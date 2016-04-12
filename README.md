@@ -40,7 +40,7 @@ Go to the Meteor project directory (/app) and execute
 If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor is running?
 '*, you'll need to specify the port explicitly (and choose some other available port):
 
-`meteor -p 2000 --settings ../config/development/settings.json`
+`meteor -p 2000`
 
 #License
 The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
