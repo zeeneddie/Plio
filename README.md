@@ -1,7 +1,7 @@
 # PLIO
 The first on-demand system for compliance management in the enterprise, using lean principles
 
-This project should sould be developed with respect to the architecture, style guide and best practices defined in [Meteor Guide 1.3](guide.meteor.com).
+Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](guide.meteor.com).
 
 # MOTIVATION
 Plio is a collaborative software tool designed to support a new approach to compliance management based on the principles of continuous improvement.
@@ -9,8 +9,6 @@ Plio is a collaborative software tool designed to support a new approach to comp
 Regulated organizations face particular challenges. Not only do they need to meet the requirements of customers but also the requirements of their regulatory agency. By applying the principles of continuous improvement, businesses can streamline the compliance management process whilst simultaneously finding ways to reduce cost and waste.
 
 Plio helps an organization to create and maintain a standards book for its key processes and policies, supporting real-time discussion around each process.  It also helps streamline the management of corrective and preventative actions that are implemented to improve these processes and policies. 
-
-Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in Meteor Guide 1.3.  The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
 
 ![Continuous Improvement](https://cloud.githubusercontent.com/assets/2095940/14455609/0322fe72-00a9-11e6-8efb-f781c30e0a7b.png)
 
