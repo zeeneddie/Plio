@@ -1,0 +1,86 @@
+.label {  
+  border-radius: 0;
+  display: inline-block;
+  font-weight: normal;
+  font-family: $font-semibold;
+  
+  /* Colors */
+  &-success {
+    background: $green-color;
+  }
+  &-warning {
+    background: $amber-color;
+  }
+  &-danger {
+    background: $red-color;
+  }
+  &-primary {
+    background: $blue-color;
+  }
+  &-info {
+    background: $light-blue-color;
+  }
+
+  &-standard {
+    $label-standard-size: 36px;
+    float: left;
+    height: $label-standard-size;
+    width: $label-standard-size;
+    line-height: $label-standard-size;
+    font-size: 12px;
+    padding: 0;
+    margin-right: 12px;
+    margin-top: 3px;
+  }
+  
+  &-status {
+    font-size: inherit !important;
+    margin-right: 5px;
+  }
+
+  &-status-indicator {
+    $status-indicator-size: 16px;
+    border-radius: 50%;
+    z-index: 9;
+    height: $status-indicator-size;
+    width: $status-indicator-size;
+    padding: 0;
+    text-align: center;
+    position: relative;
+    top: 1px;
+  
+    &:empty {
+      display: inline-block;
+    }
+  } 
+  
+  i {
+    &.margin-right {
+      margin-right: 5px;
+    }
+  }
+  
+  &.margin-left {
+    margin-left: 10px;
+  }
+}
+
+.form-group .label {
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: .375rem 0;
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+.ref-number {
+  background: #777;
+  color: white;
+  float: right;
+  display: inline-block;
+  padding: .25em .6em .3em;
+  margin-right: 0;
+}
+
+
+

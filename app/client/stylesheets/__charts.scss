@@ -1,0 +1,48 @@
+.chart {
+  &-tabs {
+    @include flexbox;
+    
+    .nav-item {
+      @include flex(1);
+      text-align: center;
+      margin: 0 !important;
+      
+      .nav-link {
+        border: 0 !important;
+        border-radius: 0;  
+        padding: 10px 0;
+      }
+    }
+  }
+
+  &-dropdown {
+    float: left;
+    width: auto;
+    margin-bottom: 1rem;
+  }
+  
+  &-legend {
+    float: right;
+    padding: 5px 0;
+    
+    ul {
+      list-style: none;
+      padding: 0;
+      
+      li {
+        display: inline;
+        font-family: $font-semibold;
+        margin-right: 15px;
+        
+        span {
+          display: inline-block;
+          height: 12px;
+          width: 12px;
+          margin-right: 6px;
+          position: relative;
+          top: 1px;
+        }
+      }
+    }
+  }
+}

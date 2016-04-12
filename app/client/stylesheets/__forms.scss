@@ -1,0 +1,382 @@
+
+
+
+/* Inputs */
+
+.form-control {
+  color: #333;
+  
+  &:disabled {
+    color: black;
+  }
+}
+
+
+/* Labels */
+
+.form-control-label {
+  font-weight: normal;
+  font-family: $font-semibold;
+  
+  .form-horizontal &,
+  .form-group.row & {
+    @media (min-width:768px) {
+      text-align: right;
+      padding-right: 0;
+    }
+  }
+  
+  .form-group:not(.row) & {
+    padding-left: 0;
+  }
+}
+
+
+/* Rich text */
+
+.rich-text {  
+  &-controls {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    padding: 3px 0;
+    
+    .btn {
+      border: 0;
+    }
+  }
+  
+  &-input {
+    font-size: 0;
+    height: 400px;
+    
+    .expanded & {
+      height: 800px;
+    }
+  }
+  
+  &-expand-toggle {
+    .fa-compress { display: none; }
+    .fa-expand { display: inline-block; }
+    
+    .expanded & {
+      .fa-compress { display: inline-block; }
+      .fa-expand { display: none; }      
+    }
+    
+  }
+}
+
+
+/* Form buttons */
+
+.form-group {
+  .btn {
+    margin-bottom: 7px;
+  }
+}
+
+/* Checkbox button */
+
+.btn-checkbox {
+  width: 34px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 10px;
+  
+  &.active {
+    background: $light-blue-color;
+    border-color: $light-blue-color;
+    
+    &:hover {
+      background: darken($light-blue-color,5%);
+      border-color: darken($light-blue-color,5%);      
+    }
+  }
+
+  i {
+    margin: 0;
+    color: white;
+    font-size: 19px;
+  }
+  
+  &-label {
+    font-family: $font-semibold;
+  }
+}
+
+/* 
+  Select dropdowns 
+*/
+
+.c-select {
+  width: 100%;
+  color: #333;
+  border-radius: .25rem;
+}
+
+/*
+  Dropdowns
+*/
+
+.dropdown {
+  &-menu {
+    padding: 0;
+    
+    &-full {
+      left: 0;
+      right: 0;
+    }
+  }
+  &-item {
+    padding: 10px 15px;
+    
+    &.indent {
+      padding-left: 30px;
+    }
+  }
+  &-header {
+    margin-bottom: 0;
+    font-family: $font-semibold;
+  }
+}
+
+/*
+  Form group nested layout - flex
+*/
+
+.form-group-flex {
+  @include flexbox;
+  
+  &-flex {
+    @include flex(1);
+  }
+  
+  .margin-left {
+    margin-left: 15px;
+  }
+  
+  .margin-right {
+    margin-right: 15px;
+  }
+  
+  .btn {
+    margin-bottom: 0;
+  }
+}
+
+/* 
+  Form group nested layout - rows/cols
+*/
+
+.form-group.row .row {
+  margin: 0;
+  
+  > div {
+    padding: 0;
+    
+    &:not(:last-child) {
+      padding-right: 15px;
+    }
+  }
+}
+
+
+
+/* Clear field */
+
+.clear-field {
+	position: absolute;
+	right: 15px;
+	top: 0;
+	font-size: 21px;
+	line-height: 1;
+	color: #bbb !important;
+	transition: all 0.3s ease;
+	border: 0;
+  z-index: 9;
+  display: none;
+  margin: 0 !important;
+  padding-left: 6px;
+  padding-right: 6px;
+  
+	&:hover {
+  	color: #99130f !important;
+	}
+
+	i {
+  	margin: 0 !important;
+  	font-size: 21px !important;
+  	line-height: inherit;
+  	top: 0 !important;
+	}
+
+  .ios & {
+    padding-right: 0 !important;
+  }
+  
+  .android & {
+    right: 0;
+  }	
+}
+
+input:focus ~ .clear-field {
+  display: block;
+}
+
+
+/* Input group */
+
+.input-group {
+  &-btn {
+    .btn {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+
+/* Typeahead */
+
+.input-group-typeahead {
+  position: relative;
+  
+  .dropdown-menu {
+    left: 0;
+  }
+}
+
+
+
+/* Risk Grading */
+
+.table-risk-grading {
+  border-top: 1px solid #ddd;
+
+  table {
+    margin-bottom: 10px;
+  }
+
+  th, td {
+    border-color: white !important;
+    border-left: 2px solid white;
+    border-top: 2px solid white;
+    text-align: center;
+    width: 1%;
+    padding: 10px !important;
+    font-weight: 500;
+    
+    @media (max-width: 480px) {
+      max-width: 50px !important;
+      overflow: hidden;
+    }
+
+    &.impacts-heading {
+      position: relative;
+      width: 44px !important;
+      padding: 0 !important;
+      vertical-align: middle;
+
+      span {
+        -webkit-transform: rotate(-90deg);
+        display: block;
+        //position: absolute;
+        //top: 50%;
+        //margin-top: -30px;
+      
+      }
+    }
+
+    &.impact-label {
+      background: #eee;
+    }
+
+    &.impact {
+      cursor: pointer;
+      position: relative;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -1px;
+        bottom: 0;
+        background: rgba(255,255,255,0.6);
+        opacity: 1;
+        transition: all 0.3s ease;
+      }
+
+      &:hover, &:focus, &:active, &.active {
+        &:after {
+          opacity: 0;
+        }
+      }
+    }
+
+    &.impact-vlow { background: $green-color; }
+    &.impact-low { background: $yellow-color; }
+    &.impact-medium { background: $amber-color; }
+    &.impact-high { background: $red-color; }
+    &.impact-vhigh { background: $red-color; }
+  }
+
+  td {
+    color: white;
+    font-weight: bold;
+  }
+
+}
+
+/*
+  FORM GROUP - BUTTONS (e.g. lists of file attachments)
+*/
+
+.form-group-buttons {
+  .btn, .btn-group {
+    margin-right: 3px;
+  }
+  
+  .btn-group .btn {
+    margin-right: 0;
+  }
+}
+
+
+/*
+  LEGEND
+*/
+
+legend {
+  font-size: 16px;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+/*
+  INLINE FORM GROUPS
+*/
+
+.form-group-inline {
+  @include clearfix;
+  
+  label {
+    display: inline-block;
+    padding-left: 0;
+    float: left;
+  }
+  .input-group {
+    max-width: 130px;
+    float: left;
+  }
+  
+  .margin-right {
+    margin-right: 10px;
+  }
+}
+
+
+
+.help-block {
+  margin: 0 0 10px;
+}

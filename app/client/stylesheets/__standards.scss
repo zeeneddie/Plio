@@ -1,0 +1,171 @@
+.standard {
+  @include flexbox();
+  @include flex-direction(column);
+
+  &-heading {
+    margin: 0;
+    border-radius: 0;
+    border-width: 0;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    padding: 1rem 1.25rem 1.25rem;
+    min-height: 127px;
+    background: white;
+    z-index: 3;
+    
+    .label-standard {
+      $label-standard-size: 70px;
+      width: $label-standard-size;
+      height: $label-standard-size;
+      line-height: $label-standard-size;
+      font-size: $label-standard-size/2 - 10px;
+      margin-right: 12px;
+    }
+    
+    .btn-sidebar-collapse {
+      float: right;
+      padding: 0;
+      font-size: 28px;
+      line-height: 1;
+      padding: 0;
+      margin-bottom: 3px;
+      opacity: 0;
+      
+      &.collapsed {
+        opacity: 1;
+      }
+    }
+    
+    .btn-group {
+      float: right;
+      margin-top: 5px;
+      clear: right;
+    }
+    
+    &-dropdown {
+      display: inline-block;
+    }
+    
+    &-title {
+      font-size: 27px;
+      cursor: pointer;
+      display: inline-block;
+      margin-bottom: 5px;
+      
+      &:after {
+        border-width: .2em; // dropdown chevron size 
+      }
+    }
+    
+    &-text {
+      font-size: 14px;
+      margin: 0 0 2px;
+    }
+    
+    &-issue {
+      &-draft {
+        //color: #aaa;
+        font-family: $font-regular;
+        color: #777;
+        position: relative;
+        top: -2px;
+        left: 5px;
+        font-size: 14px;
+        line-height: 14px;
+        //line-height: 14px;
+      }
+    }
+  }
+
+
+}
+
+.standard-edit {
+  @include flexbox;
+  @include flex-wrap(wrap);
+  margin-bottom: 20px;
+  
+  &-category {
+    .form-control {
+      border:0;
+      box-shadow: none;
+      outline: none;
+      border-radius: 0;
+      background: transparent;
+      padding-left: 0;
+      font-size: 16px;
+      //font-family: $font-semibold;
+    }
+  }
+  
+  .form-control {
+    border:0;
+    box-shadow: none;
+    outline: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 0;
+    line-height: 1.6;
+    border-bottom: 1px solid #ddd;
+    font-size: 15px;
+    
+    &:focus {
+      border-bottom-color: $blue-color;
+    }
+  }
+  
+  &-label {
+    width: 90px;
+    height: 90px;
+    padding: 8px;
+    float: left;
+    margin-bottom: 1rem;
+    margin-top: .5rem;
+    margin-right: 1.25rem;
+    
+    .form-group {
+      margin: 0;
+    }
+    
+    .form-control {
+      text-align: center;
+      color: white;
+      font-size: 24px;
+      line-height: 1.5;
+      padding: 0;
+      border-bottom-color: white;
+      
+      &:focus {
+        border-bottom-color: white;
+      }
+      
+      @include placeholder {
+        color: rgba(255,255,255,0.5);
+      }
+    }
+  }
+  
+  &-content {   
+    @include flex(1);
+    .form-group {
+      margin: 0 0 .3rem;
+    }
+  }
+  
+  &-title {
+    font-size: 24px !important;
+  }
+  
+  .dropdown-menu {
+    right: 0;
+  }
+  
+  > .form-group {
+    width: 100%;
+  }
+}
+
+
+
+
+

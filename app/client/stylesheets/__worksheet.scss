@@ -1,0 +1,197 @@
+/* WORKSHEET MODAL */
+
+.modal-worksheet {
+  
+  .modal-dialog {
+    width: auto;
+    
+    @media (max-width: 991px) {
+      margin-top: 0;
+      
+      .card {
+        border-radius: 0;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      margin-left: 30px;
+      margin-right: 30px;      
+    }
+
+  }
+  
+  .table {
+    th, td {
+      padding: 10px 15px !important;
+      
+      @media (max-width: 991px) {
+        white-space: nowrap;  
+      }
+    }
+    
+    th {
+      font-family: $font-semibold;
+      font-weight: normal;
+      background-color: #f5f5f5;
+      border-top: 0;
+      border-bottom-width: 1px;
+    }
+  }
+
+  /*
+	.modal-dialog {
+		width: auto;
+    
+		.modal-content {	
+  		//border-radius: 0;
+  		overflow: hidden;
+  		
+  		.modal-header {
+    		padding: 5px 15px;
+    		text-align: left;
+    		
+    		.btn-group {
+      		position: absolute;
+      		right: 5px;
+      		top: 5px;
+    		}
+  		}
+  				
+			.modal-body {
+				padding:0;
+
+        .table-responsive {
+        	width: 100%;
+        	margin: 0;
+        	overflow-x: auto;
+        	overflow-y: hidden;
+        	-webkit-overflow-scrolling: touch;
+        	-ms-overflow-style: -ms-autohiding-scrollbar;
+        	border: 0;
+        }
+        
+        .table {
+        	margin: 0;
+        	
+        	thead {
+        		background: #eee;
+        	}
+        	
+        	>thead>tr>th,
+        	>tbody>tr>td {
+        		padding: 10px 15px;
+        	}
+        	
+        	th, td {
+          	&.narrow { width: 60px; }
+          	&.width-100 { width: 100px; }
+          	&.width-30 { width: 30px; }          	
+        	}
+
+        	        	
+        	.label {
+          	padding-top: 6px;
+          	padding-bottom: 6px;
+          	
+          	&.impact { display: block; }
+          	
+            &.impact-vlow { background: #29aa50; }
+            &.impact-low { background: #5cb85c; }
+            &.impact-medium { background: #f0ad4e; }
+            &.impact-high { background: #d9534f; }
+            &.impact-vhigh { background: #c02927; } 
+            
+            &.ref { font-size: 14px; }         	
+        	}
+        	
+        	
+        	
+        	.arrow {
+          	height: 3px;
+          	background: #ddd;
+          	margin: 9px 0;
+          	position: relative;
+          	margin-right: 5px;
+          	
+          	&:after {
+            	content: '';
+            	position: absolute;
+            	right: 0;
+            	top: 50%;
+            	margin-top: -8px;
+            	margin-right: -13px;
+            	border-style: solid;
+            	border-width: 8px;
+            	border-color: transparent;
+            	border-left-color: #ddd;
+          	}
+        	}
+        	
+        	.extra-border {
+          	border-bottom: 2px solid #ddd;
+        	}
+        	
+        	
+        	
+        	.subheading {
+          	background: #eee;
+          	font-weight: bold;
+          	font-size: 20px;
+          	font-weight: 500;
+          	padding-top: 12px;
+          	padding-bottom: 12px;
+          	color: #777;
+        	}
+        	
+        	.subsubheading {
+          	background: #eee;
+          	font-weight: bold;
+          	font-weight: 500;
+          	color: #777;
+        	}
+        	
+        	.mitigation {
+          	background: #d9edf7 url("../img/bg-diagonal-white.png");
+          	color: #31708f;
+        	}
+        	
+        	td {
+          	&.impact-vlow { background-color: #dff0d8; color: #3c763d; }
+            &.impact-low { background-color: #dff0d8; color: #3c763d; }
+            &.impact-medium { background-color: #fcf8e3; color: #8a6d3b; }
+            &.impact-high { background-color: #f2dede; color: #a94442; }
+            &.impact-vhigh { background-color: #f2dede; color: #a94442; }
+
+          	&.text-green { color: #3c763d; }
+            &.text-amber { color: #8a6d3b; }
+            &.text-red { color: #a94442; }
+            
+            &.bg-green { background-color: #dff0d8; }
+            &.bg-amber { background-color: #fcf8e3; }
+            &.bg-red { background-color: #f2dede;}
+            
+            &.text-green-inverse { background-color: #5cb85c; color: white; }
+            &.text-amber-inverse { background-color: #f0ad4e; color: white; }
+            &.text-red-inverse { background-color: #d9534f; color: white; }
+            
+            &.text-middle { vertical-align: middle; }
+            
+        	}
+        	
+        	th.wide,
+        	td.wide {
+          	//min-width: 150px;
+        	}
+        	        	
+        	.subtitle {
+        		//display: block;
+        		//font-size: 12px;
+        		//line-height: 20px;
+        		//color: #999;
+        	}
+        }
+			}
+		}
+	}
+	*/
+}

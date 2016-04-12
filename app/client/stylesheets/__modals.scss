@@ -1,0 +1,90 @@
+.modal {
+  
+  &-dialog {  
+    @media (max-width: 600px) {
+      width: auto;
+      margin: 0;
+    }
+    
+    #choose-add-type-modal & {
+      width: auto;
+      
+      @media (min-width:768px) {
+        max-width: 400px;
+      }
+    }
+    
+    > .card {
+      border: 0;
+      
+      > .card-heading {
+        border-radius: 4px 4px 0 0;
+        
+        .card-title {
+          text-align: center !important;
+          font-family: $font-semibold;
+        }
+      }
+
+      .card-block {
+        &:not(:first-child) {
+          border-top: 1px solid #ddd;
+        }
+      }   
+      
+      .list-group {
+        &-item {
+          &:first-child {
+            border-top: 0;
+          }
+        }
+      }    
+      
+    }
+
+
+  }
+}
+
+#invite-modal {
+  .avatar {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .card-block:last-child {
+    border-top: 0 !important;
+  }
+}
+
+#nonconformity-chart-modal {
+  .modal-dialog {
+    @media (min-width:601px) and (max-width:1199px) {
+      width: auto;
+      margin: 20px;
+    }
+  
+    @media (min-width:1200px) {
+      width: 1200px;
+    }
+  }
+  
+  
+  .card-block:last-child {
+    border-top: 0 !important;
+  }
+}
+
+
+#verify-modal {
+  .alert {
+    border-radius: 0;
+    margin: 0;
+    border-width: 1px 0;
+    margin-top: -1px;
+  }
+  
+  .card-block:last-child {
+    border-top: 0;
+  }
+}

@@ -1,0 +1,103 @@
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+	font-size: 14px;
+}
+
+body {
+  @include flexbox();
+  @include flex-direction(column);
+  background: #f5f5f5;
+  font-family: $font-regular;
+}
+
+.scroll {
+  @include scroll;
+}
+
+.flexbox-row {
+  @include flexbox;
+}
+
+.flexbox-column {
+  @include flexbox;
+  @include flex-direction(column);
+  height: 100%;
+}
+
+.flex {
+  @include flex(1);
+}
+
+
+.content {
+  overflow: hidden;
+  position: relative;
+  @include flex(1);
+  @include flexbox;
+  
+  > .container {
+    @media (max-width:1200px) {
+      max-width: none;
+    }
+  }
+  
+  > .container,
+  > .container-fluid {
+    @include flex(1);
+    @include flexbox();
+    position: relative;
+    
+    > .row {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      height: 100%;
+      @include flexbox();
+    }
+  }
+  
+  &-list {
+    padding-top: 30px;
+    height: 100%;
+    
+    @include mobile {
+      width: 100%;
+      border: 0;
+    }
+  }
+  
+  &-cards {
+    height: 100%;
+    padding: 0;
+    
+    &-inner {
+      @media (min-width: 768px) {
+        padding: 30px 30px 0;
+      }
+    }
+  }
+}
+
+strong {
+  font-weight: normal;
+  font-family: $font-semibold;
+}
+
+.margin-top {
+  margin-top: 5px !important;
+}
+
+.margin-bottom {
+  margin-bottom: 5px !important;
+}
+
+.margin-bottom-none {
+  margin-bottom: 0 !important;
+}
+
+

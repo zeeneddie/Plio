@@ -1,0 +1,167 @@
+.btn {
+  font-family: $font-semibold;
+  font-weight: normal;
+  @include transition(all .3s ease);
+  
+
+  
+  &-primary {
+    background: $blue-color;
+    border-color: $blue-color;
+    &:hover {
+      background: darken($blue-color,5%);
+      border-color: darken($blue-color,5%);    
+    }
+  }
+  &-info {
+    background: $light-blue-color;
+    border-color: $light-blue-color;
+    &:hover {
+      background: darken($light-blue-color,5%);
+      border-color: darken($light-blue-color,5%);    
+    }
+    &:disabled:hover {
+      background: $light-blue-color;
+      border-color: $light-blue-color;      
+    }
+  }
+  &-success {
+    background: $green-color;
+    border-color: $green-color;
+    &:hover {
+      background: darken($green-color,5%);
+      border-color: darken($green-color,5%);    
+    }
+  }
+  &-warning {
+    background: $amber-color;
+    border-color: $amber-color;
+    &:hover {
+      background: darken($amber-color,5%);
+      border-color: darken($amber-color,5%);    
+    }
+  }
+  &-danger {
+    background: $red-color;
+    border-color: $red-color;
+    &:hover {
+      background: darken($red-color,5%);
+      border-color: darken($red-color,5%);    
+    }
+  }
+  
+  
+  &-link {
+    color: $blue-color;
+  }
+  
+  &:disabled {
+    opacity: 1;
+  }
+}
+
+.btn-icon {
+  width: 36px;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+  
+  i {
+    font-size: 20px;
+    line-height: 18px;
+    position: relative;
+    top: 2px;
+    width: 1.28571429em;
+    text-align: center
+  }
+}
+
+.btn-group {
+  &-nomargin {
+    margin-bottom: 0 !important;
+    
+    .btn {
+      margin-bottom: 0 !important;
+    }
+  }
+  
+  &[data-toggle="buttons"] {
+    .btn.active {
+      background: $light-blue-color;
+      border-color: $light-blue-color;
+      color: white;
+    }
+  }
+}
+
+/*
+  BUTTON ICONS
+*/
+
+.btn {
+  i {
+    &.margin-right {
+      margin-right: 5px;
+    }
+    
+    &.ms-Icon {
+      font-size: 19px;
+      position: relative;
+      top: 1px;      
+
+      &--caretDown {
+        font-size: 18px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+}
+
+/*
+  FILE UPLOAD
+*/
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+  }
+}
+
+/*
+  COLLAPSE BUTTON - switch labels
+*/
+
+.btn-collapse {
+  &-label {
+    &-show {
+      display: none;
+      
+      .collapsed & {
+        display: inline
+      }
+    }
+    &-hide {
+      display: inline;
+      
+      .collapsed & {
+        display: none;
+      }
+    }
+  }
+}
