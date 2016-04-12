@@ -1,0 +1,11 @@
+<template name="DashboardLayout">
+  {{> DashboardHeader}}
+
+  <div class="content scroll">
+    <div class="container">
+      <div class="row">
+        {{> Template.dynamic template=content}}
+      </div>
+    </div>
+  </div>
+</template>
