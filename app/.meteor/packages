@@ -28,3 +28,4 @@ useraccounts:core
 useraccounts:flow-routing
 accounts-password
 fortawesome:fontawesome
+arillo:flow-router-helpers
