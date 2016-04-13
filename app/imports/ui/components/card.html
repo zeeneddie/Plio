@@ -1,0 +1,16 @@
+<template name="Card">
+  <div>
+    <a href="{{href}}" class="card dashboard-item {{#if disabled}}dashboard-item-disabled{{/if}}">
+      <div class="card-block">
+        <i class="fa fa-fw {{icon}} dashboard-item-icon"></i>
+        <h3 class="card-title">{{title}}</h3>
+        {{#if labelText}}
+          <span class="label label-danger">{{labelText}}</span>
+        {{/if}}
+        <div class="card-footer">
+          <span class="text-muted">{{text}}</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</template>

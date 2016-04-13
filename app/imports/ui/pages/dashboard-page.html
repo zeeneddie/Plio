@@ -1,0 +1,12 @@
+<template name="DashboardPage">
+  <div class="content-cards col-sm-12">
+    <div class="dashboard-items">
+      {{> Card href="/standards" icon="fa-book" title="Standards book" text="8 standards, 2 new"}}
+      {{> Card href="/discussions" icon="fa-comments" title="Discussions" text="3 discussions, 1 new" labelText="1"}}
+      {{> Card href="/nonconformities" icon="fa-exclamation-triangle" title="Non-conformities" text="5 NCs, 2 new"}}
+      {{> Card href="/actions" icon="fa-inbox" title="Actions" text="5 actions, 2 new" labelText="2"}}
+      {{> Card icon="fa-bolt" title="Risk register" text="Coming soon" disabled=true}}
+    </div>
+    <hr>
+  </div>
+</template>
