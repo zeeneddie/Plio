@@ -6,10 +6,10 @@ AccountsTemplates.configure({
 });
 
 AccountsTemplates.addField({
-  _id: 'name',
+  _id: 'fullName',
   type: 'text',
-  displayName: 'Username',
-  placeholder: 'Username',
+  displayName: 'Full name',
+  placeholder: 'Full name',
   required: true,
   minLength: 1,
   maxLength: 40
