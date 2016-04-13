@@ -1,0 +1,72 @@
+.at-form {
+  float: none;
+  margin: auto;
+
+  p {
+    font-size: 15px;
+    line-height: 20px;
+    margin-bottom: 0;
+  }
+}
+
+.at-title {
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+.at-link.disabled {
+  color: #444;
+}
+
+.at-signin-link {
+  text-align: center;
+}
+
+.at-error,
+.at-result {
+  text-align: center;
+}
+
+.at-oauth {
+  margin-top: 10px;
+}
+
+.at-input.validating * {
+  cursor: progress;
+}
+
+.at-input {
+  .form-control-label {
+    font-weight: bold;
+  }
+}
+
+.at-pwd-form {
+  >form {
+    label {
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}
+
+#at-btn {
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+}
+
+.at-signup-link {
+  text-align: center;
+}
+
+.text-help {
+  display: block;
+  margin-top: 5px;
+}

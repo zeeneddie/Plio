@@ -24,3 +24,6 @@ kadira:blaze-layout
 coursierprive:tether
 twbs:bootstrap@=4.0.0-alpha.2
 fourseven:scss
+useraccounts:core
+useraccounts:flow-routing
+accounts-password
