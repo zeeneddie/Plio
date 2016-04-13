@@ -5,6 +5,9 @@ AccountsTemplates.configure({
   homeRoutePath: '/'
 });
 
+const email = AccountsTemplates.removeField('email');
+const password = AccountsTemplates.removeField('password');
+
 AccountsTemplates.addField({
   _id: 'fullName',
   type: 'text',
@@ -14,6 +17,9 @@ AccountsTemplates.addField({
   minLength: 1,
   maxLength: 40
 });
+
+AccountsTemplates.addField(email);
+AccountsTemplates.addField(password);
 
 AccountsTemplates.addField({
   _id: 'companyName',
