@@ -1,4 +1,5 @@
 .meteor/local
 node_modules
+deploy
 .idea
 .DS_Store

@@ -1,0 +1,42 @@
+<template name="UserMenu">
+  {{#if currentUser}}
+    <ul class="nav navbar-nav pull-xs-right">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+          <i class="fa fa-circle text-success label-status"></i>
+          <span>{{currentUser.profile.fullName}}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item active" href="#">
+            <i class="fa fa-circle text-success label-status"></i>
+            Online
+          </a>
+          <a class="dropdown-item" href="#">
+            <i class="fa fa-circle text-warning label-status"></i>
+            Away
+          </a>
+          <a class="dropdown-item" href="#">
+            <i class="fa fa-circle text-danger label-status"></i>
+            Offline
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">
+            User preferences
+          </a>
+          <a class="dropdown-item" href="#">
+            User directory
+          </a>
+          <a class="dropdown-item" href="#" data-toggle="modal">
+            Invite users
+          </a>
+          <a class="dropdown-item" href="#">
+            Standard subcards
+          </a>
+          <a class="dropdown-item logout-link" href="#">
+            Logout
+          </a>
+        </div>
+      </li>
+    </ul>
+  {{/if}}
+</template>
