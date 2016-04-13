@@ -13,7 +13,7 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/:organizationId', {
+FlowRouter.route('/organizations/:_id', {
   name: 'dashboardPage',
   action: function(params) {
     BlazeLayout.render('DashboardLayout', {
