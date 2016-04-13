@@ -1,4 +1,4 @@
-import Organizations from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UserRoles } from '/imports/api/constants.js';
 
 
