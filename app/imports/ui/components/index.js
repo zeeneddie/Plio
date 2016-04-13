@@ -7,3 +7,5 @@ import './simple_card.html'
 import './useraccounts';
 import './user-menu.html';
 import './user-menu.js';
+import './organizations-menu.html';
+import './organizations-menu.js';
