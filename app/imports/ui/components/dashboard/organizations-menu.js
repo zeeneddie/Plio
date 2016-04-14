@@ -16,6 +16,7 @@ Template.OrganizationsMenu.helpers({
 Template.OrganizationsMenu.viewmodel({
   orgName: '',
   save(e) {
+    const $modal = this.child('ModalWindow').modal;
     const orgName = this.orgName();
     if (!orgName) {
       toastr.error('Organization name cannot be empty!');
@@ -23,9 +24,10 @@ Template.OrganizationsMenu.viewmodel({
     }
     insert.call({ name: orgName }, (err, _id) => {
       if (err) {
-        toastr.error(`Could not create new organization: ${err.reason}`);
+        toastr.error(`Could not create new organization:<br>${err.reason}`);
       } else {
         FlowRouter.go('dashboardPage', { _id });
+        $modal.modal('hide');
       }
     });
   }
