@@ -1,19 +1,25 @@
 <template name="Organizations_Settings">
-  <div class="modal fade" id="org-settings-modal">
-    <div class="modal-dialog">
-      <div class="card">
-        {{> ModalHeading}}
-        {{> GuidancePanel}}
-        <form>
-          {{> Organizations_MainSettings}}
-          {{> Organizations_Departments}}
-          {{> Organizations_StandardsTypes}}
-          {{> Organizations_StandardsBookSections}}
-          {{> Organizations_WorkflowDefaults}}
-          {{> Organizations_Reminders}}
-          {{> Organizations_NonConformityGuidelines}}
-        </form>
-      </div>
-    </div>
-  </div>
+  {{#ModalWrapper id="org-settings-modal"}}
+    {{> ModalHeading title="Org settings" onSave=onSave}}
+
+    {{#GuidancePanel moreInfoLink="#"}}
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Praesent vestibulum accumsan nulla, non pulvinar neque.
+        Quisque faucibus tempor imperdiet. Suspendisse feugiat,
+        nibh nec maximus pellentesque, massa nunc mattis ipsum,
+        in dictum magna arcu et ipsum.
+      </p>
+    {{/GuidancePanel}}
+
+    <form>
+      {{> Organizations_MainSettings org=org}}
+      {{> Organizations_Departments}}
+      {{> Organizations_StandardsTypes}}
+      {{> Organizations_StandardsBookSections}}
+      {{> Organizations_WorkflowDefaults}}
+      {{> Organizations_Reminders}}
+      {{> Organizations_NonConformityGuidelines}}
+    </form>
+  {{/ModalWrapper}}
 </template>

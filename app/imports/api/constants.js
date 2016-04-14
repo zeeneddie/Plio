@@ -2,4 +2,10 @@ const UserRoles = {
   OWNER: 'owner'
 };
 
-export { UserRoles };
+const OrgCurrencies = {
+  EUR: 'EUR',
+  GBP: 'GBP',
+  USD: 'USD'
+};
+
+export { UserRoles, OrgCurrencies };

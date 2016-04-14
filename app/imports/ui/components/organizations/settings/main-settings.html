@@ -1,50 +1,46 @@
 <template name="Organizations_MainSettings">
-  <div class="card-block">
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4">Org name</label>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" placeholder="Org name"
-            value="Clifton Asset Management Plc">
-        <button type="button" class="btn btn-link clear-field">
-          <i class="fa fa-times-circle"></i>
-        </button>
+  {{#with org}}
+    <div class="card-block">
+      <div class="form-group row">
+        <label class="form-control-label col-sm-4">Org name</label>
+        <div class="col-sm-8">
+          <input type="text" class="form-control" placeholder="Org name"
+              value="{{name}}">
+          <button type="button" class="btn btn-link clear-field">
+            <i class="fa fa-times-circle"></i>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">Org owner</label>
-      <div class="col-sm-8 col-xs-12">
-        <div class="input-group">
-          <input type="text" class="form-control" value="Mike Smith" disabled="">
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-primary no-margin">
-              Transfer
-            </button>
-          </span>
+      <div class="form-group row">
+        <label class="form-control-label col-sm-4 col-xs-12">Org owner</label>
+        <div class="col-sm-8 col-xs-12">
+          <div class="input-group">
+            <input type="text" class="form-control" value="{{owner}}" disabled="">
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-primary no-margin">
+                Transfer
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="form-control-label col-sm-4 col-xs-12">
+          Default currency
+        </label>
+        <div class="col-sm-8 col-xs-12">
+          <div class="btn-group btn-group-nomargin" data-toggle="buttons">
+            {{#each currencies}}
+              <label class="btn btn-secondary {{#if isOrgCurrency}} active {{/if}}">
+                <input type="radio" name="options" id="{{key}}" autocomplete="off">
+                {{name}}
+              </label>
+            {{/each}}
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">
-        Default currency
-      </label>
-      <div class="col-sm-8 col-xs-12">
-        <div class="btn-group btn-group-nomargin" data-toggle="buttons">
-          <label class="btn btn-secondary">
-            <input type="radio" name="options" id="option2" autocomplete="off">
-            EUR
-          </label>
-          <label class="btn btn-secondary active">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked>
-            GBP
-          </label>
-          <label class="btn btn-secondary">
-            <input type="radio" name="options" id="option2" autocomplete="off">
-            USD
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
+  {{/with}}
 </template>

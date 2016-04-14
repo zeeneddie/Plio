@@ -1,16 +1,10 @@
 <template name="GuidancePanel">
   <div class="collapse guidance-panel">
     <div class="card-block">
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Praesent vestibulum accumsan nulla, non pulvinar neque.
-        Quisque faucibus tempor imperdiet. Suspendisse feugiat,
-        nibh nec maximus pellentesque, massa nunc mattis ipsum,
-        in dictum magna arcu et ipsum.
-      </p>
+      {{> Template.contentBlock}}
       <div class="btn-group">
         <a href="#" class="btn btn-link guidance-panel-close">Close</a>
-        <a href="#" class="btn btn-link">More info</a>
+        <a href="{{moreInfoLink}}" class="btn btn-link">More info</a>
       </div>
     </div>
   </div>
