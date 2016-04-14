@@ -3,7 +3,8 @@ import './dashboard/dashboard-header.html';
 import './dashboard/dashboard-footer.html';
 import './login-header.html';
 import './standard-header.html';
-import './dashboard/simple_card.html'
+import './includes/simple-card.html';
+import './includes/modal-window.html';
 import './useraccounts';
 import './dashboard/organizations-menu.html';
 import './dashboard/organizations-menu.js';
