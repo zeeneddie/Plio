@@ -27,3 +27,4 @@ useraccounts:flow-routing
 accounts-password
 fortawesome:fontawesome
 arillo:flow-router-helpers
+zimme:active-route
