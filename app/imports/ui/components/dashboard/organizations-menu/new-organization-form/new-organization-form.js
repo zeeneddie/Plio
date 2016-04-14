@@ -16,14 +16,18 @@ Template.NewOrganizationForm.viewmodel({
     }
 
     insert.call({ name: orgName }, (err, _id) => {
+      $modal.modal('hide');
+      this.orgName('');
+
       if (err) {
         toastr.error(`Could not create new organization:<br>${err.reason}`);
       } else {
         FlowRouter.go('dashboardPage', { _id });
       }
-
-      $modal.modal('hide');
-      this.orgName('');
     });
+  },
+  clear() {
+    this.orgName('');
+    this.name.val('');
   }
 });
