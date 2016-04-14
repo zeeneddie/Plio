@@ -4,6 +4,8 @@ import './dashboard/dashboard-footer.html';
 import './login-header.html';
 import './standard-header.html';
 import './dashboard/simple_card.html'
+import './modals';
+import './organizations';
 import './useraccounts';
 import './dashboard/organizations-menu.html';
 import './dashboard/organizations-menu.js';

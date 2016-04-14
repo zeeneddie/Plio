@@ -8,3 +8,9 @@ Template.OrganizationsMenu.helpers({
     return `^\\/organizations/${this._id}`;
   }
 });
+
+Template.OrganizationsMenu.events({
+  'click .org-settings-modal-link'(e, tpl) {
+    ModalManager.open('Organizations_Settings');
+  }
+});
