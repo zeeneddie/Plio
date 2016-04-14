@@ -2,7 +2,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UserRoles } from '/imports/api/constants.js';
 
 
-function postSignUpHook(userId, info) {
+const postSignUpHook = (userId, info) => {
   const companyName = info.profile.companyName;
   const org = Organizations.findOne({
     name: companyName
@@ -28,7 +28,7 @@ function postSignUpHook(userId, info) {
       }
     });
   }
-}
+};
 
 AccountsTemplates.configure({
   postSignUpHook: postSignUpHook

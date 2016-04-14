@@ -8,14 +8,14 @@ import '/imports/ui/pages';
 
 FlowRouter.route('/', {
   name: 'dashboard',
-  action: function(params) {
+  action(params) {
     BlazeLayout.render('DashboardLayout');
   }
 });
 
 FlowRouter.route('/organizations/:_id', {
   name: 'dashboardPage',
-  action: function(params) {
+  action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
     });
