@@ -36,7 +36,7 @@ Template.UserMenu.helpers({
       return status.text.toLowerCase() === userStatus;
     });
 
-    return activeStatus.css;
+    return (activeStatus && activeStatus.css) || STATUSES[0].css;
   }
 });
 
