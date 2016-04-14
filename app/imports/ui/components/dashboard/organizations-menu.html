@@ -7,7 +7,7 @@
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-            <a class="dropdown-item {{isActivePath regex=regex}}" href="{{pathFor 'dashboardPage' _id=_id}}">{{name}}</a>
+          <a class="dropdown-item {{isActivePath regex=regex}}" href="{{pathFor 'dashboardPage' _id=_id}}">{{name}}</a>
         {{/each}}
       </div>
     </li>
