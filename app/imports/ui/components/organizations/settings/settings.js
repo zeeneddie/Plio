@@ -2,9 +2,13 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 
 Template.Organizations_Settings.helpers({
-  org() {
+  organization() {
     // temporary!
     return Organizations.findOne();
+  },
+  workflowDefaults() {
+    // temporary!
+    return Organizations.findOne().ncStepTimes;
   },
   onSave() {
     // temporary!

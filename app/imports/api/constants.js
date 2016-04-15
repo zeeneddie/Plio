@@ -1,5 +1,13 @@
-const UserRoles = {
-  OWNER: 'owner'
+const NCTypes = {
+  MINOR: 'minor',
+  MAJOR: 'major',
+  CRITICAL: 'critical'
+};
+
+const TimeUnits = {
+  HOURS: 'hours',
+  DAYS: 'days',
+  WEEKS: 'weeks'
 };
 
 const OrgCurrencies = {
@@ -8,4 +16,8 @@ const OrgCurrencies = {
   USD: 'USD'
 };
 
-export { UserRoles, OrgCurrencies };
+const UserRoles = {
+  OWNER: 'owner'
+};
+
+export { NCTypes, OrgCurrencies, TimeUnits, UserRoles };

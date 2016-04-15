@@ -13,11 +13,11 @@
     {{/GuidancePanel}}
 
     <form>
-      {{> Organizations_MainSettings org=org}}
+      {{> Organizations_MainSettings organization=organization}}
       {{> Organizations_Departments}}
       {{> Organizations_StandardsTypes}}
       {{> Organizations_StandardsBookSections}}
-      {{> Organizations_WorkflowDefaults}}
+      {{> Organizations_WorkflowDefaults workflowDefaults=workflowDefaults}}
       {{> Organizations_Reminders}}
       {{> Organizations_NonConformityGuidelines}}
     </form>

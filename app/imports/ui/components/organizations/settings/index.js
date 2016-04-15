@@ -1,10 +1,13 @@
 import './departments.html';
 import './main-settings.html';
 import './main-settings.js';
+import './nc-workflow-defaults.html';
 import './non-conformity-guidelines.html';
 import './reminders.html';
 import './settings.html';
 import './settings.js';
 import './standards-book-sections.html';
 import './standards-types.html';
+import './time-picker.html';
+import './time-picker.js';
 import './workflow-defaults.html';
