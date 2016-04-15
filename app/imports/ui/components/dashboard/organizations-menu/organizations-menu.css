@@ -1,3 +1,7 @@
-.org-name {
+.nav.navbar-nav {
+  max-height: 80px;
+}
+
+.nav.navbar-nav .org-name {
   font-size: 26px;
 }
