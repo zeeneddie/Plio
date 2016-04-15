@@ -15,6 +15,14 @@ Template.OrganizationsMenu.helpers({
 
 Template.OrganizationsMenu.events({
   'click .js-create-organization'(e, tpl) {
-    Blaze.render(Template.NewOrganizationForm, document.body);
+    Blaze.renderWithData(
+      Template.ModalWindow,
+      {
+        template: 'NewOrganizationForm',
+        name: 'new-organization',
+        title: 'Create organization'
+      },
+      document.body
+    );
   }
 });
