@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
 
 const STATUSES = [
@@ -44,9 +46,7 @@ Template.UserMenu.events({
   'click a.logout-link': function (e, tpl) {
     e.preventDefault();
 
-    Meteor.logout(() => {
-      FlowRouter.go('signIn');
-    });
+    Meteor.logout(() => FlowRouter.go('signIn'));
   },
 
   'click a.js-status': function (e, tpl) {

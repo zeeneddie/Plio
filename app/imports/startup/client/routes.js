@@ -15,7 +15,7 @@ FlowRouter.route('/', {
 
 FlowRouter.route('/organizations/:_id', {
   name: 'dashboardPage',
-  action: function(params) {
+  action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
     });
