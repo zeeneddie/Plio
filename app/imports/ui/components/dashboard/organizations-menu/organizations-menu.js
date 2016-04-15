@@ -6,8 +6,8 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.helpers({
   organization() {
-    const _id = FlowRouter.getParam("_id");
-    return Organizations.findOne(_id);
+    const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
+    return Organizations.findOne({ serialNumber });
   },
   organizations() {
     return Organizations.find({ 'users.userId': Meteor.userId() });
