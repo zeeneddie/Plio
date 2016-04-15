@@ -1,24 +1,27 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
-import { Organizations } from './organizations.js';
-import { UserRoles } from '../constants.js';
+import OrganizationService from './organization-service.js';
+
 
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
+
   validate: new SimpleSchema({
     name: { type: String }
   }).validator(),
+
   run({ name }) {
     const userId = this.userId;
-    const userDoc = {
-      userId,
-      role: UserRoles.OWNER
-    };
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot create an organization'
+      );
+    }
 
-    return Organizations.insert({
+    return OrganizationService.insert({
       name,
-      users: [userDoc]
+      ownerId: userId
     });
   }
 });

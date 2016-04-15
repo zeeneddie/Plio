@@ -13,16 +13,6 @@ FlowRouter.route('/', {
   }
 });
 
-FlowRouter.route('/organizations/:_id', {
-  name: 'dashboardPage',
-  action(params) {
-    BlazeLayout.render('DashboardLayout', {
-      content: 'DashboardPage'
-    });
-  }
-});
-
-
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
@@ -39,4 +29,13 @@ AccountsTemplates.configureRoute('signUp', {
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content'
+});
+
+FlowRouter.route('/:orgSerialNumber', {
+  name: 'dashboardPage',
+  action(params) {
+    BlazeLayout.render('DashboardLayout', {
+      content: 'DashboardPage'
+    });
+  }
 });
