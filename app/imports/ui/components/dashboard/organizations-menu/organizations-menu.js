@@ -12,17 +12,3 @@ Template.OrganizationsMenu.helpers({
     return `^\\/${this.serialNumber}`;
   }
 });
-
-Template.OrganizationsMenu.events({
-  'click .js-create-organization'(e, tpl) {
-    Blaze.renderWithData(
-      Template.ModalWindow,
-      {
-        template: 'NewOrganizationForm',
-        name: 'new-organization',
-        title: 'Create organization'
-      },
-      document.body
-    );
-  }
-});
