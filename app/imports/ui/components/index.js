@@ -10,7 +10,5 @@ import './includes/modal-window.js';
 import './useraccounts';
 import './dashboard/organizations-menu/organizations-menu.html';
 import './dashboard/organizations-menu/organizations-menu.js';
-import './dashboard/organizations-menu/new-organization-form/new-organization-form.html';
-import './dashboard/organizations-menu/new-organization-form/new-organization-form.js';
 import './dashboard/user-menu.html';
 import './dashboard/user-menu.js';
