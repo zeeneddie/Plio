@@ -1,0 +1,11 @@
+<template name="OrganizationPickerPage">
+  <div class="col-sm-4 col-sm-offset-4">
+    <div class="jumbotron">
+      <div class="list-group">
+        {{#each organizations}}
+          <a href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}" class="list-group-item">{{name}}</a>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</template>

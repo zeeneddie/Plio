@@ -5,6 +5,8 @@ import '/imports/ui/layouts';
 import '/imports/ui/components';
 import '/imports/ui/pages';
 
+import { Organizations } from '/imports/api/organizations/organizations.js';
+
 
 FlowRouter.route('/', {
   name: 'home',
@@ -19,7 +21,8 @@ AccountsTemplates.configureRoute('signIn', {
   path: '/sign-in',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
+  redirect: redirectHandler
 });
 
 AccountsTemplates.configureRoute('signUp', {
@@ -28,10 +31,11 @@ AccountsTemplates.configureRoute('signUp', {
   path: '/sign-up',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
+  redirect: redirectHandler
 });
 
-FlowRouter.route('/:orgSerialNumber', {
+FlowRouter.route('/organizations/:orgSerialNumber', {
   name: 'dashboardPage',
   action(params) {
     BlazeLayout.render('DashboardLayout', {
@@ -39,3 +43,20 @@ FlowRouter.route('/:orgSerialNumber', {
     });
   }
 });
+
+FlowRouter.route('/organizations', {
+  name: 'organizationPickerPage',
+  action(params) {
+    BlazeLayout.render('OrganizationPickerPage');
+  }
+});
+
+function redirectHandler() {
+  const organizationsCount = Organizations.find({'users.userId': Meteor.userId()}).count();
+  if (organizationsCount > 1) {
+    FlowRouter.go('organizationPickerPage')
+  } else {
+    const { serialNumber } = Organizations.findOne();
+    FlowRouter.go('dashboardPage', { orgSerialNumber: serialNumber });
+  }
+};
