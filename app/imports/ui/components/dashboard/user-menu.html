@@ -3,22 +3,16 @@
     <ul class="nav navbar-nav pull-xs-right">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-          <i class="fa fa-circle text-success label-status"></i>
+          <i class="fa fa-circle {{getActiveClass}} label-status"></i>
           <span>{{currentUser.profile.fullName}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item active" href="#">
-            <i class="fa fa-circle text-success label-status"></i>
-            Online
-          </a>
-          <a class="dropdown-item" href="#">
-            <i class="fa fa-circle text-warning label-status"></i>
-            Away
-          </a>
-          <a class="dropdown-item" href="#">
-            <i class="fa fa-circle text-danger label-status"></i>
-            Offline
-          </a>
+          {{#each getStatuses}}
+            <a class="js-status dropdown-item {{#if isActiveStatus @index}}active{{/if}}" href="#">
+              <i class="fa fa-circle {{css}} label-status"></i>
+              {{text}}
+            </a>
+          {{/each}}
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">
             User preferences

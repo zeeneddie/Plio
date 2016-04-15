@@ -1,4 +1,5 @@
 import './useraccounts';
+import './user-stats';
 import './dashboard/dashboard-header.html';
 import './dashboard/dashboard-footer.html';
 import './login-header.html';
