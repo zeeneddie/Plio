@@ -14,7 +14,11 @@
               <i class="fa fa-question-circle"></i>
             </button>
             <button type="button" class="btn btn-primary js-modal-save" data-dismiss="modal" {{b "click: child.save"}}>
-              Save
+              {{#if saveButtonText}}
+                {{saveButtonText}}
+              {{else}}
+                Save
+              {{/if}}
             </button>
           </div>
         </div>
