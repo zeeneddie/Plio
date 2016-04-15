@@ -1,5 +1,5 @@
 Template.ModalWindow.viewmodel({
   onRendered(template) {
-    this.modal.on('hide.bs.modal', e => $(template.firstNode).remove());
+    this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
   }
 });

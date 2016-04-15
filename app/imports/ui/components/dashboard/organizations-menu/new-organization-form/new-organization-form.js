@@ -16,8 +16,8 @@ Template.NewOrganizationForm.viewmodel({
     }
 
     insert.call({ name: orgName }, (err, _id) => {
-      $modal.modal('hide');
       this.orgName('');
+      $modal.modal('hide');
 
       if (err) {
         toastr.error(`Could not create new organization:<br>${err.reason}`);
