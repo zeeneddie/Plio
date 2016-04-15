@@ -5,6 +5,7 @@ import './login-header.html';
 import './standard-header.html';
 import './includes/simple-card.html';
 import './includes/modal-window.html';
+import './includes/modal-window.js';
 import './useraccounts';
 import './dashboard/organizations-menu/organizations-menu.html';
 import './dashboard/organizations-menu/organizations-menu.js';
