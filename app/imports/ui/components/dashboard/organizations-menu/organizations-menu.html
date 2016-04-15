@@ -7,10 +7,15 @@
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-          <a class="dropdown-item {{isActivePath regex=regex}}" href="{{pathFor 'dashboardPage' _id=_id}}">{{name}}</a>
+          <a class="dropdown-item {{isActivePath regex=regex}}"
+              href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}">
+            {{name}}
+          </a>
         {{/each}}
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#org-settings-modal" data-toggle="modal">Org settings</a>
+        <a class="dropdown-item" href="#org-settings-modal" data-toggle="modal">
+          Org settings
+        </a>
       </div>
     </li>
   </ul>
