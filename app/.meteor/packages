@@ -28,3 +28,7 @@ accounts-password
 fortawesome:fontawesome
 arillo:flow-router-helpers
 zimme:active-route
+manuel:viewmodel
+mdg:validated-method
+aldeed:simple-schema
+chrismbeckett:toastr

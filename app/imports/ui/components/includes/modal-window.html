@@ -1,0 +1,29 @@
+<template name="ModalWindow">
+  <div class="modal fade" id="{{name}}-modal" {{b "ref: modal"}}>
+    <div class="modal-dialog">
+      <div class="card">
+        <div class="card-block card-heading">
+          <div class="card-heading-buttons pull-xs-left">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Cancel
+            </button>
+          </div>
+          <h4 class="card-title">{{title}}</h4>
+          <div class="card-heading-buttons pull-xs-right">
+            <button type="button" class="btn btn-link btn-icon guidance-panel-open collapsed">
+              <i class="fa fa-question-circle"></i>
+            </button>
+            <button type="button" class="btn btn-primary js-modal-save" data-dismiss="modal" {{b "click: child.save"}}>
+              Save
+            </button>
+          </div>
+        </div>
+        <div class="card-block">
+          <div>
+            {{> Template.dynamic template=template}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
