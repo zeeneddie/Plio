@@ -7,9 +7,9 @@ import '/imports/ui/pages';
 
 
 FlowRouter.route('/', {
-  name: 'dashboard',
+  name: 'home',
   action: function(params) {
-    BlazeLayout.render('DashboardLayout');
+    BlazeLayout.render('LoginLayout');
   }
 });
 
