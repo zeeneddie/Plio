@@ -4,8 +4,13 @@ import './dashboard/dashboard-header.html';
 import './dashboard/dashboard-footer.html';
 import './login-header.html';
 import './standard-header.html';
-import './dashboard/simple_card.html'
-import './dashboard/organizations-menu.html';
-import './dashboard/organizations-menu.js';
+import './includes/simple-card.html';
+import './includes/modal-window.html';
+import './includes/modal-window.js';
+import './useraccounts';
+import './dashboard/organizations-menu/organizations-menu.html';
+import './dashboard/organizations-menu/organizations-menu.js';
+import './dashboard/organizations-menu/new-organization-form/new-organization-form.html';
+import './dashboard/organizations-menu/new-organization-form/new-organization-form.js';
 import './dashboard/user-menu.html';
 import './dashboard/user-menu.js';

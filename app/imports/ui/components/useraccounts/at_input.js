@@ -1,4 +1,4 @@
-_.each(AccountsTemplates.atInputRendered, function(callback){
+_.each(AccountsTemplates.atInputRendered, (callback) => {
   Template.atInput.onRendered(callback);
   Template.atHiddenInput.onRendered(callback);
 });
