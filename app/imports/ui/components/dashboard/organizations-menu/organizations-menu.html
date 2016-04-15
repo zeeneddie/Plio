@@ -2,7 +2,9 @@
   <ul class="nav navbar-nav pull-xs-left">
     <li class="nav-item dropdown dropdown-company hidden-sm-down">
       <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-        <span class="hidden-xs-down"><img src="/img/default-logo.png"></span>
+        {{#with organization}}
+          <span class="hidden-xs-down org-name">{{name}}</span>
+        {{/with}}
         <i class="fa fa-building hidden-sm-up"></i>
       </a>
       <div class="dropdown-menu">
