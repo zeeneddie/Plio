@@ -1,24 +1,25 @@
-<template name="Organizations_WorkflowDefaults">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#workflow-defaults" data-toggle="collapse">
+<template name="Organizations_NcStepTimes">
+  <div class="card-block card-block-collapse-toggle collapsed" 
+      href="#workflow-defaults" data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Workflow defaults</h4>
   </div>
-  {{#with workflowDefaults}}
+  {{#with stepTimes}}
     <div class="card-block-collapse collapse" id="workflow-defaults">
       <div class="card-block">
         {{#with minor}}
-          {{> Organizations_NcWorkflowDefaults
+          {{> Organizations_NcStepTime
               title="Minor non-conformity"
               timeValue=timeValue
               timeUnit=timeUnit}}
         {{/with}}
         {{#with major}}
-          {{> Organizations_NcWorkflowDefaults
+          {{> Organizations_NcStepTime
               title="Major non-conformity"
               timeValue=timeValue
               timeUnit=timeUnit}}
         {{/with}}
         {{#with critical}}
-          {{> Organizations_NcWorkflowDefaults
+          {{> Organizations_NcStepTime
               title="Critical non-conformity"
               timeValue=timeValue
               timeUnit=timeUnit}}

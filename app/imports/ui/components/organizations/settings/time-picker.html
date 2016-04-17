@@ -1,19 +1,17 @@
 <template name="TimePicker">
-  <div class="col-sm-4 col-xs-12">
-    <div class="input-group">
-      <input type="number" class="form-control" value="{{timeValue}}">
-      <span class="input-group-btn dropdown">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-          {{timeUnit}}
-        </button>
-        <div class="dropdown-menu dropdown-menu-right">
-          {{#each timeUnits}}
-            <a href="#" class="dropdown-item {{#if isSelectedUnit}} active {{/if}}">
-              {{this}}
-            </a>
-          {{/each}}
-        </div>
-      </span>
-    </div>
+  <div class="input-group {{cssClass}}">
+    <input type="number" class="form-control" value="{{timeValue}}">
+    <span class="input-group-btn dropdown">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+        {{timeUnit}}
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        {{#each timeUnits}}
+          <a href="#" class="dropdown-item {{#if isSelectedUnit}} active {{/if}}">
+            {{this}}
+          </a>
+        {{/each}}
+      </div>
+    </span>
   </div>
 </template>

@@ -6,9 +6,17 @@ Template.Organizations_Settings.helpers({
     // temporary!
     return Organizations.findOne();
   },
-  workflowDefaults() {
+  stepTimes() {
     // temporary!
     return Organizations.findOne().ncStepTimes;
+  },
+  reminders() {
+    // temporary!
+    return Organizations.findOne().ncReminders;
+  },
+  guidelines() {
+    // temporary!
+    return Organizations.findOne().ncGuidelines;
   },
   onSave() {
     // temporary!
