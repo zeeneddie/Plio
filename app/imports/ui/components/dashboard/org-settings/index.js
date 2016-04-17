@@ -11,5 +11,3 @@ import './settings.html';
 import './settings.js';
 import './standards-book-sections.html';
 import './standards-types.html';
-import './time-picker.html';
-import './time-picker.js';

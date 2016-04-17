@@ -1,11 +1,13 @@
 import './useraccounts';
+import './dashboard/org-settings';
 import './dashboard/dashboard-header.html';
 import './dashboard/dashboard-footer.html';
+import './includes/time-picker.html';
+import './includes/time-picker.js';
 import './login-header.html';
 import './standard-header.html';
 import './dashboard/simple_card.html'
 import './modals';
-import './organizations';
 import './useraccounts';
 import './dashboard/organizations-menu.html';
 import './dashboard/organizations-menu.js';
