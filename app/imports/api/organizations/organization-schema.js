@@ -72,6 +72,10 @@ const ncGuidelinesSchema = new SimpleSchema({
 });
 
 export const OrganizationSchema = new SimpleSchema({
+  serialNumber: {
+    type: Number,
+    min: 100
+  },
   name: {
     type: String,
     min: 1,

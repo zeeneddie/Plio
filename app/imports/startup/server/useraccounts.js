@@ -1,17 +1,17 @@
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UserRoles } from '/imports/api/constants.js';
+import OrganizationService from '/imports/api/organizations/organization-service.js';
 
 
 function postSignUpHook(userId, info) {
   const companyName = info.profile.companyName || 'My Organization';
 
-  Organizations.insert({
+  OrganizationService.insert({
     name: companyName,
     users: [{
       userId,
       role: UserRoles.OWNER
     }],
     currency: 'USD',
+    ownerId: userId,
     ncStepTimes: {
       minor: {
         timeUnit: 'days',

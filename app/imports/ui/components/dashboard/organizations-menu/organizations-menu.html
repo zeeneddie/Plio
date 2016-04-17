@@ -2,15 +2,20 @@
   <ul class="nav navbar-nav pull-xs-left">
     <li class="nav-item dropdown dropdown-company hidden-sm-down">
       <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-        <span class="hidden-xs-down"><img src="/img/default-logo.png"></span>
+        {{#with organization}}
+          <span class="hidden-xs-down org-name">{{name}}</span>
+        {{/with}}
         <i class="fa fa-building hidden-sm-up"></i>
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-          <a class="dropdown-item {{isActivePath regex=regex}}" href="{{pathFor 'dashboardPage' _id=_id}}">{{name}}</a>
+          <a class="dropdown-item {{isActivePath regex=regex}}"
+              href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}">
+            {{name}}
+          </a>
         {{/each}}
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item org-settings-modal-link" href="#org-settings-modal" data-toggle="modal">
+        <a class="dropdown-item" href="#org-settings-modal" data-toggle="modal">
           Org settings
         </a>
       </div>
