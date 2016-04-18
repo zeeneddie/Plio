@@ -4,6 +4,10 @@ import { Blaze } from 'meteor/blaze';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
+Template.OrganizationsMenu.onCreated(function() {
+  this.autorun(() => this.subscribe('organizationsByUserId'));
+});
+
 Template.OrganizationsMenu.helpers({
   organization() {
     const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));

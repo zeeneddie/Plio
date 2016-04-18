@@ -1,3 +1,7 @@
 <template name="HelloPage">
-  Hello World
+  {{#unless Template.subscriptionsReady}}
+    <div class="jumbotron">
+      LOADING....
+    </div>
+  {{/unless}}
 </template>

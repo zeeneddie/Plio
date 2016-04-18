@@ -44,10 +44,10 @@ FlowRouter.route('/hello', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   action(params) {
-    const selectedOrganizationSerialNumber = params.orgSerialNumber;
-    update.call({
-      selectedOrganizationSerialNumber
-    });
+    // const selectedOrganizationSerialNumber = params.orgSerialNumber;
+    // update.call({
+    //   selectedOrganizationSerialNumber
+    // });
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
     });
