@@ -1,5 +1,5 @@
 <template name="Organizations_NcStepTimes">
-  <div class="card-block card-block-collapse-toggle collapsed" 
+  <div class="card-block card-block-collapse-toggle collapsed"
       href="#workflow-defaults" data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Workflow defaults</h4>
   </div>
@@ -10,19 +10,22 @@
           {{> Organizations_NcStepTime
               title="Minor non-conformity"
               timeValue=timeValue
-              timeUnit=timeUnit}}
+              timeUnit=timeUnit
+              ref="minor"}}
         {{/with}}
         {{#with major}}
           {{> Organizations_NcStepTime
               title="Major non-conformity"
               timeValue=timeValue
-              timeUnit=timeUnit}}
+              timeUnit=timeUnit
+              ref="major"}}
         {{/with}}
         {{#with critical}}
           {{> Organizations_NcStepTime
               title="Critical non-conformity"
               timeValue=timeValue
-              timeUnit=timeUnit}}
+              timeUnit=timeUnit
+              ref="critical"}}
         {{/with}}
       </div>
     </div>

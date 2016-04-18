@@ -1,14 +1,14 @@
 <template name="Organizations_NcGuidelines">
-  <div class="card-block card-block-collapse-toggle collapsed" 
+  <div class="card-block card-block-collapse-toggle collapsed"
       href="#nonconformity-guidelines" data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Non-conformity guidelines</h4>
   </div>
   <div class="card-block-collapse collapse" id="nonconformity-guidelines">
     <div class="card-block">
       {{#with guidelines}}
-        {{> Organizations_NcGuideline ncType="minor" text=minor}}
-        {{> Organizations_NcGuideline ncType="major" text=major}}
-        {{> Organizations_NcGuideline ncType="critical" text=critical}}
+        {{> Organizations_NcGuideline ncType="minor" text=minor ref="minor"}}
+        {{> Organizations_NcGuideline ncType="major" text=major ref="major"}}
+        {{> Organizations_NcGuideline ncType="critical" text=critical ref="critical"}}
       {{/with}}
     </div>
   </div>

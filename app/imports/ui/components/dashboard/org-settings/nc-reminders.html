@@ -1,5 +1,5 @@
 <template name="Organizations_NcReminders">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#reminders" 
+  <div class="card-block card-block-collapse-toggle collapsed" href="#reminders"
       data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Reminders</h4>
   </div>
@@ -10,21 +10,24 @@
           {{> Organizations_NcReminder
               title="Minor non-conformity"
               interval=interval
-              pastDue=pastDue}}
+              pastDue=pastDue
+              ref="minor"}}
         {{/with}}
         {{#with major}}
           {{> Organizations_NcReminder
               title="Major non-conformity"
               interval=interval
-              pastDue=pastDue}}
+              pastDue=pastDue
+              ref="major"}}
         {{/with}}
         {{#with critical}}
           {{> Organizations_NcReminder
               title="Critical non-conformity"
               interval=interval
-              pastDue=pastDue}}
+              pastDue=pastDue
+              ref="critical"}}
         {{/with}}
-      </div>  
+      </div>
     </div>
   {{/with}}
 </template>

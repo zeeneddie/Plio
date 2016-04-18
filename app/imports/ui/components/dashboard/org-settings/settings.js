@@ -1,7 +1,7 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 
-Template.Organizations_Settings.helpers({
+Template.Organizations_Settings.viewmodel({
   organization() {
     // temporary!
     return Organizations.findOne();
@@ -20,6 +20,10 @@ Template.Organizations_Settings.helpers({
   },
   onSave() {
     // temporary!
-    return () => console.log('on save');
+    return () => {
+      console.log(this.child('Organizations_NcStepTimes'));
+      console.log(this.child('Organizations_NcReminders'));
+      console.log(this.child('Organizations_NcGuidelines'));
+    };
   }
 });

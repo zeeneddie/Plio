@@ -3,18 +3,20 @@
   <div class="form-group form-group-inline">
     {{#with interval}}
       <label class="form-control-label">Remind every</label>
-      {{> TimePicker 
-          timeValue=timeValue 
-          timeUnit=timeUnit 
-          cssClass="margin-right"}}
+      {{> TimePicker
+          timeValue=timeValue
+          timeUnit=timeUnit
+          cssClass="margin-right"
+          ref="interval"}}
     {{/with}}
     {{#with pastDue}}
       <label class="form-control-label">until</label>
-      {{> TimePicker 
-          timeValue=timeValue 
-          timeUnit=timeUnit 
-          cssClass="margin-right"}}
+      {{> TimePicker
+          timeValue=timeValue
+          timeUnit=timeUnit
+          cssClass="margin-right"
+          ref="pastDue"}}
       <label class="form-control-label">past due</label>
     {{/with}}
-  </div>  
+  </div>
 </template>

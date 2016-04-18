@@ -16,3 +16,9 @@ Template.OrganizationsMenu.helpers({
     return `^\\/${this.serialNumber}`;
   }
 });
+
+Template.OrganizationsMenu.events({
+  'click .org-settings-modal-link'(e, tpl) {
+    ModalManager.open('Organizations_Settings');
+  }
+});

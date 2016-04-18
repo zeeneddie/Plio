@@ -6,13 +6,6 @@ import '/imports/ui/components';
 import '/imports/ui/pages';
 
 
-FlowRouter.route('/', {
-  name: 'home',
-  action: function(params) {
-    BlazeLayout.render('LoginLayout');
-  }
-});
-
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
@@ -29,6 +22,13 @@ AccountsTemplates.configureRoute('signUp', {
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content'
+});
+
+FlowRouter.route('/', {
+  name: 'home',
+  action: function(params) {
+    BlazeLayout.render('LoginLayout');
+  }
 });
 
 FlowRouter.route('/:orgSerialNumber', {

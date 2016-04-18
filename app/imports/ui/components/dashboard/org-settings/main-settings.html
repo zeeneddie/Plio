@@ -1,11 +1,10 @@
 <template name="Organizations_MainSettings">
-  {{#with organization}}
     <div class="card-block">
       <div class="form-group row">
         <label class="form-control-label col-sm-4">Org name</label>
         <div class="col-sm-8">
-          <input type="text" class="form-control" placeholder="Org name"
-              value="{{name}}">
+          <input {{b "value: name"}} type="text" class="form-control"
+              placeholder="Org name">
           <button type="button" class="btn btn-link clear-field">
             <i class="fa fa-times-circle"></i>
           </button>
@@ -15,7 +14,7 @@
         <label class="form-control-label col-sm-4 col-xs-12">Org owner</label>
         <div class="col-sm-8 col-xs-12">
           <div class="input-group">
-            <input type="text" class="form-control" value="{{owner}}" disabled="">
+            <input value="" type="text" class="form-control" disabled="">
             <span class="input-group-btn">
               <button type="button" class="btn btn-primary no-margin">
                 Transfer
@@ -31,14 +30,14 @@
         <div class="col-sm-8 col-xs-12">
           <div class="btn-group btn-group-nomargin" data-toggle="buttons">
             {{#each currencies}}
-              <label class="btn btn-secondary {{#if isOrgCurrency}} active {{/if}}">
-                <input type="radio" name="options" id="{{key}}" autocomplete="off">
-                {{name}}
+              <label class="btn btn-secondary"
+                  {{b "{click: currency(this), class: {active: isSelectedCurrency(this)}}"}}>
+                <input type="radio" name="options" id="{{this}}" autocomplete="off">
+                {{this}}
               </label>
             {{/each}}
           </div>
         </div>
       </div>
     </div>
-  {{/with}}
 </template>
