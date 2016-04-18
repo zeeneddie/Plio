@@ -13,6 +13,6 @@ Template.OrganizationsMenu.helpers({
     return Organizations.find({ 'users.userId': Meteor.userId() });
   },
   regex() {
-    return `^\\/organizations/${this.serialNumber}`;
+    return `^\\/${this.serialNumber}`;
   }
 });

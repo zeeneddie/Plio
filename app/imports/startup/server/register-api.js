@@ -4,3 +4,5 @@ import '../../api/organizations/organization-schema.js';
 import '../../api/organizations/organization-service.js';
 import '../../api/organizations/methods.js';
 import '../../api/users/server/publications.js';
+import '../../api/users/user-service.js';
+import '../../api/users/methods.js';

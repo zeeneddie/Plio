@@ -6,6 +6,7 @@ import '/imports/ui/components';
 import '/imports/ui/pages';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { update } from '/imports/api/users/methods.js';
 
 
 FlowRouter.route('/', {
@@ -21,8 +22,7 @@ AccountsTemplates.configureRoute('signIn', {
   path: '/sign-in',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content',
-  redirect: redirectHandler
+  contentRegion: 'content'
 });
 
 AccountsTemplates.configureRoute('signUp', {
@@ -31,32 +31,25 @@ AccountsTemplates.configureRoute('signUp', {
   path: '/sign-up',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content',
-  redirect: redirectHandler
+  contentRegion: 'content'
 });
 
-FlowRouter.route('/organizations/:orgSerialNumber', {
+FlowRouter.route('/hello', {
+  name: 'hello',
+  action(params) {
+    BlazeLayout.render('HelloPage');
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   action(params) {
+    const selectedOrganizationSerialNumber = params.orgSerialNumber;
+    update.call({
+      selectedOrganizationSerialNumber
+    });
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
     });
   }
 });
-
-FlowRouter.route('/organizations', {
-  name: 'organizationPickerPage',
-  action(params) {
-    BlazeLayout.render('OrganizationPickerPage');
-  }
-});
-
-function redirectHandler() {
-  const organizationsCount = Organizations.find({'users.userId': Meteor.userId()}).count();
-  if (organizationsCount > 1) {
-    FlowRouter.go('organizationPickerPage')
-  } else {
-    const { serialNumber } = Organizations.findOne();
-    FlowRouter.go('dashboardPage', { orgSerialNumber: serialNumber });
-  }
-};
