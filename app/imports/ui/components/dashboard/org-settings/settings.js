@@ -1,4 +1,5 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { update } from '/imports/api/organizations/methods.js'
 
 
 Template.Organizations_Settings.viewmodel({
@@ -21,15 +22,19 @@ Template.Organizations_Settings.viewmodel({
   onSave() {
     // temporary!
     return () => {
-      const mainSettings = this.child('Organizations_MainSettings').getData();
+      const { name, currency } = this.child('Organizations_MainSettings').getData();
       const ncStepTimes = this.child('Organizations_NcStepTimes').getData();
       const ncReminders = this.child('Organizations_NcReminders').getData();
       const ncGuidelines = this.child('Organizations_NcGuidelines').getData();
 
-      console.log(mainSettings);
-      console.log(ncStepTimes);
-      console.log(ncReminders);
-      console.log(ncGuidelines);
+      const _id = this.organization()._id;
+
+      update.call({
+        _id, name, currency, ncStepTimes,
+        ncReminders, ncGuidelines
+      }, (err, res) => {
+        if (err) toastr.error(err);
+      });
     };
   }
 });

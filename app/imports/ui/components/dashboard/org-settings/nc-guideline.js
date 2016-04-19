@@ -7,9 +7,7 @@ Template.Organizations_NcGuideline.viewmodel((context = {}) => {
       this.load({ text });
     },
     getData() {
-      return {
-        text: this.text()
-      };
+      return this.text();
     }
   };
 });

@@ -27,8 +27,14 @@ export default OrganizationService = {
     });
   },
 
-  update() {
-
+  update({ _id, name, currency, ncStepTimes, ncReminders, ncGuidelines }) {
+    return Organizations.update({ _id }, {
+      $set: {
+        name, currency,
+        ncStepTimes, ncReminders,
+        ncGuidelines
+      }
+    });
   },
 
   remove() {

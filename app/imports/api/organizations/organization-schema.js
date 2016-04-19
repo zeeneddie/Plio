@@ -71,11 +71,7 @@ const ncGuidelinesSchema = new SimpleSchema({
   }
 });
 
-export const OrganizationSchema = new SimpleSchema({
-  serialNumber: {
-    type: Number,
-    min: 100
-  },
+const OrganizationEditableFields = {
   name: {
     type: String,
     min: 1,
@@ -85,10 +81,6 @@ export const OrganizationSchema = new SimpleSchema({
     type: String,
     allowedValues: _.values(OrgCurrencies),
     optional: true
-  },
-  users: {
-    type: [orgUserSchema],
-    minCount: 1
   },
   ncStepTimes: {
     type: ncStepTimesSchema,
@@ -102,4 +94,24 @@ export const OrganizationSchema = new SimpleSchema({
     type: ncGuidelinesSchema,
     optional: true
   }
-});
+};
+
+const OrganizationFormSchema = new SimpleSchema([OrganizationEditableFields, {
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  }
+}]);
+
+const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
+  serialNumber: {
+    type: Number,
+    min: 100
+  },
+  users: {
+    type: [orgUserSchema],
+    minCount: 1
+  }
+}]);
+
+export { OrganizationFormSchema, OrganizationSchema };
