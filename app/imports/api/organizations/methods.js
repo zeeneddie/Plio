@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import OrganizationService from './organization-service.js';
 import { OrganizationFormSchema } from './organization-schema.js';
