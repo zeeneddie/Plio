@@ -2,11 +2,17 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.Organizations_MainSettings.viewmodel((context = {}) => {
-  const { organization } = context;
+  const defaultName = '';
+  const defaultCurrency = OrgCurrencies.EUR;
+
+  const {
+    name = defaultName,
+    currency = defaultCurrency
+  } = context;
 
   return {
-    name: '',
-    currency: OrgCurrencies.EUR,
+    name: defaultName,
+    currency: defaultCurrency,
     isSelectedCurrency(currency) {
       return this.currency() === currency;
     },
@@ -14,7 +20,7 @@ Template.Organizations_MainSettings.viewmodel((context = {}) => {
       return _.values(OrgCurrencies);
     },
     onCreated() {
-      this.load(organization);
+      this.load({ name, currency });
     },
     getData() {
       return {

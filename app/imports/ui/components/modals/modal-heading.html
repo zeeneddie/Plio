@@ -1,16 +1,14 @@
 <template name="ModalHeading">
   <div class="card-block card-heading">
     <div class="card-heading-buttons pull-xs-left">
-  		<button type="button" class="btn btn-secondary" data-dismiss="modal">
-  			Cancel
+      <button type="button" class="btn btn-link btn-icon guidance-panel-open collapsed"
+          {{b "click: openGuidancePanel"}}>
+  			<i class="fa fa-question-circle"></i>
   		</button>
     </div>
     <div class="card-heading-buttons pull-xs-right">
-      <button type="button" class="btn btn-link btn-icon guidance-panel-open collapsed">
-  			<i class="fa fa-question-circle"></i>
-  		</button>
-  		<button type="button" class="btn btn-primary modal-save" data-dismiss="modal">
-  			Save
+  		<button type="button" class="btn btn-secondary modal-close"
+          {{b "click: onClose, text: closeButtonText, class: {disabled: saving}"}}>
   		</button>
     </div>
     <h4 class="card-title">{{title}}</h4>

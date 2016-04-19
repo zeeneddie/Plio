@@ -9,22 +9,28 @@
         {{#with minor}}
           {{> Organizations_NcReminder
               title="Minor non-conformity"
-              interval=interval
-              pastDue=pastDue
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
               ref="minor"}}
         {{/with}}
         {{#with major}}
           {{> Organizations_NcReminder
               title="Major non-conformity"
-              interval=interval
-              pastDue=pastDue
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
               ref="major"}}
         {{/with}}
         {{#with critical}}
           {{> Organizations_NcReminder
               title="Critical non-conformity"
-              interval=interval
-              pastDue=pastDue
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
               ref="critical"}}
         {{/with}}
       </div>

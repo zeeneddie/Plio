@@ -1,6 +1,6 @@
-Template.GuidancePanel.events({
-  'click .guidance-panel-close'(e, tpl) {
-    const $a = tpl.$(e.target);
+Template.GuidancePanel.viewmodel({
+  closeGuidancePanel(e) {
+    const $a = this.templateInstance.$(e.target);
 
     $a
       .closest('.guidance-panel')

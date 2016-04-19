@@ -3,7 +3,10 @@
     <div class="card-block">
       {{> Template.contentBlock}}
       <div class="btn-group">
-        <a href="#" class="btn btn-link guidance-panel-close">Close</a>
+        <a href="#" class="btn btn-link guidance-panel-close"
+            {{b "click: closeGuidancePanel"}}>
+          Close
+        </a>
         <a href="{{moreInfoLink}}" class="btn btn-link">More info</a>
       </div>
     </div>

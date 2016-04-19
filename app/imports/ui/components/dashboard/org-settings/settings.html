@@ -1,6 +1,6 @@
 <template name="Organizations_Settings">
   {{#ModalWrapper id="org-settings-modal"}}
-    {{> ModalHeading title="Org settings" onSave=onSave}}
+    {{> ModalHeading title="Org settings" onClose=onClose}}
 
     {{#GuidancePanel moreInfoLink="#"}}
       <p>
@@ -13,7 +13,7 @@
     {{/GuidancePanel}}
 
     <form>
-      {{> Organizations_MainSettings organization=organization}}
+      {{> Organizations_MainSettings name=name currency=currency}}
       {{> Organizations_Departments}}
       {{> Organizations_StandardsTypes}}
       {{> Organizations_StandardsBookSections}}

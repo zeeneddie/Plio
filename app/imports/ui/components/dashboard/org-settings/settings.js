@@ -3,37 +3,57 @@ import { update } from '/imports/api/organizations/methods.js'
 
 
 Template.Organizations_Settings.viewmodel({
+  saving(val) {
+    const modalHeading = this.child('ModalHeading');
+
+    if (val !== undefined) {
+      modalHeading.saving(val);
+    }
+
+    return modalHeading.saving();
+  },
   organization() {
     // temporary!
     return Organizations.findOne();
   },
+  name() {
+    return this.organization().name;
+  },
+  currency() {
+    return this.organization().currency;
+  },
   stepTimes() {
-    // temporary!
-    return Organizations.findOne().ncStepTimes;
+    return this.organization().ncStepTimes;
   },
   reminders() {
-    // temporary!
-    return Organizations.findOne().ncReminders;
+    return this.organization().ncReminders;
   },
   guidelines() {
-    // temporary!
-    return Organizations.findOne().ncGuidelines;
+    return this.organization().ncGuidelines;
   },
-  onSave() {
-    // temporary!
+  onClose() {
     return () => {
       const { name, currency } = this.child('Organizations_MainSettings').getData();
       const ncStepTimes = this.child('Organizations_NcStepTimes').getData();
       const ncReminders = this.child('Organizations_NcReminders').getData();
       const ncGuidelines = this.child('Organizations_NcGuidelines').getData();
 
-      const _id = this.organization()._id;
+      const { _id } = this.organization();
+
+      this.saving(true);
 
       update.call({
         _id, name, currency, ncStepTimes,
         ncReminders, ncGuidelines
       }, (err, res) => {
-        if (err) toastr.error(err);
+        if (err) {
+          toastr.error(err);
+        } else {
+          toastr.success('Organization has been updated');
+        }
+
+        this.saving(false);
+        $('#org-settings-modal').modal('hide');
       });
     };
   }
