@@ -1,8 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 export default {
-  update({ selectedOrganizationSerialNumber }) {
-    const userId = this.userId;
+  update({ selectedOrganizationSerialNumber, userId }) {
     Meteor.users.update(userId, {
       $set: {
         selectedOrganizationSerialNumber

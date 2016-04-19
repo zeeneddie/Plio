@@ -6,12 +6,10 @@ import '/imports/ui/components';
 import '/imports/ui/pages';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { update } from '/imports/api/users/methods.js';
-
 
 FlowRouter.route('/', {
   name: 'home',
-  action: function(params) {
+  action(params) {
     BlazeLayout.render('LoginLayout');
   }
 });
@@ -22,7 +20,8 @@ AccountsTemplates.configureRoute('signIn', {
   path: '/sign-in',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
+  redirect: redirectHandler
 });
 
 AccountsTemplates.configureRoute('signUp', {
@@ -31,7 +30,8 @@ AccountsTemplates.configureRoute('signUp', {
   path: '/sign-up',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
+  redirect: redirectHandler
 });
 
 FlowRouter.route('/hello', {
@@ -44,12 +44,12 @@ FlowRouter.route('/hello', {
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   action(params) {
-    // const selectedOrganizationSerialNumber = params.orgSerialNumber;
-    // update.call({
-    //   selectedOrganizationSerialNumber
-    // });
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
     });
   }
 });
+
+function redirectHandler() {
+  FlowRouter.go('hello');
+};

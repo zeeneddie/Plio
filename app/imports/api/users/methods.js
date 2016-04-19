@@ -10,7 +10,7 @@ export const update = new ValidatedMethod({
 
   validate: new SimpleSchema({
     selectedOrganizationSerialNumber: {
-      type: String
+      type: Number
     }
   }).validator(),
 
@@ -18,7 +18,7 @@ export const update = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot create an organization'
+        403, 'Unauthorized user cannot select organizations'
       );
     }
     const orgExists = !!Organizations.findOne({ 'users.userId': userId, serialNumber: selectedOrganizationSerialNumber });
@@ -26,6 +26,6 @@ export const update = new ValidatedMethod({
       throw new Meteor.Error('not-found', 'Could not find selected organization.');
     }
 
-    return UserService.update({ selectedOrganizationSerialNumber });
+    return UserService.update({ selectedOrganizationSerialNumber, userId });
   }
 });
