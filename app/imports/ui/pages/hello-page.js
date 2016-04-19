@@ -14,8 +14,18 @@ Template.HelloPage.viewmodel({
         if (selectedOrganizationSerialNumber) {
           FlowRouter.go('dashboardPage', { orgSerialNumber: selectedOrganizationSerialNumber });
         } else {
-          const { serialNumber } = Organizations.findOne({ 'users': { $elemMatch: { userId: currentUser._id, roles: 'owner' } } }) ||
-                                    Organizations.findOne({ 'users.userId': currentUser._id });
+          const { serialNumber } = Organizations.findOne(
+            {
+              $or: [
+                {
+                  'users': { $elemMatch: { userId: currentUser._id, roles: 'owner' } }
+                },
+                {
+                  'users.userId': currentUser._id
+                }
+              ]
+            }
+          );
           FlowRouter.go('dashboardPage', { orgSerialNumber: serialNumber });
         }
       } else {
