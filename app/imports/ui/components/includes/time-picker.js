@@ -21,6 +21,12 @@ Template.TimePicker.viewmodel((context = {}) => {
     },
     isSelectedUnit(unit) {
       return this.timeUnit() === unit;
+    },
+    getData() {
+      return {
+        timeValue: Number(this.timeValue()),
+        timeUnit: this.timeUnit()
+      };
     }
   };
 });

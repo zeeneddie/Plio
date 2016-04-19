@@ -1,3 +1,7 @@
 Template.Organizations_NcStepTime.viewmodel((context) => {
-  return {};
+  return {
+    getData() {
+      return this.timeData.getData();
+    }
+  };
 });

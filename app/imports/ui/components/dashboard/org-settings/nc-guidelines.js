@@ -1,4 +1,4 @@
-Template.Organizations_NcReminders.viewmodel((context) => {
+Template.Organizations_NcGuidelines.viewmodel((context) => {
   return {
     getData() {
       return {

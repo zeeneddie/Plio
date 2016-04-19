@@ -5,6 +5,11 @@ Template.Organizations_NcGuideline.viewmodel((context = {}) => {
     text: '',
     onCreated() {
       this.load({ text });
+    },
+    getData() {
+      return {
+        text: this.text()
+      };
     }
   };
 });

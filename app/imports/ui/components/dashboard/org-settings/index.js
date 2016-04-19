@@ -4,6 +4,7 @@ import './main-settings.js';
 import './nc-guideline.html';
 import './nc-guideline.js';
 import './nc-guidelines.html';
+import './nc-guidelines.js';
 import './nc-reminder.html';
 import './nc-reminder.js';
 import './nc-reminders.html';

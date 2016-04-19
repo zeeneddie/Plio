@@ -21,9 +21,13 @@ Template.Organizations_Settings.viewmodel({
   onSave() {
     // temporary!
     return () => {
-      console.log(this.child('Organizations_NcStepTimes'));
-      console.log(this.child('Organizations_NcReminders'));
-      console.log(this.child('Organizations_NcGuidelines'));
+      const ncStepTimes = this.child('Organizations_NcStepTimes').getData();
+      const ncReminders = this.child('Organizations_NcReminders').getData();
+      const ncGuidelines = this.child('Organizations_NcGuidelines').getData();
+
+      console.log(ncStepTimes);
+      console.log(ncReminders);
+      console.log(ncGuidelines);
     };
   }
 });
