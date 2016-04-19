@@ -1,0 +1,6 @@
+<template name="OrganizationsMenuItem">
+  <a class="dropdown-item {{isActivePath regex=regex}}"
+      href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}" {{b 'click: selectOrg'}}>
+    {{name}}
+  </a>
+</template>

@@ -4,10 +4,10 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-Template.HelloPage.onCreated(function() {
-  this.autorun(() => {
+Template.HelloPage.viewmodel({
+  autorun() {
     const currentUser = Meteor.user();
-    const organizationsHandle = this.subscribe('organizationsByUserId');
+    const organizationsHandle = this.templateInstance.subscribe('organizationsByUserId');
     if (!Meteor.loggingIn() && organizationsHandle.ready()) {
       if (currentUser) {
         const { selectedOrganizationSerialNumber } = currentUser;
@@ -22,5 +22,5 @@ Template.HelloPage.onCreated(function() {
         FlowRouter.go('signIn');
       }
     }
-  });
+  }
 });
