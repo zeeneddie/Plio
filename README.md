@@ -1,9 +1,11 @@
 # PLIO
+
 The first on-demand system for compliance management in the enterprise, using lean principles
 
 Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](guide.meteor.com).
 
 # MOTIVATION
+
 Plio is a collaborative software tool designed to support a new approach to compliance management based on the principles of continuous improvement.
 
 Regulated organizations face particular challenges. Not only do they need to meet the requirements of customers but also the requirements of their regulatory agency. By applying the principles of continuous improvement, businesses can streamline the compliance management process whilst simultaneously finding ways to reduce cost and waste.
@@ -17,19 +19,23 @@ Source: https://www.getvetter.com/posts/129-define-continuous-improvement-8-expe
 Also see: http://www.oceg.org/resources/leangrc-lean-grc-series/
 
 # GETTING STARTED
+
 ## 1. Clone this repository ##
+
 `cd <PROJECTS_FOLDER>`
 
 `git clone https://github.com/sives/Plio.git`
 
 ## 2. Install Meteor ##
+
 ### OS X or Linux ###
 Install the latest official Meteor release from your terminal:
 `curl https://install.meteor.com/ | sh`
 ### Windows ###
 [Download the official Meteor installer](https://install.meteor.com/windows)
 
-## 3. Run a Meteor project locally ###
+## 3. Run a Meteor project locally ##
+
 Go to the Meteor project directory (/app) and execute
 `meteor`
 
@@ -40,8 +46,7 @@ If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor i
 
 `meteor -p 2000`
 
-#DEVELOPMENT PROCESS
-Each card on Trello should be assosiated with a corresponding branch.
+#DEVELOPMENT
 
 ## Contribution process
 
@@ -70,7 +75,6 @@ This approach allows to avoid old code appearing in merged version.
 ## Style Guide
 
 ### General recomendations: 
-
 * Use variable's names that makes sense.
 * Use `let` and `const` instead of `var`.
 * Extract complex logic into separate class.
@@ -86,7 +90,6 @@ This approach allows to avoid old code appearing in merged version.
 * IF YOU ARE WORKING WITH UNSATISFIED QUALITY CODE, PELASE, REWRITE IT FOLLOWING THIS GUIDE.
 
 ### Client side (Blaze):
-
 * Correct order for Blaze's template configuration methods: `onCreated, onRendered, helpers, events, onDestroyed`.
 * Don't use `Session` if you can pass data using template context.
 * Don't use global JQuery selectors (use `this.$('.my-element')` instead of `$('.my-element')`).
@@ -105,9 +108,9 @@ This approach allows to avoid old code appearing in merged version.
 ```
 
 ### Server side:
-
 * Each argument should be checked using `check(target, Type)` inside all publishers and methods.
 * Use ValidatedMethods instead of regular Meteor methods.
 
 #License
+
 The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
