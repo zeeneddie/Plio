@@ -42,7 +42,11 @@ If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor i
 
 #DEVELOPMENT PROCESS
 Each card on Trello should be assosiated with a corresponding branch.
-The name of the branch should contain both the id and short description. E.g. T61-org-settings or PL3-user-registration.
+
+The name of the branch should contain both the id and short description. 
+
+E.g. T61-org-settings or PL3-user-registration.
+
 A link to the pull request should be included in the card's description.
 
 #License
