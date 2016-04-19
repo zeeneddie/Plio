@@ -9,5 +9,4 @@ import './includes/modal-window.html';
 import './includes/modal-window.js';
 import './useraccounts';
 import './dashboard/organizations-menu';
-import './dashboard/user-menu.html';
-import './dashboard/user-menu.js';
+import './dashboard/user-menu';

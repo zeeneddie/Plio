@@ -1,5 +1,5 @@
-Template.UserStats.helpers({
+Template.UserStats.viewmodel({
   usersOnline() {
-    return Meteor.users.find({status: 'online'}).fetch()
+    return Meteor.users.find({status: 'online'});
   }
 });

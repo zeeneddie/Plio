@@ -8,7 +8,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           {{#each getStatuses}}
-            <a class="js-status dropdown-item {{#if isActiveStatus @index}}active{{/if}}" href="#">
+            <a class="dropdown-item {{#if isActiveStatus @index}}active{{/if}}" href="#" {{b "click: changeStatus"}}>
               <i class="fa fa-circle {{css}} label-status"></i>
               {{text}}
             </a>
@@ -26,7 +26,7 @@
           <a class="dropdown-item" href="#">
             Standard subcards
           </a>
-          <a class="dropdown-item logout-link" href="#">
+          <a class="dropdown-item" href="#" {{b "click: logout"}}>
             Logout
           </a>
         </div>
