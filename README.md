@@ -48,6 +48,7 @@ The name of the branch should contain both the id and short description.
 E.g. T61-org-settings or PL3-user-registration.
 
 A link to the pull request should be included in the card's description.
+The name of PR (Pull Request) should contain the id and short description. It should be simple but not ambiguous.
 
 #License
 The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
