@@ -15,6 +15,12 @@ Template.Organizations_MainSettings.viewmodel((context = {}) => {
     },
     onCreated() {
       this.load(organization);
+    },
+    getData() {
+      return {
+        name: this.name(),
+        currency: this.currency()
+      };
     }
   };
 });

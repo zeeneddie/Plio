@@ -21,10 +21,12 @@ Template.Organizations_Settings.viewmodel({
   onSave() {
     // temporary!
     return () => {
+      const mainSettings = this.child('Organizations_MainSettings').getData();
       const ncStepTimes = this.child('Organizations_NcStepTimes').getData();
       const ncReminders = this.child('Organizations_NcReminders').getData();
       const ncGuidelines = this.child('Organizations_NcGuidelines').getData();
 
+      console.log(mainSettings);
       console.log(ncStepTimes);
       console.log(ncReminders);
       console.log(ncGuidelines);
