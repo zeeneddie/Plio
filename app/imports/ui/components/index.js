@@ -5,6 +5,8 @@ import './dashboard/dashboard-header.html';
 import './dashboard/dashboard-footer.html';
 import './includes/time-picker.html';
 import './includes/time-picker.js';
+import './includes/inline-form-buttons.html';
+import './includes/inline-form-buttons.js';
 import './login-header.html';
 import './standard-header.html';
 import './modals';

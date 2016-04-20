@@ -1,0 +1,11 @@
+<template name="Organizations_Department">
+  <div class="form-group">
+    <div class="form-group form-group-flex">
+      <div class="form-group-flex-flex">
+        <input type="text" class="form-control" placeholder="Department"
+            {{b "value: name, keyup: onKeyup"}} />
+      </div>
+      {{> InlineFormButtons onSave=onSave onDelete=onDelete}}
+    </div>
+  </div>
+</template>

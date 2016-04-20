@@ -1,4 +1,7 @@
+import './department.html';
+import './department.js';
 import './departments.html';
+import './departments.js';
 import './main-settings.html';
 import './main-settings.js';
 import './nc-guideline.html';

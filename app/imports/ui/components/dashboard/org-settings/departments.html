@@ -1,94 +1,21 @@
 <template name="Organizations_Departments">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#departments" data-toggle="collapse">
+  <div class="card-block card-block-collapse-toggle collapsed" href="#departments"
+      data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Departments</h4>
     <h4 class="card-title pull-xs-right">
-      <span class="text-muted">8</span>
+      <span class="text-muted">{{departmentsCount}}</span>
     </h4>
   </div>
-
   <div class="card-block-collapse collapse" id="departments">
     <div class="card-block">
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Sales"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
+      <div id="departments-forms">
+        {{#each departments}}
+          {{> Organizations_Department }}
+        {{/each}}
       </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Marketing"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Customer Service"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Finance"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Administration"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Operations"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="R&D"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="form-group form-group-flex">
-          <div class="form-group-flex-flex">
-            <input type="text" class="form-control" placeholder="Department" value="Compliance"/>
-          </div>
-          <button type="button" class="btn btn-secondary btn-icon margin-left">
-            <i class="fa fa-times-circle"></i>
-          </button>
-        </div>
-      </div>
-      <button class="btn btn-primary" type="button">Add department</button>
+      <button class="btn btn-primary" type="button" {{b "click: addDepartmentForm"}}>
+        Add department
+      </button>
     </div>
   </div>
 </template>

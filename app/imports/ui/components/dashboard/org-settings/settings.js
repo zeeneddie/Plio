@@ -1,4 +1,5 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { update } from '/imports/api/organizations/methods.js'
 
 
@@ -15,6 +16,13 @@ Template.Organizations_Settings.viewmodel({
   organization() {
     // temporary!
     return Organizations.findOne();
+  },
+  organizationId() {
+    return this.organization()._id;
+  },
+  departments() {
+    const organizationId = this.organization()._id;
+    return Departments.find({ organizationId });
   },
   name() {
     return this.organization().name;
