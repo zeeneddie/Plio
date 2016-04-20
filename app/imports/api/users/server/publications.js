@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 
 Meteor.publish(null, function() {
-  return Meteor.users.find({ _id: this.userId }, { fields: { selectedOrganizationSerialNumber: 1 } });
+  return Meteor.users.find({ _id: this.userId });
 });
