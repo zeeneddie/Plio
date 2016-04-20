@@ -1,0 +1,11 @@
+<template name="Organizations_StandardType">
+  <div class="form-group form-group-flex">
+    <div class="form-group-flex-flex">
+      <input type="text" class="form-control" placeholder="Standard type"
+          {{b "value: name, keyup: onKeyup"}} />
+    </div>
+    <input type="text" class="form-control margin-left" placeholder="Short"
+        {{b "value: abbreviation, keyup: onKeyup"}} style="width:100px"/>
+    {{> InlineFormButtons onSave=onSave onDelete=onDelete}}
+  </div>
+</template>

@@ -15,7 +15,7 @@
     <form>
       {{> Organizations_MainSettings name=name currency=currency}}
       {{> Organizations_Departments departments=departments organizationId=organizationId}}
-      {{> Organizations_StandardsTypes}}
+      {{> Organizations_StandardTypes standardTypes=standardTypes organizationId=organizationId}}
       {{> Organizations_StandardsBookSections}}
       {{> Organizations_NcStepTimes stepTimes=stepTimes}}
       {{> Organizations_NcReminders reminders=reminders}}

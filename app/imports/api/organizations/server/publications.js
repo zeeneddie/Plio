@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Organizations } from '../organizations.js';
 import { Departments } from '../../departments/departments.js';
+import { StandardTypes } from '../../standard-types/standard-types.js';
 
 
 Meteor.publishComposite(null, {
@@ -10,6 +11,12 @@ Meteor.publishComposite(null, {
   children: [{
     find: function(org) {
       return Departments.find({
+        organizationId: org._id
+      });
+    }
+  }, {
+    find: function(org) {
+      return StandardTypes.find({
         organizationId: org._id
       });
     }

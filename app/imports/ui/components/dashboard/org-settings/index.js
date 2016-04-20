@@ -19,4 +19,7 @@ import './nc-step-times.js';
 import './settings.html';
 import './settings.js';
 import './standards-book-sections.html';
-import './standards-types.html';
+import './standard-types.html';
+import './standard-types.js';
+import './standard-type.html';
+import './standard-type.js';
