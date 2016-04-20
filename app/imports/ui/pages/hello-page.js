@@ -10,27 +10,26 @@ Template.HelloPage.viewmodel({
     const organizationsHandle = this.templateInstance.subscribe('organizationsByUserId');
     if (!Meteor.loggingIn() && organizationsHandle.ready()) {
       if (currentUser) {
-        const { selectedOrganizationSerialNumber } = currentUser;
-        if (selectedOrganizationSerialNumber) {
-          FlowRouter.go('dashboardPage', { orgSerialNumber: selectedOrganizationSerialNumber });
+        // if the user is an owner of organization go to that organization no matter what
+        const ownerOrg = Organizations.findOne({ 'users': { $elemMatch: { userId: currentUser._id, role: 'owner' } } });
+        if (ownerOrg) {
+          this.routeToDashboard(ownerOrg);
         } else {
-          const { serialNumber } = Organizations.findOne(
-            {
-              $or: [
-                {
-                  'users': { $elemMatch: { userId: currentUser._id, roles: 'owner' } }
-                },
-                {
-                  'users.userId': currentUser._id
-                }
-              ]
-            }
-          );
-          FlowRouter.go('dashboardPage', { orgSerialNumber: serialNumber });
+          const { selectedOrganizationSerialNumber } = currentUser;
+          if (selectedOrganizationSerialNumber) {
+            FlowRouter.go('dashboardPage', { orgSerialNumber: selectedOrganizationSerialNumber });
+          } else {
+            const org = Organizations.findOne({ 'users.userId': currentUser._id });
+            this.routeToDashboard(org);
+          }
         }
       } else {
         FlowRouter.go('signIn');
       }
     }
+  },
+  routeToDashboard(doc) {
+    const { serialNumber } = doc;
+    FlowRouter.go('dashboardPage', { orgSerialNumber: serialNumber });
   }
 });

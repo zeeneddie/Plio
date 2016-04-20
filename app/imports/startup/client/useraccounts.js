@@ -9,10 +9,20 @@ const email = AccountsTemplates.removeField('email');
 const password = AccountsTemplates.removeField('password');
 
 AccountsTemplates.addField({
-  _id: 'fullName',
+  _id: 'firstName',
   type: 'text',
-  displayName: 'Full name',
-  placeholder: 'Full name',
+  displayName: 'First Name',
+  placeholder: 'First Name',
+  required: true,
+  minLength: 1,
+  maxLength: 40
+});
+
+AccountsTemplates.addField({
+  _id: 'lastName',
+  type: 'text',
+  displayName: 'Last Name',
+  placeholder: 'Last Name',
   required: true,
   minLength: 1,
   maxLength: 40
