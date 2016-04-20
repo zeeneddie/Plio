@@ -1,13 +1,5 @@
-Template.Organizations_NcGuideline.viewmodel((context = {}) => {
-  const { text = '' } = context;
-
-  return {
-    text: '',
-    onCreated() {
-      this.load({ text });
-    },
-    getData() {
-      return this.text();
-    }
-  };
+Template.Organizations_NcGuideline.viewmodel({
+  getData() {
+    return this.text();
+  }
 });

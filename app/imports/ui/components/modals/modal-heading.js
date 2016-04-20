@@ -1,24 +1,17 @@
-Template.ModalHeading.viewmodel((context = {}) => {
-  const {
-    onClose = () => {}
-  } = context;
+Template.ModalHeading.viewmodel({
+  isSaving: false,
+  closeButtonText() {
+    return this.isSaving() ? 'Saving...' : 'Close';
+  },
+  openGuidancePanel(e) {
+    const $button = this.templateInstance.$(e.currentTarget);
 
-  return {
-    onClose: onClose,
-    saving: false,
-    closeButtonText() {
-      return this.saving() ? 'Saving...' : 'Close';
-    },
-    openGuidancePanel(e) {
-      const $button = this.templateInstance.$(e.currentTarget);
+    $button
+      .closest('.card')
+      .find('.guidance-panel')
+      .collapse('show');
 
-      $button
-        .closest('.card')
-        .find('.guidance-panel')
-        .collapse('show');
-
-      $button
-        .removeClass('collapsed');
-    }
-  };
+    $button
+      .removeClass('collapsed');
+  }
 });

@@ -4,14 +4,14 @@ import { update } from '/imports/api/organizations/methods.js'
 
 
 Template.Organizations_Settings.viewmodel({
-  saving(val) {
+  isSaving(val) {
     const modalHeading = this.child('ModalHeading');
 
     if (val !== undefined) {
-      modalHeading.saving(val);
+      modalHeading.isSaving(val);
     }
 
-    return modalHeading.saving();
+    return modalHeading.isSaving();
   },
   organization() {
     // temporary!
@@ -48,7 +48,7 @@ Template.Organizations_Settings.viewmodel({
 
       const { _id } = this.organization();
 
-      this.saving(true);
+      this.isSaving(true);
 
       update.call({
         _id, name, currency, ncStepTimes,
@@ -60,7 +60,7 @@ Template.Organizations_Settings.viewmodel({
           toastr.success('Organization has been updated');
         }
 
-        this.saving(false);
+        this.isSaving(false);
         $('#org-settings-modal').modal('hide');
       });
     };
