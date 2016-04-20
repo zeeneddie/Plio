@@ -10,4 +10,10 @@ import '../../api/departments/department-schema.js';
 import '../../api/departments/department-service.js';
 import '../../api/departments/methods.js';
 
+import '../../api/standard-types/server/publications.js';
+import '../../api/standard-types/standard-types.js';
+import '../../api/standard-types/standard-type-schema.js';
+import '../../api/standard-types/standard-type-service.js';
+import '../../api/standard-types/methods.js';
+
 import '../../api/users/server/publications.js';
