@@ -12,7 +12,7 @@ const routeToDashboard = (doc) => {
 Template.HelloPage.onCreated(function() {
   this.autorun(() => {
     const currentUser = Meteor.user();
-    const organizationsHandle = this.subscribe('organizationsByUserId');
+    const organizationsHandle = this.subscribe('currentUserOrganizations');
     if (!Meteor.loggingIn() && organizationsHandle.ready()) {
       if (currentUser) {
         // if the user is an owner of organization go to that organization no matter what
