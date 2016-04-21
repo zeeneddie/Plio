@@ -1,7 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import {
-  OrgCurrencies, TimeUnits, UserRoles
-} from '/imports/api/constants.js';
+import { OrgCurrencies,  UserRoles } from '/imports/api/constants.js';
+import { TimePeriodSchema } from '../schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({
@@ -15,35 +14,24 @@ const orgUserSchema = new SimpleSchema({
   }
 });
 
-const timePeriodSchema = new SimpleSchema({
-  timeUnit: {
-    type: String,
-    allowedValues: _.values(TimeUnits)
-  },
-  timeValue: {
-    type: Number,
-    min: 0
-  }
-});
-
 const ncStepTimesSchema = new SimpleSchema({
   minor: {
-    type: timePeriodSchema
+    type: TimePeriodSchema
   },
   major: {
-    type: timePeriodSchema
+    type: TimePeriodSchema
   },
   critical: {
-    type: timePeriodSchema
+    type: TimePeriodSchema
   }
 });
 
 const ncReminderSchema = new SimpleSchema({
   interval: {
-    type: timePeriodSchema
+    type: TimePeriodSchema
   },
   pastDue: {
-    type: timePeriodSchema
+    type: TimePeriodSchema
   }
 });
 
@@ -96,13 +84,6 @@ const OrganizationEditableFields = {
   }
 };
 
-const OrganizationFormSchema = new SimpleSchema([OrganizationEditableFields, {
-  _id: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  }
-}]);
-
 const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
   serialNumber: {
     type: Number,
@@ -114,4 +95,4 @@ const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
   }
 }]);
 
-export { OrganizationFormSchema, OrganizationSchema };
+export { OrganizationEditableFields, OrganizationSchema };

@@ -3,23 +3,43 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import OrganizationService from './organization-service.js';
-import { OrganizationFormSchema } from './organization-schema.js';
+import { OrganizationEditableFields } from './organization-schema.js';
+import { NCTypes } from '../constants.js';
+import { TimePeriodSchema } from '../schemas.js';
+import { checkUserId } from '../checkers.js';
 
+
+const idSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  }
+});
+
+const nameSchema = new SimpleSchema({
+  name: { type: String }
+});
+
+const ncTypeSchema = new SimpleSchema({
+  ncType: {
+    type: String,
+    allowedValues: _.values(NCTypes)
+  }
+});
+
+const updMethodErrMessage = 'Unauthorized user cannot update an organization';
 
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
 
-  validate: new SimpleSchema({
-    name: { type: String }
-  }).validator(),
+  validate: nameSchema.validator(),
 
   run({ name }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create an organization'
-      );
-    }
+
+    checkUserId(
+      userId, 'Unauthorized user cannot create an organization'
+    );
 
     return OrganizationService.insert({
       name,
@@ -31,15 +51,92 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Organizations.update',
 
-  validate: OrganizationFormSchema.validator(),
+  validate: new SimpleSchema([
+    OrganizationEditableFields, idFieldSchema
+  ]).validator(),
 
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update an organization'
-      );
-    }
+    checkUserId(this.userId, updMethodErrMessage);
 
     return OrganizationService.update(doc);
+  }
+});
+
+export const setName = new ValidatedMethod({
+  name: 'Organizations.setName',
+
+  validate: new SimpleSchema([
+    idFieldSchema, nameSchema
+  ]).validator(),
+
+  run(doc) {
+    checkUserId(this.userId, updMethodErrMessage);
+
+    return OrganizationService.setName(doc);
+  }
+});
+
+export const setDefaultCurrency = new ValidatedMethod({
+  name: 'Organizations.setDefaultCurrency',
+
+  validate: new SimpleSchema([idFieldSchema, {
+    currency: { type: String }
+  }]).validator(),
+
+  run(doc) {
+    checkUserId(this.userId, updMethodErrMessage);
+
+    return OrganizationService.setDefaultCurrency(doc);
+  }
+});
+
+export const setStepTime = new ValidatedMethod({
+  name: 'Organizations.setStepTime',
+
+  validate: new SimpleSchema([
+    idFieldSchema, ncTypeSchema, TimePeriodSchema
+  ]).validator(),
+
+  run(doc) {
+    checkUserId(this.userId, updMethodErrMessage);
+
+    return OrganizationService.setStepTime(doc);
+  }
+});
+
+export const setReminder = new ValidatedMethod({
+  name: 'Organizations.setReminder',
+
+  validate: new SimpleSchema([
+    idFieldSchema, ncTypeSchema, TimePeriodSchema,
+    {
+      remiderType: {
+        type: String,
+        allowedValues: ['interval', 'pastDue']
+      }
+    }
+  ]).validator(),
+
+  run(doc) {
+    checkUserId(this.userId, updMethodErrMessage);
+
+    return OrganizationService.setReminder(doc);
+  }
+});
+
+export const setGuideline = new ValidatedMethod({
+  name: 'Organizations.setGuideline',
+
+  validate: new SimpleSchema([
+    idFieldSchema, ncTypeSchema,
+    {
+      text: { type: String }
+    }
+  ]).validator(),
+
+  run(doc) {
+    checkUserId(this.userId, updMethodErrMessage);
+
+    return OrganizationService.setGuideline(doc);
   }
 });
