@@ -1,5 +1,5 @@
 Template.Organizations_NcStepTime.viewmodel({
-  getData() {
-    return this.timeData.getData();
+  onChange() {
+    return this.parent().onChange();
   }
 });

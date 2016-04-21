@@ -3,19 +3,10 @@ import { insert, update, remove } from '/imports/api/standard-types/methods.js';
 
 
 Template.Organizations_StandardType.viewmodel({
-  autorun() {
-    if (this._id) {
-      this.standardType = StandardTypes.findOne({
-        _id: this._id()
-      });
-    }
-  },
   shouldSave() {
-    let storedName, storedAbbr;
-    if (this.standardType) {
-      storedName = this.standardType.name;
-      storedAbbr = this.standardType.abbreviation;
-    }
+    const tplData = this.templateInstance.data;
+    const storedName = tplData.name;
+    const storedAbbr = tplData.abbreviation;
 
     const name = this.name();
     const abbreviation = this.abbreviation();
@@ -38,8 +29,6 @@ Template.Organizations_StandardType.viewmodel({
     remove.call({ _id }, (err, res) => {
       if (err) {
         toastr.error(err);
-      } else {
-        toastr.success('Standard type has been deleted');
       }
     });
   },
@@ -55,8 +44,6 @@ Template.Organizations_StandardType.viewmodel({
       insert.call({ name, abbreviation, organizationId }, (err, res) => {
         if (err) {
           toastr.error(err);
-        } else {
-          toastr.success('Standard type has been created');
         }
 
         this.destroy();
@@ -67,8 +54,6 @@ Template.Organizations_StandardType.viewmodel({
       update.call({ _id, name, abbreviation }, (err, res) => {
         if (err) {
           toastr.error(err);
-        } else {
-          toastr.success('Standard type has been updated');
         }
       });
     }

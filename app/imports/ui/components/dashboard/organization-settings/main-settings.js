@@ -4,11 +4,6 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.Organizations_MainSettings.viewmodel({
-  autorun() {
-    this.organization = Organizations.findOne({
-      _id: this.organizationId()
-    });
-  },
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -17,7 +12,7 @@ Template.Organizations_MainSettings.viewmodel({
   },
   updateName() {
     const name = this.name();
-    const savedName = this.organization.name;
+    const savedName = this.templateInstance.data.name;
 
     if (!name || name === savedName) return;
 
@@ -34,12 +29,6 @@ Template.Organizations_MainSettings.viewmodel({
     const _id = this.organizationId();
 
     setDefaultCurrency.call({ _id, currency }, afterUpdate);
-  },
-  getData() {
-    return {
-      name: this.name(),
-      currency: this.currency()
-    };
   }
 });
 

@@ -3,19 +3,8 @@ import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.Organizations_Department.viewmodel({
-  autorun() {
-    if (this._id) {
-      this.department = Departments.findOne({
-        _id: this._id()
-      });
-    }
-  },
   shouldSave() {
-    let savedName;
-    if (this.department) {
-      savedName = this.department.name;
-    }
-
+    let savedName = this.templateInstance.data.name;
     const name = this.name();
 
     return name && name !== savedName;
@@ -31,8 +20,6 @@ Template.Organizations_Department.viewmodel({
       insert.call({ name, organizationId }, (err, res) => {
         if (err) {
           toastr.error(err);
-        } else {
-          toastr.success('Department has been created');
         }
 
         this.destroy();
@@ -43,8 +30,6 @@ Template.Organizations_Department.viewmodel({
       update.call({ _id, name }, (err, res) => {
         if (err) {
           toastr.error(err);
-        } else {
-          toastr.success('Department has been updated');
         }
       });
     }
@@ -62,8 +47,6 @@ Template.Organizations_Department.viewmodel({
     remove.call({ _id }, (err, res) => {
       if (err) {
         toastr.error(err);
-      } else {
-        toastr.success('Department has been deleted');
       }
     });
   },

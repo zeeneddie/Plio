@@ -1,14 +1,15 @@
 <template name="TimePicker">
   <div class="input-group {{cssClass}}">
-    <input type="number" class="form-control" {{b "value: timeValue"}}>
+    <input type="number" class="form-control"
+        {{b "value: timeValue, focusout: updateTimeValue"}} />
     <span class="input-group-btn dropdown">
       <button type="button" class="btn btn-secondary dropdown-toggle"
           {{b "text: timeUnit"}} data-toggle="dropdown">
       </button>
       <div class="dropdown-menu dropdown-menu-right">
         {{#each timeUnits}}
-          <a href="#" class="dropdown-item"
-              {{b "{click: timeUnit(this), class: {active: isSelectedUnit(this)}}"}}>
+          <a class="dropdown-item"
+              {{b "{click: updateTimeUnit(this), class: {active: isSelectedUnit(this)}}"}}>
             {{this}}
           </a>
         {{/each}}

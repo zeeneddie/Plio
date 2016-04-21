@@ -1,9 +1,15 @@
 <template name="Organizations_NcStepTime">
   <legend>{{title}}</legend>
   <div class="form-group row">
-    <label class="form-control-label col-sm-4 col-xs-12">Default step time</label>
+    <label class="form-control-label col-sm-4 col-xs-12">
+      Default step time
+    </label>
     <div class="col-sm-4 col-xs-12">
-      {{> TimePicker timeValue=timeValue timeUnit=timeUnit ref="timeData"}}
+      {{> TimePicker
+          timeValue=timeValue
+          timeUnit=timeUnit
+          onChange=onChange
+          ncType=ncType}}
     </div>
   </div>
 </template>
