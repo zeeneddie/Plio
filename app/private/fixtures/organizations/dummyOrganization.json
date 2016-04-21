@@ -1,0 +1,11 @@
+{
+  "_id" : "dummyOrganization",
+  "name" : "Dummy Organization",
+  "serialNumber" : 99,
+  "users" : [
+    {
+      "userId" : "dummyUser",
+      "role" : "owner"
+    }
+  ]
+}

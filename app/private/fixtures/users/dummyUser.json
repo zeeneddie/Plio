@@ -1,0 +1,23 @@
+{
+  "_id" : "dummyUser",
+  "createdAt" : "ISODate('2016-04-18T14:53:07.408Z')",
+  "services" : {
+    "password" : {
+      "bcrypt" : "$2a$10$W0piRM5oNBPSksAQtjUGP.Xspozor467IDXoIdQzQnPCveoPWJDeq"
+    },
+    "resume" : {
+      "loginTokens" : [ ]
+    }
+  },
+  "emails" : [
+    {
+      "address" : "dummy1@pliohub.com",
+      "verified" : true
+    }
+  ],
+  "profile" : {
+    "fullName" : "Dummy User"
+  },
+  "status" : "offline",
+  "statusConnection" : "offline"
+}
