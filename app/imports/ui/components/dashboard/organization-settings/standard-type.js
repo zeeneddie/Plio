@@ -10,7 +10,7 @@ Template.Organizations_StandardType.viewmodel({
       });
     }
   },
-  onKeyup() {
+  shouldSave() {
     let storedName, storedAbbr;
     if (this.standardType) {
       storedName = this.standardType.name;
@@ -20,70 +20,58 @@ Template.Organizations_StandardType.viewmodel({
     const name = this.name();
     const abbreviation = this.abbreviation();
 
-    const editMode = _.every([
+    return _.every([
       name && abbreviation,
       (name !== storedName) || (abbreviation !== storedAbbr)
     ]);
-
-    if (editMode) {
-      this.editMode(true);
-    } else {
-      this.editMode(false);
-    }
   },
-  onDelete() {
-    return () => {
-      if (!this._id) {
-        this.destroy();
-        return;
+  delete() {
+    if (!this._id) {
+      this.destroy();
+      return;
+    }
+
+    if (!confirm('Delete this standard type?')) return;
+
+    const _id = this._id();
+
+    remove.call({ _id }, (err, res) => {
+      if (err) {
+        toastr.error(err);
+      } else {
+        toastr.success('Standard type has been deleted');
       }
+    });
+  },
+  save() {
+    if (!this.shouldSave()) return;
 
-      if (!confirm('Delete this standard type?')) return;
+    const name = this.name();
+    const abbreviation = this.abbreviation();
 
-      const _id = this._id();
+    if (!this._id) {
+      const organizationId = this.organizationId();
 
-      remove.call({ _id }, (err, res) => {
+      insert.call({ name, abbreviation, organizationId }, (err, res) => {
         if (err) {
           toastr.error(err);
         } else {
-          toastr.success('Standard type has been deleted');
+          toastr.success('Standard type has been created');
+        }
+
+        this.destroy();
+      });
+    } else {
+      const _id = this._id();
+
+      update.call({ _id, name, abbreviation }, (err, res) => {
+        if (err) {
+          toastr.error(err);
+        } else {
+          toastr.success('Standard type has been updated');
         }
       });
-    };
-  },
-  onSave() {
-    return () => {
-      const name = this.name();
-      const abbreviation = this.abbreviation();
-
-      if (!(name && abbreviation)) return;
-
-      if (!this._id) {
-        const organizationId = this.organizationId();
-
-        insert.call({ name, abbreviation, organizationId }, (err, res) => {
-          if (err) {
-            toastr.error(err);
-          } else {
-            toastr.success('Standard type has been created');
-          }
-
-          this.destroy();
-        });
-      } else {
-        const _id = this._id();
-
-        update.call({ _id, name, abbreviation }, (err, res) => {
-          if (err) {
-            toastr.error(err);
-          } else {
-            toastr.success('Standard type has been updated');
-          }
-
-          this.editMode(false);
-        });
-      }
-    };
+    }
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);
