@@ -52,7 +52,7 @@ export const update = new ValidatedMethod({
   name: 'Organizations.update',
 
   validate: new SimpleSchema([
-    OrganizationEditableFields, idFieldSchema
+    OrganizationEditableFields, idSchema
   ]).validator(),
 
   run(doc) {
@@ -66,7 +66,7 @@ export const setName = new ValidatedMethod({
   name: 'Organizations.setName',
 
   validate: new SimpleSchema([
-    idFieldSchema, nameSchema
+    idSchema, nameSchema
   ]).validator(),
 
   run(doc) {
@@ -79,7 +79,7 @@ export const setName = new ValidatedMethod({
 export const setDefaultCurrency = new ValidatedMethod({
   name: 'Organizations.setDefaultCurrency',
 
-  validate: new SimpleSchema([idFieldSchema, {
+  validate: new SimpleSchema([idSchema, {
     currency: { type: String }
   }]).validator(),
 
@@ -94,7 +94,7 @@ export const setStepTime = new ValidatedMethod({
   name: 'Organizations.setStepTime',
 
   validate: new SimpleSchema([
-    idFieldSchema, ncTypeSchema, TimePeriodSchema
+    idSchema, ncTypeSchema, TimePeriodSchema
   ]).validator(),
 
   run(doc) {
@@ -108,7 +108,7 @@ export const setReminder = new ValidatedMethod({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
-    idFieldSchema, ncTypeSchema, TimePeriodSchema,
+    idSchema, ncTypeSchema, TimePeriodSchema,
     {
       remiderType: {
         type: String,
@@ -128,7 +128,7 @@ export const setGuideline = new ValidatedMethod({
   name: 'Organizations.setGuideline',
 
   validate: new SimpleSchema([
-    idFieldSchema, ncTypeSchema,
+    idSchema, ncTypeSchema,
     {
       text: { type: String }
     }
