@@ -3,15 +3,7 @@ import { insert, update, remove } from '/imports/api/standard-types/methods.js';
 
 
 Template.Organizations_StandardType.viewmodel({
-  editMode(val) {
-    const buttons = this.child('InlineFormButtons');
-
-    if (val !== undefined) {
-      buttons.editMode(val);
-    }
-
-    return buttons.editMode();
-  },
+  mixin: 'inlineForm',
   autorun() {
     if (this._id) {
       this.standardType = StandardTypes.findOne({
@@ -93,8 +85,5 @@ Template.Organizations_StandardType.viewmodel({
         });
       }
     };
-  },
-  destroy() {
-    Blaze.remove(this.templateInstance.view);
   }
 });

@@ -3,15 +3,7 @@ import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.Organizations_Department.viewmodel({
-  editMode(val) {
-    const buttons = this.child('InlineFormButtons');
-
-    if (val !== undefined) {
-      buttons.editMode(val);
-    }
-
-    return buttons.editMode();
-  },
+  mixin: 'inlineForm',
   autorun() {
     if (this._id) {
       this.department = Departments.findOne({
@@ -85,8 +77,5 @@ Template.Organizations_Department.viewmodel({
         });
       }
     };
-  },
-  destroy() {
-    Blaze.remove(this.templateInstance.view);
   }
 });
