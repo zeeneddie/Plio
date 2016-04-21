@@ -10,20 +10,10 @@
       </a>
     </form>
     <div class="list-group list-group-accordion" id="standardsAccordion">
-      <a class="list-group-item list-group-subheading list-group-toggle collapsed" data-toggle="collapse" href="#collapse-2">
-        <h4 class="list-group-item-heading pull-left">1. Client feedback</h4>
-      </a>
-      <div class="list-group-collapse collapse" id="collapse-2">
-        <div class="list-group">
-          <a class="list-group-item" href="#">
-            <div class="list-group-item-content">
-              <h4 class="list-group-item-heading">1.1 Inquiry handling</h4>
-              <p class="list-group-item-text pull-left">Procedure</p>
-            </div>
-          </a>
-        </div>
-      </div>
-      <a class="list-group-item list-group-subheading list-group-toggle" data-toggle="collapse" href="#collapse-3">
+      {{#each testItems}}
+        {{> ListItem}}
+      {{/each}}
+      <!-- <a class="list-group-item list-group-subheading list-group-toggle" data-toggle="collapse" href="#collapse-3">
         <h4 class="list-group-item-heading pull-left">2. Client onboarding</h4>
       </a>
       <div class="list-group-collapse collapse in" id="collapse-3">
@@ -83,7 +73,7 @@
             </div>
           </a>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

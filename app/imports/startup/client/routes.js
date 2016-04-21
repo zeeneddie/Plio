@@ -44,7 +44,7 @@ FlowRouter.route('/hello', {
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   action(params) {
-    BlazeLayout.render('StandardLayout', {
+    BlazeLayout.render('StandardsLayout', {
       headerTitle: 'Standards book',
       contentList: 'StandardsList',
       contentCard: 'StandardsCard'
