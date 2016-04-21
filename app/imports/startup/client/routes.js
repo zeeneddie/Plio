@@ -43,6 +43,7 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
+  triggersEnter: [checkLoggedIn],
   action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
@@ -51,5 +52,18 @@ FlowRouter.route('/:orgSerialNumber', {
 });
 
 function redirectHandler() {
-  FlowRouter.go('hello');
+  const orgSerialNumber = FlowRouter.getQueryParam('org');
+  if (orgSerialNumber) {
+    FlowRouter.go('dashboardPage', { orgSerialNumber });
+  } else {
+    FlowRouter.go('hello');
+  }
+};
+
+function checkLoggedIn(context, redirect) {
+  if (!Meteor.loggingIn()) {
+    if (!Meteor.user()) {
+      redirect('signIn', {}, { org: context.params.orgSerialNumber });
+    }
+  }
 };
