@@ -57,9 +57,9 @@ export default OrganizationService = {
     });
   },
 
-  setReminder({ _id, ncType, remiderType, timeValue, timeUnit }) {
+  setReminder({ _id, ncType, reminderType, timeValue, timeUnit }) {
     return this._update(_id, {
-      [`ncReminders.${ncType}.${remiderType}`]: { timeValue, timeUnit }
+      [`ncReminders.${ncType}.${reminderType}`]: { timeValue, timeUnit }
     });
   },
 

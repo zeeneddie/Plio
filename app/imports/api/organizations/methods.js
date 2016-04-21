@@ -103,7 +103,7 @@ export const setReminder = new ValidatedMethod({
   validate: new SimpleSchema([
     IdSchema, ncTypeSchema, TimePeriodSchema,
     {
-      remiderType: {
+      reminderType: {
         type: String,
         allowedValues: ['interval', 'pastDue']
       }

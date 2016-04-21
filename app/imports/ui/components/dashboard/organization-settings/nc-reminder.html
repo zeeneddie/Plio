@@ -6,13 +6,17 @@
         timeValue=intervalTimeValue
         timeUnit=intervalTimeUnit
         cssClass="margin-right"
-        ref="interval"}}
+        onChange=onChange
+        ncType=ncType
+        reminderType="interval"}}
     <label class="form-control-label">until</label>
     {{> TimePicker
         timeValue=pastDueTimeValue
         timeUnit=pastDueTimeUnit
         cssClass="margin-right"
-        ref="pastDue"}}
+        onChange=onChange
+        ncType=ncType
+        reminderType="pastDue"}}
     <label class="form-control-label">past due</label>
   </div>
 </template>

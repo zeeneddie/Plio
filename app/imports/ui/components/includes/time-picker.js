@@ -23,5 +23,11 @@ Template.TimePicker.viewmodel({
   },
   change() {
     this.onChange(this);
+  },
+  getData() {
+    return {
+      timeValue: Number(this.timeValue()),
+      timeUnit: this.timeUnit()
+    };
   }
 });
