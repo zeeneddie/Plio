@@ -15,8 +15,8 @@ Template.Organizations_Settings.viewmodel({
     return modalHeading.isSaving();
   },
   organization() {
-    // temporary!
-    return Organizations.findOne();
+    const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
+    return Organizations.findOne({ serialNumber });
   },
   organizationId() {
     return this.organization()._id;
@@ -45,6 +45,6 @@ Template.Organizations_Settings.viewmodel({
     return this.organization().ncGuidelines;
   },
   onClose() {
-    
+
   }
 });

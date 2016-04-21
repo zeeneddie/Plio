@@ -5,11 +5,9 @@
   </div>
   <div class="card-block-collapse collapse" id="nonconformity-guidelines">
     <div class="card-block">
-      {{#with guidelines}}
-        {{> Organizations_NcGuideline ncType="minor" text=minor onChange=onChange}}
-        {{> Organizations_NcGuideline ncType="major" text=major onChange=onChange}}
-        {{> Organizations_NcGuideline ncType="critical" text=critical onChange=onChange}}
-      {{/with}}
+      {{> Organizations_NcGuideline ncType="minor" text=guidelines.minor onChange=onChange}}
+      {{> Organizations_NcGuideline ncType="major" text=guidelines.major onChange=onChange}}
+      {{> Organizations_NcGuideline ncType="critical" text=guidelines.critical onChange=onChange}}
     </div>
   </div>
 </template>

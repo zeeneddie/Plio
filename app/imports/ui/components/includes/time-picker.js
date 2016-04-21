@@ -22,7 +22,9 @@ Template.TimePicker.viewmodel({
     this.change();
   },
   change() {
-    this.onChange(this);
+    if (this.timeValue() && this.timeUnit()) {
+      this.onChange(this);
+    }
   },
   getData() {
     return {
