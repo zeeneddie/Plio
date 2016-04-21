@@ -3,7 +3,6 @@ import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.Organizations_Department.viewmodel({
-  mixin: 'inlineForm',
   autorun() {
     if (this._id) {
       this.department = Departments.findOne({
@@ -11,7 +10,7 @@ Template.Organizations_Department.viewmodel({
       });
     }
   },
-  onKeyup() {
+  shouldSave() {
     let savedName;
     if (this.department) {
       savedName = this.department.name;
@@ -19,63 +18,56 @@ Template.Organizations_Department.viewmodel({
 
     const name = this.name();
 
-    if (!name || name === savedName) {
-      this.editMode(false);
-    } else {
-      this.editMode(true);
-    }
+    return name && name !== savedName;
   },
-  onDelete() {
-    return () => {
-      if (!this._id) {
-        this.destroy();
-        return;
-      }
+  save() {
+    if (!this.shouldSave()) return;
 
-      if (!confirm('Delete this department?')) return;
+    const name = this.name();
 
-      const _id = this._id();
+    if (!this._id) {
+      const organizationId = this.organizationId();
 
-      remove.call({ _id }, (err, res) => {
+      insert.call({ name, organizationId }, (err, res) => {
         if (err) {
           toastr.error(err);
         } else {
-          toastr.success('Department has been deleted');
+          toastr.success('Department has been created');
+        }
+
+        this.destroy();
+      });
+    } else {
+      const _id = this._id();
+
+      update.call({ _id, name }, (err, res) => {
+        if (err) {
+          toastr.error(err);
+        } else {
+          toastr.success('Department has been updated');
         }
       });
-    };
+    }
   },
-  onSave() {
-    return () => {
-      const name = this.name();
+  delete() {
+    if (!this._id) {
+      this.destroy();
+      return;
+    }
 
-      if (!name) return;
+    if (!confirm('Delete this department?')) return;
 
-      if (!this._id) {
-        const organizationId = this.organizationId();
+    const _id = this._id();
 
-        insert.call({ name, organizationId }, (err, res) => {
-          if (err) {
-            toastr.error(err);
-          } else {
-            toastr.success('Department has been created');
-          }
-
-          this.destroy();
-        });
+    remove.call({ _id }, (err, res) => {
+      if (err) {
+        toastr.error(err);
       } else {
-        const _id = this._id();
-
-        update.call({ _id, name }, (err, res) => {
-          if (err) {
-            toastr.error(err);
-          } else {
-            toastr.success('Department has been updated');
-          }
-
-          this.editMode(false);
-        });
+        toastr.success('Department has been deleted');
       }
-    };
+    });
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
   }
 });

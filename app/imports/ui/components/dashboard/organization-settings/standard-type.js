@@ -3,7 +3,6 @@ import { insert, update, remove } from '/imports/api/standard-types/methods.js';
 
 
 Template.Organizations_StandardType.viewmodel({
-  mixin: 'inlineForm',
   autorun() {
     if (this._id) {
       this.standardType = StandardTypes.findOne({
@@ -85,5 +84,8 @@ Template.Organizations_StandardType.viewmodel({
         });
       }
     };
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
   }
 });

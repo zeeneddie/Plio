@@ -3,9 +3,12 @@
     <div class="form-group form-group-flex">
       <div class="form-group-flex-flex">
         <input type="text" class="form-control" placeholder="Department"
-            {{b "value: name, keyup: onKeyup"}} />
+            {{b "value: name, focusout: save"}} />
       </div>
-      {{> InlineFormButtons onSave=onSave onDelete=onDelete}}
+      <button type="button" class="btn btn-secondary btn-icon margin-left"
+          {{b "click: delete"}}>
+        <i class="fa fa-times-circle"></i>
+      </button>
     </div>
   </div>
 </template>
