@@ -1,31 +1,32 @@
 import { Meteor } from 'meteor/meteor';
+
+// Import all collections that should be filled with fixture data here
 import { Organizations } from '../../api/organizations/organizations.js';
 import { Standards } from '../../api/standards/standards.js';
 import { StandardsBookSections } from '../../api/standardsBookSections/standardsBookSections.js';
-import OrganizationService from '../../api/organizations/organization-service.js';
 
+// Extend the global object to have a scope of collections
 _.extend(global, { Organizations, Standards, StandardsBookSections });
 
-// if the database is empty on server start, create some sample data.
 import path from 'path';
 import fs from 'fs';
 import { EJSON } from 'meteor/ejson'
  
-_.mixin({
-  get: function(obj, attrPath) {
-    let attrName, len;
-    let attrVal = obj;
-    attrPath = attrPath.split('.');
-    for (let i = 0, len = attrPath.length; i < len; i++) {
-      attrName = attrPath[i];
-      attrVal = attrVal[attrName];
-      if (_.isUndefined(attrVal) || _.isNull(attrVal)) {
-        break;
-      }
+// If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
+// If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
+const getAttributeValue = (obj, attrPath) => {
+  let attrName, len;
+  let attrVal = obj;
+  attrPath = attrPath.split('.');
+  for (let i = 0, len = attrPath.length; i < len; i++) {
+    attrName = attrPath[i];
+    attrVal = attrVal[attrName];
+    if (_.isUndefined(attrVal) || _.isNull(attrVal)) {
+      break;
     }
-    return attrVal;
   }
-});
+  return attrVal;
+};
 
 const getAssets = (assetsDir) => {
   const assetsPath = path.join(Meteor.rootPath, 'assets', 'app');
@@ -68,7 +69,7 @@ Meteor.startup(() => {
   const fixturesConfigsEJSON = path.join(fixturesPath, 'configs.json');
   const fixturesConfigs = EJSON.parse(Assets.getText(fixturesConfigsEJSON));
   return _.each(fixturesConfigs, (assetsDir, collectionName) => {
-    const collection = _.get(global, collectionName);
+    const collection = getAttributeValue(global, collectionName);
     
     if (collection.find().count()) {
       return;
