@@ -5,16 +5,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import OrganizationService from './organization-service.js';
 import { OrganizationEditableFields } from './organization-schema.js';
 import { NCTypes } from '../constants.js';
-import { TimePeriodSchema } from '../schemas.js';
+import { IdSchema, TimePeriodSchema } from '../schemas.js';
 import { checkUserId } from '../checkers.js';
 
-
-const idSchema = new SimpleSchema({
-  _id: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  }
-});
 
 const nameSchema = new SimpleSchema({
   name: { type: String }
@@ -52,7 +45,7 @@ export const update = new ValidatedMethod({
   name: 'Organizations.update',
 
   validate: new SimpleSchema([
-    OrganizationEditableFields, idSchema
+    OrganizationEditableFields, IdSchema
   ]).validator(),
 
   run(doc) {
@@ -66,7 +59,7 @@ export const setName = new ValidatedMethod({
   name: 'Organizations.setName',
 
   validate: new SimpleSchema([
-    idSchema, nameSchema
+    IdSchema, nameSchema
   ]).validator(),
 
   run(doc) {
@@ -79,7 +72,7 @@ export const setName = new ValidatedMethod({
 export const setDefaultCurrency = new ValidatedMethod({
   name: 'Organizations.setDefaultCurrency',
 
-  validate: new SimpleSchema([idSchema, {
+  validate: new SimpleSchema([IdSchema, {
     currency: { type: String }
   }]).validator(),
 
@@ -94,7 +87,7 @@ export const setStepTime = new ValidatedMethod({
   name: 'Organizations.setStepTime',
 
   validate: new SimpleSchema([
-    idSchema, ncTypeSchema, TimePeriodSchema
+    IdSchema, ncTypeSchema, TimePeriodSchema
   ]).validator(),
 
   run(doc) {
@@ -108,7 +101,7 @@ export const setReminder = new ValidatedMethod({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
-    idSchema, ncTypeSchema, TimePeriodSchema,
+    IdSchema, ncTypeSchema, TimePeriodSchema,
     {
       remiderType: {
         type: String,
@@ -128,7 +121,7 @@ export const setGuideline = new ValidatedMethod({
   name: 'Organizations.setGuideline',
 
   validate: new SimpleSchema([
-    idSchema, ncTypeSchema,
+    IdSchema, ncTypeSchema,
     {
       text: { type: String }
     }

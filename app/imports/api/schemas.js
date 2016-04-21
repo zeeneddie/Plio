@@ -2,6 +2,13 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { TimeUnits } from './constants.js';
 
 
+export const IdSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  }
+});
+
 export const TimePeriodSchema = new SimpleSchema({
   timeUnit: {
     type: String,
