@@ -20,7 +20,7 @@ const ncTypeSchema = new SimpleSchema({
   }
 });
 
-const updMethodErrMessage = 'Unauthorized user cannot update an organization';
+const updateErrorMessage = 'Unauthorized user cannot update an organization';
 
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
@@ -49,7 +49,7 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.update(doc);
   }
@@ -63,7 +63,7 @@ export const setName = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setName(doc);
   }
@@ -77,7 +77,7 @@ export const setDefaultCurrency = new ValidatedMethod({
   }]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setDefaultCurrency(doc);
   }
@@ -91,7 +91,7 @@ export const setStepTime = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setStepTime(doc);
   }
@@ -111,7 +111,7 @@ export const setReminder = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setReminder(doc);
   }
@@ -128,7 +128,7 @@ export const setGuideline = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updMethodErrMessage);
+    checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setGuideline(doc);
   }

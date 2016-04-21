@@ -3,7 +3,7 @@
       <div class="form-group row">
         <label class="form-control-label col-sm-4">Org name</label>
         <div class="col-sm-8">
-          <input {{b "value: name"}} type="text" class="form-control"
+          <input {{b "value: name, focusout: updateName"}} type="text" class="form-control"
               placeholder="Org name">
           <button type="button" class="btn btn-link clear-field">
             <i class="fa fa-times-circle"></i>
@@ -31,7 +31,7 @@
           <div class="btn-group btn-group-nomargin" data-toggle="buttons">
             {{#each currencies}}
               <label class="btn btn-secondary"
-                  {{b "{click: currency(this), class: {active: isSelectedCurrency(this)}}"}}>
+                  {{b "{click: updateCurrency(this), class: {active: isSelectedCurrency(this)}}"}}>
                 <input type="radio" name="options" id="{{this}}" autocomplete="off">
                 {{this}}
               </label>

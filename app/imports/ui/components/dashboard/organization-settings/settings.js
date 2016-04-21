@@ -45,29 +45,6 @@ Template.Organizations_Settings.viewmodel({
     return this.organization().ncGuidelines;
   },
   onClose() {
-    return () => {
-      const { name, currency } = this.child('Organizations_MainSettings').getData();
-      const ncStepTimes = this.child('Organizations_NcStepTimes').getData();
-      const ncReminders = this.child('Organizations_NcReminders').getData();
-      const ncGuidelines = this.child('Organizations_NcGuidelines').getData();
-
-      const { _id } = this.organization();
-
-      this.isSaving(true);
-
-      update.call({
-        _id, name, currency, ncStepTimes,
-        ncReminders, ncGuidelines
-      }, (err, res) => {
-        if (err) {
-          toastr.error(err);
-        } else {
-          toastr.success('Organization has been updated');
-        }
-
-        this.isSaving(false);
-        $('#org-settings-modal').modal('hide');
-      });
-    };
+    
   }
 });
