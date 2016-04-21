@@ -65,7 +65,7 @@ export default OrganizationService = {
 
   setGuideline({ _id, ncType, text }) {
     return this._update(_id, {
-      [`ncGuidelines.${ncType}`]: { text }
+      [`ncGuidelines.${ncType}`]: text
     });
   },
 

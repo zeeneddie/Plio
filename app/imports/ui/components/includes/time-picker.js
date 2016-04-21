@@ -8,7 +8,7 @@ Template.TimePicker.viewmodel({
   isSelectedUnit(unit) {
     return this.timeUnit() === unit;
   },
-  updateTimeValue() {
+  onChangedTimeValue() {
     const prev = this.templateInstance.data.timeValue;
     const timeValue = this.timeValue();
     if (timeValue && timeValue !== prev) {
