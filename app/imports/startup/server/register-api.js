@@ -17,3 +17,5 @@ import '../../api/standard-types/standard-type-service.js';
 import '../../api/standard-types/methods.js';
 
 import '../../api/users/server/publications.js';
+import '../../api/users/user-service.js';
+import '../../api/users/methods.js';

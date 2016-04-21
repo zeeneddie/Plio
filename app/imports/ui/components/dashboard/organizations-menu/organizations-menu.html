@@ -9,7 +9,7 @@
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-          <a class="dropdown-item {{isActivePath regex=regex}}"
+          <a class="dropdown-item js-org-select {{isActivePath regex=regex}}"
               href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}">
             {{name}}
           </a>

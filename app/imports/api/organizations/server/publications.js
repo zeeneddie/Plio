@@ -4,7 +4,7 @@ import { Departments } from '../../departments/departments.js';
 import { StandardTypes } from '../../standard-types/standard-types.js';
 
 
-Meteor.publishComposite(null, {
+Meteor.publishComposite('organizationsByUserId', {
   find: function() {
     return Organizations.find({ 'users.userId': this.userId });
   },
