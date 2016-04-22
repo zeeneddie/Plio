@@ -1,0 +1,17 @@
+{
+  "_id": "dummyStandard2_2",
+  "title": "Verification of ID",
+  "typeId": "dummyStandardTypePRO",
+  "sectionId": "dummyStandardsBookSectionCO",
+  "nestingLevel": 1,
+  "number": [2],
+  "description": "This is the standard for dealing with verification of ID",
+  "isApproved": true,
+  "approvedAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "notes": null,
+  "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "createdAt": "dummyUser",
+  "updatedAt": null,
+  "updatedBy": null,
+  "isDeleted": false
+}

@@ -1,0 +1,18 @@
+{
+  "_id" : "dummyOrganization",
+  "name" : "Dummy Organization",
+  "serialNumber" : 98,
+  "users" : [
+    {
+      "userId" : "dummyUser",
+      "role" : "owner"
+    }
+  ],
+  "timezone": "Europe/London",
+  "currency": "GBP",
+  "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "createdAt": "dummyUser",
+  "updatedAt": null,
+  "updatedBy": null,
+  "isDeleted": false
+}
