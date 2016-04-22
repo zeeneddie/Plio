@@ -12,7 +12,6 @@ Template.StandardsCard.viewmodel({
           flatten().
           findWhere({ _id: this.selectedStandardId() }).
           value();
-    console.log(selectedStandard);
     return selectedStandard;
   }
 });
