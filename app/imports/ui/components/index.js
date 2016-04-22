@@ -13,3 +13,4 @@ import './dashboard/organizations-menu/organizations-menu.css';
 import './dashboard/organizations-menu/organizations-menu.js';
 import './dashboard/user-menu.html';
 import './dashboard/user-menu.js';
+import './standards';

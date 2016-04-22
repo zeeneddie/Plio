@@ -1,15 +1,13 @@
 <template name="DashboardPage">
-  <div class="content-cards col-sm-12">
-    {{#with organization}}
-      <div class="dashboard-items">
-        {{> SimpleCard href="/standards" icon="fa-book" title="Standards book" text="8 standards, 2 new"}}
-        {{> SimpleCard href="/discussions" icon="fa-comments" title="Discussions" text="3 discussions, 1 new" labelText="1"}}
-        {{> SimpleCard href="/nonconformities" icon="fa-exclamation-triangle" title="Non-conformities" text="5 NCs, 2 new"}}
-        {{> SimpleCard href="/actions" icon="fa-inbox" title="Actions" text="5 actions, 2 new" labelText="2"}}
-        {{> SimpleCard icon="fa-bolt" title="Risk register" text="Coming soon" disabled=true}}
-      </div>
-      <hr>
-    {{/with}}
-    {{> UserStats}}
-  </div>
+  {{#with organization}}
+    <div class="dashboard-items">
+      {{> SimpleCard route="standards" serialNumber=serialNumber icon="fa-book" title="Standards book" text="8 standards, 2 new"}}
+      {{> SimpleCard route="discussions" serialNumber=serialNumber icon="fa-comments" title="Discussions" text="3 discussions, 1 new" labelText="1"}}
+      {{> SimpleCard route="nonconformities" serialNumber=serialNumber icon="fa-exclamation-triangle" title="Non-conformities" text="5 NCs, 2 new"}}
+      {{> SimpleCard route="actions" serialNumber=serialNumber icon="fa-inbox" title="Actions" text="5 actions, 2 new" labelText="2"}}
+      {{> SimpleCard icon="fa-bolt" serialNumber=serialNumber title="Risk register" text="Coming soon" disabled=true}}
+    </div>
+    <hr>
+  {{/with}}
+  {{> UserStats}}
 </template>
