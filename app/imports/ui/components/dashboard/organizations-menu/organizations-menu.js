@@ -7,7 +7,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { update } from '/imports/api/users/methods.js';
 
 Template.OrganizationsMenu.onCreated(function() {
-  this.autorun(() => this.subscribe('organizationsByUserId'));
+  this.autorun(() => this.subscribe('currentUserOrganizations'));
 });
 
 Template.OrganizationsMenu.helpers({

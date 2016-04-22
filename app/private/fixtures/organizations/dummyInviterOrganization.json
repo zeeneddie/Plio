@@ -1,0 +1,15 @@
+{
+  "_id" : "dummyInviterOrganization",
+  "name" : "Dummy Inviter Organization",
+  "serialNumber" : 99,
+  "users" : [
+    {
+      "userId" : "dummyUser",
+      "role" : "member"
+    },
+    {
+      "userId" : "dummySecondaryUser",
+      "role" : "owner"
+    }
+  ]
+}
