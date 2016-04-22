@@ -11,7 +11,7 @@ Template.StandardsList.viewmodel({
     Modal.open({
       title: 'Add',
       simple: true,
-      template: ''
+      template: 'AddStandardType'
     });
   }
 });

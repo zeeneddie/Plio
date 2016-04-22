@@ -32,16 +32,16 @@
               </button>
             </div>
           </div>
-        {{/if}}
-        <div class="collapse guidance-panel" {{b "ref: collapse"}}>
-          <div class="card-block">
-            <p>{{hint}}</p>
-            <div class="btn-group">
-              <a href="#" class="btn btn-link guidance-panel-close" {{b "click: toggleCollapse"}}>Close</a>
-              <a href="#" class="btn btn-link">More info</a>
+          <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+            <div class="card-block">
+              <p>{{hint}}</p>
+              <div class="btn-group">
+                <a href="#" class="btn btn-link guidance-panel-close" {{b "click: toggleCollapse"}}>Close</a>
+                <a href="#" class="btn btn-link">More info</a>
+              </div>
             </div>
           </div>
-        </div>
+        {{/if}}
         <div class="card-block">
           <div>
             {{> Template.dynamic template=template}}
