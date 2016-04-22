@@ -5,7 +5,10 @@ AccountsTemplates.configure({
   homeRoutePath: '/',
   texts: {
     title: {
-      signUp: 'Create an Organization Account'
+      signUp: 'Sign up for a Plio user account'
+    },
+    button: {
+      signUp: 'Sign up'
     }
   }
 });
