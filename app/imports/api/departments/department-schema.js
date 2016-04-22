@@ -6,7 +6,6 @@ export const DepartmentSchema = new SimpleSchema({
     type: String
   },
   organizationId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
+    type: String
   }
 });

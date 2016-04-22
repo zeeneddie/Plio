@@ -19,7 +19,8 @@ Template.Organizations_Department.viewmodel({
 
       insert.call({ name, organizationId }, (err, res) => {
         if (err) {
-          toastr.error(err);
+          console.log(err);
+          toastr.error(err.reason);
         }
 
         this.destroy();

@@ -13,7 +13,8 @@
     }
   ],
   "profile" : {
-    "fullName" : "Dummy Secondary"
+    "firstName" : "Dummy",
+    "lastName": "Secondary"
   },
   "status" : "offline",
   "statusConnection" : "offline"

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 // Import all collections that should be filled with fixture data here
 import { Organizations } from '../../api/organizations/organizations.js';
 import { Standards } from '../../api/standards/standards.js';
-import { StandardTypes } from '../../api/standardTypes/standardTypes.js';
+import { StandardTypes } from '../../api/standard-types/standard-types.js';
 import { StandardsBookSections } from '../../api/standardsBookSections/standardsBookSections.js';
 
 // Extend the global object to have a scope of collections
@@ -12,7 +12,7 @@ _.extend(global, { Organizations, Standards, StandardTypes, StandardsBookSection
 import path from 'path';
 import fs from 'fs';
 import { EJSON } from 'meteor/ejson'
- 
+
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
 const getAttributeValue = (obj, attrPath) => {
@@ -66,12 +66,12 @@ const logAction = (assetsNumber, collectionName) => {
 };
 
 Meteor.startup(() => {
-  const fixturesPath = 'fixtures';  
+  const fixturesPath = 'fixtures';
   const fixturesConfigsEJSON = path.join(fixturesPath, 'configs.json');
   const fixturesConfigs = EJSON.parse(Assets.getText(fixturesConfigsEJSON));
   return _.each(fixturesConfigs, (assetsDir, collectionName) => {
     const collection = getAttributeValue(global, collectionName);
-    
+
     if (collection.find().count()) {
       return;
     }

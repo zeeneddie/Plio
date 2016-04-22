@@ -11,8 +11,7 @@ export const insert = new ValidatedMethod({
     name: { type: String },
     abbreviation: { type: String },
     organizationId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
+      type: String
     }
   }).validator(),
 
@@ -33,8 +32,7 @@ export const update = new ValidatedMethod({
 
   validate: new SimpleSchema({
     _id: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
+      type: String
     },
     name: { type: String },
     abbreviation: { type: String }
@@ -56,8 +54,7 @@ export const remove = new ValidatedMethod({
 
   validate: new SimpleSchema({
     _id: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
+      type: String
     }
   }).validator(),
 

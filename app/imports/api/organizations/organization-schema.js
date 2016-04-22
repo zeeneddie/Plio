@@ -5,8 +5,7 @@ import { TimePeriodSchema } from '../schemas.js';
 
 const orgUserSchema = new SimpleSchema({
   userId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
+    type: String
   },
   role: {
     type: String,
@@ -87,7 +86,7 @@ const OrganizationEditableFields = {
 const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
   serialNumber: {
     type: Number,
-    min: 100
+    min: 0
   },
   users: {
     type: [orgUserSchema],

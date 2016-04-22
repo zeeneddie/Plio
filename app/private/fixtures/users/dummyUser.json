@@ -16,7 +16,8 @@
     }
   ],
   "profile" : {
-    "fullName" : "Dummy User"
+    "firstName" : "Dummy",
+    "lastName": "User"
   },
   "status" : "offline",
   "statusConnection" : "offline"

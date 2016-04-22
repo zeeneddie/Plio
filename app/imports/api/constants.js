@@ -17,7 +17,8 @@ const OrgCurrencies = {
 };
 
 const UserRoles = {
-  OWNER: 'owner'
+  OWNER: 'owner',
+  MEMBER: 'member'
 };
 
 export { NCTypes, OrgCurrencies, TimeUnits, UserRoles };
