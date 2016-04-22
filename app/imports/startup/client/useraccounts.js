@@ -2,7 +2,12 @@ AccountsTemplates.configure({
   sendVerificationEmail: false,
   negativeValidation: true,
   positiveValidation: true,
-  homeRoutePath: '/'
+  homeRoutePath: '/',
+  texts: {
+    title: {
+      signUp: 'Create an Organization Account'
+    }
+  }
 });
 
 const email = AccountsTemplates.removeField('email');
@@ -32,10 +37,10 @@ AccountsTemplates.addField(email);
 AccountsTemplates.addField(password);
 
 AccountsTemplates.addField({
-  _id: 'companyName',
+  _id: 'organizationName',
   type: 'text',
-  displayName: 'Company name',
-  placeholder: 'Company name',
+  displayName: 'Organization name',
+  placeholder: 'Organization name',
   required: true,
   minLength: 1,
   maxLength: 40

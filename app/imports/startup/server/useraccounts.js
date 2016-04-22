@@ -2,10 +2,10 @@ import OrganizationService from '/imports/api/organizations/organization-service
 
 
 function postSignUpHook(userId, info) {
-  const companyName = info.profile.companyName || 'My Organization';
+  const organizationName = info.profile.organizationName || 'My Organization';
 
   OrganizationService.insert({
-    name: companyName,
+    name: organizationName,
     ownerId: userId
   });
 }
