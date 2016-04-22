@@ -7,9 +7,6 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
   share: 'organization',
-  autorun() {
-    this.templateInstance.subscribe('organizationsByUserId');
-  },
   organization() {
     return Organizations.findOne({ serialNumber: this.orgSerialNumber() });
   },

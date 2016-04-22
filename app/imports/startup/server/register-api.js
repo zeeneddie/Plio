@@ -6,3 +6,5 @@ import '../../api/organizations/methods.js';
 import '../../api/users/server/publications.js';
 import '../../api/users/user-service.js';
 import '../../api/users/methods.js';
+import '../../api/standardsBookSections/server/publications.js';
+import '../../api/standards/server/publications.js';

@@ -11,9 +11,11 @@ body {
 }
 
 #__blaze-root {
+	height: 100%;
+	overflow: hidden;
+	font-size: 14px;
 	@include flexbox();
 	@include flex-direction(column);
-	height: 100%;
 }
 
 .scroll {
