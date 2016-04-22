@@ -4,7 +4,8 @@ import { TimeUnits } from './constants.js';
 
 export const IdSchema = new SimpleSchema({
   _id: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   }
 });
 

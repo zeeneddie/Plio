@@ -5,7 +5,8 @@ import { TimePeriodSchema } from '../schemas.js';
 
 const orgUserSchema = new SimpleSchema({
   userId: {
-    type: String
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   role: {
     type: String,

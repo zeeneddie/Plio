@@ -1,26 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { DepartmentSchema } from './department-schema';
 import DepartmentService from './department-service.js';
-
+import { IdSchema } from '../schemas.js';
+import { checkUserId } from '../checkers.js';
 
 export const insert = new ValidatedMethod({
   name: 'Departments.insert',
 
-  validate: new SimpleSchema({
-    name: { type: String },
-    organizationId: {
-      type: String
-    }
-  }).validator(),
+  validate: DepartmentSchema.validator(),
 
   run(doc) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a department'
-      );
-    }
+    checkUserId(
+      this.userId, 'Unauthorized user cannot create a department'
+    );
 
     return DepartmentService.insert(doc);
   }
@@ -29,19 +23,14 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Departments.update',
 
-  validate: new SimpleSchema({
-    _id: {
-      type: String
-    },
+  validate: new SimpleSchema([IdSchema, {
     name: { type: String }
-  }).validator(),
+  }]).validator(),
 
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a department'
-      );
-    }
+    checkUserId(
+      this.userId, 'Unauthorized user cannot update a department'
+    );
 
     return DepartmentService.update(doc);
   }
@@ -50,18 +39,12 @@ export const update = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'Departments.remove',
 
-  validate: new SimpleSchema({
-    _id: {
-      type: String
-    }
-  }).validator(),
+  validate: IdSchema.validator(),
 
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a department'
-      );
-    }
+    checkUserId(
+      this.userId, 'Unauthorized user cannot remove a department'
+    );
 
     return DepartmentService.remove(doc);
   }

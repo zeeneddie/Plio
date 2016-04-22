@@ -1,4 +1,4 @@
-<template name="Organizations_StandardTypes">
+<template name="Organizations_StandardsTypes">
   <div class="card-block card-block-collapse-toggle collapsed" href="#standard-types"
       data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Standards types</h4>
@@ -9,8 +9,8 @@
   <div class="card-block-collapse collapse" id="standard-types">
     <div class="card-block">
       <div id="standard-types-forms">
-        {{#each standardTypes}}
-          {{> Organizations_StandardType }}
+        {{#each standardsTypes}}
+          {{> Organizations_StandardsType }}
         {{/each}}
       </div>
       <button class="btn btn-primary" type="button" {{b "click: addStandardTypeForm"}}>

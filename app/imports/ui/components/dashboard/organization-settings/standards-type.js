@@ -1,8 +1,8 @@
-import { StandardTypes } from '/imports/api/standard-types/standard-types.js';
-import { insert, update, remove } from '/imports/api/standard-types/methods.js';
+import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { insert, update, remove } from '/imports/api/standards-types/methods.js';
 
 
-Template.Organizations_StandardType.viewmodel({
+Template.Organizations_StandardsType.viewmodel({
   shouldSave() {
     const tplData = this.templateInstance.data;
     const storedName = tplData.name;

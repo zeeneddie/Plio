@@ -1,22 +1,22 @@
-import { StandardTypes } from './standard-types.js';
+import { StandardsTypes } from './standards-types.js';
 
 
-export default StandardTypeService = {
+export default StandardsTypeService = {
 
   insert({ name, abbreviation, organizationId }) {
-    return StandardTypes.insert({
+    return StandardsTypes.insert({
       name, abbreviation, organizationId
     });
   },
 
   update({ _id, name, abbreviation }) {
-    return StandardTypes.update({ _id }, {
+    return StandardsTypes.update({ _id }, {
       $set: { name, abbreviation }
     });
   },
 
   remove({ _id }) {
-    return StandardTypes.remove({ _id });
+    return StandardsTypes.remove({ _id });
   }
 
 };

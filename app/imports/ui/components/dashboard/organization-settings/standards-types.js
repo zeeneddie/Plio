@@ -1,16 +1,16 @@
-import { StandardTypes } from '/imports/api/standard-types/standard-types.js';
+import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 
-Template.Organizations_StandardTypes.viewmodel({
+Template.Organizations_StandardsTypes.viewmodel({
   addStandardTypeForm() {
     Blaze.renderWithData(
-      Template.Organizations_StandardType,
+      Template.Organizations_StandardsType,
       { organizationId: this.organizationId() },
       this.templateInstance.$("#standard-types-forms")[0]
     );
   },
   standardTypesCount() {
-    return StandardTypes.find({
+    return StandardsTypes.find({
       organizationId: this.organizationId()
     }).count();
   }
