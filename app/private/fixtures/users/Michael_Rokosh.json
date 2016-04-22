@@ -1,0 +1,24 @@
+{
+  "_id": "ABKpuGYiJHKhDwLDk",
+  "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$PpFrYXSDKldZEZLULs3lZeEh0riMIkVhBktIAW7Abo1frk/n/TyAO"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "mike@jssolutionsdev.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Michael",
+    "lastName": "Rokosh"
+  },
+  "status": "offline",
+  "statusConnection": "offline"
+}
