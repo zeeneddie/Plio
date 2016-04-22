@@ -1,3 +1,9 @@
 import { Mongo } from 'meteor/mongo';
 
-export const StandardsBookSections = new Mongo.Collection('StandardsBookSections');
+import { StandardsBookSectionSchema  } from './standards-book-section-schema.js';
+
+
+const StandardsBookSections = new Mongo.Collection('StandardsBookSections');
+StandardsBookSections.attachSchema(StandardsBookSectionSchema);
+
+export { StandardsBookSections };

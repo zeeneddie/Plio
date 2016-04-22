@@ -2,6 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '../organizations.js';
 import { Departments } from '../../departments/departments.js';
 import { StandardsTypes } from '../../standards-types/standards-types.js';
+import {
+  StandardsBookSections
+} from '../../standards-book-sections/standards-book-sections.js';
 
 
 Meteor.publishComposite('currentUserOrganizations', {
@@ -17,6 +20,12 @@ Meteor.publishComposite('currentUserOrganizations', {
   }, {
     find: function(org) {
       return StandardsTypes.find({
+        organizationId: org._id
+      });
+    }
+  }, {
+    find: function(org) {
+      return StandardsBookSections.find({
         organizationId: org._id
       });
     }

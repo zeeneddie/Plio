@@ -3,18 +3,20 @@ import { Departments } from './departments.js';
 
 export default DepartmentService = {
 
+  collection: Departments,
+
   insert({ name, organizationId }) {
-    return Departments.insert({ name, organizationId });
+    return this.collection.insert({ name, organizationId });
   },
 
   update({ _id, name }) {
-    return Departments.update({ _id }, {
+    return this.collection.update({ _id }, {
       $set: { name }
     });
   },
 
   remove({ _id }) {
-    return Departments.remove({ _id });
+    return this.collection.remove({ _id });
   }
 
 };

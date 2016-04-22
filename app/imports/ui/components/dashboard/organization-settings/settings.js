@@ -1,7 +1,9 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
-import { update } from '/imports/api/organizations/methods.js'
+import {
+  StandardsBookSections
+} from '/imports/api/standards-book-sections/standards-book-sections.js';
 
 
 Template.Organizations_Settings.viewmodel({
@@ -28,6 +30,12 @@ Template.Organizations_Settings.viewmodel({
   standardsTypes() {
     const organizationId = this.organization()._id;
     return StandardsTypes.find({ organizationId });
+  },
+  standardsBookSections() {
+    const organizationId = this.organization()._id;
+    return StandardsBookSections.find({ organizationId }, {
+      sort: { number: 1, name: 1 }
+    });
   },
   name() {
     return this.organization().name;

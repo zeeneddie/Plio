@@ -3,20 +3,22 @@ import { StandardsTypes } from './standards-types.js';
 
 export default StandardsTypeService = {
 
+  collection: StandardsTypes,
+
   insert({ name, abbreviation, organizationId }) {
-    return StandardsTypes.insert({
+    return this.collection.insert({
       name, abbreviation, organizationId
     });
   },
 
   update({ _id, name, abbreviation }) {
-    return StandardsTypes.update({ _id }, {
+    return this.collection.update({ _id }, {
       $set: { name, abbreviation }
     });
   },
 
   remove({ _id }) {
-    return StandardsTypes.remove({ _id });
+    return this.collection.remove({ _id });
   }
 
 };

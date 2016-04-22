@@ -16,6 +16,12 @@ import '../../api/standards-types/standards-type-schema.js';
 import '../../api/standards-types/standards-type-service.js';
 import '../../api/standards-types/methods.js';
 
+import '../../api/standards-book-sections/server/publications.js';
+import '../../api/standards-book-sections/standards-book-sections.js';
+import '../../api/standards-book-sections/standards-book-section-schema.js';
+import '../../api/standards-book-sections/standards-book-section-service.js';
+import '../../api/standards-book-sections/methods.js';
+
 import '../../api/users/server/publications.js';
 import '../../api/users/user-service.js';
 import '../../api/users/methods.js';

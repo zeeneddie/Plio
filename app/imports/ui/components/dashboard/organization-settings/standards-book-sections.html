@@ -1,45 +1,23 @@
 <template name="Organizations_StandardsBookSections">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#standards-book-sections" data-toggle="collapse">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      href="#standards-book-sections" data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Standards book sections</h4>
     <h4 class="card-title pull-xs-right">
-      <span class="text-muted">4</span>
+      <span class="text-muted" {{b "text: standardsBookSectionsCount"}}>
+      </span>
     </h4>
   </div>
   <div class="card-block-collapse collapse" id="standards-book-sections">
     <div class="card-block">
-      <div class="form-group form-group-flex">
-        <div class="form-group-flex-flex">
-          <input type="text" class="form-control" placeholder="Title" value="1. Client feedback"/>
-        </div>
-        <button type="button" class="btn btn-secondary btn-icon margin-left">
-          <i class="fa fa-times-circle"></i>
-        </button>
+      <div id="standards-book-sections-forms">
+        {{#each standardsBookSections}}
+          {{> Organizations_StandardsBookSection }}
+        {{/each}}
       </div>
-      <div class="form-group form-group-flex">
-        <div class="form-group-flex-flex">
-          <input type="text" class="form-control" placeholder="Title" value="2. Client onboarding"/>
-        </div>
-        <button type="button" class="btn btn-secondary btn-icon margin-left">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </div>
-      <div class="form-group form-group-flex">
-        <div class="form-group-flex-flex">
-          <input type="text" class="form-control" placeholder="Title" value="3. Client deal execution"/>
-        </div>
-        <button type="button" class="btn btn-secondary btn-icon margin-left">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </div>
-      <div class="form-group form-group-flex">
-        <div class="form-group-flex-flex">
-          <input type="text" class="form-control" placeholder="Title" value="4. Clifton policies"/>
-        </div>
-        <button type="button" class="btn btn-secondary btn-icon margin-left">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </div>
-      <button class="btn btn-primary" type="button">Add section</button>
+      <button class="btn btn-primary" type="button"
+          {{b "click: addStandardsBookSectionForm"}}>
+        Add section
+      </button>
     </div>
   </div>
 </template>
