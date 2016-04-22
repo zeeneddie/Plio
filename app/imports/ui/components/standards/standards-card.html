@@ -16,12 +16,12 @@
         <div class="list-group">
           <div class="list-group-item">
             <p class="list-group-item-text">Title</p>
-            <h4 class="list-group-item-heading">2.2.1 Inquiry handling <span class="label label-danger">Draft</span></h4>
+            <h4 class="list-group-item-heading">{{renderNumber}} {{this.title}} <span class="label label-danger" {{b "if: status === 'draft'"}}>Draft</span></h4>
           </div>
 
           <div class="list-group-item">
             <p class="list-group-item-text">Description</p>
-            <h4 class="list-group-item-heading">This is the standard for dealing with client enquiries</h4>
+            <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
           </div>
 
           <div class="row">
@@ -34,7 +34,7 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Section</p>
-                <h4 class="list-group-item-heading">Client onboarding</h4>
+                <h4 class="list-group-item-heading" {{b "text: renderSection"}}></h4>
               </div>
             </div>
 
@@ -44,13 +44,13 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Type</p>
-                <h4 class="list-group-item-heading">Standard operating procedure</h4>
+                <h4 class="list-group-item-heading" {{b "text: renderType"}}></h4>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Owner</p>
-                <h4 class="list-group-item-heading">Mike Smith</h4>
+                <h4 class="list-group-item-heading" {{b "text: this.createdBy"}}></h4>
               </div>
             </div>
 
@@ -98,7 +98,8 @@
           <h4 class="card-title">Lessons learned</h4>
         </div>
         <div ng-include="'includes/subcards-read/lessons.html'"></div>
-        <div ng-include="'includes/card-footer-changelog.html'"></div>
+
+        {{> CardChangelog}}
       </div>
     </div>
   {{/with}}

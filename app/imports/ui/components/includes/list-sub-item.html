@@ -1,7 +1,10 @@
 <template name="ListSubItem">
   <a class="list-group-item" href="#" {{b "click: selectedStandardId(this._id), class: { active: selectedStandardId === this._id }"}}>
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading">{{this.number}} {{this.title}}</h4>
+      <h4 class="list-group-item-heading">
+        {{renderNumber}} {{this.title}}
+        <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
+      </h4>
       <p class="list-group-item-text pull-left">Procedure</p>
     </div>
   </a>

@@ -3,15 +3,12 @@ import { Template } from 'meteor/templating';
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ListItem.viewmodel({
+  mixin: 'collapse',
   standards() {
-    return Standards.find({ sectionId: this._id() });
+    const standards = Standards.find({ sectionId: this._id() });
+    return standards;
   },
   eq(item1, item2) {
     return item1 === item2;
-  },
-  collapsed: true,
-  toggleCollapse: _.throttle(function() {
-    this.collapse.collapse('toggle');
-    this.collapsed(!this.collapsed());
-  }, 500),
+  }
 });

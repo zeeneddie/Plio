@@ -1,0 +1,81 @@
+<template name="CardChangelog">
+  <div class="card-footer card-changelog-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <div class="row">
+      <div class="col-xs-6">
+        Created by: <span {{b "text: createdBy"}}></span>
+        <br>Date: <span {{b "text: renderDate(createdAt)"}}></span>
+      </div>
+      <div class="col-xs-6">
+        Last edited by: <span {{b "text: updatedBy"}}></span>
+        <br>Date: <span {{b "text: renderDate(updatedAt)"}}></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-changelog collapse" {{b "ref: collapse"}}>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Change summary</th>
+          <th class="text-right">Date &amp; time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mike Smith</td>
+          <td>New agenda item added - Review non-conformities</td>
+          <td class="text-right">15 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Mike Smith</td>
+          <td>Removed meeting action - Test server-side performance</td>
+          <td class="text-right">14 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Mark Dixon</td>
+          <td>New meeting action added - Investigate Japan pricing</td>
+          <td class="text-right">12 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Steve Ives</td>
+          <td>New meeting action added - Renew EMEA prices</td>
+          <td class="text-right">10 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Nigel Cheshire</td>
+          <td>New agenda item added - Status of corrective and preventative measures</td>
+          <td class="text-right">7 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Mike Smith</td>
+          <td>New agenda item added - Review non-conformities</td>
+          <td class="text-right">6 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Mike Smith</td>
+          <td>Removed meeting action - Test server-side performance</td>
+          <td class="text-right">4 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Mark Dixon</td>
+          <td>New meeting action added - Investigate Japan pricing</td>
+          <td class="text-right">2 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Steve Ives</td>
+          <td>New meeting action added - Renew EMEA prices</td>
+          <td class="text-right">2 Jun 2015  15:15</td>
+        </tr>
+        <tr>
+          <td>Nigel Cheshire</td>
+          <td>New agenda item added - Status of corrective and preventative measures</td>
+          <td class="text-right">1 Jun 2015  15:15</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="card-footer">
+      <a href="#" class="btn btn-secondary">View all changes (34 total)</a>
+    </div>
+  </div>
+</template>
