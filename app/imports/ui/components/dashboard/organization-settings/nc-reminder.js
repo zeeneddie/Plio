@@ -1,5 +1,5 @@
 Template.Organizations_NcReminder.viewmodel({
-  onChange() {
-    return this.parent().onChange();
+  onChangeCb() {
+    return this.onChange;
   }
 });

@@ -2,18 +2,22 @@ import { setGuideline } from '/imports/api/organizations/methods.js';
 
 
 Template.Organizations_NcGuidelines.viewmodel({
-  onChange() {
-    return (ncGuidelineVm) => {
-      const ncType = ncGuidelineVm.templateInstance.data.ncType;
-      const { text } = ncGuidelineVm.getData();
+  onChangeCb() {
+    return this.onChange.bind(this);
+  },
+  onChange(viewModel) {
+    const ncType = viewModel.templateInstance.data.ncType;
+    const { text } = viewModel.getData();
+    const _id = this.organizationId();
 
-      const _id = this.organizationId();
+    this.setSavingState(true);
 
-      setGuideline.call({ _id, ncType, text }, (err) => {
-        if (err) {
-          toastr.error('Failed to update an organization');
-        }
-      });
-    };
+    setGuideline.call({ _id, ncType, text }, (err) => {
+      this.setSavingState(false);
+
+      if (err) {
+        toastr.error('Failed to update a non-conformity guideline');
+      }
+    });
   }
 });

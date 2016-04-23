@@ -7,15 +7,6 @@ import {
 
 
 Template.Organizations_Settings.viewmodel({
-  isSaving(val) {
-    const modalHeading = this.child('ModalHeading');
-
-    if (val !== undefined) {
-      modalHeading.isSaving(val);
-    }
-
-    return modalHeading.isSaving();
-  },
   organization() {
     const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
     return Organizations.findOne({ serialNumber });
@@ -24,16 +15,20 @@ Template.Organizations_Settings.viewmodel({
     return this.organization()._id;
   },
   departments() {
-    const organizationId = this.organization()._id;
-    return Departments.find({ organizationId });
+    return Departments.find({ 
+      organizationId: this.organizationId() 
+    });
   },
   standardsTypes() {
-    const organizationId = this.organization()._id;
-    return StandardsTypes.find({ organizationId });
+    return StandardsTypes.find({
+      organizationId: this.organizationId()
+    });
   },
   standardsBookSections() {
     const organizationId = this.organization()._id;
-    return StandardsBookSections.find({ organizationId }, {
+    return StandardsBookSections.find({
+      organizationId: this.organizationId()
+    }, {
       sort: { number: 1, name: 1 }
     });
   },
@@ -52,7 +47,16 @@ Template.Organizations_Settings.viewmodel({
   guidelines() {
     return this.organization().ncGuidelines;
   },
-  onClose() {
+  setSavingStateFn() {
+    return this.setSavingState.bind(this);
+  },
+  setSavingState(val) {
+    const modalHeading = this.child('ModalHeading');
 
+    if (val !== undefined) {
+      modalHeading.isSaving(val);
+    }
+
+    return modalHeading.isSaving();
   }
 });

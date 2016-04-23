@@ -2,19 +2,22 @@ import { setStepTime } from '/imports/api/organizations/methods.js';
 
 
 Template.Organizations_NcStepTimes.viewmodel({
-  onChange() {
-    return (timePickerVm) => {
-      const ncType = timePickerVm.templateInstance.data.ncType;
+  onChangeCb() {
+    return this.onChange.bind(this);
+  },
+  onChange(viewModel) {
+    const ncType = viewModel.templateInstance.data.ncType;
+    const { timeValue, timeUnit } = viewModel.getData();
+    const _id = this.organizationId();
 
-      const { timeValue, timeUnit } = timePickerVm.getData();
+    this.setSavingState(true);
 
-      const _id = this.organizationId();
+    setStepTime.call({ _id, ncType, timeValue, timeUnit }, (err) => {
+      this.setSavingState(false);
 
-      setStepTime.call({ _id, ncType, timeValue, timeUnit }, (err) => {
-        if (err) {
-          toastr.error('Failed to update an organization');
-        }
-      });
-    };
+      if (err) {
+        toastr.error('Failed to update workflow defaults');
+      }
+    });
   }
 });

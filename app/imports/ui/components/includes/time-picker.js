@@ -12,16 +12,16 @@ Template.TimePicker.viewmodel({
     const prev = this.templateInstance.data.timeValue;
     const timeValue = this.timeValue();
     if (timeValue && timeValue !== prev) {
-      this.change();
+      this.triggerChange();
     }
   },
   updateTimeUnit(timeUnit) {
     const current = this.timeUnit();
     if (timeUnit === current) return;
     this.timeUnit(timeUnit);
-    this.change();
+    this.triggerChange();
   },
-  change() {
+  triggerChange() {
     if (this.timeValue() && this.timeUnit()) {
       this.onChange(this);
     }

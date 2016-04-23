@@ -1,6 +1,6 @@
 <template name="Organizations_Settings">
   {{#ModalWrapper id="org-settings-modal"}}
-    {{> ModalHeading title="Org settings" onClose=onClose}}
+    {{> ModalHeading title="Org settings"}}
 
     {{#GuidancePanel moreInfoLink="#"}}
       <p>
@@ -13,13 +13,41 @@
     {{/GuidancePanel}}
 
     <form>
-      {{> Organizations_MainSettings name=name currency=currency organizationId=organizationId}}
-      {{> Organizations_Departments departments=departments organizationId=organizationId}}
-      {{> Organizations_StandardsTypes standardsTypes=standardsTypes organizationId=organizationId}}
-      {{> Organizations_StandardsBookSections standardsBookSections=standardsBookSections organizationId=organizationId}}
-      {{> Organizations_NcStepTimes stepTimes=stepTimes organizationId=organizationId}}
-      {{> Organizations_NcReminders reminders=reminders organizationId=organizationId}}
-      {{> Organizations_NcGuidelines guidelines=guidelines organizationId=organizationId}}
+      {{> Organizations_MainSettings 
+          name=name 
+          currency=currency 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+
+      {{> Organizations_Departments 
+          departments=departments 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> Organizations_StandardsTypes 
+          standardsTypes=standardsTypes
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> Organizations_StandardsBookSections 
+          standardsBookSections=standardsBookSections 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> Organizations_NcStepTimes 
+          stepTimes=stepTimes 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> Organizations_NcReminders 
+          reminders=reminders 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> Organizations_NcGuidelines 
+          guidelines=guidelines 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
     </form>
   {{/ModalWrapper}}
 </template>

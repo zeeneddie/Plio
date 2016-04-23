@@ -9,19 +9,22 @@
           title="Minor non-conformity"
           timeValue=stepTimes.minor.timeValue
           timeUnit=stepTimes.minor.timeUnit
-          ncType="minor"}}
+          ncType="minor"
+          onChange=onChangeCb}}
 
       {{> Organizations_NcStepTime
           title="Major non-conformity"
           timeValue=stepTimes.major.timeValue
           timeUnit=stepTimes.major.timeUnit
-          ncType="major"}}
+          ncType="major"
+          onChange=onChangeCb}}
 
       {{> Organizations_NcStepTime
           title="Critical non-conformity"
           timeValue=stepTimes.critical.timeValue
           timeUnit=stepTimes.critical.timeUnit
-          ncType="critical"}}
+          ncType="critical"
+          onChange=onChangeCb}}
     </div>
   </div>
 </template>

@@ -2,23 +2,26 @@ import { setReminder } from '/imports/api/organizations/methods.js';
 
 
 Template.Organizations_NcReminders.viewmodel({
-  onChange() {
-    return (timePickerVm) => {
-      const timePickerContext = timePickerVm.templateInstance.data;
-      const ncType = timePickerContext.ncType;
-      const reminderType = timePickerContext.reminderType;
+  onChangeCb() {
+    return this.onChange.bind(this);
+  },
+  onChange(viewModel) {
+    const context = viewModel.templateInstance.data;
+    const ncType = context.ncType;
+    const reminderType = context.reminderType;
+    const { timeValue, timeUnit } = viewModel.getData();
+    const _id = this.organizationId();
 
-      const { timeValue, timeUnit } = timePickerVm.getData();
+    this.setSavingState(true);
 
-      const _id = this.organizationId();
-
-      setReminder.call({
-        _id, ncType, reminderType, timeValue, timeUnit
-      }, (err) => {
-        if (err) {
-          toastr.error('Failed to update an organization');
-        }
-      });
-    };
+    setReminder.call({
+      _id, ncType, reminderType, timeValue, timeUnit
+    }, (err) => {
+      this.setSavingState(false);
+      
+      if (err) {
+        toastr.error('Failed to update an organization');
+      }
+    });
   }
 });

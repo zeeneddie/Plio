@@ -18,7 +18,15 @@ Template.Organizations_MainSettings.viewmodel({
 
     const _id = this.organizationId();
 
-    setName.call({ _id, name }, afterUpdate);
+    this.setSavingState(true);
+
+    setName.call({ _id, name }, (err) => {
+      this.setSavingState(false);  
+
+      if (err) {
+        toastr.error('Failed to update a name');
+      }
+    });
   },
   updateCurrency(currency) {
     const current = this.currency();
@@ -28,12 +36,14 @@ Template.Organizations_MainSettings.viewmodel({
 
     const _id = this.organizationId();
 
-    setDefaultCurrency.call({ _id, currency }, afterUpdate);
+    this.setSavingState(true);
+
+    setDefaultCurrency.call({ _id, currency }, (err) => {
+      this.setSavingState(false);
+
+      if (err) {
+        toastr.error('Failed to update default currency');
+      }
+    });
   }
 });
-
-function afterUpdate(err) {
-  if (err) {
-    toastr.error('Failed to update an organization');
-  }
-}

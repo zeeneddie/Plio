@@ -11,7 +11,11 @@
     <div class="card-block">
       <div id="departments-forms">
         {{#each departments}}
-          {{> Organizations_Department }}
+          {{> Organizations_Department 
+              _id=this._id
+              name=this.name
+              onChange=onChangeCb
+              onDelete=onDeleteCb}}
         {{/each}}
       </div>
       <button class="btn btn-primary" type="button" {{b "click: addDepartmentForm"}}>
