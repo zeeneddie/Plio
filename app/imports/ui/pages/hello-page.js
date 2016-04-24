@@ -7,7 +7,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 Template.HelloPage.viewmodel({
   autorun() {
     const currentUser = Meteor.user();
-    const organizationsHandle = this.templateInstance.subscribe('organizationsByUserId');
+    const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
     if (!Meteor.loggingIn() && organizationsHandle.ready()) {
       if (currentUser) {
         // if the user is an owner of organization go to that organization no matter what

@@ -6,7 +6,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
   autorun() {
-    this.templateInstance.subscribe('organizationsByUserId');
+    this.templateInstance.subscribe('currentUserOrganizations');
   },
   organization() {
     const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));

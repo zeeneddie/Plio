@@ -10,3 +10,4 @@ import './includes/modal-window.js';
 import './useraccounts';
 import './dashboard/organizations-menu';
 import './dashboard/user-menu';
+import './standards';
