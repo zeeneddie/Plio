@@ -4,11 +4,15 @@ AccountsTemplates.configure({
   positiveValidation: true,
   homeRoutePath: '/',
   texts: {
+    signInLink_pre: "Already have an account?",
+    signInLink_link: "Login",
     title: {
-      signUp: 'Sign up for a Plio user account'
+      signUp: 'Sign up for a Plio account',
+      signIn: 'Login'
     },
     button: {
-      signUp: 'Sign up'
+      signUp: 'Sign up',
+      signIn: 'Login'
     }
   }
 });
@@ -19,8 +23,8 @@ const password = AccountsTemplates.removeField('password');
 AccountsTemplates.addField({
   _id: 'firstName',
   type: 'text',
-  displayName: 'First Name',
-  placeholder: 'First Name',
+  displayName: 'First name',
+  placeholder: 'First name',
   required: true,
   minLength: 1,
   maxLength: 40
@@ -29,8 +33,8 @@ AccountsTemplates.addField({
 AccountsTemplates.addField({
   _id: 'lastName',
   type: 'text',
-  displayName: 'Last Name',
-  placeholder: 'Last Name',
+  displayName: 'Last name',
+  placeholder: 'Last name',
   required: true,
   minLength: 1,
   maxLength: 40
