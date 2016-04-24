@@ -1,10 +1,11 @@
+import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-Template.DashboardPage.onCreated(function() {
-  this.autorun(() => this.subscribe('currentUserOrganizations'));
-});
 
-Template.DashboardPage.helpers({
+Template.DashboardPage.viewmodel({
+  autorun() {
+    this.templateInstance.subscribe('currentUserOrganizations');
+  },
   organization() {
     const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
     return Organizations.findOne({ serialNumber });
