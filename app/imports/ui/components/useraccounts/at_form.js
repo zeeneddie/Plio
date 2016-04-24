@@ -2,7 +2,7 @@
 Template.atForm.helpers(AccountsTemplates.atFormHelpers);
 
 Template.atForm.events({
-  'focusout input#at-field-email': function(e, tpl) {
+  'focusout input#at-field-email'(e, tpl) {
     const email = e.target.value;
 
     if (!email.length) return;

@@ -1,0 +1,24 @@
+{
+  "_id": "SQHmBKJ94gJvpLKLt",
+  "createdAt": "ISODate('2016-04-18T14:53:07.408Z')",
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$W0piRM5oNBPSksAQtjUGP.Xspozor467IDXoIdQzQnPCveoPWJDeq"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "steve.ives@pliohub.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Steve",
+    "lastName": "Ives" 
+  },
+  "status": "offline",
+  "statusConnection": "offline"
+}

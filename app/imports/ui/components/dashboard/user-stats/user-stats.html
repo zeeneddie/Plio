@@ -1,0 +1,14 @@
+<template name="UserStats">
+  <div class="dashboard-stats">
+    <h4 class="dashboard-stats-title">
+      {{usersOnline.count}} users online
+    </h4>
+    {{#each usersOnline}}
+      <span class="dashboard-stats-user">
+        <i class="fa fa-user"></i>
+        {{userFullNameOrEmail this}}
+      </span>
+    {{/each}}
+  </div>
+  <hr>
+</template>

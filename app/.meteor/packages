@@ -27,3 +27,10 @@ useraccounts:flow-routing
 accounts-password
 fortawesome:fontawesome
 arillo:flow-router-helpers
+konecty:user-presence
+zimme:active-route
+manuel:viewmodel
+mdg:validated-method
+aldeed:simple-schema
+chrismbeckett:toastr
+ostrio:meteor-root

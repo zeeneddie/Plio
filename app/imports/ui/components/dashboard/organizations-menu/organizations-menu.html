@@ -1,0 +1,21 @@
+<template name="OrganizationsMenu">
+  <ul class="nav navbar-nav pull-xs-left">
+    <li class="nav-item dropdown dropdown-company hidden-sm-down">
+      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+        {{#with organization}}
+          <span class="hidden-xs-down org-name">{{name}}</span>
+        {{/with}}
+        <i class="fa fa-building hidden-sm-up"></i>
+      </a>
+      <div class="dropdown-menu">
+        {{#each organizations}}
+          {{> OrganizationsMenuItem}}
+        {{/each}}
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="#org-settings-modal" data-toggle="modal">
+          Org settings
+        </a>
+      </div>
+    </li>
+  </ul>
+</template>
