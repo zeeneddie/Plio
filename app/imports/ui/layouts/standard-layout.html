@@ -1,5 +1,5 @@
 <template name="StandardLayout">
-  {{> StandardHeader}}
+  {{> StandardHeader title=headerTitle}}
 
   <div class="content">
     <div class="container-fluid">
@@ -8,7 +8,7 @@
           {{> Template.dynamic template=contentList}}
         </div>
         <div class="content-cards hidden-sm-down scroll">
-          {{> Template.dynamic template=contentCards}}
+          {{> Template.dynamic template=contentCard}}
         </div>
       </div>
     </div>

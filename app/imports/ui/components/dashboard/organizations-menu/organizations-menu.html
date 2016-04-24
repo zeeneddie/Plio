@@ -9,14 +9,11 @@
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-          <a class="dropdown-item js-org-select {{isActivePath regex=regex}}"
-              href="{{pathFor 'dashboardPage' orgSerialNumber=serialNumber}}">
-            {{name}}
-          </a>
+          {{> OrganizationsMenuItem}}
         {{/each}}
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item org-settings-modal-link" href="#org-settings-modal"
-            data-toggle="modal">
+        <a class="dropdown-item org-settings-modal-link" href="#" 
+            {{b "click: openOrgSettings"}}>
           Org settings
         </a>
       </div>

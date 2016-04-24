@@ -20,7 +20,7 @@ const STATUSES = [
   }
 ];
 
-Template.UserMenu.helpers({
+Template.UserMenu.viewmodel({
   getStatuses() {
     return STATUSES;
   },
@@ -39,22 +39,18 @@ Template.UserMenu.helpers({
     });
 
     return (activeStatus && activeStatus.css) || STATUSES[0].css;
-  }
-});
-
-Template.UserMenu.events({
-  'click a.logout-link': function (e, tpl) {
-    e.preventDefault();
-
-    Meteor.logout(() => FlowRouter.go('signIn'));
   },
-
-  'click a.js-status': function (e, tpl) {
+  changeStatus(e) {
     e.preventDefault();
 
     const status = $(e.target).text().trim().toLowerCase();
     if (status != Meteor.user().statusDefault) {
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
+  },
+  logout(e) {
+    e.preventDefault();
+
+    Meteor.logout(() => FlowRouter.go('signIn'));
   }
 });

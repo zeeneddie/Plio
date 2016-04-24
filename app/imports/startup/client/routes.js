@@ -42,6 +42,16 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards', {
+  name: 'standards',
+  action(params) {
+    BlazeLayout.render('StandardLayout', {
+      headerTitle: 'Standards book',
+      contentList: 'StandardsList',
+      contentCard: 'StandardsCard'
+    });
+  }
+});
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
