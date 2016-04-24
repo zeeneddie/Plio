@@ -10,7 +10,7 @@ Plio is a collaborative software tool designed to support a new approach to comp
 
 Regulated organizations face particular challenges. Not only do they need to meet the requirements of customers but also the requirements of their regulatory agency. By applying the principles of continuous improvement, businesses can streamline the compliance management process whilst simultaneously finding ways to reduce cost and waste.
 
-Plio helps an organization to create and maintain a standards book for its key processes and policies, supporting real-time discussion around each process.  It also helps streamline the management of corrective and preventative actions that are implemented to improve these processes and policies. 
+Plio helps an organization to create and maintain a standards book for its key processes and policies, supporting real-time discussion around each process.  It also helps streamline the management of corrective and preventative actions that are implemented to improve these processes and policies.
 
 ![Continuous Improvement](https://cloud.githubusercontent.com/assets/2095940/14455609/0322fe72-00a9-11e6-8efb-f781c30e0a7b.png)
 
@@ -39,7 +39,7 @@ Install the latest official Meteor release from your terminal:
 Go to the Meteor project directory (/app) and execute
 `meteor`
 
-**Note!** 
+**Note!**
 
 If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor is running?
 '*, you'll need to specify the port explicitly (and choose some other available port):
@@ -55,7 +55,7 @@ In order to contribute to this repository you should follow next steps:
 1. Choose unassigned card from Trello's "Backlog" or take already assigned to you card.
 2. Move your card into "In progress" column.
 3. Create new branch based on `devel`. Give you branch name that makes sense. Include the id of the task if there is any (like `PL2-org-settings`).
-4. Start working on your task. If you don't know how to do something, then google it. If you stuck on something for more that 15 minutes, ask your colleagues for help. 
+4. Start working on your task. If you don't know how to do something, then google it. If you stuck on something for more that 15 minutes, ask your colleagues for help.
 5. When card is finished, review your code and refactor complex/hard to understand parts of it (usually long functions or lines of code).
 6. Test all features that was changed/edited/improved by you. Fix all bugs you found. Next, run `./lint.sh` and fix all linter errors.
 7. If there are new commits on `devel` merge `devel` to your branch using `--no-ff` flag (see "Merging" section for details).
@@ -74,7 +74,7 @@ This approach allows to avoid old code appearing in merged version.
 
 ## Style Guide
 
-### General recomendations: 
+### General recomendations:
 * Use variable's names that makes sense.
 * Use `let` and `const` instead of `var`.
 * Extract complex logic into separate class.
