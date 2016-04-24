@@ -6,7 +6,7 @@ import {
 } from '/imports/api/standards-book-sections/standards-book-sections.js';
 
 
-Template.Organizations_Settings.viewmodel({
+Template.OrganizationSettings.viewmodel({
   organization() {
     const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
     return Organizations.findOne({ serialNumber });

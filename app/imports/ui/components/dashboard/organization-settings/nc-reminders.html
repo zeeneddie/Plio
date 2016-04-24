@@ -1,11 +1,11 @@
-<template name="Organizations_NcReminders">
+<template name="OrganizationSettings_NcReminders">
   <div class="card-block card-block-collapse-toggle collapsed" href="#reminders"
       data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Reminders</h4>
   </div>
   <div class="card-block-collapse collapse" id="reminders">
     <div class="card-block">
-      {{> Organizations_NcReminder
+      {{> OrganizationSettings_NcReminder
           title="Minor non-conformity"
           intervalTimeUnit=reminders.minor.interval.timeUnit
           intervalTimeValue=reminders.minor.interval.timeValue
@@ -14,7 +14,7 @@
           ncType="minor"
           onChange=onChangeCb}}
 
-      {{> Organizations_NcReminder
+      {{> OrganizationSettings_NcReminder
           title="Major non-conformity"
           intervalTimeUnit=reminders.major.interval.timeUnit
           intervalTimeValue=reminders.major.interval.timeValue
@@ -23,7 +23,7 @@
           ncType="major"
           onChange=onChangeCb}}
 
-      {{> Organizations_NcReminder
+      {{> OrganizationSettings_NcReminder
           title="Critical non-conformity"
           intervalTimeUnit=reminders.critical.interval.timeUnit
           intervalTimeValue=reminders.critical.interval.timeValue

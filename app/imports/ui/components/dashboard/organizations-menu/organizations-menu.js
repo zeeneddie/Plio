@@ -25,7 +25,7 @@ Template.OrganizationsMenu.helpers({
 
 Template.OrganizationsMenu.events({
   'click .org-settings-modal-link'(e, tpl) {
-    ModalManager.open('Organizations_Settings');
+    ModalManager.open('OrganizationSettings');
   },
   'click .js-org-select'(e, tpl) {
     e.preventDefault();

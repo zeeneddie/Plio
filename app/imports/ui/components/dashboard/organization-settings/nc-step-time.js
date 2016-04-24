@@ -1,4 +1,4 @@
-Template.Organizations_NcStepTime.viewmodel({
+Template.OrganizationSettings_NcStepTime.viewmodel({
   getOnChangeCb() {
     return this.onChange;
   }

@@ -1,9 +1,5 @@
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
-import { insert, update, remove } from '/imports/api/standards-types/methods.js';
-
-
-Template.Organizations_StandardsType.viewmodel({
-  shouldSave() {
+Template.OrganizationSettings_StandardsType.viewmodel({
+  isChanged() {
     const tplData = this.templateInstance.data;
     const storedName = tplData.name;
     const storedAbbr = tplData.abbreviation;
@@ -16,49 +12,18 @@ Template.Organizations_StandardsType.viewmodel({
       (name !== storedName) || (abbreviation !== storedAbbr)
     ]);
   },
+  onFocusOut() {
+    if (this.isChanged()) {
+      this.onChange(this);
+    }
+  },
   delete() {
-    if (!this._id) {
-      this.destroy();
-      return;
-    }
-
-    if (!confirm('Delete this standard type?')) return;
-
-    const _id = this._id();
-
-    remove.call({ _id }, (err, res) => {
-      if (err) {
-        toastr.error(err);
-      }
-    });
+    this.onDelete(this);
   },
-  save() {
-    if (!this.shouldSave()) return;
-
-    const name = this.name();
-    const abbreviation = this.abbreviation();
-
-    if (!this._id) {
-      const organizationId = this.organizationId();
-
-      insert.call({ name, abbreviation, organizationId }, (err, res) => {
-        if (err) {
-          toastr.error(err);
-        }
-
-        this.destroy();
-      });
-    } else {
-      const _id = this._id();
-
-      update.call({ _id, name, abbreviation }, (err, res) => {
-        if (err) {
-          toastr.error(err);
-        }
-      });
-    }
-  },
-  destroy() {
-    Blaze.remove(this.templateInstance.view);
+  getData() {
+    return {
+      name: this.name(),
+      abbreviation: this.abbreviation()
+    };
   }
 });

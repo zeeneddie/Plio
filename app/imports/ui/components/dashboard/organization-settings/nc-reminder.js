@@ -1,4 +1,4 @@
-Template.Organizations_NcReminder.viewmodel({
+Template.OrganizationSettings_NcReminder.viewmodel({
   onChangeCb() {
     return this.onChange;
   }

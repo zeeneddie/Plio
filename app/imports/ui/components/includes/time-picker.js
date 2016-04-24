@@ -5,24 +5,32 @@ Template.TimePicker.viewmodel({
   timeUnits() {
     return _.values(TimeUnits);
   },
-  isSelectedUnit(unit) {
-    return this.timeUnit() === unit;
+  isSelectedUnit(timeUnit) {
+    return this.timeUnit() === timeUnit;
   },
-  onChangedTimeValue() {
-    const prev = this.templateInstance.data.timeValue;
+  isChanged() {
+    const context = this.templateInstance.data;
+
+    const savedTimeValue = context.timeValue;
     const timeValue = this.timeValue();
-    if (timeValue && timeValue !== prev) {
-      this.triggerChange();
-    }
+  
+    const savedTimeUnit = context.timeUnit;
+    const timeUnit = this.timeUnit();
+
+    return _.every([
+      timeValue && timeUnit,
+      (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit)
+    ]);
+  },
+  onFocusOut() {
+    this.triggerChange();
   },
   updateTimeUnit(timeUnit) {
-    const current = this.timeUnit();
-    if (timeUnit === current) return;
     this.timeUnit(timeUnit);
     this.triggerChange();
   },
   triggerChange() {
-    if (this.timeValue() && this.timeUnit()) {
+    if (this.isChanged()) {
       this.onChange(this);
     }
   },

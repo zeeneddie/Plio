@@ -6,7 +6,7 @@ import {
 } from '/imports/api/standards-book-sections/methods.js';
 
 
-Template.Organizations_StandardsBookSection.viewmodel({
+Template.OrganizationSettings_StandardsBookSection.viewmodel({
   title: '',
   onCreated() {
     if (this._id) {

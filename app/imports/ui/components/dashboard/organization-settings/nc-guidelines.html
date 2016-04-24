@@ -1,18 +1,20 @@
-<template name="Organizations_NcGuidelines">
+<template name="OrganizationSettings_NcGuidelines">
   <div class="card-block card-block-collapse-toggle collapsed"
       href="#nonconformity-guidelines" data-toggle="collapse">
     <h4 class="card-title pull-xs-left">Non-conformity guidelines</h4>
   </div>
   <div class="card-block-collapse collapse" id="nonconformity-guidelines">
     <div class="card-block">
-      {{> Organizations_NcGuideline ncType="minor" 
+      {{> OrganizationSettings_NcGuideline ncType="minor" 
           text=guidelines.minor 
           onChange=onChangeCb}}
-      {{> Organizations_NcGuideline 
+      
+      {{> OrganizationSettings_NcGuideline 
           ncType="major" 
           text=guidelines.major 
           onChange=onChangeCb}}
-      {{> Organizations_NcGuideline 
+      
+      {{> OrganizationSettings_NcGuideline 
           ncType="critical" 
           text=guidelines.critical 
           onChange=onChangeCb}}

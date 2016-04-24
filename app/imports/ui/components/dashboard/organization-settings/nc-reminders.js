@@ -1,7 +1,7 @@
 import { setReminder } from '/imports/api/organizations/methods.js';
 
 
-Template.Organizations_NcReminders.viewmodel({
+Template.OrganizationSettings_NcReminders.viewmodel({
   onChangeCb() {
     return this.onChange.bind(this);
   },
@@ -20,7 +20,7 @@ Template.Organizations_NcReminders.viewmodel({
       this.setSavingState(false);
       
       if (err) {
-        toastr.error('Failed to update an organization');
+        toastr.error('Failed to update non-conformity reminders');
       }
     });
   }

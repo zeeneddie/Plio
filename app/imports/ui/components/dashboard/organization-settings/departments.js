@@ -1,10 +1,10 @@
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
-Template.Organizations_Departments.viewmodel({
+Template.OrganizationSettings_Departments.viewmodel({
   addDepartmentForm() {
     Blaze.renderWithData(
-      Template.Organizations_Department,
+      Template.OrganizationSettings_Department,
       {
         onChange: this.onChangeCb(),
         onDelete: this.onDeleteCb()
@@ -23,15 +23,7 @@ Template.Organizations_Departments.viewmodel({
   onDeleteCb() {
     return this.onDelete.bind(this);
   },
-  shouldSave(viewModel) {
-    let savedName = viewModel.templateInstance.data.name;
-    const { name } = viewModel.getData();
-
-    return name && name !== savedName;
-  },
   onChange(viewModel) {
-    if (!this.shouldSave(viewModel)) return;
-
     const { name } = viewModel.getData();
 
     this.setSavingState(true);

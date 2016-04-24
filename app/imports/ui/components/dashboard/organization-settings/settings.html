@@ -1,4 +1,4 @@
-<template name="Organizations_Settings">
+<template name="OrganizationSettings">
   {{#ModalWrapper id="org-settings-modal"}}
     {{> ModalHeading title="Org settings"}}
 
@@ -13,38 +13,38 @@
     {{/GuidancePanel}}
 
     <form>
-      {{> Organizations_MainSettings 
+      {{> OrganizationSettings_MainSettings 
           name=name 
           currency=currency 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
 
-      {{> Organizations_Departments 
+      {{> OrganizationSettings_Departments 
           departments=departments 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
       
-      {{> Organizations_StandardsTypes 
+      {{> OrganizationSettings_StandardsTypes 
           standardsTypes=standardsTypes
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
       
-      {{> Organizations_StandardsBookSections 
+      {{> OrganizationSettings_StandardsBookSections 
           standardsBookSections=standardsBookSections 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
       
-      {{> Organizations_NcStepTimes 
+      {{> OrganizationSettings_NcStepTimes 
           stepTimes=stepTimes 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
       
-      {{> Organizations_NcReminders 
+      {{> OrganizationSettings_NcReminders 
           reminders=reminders 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}
       
-      {{> Organizations_NcGuidelines 
+      {{> OrganizationSettings_NcGuidelines 
           guidelines=guidelines 
           organizationId=organizationId
           setSavingState=setSavingStateFn}}

@@ -1,7 +1,7 @@
 import { setStepTime } from '/imports/api/organizations/methods.js';
 
 
-Template.Organizations_NcStepTimes.viewmodel({
+Template.OrganizationSettings_NcStepTimes.viewmodel({
   onChangeCb() {
     return this.onChange.bind(this);
   },

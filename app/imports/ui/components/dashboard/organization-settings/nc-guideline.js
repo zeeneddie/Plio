@@ -1,8 +1,12 @@
-Template.Organizations_NcGuideline.viewmodel({
-  onTextChanged() {
+Template.OrganizationSettings_NcGuideline.viewmodel({
+  isChanged() {
     const prev = this.templateInstance.data.text;
     const text = this.text();
-    if (text && text !== prev) {
+    
+    return text && text !== prev;
+  },
+  onFocusOut() {
+    if (this.isChanged()) {
       this.onChange(this);
     }
   },

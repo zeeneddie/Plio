@@ -1,7 +1,7 @@
 import { setGuideline } from '/imports/api/organizations/methods.js';
 
 
-Template.Organizations_NcGuidelines.viewmodel({
+Template.OrganizationSettings_NcGuidelines.viewmodel({
   onChangeCb() {
     return this.onChange.bind(this);
   },
@@ -16,7 +16,7 @@ Template.Organizations_NcGuidelines.viewmodel({
       this.setSavingState(false);
 
       if (err) {
-        toastr.error('Failed to update a non-conformity guideline');
+        toastr.error('Failed to update non-conformity guidelines');
       }
     });
   }

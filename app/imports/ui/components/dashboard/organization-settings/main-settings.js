@@ -3,7 +3,7 @@ import { setName,  setDefaultCurrency } from '/imports/api/organizations/methods
 import { OrgCurrencies } from '/imports/api/constants.js';
 
 
-Template.Organizations_MainSettings.viewmodel({
+Template.OrganizationSettings_MainSettings.viewmodel({
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
