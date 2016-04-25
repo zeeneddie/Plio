@@ -5,6 +5,6 @@ import './dashboard/dashboard-footer.html';
 import './login-header.html';
 import './includes';
 import './useraccounts';
-import './standards';
 import './dashboard/organizations-menu';
 import './dashboard/user-menu';
+import './standards';
