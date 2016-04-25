@@ -7,7 +7,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (vm && vm.collapse && !vm.collapsed()) {
+          if (vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
