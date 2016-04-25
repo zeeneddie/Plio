@@ -7,5 +7,10 @@ ViewModel.mixin({
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
     }, 500),
+  },
+  modal: {
+    open(data) {
+      Blaze.renderWithData(Template.ModalWindow, data, document.body);
+    }
   }
 });

@@ -2,36 +2,26 @@
   <div class="modal fade" {{b "ref: modal"}}>
     <div class="modal-dialog">
       <div class="card">
-        {{#if simple}}
-          <div class="card-block card-heading">
-            <div class="card-heading-buttons pull-xs-right">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                Cancel
-              </button>
-            </div>
-            <h4 class="card-title">{{title}}</h4>
-          </div>
-        {{else}}
-          <div class="card-block card-heading">
+        <div class="card-block card-heading">
+          {{#unless simple}}
             <div class="card-heading-buttons pull-xs-left">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                Cancel
-              </button>
-            </div>
-            <h4 class="card-title">{{title}}</h4>
-            <div class="card-heading-buttons pull-xs-right">
               <button type="button" class="btn btn-link btn-icon guidance-panel-open" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
                 <i class="fa fa-question-circle"></i>
               </button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal" {{b "click: child.save"}}>
-                {{#if saveButtonText}}
-                  {{saveButtonText}}
-                {{else}}
-                  Save
-                {{/if}}
-              </button>
             </div>
+          {{/unless}}
+          <h4 class="card-title">{{title}}</h4>
+          <div class="card-heading-buttons pull-xs-right">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              {{#if closeText}}
+                {{closeText}}
+              {{else}}
+                Close
+              {{/if}}
+            </button>
           </div>
+        </div>
+        {{#unless simple}}
           <div class="collapse guidance-panel" {{b "ref: collapse"}}>
             <div class="card-block">
               <p>{{hint}}</p>
@@ -41,8 +31,7 @@
               </div>
             </div>
           </div>
-        {{/if}}
-
+        {{/unless}}
         {{> Template.dynamic template=template}}
       </div>
     </div>
