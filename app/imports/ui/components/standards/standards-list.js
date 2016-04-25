@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.StandardsList.viewmodel({
   share: 'organization',

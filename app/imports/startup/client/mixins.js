@@ -20,6 +20,10 @@ ViewModel.mixin({
   modal: {
     open(data) {
       Blaze.renderWithData(Template.ModalWindow, data, document.body);
+    },
+    destroy() {
+      const vm = ViewModel.findOne('ModalWindow');
+      return vm && vm.modal.modal('hide');
     }
   }
 });
