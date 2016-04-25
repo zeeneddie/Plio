@@ -139,9 +139,9 @@ To add a new collection, you need to create a new directory within the `app/fixt
 "Meteor.users": "users"
 ```
 
-"Meteor.users" is the users collection in Meteor.
++ "Meteor.users" is the users collection in Meteor.
 
-"users" is the name of the directory that will store `Meteor.users` documents.
++ "users" is the name of the directory that will store `Meteor.users` documents.
 
 To add a new user, you need to create him via `Accounts.createUser` or a standard registration form to set a password (use a 'password' word as a password).
 
@@ -151,9 +151,11 @@ Use existing json files as an example.
 Currently, there are two fixture users: 
 
 email: mike@jssolutionsdev.com
+
 password: password
 
 email: steve.ives@pliohub.com
+
 password: password
 
 #License
