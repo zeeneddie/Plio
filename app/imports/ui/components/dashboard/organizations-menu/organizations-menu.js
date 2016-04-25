@@ -13,5 +13,9 @@ Template.OrganizationsMenu.viewmodel({
   },
   organizations() {
     return Organizations.find({ 'users.userId': Meteor.userId() });
+  },
+  openOrgSettings(e) {
+    e.preventDefault();
+    ModalManager.open('OrganizationSettings');
   }
 });

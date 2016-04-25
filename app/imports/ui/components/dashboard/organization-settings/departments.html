@@ -1,0 +1,26 @@
+<template name="OrganizationSettings_Departments">
+  <div class="card-block card-block-collapse-toggle collapsed" href="#departments"
+      data-toggle="collapse">
+    <h4 class="card-title pull-xs-left">Departments</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted" {{b "text: departmentsCount"}}>
+      </span>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="departments">
+    <div class="card-block">
+      <div id="departments-forms">
+        {{#each departments}}
+          {{> OrganizationSettings_Department 
+              _id=this._id
+              name=this.name
+              onChange=onChangeCb
+              onDelete=onDeleteCb}}
+        {{/each}}
+      </div>
+      <button class="btn btn-primary" type="button" {{b "click: addDepartmentForm"}}>
+        Add department
+      </button>
+    </div>
+  </div>
+</template>

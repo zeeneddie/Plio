@@ -7,3 +7,5 @@ import './list-sub-item.html';
 import './list-sub-item.js';
 import './card-changelog.html';
 import './card-changelog.js';
+import './time-picker.html';
+import './time-picker.js';

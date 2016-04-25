@@ -1,0 +1,53 @@
+<template name="OrganizationSettings">
+  {{#ModalWrapper id="org-settings-modal"}}
+    {{> ModalHeading title="Org settings"}}
+
+    {{#GuidancePanel moreInfoLink="#"}}
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Praesent vestibulum accumsan nulla, non pulvinar neque.
+        Quisque faucibus tempor imperdiet. Suspendisse feugiat,
+        nibh nec maximus pellentesque, massa nunc mattis ipsum,
+        in dictum magna arcu et ipsum.
+      </p>
+    {{/GuidancePanel}}
+
+    <form>
+      {{> OrganizationSettings_MainSettings 
+          name=name 
+          currency=currency 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+
+      {{> OrganizationSettings_Departments 
+          departments=departments 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> OrganizationSettings_StandardsTypes 
+          standardsTypes=standardsTypes
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> OrganizationSettings_StandardsBookSections 
+          standardsBookSections=standardsBookSections 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> OrganizationSettings_NcStepTimes 
+          stepTimes=stepTimes 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> OrganizationSettings_NcReminders 
+          reminders=reminders 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+      
+      {{> OrganizationSettings_NcGuidelines 
+          guidelines=guidelines 
+          organizationId=organizationId
+          setSavingState=setSavingStateFn}}
+    </form>
+  {{/ModalWrapper}}
+</template>

@@ -1,7 +1,8 @@
+import './includes';
+import './modals';
 import './useraccounts';
-import './dashboard/user-stats';
-import './dashboard/dashboard-header.html';
-import './dashboard/dashboard-footer.html';
+import './dashboard';
+import './standards';
 import './login-header.html';
 import './includes';
 import './useraccounts';
