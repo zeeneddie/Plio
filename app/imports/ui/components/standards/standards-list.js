@@ -13,7 +13,6 @@ Template.StandardsList.viewmodel({
       title: 'Add',
       simple: true,
       template: 'AddStandardType',
-      closeText: 'Cancel'
     });
   }
 });
