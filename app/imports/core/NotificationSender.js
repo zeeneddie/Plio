@@ -28,7 +28,7 @@
  *
  * ```
  */
-class NotificationSender {
+export default class NotificationSender {
   /**
    * @param {string} subject notification's subject/title
    * @param {string} templateName handlebars template name
@@ -109,5 +109,9 @@ class NotificationSender {
   sendEmail(receiver) {
     let html = this._renderTemplateWithData('email');
     this._sendEmailBasic(receiver, html);
+  }
+
+  static getAbsoluteUrl(path) {
+    return `${process.env.ROOT_URL}${path}`;
   }
 }

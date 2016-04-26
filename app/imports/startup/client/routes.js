@@ -34,6 +34,16 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
+FlowRouter.route('/accept-invitation/:invitationId', {
+  name: 'acceptInvitationPage',
+  triggersEnter: [checkLoggedIn],
+  action(params) {
+    BlazeLayout.render('LoginLayout', {
+      content: 'AcceptInvitationPage'
+    });
+  }
+});
+
 FlowRouter.route('/hello', {
   name: 'hello',
   action(params) {
@@ -79,7 +89,7 @@ function redirectHandler() {
   } else {
     FlowRouter.go('hello');
   }
-};
+}
 
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
@@ -87,4 +97,4 @@ function checkLoggedIn(context, redirect) {
       redirect('signIn', {}, { org: context.params.orgSerialNumber });
     }
   }
-};
+}

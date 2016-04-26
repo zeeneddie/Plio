@@ -1,0 +1,21 @@
+<template name="AcceptInvitationPage">
+  <!--todo: add other fields here-->
+  <input {{b "value: firstName"}} class="from-control" placeholder="First name" type="text">
+  <input {{b "value: lastName"}} class="from-control" placeholder="Last name" type="text">
+  <input {{b "value: password"}} class="from-control" placeholder="Password" type="password">
+  <input {{b "value: repeatPassword"}} class="from-control" placeholder="Repeat password" type="password">
+
+  {{#with invitedUser}}
+    <input type="email" name="email" class="form-control"
+           value="{{b "text: this.emails.0.address"}}"
+           disabled="disabled"/>
+  {{/with}}
+
+  {{#with organization}}
+    <input type="text" name="organization-name" class="form-control"
+           value="{{b "text: this.name"}}"
+           disabled="disabled"/>
+  {{/with}}
+
+  <button {{b "click: acceptInvitation"}} class="btn btn-primary">Accept Invitation</button>
+</template>

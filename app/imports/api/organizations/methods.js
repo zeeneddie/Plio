@@ -1,6 +1,6 @@
-import {Meteor} from 'meteor/meteor';
-import {ValidatedMethod} from 'meteor/mdg:validated-method';
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
+import { Meteor } from 'meteor/meteor';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import OrganizationService from './organization-service.js';
 
@@ -31,18 +31,60 @@ export const inviteUserByEmail = new ValidatedMethod({
   name: 'Organizations.inviteUserByEmail',
 
   validate: new SimpleSchema({
-    name: {type: String}
+    organizationId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    email: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Email
+    }
   }).validator(),
 
-  run(email) {
+  run({organizationId, email}) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot create an organization'
+        403, 'Unauthorized user cannot invite users'
       );
     }
     //todo: check invite user permission here
 
-    //todo: invite user here
+    OrganizationService.inviteUserByEmail(organizationId, email);
+  }
+});
+
+const userDataSchema = new SimpleSchema({
+  firstName: {
+    type: String,
+    minLength: 1,
+    maxLength: 20
+  },
+  lastName: {
+    type: String,
+    minLength: 1,
+    maxLength: 20
+  },
+  password: {
+    type: String,
+    minLength: 6,
+    maxLength: 20
+  }
+});
+
+export const acceptInvitation = new ValidatedMethod({
+  name: 'Organizations.acceptInvitation',
+
+  validate: new SimpleSchema({
+    invitationId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    userData: userDataSchema
+  }).validator(),
+
+  run({invitationId, userData}) {
+    //no permission checks are required
+    OrganizationService.acceptInvitation(invitationId, userData);
   }
 });
