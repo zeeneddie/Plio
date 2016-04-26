@@ -57,18 +57,18 @@ export const inviteUserByEmail = new ValidatedMethod({
 const userDataSchema = new SimpleSchema({
   firstName: {
     type: String,
-    minLength: 1,
-    maxLength: 20
+    min: 1,
+    max: 20
   },
   lastName: {
     type: String,
-    minLength: 1,
-    maxLength: 20
+    min: 1,
+    max: 20
   },
   password: {
     type: String,
-    minLength: 6,
-    maxLength: 20
+    min: 6,
+    max: 20
   }
 });
 
@@ -80,7 +80,7 @@ export const acceptInvitation = new ValidatedMethod({
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    userData: userDataSchema
+    userData: {type: userDataSchema}
   }).validator(),
 
   run({invitationId, userData}) {
