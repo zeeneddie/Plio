@@ -1,4 +1,4 @@
-import {Accounts} from 'meteor/accounts-base'
+import { Accounts } from 'meteor/accounts-base'
 
 function onCreateUser(options, user) {
   if (options.profile) {

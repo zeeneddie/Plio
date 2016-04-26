@@ -17,7 +17,8 @@
   ],
   "profile": {
     "firstName": "Michael",
-    "lastName": "Rokosh"
+    "lastName": "Rokosh",
+    "avatar": "/avatars/avatar-placeholder-2.png"
   },
   "status": "offline",
   "statusConnection": "offline"
