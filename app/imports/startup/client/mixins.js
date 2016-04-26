@@ -27,11 +27,20 @@ ViewModel.mixin({
     }
   },
   search: {
-    searchObject(prop) {
+    searchObject(prop, fields) {
       const searchObject = {};
       if (this[prop]()) {
         const r = new RegExp(`.*${this[prop]()}.*`, 'i');
-        searchObject['name'] = r;
+        if (_.isArray(fields)) {
+          fields = _.map(fields, (field) => {
+            const obj = {};
+            obj[field] = r;
+            return obj;
+          });
+          searchObject['$or'] = fields;
+        } else {
+          searchObject[fields] = r;
+        }
       }
       return searchObject;
     }
