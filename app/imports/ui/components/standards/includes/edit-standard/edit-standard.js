@@ -3,9 +3,6 @@ import { Template } from 'meteor/templating';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.EditStandard.viewmodel({
-  autorun() {
-    console.log(this.status());
-  },
   titleValue: '',
   description: '',
   type: '',

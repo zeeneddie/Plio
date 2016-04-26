@@ -15,7 +15,7 @@ Template.ESBookSection.viewmodel({
   selectBookSection(doc) {
     const { _id, number, name } = doc;
     this.bookSection(`${number}. ${name}`);
-    this.selectedBookSection(_id);
+    this.selectedBookSectionId(_id);
   },
   getData() {
     const selectedBookSectionId = { this };
