@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { insert } from '/imports/api/standards/methods.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.EditStandard.viewmodel({
   titleText: '',
@@ -12,12 +14,22 @@ Template.EditStandard.viewmodel({
   issueNumber: 1,
   status: 'draft',
   getData() {
-    const { titleText, description, type, issueNumber, status } = this.data();
-    return { titleText, description, type, issueNumber, status };
+    const { titleText:title, description, type, issueNumber, status } = this.data();
+    return {
+      title,
+      description,
+      type,
+      issueNumber: parseInt(issueNumber, 10),
+      status
+    };
   },
   save() {
-    const data = this.getData();
+    let data = this.getData();
     this.children(vm => vm.getData && vm.getData())
         .forEach(vm => _.extend(data, vm.getData()));
+
+    data = _.extend(data, { nestingLevel: 1, number: [2] });
+
+    insert.call(data, handleMethodResult());
   }
 });
