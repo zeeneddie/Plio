@@ -18,7 +18,7 @@ Template.ESBookSection.viewmodel({
     this.selectedBookSection(_id);
   },
   getData() {
-    const selectedBookSection = { this };
-    return { selectedBookSection };
+    const selectedBookSectionId = { this };
+    return { selectedBookSectionId };
   }
 });

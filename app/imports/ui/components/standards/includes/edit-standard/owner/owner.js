@@ -7,7 +7,6 @@ Template.ESOwner.viewmodel({
   members() {
     const query = this.searchObject('owner', ['profile.firstName', 'profile.lastName']);
     const options = { sort: { 'profile.firstName': 1 } };
-    console.log(query);
     return Meteor.users.find(query, options);
   },
   selectOwner(doc) {
@@ -15,5 +14,9 @@ Template.ESOwner.viewmodel({
     const fullName = this.fullName(doc);
     this.owner(fullName);
     this.selectedOwnerId(_id);
+  },
+  getData() {
+    const selectedOwnerId = this.selectedOwnerId();
+    return { selectedOwnerId };
   }
 });
