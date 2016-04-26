@@ -16,7 +16,7 @@ Template.ESOwner.viewmodel({
     this.selectedOwnerId(_id);
   },
   getData() {
-    const selectedOwnerId = this.selectedOwnerId();
+    const { selectedOwnerId } = this.data();
     return { selectedOwnerId };
   }
 });

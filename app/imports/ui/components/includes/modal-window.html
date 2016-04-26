@@ -4,17 +4,17 @@
       <div class="card">
         <div class="card-block card-heading">
           {{#unless simple}}
-            <div class="card-heading-buttons" {{b "class: { pull-xs-left: !save, pull-xs-right: save }"}}>
+            <div class="card-heading-buttons" {{b "class: { pull-xs-left: !isSave, pull-xs-right: isSave }"}}>
               <button type="button" class="btn btn-link btn-icon guidance-panel-open" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
                 <i class="fa fa-question-circle"></i>
               </button>
-              {{#if save}}
+              {{#if isSave}}
                 <button type="button" class="btn btn-primary" data-dismiss="modal" {{b "click: child.save"}}>Save</button>
               {{/if}}
             </div>
           {{/unless}}
           <h4 class="card-title">{{title}}</h4>
-          <div class="card-heading-buttons" {{b "class: { pull-xs-left: save, pull-xs-right: !save }"}}>
+          <div class="card-heading-buttons" {{b "class: { pull-xs-left: isSave, pull-xs-right: !isSave }"}}>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">
               {{#if closeText}}
                 {{closeText}}

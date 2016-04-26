@@ -11,6 +11,8 @@
       template: String, // name of the template to be the content of the modal
       title: String,
       hint: String,
+      simple: Boolean, // for a 'simple' variation
+      isSave: Boolean, // for a 'save' variation
       closeText: String // Optional. Default to 'Close'
     });
   }
