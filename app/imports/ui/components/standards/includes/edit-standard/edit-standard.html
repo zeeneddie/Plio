@@ -2,8 +2,8 @@
   <form>
     <div class="card-block">
       {{#FormField label="Title"}}
-        <input type="text" class="form-control" placeholder="Title" {{b "value: titleValue"}}>
-        <button type="button" class="btn btn-link clear-field">
+        <input type="text" class="form-control" placeholder="Title" {{b "value: titleText"}}>
+        <button type="button" class="btn btn-link clear-field" {{b "click: titleText('')"}}>
           <i class="fa fa-times-circle"></i>
         </button>
       {{/FormField}}

@@ -5,7 +5,7 @@
 
 .form-control {
   color: #333;
-  
+
   &:disabled {
     color: black;
   }
@@ -17,7 +17,7 @@
 .form-control-label {
   font-weight: normal;
   font-family: $font-semibold;
-  
+
   .form-horizontal &,
   .form-group.row & {
     @media (min-width:768px) {
@@ -25,7 +25,7 @@
       padding-right: 0;
     }
   }
-  
+
   .form-group:not(.row) & {
     padding-left: 0;
   }
@@ -34,36 +34,36 @@
 
 /* Rich text */
 
-.rich-text {  
+.rich-text {
   &-controls {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     text-align: center;
     padding: 3px 0;
-    
+
     .btn {
       border: 0;
     }
   }
-  
+
   &-input {
     font-size: 0;
     height: 400px;
-    
+
     .expanded & {
       height: 800px;
     }
   }
-  
+
   &-expand-toggle {
     .fa-compress { display: none; }
     .fa-expand { display: inline-block; }
-    
+
     .expanded & {
       .fa-compress { display: inline-block; }
-      .fa-expand { display: none; }      
+      .fa-expand { display: none; }
     }
-    
+
   }
 }
 
@@ -83,14 +83,14 @@
   padding-left: 0;
   padding-right: 0;
   margin-right: 10px;
-  
+
   &.active {
     background: $light-blue-color;
     border-color: $light-blue-color;
-    
+
     &:hover {
       background: darken($light-blue-color,5%);
-      border-color: darken($light-blue-color,5%);      
+      border-color: darken($light-blue-color,5%);
     }
   }
 
@@ -99,14 +99,14 @@
     color: white;
     font-size: 19px;
   }
-  
+
   &-label {
     font-family: $font-semibold;
   }
 }
 
-/* 
-  Select dropdowns 
+/*
+  Select dropdowns
 */
 
 .c-select {
@@ -122,7 +122,7 @@
 .dropdown {
   &-menu {
     padding: 0;
-    
+
     &-full {
       left: 0;
       right: 0;
@@ -130,7 +130,7 @@
   }
   &-item {
     padding: 10px 15px;
-    
+
     &.indent {
       padding-left: 30px;
     }
@@ -147,34 +147,34 @@
 
 .form-group-flex {
   @include flexbox;
-  
+
   &-flex {
     @include flex(1);
   }
-  
+
   .margin-left {
     margin-left: 15px;
   }
-  
+
   .margin-right {
     margin-right: 15px;
   }
-  
+
   .btn {
     margin-bottom: 0;
   }
 }
 
-/* 
+/*
   Form group nested layout - rows/cols
 */
 
 .form-group.row .row {
   margin: 0;
-  
+
   > div {
     padding: 0;
-    
+
     &:not(:last-child) {
       padding-right: 15px;
     }
@@ -189,17 +189,18 @@
 	position: absolute;
 	right: 15px;
 	top: 0;
+  visibility: hidden;
 	font-size: 21px;
 	line-height: 1;
 	color: #bbb !important;
-	transition: all 0.3s ease;
+	transition: all 0.3s ease, visibility 0.15s;
 	border: 0;
   z-index: 9;
-  display: none;
   margin: 0 !important;
   padding-left: 6px;
   padding-right: 6px;
-  
+  outline: none;
+
 	&:hover {
   	color: #99130f !important;
 	}
@@ -214,14 +215,14 @@
   .ios & {
     padding-right: 0 !important;
   }
-  
+
   .android & {
     right: 0;
-  }	
+  }
 }
 
 input:focus ~ .clear-field {
-  display: block;
+  visibility: visible;
 }
 
 
@@ -240,7 +241,7 @@ input:focus ~ .clear-field {
 
 .input-group-typeahead {
   position: relative;
-  
+
   .dropdown-menu {
     left: 0;
   }
@@ -265,7 +266,7 @@ input:focus ~ .clear-field {
     width: 1%;
     padding: 10px !important;
     font-weight: 500;
-    
+
     @media (max-width: 480px) {
       max-width: 50px !important;
       overflow: hidden;
@@ -283,7 +284,7 @@ input:focus ~ .clear-field {
         //position: absolute;
         //top: 50%;
         //margin-top: -30px;
-      
+
       }
     }
 
@@ -336,7 +337,7 @@ input:focus ~ .clear-field {
   .btn, .btn-group {
     margin-right: 3px;
   }
-  
+
   .btn-group .btn {
     margin-right: 0;
   }
@@ -359,7 +360,7 @@ legend {
 
 .form-group-inline {
   @include clearfix;
-  
+
   label {
     display: inline-block;
     padding-left: 0;
@@ -369,7 +370,7 @@ legend {
     max-width: 130px;
     float: left;
   }
-  
+
   .margin-right {
     margin-right: 10px;
   }
