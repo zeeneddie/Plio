@@ -25,5 +25,15 @@ ViewModel.mixin({
       const vm = ViewModel.findOne('ModalWindow');
       return vm && vm.modal.modal('hide');
     }
+  },
+  search: {
+    searchObject(prop) {
+      const searchObject = {};
+      if (this[prop]()) {
+        const r = new RegExp(`.*${this[prop]()}.*`, 'i');
+        searchObject['name'] = r;
+      }
+      return searchObject;
+    }
   }
 });

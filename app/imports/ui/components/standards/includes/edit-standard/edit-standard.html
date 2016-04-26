@@ -13,19 +13,7 @@
           <i class="fa fa-times-circle"></i>
         </button>
       {{/FormField}}
-      {{#FormField label="Book section"}}
-        <div class="dropdown">
-          <input type="text" class="form-control" placeholder="Book section" data-toggle="dropdown"
-            {{b "value: bookSectionValue"}}/>
-          <div class="dropdown-menu dropdown-menu-full">
-            {{#each bookSections}}
-              <a class="dropdown-item" href="#" {{b "text: this.number + '. ' + this.name, click: bookSection(this)"}}></a>
-            {{/each}}
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"><strong>Add new section</strong></a>
-          </div>
-        </div>
-      {{/FormField}}
+      {{> ESBookSection}}
       {{#FormField label="Type"}}
         <div class="dropdown">
           <select class="form-control c-select" {{b "options: types, optionsValue: _id, optionsText: name, value: selectedType"}}></select>
