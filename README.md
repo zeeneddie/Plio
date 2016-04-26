@@ -122,7 +122,7 @@ E.g. ```throw new Meteor.Error('not-allowed', 'This operation is not allowed');
 
 This function is a wrapper, so you can pass a callback as an argument.
 ``` 
-update.call({ _id, name }, handleMethodResult(() => { 
+update.call({ _id, name }, handleMethodResult((err, res) => { 
    this.setSavingState(false); 
 }));
 ```
