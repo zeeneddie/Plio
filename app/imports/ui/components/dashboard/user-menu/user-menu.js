@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
 
+import {Organizations} from '/imports/api/organizations/organizations.js';
+
 const STATUSES = [
   {
     text: 'Online',
@@ -39,6 +41,9 @@ Template.UserMenu.viewmodel({
     });
 
     return (activeStatus && activeStatus.css) || STATUSES[0].css;
+  },
+  orgSerialNumber() {
+    return FlowRouter.getParam('orgSerialNumber');
   },
   changeStatus(e) {
     e.preventDefault();

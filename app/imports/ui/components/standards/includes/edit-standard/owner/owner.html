@@ -1,10 +1,10 @@
 <template name="ESOwner">
   {{#FormField label="Owner"}}
     <div class="dropdown">
-      <input type="text" class="form-control" value="Mike Smith" placeholder="Owner" data-toggle="dropdown"/>
+      <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner"}} />
       <div class="dropdown-menu dropdown-menu-full">
         {{#each members}}
-          <a class="dropdown-item" href="#">{{userFullNameOrEmail this}}</a>
+          <a class="dropdown-item" href="#" {{b "click: selectOwner(this)"}}>{{userFullNameOrEmail this}}</a>
         {{/each}}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#"><strong>Add new user</strong></a>

@@ -35,5 +35,12 @@ ViewModel.mixin({
       }
       return searchObject;
     }
+  },
+  fullName: {
+    fullName(doc) {
+      const { profile } = doc;
+      const { firstName, lastName } = profile;
+      return `${firstName} ${lastName}`;
+    }
   }
 });

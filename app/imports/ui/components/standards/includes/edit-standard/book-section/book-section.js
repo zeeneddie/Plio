@@ -6,9 +6,9 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 Template.ESBookSection.viewmodel({
   mixin: 'search',
   bookSection: '',
-  selectedBookSection: '',
+  selectedBookSectionId: '',
   bookSections() {
-    const query = this.searchObject('bookSection');
+    const query = this.searchObject('bookSection', 'name');
     const options = { sort: { number: 1 } };
     return StandardsBookSections.find(query, options);
   },
