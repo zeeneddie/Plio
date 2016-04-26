@@ -9,4 +9,5 @@ Template.EditStandard.viewmodel({
   types() {
     return [{ _id: '', name: '' }].concat(StandardsTypes.find({}).fetch()); // add empty option
   },
+  issueNumber: 1,
 });
