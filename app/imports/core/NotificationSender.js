@@ -1,30 +1,16 @@
 /**
  * Universal notification sender
  *
- * Supports emails and build-in notifications
- * If you need send notification you probably should use it
+ * Right now supports only email sending
  *
  * Possible notification data entries formats: String, Number.
- *
- * Note: If your notification data contains dates you should
- * format it in appropriate location's timezone.
- *
- * Also you can use `_notificationId` in your template to
- * link notification's metadata with notification itself.
- * This feature may be used in server side routes for
- * processing any notification's actions.
- * Use `{{_notificationId}}` - in templates and `this._notificationId` - in helpers
  *
  * Template data helpers
  * You can also define you own helpers
  * Note: notification helpers act as simple handlebars helpers.
- * `_notificationId` will be also included in root context.
  *
- * Usage examples:
+ * Usage example:
  * ```
- *  new NotificationSender('Test1', 'test', {username: 'User'})
- *  .sendEmail('kfZMbk62tgFSxmDen');
- *
  * new NotificationSender('Test3', 'test', {
  *     username: 'User',
  *     persons: [
@@ -118,7 +104,7 @@ class NotificationSender {
   /**
    * Sends email to specified receiver
    *
-   * @param receiver - user ID or email
+   * @param receiver user ID or email
    */
   sendEmail(receiver) {
     let html = this._renderTemplateWithData('email');
