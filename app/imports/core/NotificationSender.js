@@ -31,19 +31,13 @@
  *         {name: 'John'},
  *         {name: 'James'},
  *         {name: 'Jim'}
- *     ],
- *     menuItemId: '4NCAWrYMj75cYKQ9L'
+ *     ]
  * }, {
- *     interactive: true,
  *     helpers: {
  *         greeting: function () {
  *             return 'Hello, ' + this.name;
- *         },
- *         menuItemUrl: function () {
- *             return Router.url('menuItemDetail', {_id: this.menuItemId});
  *         }
- *     },
- *     meta: {aaa: 333}
+ *     }
  * }).sendBoth('kfZMbk62tgFSxmDen');
  *
  * ```
@@ -55,10 +49,7 @@ class NotificationSender {
    * @param {object} [templateData] data to render on template
    * @param {object} [options] additional configuration
    * @param {string} [options.senderId] user that sanded notification
-   * @param {object} [options.metadata] additional notification data
-   * @param {boolean} [options.interactive] deny automatic reading (usually if notification requires an action)
    * @param {object} [options.helpers] define you own formatting helpers
-   * @param {boolean} [options.shareable] if one of recipients marks notification as read it will be removed
    * in others too
    * @constructor
    */
@@ -75,32 +66,16 @@ class NotificationSender {
         OriginalHandlebars.registerHelper(helperName, helperFn);
       });
     }
-
-    if (options.shareable) {
-      this._options.shareId = Random.id();
-    }
-  }
-
-  /**
-   * @returns true is notification requires some action
-   * @private
-   */
-  _isInteractive() {
-    return this._options.interactive;
   }
 
   /**
    * Render Handlebars template
-   * @param {String} notificationId
    * @param {'mobile'|'email'} [type=false]
    * @returns {String}
    * @private
    */
-  _renderTemplateWithData(notificationId, type) {
-    let templateData = _.extend(this._options.templateData, {
-      _isEmail: type === 'email',
-      _notificationId: notificationId
-    });
+  _renderTemplateWithData(type) {
+    let templateData = this._options.templateData;
 
     let basicTemplateName = this._options.templateName;
 
@@ -132,7 +107,7 @@ class NotificationSender {
   _sendEmailBasic(receiver, text) {
     let emailOptions = {
       subject: this._getEmailSubject(),
-      from: this._getUserEmail(this._options.senderId) || 'notifications@hospohero.com',
+      from: this._getUserEmail(this._options.senderId) || 'no-reply@pliohub.com',
       to: this._getUserEmail(receiver),
       html: text
     };
@@ -146,28 +121,7 @@ class NotificationSender {
    * @param receiver - user ID or email
    */
   sendEmail(receiver) {
-    let notificationId = null;
-
-    if (this._isInteractive()) {
-      notificationId = this._insertNotification(receiver, true);
-    }
-
-    let html = this._renderTemplateWithData(notificationId, 'email');
+    let html = this._renderTemplateWithData('email');
     this._sendEmailBasic(receiver, html);
-  }
-
-  /**
-   * Sends build-in app notification
-   *
-   * @param receiverId
-   */
-  sendNotification(receiverId) {
-    this._insertNotification(receiverId, false);
-  }
-
-  sendBoth(receiverId) {
-    let notificationId = this._insertNotification(receiverId, false);
-    let html = this._renderTemplateWithData(notificationId, 'email');
-    this._sendEmailBasic(receiverId, html);
   }
 }
