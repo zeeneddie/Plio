@@ -11,3 +11,4 @@ import './useraccounts';
 import './dashboard/organizations-menu';
 import './dashboard/user-menu';
 import './standards';
+import './userdirectory';
