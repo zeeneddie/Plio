@@ -17,7 +17,8 @@
   ],
   "profile": {
     "firstName": "Steve",
-    "lastName": "Ives" 
+    "lastName": "Ives",
+    "avatar": "/avatars/avatar-placeholder-4.png"
   },
   "status": "offline",
   "statusConnection": "offline"
