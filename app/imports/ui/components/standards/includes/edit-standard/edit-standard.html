@@ -19,7 +19,7 @@
 
       {{#FormField label="Type"}}
         <div class="dropdown">
-          <select class="form-control c-select" {{b "options: types, optionsValue: _id, optionsText: name, value: selectedType"}}></select>
+          <select class="form-control c-select" {{b "options: types, optionsValue: _id, optionsText: name, value: type"}}></select>
         </div>
       {{/FormField}}
 
@@ -32,19 +32,18 @@
         </div>
       </div>
 
-      <div class="form-group row">
-        <label class="form-control-label col-sm-4 col-xs-12">Status</label>
-        <div class="col-sm-8 col-xs-12">
-          <div class="btn-group btn-group-nomargin" data-toggle="buttons">
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option1" autocomplete="off"> Issued
-            </label>
-            <label class="btn btn-secondary active">
-              <input type="radio" name="options" id="option2" autocomplete="off" checked> Draft
-            </label>
-          </div>
+      {{#FormField label="Status"}}
+        <div class="btn-group btn-group-nomargin" data-toggle="buttons">
+          <label class="btn btn-secondary" {{b "click: status('issued'), class: { active: status === 'issued' }"}}>
+            <input type="radio" value="issued" name="options" autocomplete="off"> Issued
+          </label>
+          <label class="btn btn-secondary" {{b "click: status('draft'), class: { active: status === 'draft' }"}}>
+            <input type="radio" value="draft" name="options" autocomplete="off"> Draft
+          </label>
         </div>
-      </div>
+      {{/FormField}}
+
+
       <div class="form-group row">
         <label class="form-control-label col-sm-4 col-xs-12">Department(s)</label>
         <div class="col-sm-8 col-xs-12">
