@@ -7,35 +7,24 @@
           <i class="fa fa-times-circle"></i>
         </button>
       {{/FormField}}
+
       {{#FormField label="Description"}}
         <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description"}}></textarea>
         <button type="button" class="btn btn-link clear-field">
           <i class="fa fa-times-circle"></i>
         </button>
       {{/FormField}}
+
       {{> ESBookSection}}
+
       {{#FormField label="Type"}}
         <div class="dropdown">
           <select class="form-control c-select" {{b "options: types, optionsValue: _id, optionsText: name, value: selectedType"}}></select>
         </div>
       {{/FormField}}
-      <div class="form-group row">
-        <label class="form-control-label col-sm-4 col-xs-12">Owner</label>
-        <div class="col-sm-8 col-xs-12">
-          <div class="dropdown">
-            <input type="text" class="form-control" value="Mike Smith" placeholder="Owner" data-toggle="dropdown"/>
-            <div class="dropdown-menu dropdown-menu-full">
-              <a class="dropdown-item" href="#">Jack Herbert</a>
-              <a class="dropdown-item" href="#">Steve Ives</a>
-              <a class="dropdown-item" href="#">Mark Leusink</a>
-              <a class="dropdown-item" href="#">Steve Saunders</a>
-              <a class="dropdown-item active" href="#">Mike Smith</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
-            </div>
-          </div>
-        </div>
-      </div>
+
+      {{> ESOwner}}
+
       <div class="form-group row">
         <label class="form-control-label col-sm-4 col-xs-12">Issue number</label>
         <div class="col-sm-2 col-xs-12">
