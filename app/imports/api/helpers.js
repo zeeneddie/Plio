@@ -1,11 +1,10 @@
-const handleMethodResult = (onSuccess) => {
+const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
       toastr.error(err.reason);
-    } else {
-      if (_.isFunction(onSuccess)) {
-        onSuccess(res);
-      }
+    }
+    if (_.isFunction(cb)) {
+      cb(err, res);
     }
   };
 };
