@@ -1,12 +1,9 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
-import '/imports/ui/layouts';
 import '/imports/ui/components';
+import '/imports/ui/layouts';
 import '/imports/ui/pages';
-
-import { Organizations } from '/imports/api/organizations/organizations.js';
-
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',

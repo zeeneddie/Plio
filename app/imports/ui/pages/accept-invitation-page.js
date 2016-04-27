@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '../../api/organizations/organizations';
 import { acceptInvitation } from '../../api/organizations/methods';

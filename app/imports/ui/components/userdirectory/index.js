@@ -4,4 +4,5 @@ import './users-list.html';
 import './users-list.js';
 import './users-details.html';
 import './users-details.js';
-import './invite-users/index.js';
+import './invite-users';
+

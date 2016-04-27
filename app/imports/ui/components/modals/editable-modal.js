@@ -33,5 +33,5 @@ Template.EditableModal.viewmodel({
         this.isSaving(false);
       }, this.savingStateTimeout());
     };
-  },
+  }
 });
