@@ -7,19 +7,6 @@ Template.UsersDetails.viewmodel({
     const userId = this.parent().activeUser();
     return Meteor.users.findOne({ _id: userId });
   },
-  initials(user) {
-    const { firstName='', lastName='' } = user.profile;
-    let initials = '';
-    if (firstName) {
-      initials += firstName.charAt(0);
-    }
-    
-    if (lastName) {
-      initials += lastName.charAt(0);
-    }
-    
-    return initials.toUpperCase(); 
-  },
   email(user) {
     return user.emails[0].address;
   },
