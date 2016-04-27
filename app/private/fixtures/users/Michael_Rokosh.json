@@ -18,8 +18,21 @@
   "profile": {
     "firstName": "Michael",
     "lastName": "Rokosh",
+    "initials": "MR",
+    "description": "IT manager",
     "avatar": "/avatars/avatar-placeholder-2.png",
-    "skype": "mike"
+    "skype": "mike",
+    "country": "USA",
+    "phoneNumbers": [
+      {
+        "type": "Work",
+        "number": "+44 1234 123 456"
+      },
+      {
+        "type": "Mobile",
+        "number": "+44 9870 654 321"
+      }
+    ]
   },
   "status": "offline",
   "statusConnection": "offline"
