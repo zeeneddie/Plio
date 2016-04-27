@@ -1,0 +1,35 @@
+<template name="EditableModal">
+  {{#ModalWrapper id=id}}
+    <div class="card-block card-heading">
+      <div class="card-heading-buttons pull-xs-left">
+        <button type="button" class="btn btn-link btn-icon guidance-panel-open"
+            {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+          <i class="fa fa-question-circle"></i>
+        </button>
+      </div>
+      <div class="card-heading-buttons pull-xs-right">
+        <button type="button" class="btn btn-secondary modal-close" data-dismiss="modal"
+            {{b "text: closeButtonText, class: {disabled: isSaving}"}}>
+        </button>
+      </div>
+      <h4 class="card-title">{{title}}</h4>
+    </div>
+
+    <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+      <div class="card-block">
+        {{{guideHtml}}}
+        <div class="btn-group">
+          <a href="#" class="btn btn-link guidance-panel-close"
+              {{b "click: toggleCollapse"}}>
+            Close
+          </a>
+          <a href="{{moreInfoLink}}" class="btn btn-link">More info</a>
+        </div>
+      </div>
+    </div>
+
+    <form>
+      {{> Template.contentBlock}}
+    </form>
+  {{/ModalWrapper}}
+</template>

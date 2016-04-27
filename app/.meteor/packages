@@ -29,8 +29,11 @@ fortawesome:fontawesome
 arillo:flow-router-helpers
 konecty:user-presence
 zimme:active-route
+trsdln:modals
 manuel:viewmodel
 mdg:validated-method
 aldeed:simple-schema
 chrismbeckett:toastr
+aldeed:collection2
+reywood:publish-composite
 ostrio:meteor-root
