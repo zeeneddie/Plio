@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
 
-import { handleMethodResult } from '/imports/api/helpers.js';
+import { remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
+  share: 'standard',
+  mixin: 'modal',
   save() {
     let data = {};
     this.children(vm => vm.getData && vm.getData())
@@ -11,5 +13,11 @@ Template.EditStandard.viewmodel({
     data = _.extend(data, { nestingLevel: 1, number: [2] });
 
     console.log(data);
+  },
+  remove() {
+    const _id = this._id();
+    remove.call({ _id }, this.modal().handleMethodResult(() => {
+      this.selectedStandardId('');
+    }));
   }
 });

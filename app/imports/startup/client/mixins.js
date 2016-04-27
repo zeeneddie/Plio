@@ -40,6 +40,7 @@ ViewModel.mixin({
             this.error(err);
           } else {
             if (_.isFunction(onSuccess)) {
+              this.destroy();
               onSuccess(res);
             }
           }

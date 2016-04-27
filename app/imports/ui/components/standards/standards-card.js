@@ -8,6 +8,7 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
+  mixin: 'modal',
   standard() {
     return Standards.findOne({ _id: this.selectedStandardId() });
   },
@@ -23,5 +24,14 @@ Template.StandardsCard.viewmodel({
   },
   owner() {
     return Meteor.users.findOne({ _id: this.owner() });
+  },
+  openEditStandardModal() {
+    this.modal().open({
+      title: 'Standard',
+      template: 'EditStandard',
+      closeText: 'Cancel',
+      hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
+      _id: this.standard()._id
+    });
   }
 });
