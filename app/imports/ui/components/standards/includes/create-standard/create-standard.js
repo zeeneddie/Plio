@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { insert } from '/imports/api/standards/methods.js';
 
 Template.CreateStandard.viewmodel({
+  share: 'standard',
   mixin: 'modal',
   save() {
     let data = {};
@@ -26,10 +27,12 @@ Template.CreateStandard.viewmodel({
 
     console.log(data);
 
-    insert.call(data, this.modal().handleMethodResult(() => {
+    insert.call(data, this.modal().handleMethodResult((_id) => {
       this.modal().destroy();
 
       Meteor.setTimeout(() => {
+        this.selectedStandardId(_id);
+        
         this.modal().open({
           title: 'Standard',
           template: 'EditStandard',
