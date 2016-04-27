@@ -18,7 +18,9 @@
   "profile": {
     "firstName": "Steve",
     "lastName": "Ives",
-    "avatar": "/avatars/avatar-placeholder-4.png"
+    "avatar": "/avatars/avatar-placeholder-4.png",
+    "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
+    "skype": "loremipsum"
   },
   "status": "offline",
   "statusConnection": "offline"

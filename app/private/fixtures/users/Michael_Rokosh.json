@@ -18,7 +18,8 @@
   "profile": {
     "firstName": "Michael",
     "lastName": "Rokosh",
-    "avatar": "/avatars/avatar-placeholder-2.png"
+    "avatar": "/avatars/avatar-placeholder-2.png",
+    "skype": "mike"
   },
   "status": "offline",
   "statusConnection": "offline"
