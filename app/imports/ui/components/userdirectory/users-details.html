@@ -3,104 +3,107 @@
     <div class="content-cards-inner flex scroll">
       {{#if activeUser}}
         <div class="card">
-        <div class="card-block card-heading clearfix">
-          <div class="card-heading-buttons pull-xs-right">
-            <a class="btn btn-primary" data-toggle="modal" data-target="#user-edit-modal">
-              <i class="ms-Icon ms-Icon--pencil"></i>
-              Edit
-            </a>
+          <div class="card-block card-heading clearfix">
+            <div class="card-heading-buttons pull-xs-right">
+              <a class="btn btn-primary" data-toggle="modal" data-target="#user-edit-modal">
+                <i class="ms-Icon ms-Icon--pencil"></i>
+                Edit
+              </a>
+            </div>
+            <h3 class="card-title">User details</h3>
           </div>
-          <h3 class="card-title">User details</h3>
-        </div>
-        <div class="list-group">
-
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="list-group-item">
-                <img class="img-circle pull-xs-left" src="{{activeUser.profile.avatar}}">
-                <p class="list-group-item-text">Name</p>
-                <h4 class="list-group-item-heading">{{userFullNameOrEmail activeUser}}</h4>
+          <div class="list-group">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <img class="img-circle pull-xs-left" src="{{activeUser.profile.avatar}}">
+                  <p class="list-group-item-text">Name</p>
+                  <h4 class="list-group-item-heading">{{userFullNameOrEmail activeUser}}</h4>
+                </div>
               </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="list-group-item">
-                <p class="list-group-item-text">Initials</p>
-                <h4 class="list-group-item-heading">{{initials activeUser}}</h4>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Initials</p>
+                  <h4 class="list-group-item-heading">{{activeUser.profile.initials}}</h4>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="list-group-item">
-                <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading">VP of Sales</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Contact details</h4>
-        </div>
-        <!-- ngInclude: 'includes/subcards-read/contact-details.html' -->
-        <div ng-include="'includes/subcards-read/contact-details.html'" class="ng-scope">
-          <div class="list-group ng-scope">
-            <div class="list-group-item">
-              <p class="list-group-item-text">Email</p>
-              <h4 class="list-group-item-heading"><a href="mailto:">{{email activeUser}}</a></h4>
-            </div>
-            <div class="list-group-item">
-              {{#if address activeUser}}
-                <p class="list-group-item-text">Address</p>
-                <h4 class="list-group-item-heading">
-                  {{address activeUser}}
-                </h4>
-              {{/if}}
             </div>
             <div class="row">
               <div class="col-sm-6">
                 <div class="list-group-item">
-                  <p class="list-group-item-text">Work phone</p>
-                  <h4 class="list-group-item-heading"><a href="tel:">+44 1234 123 456</a></h4>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Mobile phone</p>
-                  <h4 class="list-group-item-heading"><a href="tel:">+44 9870 654 321</a></h4>
+                  <p class="list-group-item-text">Description</p>
+                  <h4 class="list-group-item-heading">{{activeUser.profile.description}}</h4>
                 </div>
               </div>
             </div>
-            {{#if activeUser.profile.skype}}
+          </div>
+          <div class="card-block card-subheading">
+            <h4 class="card-title">Contact details</h4>
+          </div>
+          <div class="ng-scope">
+            <div class="list-group ng-scope">
               <div class="list-group-item">
-                <p class="list-group-item-text">Skype name</p>
-                <h4 class="list-group-item-heading"><a href="skype:{{activeUser.profile.skype}}?call">{{activeUser.profile.skype}}</a></h4>
+                <p class="list-group-item-text">Email</p>
+                <h4 class="list-group-item-heading"><a href="mailto:">{{email activeUser}}</a></h4>
               </div>
-            {{/if}}
+              <div class="list-group-item">
+                {{#if address activeUser}}
+                  <p class="list-group-item-text">Address</p>
+                  <h4 class="list-group-item-heading">
+                    {{address activeUser}}
+                  </h4>
+                {{/if}}
+              </div>
+              <div class="row">
+                {{#each activeUser.profile.phoneNumbers}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">{{type}} phone</p>
+                      <h4 class="list-group-item-heading"><a href="tel:">{{number}}</a></h4>
+                    </div>
+                  </div>
+                {{/each}}
+              </div>
+              {{#if activeUser.profile.skype}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Skype name</p>
+                  <h4 class="list-group-item-heading"><a href="skype:{{activeUser.profile.skype}}?call">{{activeUser.profile.skype}}</a></h4>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+          <div class="card-block card-subheading">
+            <h4 class="card-title">{{activeUser.profile.firstName}}'s superpowers for {{organization.name}}</h4>
+          </div>
+          <div class="ng-scope">
+            <div class="list-group ng-scope">
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  <i class="ms-Icon ms-Icon--check text-success"></i>
+                  Create &amp; delete users
+                </h4>
+                <h4 class="list-group-item-heading">
+                  <i class="ms-Icon ms-Icon--check text-success"></i>
+                  Change organization settings
+                </h4>
+              </div>
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading text-muted">
+                  <i class="ms-Icon ms-Icon--x text-danger"></i>
+                  Edit user permissions
+                </h4>
+                <h4 class="list-group-item-heading text-muted">
+                  <i class="ms-Icon ms-Icon--x text-danger"></i>
+                  View team to do lists
+                </h4>
+                <h4 class="list-group-item-heading text-muted">
+                  <i class="ms-Icon ms-Icon--x text-danger"></i>
+                  Create &amp; edit standards documents
+                </h4>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">{{activeUser.profile.firstName}}'s superpowers for {{organization.name}}</h4>
-        </div>
-        <!-- ngInclude: 'includes/subcards-read/superpowers.html' -->
-        <div ng-include="'includes/subcards-read/superpowers.html'" class="ng-scope">
-          <div class="list-group ng-scope">
-            <div class="list-group-item">
-              <h4 class="list-group-item-heading"><i class="ms-Icon ms-Icon--check text-success"></i> Create &amp;
-                delete users</h4>
-              <h4 class="list-group-item-heading"><i class="ms-Icon ms-Icon--check text-success"></i> Change
-                organization settings</h4>
-            </div>
-            <div class="list-group-item">
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> Edit user
-                permissions</h4>
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> View team to
-                do lists</h4>
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> Create &amp;
-                edit standards documents</h4>
-            </div>
-          </div>
-        </div>
-      </div>
       {{/if}}
     </div>
   </div>
