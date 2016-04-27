@@ -7,7 +7,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
+          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
@@ -18,12 +18,20 @@ ViewModel.mixin({
     }, 500),
   },
   modal: {
+    instance() {
+      return ViewModel.findOne('ModalWindow');
+    },
     open(data) {
       Blaze.renderWithData(Template.ModalWindow, data, document.body);
     },
     destroy() {
-      const vm = ViewModel.findOne('ModalWindow');
-      return vm && vm.modal.modal('hide');
+      const vm = this.instance();
+      return !!vm && vm.modal.modal('hide');
+    },
+    error(err) {
+      const vm = this.instance();
+      !!vm && vm.error(err);
+      !!vm && vm.toggleCollapse();
     }
   },
   search: {
@@ -55,17 +63,6 @@ ViewModel.mixin({
   user: {
     hasUser: function() {
       return !!Meteor.userId() || Meteor.loggingIn();
-    }
-  },
-  formField: {
-    loadParentData(label) {
-      // weird hacky way to get parent because Template.contentBlock doesn't generate childs
-      Meteor.setTimeout(() => {
-        const parent = ViewModel.findOne('FormField', vm => vm.label && vm.label() === label);
-        if (parent) {
-          this.load(parent);
-        }
-      }, 0);
     }
   }
 });

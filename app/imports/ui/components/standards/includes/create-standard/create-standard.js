@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/standards/methods.js';
-import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.CreateStandard.viewmodel({
   mixin: {
@@ -16,9 +15,11 @@ Template.CreateStandard.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
-        if (!confirm(`The new standard cannot be created without a ${capitalizedKey}. Please enter a ${capitalizedKey} for your standard.`)) {
+        const errorMessage = `The new standard cannot be created without a ${capitalizedKey}. Please enter a ${capitalizedKey} for your standard.`
+        if (!confirm(errorMessage)) {
           this.modal.destroy();
         }
+        this.modal.error(errorMessage);
         return;
       }
     }
@@ -27,8 +28,8 @@ Template.CreateStandard.viewmodel({
 
     console.log(data);
 
-    // insert.call(data, handleMethodResult(() => {
-    //   this.modal.destroy();
+    // insert.call(data, () => {
+    // this.modal.destroy();
     //   Meteor.setTimeout(() => {
     //     this.modal.open({
     //       title: 'Standard',
@@ -38,6 +39,6 @@ Template.CreateStandard.viewmodel({
     //       isSave: true
     //     });
     //   }, 400);
-    // }));
+  // });
   }
 });

@@ -24,6 +24,15 @@ import { Blaze } from 'meteor/blaze';
 
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  autorun() {
+    if (!!this.error()) {
+      Meteor.setTimeout(() => {
+        this.toggleCollapse();
+        this.error('');
+      }, 6000);
+    }
+  },
+  error: '',
   onRendered(template) {
     this.modal.modal('show');
     this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));

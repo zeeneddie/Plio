@@ -27,7 +27,18 @@
         {{#unless simple}}
           <div class="collapse guidance-panel" {{b "ref: collapse"}}>
             <div class="card-block">
-              <p>{{hint}}</p>
+              {{#if error}}
+                <div class="row">
+                  <div class="col-sm-1">
+                    <i class="fa fa-exclamation-circle fa-3x" style="color: red;"></i>
+                  </div>
+                  <div class="col-sm-11 col-xs-12">
+                    <p>{{error}}</p>
+                  </div>
+                </div>
+              {{else}}
+                <p>{{hint}}</p>
+              {{/if}}
               <div class="btn-group">
                 <a href="#" class="btn btn-link guidance-panel-close" {{b "click: toggleCollapse"}}>Close</a>
                 <a href="#" class="btn btn-link">More info</a>
