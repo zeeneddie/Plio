@@ -2,13 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 Template.AddStandardType.viewmodel({
-  mixin: {
-    modal: 'modal'
-  },
+  mixin: 'modal',
   openCreateStandardModal() {
-    this.modal.destroy();
+    this.modal().destroy();
     Meteor.setTimeout(() => {
-      this.modal.open({
+      this.modal().open({
         title: 'Standard',
         template: 'CreateStandard',
         closeText: 'Cancel',

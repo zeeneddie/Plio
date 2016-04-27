@@ -4,12 +4,12 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 
 Template.StandardsList.viewmodel({
   share: 'organization',
-  mixin: { modal: 'modal' },
+  mixin: 'modal',
   stadardsBookSections() {
     return StandardsBookSections.find({}, { sort: { number: 1 } });
   },
   openAddTypeModal(e) {
-    this.modal.open({
+    this.modal().open({
       title: 'Add',
       simple: true,
       template: 'AddStandardType',

@@ -18,20 +18,33 @@ ViewModel.mixin({
     }, 500),
   },
   modal: {
-    instance() {
-      return ViewModel.findOne('ModalWindow');
-    },
-    open(data) {
-      Blaze.renderWithData(Template.ModalWindow, data, document.body);
-    },
-    destroy() {
-      const vm = this.instance();
-      return !!vm && vm.modal.modal('hide');
-    },
-    error(err) {
-      const vm = this.instance();
-      !!vm && vm.error(err);
-      !!vm && vm.toggleCollapse();
+    modal: {
+      instance() {
+        return ViewModel.findOne('ModalWindow');
+      },
+      open(data) {
+        Blaze.renderWithData(Template.ModalWindow, data, document.body);
+      },
+      destroy() {
+        const vm = this.instance();
+        return !!vm && vm.modal.modal('hide');
+      },
+      error(err) {
+        const vm = this.instance();
+        !!vm && vm.error(err);
+        !!vm && vm.toggleCollapse();
+      },
+      handleMethodResult(onSuccess) {
+        return (err, res) => {
+          if (err) {
+            this.error(err);
+          } else {
+            if (_.isFunction(onSuccess)) {
+              onSuccess(res);
+            }
+          }
+        };
+      }
     }
   },
   search: {
