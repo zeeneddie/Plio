@@ -1,10 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.UserDirectory_InviteUsers.viewmodel({
-  isInviting: false,
-  inviteButtonText(){
-    return this.isInviting() ? 'Inviting...' : 'Invite';
+  save() {
+    console.log('on save click');
   }
-  
-
 });

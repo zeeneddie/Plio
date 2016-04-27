@@ -1,54 +1,5 @@
 <template name="UserDirectory_InviteUsers">
-  {{#ModalWrapper id="invite-modal"}}
-    <div class="card-block card-heading">
-      <div class="card-heading-buttons pull-xs-left">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Cancel
-        </button>
-      </div>
-      <h4 class="card-title">Invite users</h4>
-      <div class="card-heading-buttons pull-xs-right">
-        <button type="button" class="btn btn-link btn-icon guidance-panel-open"
-          {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-          <i class="fa fa-question-circle"></i>
-        </button>
-        <button type="button" class="btn btn-secondary modal-close" data-dismiss="modal"
-          {{b "text: inviteButtonText, class: {disabled: isSaving},click: inviteUsers"}}>
-        </button>
-      </div>
-    </div>
-
-
-
-    <div class="card-block card-heading">
-      <div class="card-heading-buttons pull-xs-left">
-
-      </div>
-      <div class="card-heading-buttons pull-xs-right">
-
-      </div>
-      <h4 class="card-title">{{title}}</h4>
-    </div>
-
-    <div class="collapse guidance-panel" {{b "ref: collapse"}}>
-      <div class="card-block">
-        {{{guideHtml}}}
-        <div class="btn-group">
-          <a href="#" class="btn btn-link guidance-panel-close"
-            {{b "click: toggleCollapse"}}>
-            Close
-          </a>
-          <a href="{{moreInfoLink}}" class="btn btn-link">More info</a>
-        </div>
-      </div>
-    </div>
-
-
-
-
-
-    <!--todo: add help section-->
-
+  {{#ModalWindow name="invite" title="Invite users" saveButtonText="Invite"}}
     <div class="card-block">
       {{> UserDirectory_InviteUsers_UserEntry}}
       {{> UserDirectory_InviteUsers_UserEntry}}
@@ -62,5 +13,5 @@
         </textarea>
       </div>
     </div>
-  {{/ModalWrapper}}
+  {{/ModalWindow}}
 </template>
