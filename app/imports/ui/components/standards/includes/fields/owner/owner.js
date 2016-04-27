@@ -1,7 +1,12 @@
 import { Template } from 'meteor/templating';
 
 Template.ESOwner.viewmodel({
-  mixin: ['search', 'fullName'],
+  mixin: ['search', 'fullName', 'user'],
+  onCreated() {
+    if (this.hasUser()) {
+      Meteor.setTimeout(() => this.selectOwner(Meteor.user()), 0);
+    }
+  },
   owner: '',
   selectedOwnerId: '',
   members() {

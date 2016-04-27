@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { insert } from '/imports/api/standards/methods.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.EditStandard.viewmodel({

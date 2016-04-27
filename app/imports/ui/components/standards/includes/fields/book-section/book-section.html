@@ -2,7 +2,7 @@
   {{#FormField label="Book section"}}
     <div class="dropdown">
       <input type="text" class="form-control" placeholder="Book section" data-toggle="dropdown"
-        {{b "value: bookSection, throttle: 300"}}/>
+        {{b "value: bookSection, focus: bookSection(''), throttle: 300"}}/>
       <div class="dropdown-menu dropdown-menu-full">
         {{#each bookSections}}
           <a class="dropdown-item" href="#" {{b "text: this.number + '. ' + this.name, click: selectBookSection(this)"}}></a>

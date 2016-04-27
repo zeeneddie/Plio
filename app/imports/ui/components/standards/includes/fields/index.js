@@ -1,4 +1,5 @@
 import './form-field.html';
+import './form-field.js';
 import './title';
 import './description';
 import './type';

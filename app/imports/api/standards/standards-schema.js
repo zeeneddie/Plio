@@ -19,17 +19,21 @@ export const StandardsSchema = new SimpleSchema({
     type: [Number]
   },
   description: {
-    type: String
+    type: String,
+    optional: true
   },
-  // approved: {
-  //   type: Boolean
-  // },
-  // approvedAt: {
-  //   type: Date
-  // },
-  // notes: {
-  //   type: String
-  // },
+  approved: {
+    type: Boolean,
+    optional: true
+  },
+  approvedAt: {
+    type: Date,
+    optional: true
+  },
+  notes: {
+    type: String,
+    optional: true
+  },
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
@@ -40,8 +44,9 @@ export const StandardsSchema = new SimpleSchema({
   status: {
     type: String
   },
-  // departments: {
-  //   type: [String],
-  //   regEx: SimpleSchema.RegEx.Id
-  // }
+  departments: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  }
 });

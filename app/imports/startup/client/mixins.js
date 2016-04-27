@@ -51,5 +51,21 @@ ViewModel.mixin({
       const { firstName, lastName } = profile;
       return `${firstName} ${lastName}`;
     }
+  },
+  user: {
+    hasUser: function() {
+      return !!Meteor.userId() || Meteor.loggingIn();
+    }
+  },
+  formField: {
+    loadParentData(label) {
+      // weird hacky way to get parent because Template.contentBlock doesn't generate childs
+      Meteor.setTimeout(() => {
+        const parent = ViewModel.findOne('FormField', vm => vm.label && vm.label() === label);
+        if (parent) {
+          this.load(parent);
+        }
+      }, 0);
+    }
   }
 });
