@@ -7,12 +7,6 @@ import '/imports/ui/pages';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-FlowRouter.route('/', {
-  name: 'home',
-  action(params) {
-    BlazeLayout.render('LoginLayout');
-  }
-});
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -36,11 +30,17 @@ AccountsTemplates.configureRoute('signUp', {
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
-  triggersEnter: [checkLoggedIn],
   action(params) {
     BlazeLayout.render('LoginLayout', {
       content: 'AcceptInvitationPage'
     });
+  }
+});
+
+FlowRouter.route('/', {
+  name: 'home',
+  action(params) {
+    BlazeLayout.render('LoginLayout');
   }
 });
 
@@ -85,7 +85,7 @@ FlowRouter.route('/:orgSerialNumber/users', {
 function redirectHandler() {
   const orgSerialNumber = FlowRouter.getQueryParam('org');
   if (orgSerialNumber) {
-    FlowRouter.go('dashboardPage', { orgSerialNumber });
+    FlowRouter.go('dashboardPage', {orgSerialNumber});
   } else {
     FlowRouter.go('hello');
   }
@@ -94,7 +94,7 @@ function redirectHandler() {
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
-      redirect('signIn', {}, { org: context.params.orgSerialNumber });
+      redirect('signIn', {}, {org: context.params.orgSerialNumber});
     }
   }
 }
