@@ -1,5 +1,10 @@
 import './edit-standard.html';
 import './edit-standard.js';
+import './title';
+import './description';
+import './type';
 import './book-section';
 import './owner';
 import './departments';
+import './issue-number';
+import './status';

@@ -1,47 +1,19 @@
 <template name="EditStandard">
   <form>
     <div class="card-block">
-      {{#FormField label="Title"}}
-        <input type="text" class="form-control" placeholder="Title" {{b "value: titleText"}}>
-        <button type="button" class="btn btn-link clear-field" {{b "click: titleText('')"}}>
-          <i class="fa fa-times-circle"></i>
-        </button>
-      {{/FormField}}
+      {{> ESTitle}}
 
-      {{#FormField label="Description"}}
-        <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description"}}></textarea>
-        <button type="button" class="btn btn-link clear-field">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      {{/FormField}}
+      {{> ESDescription}}
 
       {{> ESBookSection}}
 
-      {{#FormField label="Type"}}
-        <div class="dropdown">
-          <select class="form-control c-select" {{b "options: types, optionsValue: _id, optionsText: name, value: type"}}></select>
-        </div>
-      {{/FormField}}
+      {{> ESType}}
 
       {{> ESOwner}}
 
-      <div class="form-group row">
-        <label class="form-control-label col-sm-4 col-xs-12">Issue number</label>
-        <div class="col-sm-2 col-xs-12">
-          <input type="number" class="form-control" min="0" {{b "value: issueNumber"}}>
-        </div>
-      </div>
+      {{> ESIssueNumber}}
 
-      {{#FormField label="Status"}}
-        <div class="btn-group btn-group-nomargin" data-toggle="buttons">
-          <label class="btn btn-secondary" {{b "click: status('issued'), class: { active: status === 'issued' }"}}>
-            <input type="radio" value="issued" name="options" autocomplete="off"> Issued
-          </label>
-          <label class="btn btn-secondary" {{b "click: status('draft'), class: { active: status === 'draft' }"}}>
-            <input type="radio" value="draft" name="options" autocomplete="off"> Draft
-          </label>
-        </div>
-      {{/FormField}}
+      {{> ESStatus}}
 
       {{> ESDepartments}}
 
