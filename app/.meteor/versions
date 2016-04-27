@@ -45,6 +45,7 @@ kadira:blaze-layout@2.3.0
 kadira:flow-router@2.11.0
 konecty:user-presence@1.2.6
 launch-screen@1.0.10
+less@2.5.7
 livedata@1.0.17
 localstorage@1.0.8
 logging@1.0.11
@@ -90,6 +91,7 @@ standard-minifier-js@1.0.5
 templating@1.1.8
 templating-tools@1.0.3
 tracker@1.0.12
+trsdln:modals@0.6.0
 twbs:bootstrap@4.0.0-alpha.2
 ui@1.0.10
 underscore@1.0.7

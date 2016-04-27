@@ -1,0 +1,36 @@
+<template name="UserDirectory_InviteUsers">
+  {{#ModalWrapper id="invite-users-modal"}}
+    <div class="card-block card-heading">
+      <div class="card-heading-buttons pull-xs-left">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+      <h4 class="card-title">Invite users</h4>
+      <div class="card-heading-buttons pull-xs-right">
+        <button type="button" class="btn btn-link btn-icon guidance-panel-open collapsed">
+          <i class="fa fa-question-circle"></i>
+        </button>
+        <button type="button" class="btn btn-primary">
+          Invite
+        </button>
+      </div>
+    </div>
+
+    <!--todo: add help section-->
+
+    <div class="card-block">
+      {{> UserDirectory_InviteUsers_UserEntry}}
+      {{> UserDirectory_InviteUsers_UserEntry}}
+      {{> UserDirectory_InviteUsers_UserEntry}}
+      {{> UserDirectory_InviteUsers_UserEntry}}
+      <hr>
+      <div class="form-group">
+        <label class="control-label"><strong>Add a welcome message</strong></label>
+        <textarea class="form-control" rows="6">
+          Hi there. We'll be using Plio to store documents, complete worksheets and track issues during this project.
+        </textarea>
+      </div>
+    </div>
+  {{/ModalWrapper}}
+</template>
