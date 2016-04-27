@@ -15,7 +15,8 @@ Template.CreateStandard.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        if (!confirm(`The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`)) {
+        const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+        if (!confirm(`The new standard cannot be created without a ${capitalizedKey}. Please enter a ${capitalizedKey} for your standard.`)) {
           this.modal.destroy();
         }
         return;
@@ -24,17 +25,19 @@ Template.CreateStandard.viewmodel({
 
     data = _.extend(data, { nestingLevel: 1, number: [2] });
 
-    insert.call(data, handleMethodResult(() => {
-      this.modal.destroy();
-      Meteor.setTimeout(() => {
-        this.modal.open({
-          title: 'Standard',
-          template: 'EditStandard',
-          closeText: 'Cancel',
-          hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
-          isSave: true
-        });
-      }, 400);
-    }));
+    console.log(data);
+
+    // insert.call(data, handleMethodResult(() => {
+    //   this.modal.destroy();
+    //   Meteor.setTimeout(() => {
+    //     this.modal.open({
+    //       title: 'Standard',
+    //       template: 'EditStandard',
+    //       closeText: 'Cancel',
+    //       hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
+    //       isSave: true
+    //     });
+    //   }, 400);
+    // }));
   }
 });

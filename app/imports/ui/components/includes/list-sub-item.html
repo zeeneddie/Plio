@@ -5,7 +5,7 @@
         {{renderNumber}} {{this.title}}
         <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
       </h4>
-      <p class="list-group-item-text pull-left">Procedure</p>
+      <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
     </div>
   </a>
 </template>
