@@ -5,38 +5,25 @@
   <div class="list-group-collapse collapse" {{b "ref: collapse"}}>
     <div class="list-group">
       {{#each standards}}
-        {{#if eq this.nestingLevel 1}}
+        <div class="span" {{b "if: this.nestingLevel === 1"}}>
           {{> ListSubItem}}
-        {{/if}}
+        </div>
         <div class="sub">
-          {{#if eq this.nestingLevel 2}}
+          <div class="span" {{b "if: this.nestingLevel === 2"}}>
             {{> ListSubItem}}
-          {{/if}}
+          </div>
           <div class="subsub">
-            {{#if eq this.nestingLevel 3}}
+            <div class="span" {{b "if: this.nestingLevel === 3"}}>
               {{> ListSubItem}}
-            {{/if}}
+            </div>
             <div class="subsubsub">
-              {{#if eq this.nestingLevel 4}}
+              <div class="span" {{b "if: this.nestingLevel === 4"}}>
                 {{> ListSubItem}}
-              {{/if}}
+              </div>
             </div>
           </div>
         </div>
       {{/each}}
-      <!-- {{#each this.sub}}
-        {{> ListSubItem}}
-        <div class="sub">
-          {{#each this.sub}}
-            {{> ListSubItem}}
-            <div class="subsub">
-              {{#each this.sub}}
-                {{> ListSubItem}}
-              {{/each}}
-            </div>
-          {{/each}}
-        </div>
-      {{/each}} -->
     </div>
   </div>
 </template>

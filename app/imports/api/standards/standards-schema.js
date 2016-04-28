@@ -15,9 +15,6 @@ const StandardsSchema = new SimpleSchema({
   nestingLevel: {
     type: Number
   },
-  number: {
-    type: [Number]
-  },
   description: {
     type: String,
     optional: true
@@ -68,10 +65,6 @@ const StandardsUpdateSchema = new SimpleSchema({
   },
   nestingLevel: {
     type: Number,
-    optional: true
-  },
-  number: {
-    type: [Number],
     optional: true
   },
   description: {

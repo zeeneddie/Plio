@@ -24,15 +24,27 @@ Template.CreateStandard.viewmodel({
     this.insert(data);
   },
   getChildrenData() {
-    let data = { nestingLevel: 1, number: [2] };
-
+    const data = {};
+    
     this.children(vm => vm.getData && vm.getData())
         .forEach(vm => _.extend(data, vm.getData()));
 
     return data;
   },
-  insert(...args) {
-    this.modal().callMethod(insert, ...args, (_id) => {
+  insert({ title, sectionId, typeId, owner, issueNumber, status }) {
+    const number = title.match(/^[\d\.]*\d/);
+    const nestingLevel = number && number[0].split('.').length;
+    const args = {
+      title,
+      sectionId,
+      typeId,
+      owner,
+      issueNumber,
+      status,
+      nestingLevel
+    };
+
+     this.modal().callMethod(insert, args, (_id) => {
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);
 

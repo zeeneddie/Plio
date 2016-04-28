@@ -6,8 +6,9 @@ Template.ListItem.viewmodel({
   mixin: 'collapse',
   closeAllOnCollapse: true,
   standards() {
-    const standards = Standards.find({ sectionId: this._id() });
-    return standards;
+    const query = { sectionId: this._id() };
+    const options = { sort: { title: 1 } };
+    return Standards.find(query, options);
   },
   eq(item1, item2) {
     return item1 === item2;

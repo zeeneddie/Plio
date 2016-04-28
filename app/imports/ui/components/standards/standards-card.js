@@ -24,11 +24,6 @@ Template.StandardsCard.viewmodel({
     const _id = this.owner();
     return Meteor.users.findOne({ _id });
   },
-  renderNumber() {
-    const standardId = this.standard() && this.standard()._id;
-    const listSubItemVm = ViewModel.findOne(vm => vm._id && vm._id() === standardId);
-    return !!listSubItemVm && !!listSubItemVm.renderNumber && listSubItemVm.renderNumber();
-  },
   openEditStandardModal() {
     this.modal().open({
       title: 'Standard',

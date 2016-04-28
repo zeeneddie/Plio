@@ -16,7 +16,10 @@
         <div class="list-group">
           <div class="list-group-item">
             <p class="list-group-item-text">Title</p>
-            <h4 class="list-group-item-heading" {{b "text: renderNumber + ' ' + this.title"}}><span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span></h4>
+            <h4 class="list-group-item-heading">
+              <span {{b "text: this.title"}}></span>
+              <span class="label label-danger" {{b "if: this.status === 'draft', text: this.status"}}></span>
+            </h4>
           </div>
 
           <div class="list-group-item">
