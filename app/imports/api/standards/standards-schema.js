@@ -1,10 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const StandardsSchema = new SimpleSchema({
+const StandardsSchema = new SimpleSchema({
   title: {
     type: String
   },
-  type: {
+  typeId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
@@ -50,3 +50,64 @@ export const StandardsSchema = new SimpleSchema({
     optional: true
   }
 });
+
+const StandardsUpdateSchema = new SimpleSchema({
+  title: {
+    type: String,
+    optional: true
+  },
+  typeId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  sectionId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  nestingLevel: {
+    type: Number,
+    optional: true
+  },
+  number: {
+    type: [Number],
+    optional: true
+  },
+  description: {
+    type: String,
+    optional: true
+  },
+  approved: {
+    type: Boolean,
+    optional: true
+  },
+  approvedAt: {
+    type: Date,
+    optional: true
+  },
+  notes: {
+    type: String,
+    optional: true
+  },
+  owner: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  issueNumber: {
+    type: Number,
+    optional: true
+  },
+  status: {
+    type: String,
+    optional: true
+  },
+  departments: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  }
+});
+
+export { StandardsSchema, StandardsUpdateSchema };

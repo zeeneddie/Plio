@@ -17,7 +17,7 @@ Template.StandardsCard.viewmodel({
     return StandardsBookSections.findOne({ _id });
   },
   type() {
-    const _id = !!this.standard() && this.standard().type;
+    const _id = !!this.standard() && this.standard().typeId;
     return StandardsTypes.findOne({ _id });
   },
   owner() {

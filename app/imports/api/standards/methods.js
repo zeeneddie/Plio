@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsService from './standards-service.js';
-import { StandardsSchema } from './standards-schema.js';
+import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
 import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
@@ -12,28 +12,22 @@ export const insert = new ValidatedMethod({
 
   validate: StandardsSchema.validator(),
 
-  run(doc) {
+  run(...args) {
     checkUserId(
       this.userId,
       'Unauthorized user cannot create a standard'
     );
 
-    return StandardsService.insert(doc);
+    return StandardsService.insert(...args);
   }
 });
 
 export const update = new ValidatedMethod({
   name: 'Standards.update',
 
-  validate: new SimpleSchema({
-    _id: {
-      type: String
-    },
-    title: {
-      type: String,
-      optional: true
-    }
-  }).validator(),
+  validate: new SimpleSchema([
+    IdSchema, StandardsUpdateSchema
+  ]).validator(),
 
   run({_id, ...args}) {
     checkUserId(
