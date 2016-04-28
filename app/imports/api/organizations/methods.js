@@ -3,6 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import OrganizationService from './organization-service';
+import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields } from './organization-schema';
 import { NCTypes } from '../constants';
@@ -133,9 +134,6 @@ export const setGuideline = new ValidatedMethod({
     return OrganizationService.setGuideline(doc);
   }
 });
-
-import InvitationService from './invitation-service';
-
 
 export const inviteUserByEmail = new ValidatedMethod({
   name: 'Organizations.inviteUserByEmail',
