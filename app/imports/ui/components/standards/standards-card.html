@@ -16,7 +16,7 @@
         <div class="list-group">
           <div class="list-group-item">
             <p class="list-group-item-text">Title</p>
-            <h4 class="list-group-item-heading">{{renderNumber}} {{this.title}} <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span></h4>
+            <h4 class="list-group-item-heading" {{b "text: renderNumber + ' ' + this.title"}}><span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span></h4>
           </div>
 
           <div class="list-group-item">
@@ -34,7 +34,7 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Section</p>
-                <h4 class="list-group-item-heading" {{b "text: section.name"}}></h4>
+                <h4 class="list-group-item-heading">{{section.name}}</h4>
               </div>
             </div>
 
@@ -44,7 +44,7 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Type</p>
-                <h4 class="list-group-item-heading" {{b "text: type.name"}}></h4>
+                <h4 class="list-group-item-heading">{{type.name}}</h4>
               </div>
             </div>
             <div class="col-sm-6">

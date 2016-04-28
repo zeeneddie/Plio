@@ -11,7 +11,7 @@ Template.StandardsList.viewmodel({
   openAddTypeModal(e) {
     this.modal().open({
       title: 'Add',
-      simple: true,
+      isSimple: true,
       template: 'AddStandardType',
     });
   }

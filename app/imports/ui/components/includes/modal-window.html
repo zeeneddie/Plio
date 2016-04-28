@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="card">
         <div class="card-block card-heading">
-          {{#unless simple}}
+          {{#unless isSimple}}
             <div class="card-heading-buttons" {{b "class: { pull-xs-left: !isSave, pull-xs-right: isSave }"}}>
               <button type="button" class="btn btn-link btn-icon guidance-panel-open" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
                 <i class="fa fa-question-circle"></i>
@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-        {{#unless simple}}
+        {{#unless isSimple}}
           <div class="collapse guidance-panel" {{b "ref: collapse"}}>
             <div class="card-block">
               {{#if error}}

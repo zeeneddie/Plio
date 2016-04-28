@@ -13,17 +13,21 @@ Template.StandardsCard.viewmodel({
     return Standards.findOne({ _id: this.selectedStandardId() });
   },
   section() {
-    return StandardsBookSections.findOne({ _id: this.standard().sectionId });
+    const _id = !!this.standard() && this.standard().sectionId;
+    return StandardsBookSections.findOne({ _id });
   },
   type() {
-    return StandardsTypes.findOne({ _id: this.standard().type });
-  },
-  renderNumber() {
-    const listSubItemVm = ViewModel.findOne(vm => vm._id && vm._id() === this.standard()._id);
-    return listSubItemVm && listSubItemVm.renderNumber();
+    const _id = !!this.standard() && this.standard().type;
+    return StandardsTypes.findOne({ _id });
   },
   owner() {
-    return Meteor.users.findOne({ _id: this.owner() });
+    const _id = this.owner();
+    return Meteor.users.findOne({ _id });
+  },
+  renderNumber() {
+    const standardId = this.standard() && this.standard()._id;
+    const listSubItemVm = ViewModel.findOne(vm => vm._id && vm._id() === standardId);
+    return !!listSubItemVm && listSubItemVm.renderNumber();
   },
   openEditStandardModal() {
     this.modal().open({
