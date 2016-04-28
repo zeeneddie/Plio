@@ -45,6 +45,13 @@ ViewModel.mixin({
             }
           }
         };
+      },
+      callMethod(method, args, cb) {
+        if (_.isFunction(args)) {
+          cb = args;
+          args = {};
+        }
+        method.call(args, this.handleMethodResult(cb));
       }
     }
   },

@@ -9,7 +9,7 @@ Template.ESTitle.viewmodel({
     if (!this._id || !this.titleText()) return;
     const { _id } = this.data();
     const { title } = this.getData();
-    update.call({ _id, title }, this.modal().handleMethodResult());
+    this.modal().callMethod(update, { _id, title });
   },
   getData() {
     const { titleText:title } = this.data();
