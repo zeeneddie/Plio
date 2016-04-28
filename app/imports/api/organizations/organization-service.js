@@ -19,7 +19,7 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
-    const { ncStepTimes, ncReminders } = OrganizationDefaults;
+    const { ncStepTimes, ncReminders, ncGuidelines } = OrganizationDefaults;
 
     return this.collection.insert({
       name,
@@ -29,7 +29,8 @@ export default OrganizationService = {
         role: UserRoles.OWNER
       }],
       ncStepTimes,
-      ncReminders
+      ncReminders,
+      ncGuidelines
     });
   },
 

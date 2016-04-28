@@ -60,5 +60,10 @@
         "timeUnit": "days"
       }
     }
+  },
+  "ncGuidelines" : {
+    "minor" : "Please go to Org Settings to define what a minor non-conformity means in your organization.",
+    "major" : "Please go to Org Settings to define what a major non-conformity means in your organization.",
+    "critical" : "Please go to Org Settings to define what a critical non-conformity means in your organization."
   }
 }

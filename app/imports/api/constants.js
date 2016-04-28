@@ -21,6 +21,11 @@ const UserRoles = {
   MEMBER: 'member'
 };
 
+const getDefaultGuideline = (ncType) => {
+  return `Please go to Org Settings to define what a ${ncType} `
+    + `non-conformity means in your organization.`;
+};
+
 const OrganizationDefaults = {
   ncStepTimes: {
     minor: {
@@ -67,6 +72,11 @@ const OrganizationDefaults = {
         timeUnit: TimeUnits.DAYS
       }
     }
+  },
+  ncGuidelines: {
+    minor: getDefaultGuideline(NCTypes.MINOR),
+    major: getDefaultGuideline(NCTypes.MAJOR),
+    critical: getDefaultGuideline(NCTypes.CRITICAL)
   }
 };
 
