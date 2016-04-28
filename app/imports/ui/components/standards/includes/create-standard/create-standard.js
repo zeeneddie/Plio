@@ -30,27 +30,12 @@ Template.CreateStandard.viewmodel({
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);
 
-        const {
-          title:titleText,
-          owner:selectedOwnerId,
-          sectionId:selectedBookSectionId,
-          issueNumber,
-          type,
-          status
-        } = data;
-
         this.modal().open({
           title: 'Standard',
           template: 'EditStandard',
           closeText: 'Cancel',
           hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
-          _id,
-          titleText,
-          selectedOwnerId,
-          selectedBookSectionId,
-          issueNumber,
-          type,
-          status
+          _id
         });
       }, 400);
     }));

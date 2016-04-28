@@ -27,7 +27,7 @@ Template.StandardsCard.viewmodel({
   renderNumber() {
     const standardId = this.standard() && this.standard()._id;
     const listSubItemVm = ViewModel.findOne(vm => vm._id && vm._id() === standardId);
-    return !!listSubItemVm && listSubItemVm.renderNumber();
+    return !!listSubItemVm && !!listSubItemVm.renderNumber && listSubItemVm.renderNumber();
   },
   openEditStandardModal() {
     this.modal().open({
@@ -35,7 +35,7 @@ Template.StandardsCard.viewmodel({
       template: 'EditStandard',
       closeText: 'Cancel',
       hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
-      standard: this.standard()
+      _id: this.standard()._id
     });
   }
 });
