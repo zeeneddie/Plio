@@ -14,5 +14,51 @@
   "createdBy": "user1",
   "updatedAt": null,
   "updatedBy": null,
-  "isDeleted": false
+  "isDeleted": false,
+  "ncStepTimes": {
+    "minor": {
+      "timeValue": 1,
+      "timeUnit": "days"
+    },
+    "major": {
+      "timeValue": 2,
+      "timeUnit": "days"
+    },
+    "critical": {
+      "timeValue": 3,
+      "timeUnit": "days"
+    }
+  },
+  "ncReminders": {
+    "minor": {
+      "interval": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      },
+      "pastDue": {
+        "timeValue": 2,
+        "timeUnit": "days"
+      }
+    },
+    "major": {
+      "interval": {
+        "timeValue": 2,
+        "timeUnit": "days"
+      },
+      "pastDue": {
+        "timeValue": 4,
+        "timeUnit": "days"
+      }
+    },
+    "critical": {
+      "pastDue": {
+        "timeValue": 6,
+        "timeUnit": "days"
+      },
+      "interval": {
+        "timeValue": 3,
+        "timeUnit": "days"
+      }
+    }
+  }
 }
