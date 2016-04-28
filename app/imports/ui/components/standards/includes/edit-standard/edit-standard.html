@@ -1,19 +1,19 @@
 <template name="EditStandard">
   <form>
     <div class="card-block">
-      {{> ESTitle}}
+      {{> ESTitle titleText=standard.title _id=standard._id}}
 
-      {{> ESDescription}}
+      {{> ESDescription description=standard.description}}
 
-      {{> ESBookSection}}
+      {{> ESBookSection selectedBookSectionId=standard.sectionId}}
 
-      {{> ESType}}
+      {{> ESType type=standard.type}}
 
-      {{> ESOwner}}
+      {{> ESOwner selectedOwnerId=standard.owner}}
 
-      {{> ESIssueNumber}}
+      {{> ESIssueNumber issueNumber=standard.issueNumber}}
 
-      {{> ESStatus}}
+      {{> ESStatus status=standard.status}}
 
       {{> ESDepartments}}
 

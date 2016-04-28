@@ -5,6 +5,14 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 
 Template.ESBookSection.viewmodel({
   mixin: 'search',
+  autorun() {
+    const _id = this.selectedBookSectionId();
+    if (!!_id) {
+      const bookSection = StandardsBookSections.findOne({ _id });
+      const { number, name } = !!bookSection && bookSection;
+      this.bookSection(`${number}. ${name}`);
+    }
+  },
   bookSection: '',
   selectedBookSectionId: '',
   bookSections() {
@@ -12,9 +20,7 @@ Template.ESBookSection.viewmodel({
     const options = { sort: { number: 1 } };
     return StandardsBookSections.find(query, options);
   },
-  selectBookSection(doc) {
-    const { _id, number, name } = doc;
-    this.bookSection(`${number}. ${name}`);
+  selectBookSection({ _id }) {
     this.selectedBookSectionId(_id);
   },
   getData() {

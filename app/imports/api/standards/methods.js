@@ -22,6 +22,29 @@ export const insert = new ValidatedMethod({
   }
 });
 
+export const update = new ValidatedMethod({
+  name: 'Standards.update',
+
+  validate: new SimpleSchema({
+    _id: {
+      type: String
+    },
+    title: {
+      type: String,
+      optional: true
+    }
+  }).validator(),
+
+  run({_id, ...args}) {
+    checkUserId(
+      this.userId,
+      'Unauthorized user cannot update a standard'
+    );
+
+    return StandardsService.update({ _id, ...args });
+  }
+});
+
 export const remove = new ValidatedMethod({
   name: 'Standards.remove',
 

@@ -3,14 +3,15 @@ import { Standards } from './standards.js';
 export default {
   collection: Standards,
 
-  insert({ title, type, sectionId, nestingLevel, number, description, approved, approvedAt, notes, owner, issueNumber, status, departments }) {
-
-    return this.collection.insert({ title, type, sectionId, nestingLevel, number, description, approved, approvedAt, notes, owner, issueNumber, status, departments });
-    
+  insert({ ...args }) {
+    return this.collection.insert(args);
   },
 
-  update({}) {
-
+  update({ _id, ...args }) {
+    const query = { _id }
+    const options = {};
+    options['$set'] = args;
+    this.collection.update(query, options);
   },
 
   remove({ _id }) {
