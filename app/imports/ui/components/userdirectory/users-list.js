@@ -6,8 +6,7 @@ Template.UsersList.viewmodel({
   },
 
   onInviteClick(event) {
-    console.log('invite users click', event);
-    event && event.preventDefault();
+    event.preventDefault();
     ModalManager.open('UserDirectory_InviteUsers');
   }
 });

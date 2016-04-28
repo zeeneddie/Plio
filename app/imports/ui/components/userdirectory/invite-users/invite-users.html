@@ -1,16 +1,13 @@
 <template name="UserDirectory_InviteUsers">
-  {{#ModalWindow name="invite" title="Invite users" saveButtonText="Invite"}}
+  {{#ModalWindow id="invite-modal" title="Invite users" submitCaption="Invite"}}
     <div class="card-block">
-      {{> UserDirectory_InviteUsers_UserEntry}}
-      {{> UserDirectory_InviteUsers_UserEntry}}
-      {{> UserDirectory_InviteUsers_UserEntry}}
-      {{> UserDirectory_InviteUsers_UserEntry}}
+      {{#each usersEntries}}
+        {{> UserDirectory_InviteUsers_UserEntry}}
+      {{/each}}
       <hr>
       <div class="form-group">
         <label class="control-label"><strong>Add a welcome message</strong></label>
-        <textarea class="form-control" rows="6">
-          Hi there. We'll be using Plio to store documents, complete worksheets and track issues during this project.
-        </textarea>
+        <textarea class="form-control" rows="6" {{b "text: welcomeMessage"}}></textarea>
       </div>
     </div>
   {{/ModalWindow}}

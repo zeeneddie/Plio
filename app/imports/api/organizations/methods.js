@@ -6,7 +6,7 @@ import OrganizationService from './organization-service';
 import InvitationService from './invitation-service';
 import { OrganizationEditableFields } from './organization-schema';
 import { NCTypes } from '../constants';
-import { IdSchema, TimePeriodSchema } from '../schemas';
+import { IdSchema, TimePeriodSchema, OrganizationIdSchema, NewUserDataSchema } from '../schemas';
 import { checkUserId } from '../checkers';
 
 
@@ -138,16 +138,12 @@ export const setGuideline = new ValidatedMethod({
 export const inviteUserByEmail = new ValidatedMethod({
   name: 'Organizations.inviteUserByEmail',
 
-  validate: new SimpleSchema({
-    organizationId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
-    },
+  validate: new SimpleSchema([OrganizationIdSchema, {
     email: {
       type: String,
       regEx: SimpleSchema.RegEx.Email
     }
-  }).validator(),
+  }]).validator(),
 
   run({organizationId, email}) {
     const userId = this.userId;
@@ -162,23 +158,6 @@ export const inviteUserByEmail = new ValidatedMethod({
   }
 });
 
-const userDataSchema = new SimpleSchema({
-  firstName: {
-    type: String,
-    min: 1,
-    max: 20
-  },
-  lastName: {
-    type: String,
-    min: 1,
-    max: 20
-  },
-  password: {
-    type: String,
-    min: 6,
-    max: 20
-  }
-});
 
 export const acceptInvitation = new ValidatedMethod({
   name: 'Organizations.acceptInvitation',
@@ -188,11 +167,41 @@ export const acceptInvitation = new ValidatedMethod({
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    userData: {type: userDataSchema}
+    userData: {
+      type: NewUserDataSchema
+    }
   }).validator(),
 
   run({invitationId, userData}) {
     //no permission checks are required
     InvitationService.acceptInvitation(invitationId, userData);
+  }
+});
+
+
+export const inviteMultipleUsersByEmail = new ValidatedMethod({
+  name: 'Organizations.inviteMultipleUsers',
+
+  validate: new SimpleSchema([OrganizationIdSchema, {
+    emails: {
+      type: [SimpleSchema.RegEx.Email]
+    },
+    welcomeMessage: {
+      type: String
+    }
+  }]).validator(),
+
+  run({organizationId, emails, welcomeMessage}) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot invite users'
+      );
+    }
+    //todo: check invite user permission here
+
+    emails.forEach(email =>
+      InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+    );
   }
 });
