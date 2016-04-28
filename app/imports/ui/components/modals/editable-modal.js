@@ -2,9 +2,10 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 
 
 Template.EditableModal.viewmodel({
-  savingStateTimeout: 1000,
   mixin: 'collapse',
+  savingStateTimeout: 500,
   isSaving: false,
+  error: '',
   closeButtonText() {
     return this.isSaving() ? 'Saving...' : 'Close';
   },
@@ -14,6 +15,7 @@ Template.EditableModal.viewmodel({
       args = {};
     }
 
+    this.clearError();
     this.isSaving(true);
 
     method.call(args, this.handleMethodResult(cb));
@@ -31,7 +33,19 @@ Template.EditableModal.viewmodel({
 
       this.timeout = Meteor.setTimeout(() => {
         this.isSaving(false);
+
+        if (err) {
+          this.setError(err.reason);
+        }
       }, this.savingStateTimeout());
     };
+  },
+  setError(errMessage) {
+    this.error(errMessage);
+    this.errorSection.collapse('show');
+  },
+  clearError() {
+    this.error('');
+    this.errorSection.collapse('hide');
   }
 });
