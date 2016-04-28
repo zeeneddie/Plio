@@ -1,11 +1,11 @@
-import { Accounts } from 'meteor/accounts-base'
+import { Accounts } from 'meteor/accounts-base';
+import Utils from '/imports/core/utils';
 
 function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
 
-    const randomAvatar = Math.floor(Math.random() * 16) + 1;
-    user.profile.avatar = `/avatars/avatar-placeholder-${randomAvatar}.png`;
+    user.profile.avatar = Utils.getRandomAvatarUrl();
   }
 
   return user;

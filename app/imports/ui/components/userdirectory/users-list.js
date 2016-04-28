@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Organizations } from '/imports/api/organizations/organizations';
 
 Template.UsersList.viewmodel({
   isActiveUser(userId) {
@@ -7,6 +8,9 @@ Template.UsersList.viewmodel({
 
   onInviteClick(event) {
     event.preventDefault();
-    ModalManager.open('UserDirectory_InviteUsers');
+    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+
+    ModalManager.open('UserDirectory_InviteUsers', {organizationId: organizationId});
   }
 });

@@ -12,12 +12,18 @@ Template.UserDirectory_InviteUsers.viewmodel({
 
     let emailViewModels = this.children('UserDirectory_InviteUsers_UserEntry');
 
-    let emails = emailViewModels.map(userEntryViewModel => userEntryViewModel.data().email);
+    let emails = emailViewModels
+      .map(userEntryViewModel => userEntryViewModel.email()) // get emails
+      .filter(email => !!email); // get rid of empty strings
+
     let welcomeMessage = this.welcomeMessage();
     let organizationId = this.organizationId();
+    
 
-    modalWindowInstance.callMethod(inviteMultipleUsersByEmail, {
-      organizationId, emails, welcomeMessage
-    });
+    if (emails.length > 0) {
+      modalWindowInstance.callMethod(inviteMultipleUsersByEmail, {
+        organizationId, emails, welcomeMessage
+      });
+    }
   }
 });

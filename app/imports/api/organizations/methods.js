@@ -3,7 +3,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import OrganizationService from './organization-service';
-import InvitationService from './invitation-service';
+
 import { OrganizationEditableFields } from './organization-schema';
 import { NCTypes } from '../constants';
 import { IdSchema, TimePeriodSchema, OrganizationIdSchema, NewUserDataSchema } from '../schemas';
@@ -134,6 +134,8 @@ export const setGuideline = new ValidatedMethod({
   }
 });
 
+import InvitationService from './invitation-service';
+
 
 export const inviteUserByEmail = new ValidatedMethod({
   name: 'Organizations.inviteUserByEmail',
@@ -142,10 +144,13 @@ export const inviteUserByEmail = new ValidatedMethod({
     email: {
       type: String,
       regEx: SimpleSchema.RegEx.Email
+    },
+    welcomeMessage: {
+      type: String
     }
   }]).validator(),
 
-  run({organizationId, email}) {
+  run({organizationId, email, welcomeMessage}) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -154,7 +159,7 @@ export const inviteUserByEmail = new ValidatedMethod({
     }
     //todo: check invite user permission here
 
-    InvitationService.inviteUserByEmail(organizationId, email);
+    InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
   }
 });
 
@@ -201,6 +206,7 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
     //todo: check invite user permission here
 
     emails.forEach(email =>
+      //todo: aggregate service errors for each email
       InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
     );
   }

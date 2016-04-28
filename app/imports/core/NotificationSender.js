@@ -1,3 +1,9 @@
+import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
+
+import './notification-templates';
+import { OriginalHandlebars, Handlebars } from 'meteor/cmather:handlebars-server';
+
 /**
  * Universal notification sender
  *
@@ -65,9 +71,8 @@ export default class NotificationSender {
 
     let basicTemplateName = this._options.templateName;
 
-    let templateName = type && Handlebars.templates[`${basicTemplateName}-${type}`] &&
-      `${basicTemplateName}-${type}` || basicTemplateName;
-
+    let templateName = type && `${basicTemplateName}-${type}`;
+    console.log(Handlebars.templates);
     return Handlebars.templates[templateName](templateData);
   }
 
@@ -89,7 +94,7 @@ export default class NotificationSender {
     let user = Meteor.users.findOne(userId);
     return user && user.emails && user.emails.length ? user.emails[0].address : false;
   }
-  
+
   _sendEmailBasic(receiver, text) {
     let emailOptions = {
       subject: this._getEmailSubject(),
