@@ -6,10 +6,7 @@ Template.CreateStandard.viewmodel({
   share: 'standard',
   mixin: 'modal',
   save() {
-    let data = {};
-
-    this.children(vm => vm.getData && vm.getData())
-        .forEach(vm => _.extend(data, vm.getData()));
+    const data = this.getChildrenData();
 
     for (let key in data) {
       if (!data[key]) {
@@ -22,11 +19,20 @@ Template.CreateStandard.viewmodel({
       }
     }
 
-    data = _.extend(data, { nestingLevel: 1, number: [2] });
-
     console.log(data);
 
-    insert.call(data, this.modal().handleMethodResult((_id) => {
+    this.insert(data);
+  },
+  getChildrenData() {
+    let data = { nestingLevel: 1, number: [2] };
+
+    this.children(vm => vm.getData && vm.getData())
+        .forEach(vm => _.extend(data, vm.getData()));
+
+    return data;
+  },
+  insert(...args) {
+    this.modal().callMethod(insert, ...args, (_id) => {
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);
 
@@ -38,6 +44,6 @@ Template.CreateStandard.viewmodel({
           _id
         });
       }, 400);
-    }));
+    });
   }
 });

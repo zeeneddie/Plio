@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
+import { update } from '/imports/api/standards/methods.js';
+
 Template.ESDescription.viewmodel({
   description: '',
   getData() {
