@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
-  welcomeMessage: 'Hi there.\n We\'ll be using Plio to store documents, complete worksheets and track issues during this project.',
+  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to store documents, complete worksheets and track issues during this project.',
   usersEntries: _.range(1, 5).map((i) => {
     return {avatarIndex: i};
   }),

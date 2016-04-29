@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
 
-import {Organizations} from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 
 const STATUSES = [
   {
@@ -23,6 +23,7 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
+  mixin: ['user'],
   getStatuses() {
     return STATUSES;
   },
@@ -52,6 +53,13 @@ Template.UserMenu.viewmodel({
     if (status != Meteor.user().statusDefault) {
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
+  },
+  onInviteClick(event) {
+    event.preventDefault();
+    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+
+    ModalManager.open('UserDirectory_InviteUsers', {organizationId: organizationId});
   },
   logout(e) {
     e.preventDefault();
