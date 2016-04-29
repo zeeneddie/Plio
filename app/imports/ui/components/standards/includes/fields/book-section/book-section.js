@@ -20,7 +20,7 @@ Template.ESBookSection.viewmodel({
   },
   selectBookSection({ _id, title }) {
     this.selectedBookSectionId(_id);
-    this.title(title);
+    this.bookSection(title);
   },
   addNewSection() {
     const title = this.bookSection();
@@ -32,10 +32,10 @@ Template.ESBookSection.viewmodel({
     const org = Organizations.findOne({ serialNumber: this.orgSerialNumber() });
     const organizationId = !!org && org._id;
 
-    console.log(title);
-
     this.modal().callMethod(insert, { title, organizationId }, (_id) => {
       this.selectBookSection(_id);
+      this.bookSection(title);
+      this.dropdown.dropdown('toggle');
     });
   },
   getData() {
