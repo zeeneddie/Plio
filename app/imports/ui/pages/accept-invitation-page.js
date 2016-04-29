@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '../../api/organizations/organizations';
 import { acceptInvitation } from '../../api/organizations/methods';
+import Utils from '/imports/core/utils';
 
 
 Template.AcceptInvitationPage.viewmodel({
@@ -18,34 +19,55 @@ Template.AcceptInvitationPage.viewmodel({
     this.templateInstance.subscribe('invitationInfo', invitationId);
   },
 
-  invitedUser() {
-    return Meteor.users.findOne();
+  userEmail() {
+    let user = Meteor.users.findOne({invitationId: this.invitationId()});
+    return user && user.emails && user.emails[0].address;
   },
 
   organization() {
     return Organizations.findOne();
   },
 
+  organizationName() {
+    let organization = this.organization();
+    return organization && organization.name;
+  },
+
   acceptInvitation() {
     let userData = this.data();
+
     if (userData.password === userData.repeatPassword) {
       delete userData.repeatPassword;
       delete userData.invitationId;
 
-      //call accept invitation method
-
-      console.log('data to submit', userData);
-
-      acceptInvitation.call({
+      const args = {
         invitationId: this.invitationId(),
         userData: userData
-      }, (err, res) => {
+      };
+
+      const userEmail = this.userEmail();
+      const orgSerialNumber = this.organization().serialNumber;
+
+      acceptInvitation.call(args, (err, res) => {
         if (err) {
-          alert(err);
+          Utils.showError(err.reason);
+        } else {
+          this._loginUserWithPassword(userEmail, userData, orgSerialNumber);
         }
       });
     } else {
-      alert('passwords should match');
+      Utils.showError('Passwords should match');
     }
+  },
+
+  _loginUserWithPassword(email, userData, orgSerialNumber){
+    console.log('email', email);
+    Meteor.loginWithPassword({email}, userData.password, (err) => {
+      if (err) {
+        Utils.showError(err.reason);
+      } else {
+        FlowRouter.go(`/${orgSerialNumber}`);
+      }
+    });
   }
 });

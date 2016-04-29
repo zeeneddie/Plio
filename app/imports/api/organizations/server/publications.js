@@ -16,7 +16,7 @@ Meteor.publish('invitationInfo', function (invitationId) {
     sendInternalError('Incorrect invitation ID!');
     return;
   }
-  
+
   const invitedUserCursor = Meteor.users.find({invitationId: invitationId}, {fields: {emails: 1, invitationId: 1}});
 
   if (invitedUserCursor.count() === 0) {
@@ -27,30 +27,32 @@ Meteor.publish('invitationInfo', function (invitationId) {
   let invitedUserId = invitedUserCursor.fetch()[0]._id;
   return [
     invitedUserCursor,
-    Organizations.find({'users.userId': invitedUserId}, {limit: 1, fields: {name: 1}})
+    Organizations.find({'users.userId': invitedUserId}, {
+      limit: 1,
+      fields: {name: 1, serialNumber: 1}
+    })
   ]
 });
 
 
-
 Meteor.publishComposite('currentUserOrganizations', {
-  find: function() {
-    return Organizations.find({ 'users.userId': this.userId });
+  find: function () {
+    return Organizations.find({'users.userId': this.userId});
   },
   children: [{
-    find: function(org) {
+    find: function (org) {
       return Departments.find({
         organizationId: org._id
       });
     }
   }, {
-    find: function(org) {
+    find: function (org) {
       return StandardsTypes.find({
         organizationId: org._id
       });
     }
   }, {
-    find: function(org) {
+    find: function (org) {
       return StandardsBookSections.find({
         organizationId: org._id
       });

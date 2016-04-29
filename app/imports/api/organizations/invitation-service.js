@@ -125,18 +125,22 @@ export default InvitationService = {
     new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
   },
 
-  acceptInvitation(invitaionId, userData) {
-    console.error('not implemented yet');
-    return;
-    //draft
+  acceptInvitation(invitationId, userData) {
     const password = userData.password;
     delete userData.password;
-    let invitedUser = Meteor.users.findOne({invitationId: invitaionId});
-    Meteor.users.update({_id: invitedUser._id}, {
-      $set: userData,
-      $unset: {invitationId: ''}
-    });
-    //todo: change password
-    // Accounts.changePassword(null,password)
+
+    let invitedUser = Meteor.users.findOne({invitationId: invitationId});
+
+    if (invitedUser) {
+      Accounts.setPassword(invitedUser._id, password);
+
+      let updateUserProfile = Object.assign(invitedUser.profile, userData);
+      Meteor.users.update({_id: invitedUser._id}, {
+        $set: {profile: updateUserProfile},
+        $unset: {invitationId: ''}
+      });
+    } else {
+      throw new Meteor.Error(404, 'Invitation do not exist')
+    }
   }
 };
