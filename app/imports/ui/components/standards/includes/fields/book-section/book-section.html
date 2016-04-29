@@ -2,10 +2,10 @@
   {{#FormField label="Book section"}}
     <div class="dropdown">
       <input type="text" class="form-control" placeholder="Book section" data-toggle="dropdown"
-        {{b "value: bookSection, focus: bookSection(''), throttle: 200"}}/>
+        {{b "value: bookSection, focusout: update, throttle: 200"}}/>
       <div class="dropdown-menu dropdown-menu-full" {{b "ref: dropdown"}}>
         {{#each bookSections}}
-          <a class="dropdown-item" href="#" {{b "text: this.title, click: selectBookSection(this)"}}></a>
+          <a class="dropdown-item" href="#" {{b "text: this.title, click: bookSection(this.title) && selectedBookSectionId(this._id)"}}></a>
         {{/each}}
         <div class="dropdown-divider" {{b "if: bookSections.count > 0"}}></div>
         <a class="dropdown-item" href="#" {{b "mousedown: addNewSection"}}><strong {{b "text: sectionHintText"}}></strong></a>

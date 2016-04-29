@@ -8,6 +8,13 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 Template.ESBookSection.viewmodel({
   share: 'organization',
   mixin: ['search', 'modal'],
+  onCreated() {
+    const _id = this.selectedBookSectionId();
+    if (_id) {
+      const section = StandardsBookSections.findOne({ _id });
+      section && this.bookSection(section.title);
+    }
+  },
   bookSection: '',
   selectedBookSectionId: '',
   bookSections() {
@@ -17,10 +24,6 @@ Template.ESBookSection.viewmodel({
   },
   sectionHintText() {
     return !!this.bookSection() ? `Add "${this.bookSection()}" section` : 'Start typing...';
-  },
-  selectBookSection({ _id, title }) {
-    this.selectedBookSectionId(_id);
-    this.bookSection(title);
   },
   addNewSection() {
     const title = this.bookSection();
@@ -35,11 +38,32 @@ Template.ESBookSection.viewmodel({
     this.dropdown.dropdown('toggle');
 
     this.modal().callMethod(insert, { title, organizationId }, (_id) => {
-      this.selectBookSection({ _id, title });
+      this.selectedBookSectionId(_id);
     });
+  },
+  update() {
+    const { sectionId } = this.getData();
+
+    if (!this._id) return;
+
+    if (!sectionId) {
+      this.modal().error('Book section is required!');
+      return;
+    }
+
+    this.parent().update({ sectionId }, (res) => {
+      ViewModel.findOne('ListItem', vm => !!vm.collapsed() && vm._id() === this._id()).toggleCollapse();
+    });
+
   },
   getData() {
     const { selectedBookSectionId:sectionId } = this.data();
     return { sectionId };
+  },
+  events: {
+    'focus input'() {
+      this.bookSection('');
+      this.selectedBookSectionId('');
+    }
   }
 });

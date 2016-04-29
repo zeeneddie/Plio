@@ -11,10 +11,9 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
-  update(...args) {
+  update({ ...args }, cb) {
     const _id = this._id && this._id();
-    if (!_id || !_.some(...args, arg => !!arg)) return;
-    this.modal().callMethod(update, _.extend(...args, { _id }));
+    this.modal().callMethod(update, _.extend(args, { _id }), cb);
   },
   remove() {
     const _id = this.standard()._id;
