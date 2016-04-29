@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
 
-import {Organizations} from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 
 const STATUSES = [
   {
@@ -23,6 +23,7 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
+  mixin: ['user'],
   getStatuses() {
     return STATUSES;
   },
