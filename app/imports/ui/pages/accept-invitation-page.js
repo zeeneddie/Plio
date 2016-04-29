@@ -61,7 +61,6 @@ Template.AcceptInvitationPage.viewmodel({
   },
 
   _loginUserWithPassword(email, userData, orgSerialNumber){
-    console.log('email', email);
     Meteor.loginWithPassword({email}, userData.password, (err) => {
       if (err) {
         Utils.showError(err.reason);

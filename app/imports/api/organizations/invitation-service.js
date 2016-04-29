@@ -30,18 +30,7 @@ class InvitationSender {
     return existingUser && existingUser._id;
   }
 
-  _createNewUser(onUserCreated) {
-    let handleCreateUserError = (err) => {
-      let errorMsg = `Failed to create user ${this._userEmail}`;
-      console.log(errorMsg, err);
-      throw new Meteor.Error(500, errorMsg);
-    };
-
-    let _onUserCreated = (newUserId) => {
-      Meteor.users.update({_id: newUserId}, {$set: {invitationId: this._invitationId}});
-      onUserCreated(newUserId);
-    };
-
+  _createNewUser() {
     let randomPassword = Random.id(); //ID is enough random
 
     let userDoc = {
@@ -53,10 +42,13 @@ class InvitationSender {
     };
 
     try {
-      let newUserId = Accounts.createUser(userDoc);
-      _onUserCreated(newUserId);
+      const newUserId = Accounts.createUser(userDoc);
+      Meteor.users.update({_id: newUserId}, {$set: {invitationId: this._invitationId}});
+      return newUserId;
     } catch (err) {
-      handleCreateUserError(err);
+      const errorMsg = `Failed to create user ${this._userEmail}`;
+      console.log(errorMsg, err);
+      throw new Meteor.Error(500, errorMsg);
     }
   }
 
@@ -110,11 +102,10 @@ class InvitationSender {
     let userIdToInvite = this._findExistingUser();
 
     if (!userIdToInvite) {
-      this._createNewUser(userId => {
-        this._inviteUser(userId, false);
-      });
+      userIdToInvite = this._createNewUser();
+      this._inviteUser(userIdToInvite, false);
     } else {
-      this._inviteUser(userIdToInvite);
+      this._inviteUser(userIdToInvite, true);
     }
   }
 }
