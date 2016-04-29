@@ -5,26 +5,34 @@
   </div>
   <div class="card-block-collapse collapse" id="workflow-defaults" {{b "ref: collapse"}}>
     <div class="card-block">
-      {{> OrganizationSettings_NcStepTime
-          title="Minor non-conformity"
-          timeValue=stepTimes.minor.timeValue
-          timeUnit=stepTimes.minor.timeUnit
-          ncType="minor"
-          onChange=onChangeCb}}
+      {{#with stepTimes}}
+        {{#with minor}}
+          {{> OrganizationSettings_NcStepTime
+              title="Minor non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="minor"
+              onChange=onChangeCb}}
+        {{/with}}
 
-      {{> OrganizationSettings_NcStepTime
-          title="Major non-conformity"
-          timeValue=stepTimes.major.timeValue
-          timeUnit=stepTimes.major.timeUnit
-          ncType="major"
-          onChange=onChangeCb}}
+        {{#with major}}
+          {{> OrganizationSettings_NcStepTime
+              title="Major non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="major"
+              onChange=onChangeCb}}
+        {{/with}}
 
-      {{> OrganizationSettings_NcStepTime
-          title="Critical non-conformity"
-          timeValue=stepTimes.critical.timeValue
-          timeUnit=stepTimes.critical.timeUnit
-          ncType="critical"
-          onChange=onChangeCb}}
+        {{#with critical}}
+          {{> OrganizationSettings_NcStepTime
+              title="Critical non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="critical"
+              onChange=onChangeCb}}
+        {{/with}}
+      {{/with}}
     </div>
   </div>
 </template>
