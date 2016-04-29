@@ -1,21 +1,24 @@
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
-import './notification-templates';
-import { OriginalHandlebars, Handlebars } from 'meteor/cmather:handlebars-server';
+import HandlebarsCompiledCache from './HandlebarsCompiledCache';
+
+
+const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
+const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
+  applicationInvitationEmail: getAssetPath('email', 'application-invitation'),
+  invitedToOrganizationEmail: getAssetPath('email', 'invited-to-organization')
+}) : false;
+
 
 /**
  * Universal notification sender
  *
- * Right now supports only email sending
- *
  * Possible notification data entries formats: String, Number.
  *
- * Template data helpers
- * You can also define you own helpers
- * Note: notification helpers act as simple handlebars helpers.
- *
  * Usage example:
+ * 
  * ```
  * new NotificationSender('Test3', 'test', {
  *     username: 'User',
@@ -46,34 +49,26 @@ export default class NotificationSender {
    * @constructor
    */
   constructor(subject, templateName, templateData, options = {}) {
+    if (Meteor.isClient) {
+      throw new Meteor.Error(500, 'You cannot send notifications from client side');
+    }
+
     this._options = _.extend(options, {
       subject,
       templateName,
       templateData
     });
-
-    //register current notification helpers
-    if (options && _.isObject(options.helpers)) {
-      _.each(options.helpers, (helperFn, helperName) => {
-        OriginalHandlebars.registerHelper(helperName, helperFn);
-      });
-    }
   }
 
   /**
    * Render Handlebars template
-   * @param {'mobile'|'email'} [type=false]
    * @returns {String}
    * @private
    */
-  _renderTemplateWithData(type) {
+  _renderTemplateWithData() {
     let templateData = this._options.templateData;
-
-    let basicTemplateName = this._options.templateName;
-
-    let templateName = type && `${basicTemplateName}-${type}`;
-    console.log(Handlebars.templates);
-    return Handlebars.templates[templateName](templateData);
+    let templateName = this._options.templateName;
+    return handlebarsCache.render(templateName, templateData, this._options.helpers);
   }
 
   _getEmailSubject() {
@@ -112,7 +107,7 @@ export default class NotificationSender {
    * @param receiver user ID or email
    */
   sendEmail(receiver) {
-    let html = this._renderTemplateWithData('email');
+    let html = this._renderTemplateWithData();
     this._sendEmailBasic(receiver, html);
   }
 

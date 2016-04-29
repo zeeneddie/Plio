@@ -149,6 +149,10 @@ export const inviteUserByEmail = new ValidatedMethod({
   }]).validator(),
 
   run({organizationId, email, welcomeMessage}) {
+    if (this.isSimulation) {
+      return;
+    }
+
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -160,7 +164,6 @@ export const inviteUserByEmail = new ValidatedMethod({
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
   }
 });
-
 
 export const acceptInvitation = new ValidatedMethod({
   name: 'Organizations.acceptInvitation',
@@ -195,6 +198,10 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
   }]).validator(),
 
   run({organizationId, emails, welcomeMessage}) {
+    if (this.isSimulation) {
+      return;
+    }
+
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
