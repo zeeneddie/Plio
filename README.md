@@ -111,6 +111,53 @@ This approach allows to avoid old code appearing in merged version.
 * Each argument should be checked using `check(target, Type)` inside all publishers and methods.
 * Use ValidatedMethods instead of regular Meteor methods.
 
+## Exception handling
+
+### Methods
+```import { handleMethodResult } from '/imports/api/helpers.js';```
+
+handleMethodResult function shows a toastr notification with the error.reason.
+Therefore, each error **should contain** both error and reason properties.
+E.g. ```throw new Meteor.Error('not-allowed', 'This operation is not allowed');
+
+This function is a wrapper, so you can pass a callback as an argument.
+```
+update.call({ _id, name }, handleMethodResult(() => { 
+   this.setSavingState(false);
+}));
+```
+
+## Fixtures
+
+All fixure documents are defined in the json format in `app/private/fixtures`.
+
+To add a new document, you need to create a new json file under the proper directory.
+Each directory stands for a Meteor collection.
+To add a new collection, you need to create a new directory within the `app/fixtures` folder. Aso, you need to add names of the collection variable and the directory to the `app/fixtures/config.json` file like this:
+
+```
+"Meteor.users": "users"
+```
+
++ "Meteor.users" is the users collection in Meteor.
+
++ "users" is the name of the directory that will store `Meteor.users` documents.
+
+To add a new user, you need to create him via `Accounts.createUser` or a standard registration form to set a password (use a 'password' word as a password).
+
+Then you need to find this document in the mongo database (`meteor mongo`) and copy the `services.password.bcrypt` value.
+Use existing json files as an example.
+
+Currently, there are two fixture users: 
+
+email: mike@jssolutionsdev.com
+
+password: password
+
+email: steve.ives@pliohub.com
+
+password: password
+
 #License
 
 The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).

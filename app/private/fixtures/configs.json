@@ -2,6 +2,6 @@
   "Organizations": "organizations",
   "Standards": "standards",
   "StandardsBookSections": "standardsBookSections",
-  "StandardTypes": "standardTypes",
+  "StandardsTypes": "standardsTypes",
   "Meteor.users": "users"
 }

@@ -1,0 +1,104 @@
+<template name="UsersDetails">
+  <div class="content-cards scroll flexbox-column col-sm-8 hidden-sm-down">
+    <div class="content-cards-inner flex scroll">
+      {{#if user}}
+      <div class="card">
+        <div class="card-block card-heading clearfix">
+          <div class="card-heading-buttons pull-xs-right">
+            <a class="btn btn-primary" data-toggle="modal" data-target="#user-edit-modal">
+              <i class="ms-Icon ms-Icon--pencil"></i>
+              Edit
+            </a>
+          </div>
+          <h3 class="card-title">User details</h3>
+        </div>
+        <div class="list-group">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <img class="img-circle pull-xs-left" {{b "src: avatar(user)"}}>
+                <p class="list-group-item-text">Name</p>
+                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(user)"}}></h4>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Initials</p>
+                <h4 class="list-group-item-heading" {{b "text: initials" }}>=</h4>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: description(user)" }}></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-block card-subheading">
+          <h4 class="card-title">Contact details</h4>
+        </div>
+        <div class="ng-scope">
+          <div class="list-group ng-scope">
+            <div class="list-group-item">
+              <p class="list-group-item-text">Email</p>
+              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(user)" }}></a></h4>
+            </div>
+            <div class="list-group-item" {{b "if: address(user)"}}>
+                <p class="list-group-item-text">Address</p>
+                <h4 class="list-group-item-heading" {{b "text: address(user)"}}></h4>
+            </div>
+            <div class="row">
+              {{#each phoneNumbers}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
+                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+            <div class="list-group-item" {{b "if: skype"}}>
+              <p class="list-group-item-text">Skype name</p>
+              <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: skype"}}></a></h4>
+            </div>
+          </div>
+        </div>
+        <div class="card-block card-subheading">
+          <h4 class="card-title" {{b "text: superpowersTitle()"}}></h4>
+        </div>
+        <div class="ng-scope">
+          <div class="list-group ng-scope">
+            <div class="list-group-item">
+              <h4 class="list-group-item-heading">
+                <i class="ms-Icon ms-Icon--check text-success"></i>
+                Create &amp; delete users
+              </h4>
+              <h4 class="list-group-item-heading">
+                <i class="ms-Icon ms-Icon--check text-success"></i>
+                Change organization settings
+              </h4>
+            </div>
+            <div class="list-group-item">
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                Edit user permissions
+              </h4>
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                View team to do lists
+              </h4>
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                Create &amp; edit standards documents
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</template>

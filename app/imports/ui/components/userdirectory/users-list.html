@@ -1,0 +1,26 @@
+<template name="UsersList">
+  <div class="content-list scroll col-sm-4">
+    <div class="card">
+      <form class="search-form">
+        <div class="form-group row">
+          <input type="text" class="form-control" placeholder="Search...">
+        </div>
+        <a class="btn btn-primary" href="#" {{b "click: onInviteClick"}}>
+          <i class="fa fa-plus"></i>
+          <span>Invite</span>
+        </a>
+      </form>
+      <div class="list-group" id="usersList">
+        {{#each organizationUsers}}
+          <a class="list-group-item" href="#" {{b "click: parent.activeUser(this._id), class: { active: isActiveUser(this._id) }"}}>
+            <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
+            <div class="list-group-item-content">
+              <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+              <p class="list-group-item-text" {{b "text: description(this)"}}></p>
+            </div>
+          </a>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</template>

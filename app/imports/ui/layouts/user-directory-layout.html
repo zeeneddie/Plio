@@ -1,0 +1,13 @@
+<template name="UserDirectoryLayout">
+  {{> UserDirectoryHeader}}
+
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        {{> Template.dynamic template=content}}
+      </div>
+    </div>
+  </div>
+
+  {{> ModalManager}}
+</template>

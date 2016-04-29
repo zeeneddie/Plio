@@ -1,18 +1,9 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
-import '/imports/ui/layouts';
 import '/imports/ui/components';
+import '/imports/ui/layouts';
 import '/imports/ui/pages';
-
-import { Organizations } from '/imports/api/organizations/organizations.js';
-
-FlowRouter.route('/', {
-  name: 'home',
-  action(params) {
-    BlazeLayout.render('LoginLayout');
-  }
-});
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -32,6 +23,22 @@ AccountsTemplates.configureRoute('signUp', {
   layoutRegions: {},
   contentRegion: 'content',
   redirect: redirectHandler
+});
+
+FlowRouter.route('/accept-invitation/:invitationId', {
+  name: 'acceptInvitationPage',
+  action(params) {
+    BlazeLayout.render('LoginLayout', {
+      content: 'AcceptInvitationPage'
+    });
+  }
+});
+
+FlowRouter.route('/', {
+  name: 'home',
+  action(params) {
+    BlazeLayout.render('LoginLayout');
+  }
 });
 
 FlowRouter.route('/hello', {
@@ -62,19 +69,29 @@ FlowRouter.route('/:orgSerialNumber', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/users', {
+  name: 'userDirectoryPage',
+  triggersEnter: [checkLoggedIn],
+  action(params) {
+    BlazeLayout.render('UserDirectoryLayout', {
+      content: 'UserDirectoryPage'
+    });
+  }
+});
+
 function redirectHandler() {
   const orgSerialNumber = FlowRouter.getQueryParam('org');
   if (orgSerialNumber) {
-    FlowRouter.go('dashboardPage', { orgSerialNumber });
+    FlowRouter.go('dashboardPage', {orgSerialNumber});
   } else {
     FlowRouter.go('hello');
   }
-};
+}
 
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
-      redirect('signIn', {}, { org: context.params.orgSerialNumber });
+      redirect('signIn', {}, {org: context.params.orgSerialNumber});
     }
   }
-};
+}

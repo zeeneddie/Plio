@@ -17,7 +17,23 @@
   ],
   "profile": {
     "firstName": "Steve",
-    "lastName": "Ives" 
+    "lastName": "Ives",
+    "initials": "SI",
+    "description": "CEO",
+    "avatar": "/avatars/avatar-placeholder-4.png",
+    "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
+    "skype": "loremipsum",
+    "country": "UK",
+    "phoneNumbers": [
+      {
+        "type": "Home",
+        "number": "+44 4321 123 456"
+      },
+      {
+        "type": "Mobile",
+        "number": "+44 0987 654 321"
+      }
+    ]
   },
   "status": "offline",
   "statusConnection": "offline"
