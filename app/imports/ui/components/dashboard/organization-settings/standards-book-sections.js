@@ -6,16 +6,7 @@ import {
 } from '/imports/api/standards-book-sections/methods.js';
 
 Template.OrganizationSettings_StandardsBookSections.viewmodel({
-  addStandardsBookSectionForm() {
-    Blaze.renderWithData(
-      Template.OrganizationSettings_StandardsBookSection,
-      {
-        onChange: this.onChangeCb(),
-        onDelete: this.onDeleteCb()
-      },
-      this.templateInstance.$("#standards-book-sections-forms")[0]
-    );
-  },
+  mixin: ['collapse', 'addForm', 'editableModalSection'],
   standardsBookSectionsCount() {
     return StandardsBookSections.find({
       organizationId: this.organizationId()
@@ -33,22 +24,15 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
     if (!viewModel._id) {
       const organizationId = this.organizationId();
 
-      insert.call({ name, number, organizationId }, (err, res) => {
-        if (err) {
-          console.log(err);
-          toastr.error('Failed to create a standards book section');
-        }
+      Blaze.remove(viewModel.templateInstance.view);
 
-        Blaze.remove(viewModel.templateInstance.view);
+      this.callMethod(insert, {
+        name, number, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      update.call({ _id, name, number }, (err, res) => {
-        if (err) {
-          toastr.error('Failed to update a standards book section');
-        }
-      });
+      this.callMethod(update, { _id, name, number });
     }
   },
   onDelete(viewModel) {
@@ -61,10 +45,6 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
 
     const _id = viewModel._id();
 
-    remove.call({ _id }, (err, res) => {
-      if (err) {
-        toastr.error('Failed to remove a standards book section');
-      }
-    });
+    this.callMethod(remove, { _id });
   }
 });

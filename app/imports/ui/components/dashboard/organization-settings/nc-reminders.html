@@ -1,36 +1,43 @@
 <template name="OrganizationSettings_NcReminders">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#reminders"
-      data-toggle="collapse">
+  <div class="card-block card-block-collapse-toggle collapsed" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Reminders</h4>
   </div>
-  <div class="card-block-collapse collapse" id="reminders">
+  <div class="card-block-collapse collapse" id="reminders" {{b "ref: collapse"}}>
     <div class="card-block">
-      {{> OrganizationSettings_NcReminder
-          title="Minor non-conformity"
-          intervalTimeUnit=reminders.minor.interval.timeUnit
-          intervalTimeValue=reminders.minor.interval.timeValue
-          pastDueTimeUnit=reminders.minor.pastDue.timeUnit
-          pastDueTimeValue=reminders.minor.pastDue.timeValue
-          ncType="minor"
-          onChange=onChangeCb}}
+      {{#with reminders}}
+        {{#with minor}}
+          {{> OrganizationSettings_NcReminder
+              title="Minor non-conformity"
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
+              ncType="minor"
+              onChange=onChangeCb}}
+        {{/with}}
 
-      {{> OrganizationSettings_NcReminder
-          title="Major non-conformity"
-          intervalTimeUnit=reminders.major.interval.timeUnit
-          intervalTimeValue=reminders.major.interval.timeValue
-          pastDueTimeUnit=reminders.major.pastDue.timeUnit
-          pastDueTimeValue=reminders.major.pastDue.timeValue
-          ncType="major"
-          onChange=onChangeCb}}
+        {{#with major}}
+          {{> OrganizationSettings_NcReminder
+              title="Major non-conformity"
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
+              ncType="major"
+              onChange=onChangeCb}}
+        {{/with}}
 
-      {{> OrganizationSettings_NcReminder
-          title="Critical non-conformity"
-          intervalTimeUnit=reminders.critical.interval.timeUnit
-          intervalTimeValue=reminders.critical.interval.timeValue
-          pastDueTimeUnit=reminders.critical.pastDue.timeUnit
-          pastDueTimeValue=reminders.critical.pastDue.timeValue
-          ncType="critical"
-          onChange=onChangeCb}}
+        {{#with critical}}
+          {{> OrganizationSettings_NcReminder
+              title="Critical non-conformity"
+              intervalTimeUnit=interval.timeUnit
+              intervalTimeValue=interval.timeValue
+              pastDueTimeUnit=pastDue.timeUnit
+              pastDueTimeValue=pastDue.timeValue
+              ncType="critical"
+              onChange=onChangeCb}}
+        {{/with}}
+      {{/with}}
     </div>
   </div>
 </template>

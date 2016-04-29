@@ -6,9 +6,13 @@ Template.registerHelper('userFullNameOrEmail', (userOrUserId) => {
     user = Meteor.users.findOne(userOrUserId);
   }
   
-  const {firstName='', lastName=''} = user.profile;
-  if (firstName && lastName)
-    return `${firstName} ${lastName}`;
-  else
-    return user.emails[0].address;
+  if (user) {
+    const {firstName='', lastName=''} = user.profile;
+    
+    if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    } else {
+      return user.emails[0].address;
+    }
+  }
 });

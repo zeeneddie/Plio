@@ -1,53 +1,39 @@
 <template name="OrganizationSettings">
-  {{#ModalWrapper id="org-settings-modal"}}
-    {{> ModalHeading title="Org settings"}}
+  {{#EditableModal
+      id="org-settings-modal"
+      title="Org settings"
+      guideHtml=guideHtml
+      moreInfoLink="#"
+  }}
 
-    {{#GuidancePanel moreInfoLink="#"}}
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Praesent vestibulum accumsan nulla, non pulvinar neque.
-        Quisque faucibus tempor imperdiet. Suspendisse feugiat,
-        nibh nec maximus pellentesque, massa nunc mattis ipsum,
-        in dictum magna arcu et ipsum.
-      </p>
-    {{/GuidancePanel}}
+    {{> OrganizationSettings_MainSettings
+        name=name
+        currency=currency
+        organizationId=organizationId}}
 
-    <form>
-      {{> OrganizationSettings_MainSettings 
-          name=name 
-          currency=currency 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
+    {{> OrganizationSettings_Departments
+        departments=departments
+        organizationId=organizationId}}
 
-      {{> OrganizationSettings_Departments 
-          departments=departments 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-      
-      {{> OrganizationSettings_StandardsTypes 
-          standardsTypes=standardsTypes
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-      
-      {{> OrganizationSettings_StandardsBookSections 
-          standardsBookSections=standardsBookSections 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-      
-      {{> OrganizationSettings_NcStepTimes 
-          stepTimes=stepTimes 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-      
-      {{> OrganizationSettings_NcReminders 
-          reminders=reminders 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-      
-      {{> OrganizationSettings_NcGuidelines 
-          guidelines=guidelines 
-          organizationId=organizationId
-          setSavingState=setSavingStateFn}}
-    </form>
-  {{/ModalWrapper}}
+    {{> OrganizationSettings_StandardsTypes
+        standardsTypes=standardsTypes
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_StandardsBookSections
+        standardsBookSections=standardsBookSections
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcStepTimes
+        stepTimes=stepTimes
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcReminders
+        reminders=reminders
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcGuidelines
+        guidelines=guidelines
+        organizationId=organizationId}}
+
+  {{/EditableModal}}
 </template>

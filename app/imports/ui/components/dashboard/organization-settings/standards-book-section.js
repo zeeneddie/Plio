@@ -33,7 +33,7 @@ Template.OrganizationSettings_StandardsBookSection.viewmodel({
     const title = this.title();
     const regex = /^([0-9]+)(?:\.|\s)\s*([a-z].+)$/i;
     const match = title.match(regex);
-    
+
     if (match) {
       number = Number(match[1]);
       name = match[2];
@@ -43,9 +43,9 @@ Template.OrganizationSettings_StandardsBookSection.viewmodel({
     }
   },
   getData() {
-    return { 
-      name: this.name(), 
-      number: Number(this.number()) 
+    return {
+      name: this.name(),
+      number: Number(this.number())
     };
   }
 });

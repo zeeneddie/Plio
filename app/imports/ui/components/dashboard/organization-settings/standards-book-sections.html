@@ -1,15 +1,15 @@
 <template name="OrganizationSettings_StandardsBookSections">
   <div class="card-block card-block-collapse-toggle collapsed"
-      href="#standards-book-sections" data-toggle="collapse">
+    {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Standards book sections</h4>
     <h4 class="card-title pull-xs-right">
       <span class="text-muted" {{b "text: standardsBookSectionsCount"}}>
       </span>
     </h4>
   </div>
-  <div class="card-block-collapse collapse" id="standards-book-sections">
+  <div class="card-block-collapse collapse" id="standards-book-sections" {{b "ref: collapse"}}>
     <div class="card-block">
-      <div id="standards-book-sections-forms">
+      <div id="standards-book-sections-forms" {{b "ref: forms"}}>
         {{#each standardsBookSections}}
           {{> OrganizationSettings_StandardsBookSection
               _id=this._id
@@ -20,7 +20,7 @@
         {{/each}}
       </div>
       <button class="btn btn-primary" type="button"
-          {{b "click: addStandardsBookSectionForm"}}>
+          {{b "click: addForm('OrganizationSettings_StandardsBookSection')"}}>
         Add section
       </button>
     </div>

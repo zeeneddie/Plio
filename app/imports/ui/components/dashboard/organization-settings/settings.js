@@ -8,15 +8,15 @@ import {
 
 Template.OrganizationSettings.viewmodel({
   organization() {
-    const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
+    const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
     return Organizations.findOne({ serialNumber });
   },
   organizationId() {
     return this.organization()._id;
   },
   departments() {
-    return Departments.find({ 
-      organizationId: this.organizationId() 
+    return Departments.find({
+      organizationId: this.organizationId()
     });
   },
   standardsTypes() {
@@ -47,16 +47,12 @@ Template.OrganizationSettings.viewmodel({
   guidelines() {
     return this.organization().ncGuidelines;
   },
-  setSavingStateFn() {
-    return this.setSavingState.bind(this);
-  },
-  setSavingState(val) {
-    const modalHeading = this.child('ModalHeading');
-
-    if (val !== undefined) {
-      modalHeading.isSaving(val);
-    }
-
-    return modalHeading.isSaving();
+  guideHtml() {
+    // TEMPORARY!!!
+    return `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Praesent vestibulum accumsan nulla, non pulvinar neque.
+      Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec
+      maximus pellentesque, massa nunc mattis ipsum, in dictum magna
+      arcu et ipsum.</p>`;
   }
 });
