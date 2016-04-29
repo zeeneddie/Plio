@@ -9,8 +9,5 @@ Template.ListItem.viewmodel({
     const query = { sectionId: this._id() };
     const options = { sort: { title: 1 } };
     return Standards.find(query, options);
-  },
-  eq(item1, item2) {
-    return item1 === item2;
   }
 });

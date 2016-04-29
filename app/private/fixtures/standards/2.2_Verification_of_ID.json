@@ -1,17 +1,19 @@
 {
   "_id": "HLiWGZdNL5hifyRhJ",
-  "title": "Verification of ID",
+  "title": "2. Verification of ID",
   "typeId": "FmQ99fgj88JF3qmh3",
   "sectionId": "PGie9fw7SuoqTPya8",
   "nestingLevel": 1,
-  "number": [2],
   "description": "This is the standard for dealing with verification of ID",
   "isApproved": true,
-  "approvedAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "approvedAt": {"$date": 1358205756553},
   "notes": null,
   "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
   "createdAt": "User",
   "updatedAt": null,
   "updatedBy": null,
-  "isDeleted": false
+  "isDeleted": false,
+  "owner": "SQHmBKJ94gJvpLKLt",
+  "issueNumber": 1,
+  "status": "issued"
 }

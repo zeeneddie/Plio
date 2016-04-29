@@ -22,7 +22,7 @@
             </h4>
           </div>
 
-          <div class="list-group-item">
+          <div class="list-group-item" {{b "if: this.description"}}>
             <p class="list-group-item-text">Description</p>
             <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
           </div>
@@ -38,7 +38,7 @@
               <div class="list-group-item">
                 <p class="list-group-item-text">Section</p>
                 {{#with section}}
-                  <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                  <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
                 {{/with}}
               </div>
             </div>
@@ -77,35 +77,8 @@
             <p class="list-group-item-text">Source document/video 2</p>
             <h4 class="list-group-item-heading"><a href="#"><i class="fa fa-file-word-o margin-right"></i> source document filename</a></h4>
           </div>
-
-
-
         </div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Notify</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/notify.html'"></div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Non-conformities</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/nonconformities.html'"></div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Corrective actions</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/corrective-actions.html'"></div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Preventative actions</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/preventative-actions.html'"></div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Improvement plan</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/improvement-plan.html'"></div>
-        <div class="card-block card-subheading">
-          <h4 class="card-title">Lessons learned</h4>
-        </div>
-        <div ng-include="'includes/subcards-read/lessons.html'"></div>
-
+        
         {{> CardChangelog}}
       </div>
     </div>

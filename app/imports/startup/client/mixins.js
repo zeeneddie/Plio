@@ -42,7 +42,6 @@ ViewModel.mixin({
             this.error(err);
           } else {
             if (_.isFunction(onSuccess)) {
-              this.destroy();
               onSuccess(res);
             }
           }
@@ -74,6 +73,12 @@ ViewModel.mixin({
         }
       }
       return searchObject;
+    }
+  },
+  numberRegex: {
+    parseNumber(string) {
+      const result = string.match(/^[\d\.]*\d/);
+      return result;
     }
   },
   fullName: {

@@ -4,16 +4,13 @@ import { insert } from '/imports/api/standards/methods.js';
 
 Template.CreateStandard.viewmodel({
   share: 'standard',
-  mixin: 'modal',
+  mixin: ['modal', 'numberRegex'],
   save() {
     const data = this.getChildrenData();
 
     for (let key in data) {
       if (!data[key]) {
         const errorMessage = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
-        if (!confirm(errorMessage)) {
-          this.modal().destroy();
-        }
         this.modal().error(errorMessage);
         return;
       }
@@ -25,15 +22,21 @@ Template.CreateStandard.viewmodel({
   },
   getChildrenData() {
     const data = {};
-    
+
     this.children(vm => vm.getData && vm.getData())
         .forEach(vm => _.extend(data, vm.getData()));
 
     return data;
   },
   insert({ title, sectionId, typeId, owner, issueNumber, status }) {
-    const number = title.match(/^[\d\.]*\d/);
-    const nestingLevel = number && number[0].split('.').length;
+    const number = this.parseNumber(title);
+    const nestingLevel = (number && number[0].split('.').length) || 1;
+
+    if (nestingLevel > 4) {
+      this.modal().error('Maximum nesting is 4 levels. Please change your title.');
+      return;
+    }
+
     const args = {
       title,
       sectionId,
@@ -45,8 +48,17 @@ Template.CreateStandard.viewmodel({
     };
 
      this.modal().callMethod(insert, args, (_id) => {
+      this.modal().destroy();
+
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);
+
+        // toggle collapse of viewmodel which has the newly created sub item
+        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+          return !!viewmodel.collapsed() && viewmodel.child(vm => vm._id() === _id);
+        });
+
+        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
 
         this.modal().open({
           title: 'Standard',
