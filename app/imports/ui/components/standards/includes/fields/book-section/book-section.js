@@ -32,10 +32,11 @@ Template.ESBookSection.viewmodel({
     const org = Organizations.findOne({ serialNumber: this.orgSerialNumber() });
     const organizationId = !!org && org._id;
 
+    this.dropdown.dropdown('toggle');
+
     this.modal().callMethod(insert, { title, organizationId }, (_id) => {
       this.selectBookSection(_id);
       this.bookSection(title);
-      this.dropdown.dropdown('toggle');
     });
   },
   getData() {
