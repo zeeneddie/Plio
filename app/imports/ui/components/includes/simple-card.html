@@ -1,6 +1,6 @@
 <template name="SimpleCard">
   <div>
-    <a href={{pathFor route orgSerialNumber=serialNumber}} class="card dashboard-item {{#if disabled}}dashboard-item-disabled{{/if}}">
+    <a href={{#if route}}{{pathFor route orgSerialNumber=serialNumber}}{{/if}} class="card dashboard-item {{#if disabled}}dashboard-item-disabled{{/if}}">
       <div class="card-block">
         <i class="fa fa-fw {{icon}} dashboard-item-icon"></i>
         <h3 class="card-title">{{title}}</h3>

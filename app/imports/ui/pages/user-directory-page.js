@@ -11,8 +11,15 @@ Template.UserDirectoryPage.viewmodel({
     
     if (organizationsHandle.ready()) {
       const userIds = getOrganizationUsers();
-      this.templateInstance.subscribe('organizationUsers', userIds);
+      if (userIds) {
+        this.templateInstance.subscribe('organizationUsers', userIds);
+      } else {
+        FlowRouter.go('signIn');
+      }
     }
+  },
+  user() {
+    return Meteor.users.findOne({ _id: this.activeUser() })
   },
   organizationUsers() {
     const userIds = getOrganizationUsers();
