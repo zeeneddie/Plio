@@ -6,5 +6,8 @@ ViewModel.share({
   },
   organization: {
     orgSerialNumber: ''
+  },
+  search: {
+    searchText: ''
   }
 });

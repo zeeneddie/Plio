@@ -2,7 +2,7 @@
   <div class="card">
     <form class="search-form">
       <div class="form-group row">
-        <input type="text" class="form-control" placeholder="Search...">
+        <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 300"}}>
       </div>
       <a class="btn btn-primary" {{b "click: openAddTypeModal"}}>
         <i class="fa fa-plus"></i>
