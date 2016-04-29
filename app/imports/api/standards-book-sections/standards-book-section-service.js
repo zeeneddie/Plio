@@ -13,7 +13,7 @@ export default StandardsBookSectionService = {
 
   update({ _id, title }) {
     return this.collection.update({ _id }, {
-      $set: { name, title }
+      $set: { title }
     });
   },
 
