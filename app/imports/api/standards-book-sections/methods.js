@@ -2,7 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsBookSectionService from './standards-book-section-service.js';
-import { StandardsBookSectionSchema } from './standards-book-section-schema.js';
+import {
+  StandardsBookSectionEditableFields,
+  StandardsBookSectionSchema
+} from './standards-book-section-schema.js';
 import { IdSchema } from '../schemas.js';
 import { checkUserId } from '../checkers.js';
 
@@ -24,10 +27,10 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'StandardsBookSections.update',
 
-  validate: new SimpleSchema([IdSchema, {
-    name: { type: String },
-    number: { type: Number }
-  }]).validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    StandardsBookSectionEditableFields
+  ]).validator(),
 
   run(doc) {
     checkUserId(

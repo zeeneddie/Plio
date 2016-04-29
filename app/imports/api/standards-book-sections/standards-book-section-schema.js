@@ -1,15 +1,24 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 
-export const StandardsBookSectionSchema = new SimpleSchema({
-  name: {
-    type: String
-  },
-  number: {
-    type: Number
-  },
-  organizationId: {
+const StandardsBookSectionEditableFields = new SimpleSchema({
+  title: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: /^([0-9]+)\.(.+)$/
   }
 });
+
+const StandardsBookSectionSchema = new SimpleSchema([
+  StandardsBookSectionEditableFields,
+  {
+    organizationId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    }
+  }
+]);
+
+export {
+  StandardsBookSectionEditableFields,
+  StandardsBookSectionSchema
+};
