@@ -1,0 +1,39 @@
+<template name="OrganizationSettings">
+  {{#EditableModal
+      id="org-settings-modal"
+      title="Org settings"
+      guideHtml=guideHtml
+      moreInfoLink="#"
+  }}
+
+    {{> OrganizationSettings_MainSettings
+        name=name
+        currency=currency
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_Departments
+        departments=departments
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_StandardsTypes
+        standardsTypes=standardsTypes
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_StandardsBookSections
+        standardsBookSections=standardsBookSections
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcStepTimes
+        stepTimes=stepTimes
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcReminders
+        reminders=reminders
+        organizationId=organizationId}}
+
+    {{> OrganizationSettings_NcGuidelines
+        guidelines=guidelines
+        organizationId=organizationId}}
+
+  {{/EditableModal}}
+</template>

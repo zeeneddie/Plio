@@ -7,12 +7,6 @@ import '/imports/ui/pages';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-FlowRouter.route('/', {
-  name: 'home',
-  action(params) {
-    BlazeLayout.render('LoginLayout');
-  }
-});
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -32,6 +26,13 @@ AccountsTemplates.configureRoute('signUp', {
   layoutRegions: {},
   contentRegion: 'content',
   redirect: redirectHandler
+});
+
+FlowRouter.route('/', {
+  name: 'home',
+  action(params) {
+    BlazeLayout.render('LoginLayout');
+  }
 });
 
 FlowRouter.route('/hello', {

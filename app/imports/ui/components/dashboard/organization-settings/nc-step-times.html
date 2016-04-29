@@ -1,0 +1,38 @@
+<template name="OrganizationSettings_NcStepTimes">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Workflow defaults</h4>
+  </div>
+  <div class="card-block-collapse collapse" id="workflow-defaults" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{#with stepTimes}}
+        {{#with minor}}
+          {{> OrganizationSettings_NcStepTime
+              title="Minor non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="minor"
+              onChange=onChangeCb}}
+        {{/with}}
+
+        {{#with major}}
+          {{> OrganizationSettings_NcStepTime
+              title="Major non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="major"
+              onChange=onChangeCb}}
+        {{/with}}
+
+        {{#with critical}}
+          {{> OrganizationSettings_NcStepTime
+              title="Critical non-conformity"
+              timeValue=timeValue
+              timeUnit=timeUnit
+              ncType="critical"
+              onChange=onChangeCb}}
+        {{/with}}
+      {{/with}}
+    </div>
+  </div>
+</template>
