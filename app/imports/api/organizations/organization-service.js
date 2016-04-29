@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Organizations } from './organizations.js';
-import { UserRoles } from '../constants.js';
+import { OrganizationDefaults, UserRoles } from '../constants.js';
 
 export default OrganizationService = {
   collection: Organizations,
@@ -18,13 +18,18 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
+    const { ncStepTimes, ncReminders, ncGuidelines } = OrganizationDefaults;
+
     return this.collection.insert({
       name,
       serialNumber,
       users: [{
         userId: ownerId,
         role: UserRoles.OWNER
-      }]
+      }],
+      ncStepTimes,
+      ncReminders,
+      ncGuidelines
     });
   },
 
