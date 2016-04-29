@@ -1,8 +1,7 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
-
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
-
 
 ViewModel.mixin({
   collapse: {

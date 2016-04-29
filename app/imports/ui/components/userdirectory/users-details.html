@@ -54,7 +54,7 @@
               {{#each phoneNumbers}}
                 <div class="col-sm-6">
                   <div class="list-group-item">
-                    <p class="list-group-item-text">{{this.type}} phone</p>
+                    <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
                     <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
                   </div>
                 </div>
@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="card-block card-subheading">
-          <h4 class="card-title">{{user.profile.firstName}}'s superpowers for {{organization.name}}</h4>
+          <h4 class="card-title" {{b "text: superpowersTitle()"}}></h4>
         </div>
         <div class="ng-scope">
           <div class="list-group ng-scope">
