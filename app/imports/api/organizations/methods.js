@@ -182,7 +182,7 @@ export const acceptInvitation = new ValidatedMethod({
     if (this.isSimulation) {
       return;
     }
-    
+
     //no permission checks are required
     InvitationService.acceptInvitation(invitationId, userData);
   }
@@ -214,9 +214,19 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
     }
     //todo: check invite user permission here
 
-    emails.forEach(email =>
-      //todo: aggregate service errors for each email
-      InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
-    );
+    let errors = [];
+    emails.forEach(email => {
+      //aggregate service errors for each email
+      try {
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+      } catch (err) {
+        errors.push(err.reason);
+      }
+    });
+
+    if (errors.length > 0) {
+      let errorMsg = `Failed to invite ${errors.length + 1} user(s): ${errors.join(' ')}`;
+      throw new Meteor.Error(500, errorMsg);
+    }
   }
 });

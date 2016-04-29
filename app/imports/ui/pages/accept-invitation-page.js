@@ -66,7 +66,7 @@ Template.AcceptInvitationPage.viewmodel({
       if (err) {
         Utils.showError(err.reason);
       } else {
-        FlowRouter.go(`/${orgSerialNumber}`);
+        FlowRouter.go('dashboardPage', {orgSerialNumber: orgSerialNumber.toString()});
       }
     });
   }

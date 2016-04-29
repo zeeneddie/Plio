@@ -21,7 +21,6 @@ class InvitationSender {
 
     if (existingUser) {
       //check if user already invited
-      console.log('existing user', existingUser);
       let isInvited = Organizations.findOne({_id: this._organizationId, 'users.userId': existingUser._id});
       if (isInvited) {
         throw new Meteor.Error(500, `User with email ${this._userEmail} is already invited to organization`);
@@ -140,7 +139,7 @@ export default InvitationService = {
         $unset: {invitationId: ''}
       });
     } else {
-      throw new Meteor.Error(404, 'Invitation do not exist')
+      throw new Meteor.Error(404, 'Invitation do not exist');
     }
   }
 };
