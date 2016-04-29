@@ -77,10 +77,17 @@ ViewModel.mixin({
     }
   },
   fullName: {
-    fullName(doc) {
-      const { profile } = doc;
-      const { firstName, lastName } = profile;
-      return `${firstName} ${lastName}`;
+    userFullNameOrEmail(userOrUserId) {
+      let user = userOrUserId;
+      if (typeof userOrUserId === 'string') {
+        user = Meteor.users.findOne(userOrUserId);
+      }
+
+      const {firstName='', lastName=''} = user.profile;
+      if (firstName && lastName)
+        return `${firstName} ${lastName}`;
+      else
+        return user.emails[0].address;
     }
   },
   user: {
