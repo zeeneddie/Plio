@@ -9,5 +9,8 @@ Template.UsersDetails.viewmodel({
   },
   skype() {
     return this.user().profile.skype;
+  },
+  phoneNumbers() {
+    return this.user().profile.phoneNumbers;
   }
 });

@@ -51,11 +51,11 @@
                 <h4 class="list-group-item-heading" {{b "text: address(user)"}}></h4>
             </div>
             <div class="row">
-              {{#each activeUser.profile.phoneNumbers}}
+              {{#each phoneNumbers}}
                 <div class="col-sm-6">
                   <div class="list-group-item">
-                    <p class="list-group-item-text">{{type}} phone</p>
-                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: number" }}></a></h4>
+                    <p class="list-group-item-text">{{this.type}} phone</p>
+                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
                   </div>
                 </div>
               {{/each}}
