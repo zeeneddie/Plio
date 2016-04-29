@@ -14,7 +14,11 @@ Template.ESTitle.viewmodel({
       return;
     }
 
-    if (!this._id || !title || !nestingLevel) return;
+    if (!this._id) return;
+
+    if (!title) {
+      this.modal().error('Title is required!');
+    }
 
     this.parent().update({ title, nestingLevel });
   },

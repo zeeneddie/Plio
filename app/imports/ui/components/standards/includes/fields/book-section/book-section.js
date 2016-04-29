@@ -52,7 +52,8 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      ViewModel.findOne('ListItem', vm => !!vm.collapsed() && vm._id() === this._id()).toggleCollapse();
+      const sectionToCollapse = ViewModel.findOne('ListItem', vm => !!vm.collapsed() && vm._id() === this._id());
+      sectionToCollapse && sectionToCollapse.toggleCollapse();
     });
   },
   getData() {
