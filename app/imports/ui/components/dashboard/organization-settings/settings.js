@@ -29,7 +29,7 @@ Template.OrganizationSettings.viewmodel({
     return StandardsBookSections.find({
       organizationId: this.organizationId()
     }, {
-      sort: { number: 1, name: 1 }
+      sort: { title: 1 }
     });
   },
   name() {

@@ -24,6 +24,9 @@ Template.UserDirectoryPage.viewmodel({
       }
     }
   },
+  user() {
+    return Meteor.users.findOne({ _id: this.activeUser() })
+  },
   organizationUsers() {
     const userIds = getOrganizationUsers();
 

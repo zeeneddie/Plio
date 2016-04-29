@@ -5,15 +5,15 @@ export default StandardsBookSectionService = {
 
   collection: StandardsBookSections,
 
-  insert({ name, number, organizationId }) {
+  insert({ title, organizationId }) {
     return this.collection.insert({
-      name, number, organizationId
+      title, organizationId
     });
   },
 
-  update({ _id, name, number }) {
+  update({ _id, title }) {
     return this.collection.update({ _id }, {
-      $set: { name, number }
+      $set: { title }
     });
   },
 

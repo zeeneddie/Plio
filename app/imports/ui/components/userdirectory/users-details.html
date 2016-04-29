@@ -1,6 +1,7 @@
 <template name="UsersDetails">
   <div class="content-cards scroll flexbox-column col-sm-8 hidden-sm-down">
     <div class="content-cards-inner flex scroll">
+      {{#if user}}
       <div class="card">
         <div class="card-block card-heading clearfix">
           <div class="card-heading-buttons pull-xs-right">
@@ -13,19 +14,18 @@
           <h3 class="card-title">User details</h3>
         </div>
         <div class="list-group">
-
           <div class="row">
             <div class="col-sm-6">
               <div class="list-group-item">
-                <img class="img-circle pull-xs-left" src="/avatars/avatar-placeholder-1.png">
+                <img class="img-circle pull-xs-left" {{b "src: avatar(user)"}}>
                 <p class="list-group-item-text">Name</p>
-                <h4 class="list-group-item-heading">{{userFullNameOrEmail activeUser}}</h4>
+                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(user)"}}></h4>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Initials</p>
-                <h4 class="list-group-item-heading">MS</h4>
+                <h4 class="list-group-item-heading" {{b "text: initials" }}>=</h4>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading">VP of Sales</h4>
+                <h4 class="list-group-item-heading" {{b "text: description(user)" }}></h4>
               </div>
             </div>
           </div>
@@ -41,66 +41,65 @@
         <div class="card-block card-subheading">
           <h4 class="card-title">Contact details</h4>
         </div>
-        <!-- ngInclude: 'includes/subcards-read/contact-details.html' -->
-        <div ng-include="'includes/subcards-read/contact-details.html'" class="ng-scope">
+        <div class="ng-scope">
           <div class="list-group ng-scope">
             <div class="list-group-item">
               <p class="list-group-item-text">Email</p>
-              <h4 class="list-group-item-heading"><a href="mailto:">mike.smith@clifton-asset.co.uk</a></h4>
+              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(user)" }}></a></h4>
             </div>
-            <div class="list-group-item">
-              <p class="list-group-item-text">Address</p>
-              <h4 class="list-group-item-heading">
-                The Pavilions,
-                <br>Eden Park,
-                <br>Ham Green,
-                <br>Bristol BS20 0DD
-                <br>UK
-              </h4>
+            <div class="list-group-item" {{b "if: address(user)"}}>
+                <p class="list-group-item-text">Address</p>
+                <h4 class="list-group-item-heading" {{b "text: address(user)"}}></h4>
             </div>
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Work phone</p>
-                  <h4 class="list-group-item-heading"><a href="tel:">+44 1234 123 456</a></h4>
+              {{#each phoneNumbers}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
+                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Mobile phone</p>
-                  <h4 class="list-group-item-heading"><a href="tel:">+44 9870 654 321</a></h4>
-                </div>
-              </div>
+              {{/each}}
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item" {{b "if: skype"}}>
               <p class="list-group-item-text">Skype name</p>
-              <h4 class="list-group-item-heading"><a href="skype:loremipsum?call">loremipsum</a></h4>
+              <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: skype"}}></a></h4>
             </div>
           </div>
         </div>
         <div class="card-block card-subheading">
-          <h4 class="card-title">Mike's superpowers for Clifton Asset Management Plc</h4>
+          <h4 class="card-title" {{b "text: superpowersTitle()"}}></h4>
         </div>
-        <!-- ngInclude: 'includes/subcards-read/superpowers.html' -->
-        <div ng-include="'includes/subcards-read/superpowers.html'" class="ng-scope">
+        <div class="ng-scope">
           <div class="list-group ng-scope">
             <div class="list-group-item">
-              <h4 class="list-group-item-heading"><i class="ms-Icon ms-Icon--check text-success"></i> Create &amp;
-                delete users</h4>
-              <h4 class="list-group-item-heading"><i class="ms-Icon ms-Icon--check text-success"></i> Change
-                organization settings</h4>
+              <h4 class="list-group-item-heading">
+                <i class="ms-Icon ms-Icon--check text-success"></i>
+                Create &amp; delete users
+              </h4>
+              <h4 class="list-group-item-heading">
+                <i class="ms-Icon ms-Icon--check text-success"></i>
+                Change organization settings
+              </h4>
             </div>
             <div class="list-group-item">
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> Edit user
-                permissions</h4>
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> View team to
-                do lists</h4>
-              <h4 class="list-group-item-heading text-muted"><i class="ms-Icon ms-Icon--x text-danger"></i> Create &amp;
-                edit standards documents</h4>
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                Edit user permissions
+              </h4>
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                View team to do lists
+              </h4>
+              <h4 class="list-group-item-heading text-muted">
+                <i class="ms-Icon ms-Icon--x text-danger"></i>
+                Create &amp; edit standards documents
+              </h4>
             </div>
           </div>
         </div>
       </div>
+      {{/if}}
     </div>
   </div>
 </template>

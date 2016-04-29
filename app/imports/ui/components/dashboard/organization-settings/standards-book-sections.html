@@ -13,8 +13,7 @@
         {{#each standardsBookSections}}
           {{> OrganizationSettings_StandardsBookSection
               _id=this._id
-              name=this.name
-              number=this.number
+              title=this.title
               onChange=onChangeCb
               onDelete=onDeleteCb}}
         {{/each}}
