@@ -1,5 +1,4 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
 import { Meteor } from 'meteor/meteor';
 
 import { Standards } from '/imports/api/standards/standards.js';

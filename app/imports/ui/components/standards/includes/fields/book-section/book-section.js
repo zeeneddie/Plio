@@ -4,7 +4,7 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 
 
 Template.ESBookSection.viewmodel({
-  mixin: 'search',
+  mixin: ['search', 'modal'],
   autorun() {
     const _id = this.selectedBookSectionId();
     if (!!_id) {

@@ -37,7 +37,9 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Section</p>
-                <h4 class="list-group-item-heading">{{section.name}}</h4>
+                {{#with section}}
+                  <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                {{/with}}
               </div>
             </div>
 
@@ -47,7 +49,9 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Type</p>
-                <h4 class="list-group-item-heading">{{type.name}}</h4>
+                {{#with type}}
+                  <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                {{/with}}
               </div>
             </div>
             <div class="col-sm-6">
