@@ -35,8 +35,7 @@ Template.ESBookSection.viewmodel({
     this.dropdown.dropdown('toggle');
 
     this.modal().callMethod(insert, { title, organizationId }, (_id) => {
-      this.selectBookSection(_id);
-      this.bookSection(title);
+      this.selectBookSection({ _id, title });
     });
   },
   getData() {
