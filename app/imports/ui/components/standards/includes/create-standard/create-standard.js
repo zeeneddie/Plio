@@ -54,10 +54,12 @@ Template.CreateStandard.viewmodel({
         this.selectedStandardId(_id);
 
         // toggle collapse of viewmodel which has the newly created sub item
-        ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.child(vm => vm._id() === _id);
-        }).toggleCollapse();
-        
+        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+          return !!viewmodel.collapsed() && viewmodel.child(vm => vm._id() === _id);
+        });
+
+        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
+
         this.modal().open({
           title: 'Standard',
           template: 'EditStandard',

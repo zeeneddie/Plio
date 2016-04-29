@@ -51,10 +51,9 @@ Template.ESBookSection.viewmodel({
       return;
     }
 
-    this.parent().update({ sectionId }, (res) => {
+    this.parent().update({ sectionId }, () => {
       ViewModel.findOne('ListItem', vm => !!vm.collapsed() && vm._id() === this._id()).toggleCollapse();
     });
-
   },
   getData() {
     const { selectedBookSectionId:sectionId } = this.data();
