@@ -1,3 +1,4 @@
+import './user-edit';
 import './user-directory-header.html';
 import './user-directory-header.js';
 import './users-list.html';

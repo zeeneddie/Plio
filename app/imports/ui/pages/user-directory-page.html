@@ -1,6 +1,6 @@
 <template name="UserDirectoryPage">
   {{#if Template.subscriptionsReady}}
     {{> UsersList organizationUsers=organizationUsers}}
-    {{> UsersDetails}}
+    {{> UsersDetails user=user}}
   {{/if}}
 </template>

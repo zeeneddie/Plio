@@ -1,0 +1,31 @@
+<template name="UserEdit">
+  {{#EditableModal
+      id="user-edit-modal"
+      title="Edit User"
+      guideHtml=guideHtml
+      moreInfoLink="#"
+  }}
+
+    {{> UserEdit_MainDetails
+        avatar=avatar
+        firstName=firstName
+        lastName=lastName
+        initials=initials
+        email=email
+        description=description
+        userId=userId}}
+
+    {{> UserEdit_ContactDetails
+        address=address
+        country=country
+        phones=phones
+        skype=skype
+        userId=userId}}
+
+    {{> UserEdit_Superpowers
+        superpowers=superpowers
+        userId=userId
+        title=title}}
+
+  {{/EditableModal}}
+</template>

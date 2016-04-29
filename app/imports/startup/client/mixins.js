@@ -1,5 +1,8 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
+
+ViewModel.persist = false;
+
 ViewModel.mixin({
   collapse: {
     collapsed: true,

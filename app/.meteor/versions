@@ -23,6 +23,7 @@ check@1.1.3
 chrismbeckett:toastr@2.1.2_1
 coffeescript@1.0.16
 coursierprive:tether@1.1.1
+dburles:collection-helpers@1.0.4
 ddp@1.2.4
 ddp-client@1.2.4
 ddp-common@1.2.4

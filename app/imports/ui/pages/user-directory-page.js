@@ -6,9 +6,15 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
   activeUser: null,
+  user() {
+    const userId = this.activeUser();
+    if (userId) {
+      return Meteor.users.findOne({ _id: userId });
+    }
+  },
   autorun() {
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
-    
+
     if (organizationsHandle.ready()) {
       const userIds = getOrganizationUsers();
       if (userIds) {
