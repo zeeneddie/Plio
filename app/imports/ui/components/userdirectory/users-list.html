@@ -12,13 +12,13 @@
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
-        <a class="list-group-item {{#if isActiveUser this._id}}active{{/if}}" href="#" {{b "click: parent.activeUser(this._id)"}}>
-          <img class="img-circle pull-xs-left" src="{{profile.avatar}}">
-          <div class="list-group-item-content">
-            <h4 class="list-group-item-heading">{{userFullNameOrEmail this}}</h4>
-            <p class="list-group-item-text">Quality manager</p>
-          </div>
-        </a>
+          <a class="list-group-item" href="#" {{b "click: parent.activeUser(this._id), class: { active: isActiveUser(this._id) }"}}>
+            <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
+            <div class="list-group-item-content">
+              <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+              <p class="list-group-item-text" {{b "text: description(this)"}}></p>
+            </div>
+          </a>
         {{/each}}
       </div>
     </div>
