@@ -21,6 +21,7 @@ Template.EditStandard.viewmodel({
     if (!confirm('Are you sure you want to delete this standard?')) return;
     this.modal().callMethod(remove, { _id }, () => {
       this.selectedStandardId('');
+      this.modal().destroy();
     });
   }
 });

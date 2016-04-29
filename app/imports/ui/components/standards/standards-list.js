@@ -6,7 +6,9 @@ Template.StandardsList.viewmodel({
   share: 'organization',
   mixin: 'modal',
   stadardsBookSections() {
-    return StandardsBookSections.find({}, { sort: { number: 1 } });
+    const query = {};
+    const options = { sort: { title: 1 } };
+    return StandardsBookSections.find(query, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

@@ -25,8 +25,7 @@ export const update = new ValidatedMethod({
   name: 'StandardsBookSections.update',
 
   validate: new SimpleSchema([IdSchema, {
-    name: { type: String },
-    number: { type: Number }
+    title: { type: String }
   }]).validator(),
 
   run(doc) {

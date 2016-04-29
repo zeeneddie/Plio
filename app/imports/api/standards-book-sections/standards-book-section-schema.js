@@ -2,11 +2,8 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 
 export const StandardsBookSectionSchema = new SimpleSchema({
-  name: {
+  title: {
     type: String
-  },
-  number: {
-    type: Number
   },
   organizationId: {
     type: String,

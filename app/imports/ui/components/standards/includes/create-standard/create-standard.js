@@ -4,7 +4,7 @@ import { insert } from '/imports/api/standards/methods.js';
 
 Template.CreateStandard.viewmodel({
   share: 'standard',
-  mixin: 'modal',
+  mixin: ['modal', 'numberRegex'],
   save() {
     const data = this.getChildrenData();
 
@@ -25,15 +25,21 @@ Template.CreateStandard.viewmodel({
   },
   getChildrenData() {
     const data = {};
-    
+
     this.children(vm => vm.getData && vm.getData())
         .forEach(vm => _.extend(data, vm.getData()));
 
     return data;
   },
   insert({ title, sectionId, typeId, owner, issueNumber, status }) {
-    const number = title.match(/^[\d\.]*\d/);
+    const number = this.parseNumber(title);
     const nestingLevel = number && number[0].split('.').length;
+
+    if (nestingLevel > 4) {
+      this.modal().error('The maximum nesting is 4 levels. Please change your title.');
+      return;
+    }
+
     const args = {
       title,
       sectionId,
@@ -45,6 +51,8 @@ Template.CreateStandard.viewmodel({
     };
 
      this.modal().callMethod(insert, args, (_id) => {
+      this.modal().destroy();
+      
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);
 
