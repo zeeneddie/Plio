@@ -179,6 +179,10 @@ export const acceptInvitation = new ValidatedMethod({
   }).validator(),
 
   run({invitationId, userData}) {
+    if (this.isSimulation) {
+      return;
+    }
+    
     //no permission checks are required
     InvitationService.acceptInvitation(invitationId, userData);
   }

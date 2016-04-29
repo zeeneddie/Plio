@@ -53,44 +53,31 @@ class InvitationSender {
       }
     };
 
-    if (Meteor.isServer) {
-      try {
-        let newUserId = Accounts.createUser(userDoc);
-        _onUserCreated(newUserId);
-      } catch (err) {
-        handleCreateUserError(err);
-      }
-    } else {
-      return;
-      // on client side there is no fibers so we are forced to use callbacks
-      // we can rewrite it in callback fashion only to reduce amount of code
-      Accounts.createUser(userDoc, (err, userId) => {
-        if (err) {
-          handleCreateUserError(err);
-        } else {
-          _onUserCreated(userId);
-        }
-      });
+    try {
+      let newUserId = Accounts.createUser(userDoc);
+      _onUserCreated(newUserId);
+    } catch (err) {
+      handleCreateUserError(err);
     }
   }
 
   _sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
     //send notification
     let notificationData = Object.assign({
-      organizationPageUrl: NotificationSender.getAbsoluteUrl(`/${this._organization.serialNumber}`)
+      organizationPageUrl: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'invited-to-organization', notificationData)
+    new NotificationSender(notificationSubject, 'invitedToOrganizationEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
   _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
     // send invitation
     let notificationData = Object.assign({
-      invitationLink: NotificationSender.getAbsoluteUrl(`/accept-invitation/${this._invitationId}`)
+      invitationLink: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'application-invitation', notificationData)
+    new NotificationSender(notificationSubject, 'applicationInvitationEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 

@@ -42,9 +42,9 @@ Template.ModalWindow.viewmodel({
 
         if (err) {
           console.log('Modal submit error:\n', err);
-          this.setError(err.reason);
+          this.setError(err.reason || 'Internal server error');
         } else {
-          ModalManager.getInstanceByElement(this.modalHeading()).close();
+          ModalManager.getInstanceByElement(this.modalHeading).close();
         }
       }, this.savingStateTimeout());
     };

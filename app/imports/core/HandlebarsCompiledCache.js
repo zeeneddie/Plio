@@ -1,4 +1,6 @@
-import { Assets } from 'meteor/meteor';
+// cannot import it because of Meteor's bug
+// import { Assets } from 'meteor/meteor';
+
 import { _ } from 'meteor/underscore';
 import Handlebars from 'handlebars';
 
@@ -7,7 +9,6 @@ export default class HandlebarsCompiledCache {
     this._cachedTemplates = {};
     _.forEach(templates, (sourcePath, templateName)=> {
       let source = Assets.getText(sourcePath);
-      console.log(templateName, source);
       this._cachedTemplates[templateName] = Handlebars.compile(source);
     });
   }
