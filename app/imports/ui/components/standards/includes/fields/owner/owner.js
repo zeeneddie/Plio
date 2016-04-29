@@ -16,7 +16,7 @@ Template.ESOwner.viewmodel({
   },
   selectOwner(doc) {
     const { _id } = doc;
-    const fullName = this.fullName(doc);
+    const fullName = this.userFullNameOrEmail(doc);
     this.owner(fullName);
     this.selectedOwnerId(_id);
   },

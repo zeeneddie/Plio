@@ -7,7 +7,7 @@ Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal'],
   autorun() {
     const _id = this.selectedBookSectionId();
-    if (!!_id) {
+    if (_id) {
       const bookSection = StandardsBookSections.findOne({ _id });
       const { number, name } = !!bookSection && bookSection;
       this.bookSection(`${number}. ${name}`);
@@ -22,6 +22,9 @@ Template.ESBookSection.viewmodel({
   },
   selectBookSection({ _id }) {
     this.selectedBookSectionId(_id);
+  },
+  sectionHintText() {
+    return !!this.bookSection() ? 'Add new section' : 'Start typing...';
   },
   getData() {
     const { selectedBookSectionId:sectionId } = this.data();
