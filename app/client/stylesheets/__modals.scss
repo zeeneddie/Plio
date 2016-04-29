@@ -38,6 +38,22 @@
             border-top: 0;
           }
         }
+      }
+
+      .modal-error-section {
+        .card-block {
+          border-bottom: 1px solid #ddd;
+
+          i {
+            color: red;
+            margin-right: 10px;
+            float: left;
+          }
+
+          i, span {
+            display: inline;
+          }
+        }
       }    
       
     }

@@ -4,6 +4,7 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
+  mixin: ['editableModalSection'],
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -14,36 +15,24 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     const name = this.name();
     const savedName = this.templateInstance.data.name;
 
-    if (!name || name === savedName) return;
+    if (!name || name === savedName) {
+      return;
+    }
 
     const _id = this.organizationId();
 
-    this.setSavingState(true);
-
-    setName.call({ _id, name }, (err) => {
-      this.setSavingState(false);  
-
-      if (err) {
-        toastr.error('Failed to update a name');
-      }
-    });
+    this.callMethod(setName, { _id, name });
   },
   updateCurrency(currency) {
     const current = this.currency();
-    if (currency === current) return;
+    if (currency === current) {
+      return;
+    }
 
     this.currency(currency);
 
     const _id = this.organizationId();
 
-    this.setSavingState(true);
-
-    setDefaultCurrency.call({ _id, currency }, (err) => {
-      this.setSavingState(false);
-
-      if (err) {
-        toastr.error('Failed to update default currency');
-      }
-    });
+    this.callMethod(setDefaultCurrency, { _id, currency });
   }
 });

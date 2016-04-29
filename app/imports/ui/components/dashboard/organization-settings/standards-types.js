@@ -3,16 +3,7 @@ import { insert, update, remove } from '/imports/api/standards-types/methods.js'
 
 
 Template.OrganizationSettings_StandardsTypes.viewmodel({
-  addStandardsTypeForm() {
-    Blaze.renderWithData(
-      Template.OrganizationSettings_StandardsType,
-      {
-        onChange: this.onChangeCb(),
-        onDelete: this.onDeleteCb()
-      },
-      this.templateInstance.$("#standard-types-forms")[0]
-    );
-  },
+  mixin: ['collapse', 'addForm', 'editableModalSection'],
   standardsTypesCount() {
     return StandardsTypes.find({
       organizationId: this.organizationId()
@@ -30,21 +21,15 @@ Template.OrganizationSettings_StandardsTypes.viewmodel({
     if (!viewModel._id) {
       const organizationId = this.organizationId();
 
-      insert.call({ name, abbreviation, organizationId }, (err, res) => {
-        if (err) {
-          toastr.error('Failed to create standards type');
-        }
+      Blaze.remove(viewModel.templateInstance.view);
 
-        Blaze.remove(viewModel.templateInstance.view);
+      this.callMethod(insert, {
+        name, abbreviation, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      update.call({ _id, name, abbreviation }, (err, res) => {
-        if (err) {
-          toastr.error('Failed to update standards type');
-        }
-      });
+      this.callMethod(update, { _id, name, abbreviation });
     }
   },
   onDelete(viewModel) {
@@ -57,10 +42,6 @@ Template.OrganizationSettings_StandardsTypes.viewmodel({
 
     const _id = viewModel._id();
 
-    remove.call({ _id }, (err, res) => {
-      if (err) {
-        toastr.error('Failed to remove standards type');
-      }
-    });
+    this.callMethod(remove, { _id });
   }
 });

@@ -2,6 +2,7 @@ import { setReminder } from '/imports/api/organizations/methods.js';
 
 
 Template.OrganizationSettings_NcReminders.viewmodel({
+  mixin: ['collapse', 'editableModalSection'],
   onChangeCb() {
     return this.onChange.bind(this);
   },
@@ -12,16 +13,8 @@ Template.OrganizationSettings_NcReminders.viewmodel({
     const { timeValue, timeUnit } = viewModel.getData();
     const _id = this.organizationId();
 
-    this.setSavingState(true);
-
-    setReminder.call({
+    this.callMethod(setReminder, {
       _id, ncType, reminderType, timeValue, timeUnit
-    }, (err) => {
-      this.setSavingState(false);
-      
-      if (err) {
-        toastr.error('Failed to update non-conformity reminders');
-      }
     });
   }
 });

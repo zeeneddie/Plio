@@ -1,5 +1,4 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
 import { Meteor } from 'meteor/meteor';
 
 import { Standards } from '/imports/api/standards/standards.js';
@@ -8,7 +7,7 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: 'modal',
+  mixin: ['modal', 'fullName'],
   standard() {
     return Standards.findOne({ _id: this.selectedStandardId() });
   },

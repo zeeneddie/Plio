@@ -7,8 +7,8 @@
         {{#each bookSections}}
           <a class="dropdown-item" href="#" {{b "text: this.number + '. ' + this.name, click: selectBookSection(this)"}}></a>
         {{/each}}
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#"><strong>Add new section</strong></a>
+        <div class="dropdown-divider" {{b "if: bookSections.count > 0"}}></div>
+        <a class="dropdown-item" href="#"><strong {{b "text: sectionHintText"}}></strong></a>
       </div>
     </div>
   {{/FormField}}

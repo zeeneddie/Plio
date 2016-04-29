@@ -1,17 +1,9 @@
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
+
 Template.OrganizationSettings_Departments.viewmodel({
-  addDepartmentForm() {
-    Blaze.renderWithData(
-      Template.OrganizationSettings_Department,
-      {
-        onChange: this.onChangeCb(),
-        onDelete: this.onDeleteCb()
-      },
-      this.templateInstance.$('#departments-forms')[0]
-    );
-  },
+  mixin: ['collapse', 'addForm', 'editableModalSection'],
   departmentsCount() {
     return Departments.find({
       organizationId: this.organizationId()
@@ -26,30 +18,16 @@ Template.OrganizationSettings_Departments.viewmodel({
   onChange(viewModel) {
     const { name } = viewModel.getData();
 
-    this.setSavingState(true);
-
     if (!viewModel._id) {
       const organizationId = this.organizationId();
 
-      insert.call({ name, organizationId }, (err, res) => {
-        this.setSavingState(false);
+      Blaze.remove(viewModel.templateInstance.view);
 
-        if (err) {
-          toastr.error('Failed to create a department');
-        }
-
-        Blaze.remove(viewModel.templateInstance.view);
-      });
+      this.callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
 
-      update.call({ _id, name }, (err, res) => {
-        this.setSavingState(false);
-
-        if (err) {
-          toastr.error('Failed to update a department');
-        }
-      });
+      this.callMethod(update, { _id, name });
     }
   },
   onDelete(viewModel) {
@@ -58,18 +36,12 @@ Template.OrganizationSettings_Departments.viewmodel({
       return;
     }
 
-    if (!confirm('Delete this department?')) return;
+    if (!confirm('Delete this department?')) {
+      return;
+    }
 
     const _id = viewModel._id();
 
-    this.setSavingState(true);
-
-    remove.call({ _id }, (err, res) => {
-      this.setSavingState(false);
-
-      if (err) {
-        toastr.error('Failed to remove a department');
-      }
-    });
+    this.callMethod(remove, { _id });
   },
 });
