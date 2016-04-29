@@ -1,15 +1,19 @@
 {
-  "_id" : "8bcNPN8sKTtJFw4uy",
-  "name" : "FE International Ltd",
-  "serialNumber" : 99,
-  "users" : [
+  "_id": "8bcNPN8sKTtJFw4uy",
+  "name": "FE International Ltd",
+  "serialNumber": 99,
+  "users": [
     {
-      "userId" : "SQHmBKJ94gJvpLKLt",
-      "role" : "member"
+      "userId": "SQHmBKJ94gJvpLKLt",
+      "role": "member"
     },
     {
-      "userId" : "ABKpuGYiJHKhDwLDk",
-      "role" : "owner"
+      "userId": "TCstWknRczHkvP6j4",
+      "role": "member"
+    },
+    {
+      "userId": "ABKpuGYiJHKhDwLDk",
+      "role": "owner"
     }
   ],
   "timezone": "Europe/London",

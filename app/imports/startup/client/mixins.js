@@ -3,6 +3,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
+ViewModel.persist = false;
+
 ViewModel.mixin({
   collapse: {
     collapsed: true,

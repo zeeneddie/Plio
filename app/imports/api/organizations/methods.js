@@ -2,15 +2,17 @@ import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import OrganizationService from './organization-service.js';
-import { OrganizationEditableFields } from './organization-schema.js';
-import { NCTypes } from '../constants.js';
-import { IdSchema, TimePeriodSchema } from '../schemas.js';
-import { checkUserId } from '../checkers.js';
+import OrganizationService from './organization-service';
+import InvitationService from './invitation-service';
+
+import { OrganizationEditableFields } from './organization-schema';
+import { NCTypes } from '../constants';
+import { IdSchema, TimePeriodSchema, OrganizationIdSchema, NewUserDataSchema } from '../schemas';
+import { checkUserId } from '../checkers';
 
 
 const nameSchema = new SimpleSchema({
-  name: { type: String }
+  name: {type: String}
 });
 
 const ncTypeSchema = new SimpleSchema({
@@ -24,10 +26,9 @@ const updateErrorMessage = 'Unauthorized user cannot update an organization';
 
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
-
   validate: nameSchema.validator(),
 
-  run({ name }) {
+  run({name}) {
     const userId = this.userId;
 
     checkUserId(
@@ -73,7 +74,7 @@ export const setDefaultCurrency = new ValidatedMethod({
   name: 'Organizations.setDefaultCurrency',
 
   validate: new SimpleSchema([IdSchema, {
-    currency: { type: String }
+    currency: {type: String}
   }]).validator(),
 
   run(doc) {
@@ -123,7 +124,7 @@ export const setGuideline = new ValidatedMethod({
   validate: new SimpleSchema([
     IdSchema, ncTypeSchema,
     {
-      text: { type: String }
+      text: {type: String}
     }
   ]).validator(),
 
@@ -131,5 +132,101 @@ export const setGuideline = new ValidatedMethod({
     checkUserId(this.userId, updateErrorMessage);
 
     return OrganizationService.setGuideline(doc);
+  }
+});
+
+export const inviteUserByEmail = new ValidatedMethod({
+  name: 'Organizations.inviteUserByEmail',
+
+  validate: new SimpleSchema([OrganizationIdSchema, {
+    email: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Email
+    },
+    welcomeMessage: {
+      type: String
+    }
+  }]).validator(),
+
+  run({organizationId, email, welcomeMessage}) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot invite users'
+      );
+    }
+    //todo: check invite user permission here
+
+    InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+  }
+});
+
+export const acceptInvitation = new ValidatedMethod({
+  name: 'Organizations.acceptInvitation',
+
+  validate: new SimpleSchema({
+    invitationId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    userData: {
+      type: NewUserDataSchema
+    }
+  }).validator(),
+
+  run({invitationId, userData}) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    //no permission checks are required
+    InvitationService.acceptInvitation(invitationId, userData);
+  }
+});
+
+
+export const inviteMultipleUsersByEmail = new ValidatedMethod({
+  name: 'Organizations.inviteMultipleUsers',
+
+  validate: new SimpleSchema([OrganizationIdSchema, {
+    emails: {
+      type: [SimpleSchema.RegEx.Email]
+    },
+    welcomeMessage: {
+      type: String
+    }
+  }]).validator(),
+
+  run({organizationId, emails, welcomeMessage}) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot invite users'
+      );
+    }
+    //todo: check invite user permission here
+
+    let errors = [];
+    emails.forEach(email => {
+      //aggregate service errors for each email
+      try {
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+      } catch (err) {
+        errors.push(err.reason);
+      }
+    });
+
+    if (errors.length > 0) {
+      let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
+      throw new Meteor.Error(500, errorMsg);
+    }
   }
 });

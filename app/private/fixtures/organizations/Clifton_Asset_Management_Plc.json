@@ -1,11 +1,15 @@
 {
-  "_id" : "KwKXz5RefrE5hjWJ2",
-  "name" : "Clifton Asset Management Plc",
-  "serialNumber" : 98,
-  "users" : [
+  "_id": "KwKXz5RefrE5hjWJ2",
+  "name": "Clifton Asset Management Plc",
+  "serialNumber": 98,
+  "users": [
     {
-      "userId" : "SQHmBKJ94gJvpLKLt",
-      "role" : "owner"
+      "userId": "SQHmBKJ94gJvpLKLt",
+      "role": "owner"
+    },
+    {
+      "userId": "TCstWknRczHkvP6j4",
+      "role": "member"
     }
   ],
   "timezone": "Europe/London",

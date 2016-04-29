@@ -54,6 +54,13 @@ Template.UserMenu.viewmodel({
       Meteor.call('UserPresence:setDefaultStatus', status);
     }
   },
+  onInviteClick(event) {
+    event.preventDefault();
+    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+
+    ModalManager.open('UserDirectory_InviteUsers', {organizationId: organizationId});
+  },
   logout(e) {
     e.preventDefault();
 
