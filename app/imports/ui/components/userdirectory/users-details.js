@@ -16,7 +16,7 @@ Template.UsersDetails.viewmodel({
   },
   superpowersTitle() {
     if(this.organization()) {
-      return `${this.user().profile.firstName}'s superpowers for ${this.organization().name}`
+      return `${this.userFullNameOrEmail(this.user())}'s superpowers for ${this.organization().name}`
     }
   }
 });

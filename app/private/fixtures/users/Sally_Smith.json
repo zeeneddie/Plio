@@ -1,5 +1,5 @@
 {
-  "_id": "SQHmBKJ94gJvpLKLt",
+  "_id": "xE2HGee4ihvhqW8er",
   "createdAt": {"$date": 1459508400000},
   "services": {
     "password": {
@@ -11,18 +11,18 @@
   },
   "emails": [
     {
-      "address": "steve.ives@pliohub.com",
+      "address": "sally.smith@pliohub.com",
       "verified": true
     }
   ],
   "profile": {
-    "firstName": "Steve",
-    "lastName": "Ives",
-    "initials": "SI",
-    "description": "CEO",
-    "avatar": "/avatars/avatar-placeholder-4.png",
+    "firstName": "Sally",
+    "lastName": "Smith",
+    "initials": "SS",
+    "description": "HR manager",
+    "avatar": "/avatars/avatar-placeholder-9.png",
     "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
-    "skype": "loremipsum",
+    "skype": "sally.smith",
     "country": "GB",
     "phoneNumbers": [
       {

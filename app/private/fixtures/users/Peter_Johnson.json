@@ -1,5 +1,5 @@
 {
-  "_id": "ABKpuGYiJHKhDwLDk",
+  "_id": "J98rbcx3jTiw2gcSF",
   "createdAt": {"$date": 1459508400000},
   "services": {
     "password": {
@@ -11,18 +11,18 @@
   },
   "emails": [
     {
-      "address": "mike@jssolutionsdev.com",
+      "address": "peter.johnson@pliohub.com",
       "verified": true
     }
   ],
   "profile": {
-    "firstName": "Michael",
-    "lastName": "Rokosh",
-    "initials": "MR",
+    "firstName": "Peter",
+    "lastName": "Johnson",
+    "initials": "PJ",
     "description": "IT manager",
-    "avatar": "/avatars/avatar-placeholder-2.png",
-    "skype": "m.rokosh",
-    "country": "UK",
+    "avatar": "/avatars/avatar-placeholder-7.png",
+    "skype": "peter.johnson",
+    "country": "GB",
     "phoneNumbers": [
       {
         "type": "Work",
@@ -34,6 +34,6 @@
       }
     ]
   },
-  "status": "offline",
-  "statusConnection": "offline"
+  "status": "online",
+  "statusConnection": "online"
 }

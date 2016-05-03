@@ -34,6 +34,23 @@ body {
   @include flex(1);
 }
 
+.table {
+  display: table;
+  .table-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.jumbotron.vertical-center {
+  /* Remove the default bottom margin of .jumbotron */
+  margin-bottom: 0; 
+}
+
+.vertical-center {
+  min-height: 100%;  /* Fallback for vh unit */
+  min-height: 100vh;
+}
 
 .content {
   overflow: hidden;
