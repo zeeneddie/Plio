@@ -121,9 +121,9 @@ Therefore, each error **should contain** both error and reason properties.
 E.g. ```throw new Meteor.Error('not-allowed', 'This operation is not allowed');
 
 This function is a wrapper, so you can pass a callback as an argument.
-``` 
+```
 update.call({ _id, name }, handleMethodResult(() => { 
-   this.setSavingState(false); 
+   this.setSavingState(false);
 }));
 ```
 

@@ -1,10 +1,10 @@
-import { Accounts } from 'meteor/accounts-base'
+import { Accounts } from 'meteor/accounts-base';
+import Utils from '/imports/core/utils';
 
 function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
-
-    user.profile.avatar = getUserAvatar();
+    user.profile.avatar = Utils.getRandomAvatarUrl();
     user.profile.initials = getUserInitials(user.profile);
   }
 
@@ -23,11 +23,6 @@ function getUserInitials(userProfile) {
   }
 
   return initials.toUpperCase();
-}
-
-function getUserAvatar() {
-  const randomAvatar = Math.floor(Math.random() * 16) + 1;
-  return `/avatars/avatar-placeholder-${randomAvatar}.png`;
 }
 
 Accounts.onCreateUser(onCreateUser);

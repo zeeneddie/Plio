@@ -1,12 +1,11 @@
+import { Meteor } from 'meteor/meteor';
 import { Organizations } from './organizations.js';
 import { OrganizationDefaults, UserRoles } from '../constants.js';
 
-
 export default OrganizationService = {
-
   collection: Organizations,
 
-  insert({ name, ownerId }) {
+  insert({name, ownerId}) {
     const lastOrg = this.collection.findOne({
       serialNumber: {
         $type: 16 // 32-bit integer
@@ -34,8 +33,8 @@ export default OrganizationService = {
     });
   },
 
-  update({ _id, name, currency, ncStepTimes, ncReminders, ncGuidelines }) {
-    return this.collection.update({ _id }, {
+  update({_id, name, currency, ncStepTimes, ncReminders, ncGuidelines}) {
+    return this.collection.update({_id}, {
       $set: {
         name, currency,
         ncStepTimes, ncReminders,
@@ -48,36 +47,37 @@ export default OrganizationService = {
 
   },
 
-  setName({ _id, name }) {
-    return this._update(_id, { name });
+  setName({_id, name}) {
+    return this._update(_id, {name});
   },
 
-  setDefaultCurrency({ _id, currency }) {
-    return this._update(_id, { currency });
+  setDefaultCurrency({_id, currency}) {
+    return this._update(_id, {currency});
   },
 
-  setStepTime({ _id, ncType, timeValue, timeUnit }) {
+  setStepTime({_id, ncType, timeValue, timeUnit}) {
     return this._update(_id, {
-      [`ncStepTimes.${ncType}`]: { timeValue, timeUnit }
+      [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
     });
   },
 
-  setReminder({ _id, ncType, reminderType, timeValue, timeUnit }) {
+  setReminder({_id, ncType, reminderType, timeValue, timeUnit}) {
     return this._update(_id, {
-      [`ncReminders.${ncType}.${reminderType}`]: { timeValue, timeUnit }
+      [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
     });
   },
 
-  setGuideline({ _id, ncType, text }) {
+  setGuideline({_id, ncType, text}) {
     return this._update(_id, {
       [`ncGuidelines.${ncType}`]: text
     });
   },
 
   _update(_id, fields) {
-    return this.collection.update({ _id }, {
+    return this.collection.update({_id}, {
       $set: fields
     });
   }
-
 };
+
+

@@ -19,3 +19,25 @@ export const TimePeriodSchema = new SimpleSchema({
     min: 0
   }
 });
+
+export const NewUserDataSchema = new SimpleSchema({
+  firstName: {
+    type: String,
+    min: 1,
+    max: 20
+  },
+  lastName: {
+    type: String,
+    min: 1,
+    max: 20
+  },
+  password: {
+    type: String,
+    min: 6,
+    max: 20
+  }
+});
+
+export const OrganizationIdSchema = new SimpleSchema({
+  organizationId: {type: SimpleSchema.RegEx.Id}
+});

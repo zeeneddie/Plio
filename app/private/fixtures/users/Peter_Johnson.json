@@ -1,0 +1,39 @@
+{
+  "_id": "J98rbcx3jTiw2gcSF",
+  "createdAt": {"$date": 1459508400000},
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$PpFrYXSDKldZEZLULs3lZeEh0riMIkVhBktIAW7Abo1frk/n/TyAO"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "peter.johnson@pliohub.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Peter",
+    "lastName": "Johnson",
+    "initials": "PJ",
+    "description": "IT manager",
+    "avatar": "/avatars/avatar-placeholder-7.png",
+    "skype": "peter.johnson",
+    "country": "GB",
+    "phoneNumbers": [
+      {
+        "type": "Work",
+        "number": "+44 1234 123 456"
+      },
+      {
+        "type": "Mobile",
+        "number": "+44 9870 654 321"
+      }
+    ]
+  },
+  "status": "online",
+  "statusConnection": "online"
+}
