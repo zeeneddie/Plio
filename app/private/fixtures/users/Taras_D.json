@@ -1,0 +1,27 @@
+{
+  "_id": "TCstWknRczHkvP6j4",
+  "createdAt": {"$date": 1459508400000},
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$DEJecFSwv8Tjm9EAdMp.G.oIpR.mZK.dTnyJLyu9KYmg88RYCpNw."
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "taras@jssolutionsdev.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Taras",
+    "lastName": "D",
+    "organizationName": "D. Inc",
+    "avatar": "/avatars/avatar-placeholder-16.png"
+  },
+  "status": "away",
+  "statusConnection": "away",
+  "selectedOrganizationSerialNumber": 98
+}
