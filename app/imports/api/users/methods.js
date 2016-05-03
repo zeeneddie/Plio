@@ -53,8 +53,6 @@ export const updateProfile = new ValidatedMethod({
       fields[`profile.${name}`] = val;
     });
 
-    console.log(fields);
-
     return UserService.update(userId, fields);
   }
 });

@@ -10,35 +10,5 @@ Template.UserEdit.viewmodel({
     return Meteor.users.findOne({
       _id: this.userId()
     });
-  },
-  firstName() {
-    return this.user().profile.firstName;
-  },
-  lastName() {
-    return this.user().profile.lastName;
-  },
-  initials() {
-    return this.user().initials();
-  },
-  email() {
-    return this.user().email();
-  },
-  avatar() {
-    return this.user().avatar();
-  },
-  description() {
-    return this.user().description();
-  },
-  address() {
-    return this.user().address();
-  },
-  country() {
-    return this.user().country();
-  },
-  phones() {
-    return this.user().phones();
-  },
-  skype() {
-    return this.user().skype();
   }
 });

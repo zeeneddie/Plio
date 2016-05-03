@@ -3,11 +3,11 @@ import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
 
 Template.UserEdit_MainDetails.viewmodel({
   mixin: ['editableModalSection'],
-  isChanged(vmField, contextField) {
-    contextField = contextField || vmField;
+  isChanged(vmProperty, contextProperty) {
+    contextProperty = contextProperty || vmProperty;
 
-    const val = this[vmField]();
-    const savedVal = this.templateInstance.data[contextField];
+    const val = this[vmProperty]();
+    const savedVal = this.templateInstance.data[contextProperty];
 
     return val && val !== savedVal;
   },

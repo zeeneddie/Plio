@@ -1,8 +1,13 @@
 Meteor.users.helpers({
   fullName() {
     const { firstName='', lastName='' } = this.profile;
-
     return `${firstName} ${lastName}`;
+  },
+  firstName() {
+    return this.profile.firstName;
+  },
+  lastName() {
+    return this.profile.lastName;
   },
   initials() {
     return this.profile.initials;
@@ -22,7 +27,7 @@ Meteor.users.helpers({
   country() {
     return this.profile.country;
   },
-  phones() {
+  phoneNumbers() {
     return this.profile.phoneNumbers;
   },
   skype() {
