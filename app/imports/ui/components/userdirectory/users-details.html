@@ -21,14 +21,14 @@
                 <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(user)"}}></h4>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" {{b "if: initials"}}>
               <div class="list-group-item">
                 <p class="list-group-item-text">Initials</p>
                 <h4 class="list-group-item-heading" {{b "text: initials" }}>=</h4>
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row" {{b "if: description(user)"}}>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>

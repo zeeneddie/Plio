@@ -7,10 +7,10 @@
   "number": [2],
   "description": "This is the standard for dealing with verification of ID",
   "isApproved": true,
-  "approvedAt": "ISODate('2016-04-21T15:48:28.889Z')",
+  "approvedAt": {"$date": 1459515600000},
   "notes": null,
-  "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
-  "createdAt": "User",
+  "createdAt": {"$date": 1459508400000},
+  "createdBy": "SQHmBKJ94gJvpLKLt",
   "updatedAt": null,
   "updatedBy": null,
   "isDeleted": false

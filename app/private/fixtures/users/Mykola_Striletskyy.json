@@ -1,0 +1,23 @@
+{
+  "_id": "RifbrzLTCGKPGbENM",
+  "createdAt": {"$date": 1459508400000},
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$PpFrYXSDKldZEZLULs3lZeEh0riMIkVhBktIAW7Abo1frk/n/TyAO"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "mykola@jssolutionsdev.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "avatar": "/avatars/avatar-placeholder-11.png"
+  },
+  "status": "offline",
+  "statusConnection": "offline"
+}
