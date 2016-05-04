@@ -5,7 +5,7 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 /**
  * Can be shown using ModalManager
  */
-Template.ModalWindow.viewmodel({
+Template.ModalWindows.viewmodel({
   mixin: 'collapse',
   savingStateTimeout: 500,
   isSaving: false,

@@ -22,7 +22,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-Template.ModalWindows.viewmodel({
+Template.ModalWindow.viewmodel({
   mixin: 'collapse',
   autorun() {
     if (!!this.error()) {

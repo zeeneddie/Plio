@@ -84,25 +84,6 @@ ViewModel.mixin({
       return result;
     }
   },
-  fullName: {
-    userFullNameOrEmail(userOrUserId) {
-      let user = userOrUserId;
-      if (typeof userOrUserId === 'string') {
-        user = Meteor.users.findOne(userOrUserId);
-      }
-
-      const {firstName='', lastName=''} = user.profile;
-      if (firstName && lastName)
-        return `${firstName} ${lastName}`;
-      else
-        return user.emails[0].address;
-    }
-  },
-  user: {
-    hasUser: function() {
-      return !!Meteor.userId() || Meteor.loggingIn();
-    }
-  },
   addForm: {
     addForm(template) {
       Blaze.renderWithData(
@@ -164,6 +145,9 @@ ViewModel.mixin({
     },
     description(user) {
       return user.profile.description;
+    },
+    hasUser() {
+      return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
   organization: {

@@ -9,6 +9,7 @@ Template.ESType.viewmodel({
     return [{ _id: '', name: '' }].concat(StandardsTypes.find({}).fetch()); // add empty option
   },
   update() {
+    if (!this._id) return;
     const { typeId } = this.getData();
     if (!typeId) {
       this.modal().error('Type is required!');

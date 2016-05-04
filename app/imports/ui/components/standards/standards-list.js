@@ -11,11 +11,10 @@ Template.StandardsList.viewmodel({
     return StandardsBookSections.find(query, options);
   },
   openAddTypeModal(e) {
-    ModalManager.open('AddStandardType');
-    // this.modal().open({
-    //   title: 'Add',
-    //   isSimple: true,
-    //   template: 'AddStandardType',
-    // });
+    this.modal().open({
+      title: 'Add',
+      isSimple: true,
+      template: 'AddStandardType'
+    });
   }
 });

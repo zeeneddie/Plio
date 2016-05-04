@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
 Template.ESOwner.viewmodel({
-  mixin: ['search', 'fullName', 'user'],
-  onCreated() {
+  mixin: ['search', 'user'],
+  onRendered() {
     if (this.hasUser()) {
       Meteor.setTimeout(() => this.selectOwner(Meteor.user()), 0);
     }

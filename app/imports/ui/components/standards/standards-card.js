@@ -7,7 +7,7 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'fullName'],
+  mixin: ['modal', 'user'],
   standard() {
     return Standards.findOne({ _id: this.selectedStandardId() });
   },
