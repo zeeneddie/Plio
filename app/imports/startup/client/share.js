@@ -18,5 +18,8 @@ ViewModel.share({
       }
       return searchObject;
     }
-  }
+  },
+  organization: {
+    orgSerialNumber: ''
+  },
 });

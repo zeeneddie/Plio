@@ -12,7 +12,7 @@
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
-          <a class="list-group-item" href="#" {{b "click: parent.activeUser(this._id), class: { active: isActiveUser(this._id) }"}}>
+          <a class="list-group-item" {{b "href: getUserPath(this._id), class: { active: isActiveUser(this._id) }"}}>
             <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
             <div class="list-group-item-content">
               <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
