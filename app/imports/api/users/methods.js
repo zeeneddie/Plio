@@ -1,12 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Roles } from 'meteor/alanning:roles';
 
 import UserService from './user-service.js';
 import { UserProfile } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { checkUserId } from '../checkers.js';
-import { IdSchema } from '../schemas';
+import { IdSchema } from '../schemas.js';
+import { UserRoles } from '../constants.js';
 
 
 export const selectOrganization = new ValidatedMethod({
@@ -89,5 +91,55 @@ export const updateEmail = new ValidatedMethod({
     };
 
     return UserService.update(_id, fields);
+  }
+});
+
+const changeRoleSchema = new SimpleSchema([IdSchema, {
+  organizationId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  role: {
+    type: String,
+    allowedValues: _.values(UserRoles)
+  }
+}]);
+
+const ensureUserCanChangeRoles = (userId, orgId) => {
+  const canChangeRoles = Roles.userIsInRole(
+    userId, UserRoles.EDIT_USER_PERMISSIONS, orgId
+  );
+
+  if (!canChangeRoles) {
+    throw new Meteor.Error(
+      403,
+      'User is not authorized for changing user\'s permissions in this organization'
+    );
+  }
+};
+
+export const assignRole = new ValidatedMethod({
+  name: 'Users.assignRole',
+
+  validate: changeRoleSchema.validator(),
+
+  run({ _id, organizationId, role }) {
+    ensureUserCanChangeRoles(this.userId, organizationId);
+
+    return Roles.addUsersToRoles(_id, role, organizationId);
+  }
+});
+
+export const revokeRole = new ValidatedMethod({
+  name: 'Users.revokeRole',
+
+  validate: changeRoleSchema.validator(),
+
+  run({ _id, organizationId, role }) {
+    ensureUserCanChangeRoles(this.userId, organizationId);
+
+    console.log('revoke');
+
+    return Roles.removeUsersFromRoles(_id, role, organizationId);
   }
 });

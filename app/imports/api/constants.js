@@ -16,9 +16,27 @@ const OrgCurrencies = {
   USD: 'USD'
 };
 
+const UserMembership = {
+  ORG_OWNER: 'owner',
+  ORG_MEMBER: 'member'
+};
+
 const UserRoles = {
-  OWNER: 'owner',
-  MEMBER: 'member'
+  DELETE_USERS: 'delete-users',
+  INVITE_USERS: 'invite-users',
+  EDIT_USER_PERMISSIONS: 'edit-user-permissions',
+  CHANGE_ORG_SETTINGS: 'change-org-settings',
+  VIEW_TEAM_TO_DO_LISTS: 'view-team-to-do-lists',
+  CREATE_AND_EDIT_STANDARDS_DOCUMENTS: 'create-and-edit-standards-documents'
+};
+
+const UserRolesNames = {
+  [UserRoles.DELETE_USERS]: 'Delete users',
+  [UserRoles.INVITE_USERS]: 'Invite users',
+  [UserRoles.EDIT_USER_PERMISSIONS]: 'Edit user permissions',
+  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
+  [UserRoles.VIEW_TEAM_TO_DO_LISTS]: 'View team to do lists',
+  [UserRoles.CREATE_AND_EDIT_STANDARDS_DOCUMENTS]: 'Create & edit standards documents'
 };
 
 const getDefaultGuideline = (ncType) => {
@@ -85,5 +103,7 @@ export {
   OrgCurrencies,
   OrganizationDefaults,
   TimeUnits,
-  UserRoles
+  UserMembership,
+  UserRoles,
+  UserRolesNames
 };
