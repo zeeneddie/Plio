@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
+  share: 'search',
   activeUser: null,
   autorun() {
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
@@ -19,15 +20,27 @@ Template.UserDirectoryPage.viewmodel({
     }
   },
   user() {
-    return Meteor.users.findOne({ _id: this.activeUser() })
+    return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
   organizationUsers() {
     const userIds = getOrganizationUsers();
+    const findQuery = {};
+    
+    findQuery['$and'] = [
+      { _id: { $in: userIds }},
+      { ...this.searchUser() }
+    ];
+      
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});
+      
+    const result = _.pluck(cursor.fetch(), '_id');
+    
+    if (result.length) {
+      this.activeUser(result[0]);
 
-    if (userIds) {
-      this.activeUser(userIds[0]);
-
-      return Meteor.users.find({ _id: { $in: userIds }}, { sort: { 'profile.firstName': 1 }});
+      return cursor;
+    } else {
+      this.activeUser(null);
     }
   }
 });
@@ -40,5 +53,5 @@ function getOrganizationUsers() {
     return _.pluck(users, 'userId');
   }
 
-  return null;
+  return [];
 }
