@@ -84,7 +84,7 @@ class InvitationSender {
     });
 
     let sender = Meteor.user();
-    let notificationSubject = `You were invited to ${this._organization.name} on Plio`;
+    let notificationSubject;
     let basicNotificationData = {
       welcomeMessage: this._welcomeMessage,
       organizationName: this._organization.name,
@@ -92,8 +92,10 @@ class InvitationSender {
     };
 
     if (isExisting) {
+      notificationSubject = `You have been added to the "${this._organization.name}" organization!`;
       this._sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     } else {
+      notificationSubject = `You have been invited to the "${this._organization.name}" organization!`;
       this._sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     }
   }
