@@ -11,7 +11,8 @@ ViewModel.share({
           [
             { 'profile.firstName': r },
             { 'profile.lastName': r },
-            { 'profile.description': r }
+            { 'profile.description': r },
+            { 'emails.0.address': r }
           ]
         ;
       }
