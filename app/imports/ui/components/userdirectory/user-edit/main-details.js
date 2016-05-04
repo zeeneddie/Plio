@@ -14,6 +14,7 @@ Template.UserEdit_MainDetails.viewmodel({
   updateFirstName() {
     if (this.isChanged('firstName')) {
       this.callMethod(updateProfile, {
+        _id: this.userId(),
         firstName: this.firstName()
       });
     }
@@ -21,6 +22,7 @@ Template.UserEdit_MainDetails.viewmodel({
   updateLastName() {
     if (this.isChanged('lastName')) {
       this.callMethod(updateProfile, {
+        _id: this.userId(),
         lastName: this.lastName()
       });
     }
@@ -28,6 +30,7 @@ Template.UserEdit_MainDetails.viewmodel({
   updateInitials() {
     if (this.isChanged('initials')) {
       this.callMethod(updateProfile, {
+        _id: this.userId(),
         initials: this.initials()
       });
     }
@@ -35,6 +38,7 @@ Template.UserEdit_MainDetails.viewmodel({
   updateEmail() {
     if (this.isChanged('email')) {
       this.callMethod(updateEmail, {
+        _id: this.userId(),
         email: this.email()
       });
     }
@@ -42,6 +46,7 @@ Template.UserEdit_MainDetails.viewmodel({
   updateDescription() {
     if (this.isChanged('description')) {
       this.callMethod(updateProfile, {
+        _id: this.userId(),
         description: this.description()
       });
     }

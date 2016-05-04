@@ -6,6 +6,7 @@ import UserService from './user-service.js';
 import { UserProfile } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { checkUserId } from '../checkers.js';
+import { IdSchema } from '../schemas';
 
 
 export const selectOrganization = new ValidatedMethod({
@@ -41,41 +42,52 @@ export const selectOrganization = new ValidatedMethod({
 export const updateProfile = new ValidatedMethod({
   name: 'Users.updateProfile',
 
-  validate: UserProfile.validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    UserProfile
+  ]).validator(),
 
-  run(doc) {
+  run({ _id, ...args}) {
     const userId = this.userId;
     checkUserId(userId, 'Unauthorized user cannot update profile');
 
+    if (userId !== _id) {
+      throw new Meteor.Error(403, 'User cannot update another user');
+    }
+
     const fields = {};
 
-    _.each(doc, (val, name) => {
+    _.each(args, (val, name) => {
       fields[`profile.${name}`] = val;
     });
 
-    return UserService.update(userId, fields);
+    return UserService.update(_id, fields);
   }
 });
 
 export const updateEmail = new ValidatedMethod({
   name: 'Users.updateEmail',
 
-  validate: new SimpleSchema({
+  validate: new SimpleSchema([IdSchema, {
     email: {
       type: String,
       regEx: SimpleSchema.RegEx.Email
     }
-  }).validator(),
+  }]).validator(),
 
-  run({ email }) {
+  run({ _id, email }) {
     const userId = this.userId;
     checkUserId(userId, 'Unauthorized user cannot update email');
+
+    if (userId !== _id) {
+      throw new Meteor.Error(403, 'User cannot update another user\'s email');
+    }
 
     const fields = {
       'emails.0.address': email,
       'emails.0.verified': false
     };
 
-    return UserService.update(userId, fields);
+    return UserService.update(_id, fields);
   }
 });
