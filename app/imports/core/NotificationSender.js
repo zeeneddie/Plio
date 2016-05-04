@@ -72,7 +72,7 @@ export default class NotificationSender {
   }
 
   _getEmailSubject() {
-    return `[Plio] | ${this._options.subject}`;
+    return this._options.subject;
   }
 
   /**
@@ -91,9 +91,10 @@ export default class NotificationSender {
   }
 
   _sendEmailBasic(receiver, text) {
+    console.log('this => ', this);
     let emailOptions = {
       subject: this._getEmailSubject(),
-      from: this._getUserEmail(this._options.senderId) || 'no-reply@pliohub.com',
+      from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
       to: this._getUserEmail(receiver),
       html: text
     };
