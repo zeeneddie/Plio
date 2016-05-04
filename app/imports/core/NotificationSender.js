@@ -91,7 +91,6 @@ export default class NotificationSender {
   }
 
   _sendEmailBasic(receiver, text) {
-    console.log('this => ', this);
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
