@@ -39,6 +39,14 @@ ViewModel.mixin({
 
       return editableModal.isSaving();
     },
+    isChanged(vmProperty, contextProperty) {
+      contextProperty = contextProperty || vmProperty;
+
+      const val = this[vmProperty]();
+      const savedVal = this.templateInstance.data[contextProperty];
+
+      return val && val !== savedVal;
+    },
     callMethod(method, args, cb) {
       return this.editableModal().callMethod(method, args, cb);
     },

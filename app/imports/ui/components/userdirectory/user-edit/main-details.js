@@ -3,37 +3,9 @@ import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
 
 Template.UserEdit_MainDetails.viewmodel({
   mixin: ['editableModalSection'],
-  isChanged(vmProperty, contextProperty) {
-    contextProperty = contextProperty || vmProperty;
-
-    const val = this[vmProperty]();
-    const savedVal = this.templateInstance.data[contextProperty];
-
-    return val && val !== savedVal;
-  },
-  updateFirstName() {
-    if (this.isChanged('firstName')) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        firstName: this.firstName()
-      });
-    }
-  },
-  updateLastName() {
-    if (this.isChanged('lastName')) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        lastName: this.lastName()
-      });
-    }
-  },
-  updateInitials() {
-    if (this.isChanged('initials')) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        initials: this.initials()
-      });
-    }
+  updateProfile(doc) {
+    _.extend(doc, { _id: this.userId() });
+    this.callMethod(updateProfile, doc);
   },
   updateEmail() {
     if (this.isChanged('email')) {
@@ -43,10 +15,30 @@ Template.UserEdit_MainDetails.viewmodel({
       });
     }
   },
+  updateFirstName() {
+    if (this.isChanged('firstName')) {
+      this.updateProfile({
+        firstName: this.firstName()
+      });
+    }
+  },
+  updateLastName() {
+    if (this.isChanged('lastName')) {
+      this.updateProfile({
+        lastName: this.lastName()
+      });
+    }
+  },
+  updateInitials() {
+    if (this.isChanged('initials')) {
+      this.updateProfile({
+        initials: this.initials()
+      });
+    }
+  },
   updateDescription() {
     if (this.isChanged('description')) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
+      this.updateProfile({
         description: this.description()
       });
     }

@@ -1,27 +1,22 @@
 <template name="UserEdit_ContactDetails">
-  <div class="card-block card-block-collapse-toggle collapsed" href="#contact" data-toggle="collapse">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Contact details</h4>
     <i class="ms-Icon ms-Icon--menu disclosure-indicator pull-xs-right"></i>
   </div>
-  <div class="card-block-collapse collapse" id="contact">
+  <div class="card-block-collapse collapse" id="contact" {{b "ref: collapse"}}>
     <div class="card-block">
       {{#FormField label="Address"}}
-        <textarea class="form-control" placeholder="Address" rows="4" {{b "text: address"}}></textarea>
+        <textarea class="form-control" placeholder="Address" rows="4"
+            {{b "value: address, focusout: updateAddress"}}></textarea>
         <button type="button" class="btn btn-link clear-field">
           <i class="ms-Icon ms-Icon--xCircle"></i>
         </button>
       {{/FormField}}
 
       {{#FormField label="Country"}}
-        <select class="c-select">
-          <option>Australia</option>
-          <option>Canada</option>
-          <option>France</option>
-          <option>Germany</option>
-          <option>Italy</option>
-          <option>Japan</option>
-          <option selected="">UK</option>
-          <option>USA</option>
+        <select class="c-select"
+          {{b "change: updateCountry, options: countries, optionsValue: code, optionsText: name, value: country"}}>
         </select>
       {{/FormField}}
 
@@ -43,7 +38,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="form-group row">
         <div class="col-sm-8 col-sm-offset-4 form-group-flex">
           <div class="form-group-flex-flex margin-right">
@@ -68,8 +63,8 @@
       </div>
 
       {{#FormField label="Skype name"}}
-        <input type="email" class="form-control" placeholder="Skype name" 
-            {{b "value: skype"}} />
+        <input type="email" class="form-control" placeholder="Skype name"
+            {{b "value: skype, focusout: updateSkype"}} />
         <button type="button" class="btn btn-link clear-field">
           <i class="ms-Icon ms-Icon--xCircle"></i>
         </button>
