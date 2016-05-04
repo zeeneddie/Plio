@@ -1,0 +1,40 @@
+{
+  "_id": "xE2HGee4ihvhqW8er",
+  "createdAt": {"$date": 1459508400000},
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$W0piRM5oNBPSksAQtjUGP.Xspozor467IDXoIdQzQnPCveoPWJDeq"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "sally.smith@pliohub.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Sally",
+    "lastName": "Smith",
+    "initials": "SS",
+    "description": "HR manager",
+    "avatar": "/avatars/avatar-placeholder-9.png",
+    "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
+    "skype": "sally.smith",
+    "country": "GB",
+    "phoneNumbers": [
+      {
+        "type": "Home",
+        "number": "+44 4321 123 456"
+      },
+      {
+        "type": "Mobile",
+        "number": "+44 0987 654 321"
+      }
+    ]
+  },
+  "status": "offline",
+  "statusConnection": "offline"
+}

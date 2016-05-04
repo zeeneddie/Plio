@@ -6,6 +6,7 @@
   "nestingLevel": 1,
   "description": "This is the standard for dealing with inquiry handling",
   "isApproved": true,
+<<<<<<< HEAD
   "approvedAt": {"$date": 1358205756553},
   "notes": null,
   "createdAt": "ISODate('2016-04-21T15:48:28.889Z')",
@@ -17,3 +18,13 @@
   "issueNumber": 1,
   "status": "issued"
 }
+=======
+  "approvedAt": {"$date": 1459522800000},
+  "notes": null,
+  "createdAt": {"$date": 1459508400000},
+  "createdAt": "SQHmBKJ94gJvpLKLt",
+  "updatedAt": {"$date": 1459515600000},
+  "updatedBy": "SQHmBKJ94gJvpLKLt",
+  "isDeleted": false
+}
+>>>>>>> 16b0eb421ae857a4ea455623ec5fd9aaeda1a7c8
