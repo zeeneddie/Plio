@@ -1,8 +1,13 @@
 <template name="AddStandardType">
-  <div class="list-group list-group-flush">
-    <a href="#" class="list-group-item" {{b "click: openCreateStandardModal"}}>
-      <h4 class="list-group-item-heading">Standard</h4>
-      <p class="list-group-item-text">Lorem ipsum dolor est</p>
-    </a>
-  </div>
+  {{#ModalWindow
+    id="add-standard-modal"
+    title="Add"
+  }}
+    <div class="list-group list-group-flush">
+      <a href="#" class="list-group-item" {{b "click: openCreateStandardModal"}}>
+        <h4 class="list-group-item-heading">Standard</h4>
+        <p class="list-group-item-text">Lorem ipsum dolor est</p>
+      </a>
+    </div>
+  {{/ModalWindow}}
 </template>

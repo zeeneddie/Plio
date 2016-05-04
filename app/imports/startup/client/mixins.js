@@ -5,8 +5,6 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 ViewModel.persist = false;
 
-ViewModel.persist = false;
-
 ViewModel.mixin({
   collapse: {
     collapsed: true,

@@ -1,8 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { Standards } from '/imports/api/standards/standards.js';
-import { update } from '/imports/api/standards/methods.js';
-import { remove } from '/imports/api/standards/methods.js';
+import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
