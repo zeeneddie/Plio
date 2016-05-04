@@ -2,21 +2,21 @@ import { Template } from 'meteor/templating';
 
 Template.UsersDetails.viewmodel({
   mixin: ['user', 'organization'],
-  initials() {
-    return this.user().profile.initials;
+  initials(user) {
+    return user.profile.initials;
   },
-  skype() {
-    return this.user().profile.skype;
+  skype(user) {
+    return user.profile.skype;
   },
-  phoneNumbers() {
-    return this.user().profile.phoneNumbers;
+  phoneNumbers(user) {
+    return user.profile.phoneNumbers;
   },
   phoneType(type) {
     return `${type} phone`;
   },
-  superpowersTitle() {
+  superpowersTitle(user) {
     if(this.organization()) {
-      return `${this.userFullNameOrEmail(this.user())}'s superpowers for ${this.organization().name}`
+      return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
     }
   }
 });

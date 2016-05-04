@@ -1,7 +1,7 @@
 <template name="UsersDetails">
   <div class="content-cards scroll flexbox-column col-sm-8 hidden-sm-down">
     <div class="content-cards-inner flex scroll">
-      {{#if user}}
+      {{#with currentUser}}
       <div class="card">
         <div class="card-block card-heading clearfix">
           <div class="card-heading-buttons pull-xs-right">
@@ -16,23 +16,23 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="list-group-item">
-                <img class="img-circle pull-xs-left" {{b "src: avatar(user)"}}>
+                <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
                 <p class="list-group-item-text">Name</p>
-                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(user)"}}></h4>
+                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
               </div>
             </div>
-            <div class="col-sm-6" {{b "if: initials"}}>
+            <div class="col-sm-6" {{b "if: initials(this)"}}>
               <div class="list-group-item">
                 <p class="list-group-item-text">Initials</p>
-                <h4 class="list-group-item-heading" {{b "text: initials" }}>=</h4>
+                <h4 class="list-group-item-heading" {{b "text: initials(this)" }}>=</h4>
               </div>
             </div>
           </div>
-          <div class="row" {{b "if: description(user)"}}>
+          <div class="row" {{b "if: description(this)"}}>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading" {{b "text: description(user)" }}></h4>
+                <h4 class="list-group-item-heading" {{b "text: description(this)" }}></h4>
               </div>
             </div>
           </div>
@@ -44,14 +44,14 @@
           <div class="list-group ng-scope">
             <div class="list-group-item">
               <p class="list-group-item-text">Email</p>
-              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(user)" }}></a></h4>
+              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(this)" }}></a></h4>
             </div>
-            <div class="list-group-item" {{b "if: address(user)"}}>
+            <div class="list-group-item" {{b "if: address(this)"}}>
                 <p class="list-group-item-text">Address</p>
-                <h4 class="list-group-item-heading" {{b "text: address(user)"}}></h4>
+                <h4 class="list-group-item-heading" {{b "text: address(this)"}}></h4>
             </div>
             <div class="row">
-              {{#each phoneNumbers}}
+              {{#each phoneNumbers this}}
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
@@ -60,14 +60,14 @@
                 </div>
               {{/each}}
             </div>
-            <div class="list-group-item" {{b "if: skype"}}>
+            <div class="list-group-item" {{b "if: skype(this)"}}>
               <p class="list-group-item-text">Skype name</p>
-              <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: skype"}}></a></h4>
+              <h4 class="list-group-item-heading"><a href="skype:{{skype this}}?call" {{b "text: skype(this)"}}></a></h4>
             </div>
           </div>
         </div>
         <div class="card-block card-subheading">
-          <h4 class="card-title" {{b "text: superpowersTitle()"}}></h4>
+          <h4 class="card-title" {{b "text: superpowersTitle(this)"}}></h4>
         </div>
         <div class="ng-scope">
           <div class="list-group ng-scope">
@@ -98,7 +98,7 @@
           </div>
         </div>
       </div>
-      {{/if}}
+      {{/with}}
     </div>
   </div>
 </template>
