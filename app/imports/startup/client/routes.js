@@ -66,7 +66,6 @@ FlowRouter.route( '/verify-email/:token', {
         toastr.success('Email verified! Thanks!', 'Success');
         FlowRouter.go('hello');
       }
-      console.log(err, res)
     }));
   }
 });
