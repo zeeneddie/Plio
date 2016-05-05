@@ -1,14 +1,12 @@
 <template name="UserDirectory_InviteUsers">
-  {{#ModalWindow id="invite-modal" title="Invite users" submitCaption="Invite"}}
-    <div class="card-block">
-      {{#each usersEntries}}
-        {{> UserDirectory_InviteUsers_UserEntry}}
-      {{/each}}
-      <hr>
-      <div class="form-group">
-        <label class="control-label"><strong>Add a welcome message</strong></label>
-        <textarea class="form-control" rows="6" {{b "text: welcomeMessage"}}></textarea>
-      </div>
+  <div class="card-block">
+    {{#each usersEntries}}
+      {{> UserDirectory_InviteUsers_UserEntry}}
+    {{/each}}
+    <hr>
+    <div class="form-group">
+      <label class="control-label"><strong>Add a welcome message</strong></label>
+      <textarea class="form-control" rows="6" {{b "text: welcomeMessage"}}></textarea>
     </div>
-  {{/ModalWindow}}
+  </div>
 </template>
