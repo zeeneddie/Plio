@@ -10,7 +10,8 @@ import { IdSchema } from '../schemas.js';
 const optionsSchema = new SimpleSchema({
   options: {
     type: Object,
-    optional: true
+    optional: true,
+    blackbox: true
   }
 });
 

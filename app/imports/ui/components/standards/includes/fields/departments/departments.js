@@ -8,7 +8,11 @@ Template.ESDepartments.viewmodel({
   departments() {
     let query = this.searchObject('department', 'name');
     const options = { sort: { name: 1 } };
-    return Departments.find(query, options);
+    const currentDepartmentsIds = this.currentDepartments().fetch().map(doc => doc._id);
+    const excludedDocs = { _id: { $nin: currentDepartmentsIds } };
+    query = _.extend(query, excludedDocs);
+
+    return Departments.find(query, excludedDocs);
   },
   standardDepartments() {
     return this.standard() && this.standard().departments;
@@ -21,35 +25,11 @@ Template.ESDepartments.viewmodel({
     const { _id } = doc;
     const query = { _id: this.standard()._id };
     const options = {};
+
     options[option] = {
       departments: _id
     };
+
     this.parent().update(query, options);
   }
 });
-
-// Template.ESDepartments.viewmodel({
-//   mixin: 'search',
-//   department: '',
-//   SelectedDepartments: new Mongo.Collection(null),
-//   departments() {
-//     let query = this.searchObject('department', 'name');
-//     const options = { sort: { name: 1 } };
-//
-//     const selectedDepartments = this.selectedDepartments().fetch().map(doc => doc._id);
-//     _.extend(query, { _id: { $nin: selectedDepartments } });
-//
-//     return Departments.find(query, options);
-//   },
-//   selectedDepartments() {
-//     return this.SelectedDepartments().find({});
-//   },
-//   selectDepartment(doc) {
-//     const { _id, name } = doc;
-//     this.SelectedDepartments().insert({ _id, name });
-//   },
-//   removeDepartment(doc) {
-//     const { _id } = doc;
-//     this.SelectedDepartments().remove({ _id });
-//   }
-// });
