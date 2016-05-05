@@ -12,7 +12,7 @@ Template.EditStandard.viewmodel({
   },
   update({ ...args }, options = {}, cb) {
     const _id = this._id && this._id();
-    this.modal().callMethod(update, _.extend(args, { _id }), options, cb);
+    this.modal().callMethod(update, _.extend(args, { _id, options }), cb);
   },
   remove() {
     const _id = this.standard()._id;

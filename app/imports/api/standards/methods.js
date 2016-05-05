@@ -7,6 +7,12 @@ import { Standards } from './standards.js';
 import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
 
+const optionsSchema = new SimpleSchema({
+  options: {
+    type: Object
+  }
+});
+
 export const insert = new ValidatedMethod({
   name: 'Standards.insert',
 
@@ -26,16 +32,16 @@ export const update = new ValidatedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema
+    IdSchema, StandardsUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({_id, ...args}, options = {}) {
+  run({_id, options, ...args}) {
     checkUserId(
       this.userId,
       'Unauthorized user cannot update a standard'
     );
 
-    return StandardsService.update({ _id, ...args }, options);
+    return StandardsService.update({ _id, options, ...args });
   }
 });
 
