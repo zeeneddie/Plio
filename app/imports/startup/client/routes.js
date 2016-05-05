@@ -53,6 +53,7 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
+  triggersEnter: [checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserAccountWaitingPage');
   }
@@ -60,13 +61,13 @@ FlowRouter.route('/user-waiting', {
 
 FlowRouter.route( '/verify-email/:token', {
   name: 'verifyEmail',
-  triggersEnter: [checkEmailVerified],
   action( params ) {
     Accounts.verifyEmail( params.token, handleMethodResult((err) => {
       if (!err) {
         toastr.success('Email verified! Thanks!', 'Success');
-        FlowRouter.go('hello');
       }
+      
+      FlowRouter.go('hello');
     }));
   }
 });
@@ -132,9 +133,13 @@ function checkLoggedIn(context, redirect) {
 function checkEmailVerified(context, redirect) {
   const user = Meteor.user();
   const email = user.emails[0];
+  
   if (!email.verified) {
     redirect('userWaiting');
   } else {
-    redirect('hello');
+    const { route } = context;
+    if (route.name === 'userWaiting') {
+      redirect('hello');
+    }
   }
 }
