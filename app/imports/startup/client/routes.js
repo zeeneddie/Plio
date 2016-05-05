@@ -79,6 +79,16 @@ FlowRouter.route('/:orgSerialNumber/users', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/users/:userId', {
+  name: 'userDirectoryUserPage',
+  triggersEnter: [checkLoggedIn],
+  action(params) {
+    BlazeLayout.render('UserDirectoryLayout', {
+      content: 'UserDirectoryPage'
+    });
+  }
+});
+
 function redirectHandler() {
   const orgSerialNumber = FlowRouter.getQueryParam('org');
   if (orgSerialNumber) {
