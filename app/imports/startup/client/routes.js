@@ -5,6 +5,9 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
+import { handleMethodResult } from '../../api/helpers.js';
+
+
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
@@ -48,6 +51,26 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/user-waiting', {
+  name: 'userWaiting',
+  action(params) {
+    BlazeLayout.render('UserAccountWaitingPage');
+  }
+});
+
+FlowRouter.route( '/verify-email/:token', {
+  name: 'verifyEmail',
+  action( params ) {
+    Accounts.verifyEmail( params.token, handleMethodResult((err, res) => {
+      if (!err) {
+        toastr.success('Email verified! Thanks!', 'Success');
+        FlowRouter.go('hello');
+      }
+      console.log(err, res)
+    }));
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   action(params) {
@@ -61,7 +84,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
@@ -71,7 +94,7 @@ FlowRouter.route('/:orgSerialNumber', {
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -81,7 +104,7 @@ FlowRouter.route('/:orgSerialNumber/users', {
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -103,5 +126,13 @@ function checkLoggedIn(context, redirect) {
     if (!Meteor.user()) {
       redirect('signIn', {}, {org: context.params.orgSerialNumber});
     }
+  }
+}
+
+function checkEmailVerified(context, redirect) {
+  const user = Meteor.user();
+  const email = user.emails[0];
+  if (!email.verified) {
+    redirect('userWaiting', {});
   }
 }
