@@ -81,5 +81,34 @@ ViewModel.mixin({
       const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
     }
+  },
+  modal: {
+    modal: {
+      instance() {
+        return ViewModel.findOne('ModalWindow');
+      },
+      open(data) {
+        Blaze.renderWithData(Template.ModalWindow, data, document.body);
+      },
+      close() {
+        const vm = this.instance();
+        return !!vm && vm.modal.modal('hide');
+      },
+      isSaving(val) {
+        const instance = this.instance();
+
+        if (val !== undefined) {
+          instance.isSaving(val);
+        }
+
+        return instance.isSaving();
+      },
+      callMethod(method, args, cb) {
+        return this.instance().callMethod(method, args, cb);
+      },
+      handleMethodResult(cb) {
+        return this.instance().handleMethodResult(cb);
+      }
+    }
   }
 });

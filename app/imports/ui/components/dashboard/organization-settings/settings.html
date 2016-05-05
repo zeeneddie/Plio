@@ -1,11 +1,4 @@
 <template name="OrganizationSettings">
-  {{#EditableModal
-      id="org-settings-modal"
-      title="Org settings"
-      guideHtml=guideHtml
-      moreInfoLink="#"
-  }}
-
     {{> OrganizationSettings_MainSettings
         name=name
         currency=currency
@@ -34,6 +27,4 @@
     {{> OrganizationSettings_NcGuidelines
         guidelines=guidelines
         organizationId=organizationId}}
-
-  {{/EditableModal}}
 </template>

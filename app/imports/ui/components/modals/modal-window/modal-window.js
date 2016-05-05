@@ -1,12 +1,14 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
 
 import { handleMethodResult } from '/imports/api/helpers.js';
 
-/**
- * Can be shown using ModalManager
- */
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  onRendered(template) {
+    this.modal.modal('show');
+    this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
+  },
   savingStateTimeout: 500,
   isSaving: false,
   error: '',
@@ -44,7 +46,7 @@ Template.ModalWindow.viewmodel({
           console.log('Modal submit error:\n', err);
           this.setError(err.reason || 'Internal server error');
         } else {
-          ModalManager.getInstanceByElement(this.modalHeading).close();
+          this.modal.modal('hide');
         }
       }, this.savingStateTimeout());
     };

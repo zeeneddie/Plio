@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
+  mixin: 'modal',
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },
@@ -16,7 +17,9 @@ Template.OrganizationsMenu.viewmodel({
     return Organizations.find({ 'users.userId': Meteor.userId() });
   },
   openOrgSettings(e) {
-    e.preventDefault();
-    ModalManager.open('OrganizationSettings');
+    this.modal().open({
+      title: 'Org Settings',
+      template: 'OrganizationSettings'
+    });
   }
 });
