@@ -9,7 +9,7 @@
               {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <i class="fa fa-question-circle"></i>
             </button>
-            <button type="button" class="btn btn-primary submit-modal-button" {{b "if: isVariation('save'), text: submitCaption"}}>
+            <button type="button" class="btn btn-primary submit-modal-button" {{b "if: isVariation('save'), click: child.save, text: submitCaption"}}>
             </button>
           </div>
 
