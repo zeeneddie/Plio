@@ -133,8 +133,8 @@ function checkEmailVerified(context, redirect) {
   const user = Meteor.user();
   const email = user.emails[0];
   if (!email.verified) {
-    redirect('userWaiting', {});
+    redirect('userWaiting');
   } else {
-    FlowRouter.go('hello');
+    redirect('hello');
   }
 }
