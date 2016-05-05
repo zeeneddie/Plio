@@ -1,18 +1,25 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
 
 import { handleMethodResult } from '/imports/api/helpers.js';
 
-/**
- * Can be shown using ModalManager
- */
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  onRendered(template) {
+    this.modal.modal('show');
+    this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
+  },
+  variation: '',
   savingStateTimeout: 500,
   isSaving: false,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
   guideHtml: 'No help message yet',
+
+  isVariation(variation) {
+    return this.variation() === variation;
+  },
 
   callMethod(method, args, cb) {
     if (_.isFunction(args)) {
@@ -43,8 +50,6 @@ Template.ModalWindow.viewmodel({
         if (err) {
           console.log('Modal submit error:\n', err);
           this.setError(err.reason || 'Internal server error');
-        } else {
-          ModalManager.getInstanceByElement(this.modalHeading).close();
         }
       }, this.savingStateTimeout());
     };
