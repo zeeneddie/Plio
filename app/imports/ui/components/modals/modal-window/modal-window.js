@@ -9,12 +9,17 @@ Template.ModalWindow.viewmodel({
     this.modal.modal('show');
     this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
   },
+  variation: '',
   savingStateTimeout: 500,
   isSaving: false,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
   guideHtml: 'No help message yet',
+
+  isVariation(variation) {
+    return this.variation() === variation;
+  },
 
   callMethod(method, args, cb) {
     if (_.isFunction(args)) {
@@ -45,8 +50,6 @@ Template.ModalWindow.viewmodel({
         if (err) {
           console.log('Modal submit error:\n', err);
           this.setError(err.reason || 'Internal server error');
-        } else {
-          this.modal.modal('hide');
         }
       }, this.savingStateTimeout());
     };

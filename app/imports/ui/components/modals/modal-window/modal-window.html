@@ -3,23 +3,25 @@
     <div class="modal-dialog">
       <div class="card">
         <div class="card-block card-heading modal-window-heading">
-          <div class="card-heading-buttons pull-xs-left">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-              Cancel
-            </button>
-          </div>
-
-          <h4 class="card-title" {{b "text: title"}}></h4>
-
-          <div class="card-heading-buttons pull-xs-right">
+          <div class="card-heading-buttons"
+            {{b "unless: isVariation('simple'), class: { pull-xs-left: !isVariation('save'), pull-xs-right: isVariation('save') }"}}>
             <button type="button" class="btn btn-link btn-icon guidance-panel-open"
               {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <i class="fa fa-question-circle"></i>
             </button>
             <button type="button" class="btn btn-primary submit-modal-button"
-              {{b "click: child.onSubmitModal, class: { disabled: isSaving }"}} >
+              {{b "if: isVariation('save'), click: child.save, class: { disabled: isSaving }"}} >
               <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom" {{b "if: isSaving"}}></i>
               <span {{b "text: submitCaption"}}></span>
+            </button>
+          </div>
+
+          <h4 class="card-title" {{b "text: title"}}></h4>
+
+          <div class="card-heading-buttons"
+            {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              Cancel
             </button>
           </div>
         </div>
