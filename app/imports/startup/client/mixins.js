@@ -147,7 +147,7 @@ ViewModel.mixin({
   },
   organization: {
     organization() {
-      const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
+      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
     }
   }
