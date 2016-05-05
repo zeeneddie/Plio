@@ -8,6 +8,7 @@ Template.ESIssueNumber.viewmodel({
     const { issueNumber } = this.getData();
     if (!issueNumber) {
       this.modal().error('Issue number is required!');
+      return;
     }
     this.parent().update({ issueNumber });
   },

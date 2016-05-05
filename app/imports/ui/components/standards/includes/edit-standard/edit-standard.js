@@ -10,9 +10,9 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
-  update({ ...args }, cb) {
+  update({ ...args }, options = {}, cb) {
     const _id = this._id && this._id();
-    this.modal().callMethod(update, _.extend(args, { _id }), cb);
+    this.modal().callMethod(update, _.extend(args, { _id }), options, cb);
   },
   remove() {
     const _id = this.standard()._id;

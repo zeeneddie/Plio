@@ -29,13 +29,13 @@ export const update = new ValidatedMethod({
     IdSchema, StandardsUpdateSchema
   ]).validator(),
 
-  run({_id, ...args}) {
+  run({_id, ...args}, options = {}) {
     checkUserId(
       this.userId,
       'Unauthorized user cannot update a standard'
     );
 
-    return StandardsService.update({ _id, ...args });
+    return StandardsService.update({ _id, ...args }, options);
   }
 });
 

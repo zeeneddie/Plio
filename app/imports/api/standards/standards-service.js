@@ -7,11 +7,12 @@ export default {
     return this.collection.insert(args);
   },
 
-  update({ _id, ...args }) {
+  update({ _id, ...args }, options = {}) {
     const query = { _id }
-    const options = {};
-    options['$set'] = args;
-    this.collection.update(query, options);
+    if (!_.keys(options).length > 0) {
+      options['$set'] = args;
+    }
+    return this.collection.update(query, options);
   },
 
   remove({ _id }) {

@@ -18,6 +18,7 @@ Template.ESTitle.viewmodel({
 
     if (!title) {
       this.modal().error('Title is required!');
+      return;
     }
 
     this.parent().update({ title, nestingLevel });

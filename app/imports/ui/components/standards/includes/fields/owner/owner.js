@@ -29,6 +29,7 @@ Template.ESOwner.viewmodel({
     const { owner } = this.getData();
     if (!owner) {
       this.modal().error('Owner is required!');
+      return;
     }
 
     this.parent().update({ owner });

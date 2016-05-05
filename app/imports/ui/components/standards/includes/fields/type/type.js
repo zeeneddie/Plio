@@ -6,7 +6,8 @@ Template.ESType.viewmodel({
   mixin: 'modal',
   typeId: '',
   types() {
-    return [{ _id: '', name: '' }].concat(StandardsTypes.find({}).fetch()); // add empty option
+    const types = StandardsTypes.find({}).fetch();
+    return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
   },
   update() {
     if (!this._id) return;
