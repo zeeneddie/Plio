@@ -1,10 +1,12 @@
 <template name="ESStatus">
   {{#FormField label="Status"}}
     <div class="btn-group btn-group-nomargin" data-toggle="buttons">
-      <label class="btn btn-secondary" {{b "click: status('issued'), class: { active: status === 'issued' }"}}>
+      <label class="btn btn-secondary"
+        {{b "click: changeStatus('issued'), class: { active: status === 'issued' }"}}>
         <input type="radio" value="issued" name="options" autocomplete="off"> Issued
       </label>
-      <label class="btn btn-secondary" {{b "click: status('draft'), class: { active: status === 'draft' }"}}>
+      <label class="btn btn-secondary"
+        {{b "click: changeStatus('draft'), class: { active: status === 'draft' }"}}>
         <input type="radio" value="draft" name="options" autocomplete="off"> Draft
       </label>
     </div>
