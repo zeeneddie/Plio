@@ -39,14 +39,6 @@ ViewModel.mixin({
 
       return editableModal.isSaving();
     },
-    isChanged(vmProperty, contextProperty) {
-      contextProperty = contextProperty || vmProperty;
-
-      const val = this[vmProperty]();
-      const savedVal = this.templateInstance.data[contextProperty];
-
-      return val && val !== savedVal;
-    },
     callMethod(method, args, cb) {
       return this.editableModal().callMethod(method, args, cb);
     },
@@ -89,6 +81,17 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
+    }
+  },
+  userEditSection: {
+    isPropChanged(propName) {
+      const val = this.getData()[propName];
+      const savedVal = this.templateInstance.data[propName];
+
+      return val && val !== savedVal;
+    },
+    isEditable() {
+      return Meteor.userId() === this.userId();
     }
   }
 });

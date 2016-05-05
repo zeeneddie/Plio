@@ -2,14 +2,14 @@
   <div class="card-block">
     {{#FormField label="Photo"}}
       <img class="img-circle" {{b "attr: {src: avatar}"}}>
-      <span class="btn btn-secondary btn-file">
-        Change <input type="file">
+      <span class="btn btn-secondary btn-file" {{b "enable: isEditable"}}>
+        Change <input type="file" {{b "enable: isEditable"}}>
       </span>
     {{/FormField}}
 
     {{#FormField label="First name"}}
       <input type="text" class="form-control" placeholder="First name"
-          {{b "value: firstName, focusout: updateFirstName"}} />
+          {{b "value: firstName, focusout: updateFirstName, enable: isEditable"}} />
       <button type="button" class="btn btn-link clear-field">
         <i class="ms-Icon ms-Icon--xCircle"></i>
       </button>
@@ -17,15 +17,15 @@
 
     {{#FormField label="Last name"}}
       <input type="text" class="form-control" placeholder="Last name"
-          {{b "value: lastName, focusout: updateLastName"}} />
+          {{b "value: lastName, focusout: updateLastName, enable: isEditable"}} />
       <button type="button" class="btn btn-link clear-field">
         <i class="ms-Icon ms-Icon--xCircle"></i>
       </button>
     {{/FormField}}
-    
+
     {{#FormField label="Initials"}}
       <input type="text" class="form-control" placeholder="Initials"
-          {{b "value: initials, focusout: updateInitials"}} />
+          {{b "value: initials, focusout: updateInitials, enable: isEditable"}} />
       <button type="button" class="btn btn-link clear-field">
         <i class="ms-Icon ms-Icon--xCircle"></i>
       </button>
@@ -33,7 +33,7 @@
 
     {{#FormField label="Email"}}
       <input type="email" class="form-control" placeholder="Email"
-          {{b "value: email, focusout: updateEmail"}} />
+          {{b "value: email, focusout: updateEmail, enable: isEditable"}} />
       <button type="button" class="btn btn-link clear-field">
         <i class="ms-Icon ms-Icon--xCircle"></i>
       </button>
@@ -41,14 +41,14 @@
 
     {{#FormField label="Description"}}
       <input type="text" class="form-control" placeholder="Description"
-          {{b "value: description, focusout: updateDescription"}} />
+          {{b "value: description, focusout: updateDescription, enable: isEditable"}} />
       <button type="button" class="btn btn-link clear-field">
         <i class="ms-Icon ms-Icon--xCircle"></i>
       </button>
     {{/FormField}}
 
     {{#FormField label="Password"}}
-      <button type="button" class="btn btn-primary">
+      <button type="button" class="btn btn-primary" {{b "enable: isEditable"}}>
         Change password
       </button>
     {{/FormField}}

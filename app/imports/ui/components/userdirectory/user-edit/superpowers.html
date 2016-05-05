@@ -13,7 +13,7 @@
           <div class="col-xs-12">
             <button type="button" class="btn btn-checkbox btn-secondary"
                 data-toggle="button" autocomplete="off"
-                {{b "attr: {id: this, aria-pressed: userHasRole(this)}, class: {active: userHasRole(this)}, click: updateRole(this)"}}>
+                {{b "attr: {id: this, aria-pressed: userHasRole(this)}, enable: isEditable, class: {active: userHasRole(this)}, click: updateRole(this)"}}>
               <i class="ms-Icon ms-Icon--check"></i>
             </button>
             <label class="btn-checkbox-label" {{b "text: roleName(this), attr: {for: this}"}}>

@@ -5,15 +5,19 @@ import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 
 
 Template.UserEdit_Superpowers.viewmodel({
-  mixin: ['editableModalSection', 'collapse', 'organization'],
-  title() {
-    return 'Mike\'s superpowers for Clifton Asset Management Plc';
-  },
+  mixin: ['editableModalSection', 'collapse'],
   roles() {
     return _.values(UserRoles);
   },
   userHasRole(role) {
-    return Roles.userIsInRole(this.userId(), role, this.organization()._id);
+    return Roles.userIsInRole(this.userId(), role, this.organizationId());
+  },
+  isEditable() {
+    return Roles.userIsInRole(
+      Meteor.userId(),
+      UserRoles.EDIT_USER_ROLES,
+      this.organizationId()
+    );
   },
   roleName(role) {
     return UserRolesNames[role];
@@ -21,7 +25,7 @@ Template.UserEdit_Superpowers.viewmodel({
   updateRole(role) {
     const doc = {
       _id: this.userId(),
-      organizationId: this.organization()._id,
+      organizationId: this.organizationId(),
       role
     };
 

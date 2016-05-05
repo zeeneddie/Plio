@@ -22,7 +22,7 @@ Template.UsersDetails.viewmodel({
   openEditUserModal(e) {
     e.preventDefault();
     ModalManager.open('UserEdit', {
-      userId: this.user()._id
+      userId: this.currentUser()._id
     });
   }
 });

@@ -4,31 +4,23 @@ import { updateProfile } from '/imports/api/users/methods.js';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
-  mixin: ['editableModalSection', 'collapse'],
-  updateProfile(doc) {
-    _.extend(doc, { _id: this.userId() });
-    this.callMethod(updateProfile, doc);
+  mixin: ['editableModalSection', 'userEditSection', 'collapse'],
+  updateProfile(prop) {
+    if (this.isPropChanged(prop)) {
+      this.callMethod(updateProfile, {
+        _id: this.userId(),
+        [prop]: this.getData()[prop]
+      });
+    }
   },
   updateAddress() {
-    if (this.isChanged('address')) {
-      this.updateProfile({
-        address: this.address()
-      });
-    }
+    this.updateProfile('address');
   },
   updateSkype() {
-    if (this.isChanged('skype')) {
-      this.updateProfile({
-        skype: this.skype()
-      });
-    }
+    this.updateProfile('skype');
   },
   updateCountry() {
-    if (this.isChanged('country')) {
-      this.updateProfile({
-        country: this.country()
-      });
-    }
+    this.updateProfile('country');
   },
   countries() {
     return _.map(CountryCodes.getList(), (val, key) => {
@@ -37,5 +29,12 @@ Template.UserEdit_ContactDetails.viewmodel({
         name: val
       };
     });
+  },
+  getData() {
+    return {
+      address: this.address(),
+      skype: this.skype(),
+      country: this.country()
+    };
   }
 });

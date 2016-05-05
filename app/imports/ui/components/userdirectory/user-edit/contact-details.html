@@ -8,7 +8,7 @@
     <div class="card-block">
       {{#FormField label="Address"}}
         <textarea class="form-control" placeholder="Address" rows="4"
-            {{b "value: address, focusout: updateAddress"}}></textarea>
+            {{b "value: address, focusout: updateAddress, enable: isEditable"}}></textarea>
         <button type="button" class="btn btn-link clear-field">
           <i class="ms-Icon ms-Icon--xCircle"></i>
         </button>
@@ -16,7 +16,7 @@
 
       {{#FormField label="Country"}}
         <select class="c-select"
-          {{b "change: updateCountry, options: countries, optionsValue: code, optionsText: name, value: country"}}>
+          {{b "change: updateCountry, options: countries, optionsValue: code, optionsText: name, value: country, defaultText: 'Select a country', enable: isEditable"}}>
         </select>
       {{/FormField}}
 
@@ -64,7 +64,7 @@
 
       {{#FormField label="Skype name"}}
         <input type="email" class="form-control" placeholder="Skype name"
-            {{b "value: skype, focusout: updateSkype"}} />
+            {{b "value: skype, focusout: updateSkype, enable: isEditable"}} />
         <button type="button" class="btn btn-link clear-field">
           <i class="ms-Icon ms-Icon--xCircle"></i>
         </button>

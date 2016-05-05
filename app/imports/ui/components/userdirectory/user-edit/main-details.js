@@ -2,45 +2,42 @@ import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
 
 
 Template.UserEdit_MainDetails.viewmodel({
-  mixin: ['editableModalSection'],
-  updateProfile(doc) {
-    _.extend(doc, { _id: this.userId() });
-    this.callMethod(updateProfile, doc);
+  mixin: ['editableModalSection', 'userEditSection'],
+  updateProfile(prop) {
+    if (this.isPropChanged(prop)) {
+      this.callMethod(updateProfile, {
+        _id: this.userId(),
+        [prop]: this.getData()[prop]
+      });
+    }
   },
   updateEmail() {
-    if (this.isChanged('email')) {
+    if (this.isPropChanged('email')) {
       this.callMethod(updateEmail, {
         _id: this.userId(),
-        email: this.email()
+        email: this.getData().email
       });
     }
   },
   updateFirstName() {
-    if (this.isChanged('firstName')) {
-      this.updateProfile({
-        firstName: this.firstName()
-      });
-    }
+    this.updateProfile('firstName');
   },
   updateLastName() {
-    if (this.isChanged('lastName')) {
-      this.updateProfile({
-        lastName: this.lastName()
-      });
-    }
+    this.updateProfile('lastName');
   },
   updateInitials() {
-    if (this.isChanged('initials')) {
-      this.updateProfile({
-        initials: this.initials()
-      });
-    }
+    this.updateProfile('initials');
   },
   updateDescription() {
-    if (this.isChanged('description')) {
-      this.updateProfile({
-        description: this.description()
-      });
-    }
+    this.updateProfile('description');
+  },
+  getData() {
+    return {
+      email: this.email(),
+      firstName: this.firstName(),
+      lastName: this.lastName(),
+      initials: this.initials().toUpperCase(),
+      description: this.description()
+    };
   }
 });
