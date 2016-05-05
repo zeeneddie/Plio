@@ -63,9 +63,14 @@
 
           </div>
 
-          <div class="list-group-item">
+          <div class="list-group-item" {{b "if: departments.count > 0"}}>
             <p class="list-group-item-text">Department(s)</p>
-            <h4 class="list-group-item-heading">Marketing, Sales</h4>
+            <h4 class="list-group-item-heading">
+              {{#each departments}}
+                <span {{b "text: this.name"}}></span>
+                <span {{b "if: departments.count > 1"}}>,</span>
+              {{/each}}
+            </h4>
           </div>
 
           <div class="list-group-item">
@@ -78,7 +83,7 @@
             <h4 class="list-group-item-heading"><a href="#"><i class="fa fa-file-word-o margin-right"></i> source document filename</a></h4>
           </div>
         </div>
-        
+
         {{> CardChangelog}}
       </div>
     </div>

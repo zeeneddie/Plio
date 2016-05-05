@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { Departments } from '/imports/api/departments/departments.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
@@ -22,6 +23,11 @@ Template.StandardsCard.viewmodel({
   owner() {
     const _id = this.owner();
     return Meteor.users.findOne({ _id });
+  },
+  departments() {
+    const departmentsIds = !!this.standard() && this.standard().departments || [];
+    const query = { _id: { $in: departmentsIds } };
+    return Departments.find(query);
   },
   openEditStandardModal() {
     this.modal().open({
