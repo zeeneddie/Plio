@@ -1,16 +1,22 @@
 <template name="DashboardLayout">
   {{> DashboardHeader}}
-
   <div class="content scroll">
     <div class="container">
       <div class="row">
         <div class="content-cards col-sm-12">
-          {{> Template.dynamic template=content}}
-          {{> DashboardFooter}}
+          {{#if isReady}}
+            {{#with organization}}
+              {{> Template.dynamic template=content}}
+              {{> DashboardFooter}}
+            {{else}}
+              {{> NotFoundPage}}
+            {{/with}}
+          {{else}}
+            {{> PreloaderPage}}
+          {{/if}}
         </div>
       </div>
     </div>
   </div>
-
   {{> ModalManager}}
 </template>
