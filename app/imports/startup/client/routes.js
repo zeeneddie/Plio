@@ -60,8 +60,9 @@ FlowRouter.route('/user-waiting', {
 
 FlowRouter.route( '/verify-email/:token', {
   name: 'verifyEmail',
+  triggersEnter: [checkEmailVerified],
   action( params ) {
-    Accounts.verifyEmail( params.token, handleMethodResult((err, res) => {
+    Accounts.verifyEmail( params.token, handleMethodResult((err) => {
       if (!err) {
         toastr.success('Email verified! Thanks!', 'Success');
         FlowRouter.go('hello');
@@ -133,5 +134,7 @@ function checkEmailVerified(context, redirect) {
   const email = user.emails[0];
   if (!email.verified) {
     redirect('userWaiting', {});
+  } else {
+    FlowRouter.go('hello');
   }
 }
