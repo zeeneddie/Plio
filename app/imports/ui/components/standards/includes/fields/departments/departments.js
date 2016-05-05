@@ -11,7 +11,7 @@ Template.ESDepartments.viewmodel({
     return Departments.find(query, options);
   },
   standardDepartments() {
-    return this.standard().departments;
+    return this.standard() && this.standard().departments;
   },
   currentDepartments() {
     const departments = this.standardDepartments() || [];

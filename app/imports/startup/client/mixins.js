@@ -30,32 +30,27 @@ ViewModel.mixin({
       open(data) {
         Blaze.renderWithData(Template.ModalWindow, data, document.body);
       },
-      destroy() {
+      close() {
         const vm = this.instance();
         return !!vm && vm.modal.modal('hide');
       },
-      error(err) {
-        const vm = this.instance();
-        !!vm && vm.error(err);
-        !!vm && vm.toggleCollapse();
+      isSaving(val) {
+        const instance = this.instance();
+
+        if (val !== undefined) {
+          instance.isSaving(val);
+        }
+
+        return instance.isSaving();
       },
-      handleMethodResult(onSuccess) {
-        return (err, res) => {
-          if (err) {
-            this.error(err);
-          } else {
-            if (_.isFunction(onSuccess)) {
-              onSuccess(res);
-            }
-          }
-        };
+      setError(err) {
+        this.instance().setError(err);
       },
       callMethod(method, args, cb) {
-        if (_.isFunction(args)) {
-          cb = args;
-          args = {};
-        }
-        method.call(args, this.handleMethodResult(cb));
+        return this.instance().callMethod(method, args, cb);
+      },
+      handleMethodResult(cb) {
+        return this.instance().handleMethodResult(cb);
       }
     }
   },

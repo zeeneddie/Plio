@@ -11,7 +11,7 @@ Template.ESStatus.viewmodel({
     if (!this._id) return;
     const { status } = this.getData();
     if (!status) {
-      this.modal().error('Status is required!');
+      this.modal().setError('Status is required!');
       return;
     }
     this.parent().update({ status });

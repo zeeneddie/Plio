@@ -13,7 +13,7 @@ Template.ESType.viewmodel({
     if (!this._id) return;
     const { typeId } = this.getData();
     if (!typeId) {
-      this.modal().error('Type is required!');
+      this.modal().setError('Type is required!');
     }
     this.parent().update({ typeId });
   },

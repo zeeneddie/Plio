@@ -11,7 +11,7 @@ Template.CreateStandard.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         const errorMessage = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
-        this.modal().error(errorMessage);
+        this.modal().setError(errorMessage);
         return;
       }
     }
@@ -33,7 +33,7 @@ Template.CreateStandard.viewmodel({
     const nestingLevel = (number && number[0].split('.').length) || 1;
 
     if (nestingLevel > 4) {
-      this.modal().error('Maximum nesting is 4 levels. Please change your title.');
+      this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
       return;
     }
 
@@ -48,7 +48,7 @@ Template.CreateStandard.viewmodel({
     };
 
      this.modal().callMethod(insert, args, (_id) => {
-      this.modal().destroy();
+      this.modal().close();
 
       Meteor.setTimeout(() => {
         this.selectedStandardId(_id);

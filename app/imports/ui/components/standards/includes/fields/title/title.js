@@ -10,14 +10,14 @@ Template.ESTitle.viewmodel({
     const nestingLevel = (number && number[0].split('.').length) || 1;
 
     if (nestingLevel > 4) {
-      this.modal().error('Maximum nesting is 4 levels. Please change your title.');
+      this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
       return;
     }
 
     if (!this._id) return;
 
     if (!title) {
-      this.modal().error('Title is required!');
+      this.modal().setError('Title is required!');
       return;
     }
 

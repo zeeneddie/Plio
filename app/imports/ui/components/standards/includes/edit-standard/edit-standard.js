@@ -11,6 +11,10 @@ Template.EditStandard.viewmodel({
     return Standards.findOne({ _id });
   },
   update({ ...args }, options = {}, cb) {
+    if (_.isFunction(options)) {
+      cb = options;
+      options = {};
+    }
     const _id = this._id && this._id();
     this.modal().callMethod(update, _.extend(args, { _id, options }), cb);
   },
@@ -19,7 +23,7 @@ Template.EditStandard.viewmodel({
     if (!confirm('Are you sure you want to delete this standard?')) return;
     this.modal().callMethod(remove, { _id }, () => {
       this.selectedStandardId('');
-      this.modal().destroy();
+      this.modal().close();
     });
   }
 });

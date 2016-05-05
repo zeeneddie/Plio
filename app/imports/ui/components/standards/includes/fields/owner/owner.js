@@ -28,7 +28,7 @@ Template.ESOwner.viewmodel({
     if (!this._id) return;
     const { owner } = this.getData();
     if (!owner) {
-      this.modal().error('Owner is required!');
+      this.modal().setError('Owner is required!');
       return;
     }
 
