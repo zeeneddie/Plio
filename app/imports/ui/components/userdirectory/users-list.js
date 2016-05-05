@@ -18,7 +18,7 @@ Template.UsersList.viewmodel({
 
   onInviteClick(event) {
     event.preventDefault();
-    const orgSerialNumber = this.organization.serialNumber;
+    const orgSerialNumber = this.parent().getCurrentOrganizationSerialNumber();
     const organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
 
     ModalManager.open('UserDirectory_InviteUsers', {organizationId: organizationId});
