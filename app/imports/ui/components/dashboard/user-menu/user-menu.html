@@ -14,8 +14,8 @@
             </a>
           {{/each}}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">
-            User preferences
+          <a class="dropdown-item" href="{{pathFor 'userDirectoryUserPage' orgSerialNumber=orgSerialNumber userId=currentUser._id}}">
+            My profile
           </a>
           <a class="dropdown-item" href="{{pathFor 'userDirectoryPage' orgSerialNumber=orgSerialNumber}}">
             User directory

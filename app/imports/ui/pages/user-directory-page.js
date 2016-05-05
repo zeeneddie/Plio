@@ -5,46 +5,60 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
-  activeUser: null,
-  user() {
-    const userId = this.activeUser();
-    if (userId) {
-      return Meteor.users.findOne({ _id: userId });
-    }
+  share: 'search',
+  activeUser() {
+    return FlowRouter.getParam('userId') || null;
+  },
+  getCurrentOrganizationSerialNumber() {
+    return parseInt(FlowRouter.getParam('orgSerialNumber'));
   },
   autorun() {
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
 
     if (organizationsHandle.ready()) {
-      const userIds = getOrganizationUsers();
-      if (userIds) {
-        this.templateInstance.subscribe('organizationUsers', userIds);
-      } else {
-        FlowRouter.go('signIn');
+      const userIds = this.getCurrentOrganizationUsers();
+      if (userIds && userIds.length) {
+        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+        if (!this.activeUser() && organizationUsersHandle.ready()) {
+          FlowRouter.go('userDirectoryUserPage', {
+            orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
+            userId: this.organizationUsers().fetch()[0]._id
+          });
+        }
       }
     }
   },
-  user() {
-    return Meteor.users.findOne({ _id: this.activeUser() })
+  currentUser() {
+    return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
+
   organizationUsers() {
-    const userIds = getOrganizationUsers();
+    const userIds = this.getCurrentOrganizationUsers();
+    const findQuery = {};
 
-    if (userIds) {
-      this.activeUser(userIds[0]);
+    findQuery['$and'] = [
+      { _id: { $in: userIds }},
+      { ...this.searchUser() }
+    ];
 
-      return Meteor.users.find({ _id: { $in: userIds }}, { sort: { 'profile.firstName': 1 }});
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});
+
+    const result = _.pluck(cursor.fetch(), '_id');
+
+    if (result.length) {
+      this.activeUser(result[0]);
+
+      return cursor;
+    } else {
+      this.activeUser(null);
+    }
+  },
+
+  getCurrentOrganizationUsers() {
+    const organization = Organizations.findOne({ serialNumber: this.getCurrentOrganizationSerialNumber() });
+    if (organization) {
+      const { users } = organization;
+      return _.pluck(users, 'userId');
     }
   }
 });
-
-function getOrganizationUsers() {
-  const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
-  const organization  = Organizations.findOne({ serialNumber });
-  if (organization) {
-    const { users } = organization;
-    return _.pluck(users, 'userId');
-  }
-
-  return null;
-}
