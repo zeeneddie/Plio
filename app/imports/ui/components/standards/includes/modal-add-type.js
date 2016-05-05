@@ -9,7 +9,6 @@ Template.AddStandardType.viewmodel({
       this.modal().open({
         title: 'Standard',
         template: 'CreateStandard',
-        hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
         variation: 'save'
       });
     }, 400);

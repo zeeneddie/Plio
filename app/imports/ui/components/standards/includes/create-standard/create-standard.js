@@ -47,7 +47,7 @@ Template.CreateStandard.viewmodel({
       nestingLevel
     };
 
-     this.modal().callMethod(insert, args, (_id) => {
+     this.modal().callMethod(insert, args, (err, _id) => {
       this.modal().close();
 
       Meteor.setTimeout(() => {
@@ -61,11 +61,9 @@ Template.CreateStandard.viewmodel({
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
 
         this.modal().open({
+          _id,
           title: 'Standard',
-          template: 'EditStandard',
-          closeText: 'Cancel',
-          hint: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vestibulum accumsan nulla, non pulvinar neque. Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec maximus pellentesque, massa nunc mattis ipsum, in dictum magna arcu et ipsum.',
-          _id
+          template: 'EditStandard'
         });
       }, 400);
     });
