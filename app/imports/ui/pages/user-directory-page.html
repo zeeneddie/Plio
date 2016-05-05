@@ -2,5 +2,7 @@
   {{#if Template.subscriptionsReady}}
     {{> UsersList organizationUsers=organizationUsers}}
     {{> UsersDetails currentUser=currentUser}}
+  {{else}}
+    {{> PreloaderPage}}
   {{/if}}
 </template>

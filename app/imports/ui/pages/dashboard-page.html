@@ -8,6 +8,8 @@
       {{> SimpleCard icon="fa-bolt" serialNumber=serialNumber title="Risk register" text="Coming soon" disabled=true}}
     </div>
     <hr>
+    {{> UserStats}}
+  {{else}}
+    {{> PreloaderPage}}
   {{/with}}
-  {{> UserStats}}
 </template>
