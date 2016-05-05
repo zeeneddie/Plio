@@ -107,7 +107,7 @@ const changeRoleSchema = new SimpleSchema([IdSchema, {
 
 const ensureUserCanChangeRoles = (userId, orgId) => {
   const canChangeRoles = Roles.userIsInRole(
-    userId, UserRoles.EDIT_USER_PERMISSIONS, orgId
+    userId, UserRoles.EDIT_USER_ROLES, orgId
   );
 
   if (!canChangeRoles) {
@@ -137,8 +137,6 @@ export const revokeRole = new ValidatedMethod({
 
   run({ _id, organizationId, role }) {
     ensureUserCanChangeRoles(this.userId, organizationId);
-
-    console.log('revoke');
 
     return Roles.removeUsersFromRoles(_id, role, organizationId);
   }

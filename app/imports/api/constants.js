@@ -22,21 +22,21 @@ const UserMembership = {
 };
 
 const UserRoles = {
-  DELETE_USERS: 'delete-users',
+  CREATE_STANDARDS_DOCUMENTS: 'create-standards-documents',
+  VIEW_TEAM_ACTIONS: 'view-team-actions',
   INVITE_USERS: 'invite-users',
-  EDIT_USER_PERMISSIONS: 'edit-user-permissions',
-  CHANGE_ORG_SETTINGS: 'change-org-settings',
-  VIEW_TEAM_TO_DO_LISTS: 'view-team-to-do-lists',
-  CREATE_AND_EDIT_STANDARDS_DOCUMENTS: 'create-and-edit-standards-documents'
+  DELETE_USERS: 'delete-users',
+  EDIT_USER_ROLES: 'edit-user-roles',
+  CHANGE_ORG_SETTINGS: 'change-org-settings'
 };
 
 const UserRolesNames = {
-  [UserRoles.DELETE_USERS]: 'Delete users',
+  [UserRoles.CREATE_STANDARDS_DOCUMENTS]: 'Create any new Standards documents',
+  [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
   [UserRoles.INVITE_USERS]: 'Invite users',
-  [UserRoles.EDIT_USER_PERMISSIONS]: 'Edit user permissions',
-  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
-  [UserRoles.VIEW_TEAM_TO_DO_LISTS]: 'View team to do lists',
-  [UserRoles.CREATE_AND_EDIT_STANDARDS_DOCUMENTS]: 'Create & edit standards documents'
+  [UserRoles.DELETE_USERS]: 'Delete users',
+  [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
+  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
 };
 
 const getDefaultGuideline = (ncType) => {

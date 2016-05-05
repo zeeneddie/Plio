@@ -19,5 +19,11 @@
     "avatar": "/avatars/avatar-placeholder-11.png"
   },
   "status": "offline",
-  "statusConnection": "offline"
+  "statusConnection": "offline",
+  "roles": {
+    "KwKXz5RefrE5hjWJ2": [
+      "create-standards-documents",
+      "view-team-actions"
+    ]
+  }
 }
