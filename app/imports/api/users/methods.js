@@ -29,3 +29,21 @@ export const update = new ValidatedMethod({
     return UserService.update({ selectedOrganizationSerialNumber, userId });
   }
 });
+
+export const sendVerificationEmail = new ValidatedMethod({
+  name: 'Users.sendVerificationEmail',
+  validate: new SimpleSchema({}).validator(),
+  run() {
+    const userId = this.userId;
+
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Cannot verify an email of an unauthorized user'
+      );
+    }
+
+    if (!this.isSimulation) {
+      return Accounts.sendVerificationEmail(userId);
+    }
+  }
+});

@@ -26,3 +26,7 @@ function getUserInitials(userProfile) {
 }
 
 Accounts.onCreateUser(onCreateUser);
+
+Accounts.urls.verifyEmail = function(token) {
+  return Meteor.absoluteUrl(`verify-email/${token}`);
+};

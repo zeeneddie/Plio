@@ -1,6 +1,6 @@
 AccountsTemplates.configure({
   sendVerificationEmail: true,
-  enforceEmailVerification: true,
+  enforceEmailVerification: false,
   showResendVerificationEmailLink: true,
 
   negativeValidation: true,
@@ -24,7 +24,7 @@ AccountsTemplates.configure({
       pwdReset: 'info.passwordReset',
       pwdSet: 'info.passwordReset',
       signUpVerifyEmail: 'Successful Registration! Please check your email and follow the instructions.',
-      verificationEmailSent: 'A new email has been sent to you. If the email doesn\'t show up in your inbox, be sure to check your spam folder.'
+      verificationEmailSent: 'A new email has been sent to you. If the email doesn\'t show up in your inbox, be sure to check your spam folder.',
     }
   }
 });

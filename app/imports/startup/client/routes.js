@@ -25,6 +25,9 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
+AccountsTemplates.configureRoute('verifyEmail');
+AccountsTemplates.configureRoute('resendVerificationEmail');
+
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
   action(params) {
@@ -48,6 +51,16 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/user-waiting', {
+  name: 'userWaiting',
+  triggersEnter: [checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('UserAccountWaitingPage');
+  }
+});
+
+
+
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   action(params) {
@@ -61,7 +74,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
@@ -71,7 +84,7 @@ FlowRouter.route('/:orgSerialNumber', {
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -81,7 +94,7 @@ FlowRouter.route('/:orgSerialNumber/users', {
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -102,6 +115,25 @@ function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, {org: context.params.orgSerialNumber});
+    }
+  }
+}
+
+function checkEmailVerified(context, redirect) {
+  const user = Meteor.user();
+  const isOnUserWaiting = context.route.name === 'userWaiting';
+  
+  if (user) {
+    const email = user.emails[0];
+    
+    if (!email.verified) {
+      if (!isOnUserWaiting) {
+        redirect('userWaiting');
+      }
+    } else {
+      if (isOnUserWaiting) {
+        redirect('hello');
+      }
     }
   }
 }
