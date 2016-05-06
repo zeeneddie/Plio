@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Accounts } from 'meteor/accounts-base'
 
 import UserService from './user-service.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';

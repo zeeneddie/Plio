@@ -26,7 +26,6 @@ AccountsTemplates.configureRoute('signUp', {
 });
 
 AccountsTemplates.configureRoute('verifyEmail');
-AccountsTemplates.configureRoute('resendVerificationEmail');
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',

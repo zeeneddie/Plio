@@ -1,11 +1,15 @@
 import { Accounts } from 'meteor/accounts-base';
 import Utils from '/imports/core/utils';
 
+import { sendVerificationEmail } from '/imports/api/users/methods.js';
+
 function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
     user.profile.avatar = Utils.getRandomAvatarUrl();
     user.profile.initials = getUserInitials(user.profile);
+    
+    sendVerificationEmail.call();
   }
 
   return user;
