@@ -39,6 +39,12 @@ const UserRolesNames = {
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
 };
 
+const PhoneTypes = {
+  WORK: 'Work',
+  HOME: 'Home',
+  MOBILE: 'Mobile'
+};
+
 const getDefaultGuideline = (ncType) => {
   return `Please go to Org Settings to define what a ${ncType} `
     + `non-conformity means in your organization.`;
@@ -102,6 +108,7 @@ export {
   NCTypes,
   OrgCurrencies,
   OrganizationDefaults,
+  PhoneTypes,
   TimeUnits,
   UserMembership,
   UserRoles,

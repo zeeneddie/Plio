@@ -15,13 +15,18 @@ ViewModel.mixin({
     }, 500)
   },
   addForm: {
-    addForm(template) {
+    addForm(template, context = {}) {
+      if (_.isFunction(this.onChangeCb)) {
+        context[onChange] = this.onChangeCb();
+      }
+
+      if (_.isFunction(this.onDeleteCb)) {
+        context[onDelete] = this.onDeleteCb();
+      }
+
       Blaze.renderWithData(
         Template[template],
-        {
-          onChange: this.onChangeCb(),
-          onDelete: this.onDeleteCb()
-        },
+        context,
         this.forms[0]
       );
     }

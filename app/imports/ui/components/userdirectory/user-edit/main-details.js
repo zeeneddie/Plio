@@ -1,3 +1,5 @@
+import { Slingshot } from 'meteor/edgee:slingshot';
+
 import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
 
 
@@ -30,6 +32,22 @@ Template.UserEdit_MainDetails.viewmodel({
   },
   updateDescription() {
     this.updateProfile('description');
+  },
+  uploadAvatarFile() {
+    const uploader = new Slingshot.Upload('usersAvatars');
+
+    uploader.send(this.avatarFile(), (err, downloadUrl) => {
+      if (err) {
+        alert(err);
+        console.log(err);
+        return;
+      }
+
+      this.callMethod(updateProfile, {
+        _id: this.userId(),
+        avatar: downloadUrl
+      });
+    });
   },
   getData() {
     return {

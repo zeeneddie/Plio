@@ -3,7 +3,7 @@
     {{#FormField label="Photo"}}
       <img class="img-circle" {{b "attr: {src: avatar}"}}>
       <span class="btn btn-secondary btn-file" {{b "enable: isEditable"}}>
-        Change <input type="file" {{b "enable: isEditable"}}>
+        Change <input type="file" {{b "value: avatarFile, change: uploadAvatarFile, enable: isEditable"}}>
       </span>
     {{/FormField}}
 

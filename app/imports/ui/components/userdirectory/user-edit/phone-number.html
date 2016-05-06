@@ -1,0 +1,20 @@
+<template name="UserEdit_PhoneNumber">
+  <div class="form-group row">
+    <label class="form-control-label col-sm-4">
+      Phone number(s)
+    </label>
+    <div class="col-sm-8 form-group-flex">
+      <div class="form-group-flex-flex margin-right">
+        <div class="input-group">
+          <span class="input-group-addon">+44</span>
+          <input type="text" class="form-control" placeholder="Number" {{b "value: number"}} />
+        </div>
+      </div>
+      <div>
+        <select class="c-select"
+          {{b "options: phoneTypes, value: type"}}>
+        </select>
+      </div>
+    </div>
+  </div>
+</template>
