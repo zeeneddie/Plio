@@ -8,7 +8,7 @@ export default {
   },
 
   update({ _id, options, ...args }) {
-    const query = { _id }
+    const query = { _id };
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }

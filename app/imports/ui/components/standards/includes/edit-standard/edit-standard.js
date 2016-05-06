@@ -17,6 +17,7 @@ Template.EditStandard.viewmodel({
     }
     const _id = this._id && this._id();
     const query = _.extend(args, { _id, options });
+    console.log(query);
     this.modal().callMethod(update, query, cb);
   },
   remove() {
