@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 
-Template.DashboardLayout.viewmodel({
+Template.UserDirectoryLayout.viewmodel({
   share: 'organization',
   isReady: false,
   _subHandlers: null,

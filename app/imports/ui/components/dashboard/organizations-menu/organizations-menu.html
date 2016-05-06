@@ -1,7 +1,7 @@
 <template name="OrganizationsMenu">
   <ul class="nav navbar-nav pull-xs-left">
     <li class="nav-item dropdown dropdown-company hidden-sm-down">
-      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown">
         {{#with organization}}
           <span class="hidden-xs-down org-name">{{name}}</span>
         {{/with}}
@@ -12,7 +12,7 @@
           {{> OrganizationsMenuItem}}
         {{/each}}
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item org-settings-modal-link" href="#" 
+        <a class="dropdown-item org-settings-modal-link"
             {{b "click: openOrgSettings"}}>
           Org settings
         </a>
