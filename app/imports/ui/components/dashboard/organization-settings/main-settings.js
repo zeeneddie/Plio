@@ -4,7 +4,7 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['editableModalSection'],
+  mixin: ['modal'],
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -21,7 +21,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     const _id = this.organizationId();
 
-    this.callMethod(setName, { _id, name });
+    this.modal().callMethod(setName, { _id, name });
   },
   updateCurrency(currency) {
     const current = this.currency();
@@ -33,6 +33,6 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     const _id = this.organizationId();
 
-    this.callMethod(setDefaultCurrency, { _id, currency });
+    this.modal().callMethod(setDefaultCurrency, { _id, currency });
   }
 });
