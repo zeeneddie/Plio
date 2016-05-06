@@ -2,11 +2,11 @@
   <div class="card-footer card-changelog-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <div class="row">
       <div class="col-xs-6">
-        Created by: <span {{b "text: createdBy"}}></span>
+        Created by: <span {{b "text: userFullNameOrEmail(createdBy)"}}></span>
         <br>Date: <span {{b "text: renderDate(createdAt)"}}></span>
       </div>
       <div class="col-xs-6">
-        Last edited by: <span {{b "text: updatedBy"}}></span>
+        Last edited by: <span {{b "text: userFullNameOrEmail(updatedBy)"}}></span>
         <br>Date: <span {{b "text: renderDate(updatedAt)"}}></span>
       </div>
     </div>

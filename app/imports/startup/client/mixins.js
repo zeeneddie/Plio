@@ -149,5 +149,10 @@ ViewModel.mixin({
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
     }
+  },
+  date: {
+    renderDate(date) {
+      return moment.isDate(date) && moment(date).format('DD MMMM YYYY');
+    }
   }
 });
