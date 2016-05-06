@@ -12,7 +12,6 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
-    console.log(options);
     return this.collection.update(query, options);
   },
 

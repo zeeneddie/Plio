@@ -29,6 +29,9 @@ Template.StandardsCard.viewmodel({
     const query = { _id: { $in: departmentsIds } };
     return Departments.find(query);
   },
+  renderDepartments() {
+    return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
+  },
   openEditStandardModal() {
     this.modal().open({
       title: 'Standard',

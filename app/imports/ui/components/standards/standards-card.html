@@ -66,10 +66,7 @@
           <div class="list-group-item" {{b "if: departments.count > 0"}}>
             <p class="list-group-item-text">Department(s)</p>
             <h4 class="list-group-item-heading">
-              {{#each departments}}
-                <span {{b "text: this.name"}}></span>
-                <span {{b "if: departments.count > 1"}}>,</span>
-              {{/each}}
+              <span {{b "text: renderDepartments"}}></span>
             </h4>
           </div>
 
