@@ -5,7 +5,6 @@ import {
   insert, update, remove
 } from '/imports/api/standards-book-sections/methods.js';
 
-
 Template.OrganizationSettings_StandardsBookSections.viewmodel({
   mixin: ['collapse', 'addForm', 'editableModalSection'],
   standardsBookSectionsCount() {

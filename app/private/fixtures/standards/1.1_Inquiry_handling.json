@@ -1,17 +1,18 @@
 {
   "_id": "Zty4NCagWvrcuLYoy",
-  "title": "Inquiry handling",
+  "title": "1. Inquiry handling",
   "typeId": "FmQ99fgj88JF3qmh3",
   "sectionId": "sktksJAYjHYJmNYaM",
   "nestingLevel": 1,
-  "number": [1],
   "description": "This is the standard for dealing with inquiry handling",
-  "isApproved": true,
+  "owner": "SQHmBKJ94gJvpLKLt",
+  "issueNumber": 1,
+  "status": "issued",
   "approvedAt": {"$date": 1459522800000},
   "notes": null,
   "createdAt": {"$date": 1459508400000},
-  "createdAt": "SQHmBKJ94gJvpLKLt",
   "updatedAt": {"$date": 1459515600000},
   "updatedBy": "SQHmBKJ94gJvpLKLt",
+  "isApproved": true,
   "isDeleted": false
 }

@@ -75,8 +75,7 @@ ViewModel.mixin({
   },
   numberRegex: {
     parseNumber(string) {
-      const result = string.match(/^[\d\.]*\d/);
-      return result;
+      return string.match(/^[\d\.]*\d/);
     }
   },
   addForm: {

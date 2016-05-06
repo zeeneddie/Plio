@@ -1,0 +1,12 @@
+<template name="ESOwner">
+  {{#FormField label="Owner"}}
+    <div class="dropdown">
+      <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner, focus: owner('')"}} />
+      <div class="dropdown-menu dropdown-menu-full">
+        {{#each members}}
+          <a class="dropdown-item" href="#" {{b "click: selectOwner(this), text: userFullNameOrEmail(this)"}}></a>
+        {{/each}}
+      </div>
+    </div>
+  {{/FormField}}
+</template>

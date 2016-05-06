@@ -1,13 +1,13 @@
 import { Template } from 'meteor/templating';
+
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-
 Template.DashboardPage.viewmodel({
+  share: 'organization',
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organization() {
-    const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
-    return Organizations.findOne({ serialNumber });
+    return Organizations.findOne({ serialNumber: this.orgSerialNumber() });
   }
 });
