@@ -22,8 +22,6 @@ Template.StandardsCard.viewmodel({
           return viewmodel.child(vm => vm._id() === _id);
         });
 
-        console.log(sectionToCollapse);
-
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
       }
     }
