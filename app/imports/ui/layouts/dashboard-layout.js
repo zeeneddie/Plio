@@ -3,23 +3,23 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 
 Template.DashboardLayout.viewmodel({
-  mixin: {
-    organizationMX: 'organization'
-  },
+  share: 'organization',
   isReady: false,
-  organizationSerialNumber() {
-    return parseInt(FlowRouter.getParam('orgSerialNumber'));
+  _subHandlers: null,
+  onCreated() {
+    this.orgSerialNumber(parseInt(FlowRouter.getParam('orgSerialNumber')));
+    this._subHandlers = [
+      this.templateInstance.subscribe('currentUserOrganizations'),
+      this.templateInstance.subscribe('currentUserOrganizationById', this.orgSerialNumber())
+    ];
   },
   autorun: [
     function () {
-      this.organizationMX.subscribe(this.organizationSerialNumber())
-    },
-    function () {
-      this.isReady(this.organizationMX.subHandler().ready());
+      this.isReady(this._subHandlers.every(handle => handle.ready()));
     }
   ],
   organization() {
-    const serialNumber = this.organizationSerialNumber();
+    const serialNumber = this.orgSerialNumber();
     return Organizations.findOne({ serialNumber });
   }
 });

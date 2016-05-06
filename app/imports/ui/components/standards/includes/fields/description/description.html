@@ -1,0 +1,8 @@
+<template name="ESDescription">
+  {{#FormField label="Description"}}
+    <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description, focusout: update"}}></textarea>
+    <button type="button" class="btn btn-link clear-field">
+      <i class="fa fa-times-circle"></i>
+    </button>
+  {{/FormField}}
+</template>

@@ -1,3 +1,8 @@
 import { Mongo } from 'meteor/mongo';
 
-export const Standards = new Mongo.Collection('standards');
+import { StandardsSchema } from './standards-schema.js';
+
+const Standards = new Mongo.Collection('standards');
+Standards.attachSchema(StandardsSchema);
+
+export { Standards };

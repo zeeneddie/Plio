@@ -25,3 +25,9 @@ import '../../api/standards-book-sections/methods.js';
 import '../../api/users/server/publications.js';
 import '../../api/users/user-service.js';
 import '../../api/users/methods.js';
+
+import '../../api/standards/server/publications.js';
+import '../../api/standards/standards.js';
+import '../../api/standards/standards-schema.js';
+import '../../api/standards/standards-service.js';
+import '../../api/standards/methods.js';

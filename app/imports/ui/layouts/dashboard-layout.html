@@ -9,7 +9,7 @@
               {{> Template.dynamic template=content}}
               {{> DashboardFooter}}
             {{else}}
-              {{> NotFoundPage}}
+              {{> NotFoundPage subject="Organization"}}
             {{/with}}
           {{else}}
             {{> PreloaderPage}}
@@ -18,5 +18,4 @@
       </div>
     </div>
   </div>
-  {{> ModalManager}}
 </template>

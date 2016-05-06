@@ -1,17 +1,16 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
+  share: 'organization',
   mixin: 'modal',
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organization() {
-    const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
-    return Organizations.findOne({ serialNumber });
+    return Organizations.findOne({ serialNumber: this.orgSerialNumber() });
   },
   organizations() {
     return Organizations.find({ 'users.userId': Meteor.userId() });
