@@ -4,3 +4,4 @@ import './login-layout.html';
 import './standards-layout.html';
 import './standards-layout.js';
 import './user-directory-layout.html';
+import './user-directory-layout.js';

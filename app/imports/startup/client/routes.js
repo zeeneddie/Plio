@@ -52,9 +52,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   action(params) {
     BlazeLayout.render('StandardsLayout', {
-      headerTitle: 'Standards book',
-      contentList: 'StandardsList',
-      contentCard: 'StandardsCard'
+      content: 'StandardsPage'
     });
   }
 });

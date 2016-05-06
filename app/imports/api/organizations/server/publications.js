@@ -59,3 +59,28 @@ Meteor.publishComposite('currentUserOrganizations', {
     }
   }]
 });
+
+Meteor.publishComposite('currentUserOrganizationById', {
+  find: function (orgId) {
+    return Organizations.find({_id: orgId, 'users.userId': this.userId});
+  },
+  children: [{
+    find: function (org) {
+      return Departments.find({
+        organizationId: org._id
+      });
+    }
+  }, {
+    find: function (org) {
+      return StandardsTypes.find({
+        organizationId: org._id
+      });
+    }
+  }, {
+    find: function (org) {
+      return StandardsBookSections.find({
+        organizationId: org._id
+      });
+    }
+  }]
+});

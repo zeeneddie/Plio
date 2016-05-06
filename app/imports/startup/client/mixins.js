@@ -144,10 +144,20 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
+  organizations: {
+    subHandler: null,
+    subscribe() {
+      this.subHandler(Meteor.subscribe('currentUserOrganizations'));
+    }
+  },
   organization: {
+    subHandler: null,
+    subscribe(orgId) {
+      this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
+    },
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
-    }
+    },
   }
 });
