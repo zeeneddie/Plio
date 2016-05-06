@@ -1,5 +1,8 @@
 AccountsTemplates.configure({
-  sendVerificationEmail: false,
+  sendVerificationEmail: true,
+  enforceEmailVerification: false,
+  showResendVerificationEmailLink: true,
+
   negativeValidation: true,
   positiveValidation: true,
   homeRoutePath: '/',
@@ -13,6 +16,15 @@ AccountsTemplates.configure({
     button: {
       signUp: 'Sign up',
       signIn: 'Login'
+    },
+    info: {
+      emailSent: 'info.emailSent',
+      emailVerified: 'info.emailVerified',
+      pwdChanged: 'info.passwordChanged',
+      pwdReset: 'info.passwordReset',
+      pwdSet: 'info.passwordReset',
+      signUpVerifyEmail: 'Successful Registration! Please check your email and follow the instructions.',
+      verificationEmailSent: 'A new email has been sent to you. If the email doesn\'t show up in your inbox, be sure to check your spam folder.',
     }
   }
 });
