@@ -90,26 +90,6 @@ ViewModel.mixin({
       );
     }
   },
-  editableModalSection: {
-    editableModal() {
-      return this.parent().child('EditableModal');
-    },
-    isSaving(val) {
-      const editableModal = this.editableModal();
-
-      if (val !== undefined) {
-        editableModal.isSaving(val);
-      }
-
-      return editableModal.isSaving();
-    },
-    callMethod(method, args, cb) {
-      return this.editableModal().callMethod(method, args, cb);
-    },
-    handleMethodResult(cb) {
-      return this.editableModal().handleMethodResult(cb);
-    }
-  },
   user: {
     userFullNameOrEmail(userOrUserId) {
       let user = userOrUserId;
