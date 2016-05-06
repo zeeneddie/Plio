@@ -3,3 +3,4 @@ import './routes.js';
 import './useraccounts.js';
 import './userpresence.js';
 import './bindings.js';
+import './share.js';

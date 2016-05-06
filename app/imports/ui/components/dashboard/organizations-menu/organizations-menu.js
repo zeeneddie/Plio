@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
+  mixin: 'modal',
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },

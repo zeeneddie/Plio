@@ -16,6 +16,10 @@ body {
 	height: 100%;
 }
 
+a {
+  cursor: pointer;
+}
+
 .scroll {
   @include scroll;
 }
@@ -34,6 +38,22 @@ body {
   @include flex(1);
 }
 
+.table {
+  display: table;
+  .table-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.vertical-center {
+  /* Remove the default bottom margin of .jumbotron */
+  margin-bottom: 0; 
+}
+
+.vertical-center {
+  min-height: 100%;
+}
 
 .content {
   overflow: hidden;
