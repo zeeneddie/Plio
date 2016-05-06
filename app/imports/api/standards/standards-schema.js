@@ -1,20 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-const StandardsSchema = new SimpleSchema({
-  title: {
-    type: String
-  },
-  typeId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  sectionId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  nestingLevel: {
-    type: Number
-  },
+const optionalFields = new SimpleSchema({
   description: {
     type: String,
     optional: true
@@ -77,6 +63,28 @@ const StandardsSchema = new SimpleSchema({
     type: String,
     optional: true
   },
+  departments: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  }
+});
+
+const StandardsSchema = new SimpleSchema([optionalFields, {
+  title: {
+    type: String
+  },
+  typeId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  sectionId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  nestingLevel: {
+    type: Number
+  },
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
@@ -86,15 +94,10 @@ const StandardsSchema = new SimpleSchema({
   },
   status: {
     type: String
-  },
-  departments: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
   }
-});
+}]);
 
-const StandardsUpdateSchema = new SimpleSchema({
+const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   title: {
     type: String,
     optional: true
@@ -117,18 +120,6 @@ const StandardsUpdateSchema = new SimpleSchema({
     type: String,
     optional: true
   },
-  approved: {
-    type: Boolean,
-    optional: true
-  },
-  approvedAt: {
-    type: Date,
-    optional: true
-  },
-  notes: {
-    type: String,
-    optional: true
-  },
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -141,12 +132,7 @@ const StandardsUpdateSchema = new SimpleSchema({
   status: {
     type: String,
     optional: true
-  },
-  departments: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
   }
-});
+}]);
 
 export { StandardsSchema, StandardsUpdateSchema };
