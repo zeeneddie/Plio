@@ -3,6 +3,9 @@ AccountsTemplates.configure({
   enforceEmailVerification: false,
   showResendVerificationEmailLink: true,
 
+  enablePasswordChange: true,
+  showForgotPasswordLink: true,
+
   negativeValidation: true,
   positiveValidation: true,
   homeRoutePath: '/',
