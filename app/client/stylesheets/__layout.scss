@@ -18,6 +18,10 @@ body {
 	@include flex-direction(column);
 }
 
+a {
+  cursor: pointer;
+}
+
 .scroll {
   @include scroll;
 }
@@ -44,14 +48,13 @@ body {
   }
 }
 
-.jumbotron.vertical-center {
+.vertical-center {
   /* Remove the default bottom margin of .jumbotron */
   margin-bottom: 0; 
 }
 
 .vertical-center {
-  min-height: 100%;  /* Fallback for vh unit */
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .content {

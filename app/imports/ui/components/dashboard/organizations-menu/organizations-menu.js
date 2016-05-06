@@ -5,6 +5,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
   share: 'organization',
+  mixin: 'modal',
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },

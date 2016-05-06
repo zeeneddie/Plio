@@ -4,10 +4,10 @@ ViewModel.share({
   standard: {
     selectedStandardId: ''
   },
+  search: {
+    searchText: ''
+  },
   organization: {
     orgSerialNumber: ''
   },
-  search: {
-    searchText: ''
-  }
 });

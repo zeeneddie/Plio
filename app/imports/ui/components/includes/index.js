@@ -6,4 +6,5 @@ import './list-sub-item.js';
 import './card-changelog.html';
 import './card-changelog.js';
 import './time-picker.html';
+import './preloader.html';
 import './time-picker.js';
