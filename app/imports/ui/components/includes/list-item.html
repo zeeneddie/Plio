@@ -1,0 +1,29 @@
+<template name="ListItem">
+  <a class="list-group-item list-group-subheading list-group-toggle" href="#" {{b "click: toggleCollapse(), class: { collapsed: collapsed }"}}>
+    <h4 class="list-group-item-heading pull-left" {{b "text: this.title"}}></h4>
+  </a>
+  <div class="list-group-collapse collapse" {{b "ref: collapse"}}>
+    <div class="list-group">
+      {{#each standards}}
+        <div class="span" {{b "if: this.nestingLevel === 1"}}>
+          {{> ListSubItem}}
+        </div>
+        <div class="sub">
+          <div class="span" {{b "if: this.nestingLevel === 2"}}>
+            {{> ListSubItem}}
+          </div>
+          <div class="subsub">
+            <div class="span" {{b "if: this.nestingLevel === 3"}}>
+              {{> ListSubItem}}
+            </div>
+            <div class="subsubsub">
+              <div class="span" {{b "if: this.nestingLevel === 4"}}>
+                {{> ListSubItem}}
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</template>

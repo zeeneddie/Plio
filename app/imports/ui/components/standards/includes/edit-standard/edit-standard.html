@@ -1,0 +1,120 @@
+<template name="EditStandard">
+  <form>
+    <div class="card-block">
+      {{> ESTitle titleText=standard.title _id=standard._id}}
+
+      {{> ESDescription description=standard.description}}
+
+      {{> ESBookSection selectedBookSectionId=standard.sectionId _id=standard.sectionId}}
+
+      {{> ESType typeId=standard.typeId _id=standard._id}}
+
+      {{> ESOwner selectedOwnerId=standard.owner _id=standard._id}}
+
+      {{> ESIssueNumber issueNumber=standard.issueNumber _id=standard._id}}
+
+      {{> ESStatus status=standard.status _id=standard._id}}
+
+      {{> ESDepartments standard=standard}}
+
+      <hr>
+      <div class="form-group row">
+        <label class="form-control-label col-sm-4 col-xs-12">Source document/video 1</label>
+        <div class="col-sm-8 col-xs-12">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> URL link
+            </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option2" autocomplete="off"> Attachment
+            </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option3" autocomplete="off"> Video
+            </label>
+          </div>
+          <input type="text" class="form-control" placeholder="URL link" value="http://www.clifton-asset.co.uk/example/12345">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="form-control-label col-sm-4 col-xs-12">Source document/video 2</label>
+        <div class="col-sm-8 col-xs-12">
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option1" autocomplete="off"> URL link
+            </label>
+            <label class="btn btn-secondary active">
+              <input type="radio" name="options" id="option2" autocomplete="off" checked> Attachment
+            </label>
+            <label class="btn btn-secondary">
+              <input type="radio" name="options" id="option3" autocomplete="off"> Video
+            </label>
+          </div>
+          <div class="btn-group">
+            <button type="button" class="btn btn-secondary" disabled="">
+              <i class="fa fa-file-word-o fa-lg margin-right"></i>
+              source document filename
+            </button>
+            <button type="button" class="btn btn-secondary">
+              <i class="fa fa-times-circle no-margin"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#notify" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Notify</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">2</span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="notify">
+      <div ng-include="'includes/subcards-edit/notify.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#nonconformities" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Non-conformities</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">1</span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="nonconformities">
+      <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#corrective-actions" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Corrective actions</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">1</span>
+        <span class="label label-warning label-status-indicator"></span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="corrective-actions">
+      <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#preventative-actions" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Preventative actions</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">1</span>
+        <span class="label label-warning label-status-indicator"></span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="preventative-actions">
+      <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#improvement-plan" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Improvement plan</h4>
+      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+    </div>
+    <div class="card-block-collapse collapse" id="improvement-plan">
+      <div ng-include="'includes/subcards-edit/improvement-plan.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed" href="#lessons" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Lessons learned</h4>
+      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+    </div>
+    <div class="card-block-collapse collapse" id="lessons">
+      <div ng-include="'includes/subcards-edit/lessons.html'"></div>
+    </div>
+    <div class="card-block text-xs-center">
+      <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+    </div>
+  </form>
+</template>

@@ -1,0 +1,19 @@
+<template name="StandardsLayout">
+  {{> StandardsHeader}}
+
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        {{#if isReady}}
+          {{#if organization}}
+            {{> Template.dynamic template=content}}
+          {{else}}
+            {{> NotFoundPage subject="Organization"}}
+          {{/if}}
+        {{else}}
+          {{> PreloaderPage}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>

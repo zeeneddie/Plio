@@ -75,8 +75,7 @@ ViewModel.mixin({
   },
   numberRegex: {
     parseNumber(string) {
-      const result = string.match(/^[\d\.]*\d/);
-      return result;
+      return string.match(/^[\d\.]*\d/);
     }
   },
   addForm: {
@@ -89,26 +88,6 @@ ViewModel.mixin({
         },
         this.forms[0]
       );
-    }
-  },
-  editableModalSection: {
-    editableModal() {
-      return this.parent().child('EditableModal');
-    },
-    isSaving(val) {
-      const editableModal = this.editableModal();
-
-      if (val !== undefined) {
-        editableModal.isSaving(val);
-      }
-
-      return editableModal.isSaving();
-    },
-    callMethod(method, args, cb) {
-      return this.editableModal().callMethod(method, args, cb);
-    },
-    handleMethodResult(cb) {
-      return this.editableModal().handleMethodResult(cb);
     }
   },
   user: {
@@ -145,10 +124,20 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
+  organizations: {
+    subHandler: null,
+    subscribe() {
+      this.subHandler(Meteor.subscribe('currentUserOrganizations'));
+    }
+  },
   organization: {
+    subHandler: null,
+    subscribe(orgId) {
+      this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
+    },
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
-    }
+    },
   }
 });

@@ -23,7 +23,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
       }, (err, res) => {
-        this.modal().close();
+        if(!err) {
+          this.modal().close();
+        }
       });
     }
   }
