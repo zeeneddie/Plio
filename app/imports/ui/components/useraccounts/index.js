@@ -10,6 +10,8 @@ import './at_pwd_form.html';
 import './at_pwd_form.js';
 import './at_pwd_form_btn.html';
 import './at_pwd_form_btn.js';
+import './at_pwd_link.html';
+import './at_pwd_link.js';
 import './at_result.html';
 import './at_result.js';
 import './at_signin_link.html';
