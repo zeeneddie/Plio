@@ -10,3 +10,4 @@ import './superpowers.html';
 import './superpowers.js';
 import './user-edit.html';
 import './user-edit.js';
+import './user-edit.scss';

@@ -44,6 +44,12 @@ ViewModel.mixin({
 
       return editableModal.isSaving();
     },
+    setError(errMessage) {
+      return this.editableModal().setError(errMessage);
+    },
+    clearError() {
+      return this.editableModal().clearError();
+    },
     callMethod(method, args, cb) {
       return this.editableModal().callMethod(method, args, cb);
     },

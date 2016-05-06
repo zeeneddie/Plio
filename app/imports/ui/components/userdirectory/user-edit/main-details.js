@@ -5,6 +5,7 @@ import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
 
 Template.UserEdit_MainDetails.viewmodel({
   mixin: ['editableModalSection', 'userEditSection'],
+  avatarFile: null,
   updateProfile(prop) {
     if (this.isPropChanged(prop)) {
       this.callMethod(updateProfile, {
@@ -34,12 +35,21 @@ Template.UserEdit_MainDetails.viewmodel({
     this.updateProfile('description');
   },
   uploadAvatarFile() {
+    if (!this.avatarFile()) {
+      return;
+    }
+
     const uploader = new Slingshot.Upload('usersAvatars');
 
+    this.clearError();
+    this.isSaving(true);
+
     uploader.send(this.avatarFile(), (err, downloadUrl) => {
+      this.isSaving(false);
+      this.avatarFile(null);
+
       if (err) {
-        alert(err);
-        console.log(err);
+        this.setError(err);
         return;
       }
 
@@ -55,7 +65,8 @@ Template.UserEdit_MainDetails.viewmodel({
       firstName: this.firstName(),
       lastName: this.lastName(),
       initials: this.initials().toUpperCase(),
-      description: this.description()
+      description: this.description(),
+      avatar: this.avatar()
     };
   }
 });

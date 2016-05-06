@@ -15,6 +15,6 @@ Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
   },
 
   key(file) {
-    return `users-avatars/${file.name}`;
+    return `images/avatars/${file.name}`;
   }
 });
