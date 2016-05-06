@@ -41,7 +41,13 @@ Go to the Meteor project directory (/app) and execute
 
 **Note!**
 
-If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor is running?
+- You will need to execute the `meteor npm install` command if you you'll get a similiar error:
+
+`Error: Can't find npm module 'handlebars'.`
+
+This means that someone added a new npm module and you need to install it.
+
+- If you're getting an error *'Can't listen on port 3000. Perhaps another Meteor is running?
 '*, you'll need to specify the port explicitly (and choose some other available port):
 
 `meteor -p 2000`
