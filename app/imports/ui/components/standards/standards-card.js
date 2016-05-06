@@ -8,7 +8,7 @@ import { Departments } from '/imports/api/departments/departments.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user'],
+  mixin: ['modal', 'user', 'urlRegex'],
   autorun() {
     if (this.standards().count() > 0 && !this.selectedStandardId()) {
       const standard = Standards.findOne({});
@@ -58,5 +58,17 @@ Template.StandardsCard.viewmodel({
       template: 'EditStandard',
       _id: this.standard()._id
     });
+  },
+  renderVideoSrc(url) {
+    if (this.isYoutubeUrl(url)) {
+      const videoId = this.getIdFromYoutubeUrl(url);
+      url = `https://www.youtube.com/embed/${videoId}`;
+    } else if (this.isVimeoUrl(url)) {
+      const videoId = this.getIdFromVimeoUrl(url);
+      console.log(videoId)
+      console.log(`vimeo ${videoId}`)
+      url = `https://player.vimeo.com/video/${videoId}`;
+    }
+    return url;
   }
 });

@@ -18,48 +18,11 @@
       {{> ESDepartments standard=standard}}
 
       <hr>
-      <div class="form-group row">
-        <label class="form-control-label col-sm-4 col-xs-12">Source document/video 1</label>
-        <div class="col-sm-8 col-xs-12">
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-secondary active">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> URL link
-            </label>
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option2" autocomplete="off"> Attachment
-            </label>
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option3" autocomplete="off"> Video
-            </label>
-          </div>
-          <input type="text" class="form-control" placeholder="URL link" value="http://www.clifton-asset.co.uk/example/12345">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="form-control-label col-sm-4 col-xs-12">Source document/video 2</label>
-        <div class="col-sm-8 col-xs-12">
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option1" autocomplete="off"> URL link
-            </label>
-            <label class="btn btn-secondary active">
-              <input type="radio" name="options" id="option2" autocomplete="off" checked> Attachment
-            </label>
-            <label class="btn btn-secondary">
-              <input type="radio" name="options" id="option3" autocomplete="off"> Video
-            </label>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary" disabled="">
-              <i class="fa fa-file-word-o fa-lg margin-right"></i>
-              source document filename
-            </button>
-            <button type="button" class="btn btn-secondary">
-              <i class="fa fa-times-circle no-margin"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+
+      {{> ESSources sourceType=standard.source1.type sourceUrl=standard.source1.url label="Source document/video 1" id=1}}
+
+      {{> ESSources sourceType=standard.source2.type sourceUrl=standard.source2.url label="Source document/video 2" id=2}}
+
     </div>
     <div class="card-block card-block-collapse-toggle collapsed" href="#notify" data-toggle="collapse">
       <h4 class="card-title pull-xs-left">Notify</h4>

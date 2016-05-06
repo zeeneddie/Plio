@@ -14,7 +14,7 @@ Template.StandardsLayout.viewmodel({
     const userIds = _.pluck(users, 'userId');
     this.templateInstance.subscribe('standards-book-sections', _id);
     this.templateInstance.subscribe('standards-types', _id);
-    this.templateInstance.subscribe('standards')
+    this.templateInstance.subscribe('standards');
     this.templateInstance.subscribe('departments', _id);
     this.templateInstance.subscribe('organizationUsers', userIds);
   }

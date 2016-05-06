@@ -75,15 +75,24 @@
               </h4>
             </div>
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Source document/video 1</p>
-              <h4 class="list-group-item-heading"><a href="#">http://www.clifton-asset.co.uk/example/12345</a></h4>
-            </div>
+            {{#with this.source1}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Source document/video 1</p>
+                <h4 class="list-group-item-heading" {{b "if: this.type === 'url'"}}><a {{b "href: this.url, text: this.url"}}></a></h4>
+                <iframe width="560" height="315" frameborder="0" allowfullscreen
+                  {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}></iframe>
+              </div>
+            {{/with}}
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Source document/video 2</p>
-              <h4 class="list-group-item-heading"><a href="#"><i class="fa fa-file-word-o margin-right"></i> source document filename</a></h4>
-            </div>
+            {{#with this.source2}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Source document/video 2</p>
+                <h4 class="list-group-item-heading" {{b "if: this.type === 'url'"}}><a {{b "href: this.url, text: this.url"}}></a></h4>
+                <iframe width="560" height="315" frameborder="0" allowfullscreen
+                  {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}></iframe>
+              </div>
+            {{/with}}
+
           </div>
 
           {{> CardChangelog standard=this}}

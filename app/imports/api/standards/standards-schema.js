@@ -67,7 +67,29 @@ const optionalFields = new SimpleSchema({
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
     optional: true
-  }
+  },
+  source1: {
+    type: Object,
+    optional: true
+  },
+  'source1.type': {
+    type: String
+  },
+  'source1.url': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url
+  },
+  source2: {
+    type: Object,
+    optional: true
+  },
+  'source2.type': {
+    type: String
+  },
+  'source2.url': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url
+  },
 });
 
 const StandardsSchema = new SimpleSchema([optionalFields, {
