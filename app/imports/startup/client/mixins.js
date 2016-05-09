@@ -17,11 +17,11 @@ ViewModel.mixin({
   addForm: {
     addForm(template, context = {}) {
       if (_.isFunction(this.onChangeCb)) {
-        context[onChange] = this.onChangeCb();
+        context['onChange'] = this.onChangeCb();
       }
 
       if (_.isFunction(this.onDeleteCb)) {
-        context[onDelete] = this.onDeleteCb();
+        context['onDelete'] = this.onDeleteCb();
       }
 
       Blaze.renderWithData(
@@ -92,17 +92,6 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
       return Organizations.findOne({ serialNumber });
-    }
-  },
-  userEditSection: {
-    isPropChanged(propName) {
-      const val = this.getData()[propName];
-      const savedVal = this.templateInstance.data[propName];
-
-      return val && val !== savedVal;
-    },
-    isEditable() {
-      return Meteor.userId() === this.userId();
     }
   }
 });

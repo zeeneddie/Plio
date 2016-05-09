@@ -35,6 +35,7 @@ Template.EditableModal.viewmodel({
         this.isSaving(false);
 
         if (err) {
+          console.log(err);
           this.setError(err.reason);
         }
       }, this.savingStateTimeout());

@@ -1,7 +1,11 @@
 <template name="UserEdit_PhoneNumbers">
   <div id="phones-forms" {{b "ref: forms"}}>
-    {{#each phoneNumbers}}
-      {{> UserEdit_PhoneNumber}}
+    {{#each phoneNumbersData}}
+      {{> UserEdit_PhoneNumber
+          number=number
+          type=type
+          index=index
+          onChange=onChangeCb}}
     {{/each}}
   </div>
 

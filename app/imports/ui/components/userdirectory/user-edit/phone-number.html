@@ -5,10 +5,8 @@
     </label>
     <div class="col-sm-8 form-group-flex">
       <div class="form-group-flex-flex margin-right">
-        <div class="input-group">
-          <span class="input-group-addon">+44</span>
-          <input type="text" class="form-control" placeholder="Number" {{b "value: number"}} />
-        </div>
+        <input type="text" class="form-control" placeholder="Number" 
+            {{b "value: number, focusout: onPropertyChanged"}} />
       </div>
       <div>
         <select class="c-select"

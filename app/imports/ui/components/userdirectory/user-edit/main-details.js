@@ -1,63 +1,29 @@
-import { Slingshot } from 'meteor/edgee:slingshot';
-
-import { updateProfile, updateEmail } from '/imports/api/users/methods.js';
+import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
   mixin: ['editableModalSection', 'userEditSection'],
   avatarFile: null,
-  updateProfile(prop) {
-    if (this.isPropChanged(prop)) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        [prop]: this.getData()[prop]
-      });
-    }
-  },
-  updateEmail() {
-    if (this.isPropChanged('email')) {
-      this.callMethod(updateEmail, {
-        _id: this.userId(),
-        email: this.getData().email
-      });
-    }
-  },
   updateFirstName() {
-    this.updateProfile('firstName');
+    this.parent().updateProfile('firstName', this);
   },
   updateLastName() {
-    this.updateProfile('lastName');
+    this.parent().updateProfile('lastName', this);
   },
   updateInitials() {
-    this.updateProfile('initials');
+    this.parent().updateProfile('initials', this);
   },
   updateDescription() {
-    this.updateProfile('description');
+    this.parent().updateProfile('description', this);
   },
-  uploadAvatarFile() {
-    if (!this.avatarFile()) {
-      return;
-    }
-
-    const uploader = new Slingshot.Upload('usersAvatars');
-
-    this.clearError();
-    this.isSaving(true);
-
-    uploader.send(this.avatarFile(), (err, downloadUrl) => {
-      this.isSaving(false);
-      this.avatarFile(null);
-
-      if (err) {
-        this.setError(err);
-        return;
-      }
-
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        avatar: downloadUrl
-      });
-    });
+  updateAvatar() {
+    this.parent().uploadAvatarFile(this);
+  },
+  updateEmail() {
+    this.parent().updateEmail(this);
+  },
+  isEditable() {
+    return this.parent().isEditable();
   },
   getData() {
     return {

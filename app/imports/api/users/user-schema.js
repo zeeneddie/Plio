@@ -1,7 +1,20 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { PhoneTypes } from '../constants.js';
 
-const UserProfile = new SimpleSchema({
+
+const PhoneNumberSchema = new SimpleSchema({
+  number: {
+    type: String,
+    regEx: /^[\+|0-9][0-9\-\s\(\)]+$/
+  },
+  type: {
+    type: String,
+    allowedValues: _.values(PhoneTypes)
+  }
+});
+
+const UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
     optional: true
@@ -35,9 +48,13 @@ const UserProfile = new SimpleSchema({
   address: {
     type: String,
     optional: true
+  },
+  phoneNumbers: {
+    type: [PhoneNumberSchema],
+    optional: true
   }
 });
 
-const UserSchema = new SimpleSchema([UserProfile]);
+const UserSchema = new SimpleSchema([UserProfileSchema]);
 
-export { UserSchema, UserProfile };
+export { UserSchema, UserProfileSchema, PhoneNumberSchema };

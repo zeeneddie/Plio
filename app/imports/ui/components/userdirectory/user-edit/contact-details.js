@@ -1,26 +1,26 @@
+import { Template } from 'meteor/templating';
 import { CountryCodes } from 'meteor/3stack:country-codes';
-
-import { updateProfile } from '/imports/api/users/methods.js';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
   mixin: ['editableModalSection', 'userEditSection', 'collapse'],
-  updateProfile(prop) {
-    if (this.isPropChanged(prop)) {
-      this.callMethod(updateProfile, {
-        _id: this.userId(),
-        [prop]: this.getData()[prop]
-      });
-    }
-  },
   updateAddress() {
-    this.updateProfile('address');
+    this.parent().updateProfile('address', this);
   },
   updateSkype() {
-    this.updateProfile('skype');
+    this.parent().updateProfile('skype', this);
   },
   updateCountry() {
-    this.updateProfile('country');
+    this.parent().updateProfile('country', this);
+  },
+  updatePhoneNumber(viewModel) {
+    this.parent().updatePhoneNumber(viewModel);
+  },
+  addPhoneNumber(viewModel) {
+    this.parent().addPhoneNumber(viewModel);
+  },
+  isEditable() {
+    return this.parent().isEditable();
   },
   countries() {
     return _.map(CountryCodes.getList(), (val, key) => {

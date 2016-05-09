@@ -1,3 +1,17 @@
+import { Template } from 'meteor/templating';
+import { Slingshot } from 'meteor/edgee:slingshot';
+import { Roles } from 'meteor/alanning:roles';
+
+import { 
+  updateProfile, 
+  updateEmail, 
+  updatePhoneNumber, 
+  addPhoneNumber 
+} from '/imports/api/users/methods.js';
+import { assignRole, revokeRole } from '/imports/api/users/methods.js';
+import { UserRoles } from '/imports/api/constants.js';
+
+
 Template.UserEdit.viewmodel({
   mixin: ['organization'],
   guideHtml() {
@@ -19,5 +33,103 @@ Template.UserEdit.viewmodel({
     const userName = this.user().firstName();
     const orgName = this.organization().name;
     return `${userName}'s superpowers for ${orgName}`;
+  },
+  callMethod(method, args, cb) {
+    this.child('EditableModal').callMethod(method, args, cb);
+  },
+  updateProfile(prop, viewModel) {
+    if (this.isPropChanged(prop, viewModel)) {
+      this.callMethod(updateProfile, {
+        _id: this.userId(),
+        [prop]: viewModel.getData()[prop]
+      });
+    }
+  },
+  updateEmail(viewModel) {
+    if (this.isPropChanged('email', viewModel)) {
+      this.callMethod(updateEmail, {
+        _id: this.userId(),
+        email: viewModel.getData().email
+      });
+    }
+  },
+  uploadAvatarFile(viewModel) {
+    const avatarFile = viewModel.avatarFile();
+    if (!avatarFile) {
+      return;
+    }
+
+    const uploader = new Slingshot.Upload('usersAvatars');
+
+    this.clearError();
+    this.isSaving(true);
+
+    uploader.send(avatarFile, (err, downloadUrl) => {
+      this.isSaving(false);
+      viewModel.avatarFile(null);
+
+      if (err) {
+        this.setError(err);
+        return;
+      }
+
+      this.callMethod(updateProfile, {
+        _id: this.userId(),
+        avatar: downloadUrl
+      });
+    });
+  },
+  updatePhoneNumber(viewModel) {
+    const { number, type } = viewModel.getData();
+    const index = viewModel.index();
+    
+    this.callMethod(updatePhoneNumber, {
+      _id: this.userId(),
+      index, number, type
+    });
+  },
+  addPhoneNumber(viewModel) {
+    const { number, type } = viewModel.getData();
+
+    this.callMethod(addPhoneNumber, {
+      _id: this.userId(),
+      number, type
+    }, (err) => {
+      if (!err) {
+        Blaze.remove(viewModel.templateInstance.view);
+      }
+    });
+  },
+  isPropChanged(propName, viewModel) {
+    const val = viewModel.getData()[propName];
+    const savedVal = viewModel.templateInstance.data[propName];
+
+    return val && val !== savedVal;
+  },
+  isEditable() {
+    return Meteor.userId() === this.userId();
+  },
+  isSuperpowersEditable() {
+    return Roles.userIsInRole(
+      Meteor.userId(),
+      UserRoles.EDIT_USER_ROLES,
+      this.organizationId()
+    );
+  },
+  userHasRole(role) {
+    return Roles.userIsInRole(this.userId(), role, this.organizationId());
+  },
+  updateRole(role) {
+    const doc = {
+      _id: this.userId(),
+      organizationId: this.organizationId(),
+      role
+    };
+
+    if (this.userHasRole(role)) {
+      this.callMethod(revokeRole, doc);
+    } else {
+      this.callMethod(assignRole, doc);
+    }
   }
 });

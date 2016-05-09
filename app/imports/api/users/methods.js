@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Roles } from 'meteor/alanning:roles';
 
 import UserService from './user-service.js';
-import { UserProfile } from './user-schema.js';
+import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
@@ -46,7 +46,7 @@ export const updateProfile = new ValidatedMethod({
 
   validate: new SimpleSchema([
     IdSchema,
-    UserProfile
+    UserProfileSchema
   ]).validator(),
 
   run({ _id, ...args}) {
@@ -57,13 +57,7 @@ export const updateProfile = new ValidatedMethod({
       throw new Meteor.Error(403, 'User cannot update another user');
     }
 
-    const fields = {};
-
-    _.each(args, (val, name) => {
-      fields[`profile.${name}`] = val;
-    });
-
-    return UserService.update(_id, fields);
+    return UserService.updateProfile(_id, args);
   }
 });
 
@@ -90,7 +84,52 @@ export const updateEmail = new ValidatedMethod({
       'emails.0.verified': false
     };
 
-    return UserService.update(_id, fields);
+    return UserService.updateEmail(_id, email);
+  }
+});
+
+export const updatePhoneNumber = new ValidatedMethod({
+  name: 'Users.updatePhoneNumber',
+
+  validate: new SimpleSchema([IdSchema, PhoneNumberSchema, {
+    index: {
+      type: Number,
+      min: 0
+    }
+  }]).validator(),
+
+  run({ _id, ...args }) {
+    const userId = this.userId;
+    checkUserId(userId, 'Unauthorized user cannot update phone numbers');
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot update another user\'s phone numbers'
+        );
+    }
+
+    return UserService.updatePhoneNumber(_id, args);
+  }
+});
+
+export const addPhoneNumber = new ValidatedMethod({
+  name: 'Users.addPhoneNumber',
+
+  validate: new SimpleSchema([
+    IdSchema, PhoneNumberSchema
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    const userId = this.userId;
+    checkUserId(userId, 'Unauthorized user cannot add phone numbers');
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot add phone numbers to another users'
+      );
+    }
+
+    return UserService.addPhoneNumber(_id, args);
   }
 });
 
