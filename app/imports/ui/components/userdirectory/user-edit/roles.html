@@ -1,9 +1,10 @@
-<template name="UserEdit_Superpowers">
+<template name="UserEdit_Roles">
   <div class="card-block card-block-collapse-toggle collapsed"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left" {{b "text: title"}}>
     </h4>
-    <h4 class="card-title pull-xs-right text-muted">2</h4>
+    <h4 class="card-title pull-xs-right text-muted" {{b "text: rolesCount"}}>
+    </h4>
   </div>
 
   <div class="card-block-collapse collapse" id="superpowers" {{b "ref: collapse"}}>

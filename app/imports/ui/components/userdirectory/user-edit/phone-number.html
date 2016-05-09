@@ -6,11 +6,11 @@
     <div class="col-sm-8 form-group-flex">
       <div class="form-group-flex-flex margin-right">
         <input type="text" class="form-control" placeholder="Number" 
-            {{b "value: number, focusout: onPropertyChanged"}} />
+            {{b "value: number, focusout: onPropertyChanged, enable: isEditable"}} />
       </div>
       <div>
         <select class="c-select"
-          {{b "options: phoneTypes, value: type"}}>
+          {{b "options: phoneTypes, value: type, enable: isEditable"}}>
         </select>
       </div>
     </div>

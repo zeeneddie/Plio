@@ -1,7 +1,7 @@
 <template name="UserEdit_MainDetails">
   <div class="card-block">
     {{#FormField label="Photo"}}
-      <img class="img-circle" {{b "attr: {src: avatar}"}}>
+      <img class="img-circle user-avatar" {{b "attr: {src: avatar}"}}>
       <span class="btn btn-secondary btn-file" {{b "enable: isEditable"}}>
         Change <input type="file" {{b "value: avatarFile, change: updateAvatar, enable: isEditable"}}>
       </span>

@@ -29,7 +29,7 @@ Template.UserEdit.viewmodel({
   organizationId() {
     return this.organization()._id;
   },
-  superpowersTitle() {
+  rolesTitle() {
     const userName = this.user().firstName();
     const orgName = this.organization().name;
     return `${userName}'s superpowers for ${orgName}`;
@@ -106,7 +106,7 @@ Template.UserEdit.viewmodel({
   isEditable() {
     return Meteor.userId() === this.userId();
   },
-  isSuperpowersEditable() {
+  isRolesEditable() {
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.EDIT_USER_ROLES,
@@ -114,7 +114,14 @@ Template.UserEdit.viewmodel({
     );
   },
   userHasRole(role) {
-    return Roles.userIsInRole(this.userId(), role, this.organizationId());
+    return Roles.userIsInRole(
+      this.userId(), role, this.organizationId()
+    );
+  },
+  userRoles() {
+    return _.filter(UserRoles, (role) => {
+      return this.userHasRole(role);
+    });
   },
   updateRole(role) {
     const doc = {
