@@ -8,4 +8,3 @@ import './card-changelog.js';
 import './time-picker.html';
 import './preloader.html';
 import './time-picker.js';
-import './form-field.html';

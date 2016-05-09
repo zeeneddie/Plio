@@ -4,7 +4,7 @@ import { UserRoles, UserRolesNames } from '/imports/api/constants.js';
 
 
 Template.UserEdit_Superpowers.viewmodel({
-  mixin: ['editableModalSection', 'collapse'],
+  mixin: ['collapse'],
   roles() {
     return _.values(UserRoles);
   },

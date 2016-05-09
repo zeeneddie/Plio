@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.UsersDetails.viewmodel({
-  mixin: ['user', 'organization'],
+  mixin: ['user', 'organization', 'modal'],
   initials(user) {
     return user.profile.initials;
   },
@@ -21,7 +21,9 @@ Template.UsersDetails.viewmodel({
   },
   openEditUserModal(e) {
     e.preventDefault();
-    ModalManager.open('UserEdit', {
+    this.modal().open({
+      template: 'UserEdit',
+      title: 'Edit User',
       userId: this.currentUser()._id
     });
   }

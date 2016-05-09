@@ -1,11 +1,4 @@
 <template name="UserEdit">
-  {{#EditableModal
-      id="user-edit-modal"
-      title="Edit User"
-      guideHtml=guideHtml
-      moreInfoLink="#"
-  }}
-
     {{#with user}}
       {{> UserEdit_MainDetails
           avatar=avatar
@@ -25,6 +18,4 @@
           superpowers=superpowers
           title=superpowersTitle}}
     {{/with}}
-
-  {{/EditableModal}}
 </template>

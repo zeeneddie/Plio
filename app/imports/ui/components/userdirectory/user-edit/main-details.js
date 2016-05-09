@@ -2,7 +2,6 @@ import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
-  mixin: ['editableModalSection', 'userEditSection'],
   avatarFile: null,
   updateFirstName() {
     this.parent().updateProfile('firstName', this);

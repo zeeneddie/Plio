@@ -3,7 +3,7 @@ import { CountryCodes } from 'meteor/3stack:country-codes';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
-  mixin: ['editableModalSection', 'userEditSection', 'collapse'],
+  mixin: ['collapse'],
   updateAddress() {
     this.parent().updateProfile('address', this);
   },

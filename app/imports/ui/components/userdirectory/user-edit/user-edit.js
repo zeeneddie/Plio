@@ -13,7 +13,7 @@ import { UserRoles } from '/imports/api/constants.js';
 
 
 Template.UserEdit.viewmodel({
-  mixin: ['organization'],
+  mixin: ['organization', 'modal'],
   guideHtml() {
     return `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       Praesent vestibulum accumsan nulla, non pulvinar neque.
@@ -34,12 +34,9 @@ Template.UserEdit.viewmodel({
     const orgName = this.organization().name;
     return `${userName}'s superpowers for ${orgName}`;
   },
-  callMethod(method, args, cb) {
-    this.child('EditableModal').callMethod(method, args, cb);
-  },
   updateProfile(prop, viewModel) {
     if (this.isPropChanged(prop, viewModel)) {
-      this.callMethod(updateProfile, {
+      this.modal().callMethod(updateProfile, {
         _id: this.userId(),
         [prop]: viewModel.getData()[prop]
       });
@@ -47,7 +44,7 @@ Template.UserEdit.viewmodel({
   },
   updateEmail(viewModel) {
     if (this.isPropChanged('email', viewModel)) {
-      this.callMethod(updateEmail, {
+      this.modal().callMethod(updateEmail, {
         _id: this.userId(),
         email: viewModel.getData().email
       });
@@ -73,7 +70,7 @@ Template.UserEdit.viewmodel({
         return;
       }
 
-      this.callMethod(updateProfile, {
+      this.modal().callMethod(updateProfile, {
         _id: this.userId(),
         avatar: downloadUrl
       });
@@ -83,7 +80,7 @@ Template.UserEdit.viewmodel({
     const { number, type } = viewModel.getData();
     const index = viewModel.index();
     
-    this.callMethod(updatePhoneNumber, {
+    this.modal().callMethod(updatePhoneNumber, {
       _id: this.userId(),
       index, number, type
     });
@@ -91,7 +88,7 @@ Template.UserEdit.viewmodel({
   addPhoneNumber(viewModel) {
     const { number, type } = viewModel.getData();
 
-    this.callMethod(addPhoneNumber, {
+    this.modal().callMethod(addPhoneNumber, {
       _id: this.userId(),
       number, type
     }, (err) => {
@@ -127,9 +124,9 @@ Template.UserEdit.viewmodel({
     };
 
     if (this.userHasRole(role)) {
-      this.callMethod(revokeRole, doc);
+      this.modal().callMethod(revokeRole, doc);
     } else {
-      this.callMethod(assignRole, doc);
+      this.modal().callMethod(assignRole, doc);
     }
   }
 });
