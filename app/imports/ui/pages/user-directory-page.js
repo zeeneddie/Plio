@@ -6,6 +6,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
+  mixin: 'search',
   activeUser() {
     return FlowRouter.getParam('userId') || null;
   },
@@ -36,9 +37,12 @@ Template.UserDirectoryPage.viewmodel({
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
 
+    const searchUsers = this.searchObject('searchText',
+      ['profile.firstName', 'profile.lastName', 'profile.description', 'emails.0.address']);
+
     findQuery['$and'] = [
       { _id: { $in: userIds }},
-      { ...this.searchUser() }
+      { ...searchUsers }
     ];
 
     const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});

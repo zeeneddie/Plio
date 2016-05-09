@@ -23,7 +23,7 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
-  mixin: ['user'],
+  mixin: ['user', 'modal'],
   getStatuses() {
     return STATUSES;
   },
@@ -59,7 +59,13 @@ Template.UserMenu.viewmodel({
     let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
     let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
 
-    ModalManager.open('UserDirectory_InviteUsers', {organizationId: organizationId});
+    this.modal().open({
+      template: 'UserDirectory_InviteUsers',
+      title: 'Invite users',
+      submitCaption: 'Invite',
+      variation: 'save',
+      organizationId
+    });
   },
   logout(e) {
     e.preventDefault();

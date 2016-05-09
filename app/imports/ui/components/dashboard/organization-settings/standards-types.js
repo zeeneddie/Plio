@@ -3,7 +3,7 @@ import { insert, update, remove } from '/imports/api/standards-types/methods.js'
 
 
 Template.OrganizationSettings_StandardsTypes.viewmodel({
-  mixin: ['collapse', 'addForm', 'editableModalSection'],
+  mixin: ['collapse', 'addForm', 'modal'],
   standardsTypesCount() {
     return StandardsTypes.find({
       organizationId: this.organizationId()
@@ -23,13 +23,13 @@ Template.OrganizationSettings_StandardsTypes.viewmodel({
 
       Blaze.remove(viewModel.templateInstance.view);
 
-      this.callMethod(insert, {
+      this.modal().callMethod(insert, {
         name, abbreviation, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      this.callMethod(update, { _id, name, abbreviation });
+      this.modal().callMethod(update, { _id, name, abbreviation });
     }
   },
   onDelete(viewModel) {
@@ -42,6 +42,6 @@ Template.OrganizationSettings_StandardsTypes.viewmodel({
 
     const _id = viewModel._id();
 
-    this.callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id });
   }
 });

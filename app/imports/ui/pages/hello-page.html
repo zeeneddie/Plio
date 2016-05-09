@@ -2,9 +2,7 @@
   <div class="jumbotron vertical-center table">
     <div class="table-cell text-xs-center">
       {{#unless Template.subscriptionsReady}}
-        <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw margin-bottom"></i>
-        <br>
-        <span>Loading...</span>
+        {{> Preloader}}
       {{else}}
         <p>Sorry, your account is not associated with any organization.</p> 
         <a href="{{pathFor 'signUp'}}">You can create a new account.</a>
