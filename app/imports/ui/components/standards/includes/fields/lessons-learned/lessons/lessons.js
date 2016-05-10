@@ -6,6 +6,9 @@ Template.ESLessons.viewmodel({
   mixin: 'collapse',
   onRendered() {
     this.datepicker.datepicker();
+    if (!this._id) {
+      this.toggleCollapse();
+    }
   },
   standard() {
     return ViewModel.findOne('ESLessonsLearned').standard();
@@ -27,10 +30,13 @@ Template.ESLessons.viewmodel({
     const standardId = this.standard() && this.standard()._id;
 
     if (_id) {
-      console.log(owner);
       ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId });
     } else {
-      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId }, this.destroy());
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId }, (err, _id) => {
+        this.destroy();
+        const sectionToCollapse = ViewModel.findOne('ESLessons', vm => vm._id && vm._id() === _id);
+        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
+      });
     }
   },
   delete() {

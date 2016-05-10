@@ -14,7 +14,6 @@ export default {
         ...args
       }
     };
-    console.log(options);
     return this.collection.update(query, options);
   },
 

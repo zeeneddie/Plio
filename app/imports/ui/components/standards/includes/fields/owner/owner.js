@@ -25,7 +25,7 @@ Template.ESOwner.viewmodel({
     this.update();
   },
   update() {
-    if (!this._id) return;
+    if (!this._id || this._id !== 'placeholder') return;
     const { owner } = this.getData();
     if (!owner) {
       this.modal().setError('Owner is required!');
