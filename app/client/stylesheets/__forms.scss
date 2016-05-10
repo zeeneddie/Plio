@@ -62,17 +62,6 @@
       height: 800px;
     }
   }
-
-  &-expand-toggle {
-    .fa-compress { display: none; }
-    .fa-expand { display: inline-block; }
-
-    .expanded & {
-      .fa-compress { display: inline-block; }
-      .fa-expand { display: none; }
-    }
-
-  }
 }
 
 
