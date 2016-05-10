@@ -2,11 +2,11 @@ import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
 
-import { 
-  updateProfile, 
-  updateEmail, 
-  updatePhoneNumber, 
-  addPhoneNumber 
+import {
+  updateProfile,
+  updateEmail,
+  updatePhoneNumber,
+  addPhoneNumber
 } from '/imports/api/users/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 import { UserRoles } from '/imports/api/constants.js';
@@ -58,15 +58,15 @@ Template.UserEdit.viewmodel({
 
     const uploader = new Slingshot.Upload('usersAvatars');
 
-    this.clearError();
-    this.isSaving(true);
+    this.modal().clearError();
+    this.modal().isSaving(true);
 
     uploader.send(avatarFile, (err, downloadUrl) => {
-      this.isSaving(false);
+      this.modal().isSaving(false);
       viewModel.avatarFile(null);
 
       if (err) {
-        this.setError(err);
+        this.modal().setError(err);
         return;
       }
 
@@ -79,7 +79,7 @@ Template.UserEdit.viewmodel({
   updatePhoneNumber(viewModel) {
     const { number, type } = viewModel.getData();
     const index = viewModel.index();
-    
+
     this.modal().callMethod(updatePhoneNumber, {
       _id: this.userId(),
       index, number, type

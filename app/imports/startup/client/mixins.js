@@ -47,6 +47,9 @@ ViewModel.mixin({
       setError(err) {
         this.instance().setError(err);
       },
+      clearError() {
+        this.instance().clearError();
+      },
       callMethod(method, args, cb) {
         return this.instance().callMethod(method, args, cb);
       },
