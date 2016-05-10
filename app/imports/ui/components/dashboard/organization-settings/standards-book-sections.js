@@ -6,7 +6,7 @@ import {
 } from '/imports/api/standards-book-sections/methods.js';
 
 Template.OrganizationSettings_StandardsBookSections.viewmodel({
-  mixin: ['collapse', 'addForm', 'editableModalSection'],
+  mixin: ['collapse', 'addForm', 'modal'],
   standardsBookSectionsCount() {
     return StandardsBookSections.find({
       organizationId: this.organizationId()
@@ -26,13 +26,13 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
 
       Blaze.remove(viewModel.templateInstance.view);
 
-      this.callMethod(insert, {
+      this.modal().callMethod(insert, {
         title, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      this.callMethod(update, { _id, title });
+      this.modal().callMethod(update, { _id, title });
     }
   },
   onDelete(viewModel) {
@@ -47,6 +47,6 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
 
     const _id = viewModel._id();
 
-    this.callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id });
   }
 });
