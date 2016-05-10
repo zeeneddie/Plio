@@ -30,7 +30,8 @@ Template.UserEdit.viewmodel({
     return this.organization()._id;
   },
   rolesTitle() {
-    const userName = this.user().firstName();
+    const user = this.user();
+    const userName = user.firstName() || user.lastName() || user.email();
     const orgName = this.organization().name;
     return `${userName}'s superpowers for ${orgName}`;
   },
