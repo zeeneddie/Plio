@@ -168,8 +168,9 @@ password: password
 
 [Documentation.](http://quilljs.com/docs/quickstart/) Example:
 
-```
+```html
 {{#QuillEditor}}
+   <!-- This is the actual value -->
    <div>Hello World!</div>
    <div>Some initial <b>bold</b> text</div>
    <div><br></div>
