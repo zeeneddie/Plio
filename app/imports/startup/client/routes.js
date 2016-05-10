@@ -52,7 +52,7 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
-  triggersEnter: [checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserAccountWaitingPage');
   }
@@ -109,6 +109,7 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
+  console.log('asdasd');
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, {org: context.params.orgSerialNumber});
@@ -119,7 +120,7 @@ function checkLoggedIn(context, redirect) {
 function checkEmailVerified(context, redirect) {
   const user = Meteor.user();
   const isOnUserWaiting = context.route.name === 'userWaiting';
-  
+
   if (user) {
     const email = user.emails[0];
     
