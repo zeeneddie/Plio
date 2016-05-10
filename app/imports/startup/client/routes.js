@@ -25,7 +25,12 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
-AccountsTemplates.configureRoute('verifyEmail');
+AccountsTemplates.configureRoute('verifyEmail', {
+  redirect() {
+    FlowRouter.go('hello');
+    toastr.success('Email verified! Thanks!');
+  }
+});
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
@@ -109,7 +114,6 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
-  console.log('asdasd');
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, {org: context.params.orgSerialNumber});
