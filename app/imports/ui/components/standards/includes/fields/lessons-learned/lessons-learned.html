@@ -4,10 +4,12 @@
     <i class="fa fa-align-left disclosure-indicator pull-right"></i>
   </div>
   <div class="card-block-collapse collapse" id="lessons" {{b "ref: collapse"}}>
-    <div class="card-block" {{b "ref: container"}}>
-      {{#each lessons}}
-        {{> ESLessons}}
-      {{/each}}
+    <div class="card-block">
+      <div {{b "ref: container"}}>
+        {{#each lessons}}
+          {{> ESLessons}}
+        {{/each}}
+      </div>
       <div class="text-xs-center">
         <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
       </div>

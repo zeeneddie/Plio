@@ -96,10 +96,10 @@ const optionalFields = new SimpleSchema({
     optional: true
   },
   lessons: {
-    type: [Object],
-    blackbox: true,
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
     optional: true
-  }
+  },
 });
 
 const StandardsSchema = new SimpleSchema([optionalFields, {

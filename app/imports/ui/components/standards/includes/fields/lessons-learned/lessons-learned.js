@@ -6,9 +6,8 @@ Template.ESLessonsLearned.viewmodel({
     return this.standard() && this.standard().lessons;
   },
   addLesson() {
-    Blaze.renderWithData(
+    const view = Blaze.render(
       Template.ESLessons,
-      {},
       this.container[0]
     );
   }
