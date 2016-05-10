@@ -17,7 +17,9 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="list-group-item">
-                <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
+                <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
+                  <img {{b "src: avatar(this)"}}>
+                </div>
                 <p class="list-group-item-text">Name</p>
                 <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
               </div>

@@ -32,7 +32,11 @@
         }
 
         .user-avatar {
-          max-width: 50%;
+          vertical-align: middle;
+        }
+
+        .user-avatar + .btn {
+          margin-bottom: 0;
         }
 
         select {

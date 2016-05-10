@@ -1,0 +1,9 @@
+{
+  "AWSRegion": "eu-west-1",
+  "AWSAccessKeyId": "AKIAIBJBPA7W5KHQPP2Q",
+  "AWSSecretAccessKey": "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",
+  "AWSS3Bucket": {
+    "name": "plio",
+    "acl": "public-read"
+  }
+}
