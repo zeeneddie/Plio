@@ -11,7 +11,9 @@ _.extend(global, { Organizations, Standards, StandardsTypes, StandardsBookSectio
 
 import path from 'path';
 import fs from 'fs';
-import { EJSON } from 'meteor/ejson'
+import { EJSON } from 'meteor/ejson';
+
+import { UserRoles } from '../../api/constants.js';
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
@@ -49,9 +51,6 @@ const fillCollection = (collection, assets) => {
   if (!collection.find().count()) {
     return _.each(assets, function(doc) {
       collection.insert(doc);
-      if (collection === Meteor.users && doc.roles) {
-        return Roles.addUsersToRoles(doc._id, doc.roles);
-      }
     });
   }
 };
@@ -66,9 +65,16 @@ const logAction = (assetsNumber, collectionName) => {
 };
 
 Meteor.startup(() => {
+  if (!Meteor.roles.find().count()) {
+    _.each(UserRoles, (name) => {
+      Meteor.roles.insert({ name });
+    });
+  }
+
   const fixturesPath = 'fixtures';
   const fixturesConfigsEJSON = path.join(fixturesPath, 'configs.json');
   const fixturesConfigs = EJSON.parse(Assets.getText(fixturesConfigsEJSON));
+
   return _.each(fixturesConfigs, (assetsDir, collectionName) => {
     const collection = getAttributeValue(global, collectionName);
 

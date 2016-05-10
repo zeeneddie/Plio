@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
+import { Roles } from 'meteor/alanning:roles';
 import { Organizations } from './organizations.js';
+import { OrgMemberRoles } from '../constants.js';
 
 import Utils from '/imports/core/utils';
 import NotificationSender from '../../core/NotificationSender';
@@ -44,6 +46,7 @@ class InvitationSender {
     try {
       const newUserId = Accounts.createUser(userDoc);
       Meteor.users.update({_id: newUserId}, {$set: {invitationId: this._invitationId}});
+      Roles.addUsersToRoles(newUserId, OrgMemberRoles, this._organizationId);
       return newUserId;
     } catch (err) {
       const errorMsg = `Failed to create user ${this._userEmail}`;

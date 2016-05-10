@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.UsersDetails.viewmodel({
-  mixin: ['user', 'organization'],
+  mixin: ['user', 'organization', 'modal'],
   initials(user) {
     return user.profile.initials;
   },
@@ -18,5 +18,13 @@ Template.UsersDetails.viewmodel({
     if(this.organization()) {
       return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
     }
+  },
+  openEditUserModal(e) {
+    e.preventDefault();
+    this.modal().open({
+      template: 'UserEdit',
+      title: 'Edit User',
+      userId: this.currentUser()._id
+    });
   }
 });

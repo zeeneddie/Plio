@@ -29,6 +29,14 @@
   .form-group:not(.row) & {
     padding-left: 0;
   }
+
+  &.first-row-label {
+    padding-right: 0;
+
+    @media (min-width:768px) {
+      text-align: right;
+    }
+  }
 }
 
 
@@ -73,7 +81,7 @@
   padding-right: 0;
   margin-right: 10px;
 
-  &.active {
+  &.active, &.active:focus {
     background: $light-blue-color;
     border-color: $light-blue-color;
 
