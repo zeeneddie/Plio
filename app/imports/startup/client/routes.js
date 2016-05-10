@@ -25,8 +25,23 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
-AccountsTemplates.configureRoute('forgotPwd');
-AccountsTemplates.configureRoute('resetPwd');
+AccountsTemplates.configureRoute('forgotPwd', {
+  layoutType: 'blaze',
+  name: 'forgotPwd',
+  path: '/forgot-password',
+  layoutTemplate: 'LoginLayout',
+  layoutRegions: {},
+  contentRegion: 'content'
+});
+
+AccountsTemplates.configureRoute('resetPwd', {
+  layoutType: 'blaze',
+  name: 'resetPwd',
+  path: '/reset-password',
+  layoutTemplate: 'LoginLayout',
+  layoutRegions: {},
+  contentRegion: 'content'
+});
 AccountsTemplates.configureRoute('verifyEmail');
 
 FlowRouter.route('/accept-invitation/:invitationId', {
