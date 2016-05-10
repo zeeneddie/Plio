@@ -1,10 +1,12 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 
 
-Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
-  bucket: 'plio',
+const s3BucketSettings = Meteor.settings.AWSS3Bucket;
 
-  acl: 'public-read',
+Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
+  bucket: s3BucketSettings.name,
+
+  acl: s3BucketSettings.acl,
 
   authorize() {
     if (!this.userId) {
@@ -15,6 +17,6 @@ Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
   },
 
   key(file) {
-    return `images/avatars/${file.name}`;
+    return `${s3BucketSettings.avatarsDir}/${file.name}`;
   }
 });

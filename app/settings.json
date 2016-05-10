@@ -1,5 +1,10 @@
 {
   "AWSRegion": "",
   "AWSAccessKeyId": "",
-  "AWSSecretAccessKey": ""
+  "AWSSecretAccessKey": "",
+  "AWSS3Bucket": {
+    "name": "",
+    "acl": "",
+    "avatarsDir": ""
+  }
 }
