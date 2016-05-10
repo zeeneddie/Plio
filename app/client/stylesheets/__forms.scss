@@ -92,7 +92,7 @@
   padding-right: 0;
   margin-right: 10px;
 
-  &.active {
+  &.active, &.active:focus {
     background: $light-blue-color;
     border-color: $light-blue-color;
 
