@@ -14,13 +14,6 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UserEdit.viewmodel({
   mixin: ['organization', 'modal'],
-  guideHtml() {
-    return `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Praesent vestibulum accumsan nulla, non pulvinar neque.
-      Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec
-      maximus pellentesque, massa nunc mattis ipsum, in dictum magna
-      arcu et ipsum.</p>`;
-  },
   user() {
     return Meteor.users.findOne({
       _id: this.userId()
@@ -28,12 +21,6 @@ Template.UserEdit.viewmodel({
   },
   organizationId() {
     return this.organization()._id;
-  },
-  rolesTitle() {
-    const user = this.user();
-    const userName = user.firstName() || user.lastName() || user.email();
-    const orgName = this.organization().name;
-    return `${userName}'s superpowers for ${orgName}`;
   },
   updateProfile(prop, viewModel) {
     if (this.isPropChanged(prop, viewModel)) {
@@ -106,6 +93,12 @@ Template.UserEdit.viewmodel({
   },
   isEditable() {
     return Meteor.userId() === this.userId();
+  },
+  rolesTitle() {
+    const user = this.user();
+    const userName = user.firstName() || user.lastName() || user.email();
+    const orgName = this.organization().name;
+    return `${userName}'s superpowers for ${orgName}`;
   },
   isRolesEditable() {
     return Roles.userIsInRole(
