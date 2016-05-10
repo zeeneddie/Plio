@@ -58,8 +58,6 @@ FlowRouter.route('/user-waiting', {
   }
 });
 
-
-
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   action(params) {

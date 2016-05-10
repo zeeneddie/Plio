@@ -10,4 +10,6 @@ function postSignUpHook(userId, info) {
   });
 }
 
-AccountsTemplates.configure({ postSignUpHook });
+AccountsTemplates.configure({ 
+  postSignUpHook
+});
