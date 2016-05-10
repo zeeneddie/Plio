@@ -79,11 +79,6 @@ export const updateEmail = new ValidatedMethod({
       throw new Meteor.Error(403, 'User cannot update another user\'s email');
     }
 
-    const fields = {
-      'emails.0.address': email,
-      'emails.0.verified': false
-    };
-
     return UserService.updateEmail(_id, email);
   }
 });
@@ -105,7 +100,7 @@ export const updatePhoneNumber = new ValidatedMethod({
     if (userId !== _id) {
       throw new Meteor.Error(
         403, 'User cannot update another user\'s phone numbers'
-        );
+      );
     }
 
     return UserService.updatePhoneNumber(_id, args);

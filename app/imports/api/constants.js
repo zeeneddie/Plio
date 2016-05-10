@@ -39,6 +39,20 @@ const UserRolesNames = {
   [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
 };
 
+const OrgOwnerRoles = [
+  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.VIEW_TEAM_ACTIONS,
+  UserRoles.INVITE_USERS,
+  UserRoles.DELETE_USERS,
+  UserRoles.EDIT_USER_ROLES,
+  UserRoles.CHANGE_ORG_SETTINGS
+];
+
+const OrgMemberRoles = [
+  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.VIEW_TEAM_ACTIONS
+];
+
 const PhoneTypes = {
   WORK: 'Work',
   HOME: 'Home',
@@ -108,6 +122,8 @@ export {
   NCTypes,
   OrgCurrencies,
   OrganizationDefaults,
+  OrgOwnerRoles,
+  OrgMemberRoles,
   PhoneTypes,
   TimeUnits,
   UserMembership,
