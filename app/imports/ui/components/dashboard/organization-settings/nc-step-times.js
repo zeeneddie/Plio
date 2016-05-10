@@ -2,7 +2,7 @@ import { setStepTime } from '/imports/api/organizations/methods.js';
 
 
 Template.OrganizationSettings_NcStepTimes.viewmodel({
-  mixin: ['collapse', 'editableModalSection'],
+  mixin: ['collapse', 'modal'],
   onChangeCb() {
     return this.onChange.bind(this);
   },
@@ -11,7 +11,7 @@ Template.OrganizationSettings_NcStepTimes.viewmodel({
     const { timeValue, timeUnit } = viewModel.getData();
     const _id = this.organizationId();
 
-    this.callMethod(setStepTime, {
+    this.modal().callMethod(setStepTime, {
       _id, ncType, timeValue, timeUnit
     });
   }

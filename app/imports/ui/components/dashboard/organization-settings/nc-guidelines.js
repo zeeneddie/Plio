@@ -2,7 +2,7 @@ import { setGuideline } from '/imports/api/organizations/methods.js';
 
 
 Template.OrganizationSettings_NcGuidelines.viewmodel({
-  mixin: ['collapse', 'editableModalSection'],
+  mixin: ['collapse', 'modal'],
   onChangeCb() {
     return this.onChange.bind(this);
   },
@@ -11,6 +11,6 @@ Template.OrganizationSettings_NcGuidelines.viewmodel({
     const { text } = viewModel.getData();
     const _id = this.organizationId();
 
-    this.callMethod(setGuideline, { _id, ncType, text });
+    this.modal().callMethod(setGuideline, { _id, ncType, text });
   }
 });

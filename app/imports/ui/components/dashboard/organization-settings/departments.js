@@ -3,7 +3,7 @@ import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.OrganizationSettings_Departments.viewmodel({
-  mixin: ['collapse', 'addForm', 'editableModalSection'],
+  mixin: ['collapse', 'addForm', 'modal'],
   departmentsCount() {
     return Departments.find({
       organizationId: this.organizationId()
@@ -23,11 +23,11 @@ Template.OrganizationSettings_Departments.viewmodel({
 
       Blaze.remove(viewModel.templateInstance.view);
 
-      this.callMethod(insert, { name, organizationId });
+      this.modal().callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
 
-      this.callMethod(update, { _id, name });
+      this.modal().callMethod(update, { _id, name });
     }
   },
   onDelete(viewModel) {
@@ -42,6 +42,6 @@ Template.OrganizationSettings_Departments.viewmodel({
 
     const _id = viewModel._id();
 
-    this.callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id });
   },
 });
