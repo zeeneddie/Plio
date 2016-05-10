@@ -1,17 +1,20 @@
-import { Lessons } from './lessons.js';
+import { LessonsLearned } from './lessons.js';
 
 export default {
-  collection: Lessons,
+  collection: LessonsLearned,
 
   insert({ ...args }) {
     return this.collection.insert(args);
   },
 
-  update({ _id, options, ...args }) {
+  update({ _id, ...args }) {
     const query = { _id };
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
-    }
+    const options = {
+      '$set': {
+        ...args
+      }
+    };
+    console.log(options);
     return this.collection.update(query, options);
   },
 

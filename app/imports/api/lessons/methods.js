@@ -25,20 +25,20 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Lessons.update',
 
-  validate: LessonsSchema.validator(),
+  validate: new SimpleSchema([IdSchema, LessonsSchema]).validator(),
 
-  run({_id, options, ...args}) {
+  run({_id, ...args}) {
     checkUserId(
       this.userId,
       'Unauthorized user cannot update a standard'
     );
 
-    return LessonsService.update({ _id, options, ...args });
+    return LessonsService.update({ _id, ...args });
   }
 });
 
 export const remove = new ValidatedMethod({
-  name: 'Standards.remove',
+  name: 'Lessons.remove',
 
   validate: IdSchema.validator(),
 
@@ -48,6 +48,6 @@ export const remove = new ValidatedMethod({
       'Unauthorized user cannot delete a standard'
     );
 
-    return StandardsService.remove({ _id });
+    return LessonsService.remove({ _id });
   }
 });

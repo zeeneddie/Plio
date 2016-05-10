@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-const LessonsSchema = new SimpleSchema({
-  _id: {
+export const LessonsSchema = new SimpleSchema({
+  standardId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
@@ -16,5 +16,3 @@ const LessonsSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   }
 });
-
-export LessonsSchema;

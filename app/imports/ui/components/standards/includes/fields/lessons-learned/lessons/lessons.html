@@ -19,7 +19,7 @@
         {{#FormField label="Created date"}}
           <input type="text" class="form-control" placeholder="Created date" {{b "ref: datepicker, value: date"}}>
         {{/FormField}}
-        {{> ESOwner _id=null}}
+        {{> ESOwner selectedOwnerId=owner}}
       </div>
       <div ng-include="'includes/subcards-edit/notes.html'"></div>
       <div class="card-block clearfix">

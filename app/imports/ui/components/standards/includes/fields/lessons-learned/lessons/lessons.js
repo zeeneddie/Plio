@@ -7,9 +7,14 @@ Template.ESLessons.viewmodel({
   onRendered() {
     this.datepicker.datepicker();
   },
+  standard() {
+    return ViewModel.findOne('ESLessonsLearned').standard();
+  },
+  title: '',
   date: '',
   save() {
     const data = this.getData();
+    const _id = this._id && this._id();
 
     for (let prop in data) {
       if (!data[prop]) {
@@ -19,35 +24,26 @@ Template.ESLessons.viewmodel({
     }
 
     const { title, date, owner } = this.getData();
-    const options = {};
+    const standardId = this.standard() && this.standard()._id;
 
-    if (this._id) {
-      this.parent().insert({ title, date, owner });
-    }
-
-    if (this._id) {
-      options['$set'] = { 'lessons.$': { title, date, owner } };
+    if (_id) {
+      console.log(owner);
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId });
     } else {
-      options['$addToSet'] = { lessons: { _id, title, date, owner } };
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId }, this.destroy());
     }
-
-    ViewModel.findOne('EditStandard').update({}, options, () => Blaze.remove(this.templateInstance.view));
   },
   delete() {
     const _id = this._id && this._id();
     if (!confirm('Are you sure you want to delete this lesson?')) return;
     if (_id) {
-      const options = {
-        '$pull': {
-          lessons: {
-            _id: _id
-          }
-        }
-      };
-      ViewModel.findOne('EditStandard').update({}, options, () => Blaze.remove(this.templateInstance.view));
+      ViewModel.findOne('ESLessonsLearned').remove({ _id }, this.destroy());
     } else {
-      Blaze.remove(this.templateInstance.view);
+      this.destroy();
     }
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
   },
   getData() {
     const { owner } = this.child('ESOwner').getData();

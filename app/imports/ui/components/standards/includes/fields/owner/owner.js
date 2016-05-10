@@ -4,10 +4,10 @@ Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
     if (this.hasUser() && !this._id) {
-      Meteor.setTimeout(() => this.selectOwner(Meteor.user()), 0);
+      this.selectOwner(Meteor.user());
     } else if (this.hasUser() && this._id) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
-      Meteor.setTimeout(() => this.owner(fullName), 0);
+      this.owner(fullName);
     }
   },
   owner: '',
@@ -37,5 +37,10 @@ Template.ESOwner.viewmodel({
   getData() {
     const { selectedOwnerId:owner } = this.data();
     return { owner };
+  },
+  events: {
+    'focus input'() {
+      this.owner('');
+    }
   }
 });

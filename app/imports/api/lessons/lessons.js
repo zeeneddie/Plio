@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo';
 
 import { LessonsSchema } from './lessons-schema.js';
 
-const Lessons = new Mongo.Collection('Lessons');
-Lessons.attachSchema(LessonsSchema);
+const LessonsLearned = new Mongo.Collection('LessonsLearned');
+LessonsLearned.attachSchema(LessonsSchema);
 
-export { Lessons };
+export { LessonsLearned };
