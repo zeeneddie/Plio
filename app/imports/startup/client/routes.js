@@ -25,7 +25,12 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
-AccountsTemplates.configureRoute('verifyEmail');
+AccountsTemplates.configureRoute('verifyEmail', {
+  redirect() {
+    FlowRouter.go('hello');
+    toastr.success('Email verified! Thanks!');
+  }
+});
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
@@ -52,7 +57,7 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
-  triggersEnter: [checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserAccountWaitingPage');
   }
@@ -117,7 +122,7 @@ function checkLoggedIn(context, redirect) {
 function checkEmailVerified(context, redirect) {
   const user = Meteor.user();
   const isOnUserWaiting = context.route.name === 'userWaiting';
-  
+
   if (user) {
     const email = user.emails[0];
     
