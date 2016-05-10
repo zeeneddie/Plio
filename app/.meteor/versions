@@ -62,7 +62,7 @@ manuel:reactivearray@1.0.5
 manuel:viewmodel@4.0.14
 manuel:viewmodel-debug@2.7.0
 mdg:validated-method@1.1.0
-mdg:validation-error@0.2.0
+mdg:validation-error@0.5.1
 meteor@1.1.14
 meteor-base@1.0.4
 minifier-css@1.1.11
