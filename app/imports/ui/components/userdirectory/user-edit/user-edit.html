@@ -8,6 +8,10 @@
           email=email
           description=description}}
 
+      {{#if isEditable}}
+        {{> UserEdit_Password}}
+      {{/if}}
+
       {{> UserEdit_ContactDetails
           address=address
           country=country

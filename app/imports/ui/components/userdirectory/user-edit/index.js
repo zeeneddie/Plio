@@ -6,6 +6,8 @@ import './phone-number.html';
 import './phone-number.js';
 import './phone-numbers.html';
 import './phone-numbers.js';
+import './password.html';
+import './password.js';
 import './roles.html';
 import './roles.js';
 import './user-edit.html';

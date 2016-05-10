@@ -1,5 +1,5 @@
 <template name="UserEdit_ContactDetails">
-  <div class="card-block card-block-collapse-toggle collapsed"
+  <div class="card-block card-block-collapse-toggle"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Contact details</h4>
     <i class="ms-Icon ms-Icon--menu disclosure-indicator pull-xs-right"></i>
@@ -9,9 +9,7 @@
       {{#FormField label="Address"}}
         <textarea class="form-control" placeholder="Address" rows="4"
             {{b "value: address, focusout: updateAddress, enable: isEditable"}}></textarea>
-        <button type="button" class="btn btn-link clear-field">
-          <i class="ms-Icon ms-Icon--xCircle"></i>
-        </button>
+        {{> ClearFieldButton}}
       {{/FormField}}
 
       {{#FormField label="Country"}}
@@ -25,9 +23,7 @@
       {{#FormField label="Skype name"}}
         <input type="email" class="form-control" placeholder="Skype name"
             {{b "value: skype, focusout: updateSkype, enable: isEditable"}} />
-        <button type="button" class="btn btn-link clear-field">
-          <i class="ms-Icon ms-Icon--xCircle"></i>
-        </button>
+        {{> ClearFieldButton}}
       {{/FormField}}
     </div>
   </div>

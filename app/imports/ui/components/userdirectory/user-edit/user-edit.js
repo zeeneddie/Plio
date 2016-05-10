@@ -135,5 +135,20 @@ Template.UserEdit.viewmodel({
     } else {
       this.modal().callMethod(assignRole, doc);
     }
+  },
+  changePassword(viewModel) {
+    const { oldPassword, newPassword } = viewModel.getData();
+
+    this.modal().clearError();
+    this.modal().isSaving(true);
+
+    Accounts.changePassword(oldPassword, newPassword, (err) => {
+      this.modal().isSaving(false);
+
+      if (err) {
+        this.modal().setError(err);
+        return;
+      }
+    });
   }
 });
