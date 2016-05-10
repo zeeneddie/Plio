@@ -19,8 +19,11 @@ Template.ESLessons.viewmodel({
     }
 
     const { title, date, owner } = this.getData();
-    const _id = Random.id();
     const options = {};
+
+    if (this._id) {
+      this.parent().insert({ title, date, owner });
+    }
 
     if (this._id) {
       options['$set'] = { 'lessons.$': { title, date, owner } };
