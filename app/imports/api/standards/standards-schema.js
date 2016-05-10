@@ -90,9 +90,23 @@ const optionalFields = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Url
   },
+  notify: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  lessons: {
+    type: [Object],
+    blackbox: true,
+    optional: true
+  }
 });
 
 const StandardsSchema = new SimpleSchema([optionalFields, {
+  organizationId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
   title: {
     type: String
   },

@@ -6,8 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  share: 'organization',
-  mixin: ['search', 'modal'],
+  mixin: ['search', 'modal', 'organization'],
   onCreated() {
     const _id = this.selectedBookSectionId();
     if (_id) {
@@ -32,7 +31,7 @@ Template.ESBookSection.viewmodel({
 
     if (!confirm(`Are you sure you want to add section: '${title}'?`)) return;
 
-    const org = Organizations.findOne({ serialNumber: this.orgSerialNumber() });
+    const org = Organizations.findOne({ serialNumber: this.organization().serialNumber });
     const organizationId = !!org && org._id;
 
     this.dropdown.dropdown('toggle');

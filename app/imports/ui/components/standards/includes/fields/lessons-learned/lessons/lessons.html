@@ -1,0 +1,56 @@
+<template name="ESLessons">
+  <div class="card">
+    <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+      <strong>LL456</strong>
+      <span {{b "text: title"}}></span>
+    </div>
+    <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+      <div class="card-block">
+        <div class="form-group row">
+          <label class="form-control-label col-sm-4 col-xs-12">Title</label>
+          <div class="col-sm-8 col-xs-12">
+            <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="form-control-label col-sm-4 col-xs-12">Linked to</label>
+          <div class="col-sm-8 col-xs-12">
+            <div class="input-group">
+              <span class="input-group-addon">NC101</span>
+              <input type="text" class="form-control" value="Deal valuation not carried out" disabled="">
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="form-control-label col-sm-4 col-xs-12">Created date</label>
+          <div class="col-sm-8 col-xs-12">
+            <input type="text" class="form-control" placeholder="Created date">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="form-control-label col-sm-4 col-xs-12">Created by</label>
+          <div class="col-sm-8 col-xs-12">
+            <div class="dropdown">
+              <input class="form-control" data-toggle="dropdown" placeholder="Created by"/>
+              <div class="dropdown-menu dropdown-menu-full">
+                <a class="dropdown-item" href="#">Jack Herbert</a>
+                <a class="dropdown-item" href="#">Steve Ives</a>
+                <a class="dropdown-item" href="#">Mark Leusink</a>
+                <a class="dropdown-item" href="#">Steve Saunders</a>
+                <a class="dropdown-item" href="#">Mike Smith</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-include="'includes/subcards-edit/notes.html'"></div>
+      <div class="card-block clearfix">
+        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: save"}}>Save</button>
+        <button type="button" class="btn btn-secondary pull-xs-right" {{b "click: delete"}}>Delete</button>
+      </div>
+    </div>
+  </div>
+</template>

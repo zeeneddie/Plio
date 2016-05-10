@@ -24,15 +24,9 @@
       {{> ESSources sourceType=standard.source2.type sourceUrl=standard.source2.url label="Source document/video 2" id=2}}
 
     </div>
-    <div class="card-block card-block-collapse-toggle collapsed" href="#notify" data-toggle="collapse">
-      <h4 class="card-title pull-xs-left">Notify</h4>
-      <h4 class="card-title pull-xs-right">
-        <span class="text-muted">2</span>
-      </h4>
-    </div>
-    <div class="card-block-collapse collapse" id="notify">
-      <div ng-include="'includes/subcards-edit/notify.html'"></div>
-    </div>
+
+    {{> ESNotify standard=standard}}
+
     <div class="card-block card-block-collapse-toggle collapsed" href="#nonconformities" data-toggle="collapse">
       <h4 class="card-title pull-xs-left">Non-conformities</h4>
       <h4 class="card-title pull-xs-right">
@@ -69,13 +63,7 @@
     <div class="card-block-collapse collapse" id="improvement-plan">
       <div ng-include="'includes/subcards-edit/improvement-plan.html'"></div>
     </div>
-    <div class="card-block card-block-collapse-toggle collapsed" href="#lessons" data-toggle="collapse">
-      <h4 class="card-title pull-xs-left">Lessons learned</h4>
-      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
-    </div>
-    <div class="card-block-collapse collapse" id="lessons">
-      <div ng-include="'includes/subcards-edit/lessons.html'"></div>
-    </div>
+    {{> ESLessonsLearned standard=standard}}
     <div class="card-block text-xs-center">
       <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
     </div>

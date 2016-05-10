@@ -1,0 +1,16 @@
+<template name="ESLessonsLearned">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Lessons learned</h4>
+    <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+  </div>
+  <div class="card-block-collapse collapse" id="lessons" {{b "ref: collapse"}}>
+    <div class="card-block" {{b "ref: container"}}>
+      {{#each lessons}}
+        {{> ESLessons}}
+      {{/each}}
+      <div class="text-xs-center">
+        <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
+      </div>
+    </div>
+  </div>
+</template>
