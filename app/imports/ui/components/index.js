@@ -11,3 +11,4 @@ import './dashboard/organizations-menu';
 import './dashboard/user-menu';
 import './standards';
 import './userdirectory';
+import './quill-editor';
