@@ -48,34 +48,49 @@ export default OrganizationService = {
   },
 
   setName({_id, name}) {
-    return this._update(_id, {name});
+    return this.collection.update({ _id }, {
+      $set: { name }
+    });
   },
 
   setDefaultCurrency({_id, currency}) {
-    return this._update(_id, {currency});
+    return this.collection.update({ _id }, {
+      $set: { currency }
+    });
   },
 
   setStepTime({_id, ncType, timeValue, timeUnit}) {
-    return this._update(_id, {
-      [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
+      }
     });
   },
 
   setReminder({_id, ncType, reminderType, timeValue, timeUnit}) {
-    return this._update(_id, {
-      [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
+      }
     });
   },
 
   setGuideline({_id, ncType, text}) {
-    return this._update(_id, {
-      [`ncGuidelines.${ncType}`]: text
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncGuidelines.${ncType}`]: text
+      }
     });
   },
 
-  _update(_id, fields) {
-    return this.collection.update({_id}, {
-      $set: fields
+  deleteUser({ userId, organizationId, deletedBy }) {
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': userId
+    }, {
+      $set: {
+        'users.$.deletedBy': deletedBy
+      }
     });
   }
 };

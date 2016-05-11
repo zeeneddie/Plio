@@ -11,6 +11,11 @@ const orgUserSchema = new SimpleSchema({
   role: {
     type: String,
     allowedValues: _.values(UserMembership)
+  },
+  deletedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
   }
 });
 

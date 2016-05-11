@@ -6,7 +6,6 @@ import { Roles } from 'meteor/alanning:roles';
 import UserService from './user-service.js';
 import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
 import { UserRoles } from '../constants.js';
 
@@ -51,7 +50,11 @@ export const updateProfile = new ValidatedMethod({
 
   run({ _id, ...args}) {
     const userId = this.userId;
-    checkUserId(userId, 'Unauthorized user cannot update profile');
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update profile'
+      );
+    }
 
     if (userId !== _id) {
       throw new Meteor.Error(403, 'User cannot update another user');
@@ -73,7 +76,11 @@ export const updateEmail = new ValidatedMethod({
 
   run({ _id, email }) {
     const userId = this.userId;
-    checkUserId(userId, 'Unauthorized user cannot update email');
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update email'
+      );
+    }
 
     if (userId !== _id) {
       throw new Meteor.Error(403, 'User cannot update another user\'s email');
@@ -95,7 +102,11 @@ export const updatePhoneNumber = new ValidatedMethod({
 
   run({ _id, ...args }) {
     const userId = this.userId;
-    checkUserId(userId, 'Unauthorized user cannot update phone numbers');
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update phone numbers'
+      );
+    }
 
     if (userId !== _id) {
       throw new Meteor.Error(
@@ -116,7 +127,11 @@ export const addPhoneNumber = new ValidatedMethod({
 
   run({ _id, ...args }) {
     const userId = this.userId;
-    checkUserId(userId, 'Unauthorized user cannot add phone numbers');
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot add phone numbers'
+      );
+    }
 
     if (userId !== _id) {
       throw new Meteor.Error(

@@ -8,6 +8,7 @@ import {
   updatePhoneNumber,
   addPhoneNumber
 } from '/imports/api/users/methods.js';
+import { deleteUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 import { UserRoles } from '/imports/api/constants.js';
 
@@ -91,8 +92,11 @@ Template.UserEdit.viewmodel({
 
     return val && val !== savedVal;
   },
-  isEditable() {
+  isCurrentUser() {
     return Meteor.userId() === this.userId();
+  },
+  isEditable() {
+    return this.isCurrentUser();
   },
   rolesTitle() {
     const user = this.user();
@@ -129,5 +133,21 @@ Template.UserEdit.viewmodel({
     } else {
       this.modal().callMethod(assignRole, doc);
     }
+  },
+  isDeleteButtonEnabled() {
+    return Roles.userIsInRole(
+      Meteor.userId(),
+      UserRoles.DELETE_USERS,
+      this.organizationId()
+    ) || this.isCurrentUser();
+  },
+  deleteUserFn() {
+    return this.deleteUser.bind(this);
+  },
+  deleteUser() {
+    this.modal().callMethod(deleteUser, {
+      userId: this.userId(),
+      organizationId: this.organizationId()
+    });
   }
 });

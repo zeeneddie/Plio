@@ -9,3 +9,5 @@ import './time-picker.html';
 import './preloader.html';
 import './time-picker.js';
 import './clear-field-button.html';
+import './modal-delete-button.html';
+import './modal-delete-button.js';
