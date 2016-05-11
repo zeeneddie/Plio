@@ -75,28 +75,13 @@
         <div class="ng-scope">
           <div class="list-group ng-scope">
             <div class="list-group-item">
-              <h4 class="list-group-item-heading">
-                <i class="ms-Icon ms-Icon--check text-success"></i>
-                Create &amp; delete users
+            {{#each superpowers this}}
+              <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
+                <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
+                </i>
+                {{value}}
               </h4>
-              <h4 class="list-group-item-heading">
-                <i class="ms-Icon ms-Icon--check text-success"></i>
-                Change organization settings
-              </h4>
-            </div>
-            <div class="list-group-item">
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                Edit user permissions
-              </h4>
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                View team to do lists
-              </h4>
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                Create &amp; edit standards documents
-              </h4>
+            {{/each}}
             </div>
           </div>
         </div>
