@@ -27,9 +27,8 @@ Template.ESLessons.viewmodel({
       }
     }
 
-    const { title, date, owner } = this.getData();
+    const { title, date, owner, notes } = this.getData();
     const standardId = this.standard() && this.standard()._id;
-    const notes = ViewModel.findOne('QuillEditor').editor().getHTML();
 
     if (_id) {
       ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes });
@@ -55,7 +54,8 @@ Template.ESLessons.viewmodel({
   },
   getData() {
     const { owner } = this.child('ESOwner').getData();
+    const notes = this.child('QuillEditor').editor().getHTML();
     const { title, date } = this.data();
-    return { title, date, owner };
+    return { title, date, owner, notes };
   }
 });

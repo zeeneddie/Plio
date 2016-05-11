@@ -14,5 +14,8 @@ export const LessonsSchema = new SimpleSchema({
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
+  },
+  notes: {
+    type: String
   }
 });
