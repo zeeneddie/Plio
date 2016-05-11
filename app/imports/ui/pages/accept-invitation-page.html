@@ -6,13 +6,13 @@
 
         {{#unless organization}}
           <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header text-xs-center">
               Invitation not found!
             </div>
           </div>
         {{else}}
           <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header text-xs-center">
               <div class="at-title">
                 <h3>Accept Invitation</h3>
               </div>
@@ -96,7 +96,7 @@
                 </div>
               </div>
             </div>
-            <div class="card-footer text-center">
+            <div class="card-footer text-xs-center">
               <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary">
                 Submit
               </button>
