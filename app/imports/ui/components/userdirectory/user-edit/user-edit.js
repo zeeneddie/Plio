@@ -100,9 +100,11 @@ Template.UserEdit.viewmodel({
   },
   rolesTitle() {
     const user = this.user();
-    const userName = user.firstName() || user.lastName() || user.email();
-    const orgName = this.organization().name;
-    return `${userName}'s superpowers for ${orgName}`;
+    if (user) {
+      const userName = user.firstName() || user.lastName() || user.email();
+      const orgName = this.organization().name;
+      return `${userName}'s superpowers for ${orgName}`;
+    }
   },
   isRolesEditable() {
     return Roles.userIsInRole(
@@ -159,8 +161,11 @@ Template.UserEdit.viewmodel({
         organizationId: this.organizationId()
       }, (err, res) => {
         if (!err) {
+          // have to wait some time before opening new sweet alert
+          Meteor.setTimeout(() => {
+            swal('Removed', 'User has been removed', 'success');
+          }, 500);
           this.modal().close();
-          swal('Removed', 'User has been removed', 'success');
         }
       });
     });

@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+
 import { Organizations } from './organizations.js';
-import { OrganizationDefaults, UserMembership } from '../constants.js';
+import { OrganizationDefaults, UserMembership, UserRoles } from '../constants.js';
+
 
 export default OrganizationService = {
   collection: Organizations,
@@ -99,6 +102,10 @@ export default OrganizationService = {
     if (isAlreadyRemoved) {
       throw new Meteor.Error(400, 'User is already removed');
     }
+
+    Roles.removeUsersFromRoles(
+      userId, _.values(UserRoles), organizationId
+    );
 
     this.collection.update({
       _id: organizationId,
