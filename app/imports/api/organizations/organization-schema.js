@@ -12,9 +12,18 @@ const orgUserSchema = new SimpleSchema({
     type: String,
     allowedValues: _.values(UserMembership)
   },
-  deletedBy: {
+  isRemoved: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
+  },
+  removedBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  removedAt: {
+    type: Date,
     optional: true
   }
 });

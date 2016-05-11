@@ -23,6 +23,7 @@ caching-html-compiler@1.0.6
 callback-hook@1.0.8
 check@1.2.1
 chrismbeckett:toastr@2.1.2_1
+codechimera:meteor-bootstrap-sweetalert@0.0.1
 coffeescript@1.0.17
 coursierprive:tether@1.1.1
 dburles:collection-helpers@1.0.4

@@ -83,13 +83,31 @@ export default OrganizationService = {
     });
   },
 
-  deleteUser({ userId, organizationId, deletedBy }) {
+  removeUser({ userId, organizationId, removedBy }) {
+    const isAlreadyRemoved = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          isRemoved: true,
+          removedBy: {$exists: true},
+          removedAt: {$exists: true}
+        }
+      }
+    });
+
+    if (isAlreadyRemoved) {
+      throw new Meteor.Error(400, 'User is already removed');
+    }
+
     this.collection.update({
       _id: organizationId,
       'users.userId': userId
     }, {
       $set: {
-        'users.$.deletedBy': deletedBy
+        'users.$.isRemoved': true,
+        'users.$.removedBy': removedBy,
+        'users.$.removedAt': new Date()
       }
     });
   }

@@ -249,8 +249,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
   }
 });
 
-export const deleteUser = new ValidatedMethod({
-  name: 'Organizations.deleteUser',
+export const removeUser = new ValidatedMethod({
+  name: 'Organizations.removeUser',
 
   validate: new SimpleSchema([
     OrganizationIdSchema,
@@ -261,22 +261,22 @@ export const deleteUser = new ValidatedMethod({
     const currUserId = this.userId;
     if (!currUserId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot delete users'
+        403, 'Unauthorized user cannot remove users'
       );
     }
 
-    const canDeleteUser = (currUserId === userId) || Roles.userIsInRole(
+    const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
       currUserId, UserRoles.DELETE_USERS, organizationId
     );
-    if (!canDeleteUser) {
+    if (!canRemoveUser) {
       throw new Meteor.Error(
         403,
-        'User is not authorized for deleting user\'s in this organization'
+        'User is not authorized for removing user\'s from this organization'
       );
     }
 
-    return OrganizationService.deleteUser({
-      deletedBy: currUserId,
+    return OrganizationService.removeUser({
+      removedBy: currUserId,
       organizationId,
       userId
     });

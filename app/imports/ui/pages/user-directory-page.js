@@ -59,10 +59,19 @@ Template.UserDirectoryPage.viewmodel({
   },
 
   getCurrentOrganizationUsers() {
-    const organization = Organizations.findOne({ serialNumber: this.getCurrentOrganizationSerialNumber() });
+    const organization = Organizations.findOne({
+      serialNumber: this.getCurrentOrganizationSerialNumber()
+    });
+
     if (organization) {
       const { users } = organization;
-      return _.pluck(users, 'userId');
+
+      const existingUsersIds = _.filter(users, (usrDoc) => {
+        const { isRemoved, removedBy, removedAt } = usrDoc;
+        return !isRemoved && !removedBy && !removedAt;
+      });
+
+      return _.pluck(existingUsersIds, 'userId');
     }
   }
 });

@@ -8,7 +8,7 @@ import {
   updatePhoneNumber,
   addPhoneNumber
 } from '/imports/api/users/methods.js';
-import { deleteUser } from '/imports/api/organizations/methods.js';
+import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 import { UserRoles } from '/imports/api/constants.js';
 
@@ -141,13 +141,28 @@ Template.UserEdit.viewmodel({
       this.organizationId()
     ) || this.isCurrentUser();
   },
-  deleteUserFn() {
-    return this.deleteUser.bind(this);
+  removeUserFn() {
+    return this.removeUser.bind(this);
   },
-  deleteUser() {
-    this.modal().callMethod(deleteUser, {
-      userId: this.userId(),
-      organizationId: this.organizationId()
+  removeUser() {
+    swal({
+      title: 'Are you sure?',
+      text: 'This user will be removed from the organization',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonClass: 'btn-danger',
+      confirmButtonText: 'Delete',
+      closeOnConfirm: true
+    }, () => {
+      this.modal().callMethod(removeUser, {
+        userId: this.userId(),
+        organizationId: this.organizationId()
+      }, (err, res) => {
+        if (!err) {
+          this.modal().close();
+          swal('Removed', 'User has been removed', 'success');
+        }
+      });
     });
   }
 });
