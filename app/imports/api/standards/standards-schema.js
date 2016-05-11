@@ -100,6 +100,35 @@ const optionalFields = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
+  improvementPlan: {
+    type: Object,
+    optional: true
+  },
+  'improvementPlan.desiredOutcome': {
+    type: String,
+    optional: true
+  },
+  'improvementPlan.targetDate': {
+    type: Date,
+    optional: true
+  },
+  'improvementPlan.reviewDates': {
+    type: [Date],
+    optional: true
+  },
+  'improvementPlan.owner': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  'improvementPlan.selectedMetric': {
+    type: String,
+    optional: true
+  },
+  'improvementPlan.targetValue': {
+    type: String,
+    optional: true
+  }
 });
 
 const StandardsSchema = new SimpleSchema([optionalFields, {

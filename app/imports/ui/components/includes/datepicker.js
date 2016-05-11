@@ -6,7 +6,12 @@ Template.Datepicker.viewmodel({
     this.datepickerInit();
     this.datepicker.on('changeDate', (e) => {
       const { date } = e;
+
       this.value(date);
+
+      if (this.name && this.name()) {
+        this.parent().update(this.name());
+      }
     });
   },
   label: 'Date',

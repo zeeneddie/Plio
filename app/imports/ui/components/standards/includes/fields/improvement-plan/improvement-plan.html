@@ -7,18 +7,20 @@
     <div class="card-block">
 
       {{#FormField label="Statement of desired outcome" sm=7}}
-        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome" {{b "value: desiredOutcome"}}></textarea>
+        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome"
+          {{b "value: desiredOutcome, focusout: update('desiredOutcome')"}}></textarea>
       {{/FormField}}
 
       {{#FormField label="Target date for desired outcome" sm=7}}
-        {{> Datepicker placeholder="Target date for desired outcome"}}
+        {{> Datepicker placeholder="Target date for desired outcome" name="targetDate" date=(renderDate targetDate)}}
       {{/FormField}}
 
       {{#FormField label="Improvement plan review dates" sm=7}}
-        {{> Datepicker placeholder="Review date 1" class="margin-bottom"}}
-
-        {{> Datepicker placeholder="Review date 2" class="margin-bottom"}}
-        <button type="button" class="btn btn-primary margin-bottom-none">
+        <div {{b "ref: forms"}}>
+          {{> Datepicker placeholder="Review date" class="margin-bottom"}}
+        </div>
+        <button type="button" class="btn btn-primary margin-bottom-none"
+          {{b "click: addForm('Datepicker', { class: 'margin-bottom', placeholder: 'Review date' })"}}>
           <i class="fa fa-plus"></i>
           Add review date
         </button>
@@ -27,11 +29,11 @@
       {{> ESOwner sm=7}}
 
       {{#FormField label="Selected metric" sm=7}}
-        <input type="text" class="form-control" placeholder="Selected metric">
+        <input type="text" class="form-control" placeholder="Selected metric" {{b "value: selectedMetric"}}>
       {{/FormField}}
 
       {{#FormField label="Target value" sm=7}}
-        <input type="text" class="form-control" placeholder="Target value">
+        <input type="text" class="form-control" placeholder="Target value" {{b "value: targetValue"}}>
       {{/FormField}}
 
       <div class="form-group form-group-buttons row">
