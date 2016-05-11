@@ -18,24 +18,24 @@
             <div class="col-sm-6">
               <div class="list-group-item">
                 <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
-                  <img {{b "src: avatar(this)"}}>
+                  <img {{b "src: this.avatar()"}}>
                 </div>
-                <p class="list-group-item-text">Name</p>
-                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                <p class="list-group-item-text" {{b "if: this.fullName()"}}>Name</p>
+                <h4 class="list-group-item-heading" {{b "if: this.fullName(), text: this.fullName()"}}></h4>
               </div>
             </div>
-            <div class="col-sm-6" {{b "if: initials(this)"}}>
+            <div class="col-sm-6" {{b "if: this.initials()"}}>
               <div class="list-group-item">
                 <p class="list-group-item-text">Initials</p>
-                <h4 class="list-group-item-heading" {{b "text: initials(this)" }}>=</h4>
+                <h4 class="list-group-item-heading" {{b "text: this.initials()" }}>=</h4>
               </div>
             </div>
           </div>
-          <div class="row" {{b "if: description(this)"}}>
+          <div class="row" {{b "if: this.description()"}}>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading" {{b "text: description(this)" }}></h4>
+                <h4 class="list-group-item-heading" {{b "text: this.description()" }}></h4>
               </div>
             </div>
           </div>
@@ -47,14 +47,14 @@
           <div class="list-group ng-scope">
             <div class="list-group-item">
               <p class="list-group-item-text">Email</p>
-              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(this)" }}></a></h4>
+              <h4 class="list-group-item-heading"><a href="mailto:{{email}}" {{b "text: this.email()" }}></a></h4>
             </div>
-            <div class="list-group-item" {{b "if: address(this)"}}>
+            <div class="list-group-item" {{b "if: this.address()"}}>
                 <p class="list-group-item-text">Address</p>
-                <h4 class="list-group-item-heading" {{b "text: address(this)"}}></h4>
+                <h4 class="list-group-item-heading" {{b "text: this.address()"}}></h4>
             </div>
             <div class="row">
-              {{#each phoneNumbers this}}
+              {{#each phoneNumbers}}
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
@@ -63,9 +63,9 @@
                 </div>
               {{/each}}
             </div>
-            <div class="list-group-item" {{b "if: skype(this)"}}>
+            <div class="list-group-item" {{b "if: this.skype()"}}>
               <p class="list-group-item-text">Skype name</p>
-              <h4 class="list-group-item-heading"><a href="skype:{{skype this}}?call" {{b "text: skype(this)"}}></a></h4>
+              <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: this.skype()"}}></a></h4>
             </div>
           </div>
         </div>

@@ -2,15 +2,6 @@ import { Template } from 'meteor/templating';
 
 Template.UsersDetails.viewmodel({
   mixin: ['user', 'organization', 'modal'],
-  initials(user) {
-    return user.profile.initials;
-  },
-  skype(user) {
-    return user.profile.skype;
-  },
-  phoneNumbers(user) {
-    return user.profile.phoneNumbers;
-  },
   phoneType(type) {
     return `${type} phone`;
   },

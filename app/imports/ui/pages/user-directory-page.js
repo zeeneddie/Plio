@@ -36,9 +36,18 @@ Template.UserDirectoryPage.viewmodel({
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
+    const searchFields = [
+      { name: 'profile.firstName' },
+      { name: 'profile.lastName' },
+      { name: 'profile.lastName' },
+      { name: 'profile.description' },
+      { name: 'emails.0.address' },
+      { name: 'profile.skype' },
+      { name: 'profile.address' },
+      { name: 'profile.phoneNumbers', subField: 'number' }
+    ];
 
-    const searchUsers = this.searchObject('searchText',
-      ['profile.firstName', 'profile.lastName', 'profile.description', 'emails.0.address']);
+    const searchUsers = this.searchObject('searchText', searchFields);
 
     findQuery['$and'] = [
       { _id: { $in: userIds }},
