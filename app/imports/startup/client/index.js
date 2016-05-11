@@ -1,6 +1,6 @@
 import './mixins.js';
-import './routes.js';
 import './useraccounts.js';
+import './routes.js';
 import './userpresence.js';
 import './share.js';
 import './mixins.js';

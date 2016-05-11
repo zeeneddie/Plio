@@ -9,3 +9,8 @@ import './user-directory-page.html';
 import './user-directory-page.js';
 import './accept-invitation-page.html';
 import './accept-invitation-page.js';
+import './user-account-waiting-page.html';
+import './user-account-waiting-page.js';
+import './verify-email-page.html';
+import './verify-email-page.js';
+

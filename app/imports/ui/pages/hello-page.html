@@ -1,12 +1,8 @@
 <template name="HelloPage">
-  <div class="jumbotron vertical-center table">
-    <div class="table-cell text-xs-center">
-      {{#unless Template.subscriptionsReady}}
-        {{> Preloader}}
-      {{else}}
-        <p>Sorry, your account is not associated with any organization.</p> 
-        <a href="{{pathFor 'signUp'}}">You can create a new account.</a>
-      {{/unless}}
-    </div>
-  </div>
+  {{#unless Template.subscriptionsReady}}
+    {{> Preloader size=3}}
+  {{else}}
+    <p>Sorry, your account is not associated with any organization.</p> 
+    <a href="{{pathFor 'signUp'}}">You can create a new account.</a>
+  {{/unless}}
 </template>

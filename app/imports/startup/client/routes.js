@@ -8,7 +8,7 @@ import '/imports/ui/pages';
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
-  path: '/sign-in',
+  path: '/login',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content',
@@ -23,6 +23,37 @@ AccountsTemplates.configureRoute('signUp', {
   layoutRegions: {},
   contentRegion: 'content',
   redirect: redirectHandler
+});
+
+AccountsTemplates.configureRoute('verifyEmail', {
+  layoutType: 'blaze',
+  name: 'verifyEmail',
+  path: '/verify-email',
+  layoutTemplate: 'TransitionalLayout',
+  template: 'VerifyEmailPage',
+  contentRegion: 'content',
+  redirect() {
+    FlowRouter.go('hello');
+    toastr.success('Email verified! Thanks!');
+  }
+});
+
+AccountsTemplates.configureRoute('forgotPwd', {
+  layoutType: 'blaze',
+  name: 'forgotPwd',
+  path: '/forgot-password',
+  layoutTemplate: 'LoginLayout',
+  layoutRegions: {},
+  contentRegion: 'content'
+});
+
+AccountsTemplates.configureRoute('resetPwd', {
+  layoutType: 'blaze',
+  name: 'resetPwd',
+  path: '/reset-password',
+  layoutTemplate: 'LoginLayout',
+  layoutRegions: {},
+  contentRegion: 'content'
 });
 
 FlowRouter.route('/accept-invitation/:invitationId', {
@@ -44,12 +75,25 @@ FlowRouter.route('/', {
 FlowRouter.route('/hello', {
   name: 'hello',
   action(params) {
-    BlazeLayout.render('HelloPage');
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'HelloPage'
+    });
+  }
+});
+
+FlowRouter.route('/user-waiting', {
+  name: 'userWaiting',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'UserAccountWaitingPage'
+    });
   }
 });
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('StandardsLayout', {
       content: 'StandardsPage'
@@ -59,7 +103,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('DashboardLayout', {
       content: 'DashboardPage'
@@ -69,7 +113,7 @@ FlowRouter.route('/:orgSerialNumber', {
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -79,7 +123,7 @@ FlowRouter.route('/:orgSerialNumber/users', {
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
-  triggersEnter: [checkLoggedIn],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserDirectoryLayout', {
       content: 'UserDirectoryPage'
@@ -88,9 +132,9 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
 });
 
 function redirectHandler() {
-  const orgSerialNumber = FlowRouter.getQueryParam('org');
-  if (orgSerialNumber) {
-    FlowRouter.go('dashboardPage', {orgSerialNumber});
+  const targetURL = FlowRouter.getQueryParam('b');
+  if (targetURL) {
+    FlowRouter.go(targetURL);
   } else {
     FlowRouter.go('hello');
   }
@@ -99,7 +143,27 @@ function redirectHandler() {
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
-      redirect('signIn', {}, {org: context.params.orgSerialNumber});
+      console.log('context', context);
+      redirect('signIn', {}, { b: context.path });
+    }
+  }
+}
+
+function checkEmailVerified(context, redirect) {
+  const user = Meteor.user();
+  const isOnUserWaiting = context.route.name === 'userWaiting';
+
+  if (user) {
+    const email = user.emails[0];
+    
+    if (!email.verified) {
+      if (!isOnUserWaiting) {
+        redirect('userWaiting');
+      }
+    } else {
+      if (isOnUserWaiting) {
+        redirect('hello');
+      }
     }
   }
 }

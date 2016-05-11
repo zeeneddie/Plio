@@ -15,4 +15,6 @@ function postSignUpHook(userId, info) {
   Roles.addUsersToRoles(userId, OrgOwnerRoles, orgId);
 }
 
-AccountsTemplates.configure({ postSignUpHook });
+AccountsTemplates.configure({ 
+  postSignUpHook
+});
