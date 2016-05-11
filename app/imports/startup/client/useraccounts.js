@@ -8,7 +8,8 @@ AccountsTemplates.configure({
     },
     button: {
       signUp: 'Sign up',
-      signIn: 'Login'
+      signIn: 'Login',
+      changePwd: 'Change password'
     },
     info: {
       emailSent: "info.emailSent",

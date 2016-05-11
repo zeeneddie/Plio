@@ -1,0 +1,30 @@
+<template name="UserEdit_ContactDetails">
+  <div class="card-block card-block-collapse-toggle"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Contact details</h4>
+    <i class="ms-Icon ms-Icon--menu disclosure-indicator pull-xs-right"></i>
+  </div>
+  <div class="card-block-collapse collapse" id="contact" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{#FormField label="Address"}}
+        <textarea class="form-control" placeholder="Address" rows="4"
+            {{b "value: address, focusout: updateAddress, enable: isEditable"}}></textarea>
+        {{> ClearFieldButton}}
+      {{/FormField}}
+
+      {{#FormField label="Country"}}
+        <select class="c-select"
+          {{b "change: updateCountry, options: countries, optionsValue: code, optionsText: name, value: country, defaultText: 'Select a country', enable: isEditable"}}>
+        </select>
+      {{/FormField}}
+
+      {{> UserEdit_PhoneNumbers phoneNumbers=phoneNumbers}}
+
+      {{#FormField label="Skype name"}}
+        <input type="email" class="form-control" placeholder="Skype name"
+            {{b "value: skype, focusout: updateSkype, enable: isEditable"}} />
+        {{> ClearFieldButton}}
+      {{/FormField}}
+    </div>
+  </div>
+</template>
