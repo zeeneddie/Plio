@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: 'collapse'
+  mixin: 'collapse',
+  desiredOutcome: '',
+  desiredOutcomeDate: ''
 });

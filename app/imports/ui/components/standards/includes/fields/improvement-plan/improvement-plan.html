@@ -7,16 +7,17 @@
     <div class="card-block">
 
       {{#FormField label="Statement of desired outcome" sm=7}}
-        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome"></textarea>
+        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome" {{b "value: desiredOutcome"}}></textarea>
       {{/FormField}}
 
       {{#FormField label="Target date for desired outcome" sm=7}}
-        <input type="text" class="form-control" placeholder="Target date for desired outcome">
+        {{> Datepicker placeholder="Target date for desired outcome"}}
       {{/FormField}}
 
       {{#FormField label="Improvement plan review dates" sm=7}}
-        <input type="text" class="form-control margin-bottom" placeholder="Review date 1" value="18 Jun 2016">
-        <input type="text" class="form-control margin-bottom" placeholder="Review date 2" value="24 Sep 2016">
+        {{> Datepicker placeholder="Review date 1" class="margin-bottom"}}
+
+        {{> Datepicker placeholder="Review date 2" class="margin-bottom"}}
         <button type="button" class="btn btn-primary margin-bottom-none">
           <i class="fa fa-plus"></i>
           Add review date

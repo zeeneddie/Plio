@@ -16,13 +16,11 @@
             <input type="text" class="form-control" value="" disabled="">
           </div>
         {{/FormField}}
+
         {{#FormField label="Created date"}}
-          {{#if _id}}
-            <input type="text" class="form-control" placeholder="Created date" {{b "ref: datepicker, value: formattedDate"}}>
-          {{else}}
-            <input type="text" class="form-control" placeholder="Created date" {{b "ref: datepicker, value: date"}}>
-          {{/if}}
+          {{> Datepicker placeholder="Created date" date=getDate}}
         {{/FormField}}
+
         {{> ESOwner _id='placeholder' selectedOwnerId=createdBy label="Created by"}}
       </div>
       {{#QuillEditor}}

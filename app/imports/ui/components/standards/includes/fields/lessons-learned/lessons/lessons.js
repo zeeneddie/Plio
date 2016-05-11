@@ -3,13 +3,8 @@ import { Blaze } from 'meteor/blaze';
 import { Random } from 'meteor/random';
 
 Template.ESLessons.viewmodel({
-  mixin: 'collapse',
+  mixin: ['collapse', 'date'],
   onRendered() {
-    this.datepicker.datepicker({
-      startDate: new Date(),
-      format: 'dd MM yyyy'
-    });
-
     if (!this._id) {
       this.toggleCollapse();
     }
@@ -19,9 +14,6 @@ Template.ESLessons.viewmodel({
   },
   title: '',
   date: '',
-  formattedDate() {
-    return moment(this.date()).format('DD MMM YYYY');
-  },
   save() {
     const data = this.getData();
     const _id = this._id && this._id();
@@ -58,10 +50,14 @@ Template.ESLessons.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
+  getDate() {
+    return this.date() && this._id ? this.renderDate(this.date()) : '';
+  },
   getData() {
     const { owner:createdBy } = this.child('ESOwner').getData();
+    const { date } = this.child('Datepicker').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
-    const { title, date } = this.data();
-    return { title, date: new Date(date), createdBy, notes };
+    const { title } = this.data();
+    return { title, date, createdBy, notes };
   }
 });
