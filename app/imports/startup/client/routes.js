@@ -81,6 +81,14 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/sign-out', {
+  name: 'signOut',
+  action(params) {
+    Meteor.logout();
+    FlowRouter.go('hello');
+  }
+});
+
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
