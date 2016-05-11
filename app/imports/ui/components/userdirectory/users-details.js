@@ -28,6 +28,7 @@ Template.UsersDetails.viewmodel({
 
   openEditUserModal(e) {
     e.preventDefault();
+    
     this.modal().open({
       template: 'UserEdit',
       title: 'Edit User',

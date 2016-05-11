@@ -63,7 +63,8 @@ ViewModel.mixin({
       const searchObject = {};
       
       if (this[prop]()) {
-        const r = new RegExp(`.*${this[prop]()}.*`, 'i');
+        const words = this[prop]().split(' ');
+        const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
             const obj = {};
@@ -75,7 +76,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
-      console.log(searchObject);
+      
       return searchObject;
     }
   },
