@@ -29,6 +29,14 @@
   .form-group:not(.row) & {
     padding-left: 0;
   }
+
+  &.first-row-label {
+    padding-right: 0;
+
+    @media (min-width:768px) {
+      text-align: right;
+    }
+  }
 }
 
 
@@ -54,17 +62,6 @@
       height: 800px;
     }
   }
-
-  &-expand-toggle {
-    .fa-compress { display: none; }
-    .fa-expand { display: inline-block; }
-
-    .expanded & {
-      .fa-compress { display: inline-block; }
-      .fa-expand { display: none; }
-    }
-
-  }
 }
 
 
@@ -84,7 +81,7 @@
   padding-right: 0;
   margin-right: 10px;
 
-  &.active {
+  &.active, &.active:focus {
     background: $light-blue-color;
     border-color: $light-blue-color;
 

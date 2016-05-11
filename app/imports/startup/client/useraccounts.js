@@ -1,4 +1,9 @@
 AccountsTemplates.configure({
+  sendVerificationEmail: false,
+  enablePasswordChange: true,
+  negativeValidation: true,
+  positiveValidation: true,
+  homeRoutePath: '/',
   texts: {
     signInLink_pre: "Already have an account?",
     signInLink_link: "Login",
@@ -8,7 +13,8 @@ AccountsTemplates.configure({
     },
     button: {
       signUp: 'Sign up',
-      signIn: 'Login'
+      signIn: 'Login',
+      changePwd: 'Change password'
     },
     info: {
       emailSent: "info.emailSent",

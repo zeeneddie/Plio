@@ -1,5 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { OrgCurrencies,  UserRoles } from '/imports/api/constants.js';
+import { OrgCurrencies,  UserMembership } from '/imports/api/constants.js';
 import { TimePeriodSchema } from '../schemas.js';
 
 
@@ -10,7 +10,7 @@ const orgUserSchema = new SimpleSchema({
   },
   role: {
     type: String,
-    allowedValues: _.values(UserRoles)
+    allowedValues: _.values(UserMembership)
   }
 });
 

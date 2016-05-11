@@ -35,5 +35,11 @@
     ]
   },
   "status": "online",
-  "statusConnection": "online"
+  "statusConnection": "online",
+  "roles": {
+    "KwKXz5RefrE5hjWJ2": [
+      "create-standards-documents",
+      "view-team-actions"
+    ]
+  }
 }

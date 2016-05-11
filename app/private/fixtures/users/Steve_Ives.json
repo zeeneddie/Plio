@@ -36,5 +36,19 @@
     ]
   },
   "status": "offline",
-  "statusConnection": "offline"
+  "statusConnection": "offline",
+  "roles": {
+    "KwKXz5RefrE5hjWJ2": [
+      "create-standards-documents",
+      "view-team-actions",
+      "invite-users",
+      "delete-users",
+      "edit-user-roles",
+      "change-org-settings"
+    ],
+    "8bcNPN8sKTtJFw4uy": [
+      "create-standards-documents",
+      "view-team-actions"
+    ]
+  }
 }

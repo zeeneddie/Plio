@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Organizations } from './organizations.js';
-import { OrganizationDefaults, UserRoles } from '../constants.js';
+import { OrganizationDefaults, UserMembership } from '../constants.js';
 
 export default OrganizationService = {
   collection: Organizations,
@@ -25,7 +25,7 @@ export default OrganizationService = {
       serialNumber,
       users: [{
         userId: ownerId,
-        role: UserRoles.OWNER
+        role: UserMembership.ORG_OWNER
       }],
       ncStepTimes,
       ncReminders,
@@ -79,5 +79,3 @@ export default OrganizationService = {
     });
   }
 };
-
-

@@ -3,6 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
+
 ViewModel.persist = false;
 
 ViewModel.mixin({
@@ -46,6 +47,9 @@ ViewModel.mixin({
       setError(err) {
         this.instance().setError(err);
       },
+      clearError() {
+        this.instance().clearError();
+      },
       callMethod(method, args, cb) {
         return this.instance().callMethod(method, args, cb);
       },
@@ -79,13 +83,18 @@ ViewModel.mixin({
     }
   },
   addForm: {
-    addForm(template) {
+    addForm(template, context = {}) {
+      if (_.isFunction(this.onChangeCb)) {
+        context['onChange'] = this.onChangeCb();
+      }
+
+      if (_.isFunction(this.onDeleteCb)) {
+        context['onDelete'] = this.onDeleteCb();
+      }
+
       Blaze.renderWithData(
         Template[template],
-        {
-          onChange: this.onChangeCb(),
-          onDelete: this.onDeleteCb()
-        },
+        context,
         this.forms[0]
       );
     }

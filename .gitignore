@@ -3,3 +3,4 @@ node_modules
 deploy
 .idea
 .DS_Store
+settings-local.json
