@@ -25,6 +25,18 @@ AccountsTemplates.configureRoute('signUp', {
   redirect: redirectHandler
 });
 
+AccountsTemplates.configureRoute('verifyEmail', {
+  layoutType: 'blaze',
+  name: 'verifyEmail',
+  path: '/verify-email',
+  layoutTemplate: 'VerifyEmailPage',
+  contentRegion: 'content',
+  redirect() {
+    FlowRouter.go('hello');
+    toastr.success('Email verified! Thanks!');
+  }
+});
+
 AccountsTemplates.configureRoute('forgotPwd', {
   layoutType: 'blaze',
   name: 'forgotPwd',
@@ -42,7 +54,6 @@ AccountsTemplates.configureRoute('resetPwd', {
   layoutRegions: {},
   contentRegion: 'content'
 });
-AccountsTemplates.configureRoute('verifyEmail');
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
@@ -69,13 +80,11 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
-  triggersEnter: [checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('UserAccountWaitingPage');
   }
 });
-
-
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
@@ -136,7 +145,7 @@ function checkLoggedIn(context, redirect) {
 function checkEmailVerified(context, redirect) {
   const user = Meteor.user();
   const isOnUserWaiting = context.route.name === 'userWaiting';
-  
+
   if (user) {
     const email = user.emails[0];
     

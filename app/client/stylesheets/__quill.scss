@@ -1,0 +1,200 @@
+// Colors
+$black: #000;
+$white: #fff;
+
+// Fonts
+$font_0: Helvetica;
+$font_1: Arial;
+$font_2: sans-serif;
+
+.quill {
+  &.ql-expanded {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 9999;
+    .rich-text-expand-toggle > .icon-expand-compress::before {
+      content: '\f066'
+    }
+  }
+
+  .rich-text-expand-toggle > .icon-expand-compress::before {
+    content: '\f065'
+  }
+
+  // Instead of the line below you could use @include box-sizing($bs)
+  box-sizing: border-box;
+  cursor: text;
+  font-family: $font_0, $font_1, $font_2;
+  font-size: 13px;
+  height: auto;
+  line-height: 1.42;
+  margin: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: #fff;
+  padding: 25px !important;
+
+  &.editor-container {
+    height: auto;
+    outline: none;
+    position: relative;
+    tab-size: 4;
+    white-space: pre-wrap;
+    p {
+      margin: 0 0 1em 0;
+      padding: 0;
+    }
+    a {
+      text-decoration: underline;
+    }
+    b {
+      font-weight: bold;
+    }
+    i {
+      font-style: italic;
+    }
+    s {
+      text-decoration: line-through;
+    }
+    u {
+      text-decoration: underline;
+    }
+    img {
+      max-width: 100%;
+    }
+    blockquote {
+      margin: 0 0 0 2em;
+      padding: 0;
+    }
+    ol {
+      margin: 0 0 0 2em;
+      padding: 0;
+      list-style-type: decimal;
+      > li > ol {
+        list-style-type: lower-alpha;
+        > li > ol {
+          list-style-type: lower-roman;
+          > li > ol {
+            list-style-type: decimal;
+            > li > ol {
+              list-style-type: lower-alpha;
+              > li > ol {
+                list-style-type: lower-roman;
+                > li > ol {
+                  list-style-type: decimal;
+                  > li > ol {
+                    list-style-type: lower-alpha;
+                    > li > ol {
+                      list-style-type: lower-roman;
+                      > li > ol {
+                        list-style-type: decimal;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    ul {
+      margin: 0 0 0 2em;
+      padding: 0;
+      list-style-type: disc;
+    }
+  }
+  .image-tooltip-container {
+    margin: 25px;
+    padding: 10px;
+    width: 300px;
+    &:after {
+      clear: both;
+      content: "";
+      display: table;
+    }
+    .preview {
+      margin: 10px 0;
+      position: relative;
+      border: 1px dashed $black;
+      height: 200px;
+      span {
+        display: inline-block;
+        position: absolute;
+        text-align: center;
+        top: 40%;
+        width: 100%;
+      }
+    }
+    img {
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    .input {
+      //Instead of the line below you could use @include box-sizing($bs)
+      box-sizing: border-box;
+      width: 100%;
+    }
+    a {
+      border: 1px solid $black;
+      //Instead of the line below you could use @include box-sizing($bs)
+      box-sizing: border-box;
+      display: inline-block;
+      float: left;
+      padding: 5px;
+      text-align: center;
+      width: 50%;
+    }
+  }
+  .tooltip {
+    background-color: $white;
+    border: 1px solid $black;
+    top: 0;
+    white-space: nowrap;
+    z-index: 2000;
+    a {
+      cursor: pointer;
+      text-decoration: none;
+    }
+  }
+  .link-tooltip-container {
+    padding: 5px 10px;
+    &.editing {
+      a {
+        &.url {
+          display: none;
+        }
+        &.change {
+          display: none;
+        }
+        &.done {
+          display: inline-block;
+        }
+      }
+      input.input {
+        display: inline-block;
+      }
+    }
+    input.input {
+      width: 170px;
+      display: none;
+    }
+    a.done {
+      display: none;
+    }
+  }
+  .paste-container {
+    left: -10000px;
+    position: absolute;
+    top: 50%;
+  }
+}

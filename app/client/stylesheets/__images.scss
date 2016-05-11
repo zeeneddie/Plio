@@ -1,0 +1,16 @@
+.img-wrapper { 
+  display: inline-block;
+  overflow: hidden;
+  &.md { 
+    width: 80px;
+    height: 80px;
+  }
+  &.sm {
+    width: 40px;
+    height: 40px;
+  }
+
+  img {
+    width: 100%;
+  }
+}
