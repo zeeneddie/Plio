@@ -11,3 +11,4 @@ import './status';
 import './sources';
 import './notify';
 import './lessons-learned';
+import './improvement-plan';

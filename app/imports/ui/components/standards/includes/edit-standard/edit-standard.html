@@ -56,14 +56,11 @@
     <div class="card-block-collapse collapse" id="preventative-actions">
       <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
     </div>
-    <div class="card-block card-block-collapse-toggle collapsed" href="#improvement-plan" data-toggle="collapse">
-      <h4 class="card-title pull-xs-left">Improvement plan</h4>
-      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
-    </div>
-    <div class="card-block-collapse collapse" id="improvement-plan">
-      <div ng-include="'includes/subcards-edit/improvement-plan.html'"></div>
-    </div>
+
+    {{> ESImprovementPlan standard=standard}}
+
     {{> ESLessonsLearned standard=standard}}
+
     <div class="card-block text-xs-center">
       <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
     </div>

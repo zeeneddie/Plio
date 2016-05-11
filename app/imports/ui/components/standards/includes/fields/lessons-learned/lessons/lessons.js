@@ -6,7 +6,8 @@ Template.ESLessons.viewmodel({
   mixin: 'collapse',
   onRendered() {
     this.datepicker.datepicker({
-      startDate: new Date()
+      startDate: new Date(),
+      format: 'dd MM yyyy'
     });
 
     if (!this._id) {
@@ -18,6 +19,9 @@ Template.ESLessons.viewmodel({
   },
   title: '',
   date: '',
+  formattedDate() {
+    return moment(this.date()).format('DD MMM YYYY');
+  },
   save() {
     const data = this.getData();
     const _id = this._id && this._id();
@@ -58,6 +62,6 @@ Template.ESLessons.viewmodel({
     const { owner:createdBy } = this.child('ESOwner').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
     const { title, date } = this.data();
-    return { title, date, createdBy, notes };
+    return { title, date: new Date(date), createdBy, notes };
   }
 });

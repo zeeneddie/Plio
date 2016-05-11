@@ -9,7 +9,7 @@ export const LessonsSchema = new SimpleSchema({
     type: String
   },
   date: {
-    type: String
+    type: Date
   },
   createdBy: {
     type: String,

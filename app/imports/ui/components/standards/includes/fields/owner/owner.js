@@ -11,6 +11,7 @@ Template.ESOwner.viewmodel({
     }
   },
   label: 'Owner',
+  sm: 8,
   owner: '',
   selectedOwnerId: '',
   members() {
