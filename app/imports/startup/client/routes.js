@@ -8,7 +8,7 @@ import '/imports/ui/pages';
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
   name: 'signIn',
-  path: '/sign-in',
+  path: '/login',
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content',
@@ -93,6 +93,7 @@ FlowRouter.route('/user-waiting', {
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('StandardsLayout', {
       content: 'StandardsPage'
@@ -131,9 +132,9 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
 });
 
 function redirectHandler() {
-  const orgSerialNumber = FlowRouter.getQueryParam('org');
-  if (orgSerialNumber) {
-    FlowRouter.go('dashboardPage', {orgSerialNumber});
+  const targetURL = FlowRouter.getQueryParam('b');
+  if (targetURL) {
+    FlowRouter.go(targetURL);
   } else {
     FlowRouter.go('hello');
   }
@@ -142,7 +143,8 @@ function redirectHandler() {
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
-      redirect('signIn', {}, {org: context.params.orgSerialNumber});
+      console.log('context', context);
+      redirect('signIn', {}, { b: context.path });
     }
   }
 }
