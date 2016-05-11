@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Accounts } from 'meteor/accounts-base'
 import { Roles } from 'meteor/alanning:roles';
 
 import UserService from './user-service.js';
@@ -173,5 +174,23 @@ export const revokeRole = new ValidatedMethod({
     ensureUserCanChangeRoles(this.userId, organizationId);
 
     return Roles.removeUsersFromRoles(_id, role, organizationId);
+  }
+});
+
+export const sendVerificationEmail = new ValidatedMethod({
+  name: 'Users.sendVerificationEmail',
+  validate: new SimpleSchema({}).validator(),
+  run() {
+    const userId = this.userId;
+
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Cannot verify an email of an unauthorized user'
+      );
+    }
+
+    if (!this.isSimulation) {
+      return Accounts.sendVerificationEmail(userId);
+    }
   }
 });

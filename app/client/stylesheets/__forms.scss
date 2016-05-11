@@ -375,7 +375,9 @@ legend {
   }
 }
 
-
+fieldset[disabled] {
+  opacity: 0.5;
+}
 
 .help-block {
   margin: 0 0 10px;
