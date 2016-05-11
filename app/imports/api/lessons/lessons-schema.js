@@ -11,7 +11,7 @@ export const LessonsSchema = new SimpleSchema({
   date: {
     type: String
   },
-  owner: {
+  createdBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },

@@ -5,7 +5,9 @@ import { Random } from 'meteor/random';
 Template.ESLessons.viewmodel({
   mixin: 'collapse',
   onRendered() {
-    this.datepicker.datepicker();
+    this.datepicker.datepicker({
+      startDate: new Date()
+    });
 
     if (!this._id) {
       this.toggleCollapse();
@@ -27,13 +29,13 @@ Template.ESLessons.viewmodel({
       }
     }
 
-    const { title, date, owner, notes } = this.getData();
+    const { title, date, createdBy, notes } = this.getData();
     const standardId = this.standard() && this.standard()._id;
 
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes });
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes });
     } else {
-      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId, notes }, (err, _id) => {
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, createdBy, standardId, notes }, (err, _id) => {
         this.destroy();
         const sectionToCollapse = ViewModel.findOne('ESLessons', vm => vm._id && vm._id() === _id);
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
@@ -53,9 +55,9 @@ Template.ESLessons.viewmodel({
     Blaze.remove(this.templateInstance.view);
   },
   getData() {
-    const { owner } = this.child('ESOwner').getData();
+    const { owner:createdBy } = this.child('ESOwner').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
     const { title, date } = this.data();
-    return { title, date, owner, notes };
+    return { title, date, createdBy, notes };
   }
 });

@@ -10,6 +10,7 @@ Template.ESOwner.viewmodel({
       this.owner(fullName);
     }
   },
+  label: 'Owner',
   owner: '',
   selectedOwnerId: '',
   members() {

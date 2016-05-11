@@ -19,13 +19,13 @@
         {{#FormField label="Created date"}}
           <input type="text" class="form-control" placeholder="Created date" {{b "ref: datepicker, value: date"}}>
         {{/FormField}}
-        {{> ESOwner _id='placeholder' selectedOwnerId=owner}}
+        {{> ESOwner _id='placeholder' selectedOwnerId=createdBy label="Created by"}}
       </div>
       {{#QuillEditor}}
         {{#if _id}}
           <div {{b "html: notes"}}></div>
         {{else}}
-          <div>fjaddkjandkasjdkjandas</div>
+          <div></div>
         {{/if}}
       {{/QuillEditor}}
       <div class="card-block clearfix">
