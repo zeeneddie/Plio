@@ -1,5 +1,6 @@
 AccountsTemplates.configure({
   sendVerificationEmail: false,
+  enablePasswordChange: true,
   negativeValidation: true,
   positiveValidation: true,
   homeRoutePath: '/',
@@ -12,7 +13,8 @@ AccountsTemplates.configure({
     },
     button: {
       signUp: 'Sign up',
-      signIn: 'Login'
+      signIn: 'Login',
+      changePwd: 'Change password'
     }
   }
 });

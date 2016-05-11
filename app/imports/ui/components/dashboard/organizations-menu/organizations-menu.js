@@ -13,6 +13,11 @@ Template.OrganizationsMenu.viewmodel({
   },
   openOrgSettings(e) {
     e.preventDefault();
-    ModalManager.open('OrganizationSettings');
+    this.modal().open({
+      template: 'OrganizationSettings',
+      title: 'Org Settings',
+      organizationId: this.organization()._id
+    });
+    // ModalManager.open('OrganizationSettings');
   }
 });

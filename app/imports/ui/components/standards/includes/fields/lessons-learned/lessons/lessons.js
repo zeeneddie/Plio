@@ -7,9 +7,6 @@ Template.ESLessons.viewmodel({
   onRendered() {
     this.datepicker.datepicker();
 
-    const basicEditor = new Quill('#editor-container');
-    basicEditor.addModule('toolbar', { container: '#formatting-container' });
-
     if (!this._id) {
       this.toggleCollapse();
     }
@@ -32,11 +29,12 @@ Template.ESLessons.viewmodel({
 
     const { title, date, owner } = this.getData();
     const standardId = this.standard() && this.standard()._id;
+    const notes = ViewModel.findOne('QuillEditor').editor().getHTML();
 
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId });
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes });
     } else {
-      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId }, (err, _id) => {
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId, notes }, (err, _id) => {
         this.destroy();
         const sectionToCollapse = ViewModel.findOne('ESLessons', vm => vm._id && vm._id() === _id);
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();

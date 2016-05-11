@@ -21,21 +21,9 @@
         {{/FormField}}
         {{> ESOwner _id='placeholder' selectedOwnerId=owner}}
       </div>
-      <div class="rich-text">
-        <div class="rich-text-controls">
-          <div class="ql-toolbar-container" id="formatting-container">
-            <a class="ql-bold btn btn-secondary" href="#" title="Bold"><i class="fa fa-bold"></i></a>
-            <a class="ql-italic btn btn-secondary" href="#" title="Italic"><i class="fa fa-italic"></i></a>
-            <a class="ql-bullet btn btn-secondary" href="#" title="Bullet"><i class="fa fa-list-ul"></i></a>
-            <a class="ql-list btn btn-secondary" href="#" title="List"><i class="fa fa-list-ol"></i></a>
-            <a class="ql-link btn btn-secondary" href="#" title="Link"><i class="fa fa-link"></i></a>
-            <a class="btn btn-secondary rich-text-expand-toggle" href="#"><i class="fa fa-expand"></i><i class="fa fa-compress"></i></a>
-          </div>
-        </div>
-        <div class="ql-container rich-text-input" id="editor-container" contenteditable>
-
-        </div>
-      </div>
+      {{#QuillEditor}}
+        <div {{b "html: notes"}}></div>
+      {{/QuillEditor}}
       <div class="card-block clearfix">
         <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: save"}}>Save</button>
         <button type="button" class="btn btn-secondary pull-xs-right" {{b "click: delete"}}>Delete</button>

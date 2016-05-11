@@ -1,20 +1,19 @@
 <template name="StandardsLayout">
-  {{#if Template.subscriptionsReady}}
-    {{> StandardsHeader title=headerTitle}}
+  {{> StandardsHeader}}
 
-    <div class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="content-list scroll">
-            {{> Template.dynamic template=contentList}}
-          </div>
-          <div class="content-cards hidden-sm-down scroll">
-            {{> Template.dynamic template=contentCard}}
-          </div>
-        </div>
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        {{#if isReady}}
+          {{#if organization}}
+            {{> Template.dynamic template=content}}
+          {{else}}
+            {{> NotFoundPage subject="Organization"}}
+          {{/if}}
+        {{else}}
+          {{> PreloaderPage}}
+        {{/if}}
       </div>
     </div>
-  {{else}}
-    {{> PreloaderPage}}
-  {{/if}}
+  </div>
 </template>

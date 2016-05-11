@@ -1,0 +1,14 @@
+import './contact-details.html';
+import './contact-details.js';
+import './main-details.html';
+import './main-details.js';
+import './phone-number.html';
+import './phone-number.js';
+import './phone-numbers.html';
+import './phone-numbers.js';
+import './password.html';
+import './password.js';
+import './roles.html';
+import './roles.js';
+import './user-edit.html';
+import './user-edit.js';

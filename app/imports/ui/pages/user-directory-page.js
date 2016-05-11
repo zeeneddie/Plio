@@ -36,6 +36,7 @@ Template.UserDirectoryPage.viewmodel({
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
+
     const searchUsers = this.searchObject('searchText',
       ['profile.firstName', 'profile.lastName', 'profile.description', 'emails.0.address']);
 

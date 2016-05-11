@@ -4,7 +4,15 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        {{> Template.dynamic template=content}}
+        {{#if isReady}}
+          {{#with organization}}
+            {{> Template.dynamic template=content}}
+          {{else}}
+            {{> NotFoundPage subject="Organization"}}
+          {{/with}}
+        {{else}}
+          {{> PreloaderPage}}
+        {{/if}}
       </div>
     </div>
   </div>

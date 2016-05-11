@@ -49,6 +49,9 @@ ViewModel.mixin({
       setError(err) {
         this.instance().setError(err);
       },
+      clearError() {
+        this.instance().clearError();
+      },
       callMethod(method, args, cb) {
         return this.instance().callMethod(method, args, cb);
       },
@@ -107,35 +110,20 @@ ViewModel.mixin({
     }
   },
   addForm: {
-    addForm(template) {
-      Blaze.renderWithData(
-        Template[template],
-        {
-          onChange: this.onChangeCb(),
-          onDelete: this.onDeleteCb()
-        },
-        this.forms[0]
-      );
-    }
-  },
-  editableModalSection: {
-    editableModal() {
-      return this.parent().child('EditableModal');
-    },
-    isSaving(val) {
-      const editableModal = this.editableModal();
-
-      if (val !== undefined) {
-        editableModal.isSaving(val);
+    addForm(template, context = {}) {
+      if (_.isFunction(this.onChangeCb)) {
+        context['onChange'] = this.onChangeCb();
       }
 
-      return editableModal.isSaving();
-    },
-    callMethod(method, args, cb) {
-      return this.editableModal().callMethod(method, args, cb);
-    },
-    handleMethodResult(cb) {
-      return this.editableModal().handleMethodResult(cb);
+      if (_.isFunction(this.onDeleteCb)) {
+        context['onDelete'] = this.onDeleteCb();
+      }
+
+      Blaze.renderWithData(
+        Template[template],
+        context,
+        this.forms[0]
+      );
     }
   },
   user: {
@@ -172,7 +160,17 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
+  organizations: {
+    subHandler: null,
+    subscribe() {
+      this.subHandler(Meteor.subscribe('currentUserOrganizations'));
+    }
+  },
   organization: {
+    subHandler: null,
+    subscribe(orgId) {
+      this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
+    },
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
