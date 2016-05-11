@@ -6,6 +6,10 @@ Template.ESLessons.viewmodel({
   mixin: 'collapse',
   onRendered() {
     this.datepicker.datepicker();
+
+    const basicEditor = new Quill('#editor-container');
+    basicEditor.addModule('toolbar', { container: '#formatting-container' });
+
     if (!this._id) {
       this.toggleCollapse();
     }
