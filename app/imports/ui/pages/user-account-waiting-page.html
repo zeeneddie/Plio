@@ -1,8 +1,15 @@
 <template name="UserAccountWaitingPage">
-  <div class="jumbotron vertical-center table">
-    <div class="table-cell text-xs-center">
-      <p>Confirm your email address to start using the Plio application.</p>
-      <a href="#" {{b "click: sendVerificationEmail"}}>Re-send the confirmation email</a>
-    </div>
-  </div>
+  {{#if currentUser}}
+    {{#if isEmailVerified}}
+      <h3>Your email address is successfully verified!</h3>
+      <a href="{{pathFor 'hello'}}">Open the dashboard.</a>
+    {{else}}
+      <h3>Confirm your email address to start using the Plio application.</h3>
+      {{#if isSendingEmail}}
+        <span>Sending...</span>
+      {{else}}
+        <a class="pointer" {{b "click: sendVerificationEmail"}}>Re-send the confirmation email</a>
+      {{/if}}
+    {{/if}}
+  {{/if}}
 </template>

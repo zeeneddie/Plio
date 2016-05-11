@@ -1,9 +1,7 @@
 <template name="VerifyEmailPage">
   {{#if error}}
-  <div class="jumbotron vertical-center table">
-    <div class="table-cell text-xs-center">
-      <p>{{error}}</p>
-    </div>
-  </div>
+    <h3>{{error}}</h3>
+  {{else}}
+    <h3>Verifying...</h3>
   {{/if}}
 </template>

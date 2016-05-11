@@ -29,7 +29,8 @@ AccountsTemplates.configureRoute('verifyEmail', {
   layoutType: 'blaze',
   name: 'verifyEmail',
   path: '/verify-email',
-  layoutTemplate: 'VerifyEmailPage',
+  layoutTemplate: 'TransitionalLayout',
+  template: 'VerifyEmailPage',
   contentRegion: 'content',
   redirect() {
     FlowRouter.go('hello');
@@ -56,7 +57,9 @@ FlowRouter.route('/', {
 FlowRouter.route('/hello', {
   name: 'hello',
   action(params) {
-    BlazeLayout.render('HelloPage');
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'HelloPage'
+    });
   }
 });
 
@@ -64,7 +67,9 @@ FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserAccountWaitingPage');
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'UserAccountWaitingPage'
+    });
   }
 });
 
