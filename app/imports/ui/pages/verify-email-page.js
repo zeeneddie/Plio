@@ -5,8 +5,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 Template.VerifyEmailPage.viewmodel({
   error() {
     const error = AccountsTemplates.state.form.get("error");
-    if (error) {
-      return error.replace('error.accounts.', '');
+    if (error && error[0]) {
+      return error[0].replace('error.accounts.', '');
     }
   }
 });
