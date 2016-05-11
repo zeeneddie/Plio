@@ -5,6 +5,9 @@
         {{#each fields}}
           {{> atInput}}
         {{/each}}
+        {{#if showForgotPasswordLink}}
+          {{> atPwdLink}}
+        {{/if}}
       </fieldset>
     </form>
   </div>
