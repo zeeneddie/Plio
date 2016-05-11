@@ -26,6 +26,11 @@ AccountsTemplates.configureRoute('signUp', {
 });
 
 AccountsTemplates.configureRoute('verifyEmail', {
+  layoutType: 'blaze',
+  name: 'verifyEmail',
+  path: '/verify-email',
+  layoutTemplate: 'VerifyEmailPage',
+  contentRegion: 'content',
   redirect() {
     FlowRouter.go('hello');
     toastr.success('Email verified! Thanks!');
