@@ -4,9 +4,6 @@ import { Random } from 'meteor/random';
 
 Template.ESLessons.viewmodel({
   mixin: ['collapse', 'date'],
-  autorun() {
-    console.log(this.data());
-  },
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
@@ -46,15 +43,32 @@ Template.ESLessons.viewmodel({
   },
   delete() {
     const _id = this._id && this._id();
-    if (!confirm('Are you sure you want to delete this lesson?')) return;
+    const { title } = this.getData();
+
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').remove({ _id }, this.destroy());
+      swal(
+        {
+          title: 'Are you sure?',
+          text: `The lesson "${title}" will be removed.`,
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonClass: 'btn-danger',
+          confirmButtonText: 'Remove',
+          closeOnConfirm: false
+        },
+        () => {
+          ViewModel.findOne('ESLessonsLearned').remove({ _id }, this.destroy(() =>
+            swal('Removed!', `The lesson "${title}" was removed succesfully.`, 'success')));
+        }
+      );
     } else {
       this.destroy();
     }
   },
-  destroy() {
+  destroy(cb) {
     Blaze.remove(this.templateInstance.view);
+
+    if (cb) cb();
   },
   getDate() {
     return this.date() && this._id ? this.renderDate(this.date()) : '';
