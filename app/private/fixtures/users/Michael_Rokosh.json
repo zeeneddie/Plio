@@ -34,8 +34,8 @@
       }
     ]
   },
-  "status": "offline",
-  "statusConnection": "offline",
+  "status": "online",
+  "statusConnection": "online",
   "roles": {
     "8bcNPN8sKTtJFw4uy": [
       "create-standards-documents",
