@@ -14,11 +14,11 @@
         {{#each organizationUsers}}
           <a class="list-group-item" {{b "href: getUserPath(this._id), class: { active: isActiveUser(this._id) }"}}>
             <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
-              <img {{b "src: avatar(this)"}}>
+              <img {{b "src: this.avatar()"}}>
             </div>
             <div class="list-group-item-content">
               <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
-              <p class="list-group-item-text" {{b "text: description(this)"}}></p>
+              <p class="list-group-item-text" {{b "text: this.description()"}}></p>
             </div>
           </a>
         {{/each}}

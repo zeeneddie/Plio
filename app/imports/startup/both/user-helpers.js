@@ -1,7 +1,10 @@
 Meteor.users.helpers({
   fullName() {
     const { firstName='', lastName='' } = this.profile;
-    return `${firstName} ${lastName}`;
+    
+    if (firstName && lastName) {
+      return `${firstName} ${lastName}`;
+    }
   },
   firstName() {
     return this.profile.firstName;
