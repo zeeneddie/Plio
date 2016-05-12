@@ -9,15 +9,19 @@ Template.Datepicker.viewmodel({
 
       this.value(date);
 
-      if (this.name && this.name()) {
-        this.parent().update(this.name());
-      }
+      this.update();
     });
   },
   label: 'Date',
   sm: 8,
   date: '',
   value: '',
+  update() {
+    if (this.isEditable && this.isEditable()) {
+      const { date } = this.getData();
+      this.parent().update({ date });
+    }
+  },
   getData() {
     const date = this.value();
     return { date };

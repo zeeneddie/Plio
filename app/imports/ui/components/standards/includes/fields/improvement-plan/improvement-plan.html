@@ -6,14 +6,9 @@
   <div class="card-block-collapse collapse" id="improvement-plan" {{b "ref: collapse"}}>
     <div class="card-block">
 
-      {{#FormField label="Statement of desired outcome" sm=7}}
-        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome"
-          {{b "value: desiredOutcome, focusout: update('desiredOutcome')"}}></textarea>
-      {{/FormField}}
+      {{> ESIPDesiredOutcome desiredOutcome=desiredOutcome}}
 
-      {{#FormField label="Target date for desired outcome" sm=7}}
-        {{> Datepicker placeholder="Target date for desired outcome" name="targetDate" date=(renderDate targetDate)}}
-      {{/FormField}}
+      {{> ESIPTargetDate targetDate=targetDate}}
 
       {{#FormField label="Improvement plan review dates" sm=7}}
         <div {{b "ref: forms"}}>
@@ -26,7 +21,7 @@
         </button>
       {{/FormField}}
 
-      {{> ESOwner sm=7}}
+      {{> ESOwner sm=7 isEditable=true selectedOwnerId=owner}}
 
       {{#FormField label="Selected metric" sm=7}}
         <input type="text" class="form-control" placeholder="Selected metric" {{b "value: selectedMetric"}}>

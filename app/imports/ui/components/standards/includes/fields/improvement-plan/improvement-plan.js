@@ -3,16 +3,18 @@ import { Blaze } from 'meteor/blaze';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: ['collapse', 'addForm', 'date'],
+  mixin: ['collapse', 'addForm'],
   desiredOutcome: '',
   targetDate: '',
+  owner: '',
   selectedMetric: '',
   targetValue: '',
-  update(field) {
-    const value = this.getData()[field];
+  update({ ...args }) {
+    const key = _.keys(args)[0];
+    const value = _.values(args)[0];
     const options = {};
 
-    options[`improvementPlan.${field}`] = value;
+    options[`improvementPlan.${key}`] = value;
 
     this.parent().update(options);
   },

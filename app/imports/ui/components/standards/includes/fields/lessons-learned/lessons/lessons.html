@@ -21,7 +21,7 @@
           {{> Datepicker placeholder="Created date" date=getDate}}
         {{/FormField}}
 
-        {{> ESOwner _id='placeholder' selectedOwnerId=createdBy label="Created by"}}
+        {{> ESOwner selectedOwnerId=createdBy label="Created by"}}
       </div>
       {{#QuillEditor}}
         {{#if _id}}
