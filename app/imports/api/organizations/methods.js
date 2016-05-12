@@ -243,6 +243,7 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
     });
 
     if (errors.length > 0) {
+      console.log(errors);
       let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
       throw new Meteor.Error(500, errorMsg);
     }

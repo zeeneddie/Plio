@@ -3,7 +3,14 @@
     <div class="table-cell text-xs-center">
       {{> Template.dynamic template=content}}
       <hr>
-      <img src="/p-logo.png" class="p-logo" alt="Plio">
+      <p>
+        <img src="/p-logo.png" class="p-logo" alt="Plio">
+      </p>
+      <p>
+        <small>
+          Support: <a href="mailto:steve.ives@pliohub.com">steve.ives@pliohub.com</a> • <a href="{{pathFor 'signOut'}}">Sign Out</a>
+        </small>
+      </p>
     </div>
   </div>
 </template>

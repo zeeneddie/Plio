@@ -152,6 +152,7 @@ Template.UserEdit.viewmodel({
       text: 'This user will be removed from the organization',
       type: 'warning',
       showCancelButton: true,
+      cancelButtonClass: 'btn-secondary',
       confirmButtonClass: 'btn-danger',
       confirmButtonText: 'Delete',
       closeOnConfirm: true
@@ -162,6 +163,9 @@ Template.UserEdit.viewmodel({
       }, (err, res) => {
         if (!err) {
           // have to wait some time before opening new sweet alert
+          FlowRouter.go('userDirectoryPage', { 
+            orgSerialNumber: this.organization().serialNumber 
+          });
           Meteor.setTimeout(() => {
             swal('Removed', 'User has been removed', 'success');
           }, 500);

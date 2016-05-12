@@ -61,12 +61,14 @@ ViewModel.mixin({
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
+      
       if (this[prop]()) {
-        const r = new RegExp(`.*${this[prop]()}.*`, 'i');
+        const words = this[prop]().split(' ');
+        const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
             const obj = {};
-            obj[field] = r;
+            obj[field.name] = field.subField ? { $elemMatch: { [field.subField]: r } } : r;
             return obj;
           });
           searchObject['$or'] = fields;
@@ -74,6 +76,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
+      
       return searchObject;
     }
   },
@@ -115,19 +118,6 @@ ViewModel.mixin({
           return user.emails[0].address;
         }
       }
-    },
-    email(user) {
-      return user.emails[0].address;
-    },
-    address(user) {
-      const { address='' } = user.profile;
-      return address;
-    },
-    avatar(user) {
-      return user.profile.avatar;
-    },
-    description(user) {
-      return user.profile.description;
     },
     hasUser() {
       return !!Meteor.userId() || Meteor.loggingIn();
