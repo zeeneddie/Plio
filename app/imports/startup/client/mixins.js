@@ -2,6 +2,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { UserRoles } from '/imports/api/constants.js';
 
 const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -148,13 +149,18 @@ ViewModel.mixin({
     },
     hasUser() {
       return !!Meteor.userId() || Meteor.loggingIn();
-    },
+    }
+  },
+  roles: {
     isInRole(user, orgId, role) {
       if (user) {
         const { [orgId]: orgRoles } = user.roles;
 
         return orgRoles && _.contains(orgRoles, role);
       }
+    },
+    inviteUsers() {
+      return UserRoles.INVITE_USERS;
     }
   },
   organizations: {
@@ -171,6 +177,9 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    },
+    organizationId() {
+      return this.organization() && this.organization()._id;
     }
   },
   date: {

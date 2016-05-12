@@ -1,10 +1,12 @@
 <template name="DashboardFooter">
   <div class="dashboard-footer">
     <div class="dashboard-footer-buttons">
+      {{#if isInRole currentUser organizationId inviteUsers}}
       <button type="button" class="btn btn-secondary" {{b "click: onInviteClick"}}>
         <i class="fa fa-user-plus margin-right"></i>
         Invite users
       </button>
+      {{/if}}
       <button type="button" class="btn btn-secondary disabled">
         <i class="fa fa-plus margin-right"></i>
         Report a non-conformity

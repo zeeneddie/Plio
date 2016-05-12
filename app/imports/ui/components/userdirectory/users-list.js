@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.UsersList.viewmodel({
   share: 'search',
-  mixin: ['user', 'organization', 'modal'],
+  mixin: ['user', 'organization', 'modal', 'roles'],
   isActiveUser(userId) {
     return this.parent().activeUser() === userId;
   },

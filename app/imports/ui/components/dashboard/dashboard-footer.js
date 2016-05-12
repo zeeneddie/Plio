@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations';
 
 Template.DashboardFooter.viewmodel({
-  mixin: ['modal'],
+  mixin: ['modal', 'roles', 'organization'],
   onInviteClick(event) {
     event.preventDefault();
     let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
