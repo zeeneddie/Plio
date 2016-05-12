@@ -9,7 +9,7 @@ Template.ESLessonsLearned.viewmodel({
     this.templateInstance.subscribe('lessons', _id);
   },
   lessons() {
-    return LessonsLearned.find({}, { sort: { date: 1 } });
+    return LessonsLearned.find({}, { sort: { serialNumber: 1 } });
   },
   insert(args, cb) {
     this.modal().callMethod(insert, args, cb);

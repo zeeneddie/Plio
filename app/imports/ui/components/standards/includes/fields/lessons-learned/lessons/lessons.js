@@ -4,6 +4,9 @@ import { Random } from 'meteor/random';
 
 Template.ESLessons.viewmodel({
   mixin: ['collapse', 'date'],
+  autorun() {
+    console.log(this.data());
+  },
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
@@ -11,6 +14,9 @@ Template.ESLessons.viewmodel({
   },
   standard() {
     return ViewModel.findOne('ESLessonsLearned').standard();
+  },
+  renderSerialNumber() {
+    return !!(this._id && this._id() && this.serialNumber && this.serialNumber()) ? `LL ${this.serialNumber()}` : ''
   },
   title: '',
   date: '',
