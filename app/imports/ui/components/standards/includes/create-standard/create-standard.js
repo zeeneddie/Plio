@@ -4,7 +4,7 @@ import { insert } from '/imports/api/standards/methods.js';
 
 Template.CreateStandard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'numberRegex'],
+  mixin: ['modal', 'numberRegex', 'organization'],
   save() {
     const data = this.getChildrenData();
 
@@ -31,6 +31,7 @@ Template.CreateStandard.viewmodel({
   insert({ title, sectionId, typeId, owner, issueNumber, status }) {
     const number = this.parseNumber(title);
     const nestingLevel = (number && number[0].split('.').length) || 1;
+    const organizationId = this.organization() && this.organization()._id;
 
     if (nestingLevel > 4) {
       this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
@@ -38,6 +39,7 @@ Template.CreateStandard.viewmodel({
     }
 
     const args = {
+      organizationId,
       title,
       sectionId,
       typeId,

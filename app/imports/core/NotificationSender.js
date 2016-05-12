@@ -7,8 +7,7 @@ import HandlebarsCompiledCache from './HandlebarsCompiledCache';
 
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
-  applicationInvitationEmail: getAssetPath('email', 'application-invitation'),
-  invitedToOrganizationEmail: getAssetPath('email', 'invited-to-organization')
+  minimalisticEmail: getAssetPath('email', 'minimalistic-email')
 }) : false;
 
 

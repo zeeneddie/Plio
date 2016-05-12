@@ -5,7 +5,8 @@
       <div class="card">
         <div class="card-block card-heading clearfix">
           <div class="card-heading-buttons pull-xs-right">
-            <a class="btn btn-primary" data-toggle="modal" data-target="#user-edit-modal">
+            <a class="btn btn-primary" data-toggle="modal"
+                data-target="#user-edit-modal" {{b "click: openEditUserModal"}}>
               <i class="ms-Icon ms-Icon--pencil"></i>
               Edit
             </a>
@@ -16,23 +17,25 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="list-group-item">
-                <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
-                <p class="list-group-item-text">Name</p>
-                <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
+                  <img {{b "src: this.avatar()"}}>
+                </div>
+                <p class="list-group-item-text" {{b "if: this.fullName()"}}>Name</p>
+                <h4 class="list-group-item-heading" {{b "if: this.fullName(), text: this.fullName()"}}></h4>
               </div>
             </div>
-            <div class="col-sm-6" {{b "if: initials(this)"}}>
+            <div class="col-sm-6" {{b "if: this.initials()"}}>
               <div class="list-group-item">
                 <p class="list-group-item-text">Initials</p>
-                <h4 class="list-group-item-heading" {{b "text: initials(this)" }}>=</h4>
+                <h4 class="list-group-item-heading" {{b "text: this.initials()" }}>=</h4>
               </div>
             </div>
           </div>
-          <div class="row" {{b "if: description(this)"}}>
+          <div class="row" {{b "if: this.description()"}}>
             <div class="col-sm-6">
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading" {{b "text: description(this)" }}></h4>
+                <h4 class="list-group-item-heading" {{b "text: this.description()" }}></h4>
               </div>
             </div>
           </div>
@@ -44,25 +47,25 @@
           <div class="list-group ng-scope">
             <div class="list-group-item">
               <p class="list-group-item-text">Email</p>
-              <h4 class="list-group-item-heading"><a href="mailto:" {{b "text: email(this)" }}></a></h4>
+              <h4 class="list-group-item-heading"><a href="mailto:{{email}}" {{b "text: this.email()" }}></a></h4>
             </div>
-            <div class="list-group-item" {{b "if: address(this)"}}>
+            <div class="list-group-item" {{b "if: this.address()"}}>
                 <p class="list-group-item-text">Address</p>
-                <h4 class="list-group-item-heading" {{b "text: address(this)"}}></h4>
+                <h4 class="list-group-item-heading" {{b "text: this.address()"}}></h4>
             </div>
             <div class="row">
-              {{#each phoneNumbers this}}
+              {{#each phoneNumbers}}
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
-                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
+                    <h4 class="list-group-item-heading"><a {{b "text: this.number, href: 'tel:' + this.number" }}></a></h4>
                   </div>
                 </div>
               {{/each}}
             </div>
-            <div class="list-group-item" {{b "if: skype(this)"}}>
+            <div class="list-group-item" {{b "if: this.skype()"}}>
               <p class="list-group-item-text">Skype name</p>
-              <h4 class="list-group-item-heading"><a href="skype:{{skype this}}?call" {{b "text: skype(this)"}}></a></h4>
+              <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: this.skype()"}}></a></h4>
             </div>
           </div>
         </div>
@@ -72,28 +75,13 @@
         <div class="ng-scope">
           <div class="list-group ng-scope">
             <div class="list-group-item">
-              <h4 class="list-group-item-heading">
-                <i class="ms-Icon ms-Icon--check text-success"></i>
-                Create &amp; delete users
+            {{#each superpowers this}}
+              <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
+                <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
+                </i>
+                {{value}}
               </h4>
-              <h4 class="list-group-item-heading">
-                <i class="ms-Icon ms-Icon--check text-success"></i>
-                Change organization settings
-              </h4>
-            </div>
-            <div class="list-group-item">
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                Edit user permissions
-              </h4>
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                View team to do lists
-              </h4>
-              <h4 class="list-group-item-heading text-muted">
-                <i class="ms-Icon ms-Icon--x text-danger"></i>
-                Create &amp; edit standards documents
-              </h4>
+            {{/each}}
             </div>
           </div>
         </div>

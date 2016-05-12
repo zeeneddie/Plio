@@ -3,6 +3,9 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
+const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
+const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
+
 ViewModel.persist = false;
 
 ViewModel.mixin({
@@ -46,6 +49,9 @@ ViewModel.mixin({
       setError(err) {
         this.instance().setError(err);
       },
+      clearError() {
+        this.instance().clearError();
+      },
       callMethod(method, args, cb) {
         return this.instance().callMethod(method, args, cb);
       },
@@ -57,12 +63,14 @@ ViewModel.mixin({
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
+      
       if (this[prop]()) {
-        const r = new RegExp(`.*${this[prop]()}.*`, 'i');
+        const words = this[prop]().split(' ');
+        const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
             const obj = {};
-            obj[field] = r;
+            obj[field.name] = field.subField ? { $elemMatch: { [field.subField]: r } } : r;
             return obj;
           });
           searchObject['$or'] = fields;
@@ -70,6 +78,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
+      
       return searchObject;
     }
   },
@@ -78,14 +87,44 @@ ViewModel.mixin({
       return string.match(/^[\d\.]*\d/);
     }
   },
+  urlRegex: {
+    IsValidUrl(url) {
+      return SimpleSchema.RegEx.Url.test(url);
+    },
+    isYoutubeUrl(url) {
+      return youtubeRegex.test(url);
+    },
+    getIdFromYoutubeUrl(url) {
+      let videoId = url.split('v=')[1];
+      if (!videoId) return false;
+      const ampersandPosition = videoId.indexOf('&');
+      if(ampersandPosition != -1) {
+        videoId = videoId.substring(0, ampersandPosition);
+      }
+      return videoId;
+    },
+    isVimeoUrl(url) {
+      return vimeoRegex.test(url);
+    },
+    getIdFromVimeoUrl(url) {
+      const match = url.match(vimeoRegex);
+      if (!match) return false;
+      return match[4];
+    }
+  },
   addForm: {
-    addForm(template) {
+    addForm(template, context = {}) {
+      if (_.isFunction(this.onChangeCb)) {
+        context['onChange'] = this.onChangeCb();
+      }
+
+      if (_.isFunction(this.onDeleteCb)) {
+        context['onDelete'] = this.onDeleteCb();
+      }
+
       Blaze.renderWithData(
         Template[template],
-        {
-          onChange: this.onChangeCb(),
-          onDelete: this.onDeleteCb()
-        },
+        context,
         this.forms[0]
       );
     }
@@ -107,19 +146,6 @@ ViewModel.mixin({
         }
       }
     },
-    email(user) {
-      return user.emails[0].address;
-    },
-    address(user) {
-      const { address='' } = user.profile;
-      return address;
-    },
-    avatar(user) {
-      return user.profile.avatar;
-    },
-    description(user) {
-      return user.profile.description;
-    },
     hasUser() {
       return !!Meteor.userId() || Meteor.loggingIn();
     }
@@ -136,8 +162,20 @@ ViewModel.mixin({
       this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
     },
     organization() {
-      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    }
+  },
+  date: {
+    renderDate(date) {
+      return moment.isDate(date) && moment(date).format('DD MMM YYYY');
     },
+    datepickerInit() {
+      this.datepicker.datepicker({
+        startDate: new Date(),
+        format: 'dd MM yyyy',
+        autoclose: true
+      });
+    }
   }
 });

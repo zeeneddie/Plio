@@ -4,7 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
-import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
 
 const optionsSchema = new SimpleSchema({
@@ -21,10 +20,11 @@ export const insert = new ValidatedMethod({
   validate: StandardsSchema.validator(),
 
   run(...args) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot create a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot create a standard'
+      );
+    }
 
     return StandardsService.insert(...args);
   }
@@ -38,10 +38,11 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run({_id, options, ...args}) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot update a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update a standard'
+      );
+    }
 
     return StandardsService.update({ _id, options, ...args });
   }
@@ -53,10 +54,11 @@ export const remove = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot delete a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot delete a standard'
+      );
+    }
 
     return StandardsService.remove({ _id });
   }

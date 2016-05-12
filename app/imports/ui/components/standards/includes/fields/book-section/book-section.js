@@ -6,8 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  share: 'organization',
-  mixin: ['search', 'modal'],
+  mixin: ['search', 'modal', 'organization'],
   onCreated() {
     const _id = this.selectedBookSectionId();
     if (_id) {
@@ -30,14 +29,33 @@ Template.ESBookSection.viewmodel({
 
     if (!title) return;
 
-    if (!confirm(`Are you sure you want to add section: '${title}'?`)) return;
+    this.showAlert();
+  },
+  showAlert() {
+    swal(
+      {
+        title: "Are you sure?",
+        text: `New section "${this.bookSection()}" will be added.`,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success",
+        confirmButtonText: "Add",
+        closeOnConfirm: false
+      },
+      () => {
+        this.onAlertConfirm();
+      }
+    );
+  },
+  onAlertConfirm() {
+    swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
 
-    const org = Organizations.findOne({ serialNumber: this.orgSerialNumber() });
+    const org = Organizations.findOne({ serialNumber: this.organization().serialNumber });
     const organizationId = !!org && org._id;
 
     this.dropdown.dropdown('toggle');
 
-    this.modal().callMethod(insert, { title, organizationId }, (_id) => {
+    this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
       this.selectedBookSectionId(_id);
     });
   },

@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 
 Template.StandardsList.viewmodel({
-  share: ['organization', 'search'],
+  share: 'search',
   mixin: ['modal', 'search'],
   stadardsBookSections() {
     const query = this.searchObject('searchText', 'title');

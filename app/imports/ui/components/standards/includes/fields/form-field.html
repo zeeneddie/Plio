@@ -1,7 +1,9 @@
 <template name="FormField">
   <div class="form-group row" {{b "class: { has-danger: isInvalid }"}}>
-    <label class="form-control-label col-sm-4 col-xs-12" {{b "text: label"}}></label>
-    <div class="col-sm-8 col-xs-12">
+    <label class="form-control-label col-xs-12"
+      {{b "if: label, text: label, class: 'col-sm-' + calcLabelCol"}}>
+    </label>
+    <div class="col-xs-12" {{b "class: 'col-sm-' + sm"}}>
       {{> Template.contentBlock}}
     </div>
   </div>

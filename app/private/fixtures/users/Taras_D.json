@@ -23,5 +23,15 @@
   },
   "status": "away",
   "statusConnection": "away",
-  "selectedOrganizationSerialNumber": 98
+  "selectedOrganizationSerialNumber": 98,
+  "roles": {
+    "KwKXz5RefrE5hjWJ2": [
+      "create-standards-documents",
+      "view-team-actions"
+    ],
+    "8bcNPN8sKTtJFw4uy": [
+      "create-standards-documents",
+      "view-team-actions"
+    ]
+  }
 }
