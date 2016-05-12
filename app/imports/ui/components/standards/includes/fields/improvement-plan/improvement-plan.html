@@ -23,13 +23,9 @@
 
       {{> ESOwner sm=7 isEditable=true selectedOwnerId=owner}}
 
-      {{#FormField label="Selected metric" sm=7}}
-        <input type="text" class="form-control" placeholder="Selected metric" {{b "value: selectedMetric"}}>
-      {{/FormField}}
+      {{> ESIPSelectedMetric selectedMetric=selectedMetric}}
 
-      {{#FormField label="Target value" sm=7}}
-        <input type="text" class="form-control" placeholder="Target value" {{b "value: targetValue"}}>
-      {{/FormField}}
+      {{> ESIPTargetValue targetValue=targetValue}}
 
       <div class="form-group form-group-buttons row">
         <label class="form-control-label col-sm-5 col-xs-12">Means statement</label>
