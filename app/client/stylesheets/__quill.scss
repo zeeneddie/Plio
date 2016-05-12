@@ -8,6 +8,7 @@ $font_1: Arial;
 $font_2: sans-serif;
 
 .quill {
+
   &.ql-expanded {
     position: fixed;
     top: 0;
@@ -35,10 +36,11 @@ $font_2: sans-serif;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #fff;
-  padding: 25px !important;
+  padding: 0;
 
   &.editor-container {
     height: auto;
+    min-height: 300px;
     outline: none;
     position: relative;
     tab-size: 4;
