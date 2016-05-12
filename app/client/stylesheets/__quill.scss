@@ -38,9 +38,9 @@ $font_2: sans-serif;
   background-color: #fff;
   padding: 0;
 
-  &.editor-container {
-    height: auto;
-    min-height: 300px;
+  .editor-container {
+    height: 300px;
+    overflow-y: scroll;
     outline: none;
     position: relative;
     tab-size: 4;
