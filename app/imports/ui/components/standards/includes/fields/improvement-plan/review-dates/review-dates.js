@@ -9,6 +9,9 @@ Template.ESIPReviewDates.viewmodel({
       { class: 'margin-bottom', placeholder: 'Review date', isEditable: true, parentVM: this }
     );
   },
+  reviewDatesSorted() {
+    return this.reviewDates().sort((a, b) => new Date(a) - new Date(b));
+  },
   update({ date }) {
     const { reviewDates } = this.getData();
     const options = {};
