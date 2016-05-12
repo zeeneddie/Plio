@@ -18,7 +18,7 @@ Template.ESImprovementPlan.viewmodel({
       options[`improvementPlan.${key}`] = value;
       this.parent().update(options);
     } else {
-      this.parent().update({}, options);
+      this.parent().update({ query: { ...args } }, options);
     }
   }
 });

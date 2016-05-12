@@ -113,8 +113,15 @@ const optionalFields = new SimpleSchema({
     optional: true
   },
   'improvementPlan.reviewDates': {
-    type: [Date],
+    type: [Object],
     optional: true
+  },
+  'improvementPlan.reviewDates.$.date': {
+    type: Date
+  },
+  'improvementPlan.reviewDates.$._id': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
   'improvementPlan.owner': {
     type: String,

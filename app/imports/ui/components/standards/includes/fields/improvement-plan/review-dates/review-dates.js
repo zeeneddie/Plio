@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Random } from 'meteor/random';
 
 Template.ESIPReviewDates.viewmodel({
   mixin: ['addForm', 'date'],
@@ -12,13 +13,34 @@ Template.ESIPReviewDates.viewmodel({
   reviewDatesSorted() {
     return this.reviewDates().sort((a, b) => new Date(a) - new Date(b));
   },
-  update({ date }) {
-    const { reviewDates } = this.getData();
+  update({ _id, date }, cb) {
+    if (_id) {
+      this.set({ _id, date }, cb);
+    } else {
+      this.addToSet({ date }, cb);
+    }
+  },
+  addToSet({ date }, cb) {
     const options = {};
+    const _id = Random.id();
     options['$addToSet'] = {
-      'improvementPlan.reviewDates': date
+      'improvementPlan.reviewDates': { _id, date }
     };
-    this.parent().update({}, options);
+    this.parent().update({}, options, cb);
+  },
+  set({ _id, date }, cb) {
+    const query = {
+      'improvementPlan.reviewDates': {
+        $elemMatch: {
+          _id: _id
+        }
+      }
+    };
+    const options = {};
+    options['$set'] = {
+      'improvementPlan.reviewDates.$.date': date
+    }
+    this.parent().update(query, options, cb);
   },
   getData() {
     const datepickers = ViewModel.find('Datepicker', vm => vm.placeholder && vm.placeholder() === 'Review date');

@@ -48,7 +48,8 @@ Template.ModalWindow.viewmodel({
         this.isSaving(false);
 
         if (err) {
-          console.log('Modal submit error:\n', err);
+          // console.log('Modal submit error:\n', err);
+          console.log(err.details)
           this.setError(err.reason || 'Internal server error');
         }
       }, this.savingStateTimeout());

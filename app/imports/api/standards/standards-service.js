@@ -7,8 +7,8 @@ export default {
     return this.collection.insert(args);
   },
 
-  update({ _id, options, ...args }) {
-    const query = { _id };
+  update({ _id, query, options, ...args }) {
+    query = query || { _id };
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
