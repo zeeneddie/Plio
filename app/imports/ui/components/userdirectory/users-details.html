@@ -58,7 +58,7 @@
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
-                    <h4 class="list-group-item-heading"><a href="tel:" {{b "text: this.number" }}></a></h4>
+                    <h4 class="list-group-item-heading"><a {{b "text: this.number, href: 'tel:' + this.number" }}></a></h4>
                   </div>
                 </div>
               {{/each}}

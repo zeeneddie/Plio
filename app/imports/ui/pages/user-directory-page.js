@@ -39,11 +39,12 @@ Template.UserDirectoryPage.viewmodel({
     const searchFields = [
       { name: 'profile.firstName' },
       { name: 'profile.lastName' },
-      { name: 'profile.lastName' },
       { name: 'profile.description' },
       { name: 'emails.0.address' },
       { name: 'profile.skype' },
       { name: 'profile.address' },
+      { name: 'profile.initials' },
+      { name: 'profile.country' },
       { name: 'profile.phoneNumbers', subField: 'number' }
     ];
 
@@ -72,6 +73,8 @@ Template.UserDirectoryPage.viewmodel({
     if (organization) {
       const { users } = organization;
       return _.pluck(users, 'userId');
+    } else {
+      return [];
     }
   }
 });
