@@ -18,13 +18,12 @@ Template.StandardsLayout.viewmodel({
     function () {
       const org = Organizations.findOne({ serialNumber: this.orgSerialNumber() });
       const { _id, users } = !!org && org;
-      const userIds = _.pluck(users, 'userId');
       this._subHandlers = [
         this.templateInstance.subscribe('currentUserOrganizations'),
         this.templateInstance.subscribe('standards-book-sections', _id),
         this.templateInstance.subscribe('standards-types', _id),
         this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('organizationUsers', userIds)
+        this.templateInstance.subscribe('organizationUsers', _id)
       ]
     },
     function () {

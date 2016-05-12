@@ -1,14 +1,19 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
+import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields } from './organization-schema';
-import { NCTypes } from '../constants';
-import { IdSchema, TimePeriodSchema, OrganizationIdSchema, NewUserDataSchema } from '../schemas';
-import { checkUserId } from '../checkers';
+import { NCTypes, UserRoles, UserMembership } from '../constants';
+import {
+  IdSchema, TimePeriodSchema,
+  OrganizationIdSchema, NewUserDataSchema,
+  UserIdSchema
+} from '../schemas';
 
 
 const nameSchema = new SimpleSchema({
@@ -31,9 +36,11 @@ export const insert = new ValidatedMethod({
   run({name}) {
     const userId = this.userId;
 
-    checkUserId(
-      userId, 'Unauthorized user cannot create an organization'
-    );
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot create an organization'
+      );
+    }
 
     return OrganizationService.insert({
       name,
@@ -50,7 +57,9 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.update(doc);
   }
@@ -64,7 +73,9 @@ export const setName = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.setName(doc);
   }
@@ -78,7 +89,9 @@ export const setDefaultCurrency = new ValidatedMethod({
   }]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.setDefaultCurrency(doc);
   }
@@ -92,7 +105,9 @@ export const setStepTime = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.setStepTime(doc);
   }
@@ -112,7 +127,9 @@ export const setReminder = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.setReminder(doc);
   }
@@ -129,7 +146,9 @@ export const setGuideline = new ValidatedMethod({
   ]).validator(),
 
   run(doc) {
-    checkUserId(this.userId, updateErrorMessage);
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
 
     return OrganizationService.setGuideline(doc);
   }
@@ -229,5 +248,53 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
       let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
       throw new Meteor.Error(500, errorMsg);
     }
+  }
+});
+
+export const removeUser = new ValidatedMethod({
+  name: 'Organizations.removeUser',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    UserIdSchema
+  ]).validator(),
+
+  run({ userId, organizationId }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove users'
+      );
+    }
+
+    const isRemovableUserOrgOwner = !!Organizations.findOne({ 
+      _id: organizationId, 
+      users: {
+        $elemMatch: {
+          userId: userId,
+          role: 'owner'
+        }
+      }
+    });
+
+    if (isRemovableUserOrgOwner) {
+      throw new Meteor.Error(403, 'Organization owner can\'t be removed');
+    }
+
+    const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
+      currUserId, UserRoles.DELETE_USERS, organizationId
+    );
+    if (!canRemoveUser) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for removing user\'s from this organization'
+      );
+    }
+
+    return OrganizationService.removeUser({
+      removedBy: currUserId,
+      organizationId,
+      userId
+    });
   }
 });
