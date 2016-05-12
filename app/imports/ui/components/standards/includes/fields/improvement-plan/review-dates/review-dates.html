@@ -1,0 +1,12 @@
+<template name="ESIPReviewDates">
+  {{#FormField label="Improvement plan review dates" sm=7}}
+    <div {{b "ref: forms"}}>
+      {{> Datepicker placeholder="Review date" class="margin-bottom" isEditable=true}}
+    </div>
+    <button type="button" class="btn btn-primary margin-bottom-none"
+      {{b "click: addReviewDate"}}>
+      <i class="fa fa-plus"></i>
+      Add review date
+    </button>
+  {{/FormField}}
+</template>

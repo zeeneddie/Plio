@@ -21,10 +21,9 @@ export const insert = new ValidatedMethod({
   validate: StandardsSchema.validator(),
 
   run(...args) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot create a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return StandardsService.insert(...args);
   }
@@ -38,10 +37,9 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run({_id, options, ...args}) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot update a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return StandardsService.update({ _id, options, ...args });
   }
@@ -53,10 +51,9 @@ export const remove = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot delete a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return StandardsService.remove({ _id });
   }

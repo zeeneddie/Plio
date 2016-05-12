@@ -10,16 +10,7 @@
 
       {{> ESIPTargetDate targetDate=targetDate}}
 
-      {{#FormField label="Improvement plan review dates" sm=7}}
-        <div {{b "ref: forms"}}>
-          {{> Datepicker placeholder="Review date" class="margin-bottom"}}
-        </div>
-        <button type="button" class="btn btn-primary margin-bottom-none"
-          {{b "click: addForm('Datepicker', { class: 'margin-bottom', placeholder: 'Review date' })"}}>
-          <i class="fa fa-plus"></i>
-          Add review date
-        </button>
-      {{/FormField}}
+      {{> ESIPReviewDates}}
 
       {{> ESOwner sm=7 isEditable=true selectedOwnerId=owner}}
 
