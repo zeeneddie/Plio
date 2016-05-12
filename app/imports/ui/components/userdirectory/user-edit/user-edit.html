@@ -22,4 +22,8 @@
           userRoles=userRoles
           title=rolesTitle}}
     {{/with}}
+
+    {{#if isDeleteButtonEnabled}}
+      {{> ModalDeleteButton onClick=removeUserFn}}
+    {{/if}}
 </template>

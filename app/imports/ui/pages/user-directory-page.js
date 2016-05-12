@@ -17,9 +17,11 @@ Template.UserDirectoryPage.viewmodel({
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
 
     if (organizationsHandle.ready()) {
-      const userIds = this.getCurrentOrganizationUsers();
-      if (userIds && userIds.length) {
-        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+      const organization = Organizations.findOne({
+        serialNumber: this.getCurrentOrganizationSerialNumber()
+      });
+      if (organization) {
+        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', organization._id);
         if (!this.activeUser() && organizationUsersHandle.ready()) {
           FlowRouter.go('userDirectoryUserPage', {
             orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
@@ -36,9 +38,19 @@ Template.UserDirectoryPage.viewmodel({
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
+    const searchFields = [
+      { name: 'profile.firstName' },
+      { name: 'profile.lastName' },
+      { name: 'profile.description' },
+      { name: 'emails.0.address' },
+      { name: 'profile.skype' },
+      { name: 'profile.address' },
+      { name: 'profile.initials' },
+      { name: 'profile.country' },
+      { name: 'profile.phoneNumbers', subField: 'number' }
+    ];
 
-    const searchUsers = this.searchObject('searchText',
-      ['profile.firstName', 'profile.lastName', 'profile.description', 'emails.0.address']);
+    const searchUsers = this.searchObject('searchText', searchFields);
 
     findQuery['$and'] = [
       { _id: { $in: userIds }},
@@ -59,10 +71,20 @@ Template.UserDirectoryPage.viewmodel({
   },
 
   getCurrentOrganizationUsers() {
-    const organization = Organizations.findOne({ serialNumber: this.getCurrentOrganizationSerialNumber() });
+    const organization = Organizations.findOne({
+      serialNumber: this.getCurrentOrganizationSerialNumber()
+    });
+
     if (organization) {
       const { users } = organization;
-      return _.pluck(users, 'userId');
+      const existingUsersIds = _.filter(users, (usrDoc) => {
+        const { isRemoved, removedBy, removedAt } = usrDoc;
+        return !isRemoved && !removedBy && !removedAt;
+      });
+
+      return _.pluck(existingUsersIds, 'userId');
+    } else {
+      return [];
     }
   }
 });
