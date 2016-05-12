@@ -1,20 +1,26 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIPReviewDates.viewmodel({
-  mixin: 'addForm',
+  mixin: ['addForm', 'date'],
+  reviewDates: [],
   addReviewDate() {
     this.addForm(
       'Datepicker',
-      { class: 'margin-bottom', placeholder: 'Review date', isEditable: true }
+      { class: 'margin-bottom', placeholder: 'Review date', isEditable: true, parentVM: this }
     );
   },
-  update() {
-    console.log(this.getData());
+  update({ date }) {
+    const { reviewDates } = this.getData();
+    const options = {};
+    options['$addToSet'] = {
+      'improvementPlan.reviewDates': date
+    };
+    this.parent().update({}, options);
   },
   getData() {
-    const datepickers = ViewModel.find('Datepicker', vm => vm.placeholder && vm.placeholder() === 'Review Date');
+    const datepickers = ViewModel.find('Datepicker', vm => vm.placeholder && vm.placeholder() === 'Review date');
     const data = _.map(datepickers, vm => vm.getData());
-    const dates = _.map(data, ({ date }) => date);
-    return { dates };
+    const reviewDates = _.map(data, ({ date }) => date);
+    return { reviewDates };
   }
 });

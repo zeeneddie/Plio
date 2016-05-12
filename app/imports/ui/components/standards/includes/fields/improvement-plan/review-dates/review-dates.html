@@ -3,6 +3,9 @@
     <div {{b "ref: forms"}}>
       {{> Datepicker placeholder="Review date" class="margin-bottom" isEditable=true}}
     </div>
+    {{#each reviewDates}}
+      {{> Datepicker placeholder="Review date" class="margin-bottom" isEditable=true date=(renderDate this)}}
+    {{/each}}
     <button type="button" class="btn btn-primary margin-bottom-none"
       {{b "click: addReviewDate"}}>
       <i class="fa fa-plus"></i>

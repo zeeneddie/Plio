@@ -19,7 +19,7 @@ Template.Datepicker.viewmodel({
   update() {
     if (this.isEditable && this.isEditable()) {
       const { date } = this.getData();
-      this.parent().update({ date });
+      !!(this.parent && this.parent()) ? this.parent().update({ date }) : this.parentVM().update({ date });
     }
   },
   getData() {

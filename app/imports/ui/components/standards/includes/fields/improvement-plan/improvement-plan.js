@@ -9,13 +9,16 @@ Template.ESImprovementPlan.viewmodel({
   owner: '',
   selectedMetric: '',
   targetValue: '',
-  update({ ...args }) {
+  update({ ...args }, options) {
     const key = _.keys(args)[0];
     const value = _.values(args)[0];
-    const options = {};
+    if (!options) {
+      const options = {};
 
-    options[`improvementPlan.${key}`] = value;
-
-    this.parent().update(options);
+      options[`improvementPlan.${key}`] = value;
+      this.parent().update(options);
+    } else {
+      this.parent().update({}, options);
+    }
   }
 });
