@@ -9,6 +9,26 @@ import { Departments } from '/imports/api/departments/departments.js';
 Template.StandardsCard.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user'],
+  autorun() {
+    if (this.standards().count() > 0 && !this.selectedStandardId()) {
+      const standard = Standards.findOne({});
+
+      if (!!standard) {
+        const { _id } = standard;
+
+        this.selectedStandardId(_id);
+
+        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+          return viewmodel.child(vm => vm._id() === _id);
+        });
+
+        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
+      }
+    }
+  },
+  standards() {
+    return Standards.find({}, { sort: { title: 1 } });
+  },
   standard() {
     return Standards.findOne({ _id: this.selectedStandardId() });
   },

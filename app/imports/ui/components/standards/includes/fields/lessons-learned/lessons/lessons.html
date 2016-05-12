@@ -1,0 +1,39 @@
+<template name="ESLessons">
+  <div class="card">
+    <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+      <strong>LL456</strong>
+      <span {{b "text: title"}}></span>
+    </div>
+    <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+      <div class="card-block">
+        {{#FormField label="Title"}}
+          <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+        {{/FormField}}
+        {{#FormField label="Linked to"}}
+          <div class="input-group">
+            <span class="input-group-addon"></span>
+            <input type="text" class="form-control" value="" disabled="">
+          </div>
+        {{/FormField}}
+
+        {{#FormField label="Created date"}}
+          {{> Datepicker placeholder="Created date" date=getDate}}
+        {{/FormField}}
+
+        {{> ESOwner selectedOwnerId=createdBy label="Created by"}}
+      </div>
+      {{#QuillEditor}}
+        {{#if _id}}
+          <div {{b "html: notes"}}></div>
+        {{else}}
+          <div></div>
+        {{/if}}
+      {{/QuillEditor}}
+      <div class="card-block clearfix">
+        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: save"}}>Save</button>
+        <button type="button" class="btn btn-secondary pull-xs-right" {{b "click: delete"}}>Delete</button>
+      </div>
+    </div>
+  </div>
+</template>

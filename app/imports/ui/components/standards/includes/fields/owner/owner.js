@@ -3,13 +3,18 @@ import { Template } from 'meteor/templating';
 Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
-    if (this.hasUser() && !this._id) {
-      Meteor.setTimeout(() => this.selectOwner(Meteor.user()), 0);
-    } else if (this.hasUser() && this._id) {
+    if (this.hasUser() && !this.editable()) {
+      this.selectOwner(Meteor.user());
+    } else if (this.hasUser() && this.editable()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
-      Meteor.setTimeout(() => this.owner(fullName), 0);
+      this.owner(fullName);
     }
   },
+  editable() {
+    return !!this.isEditable && !!this.isEditable();
+  },
+  label: 'Owner',
+  sm: 8,
   owner: '',
   selectedOwnerId: '',
   members() {
@@ -25,7 +30,7 @@ Template.ESOwner.viewmodel({
     this.update();
   },
   update() {
-    if (!this._id) return;
+    if (!this.editable()) return;
     const { owner } = this.getData();
     if (!owner) {
       this.modal().setError('Owner is required!');
@@ -37,5 +42,10 @@ Template.ESOwner.viewmodel({
   getData() {
     const { selectedOwnerId:owner } = this.data();
     return { owner };
+  },
+  events: {
+    'focus input'() {
+      this.owner('');
+    }
   }
 });

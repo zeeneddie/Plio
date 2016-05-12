@@ -1,6 +1,8 @@
 Template.FormField.viewmodel({
   isInvalid: false,
-  hideLabel() {
-    return !this.label || !this.label();
+  sm: 8,
+  calcLabelCol() {
+    const col = parseInt(this.sm(), 10);
+    return 12 - col;
   }
 });

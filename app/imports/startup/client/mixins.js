@@ -3,6 +3,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
+const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
+const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
 
 ViewModel.persist = false;
 
@@ -85,6 +87,31 @@ ViewModel.mixin({
       return string.match(/^[\d\.]*\d/);
     }
   },
+  urlRegex: {
+    IsValidUrl(url) {
+      return SimpleSchema.RegEx.Url.test(url);
+    },
+    isYoutubeUrl(url) {
+      return youtubeRegex.test(url);
+    },
+    getIdFromYoutubeUrl(url) {
+      let videoId = url.split('v=')[1];
+      if (!videoId) return false;
+      const ampersandPosition = videoId.indexOf('&');
+      if(ampersandPosition != -1) {
+        videoId = videoId.substring(0, ampersandPosition);
+      }
+      return videoId;
+    },
+    isVimeoUrl(url) {
+      return vimeoRegex.test(url);
+    },
+    getIdFromVimeoUrl(url) {
+      const match = url.match(vimeoRegex);
+      if (!match) return false;
+      return match[4];
+    }
+  },
   addForm: {
     addForm(template, context = {}) {
       if (_.isFunction(this.onChangeCb)) {
@@ -135,8 +162,20 @@ ViewModel.mixin({
       this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
     },
     organization() {
-      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
+      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    }
+  },
+  date: {
+    renderDate(date) {
+      return moment.isDate(date) && moment(date).format('DD MMM YYYY');
     },
+    datepickerInit() {
+      this.datepicker.datepicker({
+        startDate: new Date(),
+        format: 'dd MM yyyy',
+        autoclose: true
+      });
+    }
   }
 });

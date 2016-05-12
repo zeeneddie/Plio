@@ -31,3 +31,9 @@ import '../../api/standards/standards.js';
 import '../../api/standards/standards-schema.js';
 import '../../api/standards/standards-service.js';
 import '../../api/standards/methods.js';
+
+import '../../api/lessons/server/publications.js';
+import '../../api/lessons/lessons.js';
+import '../../api/lessons/lessons-schema.js';
+import '../../api/lessons/lessons-service.js';
+import '../../api/lessons/methods.js';

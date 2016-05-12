@@ -3,7 +3,9 @@
     <li class="nav-item dropdown dropdown-company hidden-sm-down">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown">
         {{#with organization}}
-          <span class="hidden-xs-down org-name">{{name}}</span>
+          <span class="hidden-xs-down org-name" {{b "text: this.name"}}></span>
+        {{else}}
+          <span class="hidden-xs-down org-name">Not Found</span>
         {{/with}}
         <i class="fa fa-building hidden-sm-up"></i>
       </a>

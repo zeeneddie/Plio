@@ -1,6 +1,15 @@
 <template name="DashboardHeader">
   <div class="navbar navbar-branded">
-    {{> OrganizationsMenu}}
-    {{> UserMenu}}
+    {{#if isReady}}
+      {{#with organization}}
+        {{> OrganizationsMenu}}
+        {{> UserMenu}}
+      {{else}}
+        {{> OrganizationsMenu}}
+        {{> UserMenu}}
+      {{/with}}
+    {{else}}
+      {{> Preloader}}
+    {{/if}}
   </div>
 </template>
