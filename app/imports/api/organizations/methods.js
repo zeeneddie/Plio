@@ -4,10 +4,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
+import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields } from './organization-schema';
-import { NCTypes, UserRoles } from '../constants';
+import { NCTypes, UserRoles, UserMembership } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
@@ -264,6 +265,20 @@ export const removeUser = new ValidatedMethod({
       throw new Meteor.Error(
         403, 'Unauthorized user cannot remove users'
       );
+    }
+
+    const isRemovableUserOrgOwner = !!Organizations.findOne({ 
+      _id: organizationId, 
+      users: {
+        $elemMatch: {
+          userId: userId,
+          role: 'owner'
+        }
+      }
+    });
+
+    if (isRemovableUserOrgOwner) {
+      throw new Meteor.Error(403, 'Organization owner can\'t be removed');
     }
 
     const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
