@@ -18,6 +18,5 @@ Template.OrganizationsMenu.viewmodel({
       title: 'Org Settings',
       organizationId: this.organization()._id
     });
-    // ModalManager.open('OrganizationSettings');
   }
 });
