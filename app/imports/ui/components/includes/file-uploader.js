@@ -30,6 +30,8 @@ Template.FileUploader.viewmodel({
       return;
     }
 
-    this.uploader.send(attachmentFile, this.uploadCb);
+    this.uploader.send(attachmentFile, (err, url) => {
+      this.uploadCb(err, url, attachmentFile);
+    });
   }
 });
