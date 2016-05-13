@@ -7,6 +7,7 @@ Template.ESImprovementPlan.viewmodel({
   desiredOutcome: '',
   targetDate: '',
   owner: '',
+  reviewDates: '',
   selectedMetric: '',
   currentValue: '',
   targetValue: '',
