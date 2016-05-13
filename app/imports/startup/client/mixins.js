@@ -2,7 +2,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UserRoles } from '/imports/api/constants.js';
+import { UserRoles, StandardFilters } from '/imports/api/constants.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -191,6 +191,9 @@ ViewModel.mixin({
   standard: {
     standardId() {
       return FlowRouter.getParam('standardId');
+    },
+    activeFilter() {
+      return FlowRouter.getQueryParam('by') || StandardFilters[0];
     }
   },
   date: {
