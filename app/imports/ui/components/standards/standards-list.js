@@ -7,7 +7,7 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 Template.StandardsList.viewmodel({
   share: 'search',
   mixin: ['modal', 'search', 'standard'],
-  standardsBookSections() {
+  standardsBookSections(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
       { name: 'title' },
       { name: 'description' },
@@ -24,11 +24,11 @@ Template.StandardsList.viewmodel({
       ]
     };
     
-    // if (this.isActiveStandardFilter('type')) {
-    //   standardsQuery.$and.push({
-    //     typeId: this._id()
-    //   });
-    // }
+    if (this.isActiveStandardFilter('type') && typeId) {
+      standardsQuery.$and.push({
+        typeId
+      });
+    }
     
     const standards = Standards.find(standardsQuery).fetch();
 
