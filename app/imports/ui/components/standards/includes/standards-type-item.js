@@ -10,5 +10,9 @@ Template.StandardsTypeItem.viewmodel({
   mixin: 'collapse',
   standardsBookSections() {
     return this.parent().standardsBookSections(this._id());
+  },
+  hasStandards() {
+    const sections = this.parent().standardsBookSections(this._id()).fetch();
+    return sections.length > 0;
   }
 });
