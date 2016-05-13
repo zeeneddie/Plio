@@ -1,8 +1,6 @@
 <template name="ESTitle">
   {{#FormField label="Title"}}
     <input type="text" class="form-control" placeholder="Title" {{b "value: titleText, focusout: update"}}>
-    <button type="button" class="btn btn-link clear-field" {{b "click: titleText('')"}}>
-      <i class="fa fa-times-circle"></i>
-    </button>
+    {{> ClearField field="titleText"}}
   {{/FormField}}
 </template>

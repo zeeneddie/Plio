@@ -9,6 +9,7 @@
     <div class="dropdown">
       <input type="text" class="form-control" placeholder="Add a department" data-toggle="dropdown"
         {{b "value: department, throttle: 300"}}/>
+      {{> ClearField field="department"}}
       <div class="dropdown-menu dropdown-menu-full">
         {{#each departments}}
           <a class="dropdown-item" href="#" {{b "text: this.name, click: update(this, '$addToSet')"}}></a>
