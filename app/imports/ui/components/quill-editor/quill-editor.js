@@ -5,7 +5,7 @@ Template.QuillEditor.viewmodel({
   editor: null,
   isExpanded: false,
   toggleExpand() {
-    return this.isExpanded(!this.isExpanded());
+    return this.isExpanded(!this.isExpanded()) && $(this.editor().container).closest('.modal').scrollTop(0);
   },
   onRendered() {
     this.editor(new Quill(this.templateInstance.find('.editor-container')));
