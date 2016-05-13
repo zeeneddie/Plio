@@ -147,6 +147,20 @@ const optionalFields = new SimpleSchema({
   'improvementPlan.targetValue': {
     type: String,
     optional: true
+  },
+  'improvementPlan.files': {
+    type: [Object],
+    optional: true
+  },
+  'improvementPlan.files.$._id': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  'improvementPlan.files.$.url': {
+    type: String
+  },
+  'improvementPlan.files.$.name': {
+    type: String
   }
 });
 

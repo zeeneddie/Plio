@@ -6,3 +6,4 @@ import './selected-metric';
 import './current-value';
 import './target-value';
 import './review-dates';
+import './means-statement';

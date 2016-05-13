@@ -1,0 +1,19 @@
+<template name="ESIPMeansStatement">
+  {{#FormField label="Means statement" sm=7}}
+    {{#each files}}
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" {{b "text: this.name"}}>
+        </button>
+        <button type="button" class="btn btn-secondary"
+            {{b "click: removeFile(this._id)"}}>
+          <i class="fa fa-times-circle no-margin"></i>
+        </button>
+      </div>
+    {{/each}}
+    <span class="btn btn-primary btn-file">
+      <i class="fa fa-plus"></i>
+      Add
+      <input type="file">
+    </span>
+  {{/FormField}}
+</template>
