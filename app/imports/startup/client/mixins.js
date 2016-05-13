@@ -162,6 +162,19 @@ ViewModel.mixin({
       this.subHandler(Meteor.subscribe('currentUserOrganizations'));
     }
   },
+  roles: {
+    canInviteUsers(organizationId) {
+      const userId = Meteor.userId();
+      
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          Meteor.userId(),
+          UserRoles.INVITE_USERS,
+          organizationId
+        );
+      }
+    }
+  },
   organization: {
     subHandler: null,
     subscribe(orgId) {

@@ -1,7 +1,7 @@
 <template name="DashboardFooter">
   <div class="dashboard-footer">
     <div class="dashboard-footer-buttons">
-      {{#if canInviteUsers}}
+      {{#if canInviteUsers organizationId}}
         <button type="button" class="btn btn-secondary" {{b "click: onInviteClick"}}>
           <i class="fa fa-user-plus margin-right"></i>
           Invite users

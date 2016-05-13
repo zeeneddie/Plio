@@ -25,17 +25,7 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
-  mixin: ['user', 'modal', 'organization'],
-  organizationId() {
-    return this.organization() && this.organization()._id;
-  },
-  canInviteUsers() {
-    return Roles.userIsInRole(
-      Meteor.userId(),
-      UserRoles.INVITE_USERS,
-      this.organizationId()
-    );
-  },
+  mixin: ['user', 'modal', 'organization', 'roles'],
   getStatuses() {
     return STATUSES;
   },

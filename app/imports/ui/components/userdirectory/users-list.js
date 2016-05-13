@@ -7,17 +7,7 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UsersList.viewmodel({
   share: 'search',
-  mixin: ['user', 'organization', 'modal'],
-  organizationId() {
-    return this.organization() && this.organization()._id;
-  },
-  canInviteUsers() {
-    return Roles.userIsInRole(
-      Meteor.userId(),
-      UserRoles.INVITE_USERS,
-      this.organizationId()
-    );
-  },
+  mixin: ['user', 'organization', 'modal', 'roles'],
   isActiveUser(userId) {
     return this.parent().activeUser() === userId;
   },
