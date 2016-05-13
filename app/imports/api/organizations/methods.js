@@ -245,7 +245,7 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
     if (!canInviteUser) {
       throw new Meteor.Error(
         403,
-        'User is not authorized for inviting user\'s from this organization'
+        'You don\'t have a superpower to invite other users in this organization'
       );
     }
 
