@@ -28,7 +28,6 @@ Template.EditStandard.viewmodel({
         text: `The standard "${title}" will be removed.`,
         type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: 'btn-danger',
         confirmButtonText: 'Remove',
         closeOnConfirm: false
       },
