@@ -15,15 +15,15 @@ Template.StandardsList.viewmodel({
 
     const availableSections = StandardsBookSections.find({}).fetch();
     const sectionIds = _.pluck(availableSections, '_id');
-    
-    const standardsQuery = { 
+
+    const standardsQuery = {
       $and: [
         { sectionId: { $in: sectionIds } },
         standardsSearchQuery
       ]
     };
     const standards = Standards.find(standardsQuery).fetch();
-    
+
     const filteredSectionIds = sectionIds.filter((id) => {
       return _.some(standards, (s) => s.sectionId === id);
     });
@@ -32,9 +32,9 @@ Template.StandardsList.viewmodel({
         { _id: { $in: filteredSectionIds } }
       ]
     };
-    
+
     const options = { sort: { title: 1 } };
-    
+
     return StandardsBookSections.find(sectionsQuery, options);
   },
   openAddTypeModal(e) {

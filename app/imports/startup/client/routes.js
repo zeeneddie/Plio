@@ -109,6 +109,16 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
+  name: 'standard',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -163,7 +173,7 @@ function checkEmailVerified(context, redirect) {
 
   if (user) {
     const email = user.emails[0];
-    
+
     if (!email.verified) {
       if (!isOnUserWaiting) {
         redirect('userWaiting');

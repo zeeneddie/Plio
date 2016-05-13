@@ -19,9 +19,19 @@
 
       <hr>
 
-      {{> ESSources sourceType=standard.source1.type sourceUrl=standard.source1.url label="Source document/video 1" id=1}}
+      {{> ESSources
+          sourceType=standard.source1.type
+          sourceUrl=standard.source1.url
+          sourceName=standard.source1.name
+          label="Source document/video 1"
+          id=1}}
 
-      {{> ESSources sourceType=standard.source2.type sourceUrl=standard.source2.url label="Source document/video 2" id=2}}
+      {{> ESSources
+          sourceType=standard.source2.type
+          sourceUrl=standard.source2.url
+          sourceName=standard.source2.name
+          label="Source document/video 2"
+          id=2}}
 
     </div>
 
@@ -62,6 +72,7 @@
       desiredOutcome=standard.improvementPlan.desiredOutcome
       targetDate=standard.improvementPlan.targetDate
       owner=standard.improvementPlan.owner
+      reviewDates=standard.improvementPlan.reviewDates
       selectedMetric=standard.improvementPlan.selectedMetric
       targetValue=standard.improvementPlan.targetValue}}
 

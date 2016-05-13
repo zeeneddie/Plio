@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const LessonsSchema = new SimpleSchema({
+export const requiredSchema = new SimpleSchema({
   standardId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
@@ -19,3 +19,9 @@ export const LessonsSchema = new SimpleSchema({
     type: String
   }
 });
+
+export const LessonsSchema = new SimpleSchema([requiredSchema, {
+  serialNumber: {
+    type: Number
+  }
+}]);

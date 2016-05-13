@@ -5,6 +5,13 @@
   "AWSS3Bucket": {
     "name": "",
     "acl": "",
-    "avatarsDir": ""
+    "avatarsDir": "",
+    "attachmentsDir": ""
+  },
+  "mail": {
+    "login": "",
+    "password": "",
+    "hostname": "",
+    "port": ""
   }
 }
