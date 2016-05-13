@@ -18,32 +18,8 @@
 
       {{> ESIPTargetValue targetValue=targetValue}}
 
-      <div class="form-group form-group-buttons row">
-        <label class="form-control-label col-sm-5 col-xs-12">Means statement</label>
-        <div class="col-sm-7 col-xs-12">
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary">
-              <i class="fa fa-file-word-o"></i>
-              Means Statement - 18 Mar 2016
-            </button>
-            <button type="button" class="btn btn-secondary">
-              <i class="fa fa-times-circle no-margin"></i>
-            </button>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-secondary">
-              <i class="fa fa-file-excel-o"></i>
-              attachment
-            </button>
-            <button type="button" class="btn btn-secondary">
-              <i class="fa fa-times-circle no-margin"></i>
-            </button>
-          </div>
-          <span class="btn btn-primary btn-file">
-            <i class="fa fa-plus"></i> Add <input type="file">
-          </span>
-        </div>
-      </div>
+      {{> ESIPMeansStatement files=files}}
+
     </div>
   </div>
 </template>

@@ -6,7 +6,8 @@
     "name": "",
     "acl": "",
     "avatarsDir": "",
-    "attachmentsDir": ""
+    "attachmentsDir": "",
+    "improvementPlanFilesDir": ""
   },
   "mail": {
     "login": "",
