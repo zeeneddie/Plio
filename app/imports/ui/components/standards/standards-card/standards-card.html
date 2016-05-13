@@ -145,6 +145,16 @@
             </div>
           {{/with}}
 
+          <div {{b "if: lessons.count > 0"}}>
+            <div class="list-group">
+              {{#each lessons}}
+                <div class="list-group-item">
+                  <a class="btn btn-secondary pointer"><strong {{b "text: 'LL' + this.serialNumber"}}></strong> <span {{b "text: this.title"}}></span></a>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+
           {{> CardChangelog standard=this}}
         {{/with}}
       </div>

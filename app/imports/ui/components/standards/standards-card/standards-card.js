@@ -5,20 +5,21 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
+import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user', 'organization', 'standard', 'collapsing', 'date'],
   onCreated() {
     // show stored standard section
-    if (this.standards().count() > 0 && this.standardId()) {
-      this.selectedStandardId(this.standardId());
+    if (this.standards().count() > 0 && this.currentStandard()._id) {
+      this.selectedStandardId(this.currentStandard()._id);
 
-      this.toggleSection(this.standardId());
+      this.toggleSection(this.currentStandard()._id);
     }
 
     // show first standard section
-    if (this.standards().count() > 0 && !this.standardId()) {
+    if (this.standards().count() > 0 && !this.currentStandard()._id) {
       const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
 
       if (!!standard) {
@@ -63,6 +64,9 @@ Template.StandardsCard.viewmodel({
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');
+  },
+  lessons() {
+    return LessonsLearned.find({}, { sort: { serialNumber: 1 } });
   },
   toggleSection(_id) {
     Meteor.setTimeout(() => {

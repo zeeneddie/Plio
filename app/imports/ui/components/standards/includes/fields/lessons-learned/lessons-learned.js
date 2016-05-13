@@ -4,10 +4,6 @@ import { insert, update, remove } from '/imports/api/lessons/methods.js';
 
 Template.ESLessonsLearned.viewmodel({
   mixin: ['collapse', 'modal', 'addForm'],
-  onCreated() {
-    const _id = this.standard() && this.standard()._id;
-    this.templateInstance.subscribe('lessons', _id);
-  },
   lessons() {
     return LessonsLearned.find({}, { sort: { serialNumber: 1 } });
   },

@@ -9,11 +9,13 @@ Template.StandardsLayout.viewmodel({
   autorun: [
     function() {
       const org = this.organization();
+      const standard = this.currentStandard();
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizations'),
         this.templateInstance.subscribe('standards', _id),
+        this.templateInstance.subscribe('lessons', standard && standard._id),
         this.templateInstance.subscribe('organizationUsers', userIds)
       ]);
     },
