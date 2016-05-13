@@ -9,26 +9,87 @@ Template.ESSources.viewmodel({
   },
   sourceType: 'url',
   sourceUrl: '',
+  sourceName: '',
+  shouldUpdate() {
+    let { type, url, name } = this.getData();
+
+    if (!type || !url || (type === 'attachment' && !name)) {
+      return false;
+    }
+
+    const context = this.templateInstance.data;
+    return (type !== context.sourceType) || (url !== context.sourceUrl);
+  },
   changeType(type) {
     this.sourceType(type);
+
+    const context = this.templateInstance.data;
+    if (type === context.sourceType) {
+      this.sourceUrl(context.sourceUrl || '');
+      this.sourceName(context.sourceName || '');
+    } else {
+      this.sourceUrl('');
+      this.sourceName('');
+    }
+
     this.update();
   },
   update() {
-    let { type, url } = this.getData();
+    let { type, url, name } = this.getData();
 
-    if (!this.IsValidUrl(url)) {
+    if (!this.shouldUpdate()) {
+      return;
+    }
+
+    if (url && !this.IsValidUrl(url)) {
       ViewModel.findOne('ModalWindow').setError('Url is not valid!');
       return;
     }
 
-    const query = {};
+    const sourceDoc = { type, url };
+    if (type === 'attachment') {
+      sourceDoc.name = name;
+    }
 
-    query[`source${this.id()}`] = { type, url };
+    const query = {
+      [`source${this.id()}`]: sourceDoc
+    };
 
     this.parent().update(query);
   },
+  uploadAttachmentCb() {
+    return this.onAttachmentUploaded.bind(this);
+  },
+  onAttachmentUploaded(err, url, fileObj) {
+    if (err) {
+      this.parent().modal().setError(err);
+      return;
+    }
+
+    this.sourceUrl(url);
+    this.sourceName(fileObj.name);
+    this.update();
+  },
+  removeAttachment() {
+    swal({
+      title: 'Are you sure?',
+      text: 'This attachment will be removed',
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonClass: 'btn-secondary',
+      confirmButtonClass: 'btn-danger',
+      confirmButtonText: 'Remove',
+      closeOnConfirm: true
+    }, () => {
+      this.parent().update({}, {
+        $unset: {
+          [`source${this.id()}`]: ''
+        }
+      });
+    });
+  },
   getData() {
-    const { sourceType:type, sourceUrl:url } = this.data();
-    return { type, url };
+    const { sourceType:type, sourceUrl:url, sourceName:name } = this.data();
+    return { type, url, name };
   }
 });

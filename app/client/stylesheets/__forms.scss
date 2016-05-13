@@ -383,6 +383,21 @@ fieldset[disabled] {
   margin: 0 0 10px;
 }
 
+.source-file-uploader {
+  label.btn.btn-secondary {
+    input[type="file"] {
+      opacity: 0;
+      width: 0.1px;
+      height: 0.1px;
+      z-index: -1;
+    }
+  }
+
+  progress {
+    margin-top: 5px;
+  }
+}
+
 .shroud {
   opacity: 0.5;
 }

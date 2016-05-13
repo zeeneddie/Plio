@@ -5,13 +5,13 @@
   </div>
   <div class="card-block-collapse collapse" id="lessons" {{b "ref: collapse"}}>
     <div class="card-block">
-      <div {{b "ref: container"}}>
+      <div {{b "ref: forms"}}>
         {{#each lessons}}
           {{> ESLessons}}
         {{/each}}
       </div>
       <div class="text-xs-center">
-        <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
+        <button type="button" class="btn btn-link" {{b "click: addForm('ESLessons', { standard: standard })"}}>Add a lesson learned</button>
       </div>
     </div>
   </div>

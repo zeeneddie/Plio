@@ -11,6 +11,11 @@ const optionsSchema = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
+  },
+  query: {
+    type: Object,
+    optional: true,
+    blackbox: true
   }
 });
 

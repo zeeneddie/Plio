@@ -19,8 +19,16 @@ Template.Datepicker.viewmodel({
   update() {
     if (this.isEditable && this.isEditable()) {
       const { date } = this.getData();
-      this.parent().update({ date });
+      if (!this._id) {
+        !!(this.parent && this.parent()) ? this.parent().update({ date }, this.onAfterUpdate()) : this.parentVM().update({ date }, this.onAfterUpdate());
+      } else {
+        const _id = this._id();
+        !!(this.parent && this.parent()) ? this.parent().update({ date, _id }, this.onAfterUpdate()) : this.parentVM().update({ date, _id }, this.onAfterUpdate());
+      }
     }
+  },
+  onAfterUpdate() {
+    Blaze.remove(this.templateInstance.view);
   },
   getData() {
     const date = this.value();

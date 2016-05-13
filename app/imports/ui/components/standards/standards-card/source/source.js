@@ -8,8 +8,6 @@ Template.SCSource.viewmodel({
       url = `https://www.youtube.com/embed/${videoId}`;
     } else if (this.isVimeoUrl(url)) {
       const videoId = this.getIdFromVimeoUrl(url);
-      console.log(videoId)
-      console.log(`vimeo ${videoId}`)
       url = `https://player.vimeo.com/video/${videoId}`;
     }
     return url;

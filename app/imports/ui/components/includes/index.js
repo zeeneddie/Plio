@@ -11,5 +11,7 @@ import './time-picker.js';
 import './clear-field-button.html';
 import './datepicker.html';
 import './datepicker.js';
+import './file-uploader.html';
+import './file-uploader.js';
 import './modal-delete-button.html';
 import './modal-delete-button.js';

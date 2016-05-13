@@ -16,8 +16,21 @@
     </div>
     <input type="text" class="form-control" placeholder="URL link"
       {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}}>
-    <input type="text" class="form-control" placeholder="Attachment"
-      {{b "if: sourceType === 'attachment', value: sourceUrl, focusout: update"}}>
+    <div {{b "if: sourceType === 'attachment'"}}>
+      {{#with sourceName}}
+        <div class="btn-group" >
+          <button type="button" class="btn btn-secondary" disabled="" {{b "text: this"}}>
+          </button>
+          <button type="button" class="btn btn-secondary" {{b "click: removeAttachment"}}>
+            <i class="fa fa-times-circle"></i>
+          </button>
+        </div>
+      {{else}}
+        {{> FileUploader
+            uploadCb=uploadAttachmentCb
+            slingshotDirective='standardsAttachments'}}
+      {{/with}}
+    </div>
     <input type="text" class="form-control" placeholder="Video"
       {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}}>
   {{/FormField}}
