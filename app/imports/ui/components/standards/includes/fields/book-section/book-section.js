@@ -38,7 +38,6 @@ Template.ESBookSection.viewmodel({
         text: `New section "${this.bookSection()}" will be added.`,
         type: "warning",
         showCancelButton: true,
-        confirmButtonClass: "btn-success",
         confirmButtonText: "Add",
         closeOnConfirm: false
       },
