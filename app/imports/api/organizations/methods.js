@@ -178,7 +178,15 @@ export const inviteUserByEmail = new ValidatedMethod({
         403, 'Unauthorized user cannot invite users'
       );
     }
-    //todo: check invite user permission here
+
+    const canInviteUser = Roles.userIsInRole(userId, UserRoles.INVITE_USERS, organizationId);
+
+    if (!canInviteUser) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for inviting user\'s from this organization'
+      );
+    }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
   }
@@ -231,7 +239,15 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
         403, 'Unauthorized user cannot invite users'
       );
     }
-    //todo: check invite user permission here
+
+    const canInviteUser = Roles.userIsInRole(userId, UserRoles.INVITE_USERS, organizationId);
+
+    if (!canInviteUser) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for inviting user\'s from this organization'
+      );
+    }
 
     let errors = [];
     emails.forEach(email => {
