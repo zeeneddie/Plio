@@ -7,7 +7,11 @@ Template.StandardsList.viewmodel({
   share: 'search',
   mixin: ['modal', 'search'],
   standardsBookSections() {
-    const searchQuery = this.searchObject('searchText', 'title');
+    const standardsSearchQuery = this.searchObject('searchText', [
+      { name: 'title' },
+      { name: 'description' },
+      { name: 'status' }
+    ]);
 
     const availableSections = StandardsBookSections.find({}).fetch();
     const sectionIds = _.pluck(availableSections, '_id');
@@ -15,7 +19,7 @@ Template.StandardsList.viewmodel({
     const standardsQuery = { 
       $and: [
         { sectionId: { $in: sectionIds } },
-        searchQuery
+        standardsSearchQuery
       ]
     };
     const standards = Standards.find(standardsQuery).fetch();
@@ -25,8 +29,7 @@ Template.StandardsList.viewmodel({
     });
     const sectionsQuery = {
       $or: [
-        { _id: { $in: filteredSectionIds } },
-        searchQuery
+        { _id: { $in: filteredSectionIds } }
       ]
     };
     
