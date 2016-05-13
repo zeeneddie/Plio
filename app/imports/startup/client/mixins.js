@@ -151,18 +151,6 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
-  roles: {
-    isInRole(user, orgId, role) {
-      if (user) {
-        const { [orgId]: orgRoles } = user.roles;
-
-        return orgRoles && _.contains(orgRoles, role);
-      }
-    },
-    inviteUsers() {
-      return UserRoles.INVITE_USERS;
-    }
-  },
   organizations: {
     subHandler: null,
     subscribe() {
