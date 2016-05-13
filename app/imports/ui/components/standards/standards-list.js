@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { Standards } from '/imports/api/standards/standards.js'
+import { Standards } from '/imports/api/standards/standards.js';
+import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -22,6 +23,13 @@ Template.StandardsList.viewmodel({
         standardsSearchQuery
       ]
     };
+    
+    // if (this.isActiveStandardFilter('type')) {
+    //   standardsQuery.$and.push({
+    //     typeId: this._id()
+    //   });
+    // }
+    
     const standards = Standards.find(standardsQuery).fetch();
 
     const filteredSectionIds = sectionIds.filter((id) => {
@@ -39,7 +47,7 @@ Template.StandardsList.viewmodel({
   },
   standardsTypes() {
     const options = { sort: { name: 1 } };
-    return StandardsBookSections.find({}, options);
+    return StandardsTypes.find({}, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

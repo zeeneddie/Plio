@@ -15,6 +15,9 @@
           {{> ListItem}}
         {{/each}}
       {{else}}
+        {{#each standardsTypes}}
+          {{> StandardsTypeItem}}
+        {{/each}}
       {{/if}}
     </div>
   </div>
