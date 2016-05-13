@@ -5,10 +5,12 @@
         <div class="form-group row">
           <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 400"}}>
         </div>
-        <a class="btn btn-primary" href="#" {{b "click: onInviteClick"}}>
-          <i class="fa fa-plus"></i>
-          <span>Invite</span>
-        </a>
+        {{#if canInviteUsers}}
+          <a class="btn btn-primary" href="#" {{b "click: onInviteClick"}}>
+            <i class="fa fa-plus"></i>
+            <span>Invite</span>
+          </a>
+        {{/if}}
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
