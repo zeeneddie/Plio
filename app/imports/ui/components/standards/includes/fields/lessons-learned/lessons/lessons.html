@@ -18,10 +18,10 @@
         {{/FormField}}
 
         {{#FormField label="Created date"}}
-          {{> Datepicker placeholder="Created date" date=getDate}}
+          {{> Datepicker placeholder="Created date" value=date date=getDate}}
         {{/FormField}}
 
-        {{> ESOwner selectedOwnerId=createdBy label="Created by"}}
+        {{> ESOwner selectedOwnerId=createdBy label="Created by" _id="placeholder"}}
       </div>
       {{#QuillEditor}}
         {{#if _id}}

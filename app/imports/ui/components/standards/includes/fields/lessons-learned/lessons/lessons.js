@@ -31,6 +31,8 @@ Template.ESLessons.viewmodel({
     const { title, date, createdBy, notes } = this.getData();
     const standardId = this.standard() && this.standard()._id;
 
+    console.log({ title, date, createdBy, standardId, notes })
+
     if (_id) {
       ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes });
     } else {

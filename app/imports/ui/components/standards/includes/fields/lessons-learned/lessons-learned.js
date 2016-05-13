@@ -3,15 +3,17 @@ import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { insert, update, remove } from '/imports/api/lessons/methods.js';
 
 Template.ESLessonsLearned.viewmodel({
-  mixin: ['collapse', 'modal', 'addForm'],
+  mixin: ['collapse', 'modal', 'addForm', 'organization', 'standard'],
   lessons() {
-    return LessonsLearned.find({}, { sort: { serialNumber: 1 } });
+    const standardId = this.currentStandard() && this.currentStandard()._id;
+    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
   },
-  insert(args, cb) {
-    this.modal().callMethod(insert, args, cb);
+  insert({ ...args }, cb) {
+    const organizationId = this.organization()._id;
+    this.modal().callMethod(insert, { organizationId, ...args }, cb);
   },
-  update(args, cb) {
-    this.modal().callMethod(update, args, cb);
+  update({ ...args }, cb) {
+    this.modal().callMethod(update, { ...args }, cb);
   },
   remove({ _id }, cb) {
     this.modal().callMethod(remove, { _id }, cb);

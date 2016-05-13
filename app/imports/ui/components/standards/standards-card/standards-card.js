@@ -9,30 +9,7 @@ import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing', 'date'],
-  onCreated() {
-    // show stored standard section
-    if (this.standards().count() > 0 && this.currentStandard()._id) {
-      this.selectedStandardId(this.currentStandard()._id);
-
-      this.toggleSection(this.currentStandard()._id);
-    }
-
-    // show first standard section
-    if (this.standards().count() > 0 && !this.currentStandard()._id) {
-      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
-
-      if (!!standard) {
-        const { _id } = standard;
-
-        this.selectedStandardId(_id);
-
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
-
-        this.toggleSection(_id);
-      }
-    }
-  },
+  mixin: ['modal', 'user', 'standard', 'date'],
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
   },
@@ -66,14 +43,8 @@ Template.StandardsCard.viewmodel({
     return dates.map(doc => this.renderDate(doc.date)).join(', ');
   },
   lessons() {
-    return LessonsLearned.find({}, { sort: { serialNumber: 1 } });
-  },
-  toggleSection(_id) {
-    Meteor.setTimeout(() => {
-      this.toggleVMCollapse('ListItem', (viewmodel) => {
-        return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === _id);
-      });
-    }, 500);
+    const standardId = this.currentStandard() && this.currentStandard()._id;
+    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
   },
   openEditStandardModal() {
     this.modal().open({
