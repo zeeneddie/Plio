@@ -8,7 +8,7 @@ import { Departments } from '/imports/api/departments/departments.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing', 'date'],
   onCreated() {
     // show stored standard section
     if (this.standards().count() > 0 && this.standardId()) {
@@ -57,6 +57,12 @@ Template.StandardsCard.viewmodel({
   },
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
+  },
+  renderNotifyUsers(users) {
+    return users.map(user => this.userFullNameOrEmail(user)).join(', ');
+  },
+  renderReviewDates(dates) {
+    return dates.map(doc => this.renderDate(doc.date)).join(', ');
   },
   toggleSection(_id) {
     Meteor.setTimeout(() => {

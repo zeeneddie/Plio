@@ -132,6 +132,10 @@ const optionalFields = new SimpleSchema({
     type: String,
     optional: true
   },
+  'improvementPlan.currentValue': {
+    type: String,
+    optional: true
+  },
   'improvementPlan.targetValue': {
     type: String,
     optional: true
