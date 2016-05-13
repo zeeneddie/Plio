@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
+const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
 
 ViewModel.persist = false;
@@ -63,7 +63,7 @@ ViewModel.mixin({
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
-      
+
       if (this[prop]()) {
         const words = this[prop]().split(' ');
         const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
@@ -78,7 +78,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
-      
+
       return searchObject;
     }
   },
@@ -95,12 +95,8 @@ ViewModel.mixin({
       return youtubeRegex.test(url);
     },
     getIdFromYoutubeUrl(url) {
-      let videoId = url.split('v=')[1];
-      if (!videoId) return false;
-      const ampersandPosition = videoId.indexOf('&');
-      if(ampersandPosition != -1) {
-        videoId = videoId.substring(0, ampersandPosition);
-      }
+      const videoId = url.match(youtubeRegex)[1];
+      if (!videoId) return '';
       return videoId;
     },
     isVimeoUrl(url) {
