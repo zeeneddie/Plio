@@ -8,21 +8,27 @@ import { Departments } from '/imports/api/departments/departments.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user'],
-  autorun() {
-    if (this.standards().count() > 0 && !this.selectedStandardId()) {
-      const standard = Standards.findOne({});
+  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing'],
+  onCreated() {
+    // show stored standard section
+    if (this.standards().count() > 0 && this.standardId()) {
+      this.selectedStandardId(this.standardId());
+
+      this.toggleSection(this.standardId());
+    }
+
+    // show first standard section
+    if (this.standards().count() > 0 && !this.standardId()) {
+      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
 
       if (!!standard) {
         const { _id } = standard;
 
         this.selectedStandardId(_id);
 
-        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.child(vm => vm._id() === _id);
-        });
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
 
-        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
+        this.toggleSection(_id);
       }
     }
   },
@@ -51,6 +57,13 @@ Template.StandardsCard.viewmodel({
   },
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
+  },
+  toggleSection(_id) {
+    Meteor.setTimeout(() => {
+      this.toggleVMCollapse('ListItem', (viewmodel) => {
+        return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === _id);
+      });
+    }, 500);
   },
   openEditStandardModal() {
     this.modal().open({

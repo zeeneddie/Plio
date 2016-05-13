@@ -2,11 +2,12 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.StandardsLayout.viewmodel({
-  mixin: 'organization',
+  share: 'standard',
+  mixin: ['organization', 'standard'],
   _subHandlers: [],
   isReady: false,
   autorun: [
-    function () {
+    function() {
       const org = this.organization();
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
@@ -16,7 +17,7 @@ Template.StandardsLayout.viewmodel({
         this.templateInstance.subscribe('organizationUsers', userIds)
       ]);
     },
-    function () {
+    function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ]

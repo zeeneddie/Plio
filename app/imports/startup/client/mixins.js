@@ -25,6 +25,15 @@ ViewModel.mixin({
       this.collapsed(!this.collapsed());
     }, 500)
   },
+  collapsing: {
+    toggleVMCollapse(name = '', condition = () => {}) {
+      if (name) {
+        const vmToCollapse = ViewModel.findOne(name, condition);
+
+        !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      }
+    }
+  },
   modal: {
     modal: {
       instance() {
@@ -160,6 +169,11 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    }
+  },
+  standard: {
+    standardId() {
+      return FlowRouter.getParam('standardId');
     }
   },
   date: {
