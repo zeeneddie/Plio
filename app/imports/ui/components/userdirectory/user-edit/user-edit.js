@@ -152,8 +152,6 @@ Template.UserEdit.viewmodel({
       text: 'This user will be removed from the organization',
       type: 'warning',
       showCancelButton: true,
-      cancelButtonClass: 'btn-secondary',
-      confirmButtonClass: 'btn-danger',
       confirmButtonText: 'Delete',
       closeOnConfirm: true
     }, () => {

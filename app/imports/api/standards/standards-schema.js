@@ -79,6 +79,10 @@ const optionalFields = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Url
   },
+  'source1.name': {
+    type: String,
+    optional: true
+  },
   source2: {
     type: Object,
     optional: true
@@ -89,6 +93,10 @@ const optionalFields = new SimpleSchema({
   'source2.url': {
     type: String,
     regEx: SimpleSchema.RegEx.Url
+  },
+  'source2.name': {
+    type: String,
+    optional: true
   },
   notify: {
     type: [String],
