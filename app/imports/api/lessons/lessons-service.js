@@ -4,7 +4,19 @@ export default {
   collection: LessonsLearned,
 
   insert({ ...args }) {
-    return this.collection.insert(args);
+    const lastLesson = this.collection.findOne({
+      serialNumber: {
+        $type: 16 // 32-bit integer
+      }
+    }, {
+      sort: {
+        serialNumber: -1
+      }
+    });
+
+    const serialNumber = lastLesson ? lastLesson.serialNumber + 1 : 1;
+
+    return this.collection.insert({ ...args, serialNumber });
   },
 
   update({ _id, ...args }) {

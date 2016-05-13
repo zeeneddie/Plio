@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-      <strong>LL456</strong>
+      <strong {{b "text: renderSerialNumber"}}></strong>
       <span {{b "text: title"}}></span>
     </div>
     <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
@@ -21,7 +21,7 @@
           {{> Datepicker placeholder="Created date" date=getDate}}
         {{/FormField}}
 
-        {{> ESOwner _id='placeholder' selectedOwnerId=createdBy label="Created by"}}
+        {{> ESOwner selectedOwnerId=createdBy label="Created by"}}
       </div>
       {{#QuillEditor}}
         {{#if _id}}

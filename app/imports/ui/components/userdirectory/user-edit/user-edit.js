@@ -8,6 +8,7 @@ import {
   updatePhoneNumber,
   addPhoneNumber
 } from '/imports/api/users/methods.js';
+import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 import { UserRoles } from '/imports/api/constants.js';
 
@@ -20,7 +21,7 @@ Template.UserEdit.viewmodel({
     });
   },
   organizationId() {
-    return this.organization()._id;
+    return this.organization() && this.organization()._id;
   },
   updateProfile(prop, viewModel) {
     if (this.isPropChanged(prop, viewModel)) {
@@ -91,14 +92,19 @@ Template.UserEdit.viewmodel({
 
     return val && val !== savedVal;
   },
-  isEditable() {
+  isCurrentUser() {
     return Meteor.userId() === this.userId();
+  },
+  isEditable() {
+    return this.isCurrentUser();
   },
   rolesTitle() {
     const user = this.user();
-    const userName = user.firstName() || user.lastName() || user.email();
-    const orgName = this.organization().name;
-    return `${userName}'s superpowers for ${orgName}`;
+    if (user) {
+      const userName = user.firstName() || user.lastName() || user.email();
+      const orgName = this.organization() && this.organization().name;
+      return `${userName}'s superpowers for ${orgName}`;
+    }
   },
   isRolesEditable() {
     return Roles.userIsInRole(
@@ -129,5 +135,43 @@ Template.UserEdit.viewmodel({
     } else {
       this.modal().callMethod(assignRole, doc);
     }
+  },
+  isDeleteButtonEnabled() {
+    return Roles.userIsInRole(
+      Meteor.userId(),
+      UserRoles.DELETE_USERS,
+      this.organizationId()
+    ) || this.isCurrentUser();
+  },
+  removeUserFn() {
+    return this.removeUser.bind(this);
+  },
+  removeUser() {
+    swal({
+      title: 'Are you sure?',
+      text: 'This user will be removed from the organization',
+      type: 'warning',
+      showCancelButton: true,
+      cancelButtonClass: 'btn-secondary',
+      confirmButtonClass: 'btn-danger',
+      confirmButtonText: 'Delete',
+      closeOnConfirm: true
+    }, () => {
+      this.modal().close();
+      this.modal().callMethod(removeUser, {
+        userId: this.userId(),
+        organizationId: this.organizationId()
+      }, (err, res) => {
+        if (!err) {
+          // have to wait some time before opening new sweet alert
+          FlowRouter.go('userDirectoryPage', { 
+            orgSerialNumber: this.organization().serialNumber 
+          });
+          Meteor.setTimeout(() => {
+            swal('Removed', 'User has been removed', 'success');
+          }, 500);
+        }
+      });
+    });
   }
 });

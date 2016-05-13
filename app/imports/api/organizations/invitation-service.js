@@ -56,22 +56,34 @@ class InvitationSender {
   }
 
   _sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
+    let sender = Meteor.user();
+
     //send notification
     let notificationData = Object.assign({
-      organizationPageUrl: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
+      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the "${this._organization.name}"!`,
+      button: {
+        label: 'Go to the dashboard',
+        url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
+      }
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'invitedToOrganizationEmail', notificationData)
+    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
   _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
+    let sender = Meteor.user();
+
     // send invitation
     let notificationData = Object.assign({
-      invitationLink: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
+      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to the "${this._organization.name}" organization!`,
+      button: {
+        label: 'Accept the invitation',
+        url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
+      }
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'applicationInvitationEmail', notificationData)
+    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
@@ -89,9 +101,7 @@ class InvitationSender {
     let sender = Meteor.user();
     let notificationSubject;
     let basicNotificationData = {
-      welcomeMessage: this._welcomeMessage,
-      organizationName: this._organization.name,
-      invitationSenderName: `${sender.profile.firstName} ${sender.profile.lastName}`
+      organizationName: this._organization.name
     };
 
     if (isExisting) {

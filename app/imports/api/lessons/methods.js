@@ -2,21 +2,19 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import LessonsService from './lessons-service.js';
-import { LessonsSchema } from './lessons-schema.js';
+import { LessonsSchema, requiredSchema } from './lessons-schema.js';
 import { Lessons } from './lessons.js';
-import { checkUserId } from '../checkers.js';
 import { IdSchema } from '../schemas.js';
 
 export const insert = new ValidatedMethod({
   name: 'Lessons.insert',
 
-  validate: LessonsSchema.validator(),
+  validate: requiredSchema.validator(),
 
   run(...args) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot create a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return LessonsService.insert(...args);
   }
@@ -25,13 +23,12 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Lessons.update',
 
-  validate: new SimpleSchema([IdSchema, LessonsSchema]).validator(),
+  validate: new SimpleSchema([IdSchema, requiredSchema]).validator(),
 
   run({_id, ...args}) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot update a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return LessonsService.update({ _id, ...args });
   }
@@ -43,10 +40,9 @@ export const remove = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    checkUserId(
-      this.userId,
-      'Unauthorized user cannot delete a standard'
-    );
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+    }
 
     return LessonsService.remove({ _id });
   }

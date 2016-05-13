@@ -38,6 +38,15 @@ export const NewUserDataSchema = new SimpleSchema({
   }
 });
 
+const idSchemaDoc = {
+  type: String,
+  regEx: SimpleSchema.RegEx.Id
+};
+
 export const OrganizationIdSchema = new SimpleSchema({
-  organizationId: {type: SimpleSchema.RegEx.Id}
+  organizationId: idSchemaDoc
+});
+
+export const UserIdSchema = new SimpleSchema({
+  userId: idSchemaDoc
 });

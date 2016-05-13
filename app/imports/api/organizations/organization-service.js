@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
+import { Roles } from 'meteor/alanning:roles';
+
 import { Organizations } from './organizations.js';
-import { OrganizationDefaults, UserMembership } from '../constants.js';
+import { OrganizationDefaults, UserMembership, UserRoles } from '../constants.js';
+
 
 export default OrganizationService = {
   collection: Organizations,
@@ -48,34 +51,71 @@ export default OrganizationService = {
   },
 
   setName({_id, name}) {
-    return this._update(_id, {name});
+    return this.collection.update({ _id }, {
+      $set: { name }
+    });
   },
 
   setDefaultCurrency({_id, currency}) {
-    return this._update(_id, {currency});
+    return this.collection.update({ _id }, {
+      $set: { currency }
+    });
   },
 
   setStepTime({_id, ncType, timeValue, timeUnit}) {
-    return this._update(_id, {
-      [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
+      }
     });
   },
 
   setReminder({_id, ncType, reminderType, timeValue, timeUnit}) {
-    return this._update(_id, {
-      [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
+      }
     });
   },
 
   setGuideline({_id, ncType, text}) {
-    return this._update(_id, {
-      [`ncGuidelines.${ncType}`]: text
+    return this.collection.update({ _id }, {
+      $set: {
+        [`ncGuidelines.${ncType}`]: text
+      }
     });
   },
 
-  _update(_id, fields) {
-    return this.collection.update({_id}, {
-      $set: fields
+  removeUser({ userId, organizationId, removedBy }) {
+    const isAlreadyRemoved = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          isRemoved: true,
+          removedBy: {$exists: true},
+          removedAt: {$exists: true}
+        }
+      }
+    });
+
+    if (isAlreadyRemoved) {
+      throw new Meteor.Error(400, 'User is already removed');
+    }
+
+    Roles.removeUsersFromRoles(
+      userId, _.values(UserRoles), organizationId
+    );
+
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': userId
+    }, {
+      $set: {
+        'users.$.isRemoved': true,
+        'users.$.removedBy': removedBy,
+        'users.$.removedAt': new Date()
+      }
     });
   }
 };

@@ -6,35 +6,17 @@
   <div class="card-block-collapse collapse" id="improvement-plan" {{b "ref: collapse"}}>
     <div class="card-block">
 
-      {{#FormField label="Statement of desired outcome" sm=7}}
-        <textarea class="form-control" rows="3" placeholder="Statement of desired outcome"
-          {{b "value: desiredOutcome, focusout: update('desiredOutcome')"}}></textarea>
-      {{/FormField}}
+      {{> ESIPDesiredOutcome desiredOutcome=desiredOutcome}}
 
-      {{#FormField label="Target date for desired outcome" sm=7}}
-        {{> Datepicker placeholder="Target date for desired outcome" name="targetDate" date=(renderDate targetDate)}}
-      {{/FormField}}
+      {{> ESIPTargetDate targetDate=targetDate}}
 
-      {{#FormField label="Improvement plan review dates" sm=7}}
-        <div {{b "ref: forms"}}>
-          {{> Datepicker placeholder="Review date" class="margin-bottom"}}
-        </div>
-        <button type="button" class="btn btn-primary margin-bottom-none"
-          {{b "click: addForm('Datepicker', { class: 'margin-bottom', placeholder: 'Review date' })"}}>
-          <i class="fa fa-plus"></i>
-          Add review date
-        </button>
-      {{/FormField}}
+      {{> ESIPReviewDates reviewDates=reviewDates}}
 
-      {{> ESOwner sm=7}}
+      {{> ESOwner sm=7 isEditable=true selectedOwnerId=owner}}
 
-      {{#FormField label="Selected metric" sm=7}}
-        <input type="text" class="form-control" placeholder="Selected metric" {{b "value: selectedMetric"}}>
-      {{/FormField}}
+      {{> ESIPSelectedMetric selectedMetric=selectedMetric}}
 
-      {{#FormField label="Target value" sm=7}}
-        <input type="text" class="form-control" placeholder="Target value" {{b "value: targetValue"}}>
-      {{/FormField}}
+      {{> ESIPTargetValue targetValue=targetValue}}
 
       <div class="form-group form-group-buttons row">
         <label class="form-control-label col-sm-5 col-xs-12">Means statement</label>

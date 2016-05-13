@@ -3,12 +3,15 @@ import { Template } from 'meteor/templating';
 Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
-    if (this.hasUser() && !this._id) {
+    if (this.hasUser() && !this.editable()) {
       this.selectOwner(Meteor.user());
-    } else if (this.hasUser() && this._id) {
+    } else if (this.hasUser() && this.editable()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
       this.owner(fullName);
     }
+  },
+  editable() {
+    return !!this.isEditable && !!this.isEditable();
   },
   label: 'Owner',
   sm: 8,
@@ -27,7 +30,7 @@ Template.ESOwner.viewmodel({
     this.update();
   },
   update() {
-    if (!this._id || this._id !== 'placeholder') return;
+    if (!this.editable()) return;
     const { owner } = this.getData();
     if (!owner) {
       this.modal().setError('Owner is required!');

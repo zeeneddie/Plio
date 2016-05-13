@@ -41,7 +41,7 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    if (!this.IsValidUrl(url)) {
+    if (url && !this.IsValidUrl(url)) {
       ViewModel.findOne('ModalWindow').setError('Url is not valid!');
       return;
     }

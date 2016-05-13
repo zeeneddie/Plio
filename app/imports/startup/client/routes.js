@@ -81,6 +81,14 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/sign-out', {
+  name: 'signOut',
+  action(params) {
+    Meteor.logout();
+    FlowRouter.go('hello');
+  }
+});
+
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -93,6 +101,16 @@ FlowRouter.route('/user-waiting', {
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
+  name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('StandardsLayout', {
@@ -155,7 +173,7 @@ function checkEmailVerified(context, redirect) {
 
   if (user) {
     const email = user.emails[0];
-    
+
     if (!email.verified) {
       if (!isOnUserWaiting) {
         redirect('userWaiting');

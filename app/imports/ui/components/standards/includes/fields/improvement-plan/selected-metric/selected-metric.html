@@ -1,0 +1,6 @@
+<template name="ESIPSelectedMetric">
+  {{#FormField label="Selected metric" sm=7}}
+    <input type="text" class="form-control" placeholder="Selected metric"
+      {{b "value: selectedMetric, focusout: update"}}>
+  {{/FormField}}
+</template>

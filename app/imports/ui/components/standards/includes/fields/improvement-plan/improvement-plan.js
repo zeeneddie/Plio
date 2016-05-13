@@ -3,23 +3,22 @@ import { Blaze } from 'meteor/blaze';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: ['collapse', 'addForm', 'date'],
+  mixin: 'collapse',
   desiredOutcome: '',
   targetDate: '',
+  owner: '',
   selectedMetric: '',
   targetValue: '',
-  update(field) {
-    const value = this.getData()[field];
-    const options = {};
+  update({ ...args }, options) {
+    const key = _.keys(args)[0];
+    const value = _.values(args)[0];
+    if (!options) {
+      const options = {};
 
-    options[`improvementPlan.${field}`] = value;
-
-    this.parent().update(options);
-  },
-  getData() {
-    const { date:targetDate } = this.child('Datepicker', vm => vm.name && vm.name() === 'targetDate').getData();
-    const { desiredOutcome } = this.data();
-
-    return { desiredOutcome, targetDate };
+      options[`improvementPlan.${key}`] = value;
+      this.parent().update(options);
+    } else {
+      this.parent().update({ query: { ...args } }, options);
+    }
   }
 });

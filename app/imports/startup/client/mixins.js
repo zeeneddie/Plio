@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
-const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
+const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
 
 ViewModel.persist = false;
@@ -24,6 +24,15 @@ ViewModel.mixin({
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
     }, 500)
+  },
+  collapsing: {
+    toggleVMCollapse(name = '', condition = () => {}) {
+      if (name) {
+        const vmToCollapse = ViewModel.findOne(name, condition);
+
+        !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      }
+    }
   },
   modal: {
     modal: {
@@ -63,12 +72,14 @@ ViewModel.mixin({
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
+
       if (this[prop]()) {
-        const r = new RegExp(`.*${this[prop]()}.*`, 'i');
+        const words = this[prop]().split(' ');
+        const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
             const obj = {};
-            obj[field] = r;
+            obj[field.name] = field.subField ? { $elemMatch: { [field.subField]: r } } : r;
             return obj;
           });
           searchObject['$or'] = fields;
@@ -76,6 +87,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
+
       return searchObject;
     }
   },
@@ -92,12 +104,8 @@ ViewModel.mixin({
       return youtubeRegex.test(url);
     },
     getIdFromYoutubeUrl(url) {
-      let videoId = url.split('v=')[1];
-      if (!videoId) return false;
-      const ampersandPosition = videoId.indexOf('&');
-      if(ampersandPosition != -1) {
-        videoId = videoId.substring(0, ampersandPosition);
-      }
+      const videoId = url.match(youtubeRegex)[1];
+      if (!videoId) return '';
       return videoId;
     },
     isVimeoUrl(url) {
@@ -143,19 +151,6 @@ ViewModel.mixin({
         }
       }
     },
-    email(user) {
-      return user.emails[0].address;
-    },
-    address(user) {
-      const { address='' } = user.profile;
-      return address;
-    },
-    avatar(user) {
-      return user.profile.avatar;
-    },
-    description(user) {
-      return user.profile.description;
-    },
     hasUser() {
       return !!Meteor.userId() || Meteor.loggingIn();
     }
@@ -174,6 +169,11 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    }
+  },
+  standard: {
+    standardId() {
+      return FlowRouter.getParam('standardId');
     }
   },
   date: {
