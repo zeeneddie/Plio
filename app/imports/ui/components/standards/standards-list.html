@@ -10,9 +10,12 @@
       </a>
     </form>
     <div class="list-group list-group-accordion" id="standardsAccordion">
-      {{#each standardsBookSections}}
-        {{> ListItem}}
-      {{/each}}
+      {{#if isActiveStandardFilter 'section'}}
+        {{#each standardsBookSections}}
+          {{> ListItem}}
+        {{/each}}
+      {{else}}
+      {{/if}}
     </div>
   </div>
 </template>

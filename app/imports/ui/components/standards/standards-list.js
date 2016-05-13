@@ -5,7 +5,7 @@ import { Standards } from '/imports/api/standards/standards.js'
 
 Template.StandardsList.viewmodel({
   share: 'search',
-  mixin: ['modal', 'search'],
+  mixin: ['modal', 'search', 'standard'],
   standardsBookSections() {
     const standardsSearchQuery = this.searchObject('searchText', [
       { name: 'title' },
@@ -36,6 +36,10 @@ Template.StandardsList.viewmodel({
     const options = { sort: { title: 1 } };
 
     return StandardsBookSections.find(sectionsQuery, options);
+  },
+  standardsTypes() {
+    const options = { sort: { name: 1 } };
+    return StandardsBookSections.find({}, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

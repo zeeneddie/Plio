@@ -1,12 +1,12 @@
 <template name="StandardsHeader">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle" data-toggle="dropdown" {{b "text: standardsHeader(activeFilter)"}}>
+      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: standardsHeader(activeStandardFilter)"}}>
       </a>
       <div class="dropdown-menu">
         {{#each standardFilters}}
-          <a class="dropdown-item"
-            {{b "class: { active: isActiveFilter(this) }, text: filterText(this), click: selectedFilter(this)"}} href="#">
+          <a class="dropdown-item pointer"
+            {{b "class: { active: isActiveStandardFilter(this) }, text: filterText(this), click: selectedFilter(this)"}}>
           </a>
         {{/each}}
       </div>

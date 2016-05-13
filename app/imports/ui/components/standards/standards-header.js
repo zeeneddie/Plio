@@ -7,15 +7,12 @@ Template.StandardsHeader.viewmodel({
   mixin: ['organization', 'standard'],
   selectedFilter: '',
   autorun() {
-    if (this.selectedFilter) {
+    if (this.selectedFilter()) {
       FlowRouter.setQueryParams({ by: this.selectedFilter() });
     }
   },
   standardFilters() {
     return StandardFilters;
-  },
-  isActiveFilter(filter) {
-    return this.activeFilter() === filter;
   },
   standardsHeader(activeFilter) {
     return `Standards - by ${activeFilter}`;

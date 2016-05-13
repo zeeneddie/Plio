@@ -192,8 +192,11 @@ ViewModel.mixin({
     standardId() {
       return FlowRouter.getParam('standardId');
     },
-    activeFilter() {
+    activeStandardFilter() {
       return FlowRouter.getQueryParam('by') || StandardFilters[0];
+    },
+    isActiveStandardFilter(filter) {
+      return this.activeStandardFilter() === filter;
     }
   },
   date: {
