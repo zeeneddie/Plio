@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { LessonsLearned } from '../lessons.js';
 
-Meteor.publish('lessons', function(standardId) {
+Meteor.publish('lessons', function(organizationId) {
   if (this.userId) {
-    return LessonsLearned.find({ standardId });
+    return LessonsLearned.find({ organizationId });
   } else {
     return this.ready();
   }

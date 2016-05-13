@@ -5,33 +5,11 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
+import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing'],
-  onCreated() {
-    // show stored standard section
-    if (this.standards().count() > 0 && this.standardId()) {
-      this.selectedStandardId(this.standardId());
-
-      this.toggleSection(this.standardId());
-    }
-
-    // show first standard section
-    if (this.standards().count() > 0 && !this.standardId()) {
-      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
-
-      if (!!standard) {
-        const { _id } = standard;
-
-        this.selectedStandardId(_id);
-
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
-
-        this.toggleSection(_id);
-      }
-    }
-  },
+  mixin: ['modal', 'user', 'standard', 'date'],
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
   },
@@ -58,12 +36,15 @@ Template.StandardsCard.viewmodel({
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
   },
-  toggleSection(_id) {
-    Meteor.setTimeout(() => {
-      this.toggleVMCollapse('ListItem', (viewmodel) => {
-        return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === _id);
-      });
-    }, 500);
+  renderNotifyUsers(users) {
+    return users.map(user => this.userFullNameOrEmail(user)).join(', ');
+  },
+  renderReviewDates(dates) {
+    return dates.map(doc => this.renderDate(doc.date)).join(', ');
+  },
+  lessons() {
+    const standardId = this.currentStandard() && this.currentStandard()._id;
+    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
   },
   openEditStandardModal() {
     this.modal().open({

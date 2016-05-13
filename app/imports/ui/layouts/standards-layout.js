@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.StandardsLayout.viewmodel({
   share: 'standard',
-  mixin: ['organization', 'standard'],
+  mixin: ['organization'],
   _subHandlers: [],
   isReady: false,
   autorun: [
@@ -14,6 +14,7 @@ Template.StandardsLayout.viewmodel({
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizations'),
         this.templateInstance.subscribe('standards', _id),
+        this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('organizationUsers', userIds)
       ]);
     },

@@ -9,6 +9,7 @@
       <div class="card-block">
         {{#FormField label="Title"}}
           <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+          {{> ClearField field="title"}}
         {{/FormField}}
         {{#FormField label="Linked to"}}
           <div class="input-group">
@@ -18,7 +19,7 @@
         {{/FormField}}
 
         {{#FormField label="Created date"}}
-          {{> Datepicker placeholder="Created date" date=getDate}}
+          {{> Datepicker placeholder="Created date" value=date date=getDate}}
         {{/FormField}}
 
         {{> ESOwner selectedOwnerId=createdBy label="Created by"}}
