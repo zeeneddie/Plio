@@ -17,7 +17,7 @@ Template.UsersDetails.viewmodel({
       const userRoles = user.roles[orgId] || [];
 
       const superpowers = Object.keys(UserRolesNames).map((key) => {
-        return { key: key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
+        return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
       });
       
       return superpowers.sort((a, b) => {

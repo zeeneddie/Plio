@@ -20,9 +20,11 @@
           <a class="dropdown-item" href="{{pathFor 'userDirectoryPage' orgSerialNumber=orgSerialNumber}}">
             User directory
           </a>
-          <a class="dropdown-item" {{b "click: onInviteClick"}}>
-            Invite users
-          </a>
+          {{#if canInviteUsers organizationId}}
+            <a class="dropdown-item" {{b "click: onInviteClick"}}>
+              Invite users
+            </a>
+          {{/if}}
           <a class="dropdown-item disabled">
             Standard subcards
           </a>
