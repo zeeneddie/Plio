@@ -10,6 +10,13 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  fileId: '',
+  fileUploader() {
+    return this.child('FileUploader');
+  },
+  fileProgress(fileId) {
+    return this.fileUploader() && this.fileUploader().progress(fileId);
+  },
   shouldUpdate() {
     let { type, url, name } = this.getData();
 
@@ -57,30 +64,55 @@ Template.ESSources.viewmodel({
 
     this.parent().update(query);
   },
-  uploadAttachmentCb() {
-    return this.onAttachmentUploaded.bind(this);
+  insertFileFn() {
+    return this.insertFile.bind(this);
   },
-  onAttachmentUploaded(err, url, fileObj) {
+  insertFile({ _id, name }) {
+    this.fileId(_id);
+    this.sourceName(name);
+    this.update();
+  },
+  onUploadCb() {
+    return this.onUpload.bind(this);
+  },
+  onUpload(err, { url }) {
     if (err) {
       this.parent().modal().setError(err);
       return;
     }
 
     this.sourceUrl(url);
-    this.sourceName(fileObj.name);
     this.update();
   },
+  removeAttachmentFn() {
+    return this.removeAttachment.bind(this);
+  },
   removeAttachment() {
+    const fileUploader = this.fileUploader();
+
+    const isFileUploading = fileUploader.isFileUploading(this.fileId());
+
+    let warningMsg = 'This attachment will be removed';
+    let buttonText = 'Remove';
+    if (isFileUploading) {
+      warningMsg = 'The upload process will be canceled';
+      buttonText = 'Cancel';
+    }
+
     swal({
       title: 'Are you sure?',
-      text: 'This attachment will be removed',
+      text: warningMsg,
       type: 'warning',
       showCancelButton: true,
       cancelButtonClass: 'btn-secondary',
       confirmButtonClass: 'btn-danger',
-      confirmButtonText: 'Remove',
+      confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
+      if (isFileUploading) {
+        fileUploader.cancelUpload(this.fileId());
+      }
+
       this.parent().update({}, {
         $unset: {
           [`source${this.id()}`]: ''

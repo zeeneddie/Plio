@@ -18,15 +18,18 @@
       {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}}>
     <div {{b "if: sourceType === 'attachment'"}}>
       {{#with sourceName}}
-        <div class="btn-group" >
-          <button type="button" class="btn btn-secondary" disabled="" {{b "text: this"}}>
-          </button>
-        </div>
-      {{else}}
-        {{> FileUploader
-            uploadCb=uploadAttachmentCb
-            slingshotDirective='standardsAttachments'}}
+        {{> FileItem
+            _id=fileId
+            name=sourceName
+            url=sourceUrl
+            removeFile=removeAttachmentFn}}
       {{/with}}
+      <div {{b "unless: sourceName"}}>
+        {{> FileUploader
+            insertFile=insertFileFn
+            onUpload=onUploadCb
+            slingshotDirective='standardsAttachments'}}
+      </div>
     </div>
     <input type="text" class="form-control" placeholder="Video"
       {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}}>

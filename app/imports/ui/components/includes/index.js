@@ -17,3 +17,5 @@ import './modal-delete-button.html';
 import './modal-delete-button.js';
 import './clear-field.html';
 import './clear-field.js';
+import './file-item.html';
+import './file-item.js';

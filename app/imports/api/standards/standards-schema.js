@@ -77,7 +77,8 @@ const optionalFields = new SimpleSchema({
   },
   'source1.url': {
     type: String,
-    regEx: SimpleSchema.RegEx.Url
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
   },
   'source1.name': {
     type: String,
@@ -157,7 +158,8 @@ const optionalFields = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   },
   'improvementPlan.files.$.url': {
-    type: String
+    type: String,
+    optional: true
   },
   'improvementPlan.files.$.name': {
     type: String
