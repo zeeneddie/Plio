@@ -52,7 +52,6 @@ Template.ESLessons.viewmodel({
           text: `The lesson "${title}" will be removed.`,
           type: 'warning',
           showCancelButton: true,
-          confirmButtonClass: 'btn-danger',
           confirmButtonText: 'Remove',
           closeOnConfirm: false
         },
