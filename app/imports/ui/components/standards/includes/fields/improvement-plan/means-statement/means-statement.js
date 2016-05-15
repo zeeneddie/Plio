@@ -2,10 +2,8 @@ import { Template } from 'meteor/templating';
 
 
 Template.ESIPMeansStatement.viewmodel({
+  mixin: ['modal', 'filesList'],
   files: [],
-  fileUploader() {
-    return this.child('FileUploader');
-  },
   insertFileFn() {
     return this.insertFile.bind(this);
   },
@@ -28,6 +26,11 @@ Template.ESIPMeansStatement.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { _id, url }) {
+    if (err) {
+      this.modal().setError(err.reason || err);
+      return;
+    }
+
     this.parent().update({
       'improvementPlan.files._id': _id
     }, {
@@ -49,7 +52,7 @@ Template.ESIPMeansStatement.viewmodel({
     let buttonText = 'Remove';
     if (isFileUploading) {
       warningMsg = 'The upload process will be canceled';
-      buttonText = 'Cancel';
+      buttonText = 'OK';
     }
 
     swal({
@@ -72,8 +75,5 @@ Template.ESIPMeansStatement.viewmodel({
         }
       });
     });
-  },
-  fileProgress(fileId) {
-    return this.fileUploader() && this.fileUploader().progress(fileId);
   }
 })

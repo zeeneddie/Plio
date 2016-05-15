@@ -99,48 +99,64 @@
             </div>
 
             <div class="list-group">
-              <div class="list-group-item" {{b "if: this.desiredOutcome"}}>
-                <p class="list-group-item-text">Statement of desired outcome</p>
-                <h4 class="list-group-item-heading" {{b "text: this.desiredOutcome"}}></h4>
-              </div>
+              {{#with desiredOutcome}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Statement of desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                </div>
+              {{/with}}
 
-              <div class="list-group-item" {{b "if: this.targetDate"}}>
-                <p class="list-group-item-text">Target date for desired outcome</p>
-                <h4 class="list-group-item-heading" {{b "text: renderDate(this.targetDate)"}}></h4>
-              </div>
+              {{#with targetDate}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Target date for desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
 
-              <div class="list-group-item" {{b "if: this.reviewDates"}}>
-                <p class="list-group-item-text">Improvement plan review dates</p>
-                <h4 class="list-group-item-heading" {{b "text: renderReviewDates(this.reviewDates)"}}></h4>
-              </div>
+              {{#with reviewDates}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Improvement plan review dates</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderReviewDates(this)"}}></h4>
+                </div>
+              {{/with}}
 
               <div class="row">
-                <div class="col-sm-6">
-                  <div class="list-group-item" {{b "if: this.owner"}}>
-                    <p class="list-group-item-text">Owner</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                {{#with owner}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Owner</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                    </div>
                   </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="list-group-item" {{b "if: this.selectedMetric"}}>
-                    <p class="list-group-item-text">Selected metric</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.selectedMetric"}}></h4>
+                {{/with}}
+                
+                {{#with selectedMetric}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Selected metric</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
                   </div>
-                </div>
+                {{/with}}
               </div>
               <div class="row">
-                <div class="col-sm-6">
-                  <div class="list-group-item" {{b "if: this.currentValue"}}>
-                    <p class="list-group-item-text">Current value</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.currentValue"}}></h4>
+                {{#with currentValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Current value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
                   </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="list-group-item" {{b "if: this.targetValue"}}>
-                    <p class="list-group-item-text">Target value</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.targetValue"}}></h4>
+                {{/with}}
+                
+                {{#with targetValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Target value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
                   </div>
-                </div>
+                {{/with}}
               </div>
             </div>
           {{/with}}

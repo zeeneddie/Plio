@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: 'urlRegex',
+  mixin: ['urlRegex', 'modal', 'filesList'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -11,21 +11,21 @@ Template.ESSources.viewmodel({
   sourceUrl: '',
   sourceName: '',
   fileId: '',
-  fileUploader() {
-    return this.child('FileUploader');
-  },
-  fileProgress(fileId) {
-    return this.fileUploader() && this.fileUploader().progress(fileId);
-  },
   shouldUpdate() {
-    let { type, url, name } = this.getData();
+    const { type, url, name } = this.getData();
+    const { sourceType, sourceUrl, sourceName } = this.templateInstance.data;
 
-    if (!type || !url || (type === 'attachment' && !name)) {
-      return false;
+    if (type === 'attachment') {
+      return _.every([
+        (type && name) || (type && url),
+        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) 
+      ]);
+    } else {
+      return _.every([
+        type && url,
+        (type !== sourceType) || (url !== sourceUrl)
+      ]);
     }
-
-    const context = this.templateInstance.data;
-    return (type !== context.sourceType) || (url !== context.sourceUrl);
   },
   changeType(type) {
     this.sourceType(type);
@@ -56,6 +56,10 @@ Template.ESSources.viewmodel({
     const sourceDoc = { type, url };
     if (type === 'attachment') {
       sourceDoc.name = name;
+      
+      if (!url) {
+        delete sourceDoc.url;
+      }
     }
 
     const query = {
@@ -77,7 +81,7 @@ Template.ESSources.viewmodel({
   },
   onUpload(err, { url }) {
     if (err) {
-      this.parent().modal().setError(err);
+      this.modal().setError(err.reason || err);
       return;
     }
 
@@ -96,7 +100,7 @@ Template.ESSources.viewmodel({
     let buttonText = 'Remove';
     if (isFileUploading) {
       warningMsg = 'The upload process will be canceled';
-      buttonText = 'Cancel';
+      buttonText = 'OK';
     }
 
     swal({

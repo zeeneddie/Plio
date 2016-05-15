@@ -24,10 +24,6 @@ Template.StandardsCard.viewmodel({
     const _id = !!this.standard() && this.standard().typeId;
     return StandardsTypes.findOne({ _id });
   },
-  owner() {
-    const _id = this.owner();
-    return Meteor.users.findOne({ _id });
-  },
   departments() {
     const departmentsIds = !!this.standard() && this.standard().departments || [];
     const query = { _id: { $in: departmentsIds } };

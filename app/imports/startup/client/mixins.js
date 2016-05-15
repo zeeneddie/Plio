@@ -189,5 +189,13 @@ ViewModel.mixin({
         autoclose: true
       });
     }
+  },
+  filesList: {
+    fileUploader() {
+      return this.child('FileUploader');
+    },
+    fileProgress(fileId) {
+      return this.fileUploader() && this.fileUploader().progress(fileId);
+    }
   }
 });
