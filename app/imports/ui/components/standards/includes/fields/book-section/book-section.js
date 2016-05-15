@@ -69,7 +69,15 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      const sectionToCollapse = ViewModel.findOne('ListItem', vm => !!vm.collapsed() && vm._id() === this._id());
+      const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+        if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
+          return viewmodel.type() === 'standardSection' &&
+            viewmodel.parent()._id() === this.parent().standard().sectionId && 
+            viewmodel.parent().parent()._id() === this.parent().standard().typeId;
+        } else {
+          return !!viewmodel.collapsed() && viewmodel.parent()._id() === this._id()
+        }
+      });
       sectionToCollapse && sectionToCollapse.toggleCollapse();
     });
   },

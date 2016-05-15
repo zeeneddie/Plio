@@ -24,7 +24,7 @@
           </div>
           <div class="dropdown-menu dropdown-menu-right">
             {{#each members}}
-              <a class="dropdown-item" href="#"
+              <a class="dropdown-item pointer"
                 {{b "click: update(this, '$addToSet'), text: userFullNameOrEmail(this)"}}></a>
             {{/each}}
           </div>

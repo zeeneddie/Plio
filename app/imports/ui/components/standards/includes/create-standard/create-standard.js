@@ -49,21 +49,25 @@ Template.CreateStandard.viewmodel({
       nestingLevel
     };
 
-     this.modal().callMethod(insert, args, (err, _id) => {
+     this.modal().callMethod(insert, args, (err, doc) => {
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        this.selectedStandardId(_id);
-
+        this.selectedStandardId(doc._id);
+        
         // toggle collapse of viewmodel which has the newly created sub item
         const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-          return !!viewmodel.collapsed() && viewmodel.child(vm => vm._id() === _id);
+          return viewmodel.parent()._id() === doc.sectionId;
         });
 
+        const typeToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+          return viewmodel.parent()._id() === doc.typeId;
+        });
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
+        !!typeToCollapse && typeToCollapse.toggleCollapse();
 
         this.modal().open({
-          _id,
+          _id: doc._id,
           title: 'Standard',
           template: 'EditStandard'
         });

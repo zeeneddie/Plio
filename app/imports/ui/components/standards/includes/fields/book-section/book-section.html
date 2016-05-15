@@ -5,10 +5,10 @@
         {{b "value: bookSection, focusout: update, throttle: 200"}}/>
       <div class="dropdown-menu dropdown-menu-full" {{b "ref: dropdown"}}>
         {{#each bookSections}}
-          <a class="dropdown-item" href="#" {{b "text: this.title, click: bookSection(this.title) && selectedBookSectionId(this._id)"}}></a>
+          <a class="dropdown-item pointer" {{b "text: this.title, click: bookSection(this.title) && selectedBookSectionId(this._id)"}}></a>
         {{/each}}
         <div class="dropdown-divider" {{b "if: bookSections.count > 0"}}></div>
-        <a class="dropdown-item" href="#" {{b "mousedown: addNewSection"}}><strong {{b "text: sectionHintText"}}></strong></a>
+        <a class="dropdown-item pointer" {{b "mousedown: addNewSection"}}><strong {{b "text: sectionHintText"}}></strong></a>
       </div>
     </div>
   {{/FormField}}

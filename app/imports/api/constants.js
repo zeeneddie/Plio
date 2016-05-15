@@ -118,6 +118,11 @@ const OrganizationDefaults = {
   }
 };
 
+const StandardFilters = [
+  'section',
+  'type'
+];
+
 export {
   NCTypes,
   OrgCurrencies,
@@ -128,5 +133,6 @@ export {
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames
+  UserRolesNames,
+  StandardFilters
 };

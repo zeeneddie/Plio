@@ -8,13 +8,11 @@ import { Departments } from '/imports/api/departments/departments.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'collapsing'],
+  mixin: ['modal', 'user', 'organization', 'standard'],
   onCreated() {
     // show stored standard section
     if (this.standards().count() > 0 && this.standardId()) {
       this.selectedStandardId(this.standardId());
-
-      this.toggleSection(this.standardId());
     }
 
     // show first standard section
@@ -27,8 +25,6 @@ Template.StandardsCard.viewmodel({
         this.selectedStandardId(_id);
 
         FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
-
-        this.toggleSection(_id);
       }
     }
   },
@@ -57,13 +53,6 @@ Template.StandardsCard.viewmodel({
   },
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
-  },
-  toggleSection(_id) {
-    Meteor.setTimeout(() => {
-      this.toggleVMCollapse('ListItem', (viewmodel) => {
-        return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === _id);
-      });
-    }, 500);
   },
   openEditStandardModal() {
     this.modal().open({
