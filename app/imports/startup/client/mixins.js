@@ -2,6 +2,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Standards } from '/imports/api/standards/standards.js';
 import { UserRoles, StandardFilters } from '/imports/api/constants.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -16,7 +17,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
+          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId && vm.type() === this.type()) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
@@ -32,6 +33,31 @@ ViewModel.mixin({
         const vmToCollapse = ViewModel.findOne(name, condition);
 
         !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      }
+    },
+    toggleCollapsibles(standardId) {
+      const standard = Standards.findOne({ _id: standardId });
+      if (standard) {
+        Meteor.setTimeout(() => {
+          this.toggleVMCollapse('ListItem', (viewmodel) => {
+            if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
+              return viewmodel.type() === 'standardSection' &&
+                viewmodel.parent()._id &&
+                viewmodel.parent()._id() === standard.sectionId && 
+                viewmodel.parent().parent()._id() === standard.typeId;
+            } else {
+              return viewmodel.type() === 'standardSection' && 
+                viewmodel.collapsed() && 
+                viewmodel.parent()._id && 
+                viewmodel.parent()._id() === standard.sectionId;
+            }
+          });
+          this.toggleVMCollapse('ListItem', (viewmodel) => {
+            return viewmodel.type() === 'standardType' &&
+              viewmodel.parent()._id &&
+              viewmodel.parent()._id() === standard.typeId
+          });
+        }, 500);
       }
     }
   },

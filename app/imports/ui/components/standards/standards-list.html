@@ -12,7 +12,7 @@
     <div class="list-group list-group-accordion" id="standardsAccordion">
       {{#if isActiveStandardFilter 'section'}}
         {{#each standardsBookSections}}
-          {{> ListItem}}
+          {{> StandardsSectionItem}}
         {{/each}}
       {{else}}
         {{#each standardsTypes}}

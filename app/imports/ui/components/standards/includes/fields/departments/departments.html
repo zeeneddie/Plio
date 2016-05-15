@@ -11,10 +11,10 @@
         {{b "value: department, throttle: 300"}}/>
       <div class="dropdown-menu dropdown-menu-full">
         {{#each departments}}
-          <a class="dropdown-item" href="#" {{b "text: this.name, click: update(this, '$addToSet')"}}></a>
+          <a class="dropdown-item pointer" {{b "text: this.name, click: update(this, '$addToSet')"}}></a>
         {{/each}}
         <div class="dropdown-divider" {{b "if: departments.count > 0"}}></div>
-        <a class="dropdown-item" href="#"><strong>Add new department</strong></a>
+        <a class="dropdown-item pointer"><strong>Add new department</strong></a>
       </div>
     </div>
   {{/FormField}}

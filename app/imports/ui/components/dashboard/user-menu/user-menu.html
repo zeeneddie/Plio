@@ -2,13 +2,13 @@
   {{#if currentUser}}
     <ul class="nav navbar-nav pull-xs-right">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+        <a class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
           <i class="fa fa-circle {{getActiveClass}} label-status"></i>
           <span>{{userFullNameOrEmail currentUser}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           {{#each getStatuses}}
-            <a class="dropdown-item {{#if isActiveStatus @index}}active{{/if}}" href="#" {{b "click: changeStatus"}}>
+            <a class="dropdown-item pointer {{#if isActiveStatus @index}}active{{/if}}" {{b "click: changeStatus"}}>
               <i class="fa fa-circle {{css}} label-status"></i>
               {{text}}
             </a>

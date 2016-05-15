@@ -7,7 +7,6 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 
 
 Template.StandardsTypeItem.viewmodel({
-  mixin: 'collapse',
   standardsBookSections() {
     return this.parent().standardsBookSections(this._id());
   },

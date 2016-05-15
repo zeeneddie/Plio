@@ -4,7 +4,8 @@ export default {
   collection: Standards,
 
   insert({ ...args }) {
-    return this.collection.insert(args);
+    const _id = this.collection.insert(args);
+    return this.collection.findOne({ _id: _id });
   },
 
   update({ _id, query = {}, options = {}, ...args }) {

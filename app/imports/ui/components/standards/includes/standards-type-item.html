@@ -1,16 +1,9 @@
 <template name="StandardsTypeItem">
-  <a class="list-group-item list-group-subheading list-group-toggle pointer"
-    {{b "if: hasStandards, click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="list-group-item-heading pull-left" {{b "text: this.name"}}></h4>
-  </a>
-  <div class="list-group-collapse collapse" {{b "ref: collapse"}}>
-    <div class="list-group">
-      <div class="sub">
+  {{#ListItem type="standardType" title=name}}
+    <div class="sub">
       {{#each standardsBookSections}}
-        {{> ListItem}}
+        {{> StandardsSectionItem}}
       {{/each}}
-      </div>
     </div>
-  </div>
-
+  {{/ListItem}}
 </template>

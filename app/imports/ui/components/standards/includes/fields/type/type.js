@@ -15,7 +15,21 @@ Template.ESType.viewmodel({
     if (!typeId) {
       this.modal().setError('Type is required!');
     }
-    this.parent().update({ typeId });
+    this.parent().update({ typeId }, () => {
+      const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+        return viewmodel.type() === 'standardSection' &&
+          viewmodel.parent()._id() === this.parent().standard().sectionId && 
+          viewmodel.parent().parent()._id() === this.typeId();
+      });
+
+      const typeToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
+        return viewmodel.type() === 'standardType' &&
+          viewmodel.parent()._id() === this.typeId();
+      });
+
+      typeToCollapse && typeToCollapse.toggleCollapse();
+      sectionToCollapse && sectionToCollapse.toggleCollapse();
+    });
   },
   getData() {
     const { typeId } = this.data();
