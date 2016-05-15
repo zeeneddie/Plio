@@ -7,8 +7,11 @@ Template.ESImprovementPlan.viewmodel({
   desiredOutcome: '',
   targetDate: '',
   owner: '',
+  reviewDates: '',
   selectedMetric: '',
+  currentValue: '',
   targetValue: '',
+  files: [],
   update({ ...args }, options) {
     const key = _.keys(args)[0];
     const value = _.values(args)[0];

@@ -32,7 +32,7 @@ Template.ESLessons.viewmodel({
     const standardId = this.standard() && this.standard()._id;
 
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes });
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes }, () => this.toggleCollapse());
     } else {
       ViewModel.findOne('ESLessonsLearned').insert({ title, date, createdBy, standardId, notes }, (err, _id) => {
         this.destroy();

@@ -48,3 +48,5 @@ momentjs:moment
 rajit:bootstrap3-datepicker
 codechimera:meteor-bootstrap-sweetalert
 browser-policy
+matb33:collection-hooks
+manuel:reactivearray

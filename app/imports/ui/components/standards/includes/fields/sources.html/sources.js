@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: 'urlRegex',
+  mixin: ['urlRegex', 'modal', 'filesList'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -10,15 +10,22 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  fileId: '',
   shouldUpdate() {
-    let { type, url, name } = this.getData();
+    const { type, url, name } = this.getData();
+    const { sourceType, sourceUrl, sourceName } = this.templateInstance.data;
 
-    if (!type || !url || (type === 'attachment' && !name)) {
-      return false;
+    if (type === 'attachment') {
+      return _.every([
+        (type && name) || (type && url),
+        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) 
+      ]);
+    } else {
+      return _.every([
+        type && url,
+        (type !== sourceType) || (url !== sourceUrl)
+      ]);
     }
-
-    const context = this.templateInstance.data;
-    return (type !== context.sourceType) || (url !== context.sourceUrl);
   },
   changeType(type) {
     this.sourceType(type);
@@ -49,6 +56,10 @@ Template.ESSources.viewmodel({
     const sourceDoc = { type, url };
     if (type === 'attachment') {
       sourceDoc.name = name;
+      
+      if (!url) {
+        delete sourceDoc.url;
+      }
     }
 
     const query = {
@@ -57,30 +68,55 @@ Template.ESSources.viewmodel({
 
     this.parent().update(query);
   },
-  uploadAttachmentCb() {
-    return this.onAttachmentUploaded.bind(this);
+  insertFileFn() {
+    return this.insertFile.bind(this);
   },
-  onAttachmentUploaded(err, url, fileObj) {
+  insertFile({ _id, name }) {
+    this.fileId(_id);
+    this.sourceName(name);
+    this.update();
+  },
+  onUploadCb() {
+    return this.onUpload.bind(this);
+  },
+  onUpload(err, { url }) {
     if (err) {
-      this.parent().modal().setError(err);
+      this.modal().setError(err.reason || err);
       return;
     }
 
     this.sourceUrl(url);
-    this.sourceName(fileObj.name);
     this.update();
   },
+  removeAttachmentFn() {
+    return this.removeAttachment.bind(this);
+  },
   removeAttachment() {
+    const fileUploader = this.fileUploader();
+
+    const isFileUploading = fileUploader.isFileUploading(this.fileId());
+
+    let warningMsg = 'This attachment will be removed';
+    let buttonText = 'Remove';
+    if (isFileUploading) {
+      warningMsg = 'The upload process will be canceled';
+      buttonText = 'OK';
+    }
+
     swal({
       title: 'Are you sure?',
-      text: 'This attachment will be removed',
+      text: warningMsg,
       type: 'warning',
       showCancelButton: true,
       cancelButtonClass: 'btn-secondary',
       confirmButtonClass: 'btn-danger',
-      confirmButtonText: 'Remove',
+      confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
+      if (isFileUploading) {
+        fileUploader.cancelUpload(this.fileId());
+      }
+
       this.parent().update({}, {
         $unset: {
           [`source${this.id()}`]: ''

@@ -1,17 +1,7 @@
 <template name="FileUploader">
-  <div class="source-file-uploader">
-    <div class="input-group">
-      <input type="text" class="form-control" disabled="disabled"
-          placeholder="Attachment" {{b "value: fileName"}}>
-      <span class="input-group-btn">
-        <label class="btn btn-secondary">
-          Choose file
-          <input type="file" {{b "value: attachmentFile, change: upload"}} />
-        </label>
-      </span>
-    </div>
-    <progress class="progress progress-success" max="100"
-        {{b "value: progress, if: isUploading"}}>
-    </progress>
-  </div>
+  <span class="btn btn-primary btn-file">
+    <i class="fa fa-plus"></i>
+    Add
+    <input type="file" {{b "value: attachmentFile, change: upload"}}>
+  </span>
 </template>
