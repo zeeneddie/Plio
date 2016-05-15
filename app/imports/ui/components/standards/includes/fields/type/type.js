@@ -3,10 +3,11 @@ import { Template } from 'meteor/templating';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.ESType.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'organization'],
   typeId: '',
   types() {
-    const types = StandardsTypes.find({}).fetch();
+    const organizationId = this.organization() && this.organization()._id;
+    const types = StandardsTypes.find({ organizationId }).fetch();
     return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
   },
   update() {

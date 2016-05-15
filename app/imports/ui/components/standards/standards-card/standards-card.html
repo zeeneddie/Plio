@@ -81,6 +81,99 @@
 
           </div>
 
+          {{#with notify}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Notify</h4>
+            </div>
+
+            <div class="list-group">
+             <div class="list-group-item">
+               <h4 class="list-group-item-heading" {{b "text: renderNotifyUsers(this)"}}></h4>
+             </div>
+            </div>
+          {{/with}}
+
+          {{#with improvementPlan}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Improvement plan</h4>
+            </div>
+
+            <div class="list-group">
+              {{#with desiredOutcome}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Statement of desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with targetDate}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Target date for desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with reviewDates}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Improvement plan review dates</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderReviewDates(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              <div class="row">
+                {{#with owner}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Owner</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+                
+                {{#with selectedMetric}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Selected metric</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+              </div>
+              <div class="row">
+                {{#with currentValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Current value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+                
+                {{#with targetValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Target value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+              </div>
+            </div>
+          {{/with}}
+
+          <div {{b "if: lessons.count > 0"}}>
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Lessons learned</h4>
+            </div>
+            <div class="list-group">
+              <div class="list-group-item">
+                {{#each lessons}}
+                  <a class="btn btn-secondary pointer"><strong {{b "text: 'LL' + this.serialNumber"}}></strong> <span {{b "text: this.title"}}></span></a>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
           {{> CardChangelog standard=this}}
         {{/with}}
       </div>

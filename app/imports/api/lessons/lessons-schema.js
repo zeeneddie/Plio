@@ -21,6 +21,10 @@ export const requiredSchema = new SimpleSchema({
 });
 
 export const LessonsSchema = new SimpleSchema([requiredSchema, {
+  organizationId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
   serialNumber: {
     type: Number
   }

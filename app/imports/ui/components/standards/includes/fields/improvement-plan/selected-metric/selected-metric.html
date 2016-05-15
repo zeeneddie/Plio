@@ -2,5 +2,6 @@
   {{#FormField label="Selected metric" sm=7}}
     <input type="text" class="form-control" placeholder="Selected metric"
       {{b "value: selectedMetric, focusout: update"}}>
+    {{> ClearField field="selectedMetric" isEditable=true}}
   {{/FormField}}
 </template>

@@ -5,8 +5,30 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
-  share: 'search',
-  mixin: ['modal', 'search', 'standard'],
+  share: ['search', 'standard'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing'],
+  onRendered() {
+    // show stored standard section
+    if (this.standards().count() > 0 && this.currentStandard()) {
+      this.selectedStandardId(this.currentStandard()._id);
+    }
+
+    // show first standard section
+    if (this.standards().count() > 0 && !this.currentStandard()) {
+      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
+
+      if (!!standard) {
+        const { _id } = standard;
+
+        this.selectedStandardId(_id);
+
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+      }
+    }
+  },
+  standards() {
+    return Standards.find({}, { sort: { title: 1 } });
+  },
   standardsBookSections(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
       { name: 'title' },

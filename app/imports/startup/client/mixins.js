@@ -223,6 +223,10 @@ ViewModel.mixin({
     },
     isActiveStandardFilter(filter) {
       return this.activeStandardFilter() === filter;
+    },
+    currentStandard() {
+      const _id =  FlowRouter.getParam('standardId');
+      return Standards.findOne({ _id });
     }
   },
   date: {
@@ -235,6 +239,14 @@ ViewModel.mixin({
         format: 'dd MM yyyy',
         autoclose: true
       });
+    }
+  },
+  filesList: {
+    fileUploader() {
+      return this.child('FileUploader');
+    },
+    fileProgress(fileId) {
+      return this.fileUploader() && this.fileUploader().progress(fileId);
     }
   }
 });

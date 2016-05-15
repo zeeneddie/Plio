@@ -6,10 +6,17 @@ import { LessonsSchema, requiredSchema } from './lessons-schema.js';
 import { Lessons } from './lessons.js';
 import { IdSchema } from '../schemas.js';
 
+const organizationIdSchema = new SimpleSchema({
+  organizationId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  }
+});
+
 export const insert = new ValidatedMethod({
   name: 'Lessons.insert',
 
-  validate: requiredSchema.validator(),
+  validate: new SimpleSchema([requiredSchema, organizationIdSchema]).validator(),
 
   run(...args) {
     if (!this.userId) {

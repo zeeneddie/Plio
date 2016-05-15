@@ -2,9 +2,15 @@
   {{#with source}}
     <div class="list-group-item">
       <p class="list-group-item-text">Source document/video 1</p>
-      <h4 class="list-group-item-heading" {{b "if: this.type === 'url'"}}><a {{b "href: this.url, text: this.url"}}></a></h4>
+      <h4 class="list-group-item-heading" {{b "if: this.type === 'url'"}}>
+        <a target="_blank" {{b "href: this.url, text: this.url"}}></a>
+      </h4>
+      <h4 class="list-group-item-heading" {{b "if: this.type === 'attachment'"}}>
+        <a target="_blank" download="" {{b "href: this.url, text: this.name"}}></a>
+      </h4>
       <iframe width="560" height="315" frameborder="0" allowfullscreen
-        {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}></iframe>
+        {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}>
+      </iframe>
     </div>
   {{/with}}
 </template>

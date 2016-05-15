@@ -10,3 +10,8 @@ Slingshot.fileRestrictions('standardsAttachments', {
   allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
   maxSize: 64 * 1024 * 1024 // 64 MB
 });
+
+Slingshot.fileRestrictions('improvementPlanFiles', {
+  allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
+  maxSize: 64 * 1024 * 1024 // 64 MB
+});
