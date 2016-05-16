@@ -4,8 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
-import { IdSchema } from '../schemas.js';
-import { optionsSchema } from '../schemas.js';
+import { IdSchema, OrganizationIdSchema, optionsSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
 
 export const insert = new ValidatedMethod({
@@ -27,7 +26,7 @@ export const insert = new ValidatedMethod({
     if (!canCreateStandards) {
       throw new Meteor.Error(
         403,
-        'User is not authorized for creating standards'
+        'User is not authorized for creating, removing or editing standards'
       );
     }
 
@@ -39,13 +38,22 @@ export const update = new ValidatedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema, optionsSchema
+    IdSchema, StandardsUpdateSchema, optionsSchema, OrganizationIdSchema
   ]).validator(),
 
-  run({_id, options, ...args}) {
+  run({_id, options, ...args, organizationId }) {
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update a standard'
+      );
+    }
+
+    const canEditStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_STANDARDS_DOCUMENTS, organizationId);
+
+    if (canEditStandards) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for creating, removing or editing standards'
       );
     }
 
@@ -55,13 +63,24 @@ export const update = new ValidatedMethod({
 
 export const remove = new ValidatedMethod({
   name: 'Standards.remove',
+  
+  validate: new SimpleSchema([
+    IdSchema, OrganizationIdSchema
+  ]).validator(),
 
-  validate: IdSchema.validator(),
-
-  run({ _id }) {
+  run({ _id, organizationId }) {
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot delete a standard'
+      );
+    }
+
+    const canDeleteStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_STANDARDS_DOCUMENTS, organizationId);
+
+    if (canDeleteStandards) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for creating, removing or editing standards'
       );
     }
 

@@ -17,12 +17,15 @@ Template.EditStandard.viewmodel({
       options = {};
     }
     const _id = this._id && this._id();
-    const modifier = _.extend(args, { _id, options, query });
+    const organizationId = this.organizationId();
+    const modifier = _.extend(args, { _id, options, query, organizationId });
 
     this.modal().callMethod(update, modifier, cb);
   },
   remove() {
     const { _id, title } = this.standard();
+    const organizationId = this.organizationId();
+    
     swal(
       {
         title: 'Are you sure?',
@@ -33,7 +36,7 @@ Template.EditStandard.viewmodel({
         closeOnConfirm: false
       },
       () => {
-        this.modal().callMethod(remove, { _id }, () => {
+        this.modal().callMethod(remove, { _id, organizationId }, () => {
           swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
 
           this.modal().close();
