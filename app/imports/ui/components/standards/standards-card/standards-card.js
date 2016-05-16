@@ -3,14 +3,15 @@ import { Meteor } from 'meteor/meteor';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
+
   autorun() {
     const standardId = this.standard() && this.standard()._id;
     this.templateInstance.subscribe('improvementPlan', standardId);
@@ -27,7 +28,7 @@ Template.StandardsCard.viewmodel({
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardsTypes.findOne({ _id });
+    return StandardTypes.findOne({ _id });
   },
   departments() {
     const departmentsIds = !!this.standard() && this.standard().departments || [];

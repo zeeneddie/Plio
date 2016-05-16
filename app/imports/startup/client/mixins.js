@@ -40,11 +40,17 @@ ViewModel.mixin({
       if (standard) {
         Meteor.setTimeout(() => {
           this.toggleVMCollapse('ListItem', (viewmodel) => {
-            if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
+
+            // Check if the section has parent (Type) collapsible list
+            if (viewmodel.parent().parent && viewmodel.parent().parent()._id) {
               return viewmodel.type() === 'standardSection' &&
                 viewmodel.collapsed() &&
+
+                // viewmodel.parent() => StandardsSectionItem
                 viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId &&
+                viewmodel.parent()._id() === standard.sectionId && 
+
+                // viewmodel.parent().parent() => StandardsTypeItem
                 viewmodel.parent().parent()._id() === standard.typeId;
             } else {
               return viewmodel.type() === 'standardSection' &&
@@ -56,6 +62,8 @@ ViewModel.mixin({
           this.toggleVMCollapse('ListItem', (viewmodel) => {
             return viewmodel.type() === 'standardType' &&
               viewmodel.collapsed() &&
+
+              // viewmodel.parent() => StandardsSectionItem
               viewmodel.parent()._id &&
               viewmodel.parent()._id() === standard.typeId
           });
@@ -196,8 +204,30 @@ ViewModel.mixin({
 
       if (userId && organizationId) {
         return Roles.userIsInRole(
-          Meteor.userId(),
+          userId,
           UserRoles.INVITE_USERS,
+          organizationId
+        );
+      }
+    },
+    canCreateStandards(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          organizationId
+        );
+      }
+    },
+    canEditOrgSettings(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CHANGE_ORG_SETTINGS,
           organizationId
         );
       }

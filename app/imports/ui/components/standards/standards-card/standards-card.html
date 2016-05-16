@@ -8,12 +8,14 @@
         </div>
         {{#with standard}}
           <div class="card-block card-heading">
-            <div class="card-heading-buttons pull-xs-right">
-              <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
-                <i class="fa fa-pencil"></i>
-                Edit
-              </a>
-            </div>
+            {{#if canCreateStandards organizationId}}
+              <div class="card-heading-buttons pull-xs-right">
+                <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
+                  <i class="fa fa-pencil"></i>
+                  Edit
+                </a>
+              </div>
+            {{/if}}
             <h3 class="card-title">
               Standard
             </h3>
