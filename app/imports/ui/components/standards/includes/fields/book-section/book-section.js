@@ -6,7 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  mixin: ['search', 'modal', 'organization'],
+  mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
     const _id = this.selectedBookSectionId();
     if (_id) {
@@ -50,11 +50,15 @@ Template.ESBookSection.viewmodel({
     const organizationId = !!this.organization() && this.organization()._id;
 
     this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
-      swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
 
-      this.dropdown.dropdown('toggle');
+        this.selectedBookSectionId(_id);
 
-      this.selectedBookSectionId(_id);
+        this.update();
+      }
     });
   },
   update() {

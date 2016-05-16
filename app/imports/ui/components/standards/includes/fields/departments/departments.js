@@ -48,14 +48,16 @@ Template.ESDepartments.viewmodel({
   onAlertConfirm() {
     const organizationId = this.organization() && this.organization()._id;
 
-    // this.dropdown.dropdown('toggle');
-
     this.modal().callMethod(insert, { name: this.department(), organizationId }, (err, _id) => {
-      swal("Added!", `New department "${this.department()}" was added succesfully.`, "success");
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        swal("Added!", `New department "${this.department()}" was added succesfully.`, "success");
 
-      const newDepartment = Departments.findOne({ _id });
+        const newDepartment = Departments.findOne({ _id });
 
-      !!newDepartment && this.update(newDepartment, '$addToSet');
+        !!newDepartment && this.update(newDepartment, '$addToSet');
+      }
     });
   },
   update(doc, option) {
