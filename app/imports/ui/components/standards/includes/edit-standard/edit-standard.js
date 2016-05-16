@@ -44,7 +44,7 @@ Template.EditStandard.viewmodel({
           if (!!standard) {
             this.selectedStandardId(standard._id);
 
-            FlowRouter.go('standards', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
+            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
 
             this.toggleVMCollapse('ListItem', (viewmodel) => {
               return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === standard._id);
