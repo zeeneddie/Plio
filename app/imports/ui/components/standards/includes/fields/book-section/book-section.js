@@ -72,6 +72,7 @@ Template.ESBookSection.viewmodel({
       const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
         if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
           return viewmodel.type() === 'standardSection' &&
+            this.parent().standard() &&
             viewmodel.parent()._id() === this.parent().standard().sectionId && 
             viewmodel.parent().parent()._id() === this.parent().standard().typeId;
         } else {
