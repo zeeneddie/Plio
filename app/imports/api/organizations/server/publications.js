@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { Organizations } from '../organizations.js';
 import { Departments } from '../../departments/departments.js';
-import { StandardsTypes } from '../../standards-types/standards-types.js';
+import { StandardTypes } from '../../standards-types/standards-types.js';
 import {
   StandardsBookSections
 } from '../../standards-book-sections/standards-book-sections.js';
@@ -47,7 +47,7 @@ Meteor.publishComposite('currentUserOrganizations', {
     }
   }, {
     find: function (org) {
-      return StandardsTypes.find({
+      return StandardTypes.find({
         organizationId: org._id
       });
     }
@@ -72,7 +72,7 @@ Meteor.publishComposite('currentUserOrganizationById', {
     }
   }, {
     find: function (org) {
-      return StandardsTypes.find({
+      return StandardTypes.find({
         organizationId: org._id
       });
     }

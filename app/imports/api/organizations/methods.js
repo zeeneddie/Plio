@@ -61,6 +61,15 @@ export const update = new ValidatedMethod({
       throw new Meteor.Error(403, updateErrorMessage);
     }
 
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
     return OrganizationService.update(doc);
   }
 });
@@ -75,6 +84,15 @@ export const setName = new ValidatedMethod({
   run(doc) {
     if (!this.userId) {
       throw new Meteor.Error(403, updateErrorMessage);
+    }
+    
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
     }
 
     return OrganizationService.setName(doc);
@@ -93,6 +111,15 @@ export const setDefaultCurrency = new ValidatedMethod({
       throw new Meteor.Error(403, updateErrorMessage);
     }
 
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+    
     return OrganizationService.setDefaultCurrency(doc);
   }
 });
@@ -109,6 +136,15 @@ export const setStepTime = new ValidatedMethod({
       throw new Meteor.Error(403, updateErrorMessage);
     }
 
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+    
     return OrganizationService.setStepTime(doc);
   }
 });
@@ -131,6 +167,15 @@ export const setReminder = new ValidatedMethod({
       throw new Meteor.Error(403, updateErrorMessage);
     }
 
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
     return OrganizationService.setReminder(doc);
   }
 });
@@ -148,6 +193,15 @@ export const setGuideline = new ValidatedMethod({
   run(doc) {
     if (!this.userId) {
       throw new Meteor.Error(403, updateErrorMessage);
+    }
+
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
     }
 
     return OrganizationService.setGuideline(doc);

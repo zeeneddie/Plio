@@ -6,6 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
+  share: 'standard',
   mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
     const _id = this.selectedBookSectionId();
@@ -72,7 +73,7 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      this.expandCollapsedStandard(this.parent().standard()._id);
+      this.expandCollapsedStandard(this.selectedStandardId());
     });
   },
   getData() {

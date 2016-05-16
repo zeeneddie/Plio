@@ -1,8 +1,8 @@
 import { Organizations } from './organizations.js';
-import { StandardsTypes } from '../standards-types/standards-types.js';
+import { StandardTypes } from '../standards-types/standards-types.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
 
-const defaultStandardsTypes = [
+const defaultStandardTypes = [
   {
     name: 'Customer experience',
     abbreviation: 'CEX'
@@ -43,8 +43,8 @@ const defaultStandardsTypes = [
 
 
 Organizations.after.insert((userId, { _id }) => {
-  _.each(defaultStandardsTypes, ({ name, abbreviation }) => {
-    if (!StandardsTypes.findOne({ organizationId: _id, name, abbreviation })) {
+  _.each(defaultStandardTypes, ({ name, abbreviation }) => {
+    if (!StandardTypes.findOne({ organizationId: _id, name, abbreviation })) {
       StandardsTypeService.insert({ organizationId: _id, name, abbreviation });
     }
   });
