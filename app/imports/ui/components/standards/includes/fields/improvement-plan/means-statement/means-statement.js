@@ -60,8 +60,6 @@ Template.ESIPMeansStatement.viewmodel({
       text: warningMsg,
       type: 'warning',
       showCancelButton: true,
-      cancelButtonClass: 'btn-secondary',
-      confirmButtonClass: 'btn-danger',
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {

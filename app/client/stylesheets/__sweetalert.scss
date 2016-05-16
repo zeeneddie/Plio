@@ -6,9 +6,11 @@
 .sweet-alert {
   top: 240px;
   border: 1px solid #CCC;
-  width: 600px;
-  margin-left: -300px;
   border-radius: 0;
+  position: relative;
+  width: auto;
+  margin: 10px;
+  left: 0;
   font-family: "Segoe UI Semibold WestEuropean", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
   
   h2 {
@@ -159,5 +161,19 @@
   }
   100% {
     background-color: #FF8C00;
+  }
+}
+
+@media (min-width: 544px) {
+  .sweet-alert {
+    width: 600px;
+    margin: 30px auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .sweet-alert {
+    width: auto;
+    margin: 0;
   }
 }
