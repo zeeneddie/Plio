@@ -9,7 +9,7 @@ Template.StandardsHeader.viewmodel({
   autorun: [
    function (){
     this.selectedFilter();
-    this.toggleCollapsibles(this.standardId());
+    this.expandCollapsedStandard(this.standardId());
   },
   function () {
     if (this.selectedFilter()) {

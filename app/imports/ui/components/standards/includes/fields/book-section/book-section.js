@@ -6,7 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  mixin: ['search', 'modal', 'organization'],
+  mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
     const _id = this.selectedBookSectionId();
     if (_id) {
@@ -69,17 +69,7 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-        if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
-          return viewmodel.type() === 'standardSection' &&
-            this.parent().standard() &&
-            viewmodel.parent()._id() === this.parent().standard().sectionId && 
-            viewmodel.parent().parent()._id() === this.parent().standard().typeId;
-        } else {
-          return !!viewmodel.collapsed() && viewmodel.parent()._id() === this._id()
-        }
-      });
-      sectionToCollapse && sectionToCollapse.toggleCollapse();
+      this.expandCollapsedStandard(this.parent().standard()._id);
     });
   },
   getData() {
