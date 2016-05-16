@@ -19,6 +19,7 @@ Template.ESType.viewmodel({
     this.parent().update({ typeId }, () => {
       const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
         return viewmodel.type() === 'standardSection' &&
+          this.parent().standard() &&
           viewmodel.parent()._id() === this.parent().standard().sectionId && 
           viewmodel.parent().parent()._id() === this.typeId();
       });

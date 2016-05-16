@@ -1,3 +1,8 @@
+body > div:not(#__blaze-root):first-of-type {
+  position: absolute;
+  width: 100%;
+}
+
 .sweet-overlay {
   // Needs to be higher than bootstrap modal's
   z-index: 1051;

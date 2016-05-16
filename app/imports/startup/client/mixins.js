@@ -43,12 +43,12 @@ ViewModel.mixin({
             if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
               return viewmodel.type() === 'standardSection' &&
                 viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId && 
+                viewmodel.parent()._id() === standard.sectionId &&
                 viewmodel.parent().parent()._id() === standard.typeId;
             } else {
-              return viewmodel.type() === 'standardSection' && 
-                viewmodel.collapsed() && 
-                viewmodel.parent()._id && 
+              return viewmodel.type() === 'standardSection' &&
+                viewmodel.collapsed() &&
+                viewmodel.parent()._id &&
                 viewmodel.parent()._id() === standard.sectionId;
             }
           });
@@ -191,7 +191,7 @@ ViewModel.mixin({
   roles: {
     canInviteUsers(organizationId) {
       const userId = Meteor.userId();
-      
+
       if (userId && organizationId) {
         return Roles.userIsInRole(
           Meteor.userId(),
