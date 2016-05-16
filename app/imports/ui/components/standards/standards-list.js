@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { Standards } from '/imports/api/standards/standards.js';
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
@@ -69,7 +69,7 @@ Template.StandardsList.viewmodel({
   },
   standardsTypes() {
     const options = { sort: { name: 1 } };
-    return StandardsTypes.find({ organizationId: this.organization()._id }, options);
+    return StandardTypes.find({ organizationId: this.organization()._id }, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

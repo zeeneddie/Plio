@@ -8,7 +8,7 @@ import { UserRoles } from '../constants';
 
 
 export const insert = new ValidatedMethod({
-  name: 'StandardsTypes.insert',
+  name: 'StandardTypes.insert',
 
   validate: StandardsTypeSchema.validator(),
 
@@ -34,7 +34,7 @@ export const insert = new ValidatedMethod({
 });
 
 export const update = new ValidatedMethod({
-  name: 'StandardsTypes.update',
+  name: 'StandardTypes.update',
 
   validate: new SimpleSchema([IdSchema, {
     name: { type: String },
@@ -63,7 +63,7 @@ export const update = new ValidatedMethod({
 });
 
 export const remove = new ValidatedMethod({
-  name: 'StandardsTypes.remove',
+  name: 'StandardTypes.remove',
 
   validate: IdSchema.validator(),
 

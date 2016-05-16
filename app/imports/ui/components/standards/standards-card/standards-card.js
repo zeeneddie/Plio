@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
@@ -23,7 +23,7 @@ Template.StandardsCard.viewmodel({
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardsTypes.findOne({ _id });
+    return StandardTypes.findOne({ _id });
   },
   departments() {
     const departmentsIds = !!this.standard() && this.standard().departments || [];
