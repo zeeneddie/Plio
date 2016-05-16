@@ -216,7 +216,7 @@ ViewModel.mixin({
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
-          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
           organizationId
         );
       }
