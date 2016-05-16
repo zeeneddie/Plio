@@ -26,8 +26,8 @@ Template.ESIPMeansStatement.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { _id, url }) {
-    if (err) {
-      this.modal().setError(err.reason || err);
+    if (err && err.error !== 'Aborted') {
+      this.modal().setError(err.reason);
       return;
     }
 

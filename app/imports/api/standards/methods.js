@@ -19,7 +19,7 @@ export const insert = new ValidatedMethod({
         403, 'Unauthorized user cannot create a standard'
       );
     }
-    
+
     const [ doc ] = args;
     const { organizationId } = doc;
     const canCreateStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_STANDARDS_DOCUMENTS, organizationId);

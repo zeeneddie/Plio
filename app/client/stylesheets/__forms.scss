@@ -436,3 +436,7 @@ fieldset[disabled] {
 .no-pointer-events {
   pointer-events: none;
 }
+
+.clearable-field-container {
+  position: relative;
+}
