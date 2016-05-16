@@ -9,11 +9,11 @@ Template.ESIPMeansStatement.viewmodel({
   },
   insertFile({ _id, name }) {
     const fileDoc = { _id, name };
-    
+
     if (this.files() && this.files().length) {
       this.parent().update({}, {
         $push: {
-          'improvementPlan.files': fileDoc
+          files: fileDoc
         }
       });
     } else {
@@ -32,10 +32,14 @@ Template.ESIPMeansStatement.viewmodel({
     }
 
     this.parent().update({
-      'improvementPlan.files._id': _id
+      query: {
+        files: {
+          $elemMatch: { _id }
+        }
+      }
     }, {
       $set: {
-        'improvementPlan.files.$.url': url
+        'files.$.url': url
       }
     });
   },
@@ -69,7 +73,7 @@ Template.ESIPMeansStatement.viewmodel({
 
       this.parent().update({}, {
         $pull: {
-          'improvementPlan.files': { _id }
+          files: { _id }
         }
       });
     });
