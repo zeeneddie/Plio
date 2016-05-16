@@ -1,0 +1,11 @@
+<template name="StandardsTypeItem">
+  {{#if hasStandards}}
+    {{#ListItem type="standardType" title=name}}
+      <div class="sub">
+        {{#each standardsBookSections}}
+          {{> StandardsSectionItem}}
+        {{/each}}
+      </div>
+    {{/ListItem}}
+  {{/if}}
+</template>

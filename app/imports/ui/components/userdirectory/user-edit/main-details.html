@@ -1,0 +1,52 @@
+<template name="UserEdit_MainDetails">
+  <div class="card-block">
+    {{#FormField label="Photo"}}
+      <div class="user-avatar img-wrapper img-circle md">
+        <img {{b "attr: {src: avatar}"}}>
+      </div>
+      <span class="btn btn-secondary btn-file" {{b "if: isEditable"}}>
+        Change <input type="file" {{b "value: avatarFile, change: updateAvatar, enable: isEditable"}}>
+      </span>
+    {{/FormField}}
+
+    {{#FormField label="First name"}}
+      <input type="text" class="form-control" placeholder="First name"
+          {{b "value: firstName, focusout: updateFirstName, enable: isEditable"}} />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="ms-Icon ms-Icon--xCircle"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Last name"}}
+      <input type="text" class="form-control" placeholder="Last name"
+          {{b "value: lastName, focusout: updateLastName, enable: isEditable"}} />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="ms-Icon ms-Icon--xCircle"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Initials"}}
+      <input type="text" class="form-control" placeholder="Initials"
+          {{b "value: initials, focusout: updateInitials, enable: isEditable"}} />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="ms-Icon ms-Icon--xCircle"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Email"}}
+      <input type="email" class="form-control" placeholder="Email"
+          {{b "value: email, focusout: updateEmail, enable: isEditable"}} />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="ms-Icon ms-Icon--xCircle"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Description"}}
+      <input type="text" class="form-control" placeholder="Description"
+          {{b "value: description, focusout: updateDescription, enable: isEditable"}} />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="ms-Icon ms-Icon--xCircle"></i>
+      </button>
+    {{/FormField}}
+  </div>
+</template>

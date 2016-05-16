@@ -11,9 +11,15 @@ body {
 }
 
 #__blaze-root {
+	height: 100%;
+	overflow: hidden;
+	font-size: 14px;
 	@include flexbox();
 	@include flex-direction(column);
-	height: 100%;
+}
+
+a {
+  cursor: pointer;
 }
 
 .scroll {
@@ -34,6 +40,37 @@ body {
   @include flex(1);
 }
 
+.table {
+  display: table;
+  .table-cell {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
+.vertical-center {
+  /* Remove the default bottom margin of .jumbotron */
+  margin-bottom: 0; 
+}
+
+.vertical-center {
+  min-height: 100%;
+}
+
+.jumbotron {
+  hr {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .p-logo {
+    width: 40px;
+    height: auto;
+  }
+}
+
+.preloader {
+  padding-bottom: 12%;
+}
 
 .content {
   overflow: hidden;

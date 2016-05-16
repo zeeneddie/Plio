@@ -1,0 +1,29 @@
+<template name="UserEdit">
+    {{#with user}}
+      {{> UserEdit_MainDetails
+          avatar=avatar
+          firstName=firstName
+          lastName=lastName
+          initials=initials
+          email=email
+          description=description}}
+
+      {{#if isEditable}}
+        {{> UserEdit_Password}}
+      {{/if}}
+
+      {{> UserEdit_ContactDetails
+          address=address
+          country=country
+          phoneNumbers=phoneNumbers
+          skype=skype}}
+
+      {{> UserEdit_Roles
+          userRoles=userRoles
+          title=rolesTitle}}
+    {{/with}}
+
+    {{#if isDeleteButtonEnabled}}
+      {{> ModalDeleteButton onClick=removeUserFn}}
+    {{/if}}
+</template>

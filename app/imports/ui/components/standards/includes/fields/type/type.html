@@ -1,0 +1,9 @@
+<template name="ESType">
+  {{#FormField label="Type"}}
+    <div class="dropdown">
+      <select class="form-control c-select"
+        {{b "change: update, options: types, optionsValue: _id, optionsText: name, value: typeId"}}>
+      </select>
+    </div>
+  {{/FormField}}
+</template>

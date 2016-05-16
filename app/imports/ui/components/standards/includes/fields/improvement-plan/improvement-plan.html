@@ -1,0 +1,27 @@
+<template name="ESImprovementPlan">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Improvement plan</h4>
+    <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+  </div>
+  <div class="card-block-collapse collapse" id="improvement-plan" {{b "ref: collapse"}}>
+    <div class="card-block">
+
+      {{> ESIPDesiredOutcome desiredOutcome=desiredOutcome}}
+
+      {{> ESIPTargetDate targetDate=targetDate}}
+
+      {{> ESIPReviewDates reviewDates=reviewDates}}
+
+      {{> ESOwner sm=7 isEditable=true selectedOwnerId=owner}}
+
+      {{> ESIPSelectedMetric selectedMetric=selectedMetric}}
+
+      {{> ESIPCurrentValue currentValue=currentValue}}
+
+      {{> ESIPTargetValue targetValue=targetValue}}
+
+      {{> ESIPMeansStatement files=files}}
+
+    </div>
+  </div>
+</template>

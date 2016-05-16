@@ -3,20 +3,24 @@
     <div class="card">
       <form class="search-form">
         <div class="form-group row">
-          <input type="text" class="form-control" placeholder="Search...">
+          <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 400"}}>
         </div>
-        <a class="btn btn-primary" href="#" {{b "click: onInviteClick"}}>
-          <i class="fa fa-plus"></i>
-          <span>Invite</span>
-        </a>
+        {{#if canInviteUsers organizationId}}
+          <a class="btn btn-primary pointer" {{b "click: onInviteClick"}}>
+            <i class="fa fa-plus"></i>
+            <span>Invite</span>
+          </a>
+        {{/if}}
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
-          <a class="list-group-item" href="#" {{b "click: parent.activeUser(this._id), class: { active: isActiveUser(this._id) }"}}>
-            <img class="img-circle pull-xs-left" {{b "src: avatar(this)"}}>
+          <a class="list-group-item" {{b "href: getUserPath(this._id), class: { active: isActiveUser(this._id) }"}}>
+            <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
+              <img {{b "src: this.avatar()"}}>
+            </div>
             <div class="list-group-item-content">
               <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
-              <p class="list-group-item-text" {{b "text: description(this)"}}></p>
+              <p class="list-group-item-text" {{b "text: this.description()"}}></p>
             </div>
           </a>
         {{/each}}

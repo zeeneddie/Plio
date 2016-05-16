@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { update } from '/imports/api/users/methods.js';
+import { selectOrganization } from '/imports/api/users/methods.js';
 
 Template.OrganizationsMenuItem.viewmodel({
   regex() {
@@ -12,7 +12,7 @@ Template.OrganizationsMenuItem.viewmodel({
 
     const selectedOrganizationSerialNumber = this.serialNumber();
 
-    update.call({ selectedOrganizationSerialNumber }, (err) => {
+    selectOrganization.call({ selectedOrganizationSerialNumber }, (err) => {
       if (err) {
         toastr.error(err.reason);
       }

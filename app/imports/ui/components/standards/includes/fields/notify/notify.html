@@ -1,0 +1,35 @@
+<template name="ESNotify">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Notify</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted" {{b "text: currentNotifyUsers.count"}}></span>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="notify" {{b "ref: collapse"}}>
+    <div class="card-block">
+      <div class="form-group form-group-buttons">
+        {{#each currentNotifyUsers}}
+          <div class="btn-group">
+            <button class="btn btn-secondary" type="button" disabled="" {{b "text: userFullNameOrEmail(this)"}}></button>
+            <button class="btn btn-secondary" type="button"
+              {{b "click: update(this, '$pull')"}}><i class="fa fa-times-circle"></i></button>
+          </div>
+        {{/each}}
+        <div class="input-group-typeahead">
+          <div class="input-group" data-toggle="dropdown">
+            <input type="text" class="form-control" placeholder="Add user" {{b "value: notifyUser, throttle: 300"}}/>
+            <span class="input-group-btn">
+              <button class="btn btn-secondary" type="button"><i class="fa fa-caret-down"></i></button>
+            </span>
+          </div>
+          <div class="dropdown-menu dropdown-menu-right">
+            {{#each members}}
+              <a class="dropdown-item pointer"
+                {{b "click: update(this, '$addToSet'), text: userFullNameOrEmail(this)"}}></a>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

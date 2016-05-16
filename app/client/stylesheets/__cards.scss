@@ -3,6 +3,10 @@
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   margin-bottom: 30px;
 
+  iframe {
+    max-width: 100%;
+  }
+
   @media (max-width:767px) {
     margin-bottom: 15px;
     border-width: 0 0 1px;
@@ -113,9 +117,7 @@
         padding-top: 8px;
         padding-bottom: 8px;
         
-        img {
-          height: 40px;
-          width: 40px;
+        .user-avatar {
           margin-right: 15px;
         }
         

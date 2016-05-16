@@ -3,15 +3,17 @@ import { Meteor } from 'meteor/meteor';
 // Import all collections that should be filled with fixture data here
 import { Organizations } from '../../api/organizations/organizations.js';
 import { Standards } from '../../api/standards/standards.js';
-import { StandardsTypes } from '../../api/standards-types/standards-types.js';
+import { StandardTypes } from '../../api/standards-types/standards-types.js';
 import { StandardsBookSections } from '../../api/standards-book-sections/standards-book-sections.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Standards, StandardsTypes, StandardsBookSections });
+_.extend(global, { Organizations, Standards, StandardTypes, StandardsBookSections });
 
 import path from 'path';
 import fs from 'fs';
-import { EJSON } from 'meteor/ejson'
+import { EJSON } from 'meteor/ejson';
+
+import { UserRoles } from '../../api/constants.js';
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
@@ -49,9 +51,6 @@ const fillCollection = (collection, assets) => {
   if (!collection.find().count()) {
     return _.each(assets, function(doc) {
       collection.insert(doc);
-      if (collection === Meteor.users && doc.roles) {
-        return Roles.addUsersToRoles(doc._id, doc.roles);
-      }
     });
   }
 };
@@ -66,9 +65,16 @@ const logAction = (assetsNumber, collectionName) => {
 };
 
 Meteor.startup(() => {
+  if (!Meteor.roles.find().count()) {
+    _.each(UserRoles, (name) => {
+      Meteor.roles.insert({ name });
+    });
+  }
+
   const fixturesPath = 'fixtures';
   const fixturesConfigsEJSON = path.join(fixturesPath, 'configs.json');
   const fixturesConfigs = EJSON.parse(Assets.getText(fixturesConfigsEJSON));
+
   return _.each(fixturesConfigs, (assetsDir, collectionName) => {
     const collection = getAttributeValue(global, collectionName);
 

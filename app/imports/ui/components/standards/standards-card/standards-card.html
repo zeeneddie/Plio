@@ -1,0 +1,183 @@
+<template name="StandardsCard">
+    <div class="content-cards-inner flex scroll">
+      <div class="card">
+        <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
+          <h5>
+            There is no standards yet! Click on the 'Add' button to create your first standard.
+          </h5>
+        </div>
+        {{#with standard}}
+          <div class="card-block card-heading">
+            {{#if canCreateStandards organizationId}}
+              <div class="card-heading-buttons pull-xs-right">
+                <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
+                  <i class="fa fa-pencil"></i>
+                  Edit
+                </a>
+              </div>
+            {{/if}}
+            <h3 class="card-title">
+              Standard
+            </h3>
+          </div>
+          <div class="list-group">
+            <div class="list-group-item">
+              <p class="list-group-item-text">Title</p>
+              <h4 class="list-group-item-heading">
+                <span {{b "text: this.title"}}></span>
+                <span class="label label-danger" {{b "if: this.status === 'draft', text: this.status"}}></span>
+              </h4>
+            </div>
+
+            <div class="list-group-item" {{b "if: this.description"}}>
+              <p class="list-group-item-text">Description</p>
+              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Issue number</p>
+                  <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Section</p>
+                  {{#with section}}
+                    <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                  {{/with}}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Type</p>
+                  {{#with type}}
+                    <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                  {{/with}}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Owner</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="list-group-item" {{b "if: departments.count > 0"}}>
+              <p class="list-group-item-text">Department(s)</p>
+              <h4 class="list-group-item-heading">
+                <span {{b "text: renderDepartments"}}></span>
+              </h4>
+            </div>
+
+            {{> SCSource source=this.source1}}
+
+            {{> SCSource source=this.source2}}
+
+          </div>
+
+          {{#with notify}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Notify</h4>
+            </div>
+
+            <div class="list-group">
+             <div class="list-group-item">
+               <h4 class="list-group-item-heading" {{b "text: renderNotifyUsers(this)"}}></h4>
+             </div>
+            </div>
+          {{/with}}
+
+          {{#with improvementPlan}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Improvement plan</h4>
+            </div>
+
+            <div class="list-group">
+              {{#with desiredOutcome}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Statement of desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with targetDate}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Target date for desired outcome</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with reviewDates}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Improvement plan review dates</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderReviewDates(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              <div class="row">
+                {{#with owner}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Owner</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+                
+                {{#with selectedMetric}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Selected metric</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+              </div>
+              <div class="row">
+                {{#with currentValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Current value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+                
+                {{#with targetValue}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Target value</p>
+                      <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                    </div>
+                  </div>
+                {{/with}}
+              </div>
+            </div>
+          {{/with}}
+
+          <div {{b "if: lessons.count > 0"}}>
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Lessons learned</h4>
+            </div>
+            <div class="list-group">
+              <div class="list-group-item">
+                {{#each lessons}}
+                  <a class="btn btn-secondary pointer"><strong {{b "text: 'LL' + this.serialNumber"}}></strong> <span {{b "text: this.title"}}></span></a>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
+          {{> CardChangelog standard=this}}
+        {{/with}}
+      </div>
+    </div>
+</template>

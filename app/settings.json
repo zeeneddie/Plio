@@ -1,0 +1,18 @@
+{
+  "AWSRegion": "",
+  "AWSAccessKeyId": "",
+  "AWSSecretAccessKey": "",
+  "AWSS3Bucket": {
+    "name": "",
+    "acl": "",
+    "avatarsDir": "",
+    "attachmentsDir": "",
+    "improvementPlanFilesDir": ""
+  },
+  "mail": {
+    "login": "",
+    "password": "",
+    "hostname": "",
+    "port": ""
+  }
+}

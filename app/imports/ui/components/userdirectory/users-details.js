@@ -1,22 +1,38 @@
 import { Template } from 'meteor/templating';
+import { UserRolesNames } from '../../../api/constants.js';
 
 Template.UsersDetails.viewmodel({
-  mixin: ['user', 'organization'],
-  initials() {
-    return this.user().profile.initials;
-  },
-  skype() {
-    return this.user().profile.skype;
-  },
-  phoneNumbers() {
-    return this.user().profile.phoneNumbers;
-  },
+  mixin: ['user', 'organization', 'modal'],
   phoneType(type) {
     return `${type} phone`;
   },
-  superpowersTitle() {
-    if(this.organization()) {
-      return `${this.user().profile.firstName}'s superpowers for ${this.organization().name}`
+  superpowersTitle(user) {
+    if (this.organization()) {
+      return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
     }
+  },
+  superpowers(user) {
+    if (this.organization()) {
+      const orgId = this.organization()._id;
+      const userRoles = user.roles[orgId] || [];
+
+      const superpowers = Object.keys(UserRolesNames).map((key) => {
+        return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
+      });
+      
+      return superpowers.sort((a, b) => {
+        return b.flag - a.flag;
+      });
+    }
+  },
+
+  openEditUserModal(e) {
+    e.preventDefault();
+    
+    this.modal().open({
+      template: 'UserEdit',
+      title: 'Edit User',
+      userId: this.currentUser()._id
+    });
   }
 });

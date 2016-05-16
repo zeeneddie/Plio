@@ -5,40 +5,84 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
-  activeUser: null,
+  share: 'search',
+  mixin: 'search',
+  activeUser() {
+    return FlowRouter.getParam('userId') || null;
+  },
+  getCurrentOrganizationSerialNumber() {
+    return parseInt(FlowRouter.getParam('orgSerialNumber'));
+  },
   autorun() {
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
-    
+
     if (organizationsHandle.ready()) {
-      const userIds = getOrganizationUsers();
-      if (userIds) {
-        this.templateInstance.subscribe('organizationUsers', userIds);
-      } else {
-        FlowRouter.go('signIn');
+      const userIds = this.getCurrentOrganizationUsers();
+      if (userIds && userIds.length) {
+        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+        if (!this.activeUser() && organizationUsersHandle.ready()) {
+          FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
+            orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
+            userId: this.organizationUsers().fetch()[0]._id
+          }));
+        }
       }
     }
   },
-  user() {
-    return Meteor.users.findOne({ _id: this.activeUser() })
+  currentUser() {
+    return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
+
   organizationUsers() {
-    const userIds = getOrganizationUsers();
+    const userIds = this.getCurrentOrganizationUsers();
+    const findQuery = {};
+    const searchFields = [
+      { name: 'profile.firstName' },
+      { name: 'profile.lastName' },
+      { name: 'profile.description' },
+      { name: 'emails.0.address' },
+      { name: 'profile.skype' },
+      { name: 'profile.address' },
+      { name: 'profile.initials' },
+      { name: 'profile.country' },
+      { name: 'profile.phoneNumbers', subField: 'number' }
+    ];
 
-    if (userIds) {
-      this.activeUser(userIds[0]);
+    const searchUsers = this.searchObject('searchText', searchFields);
 
-      return Meteor.users.find({ _id: { $in: userIds }}, { sort: { 'profile.firstName': 1 }});
+    findQuery['$and'] = [
+      { _id: { $in: userIds }},
+      { ...searchUsers }
+    ];
+
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});
+
+    const result = _.pluck(cursor.fetch(), '_id');
+
+    if (result.length) {
+      this.activeUser(result[0]);
+
+      return cursor;
+    } else {
+      this.activeUser(null);
+    }
+  },
+
+  getCurrentOrganizationUsers() {
+    const organization = Organizations.findOne({
+      serialNumber: this.getCurrentOrganizationSerialNumber()
+    });
+
+    if (organization) {
+      const { users } = organization;
+      const existingUsersIds = _.filter(users, (usrDoc) => {
+        const { isRemoved, removedBy, removedAt } = usrDoc;
+        return !isRemoved && !removedBy && !removedAt;
+      });
+
+      return _.pluck(existingUsersIds, 'userId');
+    } else {
+      return [];
     }
   }
 });
-
-function getOrganizationUsers() {
-  const serialNumber = Number(FlowRouter.getParam('orgSerialNumber'));
-  const organization  = Organizations.findOne({ serialNumber });
-  if (organization) {
-    const { users } = organization;
-    return _.pluck(users, 'userId');
-  }
-
-  return null;
-}

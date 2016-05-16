@@ -16,9 +16,47 @@ const OrgCurrencies = {
   USD: 'USD'
 };
 
+const UserMembership = {
+  ORG_OWNER: 'owner',
+  ORG_MEMBER: 'member'
+};
+
 const UserRoles = {
-  OWNER: 'owner',
-  MEMBER: 'member'
+  CREATE_STANDARDS_DOCUMENTS: 'create-standards-documents',
+  VIEW_TEAM_ACTIONS: 'view-team-actions',
+  INVITE_USERS: 'invite-users',
+  DELETE_USERS: 'delete-users',
+  EDIT_USER_ROLES: 'edit-user-roles',
+  CHANGE_ORG_SETTINGS: 'change-org-settings'
+};
+
+const UserRolesNames = {
+  [UserRoles.CREATE_STANDARDS_DOCUMENTS]: 'Create & edit standards documents',
+  [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
+  [UserRoles.INVITE_USERS]: 'Invite users',
+  [UserRoles.DELETE_USERS]: 'Delete users',
+  [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
+  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
+};
+
+const OrgOwnerRoles = [
+  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.VIEW_TEAM_ACTIONS,
+  UserRoles.INVITE_USERS,
+  UserRoles.DELETE_USERS,
+  UserRoles.EDIT_USER_ROLES,
+  UserRoles.CHANGE_ORG_SETTINGS
+];
+
+const OrgMemberRoles = [
+  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.VIEW_TEAM_ACTIONS
+];
+
+const PhoneTypes = {
+  WORK: 'Work',
+  HOME: 'Home',
+  MOBILE: 'Mobile'
 };
 
 const getDefaultGuideline = (ncType) => {
@@ -80,10 +118,21 @@ const OrganizationDefaults = {
   }
 };
 
+const StandardFilters = [
+  'section',
+  'type'
+];
+
 export {
   NCTypes,
   OrgCurrencies,
   OrganizationDefaults,
+  OrgOwnerRoles,
+  OrgMemberRoles,
+  PhoneTypes,
   TimeUnits,
-  UserRoles
+  UserMembership,
+  UserRoles,
+  UserRolesNames,
+  StandardFilters
 };

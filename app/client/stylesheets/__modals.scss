@@ -30,6 +30,21 @@
         &:not(:first-child) {
           border-top: 1px solid #ddd;
         }
+
+        .user-avatar {
+          vertical-align: middle;
+        }
+
+        .user-avatar + .btn {
+          margin-bottom: 0;
+        }
+
+        select {
+          &.disabled {
+            pointer-events: none;
+            background-color: #eceeef;
+          }
+        }
       }   
       
       .list-group {

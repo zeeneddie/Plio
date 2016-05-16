@@ -1,9 +1,9 @@
-import { StandardsTypes } from './standards-types.js';
+import { StandardTypes } from './standards-types.js';
 
 
 export default StandardsTypeService = {
 
-  collection: StandardsTypes,
+  collection: StandardTypes,
 
   insert({ name, abbreviation, organizationId }) {
     return this.collection.insert({

@@ -1,0 +1,21 @@
+<template name="QuillEditor">
+  <div class="quill" {{b "class: { 'ql-expanded': isExpanded }"}}>
+
+   <!-- Create the toolbar container -->
+  <div class="rich-text-controls">
+    <div class="editor-toolbar">
+      <a class="btn btn-secondary ql-format-button ql-bold pointer" title="Bold"><i class="fa fa-bold"></i></a>
+      <a class="ql-italic btn btn-secondary pointer" title="Italic"><i class="fa fa-italic"></i></a>
+      <a class="ql-bullet btn btn-secondary pointer" title="Bullet"><i class="fa fa-list-ul"></i></a>
+      <a class="ql-list btn btn-secondary pointer" title="List"><i class="fa fa-list-ol"></i></a>
+      <a class="ql-link btn btn-secondary pointer" title="Link"><i class="fa fa-link"></i></a>
+      <a class="btn btn-secondary rich-text-expand-toggle pointer" {{b "click: toggleExpand"}}><i class="icon-expand-compress"></i></a>
+    </div>
+  </div>
+
+  <!-- Create the editor container -->
+  <div class="editor-container">
+    {{> UI.contentBlock}}
+  </div>
+</div>
+</template>

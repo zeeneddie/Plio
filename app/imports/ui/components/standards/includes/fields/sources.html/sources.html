@@ -1,0 +1,37 @@
+<template name="ESSources">
+  {{#FormField label=label}}
+    <div class="btn-group" data-toggle="buttons">
+      <label class="btn btn-secondary"
+        {{b "click: changeType('url'), class: { active: sourceType === 'url' }"}}>
+        <input type="radio" name="options" autocomplete="off" checked> URL link
+      </label>
+      <label class="btn btn-secondary"
+        {{b "click: changeType('attachment'), class: { active: sourceType === 'attachment' }"}}>
+        <input type="radio" name="options" autocomplete="off"> Attachment
+      </label>
+      <label class="btn btn-secondary"
+        {{b "click: changeType('video'), class: { active: sourceType === 'video' }"}}>
+        <input type="radio" name="options" autocomplete="off"> Video
+      </label>
+    </div>
+    <input type="text" class="form-control" placeholder="URL link"
+      {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}}>
+    <div {{b "if: sourceType === 'attachment'"}}>
+      {{#with sourceName}}
+        {{> FileItem
+            _id=fileId
+            name=sourceName
+            url=sourceUrl
+            removeFile=removeAttachmentFn}}
+      {{/with}}
+      <div {{b "unless: sourceName"}}>
+        {{> FileUploader
+            insertFile=insertFileFn
+            onUpload=onUploadCb
+            slingshotDirective='standardsAttachments'}}
+      </div>
+    </div>
+    <input type="text" class="form-control" placeholder="Video"
+      {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}}>
+  {{/FormField}}
+</template>
