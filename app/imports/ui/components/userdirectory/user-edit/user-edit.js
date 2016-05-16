@@ -21,7 +21,7 @@ Template.UserEdit.viewmodel({
     });
   },
   organizationId() {
-    return this.organization()._id;
+    return this.organization() && this.organization()._id;
   },
   updateProfile(prop, viewModel) {
     if (this.isPropChanged(prop, viewModel)) {
@@ -102,7 +102,7 @@ Template.UserEdit.viewmodel({
     const user = this.user();
     if (user) {
       const userName = user.firstName() || user.lastName() || user.email();
-      const orgName = this.organization().name;
+      const orgName = this.organization() && this.organization().name;
       return `${userName}'s superpowers for ${orgName}`;
     }
   },
@@ -152,11 +152,10 @@ Template.UserEdit.viewmodel({
       text: 'This user will be removed from the organization',
       type: 'warning',
       showCancelButton: true,
-      cancelButtonClass: 'btn-secondary',
-      confirmButtonClass: 'btn-danger',
       confirmButtonText: 'Delete',
       closeOnConfirm: true
     }, () => {
+      this.modal().close();
       this.modal().callMethod(removeUser, {
         userId: this.userId(),
         organizationId: this.organizationId()
@@ -169,7 +168,6 @@ Template.UserEdit.viewmodel({
           Meteor.setTimeout(() => {
             swal('Removed', 'User has been removed', 'success');
           }, 500);
-          this.modal().close();
         }
       });
     });

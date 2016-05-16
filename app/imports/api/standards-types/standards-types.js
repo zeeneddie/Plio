@@ -3,7 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { StandardsTypeSchema } from './standards-type-schema.js';
 
 
-const StandardsTypes = new Mongo.Collection('StandardsTypes');
-StandardsTypes.attachSchema(StandardsTypeSchema);
+const StandardTypes = new Mongo.Collection('StandardTypes');
+StandardTypes.attachSchema(StandardsTypeSchema);
 
-export { StandardsTypes };
+export { StandardTypes };

@@ -31,7 +31,7 @@ const UserRoles = {
 };
 
 const UserRolesNames = {
-  [UserRoles.CREATE_STANDARDS_DOCUMENTS]: 'Create any new Standards documents',
+  [UserRoles.CREATE_STANDARDS_DOCUMENTS]: 'Create & edit standards documents',
   [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
@@ -118,6 +118,11 @@ const OrganizationDefaults = {
   }
 };
 
+const StandardFilters = [
+  'section',
+  'type'
+];
+
 export {
   NCTypes,
   OrgCurrencies,
@@ -128,5 +133,6 @@ export {
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames
+  UserRolesNames,
+  StandardFilters
 };

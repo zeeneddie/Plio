@@ -4,15 +4,23 @@
       <div class="form-group row">
         <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 300"}}>
       </div>
-      <a class="btn btn-primary" {{b "click: openAddTypeModal"}}>
-        <i class="fa fa-plus"></i>
-        <span>Add</span>
-      </a>
+      {{#if canCreateStandards organizationId}}
+        <a class="btn btn-primary" {{b "click: openAddTypeModal"}}>
+          <i class="fa fa-plus"></i>
+          <span>Add</span>
+        </a>
+      {{/if}}
     </form>
     <div class="list-group list-group-accordion" id="standardsAccordion">
-      {{#each stadardsBookSections}}
-        {{> ListItem}}
-      {{/each}}
+      {{#if isActiveStandardFilter 'section'}}
+        {{#each standardsBookSections}}
+          {{> StandardsSectionItem}}
+        {{/each}}
+      {{else}}
+        {{#each standardsTypes}}
+          {{> StandardsTypeItem}}
+        {{/each}}
+      {{/if}}
     </div>
   </div>
 </template>

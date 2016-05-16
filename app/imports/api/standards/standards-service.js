@@ -4,11 +4,14 @@ export default {
   collection: Standards,
 
   insert({ ...args }) {
-    return this.collection.insert(args);
+    const _id = this.collection.insert(args);
+    return this.collection.findOne({ _id: _id });
   },
 
-  update({ _id, options, ...args }) {
-    const query = { _id };
+  update({ _id, query = {}, options = {}, ...args }) {
+    if (!_.keys(query).length > 0) {
+      query = { _id };
+    }
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }

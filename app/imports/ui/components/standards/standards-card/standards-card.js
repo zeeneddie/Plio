@@ -3,29 +3,14 @@ import { Meteor } from 'meteor/meteor';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
+import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user'],
-  autorun() {
-    if (this.standards().count() > 0 && !this.selectedStandardId()) {
-      const standard = Standards.findOne({});
-
-      if (!!standard) {
-        const { _id } = standard;
-
-        this.selectedStandardId(_id);
-
-        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.child(vm => vm._id() === _id);
-        });
-
-        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
-      }
-    }
-  },
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
+  
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
   },
@@ -38,11 +23,7 @@ Template.StandardsCard.viewmodel({
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardsTypes.findOne({ _id });
-  },
-  owner() {
-    const _id = this.owner();
-    return Meteor.users.findOne({ _id });
+    return StandardTypes.findOne({ _id });
   },
   departments() {
     const departmentsIds = !!this.standard() && this.standard().departments || [];
@@ -51,6 +32,16 @@ Template.StandardsCard.viewmodel({
   },
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
+  },
+  renderNotifyUsers(users) {
+    return users.map(user => this.userFullNameOrEmail(user)).join(', ');
+  },
+  renderReviewDates(dates) {
+    return dates.map(doc => this.renderDate(doc.date)).join(', ');
+  },
+  lessons() {
+    const standardId = this.currentStandard() && this.currentStandard()._id;
+    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
   },
   openEditStandardModal() {
     this.modal().open({

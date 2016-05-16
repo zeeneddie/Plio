@@ -1,8 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
+import { Roles } from 'meteor/alanning:roles';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { UserRoles } from '/imports/api/constants.js';
 
 const STATUSES = [
   {
@@ -23,7 +25,7 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
-  mixin: ['user', 'modal'],
+  mixin: ['user', 'modal', 'organization', 'roles'],
   getStatuses() {
     return STATUSES;
   },

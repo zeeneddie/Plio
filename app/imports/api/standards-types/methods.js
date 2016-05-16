@@ -4,10 +4,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsTypeService from './standards-type-service.js';
 import { StandardsTypeSchema } from './standards-type-schema.js';
 import { IdSchema } from '../schemas.js';
+import { UserRoles } from '../constants';
 
 
 export const insert = new ValidatedMethod({
-  name: 'StandardsTypes.insert',
+  name: 'StandardTypes.insert',
 
   validate: StandardsTypeSchema.validator(),
 
@@ -18,12 +19,22 @@ export const insert = new ValidatedMethod({
       );
     }
 
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
     return StandardsTypeService.insert(doc);
   }
 });
 
 export const update = new ValidatedMethod({
-  name: 'StandardsTypes.update',
+  name: 'StandardTypes.update',
 
   validate: new SimpleSchema([IdSchema, {
     name: { type: String },
@@ -37,12 +48,22 @@ export const update = new ValidatedMethod({
       );
     }
 
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
     return StandardsTypeService.update(doc);
   }
 });
 
 export const remove = new ValidatedMethod({
-  name: 'StandardsTypes.remove',
+  name: 'StandardTypes.remove',
 
   validate: IdSchema.validator(),
 
@@ -50,6 +71,16 @@ export const remove = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot remove a standard type'
+      );
+    }
+
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
       );
     }
 

@@ -1,12 +1,15 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 
 
-const s3BucketSettings = Meteor.settings.AWSS3Bucket;
+const {
+  name, acl, avatarsDir,
+  attachmentsDir, improvementPlanFilesDir
+}  = Meteor.settings.AWSS3Bucket;
 
 Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
-  bucket: s3BucketSettings.name,
+  bucket: name,
 
-  acl: s3BucketSettings.acl,
+  acl: acl,
 
   authorize() {
     if (!this.userId) {
@@ -17,6 +20,42 @@ Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
   },
 
   key(file) {
-    return `${s3BucketSettings.avatarsDir}/${file.name}`;
+    return `${avatarsDir}/${file.name}`;
+  }
+});
+
+Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
+  bucket: name,
+
+  acl: acl,
+
+  authorize() {
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    }
+
+    return true;
+  },
+
+  key(file) {
+    return `${attachmentsDir}/${file.name}`;
+  }
+});
+
+Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
+  bucket: name,
+
+  acl: acl,
+
+  authorize() {
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    }
+
+    return true;
+  },
+
+  key(file) {
+    return `${improvementPlanFilesDir}/${file.name}`;
   }
 });

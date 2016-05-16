@@ -13,11 +13,13 @@
         {{#each organizations}}
           {{> OrganizationsMenuItem}}
         {{/each}}
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item org-settings-modal-link"
+        {{#if canEditOrgSettings organizationId}}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item org-settings-modal-link"
             {{b "click: openOrgSettings"}}>
-          Org settings
-        </a>
+            Org settings
+          </a>
+        {{/if}}
       </div>
     </li>
   </ul>

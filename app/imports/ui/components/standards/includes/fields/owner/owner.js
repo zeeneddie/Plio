@@ -3,9 +3,9 @@ import { Template } from 'meteor/templating';
 Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
-    if (this.hasUser() && !this.editable()) {
+    if (this.hasUser() && !this.editable() && this.showCurrentUser && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
-    } else if (this.hasUser() && this.editable()) {
+    } else if (this.hasUser()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
       this.owner(fullName);
     }

@@ -17,16 +17,14 @@ Template.UserDirectoryPage.viewmodel({
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
 
     if (organizationsHandle.ready()) {
-      const organization = Organizations.findOne({
-        serialNumber: this.getCurrentOrganizationSerialNumber()
-      });
-      if (organization) {
-        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', organization._id);
+      const userIds = this.getCurrentOrganizationUsers();
+      if (userIds && userIds.length) {
+        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
         if (!this.activeUser() && organizationUsersHandle.ready()) {
-          FlowRouter.go('userDirectoryUserPage', {
+          FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
             orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
             userId: this.organizationUsers().fetch()[0]._id
-          });
+          }));
         }
       }
     }

@@ -4,7 +4,7 @@ import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.OrganizationsMenu.viewmodel({
-  mixin: ['modal', 'organization'],
+  mixin: ['modal', 'organization', 'roles'],
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },
@@ -18,6 +18,5 @@ Template.OrganizationsMenu.viewmodel({
       title: 'Org Settings',
       organizationId: this.organization()._id
     });
-    // ModalManager.open('OrganizationSettings');
   }
 });

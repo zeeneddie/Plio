@@ -3,8 +3,21 @@ import { LessonsLearned } from './lessons.js';
 export default {
   collection: LessonsLearned,
 
-  insert({ ...args }) {
-    return this.collection.insert(args);
+  insert({ organizationId, ...args }) {
+    const lastLesson = this.collection.findOne({
+      organizationId,
+      serialNumber: {
+        $type: 16 // 32-bit integer
+      }
+    }, {
+      sort: {
+        serialNumber: -1
+      }
+    });
+
+    const serialNumber = lastLesson ? lastLesson.serialNumber + 1 : 1;
+
+    return this.collection.insert({ ...args, organizationId, serialNumber });
   },
 
   update({ _id, ...args }) {

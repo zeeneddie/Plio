@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
 
-import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.ESType.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'organization', 'collapsing'],
   typeId: '',
   types() {
-    const types = StandardsTypes.find({}).fetch();
+    const organizationId = this.organization() && this.organization()._id;
+    const types = StandardTypes.find({ organizationId }).fetch();
     return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
   },
   update() {
@@ -15,7 +16,9 @@ Template.ESType.viewmodel({
     if (!typeId) {
       this.modal().setError('Type is required!');
     }
-    this.parent().update({ typeId });
+    this.parent().update({ typeId }, () => {
+      this.expandCollapsedStandard(this.parent().standard()._id);
+    });
   },
   getData() {
     const { typeId } = this.data();

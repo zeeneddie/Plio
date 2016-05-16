@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { DepartmentSchema } from './department-schema';
 import DepartmentService from './department-service.js';
 import { IdSchema } from '../schemas.js';
+import { UserRoles } from '../constants';
 
 
 export const insert = new ValidatedMethod({
@@ -15,6 +16,16 @@ export const insert = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot create a department'
+      );
+    }
+    
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
       );
     }
 
@@ -36,6 +47,16 @@ export const update = new ValidatedMethod({
       );
     }
 
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
     return DepartmentService.update(doc);
   }
 });
@@ -49,6 +70,16 @@ export const remove = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot remove a department'
+      );
+    }
+
+    const { organizationId } = doc;
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
       );
     }
 

@@ -2,8 +2,10 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Standards } from '/imports/api/standards/standards.js';
+import { UserRoles, StandardFilters } from '/imports/api/constants.js';
 
-const youtubeRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
+const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
 
 ViewModel.persist = false;
@@ -15,7 +17,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
+          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId && vm.type() === this.type()) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
@@ -24,6 +26,50 @@ ViewModel.mixin({
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
     }, 500)
+  },
+  collapsing: {
+    toggleVMCollapse(name = '', condition = () => {}) {
+      if (name) {
+        const vmToCollapse = ViewModel.findOne(name, condition);
+
+        !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      }
+    },
+    expandCollapsedStandard(standardId) {
+      const standard = Standards.findOne({ _id: standardId });
+      if (standard) {
+        Meteor.setTimeout(() => {
+          this.toggleVMCollapse('ListItem', (viewmodel) => {
+
+            // Check if the section has parent (Type) collapsible list
+            if (viewmodel.parent().parent && viewmodel.parent().parent()._id) {
+              return viewmodel.type() === 'standardSection' &&
+                viewmodel.collapsed() &&
+
+                // viewmodel.parent() => StandardsSectionItem
+                viewmodel.parent()._id &&
+                viewmodel.parent()._id() === standard.sectionId && 
+
+                // viewmodel.parent().parent() => StandardsTypeItem
+                viewmodel.parent().parent()._id() === standard.typeId;
+            } else {
+              return viewmodel.type() === 'standardSection' && 
+                viewmodel.collapsed() && 
+                viewmodel.parent()._id && 
+                viewmodel.parent()._id() === standard.sectionId;
+            }
+          });
+          this.toggleVMCollapse('ListItem', (viewmodel) => {
+            return viewmodel.type() === 'standardType' &&
+              viewmodel.collapsed() &&
+
+              // viewmodel.parent() => StandardsSectionItem
+              viewmodel.parent()._id &&
+              viewmodel.parent()._id() === standard.typeId
+          });
+        }, 500);
+      }
+    }
   },
   modal: {
     modal: {
@@ -63,7 +109,7 @@ ViewModel.mixin({
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
-      
+
       if (this[prop]()) {
         const words = this[prop]().split(' ');
         const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
@@ -78,7 +124,7 @@ ViewModel.mixin({
           searchObject[fields] = r;
         }
       }
-      
+
       return searchObject;
     }
   },
@@ -95,12 +141,8 @@ ViewModel.mixin({
       return youtubeRegex.test(url);
     },
     getIdFromYoutubeUrl(url) {
-      let videoId = url.split('v=')[1];
-      if (!videoId) return false;
-      const ampersandPosition = videoId.indexOf('&');
-      if(ampersandPosition != -1) {
-        videoId = videoId.substring(0, ampersandPosition);
-      }
+      const videoId = url.match(youtubeRegex)[1];
+      if (!videoId) return '';
       return videoId;
     },
     isVimeoUrl(url) {
@@ -156,6 +198,41 @@ ViewModel.mixin({
       this.subHandler(Meteor.subscribe('currentUserOrganizations'));
     }
   },
+  roles: {
+    canInviteUsers(organizationId) {
+      const userId = Meteor.userId();
+      
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.INVITE_USERS,
+          organizationId
+        );
+      }
+    },
+    canCreateStandards(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          organizationId
+        );
+      }
+    },
+    canEditOrgSettings(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CHANGE_ORG_SETTINGS,
+          organizationId
+        );
+      }
+    }
+  },
   organization: {
     subHandler: null,
     subscribe(orgId) {
@@ -164,6 +241,24 @@ ViewModel.mixin({
     organization() {
       const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
       return Organizations.findOne({ serialNumber });
+    },
+    organizationId() {
+      return this.organization() && this.organization()._id;
+    }
+  },
+  standard: {
+    standardId() {
+      return FlowRouter.getParam('standardId');
+    },
+    activeStandardFilter() {
+      return FlowRouter.getQueryParam('by') || StandardFilters[0];
+    },
+    isActiveStandardFilter(filter) {
+      return this.activeStandardFilter() === filter;
+    },
+    currentStandard() {
+      const _id =  FlowRouter.getParam('standardId');
+      return Standards.findOne({ _id });
     }
   },
   date: {
@@ -176,6 +271,14 @@ ViewModel.mixin({
         format: 'dd MM yyyy',
         autoclose: true
       });
+    }
+  },
+  filesList: {
+    fileUploader() {
+      return this.child('FileUploader');
+    },
+    fileProgress(fileId) {
+      return this.fileUploader() && this.fileUploader().progress(fileId);
     }
   }
 });

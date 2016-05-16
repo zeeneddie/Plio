@@ -19,38 +19,46 @@
 
       <hr>
 
-      {{> ESSources sourceType=standard.source1.type sourceUrl=standard.source1.url label="Source document/video 1" id=1}}
+      {{> ESSources
+          sourceType=standard.source1.type
+          sourceUrl=standard.source1.url
+          sourceName=standard.source1.name
+          label="Source document/video 1"
+          id=1}}
 
-      {{> ESSources sourceType=standard.source2.type sourceUrl=standard.source2.url label="Source document/video 2" id=2}}
+      {{> ESSources
+          sourceType=standard.source2.type
+          sourceUrl=standard.source2.url
+          sourceName=standard.source2.name
+          label="Source document/video 2"
+          id=2}}
 
     </div>
 
     {{> ESNotify standard=standard}}
 
-    <div class="card-block card-block-collapse-toggle collapsed" href="#nonconformities" data-toggle="collapse">
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#nonconformities" data-toggle="collapse">
       <h4 class="card-title pull-xs-left">Non-conformities</h4>
       <h4 class="card-title pull-xs-right">
-        <span class="text-muted">1</span>
+        <span class="text-muted">0</span>
       </h4>
     </div>
     <div class="card-block-collapse collapse" id="nonconformities">
       <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
     </div>
-    <div class="card-block card-block-collapse-toggle collapsed" href="#corrective-actions" data-toggle="collapse">
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
       <h4 class="card-title pull-xs-left">Corrective actions</h4>
       <h4 class="card-title pull-xs-right">
-        <span class="text-muted">1</span>
-        <span class="label label-warning label-status-indicator"></span>
+        <span class="text-muted">0</span>
       </h4>
     </div>
     <div class="card-block-collapse collapse" id="corrective-actions">
       <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
     </div>
-    <div class="card-block card-block-collapse-toggle collapsed" href="#preventative-actions" data-toggle="collapse">
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
       <h4 class="card-title pull-xs-left">Preventative actions</h4>
       <h4 class="card-title pull-xs-right">
-        <span class="text-muted">1</span>
-        <span class="label label-warning label-status-indicator"></span>
+        <span class="text-muted">0</span>
       </h4>
     </div>
     <div class="card-block-collapse collapse" id="preventative-actions">
@@ -58,12 +66,15 @@
     </div>
 
     {{> ESImprovementPlan
-      standard=standard
-      desiredOutcome=standard.improvementPlan.desiredOutcome
-      targetDate=standard.improvementPlan.targetDate
-      owner=standard.improvementPlan.owner
-      selectedMetric=standard.improvementPlan.selectedMetric
-      targetValue=standard.improvementPlan.targetValue}}
+        standard=standard
+        desiredOutcome=standard.improvementPlan.desiredOutcome
+        targetDate=standard.improvementPlan.targetDate
+        owner=standard.improvementPlan.owner
+        reviewDates=standard.improvementPlan.reviewDates
+        selectedMetric=standard.improvementPlan.selectedMetric
+        currentValue=standard.improvementPlan.currentValue
+        targetValue=standard.improvementPlan.targetValue
+        files=standard.improvementPlan.files}}
 
     {{> ESLessonsLearned standard=standard}}
 
