@@ -69,7 +69,7 @@ Template.StandardsList.viewmodel({
   },
   standardsTypes() {
     const options = { sort: { name: 1 } };
-    return StandardsTypes.find({}, options);
+    return StandardsTypes.find({ organizationId: this.organization()._id }, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

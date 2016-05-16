@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { StandardsTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.ESType.viewmodel({
-  mixin: ['modal', 'organization'],
+  mixin: ['modal', 'organization', 'collapsing'],
   typeId: '',
   types() {
     const organizationId = this.organization() && this.organization()._id;
@@ -17,20 +17,7 @@ Template.ESType.viewmodel({
       this.modal().setError('Type is required!');
     }
     this.parent().update({ typeId }, () => {
-      const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-        return viewmodel.type() === 'standardSection' &&
-          this.parent().standard() &&
-          viewmodel.parent()._id() === this.parent().standard().sectionId && 
-          viewmodel.parent().parent()._id() === this.typeId();
-      });
-
-      const typeToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-        return viewmodel.type() === 'standardType' &&
-          viewmodel.parent()._id() === this.typeId();
-      });
-
-      typeToCollapse && typeToCollapse.toggleCollapse();
-      sectionToCollapse && sectionToCollapse.toggleCollapse();
+      this.expandCollapsedStandard(this.parent().standard()._id);
     });
   },
   getData() {

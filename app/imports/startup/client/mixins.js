@@ -35,13 +35,14 @@ ViewModel.mixin({
         !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
       }
     },
-    toggleCollapsibles(standardId) {
+    expandCollapsedStandard(standardId) {
       const standard = Standards.findOne({ _id: standardId });
       if (standard) {
         Meteor.setTimeout(() => {
           this.toggleVMCollapse('ListItem', (viewmodel) => {
             if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
               return viewmodel.type() === 'standardSection' &&
+                viewmodel.collapsed() &&
                 viewmodel.parent()._id &&
                 viewmodel.parent()._id() === standard.sectionId &&
                 viewmodel.parent().parent()._id() === standard.typeId;
@@ -54,6 +55,7 @@ ViewModel.mixin({
           });
           this.toggleVMCollapse('ListItem', (viewmodel) => {
             return viewmodel.type() === 'standardType' &&
+              viewmodel.collapsed() &&
               viewmodel.parent()._id &&
               viewmodel.parent()._id() === standard.typeId
           });
