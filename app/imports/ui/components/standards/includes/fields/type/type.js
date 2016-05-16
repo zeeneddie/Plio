@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.ESType.viewmodel({
+  share: 'standard',
   mixin: ['modal', 'organization', 'collapsing'],
   typeId: '',
   types() {
@@ -17,7 +18,7 @@ Template.ESType.viewmodel({
       this.modal().setError('Type is required!');
     }
     this.parent().update({ typeId }, () => {
-      this.expandCollapsedStandard(this.parent().standard()._id);
+      this.expandCollapsedStandard(this.selectedStandardId());
     });
   },
   getData() {

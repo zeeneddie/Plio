@@ -53,9 +53,9 @@ ViewModel.mixin({
                 // viewmodel.parent().parent() => StandardsTypeItem
                 viewmodel.parent().parent()._id() === standard.typeId;
             } else {
-              return viewmodel.type() === 'standardSection' && 
-                viewmodel.collapsed() && 
-                viewmodel.parent()._id && 
+              return viewmodel.type() === 'standardSection' &&
+                viewmodel.collapsed() &&
+                viewmodel.parent()._id &&
                 viewmodel.parent()._id() === standard.sectionId;
             }
           });
@@ -201,7 +201,7 @@ ViewModel.mixin({
   roles: {
     canInviteUsers(organizationId) {
       const userId = Meteor.userId();
-      
+
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
@@ -216,7 +216,7 @@ ViewModel.mixin({
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
-          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
           organizationId
         );
       }

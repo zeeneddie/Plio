@@ -4,10 +4,10 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  mixin: ['organization', 'standard', 'collapsing'],
+  mixin: ['standard', 'collapsing'],
   selectedFilter: '',
   autorun: [
-   function (){
+   function () {
     this.selectedFilter();
     this.expandCollapsedStandard(this.standardId());
   },
@@ -18,11 +18,5 @@ Template.StandardsHeader.viewmodel({
   }],
   standardFilters() {
     return StandardFilters;
-  },
-  standardsHeader(activeFilter) {
-    return `Standards - by ${activeFilter}`;
-  },
-  filterText(filter) {
-    return `By ${filter}`;
   }
 });
