@@ -36,7 +36,7 @@ Template.StandardsList.viewmodel({
       { name: 'status' }
     ]);
 
-    const availableSections = StandardsBookSections.find({}).fetch();
+    const availableSections = StandardsBookSections.find({ organizationId: this.organization()._id }).fetch();
     const sectionIds = _.pluck(availableSections, '_id');
 
     const standardsQuery = {
