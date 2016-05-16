@@ -47,15 +47,18 @@ Template.ESBookSection.viewmodel({
     );
   },
   onAlertConfirm() {
-    swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
-
-    const org = Organizations.findOne({ serialNumber: this.organization().serialNumber });
-    const organizationId = !!org && org._id;
-
-    this.dropdown.dropdown('toggle');
+    const organizationId = !!this.organization() && this.organization()._id;
 
     this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
-      this.selectedBookSectionId(_id);
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
+
+        this.selectedBookSectionId(_id);
+
+        this.update();
+      }
     });
   },
   update() {
