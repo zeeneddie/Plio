@@ -3,7 +3,7 @@
     <div class="dropdown">
       <input type="text" class="form-control" placeholder="Book section" data-toggle="dropdown"
         {{b "value: bookSection, focusout: update, throttle: 200"}}/>
-      <div class="dropdown-menu dropdown-menu-full" {{b "ref: dropdown"}}>
+      <div class="dropdown-menu dropdown-menu-full">
         {{#each bookSections}}
           <a class="dropdown-item pointer" {{b "text: this.title, click: bookSection(this.title) && selectedBookSectionId(this._id)"}}></a>
         {{/each}}

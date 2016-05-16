@@ -6,7 +6,7 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  mixin: ['search', 'modal', 'organization'],
+  mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
     const _id = this.selectedBookSectionId();
     if (_id) {
@@ -47,15 +47,18 @@ Template.ESBookSection.viewmodel({
     );
   },
   onAlertConfirm() {
-    swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
-
-    const org = Organizations.findOne({ serialNumber: this.organization().serialNumber });
-    const organizationId = !!org && org._id;
-
-    this.dropdown.dropdown('toggle');
+    const organizationId = !!this.organization() && this.organization()._id;
 
     this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
-      this.selectedBookSectionId(_id);
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
+
+        this.selectedBookSectionId(_id);
+
+        this.update();
+      }
     });
   },
   update() {
@@ -69,17 +72,7 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-        if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
-          return viewmodel.type() === 'standardSection' &&
-            this.parent().standard() &&
-            viewmodel.parent()._id() === this.parent().standard().sectionId && 
-            viewmodel.parent().parent()._id() === this.parent().standard().typeId;
-        } else {
-          return !!viewmodel.collapsed() && viewmodel.parent()._id() === this._id()
-        }
-      });
-      sectionToCollapse && sectionToCollapse.toggleCollapse();
+      this.expandCollapsedStandard(this.parent().standard()._id);
     });
   },
   getData() {
