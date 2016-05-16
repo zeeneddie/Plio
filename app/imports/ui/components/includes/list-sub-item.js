@@ -21,8 +21,9 @@ Template.ListSubItem.viewmodel({
     const { serialNumber } = this.organization();
 
     this.selectedStandardId(this._id());
+
     FlowRouter.go(
-      'standard', 
+      'standard',
       { orgSerialNumber: serialNumber, standardId: this._id() },
       { by: this.activeStandardFilter() }
     );

@@ -120,7 +120,8 @@ const OrganizationDefaults = {
 
 const StandardFilters = [
   'section',
-  'type'
+  'type',
+  'deleted'
 ];
 
 export {

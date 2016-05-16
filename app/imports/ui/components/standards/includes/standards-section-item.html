@@ -1,6 +1,6 @@
 <template name="StandardsSectionItem">
   {{#ListItem type="standardSection" title=title}}
-    <div class="list-group">
+    <div class="list-group disabled">
       {{#each standards}}
         <div class="span" {{b "if: this.nestingLevel === 1"}}>
           {{> ListSubItem}}

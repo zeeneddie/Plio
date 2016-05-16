@@ -13,7 +13,7 @@ Template.ESIPMeansStatement.viewmodel({
     if (this.files() && this.files().length) {
       this.parent().update({}, {
         $push: {
-          'files': fileDoc
+          files: fileDoc
         }
       });
     } else {
@@ -31,10 +31,17 @@ Template.ESIPMeansStatement.viewmodel({
       return;
     }
 
-    const query = { files: { $elemMatch: { _id } } };
-    const options = { $set: { 'files.$.url': url } };
-
-    this.parent().update({ query }, options);
+    this.parent().update({
+      query: {
+        files: {
+          $elemMatch: { _id }
+        }
+      }
+    }, {
+      $set: {
+        'files.$.url': url
+      }
+    });
   },
   removeFileFn() {
     return this.removeFile.bind(this);
@@ -66,7 +73,7 @@ Template.ESIPMeansStatement.viewmodel({
 
       this.parent().update({}, {
         $pull: {
-          'files': { _id }
+          files: { _id }
         }
       });
     });
