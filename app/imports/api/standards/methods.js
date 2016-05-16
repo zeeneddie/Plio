@@ -5,6 +5,7 @@ import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
 import { IdSchema } from '../schemas.js';
+import { UserRoles } from '../constants';
 
 const optionsSchema = new SimpleSchema({
   options: {
@@ -28,6 +29,17 @@ export const insert = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot create a standard'
+      );
+    }
+    
+    const [ doc ] = args;
+    const { organizationId } = doc;
+    const canCreateStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_STANDARDS_DOCUMENTS, organizationId);
+
+    if (!canCreateStandards) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for creating standards'
       );
     }
 

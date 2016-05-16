@@ -161,7 +161,6 @@ function redirectHandler() {
 function checkLoggedIn(context, redirect) {
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
-      console.log('context', context);
       redirect('signIn', {}, { b: context.path });
     }
   }

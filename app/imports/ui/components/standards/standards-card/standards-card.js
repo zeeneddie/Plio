@@ -9,7 +9,7 @@ import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
   
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
