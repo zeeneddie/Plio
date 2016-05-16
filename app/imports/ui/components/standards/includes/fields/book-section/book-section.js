@@ -47,14 +47,13 @@ Template.ESBookSection.viewmodel({
     );
   },
   onAlertConfirm() {
-    swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
-
-    const org = Organizations.findOne({ serialNumber: this.organization().serialNumber });
-    const organizationId = !!org && org._id;
-
-    this.dropdown.dropdown('toggle');
+    const organizationId = !!this.organization() && this.organization()._id;
 
     this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
+      swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
+
+      this.dropdown.dropdown('toggle');
+
       this.selectedBookSectionId(_id);
     });
   },
@@ -72,7 +71,7 @@ Template.ESBookSection.viewmodel({
       const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
         if (viewmodel.parent().parent && viewmodel.parent().parent().collapsed) {
           return viewmodel.type() === 'standardSection' &&
-            viewmodel.parent()._id() === this.parent().standard().sectionId && 
+            viewmodel.parent()._id() === this.parent().standard().sectionId &&
             viewmodel.parent().parent()._id() === this.parent().standard().typeId;
         } else {
           return !!viewmodel.collapsed() && viewmodel.parent()._id() === this._id()
