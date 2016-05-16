@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ImprovementPlansService from './improvement-plans-service.js';
 import { requiredSchema, optionalSchema, ImprovementPlansSchema } from './improvement-plans-schema.js';
 import { ImprovementPlans } from './improvement-plans.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, optionsSchema } from '../schemas.js';
 
 export const insert = new ValidatedMethod({
   name: 'ImprovementPlans.insert',
@@ -23,7 +23,7 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'ImprovementPlans.update',
 
-  validate: new SimpleSchema([IdSchema, optionalSchema]).validator(),
+  validate: new SimpleSchema([IdSchema, optionalSchema, optionsSchema]).validator(),
 
   run({ _id, ...args }) {
     if (!this.userId) {

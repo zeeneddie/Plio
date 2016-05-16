@@ -5,8 +5,12 @@ Template.ESOwner.viewmodel({
   onCreated() {
     if (this.hasUser() && !this.editable() && this.showCurrentUser && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
-    } else if (this.hasUser()) {
+    }
+  },
+  autorun() {
+    if (this.selectedOwnerId()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
+
       this.owner(fullName);
     }
   },
@@ -20,18 +24,20 @@ Template.ESOwner.viewmodel({
   members() {
     const query = this.searchObject('owner', ['profile.firstName', 'profile.lastName']);
     const options = { sort: { 'profile.firstName': 1 } };
+
     return Meteor.users.find(query, options);
   },
   selectOwner(doc) {
     const { _id } = doc;
-    const fullName = this.userFullNameOrEmail(doc);
-    this.owner(fullName);
+
     this.selectedOwnerId(_id);
     this.update();
   },
   update() {
     if (!this.editable()) return;
+
     const { owner } = this.getData();
+
     if (!owner) {
       this.modal().setError('Owner is required!');
       return;

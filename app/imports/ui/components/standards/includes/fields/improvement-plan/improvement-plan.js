@@ -9,12 +9,9 @@ Template.ESImprovementPlan.viewmodel({
   autorun() {
     const _id = this.standard() && this.standard()._id;
 
-    this.templateInstance.subscribe('improvementPlans', _id);
+    this.templateInstance.subscribe('improvementPlan', _id);
 
-    console.log(this.improvementPlan());
-  },
-  improvementPlan() {
-    return ImprovementPlans.findOne({});
+    this.load(this.improvementPlan());
   },
   desiredOutcome: '',
   targetDate: '',
@@ -24,26 +21,30 @@ Template.ESImprovementPlan.viewmodel({
   currentValue: '',
   targetValue: '',
   files: [],
+  improvementPlan() {
+    return ImprovementPlans.findOne({});
+  },
   insert({ ...args }, cb) {
     const standardId = this.standard() && this.standard()._id;
-    
+
     this.modal().callMethod(insert, { standardId, ...args }, cb);
   },
-  update({ _id, ...args }) {
+  update({ query = {}, ...args }, options = {}, cb) {
+    if (_.isFunction(options)) {
+      cb = options;
+      options = {};
+    }
+
     if (!this.improvementPlan()) {
       return this.insert({ ...args });
     }
+
+    const _id = this.improvementPlan() && this.improvementPlan()._id;
+
+    const modifier = { ...args, _id, options, query };
+
+    console.log(modifier);
+
+    this.modal().callMethod(update, modifier, cb);
   }
-  // update({ ...args }, options) {
-  //   const key = _.keys(args)[0];
-  //   const value = _.values(args)[0];
-  //   if (!options) {
-  //     const options = {};
-  //
-  //     options[`improvementPlan.${key}`] = value;
-  //     this.parent().update(options);
-  //   } else {
-  //     this.parent().update({ query: { ...args } }, options);
-  //   }
-  // }
 });

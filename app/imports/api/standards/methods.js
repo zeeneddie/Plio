@@ -5,19 +5,7 @@ import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
 import { IdSchema } from '../schemas.js';
-
-const optionsSchema = new SimpleSchema({
-  options: {
-    type: Object,
-    optional: true,
-    blackbox: true
-  },
-  query: {
-    type: Object,
-    optional: true,
-    blackbox: true
-  }
-});
+import { optionsSchema } from '../schemas.js';
 
 export const insert = new ValidatedMethod({
   name: 'Standards.insert',
