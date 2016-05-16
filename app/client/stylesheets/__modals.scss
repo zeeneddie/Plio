@@ -42,6 +42,7 @@
         select {
           &.disabled {
             pointer-events: none;
+            background-color: #eceeef;
           }
         }
       }   
