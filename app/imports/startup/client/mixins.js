@@ -194,8 +194,30 @@ ViewModel.mixin({
       
       if (userId && organizationId) {
         return Roles.userIsInRole(
-          Meteor.userId(),
+          userId,
           UserRoles.INVITE_USERS,
+          organizationId
+        );
+      }
+    },
+    canCreateStandards(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          organizationId
+        );
+      }
+    },
+    canEditOrgSettings(organizationId) {
+      const userId = Meteor.userId();
+
+      if (userId && organizationId) {
+        return Roles.userIsInRole(
+          userId,
+          UserRoles.CHANGE_ORG_SETTINGS,
           organizationId
         );
       }

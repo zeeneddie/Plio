@@ -15,9 +15,7 @@ Template.CreateStandard.viewmodel({
         return;
       }
     }
-
-    console.log(data);
-
+    
     this.insert(data);
   },
   getChildrenData() {

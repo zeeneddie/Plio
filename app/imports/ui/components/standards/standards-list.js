@@ -6,7 +6,7 @@ import { StandardsTypes } from '/imports/api/standards-types/standards-types.js'
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
   onRendered() {
     // show stored standard section
     if (this.standards().count() > 0 && this.currentStandard()) {
