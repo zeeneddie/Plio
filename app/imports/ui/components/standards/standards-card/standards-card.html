@@ -129,7 +129,7 @@
                     </div>
                   </div>
                 {{/with}}
-                
+
                 {{#with selectedMetric}}
                   <div class="col-sm-6">
                     <div class="list-group-item">
@@ -148,7 +148,7 @@
                     </div>
                   </div>
                 {{/with}}
-                
+
                 {{#with targetValue}}
                   <div class="col-sm-6">
                     <div class="list-group-item">
@@ -158,6 +158,23 @@
                   </div>
                 {{/with}}
               </div>
+
+
+              {{#with files}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Files</p>
+                  {{#each this}}
+                    <h4 class="list-group-item-heading">
+                      <i class="fa fa-paperclip margin-right">
+                      </i>
+                      <a target="_blank" download=""
+                          {{b "href: this.url, text: this.name"}}>
+                      </a>
+                    </h4>
+                  {{/each}}
+                </div>
+              {{/with}}
+
             </div>
           {{/with}}
 
