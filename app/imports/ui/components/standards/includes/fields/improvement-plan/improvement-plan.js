@@ -7,10 +7,6 @@ import { insert, update } from '/imports/api/improvement-plans/methods.js';
 Template.ESImprovementPlan.viewmodel({
   mixin: ['collapse', 'modal'],
   autorun() {
-    const _id = this.standard() && this.standard()._id;
-
-    this.templateInstance.subscribe('improvementPlan', _id);
-
     this.load(this.improvementPlan());
   },
   desiredOutcome: '',
