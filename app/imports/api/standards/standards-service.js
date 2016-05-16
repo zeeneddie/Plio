@@ -19,6 +19,14 @@ export default {
   },
 
   remove({ _id }) {
-    return this.collection.remove({ _id });
+    const options = {
+      $set: {
+        isDeleted: true,
+        deletedBy: this.userId,
+        deletedAt: new Date()
+      }
+    };
+    
+    return this.collection.update({ _id }, options);
   }
 };
