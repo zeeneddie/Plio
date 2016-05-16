@@ -63,8 +63,8 @@ Template.CreateStandard.viewmodel({
         const typeToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
           return viewmodel.parent()._id() === doc.typeId;
         });
-        !!sectionToCollapse && sectionToCollapse.toggleCollapse();
-        !!typeToCollapse && typeToCollapse.toggleCollapse();
+        !!sectionToCollapse && sectionToCollapse.collapsed() && sectionToCollapse.toggleCollapse();
+        !!typeToCollapse && typeToCollapse.collapsed() && typeToCollapse.toggleCollapse();
 
         this.modal().open({
           _id: doc._id,
