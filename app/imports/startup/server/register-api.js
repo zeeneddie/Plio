@@ -3,7 +3,6 @@ import '../../api/organizations/organizations.js';
 import '../../api/organizations/organization-schema.js';
 import '../../api/organizations/organization-service.js';
 import '../../api/organizations/methods.js';
-import '../../api/organizations/hooks.js';
 
 import '../../api/departments/server/publications.js';
 import '../../api/departments/departments.js';
