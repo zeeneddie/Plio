@@ -64,7 +64,7 @@ localstorage@1.0.9
 logging@1.0.12
 manuel:isdev@1.0.0
 manuel:reactivearray@1.0.5
-manuel:viewmodel@4.0.14
+manuel:viewmodel@4.1.4
 manuel:viewmodel-debug@2.7.0
 matb33:collection-hooks@0.8.1
 mdg:validated-method@1.1.0
