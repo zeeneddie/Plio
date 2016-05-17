@@ -2,7 +2,13 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 
 import { Organizations } from './organizations.js';
-import { OrganizationDefaults, UserMembership, UserRoles } from '../constants.js';
+import { StandardsTypeService } from '../standards-types/standards-type-service.js';
+import {
+  DefaultStandardTypes,
+  OrganizationDefaults,
+  UserMembership,
+  UserRoles
+} from '../constants.js';
 
 
 export default OrganizationService = {
@@ -23,7 +29,7 @@ export default OrganizationService = {
 
     const { ncStepTimes, ncReminders, ncGuidelines } = OrganizationDefaults;
 
-    return this.collection.insert({
+    const organizationId = this.collection.insert({
       name,
       serialNumber,
       users: [{
@@ -34,6 +40,16 @@ export default OrganizationService = {
       ncReminders,
       ncGuidelines
     });
+
+    _.each(DefaultStandardTypes, ({ name, abbreviation }) => {
+      StandardsTypeService.insert({
+        name,
+        abbreviation,
+        organizationId
+      });
+    });
+
+    return organizationId;
   },
 
   update({_id, name, currency, ncStepTimes, ncReminders, ncGuidelines}) {
