@@ -1,4 +1,5 @@
 Template.OrganizationSettings_Department.viewmodel({
+  mixin: ['modal', 'clearableField'],
   isChanged() {
     let savedName = this.templateInstance.data.name;
     const name = this.name();
@@ -6,9 +7,11 @@ Template.OrganizationSettings_Department.viewmodel({
     return name && name !== savedName;
   },
   onFocusOut() {
-    if (this.isChanged()) {
-      this.onChange(this);
-    }
+    this.callWithFocusCheck(() => {
+      if (this.isChanged()) {
+        this.onChange(this);
+      }
+    });
   },
   delete() {
     this.onDelete(this);

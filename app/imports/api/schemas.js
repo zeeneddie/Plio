@@ -50,3 +50,16 @@ export const OrganizationIdSchema = new SimpleSchema({
 export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
 });
+
+export const optionsSchema = new SimpleSchema({
+  options: {
+    type: Object,
+    optional: true,
+    blackbox: true
+  },
+  query: {
+    type: Object,
+    optional: true,
+    blackbox: true
+  }
+});

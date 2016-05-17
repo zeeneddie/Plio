@@ -4,7 +4,7 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['modal'],
+  mixin: ['modal', 'clearableField'],
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -12,16 +12,18 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     return _.values(OrgCurrencies);
   },
   updateName() {
-    const name = this.name();
-    const savedName = this.templateInstance.data.name;
+    this.callWithFocusCheck(() => {
+      const name = this.name();
+      const savedName = this.templateInstance.data.name;
 
-    if (!name || name === savedName) {
-      return;
-    }
+      if (!name || name === savedName) {
+        return;
+      }
 
-    const _id = this.organizationId();
+      const _id = this.organizationId();
 
-    this.modal().callMethod(setName, { _id, name });
+      this.modal().callMethod(setName, { _id, name });
+    });
   },
   updateCurrency(currency) {
     const current = this.currency();

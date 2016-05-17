@@ -124,6 +124,14 @@ a {
   }
 }
 
+#release-version {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  font-weight: bold;
+  color: #464646;
+}
+
 strong {
   font-weight: normal;
   font-family: $font-semibold;

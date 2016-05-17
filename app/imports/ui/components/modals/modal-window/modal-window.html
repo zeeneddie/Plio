@@ -1,5 +1,5 @@
 <template name="ModalWindow">
-  <div class="modal fade" {{b "ref: modal"}}>
+  <div class="modal fade" data-backdrop="static" data-keyboard="false" {{b "ref: modal"}}>
     <div class="modal-dialog">
       <div class="card">
         <div class="card-block card-heading modal-window-heading">
@@ -17,7 +17,8 @@
 
           <div class="card-heading-buttons"
             {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" {{b "class: { disabled: isSaving }"}}>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                {{b "disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving"}}></i>
               Close
             </button>

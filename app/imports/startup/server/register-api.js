@@ -38,3 +38,9 @@ import '../../api/lessons/lessons.js';
 import '../../api/lessons/lessons-schema.js';
 import '../../api/lessons/lessons-service.js';
 import '../../api/lessons/methods.js';
+
+import '../../api/improvement-plans/server/publications.js';
+import '../../api/improvement-plans/improvement-plans.js';
+import '../../api/improvement-plans/improvement-plans-schema.js'
+import '../../api/improvement-plans/improvement-plans-service.js';
+import '../../api/improvement-plans/methods.js';

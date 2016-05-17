@@ -10,9 +10,6 @@ Template.ESIPReviewDates.viewmodel({
       { class: 'margin-bottom', placeholder: 'Review date', isEditable: true, parentVM: this }
     );
   },
-  reviewDatesSorted() {
-    return this.reviewDates().sort((a, b) => new Date(a) - new Date(b));
-  },
   update({ _id, date }, cb) {
     if (_id) {
       this.set({ _id, date }, cb);
@@ -23,24 +20,29 @@ Template.ESIPReviewDates.viewmodel({
   addToSet({ date }, cb) {
     const options = {};
     const _id = Random.id();
+
     options['$addToSet'] = {
-      'improvementPlan.reviewDates': { _id, date }
+      'reviewDates': { _id, date }
     };
+
     this.parent().update({}, options, cb);
   },
   set({ _id, date }, cb) {
     const query = {
-      'improvementPlan.reviewDates': {
+      'reviewDates': {
         $elemMatch: {
           _id: _id
         }
       }
     };
+
     const options = {};
+
     options['$set'] = {
-      'improvementPlan.reviewDates.$.date': date
+      'reviewDates.$.date': date
     }
-    this.parent().update(query, options, cb);
+
+    this.parent().update({ query }, options, cb);
   },
   getData() {
     const datepickers = ViewModel.find('Datepicker', vm => vm.placeholder && vm.placeholder() === 'Review date');
