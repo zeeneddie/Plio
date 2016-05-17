@@ -4,7 +4,7 @@ import { insert } from '/imports/api/standards/methods.js';
 
 Template.CreateStandard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'numberRegex', 'organization'],
+  mixin: ['modal', 'numberRegex', 'organization', 'collapsing'],
   save() {
     const data = this.getChildrenData();
 
@@ -15,7 +15,7 @@ Template.CreateStandard.viewmodel({
         return;
       }
     }
-    
+
     this.insert(data);
   },
   getChildrenData() {
@@ -52,17 +52,8 @@ Template.CreateStandard.viewmodel({
 
       Meteor.setTimeout(() => {
         this.selectedStandardId(doc._id);
-        
-        // toggle collapse of viewmodel which has the newly created sub item
-        const sectionToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.parent()._id() === doc.sectionId;
-        });
 
-        const typeToCollapse = ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.parent()._id() === doc.typeId;
-        });
-        !!sectionToCollapse && sectionToCollapse.collapsed() && sectionToCollapse.toggleCollapse();
-        !!typeToCollapse && typeToCollapse.collapsed() && typeToCollapse.toggleCollapse();
+        this.expandCollapsedStandard(doc._id);
 
         this.modal().open({
           _id: doc._id,

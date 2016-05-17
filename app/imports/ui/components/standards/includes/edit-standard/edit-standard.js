@@ -37,9 +37,9 @@ Template.EditStandard.viewmodel({
         closeOnConfirm: false
       },
       () => {
-        this.modal().callMethod(remove, { _id, organizationId }, () => {
+        this.modal().callMethod(remove, { _id, organizationId }, (err) => {
           if (err) {
-            swal('Oops... Something went wrong!');
+            swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
             swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
 
@@ -53,9 +53,7 @@ Template.EditStandard.viewmodel({
 
               FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
 
-              this.toggleVMCollapse('ListItem', (viewmodel) => {
-                return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === standard._id);
-              });
+              this.expandCollapsedStandard(standard._id);
             }
           }
         });
