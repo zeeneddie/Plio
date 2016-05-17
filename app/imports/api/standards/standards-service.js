@@ -18,11 +18,11 @@ export default {
     return this.collection.update(query, options);
   },
 
-  remove({ _id }) {
+  remove({ _id, deletedBy }) {
     const options = {
       $set: {
         isDeleted: true,
-        deletedBy: this.userId,
+        deletedBy,
         deletedAt: new Date()
       }
     };
