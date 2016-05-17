@@ -1,4 +1,5 @@
 Template.OrganizationSettings_StandardsType.viewmodel({
+  mixin: ['modal', 'clearableField'],
   isChanged() {
     const tplData = this.templateInstance.data;
     const storedName = tplData.name;
@@ -13,9 +14,11 @@ Template.OrganizationSettings_StandardsType.viewmodel({
     ]);
   },
   onFocusOut() {
-    if (this.isChanged()) {
-      this.onChange(this);
-    }
+    this.callWithFocusCheck(() => {
+      if (this.isChanged()) {
+        this.onChange(this);
+      }
+    });
   },
   delete() {
     this.onDelete(this);

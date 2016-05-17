@@ -12,6 +12,7 @@ Template.ModalWindow.viewmodel({
   variation: '',
   savingStateTimeout: 500,
   isSaving: false,
+  isWaiting: false,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
@@ -63,5 +64,9 @@ Template.ModalWindow.viewmodel({
   clearError() {
     this.error('');
     this.errorSection.collapse('hide');
+  },
+
+  isButtonBlocked() {
+    return this.isSaving() || this.isWaiting();
   }
 });

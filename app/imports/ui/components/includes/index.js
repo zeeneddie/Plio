@@ -19,3 +19,4 @@ import './clear-field.html';
 import './clear-field.js';
 import './file-item.html';
 import './file-item.js';
+import './clearable-field.html';

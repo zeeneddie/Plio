@@ -3,12 +3,14 @@ import { CountryCodes } from 'meteor/3stack:country-codes';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
-  mixin: ['collapse'],
+  mixin: ['collapse', 'modal', 'clearableField'],
   updateAddress() {
     this.parent().updateProfile('address', this);
   },
   updateSkype() {
-    this.parent().updateProfile('skype', this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateProfile('skype', this);
+    });
   },
   updateCountry() {
     this.parent().updateProfile('country', this);
