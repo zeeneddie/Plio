@@ -10,43 +10,38 @@
     {{/FormField}}
 
     {{#FormField label="First name"}}
-      <input type="text" class="form-control" placeholder="First name"
-          {{b "value: firstName, focusout: updateFirstName, enable: isEditable"}} />
-      <button type="button" class="btn btn-link clear-field">
-        <i class="ms-Icon ms-Icon--xCircle"></i>
-      </button>
+      {{#ClearableField field="firstName"}}
+        <input type="text" class="form-control" placeholder="First name"
+            {{b "value: firstName, focusout: updateFirstName, enable: isEditable"}} />
+      {{/ClearableField}}
     {{/FormField}}
 
     {{#FormField label="Last name"}}
-      <input type="text" class="form-control" placeholder="Last name"
-          {{b "value: lastName, focusout: updateLastName, enable: isEditable"}} />
-      <button type="button" class="btn btn-link clear-field">
-        <i class="ms-Icon ms-Icon--xCircle"></i>
-      </button>
+      {{#ClearableField field="lastName"}}
+        <input type="text" class="form-control" placeholder="Last name"
+            {{b "value: lastName, focusout: updateLastName, enable: isEditable"}} />
+      {{/ClearableField}}
     {{/FormField}}
 
     {{#FormField label="Initials"}}
-      <input type="text" class="form-control" placeholder="Initials"
-          {{b "value: initials, focusout: updateInitials, enable: isEditable"}} />
-      <button type="button" class="btn btn-link clear-field">
-        <i class="ms-Icon ms-Icon--xCircle"></i>
-      </button>
+      {{#ClearableField field="initials"}}
+        <input type="text" class="form-control" placeholder="Initials"
+            {{b "value: initials, focusout: updateInitials, enable: isEditable"}} />
+      {{/ClearableField}}
     {{/FormField}}
 
     {{#FormField label="Email"}}
-      <input type="email" class="form-control" placeholder="Email"
-          {{b "value: email, focusout: updateEmail, enable: isEditable"}} />
-      <button type="button" class="btn btn-link clear-field">
-        <i class="ms-Icon ms-Icon--xCircle"></i>
-      </button>
+      {{#ClearableField field="email"}}
+        <input type="email" class="form-control" placeholder="Email"
+            {{b "value: email, focusout: updateEmail, enable: isEditable"}} />
+      {{/ClearableField}}
     {{/FormField}}
 
     {{#FormField label="Description"}}
-      <input type="text" class="form-control" placeholder="Description"
-          {{b "value: description, focusout: updateDescription, enable: isEditable"}} />
-      <button type="button" class="btn btn-link clear-field">
-        <i class="ms-Icon ms-Icon--xCircle"></i>
-      </button>
+      {{#ClearableField field="description"}}
+        <input type="text" class="form-control" placeholder="Description"
+            {{b "value: description, focusout: updateDescription, enable: isEditable"}} />
+      {{/ClearableField}}
     {{/FormField}}
   </div>
 </template>

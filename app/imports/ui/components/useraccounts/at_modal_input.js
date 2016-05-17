@@ -1,3 +1,6 @@
+import AtInputEvents from './at_input_events.js';
+
+
 _.each(AccountsTemplates.atInputRendered, (callback) => {
   Template.atModalInput.onRendered(callback);
 });
@@ -27,7 +30,9 @@ Template.atModalInput.helpers({
 });
 
 // Simply 'inherites' events from AccountsTemplates
-Template.atModalInput.events(AccountsTemplates.atInputEvents);
+// Template.atModalInput.events(AccountsTemplates.atInputEvents);
+
+Template.atModalInput.events(AtInputEvents);
 
 // Simply 'inherites' helpers from AccountsTemplates
 Template.atModalTextInput.helpers(AccountsTemplates.atInputHelpers);

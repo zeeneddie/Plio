@@ -20,7 +20,7 @@ export const insert = new ValidatedMethod({
 
   run(...args) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a lesson');
     }
 
     return LessonsService.insert(...args);
@@ -34,7 +34,7 @@ export const update = new ValidatedMethod({
 
   run({_id, ...args}) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+      throw new Meteor.Error(403, 'Unauthorized user cannot update a lesson');
     }
 
     return LessonsService.update({ _id, ...args });
@@ -48,7 +48,7 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create a standard');
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove a lesson');
     }
 
     return LessonsService.remove({ _id });

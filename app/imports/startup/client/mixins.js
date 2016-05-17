@@ -48,14 +48,14 @@ ViewModel.mixin({
 
                 // viewmodel.parent() => StandardsSectionItem
                 viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId && 
+                viewmodel.parent()._id() === standard.sectionId &&
 
                 // viewmodel.parent().parent() => StandardsTypeItem
                 viewmodel.parent().parent()._id() === standard.typeId;
             } else {
-              return viewmodel.type() === 'standardSection' && 
-                viewmodel.collapsed() && 
-                viewmodel.parent()._id && 
+              return viewmodel.type() === 'standardSection' &&
+                viewmodel.collapsed() &&
+                viewmodel.parent()._id &&
                 viewmodel.parent()._id() === standard.sectionId;
             }
           });
@@ -91,6 +91,15 @@ ViewModel.mixin({
         }
 
         return instance.isSaving();
+      },
+      isWaiting(val) {
+        const instance = this.instance();
+
+        if (val !== undefined) {
+          instance.isWaiting(val);
+        }
+
+        return instance.isWaiting();
       },
       setError(err) {
         this.instance().setError(err);
@@ -201,7 +210,7 @@ ViewModel.mixin({
   roles: {
     canInviteUsers(organizationId) {
       const userId = Meteor.userId();
-      
+
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
@@ -216,7 +225,7 @@ ViewModel.mixin({
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
-          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
           organizationId
         );
       }
@@ -279,6 +288,21 @@ ViewModel.mixin({
     },
     fileProgress(fileId) {
       return this.fileUploader() && this.fileUploader().progress(fileId);
+    }
+  },
+  clearableField: {
+    callWithFocusCheck(updateFn) {
+      this.modal().isWaiting(true);
+
+      Meteor.setTimeout(() => {
+        this.modal().isWaiting(false);
+
+        if (this.templateInstance.$('input').is(':focus')) {
+          return;
+        }
+
+        updateFn();
+      }, 200);
     }
   }
 });

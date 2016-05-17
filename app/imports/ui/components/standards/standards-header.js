@@ -7,7 +7,7 @@ Template.StandardsHeader.viewmodel({
   mixin: ['organization', 'standard', 'collapsing'],
   selectedFilter: '',
   autorun: [
-   function (){
+   function () {
     this.selectedFilter();
     this.expandCollapsedStandard(this.standardId());
   },
@@ -18,11 +18,5 @@ Template.StandardsHeader.viewmodel({
   }],
   standardFilters() {
     return StandardFilters;
-  },
-  standardsHeader(activeFilter) {
-    return `Standards - by ${activeFilter}`;
-  },
-  filterText(filter) {
-    return `By ${filter}`;
   }
 });

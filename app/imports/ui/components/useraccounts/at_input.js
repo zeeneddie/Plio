@@ -1,3 +1,6 @@
+import AtInputEvents from './at_input_events.js';
+
+
 _.each(AccountsTemplates.atInputRendered, (callback) => {
   Template.atInput.onRendered(callback);
   Template.atHiddenInput.onRendered(callback);
@@ -7,7 +10,9 @@ _.each(AccountsTemplates.atInputRendered, (callback) => {
 Template.atInput.helpers(AccountsTemplates.atInputHelpers);
 
 // Simply 'inherites' events from AccountsTemplates
-Template.atInput.events(AccountsTemplates.atInputEvents);
+// Template.atInput.events(AccountsTemplates.atInputEvents);
+
+Template.atInput.events(AtInputEvents);
 
 // Simply 'inherites' helpers from AccountsTemplates
 Template.atTextInput.helpers(AccountsTemplates.atInputHelpers);

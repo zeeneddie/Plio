@@ -1,9 +1,14 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
-import { ViewModel } from 'meteor/manuel:viewmodel';
+
+import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
+import { insert, update } from '/imports/api/improvement-plans/methods.js';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: 'collapse',
+  mixin: ['collapse', 'modal'],
+  autorun() {
+    this.load(this.improvementPlan());
+  },
   desiredOutcome: '',
   targetDate: '',
   owner: '',
@@ -12,16 +17,30 @@ Template.ESImprovementPlan.viewmodel({
   currentValue: '',
   targetValue: '',
   files: [],
-  update({ ...args }, options) {
-    const key = _.keys(args)[0];
-    const value = _.values(args)[0];
-    if (!options) {
-      const options = {};
+  improvementPlan() {
+    return ImprovementPlans.findOne({});
+  },
+  insert({ ...args }, cb) {
+    const standardId = this.standard() && this.standard()._id;
 
-      options[`improvementPlan.${key}`] = value;
-      this.parent().update(options);
-    } else {
-      this.parent().update({ query: { ...args } }, options);
+    this.modal().callMethod(insert, { standardId, ...args }, cb);
+  },
+  update({ query = {}, ...args }, options = {}, cb) {
+    if (_.isFunction(options)) {
+      cb = options;
+      options = {};
     }
+
+    if (!this.improvementPlan()) {
+      return this.insert({ ...args });
+    }
+
+    const _id = this.improvementPlan() && this.improvementPlan()._id;
+
+    const modifier = { ...args, _id, options, query };
+
+    console.log(modifier);
+
+    this.modal().callMethod(update, modifier, cb);
   }
 });

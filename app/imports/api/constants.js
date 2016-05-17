@@ -22,7 +22,7 @@ const UserMembership = {
 };
 
 const UserRoles = {
-  CREATE_STANDARDS_DOCUMENTS: 'create-standards-documents',
+  CREATE_UPDATE_DELETE_STANDARDS: 'create-update-delete-standards',
   VIEW_TEAM_ACTIONS: 'view-team-actions',
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
@@ -31,7 +31,7 @@ const UserRoles = {
 };
 
 const UserRolesNames = {
-  [UserRoles.CREATE_STANDARDS_DOCUMENTS]: 'Create & edit standards documents',
+  [UserRoles.CREATE_UPDATE_DELETE_STANDARDS]: 'Create & edit standards documents',
   [UserRoles.VIEW_TEAM_ACTIONS]: 'View all Team actions',
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
@@ -40,7 +40,7 @@ const UserRolesNames = {
 };
 
 const OrgOwnerRoles = [
-  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
   UserRoles.VIEW_TEAM_ACTIONS,
   UserRoles.INVITE_USERS,
   UserRoles.DELETE_USERS,
@@ -49,7 +49,7 @@ const OrgOwnerRoles = [
 ];
 
 const OrgMemberRoles = [
-  UserRoles.CREATE_STANDARDS_DOCUMENTS,
+  UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
   UserRoles.VIEW_TEAM_ACTIONS
 ];
 

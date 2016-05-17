@@ -2,24 +2,35 @@ import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
+  mixin: ['modal', 'clearableField'],
   avatarFile: null,
   updateFirstName() {
-    this.parent().updateProfile('firstName', this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateProfile('firstName', this);
+    });
   },
   updateLastName() {
-    this.parent().updateProfile('lastName', this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateProfile('lastName', this);
+    });
   },
   updateInitials() {
-    this.parent().updateProfile('initials', this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateProfile('initials', this);
+    });
   },
   updateDescription() {
-    this.parent().updateProfile('description', this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateProfile('description', this);
+    });
   },
   updateAvatar() {
     this.parent().uploadAvatarFile(this);
   },
   updateEmail() {
-    this.parent().updateEmail(this);
+    this.callWithFocusCheck(() => {
+      this.parent().updateEmail(this);
+    });
   },
   isEditable() {
     return this.parent().isEditable();

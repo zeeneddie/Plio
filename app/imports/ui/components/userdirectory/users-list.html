@@ -3,7 +3,10 @@
     <div class="card">
       <form class="search-form">
         <div class="form-group row">
-          <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 400"}}>
+          {{#ClearableField field="searchText"}}
+            <input type="text" class="form-control" placeholder="Search..."
+                {{b "value: searchText, throttle: 400"}} />
+          {{/ClearableField}}
         </div>
         {{#if canInviteUsers organizationId}}
           <a class="btn btn-primary pointer" {{b "click: onInviteClick"}}>
