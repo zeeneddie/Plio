@@ -50,7 +50,7 @@ export const update = new ValidatedMethod({
 
     const canEditStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_UPDATE_DELETE_STANDARDS, organizationId);
 
-    if (canEditStandards) {
+    if (!canEditStandards) {
       throw new Meteor.Error(
         403,
         'You are not authorized for creating, removing or editing standards'
@@ -77,7 +77,7 @@ export const remove = new ValidatedMethod({
 
     const canDeleteStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_UPDATE_DELETE_STANDARDS, organizationId);
 
-    if (canDeleteStandards) {
+    if (!canDeleteStandards) {
       throw new Meteor.Error(
         403,
         'You are not authorized for creating, removing or editing standards'
