@@ -37,8 +37,6 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      console.log(vmsToCollapse);
-
       !!vmsToCollapse && vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse());
     },
     expandCollapsedStandard: _.debounce(function(standardId) {

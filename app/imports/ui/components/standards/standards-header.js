@@ -5,7 +5,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  share: { listItems: 'listItems' },
+  share: [{ listItems: 'listItems' }, 'standard', 'window'],
   mixin: ['standard', 'collapsing', 'organization'],
   selectedFilter: '',
   autorun: [
@@ -23,5 +23,14 @@ Template.StandardsHeader.viewmodel({
   ],
   standardFilters() {
     return StandardFilters;
+  },
+  navigate(e) {
+    e.preventDefault();
+
+    if (this.width() && this.width() < 768) {
+      this.width(null);
+    } else {
+      FlowRouter.go('dashboardPage', { orgSerialNumber: this.organization().serialNumber });
+    }
   }
 });
