@@ -1,26 +1,24 @@
 <template name="StandardsSectionItem">
-  {{#ListItem type="standardSection" title=title}}
-    <div class="list-group disabled">
-      {{#each standards}}
-        <div class="span" {{b "if: this.nestingLevel === 1"}}>
+  <div class="list-group">
+    {{#each standards}}
+      <div class="span" {{b "if: this.nestingLevel === 1"}}>
+        {{> ListSubItem}}
+      </div>
+      <div class="sub">
+        <div class="span" {{b "if: this.nestingLevel === 2"}}>
           {{> ListSubItem}}
         </div>
-        <div class="sub">
-          <div class="span" {{b "if: this.nestingLevel === 2"}}>
+        <div class="subsub">
+          <div class="span" {{b "if: this.nestingLevel === 3"}}>
             {{> ListSubItem}}
           </div>
-          <div class="subsub">
-            <div class="span" {{b "if: this.nestingLevel === 3"}}>
+          <div class="subsubsub">
+            <div class="span" {{b "if: this.nestingLevel === 4"}}>
               {{> ListSubItem}}
-            </div>
-            <div class="subsubsub">
-              <div class="span" {{b "if: this.nestingLevel === 4"}}>
-                {{> ListSubItem}}
-              </div>
             </div>
           </div>
         </div>
-      {{/each}}
-    </div>
-  {{/ListItem}}
+      </div>
+    {{/each}}
+  </div>
 </template>

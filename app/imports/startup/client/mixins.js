@@ -29,45 +29,27 @@ ViewModel.mixin({
   },
   collapsing: {
     toggleVMCollapse(name = '', condition = () => {}) {
-      if (name) {
-        const vmToCollapse = ViewModel.findOne(name, condition);
+      let vmsToCollapse = [];
 
-        !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      if (!name && !!condition) {
+        vmsToCollapse = ViewModel.find(condition);
+      } else if (!!name && !!condition) {
+        vmsToCollapse = ViewModel.find(name, condition);
       }
+
+      vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse())
     },
     expandCollapsedStandard(standardId) {
       const standard = Standards.findOne({ _id: standardId });
+
       if (standard) {
         Meteor.setTimeout(() => {
-          this.toggleVMCollapse('ListItem', (viewmodel) => {
-
-            // Check if the section has parent (Type) collapsible list
-            if (viewmodel.parent().parent && viewmodel.parent().parent()._id) {
-              return viewmodel.type() === 'standardSection' &&
-                viewmodel.collapsed() &&
-
-                // viewmodel.parent() => StandardsSectionItem
-                viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId &&
-
-                // viewmodel.parent().parent() => StandardsTypeItem
-                viewmodel.parent().parent()._id() === standard.typeId;
-            } else {
-              return viewmodel.type() === 'standardSection' &&
-                viewmodel.collapsed() &&
-                viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId;
-            }
-          });
-          this.toggleVMCollapse('ListItem', (viewmodel) => {
-            return viewmodel.type() === 'standardType' &&
-              viewmodel.collapsed() &&
-
-              // viewmodel.parent() => StandardsSectionItem
-              viewmodel.parent()._id &&
-              viewmodel.parent()._id() === standard.typeId
-          });
+          this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel));
         }, 500);
+      }
+
+      function recursiveSearch(viewmodel) {
+        return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
       }
     }
   },

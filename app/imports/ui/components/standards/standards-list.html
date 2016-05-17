@@ -14,11 +14,11 @@
     <div class="list-group list-group-accordion" id="standardsAccordion">
       {{#if isActiveStandardFilter 'section'}}
         {{#each standardsBookSections}}
-          {{> StandardsSectionItem}}
+          {{> ListItem type="standardSection" _id=this._id title=this.title template="StandardsSectionItem"}}
         {{/each}}
       {{else}}
         {{#each standardsTypes}}
-          {{> StandardsTypeItem}}
+          {{> ListItem type="standardSection" _id=this._id title=this.name template="StandardsTypeItem"}}
         {{/each}}
       {{/if}}
     </div>
