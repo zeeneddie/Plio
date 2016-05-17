@@ -5,4 +5,4 @@ import { UserPresence, UserPresenceMonitor } from 'meteor/konecty:user-presence'
 UserPresence.start();
 
 // Listen for changes in UserSessions and Meteor.users to set user status based on active connections
-// UserPresenceMonitor.start();
+UserPresenceMonitor.start();

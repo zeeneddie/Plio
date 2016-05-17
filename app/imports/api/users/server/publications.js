@@ -9,5 +9,5 @@ Meteor.publish('organizationUsers', function (userIds) {
 });
 
 Meteor.publish('organizationOnlineUsers', function (userIds) {
-  return Meteor.users.find({ _id: {$in: userIds }, status: 'online' });
+  return Meteor.users.find({ _id: { $in: userIds }, status: 'online' });
 });
