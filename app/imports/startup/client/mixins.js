@@ -48,7 +48,7 @@ ViewModel.mixin({
 
                 // viewmodel.parent() => StandardsSectionItem
                 viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId && 
+                viewmodel.parent()._id() === standard.sectionId &&
 
                 // viewmodel.parent().parent() => StandardsTypeItem
                 viewmodel.parent().parent()._id() === standard.typeId;
@@ -216,7 +216,7 @@ ViewModel.mixin({
       if (userId && organizationId) {
         return Roles.userIsInRole(
           userId,
-          UserRoles.CREATE_STANDARDS_DOCUMENTS,
+          UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
           organizationId
         );
       }

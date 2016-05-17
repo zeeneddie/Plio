@@ -18,12 +18,14 @@ Template.EditStandard.viewmodel({
     }
 
     const _id = this._id && this._id();
-    const modifier = { ...args, _id, options, query };
+    const organizationId = this.organizationId();
+    const modifier = _.extend(args, { _id, options, query, organizationId });
 
     this.modal().callMethod(update, modifier, cb);
   },
   remove() {
     const { _id, title } = this.standard();
+    const organizationId = this.organizationId();
 
     swal(
       {
@@ -35,7 +37,7 @@ Template.EditStandard.viewmodel({
         closeOnConfirm: false
       },
       () => {
-        this.update({ status: 'deleted' }, (err) => {
+        this.modal().callMethod(remove, { _id, organizationId }, () => {
           if (err) {
             swal('Oops... Something went wrong!');
           } else {
