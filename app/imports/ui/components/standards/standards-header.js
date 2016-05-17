@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  mixin: ['standard', 'collapsing'],
+  mixin: ['organization', 'standard', 'collapsing'],
   selectedFilter: '',
   autorun: [
    function () {
