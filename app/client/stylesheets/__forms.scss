@@ -230,6 +230,12 @@ input:focus ~ .clear-field {
   .clear-field {
     right: 2px;
   }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    padding-right: 30px;
+  }
 }
 
 /* Input group */
