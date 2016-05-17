@@ -224,6 +224,13 @@ input:focus ~ .clear-field {
   visibility: visible;
 }
 
+.clearable-field-container {
+  position: relative;
+
+  .clear-field {
+    right: 2px;
+  }
+}
 
 /* Input group */
 
@@ -435,8 +442,4 @@ fieldset[disabled] {
 
 .no-pointer-events {
   pointer-events: none;
-}
-
-.clearable-field-container {
-  position: relative;
 }

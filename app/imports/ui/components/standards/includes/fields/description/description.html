@@ -1,8 +1,6 @@
 <template name="ESDescription">
   {{#FormField label="Description"}}
-    {{#ClearableField field="description"}}
-      <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description, focusout: update"}}>
-      </textarea>
-    {{/ClearableField}}
+    <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description, focusout: update"}}>
+    </textarea>
   {{/FormField}}
 </template>

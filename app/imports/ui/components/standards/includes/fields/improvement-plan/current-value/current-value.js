@@ -1,10 +1,13 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIPCurrentValue.viewmodel({
+  mixin: ['modal', 'clearableField'],
   currentValue: '',
   update() {
-    const { currentValue } = this.getData();
-    this.parent().update({ currentValue });
+    this.callWithFocusCheck(() => {
+      const { currentValue } = this.getData();
+      this.parent().update({ currentValue });
+    });
   },
   getData() {
     const { currentValue } = this.data();

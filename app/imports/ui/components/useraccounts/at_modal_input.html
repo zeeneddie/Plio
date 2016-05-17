@@ -14,6 +14,9 @@
       <input type="{{type}}" class="form-control" id="at-field-{{_id}}"
           name="at-field-{{_id}}" placeholder="{{placeholder}}"
           autocapitalize="none" autocorrect="off" />
+      <button type="button" class="btn btn-link clear-field">
+        <i class="fa fa-times-circle"></i>
+      </button>
       <span class="text-help {{#unless hasError}}hide{{/unless}}">
         {{errorText}}
       </span>

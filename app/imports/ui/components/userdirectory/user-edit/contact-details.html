@@ -21,9 +21,10 @@
       {{> UserEdit_PhoneNumbers phoneNumbers=phoneNumbers}}
 
       {{#FormField label="Skype name"}}
-        <input type="email" class="form-control" placeholder="Skype name"
-            {{b "value: skype, focusout: updateSkype, enable: isEditable"}} />
-        {{> ClearFieldButton}}
+        {{#ClearableField field="skype"}}
+          <input type="email" class="form-control" placeholder="Skype name"
+              {{b "value: skype, focusout: updateSkype, enable: isEditable"}} />
+        {{/ClearableField}}
       {{/FormField}}
     </div>
   </div>

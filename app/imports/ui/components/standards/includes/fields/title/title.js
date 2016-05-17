@@ -4,7 +4,7 @@ Template.ESTitle.viewmodel({
   mixin: ['modal', 'clearableField', 'numberRegex'],
   titleText: '',
   update() {
-    this.callUpdate(() => {
+    this.callWithFocusCheck(() => {
       const { title } = this.getData();
 
       const number = this.parseNumber(title);
