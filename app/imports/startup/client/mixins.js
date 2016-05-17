@@ -92,6 +92,15 @@ ViewModel.mixin({
 
         return instance.isSaving();
       },
+      isWaiting(val) {
+        const instance = this.instance();
+
+        if (val !== undefined) {
+          instance.isWaiting(val);
+        }
+
+        return instance.isWaiting();
+      },
       setError(err) {
         this.instance().setError(err);
       },
@@ -279,6 +288,21 @@ ViewModel.mixin({
     },
     fileProgress(fileId) {
       return this.fileUploader() && this.fileUploader().progress(fileId);
+    }
+  },
+  clearableField: {
+    callUpdate(updateFn) {
+      this.modal().isWaiting(true);
+
+      Meteor.setTimeout(() => {
+        this.modal().isWaiting(false);
+
+        if (this.templateInstance.$('input').is(':focus')) {
+          return;
+        }
+
+        updateFn();
+      }, 200);
     }
   }
 });

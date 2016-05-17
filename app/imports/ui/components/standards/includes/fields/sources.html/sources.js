@@ -18,7 +18,7 @@ Template.ESSources.viewmodel({
     if (type === 'attachment') {
       return _.every([
         (type && name) || (type && url),
-        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) 
+        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName)
       ]);
     } else {
       return _.every([
@@ -56,7 +56,7 @@ Template.ESSources.viewmodel({
     const sourceDoc = { type, url };
     if (type === 'attachment') {
       sourceDoc.name = name;
-      
+
       if (!url) {
         delete sourceDoc.url;
       }
@@ -80,8 +80,8 @@ Template.ESSources.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { url }) {
-    if (err) {
-      this.modal().setError(err.reason || err);
+    if (err && err.error !== 'Aborted') {
+      this.modal().setError(err.reason);
       return;
     }
 
