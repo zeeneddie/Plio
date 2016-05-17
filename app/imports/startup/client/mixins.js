@@ -37,21 +37,21 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse())
+      console.log(vmsToCollapse);
+
+      !!vmsToCollapse && vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse());
     },
-    expandCollapsedStandard(standardId) {
-      const standard = Standards.findOne({ _id: standardId });
+    expandCollapsedStandard: _.debounce(function(standardId) {
+        const standard = Standards.findOne({ _id: standardId });
 
-      if (standard) {
-        Meteor.setTimeout(() => {
+        if (standard) {
           this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel));
-        }, 500);
-      }
+        }
 
-      function recursiveSearch(viewmodel) {
-        return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
-      }
-    }
+        function recursiveSearch(viewmodel) {
+          return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
+        }
+    }, 200)
   },
   modal: {
     modal: {

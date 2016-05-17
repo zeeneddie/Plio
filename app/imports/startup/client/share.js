@@ -10,4 +10,7 @@ ViewModel.share({
   organization: {
     orgSerialNumber: ''
   },
+  listItems: {
+    _rendered: false
+  }
 });
