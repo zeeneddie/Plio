@@ -42,6 +42,10 @@ export default {
     var parentData = Template.parentData();
 
     Meteor.setTimeout(() => {
+      if (tpl.view.isDestroyed) {
+        return;
+      }
+
       if (tpl.$('input').is(':focus')) {
         return;
       }
