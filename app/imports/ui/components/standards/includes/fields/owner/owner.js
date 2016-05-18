@@ -8,7 +8,6 @@ Template.ESOwner.viewmodel({
     }
   },
   autorun() {
-    console.log(this.selectedOwnerId());
     if (this.selectedOwnerId()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
 
@@ -21,8 +20,10 @@ Template.ESOwner.viewmodel({
   owner: '',
   selectedOwnerId: '',
   members() {
-    const query = this.searchObject('owner', ['profile.firstName', 'profile.lastName']);
+    const query = this.searchObject('owner', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
     const options = { sort: { 'profile.firstName': 1 } };
+
+    console.log(query);
 
     return Meteor.users.find(query, options);
   },
