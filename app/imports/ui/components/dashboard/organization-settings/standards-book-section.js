@@ -1,4 +1,5 @@
 Template.OrganizationSettings_StandardsBookSection.viewmodel({
+  mixin: ['modal', 'clearableField'],
   isChanged() {
     const savedTitle = this.templateInstance.data.title;
     const { title } = this.getData();
@@ -6,9 +7,11 @@ Template.OrganizationSettings_StandardsBookSection.viewmodel({
     return title && title !== savedTitle;
   },
   onFocusOut() {
-    if (this.isChanged()) {
-      this.onChange(this);
-    }
+    this.callWithFocusCheck(() => {
+      if (this.isChanged()) {
+        this.onChange(this);
+      }
+    });
   },
   delete() {
     this.onDelete(this);

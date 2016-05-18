@@ -271,7 +271,7 @@ ViewModel.mixin({
     }
   },
   clearableField: {
-    callUpdate(updateFn) {
+    callWithFocusCheck(updateFn) {
       this.modal().isWaiting(true);
 
       Meteor.setTimeout(() => {

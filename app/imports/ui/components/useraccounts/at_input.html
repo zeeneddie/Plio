@@ -11,12 +11,17 @@
       {{displayName}} {{#unless required}}{{optionalText}}{{/unless}}
     </label>
     <div class="col-md-9">
-      <input type="{{type}}" class="form-control" id="at-field-{{_id}}"
-          name="at-field-{{_id}}" placeholder="{{placeholder}}"
-          autocapitalize="none" autocorrect="off" />
-      <span class="text-help {{#unless hasError}}hide{{/unless}}">
-        {{errorText}}
-      </span>
+      <div class="clearable-field-container">
+        <input type="{{type}}" class="form-control" id="at-field-{{_id}}"
+            name="at-field-{{_id}}" placeholder="{{placeholder}}"
+            autocapitalize="none" autocorrect="off" />
+        <button type="button" class="btn btn-link clear-field" tabindex="-1">
+          <i class="fa fa-times-circle"></i>
+        </button>
+        <span class="text-help {{#unless hasError}}hide{{/unless}}">
+          {{errorText}}
+        </span>
+      </div>
     </div>
   </div>
 </template>

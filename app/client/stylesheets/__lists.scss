@@ -1,14 +1,14 @@
-.list-group { 
+.list-group {
   &-item {
     &-heading {
       font-size: 18px;
       font-family: $font-semilight;
       font-weight: normal;
     }
-    
+
     &-text {
       color: #777;
-    }  
+    }
   }
 }
 
@@ -39,7 +39,9 @@
       .form-control {
         padding-left: 32px;
       }
+    }
 
+    .form-group, .clearable-field-container {
       &:before {
         //content: '\e039';
         //font-family: 'Office365Icons';
