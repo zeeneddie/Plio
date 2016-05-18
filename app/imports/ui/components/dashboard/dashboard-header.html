@@ -1,6 +1,8 @@
 <template name="DashboardHeader">
   <div class="navbar navbar-branded">
-    {{> OrganizationsMenu}}
-    {{> UserMenu}}
+    {{#with organization}}
+      {{> OrganizationsMenu}}
+      {{> UserMenu}}
+    {{/with}}
   </div>
 </template>
