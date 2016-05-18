@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { DepartmentSchema } from './department-schema';
 import DepartmentService from './department-service.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
 
 
@@ -36,9 +36,7 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Departments.update',
 
-  validate: new SimpleSchema([IdSchema, {
-    name: { type: String }
-  }]).validator(),
+  validate: new SimpleSchema([IdSchema, DepartmentSchema]).validator(),
 
   run(doc) {
     if (!this.userId) {
@@ -64,7 +62,7 @@ export const update = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'Departments.remove',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
   run(doc) {
     if (!this.userId) {
