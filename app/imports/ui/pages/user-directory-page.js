@@ -11,18 +11,14 @@ Template.UserDirectoryPage.viewmodel({
     return FlowRouter.getParam('userId') || null;
   },
   autorun() {
-    const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
-
-    if (organizationsHandle.ready()) {
-      const userIds = this.getCurrentOrganizationUsers();
-      if (userIds && userIds.length) {
-        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
-        if (!this.activeUser() && organizationUsersHandle.ready()) {
-          FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
-            orgSerialNumber: this.organizationSerialNumber(),
-            userId: this.organizationUsers().fetch()[0]._id
-          }));
-        }
+    const userIds = this.getCurrentOrganizationUsers();
+    if (userIds && userIds.length) {
+      const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+      if (!this.activeUser() && organizationUsersHandle.ready()) {
+        FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
+          orgSerialNumber: this.organizationSerialNumber(),
+          userId: this.organizationUsers().fetch()[0]._id
+        }));
       }
     }
   },
