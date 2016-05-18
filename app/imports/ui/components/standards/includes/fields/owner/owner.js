@@ -3,20 +3,19 @@ import { Template } from 'meteor/templating';
 Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
-    if (this.hasUser() && !this.editable() && this.showCurrentUser && this.showCurrentUser()) {
+    if (this.hasUser() && !this.isEditable() && this.showCurrentUser && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
     }
   },
   autorun() {
+    console.log(this.selectedOwnerId());
     if (this.selectedOwnerId()) {
       const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
 
       this.owner(fullName);
     }
   },
-  editable() {
-    return !!this.isEditable && !!this.isEditable();
-  },
+  isEditable: false,
   label: 'Owner',
   sm: 8,
   owner: '',
@@ -34,7 +33,7 @@ Template.ESOwner.viewmodel({
     this.update();
   },
   update() {
-    if (!this.editable()) return;
+    if (!this.isEditable()) return;
 
     const { owner } = this.getData();
 
@@ -52,6 +51,7 @@ Template.ESOwner.viewmodel({
   events: {
     'focus input'() {
       this.owner('');
+      this.selectedOwnerId('');
     }
   }
 });
