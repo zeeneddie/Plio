@@ -6,12 +6,9 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
-  mixin: 'search',
+  mixin: ['search', 'organization'],
   activeUser() {
     return FlowRouter.getParam('userId') || null;
-  },
-  getCurrentOrganizationSerialNumber() {
-    return parseInt(FlowRouter.getParam('orgSerialNumber'));
   },
   autorun() {
     const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
@@ -22,7 +19,7 @@ Template.UserDirectoryPage.viewmodel({
         const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
         if (!this.activeUser() && organizationUsersHandle.ready()) {
           FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
-            orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
+            orgSerialNumber: this.organizationSerialNumber(),
             userId: this.organizationUsers().fetch()[0]._id
           }));
         }
@@ -70,7 +67,7 @@ Template.UserDirectoryPage.viewmodel({
 
   getCurrentOrganizationUsers() {
     const organization = Organizations.findOne({
-      serialNumber: this.getCurrentOrganizationSerialNumber()
+      serialNumber: this.organizationSerialNumber()
     });
 
     if (organization) {

@@ -181,12 +181,6 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
-  organizations: {
-    subHandler: null,
-    subscribe() {
-      this.subHandler(Meteor.subscribe('currentUserOrganizations'));
-    }
-  },
   roles: {
     canInviteUsers(organizationId) {
       const userId = Meteor.userId();
@@ -223,16 +217,15 @@ ViewModel.mixin({
     }
   },
   organization: {
-    subHandler: null,
-    subscribe(orgId) {
-      this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
-    },
     organization() {
-      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+      const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });
     },
     organizationId() {
       return this.organization() && this.organization()._id;
+    },
+    organizationSerialNumber() {
+      return parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
     }
   },
   standard: {

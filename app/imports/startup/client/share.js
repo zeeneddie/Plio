@@ -10,9 +10,6 @@ ViewModel.share({
   search: {
     searchText: ''
   },
-  organization: {
-    orgSerialNumber: ''
-  },
   listItems: {
     _rendered: false
   }
