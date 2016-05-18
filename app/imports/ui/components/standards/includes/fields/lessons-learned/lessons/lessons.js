@@ -2,12 +2,17 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 import { Random } from 'meteor/random';
 
+import { Standards } from '/imports/api/standards/standards.js';
+
 Template.ESLessons.viewmodel({
   mixin: ['collapse', 'date'],
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
     }
+  },
+  linkedStandard() {
+    return this.standardId ? Standards.findOne({ _id: this.standardId() }).title : '';
   },
   standard() {
     return ViewModel.findOne('ESLessonsLearned').standard();
@@ -77,6 +82,7 @@ Template.ESLessons.viewmodel({
     const { date } = this.child('Datepicker').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
     const { title } = this.data();
+    console.log(date);
     return { title, date, createdBy, notes };
   }
 });

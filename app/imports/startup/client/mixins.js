@@ -253,13 +253,6 @@ ViewModel.mixin({
   date: {
     renderDate(date) {
       return moment.isDate(date) && moment(date).format('DD MMM YYYY');
-    },
-    datepickerInit() {
-      this.datepicker.datepicker({
-        startDate: new Date(),
-        format: 'dd MM yyyy',
-        autoclose: true
-      });
     }
   },
   filesList: {
