@@ -1,11 +1,20 @@
 import { Standards } from './standards.js';
+import StandardsNotificationsSender from './standards-notifications-sender.js';
+
 
 export default {
   collection: Standards,
 
   insert({ ...args }) {
     const _id = this.collection.insert(args);
-    return this.collection.findOne({ _id: _id });
+
+    const { createdBy } = args;
+    this.addNotifyUser({
+      standardId: _id,
+      userId: createdBy
+    });
+
+    return this.collection.findOne({ _id });
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -20,5 +29,31 @@ export default {
 
   remove({ _id }) {
     return this.collection.remove({ _id });
+  },
+
+  addNotifyUser({ standardId, userId }) {
+    const updateResult = this.collection.update({
+      _id: standardId
+    }, {
+      $addToSet: {
+        notify: userId
+      }
+    });
+
+    if (Meteor.isServer) {
+      new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
+    }
+
+    return updateResult;
+  },
+
+  removeNotifyUser({ standardId, userId }) {
+    return this.collection.update({
+      _id: standardId
+    }, {
+      $pull: {
+        notify: userId
+      }
+    });
   }
 };

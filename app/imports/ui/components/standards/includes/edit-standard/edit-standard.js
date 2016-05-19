@@ -2,7 +2,12 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Standards } from '/imports/api/standards/standards.js';
-import { update, remove } from '/imports/api/standards/methods.js';
+import {
+  update,
+  remove,
+  addToNotifyList,
+  removeFromNotifyList
+} from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
@@ -22,10 +27,22 @@ Template.EditStandard.viewmodel({
 
     this.modal().callMethod(update, modifier, cb);
   },
+  addToNotifyList(userId) {
+    this.modal().callMethod(addToNotifyList, {
+      standardId: this._id(),
+      userId
+    });
+  },
+  removeFromNotifyList(userId) {
+    this.modal().callMethod(removeFromNotifyList, {
+      standardId: this._id(),
+      userId
+    });
+  },
   remove() {
     const { _id, title } = this.standard();
     const organizationId = this.organizationId();
-    
+
     swal(
       {
         title: 'Are you sure?',
@@ -42,15 +59,22 @@ Template.EditStandard.viewmodel({
           this.modal().close();
           this.selectedStandardId('');
 
-          const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
+          const standard = Standards.findOne({}, {
+            sort: { createdAt: 1 }
+          });
 
           if (!!standard) {
             this.selectedStandardId(standard._id);
 
-            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
+            FlowRouter.go('standard', {
+              orgSerialNumber: this.organization().serialNumber,
+              standardId: standard._id
+            });
 
             this.toggleVMCollapse('ListItem', (viewmodel) => {
-              return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === standard._id);
+              return viewmodel.collapsed() && viewmodel.child(
+                vm => vm._id && vm._id() === standard._id
+              );
             });
           }
         });

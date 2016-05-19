@@ -4,8 +4,33 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
-import { IdSchema, OrganizationIdSchema, optionsSchema } from '../schemas.js';
+import {
+  IdSchema,
+  OrganizationIdSchema,
+  optionsSchema,
+  StandardIdSchema,
+  UserIdSchema
+} from '../schemas.js';
 import { UserRoles } from '../constants';
+import { canChangeStandards } from '../checkers.js';
+
+
+const ensureCanChangeStandards = (userId, organizationId) => {
+  if (!canChangeStandards(userId, organizationId)) {
+    throw new Meteor.Error(
+      403,
+      'You are not authorized for creating, removing or editing standards'
+    );
+  }
+};
+
+const getStandardOrThrow = (standardId) => {
+  const standard = Standards.findOne({ _id: standardId });
+  if (!standard) {
+    throw new Meteor.Error(400, 'Standard does not exist');
+  }
+  return standard;
+};
 
 export const insert = new ValidatedMethod({
   name: 'Standards.insert',
@@ -13,7 +38,8 @@ export const insert = new ValidatedMethod({
   validate: StandardsSchema.validator(),
 
   run(...args) {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot create a standard'
       );
@@ -21,14 +47,8 @@ export const insert = new ValidatedMethod({
 
     const [ doc ] = args;
     const { organizationId } = doc;
-    const canCreateStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_UPDATE_DELETE_STANDARDS, organizationId);
 
-    if (!canCreateStandards) {
-      throw new Meteor.Error(
-        403,
-        'You are not authorized for creating, removing or editing standards'
-      );
-    }
+    ensureCanChangeStandards(userId, organizationId);
 
     return StandardsService.insert(...args);
   }
@@ -42,20 +62,16 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run({_id, options, ...args, organizationId }) {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update a standard'
       );
     }
 
-    const canEditStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_UPDATE_DELETE_STANDARDS, organizationId);
+    ensureCanChangeStandards(userId, organizationId);
 
-    if (!canEditStandards) {
-      throw new Meteor.Error(
-        403,
-        'You are not authorized for creating, removing or editing standards'
-      );
-    }
+    getStandardOrThrow(_id);
 
     return StandardsService.update({ _id, options, ...args });
   }
@@ -63,27 +79,71 @@ export const update = new ValidatedMethod({
 
 export const remove = new ValidatedMethod({
   name: 'Standards.remove',
-  
+
   validate: new SimpleSchema([
     IdSchema, OrganizationIdSchema
   ]).validator(),
 
   run({ _id, organizationId }) {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot delete a standard'
       );
     }
 
-    const canDeleteStandards = Roles.userIsInRole(this.userId, UserRoles.CREATE_UPDATE_DELETE_STANDARDS, organizationId);
+    ensureCanChangeStandards(userId, organizationId);
 
-    if (!canDeleteStandards) {
+    getStandardOrThrow(_id);
+
+    return StandardsService.remove({ _id });
+  }
+});
+
+export const addToNotifyList = new ValidatedMethod({
+  name: 'Standards.addToNotifyList',
+
+  validate: new SimpleSchema([
+    StandardIdSchema,
+    UserIdSchema
+  ]).validator(),
+
+  run({ standardId, userId }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
       throw new Meteor.Error(
-        403,
-        'You are not authorized for creating, removing or editing standards'
+        403, 'Unauthorized user cannot add users to notify list'
       );
     }
 
-    return StandardsService.remove({ _id });
+    const { organizationId } = getStandardOrThrow(standardId);
+
+    ensureCanChangeStandards(currUserId, organizationId);
+
+    return StandardsService.addNotifyUser({ standardId, userId });
+  }
+});
+
+export const removeFromNotifyList = new ValidatedMethod({
+  name: 'Standards.removeFromNotifyList',
+
+  validate: new SimpleSchema([
+    StandardIdSchema,
+    UserIdSchema
+  ]).validator(),
+
+  run({ standardId, userId }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove users from notify list'
+      );
+    }
+
+    const { organizationId } = getStandardOrThrow(standardId);
+
+    ensureCanChangeStandards(currUserId, organizationId);
+
+    return StandardsService.removeNotifyUser({ standardId, userId });
   }
 });
