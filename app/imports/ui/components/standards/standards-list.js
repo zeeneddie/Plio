@@ -7,6 +7,9 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  onCreated() {
+    this.searchText('');
+  },
   onRendered() {
     // show stored standard section
     if (this.standards().count() > 0 && this.currentStandard()) {
@@ -45,13 +48,13 @@ Template.StandardsList.viewmodel({
         standardsSearchQuery
       ]
     };
-    
+
     if (this.isActiveStandardFilter('type') && typeId) {
       standardsQuery.$and.push({
         typeId
       });
     }
-    
+
     const standards = Standards.find(standardsQuery).fetch();
 
     const filteredSectionIds = sectionIds.filter((id) => {
