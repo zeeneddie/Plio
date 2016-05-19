@@ -48,7 +48,7 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    if (url.search(/^https?\:\/\//) === -1) {
+    if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
       url = `http://${url}`;
     }
 
