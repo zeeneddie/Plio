@@ -1,4 +1,5 @@
 import './simple-card.html';
+import './simple-card.js';
 import './list-item.html';
 import './list-item.js';
 import './list-sub-item.html';
