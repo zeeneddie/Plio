@@ -7,7 +7,15 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UsersList.viewmodel({
   share: 'search',
-  mixin: ['user', 'organization', 'modal', 'roles'],
+  mixin: ['user', 'organization', 'modal', 'roles', 'search'],
+  autorun() {
+    if (this.organizationUsers()) {
+      const length = this.organizationUsers().fetch().length;
+      this.searchResultsNumber(length);
+    } else {
+      this.searchResultsNumber(0);
+    }
+  },
   isActiveUser(userId) {
     return this.parent().activeUser() === userId;
   },
