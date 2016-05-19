@@ -7,6 +7,9 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
   mixin: 'search',
+  onCreated() {
+    this.searchText('');
+  },
   activeUser() {
     return FlowRouter.getParam('userId') || null;
   },
@@ -23,7 +26,7 @@ Template.UserDirectoryPage.viewmodel({
         if (!this.activeUser() && organizationUsersHandle.ready()) {
           FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
             orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
-            userId: this.organizationUsers().fetch()[0]._id
+            userId: this.organizationUsers() && this.organizationUsers().fetch()[0]._id
           }));
         }
       }
@@ -84,5 +87,8 @@ Template.UserDirectoryPage.viewmodel({
     } else {
       return [];
     }
+  },
+  onDestroyed() {
+    this.searchText('');
   }
 });
