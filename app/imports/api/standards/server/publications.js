@@ -4,7 +4,7 @@ import Counter from '../../counter/server.js';
 
 Meteor.publish('standards', function(organizationId) {
   if (this.userId) {
-    return Standards.find({ organizationId });
+    return Standards.find({ organizationId, isDeleted: { $in: [false, null] } });
   } else {
     return this.ready();
   }
