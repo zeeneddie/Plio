@@ -13,4 +13,3 @@ import './user-account-waiting-page.html';
 import './user-account-waiting-page.js';
 import './verify-email-page.html';
 import './verify-email-page.js';
-

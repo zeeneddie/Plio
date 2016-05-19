@@ -13,3 +13,7 @@ Meteor.publish('standards', function(organizationId) {
 Meteor.publish('standardsCount', function(counterName, organizationId) {
   return new Counter(counterName, Standards.find({ organizationId }));
 });
+
+Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) {
+  return new Counter(counterName, Standards.find({ organizationId, viewedBy: { $ne: this.userId } }));
+});

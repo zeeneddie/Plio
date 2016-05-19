@@ -1,6 +1,6 @@
 <template name="DashboardPage">
   <div class="dashboard-items">
-    {{> SimpleCard route="standards" serialNumber=serialNumber icon="fa-book" title="Standards book" text=standardsCount }}
+    {{> SimpleCard route="standards" serialNumber=serialNumber icon="fa-book" title="Standards book" text=standardsMetrics }}
     {{> SimpleCard route="discussions" serialNumber=serialNumber icon="fa-comments" title="Discussions" text="Coming soon" disabled=true}}
     {{> SimpleCard route="nonconformities" serialNumber=serialNumber icon="fa-exclamation-triangle" title="Non-conformities" text="Coming soon" disabled=true}}
     {{> SimpleCard route="actions" serialNumber=serialNumber icon="fa-inbox" title="Actions" text="Coming soon" labelText="1" disabled=true}}

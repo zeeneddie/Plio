@@ -45,13 +45,13 @@ Template.StandardsList.viewmodel({
         standardsSearchQuery
       ]
     };
-    
+
     if (this.isActiveStandardFilter('type') && typeId) {
       standardsQuery.$and.push({
         typeId
       });
     }
-    
+
     const standards = Standards.find(standardsQuery).fetch();
 
     const filteredSectionIds = sectionIds.filter((id) => {
