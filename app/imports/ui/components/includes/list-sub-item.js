@@ -8,7 +8,7 @@ Template.ListSubItem.viewmodel({
   mixin: ['organization', 'standard'],
   autorun() {
     if (this._id() === this.selectedStandardId() && this.isNew()) {
-      this.updateViewedBy();
+      Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
   standardType() {
@@ -38,7 +38,7 @@ Template.ListSubItem.viewmodel({
   },
   updateViewedBy() {
     const _id = this._id();
-    
+
     updateViewedBy.call({ _id });
   }
 });

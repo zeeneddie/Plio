@@ -2,21 +2,29 @@
   {{#ListItem type="standardSection" title=title}}
     <div class="list-group">
       {{#each standards}}
-        <div class="span" {{b "if: this.nestingLevel === 1"}}>
-          {{> ListSubItem}}
-        </div>
-        <div class="sub">
-          <div class="span" {{b "if: this.nestingLevel === 2"}}>
+        {{#if isNestingLevel this 1}}
+          <div class="span">
             {{> ListSubItem}}
           </div>
-          <div class="subsub">
-            <div class="span" {{b "if: this.nestingLevel === 3"}}>
+        {{/if}}
+        <div class="sub">
+          {{#if isNestingLevel this 2}}
+            <div class="span">
               {{> ListSubItem}}
             </div>
-            <div class="subsubsub">
-              <div class="span" {{b "if: this.nestingLevel === 4"}}>
+          {{/if}}
+          <div class="subsub">
+            {{#if isNestingLevel this 3}}
+              <div class="span">
                 {{> ListSubItem}}
               </div>
+            {{/if}}
+            <div class="subsubsub">
+              {{#if isNestingLevel this 4}}
+                <div class="span">
+                  {{> ListSubItem}}
+                </div>
+              {{/if}}
             </div>
           </div>
         </div>

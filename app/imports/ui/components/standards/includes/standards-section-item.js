@@ -27,5 +27,8 @@ Template.StandardsSectionItem.viewmodel({
 
     const options = { sort: { title: 1 } };
     return Standards.find(query, options);
+  },
+  isNestingLevel({ nestingLevel }, level) {
+    return nestingLevel === level;
   }
 });
