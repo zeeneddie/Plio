@@ -84,6 +84,8 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return StandardsService.remove({ _id });
+    const deletedBy = this.userId;
+
+    return StandardsService.remove({ _id, deletedBy });
   }
 });

@@ -39,7 +39,7 @@
   "statusConnection": "offline",
   "roles": {
     "KwKXz5RefrE5hjWJ2": [
-      "create-standards-documents",
+      "create-update-delete-standards",
       "view-team-actions"
     ]
   }

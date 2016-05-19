@@ -17,7 +17,7 @@ const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
  * Possible notification data entries formats: String, Number.
  *
  * Usage example:
- * 
+ *
  * ```
  * new NotificationSender('Test3', 'test', {
  *     username: 'User',
@@ -42,7 +42,7 @@ export default class NotificationSender {
    * @param {string} templateName handlebars template name
    * @param {object} [templateData] data to render on template
    * @param {object} [options] additional configuration
-   * @param {string} [options.senderId] user that sanded notification
+   * @param {string} [options.senderId] user that sent notification
    * @param {object} [options.helpers] define you own formatting helpers
    * in others too
    * @constructor
