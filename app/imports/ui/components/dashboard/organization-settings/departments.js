@@ -17,17 +17,16 @@ Template.OrganizationSettings_Departments.viewmodel({
   },
   onChange(viewModel) {
     const { name } = viewModel.getData();
+    const organizationId = this.organizationId();
 
     if (!viewModel._id) {
-      const organizationId = this.organizationId();
-
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
-
-      this.modal().callMethod(update, { _id, name });
+      
+      this.modal().callMethod(update, { _id, name, organizationId });
     }
   },
   onDelete(viewModel) {
@@ -41,7 +40,8 @@ Template.OrganizationSettings_Departments.viewmodel({
     }
 
     const _id = viewModel._id();
+    const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id, organizationId });
   },
 });

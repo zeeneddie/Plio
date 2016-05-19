@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsTypeService from './standards-type-service.js';
 import { StandardsTypeSchema } from './standards-type-schema.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
 
 
@@ -36,10 +36,7 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'StandardTypes.update',
 
-  validate: new SimpleSchema([IdSchema, {
-    name: { type: String },
-    abbreviation: { type: String }
-  }]).validator(),
+  validate: new SimpleSchema([IdSchema, StandardsTypeSchema]).validator(),
 
   run(doc) {
     if (!this.userId) {
@@ -65,7 +62,7 @@ export const update = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'StandardTypes.remove',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
   run(doc) {
     if (!this.userId) {
