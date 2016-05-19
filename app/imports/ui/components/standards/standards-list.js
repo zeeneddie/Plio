@@ -53,6 +53,7 @@ Template.StandardsList.viewmodel({
     }
     
     const standards = Standards.find(standardsQuery).fetch();
+    this.searchResultsNumber(standards.length);
 
     const filteredSectionIds = sectionIds.filter((id) => {
       return _.some(standards, (s) => s.sectionId === id);
