@@ -1,6 +1,5 @@
 export default class Counter {
   constructor(name, cursor, interval) {
-    console.log('hello')
     this.name = name;
     this.cursor = cursor;
     this.interval = interval || 1000 * 10;
