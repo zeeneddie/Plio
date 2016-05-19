@@ -29,7 +29,6 @@ Template.StandardsList.viewmodel({
       }
     }
   },
-  searchText: '',
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
   },
