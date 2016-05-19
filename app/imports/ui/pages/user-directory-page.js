@@ -87,8 +87,5 @@ Template.UserDirectoryPage.viewmodel({
     } else {
       return [];
     }
-  },
-  onDestroyed() {
-    this.searchText('');
   }
 });
