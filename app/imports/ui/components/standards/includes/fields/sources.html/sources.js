@@ -48,6 +48,10 @@ Template.ESSources.viewmodel({
       return;
     }
 
+    if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
+      url = `http://${url}`;
+    }
+
     if (url && !this.IsValidUrl(url)) {
       ViewModel.findOne('ModalWindow').setError('Url is not valid!');
       return;
