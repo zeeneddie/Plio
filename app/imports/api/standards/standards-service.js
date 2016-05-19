@@ -18,7 +18,15 @@ export default {
     return this.collection.update(query, options);
   },
 
-  remove({ _id }) {
-    return this.collection.remove({ _id });
+  remove({ _id, deletedBy }) {
+    const options = {
+      $set: {
+        isDeleted: true,
+        deletedBy,
+        deletedAt: new Date()
+      }
+    };
+    
+    return this.collection.update({ _id }, options);
   }
 };
