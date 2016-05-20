@@ -7,6 +7,9 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
   mixin: ['search', 'organization'],
+  onCreated() {
+    this.searchText('');
+  },
   activeUser() {
     return FlowRouter.getParam('userId') || null;
   },

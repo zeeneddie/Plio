@@ -14,8 +14,7 @@ Template.DashboardLayout.viewmodel({
       const { _id, users } = !!this.organization() && this.organization();
       const userIds = _.pluck(users, 'userId');
       this._subHandlers([
-        this.templateInstance.subscribe('currentUserOrganizations'),
-        this.templateInstance.subscribe('organizationOnlineUsers', userIds)
+        this.templateInstance.subscribe('currentUserOrganizationById', _id),
       ]);
     }
   ]

@@ -120,40 +120,36 @@ const OrganizationDefaults = {
 
 const DefaultStandardTypes = [
   {
-    name: 'Customer experience',
-    abbreviation: 'CEX'
-  },
-  {
     name: 'Policy',
     abbreviation: 'POL'
   },
   {
-    name: 'Procedure',
-    abbreviation: 'PRO'
+    name: 'Checklist',
+    abbreviation: 'CHK'
+  },
+  {
+    name: 'Product specification',
+    abbreviation: 'SPC'
   },
   {
     name: 'Regulation',
     abbreviation: 'REG'
   },
   {
-    name: 'Specification',
-    abbreviation: 'SPEC'
-  },
-  {
     name: 'Standard Operating Procedure',
     abbreviation: 'SOP'
   },
   {
-    name: 'Process',
-    abbreviation: 'PRO'
-  },
-  {
     name: 'Work instruction',
-    abbreviation: 'WORK'
+    abbreviation: 'WRK'
   },
   {
     name: 'Test method',
-    abbreviation: 'TEST'
+    abbreviation: 'TST'
+  },
+  {
+    name: 'Other',
+    abbreviation: 'DOC'
   }
 ];
 

@@ -17,10 +17,9 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
   },
   onChange(viewModel) {
     const { name, abbreviation } = viewModel.getData();
-
+    const organizationId = this.organizationId();
+    
     if (!viewModel._id) {
-      const organizationId = this.organizationId();
-
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
@@ -29,7 +28,7 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
     } else {
       const _id = viewModel._id();
 
-      this.modal().callMethod(update, { _id, name, abbreviation });
+      this.modal().callMethod(update, { _id, name, abbreviation, organizationId });
     }
   },
   onDelete(viewModel) {
@@ -41,7 +40,8 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
     if (!confirm('Delete this standards type?')) return;
 
     const _id = viewModel._id();
+    const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id, organizationId });
   }
 });

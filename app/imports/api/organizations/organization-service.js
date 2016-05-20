@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 
 import { Organizations } from './organizations.js';
-import { StandardsTypeService } from '../standards-types/standards-type-service.js';
+import StandardsTypeService from '../standards-types/standards-type-service.js';
 import {
   DefaultStandardTypes,
   OrganizationDefaults,

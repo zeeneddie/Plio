@@ -7,6 +7,9 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  onCreated() {
+    this.searchText('');
+  },
   onRendered() {
     // show stored standard section
     if (this.standards().count() > 0 && this.currentStandard()) {
@@ -53,6 +56,7 @@ Template.StandardsList.viewmodel({
     }
 
     const standards = Standards.find(standardsQuery).fetch();
+    this.searchResultsNumber(standards.length);
 
     const filteredSectionIds = sectionIds.filter((id) => {
       return _.some(standards, (s) => s.sectionId === id);
@@ -73,9 +77,9 @@ Template.StandardsList.viewmodel({
   },
   openAddTypeModal(e) {
     this.modal().open({
-      title: 'Add',
-      variation: 'simple',
-      template: 'AddStandardType'
+      title: 'Standard',
+      template: 'CreateStandard',
+      variation: 'save'
     });
   }
 });

@@ -38,7 +38,7 @@
   "statusConnection": "online",
   "roles": {
     "8bcNPN8sKTtJFw4uy": [
-      "create-standards-documents",
+      "create-update-delete-standards",
       "view-team-actions",
       "invite-users",
       "delete-users",

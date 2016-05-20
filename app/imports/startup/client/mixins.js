@@ -96,6 +96,10 @@ ViewModel.mixin({
     }
   },
   search: {
+    searchResultsNumber: 0,
+    searchResultsText() {
+      return `${this.searchResultsNumber()} matching results`; 
+    },
     searchObject(prop, fields) {
       const searchObject = {};
 
