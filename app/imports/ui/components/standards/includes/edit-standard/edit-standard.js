@@ -16,6 +16,7 @@ Template.EditStandard.viewmodel({
       cb = options;
       options = {};
     }
+
     const _id = this._id && this._id();
     const organizationId = this.organizationId();
     const modifier = _.extend(args, { _id, options, query, organizationId });
@@ -25,7 +26,7 @@ Template.EditStandard.viewmodel({
   remove() {
     const { _id, title } = this.standard();
     const organizationId = this.organizationId();
-    
+
     swal(
       {
         title: 'Are you sure?',
@@ -36,22 +37,24 @@ Template.EditStandard.viewmodel({
         closeOnConfirm: false
       },
       () => {
-        this.modal().callMethod(remove, { _id, organizationId }, () => {
-          swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
+        this.modal().callMethod(remove, { _id, organizationId }, (err) => {
+          if (err) {
+            swal('Oops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
 
-          this.modal().close();
-          this.selectedStandardId('');
+            this.modal().close();
+            this.selectedStandardId('');
 
-          const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
+            const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
 
-          if (!!standard) {
-            this.selectedStandardId(standard._id);
+            if (!!standard) {
+              this.selectedStandardId(standard._id);
 
-            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
+              FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
 
-            this.toggleVMCollapse('ListItem', (viewmodel) => {
-              return viewmodel.collapsed() && viewmodel.child(vm => vm._id && vm._id() === standard._id);
-            });
+              this.expandCollapsedStandard(standard._id);
+            }
           }
         });
       }

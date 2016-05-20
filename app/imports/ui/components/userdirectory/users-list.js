@@ -22,15 +22,15 @@ Template.UsersList.viewmodel({
 
   getUserPath(userId) {
     return FlowRouter.path('userDirectoryUserPage', {
-      orgSerialNumber: this.parent().getCurrentOrganizationSerialNumber(),
+      orgSerialNumber: this.parent().organizationSerialNumber(),
       userId: userId
     });
   },
 
   onInviteClick(event) {
     event.preventDefault();
-    const orgSerialNumber = this.parent().getCurrentOrganizationSerialNumber();
-    const organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+    const serialNumber = this.parent().organizationSerialNumber();
+    const organizationId = Organizations.findOne({ serialNumber })._id;
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',

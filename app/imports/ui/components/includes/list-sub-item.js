@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.ListSubItem.viewmodel({
-  share: 'standard',
+  share: ['standard', 'window'],
   mixin: ['organization', 'standard'],
   standardType() {
     const typeId = this.typeId && this.typeId();
@@ -14,15 +14,15 @@ Template.ListSubItem.viewmodel({
   },
   select() {
     if ($(window).width() < 768) {
-      $('.content-list').attr('style', 'display: none !important');
-      $('.content-cards').attr('style', 'display: block !important');
+      this.width($(window).width());
     }
 
     const { serialNumber } = this.organization();
 
     this.selectedStandardId(this._id());
+
     FlowRouter.go(
-      'standard', 
+      'standard',
       { orgSerialNumber: serialNumber, standardId: this._id() },
       { by: this.activeStandardFilter() }
     );

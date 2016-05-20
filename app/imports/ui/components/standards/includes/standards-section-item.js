@@ -21,7 +21,7 @@ Template.StandardsSectionItem.viewmodel({
 
     if (this.isActiveStandardFilter('type')) {
       query.$and.push({
-        typeId: this.parent()._id()
+        typeId: this.parent().parent()._id()
       });
     }
 

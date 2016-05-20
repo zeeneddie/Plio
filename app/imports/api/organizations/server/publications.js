@@ -7,7 +7,8 @@ import { StandardTypes } from '../../standards-types/standards-types.js';
 import {
   StandardsBookSections
 } from '../../standards-book-sections/standards-book-sections.js';
-
+import { Standards } from '../../standards/standards.js';
+import { LessonsLearned } from '../../lessons/lessons.js';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -60,27 +61,56 @@ Meteor.publishComposite('currentUserOrganizations', {
   }]
 });
 
-Meteor.publishComposite('currentUserOrganizationById', {
-  find: function (orgId) {
-    return Organizations.find({_id: orgId, 'users.userId': this.userId});
-  },
-  children: [{
-    find: function (org) {
-      return Departments.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardTypes.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardsBookSections.find({
-        organizationId: org._id
-      });
-    }
-  }]
+Meteor.publishComposite('currentUserOrganizationById', function(orgId) {
+  return {
+    find: function () {
+      return Organizations.find({_id: orgId, 'users.userId': this.userId});
+    },
+    children: [{
+      find: function (org) {
+        return Departments.find({
+          organizationId: org._id
+        });
+      }
+    }, {
+      find: function (org) {
+        return StandardTypes.find({
+          organizationId: org._id
+        });
+      }
+    }, {
+      find: function (org) {
+        return StandardsBookSections.find({
+          organizationId: org._id
+        });
+      }
+    }]
+  }
+});
+
+Meteor.publishComposite('currentUserOrganizationBySerialNumber', function(serialNumber) {
+  return {
+    find: function () {
+      return Organizations.find({serialNumber, 'users.userId': this.userId});
+    },
+    children: [{
+      find: function (org) {
+        return Departments.find({
+          organizationId: org._id
+        });
+      }
+    }, {
+      find: function (org) {
+        return StandardTypes.find({
+          organizationId: org._id
+        });
+      }
+    }, {
+      find: function (org) {
+        return StandardsBookSections.find({
+          organizationId: org._id
+        });
+      }
+    }]
+  };
 });

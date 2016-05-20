@@ -1,10 +1,10 @@
 <template name="DashboardPage">
   <div class="dashboard-items">
-    {{> SimpleCard route="standards" serialNumber=serialNumber icon="fa-book" title="Standards book" text=""}}
-    {{> SimpleCard route="discussions" serialNumber=serialNumber icon="fa-comments" title="Discussions" text="Coming soon" disabled=true}}
-    {{> SimpleCard route="nonconformities" serialNumber=serialNumber icon="fa-exclamation-triangle" title="Non-conformities" text="Coming soon" disabled=true}}
-    {{> SimpleCard route="actions" serialNumber=serialNumber icon="fa-inbox" title="Actions" text="Coming soon" labelText="1" disabled=true}}
-    {{> SimpleCard icon="fa-bolt" serialNumber=serialNumber title="Risk register" text="Coming soon" disabled=true}}
+    {{> SimpleCard route="standards" icon="fa-book" title="Standards book" text=""}}
+    {{> SimpleCard route="discussions" icon="fa-comments" title="Discussions" text="Coming soon" disabled=true}}
+    {{> SimpleCard route="nonconformities" icon="fa-exclamation-triangle" title="Non-conformities" text="Coming soon" disabled=true}}
+    {{> SimpleCard route="actions" icon="fa-inbox" title="Actions" text="Coming soon" labelText="1" disabled=true}}
+    {{> SimpleCard icon="fa-bolt" title="Risk register" text="Coming soon" disabled=true}}
   </div>
   <hr>
   {{> UserStats}}
