@@ -1,7 +1,7 @@
 Meteor.users.helpers({
   fullName() {
     const { firstName='', lastName='' } = this.profile;
-    
+
     if (firstName && lastName) {
       return `${firstName} ${lastName}`;
     }
@@ -26,6 +26,25 @@ Meteor.users.helpers({
   },
   address() {
     return this.profile.address;
+  },
+  formattedAddress() {
+    let address = this.address();
+
+    // get rid of trailling '\n'
+    address = address.trim();
+
+    // if address does not include '\n',
+    // return it without changes
+    let parts = address.split('\n');
+    if (parts.length === 1) {
+      return parts[0];
+    }
+
+    // remove address parts that does not include words or numbers
+    parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1);
+
+    // join address parts with commas
+    return _.map(parts, part => part.replace(/\,\s*$/, '').trim()).join(', ');
   },
   country() {
     return this.profile.country;

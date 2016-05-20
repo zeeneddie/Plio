@@ -25,7 +25,7 @@ Template.UserDirectoryPage.viewmodel({
       }
     }
   },
-  currentUser() {
+  user() {
     return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
 
