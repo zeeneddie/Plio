@@ -47,16 +47,16 @@ Template.CreateStandard.viewmodel({
       nestingLevel
     };
 
-     this.modal().callMethod(insert, args, (err, doc) => {
+     this.modal().callMethod(insert, args, (err, _id) => {
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        this.selectedStandardId(doc._id);
+        this.selectedStandardId(_id);
 
-        this.expandCollapsedStandard(doc._id);
+        this.expandCollapsedStandard(_id);
 
         this.modal().open({
-          _id: doc._id,
+          _id: _id,
           title: 'Standard',
           template: 'EditStandard'
         });
