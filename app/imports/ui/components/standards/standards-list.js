@@ -77,7 +77,7 @@ Template.StandardsList.viewmodel({
   },
   openAddTypeModal(e) {
     this.modal().open({
-      title: 'Standard',
+      title: 'Compliance standard',
       template: 'CreateStandard',
       variation: 'save'
     });
