@@ -4,7 +4,7 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
 
 Template.ListSubItem.viewmodel({
-  share: 'standard',
+  share: ['standard', 'window'],
   mixin: ['organization', 'standard'],
   autorun() {
     if (this._id() === this.selectedStandardId() && this.isNew()) {
@@ -23,13 +23,13 @@ Template.ListSubItem.viewmodel({
   },
   select() {
     if ($(window).width() < 768) {
-      $('.content-list').attr('style', 'display: none !important');
-      $('.content-cards').attr('style', 'display: block !important');
+      this.width($(window).width());
     }
 
     const { serialNumber } = this.organization();
 
     this.selectedStandardId(this._id());
+
     FlowRouter.go(
       'standard',
       { orgSerialNumber: serialNumber, standardId: this._id() },

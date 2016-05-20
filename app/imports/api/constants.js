@@ -155,7 +155,8 @@ const DefaultStandardTypes = [
 
 const StandardFilters = [
   'section',
-  'type'
+  'type',
+  'deleted'
 ];
 
 export {
