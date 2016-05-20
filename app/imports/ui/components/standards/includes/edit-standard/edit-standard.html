@@ -23,15 +23,17 @@
           sourceType=standard.source1.type
           sourceUrl=standard.source1.url
           sourceName=standard.source1.name
-          label="Source document/video 1"
+          label="Source file 1"
           id=1}}
 
-      {{> ESSources
-          sourceType=standard.source2.type
-          sourceUrl=standard.source2.url
-          sourceName=standard.source2.name
-          label="Source document/video 2"
-          id=2}}
+      {{#if standard.source1}}
+        {{> ESSources
+            sourceType=standard.source2.type
+            sourceUrl=standard.source2.url
+            sourceName=standard.source2.name
+            label="Source file 2"
+            id=2}}
+      {{/if}}
 
     </div>
 
