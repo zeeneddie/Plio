@@ -11,8 +11,8 @@ Template.StandardsHeader.viewmodel({
   autorun: [
     function() {
       this.selectedFilter.depend();
-      if (!!this.standardId() && this.listItems._rendered()) {
-        this.expandCollapsedStandard(this.standardId());
+      if (!!this.selectedStandardId() && !!this.listItems._rendered()) {
+        this.expandCollapsedStandard(this.selectedStandardId());
       }
     },
     function() {
@@ -27,11 +27,13 @@ Template.StandardsHeader.viewmodel({
           const orgSerialNumber = this.organization().serialNumber;
           const { _id } = standard;
 
-          FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+          Meteor.setTimeout(() => {
+            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
 
-          this.selectedStandardId(_id);
+            this.selectedStandardId(_id);
 
-          this.expandCollapsedStandard(_id);
+            this.expandCollapsedStandard(_id);
+          }, 0);
         }
       }
     },
