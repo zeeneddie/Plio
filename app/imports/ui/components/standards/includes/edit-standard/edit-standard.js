@@ -46,15 +46,7 @@ Template.EditStandard.viewmodel({
             this.modal().close();
             this.selectedStandardId('');
 
-            const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
-
-            if (!!standard) {
-              this.selectedStandardId(standard._id);
-
-              FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: standard._id });
-
-              this.expandCollapsedStandard(standard._id);
-            }
+            FlowRouter.go('standards', { orgSerialNumber: this.organization().serialNumber });
           }
         });
       }

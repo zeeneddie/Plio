@@ -11,8 +11,28 @@ Template.StandardsHeader.viewmodel({
   autorun: [
     function() {
       this.selectedFilter.depend();
-      if (this.listItems._rendered()) {
+      if (!!this.standardId() && this.listItems._rendered()) {
         this.expandCollapsedStandard(this.standardId());
+      }
+    },
+    function() {
+      if (!this.selectedStandardId() && !!this.standardId()) {
+        this.selectedStandardId(this.standardId());
+      }
+    },
+    function() {
+      if (!this.standardId() && !this.selectedStandardId()) {
+        const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
+        if (!!standard) {
+          const orgSerialNumber = this.organization().serialNumber;
+          const { _id } = standard;
+
+          FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+
+          this.selectedStandardId(_id);
+
+          this.expandCollapsedStandard(_id);
+        }
       }
     },
     function() {

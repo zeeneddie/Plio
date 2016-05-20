@@ -17,6 +17,16 @@ export default {
     return this.collection.update(query, options);
   },
 
+  updateViewedBy({ _id, userId }) {
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        viewedBy: userId
+      }
+    };
+    return this.collection.update({ _id }, options);
+  },
+
   remove({ _id, deletedBy }) {
     const options = {
       $set: {
@@ -25,7 +35,7 @@ export default {
         deletedAt: new Date()
       }
     };
-    
+
     return this.collection.update({ _id }, options);
   }
 };

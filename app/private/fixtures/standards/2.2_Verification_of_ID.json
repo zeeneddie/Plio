@@ -17,5 +17,6 @@
   "issueNumber": 1,
   "status": "issued",
   "isApproved": true,
-  "isDeleted": false
+  "isDeleted": false,
+  "viewedBy": []
 }
