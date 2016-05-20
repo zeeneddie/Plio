@@ -20,7 +20,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal"
                 {{b "disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving"}}></i>
-              Close
+              <span {{b "text: closeCaption"}}></span>
             </button>
           </div>
         </div>
@@ -33,7 +33,7 @@
             <div class="btn-group">
               <a class="btn btn-link guidance-panel-close pointer"
                 {{b "click: toggleCollapse"}}>
-                Close
+                <span {{b "text: closeCaption"}}></span>
               </a>
               <a {{b "attr: { href: moreInfoLink }"}} class="btn btn-link">More info</a>
             </div>

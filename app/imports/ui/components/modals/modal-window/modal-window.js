@@ -16,6 +16,7 @@ Template.ModalWindow.viewmodel({
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
+  closeCaption: 'Close',
   guideHtml: 'No help message yet',
 
   isVariation(variation) {

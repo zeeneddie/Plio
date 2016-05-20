@@ -36,6 +36,7 @@ Template.UsersList.viewmodel({
       template: 'UserDirectory_InviteUsers',
       title: 'Invite users',
       submitCaption: 'Invite',
+      closeCaption: 'Cancel',
       variation: 'save',
       organizationId
     });

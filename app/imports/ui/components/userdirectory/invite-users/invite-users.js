@@ -24,6 +24,7 @@ Template.UserDirectory_InviteUsers.viewmodel({
         organizationId, emails, welcomeMessage
       }, (err, res) => {
         if(!err) {
+          swal('Invited!', `Invite${emails.length > 1 ? 's' : ''} to "${emails.join(', ')}" ${emails.length > 1 ? 'were' : 'was'} sent successfully.`, 'success');
           this.modal().close();
         }
       });
