@@ -7,6 +7,11 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  autorun() {    
+    !!this.searchText() && _.each(this.queryStandards(), (standard) => {
+      this.expandCollapsedStandard(standard._id);
+    });
+  },
   onCreated() {
     this.searchText('');
   },
@@ -29,6 +34,7 @@ Template.StandardsList.viewmodel({
       }
     }
   },
+  queryStandards: [],
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
   },
@@ -56,6 +62,7 @@ Template.StandardsList.viewmodel({
     }
 
     const standards = Standards.find(standardsQuery).fetch();
+    this.queryStandards(standards);
     this.searchResultsNumber(standards.length);
 
     const filteredSectionIds = sectionIds.filter((id) => {
