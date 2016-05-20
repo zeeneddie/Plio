@@ -3,10 +3,9 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsBookSectionService from './standards-book-section-service.js';
 import {
-  StandardsBookSectionEditableFields,
   StandardsBookSectionSchema
 } from './standards-book-section-schema.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
 
 
@@ -41,7 +40,7 @@ export const update = new ValidatedMethod({
 
   validate: new SimpleSchema([
     IdSchema,
-    StandardsBookSectionEditableFields
+    StandardsBookSectionSchema
   ]).validator(),
 
   run(doc) {
@@ -68,7 +67,7 @@ export const update = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'StandardsBookSections.remove',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
   run(doc) {
     if (!this.userId) {
