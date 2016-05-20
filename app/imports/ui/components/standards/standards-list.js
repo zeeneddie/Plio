@@ -7,21 +7,17 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
-  autorun() {    
-    !!this.searchText() && _.each(this.queryStandards(), (standard) => {
-      this.expandCollapsedStandard(standard._id);
-    });
-  },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    // show stored standard section
-    if (this.standards().count() > 0 && this.currentStandard()) {
-      this.selectedStandardId(this.currentStandard()._id);
+  autorun() {
+    if (!!this.searchText() && this.queryStandards().length > 0) {
+      _.each(this.queryStandards(), standard => this.expandCollapsedStandard(standard._id));
     }
 
-    // show first standard section
+    if (!this.searchText() && !!this.currentStandard()) {
+      console.log('called');
+      this.selectedStandardId(this.currentStandard()._id);
+      this.expandCollapsedStandard(this.currentStandard()._id);
+    }
+
     if (this.standards().count() > 0 && !this.currentStandard()) {
       const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
 
@@ -33,6 +29,9 @@ Template.StandardsList.viewmodel({
         FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
       }
     }
+  },
+  onCreated() {
+    this.searchText('');
   },
   queryStandards: [],
   standards() {
