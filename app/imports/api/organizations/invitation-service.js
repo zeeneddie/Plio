@@ -55,7 +55,14 @@ class InvitationSender {
 
     try {
       const newUserId = Accounts.createUser(userDoc);
-      Meteor.users.update({_id: newUserId}, {$set: {invitationId: this._invitationId}});
+      Meteor.users.update({
+        _id: newUserId,
+      }, {
+        $set: {
+          invitationId: this._invitationId,
+          'emails.0.verified': true
+        }
+      });
       return newUserId;
     } catch (err) {
       const errorMsg = `Failed to create user ${this._userEmail}`;

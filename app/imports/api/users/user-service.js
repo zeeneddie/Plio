@@ -23,13 +23,10 @@ export default {
   },
 
   updateEmail(_id, email) {
-    const updateDoc = {
-      'emails.0.address': email,
-      'emails.0.verified': false
-    };
-
     return this.collection.update({ _id }, {
-      $set: updateDoc
+      $set: {
+        'emails.0.address': email
+      }
     });
   },
 
