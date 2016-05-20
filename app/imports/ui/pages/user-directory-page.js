@@ -10,9 +10,6 @@ Template.UserDirectoryPage.viewmodel({
   onCreated() {
     this.searchText('');
   },
-  activeUser() {
-    return FlowRouter.getParam('userId') || null;
-  },
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
     if (userIds && userIds.length) {
@@ -28,7 +25,9 @@ Template.UserDirectoryPage.viewmodel({
   currentUser() {
     return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
-
+  activeUser() {
+    return FlowRouter.getParam('userId') || null;
+  },
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
