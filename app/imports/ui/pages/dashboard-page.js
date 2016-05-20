@@ -14,6 +14,7 @@ Template.DashboardPage.viewmodel({
     return this.counter.get('standards-not-viewed-count');
   },
   standardsMetrics() {
-    return `${this.standardsCount()} standards, ${this.standardsNotViewedCount()} new`;
+    const notViewedText = this.standardsNotViewedCount() ? `, ${this.standardsNotViewedCount()} new` : '';
+    return `${this.standardsCount()} standards${notViewedText}`;
   }
 });
