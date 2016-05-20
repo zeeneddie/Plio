@@ -177,6 +177,16 @@ const optionalFields = new SimpleSchema({
   },
   'improvementPlan.files.$.name': {
     type: String
+  },
+  viewedBy: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return [this.userId];
+      }
+    }
   }
 });
 

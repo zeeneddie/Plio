@@ -1,4 +1,5 @@
 import './dashboard-page.html';
+import './dashboard-page.js';
 import './hello-page.html';
 import './standards-page.html';
 import './standards-page.js';
