@@ -7,29 +7,18 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
-  autorun() {
-    if (!!this.searchText() && this.queryStandards().length > 0) {
-      _.each(this.queryStandards(), standard => this.expandCollapsedStandard(standard._id));
-    }
-
-    if (!this.searchText() && !!this.currentStandard()) {
-      console.log('called');
-      this.selectedStandardId(this.currentStandard()._id);
-      this.expandCollapsedStandard(this.currentStandard()._id);
-    }
-
-    if (this.standards().count() > 0 && !this.currentStandard()) {
-      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
-
-      if (!!standard) {
-        const { _id } = standard;
-
-        this.selectedStandardId(_id);
-
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+  autorun: [
+    function() {
+      if (!!this.searchText() && this.queryStandards().length > 0) {
+        _.each(this.queryStandards(), standard => this.expandCollapsedStandard(standard._id));
+      }
+    },
+    function() {
+      if (!this.searchText() && !!this.selectedStandardId()) {
+        this.expandCollapsedStandard(this.selectedStandardId());
       }
     }
-  },
+  ],
   onCreated() {
     this.searchText('');
   },
@@ -44,7 +33,7 @@ Template.StandardsList.viewmodel({
       { name: 'status' }
     ]);
 
-    const availableSections = StandardsBookSections.find({ organizationId: this.organization()._id }).fetch();
+    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
     const sectionIds = _.pluck(availableSections, '_id');
 
     const standardsQuery = {
