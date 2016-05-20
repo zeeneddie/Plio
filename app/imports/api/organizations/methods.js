@@ -85,7 +85,7 @@ export const setName = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(403, updateErrorMessage);
     }
-    
+
     const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
 
     if (!canEditOrgSettings) {
@@ -119,7 +119,7 @@ export const setDefaultCurrency = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
+
     return OrganizationService.setDefaultCurrency(doc);
   }
 });
@@ -144,7 +144,7 @@ export const setStepTime = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
+
     return OrganizationService.setStepTime(doc);
   }
 });
@@ -275,7 +275,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
   validate: new SimpleSchema([OrganizationIdSchema, {
     emails: {
-      type: [SimpleSchema.RegEx.Email]
+      type: [String],
+      regEx: SimpleSchema.RegEx.Email
     },
     welcomeMessage: {
       type: String
@@ -337,8 +338,8 @@ export const removeUser = new ValidatedMethod({
       );
     }
 
-    const isRemovableUserOrgOwner = !!Organizations.findOne({ 
-      _id: organizationId, 
+    const isRemovableUserOrgOwner = !!Organizations.findOne({
+      _id: organizationId,
       users: {
         $elemMatch: {
           userId: userId,

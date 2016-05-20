@@ -9,7 +9,10 @@
               {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <i class="fa fa-question-circle"></i>
             </button>
-            <button type="button" class="btn btn-primary submit-modal-button" {{b "if: isVariation('save'), click: child.save, text: submitCaption"}}>
+            <button type="button" class="btn btn-primary submit-modal-button"
+              {{b "if: isVariation('save'), click: child.save, disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
+              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && isVariation('save')"}}></i>
+              <span {{b "text: submitCaptionText"}}></span>
             </button>
           </div>
 
@@ -19,7 +22,7 @@
             {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
             <button type="button" class="btn btn-secondary" data-dismiss="modal"
                 {{b "disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
-              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving"}}></i>
+              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && !isVariation('save')"}}></i>
               <span {{b "text: closeCaption"}}></span>
             </button>
           </div>
@@ -33,7 +36,7 @@
             <div class="btn-group">
               <a class="btn btn-link guidance-panel-close pointer"
                 {{b "click: toggleCollapse"}}>
-                <span {{b "text: closeCaption"}}></span>
+                <span>Close</span>
               </a>
               <a {{b "attr: { href: moreInfoLink }"}} class="btn btn-link">More info</a>
             </div>
