@@ -123,6 +123,14 @@ Template.ESSources.viewmodel({
         $unset: {
           [`source${this.id()}`]: ''
         }
+      }, (err) =>  {
+        if (!err && this.id() === 1) {
+          this.parent().update({}, {
+            $rename: {
+              source2: 'source1'
+            }
+          });
+        }
       });
     });
   },
