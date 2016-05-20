@@ -68,7 +68,15 @@ Template.StandardsList.viewmodel({
   },
   standardsTypes() {
     const options = { sort: { name: 1 } };
-    return StandardTypes.find({ organizationId: this.organization()._id }, options);
+    
+    const types =  StandardTypes.find({ organizationId: this.organizationId() }).fetch();
+    const typeIds = _.pluck(types, '_id');
+    const filteredTypeIds = typeIds.filter((id) => {
+      const typeSections = this.standardsBookSections(id).fetch();
+      return typeSections.length > 0;
+    });
+    
+    return StandardTypes.find({ organizationId: this.organizationId(), _id: { $in: filteredTypeIds } }, options);
   },
   openAddTypeModal(e) {
     this.modal().open({
