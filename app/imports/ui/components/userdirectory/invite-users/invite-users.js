@@ -1,6 +1,6 @@
-import {Template} from 'meteor/templating';
-import {ViewModel} from 'meteor/manuel:viewmodel';
-import {inviteMultipleUsersByEmail} from '/imports/api/organizations/methods'
+import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
+import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: 'modal',

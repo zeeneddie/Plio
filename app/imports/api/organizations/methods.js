@@ -1,14 +1,14 @@
-import {Meteor} from 'meteor/meteor';
-import {ValidatedMethod} from 'meteor/mdg:validated-method';
-import {SimpleSchema} from 'meteor/aldeed:simple-schema';
-import {Roles} from 'meteor/alanning:roles';
+import { Meteor } from 'meteor/meteor';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
-import {Organizations} from './organizations';
+import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
-import {OrganizationEditableFields} from './organization-schema';
-import {NCTypes, UserRoles, UserMembership} from '../constants';
+import { OrganizationEditableFields } from './organization-schema';
+import { NCTypes, UserRoles, UserMembership } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,

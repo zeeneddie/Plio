@@ -1,4 +1,4 @@
-import {Slingshot} from 'meteor/edgee:slingshot';
+import { Slingshot } from 'meteor/edgee:slingshot';
 import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
