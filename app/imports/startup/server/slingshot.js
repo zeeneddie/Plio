@@ -1,61 +1,69 @@
-import { Slingshot } from 'meteor/edgee:slingshot';
+import {Slingshot} from 'meteor/edgee:slingshot';
 
 
-const {
-  name, acl, avatarsDir,
-  attachmentsDir, improvementPlanFilesDir
-}  = Meteor.settings.AWSS3Bucket;
+const configureSlignshot = () => {
+  const {
+    name, acl, avatarsDir,
+    attachmentsDir, improvementPlanFilesDir
+  }  = Meteor.settings.AWSS3Bucket;
 
-Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
-  bucket: name,
+  Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
+    bucket: name,
 
-  acl: acl,
+    acl: acl,
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file) {
+      return `${avatarsDir}/${file.name}`;
     }
+  });
 
-    return true;
-  },
+  Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
+    bucket: name,
 
-  key(file) {
-    return `${avatarsDir}/${file.name}`;
-  }
-});
+    acl: acl,
 
-Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
-  bucket: name,
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
 
-  acl: acl,
+      return true;
+    },
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    key(file) {
+      return `${attachmentsDir}/${file.name}`;
     }
+  });
 
-    return true;
-  },
+  Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
+    bucket: name,
 
-  key(file) {
-    return `${attachmentsDir}/${file.name}`;
-  }
-});
+    acl: acl,
 
-Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
-  bucket: name,
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
 
-  acl: acl,
+      return true;
+    },
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    key(file) {
+      return `${improvementPlanFilesDir}/${file.name}`;
     }
+  });
+};
 
-    return true;
-  },
+const isProduction = () =>process.env.NODE_ENV !== 'development';
 
-  key(file) {
-    return `${improvementPlanFilesDir}/${file.name}`;
-  }
-});
+if (isProduction()) {
+  configureSlignshot();
+}
