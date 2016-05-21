@@ -1,5 +1,5 @@
 import {Slingshot} from 'meteor/edgee:slingshot';
-
+import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
   const {
@@ -62,8 +62,6 @@ const configureSlignshot = () => {
   });
 };
 
-const isProduction = () =>process.env.NODE_ENV !== 'development';
-
-if (isProduction()) {
+if (Utils.isProduction()) {
   configureSlignshot();
 }
