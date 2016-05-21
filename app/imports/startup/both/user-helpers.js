@@ -41,10 +41,14 @@ Meteor.users.helpers({
     }
 
     // remove address parts that does not include words or numbers
-    parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1);
+    parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1); 
 
     // join address parts with commas
-    return _.map(parts, part => part.replace(/\,\s*$/, '').trim()).join(', ');
+    let addressString = _.map(parts, part => part.replace(/\,\s*$/, '').trim()).join(', ');
+
+    // add trailing '.' if needed
+    addressString = addressString.slice(-1) === '.' ? addressString : addressString + '.';
+    return addressString;
   },
   country() {
     return this.profile.country;
