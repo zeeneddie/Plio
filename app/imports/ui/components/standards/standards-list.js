@@ -10,12 +10,8 @@ Template.StandardsList.viewmodel({
   autorun: [
     function() {
       if (!!this.searchText() && this.queryStandards().length > 0) {
-        _.each(this.queryStandards(), standard => this.expandCollapsedStandard(standard._id));
-      }
-    },
-    function() {
-      if (!this.searchText() && !!this.selectedStandardId()) {
-        this.expandCollapsedStandard(this.selectedStandardId());
+        const ids = this.queryStandards().map(standard => standard._id);
+        this.expandCollapsedStandard(ids, { expandAll: true });
       }
     }
   ],
@@ -68,14 +64,14 @@ Template.StandardsList.viewmodel({
   },
   standardsTypes() {
     const options = { sort: { name: 1 } };
-    
+
     const types =  StandardTypes.find({ organizationId: this.organizationId() }).fetch();
     const typeIds = _.pluck(types, '_id');
     const filteredTypeIds = typeIds.filter((id) => {
       const typeSections = this.standardsBookSections(id).fetch();
       return typeSections.length > 0;
     });
-    
+
     return StandardTypes.find({ organizationId: this.organizationId(), _id: { $in: filteredTypeIds } }, options);
   },
   openAddTypeModal(e) {
