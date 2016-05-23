@@ -90,7 +90,7 @@ class InvitationSender {
 
   _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
     let sender = Meteor.user();
-    let invitationExpirationInHours = NotificationSender.getInvitationExpirationTime();
+    let invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
 
     // send invitation
     let notificationData = Object.assign({
@@ -190,7 +190,10 @@ export default InvitationService = {
       let updateUserProfile = Object.assign(invitedUser.profile, userData);
       Meteor.users.update({_id: invitedUser._id}, {
         $set: {profile: updateUserProfile},
-        $unset: {invitationId: ''}
+        $unset: {
+          invitationId: '',
+          invitedAt: ''
+        }
       });
     } else {
       throw new Meteor.Error(404, 'Invitation does not exist');
@@ -198,6 +201,6 @@ export default InvitationService = {
   },
 
   getInvitationExpirationTime() {
-    return NotificationSender.getInvitationExpirationTime();
+    return InvitationSender.getInvitationExpirationTime();
   }
 };

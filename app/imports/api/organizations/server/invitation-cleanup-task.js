@@ -4,7 +4,7 @@ SyncedCron.add({
   name: 'Remove expired invitations',
   
   schedule: function (parser) {
-    return parser.text('every 1 minute');//parser.text('every 24 hours');
+    return parser.text('every 24 hours');
   },
   
   job: function () {
