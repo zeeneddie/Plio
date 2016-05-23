@@ -432,6 +432,8 @@ fieldset[disabled] {
       margin-right: 0;
       border-right: none;
       width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .uploading-file {

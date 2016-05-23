@@ -18,7 +18,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId && vm.type() === this.type()) {
+          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
@@ -99,7 +99,7 @@ ViewModel.mixin({
   search: {
     searchResultsNumber: 0,
     searchResultsText() {
-      return `${this.searchResultsNumber()} matching results`; 
+      return `${this.searchResultsNumber()} matching results`;
     },
     searchObject(prop, fields) {
       const searchObject = {};

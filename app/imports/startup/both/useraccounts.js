@@ -6,5 +6,10 @@ AccountsTemplates.configure({
   showForgotPasswordLink: true,
   negativeValidation: true,
   positiveValidation: true,
-  homeRoutePath: '/'
+  homeRoutePath: '/',
+  texts: {
+    errors: {
+      loginForbidden: 'Incorrect login details - please try again'
+    }
+  }
 });
