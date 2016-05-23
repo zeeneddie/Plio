@@ -30,7 +30,17 @@ Template.UserDirectory_InviteUsers.viewmodel({
 
           const failMessagePart = res.error ? `\n${res.error}` : '';
 
-          swal(failMessagePart ? 'Not invited!' : 'Invited!', `${successMessagePart}${failMessagePart}`,
+          let notificationTitle;
+          if (failMessagePart) {
+            if (successMessagePart) {
+              notificationTitle = 'Some users were not invited!';
+            } else {
+              notificationTitle = 'Not invited!'
+            }
+          } else {
+            notificationTitle = 'Invited!'
+          }
+          swal(notificationTitle, `${successMessagePart}${failMessagePart}`,
             failMessagePart ? 'error' : 'success');
           this.modal().close();
         }
