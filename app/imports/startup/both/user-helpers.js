@@ -28,7 +28,7 @@ Meteor.users.helpers({
     return this.profile.address;
   },
   formattedAddress() {
-    let address = this.address();
+    let address = this.address() || '';
 
     // get rid of trailling '\n'
     address = address.trim();
