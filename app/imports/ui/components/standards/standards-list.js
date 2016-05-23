@@ -11,6 +11,7 @@ Template.StandardsList.viewmodel({
     function() {
       if (!!this.searchText() && this.queryStandards().length > 0) {
         const ids = this.queryStandards().map(standard => standard._id);
+
         this.expandCollapsedStandard(ids, { expandAll: true });
       }
     }
@@ -59,7 +60,6 @@ Template.StandardsList.viewmodel({
     };
 
     const options = { sort: { title: 1 } };
-
     return StandardsBookSections.find(sectionsQuery, options);
   },
   standardsTypes() {
