@@ -23,11 +23,10 @@ Template.UserDirectory_InviteUsers.viewmodel({
         organizationId, emails, welcomeMessage
       }, (err, res) => {
         if (err) {
-          swal('Error!', `Internal server error: ${err.reason}`);
+          swal('Error!', `Internal server error: ${err.reason}`, 'error');
         } else {
           const invitedEmails = res.invitedEmails;
-          const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} 
-          to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
+          const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
 
           const failMessagePart = res.error ? `\n${res.error}` : '';
 
