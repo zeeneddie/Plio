@@ -1,7 +1,7 @@
 <template name="UserDirectoryPage">
   {{#if Template.subscriptionsReady}}
     {{> UsersList organizationUsers=organizationUsers}}
-    {{> UsersDetails currentUser=currentUser}}
+    {{> UsersDetails user=user}}
   {{else}}
     {{> PreloaderPage}}
   {{/if}}

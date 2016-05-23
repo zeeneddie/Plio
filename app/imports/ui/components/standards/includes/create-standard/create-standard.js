@@ -51,13 +51,15 @@ Template.CreateStandard.viewmodel({
       this.modal().close();
 
       Meteor.setTimeout(() => {
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+
         this.selectedStandardId(_id);
 
         this.expandCollapsedStandard(_id);
 
         this.modal().open({
           _id: _id,
-          title: 'Standard',
+          title: 'Compliance standard',
           template: 'EditStandard'
         });
       }, 400);

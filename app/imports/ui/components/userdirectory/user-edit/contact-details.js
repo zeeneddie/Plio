@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { CountryCodes } from 'meteor/3stack:country-codes';
+import { CountryCodes } from '/imports/api/country-codes.js';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
@@ -25,12 +25,7 @@ Template.UserEdit_ContactDetails.viewmodel({
     return this.parent().isEditable();
   },
   countries() {
-    return _.map(CountryCodes.getList(), (val, key) => {
-      return {
-        code: key,
-        name: val
-      };
-    });
+    return CountryCodes.getList();
   },
   getData() {
     return {
