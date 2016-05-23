@@ -9,7 +9,7 @@
               {{> Template.dynamic template=content}}
               {{> DashboardFooter}}
             {{else}}
-              {{> NotFoundPage subject="Organization"}}
+              {{> NotFoundPage subject="organization" subjectId=organizationSerialNumber}}
             {{/with}}
           {{else}}
             {{> PreloaderPage}}
