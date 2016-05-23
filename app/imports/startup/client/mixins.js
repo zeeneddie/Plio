@@ -55,7 +55,9 @@ ViewModel.mixin({
       const standards = Standards.find(query).fetch();
 
       standards.forEach((standard) => {
-        const vmToCollapse = !!expandAll && ViewModel.findOne('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel, standard));
+        const vmToCollapse = !!expandAll && ViewModel.findOne('ListItem', (viewmodel) => {
+          return viewmodel.collapsed() && (!viewmodel.parent().type || (viewmodel.parent().type() !== 'standardType')) && recursiveSearch(viewmodel, standard);
+        });
 
         !!vmToCollapse && vmToCollapse.closeAllOnCollapse(false);
 
