@@ -33,6 +33,11 @@
       color: white;
       text-decoration: none;
       display: inline-block;
+      padding: 0 20px 0 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
     }
 
     .dropdown-menu {
