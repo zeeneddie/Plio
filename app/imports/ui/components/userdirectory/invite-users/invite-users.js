@@ -22,8 +22,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
     if (emails.length > 0) {
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
-      }, (err, res) => {
-        if(!err) {
+      }, (err, expireTime) => {
+        if (!err) {
+          toastr.success(`Sent invitations expire on ${moment().add(expireTime, 'hours').format('MMMM Do YYYY')}`);
           this.modal().close();
         }
       });
