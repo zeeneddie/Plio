@@ -77,6 +77,7 @@ class InvitationSender {
     //send notification
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the "${this._organization.name}"!`,
+      secondaryText: this._welcomeMessage,
       button: {
         label: 'Go to the dashboard',
         url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
@@ -93,6 +94,7 @@ class InvitationSender {
     // send invitation
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to the "${this._organization.name}" organization!`,
+      secondaryText: this._welcomeMessage,
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
