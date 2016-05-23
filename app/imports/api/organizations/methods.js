@@ -304,21 +304,31 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
       );
     }
 
+    let invitedEmails = [];
     let errors = [];
     emails.forEach(email => {
       //aggregate service errors for each email
       try {
-        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        invitedEmails.push(email);
       } catch (err) {
+        console.error(err);
         errors.push(err.reason);
       }
     });
 
-    if (errors.length > 0) {
-      console.log(errors);
-      let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
-      throw new Meteor.Error(500, errorMsg);
-    }
+    const generateErrorMessage = () => {
+      if (errors.length > 0) {
+        return `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
+      } else {
+        return null;
+      }
+    };
+
+    return {
+      error: generateErrorMessage(),
+      invitedEmails
+    };
   }
 });
 
@@ -330,7 +340,7 @@ export const removeUser = new ValidatedMethod({
     UserIdSchema
   ]).validator(),
 
-  run({ userId, organizationId }) {
+  run({userId, organizationId}) {
     const currUserId = this.userId;
     if (!currUserId) {
       throw new Meteor.Error(
@@ -353,8 +363,8 @@ export const removeUser = new ValidatedMethod({
     }
 
     const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
-      currUserId, UserRoles.DELETE_USERS, organizationId
-    );
+        currUserId, UserRoles.DELETE_USERS, organizationId
+      );
     if (!canRemoveUser) {
       throw new Meteor.Error(
         403,
