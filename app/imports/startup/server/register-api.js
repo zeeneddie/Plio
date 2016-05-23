@@ -1,4 +1,5 @@
 import '../../api/organizations/server/publications.js';
+import '../../api/organizations/server/invitation-cleanup-task.js';
 import '../../api/organizations/organizations.js';
 import '../../api/organizations/organization-schema.js';
 import '../../api/organizations/organization-service.js';

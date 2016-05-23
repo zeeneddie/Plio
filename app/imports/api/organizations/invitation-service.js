@@ -60,6 +60,7 @@ class InvitationSender {
       }, {
         $set: {
           invitationId: this._invitationId,
+          invitedAt: new Date(),
           'emails.0.verified': true
         }
       });
@@ -89,6 +90,7 @@ class InvitationSender {
 
   _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
     let sender = Meteor.user();
+    let invitationExpirationInHours = NotificationSender.getInvitationExpirationTime();
 
     // send invitation
     let notificationData = Object.assign({
@@ -96,7 +98,8 @@ class InvitationSender {
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
-      }
+      },
+      expirationDate: moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')
     }, basicNotificationData);
 
     new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
@@ -164,6 +167,10 @@ class InvitationSender {
       this._inviteUser(userIdToInvite, true);
     }
   }
+
+  static getInvitationExpirationTime() {
+    return Meteor.settings.invitationExpirationTimeInHours || 72; // by default 3 days
+  }
 }
 
 export default InvitationService = {
@@ -188,5 +195,9 @@ export default InvitationService = {
     } else {
       throw new Meteor.Error(404, 'Invitation does not exist');
     }
+  },
+
+  getInvitationExpirationTime() {
+    return NotificationSender.getInvitationExpirationTime();
   }
 };
