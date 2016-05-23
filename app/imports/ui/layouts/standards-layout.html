@@ -8,7 +8,7 @@
           {{#if organization}}
             {{> Template.dynamic template=content}}
           {{else}}
-            {{> NotFoundPage subject="Organization"}}
+            {{> NotFoundPage subject="organization" subjectId=organizationSerialNumber}}
           {{/if}}
         {{else}}
           {{> PreloaderPage}}
