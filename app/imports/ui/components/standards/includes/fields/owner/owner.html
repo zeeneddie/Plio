@@ -1,7 +1,7 @@
 <template name="ESOwner">
   {{#FormField label=label sm=sm}}
     <div class="dropdown">
-      <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner, throttle: 300"}} />
+      <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner, focusout: checkSelectedOwner, throttle: 300"}} />
       <div class="dropdown-menu dropdown-menu-full">
         {{#each members}}
           <a class="dropdown-item pointer" {{b "click: selectOwner(this), text: userFullNameOrEmail(this)"}}></a>
