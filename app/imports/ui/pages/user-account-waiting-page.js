@@ -8,9 +8,11 @@ import { handleMethodResult } from '../../api/helpers.js';
 Template.UserAccountWaitingPage.viewmodel({
   isSendingEmail: false,
   isEmailVerified: false,
+  emailToVerify: '',
   autorun() {
     const currentUser = Meteor.user();
     if (currentUser) {
+      this.emailToVerify(currentUser.emails[0].address);
       this.isEmailVerified(currentUser.emails[0].verified);
     }
   },
