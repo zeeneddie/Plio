@@ -3,26 +3,20 @@ import { Template } from 'meteor/templating';
 Template.ESOwner.viewmodel({
   mixin: ['search', 'user', 'modal'],
   onCreated() {
-    if (this.hasUser() && !this.editable() && this.showCurrentUser && this.showCurrentUser()) {
+    if (this.hasUser() && !this.isEditable() && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
+    } else {
+      this.checkSelectedOwner();
     }
   },
-  autorun() {
-    if (this.selectedOwnerId()) {
-      const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
-
-      this.owner(fullName);
-    }
-  },
-  editable() {
-    return !!this.isEditable && !!this.isEditable();
-  },
+  isEditable: false,
+  showCurrentUser: false,
   label: 'Owner',
   sm: 8,
   owner: '',
   selectedOwnerId: '',
   members() {
-    const query = this.searchObject('owner', ['profile.firstName', 'profile.lastName']);
+    const query = this.searchObject('owner', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
     const options = { sort: { 'profile.firstName': 1 } };
 
     return Meteor.users.find(query, options);
@@ -31,10 +25,13 @@ Template.ESOwner.viewmodel({
     const { _id } = doc;
 
     this.selectedOwnerId(_id);
+
+    this.fixOwner();
+
     this.update();
   },
   update() {
-    if (!this.editable()) return;
+    if (!this.isEditable()) return;
 
     const { owner } = this.getData();
 
@@ -44,6 +41,16 @@ Template.ESOwner.viewmodel({
     }
 
     this.parent().update({ owner });
+  },
+  checkSelectedOwner() {
+    if (!this.owner() && !!this.selectedOwnerId()) {
+      this.fixOwner();
+    }
+  },
+  fixOwner() {
+    const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
+
+    this.owner(fullName);
   },
   getData() {
     const { selectedOwnerId:owner } = this.data();

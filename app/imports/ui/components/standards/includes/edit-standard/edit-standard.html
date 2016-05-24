@@ -23,15 +23,17 @@
           sourceType=standard.source1.type
           sourceUrl=standard.source1.url
           sourceName=standard.source1.name
-          label="Source document/video 1"
+          label="Source file"
           id=1}}
 
-      {{> ESSources
-          sourceType=standard.source2.type
-          sourceUrl=standard.source2.url
-          sourceName=standard.source2.name
-          label="Source document/video 2"
-          id=2}}
+      {{#if standard.source1}}
+        {{> ESSources
+            sourceType=standard.source2.type
+            sourceUrl=standard.source2.url
+            sourceName=standard.source2.name
+            label="Source file 2"
+            id=2}}
+      {{/if}}
 
     </div>
 
@@ -65,16 +67,7 @@
       <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
     </div>
 
-    {{> ESImprovementPlan
-        standard=standard
-        desiredOutcome=standard.improvementPlan.desiredOutcome
-        targetDate=standard.improvementPlan.targetDate
-        owner=standard.improvementPlan.owner
-        reviewDates=standard.improvementPlan.reviewDates
-        selectedMetric=standard.improvementPlan.selectedMetric
-        currentValue=standard.improvementPlan.currentValue
-        targetValue=standard.improvementPlan.targetValue
-        files=standard.improvementPlan.files}}
+    {{> ESImprovementPlan standard=standard}}
 
     {{> ESLessonsLearned standard=standard}}
 

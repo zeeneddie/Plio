@@ -1,9 +1,10 @@
 <template name="ListSubItem">
-  <a class="list-group-item pointer" {{b "click: select, class: { active: selectedStandardId === this._id }"}}>
+  <a class="list-group-item pointer" {{b "click: select, class: { active: selectedStandardId === this._id, disabled: status === 'deleted' }"}}>
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading">
         <span {{b "text: this.title"}}></span>
-        <span class="label label-danger" {{b "if: this.status === 'draft', text: this.status"}}></span>
+        <span class="label label-primary" {{b "if: isNew"}}>New</span>
+        <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
       </h4>
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
     </div>

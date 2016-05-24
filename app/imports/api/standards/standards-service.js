@@ -4,8 +4,7 @@ export default {
   collection: Standards,
 
   insert({ ...args }) {
-    const _id = this.collection.insert(args);
-    return this.collection.findOne({ _id: _id });
+    return this.collection.insert(args);
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -18,7 +17,25 @@ export default {
     return this.collection.update(query, options);
   },
 
-  remove({ _id }) {
-    return this.collection.remove({ _id });
+  updateViewedBy({ _id, userId }) {
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        viewedBy: userId
+      }
+    };
+    return this.collection.update({ _id }, options);
+  },
+
+  remove({ _id, deletedBy }) {
+    const options = {
+      $set: {
+        isDeleted: true,
+        deletedBy,
+        deletedAt: new Date()
+      }
+    };
+
+    return this.collection.update({ _id }, options);
   }
 };

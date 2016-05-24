@@ -230,6 +230,12 @@ input:focus ~ .clear-field {
   .clear-field {
     right: 2px;
   }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    padding-right: 30px;
+  }
 }
 
 /* Input group */
@@ -426,6 +432,8 @@ fieldset[disabled] {
       margin-right: 0;
       border-right: none;
       width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .uploading-file {

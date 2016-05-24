@@ -7,22 +7,30 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UsersList.viewmodel({
   share: 'search',
-  mixin: ['user', 'organization', 'modal', 'roles'],
+  mixin: ['user', 'organization', 'modal', 'roles', 'search'],
+  autorun() {
+    if (this.organizationUsers()) {
+      const length = this.organizationUsers().fetch().length;
+      this.searchResultsNumber(length);
+    } else {
+      this.searchResultsNumber(0);
+    }
+  },
   isActiveUser(userId) {
     return this.parent().activeUser() === userId;
   },
 
   getUserPath(userId) {
     return FlowRouter.path('userDirectoryUserPage', {
-      orgSerialNumber: this.parent().getCurrentOrganizationSerialNumber(),
+      orgSerialNumber: this.parent().organizationSerialNumber(),
       userId: userId
     });
   },
 
   onInviteClick(event) {
     event.preventDefault();
-    const orgSerialNumber = this.parent().getCurrentOrganizationSerialNumber();
-    const organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+    const serialNumber = this.parent().organizationSerialNumber();
+    const organizationId = Organizations.findOne({ serialNumber })._id;
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',

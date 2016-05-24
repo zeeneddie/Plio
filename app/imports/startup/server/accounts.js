@@ -5,7 +5,7 @@ function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
     user.profile.avatar = Utils.getRandomAvatarUrl();
-    user.profile.initials = getUserInitials(user.profile);
+    user.profile.initials = getUserInitials(options.profile);
   }
 
   return user;

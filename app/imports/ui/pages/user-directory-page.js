@@ -6,33 +6,28 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
-  mixin: 'search',
-  activeUser() {
-    return FlowRouter.getParam('userId') || null;
-  },
-  getCurrentOrganizationSerialNumber() {
-    return parseInt(FlowRouter.getParam('orgSerialNumber'));
+  mixin: ['search', 'organization'],
+  onCreated() {
+    this.searchText('');
   },
   autorun() {
-    const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
-
-    if (organizationsHandle.ready()) {
-      const userIds = this.getCurrentOrganizationUsers();
-      if (userIds && userIds.length) {
-        const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
-        if (!this.activeUser() && organizationUsersHandle.ready()) {
-          FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
-            orgSerialNumber: this.getCurrentOrganizationSerialNumber(),
-            userId: this.organizationUsers().fetch()[0]._id
-          }));
-        }
+    const userIds = this.getCurrentOrganizationUsers();
+    if (userIds && userIds.length) {
+      const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+      if (!this.activeUser() && organizationUsersHandle.ready()) {
+        FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
+          orgSerialNumber: this.organizationSerialNumber(),
+          userId: this.organizationUsers().fetch()[0]._id
+        }));
       }
     }
   },
-  currentUser() {
+  user() {
     return this.activeUser() && Meteor.users.findOne({ _id: this.activeUser() });
   },
-
+  activeUser() {
+    return FlowRouter.getParam('userId') || null;
+  },
   organizationUsers() {
     const userIds = this.getCurrentOrganizationUsers();
     const findQuery = {};
@@ -70,7 +65,7 @@ Template.UserDirectoryPage.viewmodel({
 
   getCurrentOrganizationUsers() {
     const organization = Organizations.findOne({
-      serialNumber: this.getCurrentOrganizationSerialNumber()
+      serialNumber: this.organizationSerialNumber()
     });
 
     if (organization) {

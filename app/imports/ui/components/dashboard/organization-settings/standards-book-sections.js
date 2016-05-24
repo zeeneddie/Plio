@@ -20,10 +20,9 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
   },
   onChange(viewModel) {
     const { title } = viewModel.getData();
+    const organizationId = this.organizationId();
 
     if (!viewModel._id) {
-      const organizationId = this.organizationId();
-
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
@@ -32,7 +31,7 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
     } else {
       const _id = viewModel._id();
 
-      this.modal().callMethod(update, { _id, title });
+      this.modal().callMethod(update, { _id, title, organizationId });
     }
   },
   onDelete(viewModel) {
@@ -46,7 +45,8 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
     }
 
     const _id = viewModel._id();
+    const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id });
+    this.modal().callMethod(remove, { _id, organizationId });
   }
 });

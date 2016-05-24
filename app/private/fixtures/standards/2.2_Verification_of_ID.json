@@ -2,7 +2,7 @@
   "_id": "HLiWGZdNL5hifyRhJ",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "2. Verification of ID",
-  "typeId": "FmQ99fgj88JF3qmh3",
+  "typeId": "A5rMgdxG2JzpunfsT",
   "sectionId": "PGie9fw7SuoqTPya8",
   "nestingLevel": 1,
   "description": "This is the standard for dealing with verification of ID",
@@ -17,5 +17,6 @@
   "issueNumber": 1,
   "status": "issued",
   "isApproved": true,
-  "isDeleted": false
+  "isDeleted": false,
+  "viewedBy": []
 }

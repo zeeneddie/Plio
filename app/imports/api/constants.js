@@ -118,21 +118,58 @@ const OrganizationDefaults = {
   }
 };
 
+const DefaultStandardTypes = [
+  {
+    name: 'Policy',
+    abbreviation: 'POL'
+  },
+  {
+    name: 'Checklist',
+    abbreviation: 'CHK'
+  },
+  {
+    name: 'Product specification',
+    abbreviation: 'SPC'
+  },
+  {
+    name: 'Regulation',
+    abbreviation: 'REG'
+  },
+  {
+    name: 'Standard Operating Procedure',
+    abbreviation: 'SOP'
+  },
+  {
+    name: 'Work instruction',
+    abbreviation: 'WRK'
+  },
+  {
+    name: 'Test method',
+    abbreviation: 'TST'
+  },
+  {
+    name: 'Other',
+    abbreviation: 'DOC'
+  }
+];
+
 const StandardFilters = [
   'section',
-  'type'
+  'type',
+  'deleted'
 ];
 
 export {
+  DefaultStandardTypes,
   NCTypes,
   OrgCurrencies,
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
   PhoneTypes,
+  StandardFilters,
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames,
-  StandardFilters
+  UserRolesNames
 };
