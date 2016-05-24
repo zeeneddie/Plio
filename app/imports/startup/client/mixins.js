@@ -4,6 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { UserRoles, StandardFilters } from '/imports/api/constants.js';
+import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -17,7 +18,7 @@ ViewModel.mixin({
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId && vm.type() === this.type()) {
+          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
             vm.collapsed(true);
           }
@@ -29,47 +30,27 @@ ViewModel.mixin({
   },
   collapsing: {
     toggleVMCollapse(name = '', condition = () => {}) {
-      if (name) {
-        const vmToCollapse = ViewModel.findOne(name, condition);
+      let vmsToCollapse = [];
 
-        !!vmToCollapse && vmToCollapse.collapse && vmToCollapse.toggleCollapse();
+      if (!name && !!condition) {
+        vmsToCollapse = ViewModel.find(condition);
+      } else if (!!name && !!condition) {
+        vmsToCollapse = ViewModel.find(name, condition);
       }
+
+      !!vmsToCollapse && vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse());
     },
-    expandCollapsedStandard(standardId) {
-      const standard = Standards.findOne({ _id: standardId });
-      if (standard) {
-        Meteor.setTimeout(() => {
-          this.toggleVMCollapse('ListItem', (viewmodel) => {
+    expandCollapsedStandard: _.debounce(function(standardId) {
+        const standard = Standards.findOne({ _id: standardId });
 
-            // Check if the section has parent (Type) collapsible list
-            if (viewmodel.parent().parent && viewmodel.parent().parent()._id) {
-              return viewmodel.type() === 'standardSection' &&
-                viewmodel.collapsed() &&
+        if (standard) {
+          this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel));
+        }
 
-                // viewmodel.parent() => StandardsSectionItem
-                viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId &&
-
-                // viewmodel.parent().parent() => StandardsTypeItem
-                viewmodel.parent().parent()._id() === standard.typeId;
-            } else {
-              return viewmodel.type() === 'standardSection' &&
-                viewmodel.collapsed() &&
-                viewmodel.parent()._id &&
-                viewmodel.parent()._id() === standard.sectionId;
-            }
-          });
-          this.toggleVMCollapse('ListItem', (viewmodel) => {
-            return viewmodel.type() === 'standardType' &&
-              viewmodel.collapsed() &&
-
-              // viewmodel.parent() => StandardsSectionItem
-              viewmodel.parent()._id &&
-              viewmodel.parent()._id() === standard.typeId
-          });
-        }, 500);
-      }
-    }
+        function recursiveSearch(viewmodel) {
+          return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
+        }
+    }, 200)
   },
   modal: {
     modal: {
@@ -116,6 +97,10 @@ ViewModel.mixin({
     }
   },
   search: {
+    searchResultsNumber: 0,
+    searchResultsText() {
+      return `${this.searchResultsNumber()} matching results`;
+    },
     searchObject(prop, fields) {
       const searchObject = {};
 
@@ -201,12 +186,6 @@ ViewModel.mixin({
       return !!Meteor.userId() || Meteor.loggingIn();
     }
   },
-  organizations: {
-    subHandler: null,
-    subscribe() {
-      this.subHandler(Meteor.subscribe('currentUserOrganizations'));
-    }
-  },
   roles: {
     canInviteUsers(organizationId) {
       const userId = Meteor.userId();
@@ -243,16 +222,15 @@ ViewModel.mixin({
     }
   },
   organization: {
-    subHandler: null,
-    subscribe(orgId) {
-      this.subHandler(Meteor.subscribe('currentUserOrganizationById', orgId));
-    },
     organization() {
-      const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+      const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });
     },
     organizationId() {
       return this.organization() && this.organization()._id;
+    },
+    organizationSerialNumber() {
+      return parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
     }
   },
   standard: {
@@ -273,13 +251,6 @@ ViewModel.mixin({
   date: {
     renderDate(date) {
       return moment.isDate(date) && moment(date).format('DD MMM YYYY');
-    },
-    datepickerInit() {
-      this.datepicker.datepicker({
-        startDate: new Date(),
-        format: 'dd MM yyyy',
-        autoclose: true
-      });
     }
   },
   filesList: {
@@ -303,6 +274,11 @@ ViewModel.mixin({
 
         updateFn();
       }, 200);
+    }
+  },
+  counter: {
+    get(name) {
+      return Counter.get(name);
     }
   }
 });

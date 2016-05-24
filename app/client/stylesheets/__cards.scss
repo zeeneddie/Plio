@@ -3,14 +3,18 @@
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   margin-bottom: 30px;
 
+  .search-results-meta {
+    padding-left: 14px !important;
+    padding-right: 14px;
+  }
+
   iframe {
     max-width: 100%;
   }
 
   @media (max-width:767px) {
     margin-bottom: 15px;
-    border-width: 0 0 1px;
-    border-radius: 0;
+    border-top: none;
   }
   
   &-heading {

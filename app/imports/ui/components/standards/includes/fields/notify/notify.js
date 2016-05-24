@@ -4,7 +4,7 @@ Template.ESNotify.viewmodel({
   mixin: ['collapse', 'search', 'user'],
   notifyUser: '',
   members() {
-    let query = this.searchObject('notifyUser', ['profile.firstName', 'profile.lastName']);
+    let query = this.searchObject('notifyUser', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }])
     const options = { sort: { 'profile.firstName': 1 } };
     const currentNotifyUsersIds = this.currentNotifyUsers().fetch().map(doc => doc._id);
     const excludedDocs = { _id: { $nin: currentNotifyUsersIds } };

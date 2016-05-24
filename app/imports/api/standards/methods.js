@@ -77,6 +77,29 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const updateViewedBy = new ValidatedMethod({
+  name: 'Standards.updateViewedBy',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot delete a standard'
+      );
+    }
+
+    if (!!Standards.findOne({ _id, viewedBy: this.userId })) {
+      throw new Meteor.Error(
+        403,
+        'You have been already added to this list'
+      );
+    }
+
+    return StandardsService.updateViewedBy({ _id, userId: this.userId });
+  }
+});
+
 export const remove = new ValidatedMethod({
   name: 'Standards.remove',
 
@@ -96,54 +119,7 @@ export const remove = new ValidatedMethod({
 
     getStandardOrThrow(_id);
 
-    return StandardsService.remove({ _id });
-  }
-});
-
-export const addToNotifyList = new ValidatedMethod({
-  name: 'Standards.addToNotifyList',
-
-  validate: new SimpleSchema([
-    StandardIdSchema,
-    UserIdSchema
-  ]).validator(),
-
-  run({ standardId, userId }) {
-    const currUserId = this.userId;
-    if (!currUserId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot add users to notify list'
-      );
-    }
-
-    const { organizationId } = getStandardOrThrow(standardId);
-
-    ensureCanChangeStandards(currUserId, organizationId);
-
-    return StandardsService.addNotifyUser({ standardId, userId });
-  }
-});
-
-export const removeFromNotifyList = new ValidatedMethod({
-  name: 'Standards.removeFromNotifyList',
-
-  validate: new SimpleSchema([
-    StandardIdSchema,
-    UserIdSchema
-  ]).validator(),
-
-  run({ standardId, userId }) {
-    const currUserId = this.userId;
-    if (!currUserId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove users from notify list'
-      );
-    }
-
-    const { organizationId } = getStandardOrThrow(standardId);
-
-    ensureCanChangeStandards(currUserId, organizationId);
-
-    return StandardsService.removeNotifyUser({ standardId, userId });
+    const deletedBy = this.userId;
+    return StandardsService.remove({ _id, deletedBy });
   }
 });

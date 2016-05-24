@@ -19,20 +19,19 @@ Template.UsersDetails.viewmodel({
       const superpowers = Object.keys(UserRolesNames).map((key) => {
         return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
       });
-      
+
       return superpowers.sort((a, b) => {
         return b.flag - a.flag;
       });
     }
   },
-
   openEditUserModal(e) {
     e.preventDefault();
-    
+
     this.modal().open({
       template: 'UserEdit',
       title: 'Edit User',
-      userId: this.currentUser()._id
+      userId: this.user()._id
     });
   }
 });

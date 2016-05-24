@@ -21,11 +21,14 @@ Template.StandardsSectionItem.viewmodel({
 
     if (this.isActiveStandardFilter('type')) {
       query.$and.push({
-        typeId: this.parent()._id()
+        typeId: this.parent().parent()._id()
       });
     }
 
     const options = { sort: { title: 1 } };
     return Standards.find(query, options);
+  },
+  isNestingLevel({ nestingLevel }, level) {
+    return nestingLevel === level;
   }
 });

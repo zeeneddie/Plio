@@ -35,6 +35,12 @@ Template.OrganizationSettings.viewmodel({
   name() {
     return this.organization().name;
   },
+  owner() {
+    const orgOwner = Meteor.users.findOne({
+      _id: this.organization().ownerId()
+    });
+    return orgOwner ? orgOwner.fullName() : '';
+  },
   currency() {
     return this.organization().currency;
   },

@@ -48,7 +48,7 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    if (url.search(/^https?\:\/\//) === -1) {
+    if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
       url = `http://${url}`;
     }
 
@@ -122,6 +122,14 @@ Template.ESSources.viewmodel({
       this.parent().update({}, {
         $unset: {
           [`source${this.id()}`]: ''
+        }
+      }, (err) =>  {
+        if (!err && this.id() === 1) {
+          this.parent().update({}, {
+            $rename: {
+              source2: 'source1'
+            }
+          });
         }
       });
     });

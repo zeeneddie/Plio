@@ -1,7 +1,7 @@
 <template name="StandardsHeader">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Standards by - ' + activeStandardFilter"}}>
+      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Compliance standards by - ' + activeStandardFilter"}}>
       </a>
       <div class="dropdown-menu">
         {{#each standardFilters}}
@@ -13,7 +13,7 @@
     </span>
     <ul class="nav navbar-nav pull-xs-left">
       <li class="nav-item">
-        <a class="nav-link" href="{{pathFor 'dashboardPage' orgSerialNumber=organization.serialNumber}}">
+        <a class="nav-link pointer" {{b "click: navigate"}}>
         	<i class="fa fa-angle-left"></i>
         </a>
       </li>

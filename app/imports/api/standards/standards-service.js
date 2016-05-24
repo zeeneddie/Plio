@@ -6,15 +6,10 @@ export default {
   collection: Standards,
 
   insert({ ...args }) {
-    const _id = this.collection.insert(args);
-
     const { createdBy } = args;
-    this.addNotifyUser({
-      standardId: _id,
-      userId: createdBy
-    });
+    console.log(args);
 
-    return this.collection.findOne({ _id });
+    return this.collection.insert(args);
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -27,33 +22,25 @@ export default {
     return this.collection.update(query, options);
   },
 
-  remove({ _id }) {
-    return this.collection.remove({ _id });
-  },
-
-  addNotifyUser({ standardId, userId }) {
-    const updateResult = this.collection.update({
-      _id: standardId
-    }, {
+  updateViewedBy({ _id, userId }) {
+    const query = { _id };
+    const options = {
       $addToSet: {
-        notify: userId
+        viewedBy: userId
       }
-    });
-
-    if (Meteor.isServer) {
-      new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
-    }
-
-    return updateResult;
+    };
+    return this.collection.update({ _id }, options);
   },
 
-  removeNotifyUser({ standardId, userId }) {
-    return this.collection.update({
-      _id: standardId
-    }, {
-      $pull: {
-        notify: userId
+  remove({ _id, deletedBy }) {
+    const options = {
+      $set: {
+        isDeleted: true,
+        deletedBy,
+        deletedAt: new Date()
       }
-    });
+    };
+
+    return this.collection.update({ _id }, options);
   }
 };
