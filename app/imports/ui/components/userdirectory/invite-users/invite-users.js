@@ -18,12 +18,30 @@ Template.UserDirectory_InviteUsers.viewmodel({
     let welcomeMessage = this.welcomeMessage();
     let organizationId = this.organizationId();
 
-
     if (emails.length > 0) {
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
       }, (err, res) => {
-        if(!err) {
+        if (err) {
+          swal('Error!', `Internal server error: ${err.reason}`, 'error');
+        } else {
+          const invitedEmails = res.invitedEmails;
+          const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
+
+          const failMessagePart = res.error ? `\n${res.error}` : '';
+
+          let notificationTitle;
+          if (failMessagePart) {
+            if (successMessagePart) {
+              notificationTitle = 'Some users were not invited!';
+            } else {
+              notificationTitle = 'Not invited!'
+            }
+          } else {
+            notificationTitle = 'Invited!'
+          }
+          swal(notificationTitle, `${successMessagePart}${failMessagePart}`,
+            failMessagePart ? 'error' : 'success');
           this.modal().close();
         }
       });

@@ -1,11 +1,9 @@
 <template name="StandardsTypeItem">
   {{#if hasStandards}}
-    {{#ListItem type="standardType" title=name}}
-      <div class="sub">
-        {{#each standardsBookSections}}
-          {{> StandardsSectionItem}}
-        {{/each}}
-      </div>
-    {{/ListItem}}
+    <div class="sub">
+      {{#each standardsBookSections}}
+        {{> ListItem type="standardSection" _id=this._id title=this.title template="StandardsSectionItem" closeAllOnCollapse=false}}
+      {{/each}}
+    </div>
   {{/if}}
 </template>

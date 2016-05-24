@@ -17,7 +17,7 @@
               </div>
             {{/if}}
             <h3 class="card-title">
-              Standard
+              Compliance standard
             </h3>
           </div>
           <div class="list-group">
@@ -25,7 +25,7 @@
               <p class="list-group-item-text">Title</p>
               <h4 class="list-group-item-heading">
                 <span {{b "text: this.title"}}></span>
-                <span class="label label-danger" {{b "if: this.status === 'draft', text: this.status"}}></span>
+                <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
               </h4>
             </div>
 
@@ -77,9 +77,9 @@
               </h4>
             </div>
 
-            {{> SCSource source=this.source1}}
+            {{> SCSource source=this.source1 id=1}}
 
-            {{> SCSource source=this.source2}}
+            {{> SCSource source=this.source2 id=2}}
 
           </div>
 
@@ -164,7 +164,7 @@
 
               {{#with files}}
                 <div class="list-group-item">
-                  <p class="list-group-item-text">Files</p>
+                  <p class="list-group-item-text">Means statement</p>
                   {{#each this}}
                     <h4 class="list-group-item-heading">
                       <i class="fa fa-paperclip margin-right">

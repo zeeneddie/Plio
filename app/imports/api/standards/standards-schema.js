@@ -51,6 +51,19 @@ const optionalFields = new SimpleSchema({
       }
     }
   },
+  isDeleted: {
+    type: Boolean,
+    optional: true
+  },
+  deletedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  deletedAt: {
+    type: Date,
+    optional: true
+  },
   approved: {
     type: Boolean,
     optional: true
@@ -164,6 +177,16 @@ const optionalFields = new SimpleSchema({
   },
   'improvementPlan.files.$.name': {
     type: String
+  },
+  viewedBy: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return [this.userId];
+      }
+    }
   }
 });
 

@@ -2,7 +2,7 @@
   "_id": "Mc7jjwYJ9gXPkibS8",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "1. Identification of needs",
-  "typeId": "FmQ99fgj88JF3qmh3",
+  "typeId": "yPWb8k8fZ3RBx6SZE",
   "sectionId": "PGie9fw7SuoqTPya8",
   "nestingLevel": 1,
   "description": "This is the standard for dealing with identification of needs",
@@ -17,5 +17,6 @@
   "issueNumber": 1,
   "status": "issued",
   "isApproved": true,
-  "isDeleted": false
+  "isDeleted": false,
+  "viewedBy": []
 }

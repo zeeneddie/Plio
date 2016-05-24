@@ -1,14 +1,13 @@
 <template name="SimpleCard">
   <div>
-    <a href={{#if route}}{{pathFor route orgSerialNumber=serialNumber}}{{/if}} class="card dashboard-item {{#if disabled}}dashboard-item-disabled{{/if}}">
+    <a class="card dashboard-item"
+      {{b "attr: { href: href }, class: { dashboard-item-disabled: disabled }"}}>
       <div class="card-block">
-        <i class="fa fa-fw {{icon}} dashboard-item-icon"></i>
-        <h3 class="card-title">{{title}}</h3>
-        {{#if labelText}}
-          <span class="label label-danger">{{labelText}}</span>
-        {{/if}}
+        <i class="fa fa-fw dashboard-item-icon" {{b "class: icon"}}></i>
+        <h3 class="card-title" {{b "text: title"}}></h3>
+        <span class="label label-danger" {{b "if: labelText, text: labelText"}}></span>
         <div class="card-footer">
-          <span class="text-muted">{{text}}</span>
+          <span class="text-muted" {{b "text: text"}}></span>
         </div>
       </div>
     </a>
