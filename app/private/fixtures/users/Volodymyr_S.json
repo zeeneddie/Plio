@@ -1,0 +1,46 @@
+{
+  "_id": "kLwSLeYKSxApPFErZ",
+  "createdAt": {"$date": 1459508400000},
+  "services": {
+    "password": {
+      "bcrypt": "$2a$10$W0piRM5oNBPSksAQtjUGP.Xspozor467IDXoIdQzQnPCveoPWJDeq"
+    },
+    "resume": {
+      "loginTokens": [ ]
+    }
+  },
+  "emails": [
+    {
+      "address": "volodymyr.sirenko@jssolutionsdev.com",
+      "verified": true
+    }
+  ],
+  "profile": {
+    "firstName": "Volodymyr",
+    "lastName": "S",
+    "initials": "VS",
+    "description": "Software developer",
+    "avatar": "/avatars/avatar-placeholder-4.png",
+    "address": "Ternopil",
+    "skype": "loremipsum",
+    "country": "UA",
+    "phoneNumbers": [
+      {
+        "type": "Home",
+        "number": "+77 777 77 77"
+      }
+    ]
+  },
+  "status": "online",
+  "statusConnection": "online",
+  "roles": {
+    "KwKXz5RefrE5hjWJ2": [
+      "create-update-delete-standards",
+      "view-team-actions"
+    ],
+    "8bcNPN8sKTtJFw4uy": [
+      "create-update-delete-standards",
+      "view-team-actions"
+    ]
+  }
+}

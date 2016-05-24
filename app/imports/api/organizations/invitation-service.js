@@ -56,7 +56,7 @@ class InvitationSender {
     try {
       const newUserId = Accounts.createUser(userDoc);
       let invitationExpirationDate = new Date;
-      invitationExpirationDate.setHours(invitationExpirationDate.getHours() + InvitationSender.getInvitationExpirationTime());
+      invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
       Meteor.users.update({
         _id: newUserId,
       }, {
@@ -177,7 +177,7 @@ class InvitationSender {
   static getInvitationExpirationTime() {
 
     // 3 days by default
-    return Meteor.settings.invitationExpirationTimeInDays || 72;  
+    return Meteor.settings.public.invitationExpirationTimeInDays || 3;  
   }
 }
 
