@@ -6,6 +6,13 @@ Template.UsersDetails.viewmodel({
   phoneType(type) {
     return `${type} phone`;
   },
+  isEmailVerified(user) {
+    const email = user.emails[0];
+    return email.verified;
+  },
+  emailNotVerifiedText() {
+    return 'Email address not yet verified by user';
+  },
   superpowersTitle(user) {
     if (this.organization()) {
       return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
