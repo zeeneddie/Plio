@@ -6,12 +6,12 @@ Template.UsersDetails.viewmodel({
   phoneType(type) {
     return `${type} phone`;
   },
+  isInvitationAccepted(user) {
+    return !user.invitationId;
+  },
   isEmailVerified(user) {
     const email = user.emails[0];
     return email.verified;
-  },
-  emailNotVerifiedText() {
-    return 'Email address not yet verified by user';
   },
   superpowersTitle(user) {
     if (this.organization()) {
