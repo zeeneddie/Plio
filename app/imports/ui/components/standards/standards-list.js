@@ -77,8 +77,8 @@ Template.StandardsList.viewmodel({
     if (!!value) {
       this.expandAllFound();
     } else {
-      ViewModel.find('ListItem', vm => !vm.collapsed()).forEach(vm => vm.toggleCollapse());
-      Meteor.setTimeout(() => this.expandCollapsedStandard(this.selectedStandardId()), 1000);
+      const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.selectedStandardId()));
+      this.expandCollapseItems(vms);
     }
   }, 500),
   expandAllFound() {
@@ -92,9 +92,9 @@ Template.StandardsList.viewmodel({
 
     const sections = vms.filter((vm) => !vm.type || vm.type() !== 'standardType');
 
-    const vmsSorted = types.concat(sections);
+    const vmsSorted = types.concat(sections); // to expand top level items first
 
-    this.expandCollapseItems(vmsSorted, 0);
+    this.expandCollapseItems(vmsSorted);
   },
   openAddTypeModal(e) {
     this.modal().open({

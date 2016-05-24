@@ -63,11 +63,10 @@ ViewModel.mixin({
         return viewmodel && ( viewmodel.child(vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id))) );
       } else {
         return viewmodel && ( _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) ) );
-        // return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id)) );
       }
     },
     // Recursive function to expand items one after another
-    expandCollapseItems(array, index) {
+    expandCollapseItems(array = [], index = 0) {
       if (index >= array.length) return;
 
       const item = array[index];
