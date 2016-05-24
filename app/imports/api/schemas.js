@@ -47,6 +47,10 @@ export const OrganizationIdSchema = new SimpleSchema({
   organizationId: idSchemaDoc
 });
 
+export const StandardIdSchema = new SimpleSchema({
+  standardId: idSchemaDoc
+});
+
 export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
 });
