@@ -18,7 +18,6 @@ Template.UserDirectory_InviteUsers.viewmodel({
     let welcomeMessage = this.welcomeMessage();
     let organizationId = this.organizationId();
 
-
     if (emails.length > 0) {
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
