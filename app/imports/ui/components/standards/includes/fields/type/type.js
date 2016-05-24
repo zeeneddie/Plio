@@ -18,6 +18,7 @@ Template.ESType.viewmodel({
       this.modal().setError('Type is required!');
     }
     this.parent().update({ typeId }, () => {
+      Tracker.flush();
       this.expandCollapsedStandard(this.selectedStandardId());
     });
   },

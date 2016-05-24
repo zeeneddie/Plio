@@ -15,7 +15,7 @@ export default class StandardsNotificationsSender {
   }
 
   addedToNotifyList(userId) {
-    const subject = `You have been added to a notification list of the "${this._standard.title}" standard!`;
+    const subject = `You have been added to the notification list for any changes to the Compliance standards document "${this._standard.title}"`;
     const options = {
       organizationName: this._organization.name,
       title: subject,
