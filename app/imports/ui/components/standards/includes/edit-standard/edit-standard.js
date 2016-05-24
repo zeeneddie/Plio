@@ -2,12 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Standards } from '/imports/api/standards/standards.js';
-import {
-  update,
-  remove,
-  addToNotifyList,
-  removeFromNotifyList
-} from '/imports/api/standards/methods.js';
+import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
