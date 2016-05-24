@@ -20,6 +20,11 @@ Template.StandardsHeader.viewmodel({
       }
     },
     function() {
+      if (!this.standardId() && !!this.selectedStandardId() && this.organization()) {
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: this.selectedStandardId() });
+      }
+    },
+    function() {
       if (!this.standardId() && !this.selectedStandardId()) {
         const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
         if (!!standard) {
@@ -28,7 +33,6 @@ Template.StandardsHeader.viewmodel({
 
           Meteor.setTimeout(() => {
             FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id }, { by: this.selectedFilter() });
-
             this.selectedStandardId(_id);
 
             this.expandCollapsedStandard(_id);
