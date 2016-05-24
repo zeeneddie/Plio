@@ -5,7 +5,7 @@ import { addedToNotifyList } from '/imports/api/standards/methods.js';
 import Utils from '/imports/core/utils.js';
 
 Template.CreateStandard.viewmodel({
-  share: 'standard',
+  share: ['standard', 'filter'],
   mixin: ['modal', 'numberRegex', 'organization', 'collapsing'],
   save() {
     const data = this.getChildrenData();
@@ -66,7 +66,7 @@ Template.CreateStandard.viewmodel({
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id }, { by: this.selectedFilter() });
 
         this.selectedStandardId(_id);
 

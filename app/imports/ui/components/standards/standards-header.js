@@ -5,9 +5,8 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  share: [{ listItems: 'listItems' }, 'standard', 'window'],
+  share: [{ listItems: 'listItems' }, 'standard', 'window', 'filter'],
   mixin: ['standard', 'collapsing', 'organization'],
-  selectedFilter: '',
   autorun: [
     function() {
       this.selectedFilter.depend();
@@ -24,11 +23,11 @@ Template.StandardsHeader.viewmodel({
       if (!this.standardId() && !this.selectedStandardId()) {
         const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
         if (!!standard) {
-          const orgSerialNumber = this.organization().serialNumber;
+          const orgSerialNumber = this.organization() && this.organization().serialNumber;
           const { _id } = standard;
 
           Meteor.setTimeout(() => {
-            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
+            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id }, { by: this.selectedFilter() });
 
             this.selectedStandardId(_id);
 
