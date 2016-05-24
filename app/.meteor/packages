@@ -50,3 +50,4 @@ codechimera:meteor-bootstrap-sweetalert
 browser-policy
 matb33:collection-hooks
 manuel:reactivearray
+percolate:synced-cron

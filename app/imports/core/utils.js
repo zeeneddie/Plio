@@ -8,5 +8,9 @@ export default Utils = {
 
   showError(errorMsg) {
     toastr.error(errorMsg);
+  },
+
+  isProduction() {
+    return process.env.NODE_ENV !== 'development';
   }
 }

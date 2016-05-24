@@ -14,12 +14,17 @@ Accounts.emailTemplates.verifyEmail = {
     return 'Verify Your Email Address';
   },
   html(user, url) {
+
+    // 3 days by default
+    const emailConfirmationExpirationInHours = Meteor.settings.emailConfirmationExpirationInHours || 72;
+
     return handlebarsCache.render('minimalisticEmail', {
       title: 'Welcome, ' + user.profile.firstName + '! Please click on the following button to confirm your email address:',
       button: {
         label: `Confirm '${user.emails[0].address}'`,
         url: url
       },
+      footerText: `This link expires on ${moment().add(emailConfirmationExpirationInHours, 'hours').format('MMMM Do YYYY')}`
     });
   }
 };
