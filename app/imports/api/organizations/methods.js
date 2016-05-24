@@ -243,6 +243,8 @@ export const inviteUserByEmail = new ValidatedMethod({
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+    
+    return InvitationService.getInvitationExpirationTime();
   }
 });
 
@@ -327,7 +329,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
     return {
       error: generateErrorMessage(),
-      invitedEmails
+      invitedEmails,
+      expirationTime: InvitationService.getInvitationExpirationTime()
     };
   }
 });
