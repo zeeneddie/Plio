@@ -20,18 +20,14 @@ Template.StandardsList.viewmodel({
     this.searchText('');
   },
   queryStandards: [],
-  standards() {
-    return Standards.find({}, { sort: { title: 1 } });
-  },
-  standardsBookSections(typeId) {
+  standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
       { name: 'title' },
       { name: 'description' },
       { name: 'status' }
     ]);
 
-    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
-    const sectionIds = _.pluck(availableSections, '_id');
+    const sectionIds = this.sectionIds();
 
     const standardsQuery = {
       $and: [
@@ -46,9 +42,15 @@ Template.StandardsList.viewmodel({
       });
     }
 
-    const standards = Standards.find(standardsQuery).fetch();
-    this.queryStandards(standards);
-    this.searchResultsNumber(standards.length);
+    return Standards.find(standardsQuery);
+  },
+  sectionIds() {
+    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
+    return _.pluck(availableSections, '_id');
+  },
+  standardsBookSections(typeId) {
+    const standards = this.standards(typeId).fetch();
+    const sectionIds = this.sectionIds();
 
     const filteredSectionIds = sectionIds.filter((id) => {
       return _.some(standards, (s) => s.sectionId === id);
@@ -63,16 +65,16 @@ Template.StandardsList.viewmodel({
     return StandardsBookSections.find(sectionsQuery, options);
   },
   standardsTypes() {
-    const options = { sort: { name: 1 } };
-
     const types =  StandardTypes.find({ organizationId: this.organizationId() }).fetch();
     const typeIds = _.pluck(types, '_id');
     const filteredTypeIds = typeIds.filter((id) => {
       const typeSections = this.standardsBookSections(id).fetch();
       return typeSections.length > 0;
     });
+    const query = { organizationId: this.organizationId(), _id: { $in: filteredTypeIds } };
+    const options = { sort: { name: 1 } };
 
-    return StandardTypes.find({ organizationId: this.organizationId(), _id: { $in: filteredTypeIds } }, options);
+    return StandardTypes.find(query, options);
   },
   openAddTypeModal(e) {
     this.modal().open({

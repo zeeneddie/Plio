@@ -24,7 +24,8 @@
           {{> ListItem type="standardSection" _id=this._id title=this.name template="StandardsTypeItem"}}
         {{/each}}
       {{/if}}
-      <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "if: searchText, text: searchResultsText"}}></div>
+      <div class="list-group-item list-group-subheading search-results-meta text-muted"
+        {{b "if: searchText, text: standards.count + ' matching results'"}}></div>
     </div>
   </div>
 </template>
