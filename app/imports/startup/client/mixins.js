@@ -45,7 +45,7 @@ ViewModel.mixin({
         }
       });
     },
-    expandCollapsedStandard: _.debounce(function(_id, { expandAll = false } = {}) {
+    expandCollapsedStandard: _.debounce(function(_id) {
       let query = { _id };
 
       if (_.isArray(_id)) {
@@ -55,21 +55,16 @@ ViewModel.mixin({
       const standards = Standards.find(query).fetch();
 
       standards.forEach((standard) => {
-        const vmToCollapse = !!expandAll && ViewModel.findOne('ListItem', (viewmodel) => {
-          return viewmodel.collapsed() && (!viewmodel.parent().type || (viewmodel.parent().type() !== 'standardType')) && recursiveSearch(viewmodel, standard);
-        });
-
-        !!vmToCollapse && vmToCollapse.closeAllOnCollapse(false);
-
-        this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel, standard), () => {
-          !!vmToCollapse && vmToCollapse.closeAllOnCollapse(true);
-        });
+        this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, standard._id));
       });
-
-      function recursiveSearch(viewmodel, standard) {
-        return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm, standard)) );
+    }, 200),
+    findRecursive(viewmodel, _id) {
+      if (_.isArray(_id)) {
+        return viewmodel && ( viewmodel.child(vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id))) );
+      } else {
+        return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id)) );
       }
-    }, 200)
+    }
   },
   modal: {
     modal: {
