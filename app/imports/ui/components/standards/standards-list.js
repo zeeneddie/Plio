@@ -7,11 +7,6 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
-  autorun() {
-    if (!!this.searchText() && this.standards().count() > 0) {
-      this.expandAllFound();
-    }
-  },
   onCreated() {
     this.searchText('');
   },
@@ -72,18 +67,20 @@ Template.StandardsList.viewmodel({
 
     return StandardTypes.find(query, options);
   },
-  onkeyup: _.debounce(function(e) {
+  onKeyUp: _.debounce(function(e) {
     const value = e.target.value;
 
     if (this.searchText() === value) return;
 
     this.searchText(value);
 
-    if (!value) {
+    if (!!value) {
+      this.expandAllFound();
+    } else {
       ViewModel.find('ListItem', vm => !vm.collapsed()).forEach(vm => vm.toggleCollapse());
       Meteor.setTimeout(() => this.expandCollapsedStandard(this.selectedStandardId()), 1000);
     }
-  }, 300),
+  }, 500),
   expandAllFound() {
     const ids = this.standards().fetch().map(standard => standard._id);
 
@@ -91,16 +88,13 @@ Template.StandardsList.viewmodel({
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
-    vms.forEach(vm => {
-      if (vm.collapse && vm.closeAllOnCollapse) {
+    const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
 
-        !!vm.closeAllOnCollapse() && vm.closeAllOnCollapse(false);
+    const sections = vms.filter((vm) => !vm.type || vm.type() !== 'standardType');
 
-        (_.debounce(function() {
-          !!vm.collapse && vm.toggleCollapse(() => vm.closeAllOnCollapse(true));
-        }, 100))();
-      }
-    });
+    const vmsSorted = types.concat(sections);
+
+    this.expandCollapseItems(vmsSorted, 0);
   },
   openAddTypeModal(e) {
     this.modal().open({

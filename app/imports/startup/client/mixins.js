@@ -62,8 +62,24 @@ ViewModel.mixin({
       if (_.isArray(_id)) {
         return viewmodel && ( viewmodel.child(vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id))) );
       } else {
-        return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id)) );
+        return viewmodel && ( _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) ) );
+        // return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id)) );
       }
+    },
+    // Recursive function to expand items one after another
+    expandCollapseItems(array, index) {
+      if (index >= array.length) return;
+
+      const item = array[index];
+
+      const closeAllOnCollapse = item.closeAllOnCollapse.value; // nonreactive value
+
+      !!closeAllOnCollapse && item.closeAllOnCollapse(false);
+
+      return item.toggleCollapse(() => {
+        !!closeAllOnCollapse && item.closeAllOnCollapse(true);
+        return this.expandCollapseItems(array, index + 1);
+      });
     }
   },
   modal: {
