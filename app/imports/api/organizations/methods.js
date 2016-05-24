@@ -277,7 +277,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
   validate: new SimpleSchema([OrganizationIdSchema, {
     emails: {
-      type: [SimpleSchema.RegEx.Email]
+      type: [String],
+      regEx: SimpleSchema.RegEx.Email
     },
     welcomeMessage: {
       type: String
@@ -305,23 +306,32 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
       );
     }
 
+    let invitedEmails = [];
     let errors = [];
     emails.forEach(email => {
       //aggregate service errors for each email
       try {
-        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        invitedEmails.push(email);
       } catch (err) {
+        console.error(err);
         errors.push(err.reason);
       }
     });
 
-    if (errors.length > 0) {
-      console.log(errors);
-      let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
-      throw new Meteor.Error(500, errorMsg);
-    }
-    
-    return InvitationService.getInvitationExpirationTime();
+    const generateErrorMessage = () => {
+      if (errors.length > 0) {
+        return `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
+      } else {
+        return null;
+      }
+    };
+
+    return {
+      error: generateErrorMessage(),
+      invitedEmails,
+      expirationTime: InvitationService.getInvitationExpirationTime()
+    };
   }
 });
 

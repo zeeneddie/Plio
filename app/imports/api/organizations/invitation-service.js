@@ -55,12 +55,16 @@ class InvitationSender {
 
     try {
       const newUserId = Accounts.createUser(userDoc);
+      let invitationExpirationDate = new Date;
+      invitationExpirationDate.setHours(invitationExpirationDate.getHours() + InvitationSender.getInvitationExpirationTime());
       Meteor.users.update({
         _id: newUserId,
       }, {
         $set: {
           invitationId: this._invitationId,
           invitedAt: new Date(),
+          invitedBy: Meteor.userId(),
+          invitationExpirationDate,
           'emails.0.verified': true
         }
       });
@@ -78,6 +82,7 @@ class InvitationSender {
     //send notification
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the "${this._organization.name}"!`,
+      secondaryText: this._welcomeMessage,
       button: {
         label: 'Go to the dashboard',
         url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
@@ -95,11 +100,12 @@ class InvitationSender {
     // send invitation
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to the "${this._organization.name}" organization!`,
+      secondaryText: this._welcomeMessage,
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
       },
-      expirationDate: moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')
+      footerText: `This link expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}`
     }, basicNotificationData);
 
     new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
@@ -169,7 +175,9 @@ class InvitationSender {
   }
 
   static getInvitationExpirationTime() {
-    return Meteor.settings.invitationExpirationTimeInHours || 72; // by default 3 days
+
+    // 3 days by default
+    return Meteor.settings.invitationExpirationTimeInHours || 72;  
   }
 }
 
@@ -192,7 +200,7 @@ export default InvitationService = {
         $set: {profile: updateUserProfile},
         $unset: {
           invitationId: '',
-          invitedAt: ''
+          invitationExpirationDate: ''
         }
       });
     } else {

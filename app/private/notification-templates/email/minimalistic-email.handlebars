@@ -25,6 +25,12 @@
           <div style="line-height:5px;font-size:1px">&nbsp;</div>
         </div>
 
+        {{#if secondaryText}}
+          <div style="Margin-left: 20px;Margin-right: 20px;">
+            <p style="Margin-top: 0;Margin-bottom: 20px;text-align: center;">{{secondaryText}}</p>
+          </div>
+        {{/if}}
+
         {{#with button}}
           <div style="Margin-left: 20px;Margin-right: 20px;">
             <div class="btn btn--flat" style="Margin-bottom: 20px;text-align: center;">
@@ -41,11 +47,11 @@
           </div>
         {{/with}}
 
-          {{#if expirationDate}}
-            <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 12px;">
-              <p style="Margin-top: 0;Margin-bottom: 0;text-align: center;">Invitation expires on {{expirationDate}}</p>
-            </div>
-          {{/if}}
+        {{#if footerText}}
+          <div style="Margin-left: 20px;Margin-right: 20px;Margin-bottom: 12px;">
+            <p style="Margin-top: 0;Margin-bottom: 0;text-align: center;">{{footerText}}</p>
+          </div>
+        {{/if}}
       </td>
     </tr>
   </tbody></table>
