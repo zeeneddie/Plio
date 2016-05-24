@@ -40,7 +40,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
           } else {
             notificationTitle = 'Invited!'
           }
-          swal(notificationTitle, `${successMessagePart}${failMessagePart}`,
+
+          const expirationMessagePart = `\nSent invitations expire on ${moment().add(res.expirationTime, 'hours').format('MMMM Do YYYY')}`;
+          swal(notificationTitle, `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
             failMessagePart ? 'error' : 'success');
           this.modal().close();
         }

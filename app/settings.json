@@ -14,5 +14,7 @@
     "password": "",
     "hostname": "",
     "port": ""
-  }
+  },
+
+  "invitationExpirationTimeInHours": 72
 }
