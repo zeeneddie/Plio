@@ -27,11 +27,19 @@
   "roles": {
     "KwKXz5RefrE5hjWJ2": [
       "create-update-delete-standards",
-      "view-team-actions"
+      "view-team-actions",
+      "invite-users",
+      "delete-users",
+      "edit-user-roles",
+      "change-org-settings"
     ],
     "8bcNPN8sKTtJFw4uy": [
       "create-update-delete-standards",
-      "view-team-actions"
+      "view-team-actions",
+      "invite-users",
+      "delete-users",
+      "edit-user-roles",
+      "change-org-settings"
     ]
   }
 }
