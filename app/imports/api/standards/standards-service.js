@@ -1,13 +1,12 @@
 import { Standards } from './standards.js';
-import StandardsNotificationsSender from './standards-notifications-sender.js';
 
 
 export default {
   collection: Standards,
 
   insert({ ...args }) {
-    const { createdBy } = args;
-    console.log(args);
+    // add standard creator to notify list
+    args['notify'] = [args.createdBy];
 
     return this.collection.insert(args);
   },

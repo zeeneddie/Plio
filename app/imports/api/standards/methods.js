@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsService from './standards-service.js';
 import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
 import { Standards } from './standards.js';
+import StandardsNotificationsSender from './standards-notifications-sender.js';
 import {
   IdSchema,
   OrganizationIdSchema,
@@ -47,6 +48,8 @@ export const insert = new ValidatedMethod({
 
     const [ doc ] = args;
     const { organizationId } = doc;
+
+    doc['createdBy'] = userId;
 
     ensureCanChangeStandards(userId, organizationId);
 
@@ -119,7 +122,33 @@ export const remove = new ValidatedMethod({
 
     getStandardOrThrow(_id);
 
-    const deletedBy = this.userId;
-    return StandardsService.remove({ _id, deletedBy });
+    return StandardsService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const addedToNotifyList = new ValidatedMethod({
+  name: 'Standards.addedToNotifyList',
+
+  validate: new SimpleSchema([
+    StandardIdSchema,
+    UserIdSchema
+  ]).validator(),
+
+  run({ standardId, userId }) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    const currUserId = this.userId;
+    if (!currUserId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot send emails'
+      );
+    }
+
+    const standard = getStandardOrThrow(standardId);
+    ensureCanChangeStandards(currUserId, standard.organizationId);
+
+    return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
   }
 });

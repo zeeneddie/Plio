@@ -1,4 +1,7 @@
 import { Template } from 'meteor/templating';
+import { addedToNotifyList } from '/imports/api/standards/methods.js';
+import Utils from '/imports/core/utils.js';
+
 
 Template.ESNotify.viewmodel({
   mixin: ['collapse', 'search', 'user'],
@@ -20,10 +23,35 @@ Template.ESNotify.viewmodel({
     const usersIds = this.notifyUsersList();
     return Meteor.users.find({ _id: { $in: usersIds } });
   },
+  update(userId, option, cb) {
+    const query = { _id: this.standard()._id };
+    const options = {
+      [`${option}`]: {
+        notify: userId
+      }
+    };
+
+    this.parent().update(query, options, cb);
+  },
   addToNotifyList(userId) {
-    this.parent().addToNotifyList(userId);
+    this.update(userId, '$addToSet', (err, res) => {
+      if (err) {
+        return;
+      }
+
+      addedToNotifyList.call({
+        standardId: this.standard()._id,
+        userId
+      }, (err, res) => {
+        if (err) {
+          Utils.showError(
+            'Failed to send email to the user that was added to standard\'s notify list'
+          );
+        }
+      });
+    });
   },
   removeFromNotifyList(userId) {
-    this.parent().removeFromNotifyList(userId);
+    this.update(userId, '$pull');
   }
 });
