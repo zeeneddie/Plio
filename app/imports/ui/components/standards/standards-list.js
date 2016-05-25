@@ -67,6 +67,14 @@ Template.StandardsList.viewmodel({
 
     return StandardTypes.find(query, options);
   },
+  animating: false,
+  sortVms(vms, isTypesFirst = false) {
+    const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
+
+    const sections = vms.filter((vm) => !vm.type || vm.type() !== 'standardType');
+
+    return isTypesFirst ? types.concat(sections) : sections.concat(types);
+  },
   onKeyUp: _.debounce(function(e) {
     const value = e.target.value;
 
@@ -77,8 +85,7 @@ Template.StandardsList.viewmodel({
     if (!!value) {
       this.expandAllFound();
     } else {
-      const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.selectedStandardId()));
-      this.expandCollapseItems(vms);
+      this.expandSelected();
     }
   }, 500),
   expandAllFound() {
@@ -88,13 +95,39 @@ Template.StandardsList.viewmodel({
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
-    const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
+    const vmsSorted = this.sortVms(vms, true); // to expand top level items first
 
-    const sections = vms.filter((vm) => !vm.type || vm.type() !== 'standardType');
+    if (vmsSorted.length > 0) {
+      this.animating(true);
 
-    const vmsSorted = types.concat(sections); // to expand top level items first
+      this.expandCollapseItems(vmsSorted, 0, () => {
+        this.onAfterExpand();
+      });
+    }
+  },
+  expandSelected() {
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
 
-    this.expandCollapseItems(vmsSorted);
+    this.animating(true);
+
+    if (vms.length > 0) {
+      const vmsSorted = this.sortVms(vms);
+
+      this.expandCollapseItems(vmsSorted, 0, () => {
+        this.expandSelectedStandard();
+      });
+    } else {
+      this.expandSelectedStandard();
+    }
+  },
+  expandSelectedStandard() {
+    this.expandCollapsedStandard(this.selectedStandardId(), () => {
+      this.onAfterExpand();
+    });
+  },
+  onAfterExpand() {
+    this.animating(false);
+    Meteor.setTimeout(() => this.searchInput.focus(), 0);
   },
   openAddTypeModal(e) {
     this.modal().open({

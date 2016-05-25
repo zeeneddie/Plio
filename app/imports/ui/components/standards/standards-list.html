@@ -4,7 +4,7 @@
       <div class="form-group row">
         {{#ClearableField field="searchText"}}
           <input type="text" class="form-control" placeholder="Search..."
-              {{b "keyup: onKeyUp"}} />
+              disabled={{animating}} {{b "ref: searchInput, keyup: onKeyUp"}} />
         {{/ClearableField}}
       </div>
       {{#if canCreateStandards organizationId}}
