@@ -8,8 +8,8 @@ SyncedCron.add({
   },
   
   job: function () {
-    let emailVerificationTimeInHours = Meteor.settings.invitationVerificationTimeInHours || 72;
-    let emailVerificationThresholdDate = moment().subtract(emailVerificationTimeInHours, 'hours').toDate();
+    let emailVerificationExpirationTimeInDays = Meteor.settings.public.emailVerificationExpirationTimeInDays || 3;
+    let emailVerificationThresholdDate = moment().subtract(emailVerificationExpirationTimeInDays, 'days').toDate();
 
     //get all users with expired email verification tokens
     Meteor.users.find({ 
@@ -18,7 +18,11 @@ SyncedCron.add({
       },
       'emails.verified': false 
     }, { fields: { _id: 1 } }).forEach(userDoc => {
-      Meteor.users.update({ _id: userDoc._id }, { $unset: { 'services.email': '' } });
+      Meteor.users.update(
+        { _id: userDoc._id }, 
+        { $pull: { 'services.email.verificationTokens': { when: { $lt: emailVerificationThresholdDate  } } } },
+        { multi: true }
+      )
     });
 
     console.log('Expired email verification tokens removed at ', new Date());
