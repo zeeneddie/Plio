@@ -17,6 +17,8 @@ Template.StandardsHeader.viewmodel({
     function() {
       if (!this.selectedStandardId() && !!this.standardId()) {
         this.selectedStandardId(this.standardId());
+      } else if (!!this.selectedStandardId() && !this.standardId() && this.organization()) {
+        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: this.selectedStandardId() }, { by: this.selectedFilter() });
       }
     },
     function() {
