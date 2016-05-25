@@ -7,6 +7,9 @@ import { StandardFilters } from '/imports/api/constants.js';
 Template.StandardsHeader.viewmodel({
   share: [{ listItems: 'listItems' }, 'standard', 'window'],
   mixin: ['standard', 'collapsing', 'organization'],
+  onDestroyed() {
+    this.selectedStandardId('');
+  },
   autorun: [
     function() {
       this.activeStandardFilter();
@@ -17,24 +20,19 @@ Template.StandardsHeader.viewmodel({
     function() {
       if (!this.selectedStandardId() && !!this.standardId()) {
         this.selectedStandardId(this.standardId());
-      } else if (!this.standardId() && !!this.selectedStandardId() && this.organization()) {
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: this.selectedStandardId() });
+      } else if (!!this.selectedStandardId() && !this.standardId() && this.organizationSerialNumber()) {
+        FlowRouter.go('standard', { orgSerialNumber: this.organizationSerialNumber(), standardId: this.selectedStandardId() });
       }
     },
     function() {
-      if (!this.standardId() && !this.selectedStandardId()) {
-        const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
-        if (!!standard) {
-          const orgSerialNumber = this.organization() && this.organization().serialNumber;
-          const { _id } = standard;
+      const standard = Standards.findOne({}, { sort: { createdAt: 1 } });
 
-          Meteor.setTimeout(() => {
-            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
-            this.selectedStandardId(_id);
+      if (!this.standardId() && !this.selectedStandardId() && !!standard && this.organizationSerialNumber()) {
+        const { _id } = standard;
 
-            this.expandCollapsedStandard(_id);
-          }, 0);
-        }
+        this.selectedStandardId(_id);
+
+        FlowRouter.go('standard', { orgSerialNumber: this.organizationSerialNumber(), standardId: _id });
       }
     }
   ],

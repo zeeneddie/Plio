@@ -30,11 +30,7 @@ Template.ListSubItem.viewmodel({
 
     this.selectedStandardId(this._id());
 
-    FlowRouter.go(
-      'standard',
-      { orgSerialNumber: serialNumber, standardId: this._id() },
-      { by: this.activeStandardFilter() }
-    );
+    FlowRouter.setParams({ standardId: this._id() });
   },
   updateViewedBy() {
     const _id = this._id();
