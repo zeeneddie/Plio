@@ -1,8 +1,9 @@
 Template.OrganizationSettings_NcGuideline.viewmodel({
+  text: '',
   isChanged() {
     const prev = this.templateInstance.data.text;
     const text = this.text();
-    
+
     return text && text !== prev;
   },
   onFocusOut() {

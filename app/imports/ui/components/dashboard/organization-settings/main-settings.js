@@ -5,6 +5,9 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 Template.OrganizationSettings_MainSettings.viewmodel({
   mixin: ['modal', 'clearableField'],
+  name: '',
+  currency: '',
+  owner: '',
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },

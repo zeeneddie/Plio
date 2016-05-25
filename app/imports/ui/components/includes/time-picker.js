@@ -2,6 +2,8 @@ import { TimeUnits } from '/imports/api/constants.js';
 
 
 Template.TimePicker.viewmodel({
+  timeValue: '',
+  timeUnit: '',
   timeUnits() {
     return _.values(TimeUnits);
   },
@@ -13,7 +15,7 @@ Template.TimePicker.viewmodel({
 
     const savedTimeValue = context.timeValue;
     const timeValue = this.timeValue();
-  
+
     const savedTimeUnit = context.timeUnit;
     const timeUnit = this.timeUnit();
 
