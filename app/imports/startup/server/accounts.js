@@ -5,24 +5,10 @@ function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
     user.profile.avatar = Utils.getRandomAvatarUrl();
-    user.profile.initials = getUserInitials(options.profile);
+    user.profile.initials = Utils.generateUserInitials(options.profile);
   }
 
   return user;
-}
-
-function getUserInitials(userProfile) {
-  const { firstName='', lastName='' } = userProfile;
-  let initials = '';
-  if (firstName) {
-    initials += firstName.charAt(0);
-  }
-
-  if (lastName) {
-    initials += lastName.charAt(0);
-  }
-
-  return initials.toUpperCase();
 }
 
 Accounts.onCreateUser(onCreateUser);
