@@ -192,6 +192,8 @@ export default InvitationService = {
 
     let invitedUser = Meteor.users.findOne({invitationId: invitationId});
 
+    userData.initials = Utils.generateUserInitials(userData);
+
     if (invitedUser) {
       Accounts.setPassword(invitedUser._id, password);
 
