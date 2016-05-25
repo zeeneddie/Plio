@@ -100,8 +100,9 @@ Template.StandardsList.viewmodel({
     if (vmsSorted.length > 0) {
       this.animating(true);
 
-      this.expandCollapseItems(vmsSorted, 0, () => {
-        this.onAfterExpand();
+      this.expandCollapseItems(vmsSorted, {
+        expandNotExpandable: true,
+        complete: () => this.onAfterExpand()
       });
     }
   },
@@ -113,8 +114,9 @@ Template.StandardsList.viewmodel({
     if (vms.length > 0) {
       const vmsSorted = this.sortVms(vms);
 
-      this.expandCollapseItems(vmsSorted, 0, () => {
-        this.expandSelectedStandard();
+      this.expandCollapseItems(vmsSorted, {
+        expandNotExpandable: true,
+        complete: () => this.expandSelectedStandard()
       });
     } else {
       this.expandSelectedStandard();

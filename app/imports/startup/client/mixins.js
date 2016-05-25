@@ -39,12 +39,12 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, 0, cb);
+      vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, { complete: cb });
     },
     expandCollapsedStandard: _.debounce(function(_id, cb) {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
-      this.expandCollapseItems(vms, 0, cb);
+      this.expandCollapseItems(vms, { complete: cb });
     }, 200),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
@@ -54,21 +54,21 @@ ViewModel.mixin({
       }
     },
     // Recursive function to expand items one after another
-    expandCollapseItems(array = [], index = 0, cb) {
+    expandCollapseItems(array = [], { index = 0, complete = () => {}, expandNotExpandable = false } = {}) {
       if (index >= array.length) return;
 
       const item = array[index];
 
       const closeAllOnCollapse = item.closeAllOnCollapse.value; // nonreactive value
 
-      !!closeAllOnCollapse && item.closeAllOnCollapse(false);
+      !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
 
       return item.toggleCollapse(() => {
-        !!closeAllOnCollapse && item.closeAllOnCollapse(true);
+        !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
 
-        if (index === array.length - 1 && _.isFunction(cb)) cb();
+        if (index === array.length - 1 && _.isFunction(complete)) complete();
 
-        return this.expandCollapseItems(array, index + 1, cb);
+        return this.expandCollapseItems(array, { index: index + 1, complete, expandNotExpandable });
       });
     }
   },
