@@ -22,12 +22,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
       }, (err, res) => {
-        if (err) {
-          swal('Error!', `Internal server error: ${err.reason}`, 'error');
-        } else {
+        if (!err) {
           const invitedEmails = res.invitedEmails;
           const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
-
           const failMessagePart = res.error ? `\n${res.error}` : '';
 
           let notificationTitle;
@@ -41,7 +38,7 @@ Template.UserDirectory_InviteUsers.viewmodel({
             notificationTitle = 'Invited!'
           }
 
-          const expirationMessagePart = `\nSent invitations expire on ${moment().add(res.expirationTime, 'hours').format('MMMM Do YYYY')}`;
+          const expirationMessagePart = `\nExpiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}`;
           swal(notificationTitle, `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
             failMessagePart ? 'error' : 'success');
           this.modal().close();

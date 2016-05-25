@@ -13,10 +13,12 @@ Template.AcceptInvitationPage.viewmodel({
   repeatPassword: '',
   invitationId: '',
 
-  autorun() {
-    let invitationId = FlowRouter.getParam('invitationId');
-    this.invitationId(invitationId);
-    this.templateInstance.subscribe('invitationInfo', invitationId);
+  onCreated() {
+    this.templateInstance.autorun(() => {
+      let invitationId = FlowRouter.getParam('invitationId');
+      this.invitationId(invitationId);
+      this.templateInstance.subscribe('invitationInfo', invitationId);
+    });
   },
 
   userEmail() {

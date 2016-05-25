@@ -39,10 +39,11 @@
   @include flex(1);
   @include flex-direction(column);
   cursor: pointer;
-  @include transition(all .3s ease);
+  @include transition(box-shadow .3s ease);
 
-  &:hover {
+  &:hover, &:focus {
     box-shadow: 0 4px 4px rgba(0,0,0,0.1);
+    text-decoration: initial;
   }
 
   &-disabled {
