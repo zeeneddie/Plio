@@ -28,6 +28,10 @@
     margin: 0;
     line-height: 22px;
 
+    &.pull-xs-left {
+      width: calc(100% - 34px);
+    }  
+
     .text-muted {
       color: #777;
       font-weight: normal;
