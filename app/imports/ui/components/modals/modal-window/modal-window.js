@@ -16,7 +16,13 @@ Template.ModalWindow.viewmodel({
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
+  submitCaptionOnSave: 'Saving...',
+  closeCaption: 'Close',
   guideHtml: 'No help message yet',
+
+  submitCaptionText() {
+    return this.isSaving() && this.submitCaptionOnSave() ? this.submitCaptionOnSave() : this.submitCaption();
+  },
 
   isVariation(variation) {
     return this.variation() === variation;

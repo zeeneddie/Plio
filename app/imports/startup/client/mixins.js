@@ -14,7 +14,7 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    toggleCollapse: _.throttle(function() {
+    toggleCollapse: _.throttle(function(cb) {
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
@@ -26,10 +26,11 @@ ViewModel.mixin({
       }
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
+      if (_.isFunction(cb)) cb();
     }, 500)
   },
   collapsing: {
-    toggleVMCollapse(name = '', condition = () => {}) {
+    toggleVMCollapse(name = '', condition = () => {}, cb) {
       let vmsToCollapse = [];
 
       if (!name && !!condition) {
@@ -38,19 +39,47 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      !!vmsToCollapse && vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse());
+      !!vmsToCollapse && vmsToCollapse.forEach((vm) => {
+        if (!!vm && !!vm.collapse) {
+          vm.toggleCollapse(cb);
+        }
+      });
     },
-    expandCollapsedStandard: _.debounce(function(standardId) {
-        const standard = Standards.findOne({ _id: standardId });
+    expandCollapsedStandard: _.debounce(function(_id) {
+      let query = { _id };
 
-        if (standard) {
-          this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel));
-        }
+      if (_.isArray(_id)) {
+        query = { _id: { $in: _id } };
+      }
 
-        function recursiveSearch(viewmodel) {
-          return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
-        }
-    }, 200)
+      const standards = Standards.find(query).fetch();
+
+      standards.forEach((standard) => {
+        this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, standard._id));
+      });
+    }, 200),
+    findRecursive(viewmodel, _id) {
+      if (_.isArray(_id)) {
+        return viewmodel && ( viewmodel.child(vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id))) );
+      } else {
+        return viewmodel && ( _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) ) );
+      }
+    },
+    // Recursive function to expand items one after another
+    expandCollapseItems(array = [], index = 0) {
+      if (index >= array.length) return;
+
+      const item = array[index];
+
+      const closeAllOnCollapse = item.closeAllOnCollapse.value; // nonreactive value
+
+      !!closeAllOnCollapse && item.closeAllOnCollapse(false);
+
+      return item.toggleCollapse(() => {
+        !!closeAllOnCollapse && item.closeAllOnCollapse(true);
+        return this.expandCollapseItems(array, index + 1);
+      });
+    }
   },
   modal: {
     modal: {

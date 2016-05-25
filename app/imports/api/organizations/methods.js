@@ -85,7 +85,7 @@ export const setName = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(403, updateErrorMessage);
     }
-    
+
     const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
 
     if (!canEditOrgSettings) {
@@ -119,7 +119,7 @@ export const setDefaultCurrency = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
+
     return OrganizationService.setDefaultCurrency(doc);
   }
 });
@@ -144,7 +144,7 @@ export const setStepTime = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
+
     return OrganizationService.setStepTime(doc);
   }
 });
@@ -243,6 +243,8 @@ export const inviteUserByEmail = new ValidatedMethod({
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+    
+    return InvitationService.getInvitationExpirationTime();
   }
 });
 
@@ -275,7 +277,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
   validate: new SimpleSchema([OrganizationIdSchema, {
     emails: {
-      type: [SimpleSchema.RegEx.Email]
+      type: [String],
+      regEx: SimpleSchema.RegEx.Email
     },
     welcomeMessage: {
       type: String
@@ -303,21 +306,32 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
       );
     }
 
+    let invitedEmails = [];
     let errors = [];
     emails.forEach(email => {
       //aggregate service errors for each email
       try {
-        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        invitedEmails.push(email);
       } catch (err) {
+        console.error(err);
         errors.push(err.reason);
       }
     });
 
-    if (errors.length > 0) {
-      console.log(errors);
-      let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
-      throw new Meteor.Error(500, errorMsg);
-    }
+    const generateErrorMessage = () => {
+      if (errors.length > 0) {
+        return `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
+      } else {
+        return null;
+      }
+    };
+
+    return {
+      error: generateErrorMessage(),
+      invitedEmails,
+      expirationTime: InvitationService.getInvitationExpirationTime()
+    };
   }
 });
 
@@ -329,7 +343,7 @@ export const removeUser = new ValidatedMethod({
     UserIdSchema
   ]).validator(),
 
-  run({ userId, organizationId }) {
+  run({userId, organizationId}) {
     const currUserId = this.userId;
     if (!currUserId) {
       throw new Meteor.Error(
@@ -337,8 +351,8 @@ export const removeUser = new ValidatedMethod({
       );
     }
 
-    const isRemovableUserOrgOwner = !!Organizations.findOne({ 
-      _id: organizationId, 
+    const isRemovableUserOrgOwner = !!Organizations.findOne({
+      _id: organizationId,
       users: {
         $elemMatch: {
           userId: userId,
@@ -352,8 +366,8 @@ export const removeUser = new ValidatedMethod({
     }
 
     const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
-      currUserId, UserRoles.DELETE_USERS, organizationId
-    );
+        currUserId, UserRoles.DELETE_USERS, organizationId
+      );
     if (!canRemoveUser) {
       throw new Meteor.Error(
         403,

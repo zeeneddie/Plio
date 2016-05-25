@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/standards/methods.js';
+import { addedToNotifyList } from '/imports/api/standards/methods.js';
+import Utils from '/imports/core/utils.js';
 
 Template.CreateStandard.viewmodel({
   share: 'standard',
@@ -47,7 +49,20 @@ Template.CreateStandard.viewmodel({
       nestingLevel
     };
 
-     this.modal().callMethod(insert, args, (err, _id) => {
+    this.modal().callMethod(insert, args, (err, _id) => {
+      if (err) {
+        return;
+      }
+
+      addedToNotifyList.call({
+        standardId: _id,
+        userId: Meteor.userId()
+      }, (err, res) => {
+        if (err) {
+          Utils.showError('Failed to send email to standard\'s creator');
+        }
+      });
+
       this.modal().close();
 
       Meteor.setTimeout(() => {
