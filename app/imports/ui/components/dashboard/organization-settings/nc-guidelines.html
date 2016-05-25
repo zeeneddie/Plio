@@ -5,18 +5,19 @@
   </div>
   <div class="card-block-collapse collapse" id="nonconformity-guidelines" {{b "ref: collapse"}}>
     <div class="card-block">
-      {{> OrganizationSettings_NcGuideline ncType="minor"
-          text=guidelines.minor
+      {{> OrganizationSettings_NcGuideline
+          ncType="minor"
+          text=minor
           onChange=onChangeCb}}
 
       {{> OrganizationSettings_NcGuideline
           ncType="major"
-          text=guidelines.major
+          text=major
           onChange=onChangeCb}}
 
       {{> OrganizationSettings_NcGuideline
           ncType="critical"
-          text=guidelines.critical
+          text=critical
           onChange=onChangeCb}}
     </div>
   </div>

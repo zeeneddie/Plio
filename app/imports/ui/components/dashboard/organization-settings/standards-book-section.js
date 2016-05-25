@@ -1,5 +1,6 @@
 Template.OrganizationSettings_StandardsBookSection.viewmodel({
   mixin: ['modal', 'clearableField'],
+  title: '',
   isChanged() {
     const savedTitle = this.templateInstance.data.title;
     const { title } = this.getData();

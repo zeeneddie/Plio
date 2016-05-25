@@ -3,16 +3,16 @@
   <div class="form-group form-group-inline">
     <label class="form-control-label">Remind every</label>
     {{> TimePicker
-        timeValue=intervalTimeValue
-        timeUnit=intervalTimeUnit
+        timeValue=intervalValue
+        timeUnit=intervalUnit
         cssClass="margin-right"
         onChange=onChangeCb
         ncType=ncType
         reminderType="interval"}}
     <label class="form-control-label">until</label>
     {{> TimePicker
-        timeValue=pastDueTimeValue
-        timeUnit=pastDueTimeUnit
+        timeValue=pastDueValue
+        timeUnit=pastDueUnit
         cssClass="margin-right"
         onChange=onChangeCb
         ncType=ncType
