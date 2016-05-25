@@ -137,5 +137,12 @@ Template.StandardsList.viewmodel({
       template: 'CreateStandard',
       variation: 'save'
     });
+  },
+  clearSearchField() {
+    if (this.searchText()) {
+      this.searchInput.val('');
+      this.searchText('');
+      this.expandSelected();
+    }
   }
 });
