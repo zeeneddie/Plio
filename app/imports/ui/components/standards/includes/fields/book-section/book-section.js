@@ -73,6 +73,7 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
+      Tracker.flush();
       this.expandCollapsedStandard(this.selectedStandardId());
     });
   },
