@@ -3,11 +3,8 @@ import { Template } from 'meteor/templating';
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ListItem.viewmodel({
-  share: ['search', 'listItems'],
+  share: ['search'],
   mixin: ['collapse', 'search', 'standard'],
-  onRendered() {
-    this._rendered(true);
-  },
   closeAllOnCollapse: true,
   standards() {
     const searchQuery = this.searchObject('searchText', [
