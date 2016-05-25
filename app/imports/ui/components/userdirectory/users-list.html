@@ -27,7 +27,10 @@
             </div>
           </a>
         {{/each}}
-        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "if: searchText, text: searchResultsText"}}></div>
+
+        {{#if searchText}}
+          <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+        {{/if}}
       </div>
     </div>
   </div>
