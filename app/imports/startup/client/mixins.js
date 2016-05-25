@@ -124,7 +124,7 @@ ViewModel.mixin({
     searchObject(prop, fields) {
       const searchObject = {};
 
-      if (this[prop]()) {
+      if (this[prop]().trim()) {
         const words = this[prop]().split(' ');
         const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
