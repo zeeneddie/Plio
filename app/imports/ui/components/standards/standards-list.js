@@ -12,6 +12,7 @@ Template.StandardsList.viewmodel({
   },
   onRendered() {
     this._rendered(true);
+    this.expandSelected();
   },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [

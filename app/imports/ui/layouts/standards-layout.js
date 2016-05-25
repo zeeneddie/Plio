@@ -16,7 +16,9 @@ Template.StandardsLayout.viewmodel({
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('organizationUsers', userIds)
+        this.templateInstance.subscribe('organizationUsers', userIds),
+        this.templateInstance.subscribe('standards-book-sections', _id),
+        this.templateInstance.subscribe('standards-types', _id)
       ]);
     },
     function() {
