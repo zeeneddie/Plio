@@ -36,7 +36,10 @@ Template.StandardsList.viewmodel({
       });
     }
 
-    return Standards.find(standardsQuery);
+    const standardsCursor = Standards.find(standardsQuery);
+    this.searchResultsNumber(standardsCursor.count());
+
+    return standardsCursor;
   },
   sectionIds() {
     const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
