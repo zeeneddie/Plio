@@ -133,6 +133,8 @@
           margin: 0 0 3px;
           font-weight: normal;
           font-family: $font-semilight;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         &-text {
