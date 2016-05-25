@@ -11,7 +11,7 @@ Template.ESType.viewmodel({
     const types = StandardTypes.find({ organizationId }).fetch();
     return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
   },
-  update() {
+  update: _.throttle(function() {
     if (!this._id) return;
     const { typeId } = this.getData();
     if (!typeId) {
@@ -21,7 +21,7 @@ Template.ESType.viewmodel({
       Tracker.flush();
       this.expandCollapsedStandard(this.selectedStandardId());
     });
-  },
+  }, 500),
   getData() {
     const { typeId } = this.data();
     return { typeId };

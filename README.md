@@ -164,6 +164,19 @@ email: steve.ives@pliohub.com
 
 password: password
 
+## Quill Editor
+
+[Documentation.](http://quilljs.com/docs/quickstart/) Example:
+
+```html
+{{#QuillEditor}}
+   <!-- This is the actual value -->
+   <div>Hello World!</div>
+   <div>Some initial <b>bold</b> text</div>
+   <div><br></div>
+{{/QuillEditor}}
+```
+
 #License
 
 The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
