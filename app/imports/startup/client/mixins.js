@@ -39,34 +39,22 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      !!vmsToCollapse && vmsToCollapse.forEach((vm) => {
-        if (!!vm && !!vm.collapse) {
-          vm.toggleCollapse(cb);
-        }
-      });
+      vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, 0, cb);
     },
-    expandCollapsedStandard: _.debounce(function(_id) {
-      let query = { _id };
+    expandCollapsedStandard: _.debounce(function(_id, cb) {
+      const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
-      if (_.isArray(_id)) {
-        query = { _id: { $in: _id } };
-      }
-
-      const standards = Standards.find(query).fetch();
-
-      standards.forEach((standard) => {
-        this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, standard._id));
-      });
+      this.expandCollapseItems(vms, 0, cb);
     }, 200),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
-        return viewmodel && ( viewmodel.child(vm => (vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id))) );
+        return viewmodel && _.some(viewmodel.children(), vm => ( vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id) ));
       } else {
-        return viewmodel && ( _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) ) );
+        return viewmodel && _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) );
       }
     },
     // Recursive function to expand items one after another
-    expandCollapseItems(array = [], index = 0) {
+    expandCollapseItems(array = [], index = 0, cb) {
       if (index >= array.length) return;
 
       const item = array[index];
@@ -77,7 +65,10 @@ ViewModel.mixin({
 
       return item.toggleCollapse(() => {
         !!closeAllOnCollapse && item.closeAllOnCollapse(true);
-        return this.expandCollapseItems(array, index + 1);
+
+        if (index === array.length - 1 && _.isFunction(cb)) cb();
+
+        return this.expandCollapseItems(array, index + 1, cb);
       });
     }
   },

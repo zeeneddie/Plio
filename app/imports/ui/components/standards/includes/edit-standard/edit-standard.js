@@ -45,8 +45,7 @@ Template.EditStandard.viewmodel({
 
             this.modal().close();
             this.selectedStandardId('');
-
-            FlowRouter.go('standards', { orgSerialNumber: this.organization().serialNumber });
+            FlowRouter.setParams({ standardId: '' });
           }
         });
       }
