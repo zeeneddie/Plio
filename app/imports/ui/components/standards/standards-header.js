@@ -5,11 +5,11 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  share: [{ listItems: 'listItems' }, 'standard', 'window', 'filter'],
+  share: [{ listItems: 'listItems' }, 'standard', 'window'],
   mixin: ['standard', 'collapsing', 'organization'],
   autorun: [
     function() {
-      this.selectedFilter.depend();
+      this.activeStandardFilter();
       if (!!this.selectedStandardId() && !!this.listItems._rendered()) {
         this.expandCollapsedStandard(this.selectedStandardId());
       }
@@ -17,12 +17,7 @@ Template.StandardsHeader.viewmodel({
     function() {
       if (!this.selectedStandardId() && !!this.standardId()) {
         this.selectedStandardId(this.standardId());
-      } else if (!!this.selectedStandardId() && !this.standardId() && this.organization()) {
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: this.selectedStandardId() }, { by: this.selectedFilter() });
-      }
-    },
-    function() {
-      if (!this.standardId() && !!this.selectedStandardId() && this.organization()) {
+      } else if (!this.standardId() && !!this.selectedStandardId() && this.organization()) {
         FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: this.selectedStandardId() });
       }
     },
@@ -34,22 +29,20 @@ Template.StandardsHeader.viewmodel({
           const { _id } = standard;
 
           Meteor.setTimeout(() => {
-            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id }, { by: this.selectedFilter() });
+            FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
             this.selectedStandardId(_id);
 
             this.expandCollapsedStandard(_id);
           }, 0);
         }
       }
-    },
-    function() {
-      if (this.selectedFilter()) {
-        FlowRouter.setQueryParams({ by: this.selectedFilter() });
-      }
     }
   ],
   standardFilters() {
     return StandardFilters;
+  },
+  selectFilter(filter) {
+    FlowRouter.setQueryParams({ by: filter });
   },
   navigate(e) {
     e.preventDefault();

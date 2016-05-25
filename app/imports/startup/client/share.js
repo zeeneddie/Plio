@@ -12,8 +12,5 @@ ViewModel.share({
   },
   listItems: {
     _rendered: false
-  },
-  filter: {
-    selectedFilter: 'section'
   }
 });
