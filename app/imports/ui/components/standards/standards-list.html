@@ -1,6 +1,6 @@
 <template name="StandardsList">
   <div class="card">
-    <form class="search-form">
+    <form class="search-form" {{b "class: { loading: animating }"}}>
       <div class="form-group row">
         {{#ClearableField field="searchText"}}
           <input type="text" class="form-control" placeholder="Search..."
