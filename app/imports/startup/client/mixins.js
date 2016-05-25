@@ -297,6 +297,10 @@ ViewModel.mixin({
       Meteor.setTimeout(() => {
         this.modal().isWaiting(false);
 
+        if (this.templateInstance.view.isDestroyed) {
+          return;
+        }
+
         if (this.templateInstance.$('input').is(':focus')) {
           return;
         }

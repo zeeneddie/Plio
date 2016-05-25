@@ -7,6 +7,14 @@ import {
 
 
 Template.OrganizationSettings.viewmodel({
+  name: '',
+  currency: '',
+  autorun() {
+    const org = this.organization();
+    if (org) {
+      this.load(_.pick(org, ['name', 'currency']));
+    }
+  },
   organization() {
     const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
     return Organizations.findOne({ serialNumber });
@@ -32,17 +40,11 @@ Template.OrganizationSettings.viewmodel({
       sort: { title: 1 }
     });
   },
-  name() {
-    return this.organization().name;
-  },
   owner() {
     const orgOwner = Meteor.users.findOne({
       _id: this.organization().ownerId()
     });
     return orgOwner ? orgOwner.fullName() : '';
-  },
-  currency() {
-    return this.organization().currency;
   },
   stepTimes() {
     return this.organization().ncStepTimes;
@@ -52,13 +54,5 @@ Template.OrganizationSettings.viewmodel({
   },
   guidelines() {
     return this.organization().ncGuidelines;
-  },
-  guideHtml() {
-    // TEMPORARY!!!
-    return `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Praesent vestibulum accumsan nulla, non pulvinar neque.
-      Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec
-      maximus pellentesque, massa nunc mattis ipsum, in dictum magna
-      arcu et ipsum.</p>`;
   }
 });

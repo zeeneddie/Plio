@@ -1,5 +1,6 @@
 Template.OrganizationSettings_Department.viewmodel({
   mixin: ['modal', 'clearableField'],
+  name: '',
   isChanged() {
     let savedName = this.templateInstance.data.name;
     const name = this.name();

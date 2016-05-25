@@ -1,5 +1,7 @@
 Template.OrganizationSettings_StandardsType.viewmodel({
   mixin: ['modal', 'clearableField'],
+  name: '',
+  abbreviation: '',
   isChanged() {
     const tplData = this.templateInstance.data;
     const storedName = tplData.name;
