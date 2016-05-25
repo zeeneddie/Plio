@@ -451,3 +451,23 @@ fieldset[disabled] {
 .no-pointer-events {
   pointer-events: none;
 }
+
+.with-loader {
+  .small-loader {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+  }
+  &.loading {
+    .small-loader {
+      display: block;
+    }
+  }
+}
+
+input[disabled], textarea[disabled] {
+  & ~ .clear-field {
+    display: none;
+  }
+}

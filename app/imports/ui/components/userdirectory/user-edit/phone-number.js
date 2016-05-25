@@ -3,6 +3,7 @@ import { PhoneTypes } from '/imports/api/constants.js';
 
 Template.UserEdit_PhoneNumber.viewmodel({
   mixin: ['modal', 'clearableField'],
+  number: '',
   type: PhoneTypes.WORK,
   events: {
     'change .c-select'(e, tpl) {

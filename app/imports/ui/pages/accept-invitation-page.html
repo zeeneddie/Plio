@@ -4,105 +4,97 @@
       <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <img src="/plio-logo.png" alt="plio logo" id="at-plio-logo">
 
-        {{#unless organization}}
-          <div class="card">
-            <div class="card-header text-xs-center">
-              The invitation is not found or expired!
-            </div>
-          </div>
-        {{else}}
-          <div class="card">
-            <div class="card-header text-xs-center">
-              <div class="at-title">
-                <h3>Accept Invitation</h3>
+        {{#if Template.subscriptionsReady}}
+          {{#unless organization}}
+            <div class="card">
+              <div class="card-header text-xs-center">
+                The invitation is not found or expired!
               </div>
             </div>
-
-            <div class="card-block">
-              <div class="at-form">
-                <div class="at-pwd-form">
-                  <form role="form" id="at-pwd-form">
-                    <fieldset>
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-firstName">
-                          First name
-                        </label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="at-field-firstName" name="at-field-firstName"
-                                 placeholder="First name" autocapitalize="none"
-                                 autocorrect="off" {{b "value: firstName"}}>
-                        </div>
-                      </div>
-
-
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-lastName">
-                          Last name
-                        </label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="at-field-lastName" name="at-field-lastName"
-                                 placeholder="Last name" autocapitalize="none"
-                                 autocorrect="off" {{b "value: lastName"}}>
-                        </div>
-                      </div>
-
-
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-email">
-                          Email
-                        </label>
-                        <div class="col-md-9">
-                          <input type="email" class="form-control" id="at-field-email" name="at-field-email"
-                                 placeholder="Email" autocapitalize="none" autocorrect="off"
-                            {{b "value: userEmail"}} disabled="disabled">
-                        </div>
-                      </div>
-
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-password">
-                          Password
-                        </label>
-                        <div class="col-md-9">
-                          <input type="password" class="form-control" id="at-field-password" name="at-field-password"
-                                 placeholder="Password" autocapitalize="none" autocorrect="off" {{b "value: password"}}>
-                        </div>
-                      </div>
-
-
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-password_again">
-                          Password (again)
-                        </label>
-                        <div class="col-md-9">
-                          <input type="password" class="form-control" id="at-field-password_again"
-                                 name="at-field-password_again" placeholder="Password (again)" autocapitalize="none"
-                                 autocorrect="off" {{b "value: repeatPassword"}}>
-                        </div>
-                      </div>
-
-
-                      <div class="at-input form-group row">
-                        <label class="col-md-3 form-control-label" for="at-field-organizationName">
-                          Organization name
-                        </label>
-                        <div class="col-md-9">
-                          <input type="text" class="form-control" id="at-field-organizationName"
-                                 name="at-field-organizationName" placeholder="Organization name" autocapitalize="none"
-                                 autocorrect="off" {{b "value: organizationName"}} disabled="disabled">
-                        </div>
-                      </div>
-                    </fieldset>
-                  </form>
+          {{else}}
+            <div class="card">
+              <div class="card-header text-xs-center">
+                <div class="at-title">
+                  <h3>Invitation to "{{organizationName}}" organization</h3>
                 </div>
               </div>
+
+              <div class="card-block">
+                <div class="at-form">
+                  <div class="at-pwd-form">
+                    <form role="form" id="at-pwd-form">
+                      <fieldset>
+                        <div class="at-input form-group row">
+                          <label class="col-md-3 form-control-label" for="at-field-firstName">
+                            First name
+                          </label>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control" id="at-field-firstName" name="at-field-firstName"
+                                   placeholder="First name" autocapitalize="none"
+                                   autocorrect="off" {{b "value: firstName"}}>
+                          </div>
+                        </div>
+
+
+                        <div class="at-input form-group row">
+                          <label class="col-md-3 form-control-label" for="at-field-lastName">
+                            Last name
+                          </label>
+                          <div class="col-md-9">
+                            <input type="text" class="form-control" id="at-field-lastName" name="at-field-lastName"
+                                   placeholder="Last name" autocapitalize="none"
+                                   autocorrect="off" {{b "value: lastName"}}>
+                          </div>
+                        </div>
+
+
+                        <div class="at-input form-group row">
+                          <label class="col-md-3 form-control-label" for="at-field-email">
+                            Email
+                          </label>
+                          <div class="col-md-9">
+                            <input type="email" class="form-control" id="at-field-email" name="at-field-email"
+                                   placeholder="Email" autocapitalize="none" autocorrect="off"
+                              {{b "value: userEmail"}} disabled="disabled">
+                          </div>
+                        </div>
+
+                        <div class="at-input form-group row">
+                          <label class="col-md-3 form-control-label" for="at-field-password">
+                            Password
+                          </label>
+                          <div class="col-md-9">
+                            <input type="password" class="form-control" id="at-field-password" name="at-field-password"
+                                   placeholder="Password" autocapitalize="none" autocorrect="off" {{b "value: password"}}>
+                          </div>
+                        </div>
+
+
+                        <div class="at-input form-group row">
+                          <label class="col-md-3 form-control-label" for="at-field-password_again">
+                            Password (again)
+                          </label>
+                          <div class="col-md-9">
+                            <input type="password" class="form-control" id="at-field-password_again"
+                                   name="at-field-password_again" placeholder="Password (again)" autocapitalize="none"
+                                   autocorrect="off" {{b "value: repeatPassword"}}>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer text-xs-center">
+                <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary">
+                  Accept invitation
+                </button>
+              </div>
             </div>
-            <div class="card-footer text-xs-center">
-              <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary">
-                Submit
-              </button>
-            </div>
-          </div>
-        {{/unless}}
+          {{/unless}}
+        {{else}}
+          {{> PreloaderPage}}
+        {{/if}}
       </div>
     </div>
   </div>

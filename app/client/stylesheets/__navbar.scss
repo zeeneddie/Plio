@@ -137,6 +137,11 @@
 
     .dropdown-menu {
       left: 10px;
+      top: 80px;
+      
+      .dropdown-divider {
+        margin: 0;
+      }
     }
   }
 
@@ -145,10 +150,6 @@
       @media (max-width: 767px) {
         position: static;
       }
-    }
-
-    .dropdown-menu {
-      right: 10px;
     }
   }
 

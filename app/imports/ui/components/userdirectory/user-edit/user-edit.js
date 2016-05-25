@@ -15,9 +15,28 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UserEdit.viewmodel({
   mixin: ['organization', 'modal'],
+  firstName: '',
+  lastName: '',
+  initials: '',
+  email: '',
+  description: '',
+  avatar: '',
+  address: '',
+  country: '',
+  phoneNumbers: [],
+  skype: '',
+  autorun() {
+    const user = this.user();
+    if (user) {
+      this.load(_.extend({}, user.profile, {
+        email: user.email()
+      }));
+    }
+  },
   user() {
+    const userId = this.userId && this.userId();
     return Meteor.users.findOne({
-      _id: this.userId()
+      _id: userId
     });
   },
   organizationId() {
@@ -93,7 +112,8 @@ Template.UserEdit.viewmodel({
     return val && val !== savedVal;
   },
   isCurrentUser() {
-    return Meteor.userId() === this.userId();
+    const userId = this.userId && this.userId();
+    return Meteor.userId() === userId;
   },
   isEditable() {
     return this.isCurrentUser();
@@ -115,7 +135,7 @@ Template.UserEdit.viewmodel({
   },
   userHasRole(role) {
     return Roles.userIsInRole(
-      this.userId(), role, this.organizationId()
+      this.userId && this.userId(), role, this.organizationId()
     );
   },
   userRoles() {
@@ -162,8 +182,8 @@ Template.UserEdit.viewmodel({
       }, (err, res) => {
         if (!err) {
           // have to wait some time before opening new sweet alert
-          FlowRouter.go('userDirectoryPage', { 
-            orgSerialNumber: this.organization().serialNumber 
+          FlowRouter.go('userDirectoryPage', {
+            orgSerialNumber: this.organization().serialNumber
           });
           Meteor.setTimeout(() => {
             swal('Removed', 'User has been removed', 'success');
