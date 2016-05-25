@@ -18,7 +18,7 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
   onChange(viewModel) {
     const { name, abbreviation } = viewModel.getData();
     const organizationId = this.organizationId();
-    
+
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
 
@@ -37,11 +37,30 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
       return;
     }
 
-    if (!confirm('Delete this standards type?')) return;
+    const { name } = viewModel.getData();
 
-    const _id = viewModel._id();
-    const organizationId = this.organizationId();
+    swal({
+      title: 'Are you sure?',
+      text: `Standard type "${name}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      const _id = viewModel._id();
+      const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id, organizationId });
+      this.modal().callMethod(remove, { _id, organizationId }, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal(
+            'Removed!',
+            `Standard type "${name}" was removed succesfully.`,
+            'success'
+          );
+        }
+      });
+    });
   }
 });

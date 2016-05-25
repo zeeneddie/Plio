@@ -25,7 +25,7 @@ Template.OrganizationSettings_Departments.viewmodel({
       this.modal().callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
-      
+
       this.modal().callMethod(update, { _id, name, organizationId });
     }
   },
@@ -35,13 +35,30 @@ Template.OrganizationSettings_Departments.viewmodel({
       return;
     }
 
-    if (!confirm('Delete this department?')) {
-      return;
-    }
+    const { name } = viewModel.getData();
 
-    const _id = viewModel._id();
-    const organizationId = this.organizationId();
+    swal({
+      title: 'Are you sure?',
+      text: `Department "${name}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      const _id = viewModel._id();
+      const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id, organizationId });
+      this.modal().callMethod(remove, { _id, organizationId }, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal(
+            'Removed!',
+            `Department "${name}" was removed succesfully.`,
+            'success'
+          );
+        }
+      });
+    });
   },
 });
