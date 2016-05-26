@@ -4,6 +4,9 @@ import { insert, update, remove } from '/imports/api/standards-types/methods.js'
 
 Template.OrganizationSettings_StandardTypes.viewmodel({
   mixin: ['collapse', 'addForm', 'modal'],
+  autorun() {
+    this.templateInstance.subscribe('standards-types', this.organizationId());
+  },
   standardsTypesCount() {
     return StandardTypes.find({
       organizationId: this.organizationId()

@@ -11,10 +11,10 @@ import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 Template.StandardsCard.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
-
   autorun() {
     const standardId = this.standard() && this.standard()._id;
     this.templateInstance.subscribe('improvementPlan', standardId);
+    this.templateInstance.subscribe('departments', this.organizationId());
   },
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
