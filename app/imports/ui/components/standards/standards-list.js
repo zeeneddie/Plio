@@ -13,6 +13,9 @@ Template.StandardsList.viewmodel({
   onRendered() {
     this.expandSelectedStandard();
   },
+  autorun() {
+    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+  },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
       { name: 'title' },
@@ -36,9 +39,24 @@ Template.StandardsList.viewmodel({
     }
 
     const standardsCursor = Standards.find(standardsQuery);
-    this.searchResultsNumber(standardsCursor.count());
 
     return standardsCursor;
+  },
+  standardsDeleted() {
+    const standardsSearchQuery = this.searchObject('searchText', [
+      { name: 'title' },
+      { name: 'description' },
+      { name: 'status' }
+    ]);
+    const query = {
+      $and: [
+        { isDeleted: true },
+        standardsSearchQuery
+      ]
+    }
+    const options = { sort: { createdAt: -1 } };
+
+    return Standards.find(query, options);
   },
   sectionIds() {
     const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
@@ -88,6 +106,8 @@ Template.StandardsList.viewmodel({
 
     this.searchText(value);
 
+    if (this.isActiveStandardFilter('deleted')) return;
+
     if (!!value) {
       this.expandAllFound();
     } else {
@@ -129,7 +149,7 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelectedStandard() {
-    this.expandCollapsedStandard(this.selectedStandardId(), () => {
+    this.expandCollapsedStandard(this.standardId(), () => {
       this.onAfterExpand();
     });
   },

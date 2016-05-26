@@ -20,10 +20,16 @@
         {{#each standardsBookSections}}
           {{> ListItem type="standardSection" _id=this._id title=this.title template="StandardsSectionItem"}}
         {{/each}}
-      {{else}}
+      {{/if}}
+
+      {{#if isActiveStandardFilter 'type'}}
         {{#each standardsTypes}}
           {{> ListItem type="standardType" _id=this._id title=this.name template="StandardsTypeItem"}}
         {{/each}}
+      {{/if}}
+
+      {{#if isActiveStandardFilter 'deleted'}}
+        {{> StandardsDeletedList items=standardsDeleted}}
       {{/if}}
 
       {{#if searchText}}

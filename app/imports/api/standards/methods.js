@@ -120,9 +120,9 @@ export const remove = new ValidatedMethod({
 
     ensureCanChangeStandards(userId, organizationId);
 
-    getStandardOrThrow(_id);
+    const standard = getStandardOrThrow(_id);
 
-    return StandardsService.remove({ _id, deletedBy: userId });
+    return StandardsService.remove({ _id, deletedBy: userId, isDeleted: standard.isDeleted });
   }
 });
 

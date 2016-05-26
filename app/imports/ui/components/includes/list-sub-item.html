@@ -1,11 +1,15 @@
 <template name="ListSubItem">
-  <a class="list-group-item pointer" {{b "click: select, class: { active: selectedStandardId === this._id, disabled: status === 'deleted' }"}}>
+  <a class="list-group-item pointer" {{b "click: select, class: { active: standardId === this._id }"}}>
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading">
+      <h4 class="list-group-item-heading pull-xs-left">
         <span {{b "text: this.title"}}></span>
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
         <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
       </h4>
+      <div class="pull-xs-right" {{b "if: isDeleted"}}>
+        <p class="list-group-item-text" {{b "text: 'Deleted by: ' + userFullNameOrEmail(this.deletedBy)"}}></p>
+        <p class="list-group-item-text pull-right" {{b "text: renderDate(this.deletedAt)"}}></p>
+      </div>
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
     </div>
   </a>
