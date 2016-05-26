@@ -5,13 +5,12 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
-  share: ['search', 'standard', 'listItems'],
+  share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
   onCreated() {
     this.searchText('');
   },
   onRendered() {
-    this._rendered(true);
     this.expandSelectedStandard();
   },
   standards(typeId) {
