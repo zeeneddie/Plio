@@ -36,29 +36,8 @@ Meteor.publish('invitationInfo', function (invitationId) {
 });
 
 
-Meteor.publishComposite('currentUserOrganizations', {
-  find: function () {
-    return Organizations.find({'users.userId': this.userId});
-  },
-  children: [{
-    find: function (org) {
-      return Departments.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardTypes.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardsBookSections.find({
-        organizationId: org._id
-      });
-    }
-  }]
+Meteor.publish('currentUserOrganizations', function () {
+  return Organizations.find({ 'users.userId': this.userId }, { fields: { name: 1, serialNumber: 1, users: 1 } });
 });
 
 Meteor.publishComposite('currentUserOrganizationById', function(orgId) {
