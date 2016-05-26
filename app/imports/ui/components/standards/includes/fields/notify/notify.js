@@ -39,6 +39,8 @@ Template.ESNotify.viewmodel({
         return;
       }
 
+      this.notifyUser('');
+
       addedToNotifyList.call({
         standardId: this.standard()._id,
         userId
