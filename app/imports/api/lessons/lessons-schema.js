@@ -1,10 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { StandardIdSchema, OrganizationIdSchema } from '../schemas.js';
 
-export const requiredSchema = new SimpleSchema({
-  standardId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
+
+export const requiredSchema = new SimpleSchema([StandardIdSchema, {
   title: {
     type: String
   },
@@ -18,14 +16,14 @@ export const requiredSchema = new SimpleSchema({
   notes: {
     type: String
   }
-});
-
-export const LessonsSchema = new SimpleSchema([requiredSchema, {
-  organizationId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  serialNumber: {
-    type: Number
-  }
 }]);
+
+export const LessonsSchema = new SimpleSchema([
+  requiredSchema,
+  OrganizationIdSchema,
+  {
+    serialNumber: {
+      type: Number
+    }
+  }
+]);

@@ -1,4 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { OrganizationIdSchema } from '../schemas.js';
+
 
 const optionalFields = new SimpleSchema({
   description: {
@@ -173,6 +175,7 @@ const optionalFields = new SimpleSchema({
   },
   'improvementPlan.files.$.url': {
     type: String,
+    regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
   'improvementPlan.files.$.name': {
@@ -190,36 +193,36 @@ const optionalFields = new SimpleSchema({
   }
 });
 
-const StandardsSchema = new SimpleSchema([optionalFields, {
-  organizationId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  title: {
-    type: String
-  },
-  typeId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  sectionId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  nestingLevel: {
-    type: Number
-  },
-  owner: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  issueNumber: {
-    type: Number
-  },
-  status: {
-    type: String
+const StandardsSchema = new SimpleSchema([
+  optionalFields,
+  OrganizationIdSchema,
+  {
+    title: {
+      type: String
+    },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    sectionId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    nestingLevel: {
+      type: Number
+    },
+    owner: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    issueNumber: {
+      type: Number
+    },
+    status: {
+      type: String
+    }
   }
-}]);
+]);
 
 const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   title: {

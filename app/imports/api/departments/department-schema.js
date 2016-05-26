@@ -1,12 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { OrganizationIdSchema } from '../schemas.js';
 
 
-export const DepartmentSchema = new SimpleSchema({
+export const DepartmentSchema = new SimpleSchema([OrganizationIdSchema, {
   name: {
-    type: String
-  },
-  organizationId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    min: 1
   }
-});
+}]);

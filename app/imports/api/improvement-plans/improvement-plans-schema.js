@@ -1,11 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { StandardIdSchema } from '../schemas.js';
 
-const requiredSchema = new SimpleSchema({
-  standardId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  }
-});
+
+const requiredSchema = new SimpleSchema([StandardIdSchema]);
 
 const optionalSchema = new SimpleSchema({
   'desiredOutcome': {
@@ -54,6 +51,7 @@ const optionalSchema = new SimpleSchema({
   },
   'files.$.url': {
     type: String,
+    regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
   'files.$.name': {
