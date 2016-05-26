@@ -5,9 +5,6 @@ export default {
   collection: Standards,
 
   insert({ ...args }) {
-    // add standard owner to notify list
-    args['notify'] = [args.owner];
-
     return this.collection.insert(args);
   },
 

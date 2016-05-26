@@ -116,7 +116,19 @@ const optionalFields = new SimpleSchema({
   notify: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        const owner = this.field('owner');
+        if (owner.isSet) {
+          return [owner.value];
+        } else {
+          this.unset();
+        }
+      } else {
+        this.unset();
+      }
+    }
   },
   lessons: {
     type: [String],
