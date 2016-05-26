@@ -13,8 +13,8 @@ Template.AcceptInvitationPage.viewmodel({
   repeatPassword: '',
   invitationId: '',
 
-  onCreated() {
-    this.templateInstance.autorun(() => {
+  onCreated(template) {
+    template.autorun(() => {
       let invitationId = FlowRouter.getParam('invitationId');
       this.invitationId(invitationId);
       this.templateInstance.subscribe('invitationInfo', invitationId);
