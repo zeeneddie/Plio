@@ -4,6 +4,9 @@ import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 Template.OrganizationSettings_Departments.viewmodel({
   mixin: ['collapse', 'addForm', 'modal'],
+  autorun() {
+    this.templateInstance.subscribe('departments', this.organizationId());
+  },
   departmentsCount() {
     return Departments.find({
       organizationId: this.organizationId()

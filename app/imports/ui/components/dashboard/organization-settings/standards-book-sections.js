@@ -7,6 +7,9 @@ import {
 
 Template.OrganizationSettings_StandardsBookSections.viewmodel({
   mixin: ['collapse', 'addForm', 'modal'],
+  autorun() {
+    this.templateInstance.subscribe('standards-book-sections', this.organizationId());
+  },
   standardsBookSectionsCount() {
     return StandardsBookSections.find({
       organizationId: this.organizationId()
