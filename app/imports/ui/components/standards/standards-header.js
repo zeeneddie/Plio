@@ -5,18 +5,12 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
-  share: [{ listItems: 'listItems' }, 'standard', 'window'],
+  share: ['standard', 'window'],
   mixin: ['standard', 'collapsing', 'organization'],
   onDestroyed() {
     this.selectedStandardId('');
   },
   autorun: [
-    function() {
-      this.activeStandardFilter();
-      if (!!this.selectedStandardId() && !!this.listItems._rendered()) {
-        this.expandCollapsedStandard(this.selectedStandardId());
-      }
-    },
     function() {
       if (!this.selectedStandardId() && !!this.standardId()) {
         this.selectedStandardId(this.standardId());
@@ -41,6 +35,7 @@ Template.StandardsHeader.viewmodel({
   },
   selectFilter(filter) {
     FlowRouter.setQueryParams({ by: filter });
+    this.expandCollapsedStandard(this.selectedStandardId());
   },
   navigate(e) {
     e.preventDefault();

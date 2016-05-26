@@ -45,7 +45,7 @@ ViewModel.mixin({
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
       this.expandCollapseItems(vms, { complete: cb });
-    }, 500),
+    }, 200),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
         return viewmodel && _.some(viewmodel.children(), vm => ( vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id) ));
@@ -81,17 +81,16 @@ ViewModel.mixin({
         Blaze.renderWithData(Template.ModalWindow, data, document.body);
       },
       close() {
-        const vm = this.instance();
-        return !!vm && vm.modal.modal('hide');
+        this.instance() && this.instance().modal.modal('hide');
       },
       isSaving(val) {
         const instance = this.instance();
 
         if (val !== undefined) {
-          instance.isSaving(val);
+          instance && instance.isSaving(val);
         }
 
-        return instance.isSaving();
+        return instance && instance.isSaving();
       },
       isWaiting(val) {
         const instance = this.instance();
@@ -103,16 +102,16 @@ ViewModel.mixin({
         return instance.isWaiting();
       },
       setError(err) {
-        this.instance().setError(err);
+        return this.instance() && this.instance().setError(err);
       },
       clearError() {
-        this.instance().clearError();
+        return this.instance() && this.instance().clearError();
       },
       callMethod(method, args, cb) {
-        return this.instance().callMethod(method, args, cb);
+        return this.instance() && this.instance().callMethod(method, args, cb);
       },
       handleMethodResult(cb) {
-        return this.instance().handleMethodResult(cb);
+        return this.instance() && this.instance().handleMethodResult(cb);
       }
     }
   },

@@ -9,8 +9,5 @@ ViewModel.share({
   },
   search: {
     searchText: ''
-  },
-  listItems: {
-    _rendered: false
   }
 });

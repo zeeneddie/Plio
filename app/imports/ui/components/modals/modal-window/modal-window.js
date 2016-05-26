@@ -34,6 +34,10 @@ Template.ModalWindow.viewmodel({
       args = {};
     }
 
+    if (Tracker.currentComputation) {
+      return;
+    }
+
     this.clearError();
     this.isSaving(true);
 

@@ -5,10 +5,10 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.HelloPage.viewmodel({
-  onCreated() {
-    this.templateInstance.autorun(() => {
+  onCreated(template) {
+    template.autorun(() => {
       const currentUser = Meteor.user();
-      const organizationsHandle = this.templateInstance.subscribe('currentUserOrganizations');
+      const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
           // if the user is an owner of organization go to that organization no matter what
