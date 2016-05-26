@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { OrganizationIdSchema } from '../schemas.js';
+
+import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 
 
 const StandardsBookSectionEditableFields = new SimpleSchema({
@@ -10,6 +11,7 @@ const StandardsBookSectionEditableFields = new SimpleSchema({
 });
 
 const StandardsBookSectionSchema = new SimpleSchema([
+  BaseEntitySchema,
   StandardsBookSectionEditableFields,
   OrganizationIdSchema
 ]);

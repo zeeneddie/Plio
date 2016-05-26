@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { StandardIdSchema } from '../schemas.js';
+
+import { BaseEntitySchema, StandardIdSchema } from '../schemas.js';
 
 
 const requiredSchema = new SimpleSchema([StandardIdSchema]);
@@ -59,6 +60,10 @@ const optionalSchema = new SimpleSchema({
   }
 });
 
-const ImprovementPlansSchema = new SimpleSchema([requiredSchema, optionalSchema]);
+const ImprovementPlansSchema = new SimpleSchema([
+  BaseEntitySchema,
+  requiredSchema,
+  optionalSchema
+]);
 
 export { requiredSchema, optionalSchema, ImprovementPlansSchema };

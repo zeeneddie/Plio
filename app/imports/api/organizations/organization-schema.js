@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
 import { OrgCurrencies,  UserMembership } from '/imports/api/constants.js';
-import { TimePeriodSchema } from '../schemas.js';
+import { BaseEntitySchema, TimePeriodSchema } from '../schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({
@@ -98,15 +99,19 @@ const OrganizationEditableFields = {
   }
 };
 
-const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
-  serialNumber: {
-    type: Number,
-    min: 0
-  },
-  users: {
-    type: [orgUserSchema],
-    minCount: 1
+const OrganizationSchema = new SimpleSchema([
+  BaseEntitySchema,
+  OrganizationEditableFields,
+  {
+    serialNumber: {
+      type: Number,
+      min: 0
+    },
+    users: {
+      type: [orgUserSchema],
+      minCount: 1
+    }
   }
-}]);
+]);
 
 export { OrganizationEditableFields, OrganizationSchema };

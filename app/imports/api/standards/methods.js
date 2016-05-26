@@ -49,8 +49,6 @@ export const insert = new ValidatedMethod({
     const [ doc ] = args;
     const { organizationId } = doc;
 
-    doc['createdBy'] = userId;
-
     ensureCanChangeStandards(userId, organizationId);
 
     return StandardsService.insert(...args);
