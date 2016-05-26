@@ -1,20 +1,19 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+
 
 const StandardsBookSectionEditableFields = new SimpleSchema({
   title: {
-    type: String
+    type: String,
+    min: 1
   }
 });
 
 const StandardsBookSectionSchema = new SimpleSchema([
+  BaseEntitySchema,
   StandardsBookSectionEditableFields,
-  {
-    organizationId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
-    }
-  }
+  OrganizationIdSchema
 ]);
 
 export {
