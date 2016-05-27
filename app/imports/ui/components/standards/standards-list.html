@@ -29,7 +29,9 @@
       {{/if}}
 
       {{#if isActiveStandardFilter 'deleted'}}
-        {{> StandardsDeletedList items=standardsDeleted}}
+        {{#each standardsDeleted}}
+          {{> ListSubItem}}
+        {{/each}}
       {{/if}}
 
       {{#if searchText}}

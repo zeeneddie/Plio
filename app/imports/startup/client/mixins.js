@@ -303,5 +303,10 @@ ViewModel.mixin({
     get(name) {
       return Counter.get(name);
     }
+  },
+  router: {
+    goToStandard(standardId) {
+      FlowRouter.go('standard', { orgSerialNumber: this.organizationSerialNumber(), standardId }, { by: this.activeStandardFilter() });
+    }
   }
 });

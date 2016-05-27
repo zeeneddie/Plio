@@ -6,15 +6,59 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   onCreated() {
     this.searchText('');
   },
   onRendered() {
     this.expandSelectedStandard();
+
+    // hack to wait on viewmodels render
+    this.vmAutorun.push(() => {
+      let hasSelectedStandard = false;
+
+      if (this.isActiveStandardFilter('deleted')) {
+        const vms = ViewModel.find('ListSubItem', vm => vm._id && vm._id() === this.standardId());
+        hasSelectedStandard = !!vms && vms.length > 0;
+      } else {
+        const vms = ViewModel.find('ListItem', vm => this.findRecursive(vm, this.standardId()));
+        hasSelectedStandard = !!vms && vms.length > 0;
+      }
+
+      if (!!this.standardId() && !hasSelectedStandard) {
+        const standard = this.getFirstStandard();
+        if (standard) {
+          const { _id } = standard;
+          Meteor.setTimeout(() => {
+            this.goToStandard(_id);
+            this.expandCollapsedStandard(_id);
+          }, 0);
+        }
+      }
+    });
   },
-  autorun() {
-    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+  autorun: [
+    function() {
+      this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+    },
+    function() {
+      if (!this.standardId() && this.organizationSerialNumber()) {
+        const standard = this.getFirstStandard();
+        if (!!standard) {
+          const { _id } = standard;
+
+          Meteor.setTimeout(() => {
+            this.goToStandard(_id);
+            this.expandCollapsedStandard(_id);
+          }, 0);
+        }
+      }
+    }
+  ],
+  getFirstStandard() {
+    const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
+    const options = { sort: { createdAt: -1 } };
+    return Standards.findOne(query, options);
   },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
