@@ -13,10 +13,11 @@ import { update, remove } from '/imports/api/standards/methods.js';
 Template.StandardsCard.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing'],
-  autorun() {
-    const standardId = this.standard() && this.standard()._id;
-    this.templateInstance.subscribe('improvementPlan', standardId);
-    this.templateInstance.subscribe('departments', this.organizationId());
+  onCreated(template) {
+    template.autorun(() => {
+      template.subscribe('improvementPlan', this.standardId());
+      template.subscribe('departments', this.organizationId());
+    }, 0);
   },
   standards() {
     return Standards.find({}, { sort: { title: 1 } });
