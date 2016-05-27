@@ -305,8 +305,10 @@ ViewModel.mixin({
     }
   },
   router: {
-    goToStandard(standardId) {
-      FlowRouter.go('standard', { orgSerialNumber: this.organizationSerialNumber(), standardId }, { by: this.activeStandardFilter() });
+    goToStandard(standardId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+      const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
+      FlowRouter.go('standard', params, queryParams);
     }
   }
 });

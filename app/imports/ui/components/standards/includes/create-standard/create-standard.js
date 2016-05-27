@@ -6,7 +6,7 @@ import Utils from '/imports/core/utils.js';
 
 Template.CreateStandard.viewmodel({
   share: ['standard'],
-  mixin: ['modal', 'numberRegex', 'organization', 'collapsing', 'router'],
+  mixin: ['modal', 'standard', 'numberRegex', 'organization', 'collapsing', 'router'],
   save() {
     const data = this.getChildrenData();
 
@@ -66,7 +66,7 @@ Template.CreateStandard.viewmodel({
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        this.goToStandard(_id);
+        this.isActiveStandardFilter('deleted') ? this.goToStandard(_id, false) : this.goToStandard(_id);
 
         this.expandCollapsedStandard(_id);
 
