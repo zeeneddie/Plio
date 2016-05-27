@@ -4,7 +4,7 @@ import { UserMembership } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_OrgTransfer.viewmodel({
-  mixin: ['organization', 'user'],
+  mixin: ['organization', 'user', 'search'],
   ownerId: '',
   inputText: '',
   autorun: [
@@ -17,13 +17,11 @@ Template.OrganizationSettings_OrgTransfer.viewmodel({
   ],
   orgMembers() {
     const org = this.organization();
-
     if (!org) {
       return [];
     }
 
     const { users } = org;
-
     const existingUsersIds = _.filter(users, (usrDoc) => {
       const { isRemoved, removedBy, removedAt } = usrDoc;
       return !isRemoved && !removedBy && !removedAt;
@@ -31,15 +29,17 @@ Template.OrganizationSettings_OrgTransfer.viewmodel({
 
     const orgMembersIds = _.pluck(existingUsersIds, 'userId');
 
-    return Meteor.users.find({
-      _id: {
-        $in: orgMembersIds
-      }
+    const query = this.searchObject('inputText', [{
+      name: 'profile.firstName'
     }, {
-      sort: {
-        'profile.firstName': 1
-      }
-    });
+      name: 'profile.lastName'
+    }, {
+      name: 'emails.0.address'
+    }]);
+
+    query['_id'] = { $in: orgMembersIds };
+
+    return Meteor.users.find(query, { sort: { 'profile.firstName': 1 } });
   },
   selectOwner(doc) {
     const { _id } = doc;
