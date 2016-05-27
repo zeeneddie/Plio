@@ -78,7 +78,7 @@ Template.StandardsCard.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Restored!', `The standard "${title}" was restored successfully.`);
+            swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
 
             FlowRouter.setQueryParams({ by: 'section' });
             Meteor.setTimeout(() => {
