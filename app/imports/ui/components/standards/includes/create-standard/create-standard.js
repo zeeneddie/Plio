@@ -6,7 +6,7 @@ import Utils from '/imports/core/utils.js';
 
 Template.CreateStandard.viewmodel({
   share: ['standard'],
-  mixin: ['modal', 'numberRegex', 'organization', 'collapsing'],
+  mixin: ['modal', 'numberRegex', 'organization', 'collapsing', 'router'],
   save() {
     const data = this.getChildrenData();
 
@@ -66,7 +66,7 @@ Template.CreateStandard.viewmodel({
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id }, { by: FlowRouter.getQueryParam('by') });
+        this.goToStandard(_id);
 
         this.expandCollapsedStandard(_id);
 

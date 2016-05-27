@@ -6,11 +6,9 @@
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
         <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
       </h4>
-      <div class="pull-xs-right" {{b "if: isDeleted"}}>
-        <p class="list-group-item-text" {{b "text: 'Deleted by: ' + userFullNameOrEmail(this.deletedBy)"}}></p>
-        <p class="list-group-item-text pull-right" {{b "text: renderDate(this.deletedAt)"}}></p>
-      </div>
+      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: 'Deleted by: ' + userFullNameOrEmail(this.deletedBy)"}}></p>
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
+      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: renderDate(this.deletedAt)"}}></p>
     </div>
   </a>
 </template>
