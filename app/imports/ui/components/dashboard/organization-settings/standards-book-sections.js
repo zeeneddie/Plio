@@ -62,7 +62,7 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Book section "${title}" was removed succesfully.`,
+            `Book section "${title}" was removed successfully.`,
             'success'
           );
         }

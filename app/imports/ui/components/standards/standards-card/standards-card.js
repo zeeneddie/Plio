@@ -8,11 +8,11 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { remove } from '/imports/api/standards/methods.js';
+import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing'],
   autorun() {
     const standardId = this.standard() && this.standard()._id;
     this.templateInstance.subscribe('improvementPlan', standardId);
@@ -60,6 +60,35 @@ Template.StandardsCard.viewmodel({
       _id: this.standard()._id
     });
   },
+  restore({ _id, title, isDeleted, organizationId }) {
+    if (!isDeleted) return;
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The standard "${title}" will be restored!`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Restore',
+        closeOnConfirm: false,
+      },
+      () => {
+        update.call({ _id, organizationId, isDeleted: false }, (err) => {
+          if (err) {
+            swal('Oops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Restored!', `The standard "${title}" was restored successfully.`);
+
+            FlowRouter.setQueryParams({ by: 'section' });
+            Meteor.setTimeout(() => {
+              this.goToStandard(_id);
+              this.expandCollapsedStandard(_id);
+            }, 0);
+          }
+        });
+      }
+    );
+  },
   delete({ _id, title, isDeleted, organizationId }) {
     if (!isDeleted) return;
 
@@ -68,7 +97,6 @@ Template.StandardsCard.viewmodel({
         title: 'Are you sure?',
         text: `The standard "${title}" will be removed forever!`,
         type: 'warning',
-        html: true,
         showCancelButton: true,
         confirmButtonText: 'Delete',
         closeOnConfirm: false,
@@ -78,11 +106,21 @@ Template.StandardsCard.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
+            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 
-            FlowRouter.setParams({ standardId: '' });
-            Tracker.flush();
-            // FlowRouter.go('standards', { orgSerialNumber: this.organizationSerialNumber() });
+            const query = { isDeleted: true };
+            const options = { sort: { deletedAt: -1 } };
+
+            const standard = Standards.findOne(query, options);
+
+            if (!!standard) {
+              const { _id } = standard;
+
+              Meteor.setTimeout(() => {
+                this.goToStandard(_id);
+                this.expandCollapsedStandard(_id);
+              }, 0);
+            }
           }
         });
       }

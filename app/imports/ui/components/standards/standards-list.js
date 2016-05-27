@@ -12,34 +12,10 @@ Template.StandardsList.viewmodel({
   },
   onRendered() {
     this.expandSelectedStandard();
-
-    // hack to wait on viewmodels render
-    this.vmAutorun.push(() => {
-      let hasSelectedStandard = false;
-
-      if (this.isActiveStandardFilter('deleted')) {
-        const vms = ViewModel.find('ListSubItem', vm => vm._id && vm._id() === this.standardId());
-        hasSelectedStandard = !!vms && vms.length > 0;
-      } else {
-        const vms = ViewModel.find('ListItem', vm => this.findRecursive(vm, this.standardId()));
-        hasSelectedStandard = !!vms && vms.length > 0;
-      }
-
-      if (!!this.standardId() && !hasSelectedStandard) {
-        this.reroute();
-      }
-    });
   },
-  autorun: [
-    function() {
-      this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
-    },
-    function() {
-      if (!this.standardId() && this.organizationSerialNumber()) {
-        this.reroute();
-      }
-    }
-  ],
+  autorun() {
+    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+  },
   getFirstStandard() {
     const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
     const options = { sort: { createdAt: -1 } };
@@ -83,7 +59,7 @@ Template.StandardsList.viewmodel({
         standardsSearchQuery
       ]
     }
-    const options = { sort: { createdAt: -1 } };
+    const options = { sort: { deletedAt: -1 } };
 
     return Standards.find(query, options);
   },
