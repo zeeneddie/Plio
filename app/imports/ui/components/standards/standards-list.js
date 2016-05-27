@@ -26,14 +26,7 @@ Template.StandardsList.viewmodel({
       }
 
       if (!!this.standardId() && !hasSelectedStandard) {
-        const standard = this.getFirstStandard();
-        if (standard) {
-          const { _id } = standard;
-          Meteor.setTimeout(() => {
-            this.goToStandard(_id);
-            this.expandCollapsedStandard(_id);
-          }, 0);
-        }
+        this.reroute();
       }
     });
   },
@@ -43,15 +36,7 @@ Template.StandardsList.viewmodel({
     },
     function() {
       if (!this.standardId() && this.organizationSerialNumber()) {
-        const standard = this.getFirstStandard();
-        if (!!standard) {
-          const { _id } = standard;
-
-          Meteor.setTimeout(() => {
-            this.goToStandard(_id);
-            this.expandCollapsedStandard(_id);
-          }, 0);
-        }
+        this.reroute();
       }
     }
   ],
@@ -200,6 +185,17 @@ Template.StandardsList.viewmodel({
   onAfterExpand() {
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
+  },
+  reroute() {
+    const standard = this.getFirstStandard();
+    if (!!standard) {
+      const { _id } = standard;
+
+      Meteor.setTimeout(() => {
+        this.goToStandard(_id);
+        this.expandCollapsedStandard(_id);
+      }, 0);
+    }
   },
   openAddTypeModal(e) {
     this.modal().open({
