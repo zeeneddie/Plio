@@ -11,7 +11,7 @@ Meteor.publish('standards', function(organizationId) {
 });
 
 Meteor.publish('standardsCount', function(counterName, organizationId) {
-  return new Counter(counterName, Standards.find({ organizationId }));
+  return new Counter(counterName, Standards.find({ organizationId, isDeleted: false }));
 });
 
 Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) {
