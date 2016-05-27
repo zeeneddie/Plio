@@ -1,55 +1,12 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+
+
 const optionalFields = new SimpleSchema({
   description: {
     type: String,
     optional: true
-  },
-  createdBy: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    autoValue() {
-      if (this.isInsert) {
-        return this.userId;
-      } else {
-        this.unset();
-      }
-    }
-  },
-  createdAt: {
-    type: Date,
-    optional: true,
-    autoValue() {
-      if (this.isInsert) {
-        return new Date();
-      } else {
-        this.unset();  // Prevent user from supplying their own value
-      }
-    }
-  },
-  updatedBy: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    autoValue() {
-      if (this.isUpdate) {
-        return this.userId;
-      } else {
-        this.unset();
-      }
-    }
-  },
-  updatedAt: {
-    type: Date,
-    optional: true,
-    autoValue() {
-      if (this.isUpdate) {
-        return new Date();
-      } else {
-        this.unset();
-      }
-    }
   },
   isDeleted: {
     type: Boolean,
@@ -185,6 +142,7 @@ const optionalFields = new SimpleSchema({
   },
   'improvementPlan.files.$.url': {
     type: String,
+    regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
   'improvementPlan.files.$.name': {
@@ -202,36 +160,37 @@ const optionalFields = new SimpleSchema({
   }
 });
 
-const StandardsSchema = new SimpleSchema([optionalFields, {
-  organizationId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  title: {
-    type: String
-  },
-  typeId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  sectionId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  nestingLevel: {
-    type: Number
-  },
-  owner: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  issueNumber: {
-    type: Number
-  },
-  status: {
-    type: String
+const StandardsSchema = new SimpleSchema([
+  optionalFields,
+  BaseEntitySchema,
+  OrganizationIdSchema,
+  {
+    title: {
+      type: String
+    },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    sectionId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    nestingLevel: {
+      type: Number
+    },
+    owner: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    issueNumber: {
+      type: Number
+    },
+    status: {
+      type: String
+    }
   }
-}]);
+]);
 
 const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   title: {

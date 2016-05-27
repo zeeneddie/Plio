@@ -37,59 +37,25 @@ Meteor.publish('invitationInfo', function (invitationId) {
 
 
 Meteor.publish('currentUserOrganizations', function () {
-  return Organizations.find({ 'users.userId': this.userId }, { fields: { name: 1, serialNumber: 1, users: 1 } });
-});
-
-Meteor.publishComposite('currentUserOrganizationById', function(orgId) {
-  return {
-    find: function () {
-      return Organizations.find({_id: orgId, 'users.userId': this.userId});
-    },
-    children: [{
-      find: function (org) {
-        return Departments.find({
-          organizationId: org._id
-        });
-      }
-    }, {
-      find: function (org) {
-        return StandardTypes.find({
-          organizationId: org._id
-        });
-      }
-    }, {
-      find: function (org) {
-        return StandardsBookSections.find({
-          organizationId: org._id
-        });
-      }
-    }]
+  if (this.userId) {
+    return Organizations.find({ 'users.userId': this.userId }, { fields: { name: 1, serialNumber: 1, users: 1 } });
+  } else {
+    return this.ready();
   }
 });
 
-Meteor.publishComposite('currentUserOrganizationBySerialNumber', function(serialNumber) {
-  return {
-    find: function () {
-      return Organizations.find({serialNumber, 'users.userId': this.userId});
-    },
-    children: [{
-      find: function (org) {
-        return Departments.find({
-          organizationId: org._id
-        });
-      }
-    }, {
-      find: function (org) {
-        return StandardTypes.find({
-          organizationId: org._id
-        });
-      }
-    }, {
-      find: function (org) {
-        return StandardsBookSections.find({
-          organizationId: org._id
-        });
-      }
-    }]
-  };
+Meteor.publish('currentUserOrganizationById', function(_id) {
+  if (this.userId) {
+    return Organizations.find({ _id, 'users.userId': this.userId });
+  } else {
+    return this.ready();
+  }
+});
+
+Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
+  if (this.userId) {
+    return Organizations.find({ serialNumber, 'users.userId': this.userId });
+  } else {
+    return this.ready();
+  }
 });

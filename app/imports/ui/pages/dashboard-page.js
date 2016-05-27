@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import pluralize from 'pluralize';
 
 Template.DashboardPage.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
@@ -7,7 +8,8 @@ Template.DashboardPage.viewmodel({
     function() {
       this._subHandlers([
         this.templateInstance.subscribe('standardsCount', 'standards-count', this.organization()._id),
-        this.templateInstance.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', this.organization()._id)
+        this.templateInstance.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', this.organization()._id),
+        this.templateInstance.subscribe('organizationOnlineUsers', this.organization().users.map((user) => { return user.userId }))
       ]);
     },
     function() {
@@ -24,6 +26,6 @@ Template.DashboardPage.viewmodel({
   },
   standardsMetrics() {
     const notViewedText = this.standardsNotViewedCount() ? `, ${this.standardsNotViewedCount()} new` : '';
-    return this.isReady() ? `${this.standardsCount()} standards${notViewedText}` : 'standards';
+    return this.isReady() ? `${pluralize('standard', this.standardsCount(), true)} ${notViewedText}` : '';
   }
 });

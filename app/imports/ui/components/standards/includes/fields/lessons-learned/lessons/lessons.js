@@ -33,13 +33,13 @@ Template.ESLessons.viewmodel({
       }
     }
 
-    const { title, date, createdBy, notes } = this.getData();
+    const { title, date, owner, notes } = this.getData();
     const standardId = this.standard() && this.standard()._id;
 
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes }, () => this.toggleCollapse());
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes }, () => this.toggleCollapse());
     } else {
-      ViewModel.findOne('ESLessonsLearned').insert({ title, date, createdBy, standardId, notes }, (err, _id) => {
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId, notes }, (err, _id) => {
         this.destroy();
         const sectionToCollapse = ViewModel.findOne('ESLessons', vm => vm._id && vm._id() === _id);
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
@@ -78,11 +78,11 @@ Template.ESLessons.viewmodel({
     return this.date() && this._id ? this.renderDate(this.date()) : '';
   },
   getData() {
-    const { owner:createdBy } = this.child('ESOwner').getData();
+    const { owner } = this.child('ESOwner').getData();
     const { date } = this.child('Datepicker').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
     const { title } = this.data();
-    console.log(date);
-    return { title, date, createdBy, notes };
+
+    return { title, date, owner, notes };
   }
 });

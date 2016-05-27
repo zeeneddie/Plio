@@ -3,8 +3,8 @@
     {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Standards book sections</h4>
     <h4 class="card-title pull-xs-right">
-      <span class="text-muted" {{b "text: standardsBookSectionsCount"}}>
-      </span>
+      <span class="text-muted" {{b "if: templateInstance.subscriptionsReady, text: standardsBookSectionsCount"}}></span>
+      <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: !templateInstance.subscriptionsReady"}}></i>
     </h4>
   </div>
   <div class="card-block-collapse collapse" id="standards-book-sections" {{b "ref: collapse"}}>

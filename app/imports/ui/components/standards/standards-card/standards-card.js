@@ -16,6 +16,7 @@ Template.StandardsCard.viewmodel({
   autorun() {
     const standardId = this.standard() && this.standard()._id;
     this.templateInstance.subscribe('improvementPlan', standardId);
+    this.templateInstance.subscribe('departments', this.organizationId());
   },
   standards() {
     return Standards.find({}, { sort: { title: 1 } });

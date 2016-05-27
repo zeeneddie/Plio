@@ -7,6 +7,7 @@ import {
 
 
 Template.OrganizationSettings.viewmodel({
+  mixin: 'organization',
   name: '',
   currency: '',
   autorun() {
@@ -14,13 +15,6 @@ Template.OrganizationSettings.viewmodel({
     if (org) {
       this.load(_.pick(org, ['name', 'currency']));
     }
-  },
-  organization() {
-    const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
-    return Organizations.findOne({ serialNumber });
-  },
-  organizationId() {
-    return this.organization()._id;
   },
   departments() {
     return Departments.find({
