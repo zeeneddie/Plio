@@ -6,11 +6,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ESLessons.viewmodel({
   mixin: ['collapse', 'date', { standard: 'standard' }],
-  onCreated() {
-    if (!this.linkedTo()) {
-      this.linkedTo();
-    }
-  },
+  
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
