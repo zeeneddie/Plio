@@ -19,7 +19,7 @@ Template.StandardsCard.viewmodel({
     this.templateInstance.subscribe('departments', this.organizationId());
   },
   standards() {
-    return Standards.find({}, { sort: { title: 1 } });
+    return Standards.find({ organizationId: this.organizationId() }, { sort: { title: 1 } });
   },
   standard() {
     return Standards.findOne({ _id: this.standardId() });
