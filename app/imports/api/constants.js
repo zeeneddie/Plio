@@ -128,14 +128,6 @@ const DefaultStandardTypes = [
     abbreviation: 'CHK'
   },
   {
-    name: 'Product specification',
-    abbreviation: 'SPC'
-  },
-  {
-    name: 'Regulation',
-    abbreviation: 'REG'
-  },
-  {
     name: 'Standard Operating Procedure',
     abbreviation: 'SOP'
   },
@@ -144,8 +136,16 @@ const DefaultStandardTypes = [
     abbreviation: 'WRK'
   },
   {
+    name: 'Product specification',
+    abbreviation: 'SPC'
+  },
+  {
     name: 'Test method',
     abbreviation: 'TST'
+  },
+  {
+    name: 'Regulation',
+    abbreviation: 'REG'
   },
   {
     name: 'Other',
