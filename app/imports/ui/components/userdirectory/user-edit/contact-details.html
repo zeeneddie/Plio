@@ -2,7 +2,7 @@
   <div class="card-block card-block-collapse-toggle"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left">Contact details</h4>
-    <i class="ms-Icon ms-Icon--menu disclosure-indicator pull-xs-right"></i>
+    <i class="ms-Icon ms-Icon--menu disclosure-indicator pull-xs-right" {{b "if: isTextPresent"}}></i>
   </div>
   <div class="card-block-collapse collapse" id="contact" {{b "ref: collapse"}}>
     <div class="card-block">
