@@ -20,7 +20,7 @@ Template.StandardsCard.viewmodel({
     }, 0);
   },
   standards() {
-    return Standards.find({}, { sort: { title: 1 } });
+    return Standards.find({ organizationId: this.organizationId() }, { sort: { title: 1 } });
   },
   standard() {
     return Standards.findOne({ _id: this.standardId() });
@@ -96,7 +96,7 @@ Template.StandardsCard.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `The standard "${title}" will be removed forever!`,
+        text: `The standard "${title}" will be deleted permanently!`,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Delete',

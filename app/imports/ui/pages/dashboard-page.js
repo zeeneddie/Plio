@@ -9,7 +9,7 @@ Template.DashboardPage.viewmodel({
       this._subHandlers([
         this.templateInstance.subscribe('standardsCount', 'standards-count', this.organization()._id),
         this.templateInstance.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', this.organization()._id),
-        this.templateInstance.subscribe('organizationOnlineUsers', this.organization().users.map((user) => { return user.userId }))
+        this.templateInstance.subscribe('organizationUsers', this.organization().users.map((user) => { return user.userId }))
       ]);
     },
     function() {

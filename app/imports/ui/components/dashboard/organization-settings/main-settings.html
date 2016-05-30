@@ -10,16 +10,7 @@
       {{/ClearableField}}
     {{/FormField}}
 
-    {{#FormField label="Org owner"}}
-      <div class="input-group">
-        <input type="text" class="form-control" disabled="" {{b "value: owner"}}>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-primary no-margin disabled">
-            Transfer
-          </button>
-        </span>
-      </div>
-    {{/FormField}}
+    {{> OrganizationSettings_OrgTransfer ownerId=ownerId}}
 
     {{#FormField label="Default currency"}}
       <div class="btn-group btn-group-nomargin" data-toggle="buttons">

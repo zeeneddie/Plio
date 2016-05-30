@@ -11,12 +11,10 @@
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
                 {{#if isDeleted}}
-                  <a class="btn btn-primary" {{b "click: restore(this)"}}>
-                    <i class="fa fa-undo"></i>
+                  <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
                   </a>
-                  <a class="btn btn-danger" {{b "click: delete(this)"}}>
-                    <i class="fa fa-remove"></i>
+                  <a class="btn btn-primary" {{b "click: delete(this)"}}>
                     Delete
                   </a>
                 {{else}}

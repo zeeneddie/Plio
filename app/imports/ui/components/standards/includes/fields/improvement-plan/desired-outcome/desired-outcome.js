@@ -4,6 +4,7 @@ Template.ESIPDesiredOutcome.viewmodel({
   desiredOutcome: '',
   update() {
     const { desiredOutcome } = this.getData();
+    this.parent().desiredOutcome(desiredOutcome);
     this.parent().update({ desiredOutcome });
   },
   getData() {
