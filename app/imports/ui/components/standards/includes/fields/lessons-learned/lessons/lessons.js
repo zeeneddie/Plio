@@ -5,23 +5,24 @@ import { Random } from 'meteor/random';
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ESLessons.viewmodel({
-  mixin: ['collapse', 'date'],
+  mixin: ['collapse', 'date', { standard: 'standard' }],
+  
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
     }
   },
   linkedStandard() {
-    return this.standardId ? Standards.findOne({ _id: this.standardId() }).title : '';
-  },
-  standard() {
-    return ViewModel.findOne('ESLessonsLearned').standard();
+    const _id = this.standardId ? this.standardId() : this.standard.standardId();
+    const standard = Standards.findOne({ _id });
+    return !!standard ? standard.title : '';
   },
   renderSerialNumber() {
     return !!(this._id && this._id() && this.serialNumber && this.serialNumber()) ? `LL ${this.serialNumber()}` : ''
   },
   title: '',
   date: '',
+  linkedTo: '',
   save() {
     const data = this.getData();
     const _id = this._id && this._id();
@@ -34,7 +35,7 @@ Template.ESLessons.viewmodel({
     }
 
     const { title, date, owner, notes } = this.getData();
-    const standardId = this.standard() && this.standard()._id;
+    const standardId = this.standard.standardId();
 
     if (_id) {
       ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes }, () => this.toggleCollapse());
