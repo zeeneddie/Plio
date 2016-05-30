@@ -24,7 +24,7 @@ Template.ESIPReviewDates.viewmodel({
     options['$addToSet'] = {
       'reviewDates': { _id, date }
     };
-    
+
     this.parent().improvementPlan() ? this.parent().update({}, options, cb) : this.parent().insert({ reviewDates: [{ _id, date }] }, cb);
   },
   set({ _id, date }, cb) {
@@ -45,7 +45,7 @@ Template.ESIPReviewDates.viewmodel({
     this.parent().update({ query }, options, cb);
   },
   getData() {
-    const datepickers = ViewModel.find('Datepicker', vm => vm.placeholder && vm.placeholder() === 'Review date');
+    const datepickers = this.children('Datepicker');
     const data = _.map(datepickers, vm => vm.getData());
     const reviewDates = _.map(data, ({ date }) => date);
     return { reviewDates };
