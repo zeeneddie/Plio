@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { UserPresence } from 'meteor/konecty:user-presence';
 import { Roles } from 'meteor/alanning:roles';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UserRoles } from '/imports/api/constants.js';
@@ -25,7 +26,8 @@ const STATUSES = [
 ];
 
 Template.UserMenu.viewmodel({
-  mixin: ['user', 'modal', 'organization', 'roles'],
+  share: 'window',
+  mixin: ['user', 'modal', 'organization', 'roles', 'mobile'],
   getStatuses() {
     return STATUSES;
   },
@@ -70,6 +72,15 @@ Template.UserMenu.viewmodel({
       variation: 'save',
       organizationId
     });
+  },
+  goToMyProfile(e) {
+    e.preventDefault();
+
+    if ($(window).width() < 768) {
+      this.width($(window).width());
+    }
+
+    FlowRouter.go('userDirectoryUserPage', { orgSerialNumber: this.orgSerialNumber(), userId: Meteor.userId() });
   },
   logout(e) {
     e.preventDefault();

@@ -29,6 +29,18 @@ const ncTypeSchema = new SimpleSchema({
 
 const updateErrorMessage = 'Unauthorized user cannot update an organization';
 
+const isOrgOwner = (orgId, userId) => {
+  return !!Organizations.findOne({
+    _id: orgId,
+    users: {
+      $elemMatch: {
+        userId: userId,
+        role: UserMembership.ORG_OWNER
+      }
+    }
+  });
+};
+
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
   validate: nameSchema.validator(),
@@ -243,7 +255,7 @@ export const inviteUserByEmail = new ValidatedMethod({
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
-    
+
     return InvitationService.getInvitationExpirationTime();
   }
 });
@@ -351,17 +363,7 @@ export const removeUser = new ValidatedMethod({
       );
     }
 
-    const isRemovableUserOrgOwner = !!Organizations.findOne({
-      _id: organizationId,
-      users: {
-        $elemMatch: {
-          userId: userId,
-          role: 'owner'
-        }
-      }
-    });
-
-    if (isRemovableUserOrgOwner) {
+    if (isOrgOwner(organizationId, userId)) {
       throw new Meteor.Error(403, 'Organization owner can\'t be removed');
     }
 
@@ -379,6 +381,41 @@ export const removeUser = new ValidatedMethod({
       removedBy: currUserId,
       organizationId,
       userId
+    });
+  }
+});
+
+export const transferOrganization = new ValidatedMethod({
+  name: 'Organizations.transfer',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      newOwmerId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ organizationId, newOwmerId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot transfer organizations'
+      );
+    }
+
+    if (!isOrgOwner(organizationId, userId)) {
+      throw new Meteor.Error(
+        403, 'User is not authorized for transfering organizations'
+      );
+    }
+
+    return OrganizationService.transfer({
+      currOwnerId: userId,
+      organizationId,
+      newOwmerId
     });
   }
 });

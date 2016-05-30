@@ -18,10 +18,15 @@ Template.ModalWindow.viewmodel({
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
   closeCaption: 'Close',
+  closeCaptionOnSave: 'Saving...',
   guideHtml: 'No help message yet',
 
   submitCaptionText() {
     return this.isSaving() && this.submitCaptionOnSave() ? this.submitCaptionOnSave() : this.submitCaption();
+  },
+
+  closeCaptionText() {
+    return this.isSaving() && !this.variation() ? this.closeCaptionOnSave() : this.closeCaption();
   },
 
   isVariation(variation) {
@@ -32,10 +37,6 @@ Template.ModalWindow.viewmodel({
     if (_.isFunction(args)) {
       cb = args;
       args = {};
-    }
-
-    if (Tracker.currentComputation) {
-      return;
     }
 
     this.clearError();

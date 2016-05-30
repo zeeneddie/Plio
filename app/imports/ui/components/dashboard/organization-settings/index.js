@@ -16,6 +16,8 @@ import './nc-step-time.html';
 import './nc-step-time.js';
 import './nc-step-times.html';
 import './nc-step-times.js';
+import './org-transfer.html';
+import './org-transfer.js';
 import './settings.html';
 import './settings.js';
 import './standards-book-sections.html';

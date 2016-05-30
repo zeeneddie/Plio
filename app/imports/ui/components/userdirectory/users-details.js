@@ -2,7 +2,8 @@ import { Template } from 'meteor/templating';
 import { UserRolesNames } from '../../../api/constants.js';
 
 Template.UsersDetails.viewmodel({
-  mixin: ['user', 'organization', 'modal'],
+  share: 'window',
+  mixin: ['user', 'organization', 'modal', 'mobile'],
   phoneType(type) {
     return `${type} phone`;
   },
