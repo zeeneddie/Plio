@@ -118,7 +118,7 @@ Template.UserEdit.viewmodel({
   isEditable() {
     return this.isCurrentUser();
   },
-  rolesTitle() {
+  rolesLabel() {
     const user = this.user();
     if (user) {
       const userName = user.firstName() || user.lastName() || user.email();
