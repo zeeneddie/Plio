@@ -3,6 +3,7 @@
     {{> Preloader size=3}}
   {{else}}
     <p>Sorry, your account is not associated with any organization.</p> 
-    <a href="{{pathFor 'signUp'}}">You can create a new account.</a>
+    <p><a href="#">You can create a new organization</a> or ask the administrator of the existing organization to send you an invite.</p>
+    <p><a href="#" class="text-danger">I want to delete my account permanently.</a></p>
   {{/unless}}
 </template>
