@@ -25,9 +25,7 @@ Template.ListSubItem.viewmodel({
     if ($(window).width() < 768) {
       this.width($(window).width());
     }
-
-    const { serialNumber } = this.organization();
-
+    
     FlowRouter.setParams({ standardId: this._id() });
   },
   updateViewedBy() {

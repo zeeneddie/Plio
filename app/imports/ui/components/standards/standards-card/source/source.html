@@ -8,7 +8,7 @@
       </h4>
       <h4 class="list-group-item-heading" {{b "if: this.type === 'attachment'"}}>
         <i class="fa fa-paperclip margin-right"></i>
-        <a target="_blank" download="" {{b "href: this.url, text: this.name"}}></a>
+        <a {{b "href: this.url, text: this.name"}}></a>
       </h4>
       <iframe width="560" height="315" frameborder="0" allowfullscreen
         {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}>
