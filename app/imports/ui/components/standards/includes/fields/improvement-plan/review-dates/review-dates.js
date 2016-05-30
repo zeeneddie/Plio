@@ -24,8 +24,8 @@ Template.ESIPReviewDates.viewmodel({
     options['$addToSet'] = {
       'reviewDates': { _id, date }
     };
-
-    this.parent().update({}, options, cb);
+    
+    this.parent().improvementPlan() ? this.parent().update({}, options, cb) : this.parent().insert({ reviewDates: [{ _id, date }] }, cb);
   },
   set({ _id, date }, cb) {
     const query = {
