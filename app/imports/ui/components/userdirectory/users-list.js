@@ -6,7 +6,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { UserRoles } from '/imports/api/constants.js';
 
 Template.UsersList.viewmodel({
-  share: 'search',
+  share: ['search', 'window'],
   mixin: ['user', 'organization', 'modal', 'roles', 'search'],
   autorun() {
     if (this.organizationUsers()) {
@@ -16,20 +16,9 @@ Template.UsersList.viewmodel({
       this.searchResultsNumber(0);
     }
   },
-  isActiveUser(userId) {
-    return this.parent().activeUser() === userId;
-  },
-
-  getUserPath(userId) {
-    return FlowRouter.path('userDirectoryUserPage', {
-      orgSerialNumber: this.parent().organizationSerialNumber(),
-      userId: userId
-    });
-  },
-
   onInviteClick(event) {
     event.preventDefault();
-    const serialNumber = this.parent().organizationSerialNumber();
+    const serialNumber = this.organizationSerialNumber();
     const organizationId = Organizations.findOne({ serialNumber })._id;
 
     this.modal().open({
