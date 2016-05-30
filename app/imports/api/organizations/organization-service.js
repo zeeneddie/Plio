@@ -14,7 +14,7 @@ import {
 export default OrganizationService = {
   collection: Organizations,
 
-  insert({name, ownerId}) {
+  insert({name, ownerId, currency}) {
     const lastOrg = this.collection.findOne({
       serialNumber: {
         $type: 16 // 32-bit integer
@@ -31,6 +31,7 @@ export default OrganizationService = {
 
     const organizationId = this.collection.insert({
       name,
+      currency,
       serialNumber,
       users: [{
         userId: ownerId,

@@ -1,5 +1,5 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { setName,  setDefaultCurrency } from '/imports/api/organizations/methods.js';
+import { insert, setName,  setDefaultCurrency } from '/imports/api/organizations/methods.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
 
@@ -15,6 +15,8 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     return _.values(OrgCurrencies);
   },
   updateName() {
+    if (!this.organizationId || !this.organizationId()) return;
+
     this.callWithFocusCheck(() => {
       const name = this.name();
       const savedName = this.templateInstance.data.name;
@@ -36,8 +38,22 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.currency(currency);
 
+    if (!this.organizationId || !this.organizationId()) return;
+
     const _id = this.organizationId();
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
+  },
+  save() {
+    const { name, currency } = this.data();
+    this.modal().callMethod(insert, { name, currency }, (err, _id) => {
+      if (err) console.log(err);
+
+      this.modal().close();
+
+      const org = Organizations.findOne({ _id });
+
+      !!org && FlowRouter.setParams({ orgSerialNumber: org.serialNumber });
+    });
   }
 });
