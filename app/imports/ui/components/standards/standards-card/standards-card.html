@@ -11,8 +11,7 @@
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
                 {{#if isDeleted}}
-                  <a class="btn btn-danger" {{b "click: delete(this)"}}>
-                    <i class="fa fa-remove"></i>
+                  <a class="btn btn-secondary" {{b "click: delete(this)"}}>
                     Delete
                   </a>
                 {{else}}

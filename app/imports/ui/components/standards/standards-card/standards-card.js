@@ -66,7 +66,7 @@ Template.StandardsCard.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `The standard "${title}" will be removed forever!`,
+        text: `The standard "${title}" will be deleted permanently!`,
         type: 'warning',
         html: true,
         showCancelButton: true,
