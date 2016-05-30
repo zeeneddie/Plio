@@ -5,7 +5,7 @@ import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-pla
 import { insert, update } from '/imports/api/improvement-plans/methods.js';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: ['collapse', 'modal'],
+  mixin: ['collapse', 'modal', 'standard'],
   autorun() {
     this.load(this.improvementPlan());
   },
@@ -18,10 +18,10 @@ Template.ESImprovementPlan.viewmodel({
   targetValue: '',
   files: [],
   improvementPlan() {
-    return ImprovementPlans.findOne({});
+    return ImprovementPlans.findOne({ standardId: this.standardId() });
   },
   insert({ ...args }, cb) {
-    const standardId = this.standard() && this.standard()._id;
+    const standardId = this.standardId();
 
     this.modal().callMethod(insert, { standardId, ...args }, cb);
   },
