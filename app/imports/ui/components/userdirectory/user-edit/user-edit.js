@@ -123,7 +123,7 @@ Template.UserEdit.viewmodel({
     if (user) {
       const userName = user.firstName() || user.lastName() || user.email();
       const orgName = this.organization() && this.organization().name;
-      return `${userName}'s superpowers for ${orgName}`;
+      return `${userName}'s superpowers for ${orgName}:`;
     }
   },
   isRolesEditable() {
