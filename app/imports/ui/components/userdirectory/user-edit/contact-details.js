@@ -4,6 +4,9 @@ import { CountryCodes } from '/imports/api/country-codes.js';
 
 Template.UserEdit_ContactDetails.viewmodel({
   mixin: ['collapse', 'modal', 'clearableField'],
+  isTextPresent() {
+    return this.address() || this.skype() || this.phoneNumbers().length;
+  },
   updateAddress() {
     this.parent().updateProfile('address', this);
   },
