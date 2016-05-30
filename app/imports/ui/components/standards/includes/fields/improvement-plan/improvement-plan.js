@@ -18,7 +18,7 @@ Template.ESImprovementPlan.viewmodel({
   targetValue: '',
   files: [],
   isTextPresent() {
-    return this.desiredOutcome().length || this.files().length;
+    return this.desiredOutcome() || this.files().length;
   },
   improvementPlan() {
     return ImprovementPlans.findOne({ standardId: this.standardId() });

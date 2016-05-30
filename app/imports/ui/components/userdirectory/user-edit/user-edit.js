@@ -109,7 +109,7 @@ Template.UserEdit.viewmodel({
     const val = viewModel.getData()[propName];
     const savedVal = viewModel.templateInstance.data[propName];
 
-    return val && val !== savedVal;
+    return val !== savedVal;
   },
   isCurrentUser() {
     const userId = this.userId && this.userId();

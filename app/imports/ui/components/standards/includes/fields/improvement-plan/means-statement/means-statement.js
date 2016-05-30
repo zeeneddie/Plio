@@ -11,6 +11,8 @@ Template.ESIPMeansStatement.viewmodel({
     const fileDoc = { _id, name };
 
     if (this.files() && this.files().length) {
+      this.parent().files(this.files().concat([fileDoc]));
+
       this.parent().update({}, {
         $push: {
           files: fileDoc
@@ -20,6 +22,8 @@ Template.ESIPMeansStatement.viewmodel({
       this.parent().update({
         files: [fileDoc]
       });
+
+      this.parent().files([fileDoc]);
     }
   },
   onUploadCb() {
