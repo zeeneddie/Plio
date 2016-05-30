@@ -26,8 +26,6 @@ Template.ListSubItem.viewmodel({
       this.width($(window).width());
     }
 
-    const { serialNumber } = this.organization();
-
     this.selectedStandardId(this._id());
 
     FlowRouter.setParams({ standardId: this._id() });
