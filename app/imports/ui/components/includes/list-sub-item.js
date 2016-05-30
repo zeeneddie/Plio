@@ -5,9 +5,9 @@ import { updateViewedBy } from '/imports/api/standards/methods.js';
 
 Template.ListSubItem.viewmodel({
   share: ['standard', 'window'],
-  mixin: ['organization', 'standard'],
+  mixin: ['organization', 'standard', 'user', 'date'],
   autorun() {
-    if (this._id() === this.selectedStandardId() && this.isNew()) {
+    if (this._id() === this.standardId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
@@ -25,9 +25,7 @@ Template.ListSubItem.viewmodel({
     if ($(window).width() < 768) {
       this.width($(window).width());
     }
-
-    this.selectedStandardId(this._id());
-
+    
     FlowRouter.setParams({ standardId: this._id() });
   },
   updateViewedBy() {

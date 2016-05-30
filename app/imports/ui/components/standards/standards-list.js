@@ -6,12 +6,44 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   onCreated() {
     this.searchText('');
   },
   onRendered() {
-    this.expandCollapsedStandard(this.standardId());
+    this.expandSelectedStandard();
+
+    // hack to wait on viewmodels render
+    this.vmAutorun.push(() => {
+      let hasSelectedStandard = false;
+
+      if (this.isActiveStandardFilter('deleted')) {
+        const vms = ViewModel.find('ListSubItem', vm => vm._id && vm._id() === this.standardId());
+        hasSelectedStandard = !!vms && vms.length > 0;
+      } else {
+        const vms = ViewModel.find('ListItem', vm => this.findRecursive(vm, this.standardId()));
+        hasSelectedStandard = !!vms && vms.length > 0;
+      }
+
+      if (!!this.standardId() && !hasSelectedStandard) {
+        this.reroute();
+      }
+    });
+  },
+  autorun: [
+    function() {
+      this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+    },
+    function() {
+      if (!this.standardId() && this.organizationSerialNumber()) {
+        this.reroute();
+      }
+    }
+  ],
+  getFirstStandard() {
+    const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
+    const options = { sort: { createdAt: -1 } };
+    return Standards.findOne(query, options);
   },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
@@ -36,9 +68,24 @@ Template.StandardsList.viewmodel({
     }
 
     const standardsCursor = Standards.find(standardsQuery);
-    this.searchResultsNumber(standardsCursor.count());
 
     return standardsCursor;
+  },
+  standardsDeleted() {
+    const standardsSearchQuery = this.searchObject('searchText', [
+      { name: 'title' },
+      { name: 'description' },
+      { name: 'status' }
+    ]);
+    const query = {
+      $and: [
+        { isDeleted: true },
+        standardsSearchQuery
+      ]
+    }
+    const options = { sort: { createdAt: -1 } };
+
+    return Standards.find(query, options);
   },
   sectionIds() {
     const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
@@ -88,6 +135,8 @@ Template.StandardsList.viewmodel({
 
     this.searchText(value);
 
+    if (this.isActiveStandardFilter('deleted')) return;
+
     if (!!value) {
       this.expandAllFound();
     } else {
@@ -129,13 +178,24 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelectedStandard() {
-    this.expandCollapsedStandard(this.selectedStandardId(), () => {
+    this.expandCollapsedStandard(this.standardId(), () => {
       this.onAfterExpand();
     });
   },
   onAfterExpand() {
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
+  },
+  reroute() {
+    const standard = this.getFirstStandard();
+    if (!!standard) {
+      const { _id } = standard;
+
+      Meteor.setTimeout(() => {
+        this.goToStandard(_id);
+        this.expandCollapsedStandard(_id);
+      }, 0);
+    }
   },
   openAddTypeModal(e) {
     this.modal().open({

@@ -28,15 +28,19 @@ export default {
     return this.collection.update({ _id }, options);
   },
 
-  remove({ _id, deletedBy }) {
-    const options = {
-      $set: {
-        isDeleted: true,
-        deletedBy,
-        deletedAt: new Date()
-      }
-    };
+  remove({ _id, deletedBy, isDeleted }) {
+    if (isDeleted) {
+      return this.collection.remove({ _id });
+    } else {
+      const options = {
+        $set: {
+          isDeleted: true,
+          deletedBy,
+          deletedAt: new Date()
+        }
+      };
 
-    return this.collection.update({ _id }, options);
+      return this.collection.update({ _id }, options);
+    }
   }
 };
