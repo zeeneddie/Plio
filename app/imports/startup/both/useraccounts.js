@@ -5,7 +5,7 @@ AccountsTemplates.configure({
   enablePasswordChange: true,
   showForgotPasswordLink: true,
   negativeValidation: true,
-  positiveValidation: true,
+  positiveValidation: false,
   homeRoutePath: '/',
   texts: {
     errors: {

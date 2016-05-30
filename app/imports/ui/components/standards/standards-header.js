@@ -6,21 +6,12 @@ import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
   share: ['standard', 'window'],
-  mixin: ['standard', 'collapsing', 'organization'],
+  mixin: ['standard', 'collapsing', 'organization', 'mobile'],
   standardFilters() {
     return StandardFilters;
   },
   selectFilter(filter) {
     FlowRouter.setQueryParams({ by: filter });
     this.expandCollapsedStandard(this.standardId());
-  },
-  navigate(e) {
-    e.preventDefault();
-
-    if (this.width() && this.width() < 768) {
-      this.width(null);
-    } else {
-      FlowRouter.go('dashboardPage', { orgSerialNumber: this.organization().serialNumber });
-    }
   }
 });
