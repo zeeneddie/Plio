@@ -392,14 +392,14 @@ export const transferOrganization = new ValidatedMethod({
   validate: new SimpleSchema([
     OrganizationIdSchema,
     {
-      newOwmerId: {
+      newOwnerId: {
         type: String,
         regEx: SimpleSchema.RegEx.Id
       }
     }
   ]).validator(),
 
-  run({ organizationId, newOwmerId }) {
+  run({ organizationId, newOwnerId }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -416,7 +416,7 @@ export const transferOrganization = new ValidatedMethod({
     return OrganizationService.transfer({
       currOwnerId: userId,
       organizationId,
-      newOwmerId
+      newOwnerId
     });
   }
 });
