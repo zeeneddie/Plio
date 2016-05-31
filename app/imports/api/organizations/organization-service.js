@@ -6,6 +6,8 @@ import StandardsTypeService from '../standards-types/standards-type-service.js';
 import {
   DefaultStandardTypes,
   OrganizationDefaults,
+  OrgOwnerRoles,
+  OrgMemberRoles,
   UserMembership,
   UserRoles
 } from '../constants.js';
@@ -134,5 +136,52 @@ export default OrganizationService = {
         'users.$.removedAt': new Date()
       }
     });
+  },
+
+  transfer({ organizationId, newOwmerId, currOwnerId }) {
+    if (currOwnerId === newOwmerId) {
+      throw new Meteor.Error(
+        400, 'New owner already owns transferred organization'
+      );
+    }
+
+    const isOrgMember = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId: newOwmerId,
+          role: UserMembership.ORG_MEMBER
+        }
+      }
+    });
+
+    if (!isOrgMember) {
+      throw new Meteor.Error(
+        400, 'New owner must be a member of transferred organization'
+      );
+    }
+
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': newOwmerId
+    }, {
+      $set: {
+        'users.$.role': UserMembership.ORG_OWNER
+      }
+    });
+
+    Roles.addUsersToRoles(newOwmerId, OrgOwnerRoles, organizationId);
+
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': currOwnerId
+    }, {
+      $set: {
+        'users.$.role': UserMembership.ORG_MEMBER
+      }
+    });
+
+    Roles.removeUsersFromRoles(currOwnerId, OrgOwnerRoles, organizationId);
+    Roles.addUsersToRoles(currOwnerId, OrgMemberRoles, organizationId);
   }
 };

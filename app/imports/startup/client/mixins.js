@@ -304,6 +304,13 @@ ViewModel.mixin({
       return Counter.get(name);
     }
   },
+  router: {
+    goToStandard(standardId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+      const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
+      FlowRouter.go('standard', params, queryParams);
+    }
+  },
   mobile: {
     display() {
       return this.isMobile() ? 'display: block !important' : '';

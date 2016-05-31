@@ -34,11 +34,8 @@ Template.OrganizationSettings.viewmodel({
       sort: { title: 1 }
     });
   },
-  owner() {
-    const orgOwner = Meteor.users.findOne({
-      _id: this.organization().ownerId()
-    });
-    return orgOwner ? orgOwner.fullName() : '';
+  ownerId() {
+    return this.organization().ownerId();
   },
   stepTimes() {
     return this.organization().ncStepTimes;

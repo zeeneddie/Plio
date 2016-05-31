@@ -17,6 +17,9 @@ Template.ESImprovementPlan.viewmodel({
   currentValue: '',
   targetValue: '',
   files: [],
+  isTextPresent() {
+    return this.desiredOutcome() || this.files().length;
+  },
   improvementPlan() {
     return ImprovementPlans.findOne({ standardId: this.standardId() });
   },
@@ -38,9 +41,7 @@ Template.ESImprovementPlan.viewmodel({
     const _id = this.improvementPlan() && this.improvementPlan()._id;
 
     const modifier = { ...args, _id, options, query };
-
-    console.log(modifier);
-
+    
     this.modal().callMethod(update, modifier, cb);
   }
 });

@@ -6,7 +6,7 @@ import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'organization', 'collapsing'],
+  mixin: ['modal', 'organization', 'collapsing', 'standard'],
   standard() {
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
@@ -44,7 +44,6 @@ Template.EditStandard.viewmodel({
             swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
 
             this.modal().close();
-            this.selectedStandardId('');
             FlowRouter.setParams({ standardId: '' });
           }
         });
