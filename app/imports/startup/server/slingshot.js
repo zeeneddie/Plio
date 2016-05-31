@@ -7,6 +7,11 @@ const configureSlignshot = () => {
     attachmentsDir, improvementPlanFilesDir
   }  = Meteor.settings.AWSS3Bucket;
 
+  const fileContentDisposition = (file) => {
+    const fileName = file.name;
+    return `attachment; filename="${fileName}"; filename*=utf-8''${fileName}`;
+  };
+
   Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
     bucket: name,
 
@@ -30,6 +35,8 @@ const configureSlignshot = () => {
 
     acl: acl,
 
+    contentDisposition: fileContentDisposition,
+
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -48,6 +55,8 @@ const configureSlignshot = () => {
 
     acl: acl,
 
+    contentDisposition: fileContentDisposition,
+
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -62,6 +71,6 @@ const configureSlignshot = () => {
   });
 };
 
-if (Utils.isProduction()) {
+// if (Utils.isProduction()) {
   configureSlignshot();
-}
+// }

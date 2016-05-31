@@ -8,6 +8,9 @@ Template.UserEdit_ContactDetails.viewmodel({
     const savedVal = this.templateInstance.data[propName];
     return newVal && newVal !== savedVal;
   },
+  isTextPresent() {
+    return this.address() || this.skype() || this.phoneNumbers().length;
+  },
   updateAddress() {
     const address = this.getData().address;
     if (this.isPropChanged('address', address)) {

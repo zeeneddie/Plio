@@ -59,7 +59,7 @@ Template.OrganizationSettings_StandardTypes.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Standard type "${name}" was removed succesfully.`,
+            `Standard type "${name}" was removed successfully.`,
             'success'
           );
         }

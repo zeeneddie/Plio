@@ -108,12 +108,12 @@ Template.UserEdit.viewmodel({
   isEditable() {
     return this.isCurrentUser();
   },
-  rolesTitle() {
+  rolesLabel() {
     const user = this.user();
     if (user) {
       const userName = user.firstName() || user.lastName() || user.email();
       const orgName = this.organization() && this.organization().name;
-      return `${userName}'s superpowers for ${orgName}`;
+      return `${userName}'s superpowers for ${orgName}:`;
     }
   },
   isRolesEditable() {

@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
@@ -7,20 +8,27 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles'],
-  autorun() {
-    const standardId = this.standard() && this.standard()._id;
-    this.templateInstance.subscribe('improvementPlan', standardId);
-    this.templateInstance.subscribe('departments', this.organizationId());
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing'],
+  onCreated(template) {
+    template.autorun(() => {
+      template.subscribe('improvementPlan', this.standardId());
+      template.subscribe('departments', this.organizationId());
+    });
   },
   standards() {
-    return Standards.find({}, { sort: { title: 1 } });
+    const query = { organizationId: this.organizationId() };
+    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
+    const options = { sort: { title: 1 } };
+    return Standards.find(sQuery, options);
   },
   standard() {
-    return Standards.findOne({ _id: this.selectedStandardId() });
+    const query = { _id: this.standardId(), organizationId: this.organizationId() };
+    const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
+    return Standards.findOne(filterQuery);
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
@@ -42,20 +50,87 @@ Template.StandardsCard.viewmodel({
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
   improvementPlan() {
-    return ImprovementPlans.findOne({});
+    return ImprovementPlans.findOne({ standardId: this.standardId() });
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');
   },
   lessons() {
-    const standardId = this.currentStandard() && this.currentStandard()._id;
-    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
+    const query = { standardId: this.standardId() };
+    const options = { sort: { serialNumber: 1 } };
+    return LessonsLearned.find(query, options);
   },
   openEditStandardModal() {
     this.modal().open({
       title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standard()._id
+      _id: this.standardId()
     });
+  },
+  restore({ _id, title, isDeleted, organizationId }) {
+    if (!isDeleted) return;
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The standard "${title}" will be restored!`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Restore',
+        closeOnConfirm: false,
+      },
+      () => {
+        update.call({ _id, organizationId, isDeleted: false }, (err) => {
+          if (err) {
+            swal('Oops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
+
+            FlowRouter.setQueryParams({ by: 'section' });
+            Meteor.setTimeout(() => {
+              this.goToStandard(_id);
+              this.expandCollapsedStandard(_id);
+            }, 0);
+          }
+        });
+      }
+    );
+  },
+  delete({ _id, title, isDeleted, organizationId }) {
+    if (!isDeleted) return;
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The standard "${title}" will be deleted permanently!`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        closeOnConfirm: false,
+      },
+      () => {
+        remove.call({ _id, organizationId }, (err) => {
+          if (err) {
+            swal('Oops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+
+            const query = { organizationId: this.organizationId(), isDeleted: true };
+            const options = { sort: { deletedAt: -1 } };
+
+            const standard = Standards.findOne(query, options);
+
+            if (!!standard) {
+              const { _id } = standard;
+
+              Meteor.setTimeout(() => {
+                this.goToStandard(_id);
+                this.expandCollapsedStandard(_id);
+              }, 0);
+            }
+          }
+        });
+      }
+    );
   }
 });

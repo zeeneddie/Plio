@@ -6,12 +6,21 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   onCreated() {
     this.searchText('');
   },
   onRendered() {
     this.expandSelectedStandard();
+  },
+  autorun() {
+    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+  },
+  getFirstStandard() {
+    const query = { organizationId: this.organizationId() };
+    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
+    const options = { sort: { createdAt: -1 } };
+    return Standards.findOne(sQuery, options);
   },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
@@ -24,7 +33,7 @@ Template.StandardsList.viewmodel({
 
     const standardsQuery = {
       $and: [
-        { sectionId: { $in: sectionIds } },
+        { sectionId: { $in: sectionIds }, organizationId: this.organizationId() },
         standardsSearchQuery
       ]
     };
@@ -35,13 +44,26 @@ Template.StandardsList.viewmodel({
       });
     }
 
-    const standardsCursor = Standards.find(standardsQuery);
-    this.searchResultsNumber(standardsCursor.count());
-
-    return standardsCursor;
+    return Standards.find(standardsQuery);
+  },
+  standardsDeleted() {
+    const standardsSearchQuery = this.searchObject('searchText', [
+      { name: 'title' },
+      { name: 'description' },
+      { name: 'status' }
+    ]);
+    const query = {
+      $and: [
+        { organizationId: this.organizationId(), isDeleted: true },
+        standardsSearchQuery
+      ]
+    };
+    const options = { sort: { deletedAt: -1 } };
+    return Standards.find(query, options);
   },
   sectionIds() {
-    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
+    const query = { organizationId: this.organizationId() };
+    const availableSections = StandardsBookSections.find(query).fetch();
     return _.pluck(availableSections, '_id');
   },
   standardsBookSections(typeId) {
@@ -88,6 +110,8 @@ Template.StandardsList.viewmodel({
 
     this.searchText(value);
 
+    if (this.isActiveStandardFilter('deleted')) return;
+
     if (!!value) {
       this.expandAllFound();
     } else {
@@ -129,13 +153,24 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelectedStandard() {
-    this.expandCollapsedStandard(this.selectedStandardId(), () => {
+    this.expandCollapsedStandard(this.standardId(), () => {
       this.onAfterExpand();
     });
   },
   onAfterExpand() {
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
+  },
+  reroute() {
+    const standard = this.getFirstStandard();
+    if (!!standard) {
+      const { _id } = standard;
+
+      Meteor.setTimeout(() => {
+        this.goToStandard(_id);
+        this.expandCollapsedStandard(_id);
+      }, 0);
+    }
   },
   openAddTypeModal(e) {
     this.modal().open({

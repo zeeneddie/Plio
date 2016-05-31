@@ -1,7 +1,8 @@
 <template name="UserEdit_Roles">
   <div class="card-block card-block-collapse-toggle"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left" {{b "text: title"}}>
+    <h4 class="card-title pull-xs-left" >
+      Superpowers
     </h4>
     <h4 class="card-title pull-xs-right text-muted" {{b "text: rolesCount"}}>
     </h4>
@@ -9,6 +10,7 @@
 
   <div class="card-block-collapse collapse" id="superpowers" {{b "ref: collapse, class: { shroud: !isEditable }"}}>
     <div class="card-block">
+      <p class="pull-xs-left" {{b "text: label"}}></p>
       {{#each roles}}
         <div class="form-group row">
           <div class="col-xs-12">

@@ -307,5 +307,29 @@ ViewModel.mixin({
     get(name) {
       return Counter.get(name);
     }
+  },
+  router: {
+    goToStandard(standardId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+      const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
+      FlowRouter.go('standard', params, queryParams);
+    }
+  },
+  mobile: {
+    display() {
+      return this.isMobile() ? 'display: block !important' : '';
+    },
+    isMobile() {
+      return !!this.width() && this.width() < 768;
+    },
+    navigate(e) {
+      e.preventDefault();
+
+      if (this.isMobile()) {
+        this.width(null);
+      } else {
+        FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
+      }
+    }
   }
 });
