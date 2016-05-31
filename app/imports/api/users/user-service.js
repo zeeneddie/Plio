@@ -10,6 +10,10 @@ export default {
     });
   },
 
+  remove({ _id }) {
+    return this.collection.remove({ _id });
+  },
+
   updateProfile(_id, { ...args }) {
     const updateDoc = {};
 
