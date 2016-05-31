@@ -21,7 +21,8 @@ Template.ESNotify.viewmodel({
   },
   currentNotifyUsers() {
     const usersIds = this.notifyUsersList();
-    return Meteor.users.find({ _id: { $in: usersIds } });
+    const query = { _id: { $in: usersIds } };
+    return Meteor.users.find(query);
   },
   update(userId, option, cb) {
     const query = { _id: this.standard()._id };

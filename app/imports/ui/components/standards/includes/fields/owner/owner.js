@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESOwner.viewmodel({
-  mixin: ['search', 'user', 'modal'],
+  mixin: ['search', 'user'],
   onCreated() {
     if (this.hasUser() && !this.isEditable() && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
@@ -36,7 +37,7 @@ Template.ESOwner.viewmodel({
     const { owner } = this.getData();
 
     if (!owner) {
-      this.modal().setError('Owner is required!');
+      ViewModel.findOne('ModalWindow').setError('Owner is required!');
       return;
     }
 

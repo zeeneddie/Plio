@@ -1,15 +1,15 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 import { Random } from 'meteor/random';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ESLessons.viewmodel({
   mixin: ['collapse', 'date', { standard: 'standard' }],
-  
   onRendered() {
     if (!this._id) {
-      this.toggleCollapse();
+     this.toggleCollapse();
     }
   },
   linkedStandard() {

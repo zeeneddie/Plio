@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
@@ -48,7 +49,7 @@ Template.ESBookSection.viewmodel({
     );
   },
   onAlertConfirm() {
-    const organizationId = !!this.organization() && this.organization()._id;
+    const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
       if (err) {
