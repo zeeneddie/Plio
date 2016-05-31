@@ -17,13 +17,17 @@ Template.StandardsCard.viewmodel({
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
-    }, 0);
+    });
   },
   standards() {
-    return Standards.find({}, { sort: { title: 1 } });
+    const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
+    const options = { sort: { title: 1 } };
+    return Standards.find(query, options);
   },
   standard() {
-    return Standards.findOne({ _id: this.standardId() });
+    const query = { _id: this.standardId() };
+    const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
+    return Standards.findOne(filterQuery);
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
@@ -45,20 +49,21 @@ Template.StandardsCard.viewmodel({
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
   improvementPlan() {
-    return ImprovementPlans.findOne({});
+    return ImprovementPlans.findOne({ standardId: this.standardId() });
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');
   },
   lessons() {
-    const standardId = this.currentStandard() && this.currentStandard()._id;
-    return LessonsLearned.find({ standardId }, { sort: { serialNumber: 1 } });
+    const query = { standardId: this.standardId() };
+    const options = { sort: { serialNumber: 1 } };
+    return LessonsLearned.find(query, options);
   },
   openEditStandardModal() {
     this.modal().open({
       title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standard()._id
+      _id: this.standardId()
     });
   },
   restore({ _id, title, isDeleted, organizationId }) {

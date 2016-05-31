@@ -43,9 +43,7 @@ Template.StandardsList.viewmodel({
       });
     }
 
-    const standardsCursor = Standards.find(standardsQuery);
-
-    return standardsCursor;
+    return Standards.find(standardsQuery);
   },
   standardsDeleted() {
     const standardsSearchQuery = this.searchObject('searchText', [
@@ -58,13 +56,12 @@ Template.StandardsList.viewmodel({
         { isDeleted: true },
         standardsSearchQuery
       ]
-    }
+    };
     const options = { sort: { deletedAt: -1 } };
-
     return Standards.find(query, options);
   },
   sectionIds() {
-    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
+    const availableSections = StandardsBookSections.find({ organizationId: this.organizationId() }).fetch();
     return _.pluck(availableSections, '_id');
   },
   standardsBookSections(typeId) {
