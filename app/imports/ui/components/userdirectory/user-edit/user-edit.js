@@ -42,21 +42,17 @@ Template.UserEdit.viewmodel({
   organizationId() {
     return this.organization() && this.organization()._id;
   },
-  updateProfile(prop, viewModel) {
-    if (this.isPropChanged(prop, viewModel)) {
-      this.modal().callMethod(updateProfile, {
-        _id: this.userId(),
-        [prop]: viewModel.getData()[prop]
-      });
-    }
+  updateProfile(prop, val) {
+    this.modal().callMethod(updateProfile, {
+      _id: this.userId(),
+      [prop]: val
+    });
   },
-  updateEmail(viewModel) {
-    if (this.isPropChanged('email', viewModel)) {
-      this.modal().callMethod(updateEmail, {
-        _id: this.userId(),
-        email: viewModel.getData().email
-      });
-    }
+  updateEmail(email) {
+    this.modal().callMethod(updateEmail, {
+      _id: this.userId(),
+      email
+    });
   },
   uploadAvatarFile(viewModel) {
     const avatarFile = viewModel.avatarFile();
@@ -104,12 +100,6 @@ Template.UserEdit.viewmodel({
         Blaze.remove(viewModel.templateInstance.view);
       }
     });
-  },
-  isPropChanged(propName, viewModel) {
-    const val = viewModel.getData()[propName];
-    const savedVal = viewModel.templateInstance.data[propName];
-
-    return val && val !== savedVal;
   },
   isCurrentUser() {
     const userId = this.userId && this.userId();
@@ -181,10 +171,10 @@ Template.UserEdit.viewmodel({
         organizationId: this.organizationId()
       }, (err, res) => {
         if (!err) {
-          // have to wait some time before opening new sweet alert
           FlowRouter.go('userDirectoryPage', {
             orgSerialNumber: this.organization().serialNumber
           });
+          // have to wait some time before opening new sweet alert
           Meteor.setTimeout(() => {
             swal('Removed', 'User has been removed', 'success');
           }, 500);

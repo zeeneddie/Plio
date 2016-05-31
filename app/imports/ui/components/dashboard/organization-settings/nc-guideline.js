@@ -1,4 +1,5 @@
 Template.OrganizationSettings_NcGuideline.viewmodel({
+  mixin: 'clearableField',
   text: '',
   isChanged() {
     const prev = this.templateInstance.data.text;

@@ -2,6 +2,7 @@ import { TimeUnits } from '/imports/api/constants.js';
 
 
 Template.TimePicker.viewmodel({
+  mixin: 'clearableField',
   timeValue: '',
   timeUnit: '',
   timeUnits() {

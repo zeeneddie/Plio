@@ -20,6 +20,7 @@ Template.ModalWindow.viewmodel({
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
   guideHtml: 'No help message yet',
+  closeAfterCall: false,
 
   submitCaptionText() {
     return this.isSaving() && this.submitCaptionOnSave() ? this.submitCaptionOnSave() : this.submitCaption();
@@ -37,10 +38,6 @@ Template.ModalWindow.viewmodel({
     if (_.isFunction(args)) {
       cb = args;
       args = {};
-    }
-
-    if (Tracker.currentComputation) {
-      return;
     }
 
     this.clearError();
@@ -66,6 +63,8 @@ Template.ModalWindow.viewmodel({
         if (err) {
           console.log('Modal submit error:\n', err);
           this.setError(err.reason || 'Internal server error');
+        } else if (this.closeAfterCall()) {
+          this.close();
         }
       }, this.savingStateTimeout());
     };
@@ -81,7 +80,21 @@ Template.ModalWindow.viewmodel({
     this.errorSection.collapse('hide');
   },
 
-  isButtonBlocked() {
+  close() {
+    this.modal.modal('hide');
+  },
+
+  closeModal() {
+    console.log(this.isWaiting.value);
+    console.log(this.isSaving.value);
+    if (this.isWaiting.value || this.isSaving.value) {
+      this.closeAfterCall(true);
+    } else {
+      this.close();
+    }
+  },
+
+  showSpinner() {
     return this.isSaving() || this.isWaiting();
   }
 });

@@ -281,17 +281,21 @@ ViewModel.mixin({
     }
   },
   clearableField: {
-    callWithFocusCheck(updateFn) {
-      this.modal().isWaiting(true);
+    callWithFocusCheck(e, updateFn) {
+      console.log($(e.target));
+      const modal = ViewModel.findOne('ModalWindow');
+      modal.isWaiting(true);
 
       Meteor.setTimeout(() => {
-        this.modal().isWaiting(false);
+        modal.isWaiting(false);
 
-        if (this.templateInstance.view.isDestroyed) {
+        const tpl = this.templateInstance;
+
+        if (tpl.view.isDestroyed) {
           return;
         }
 
-        if (this.templateInstance.$('input').is(':focus')) {
+        if (tpl.$(e.target).is(':focus')) {
           return;
         }
 
