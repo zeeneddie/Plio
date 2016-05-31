@@ -9,10 +9,11 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'clearableField'],
+  mixin: ['modal', 'organization', 'clearableField', 'user'],
   name: '',
   currency: '',
   owner: '',
+  isEditable: false,
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -20,7 +21,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     return _.values(OrgCurrencies);
   },
   updateName() {
-    if (!this.organizationId || !this.organizationId()) return;
+    if (!this.isEditable()) return;
 
     this.callWithFocusCheck(() => {
       const name = this.name();
@@ -43,13 +44,15 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.currency(currency);
 
-    if (!this.organizationId || !this.organizationId()) return;
+    if (!this.isEditable()) return;
 
     const _id = this.organizationId();
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
   },
   transferOrg(newOwmerId) {
+    if (!this.isEditable()) return;
+
     const { _id:organizationId, name } = this.organization();
 
     const newOwner = Meteor.users.findOne({ _id: newOwmerId });
@@ -81,7 +84,10 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     });
   },
   save() {
+    if (!!this.isEditable()) return;
+
     const { name, currency } = this.data();
+
     this.modal().callMethod(insert, { name, currency }, (err, _id) => {
       if (err) console.log(err);
 
