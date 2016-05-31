@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.ESIPMeansStatement.viewmodel({
-  mixin: ['modal', 'filesList'],
+  mixin: 'filesList',
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
@@ -31,7 +32,7 @@ Template.ESIPMeansStatement.viewmodel({
   },
   onUpload(err, { _id, url }) {
     if (err && err.error !== 'Aborted') {
-      this.modal().setError(err.reason);
+      ViewModel.findOne('ModalWindow').setError(err.reason);
       return;
     }
 

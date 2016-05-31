@@ -1,13 +1,13 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESIssueNumber.viewmodel({
-  mixin: 'modal',
   issueNumber: 1,
   update() {
     if (!this._id) return;
     const { issueNumber } = this.getData();
     if (!issueNumber) {
-      this.modal().setError('Issue number is required!');
+      ViewModel.findOne('ModalWindow').setError('Issue number is required!');
       return;
     }
     this.parent().update({ issueNumber });
