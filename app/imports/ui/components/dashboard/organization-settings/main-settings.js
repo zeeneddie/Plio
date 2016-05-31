@@ -49,18 +49,6 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
   },
-<<<<<<< HEAD
-  save() {
-    const { name, currency } = this.data();
-    this.modal().callMethod(insert, { name, currency }, (err, _id) => {
-      if (err) console.log(err);
-
-      this.modal().close();
-
-      const org = Organizations.findOne({ _id });
-
-      !!org && FlowRouter.setParams({ orgSerialNumber: org.serialNumber });
-=======
   transferOrg(newOwmerId) {
     const { _id:organizationId, name } = this.organization();
 
@@ -90,7 +78,18 @@ Template.OrganizationSettings_MainSettings.viewmodel({
           this.modal().close();
         });
       });
->>>>>>> ab4b7df200e70b631baffae881dd3e35bec81c87
+    });
+  },
+  save() {
+    const { name, currency } = this.data();
+    this.modal().callMethod(insert, { name, currency }, (err, _id) => {
+      if (err) console.log(err);
+
+      this.modal().close();
+
+      const org = Organizations.findOne({ _id });
+
+      !!org && FlowRouter.setParams({ orgSerialNumber: org.serialNumber });
     });
   }
 });
