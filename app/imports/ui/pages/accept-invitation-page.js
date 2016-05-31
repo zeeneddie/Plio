@@ -7,6 +7,7 @@ import Utils from '/imports/core/utils';
 
 
 Template.AcceptInvitationPage.viewmodel({
+  mixin: 'router',
   firstName: '',
   lastName: '',
   password: '',
@@ -17,7 +18,7 @@ Template.AcceptInvitationPage.viewmodel({
     template.autorun(() => {
       let invitationId = FlowRouter.getParam('invitationId');
       this.invitationId(invitationId);
-      this.templateInstance.subscribe('invitationInfo', invitationId);
+      template.subscribe('invitationInfo', invitationId);
     });
   },
 
@@ -67,7 +68,7 @@ Template.AcceptInvitationPage.viewmodel({
       if (err) {
         Utils.showError(err.reason);
       } else {
-        FlowRouter.go('dashboardPage', {orgSerialNumber: orgSerialNumber.toString()});
+        this.goToDashboard(orgSerialNumber.toString());
       }
     });
   }
