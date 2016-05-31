@@ -44,10 +44,10 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
   },
-  transferOrg(newOwmerId) {
+  transferOrg(newOwnerId) {
     const { _id:organizationId, name } = this.organization();
 
-    const newOwner = Meteor.users.findOne({ _id: newOwmerId });
+    const newOwner = Meteor.users.findOne({ _id: newOwnerId });
     const newOwnerName = newOwner.fullNameOrEmail();
 
     swal({
@@ -59,7 +59,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
       closeOnConfirm: false
     }, () => {
       this.modal().callMethod(transferOrganization, {
-        organizationId, newOwmerId
+        organizationId, newOwnerId
       }, (err) => {
         if (err) {
           return;
