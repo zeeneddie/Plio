@@ -7,6 +7,7 @@ import './slingshot.js';
 import './mail.js';
 import './browser-policies.js';
 import './cron';
+import './db-indexes.js';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.
