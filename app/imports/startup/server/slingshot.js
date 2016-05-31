@@ -71,6 +71,6 @@ const configureSlignshot = () => {
   });
 };
 
-if (Utils.isProduction()) {
+// if (Utils.isProduction()) {
   configureSlignshot();
-}
+// }

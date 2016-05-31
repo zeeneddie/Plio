@@ -20,12 +20,13 @@ Template.StandardsCard.viewmodel({
     });
   },
   standards() {
-    const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
+    const query = { organizationId: this.organizationId() };
+    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
     const options = { sort: { title: 1 } };
-    return Standards.find(query, options);
+    return Standards.find(sQuery, options);
   },
   standard() {
-    const query = { _id: this.standardId() };
+    const query = { _id: this.standardId(), organizationId: this.organizationId() };
     const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
     return Standards.findOne(filterQuery);
   },
@@ -101,7 +102,7 @@ Template.StandardsCard.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `The standard "${title}" will be removed forever!`,
+        text: `The standard "${title}" will be deleted permanently!`,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Delete',
@@ -114,7 +115,7 @@ Template.StandardsCard.viewmodel({
           } else {
             swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 
-            const query = { isDeleted: true };
+            const query = { organizationId: this.organizationId(), isDeleted: true };
             const options = { sort: { deletedAt: -1 } };
 
             const standard = Standards.findOne(query, options);
