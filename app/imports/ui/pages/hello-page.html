@@ -4,6 +4,6 @@
   {{else}}
     <p>Sorry, your account is not associated with any organization.</p>
     <p><a class="pointer" {{b "click: openCreateNewOrgModal"}}>You can create a new organization</a> or ask the administrator of the existing organization to send you an invite.</p>
-    <p><a href="#" class="text-danger">I want to delete my account permanently.</a></p>
+    <p><a class="text-danger pointer" {{b "click: deleteAccount"}}>I want to delete my account permanently.</a></p>
   {{/unless}}
 </template>

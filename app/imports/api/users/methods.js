@@ -10,6 +10,21 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { IdSchema } from '../schemas.js';
 import { UserRoles } from '../constants.js';
 
+export const remove = new ValidatedMethod({
+  name: 'Users.remove',
+
+  validate: new SimpleSchema({}).validator(),
+
+  run({}) {
+    const _id = this.userId;
+    if (!_id) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot delete account'
+      );
+    }
+    return UserService.remove({ _id });
+  }
+});
 
 export const selectOrganization = new ValidatedMethod({
   name: 'Users.selectOrganization',

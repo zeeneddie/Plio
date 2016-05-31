@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { remove } from '/imports/api/users/methods.js';
 
 Template.HelloPage.viewmodel({
   mixin: ['router', 'modal'],
@@ -36,12 +37,37 @@ Template.HelloPage.viewmodel({
   },
   openCreateNewOrgModal(e) {
     e.preventDefault();
+
     this.modal().open({
       template: 'OrganizationSettings_MainSettings',
       title: 'New organization',
       variation: 'save',
       owner: Meteor.user().fullName(),
       currency: 'GBP'
+    });
+  },
+  deleteAccount(e) {
+    e.preventDefault();
+
+    swal({
+      title: 'Are you sure?',
+      text: `Your account will be deleted permanently!`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      closeOnConfirm: false
+    }, () => {
+      remove.call({}, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal(
+            'Removed!',
+            `Your account was removed successfully!`,
+            'success'
+          );
+        }
+      });
     });
   }
 });
