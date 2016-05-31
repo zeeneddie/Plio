@@ -5,7 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.HelloPage.viewmodel({
-  mixin: 'router',
+  mixin: ['router', 'modal'],
   onCreated(template) {
     template.autorun(() => {
       const currentUser = Meteor.user();
@@ -32,6 +32,16 @@ Template.HelloPage.viewmodel({
           FlowRouter.go('signIn');
         }
       }
+    });
+  },
+  openCreateNewOrgModal(e) {
+    e.preventDefault();
+    this.modal().open({
+      template: 'OrganizationSettings_MainSettings',
+      title: 'New organization',
+      variation: 'save',
+      owner: Meteor.user().fullName(),
+      currency: 'GBP'
     });
   }
 });

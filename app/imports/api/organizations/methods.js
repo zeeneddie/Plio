@@ -54,11 +54,13 @@ export const insert = new ValidatedMethod({
       );
     }
 
-    return OrganizationService.insert({
-      name,
-      currency,
-      ownerId: userId
-    });
+    if (Meteor.isServer) {
+      return OrganizationService.insert({
+        name,
+        currency,
+        ownerId: userId
+      });
+    }
   }
 });
 

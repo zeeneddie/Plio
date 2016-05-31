@@ -9,7 +9,7 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'clearableField', 'user'],
+  mixin: ['modal', 'organization', 'clearableField', 'user', 'router'],
   name: '',
   currency: '',
   owner: '',
@@ -88,13 +88,15 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     const { name, currency } = this.data();
 
     this.modal().callMethod(insert, { name, currency }, (err, _id) => {
-      if (err) console.log(err);
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        this.modal().close();
 
-      this.modal().close();
+        const org = Organizations.findOne({ _id });
 
-      const org = Organizations.findOne({ _id });
-
-      !!org && FlowRouter.setParams({ orgSerialNumber: org.serialNumber });
+        !!org && this.goToDashboard(org.serialNumber);
+      }
     });
   }
 });
