@@ -16,7 +16,7 @@ import {
 export default OrganizationService = {
   collection: Organizations,
 
-  insert({name, ownerId}) {
+  insert({name, ownerId, currency}) {
     const lastOrg = this.collection.findOne({
       serialNumber: {
         $type: 16 // 32-bit integer
@@ -33,6 +33,7 @@ export default OrganizationService = {
 
     const organizationId = this.collection.insert({
       name,
+      currency,
       serialNumber,
       users: [{
         userId: ownerId,
@@ -50,6 +51,8 @@ export default OrganizationService = {
         organizationId
       });
     });
+
+    Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
 
     return organizationId;
   },
@@ -137,8 +140,8 @@ export default OrganizationService = {
     });
   },
 
-  transfer({ organizationId, newOwmerId, currOwnerId }) {
-    if (currOwnerId === newOwmerId) {
+  transfer({ organizationId, newOwnerId, currOwnerId }) {
+    if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
         400, 'New owner already owns transferred organization'
       );
@@ -148,7 +151,7 @@ export default OrganizationService = {
       _id: organizationId,
       users: {
         $elemMatch: {
-          userId: newOwmerId,
+          userId: newOwnerId,
           role: UserMembership.ORG_MEMBER
         }
       }
@@ -162,14 +165,14 @@ export default OrganizationService = {
 
     this.collection.update({
       _id: organizationId,
-      'users.userId': newOwmerId
+      'users.userId': newOwnerId
     }, {
       $set: {
         'users.$.role': UserMembership.ORG_OWNER
       }
     });
 
-    Roles.addUsersToRoles(newOwmerId, OrgOwnerRoles, organizationId);
+    Roles.addUsersToRoles(newOwnerId, OrgOwnerRoles, organizationId);
 
     this.collection.update({
       _id: organizationId,

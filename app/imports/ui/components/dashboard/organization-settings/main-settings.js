@@ -1,5 +1,6 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import {
+  insert,
   setName,
   setDefaultCurrency,
   transferOrganization
@@ -8,25 +9,28 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'clearableField'],
+  mixin: ['modal', 'organization', 'clearableField', 'user'],
   name: '',
   currency: '',
   owner: '',
+  isEditable: false,
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
   currencies() {
     return _.values(OrgCurrencies);
   },
-  updateName() {
-    this.callWithFocusCheck(() => {
-      const name = this.name();
-      const savedName = this.templateInstance.data.name;
+  updateName(e) {
+    if (!this.isEditable()) return;
 
-      if (!name || name === savedName) {
-        return;
-      }
+    const name = this.name();
+    const savedName = this.templateInstance.data.name;
 
+    if (!name || name === savedName) {
+      return;
+    }
+
+    this.callWithFocusCheck(e, () => {
       const _id = this.organizationId();
 
       this.modal().callMethod(setName, { _id, name });
@@ -40,14 +44,17 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.currency(currency);
 
+    if (!this.isEditable()) return;
+
     const _id = this.organizationId();
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
   },
-  transferOrg(newOwmerId) {
-    const { _id:organizationId, name } = this.organization();
+  transferOrg(newOwnerId) {
+    if (!this.isEditable()) return;
 
-    const newOwner = Meteor.users.findOne({ _id: newOwmerId });
+    const { _id:organizationId, name } = this.organization();
+    const newOwner = Meteor.users.findOne({ _id: newOwnerId });
     const newOwnerName = newOwner.fullNameOrEmail();
 
     swal({
@@ -59,7 +66,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
       closeOnConfirm: false
     }, () => {
       this.modal().callMethod(transferOrganization, {
-        organizationId, newOwmerId
+        organizationId, newOwnerId
       }, (err) => {
         if (err) {
           return;
@@ -73,6 +80,21 @@ Template.OrganizationSettings_MainSettings.viewmodel({
           this.modal().close();
         });
       });
+    });
+  },
+  save() {
+    if (!!this.isEditable()) return;
+
+    const { name, currency } = this.data();
+
+    this.modal().callMethod(insert, { name, currency }, (err, _id) => {
+      if (err) console.log(err);
+
+      this.modal().close();
+
+      const org = Organizations.findOne({ _id });
+
+      !!org && FlowRouter.setParams({ orgSerialNumber: org.serialNumber });
     });
   }
 });

@@ -3,8 +3,8 @@ import { Template } from 'meteor/templating';
 Template.ESTitle.viewmodel({
   mixin: ['modal', 'clearableField', 'numberRegex'],
   titleText: '',
-  update() {
-    this.callWithFocusCheck(() => {
+  update(e) {
+    this.callWithFocusCheck(e, () => {
       const { title } = this.getData();
 
       const number = this.parseNumber(title);

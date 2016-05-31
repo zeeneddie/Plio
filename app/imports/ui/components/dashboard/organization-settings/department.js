@@ -7,12 +7,10 @@ Template.OrganizationSettings_Department.viewmodel({
 
     return name && name !== savedName;
   },
-  onFocusOut() {
-    this.callWithFocusCheck(() => {
-      if (this.isChanged()) {
-        this.onChange(this);
-      }
-    });
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
   },
   delete() {
     this.onDelete(this);
