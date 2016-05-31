@@ -73,4 +73,9 @@
   display: block;
   margin: 4rem auto;
   max-width: 200px;
+
+  @media (max-width: 767px) {
+    margin: 2rem auto;
+    max-width: 100px;
+  }
 }
