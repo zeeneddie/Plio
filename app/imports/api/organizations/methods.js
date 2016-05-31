@@ -7,7 +7,7 @@ import OrganizationService from './organization-service';
 import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
-import { OrganizationEditableFields } from './organization-schema';
+import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
 import { NCTypes, UserRoles, UserMembership } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
@@ -43,9 +43,9 @@ const isOrgOwner = (orgId, userId) => {
 
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
-  validate: nameSchema.validator(),
+  validate: new SimpleSchema([nameSchema, OrganizationCurrencySchema]).validator(),
 
-  run({name}) {
+  run({name, currency}) {
     const userId = this.userId;
 
     if (!userId) {
@@ -56,6 +56,7 @@ export const insert = new ValidatedMethod({
 
     return OrganizationService.insert({
       name,
+      currency,
       ownerId: userId
     });
   }

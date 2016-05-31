@@ -74,16 +74,19 @@ const ncGuidelinesSchema = new SimpleSchema({
   }
 });
 
+const OrganizationCurrencySchema = {
+  currency: {
+    type: String,
+    allowedValues: _.values(OrgCurrencies),
+    optional: true
+  }
+};
+
 const OrganizationEditableFields = {
   name: {
     type: String,
     min: 1,
     max: 40
-  },
-  currency: {
-    type: String,
-    allowedValues: _.values(OrgCurrencies),
-    optional: true
   },
   ncStepTimes: {
     type: ncStepTimesSchema,
@@ -96,7 +99,8 @@ const OrganizationEditableFields = {
   ncGuidelines: {
     type: ncGuidelinesSchema,
     optional: true
-  }
+  },
+  ...OrganizationCurrencySchema
 };
 
 const OrganizationSchema = new SimpleSchema([
@@ -114,4 +118,4 @@ const OrganizationSchema = new SimpleSchema([
   }
 ]);
 
-export { OrganizationEditableFields, OrganizationSchema };
+export { OrganizationEditableFields, OrganizationSchema, OrganizationCurrencySchema };

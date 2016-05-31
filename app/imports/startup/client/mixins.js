@@ -282,7 +282,6 @@ ViewModel.mixin({
   },
   clearableField: {
     callWithFocusCheck(e, updateFn) {
-      console.log($(e.target));
       const modal = ViewModel.findOne('ModalWindow');
       modal.isWaiting(true);
 
