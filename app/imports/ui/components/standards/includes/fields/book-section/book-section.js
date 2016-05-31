@@ -54,7 +54,7 @@ Template.ESBookSection.viewmodel({
       if (err) {
         swal('Oops... Something went wrong!', err.reason, 'error');
       } else {
-        swal("Added!", `Book section "${this.bookSection()}" was added succesfully.`, "success");
+        swal("Added!", `Book section "${this.bookSection()}" was added successfully.`, "success");
 
         this.selectedBookSectionId(_id);
 

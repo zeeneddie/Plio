@@ -63,7 +63,7 @@ Template.ESLessons.viewmodel({
         },
         () => {
           ViewModel.findOne('ESLessonsLearned').remove({ _id }, this.destroy(() =>
-            swal('Removed!', `The lesson "${title}" was removed succesfully.`, 'success')));
+            swal('Removed!', `The lesson "${title}" was removed successfully.`, 'success')));
         }
       );
     } else {

@@ -57,7 +57,7 @@ Template.OrganizationSettings_Departments.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Department "${name}" was removed succesfully.`,
+            `Department "${name}" was removed successfully.`,
             'success'
           );
         }
