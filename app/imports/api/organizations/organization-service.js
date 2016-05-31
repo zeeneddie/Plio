@@ -52,6 +52,8 @@ export default OrganizationService = {
       });
     });
 
+    Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
+
     return organizationId;
   },
 
