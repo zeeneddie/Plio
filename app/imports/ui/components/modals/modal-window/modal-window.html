@@ -10,7 +10,7 @@
               <i class="fa fa-question-circle"></i>
             </button>
             <button type="button" class="btn btn-primary submit-modal-button"
-              {{b "if: isVariation('save'), click: child.save, disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
+              {{b "if: isVariation('save'), click: child.save, disable: isSaving, class: { disabled: isSaving }"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && isVariation('save')"}}></i>
               <span {{b "text: submitCaptionText"}}></span>
             </button>
@@ -20,8 +20,8 @@
 
           <div class="card-heading-buttons"
             {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                {{b "disable: isButtonBlocked, class: { disabled: isButtonBlocked }"}}>
+            <button type="button" class="btn btn-secondary"
+                {{b "class: { disabled: isSaving }, click: closeModal"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && !isVariation('save')"}}></i>
               <span {{b "text: closeCaptionText"}}></span>
             </button>

@@ -6,7 +6,8 @@ Template.ClearField.viewmodel({
   clearField() {
     this.templateInstance
       .$('.clear-field')
-      .siblings('input')
+      .closest('.clearable-field-container')
+      .find('input')
       .focus();
     if (this.field()) {
       this.parent()[this.field()]('');

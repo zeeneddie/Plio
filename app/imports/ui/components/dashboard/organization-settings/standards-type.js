@@ -15,12 +15,10 @@ Template.OrganizationSettings_StandardsType.viewmodel({
       (name !== storedName) || (abbreviation !== storedAbbr)
     ]);
   },
-  onFocusOut() {
-    this.callWithFocusCheck(() => {
-      if (this.isChanged()) {
-        this.onChange(this);
-      }
-    });
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
   },
   delete() {
     this.onDelete(this);

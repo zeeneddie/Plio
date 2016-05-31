@@ -3,8 +3,8 @@ import { Template } from 'meteor/templating';
 Template.ESIPCurrentValue.viewmodel({
   mixin: ['modal', 'clearableField'],
   currentValue: '',
-  update() {
-    this.callWithFocusCheck(() => {
+  update(e) {
+    this.callWithFocusCheck(e, () => {
       const { currentValue } = this.getData();
       this.parent().update({ currentValue });
     });
