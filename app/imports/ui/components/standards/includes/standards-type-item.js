@@ -8,10 +8,9 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsTypeItem.viewmodel({
   hasStandards() {
-    const sections = this.parent().parent().standardsBookSections(this._id()).fetch();
-    return sections.length > 0;
+    return this.standardsBookSections().fetch().length > 0;
   },
   standardsBookSections() {
-    return this.parent().parent().standardsBookSections(this._id());
+    return ViewModel.findOne('StandardsList').standardsBookSections(this._id());
   }
 });

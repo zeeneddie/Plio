@@ -12,38 +12,15 @@ Template.StandardsList.viewmodel({
   },
   onRendered() {
     this.expandSelectedStandard();
-
-    // hack to wait on viewmodels render
-    this.vmAutorun.push(() => {
-      let hasSelectedStandard = false;
-
-      if (this.isActiveStandardFilter('deleted')) {
-        const vms = ViewModel.find('ListSubItem', vm => vm._id && vm._id() === this.standardId());
-        hasSelectedStandard = !!vms && vms.length > 0;
-      } else {
-        const vms = ViewModel.find('ListItem', vm => this.findRecursive(vm, this.standardId()));
-        hasSelectedStandard = !!vms && vms.length > 0;
-      }
-
-      if (!!this.standardId() && !hasSelectedStandard) {
-        this.reroute();
-      }
-    });
   },
-  autorun: [
-    function() {
-      this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
-    },
-    function() {
-      if (!this.standardId() && this.organizationSerialNumber()) {
-        this.reroute();
-      }
-    }
-  ],
+  autorun() {
+    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
+  },
   getFirstStandard() {
-    const query = this.isActiveStandardFilter('deleted') ? { isDeleted: true } : {};
+    const query = { organizationId: this.organizationId() };
+    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
     const options = { sort: { createdAt: -1 } };
-    return Standards.findOne(query, options);
+    return Standards.findOne(sQuery, options);
   },
   standards(typeId) {
     const standardsSearchQuery = this.searchObject('searchText', [
@@ -56,7 +33,7 @@ Template.StandardsList.viewmodel({
 
     const standardsQuery = {
       $and: [
-        { sectionId: { $in: sectionIds } },
+        { sectionId: { $in: sectionIds }, organizationId: this.organizationId() },
         standardsSearchQuery
       ]
     };
@@ -67,9 +44,7 @@ Template.StandardsList.viewmodel({
       });
     }
 
-    const standardsCursor = Standards.find(standardsQuery);
-
-    return standardsCursor;
+    return Standards.find(standardsQuery);
   },
   standardsDeleted() {
     const standardsSearchQuery = this.searchObject('searchText', [
@@ -79,16 +54,16 @@ Template.StandardsList.viewmodel({
     ]);
     const query = {
       $and: [
-        { isDeleted: true },
+        { organizationId: this.organizationId(), isDeleted: true },
         standardsSearchQuery
       ]
-    }
-    const options = { sort: { createdAt: -1 } };
-
+    };
+    const options = { sort: { deletedAt: -1 } };
     return Standards.find(query, options);
   },
   sectionIds() {
-    const availableSections = StandardsBookSections.find({ organizationId: this.organization() && this.organization()._id }).fetch();
+    const query = { organizationId: this.organizationId() };
+    const availableSections = StandardsBookSections.find(query).fetch();
     return _.pluck(availableSections, '_id');
   },
   standardsBookSections(typeId) {
