@@ -3,7 +3,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
-import { UserRoles, StandardFilters } from '/imports/api/constants.js';
+import { Risks } from '/imports/api/risks/risks.js';
+import { UserRoles, StandardFilters, RiskFilters } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -334,5 +335,20 @@ ViewModel.mixin({
         FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
       }
     }
-  }
+  },
+  risk: {
+    riskId() {
+      return FlowRouter.getParam('riskId');
+    },
+    activeRiskFilter() {
+      return FlowRouter.getQueryParam('by') || RiskFilters[0];
+    },
+    isActiveRiskFilter(filter) {
+      return this.activeRiskFilter() === filter;
+    },
+    currentRisk() {
+      const _id = this.riskId();
+      // return Risks.findOne({ _id });
+    }
+  },
 });

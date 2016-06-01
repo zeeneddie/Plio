@@ -159,6 +159,14 @@ const StandardFilters = [
   'deleted'
 ];
 
+const RiskFilters = [
+  'department/site',
+  'activity',
+  'review status',
+  'archived',
+  'deleted'
+];
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -168,6 +176,7 @@ export {
   OrgMemberRoles,
   PhoneTypes,
   StandardFilters,
+  RiskFilters,
   TimeUnits,
   UserMembership,
   UserRoles,

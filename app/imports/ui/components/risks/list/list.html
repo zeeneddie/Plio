@@ -1,0 +1,25 @@
+<template name="RisksList">
+  <div class="card">
+    <form class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField clearFn="clearSearchField"}}
+          <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 300"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      <a class="btn btn-primary" {{b "click: openAddRiskModal"}}>
+        <i class="fa fa-plus"></i>
+        <span>Add</span>
+      </a>
+    </form>
+
+    <div class="list-group list-group-accordion">
+      {{#each risksSections}}
+        {{> ListItem template='RisksSectionsItem' title=title _id=_id}}
+      {{/each}}
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

@@ -149,6 +149,26 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/risks', {
+  name: 'risks',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('RisksLayout', {
+      content: 'RisksPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
+  name: 'risk',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('RisksLayout', {
+      content: 'RisksPage'
+    });
+  }
+});
+
 function redirectHandler() {
   const targetURL = FlowRouter.getQueryParam('b');
   if (targetURL) {
