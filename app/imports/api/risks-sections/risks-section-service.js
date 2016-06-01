@@ -5,7 +5,7 @@ export default {
   collection: RisksSections,
 
   insert({ ...args }) {
-    return this.collection.insert(args);
+    return this.collection.insert({ ...args });
   },
 
   update() {

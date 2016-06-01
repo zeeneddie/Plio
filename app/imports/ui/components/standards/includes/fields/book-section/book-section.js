@@ -7,7 +7,6 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  share: 'standard',
   mixin: ['modal', 'organization', 'collapsing', 'standard'],
   selectedBookSectionId: '',
   section() {
@@ -26,7 +25,7 @@ Template.ESBookSection.viewmodel({
 
     this.modal().callMethod(insert, { title, organizationId }, cb);
   },
-  update(viewmodel) {
+  update(e, viewmodel) {
     if (!this._id) return;
 
     const { sectionId } = viewmodel.getData();

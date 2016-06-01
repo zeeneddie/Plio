@@ -5,11 +5,10 @@ Template.RisksList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal'],
   risksSections() {
-    // const organizationId = this.organizationId();
-    // const query = { organizationId };
-    // const options = { sort: { title: 1 } };
-    // return Risks.find(query, options);
-    return [{ title: 'Industrial accident' }, { title: 'Strike or stoppage' }];
+    const organizationId = this.organizationId();
+    const query = { organizationId };
+    const options = { sort: { title: 1 } };
+    return RisksSections.find(query, options);
   },
   openAddRiskModal() {
     this.modal().open({

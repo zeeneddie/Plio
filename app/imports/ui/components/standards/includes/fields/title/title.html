@@ -1,7 +1,3 @@
 <template name="ESTitle">
-  {{#FormField label="Title"}}
-    {{#ClearableField field="titleText"}}
-      <input type="text" class="form-control" placeholder="Title" {{b "value: titleText, focusout: update"}}>
-    {{/ClearableField}}
-  {{/FormField}}
+  {{> InputField label="Title" value=titleText}}
 </template>

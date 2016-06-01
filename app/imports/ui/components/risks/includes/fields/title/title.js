@@ -3,22 +3,22 @@ import { Template } from 'meteor/templating';
 Template.RKTitle.viewmodel({
   mixin: 'clearableField',
   title: '',
-  update(e) {
+  update(e, viewmodel) {
     this.callWithFocusCheck(e, () => {
-      const { title } = this.getData();
-
       if (!this._id) return;
+
+      const { value:title } = viewmodel.getData();
 
       if (!title) {
         ViewModel.findOne('ModalWindow').setError('Title is required!');
         return;
       }
 
-      this.parent().update({ title, nestingLevel });
+      this.parent().update({ title });
     });
   },
   getData() {
-    const { title } = this.data();
+    const { value:title } = this.child().getData();
     return { title };
   }
 });

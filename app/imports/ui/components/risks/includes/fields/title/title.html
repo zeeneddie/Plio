@@ -1,7 +1,3 @@
 <template name="RKTitle">
-  {{#FormField label="Title"}}
-    {{#ClearableField field="title"}}
-      <input type="text" class="form-control" placeholder="Title" {{b "value: title, focusout: update"}}>
-    {{/ClearableField}}
-  {{/FormField}}
+  {{> InputField label="Risk name" value=title}}
 </template>

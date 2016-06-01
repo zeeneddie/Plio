@@ -17,6 +17,7 @@ Template.SectionField.viewmodel({
       this.section(title);
     }
   },
+  items: [],
   Items: new Mongo.Collection(null),
   section: '',
   sectionId: '',
@@ -65,7 +66,7 @@ Template.SectionField.viewmodel({
 
     this.parent().addNewSection(this, cb);
   },
-  update() {
+  update(e) {
     const _id = this.sectionId();
 
     if (!!_id && !this.section()) {
@@ -75,7 +76,7 @@ Template.SectionField.viewmodel({
 
     if (_id === this.templateInstance.data.sectionId) return;
 
-    this.parent().update(this);
+    this.parent().update(e, this);
   },
   getData() {
     const { section, sectionId } = this.data();
