@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIPCurrentValue.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['clearableField'],
   currentValue: '',
   update(e) {
     this.callWithFocusCheck(e, () => {
