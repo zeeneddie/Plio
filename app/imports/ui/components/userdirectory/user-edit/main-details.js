@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
-  mixin: ['clearableField'],
+  mixin: ['callWithFocusCheck'],
   avatarFile: null,
   isPropChanged(propName, newVal) {
     const savedVal = this.templateInstance.data[propName];

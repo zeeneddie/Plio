@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIPTargetValue.viewmodel({
-  mixin: 'clearableField',
+  mixin: 'callWithFocusCheck',
   targetValue: '',
   update(e) {
     this.callWithFocusCheck(e, () => {

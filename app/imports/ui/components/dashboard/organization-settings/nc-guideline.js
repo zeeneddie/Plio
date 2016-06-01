@@ -1,5 +1,5 @@
 Template.OrganizationSettings_NcGuideline.viewmodel({
-  mixin: 'clearableField',
+  mixin: 'callWithFocusCheck',
   text: '',
   isChanged() {
     const prev = this.templateInstance.data.text;
@@ -7,9 +7,9 @@ Template.OrganizationSettings_NcGuideline.viewmodel({
 
     return text && text !== prev;
   },
-  onFocusOut() {
+  onFocusOut(e) {
     if (this.isChanged()) {
-      this.onChange(this);
+      this.callWithFocusCheck(e, () => this.onChange(this));
     }
   },
   getData() {
