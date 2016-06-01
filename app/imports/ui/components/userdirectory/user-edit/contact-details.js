@@ -31,11 +31,14 @@ Template.UserEdit_ContactDetails.viewmodel({
       this.parent().updateProfile('country', country);
     }
   },
-  updatePhoneNumber(viewModel) {
-    this.parent().updatePhoneNumber(viewModel);
+  updatePhoneNumber(viewModel, cb) {
+    this.parent().updatePhoneNumber(viewModel, cb);
   },
-  addPhoneNumber(viewModel) {
-    this.parent().addPhoneNumber(viewModel);
+  addPhoneNumber(viewModel, cb) {
+    this.parent().addPhoneNumber(viewModel, cb);
+  },
+  removePhoneNumber(viewModel, cb) {
+    this.parent().removePhoneNumber(viewModel, cb);
   },
   isEditable() {
     return this.parent().isEditable();

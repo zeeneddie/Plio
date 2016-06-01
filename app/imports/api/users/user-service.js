@@ -34,34 +34,36 @@ export default {
     });
   },
 
-  updatePhoneNumber(_id, { index, ...args }) {
-    return this._updateArrayElement(
-      _id, 'profile.phoneNumbers', index, args
-    );
-  },
-
-  addPhoneNumber(_id, { ...args }) {
-    return this._pushArrayElement(_id, 'profile.phoneNumbers', args);
-  },
-
-  _updateArrayElement(_id, arrField, index, args) {
-    const updateDoc = {};
-
-    _.each(args, (val, name) => {
-      updateDoc[`${arrField}.${index}.${name}`] = val;
-    });
-
-    return this.collection.update({ _id }, {
-      $set: updateDoc
-    });
-  },
-
-  _pushArrayElement(_id, fieldName, args) {
-    return this.collection.update({ _id }, {
-      $push: {
-        [fieldName]: args
+  updatePhoneNumber({ userId, _id, number, type }) {
+    return this.collection.update({
+      _id: userId,
+      'profile.phoneNumbers._id': _id
+    }, {
+      $set: {
+        'profile.phoneNumbers.$.number': number,
+        'profile.phoneNumbers.$.type': type
       }
     });
   },
+
+  addPhoneNumber({ userId, _id, number, type }) {
+    return this.collection.update({
+      _id: userId
+    }, {
+      $push: {
+        'profile.phoneNumbers': { _id, number, type }
+      }
+    });
+  },
+
+  removePhoneNumber({ userId, _id }) {
+    return this.collection.update({
+      _id: userId
+    }, {
+      $pull: {
+        'profile.phoneNumbers': { _id }
+      }
+    });
+  }
 
 };

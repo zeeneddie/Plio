@@ -1,12 +1,14 @@
 import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
+import { Random } from 'meteor/random';
 
 import {
   updateProfile,
   updateEmail,
   updatePhoneNumber,
-  addPhoneNumber
+  addPhoneNumber,
+  removePhoneNumber
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
@@ -80,26 +82,25 @@ Template.UserEdit.viewmodel({
       });
     });
   },
-  updatePhoneNumber(viewModel) {
+  updatePhoneNumber(viewModel, cb) {
     const { number, type } = viewModel.getData();
-    const index = viewModel.index();
+    const _id = viewModel._id();
+    const userId = this.userId();
 
-    this.modal().callMethod(updatePhoneNumber, {
-      _id: this.userId(),
-      index, number, type
-    });
+    this.modal().callMethod(updatePhoneNumber, { _id, userId, number, type }, cb);
   },
-  addPhoneNumber(viewModel) {
+  addPhoneNumber(viewModel, cb) {
     const { number, type } = viewModel.getData();
+    const userId = this.userId();
+    const _id = Random.id();
 
-    this.modal().callMethod(addPhoneNumber, {
-      _id: this.userId(),
-      number, type
-    }, (err) => {
-      if (!err) {
-        Blaze.remove(viewModel.templateInstance.view);
-      }
-    });
+    this.modal().callMethod(addPhoneNumber, { _id, userId, number, type }, cb);
+  },
+  removePhoneNumber(viewModel, cb) {
+    const _id = viewModel._id();
+    const userId = this.userId();
+
+    this.modal().callMethod(removePhoneNumber, { _id, userId }, cb);
   },
   isCurrentUser() {
     const userId = this.userId && this.userId();
