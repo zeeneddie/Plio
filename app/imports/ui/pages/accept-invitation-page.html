@@ -31,6 +31,9 @@
                 <hr>
                 <div class="at-form">
                   <div class="at-pwd-form">
+                    {{#if atDisabled}}
+                      Please wait...
+                     {{/if}}
                     <form role="form" id="at-pwd-form">
                       <fieldset>
                         <div class="at-input form-group row">
