@@ -15,7 +15,7 @@
             <div class="card">
               <div class="card-header text-xs-center">
                 <div class="at-title">
-                  <h3>Invitation to "{{organizationName}}" organization</h3>
+                  <h3>Invitation</h3>
                 </div>
               </div>
 
@@ -40,10 +40,9 @@
                           <div class="col-md-9">
                             <input type="text" class="form-control" id="at-field-firstName" name="at-field-firstName"
                                    placeholder="First name" autocapitalize="none"
-                                   autocorrect="off" {{b "value: firstName"}}>
+                                   autocorrect="off" {{b "value: firstName"}} {{disabled}}>
                           </div>
                         </div>
-
 
                         <div class="at-input form-group row">
                           <label class="col-md-3 form-control-label" for="at-field-lastName">
@@ -52,7 +51,7 @@
                           <div class="col-md-9">
                             <input type="text" class="form-control" id="at-field-lastName" name="at-field-lastName"
                                    placeholder="Last name" autocapitalize="none"
-                                   autocorrect="off" {{b "value: lastName"}}>
+                                   autocorrect="off" {{b "value: lastName"}} {{disabled}}>
                           </div>
                         </div>
 
@@ -64,7 +63,7 @@
                           <div class="col-md-9">
                             <input type="email" class="form-control" id="at-field-email" name="at-field-email"
                                    placeholder="Email" autocapitalize="none" autocorrect="off"
-                              {{b "value: userEmail"}} disabled="disabled">
+                              {{b "value: userEmail"}} disabled>
                           </div>
                         </div>
 
@@ -74,7 +73,7 @@
                           </label>
                           <div class="col-md-9">
                             <input type="password" class="form-control" id="at-field-password" name="at-field-password"
-                                   placeholder="Password" autocapitalize="none" autocorrect="off" {{b "value: password"}}>
+                                   placeholder="Password" autocapitalize="none" autocorrect="off" {{b "value: password"}} {{disabled}}>
                           </div>
                         </div>
 
@@ -86,7 +85,7 @@
                           <div class="col-md-9">
                             <input type="password" class="form-control" id="at-field-password_again"
                                    name="at-field-password_again" placeholder="Password (again)" autocapitalize="none"
-                                   autocorrect="off" {{b "value: repeatPassword"}}>
+                                   autocorrect="off" {{b "value: repeatPassword"}} {{disabled}}>
                           </div>
                         </div>
                       </fieldset>
@@ -95,7 +94,7 @@
                 </div>
               </div>
               <div class="card-footer text-xs-center">
-                <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary">
+                <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary" {{disabled}}>
                   Accept invitation
                 </button>
               </div>

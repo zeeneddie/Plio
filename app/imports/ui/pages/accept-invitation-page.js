@@ -36,7 +36,12 @@ Template.AcceptInvitationPage.viewmodel({
     return organization && organization.name;
   },
 
+  disabled: function() {
+    return AccountsTemplates.disabled();
+  },
+
   acceptInvitation() {
+    AccountsTemplates.setDisabled(true);
     let userData = this.data();
 
     if (userData.password === userData.repeatPassword) {
@@ -54,12 +59,14 @@ Template.AcceptInvitationPage.viewmodel({
       acceptInvitation.call(args, (err, res) => {
         if (err) {
           Utils.showError(err.reason);
+          AccountsTemplates.setDisabled(false);
         } else {
           this._loginUserWithPassword(userEmail, userData, orgSerialNumber);
         }
       });
     } else {
       Utils.showError('Passwords should match');
+      AccountsTemplates.setDisabled(false);
     }
   },
 
