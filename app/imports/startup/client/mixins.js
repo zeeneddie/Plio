@@ -282,7 +282,6 @@ ViewModel.mixin({
   },
   callWithFocusCheck: {
     callWithFocusCheck(e, updateFn) {
-      console.log($(e.target));
       const modal = ViewModel.findOne('ModalWindow');
       modal.isWaiting(true);
 
@@ -309,6 +308,10 @@ ViewModel.mixin({
     }
   },
   router: {
+    goToDashboard(orgSerialNumber) {
+      const params = { orgSerialNumber };
+      FlowRouter.go('dashboardPage', params);
+    },
     goToStandard(standardId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
       const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};

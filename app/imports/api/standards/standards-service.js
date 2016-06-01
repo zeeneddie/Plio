@@ -1,4 +1,6 @@
 import { Standards } from './standards.js';
+import { ImprovementPlans } from '../improvement-plans/improvement-plans.js';
+import { LessonsLearned } from '../lessons/lessons.js';
 
 
 export default {
@@ -15,6 +17,7 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
+    
     return this.collection.update(query, options);
   },
 
@@ -25,12 +28,18 @@ export default {
         viewedBy: userId
       }
     };
-    return this.collection.update({ _id }, options);
+
+    return this.collection.update(query, options);
   },
 
   remove({ _id, deletedBy, isDeleted }) {
+    const query = { _id };
+
     if (isDeleted) {
-      return this.collection.remove({ _id });
+      ImprovementPlans.remove({ standardId: _id });
+      LessonsLearned.remove({ standardId: _id });
+
+      return this.collection.remove(query);
     } else {
       const options = {
         $set: {
@@ -40,7 +49,7 @@ export default {
         }
       };
 
-      return this.collection.update({ _id }, options);
+      return this.collection.update(query, options);
     }
   }
 };

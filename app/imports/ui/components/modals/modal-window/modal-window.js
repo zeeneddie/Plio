@@ -85,8 +85,6 @@ Template.ModalWindow.viewmodel({
   },
 
   closeModal() {
-    console.log(this.isWaiting.value);
-    console.log(this.isSaving.value);
     if (this.isWaiting.value || this.isSaving.value) {
       this.closeAfterCall(true);
     } else {

@@ -10,7 +10,13 @@
       {{/ClearableField}}
     {{/FormField}}
 
-    {{> OrganizationSettings_OrgTransfer ownerId=ownerId}}
+    {{#if isEditable}}
+      {{> OrganizationSettings_OrgTransfer ownerId=ownerId}}
+    {{else}}
+      {{#FormField label="Org owner"}}
+        <input type="text" class="form-control" disabled value="{{userFullNameOrEmail currentUser}}" />
+      {{/FormField}}
+    {{/if}}
 
     {{#FormField label="Default currency"}}
       <div class="btn-group btn-group-nomargin" data-toggle="buttons">

@@ -4,6 +4,10 @@ import { PhoneTypes } from '../constants.js';
 
 
 const PhoneNumberSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
   number: {
     type: String,
     regEx: /^[\+|0-9][0-9\-\s\(\)]+$/

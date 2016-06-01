@@ -89,6 +89,12 @@
   &-footer {
     border-radius: 0 0 4px 4px;
   }
+
+  @media (max-width: 767px) {
+    .card-content {
+      min-height: inherit;
+    }
+  }
 }
 
 

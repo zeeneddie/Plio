@@ -130,6 +130,7 @@ a {
   bottom: 6px;
   font-weight: bold;
   color: #464646;
+  z-index: 9999
 }
 
 strong {
@@ -150,5 +151,9 @@ strong {
 }
 
 .relative {
-  position: relative;
+  position: relative !important;
+}
+
+.no-padding {
+  padding: 0 !important;
 }

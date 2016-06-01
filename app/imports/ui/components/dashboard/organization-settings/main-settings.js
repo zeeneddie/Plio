@@ -1,5 +1,6 @@
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import {
+  insert,
   setName,
   setDefaultCurrency,
   transferOrganization
@@ -12,6 +13,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
   name: '',
   currency: '',
   owner: '',
+  isEditable: false,
   isSelectedCurrency(currency) {
     return this.currency() === currency;
   },
@@ -19,6 +21,8 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     return _.values(OrgCurrencies);
   },
   updateName(e) {
+    if (!this.isEditable()) return;
+
     const name = this.name();
     const savedName = this.templateInstance.data.name;
 
@@ -40,13 +44,16 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     this.currency(currency);
 
+    if (!this.isEditable()) return;
+
     const _id = this.organizationId();
 
     this.modal().callMethod(setDefaultCurrency, { _id, currency });
   },
   transferOrg(newOwnerId) {
-    const { _id:organizationId, name } = this.organization();
+    if (!this.isEditable()) return;
 
+    const { _id:organizationId, name } = this.organization();
     const newOwner = Meteor.users.findOne({ _id: newOwnerId });
     const newOwnerName = newOwner.fullNameOrEmail();
 
@@ -73,6 +80,23 @@ Template.OrganizationSettings_MainSettings.viewmodel({
           this.modal().close();
         });
       });
+    });
+  },
+  save() {
+    if (!!this.isEditable()) return;
+
+    const { name, currency } = this.data();
+
+    this.modal().callMethod(insert, { name, currency }, (err, _id) => {
+      if (err) {
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        this.modal().close();
+
+        const org = Organizations.findOne({ _id });
+
+        !!org && this.goToDashboard(org.serialNumber);
+      }
     });
   }
 });

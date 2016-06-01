@@ -7,9 +7,24 @@ import { Roles } from 'meteor/alanning:roles';
 import UserService from './user-service.js';
 import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, UserIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants.js';
 
+export const remove = new ValidatedMethod({
+  name: 'Users.remove',
+
+  validate: new SimpleSchema({}).validator(),
+
+  run({}) {
+    const _id = this.userId;
+    if (!_id) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot delete account'
+      );
+    }
+    return UserService.remove({ _id });
+  }
+});
 
 export const selectOrganization = new ValidatedMethod({
   name: 'Users.selectOrganization',
@@ -94,28 +109,26 @@ export const updateEmail = new ValidatedMethod({
 export const updatePhoneNumber = new ValidatedMethod({
   name: 'Users.updatePhoneNumber',
 
-  validate: new SimpleSchema([IdSchema, PhoneNumberSchema, {
-    index: {
-      type: Number,
-      min: 0
-    }
-  }]).validator(),
+  validate: new SimpleSchema([
+    UserIdSchema,
+    PhoneNumberSchema
+  ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update phone numbers'
       );
     }
 
-    if (userId !== _id) {
+    if (userId !== currUserId) {
       throw new Meteor.Error(
         403, 'User cannot update another user\'s phone numbers'
       );
     }
 
-    return UserService.updatePhoneNumber(_id, args);
+    return UserService.updatePhoneNumber({ userId, ...args });
   }
 });
 
@@ -123,24 +136,51 @@ export const addPhoneNumber = new ValidatedMethod({
   name: 'Users.addPhoneNumber',
 
   validate: new SimpleSchema([
-    IdSchema, PhoneNumberSchema
+    UserIdSchema,
+    PhoneNumberSchema
   ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot add phone numbers'
       );
     }
 
-    if (userId !== _id) {
+    if (userId !== currUserId) {
       throw new Meteor.Error(
         403, 'User cannot add phone numbers to another users'
       );
     }
 
-    return UserService.addPhoneNumber(_id, args);
+    return UserService.addPhoneNumber({ userId, ...args });
+  }
+});
+
+export const removePhoneNumber = new ValidatedMethod({
+  name: 'Users.removePhoneNumber',
+
+  validate: new SimpleSchema([
+    UserIdSchema,
+    IdSchema
+  ]).validator(),
+
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove phone numbers'
+      );
+    }
+
+    if (userId !== currUserId) {
+      throw new Meteor.Error(
+        403, 'User cannot remove another user\'s phone numbers'
+      );
+    }
+
+    return UserService.removePhoneNumber({ userId, ...args });
   }
 });
 
