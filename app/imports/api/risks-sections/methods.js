@@ -6,9 +6,9 @@ import { RisksSectionSchema } from './risks-section-schema.js';
 import { RisksSections } from './risks-sections.js';
 
 export const insert = new ValidatedMethod({
-  name: 'Risks.insert',
+  name: 'RisksSections.insert',
 
-  validate: RisksSchema.validator(),
+  validate: RisksSectionSchema.validator(),
 
   run({ ...args }) {
     const userId = this.userId;
@@ -18,6 +18,6 @@ export const insert = new ValidatedMethod({
       );
     }
 
-    return RisksService.insert({ ...args });
+    return RisksSectionService.insert({ ...args });
   }
 });
