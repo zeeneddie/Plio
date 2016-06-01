@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList'],
+  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -41,7 +41,7 @@ Template.ESSources.viewmodel({
 
     this.update();
   },
-  update() {
+  update(e) {
     let { type, url, name } = this.getData();
 
     if (!this.shouldUpdate()) {
@@ -70,7 +70,13 @@ Template.ESSources.viewmodel({
       [`source${this.id()}`]: sourceDoc
     };
 
-    this.parent().update(query);
+    const updateFn = () => this.parent().update(query);
+
+    if (type === 'attachment') {
+      updateFn();
+    } else {
+      this.callWithFocusCheck(e, updateFn);
+    }
   },
   insertFileFn() {
     return this.insertFile.bind(this);

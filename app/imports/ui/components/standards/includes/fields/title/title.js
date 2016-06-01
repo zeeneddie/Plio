@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESTitle.viewmodel({
-  mixin: ['modal', 'clearableField', 'numberRegex'],
+  mixin: ['callWithFocusCheck', 'numberRegex'],
   titleText: '',
   update(e) {
     this.callWithFocusCheck(e, () => {

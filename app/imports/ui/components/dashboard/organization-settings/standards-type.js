@@ -1,5 +1,5 @@
 Template.OrganizationSettings_StandardsType.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
   name: '',
   abbreviation: '',
   isChanged() {

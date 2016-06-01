@@ -8,7 +8,7 @@ import { OrgCurrencies } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'clearableField'],
+  mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router'],
   name: '',
   currency: '',
   owner: '',

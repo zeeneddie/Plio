@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIPSelectedMetric.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: 'callWithFocusCheck',
   selectedMetric: '',
   update(e) {
     this.callWithFocusCheck(e, () => {

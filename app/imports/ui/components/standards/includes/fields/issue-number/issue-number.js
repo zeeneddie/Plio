@@ -1,16 +1,18 @@
 import { Template } from 'meteor/templating';
 
 Template.ESIssueNumber.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'callWithFocusCheck'],
   issueNumber: 1,
-  update() {
+  update(e) {
     if (!this._id) return;
     const { issueNumber } = this.getData();
     if (!issueNumber) {
       this.modal().setError('Issue number is required!');
       return;
     }
-    this.parent().update({ issueNumber });
+    this.callWithFocusCheck(e, () => {
+      this.parent().update({ issueNumber });
+    });
   },
   getData() {
     const { issueNumber } = this.data();

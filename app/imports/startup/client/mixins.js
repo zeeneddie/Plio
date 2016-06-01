@@ -280,7 +280,7 @@ ViewModel.mixin({
       return this.fileUploader() && this.fileUploader().progress(fileId);
     }
   },
-  clearableField: {
+  callWithFocusCheck: {
     callWithFocusCheck(e, updateFn) {
       console.log($(e.target));
       const modal = ViewModel.findOne('ModalWindow');

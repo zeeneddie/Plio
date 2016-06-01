@@ -2,7 +2,7 @@ import { PhoneTypes } from '/imports/api/constants.js';
 
 
 Template.UserEdit_PhoneNumber.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
   number: '',
   type: PhoneTypes.WORK,
   events: {
