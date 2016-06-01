@@ -471,3 +471,9 @@ input[disabled], textarea[disabled] {
     display: none;
   }
 }
+
+#phones-forms {
+  .add-phone {
+    min-width: 60%;
+  }
+}
