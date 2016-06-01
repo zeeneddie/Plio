@@ -12,3 +12,5 @@ const RisksSchema = new SimpleSchema([
     }
   }
 ]);
+
+export { RisksSchema };
