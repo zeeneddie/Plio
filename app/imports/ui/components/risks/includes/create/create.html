@@ -1,3 +1,17 @@
 <template name="CreateRisk">
-  Hello World
+  <div>
+    <div class="card-block">
+      {{> RKTitle}}
+
+      {{> ESBookSection}}
+
+      {{> ESType}}
+
+      {{> ESOwner showCurrentUser=true}}
+
+      {{> ESIssueNumber}}
+
+      {{> ESStatus}}
+    </div>
+  </div>
 </template>

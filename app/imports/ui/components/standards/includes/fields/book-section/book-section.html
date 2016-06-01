@@ -1,15 +1,3 @@
 <template name="ESBookSection">
-  {{#FormField label="Book section"}}
-    <div class="dropdown">
-      <input type="text" class="form-control" placeholder="Book section" data-toggle="dropdown"
-        {{b "value: bookSection, focusout: update, throttle: 200"}}/>
-      <div class="dropdown-menu dropdown-menu-full">
-        {{#each bookSections}}
-          <a class="dropdown-item pointer" {{b "text: this.title, click: bookSection(this.title) && selectedBookSectionId(this._id)"}}></a>
-        {{/each}}
-        <div class="dropdown-divider" {{b "if: bookSections.count > 0"}}></div>
-        <a class="dropdown-item pointer" {{b "mousedown: addNewSection"}}><strong {{b "text: sectionHintText"}}></strong></a>
-      </div>
-    </div>
-  {{/FormField}}
+  {{> SectionField label="Book section" items=bookSections section=section sectionId=selectedBookSectionId}}
 </template>
