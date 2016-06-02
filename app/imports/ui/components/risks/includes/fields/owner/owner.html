@@ -1,0 +1,11 @@
+<template name="RKOwner">
+  {{#FormField label="Risk owner(s)"}}
+    {{#each owners}}
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" disabled="" {{b "text: userFullNameOrEmail(this)"}}></button>
+        <button type="button" class="btn btn-secondary" {{b "click: pull(this)"}}><i class="fa fa-times-circle"></i></button>
+      </div>
+    {{/each}}
+    {{> OwnerField onUpdate=onUpdateCb items=members}}
+  {{/FormField}}
+</template>

@@ -9,6 +9,10 @@ const RisksSchema = new SimpleSchema([
     title: {
       type: String,
       min: 1
+    },
+    owners: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id
     }
   }
 ]);
