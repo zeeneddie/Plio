@@ -1,5 +1,13 @@
 import { Template } from 'meteor/templating';
 
+import { Risks } from '/imports/api/risks/risks.js';
+
 Template.RisksSectionsItem.viewmodel({
-  risks: [{ score: 91, title: 'Spillage of solvent' }, { score: 80, title: 'Explosion of binder' }]
+  mixin: 'organization',
+  risks() {
+    const organizationId = this.organizationId();
+    const query = { organizationId };
+    const options = { sort: { title: 1 } };
+    return Risks.find(query, options);
+  }
 });
