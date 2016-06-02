@@ -55,3 +55,9 @@ import '../../api/risks-sections/risks-sections.js';
 import '../../api/risks-sections/risks-section-schema.js';
 import '../../api/risks-sections/risks-section-service.js';
 import '../../api/risks-sections/methods.js';
+
+import '../../api/non-conformities/server/publications.js';
+import '../../api/non-conformities/non-conformities.js';
+import '../../api/non-conformities/non-conformities-schema.js';
+import '../../api/non-conformities/non-conformities-service.js';
+import '../../api/non-conformities/methods.js';
