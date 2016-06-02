@@ -16,3 +16,5 @@ import './verify-email-page.html';
 import './verify-email-page.js';
 import './risks-page.html';
 import './risks-page.js';
+import './non-conformities-page.html';
+import './non-conformities-page.js';
