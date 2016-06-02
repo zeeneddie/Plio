@@ -167,6 +167,14 @@ const RiskFilters = [
   'deleted'
 ];
 
+const ProblemFilters = [
+  'department/site',
+  'activity',
+  'review status',
+  'archived',
+  'deleted'
+];
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -177,6 +185,7 @@ export {
   PhoneTypes,
   StandardFilters,
   RiskFilters,
+  ProblemFilters,
   TimeUnits,
   UserMembership,
   UserRoles,

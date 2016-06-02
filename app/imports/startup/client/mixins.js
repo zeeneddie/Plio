@@ -4,7 +4,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { UserRoles, StandardFilters, RiskFilters } from '/imports/api/constants.js';
+import { Problems } from '/imports/api/problems/problems.js';
+import { UserRoles, StandardFilters, RiskFilters, ProblemFilters } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -351,4 +352,19 @@ ViewModel.mixin({
       // return Risks.findOne({ _id });
     }
   },
+  nonconformity: {
+    NCId() {
+      return FlowRouter.getParam('riskId');
+    },
+    activeNCFilter() {
+      return FlowRouter.getQueryParam('by') || ProblemFilters[0];
+    },
+    isActiveNCFilter(filter) {
+      return this.activeNCFilter() === filter;
+    },
+    currentNC() {
+      const _id = this.NCId();
+      return Problems.findOne({ _id });
+    }
+  }
 });

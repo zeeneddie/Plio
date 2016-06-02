@@ -153,8 +153,8 @@ FlowRouter.route('/:orgSerialNumber/nonconformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NonConformitiesLayout', {
-      content: 'NonConformitiesPage'
+    BlazeLayout.render('NCLayout', {
+      content: 'NCPage'
     });
   }
 });
@@ -163,8 +163,8 @@ FlowRouter.route('/:orgSerialNumber/nonconformities/:nonconformityId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NonConformitiesLayout', {
-      content: 'NonConformitiesPage'
+    BlazeLayout.render('NCLayout', {
+      content: 'NCPage'
     });
   }
 });

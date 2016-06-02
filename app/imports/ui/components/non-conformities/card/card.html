@@ -1,0 +1,44 @@
+<template name="NCCard">
+    <div class="content-cards-inner flex scroll">
+      <div class="card">
+        <!-- <div class="card-block card-heading" {{b "if: NCs.count === 0"}}>
+          <h5 {{b "if: !isActiveNCFilter('deleted')"}}>
+            There is no problems yet! Click on the 'Add' button to create your first problem.
+          </h5>
+          <h5 {{b "if: isActiveNCFilter('deleted')"}}>There is no deleted problems yet!</h5>
+        </div> -->
+        {{#with NC}}
+          <div class="card-block card-heading">
+            <div class="card-heading-buttons pull-xs-right">
+              {{#if isDeleted}}
+                <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                  Restore
+                </a>
+                <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                  Delete
+                </a>
+              {{else}}
+                <a class="btn btn-primary" {{b "click: openEditNCModal"}}>
+                  <i class="fa fa-pencil"></i>
+                  Edit
+                </a>
+              {{/if}}
+            </div>
+            <h3 class="card-title">
+              Non-conformity
+            </h3>
+          </div>
+          <div class="list-group">
+            <div class="list-group-item">
+              <p class="list-group-item-text">Title</p>
+              <h4 class="list-group-item-heading">
+                <span {{b "text: this.title"}}></span>
+              </h4>
+            </div>
+          </div>
+
+          {{> CardChangelog document=this}}
+        {{/with}}
+      </div>
+    </div>
+</template>
