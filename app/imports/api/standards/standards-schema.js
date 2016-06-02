@@ -92,62 +92,6 @@ const optionalFields = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
-  improvementPlan: {
-    type: Object,
-    optional: true
-  },
-  'improvementPlan.desiredOutcome': {
-    type: String,
-    optional: true
-  },
-  'improvementPlan.targetDate': {
-    type: Date,
-    optional: true
-  },
-  'improvementPlan.reviewDates': {
-    type: [Object],
-    optional: true
-  },
-  'improvementPlan.reviewDates.$.date': {
-    type: Date
-  },
-  'improvementPlan.reviewDates.$._id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  'improvementPlan.owner': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  'improvementPlan.selectedMetric': {
-    type: String,
-    optional: true
-  },
-  'improvementPlan.currentValue': {
-    type: String,
-    optional: true
-  },
-  'improvementPlan.targetValue': {
-    type: String,
-    optional: true
-  },
-  'improvementPlan.files': {
-    type: [Object],
-    optional: true
-  },
-  'improvementPlan.files.$._id': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  'improvementPlan.files.$.url': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url,
-    optional: true
-  },
-  'improvementPlan.files.$.name': {
-    type: String
-  },
   viewedBy: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,

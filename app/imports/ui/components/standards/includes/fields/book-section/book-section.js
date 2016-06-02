@@ -55,6 +55,6 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    return this.child().getData();
+    return this.child('SectionField').getData();
   }
 });

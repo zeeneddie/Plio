@@ -17,11 +17,15 @@ Template.SectionField.viewmodel({
       this.section(item.title);
     }
   },
-  items: new Mongo.Collection(null),
   section: '',
   sectionId: '',
   sectionHintText() {
     return !!this.section() ? `Add "${this.section()}" section` : 'Start typing...';
+  },
+  select({ _id, title }) {
+    this.section(title);
+    this.sectionId(_id);
+    this.update();
   },
   addNewSection() {
     if (!this.section()) return;
@@ -61,15 +65,18 @@ Template.SectionField.viewmodel({
   update() {
     const _id = this.sectionId();
 
-    if (!!_id && !this.section()) {
-      const find = this.items().fetch().filter(doc => doc._id === _id);
-      const item = !!find.length > 0 && find[0];
-      this.section(item.title);
-    }
+    this.fixSection();
 
     if (_id === this.templateInstance.data.sectionId) return;
 
     this.onUpdate(this);
+  },
+  fixSection() {
+    if (!!this.sectionId() && !this.section()) {
+      const find = this.items().fetch().filter(doc => doc._id === this.sectionId());
+      const item = !!find.length > 0 && find[0];
+      !!item && this.section(item.title);
+    }
   },
   getData() {
     const { section, sectionId } = this.data();
