@@ -1,3 +1,7 @@
 <template name="ESBookSection">
-  {{> SectionField label="Book section" items=bookSections sectionId=selectedBookSectionId onUpdate=onUpdateCb onAddSection=onAddSectionCb}}
+  {{#if _id}}
+    {{> SectionField label="Book section" items=bookSections sectionId=selectedBookSectionId onUpdate=onUpdateCb onAddSection=onAddSectionCb}}
+  {{else}}
+    {{> SectionField label="Book section" items=bookSections onUpdate=onUpdateCb onAddSection=onAddSectionCb}}
+  {{/if}}
 </template>
