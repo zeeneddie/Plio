@@ -4,10 +4,17 @@ import { Mongo } from 'meteor/mongo';
 Template.SectionField.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
-    if (!this.sectionId() && this.items().count() > 0) {
-      const { _id, title } = this.items().fetch()[0];
+    const items = this.items();
+
+    if (!this.sectionId() && items.count() > 0) {
+      const { _id, title } = items.fetch()[0];
+
       this.sectionId(_id);
       this.section(title);
+    } else if (!!this.sectionId() && items.count() > 0) {
+      const find = items.fetch().filter(item => item._id === this.sectionId());
+      const item = find.length > 0 && find[0];
+      this.section(item.title);
     }
   },
   items: new Mongo.Collection(null),
@@ -17,9 +24,7 @@ Template.SectionField.viewmodel({
     return !!this.section() ? `Add "${this.section()}" section` : 'Start typing...';
   },
   addNewSection() {
-    const title = this.section();
-
-    if (!title) return;
+    if (!this.section()) return;
 
     this.showAlert();
   },

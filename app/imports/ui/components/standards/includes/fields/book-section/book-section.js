@@ -7,25 +7,44 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  mixin: ['modal', 'organization', 'collapsing', 'standard'],
+  mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
   selectedBookSectionId: '',
+  // section() {
+  //   const _id = this.selectedBookSectionId();
+  //   const section = StandardsBookSections.findOne({ _id });
+  //   return !!section ? section.title : '';
+  // },
   section() {
-    const _id = this.selectedBookSectionId();
-    const section = StandardsBookSections.findOne({ _id });
-    return !!section ? section.title : '';
+    const child = this.child('SectionField');
+    return child && child.section();
   },
   bookSections() {
-    const query = { organizationId: this.organizationId() };
+    const query = {
+      $and: [
+        {
+          organizationId: this.organizationId()
+        },
+        {
+          ...this.searchObject('section', 'title')
+        }
+      ]
+    };
     const options = { sort: { title: 1 } };
     return StandardsBookSections.find(query, options);
   },
-  addNewSection(viewmodel, cb) {
+  onAddSectionCb() {
+    return this.addSection.bind(this);
+  },
+  addSection(viewmodel, cb) {
     const { section:title } = viewmodel.getData();
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, { title, organizationId }, cb);
   },
-  update(e, viewmodel) {
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
     if (!this._id) return;
 
     const { sectionId } = viewmodel.getData();
