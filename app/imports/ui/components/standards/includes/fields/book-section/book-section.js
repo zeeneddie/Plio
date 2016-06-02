@@ -9,11 +9,6 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
   selectedBookSectionId: '',
-  // section() {
-  //   const _id = this.selectedBookSectionId();
-  //   const section = StandardsBookSections.findOne({ _id });
-  //   return !!section ? section.title : '';
-  // },
   section() {
     const child = this.child('SectionField');
     return child && child.section();
