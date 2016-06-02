@@ -7,66 +7,42 @@ import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
-  share: 'standard',
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
-  onCreated() {
-    const _id = this.selectedBookSectionId();
-    if (_id) {
-      const section = StandardsBookSections.findOne({ _id });
-      section && this.bookSection(section.title);
-    }
-  },
-  bookSection: '',
   selectedBookSectionId: '',
+  section() {
+    const child = this.child('SectionField');
+    return child && child.section();
+  },
   bookSections() {
-    const query = this.searchObject('bookSection', 'title');
+    const query = {
+      $and: [
+        {
+          organizationId: this.organizationId()
+        },
+        {
+          ...this.searchObject('section', 'title')
+        }
+      ]
+    };
     const options = { sort: { title: 1 } };
     return StandardsBookSections.find(query, options);
   },
-  sectionHintText() {
-    return !!this.bookSection() ? `Add "${this.bookSection()}" section` : 'Start typing...';
+  onAddSectionCb() {
+    return this.addSection.bind(this);
   },
-  addNewSection() {
-    const title = this.bookSection();
-
-    if (!title) return;
-
-    this.showAlert();
-  },
-  showAlert() {
-    swal(
-      {
-        title: "Are you sure?",
-        text: `New section "${this.bookSection()}" will be added.`,
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Add",
-        closeOnConfirm: false
-      },
-      () => {
-        this.onAlertConfirm();
-      }
-    );
-  },
-  onAlertConfirm() {
+  addSection(viewmodel, cb) {
+    const { section:title } = viewmodel.getData();
     const organizationId = this.organizationId();
 
-    this.modal().callMethod(insert, { title: this.bookSection(), organizationId }, (err, _id) => {
-      if (err) {
-        swal('Oops... Something went wrong!', err.reason, 'error');
-      } else {
-        swal("Added!", `Book section "${this.bookSection()}" was added successfully.`, "success");
-
-        this.selectedBookSectionId(_id);
-
-        this.update();
-      }
-    });
+    this.modal().callMethod(insert, { title, organizationId }, cb);
   },
-  update() {
-    const { sectionId } = this.getData();
-
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
     if (!this._id) return;
+
+    const { sectionId } = viewmodel.getData();
 
     if (!sectionId) {
       this.modal().setError('Book section is required!');
@@ -79,13 +55,6 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    const { selectedBookSectionId:sectionId } = this.data();
-    return { sectionId };
-  },
-  events: {
-    'focus input'() {
-      this.bookSection('');
-      this.selectedBookSectionId('');
-    }
+    return this.child().getData();
   }
 });

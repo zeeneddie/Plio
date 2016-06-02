@@ -1,0 +1,10 @@
+<template name="OwnerField">
+  <div class="dropdown">
+    <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner, focusout: update, throttle: 300"}} />
+    <div class="dropdown-menu dropdown-menu-full">
+      {{#each items}}
+        <a class="dropdown-item pointer" {{b "click: select(this), text: userFullNameOrEmail(this)"}}></a>
+      {{/each}}
+    </div>
+  </div>
+</template>

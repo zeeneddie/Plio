@@ -4,11 +4,12 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 Template.ESTitle.viewmodel({
   mixin: ['callWithFocusCheck', 'numberRegex'],
   titleText: '',
-  update(e) {
+  update(e, viewmodel) {
     this.callWithFocusCheck(e, () => {
-      const { title } = this.getData();
-      const modal = ViewModel.findOne('ModalWindow');
+      if (!this._id) return;
 
+      const { value:title } = viewmodel.getData();
+      const modal = ViewModel.findOne('ModalWindow');
       const number = this.parseNumber(title);
       const nestingLevel = (number && number[0].split('.').length) || 1;
 
@@ -16,8 +17,6 @@ Template.ESTitle.viewmodel({
         modal.setError('Maximum nesting is 4 levels. Please change your title.');
         return;
       }
-
-      if (!this._id) return;
 
       if (!title) {
         modal.setError('Title is required!');
@@ -28,7 +27,7 @@ Template.ESTitle.viewmodel({
     });
   },
   getData() {
-    const { titleText:title } = this.data();
+    const { value:title } = this.child().getData();
     return { title };
   }
 });
