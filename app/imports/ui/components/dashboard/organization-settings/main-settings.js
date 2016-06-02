@@ -3,7 +3,7 @@ import {
   insert,
   setName,
   setDefaultCurrency,
-  transferOrganization
+  createOrganizationTransfer
 } from '/imports/api/organizations/methods.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
@@ -59,13 +59,13 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Ownership of the organization "${name}" will be transfered to ${newOwnerName}`,
+      text: `Invitation to become an owner of "${name}" organization will be sent to ${newOwnerName}`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Transfer',
       closeOnConfirm: false
     }, () => {
-      this.modal().callMethod(transferOrganization, {
+      this.modal().callMethod(createOrganizationTransfer, {
         organizationId, newOwnerId
       }, (err) => {
         if (err) {
@@ -74,7 +74,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
         swal({
           title: 'Success',
-          text: 'Ownership succesfully transfered',
+          text: 'Invitation sent',
           type: 'success',
         }, () => {
           this.modal().close();

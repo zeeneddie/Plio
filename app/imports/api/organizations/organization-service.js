@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
+import { Random } from 'meteor/random';
 
 import { Organizations } from './organizations.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
@@ -11,6 +12,8 @@ import {
   UserMembership,
   UserRoles
 } from '../constants.js';
+
+import OrgNotificationsSender from './org-notifications-sender.js';
 
 
 export default OrganizationService = {
@@ -140,7 +143,7 @@ export default OrganizationService = {
     });
   },
 
-  transfer({ organizationId, newOwnerId, currOwnerId }) {
+  createTransfer({ organizationId, newOwnerId, currOwnerId }) {
     if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
         400, 'New owner already owns transferred organization'
@@ -163,27 +166,23 @@ export default OrganizationService = {
       );
     }
 
-    this.collection.update({
+    const transferId = Random.id();
+
+    new OrgNotificationsSender(organizationId).sendOwnershipInvite(newOwnerId, transferId);
+
+    return this.collection.update({
       _id: organizationId,
-      'users.userId': newOwnerId
     }, {
       $set: {
-        'users.$.role': UserMembership.ORG_OWNER
+        transfer: {
+          _id: transferId,
+          newOwnerId
+        }
       }
     });
+  },
 
-    Roles.addUsersToRoles(newOwnerId, OrgOwnerRoles, organizationId);
-
-    this.collection.update({
-      _id: organizationId,
-      'users.userId': currOwnerId
-    }, {
-      $set: {
-        'users.$.role': UserMembership.ORG_MEMBER
-      }
-    });
-
-    Roles.removeUsersFromRoles(currOwnerId, OrgOwnerRoles, organizationId);
-    Roles.addUsersToRoles(currOwnerId, OrgMemberRoles, organizationId);
+  transfer({ userId, transferId }) {
+    
   }
 };
