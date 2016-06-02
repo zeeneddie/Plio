@@ -1,3 +1,7 @@
 <template name="RKType">
-  {{> SectionField label="Risk type" items=sections section=section sectionId=type}}
+  {{> SectionField
+      label="Risk type"
+      items=sections
+      onUpdate=onUpdateCb
+      onAddSection=onAddSectionCb}}
 </template>

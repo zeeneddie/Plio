@@ -15,17 +15,16 @@ Template.OwnerField.viewmodel({
   owner: '',
   ownerId: '',
   items: [],
-  select(doc) {
-    const { _id } = doc;
-
-    this.ownerId(_id);
-
-    this.fixOwner();
-
-    this.update();
-  },
   update() {
+    this.checkSelectedOwner();
+
+    if (this.ownerId() === this.templateInstance.data.ownerId) return;
+
     return this.onUpdate(this);
+  },
+  select({ _id }) {
+    this.ownerId(_id);
+    this.fixOwner();
   },
   checkSelectedOwner() {
     if (!this.owner() && !!this.ownerId()) {

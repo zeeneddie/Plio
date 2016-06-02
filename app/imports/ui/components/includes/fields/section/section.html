@@ -4,7 +4,7 @@
       <input type="text" class="form-control" data-toggle="dropdown"
         {{b "value: section, focusout: update, attr: { placeholder: label }, throttle: 200"}}/>
       <div class="dropdown-menu dropdown-menu-full">
-        {{#each filtered}}
+        {{#each items}}
           <a class="dropdown-item pointer" {{b "text: this.title, click: section(this.title) && sectionId(this._id)"}}></a>
         {{/each}}
         <div class="dropdown-divider" {{b "if: items.count > 0"}}></div>

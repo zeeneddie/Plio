@@ -10,6 +10,10 @@ const RisksSchema = new SimpleSchema([
       type: String,
       min: 1
     },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
     owners: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id

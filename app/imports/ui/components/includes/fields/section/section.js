@@ -4,28 +4,15 @@ import { Mongo } from 'meteor/mongo';
 Template.SectionField.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing'],
   onCreated() {
-    const items = this.items();
-    const isCursor = !_.isArray(items);
-    const hasItems = isCursor ? items.count() > 0 : items.length > 0;
-
-    this.Items().remove({});
-    items.forEach(item => this.Items().insert(item));
-
-    if (!this.sectionId() && !!hasItems) {
-      const { _id, title } = isCursor ? items.fetch()[0] : items[0];
+    if (!this.sectionId() && this.items().count() > 0) {
+      const { _id, title } = this.items().fetch()[0];
       this.sectionId(_id);
       this.section(title);
     }
   },
-  items: [],
-  Items: new Mongo.Collection(null),
+  items: new Mongo.Collection(null),
   section: '',
   sectionId: '',
-  filtered() {
-    const query = this.searchObject('section', 'title');
-    const options = { sort: { title: 1 } };
-    return this.Items().find(query, options);
-  },
   sectionHintText() {
     return !!this.section() ? `Add "${this.section()}" section` : 'Start typing...';
   },
@@ -64,19 +51,20 @@ Template.SectionField.viewmodel({
       }
     };
 
-    this.parent().addNewSection(this, cb);
+    this.onAddSection(this, cb);
   },
-  update(e) {
+  update() {
     const _id = this.sectionId();
 
     if (!!_id && !this.section()) {
-      const item = this.Items().findOne({ _id });
+      const find = this.items().fetch().filter(doc => doc._id === _id);
+      const item = !!find.length > 0 && find[0];
       this.section(item.title);
     }
 
     if (_id === this.templateInstance.data.sectionId) return;
 
-    this.parent().update(e, this);
+    this.onUpdate(this);
   },
   getData() {
     const { section, sectionId } = this.data();

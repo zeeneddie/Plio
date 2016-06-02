@@ -5,25 +5,44 @@ import { RisksSections } from '/imports/api/risks-sections/risks-sections.js';
 import { insert } from '/imports/api/risks-sections/methods.js';
 
 Template.RKType.viewmodel({
-  mixin: ['collapsing', 'organization', 'modal'],
+  mixin: ['collapsing', 'organization', 'modal', 'search'],
   typeId: '',
   section() {
     const _id = this.typeId();
     const section = RisksSections.findOne({ _id });
     !!section ? section.title : '';
   },
+  sectionTitle() {
+    const child = this.child('SectionField');
+    return child && child.section();
+  },
   sections() {
-    const query = { organizationId: this.organizationId() };
+    const query = {
+      $and: [
+        {
+          ...this.searchObject('sectionTitle', 'title')
+        },
+        {
+          organizationId: this.organizationId()
+        }
+      ]
+    };
     const options = { sort: { title: 1 } };
     return RisksSections.find(query, options);
   },
-  addNewSection(viewmodel, cb) {
+  onAddSectionCb() {
+    return this.addSection.bind(this);
+  },
+  addSection(viewmodel, cb) {
     const { section:title } = viewmodel.getData();
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, { title, organizationId }, cb);
   },
-  update(e, viewmodel) {
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
     if (!this._id) return;
 
     const { sectionId } = viewmodel.getData();
