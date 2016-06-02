@@ -13,20 +13,18 @@ Template.ESImprovementPlan.viewmodel({
   targetDate: '',
   owner: '',
   reviewDates: '',
-  selectedMetric: '',
-  currentValue: '',
-  targetValue: '',
   files: [],
   isTextPresent() {
     return this.desiredOutcome() || this.files().length;
   },
   improvementPlan() {
-    return ImprovementPlans.findOne({ standardId: this.standardId() });
+    return ImprovementPlans.findOne({ documentId: this.standardId() });
   },
   insert({ ...args }, cb) {
-    const standardId = this.standardId();
+    const documentId = this.standardId();
+    const documentType = 'standard';
 
-    this.modal().callMethod(insert, { standardId, ...args }, cb);
+    this.modal().callMethod(insert, { documentId, documentType, ...args }, cb);
   },
   update({ query = {}, ...args }, options = {}, cb) {
     if (_.isFunction(options)) {
@@ -41,7 +39,7 @@ Template.ESImprovementPlan.viewmodel({
     const _id = this.improvementPlan() && this.improvementPlan()._id;
 
     const modifier = { ...args, _id, options, query };
-    
+
     this.modal().callMethod(update, modifier, cb);
   }
 });

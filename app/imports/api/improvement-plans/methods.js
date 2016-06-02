@@ -11,12 +11,18 @@ export const insert = new ValidatedMethod({
 
   validate: ImprovementPlansSchema.validator(),
 
-  run({ ...args }) {
+  run({ documentId, ...args }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create an improvement plan');
     }
 
-    return ImprovementPlansService.insert({ ...args });
+    const improvementPlan = ImprovementPlans.findOne({ documentId });
+
+    if (!!improvementPlan) {
+      throw new Meteor.Error(403, 'Improvement plan for that document already exists!');
+    }
+
+    return ImprovementPlansService.insert({ documentId, ...args });
   }
 });
 
