@@ -1,5 +1,5 @@
 Template.OrganizationSettings_Department.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
   name: '',
   isChanged() {
     let savedName = this.templateInstance.data.name;

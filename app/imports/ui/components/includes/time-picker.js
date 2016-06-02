@@ -2,7 +2,7 @@ import { TimeUnits } from '/imports/api/constants.js';
 
 
 Template.TimePicker.viewmodel({
-  mixin: 'clearableField',
+  mixin: 'callWithFocusCheck',
   timeValue: '',
   timeUnit: '',
   timeUnits() {
@@ -25,14 +25,13 @@ Template.TimePicker.viewmodel({
       (savedTimeValue !== timeValue) || (savedTimeUnit !== timeUnit)
     ]);
   },
-  onFocusOut() {
-    this.triggerChange();
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
   },
   updateTimeUnit(timeUnit) {
     this.timeUnit(timeUnit);
-    this.triggerChange();
-  },
-  triggerChange() {
     if (this.isChanged()) {
       this.onChange(this);
     }

@@ -2,7 +2,7 @@ import { PhoneTypes } from '/imports/api/constants.js';
 
 
 Template.UserEdit_PhoneNumber.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
   number: '',
   type: PhoneTypes.WORK,
   events: {
@@ -36,6 +36,9 @@ Template.UserEdit_PhoneNumber.viewmodel({
         this.onChange(this);
       });
     }
+  },
+  delete() {
+    this.onDelete(this);
   },
   getData() {
     return {

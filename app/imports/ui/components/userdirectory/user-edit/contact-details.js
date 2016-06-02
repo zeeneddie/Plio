@@ -3,7 +3,7 @@ import { CountryCodes } from '/imports/api/country-codes.js';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
-  mixin: ['collapse', 'clearableField'],
+  mixin: ['collapse', 'callWithFocusCheck'],
   isPropChanged(propName, newVal) {
     const savedVal = this.templateInstance.data[propName];
     return newVal && newVal !== savedVal;
@@ -11,10 +11,12 @@ Template.UserEdit_ContactDetails.viewmodel({
   isTextPresent() {
     return this.address() || this.skype() || this.phoneNumbers().length;
   },
-  updateAddress() {
+  updateAddress(e) {
     const address = this.getData().address;
     if (this.isPropChanged('address', address)) {
-      this.parent().updateProfile('address', address);
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateProfile('address', address);
+      });
     }
   },
   updateSkype(e) {
@@ -31,11 +33,14 @@ Template.UserEdit_ContactDetails.viewmodel({
       this.parent().updateProfile('country', country);
     }
   },
-  updatePhoneNumber(viewModel) {
-    this.parent().updatePhoneNumber(viewModel);
+  updatePhoneNumber(viewModel, cb) {
+    this.parent().updatePhoneNumber(viewModel, cb);
   },
-  addPhoneNumber(viewModel) {
-    this.parent().addPhoneNumber(viewModel);
+  addPhoneNumber(viewModel, cb) {
+    this.parent().addPhoneNumber(viewModel, cb);
+  },
+  removePhoneNumber(viewModel, cb) {
+    this.parent().removePhoneNumber(viewModel, cb);
   },
   isEditable() {
     return this.parent().isEditable();

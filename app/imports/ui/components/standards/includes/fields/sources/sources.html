@@ -14,8 +14,10 @@
         <input type="radio" name="options" autocomplete="off"> Video
       </label>
     </div>
-    <input type="text" class="form-control" placeholder="URL link"
-      {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}}>
+    {{#ClearableField field="sourceUrl"}}
+      <input type="text" class="form-control" placeholder="URL link"
+          {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
+    {{/ClearableField}}
     <div {{b "if: sourceType === 'attachment'"}}>
       {{#with sourceName}}
         {{> FileItem
@@ -31,7 +33,9 @@
             slingshotDirective='standardsAttachments'}}
       </div>
     </div>
-    <input type="text" class="form-control" placeholder="Video"
-      {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}}>
+    {{#ClearableField field="sourceUrl"}}
+      <input type="text" class="form-control" placeholder="Video"
+          {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}} />
+    {{/ClearableField}}
   {{/FormField}}
 </template>
