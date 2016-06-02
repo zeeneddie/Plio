@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NonConformitiesLayout.viewmodel({
+Template.RisksLayout.viewmodel({
   mixin: 'organization',
   _subHandlers: [],
   isReady: false,
@@ -14,8 +14,8 @@ Template.NonConformitiesLayout.viewmodel({
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('problems-sections', _id),
-        this.templateInstance.subscribe('problems', _id)
+        this.templateInstance.subscribe('risks-sections', _id),
+        this.templateInstance.subscribe('risks', _id)
       ]);
     },
     function() {

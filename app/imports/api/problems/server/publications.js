@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Problems } from '../non-conformities.js';
+import { Problems } from '../problems.js';
 import Counter from '../../counter/server.js';
 
 Meteor.publish('problems', function(organizationId) {

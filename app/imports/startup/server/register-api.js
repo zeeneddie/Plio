@@ -61,3 +61,9 @@ import '../../api/non-conformities/non-conformities.js';
 import '../../api/non-conformities/non-conformities-schema.js';
 import '../../api/non-conformities/non-conformities-service.js';
 import '../../api/non-conformities/methods.js';
+
+import '../../api/problems/server/publications.js';
+import '../../api/problems/problems.js';
+import '../../api/problems/problems-schema.js';
+import '../../api/problems/problems-service.js';
+import '../../api/problems/methods.js';
