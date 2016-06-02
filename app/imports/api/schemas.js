@@ -16,7 +16,7 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 0
+    min: 1
   }
 });
 
