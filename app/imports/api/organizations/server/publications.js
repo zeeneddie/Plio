@@ -93,3 +93,15 @@ Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
     return this.ready();
   }
 });
+
+Meteor.publish('transferredOrganization', function(transferId) {
+  const userId = this.userId;
+  if (userId) {
+    return Organizations.find({
+      'transfer._id': transferId,
+      'transfer.newOwnerId': userId
+    });
+  } else {
+    return this.ready();
+  }
+});

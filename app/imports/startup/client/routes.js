@@ -99,6 +99,16 @@ FlowRouter.route('/user-waiting', {
   }
 });
 
+FlowRouter.route('/transfer-organization/:transferId', {
+  name: 'transferOrganization',
+  triggersEnter: [checkLoggedIn],
+  action(params) {
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'TransferOrganizationPage'
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
