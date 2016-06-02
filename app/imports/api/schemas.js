@@ -55,6 +55,10 @@ export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
 });
 
+export const DocumentIdSchema = new SimpleSchema({
+  documentId: idSchemaDoc
+});
+
 export const optionsSchema = new SimpleSchema({
   options: {
     type: Object,

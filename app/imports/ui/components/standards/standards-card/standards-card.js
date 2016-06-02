@@ -50,7 +50,7 @@ Template.StandardsCard.viewmodel({
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
   improvementPlan() {
-    return ImprovementPlans.findOne({ standardId: this.standardId() });
+    return ImprovementPlans.findOne({ documentId: this.standardId() });
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');

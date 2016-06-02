@@ -193,6 +193,12 @@ const RiskFilters = [
   'deleted'
 ];
 
+const documentTypes = [
+  'standard',
+  'non-conformity',
+  'risk'
+];
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -206,5 +212,6 @@ export {
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames
+  UserRolesNames,
+  documentTypes
 };
