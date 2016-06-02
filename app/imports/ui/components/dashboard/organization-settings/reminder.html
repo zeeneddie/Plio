@@ -1,0 +1,33 @@
+<template name="OrganizationSettings_Reminder">
+  <legend>{{title}}</legend>
+  <div class="form-group form-group-inline">
+    <label class="form-control-label">Start reminding</label>
+    {{> TimePicker
+        timeValue=startValue
+        timeUnit=startUnit
+        cssClass="margin-right"
+        onChange=onChangeCb
+        type=type
+        reminderType="start"}}
+    <label class="form-control-label">before due</label>
+  </div>
+  <div class="form-group form-group-inline">
+    <label class="form-control-label">Then every</label>
+    {{> TimePicker
+        timeValue=intervalValue
+        timeUnit=intervalUnit
+        cssClass="margin-right"
+        onChange=onChangeCb
+        type=type
+        reminderType="interval"}}
+    <label class="form-control-label">until</label>
+    {{> TimePicker
+        timeValue=untilValue
+        timeUnit=untilUnit
+        cssClass="margin-right"
+        onChange=onChangeCb
+        type=type
+        reminderType="until"}}
+    <label class="form-control-label">past due</label>
+  </div>
+</template>

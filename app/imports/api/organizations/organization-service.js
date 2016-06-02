@@ -29,7 +29,7 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
-    const { ncStepTimes, ncReminders, ncGuidelines } = OrganizationDefaults;
+    const { workflowDefaults, reminders, ncGuidelines } = OrganizationDefaults;
 
     const organizationId = this.collection.insert({
       name,
@@ -39,8 +39,8 @@ export default OrganizationService = {
         userId: ownerId,
         role: UserMembership.ORG_OWNER
       }],
-      ncStepTimes,
-      ncReminders,
+      workflowDefaults,
+      reminders,
       ncGuidelines
     });
 
@@ -57,11 +57,11 @@ export default OrganizationService = {
     return organizationId;
   },
 
-  update({_id, name, currency, ncStepTimes, ncReminders, ncGuidelines}) {
+  update({_id, name, currency, workflowDefaults, reminders, ncGuidelines}) {
     return this.collection.update({_id}, {
       $set: {
         name, currency,
-        ncStepTimes, ncReminders,
+        workflowDefaults, reminders,
         ncGuidelines
       }
     });
@@ -83,18 +83,18 @@ export default OrganizationService = {
     });
   },
 
-  setStepTime({_id, ncType, timeValue, timeUnit}) {
+  setWorkflowDefaults({_id, type, timeValue, timeUnit}) {
     return this.collection.update({ _id }, {
       $set: {
-        [`ncStepTimes.${ncType}`]: {timeValue, timeUnit}
+        [`workflowDefaults.${type}`]: {timeValue, timeUnit}
       }
     });
   },
 
-  setReminder({_id, ncType, reminderType, timeValue, timeUnit}) {
+  setReminder({_id, type, reminderType, timeValue, timeUnit}) {
     return this.collection.update({ _id }, {
       $set: {
-        [`ncReminders.${ncType}.${reminderType}`]: {timeValue, timeUnit}
+        [`reminders.${type}.${reminderType}`]: {timeValue, timeUnit}
       }
     });
   },
