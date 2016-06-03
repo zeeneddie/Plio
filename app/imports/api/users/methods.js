@@ -8,7 +8,7 @@ import UserService from './user-service.js';
 import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { IdSchema, UserIdSchema } from '../schemas.js';
-import { UserRoles } from '../constants.js';
+import { UserRoles, UserMembership } from '../constants.js';
 
 export const remove = new ValidatedMethod({
   name: 'Users.remove',
@@ -203,7 +203,25 @@ const ensureUserCanChangeRoles = (userId, orgId) => {
   if (!canChangeRoles) {
     throw new Meteor.Error(
       403,
-      'User is not authorized for changing user\'s permissions in this organization'
+      'User is not authorized for changing user\'s superpowers in this organization'
+    );
+  }
+};
+
+const ensureIsNotOrgOwner = (userId, orgId) => {
+  const isOrgOwner = !!Organizations.findOne({
+    _id: orgId,
+    users: {
+      $elemMatch: {
+        userId,
+        role: UserMembership.ORG_OWNER
+      }
+    }
+  });
+
+  if (isOrgOwner) {
+    throw new Meteor.Error(
+      403, 'Organization owner\'s superpowers cannot be changed'
     );
   }
 };
@@ -216,6 +234,8 @@ export const assignRole = new ValidatedMethod({
   run({ _id, organizationId, role }) {
     ensureUserCanChangeRoles(this.userId, organizationId);
 
+    ensureIsNotOrgOwner(_id, organizationId);
+
     return Roles.addUsersToRoles(_id, role, organizationId);
   }
 });
@@ -227,6 +247,8 @@ export const revokeRole = new ValidatedMethod({
 
   run({ _id, organizationId, role }) {
     ensureUserCanChangeRoles(this.userId, organizationId);
+
+    ensureIsNotOrgOwner(_id, organizationId);
 
     return Roles.removeUsersFromRoles(_id, role, organizationId);
   }
