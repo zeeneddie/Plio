@@ -18,3 +18,5 @@ import './risks-page.html';
 import './risks-page.js';
 import './transfer-organization-page.html';
 import './transfer-organization-page.js';
+import './non-conformities-page.html';
+import './non-conformities-page.js';

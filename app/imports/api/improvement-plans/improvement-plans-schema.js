@@ -1,9 +1,15 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, StandardIdSchema } from '../schemas.js';
+import { BaseEntitySchema, DocumentIdSchema } from '../schemas.js';
+import { documentTypes } from '../constants.js';
 
 
-const requiredSchema = new SimpleSchema([StandardIdSchema]);
+const requiredSchema = new SimpleSchema([DocumentIdSchema, {
+  documentType: {
+    type: String,
+    allowedValues: documentTypes
+  }
+}]);
 
 const optionalSchema = new SimpleSchema({
   'desiredOutcome': {
@@ -28,18 +34,6 @@ const optionalSchema = new SimpleSchema({
   'owner': {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  'selectedMetric': {
-    type: String,
-    optional: true
-  },
-  'currentValue': {
-    type: String,
-    optional: true
-  },
-  'targetValue': {
-    type: String,
     optional: true
   },
   'files': {

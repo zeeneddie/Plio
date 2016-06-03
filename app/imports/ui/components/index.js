@@ -13,3 +13,4 @@ import './standards';
 import './userdirectory';
 import './quill-editor';
 import './risks';
+import './non-conformities';
