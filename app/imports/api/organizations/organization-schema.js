@@ -29,36 +29,42 @@ const orgUserSchema = new SimpleSchema({
   }
 });
 
-const ncStepTimesSchema = new SimpleSchema({
-  minor: {
+const workflowDefaultsSchema = new SimpleSchema({
+  minorNc: {
     type: TimePeriodSchema
   },
-  major: {
+  majorNc: {
     type: TimePeriodSchema
   },
-  critical: {
+  criticalNc: {
     type: TimePeriodSchema
   }
 });
 
-const ncReminderSchema = new SimpleSchema({
+const reminderSchema = new SimpleSchema({
+  start: {
+    type: TimePeriodSchema
+  },
   interval: {
     type: TimePeriodSchema
   },
-  pastDue: {
+  until: {
     type: TimePeriodSchema
   }
 });
 
-const ncRemindersSchema = new SimpleSchema({
-  minor: {
-    type: ncReminderSchema
+const remindersSchema = new SimpleSchema({
+  minorNc: {
+    type: reminderSchema
   },
-  major: {
-    type: ncReminderSchema
+  majorNc: {
+    type: reminderSchema
   },
-  critical: {
-    type: ncReminderSchema
+  criticalNc: {
+    type: reminderSchema
+  },
+  improvementPlan: {
+    type: reminderSchema
   }
 });
 
@@ -88,12 +94,12 @@ const OrganizationEditableFields = {
     min: 1,
     max: 40
   },
-  ncStepTimes: {
-    type: ncStepTimesSchema,
+  workflowDefaults: {
+    type: workflowDefaultsSchema,
     optional: true
   },
-  ncReminders: {
-    type: ncRemindersSchema,
+  reminders: {
+    type: remindersSchema,
     optional: true
   },
   ncGuidelines: {

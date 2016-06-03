@@ -37,11 +37,11 @@ Template.OrganizationSettings.viewmodel({
   ownerId() {
     return this.organization().ownerId();
   },
-  stepTimes() {
-    return this.organization().ncStepTimes;
+  workflowDefaults() {
+    return this.organization().workflowDefaults;
   },
   reminders() {
-    return this.organization().ncReminders;
+    return this.organization().reminders;
   },
   guidelines() {
     return this.organization().ncGuidelines;

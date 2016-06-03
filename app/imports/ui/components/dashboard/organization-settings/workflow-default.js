@@ -1,4 +1,4 @@
-Template.OrganizationSettings_NcStepTime.viewmodel({
+Template.OrganizationSettings_WorkflowDefault.viewmodel({
   timeValue: '',
   timeUnit: '',
   autorun() {

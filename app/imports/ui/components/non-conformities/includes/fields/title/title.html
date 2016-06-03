@@ -1,3 +1,5 @@
 <template name="NCTitle">
-  {{> InputField label="Non-conformity name" value=title}}
+  {{#FormField label="Non-conformity name"}}
+    {{> InputField value=titleText onUpdate=onUpdateCb}}
+  {{/FormField}}
 </template>

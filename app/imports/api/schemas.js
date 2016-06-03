@@ -16,7 +16,7 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 0
+    min: 1
   }
 });
 
@@ -53,6 +53,10 @@ export const StandardIdSchema = new SimpleSchema({
 
 export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
+});
+
+export const DocumentIdSchema = new SimpleSchema({
+  documentId: idSchemaDoc
 });
 
 export const optionsSchema = new SimpleSchema({

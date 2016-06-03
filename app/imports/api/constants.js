@@ -65,48 +65,74 @@ const getDefaultGuideline = (ncType) => {
 };
 
 const OrganizationDefaults = {
-  ncStepTimes: {
-    minor: {
+  workflowDefaults: {
+    minorNc: {
       timeValue: 1,
       timeUnit: TimeUnits.DAYS
     },
-    major : {
+    majorNc: {
       timeValue: 2,
       timeUnit: TimeUnits.DAYS
     },
-    critical: {
+    criticalNc: {
       timeValue: 3,
       timeUnit: TimeUnits.DAYS
     }
   },
-  ncReminders: {
-    minor: {
+  reminders: {
+    minorNc: {
+      start: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
       interval : {
         timeValue: 1,
         timeUnit: TimeUnits.DAYS
       },
-      pastDue: {
+      until: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
       }
     },
-    major: {
+    majorNc: {
+      start: {
+        timeValue: 2,
+        timeUnit: TimeUnits.DAYS
+      },
       interval: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
       },
-      pastDue: {
+      until: {
         timeValue: 4,
         timeUnit: TimeUnits.DAYS
       }
     },
-    critical: {
-      pastDue: {
-        timeValue: 6,
+    criticalNc: {
+      start: {
+        timeValue: 3,
         timeUnit: TimeUnits.DAYS
       },
       interval: {
         timeValue: 3,
+        timeUnit: TimeUnits.DAYS
+      },
+      until: {
+        timeValue: 6,
+        timeUnit: TimeUnits.DAYS
+      }
+    },
+    improvementPlan: {
+      start: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
+      interval: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
+      until: {
+        timeValue: 2,
         timeUnit: TimeUnits.DAYS
       }
     }
@@ -175,6 +201,12 @@ const ProblemFilters = [
   'deleted'
 ];
 
+const documentTypes = [
+  'standard',
+  'non-conformity',
+  'risk'
+];
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -189,5 +221,6 @@ export {
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames
+  UserRolesNames,
+  documentTypes
 };

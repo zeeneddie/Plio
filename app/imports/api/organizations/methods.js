@@ -139,11 +139,18 @@ export const setDefaultCurrency = new ValidatedMethod({
   }
 });
 
-export const setStepTime = new ValidatedMethod({
-  name: 'Organizations.setStepTime',
+export const setWorkflowDefaults = new ValidatedMethod({
+  name: 'Organizations.setWorkflowDefaults',
 
   validate: new SimpleSchema([
-    IdSchema, ncTypeSchema, TimePeriodSchema
+    IdSchema,
+    TimePeriodSchema,
+    {
+      type: {
+        type: String,
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc']
+      }
+    }
   ]).validator(),
 
   run(doc) {
@@ -160,7 +167,7 @@ export const setStepTime = new ValidatedMethod({
       );
     }
 
-    return OrganizationService.setStepTime(doc);
+    return OrganizationService.setWorkflowDefaults(doc);
   }
 });
 
@@ -168,11 +175,16 @@ export const setReminder = new ValidatedMethod({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
-    IdSchema, ncTypeSchema, TimePeriodSchema,
+    IdSchema,
+    TimePeriodSchema,
     {
+      type: {
+        type: String,
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan']
+      },
       reminderType: {
         type: String,
-        allowedValues: ['interval', 'pastDue']
+        allowedValues: ['start', 'interval', 'until']
       }
     }
   ]).validator(),

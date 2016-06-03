@@ -9,31 +9,24 @@ Template.Datepicker.viewmodel({
       autoclose: true
     });
 
-    !!this.date() ? this.datepicker.datepicker('setDate', new Date(this.date())) : this.datepicker.datepicker('setDate', new Date());
+    if (this.date()) {
+      this.datepicker.datepicker('setDate', new Date(this.date()));
+    } else if (!this.date() && this.defaultDate()) {
+      this.datepicker.datepicker('setDate', new Date());
+    }
 
     this.datepicker.on('changeDate', (e) => {
       this.update();
     });
   },
-  isEditable: false,
   label: 'Date',
+  placeholder: 'Date',
   sm: 8,
   date: '',
+  defaultDate: true,
+  onUpdate: () => {},
   update() {
-    const update = ({ ...args }) => {
-      !!(this.parent && this.parent()) ? this.parent().update({ ...args }, this.destroy()) : this.parentVM().update({ ...args }, this.destroy());
-    }
-
-    if (this.isEditable()) {
-      const { date } = this.getData();
-
-      if (!this._id) {
-        update({ date });
-      } else {
-        const _id = this._id();
-        update({ _id, date });
-      }
-    }
+    this.onUpdate(this, () => this.destroy());
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);

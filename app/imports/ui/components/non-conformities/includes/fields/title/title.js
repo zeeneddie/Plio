@@ -1,24 +1,24 @@
 import { Template } from 'meteor/templating';
 
 Template.NCTitle.viewmodel({
-  mixin: 'clearableField',
-  title: '',
-  update(e, viewmodel) {
-    this.callWithFocusCheck(e, () => {
-      if (!this._id) return;
+  titleText: '',
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
+    if (!this._id) return;
 
-      const { value:title } = viewmodel.getData();
+    const { value:title } = viewmodel.getData();
 
-      if (!title) {
-        ViewModel.findOne('ModalWindow').setError('Title is required!');
-        return;
-      }
+    if (!title) {
+      ViewModel.findOne('ModalWindow').setError('Title is required!');
+      return;
+    }
 
-      this.parent().update({ title });
-    });
+    this.parent().update({ title });
   },
   getData() {
-    const { value:title } = this.child().getData();
+    const { value:title } = this.child('InputField').getData();
     return { title };
   }
 });
