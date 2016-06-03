@@ -178,7 +178,7 @@ ViewModel.mixin({
         context['onDelete'] = this.onDeleteCb();
       }
 
-      Blaze.renderWithData(
+      return Blaze.renderWithData(
         Template[template],
         context,
         this.forms[0]
