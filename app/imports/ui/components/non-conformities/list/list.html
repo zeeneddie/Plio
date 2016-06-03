@@ -14,8 +14,8 @@
     </form>
 
     <div class="list-group list-group-accordion">
-      {{#each magnitudes}}
-        {{> ListItem template='NCSectionItem' title=title _id=_id}}
+      {{#each _magnitude}}
+        {{> ListItem template='NCSectionItem' title=this.name magnitude=this.value}}
       {{/each}}
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>

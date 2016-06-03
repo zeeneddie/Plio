@@ -5,7 +5,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, ProblemFilters } from '/imports/api/constants.js';
+import { UserRoles, StandardFilters, RiskFilters, ProblemFilters, NCTypes } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -318,6 +318,11 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
       const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
       FlowRouter.go('standard', params, queryParams);
+    },
+    goToNC(nonconformityId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
+      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      FlowRouter.go('nonconformity', params, queryParams);
     }
   },
   mobile: {
@@ -354,7 +359,7 @@ ViewModel.mixin({
   },
   nonconformity: {
     NCId() {
-      return FlowRouter.getParam('riskId');
+      return FlowRouter.getParam('nonconformityId');
     },
     activeNCFilter() {
       return FlowRouter.getQueryParam('by') || ProblemFilters[0];
@@ -370,6 +375,12 @@ ViewModel.mixin({
   utils: {
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+  },
+  magnitude: {
+    _magnitude() {
+      this.load({ mixin: 'utils' });
+      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   }
 });
