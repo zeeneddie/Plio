@@ -268,7 +268,7 @@ export default OrganizationService = {
   },
 
   cancelTransfer({ userId, organizationId }) {
-    const isOrgMember = !!this.collection.findOne({
+    const isOrgOwner = !!this.collection.findOne({
       _id: organizationId,
       users: {
         $elemMatch: {
@@ -278,7 +278,7 @@ export default OrganizationService = {
       }
     });
 
-    if (!isOrgMember) {
+    if (!isOrgOwner) {
       throw new Meteor.Error(
         400, 'Only organization owner can cancel transfers'
       );
