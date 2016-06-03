@@ -19,6 +19,17 @@ Template.UsersDetails.viewmodel({
       return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
     }
   },
+  orgOwnerLabel() {
+    const userId = this.user()._id;
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
+    }
+  },
   superpowers(user) {
     if (this.organization()) {
       const orgId = this.organization()._id;
