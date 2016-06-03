@@ -155,7 +155,10 @@ export default OrganizationService = {
       users: {
         $elemMatch: {
           userId: newOwnerId,
-          role: UserMembership.ORG_MEMBER
+          role: UserMembership.ORG_MEMBER,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
         }
       }
     });
@@ -182,7 +185,69 @@ export default OrganizationService = {
     });
   },
 
-  transfer({ userId, transferId }) {
-    
+  transfer({ newOwnerId, transferId }) {
+    const organization = this.collection.findOne({
+      'transfer._id': transferId,
+      'transfer.newOwnerId': newOwnerId,
+    });
+
+    if (!organization) {
+      throw new Meteor.Error(
+        400,
+        'Current owner canceled transfer or organization does not exist'
+      );
+    }
+
+    const organizationId = organization._id;
+    const currOwnerId = organization.ownerId();
+
+    if (currOwnerId === newOwnerId) {
+      throw new Meteor.Error(
+        400, 'New owner already owns transferred organization'
+      );
+    }
+
+    const isOrgMember = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId: newOwnerId,
+          role: UserMembership.ORG_MEMBER,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
+        }
+      }
+    });
+
+    if (!isOrgMember) {
+      throw new Meteor.Error(
+        400, 'New owner must be a member of transferred organization'
+      );
+    }
+
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': newOwnerId
+    }, {
+      $set: {
+        'users.$.role': UserMembership.ORG_OWNER
+      }
+    });
+
+    Roles.removeUsersFromRoles(currOwnerId, OrgMemberRoles, organizationId);
+    Roles.addUsersToRoles(newOwnerId, OrgOwnerRoles, organizationId);
+
+    this.collection.update({
+      _id: organizationId,
+      'users.userId': currOwnerId
+    }, {
+      $set: {
+        'users.$.role': UserMembership.ORG_MEMBER
+      }
+    });
+
+    Roles.removeUsersFromRoles(currOwnerId, OrgOwnerRoles, organizationId);
+    Roles.addUsersToRoles(currOwnerId, OrgMemberRoles, organizationId);
   }
 };

@@ -16,6 +16,7 @@ Template.TransferOrganizationPage.viewmodel({
   isTransferPerfomed: false,
   isNoOrganization: true,
   isReady: false,
+  error: '',
   onCreated(template) {
     template.autorun(() => {
       this.isReady(false);
@@ -32,6 +33,9 @@ Template.TransferOrganizationPage.viewmodel({
 
           if (!organization) {
             this.isReady(true);
+            this.error(
+              'Current organization owner canceled transfer or organization does not exist'
+            );
             return;
           } else {
             this.organizationId(organization._id);
@@ -41,7 +45,7 @@ Template.TransferOrganizationPage.viewmodel({
             this.isReady(true);
 
             if (err) {
-              Utils.showError(err.reason);
+              this.error(err.reason);
             } else {
               this.isTransfered(true);
             }

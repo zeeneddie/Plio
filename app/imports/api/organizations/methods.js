@@ -458,7 +458,7 @@ export const transferOrganization = new ValidatedMethod({
     }
 
     return OrganizationService.transfer({
-      userId,
+      newOwnerId: userId,
       transferId,
     });
   }

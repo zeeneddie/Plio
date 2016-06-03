@@ -3,7 +3,7 @@
     {{#if isTransfered}}
       <p>Transfer complete. You are an owner of "{{organizationName}}" organization now.</p>
     {{else}}
-      <p>Error. Current organization owner canceled transfer or organization does not exist</p>
+      <p>Error. {{#if error}} {{error}} {{else}} Unknown error {{/if}}</p>
     {{/if}}
   {{else}}
     {{> Preloader size=3}}
