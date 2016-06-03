@@ -1,5 +1,9 @@
 <template name="ESIPTargetDate">
   {{#FormField label="Target date for desired outcome" sm=7}}
-    {{> Datepicker placeholder="Target date for desired outcome" isEditable=true date=getDate}}
+    {{> Datepicker
+        placeholder=getTodayDate
+        date=getDate
+        onUpdate=onUpdateCb
+        defaultDate=false}}
   {{/FormField}}
 </template>

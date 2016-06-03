@@ -7,10 +7,16 @@ Template.ESIPReviewDates.viewmodel({
   addReviewDate() {
     this.addForm(
       'Datepicker',
-      { class: 'margin-bottom', placeholder: 'Review date', isEditable: true, parentVM: this }
+      { class: 'margin-bottom', placeholder: this.renderDate(new Date()), defaultDate: false, onUpdate: this.update.bind(this) }
     );
   },
-  update({ _id, date }, cb) {
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel, cb) {
+    const { date } = viewmodel.getData();
+    const _id = viewmodel._id && viewmodel._id();
+
     if (_id) {
       this.set({ _id, date }, cb);
     } else {
