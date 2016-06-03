@@ -204,7 +204,7 @@ export default OrganizationService = {
     if (!organization) {
       throw new Meteor.Error(
         400,
-        'Current owner canceled transfer or organization does not exist'
+        'Current organization owner canceled transfer or it is already completed'
       );
     }
 

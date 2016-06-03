@@ -1,11 +1,13 @@
 <template name="TransferOrganizationPage">
-  {{#unless showLoader}}
-    {{#if isTransfered}}
-      <p>Transfer complete. You are an owner of "{{organizationName}}" organization now.</p>
-    {{else}}
-      <p>Error. {{#if error}} {{error}} {{else}} Unknown error {{/if}}</p>
-    {{/if}}
+  {{#if isTransfered}}
+    <p>Transfer complete. You are an owner of "{{orgName}}" organization now.</p>
+    <p><a href="{{pathFor 'dashboardPage' orgSerialNumber=orgSerialNumber}}">Go to dashboard</a></p>
   {{else}}
-    {{> Preloader size=3}}
-  {{/unless}}
+    {{#if error}}
+      <p class="text-danger">Error. {{error}}</p>
+      <p><a href="{{pathFor 'hello'}}">Go to my organization</a></p>
+    {{else}}
+      {{> Preloader size=3}}
+    {{/if}}
+  {{/if}}
 </template>

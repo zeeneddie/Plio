@@ -11,17 +11,15 @@ import Utils from '/imports/core/utils';
 Template.TransferOrganizationPage.viewmodel({
   mixin: ['router'],
   transferId: '',
-  organizationId: '',
+  orgName: '',
+  orgSerialNumber: '',
   isTransfered: false,
-  isTransferPerfomed: false,
-  isNoOrganization: true,
-  isReady: false,
   error: '',
   onCreated(template) {
     template.autorun(() => {
-      this.isReady(false);
+      this.isTransfered(false);
 
-      let transferId = FlowRouter.getParam('transferId');
+      const transferId = FlowRouter.getParam('transferId');
       this.transferId(transferId);
 
       template.subscribe('transferredOrganization', transferId, {
@@ -32,18 +30,17 @@ Template.TransferOrganizationPage.viewmodel({
           });
 
           if (!organization) {
-            this.isReady(true);
             this.error(
-              'Current organization owner canceled transfer or organization does not exist'
+              'Current organization owner canceled transfer or it is already completed'
             );
             return;
           } else {
-            this.organizationId(organization._id);
+            const { name, serialNumber } = organization;
+            this.orgName(name);
+            this.orgSerialNumber(serialNumber);
           }
 
           transferOrganization.call({ transferId }, (err) => {
-            this.isReady(true);
-
             if (err) {
               this.error(err.reason);
             } else {
@@ -53,16 +50,5 @@ Template.TransferOrganizationPage.viewmodel({
         }
       });
     });
-  },
-  organization() {
-    return Organizations.findOne({
-      _id: this.organizationId()
-    });
-  },
-  organizationName() {
-    return this.organization().name;
-  },
-  showLoader() {
-    return !this.templateInstance.subscriptionsReady() && !this.isReady();
   }
 });
