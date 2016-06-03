@@ -144,6 +144,15 @@ export default OrganizationService = {
   },
 
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
+    const isOnTransfer = !!this.collection.findOne({
+      _id: organizationId,
+      transfer: { $exists: true }
+    });
+
+    if (isOnTransfer) {
+      throw new Meteor.Error(400, 'Organization is already on transfer');
+    }
+
     if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
         400, 'New owner already owns transferred organization'
@@ -179,7 +188,8 @@ export default OrganizationService = {
       $set: {
         transfer: {
           _id: transferId,
-          newOwnerId
+          newOwnerId,
+          createdAt: new Date()
         }
       }
     });
@@ -249,5 +259,35 @@ export default OrganizationService = {
 
     Roles.removeUsersFromRoles(currOwnerId, OrgOwnerRoles, organizationId);
     Roles.addUsersToRoles(currOwnerId, OrgMemberRoles, organizationId);
+
+    this.collection.update({
+      _id: organizationId,
+    }, {
+      $unset: { transfer: '' }
+    });
+  },
+
+  cancelTransfer({ userId, organizationId }) {
+    const isOrgMember = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (!isOrgMember) {
+      throw new Meteor.Error(
+        400, 'Only organization owner can cancel transfers'
+      );
+    }
+
+    return this.collection.update({
+      _id: organizationId,
+    }, {
+      $unset: { transfer: '' }
+    });
   }
 };

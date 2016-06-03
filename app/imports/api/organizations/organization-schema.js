@@ -117,6 +117,9 @@ const transferSchema = new SimpleSchema({
   newOwnerId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
+  },
+  createdAt: {
+    type: Date
   }
 });
 

@@ -463,3 +463,20 @@ export const transferOrganization = new ValidatedMethod({
     });
   }
 });
+
+export const cancelOrganizationTransfer = new ValidatedMethod({
+  name: 'Organizations.cancelTransfer',
+
+  validate: OrganizationIdSchema.validator(),
+
+  run({ organizationId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot cancel transfers'
+      );
+    }
+
+    return OrganizationService.cancelTransfer({ userId, organizationId });
+  }
+});

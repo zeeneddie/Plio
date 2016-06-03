@@ -3,7 +3,8 @@ import {
   insert,
   setName,
   setDefaultCurrency,
-  createOrganizationTransfer
+  createOrganizationTransfer,
+  cancelOrganizationTransfer
 } from '/imports/api/organizations/methods.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
@@ -76,8 +77,34 @@ Template.OrganizationSettings_MainSettings.viewmodel({
           title: 'Success',
           text: 'Invitation sent',
           type: 'success',
-        }, () => {
-          this.modal().close();
+        });
+      });
+    });
+  },
+  cancelOrgTransfer() {
+    if (!this.isEditable()) return;
+
+    const { _id:organizationId, name } = this.organization();
+
+    swal({
+      title: 'Are you sure?',
+      text: `Transfer of "${name}" organization will be canceled`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      closeOnConfirm: false
+    }, () => {
+      this.modal().callMethod(cancelOrganizationTransfer, {
+        organizationId
+      }, (err) => {
+        if (err) {
+          return;
+        }
+
+        swal({
+          title: 'Success',
+          text: 'Transfer canceled',
+          type: 'success',
         });
       });
     });
