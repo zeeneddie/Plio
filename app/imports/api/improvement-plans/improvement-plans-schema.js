@@ -1,13 +1,13 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, DocumentIdSchema } from '../schemas.js';
-import { documentTypes } from '../constants.js';
+import { DocumentTypes } from '../constants.js';
 
 
 const requiredSchema = new SimpleSchema([DocumentIdSchema, {
   documentType: {
     type: String,
-    allowedValues: documentTypes
+    allowedValues: DocumentTypes
   }
 }]);
 

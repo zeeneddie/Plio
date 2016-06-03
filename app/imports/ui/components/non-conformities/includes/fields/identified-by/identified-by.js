@@ -25,7 +25,7 @@ Template.NCIdentifiedBy.viewmodel({
     return this.parent().update({ identifiedBy });
   },
   getData() {
-    const { ownerId:identifiedBy } = this.child('OwnerField').getData();
+    const { owner:identifiedBy } = this.child('OwnerField').getData();
     return { identifiedBy };
   }
 });

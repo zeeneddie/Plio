@@ -201,7 +201,12 @@ const ProblemFilters = [
   'deleted'
 ];
 
-const documentTypes = [
+const ProblemTypes = [
+  'non-conformity',
+  'risk'
+];
+
+const DocumentTypes = [
   'standard',
   'non-conformity',
   'risk'
@@ -218,9 +223,10 @@ export {
   StandardFilters,
   RiskFilters,
   ProblemFilters,
+  ProblemTypes,
   TimeUnits,
   UserMembership,
   UserRoles,
   UserRolesNames,
-  documentTypes
+  DocumentTypes
 };

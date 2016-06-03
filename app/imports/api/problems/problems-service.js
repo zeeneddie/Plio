@@ -4,8 +4,26 @@ import { Problems } from './problems.js';
 export default {
   collection: Problems,
 
-  insert({ ...args }) {
-    return this.collection.insert(args);
+  insert({ organizationId, type, ...args }) {
+    const lastProblem = this.collection.findOne({
+      organizationId,
+      type,
+      serialNumber: {
+        $type: 16 // 32-bit integer
+      }
+    }, {
+      sort: {
+        serialNumber: -1
+      }
+    });
+
+    const typeAbbreviation = type === 'non-conformity' ? 'NC' : 'RK';
+
+    const serialNumber = lastProblem ? lastProblem.serialNumber + 1 : 1;
+
+    const sequentialId = typeAbbreviation + serialNumber;
+
+    return this.collection.insert({ organizationId, serialNumber, sequentialId, type, ...args });
   },
 
   update({ _id, query = {}, options = {}, ...args }) {

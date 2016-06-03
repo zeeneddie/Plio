@@ -366,5 +366,10 @@ ViewModel.mixin({
       const _id = this.NCId();
       return Problems.findOne({ _id });
     }
+  },
+  utils: {
+    capitalize(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
   }
 });

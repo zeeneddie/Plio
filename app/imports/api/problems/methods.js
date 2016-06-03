@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import ProblemsService from './problems-service.js';
-import { ProblemsSchema } from './problems-schema.js';
+import { ProblemsSchema, requiredFields } from './problems-schema.js';
 import { Problems } from './problems.js';
 import {
   IdSchema,
@@ -14,7 +14,7 @@ import {
 export const insert = new ValidatedMethod({
   name: 'Problems.insert',
 
-  validate: ProblemsSchema.validator(),
+  validate: requiredFields.validator(),
 
   run({ ...args }) {
     const userId = this.userId;

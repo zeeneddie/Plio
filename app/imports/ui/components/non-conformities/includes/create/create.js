@@ -9,7 +9,7 @@ Template.CreateNC.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
+        const errorMessage = `The new non-conformity cannot be created without a ${key}. Please enter a ${key} for your non-conformity.`;
         this.modal().setError(errorMessage);
         return;
       }
@@ -17,23 +17,25 @@ Template.CreateNC.viewmodel({
 
     this.insert(data);
   },
-  insert({ title, typeId, owner }) {
+  insert({ title, identifiedAt, identifiedBy, magnitude }) {
     const organizationId = this.organizationId();
-    const owners = [owner];
+    const type = 'non-conformity';
 
     const args = {
       title,
-      typeId,
-      owners,
+      identifiedBy,
+      identifiedAt,
+      magnitude,
+      type,
       organizationId
     };
 
     this.modal().callMethod(insert, args, (err, _id) => {
       if (err) {
-        return;
+        swal('Oops... Something went wrong!', err.reason, 'error');
+      } else {
+        this.modal().close();
       }
-
-      this.modal().close();
     });
   },
   getData() {
