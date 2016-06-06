@@ -34,12 +34,17 @@ const optionalFields = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
+  description: {
+    type: String,
+    optional: true
+  }
 });
 
 const ProblemsSchema = new SimpleSchema([
   OrganizationIdSchema,
   BaseEntitySchema,
   requiredFields,
+  optionalFields,
   {
     serialNumber: {
       type: Number,
@@ -54,7 +59,6 @@ const ProblemsSchema = new SimpleSchema([
 
 const ProblemsUpdateSchema = new SimpleSchema([
   optionalFields,
-  OrganizationIdSchema,
   {
     type: {
       type: String,

@@ -3,15 +3,14 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
   selectedBookSectionId: '',
   section() {
-    const child = this.child('SectionField');
-    return child && child.section();
+    const child = this.child('Dropdown');
+    return child && child.value();
   },
   bookSections() {
     const query = {
@@ -27,22 +26,15 @@ Template.ESBookSection.viewmodel({
     const options = { sort: { title: 1 } };
     return StandardsBookSections.find(query, options);
   },
-  onAddSectionCb() {
-    return this.addSection.bind(this);
-  },
-  addSection(viewmodel, cb) {
-    const { section:title } = viewmodel.getData();
-    const organizationId = this.organizationId();
-
-    this.modal().callMethod(insert, { title, organizationId }, cb);
-  },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    if (!this._id) return;
+    const { _id:sectionId } = viewmodel.getData();
 
-    const { sectionId } = viewmodel.getData();
+    this.selectedBookSectionId(sectionId);
+
+    if (!this._id) return;
 
     if (!sectionId) {
       this.modal().setError('Book section is required!');
@@ -55,6 +47,7 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    return this.child('SectionField').getData();
+    const { selectedBookSectionId:sectionId } = this.data();
+    return { sectionId };
   }
 });

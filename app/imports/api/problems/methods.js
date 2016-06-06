@@ -32,7 +32,7 @@ export const update = new ValidatedMethod({
   name: 'Problems.update',
 
   validate: new SimpleSchema([
-    IdSchema, ProblemsUpdateSchema, optionsSchema
+    IdSchema, ProblemsUpdateSchema, OrganizationIdSchema, optionsSchema
   ]).validator(),
 
   run({_id, options, query, organizationId, ...args }) {

@@ -5,16 +5,17 @@ import { update } from '/imports/api/problems/methods.js';
 
 Template.EditNC.viewmodel({
   mixin: ['organization', 'modal'],
-  autorun() {
+  onCreated() {
+    this.load(this.NC());
+  },
+  NC() {
     const organizationId = this.organizationId();
     const _id = this._id();
     const type = 'non-conformity';
 
     const query = { organizationId, _id, type };
 
-    const NC = Problems.findOne(query);
-
-    this.load(NC);
+    return Problems.findOne(query);
   },
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
