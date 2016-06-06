@@ -37,6 +37,9 @@ Template.UserEdit_PhoneNumber.viewmodel({
       });
     }
   },
+  deleteFn() {
+    return this.delete.bind(this);
+  },
   delete() {
     this.onDelete(this);
   },

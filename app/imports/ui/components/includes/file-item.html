@@ -1,15 +1,12 @@
 <template name="FileItem">
   <div class="btn-group file-item">
     <div class="button-wrapper">
-      <button type="button" class="btn btn-secondary" 
+      <button type="button" class="btn btn-secondary"
           {{b "class: {no-pointer-events: isNotUploaded}, text: name"}}>
       </button>
       <div class="uploading-file" {{b "if: isNotUploaded"}}>
       </div>
     </div>
-    <button type="button" class="btn btn-secondary"
-        {{b "click: onRemoveClick"}}>
-      <i class="fa fa-times-circle no-margin"></i>
-    </button>
-  </div> 
+    {{> DeleteButton smallIcon=true onClick=removeClickFn}}
+  </div>
 </template>

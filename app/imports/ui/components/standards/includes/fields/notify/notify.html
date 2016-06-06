@@ -13,10 +13,7 @@
           <div class="btn-group">
             <button class="btn btn-secondary" type="button" disabled=""
                 {{b "text: userFullNameOrEmail(this)"}}></button>
-            <button class="btn btn-secondary" type="button"
-                {{b "click: removeFromNotifyList(this._id)"}}>
-              <i class="fa fa-times-circle"></i>
-            </button>
+            {{> DeleteButton smallIcon=true onClick=removeFromNotifyListFn}}
           </div>
         {{/each}}
         <div class="input-group-typeahead">
