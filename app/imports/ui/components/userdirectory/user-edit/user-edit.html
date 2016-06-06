@@ -19,7 +19,8 @@
 
     {{> UserEdit_Roles
         userRoles=userRoles
-        label=rolesLabel}}
+        label=rolesLabel
+        orgOwnerLabel=orgOwnerLabel}}
 
     {{#if isDeleteButtonEnabled}}
       {{> ModalDeleteButton onClick=removeUserFn}}

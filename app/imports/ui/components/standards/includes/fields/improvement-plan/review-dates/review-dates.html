@@ -1,7 +1,12 @@
 <template name="ESIPReviewDates">
   {{#FormField label="Improvement plan review dates" sm=7}}
     {{#each reviewDates}}
-      {{> Datepicker placeholder="Review date" class="margin-bottom" isEditable=true _id=this._id date=(renderDate this.date)}}
+      {{> Datepicker
+          placeholder="Review date"
+          class="margin-bottom"
+          _id=this._id
+          date=(renderDate this.date)
+          onUpdate=onUpdateCb}}
     {{/each}}
     <div {{b "ref: forms"}}></div>
     <button type="button" class="btn btn-primary margin-bottom-none"

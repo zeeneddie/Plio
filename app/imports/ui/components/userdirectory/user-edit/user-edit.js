@@ -122,6 +122,17 @@ Template.UserEdit.viewmodel({
       return `${userName}'s superpowers for ${orgName}:`;
     }
   },
+  orgOwnerLabel() {
+    const userId = this.userId();
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
+    }
+  },
   isRolesEditable() {
     return Roles.userIsInRole(
       Meteor.userId(),
