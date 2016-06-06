@@ -30,7 +30,7 @@ Template.ESBookSection.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { _id:sectionId } = viewmodel.getData();
+    const { selected:sectionId } = viewmodel.getData();
 
     this.selectedBookSectionId(sectionId);
 

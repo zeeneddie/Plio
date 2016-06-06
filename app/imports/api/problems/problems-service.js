@@ -34,6 +34,8 @@ export default {
       options['$set'] = args;
     }
 
+    console.log(query, options);
+
     return this.collection.update(query, options);
   },
 

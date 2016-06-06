@@ -48,9 +48,11 @@
             <div class="list-group-item" {{b "if: this.standards"}}>
               <p class="list-group-item-text">Standards</p>
               {{#each this.standards}}
-                <h4 class="list-group-item-heading">
-                  <a {{b "text: linkedStandard(this).title, attr: { href: linkedStandard(this).href }"}}></a>
-                </h4>
+                {{#with linkedStandard this}}
+                  <h4 class="list-group-item-heading">
+                    <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+                  </h4>
+                {{/with}}
               {{/each}}
             </div>
 

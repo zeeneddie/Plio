@@ -1,21 +1,17 @@
 <template name="NCStandards">
   {{#FormField label="Standard(s)"}}
-    <div class="input-group dropdown">
-      <input class="form-control" data-toggle="dropdown" placeholder="Link to standard"
-        {{b "value: text, focusout: fixSection, throttle: 200"}}/>
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-secondary btn-icon">
-          <i class="fa fa-times-circle" {{b "if: templateInstance.subscriptionsReady"}}></i>
-          <i class="fa fa-spinner" {{b "if: !templateInstance.subscriptionsReady"}}></i>
-        </button>
-      </span>
-      <div class="dropdown-menu dropdown-menu-full">
-        {{#each standards}}
-          <a class="dropdown-item pointer"
-            {{b "text: this.title, click: select(this), class: { active: this._id === value, indent: this.nestingLevel > 1 }"}}></a>
-        {{/each}}
-      </div>
-    </div>
-    <button type="button" class="btn btn-link">Add standard</button>
+    {{#each standardsIds}}
+      {{> SelectItem
+          _id=this
+          selected=this
+          placeholder="Link to standard"
+          items=standards
+          isExtended=true
+          isReady=Template.subscriptionsReady
+          onUpdate=onUpdateCb
+          onRemove=onRemoveCb}}
+    {{/each}}
+    <div {{b "ref: forms"}}></div>
+    <button type="button" class="btn btn-link" {{b "click: addLinkedStandard"}}>Add standard</button>
   {{/FormField}}
 </template>

@@ -37,7 +37,7 @@ Template.ESBookSectionCreate.viewmodel({
       } else {
         swal("Added!", `Section "${this.value()}" was added successfully.`, "success");
 
-        this._id(_id);
+        this.selected(_id);
 
         ViewModel.findOne('ESBookSection').update(this);
       }
@@ -46,7 +46,7 @@ Template.ESBookSectionCreate.viewmodel({
     this.modal().callMethod(insert, { title, organizationId }, cb);
   },
   getData() {
-    const { value, _id } = this.data();
-    return { value, _id };
+    const { value, selected } = this.data();
+    return { value, selected };
   }
 });

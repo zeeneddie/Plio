@@ -5,9 +5,6 @@ import { update } from '/imports/api/problems/methods.js';
 
 Template.EditNC.viewmodel({
   mixin: ['organization', 'modal'],
-  onCreated() {
-    this.load(this.NC());
-  },
   NC() {
     const organizationId = this.organizationId();
     const _id = this._id();

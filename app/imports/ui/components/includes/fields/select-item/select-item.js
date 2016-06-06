@@ -1,52 +1,70 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
 
 Template.SelectItem.viewmodel({
-  onCreated() {
-    const items = this.items();
+  autorun(computation) {
+    if (this.isReady() && this.items().count() > 0) {
+      const items = this.items();
 
-    if (!this._id() && items.count() > 0) {
-      const { _id, title } = items.fetch()[0];
+      if (!this.selected() && items.count() > 0) {
+        const { _id, title } = items.fetch()[0];
 
-      this._id(_id);
-      this.value(title);
-    } else if (!!this._id() && items.count() > 0) {
-      const find = items.fetch().filter(item => item._id === this._id());
-      const item = find.length > 0 && find[0];
+        this.selected(_id);
+        this.value(title);
+      } else if (!!this.selected() && items.count() > 0) {
+        const find = items.fetch().filter(item => item._id === this.selected());
+        const item = find.length > 0 && find[0];
 
-      this.value(item.title);
+        this.value(item.title);
+      }
+      computation.stop();
     }
   },
   value: '',
-  _id: '',
+  selected: '',
   placeholder: '',
   content: '',
+  isExtended: false,
+  isReady: false,
+  focused: false,
   select({ _id, title }) {
     this.value(title);
-    this._id(_id);
+    this.selected(_id);
     this.update();
   },
   update() {
-    const _id = this._id();
-
     this.fixValue();
 
-    if (_id === this.templateInstance.data._id) return;
+    if (this.selected() === this.templateInstance.data.selected) return;
 
     this.onUpdate(this);
   },
+  remove() {
+    if (!this._id) {
+      this.destroy();
+    } else {
+      this.onRemove(this, this.destroy());
+    }
+  },
   fixValue() {
-    if (!!this._id() && !this.value()) {
-      const find = this.items().fetch().filter(doc => doc._id === this._id());
+    this.focused(false);
+    
+    if (!!this.selected() && !this.value()) {
+      const find = this.items().fetch().filter(doc => doc._id === this.selected());
       const item = !!find.length > 0 && find[0];
       !!item && this.value(item.title);
     }
   },
   getData() {
-    const { value, _id, items } = this.data();
-    return { value, _id, items };
+    const { value, selected, items } = this.data();
+    return { value, selected, items };
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
   },
   events: {
     'focus input'() {
+      this.focused(true);
       this.value('');
     }
   }

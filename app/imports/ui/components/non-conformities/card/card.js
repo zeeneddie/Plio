@@ -1,9 +1,13 @@
 import { Template } from 'meteor/templating';
 
+import { Standards } from '/imports/api/standards/standards.js';
 import { Problems } from '/imports/api/problems/problems.js';
 
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal'],
+  autorun() {
+    this.templateInstance.subscribe('standards', this.organizationId());
+  },
   NC() {
     const organizationId = this.organizationId();
     const _id = this.NCId();
@@ -22,7 +26,16 @@ Template.NCCard.viewmodel({
     return Problems.find(query, options);
   },
   linkedStandard(_id) {
-
+    const standard = Standards.findOne({ _id });
+    if (standard) {
+      const { title } = standard;
+      const href = ((() => {
+        const orgSerialNumber = this.organizationSerialNumber();
+        const standardId = _id;
+        return FlowRouter.path('standard', { orgSerialNumber, standardId });
+      })());
+      return { title, href };
+    }
   },
   openEditNCModal() {
     this.modal().open({
