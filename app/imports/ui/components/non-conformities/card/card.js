@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { Problems } from '/imports/api/problems/problems.js';
 
 Template.NCCard.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal'],
   NC() {
     const organizationId = this.organizationId();
     const _id = this.NCId();
@@ -23,5 +23,12 @@ Template.NCCard.viewmodel({
   },
   linkedStandard(_id) {
 
+  },
+  openEditNCModal() {
+    this.modal().open({
+      title: 'Non-conformity',
+      template: 'EditNC',
+      _id: this.NCId()
+    });
   }
 });

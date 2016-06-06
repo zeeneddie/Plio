@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { insert } from '/imports/api/problems/methods.js';
 
 Template.CreateNC.viewmodel({
-  mixin: ['modal', 'organization'],
+  mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
   save() {
     const data = this.getData();
 
@@ -35,6 +35,18 @@ Template.CreateNC.viewmodel({
         swal('Oops... Something went wrong!', err.reason, 'error');
       } else {
         this.modal().close();
+
+        Meteor.setTimeout(() => {
+          this.isActiveNCFilter('deleted') ? this.goToNC(_id, false) : this.goToNC(_id);
+
+          this.expandCollapsed(_id);
+
+          this.modal().open({
+            _id: _id,
+            title: 'non-conformity',
+            template: 'EditNC'
+          });
+        }, 400);
       }
     });
   },

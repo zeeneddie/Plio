@@ -52,4 +52,35 @@ const ProblemsSchema = new SimpleSchema([
   }
 ]);
 
-export { ProblemsSchema, requiredFields, optionalFields };
+const ProblemsUpdateSchema = new SimpleSchema([
+  optionalFields,
+  OrganizationIdSchema,
+  {
+    type: {
+      type: String,
+      allowedValues: ProblemTypes,
+      optional: true
+    },
+    title: {
+      type: String,
+      min: 1,
+      max: 40,
+      optional: true
+    },
+    identifiedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    identifiedAt: {
+      type: Date,
+      optional: true
+    },
+    magnitude: {
+      type: String,
+      optional: true
+    }
+  }
+]);
+
+export { ProblemsSchema, ProblemsUpdateSchema, requiredFields, optionalFields };

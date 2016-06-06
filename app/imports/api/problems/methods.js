@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import ProblemsService from './problems-service.js';
-import { ProblemsSchema, requiredFields } from './problems-schema.js';
+import { ProblemsSchema, ProblemsUpdateSchema, requiredFields } from './problems-schema.js';
 import { Problems } from './problems.js';
 import {
   IdSchema,
@@ -32,7 +32,7 @@ export const update = new ValidatedMethod({
   name: 'Problems.update',
 
   validate: new SimpleSchema([
-    IdSchema, ProblemsSchema, optionsSchema
+    IdSchema, ProblemsUpdateSchema, optionsSchema
   ]).validator(),
 
   run({_id, options, query, organizationId, ...args }) {

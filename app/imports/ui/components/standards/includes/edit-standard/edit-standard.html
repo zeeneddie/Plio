@@ -1,5 +1,5 @@
 <template name="EditStandard">
-  <form>
+  <div>
     <div class="relative">
       <div class="card-block">
         {{> ESTitle titleText=standard.title _id=standard._id}}
@@ -75,5 +75,5 @@
     <div class="card-block text-xs-center">
       <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
     </div>
-  </form>
+  </div>
 </template>

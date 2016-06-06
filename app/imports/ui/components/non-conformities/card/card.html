@@ -42,7 +42,7 @@
 
             <div class="list-group-item" {{b "if: this.description"}}>
               <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}>Deal valuations not carried out with new client resulting in problems agreeing valuations later</h4>
+              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
             </div>
 
             <div class="list-group-item" {{b "if: this.standards"}}>
@@ -93,7 +93,7 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="list-group-item">
+                <div class="list-group-item" {{b "if: this.cost"}}>
                   <p class="list-group-item-text">Number of occurrences</p>
                   <h4 class="list-group-item-heading">3</h4>
                 </div>

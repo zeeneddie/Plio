@@ -1,0 +1,83 @@
+<template name="EditNC">
+  <div>
+    <div class="relative">
+      <div class="card-block">
+        {{> NCTitle _id=_id titleText=title}}
+      </div>
+
+      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#root-cause-analysis" data-toggle="collapse">
+        <h4 class="card-title pull-xs-left">Root cause analysis</h4>
+        <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+      </div>
+      <div class="card-block-collapse collapse" id="root-cause-analysis">
+        <div ng-include="'includes/subcards-edit/root-cause-analysis.html'"></div>
+      </div>
+      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#notify" data-toggle="collapse">
+        <h4 class="card-title pull-xs-left">Notify</h4>
+        <h4 class="card-title pull-xs-right">
+          <span class="text-muted">2</span>
+        </h4>
+      </div>
+      <div class="card-block-collapse collapse" id="notify">
+        <div ng-include="'includes/subcards-edit/notify.html'"></div>
+      </div>
+      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#occurrences" data-toggle="collapse">
+        <h4 class="card-title pull-xs-left">Occurrences</h4>
+        <h4 class="card-title pull-xs-right">
+          <span class="text-muted">1</span>
+        </h4>
+      </div>
+      <div class="card-block-collapse collapse" id="occurrences">
+        <div ng-include="'includes/subcards-edit/occurrences.html'"></div>
+      </div>
+      <div class="card-block-collapse collapse" id="nonconformities">
+        <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
+      </div>
+      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
+        <h4 class="card-title pull-xs-left">Corrective actions</h4>
+        <h4 class="card-title pull-xs-right">
+          <span class="text-muted">0</span>
+        </h4>
+      </div>
+      <div class="card-block-collapse collapse" id="corrective-actions">
+        <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
+      </div>
+      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
+        <h4 class="card-title pull-xs-left">Preventative actions</h4>
+        <h4 class="card-title pull-xs-right">
+          <span class="text-muted">0</span>
+        </h4>
+      </div>
+      <div class="card-block-collapse collapse" id="preventative-actions">
+        <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
+      </div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#improvement-plan" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Improvement plan</h4>
+      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+    </div>
+    <div class="card-block-collapse collapse" id="improvement-plan">
+      <div ng-include="'includes/subcards-edit/improvement-plan.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#lessons" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Lessons learned</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">1</span>
+        <span class="label label-warning status-indicator"></span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="lessons">
+      <div ng-include="'includes/subcards-edit/lessons.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#files" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Other files</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">2</span>
+      </h4>
+    </div>
+
+    <div class="card-block text-xs-center">
+      <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+    </div>
+  </div>
+</template>
