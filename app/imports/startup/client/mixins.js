@@ -43,7 +43,7 @@ ViewModel.mixin({
 
       vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, { complete: cb });
     },
-    expandCollapsedStandard: _.debounce(function(_id, cb) {
+    expandCollapsed: _.debounce(function(_id, cb) {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
       this.expandCollapseItems(vms, { complete: cb });

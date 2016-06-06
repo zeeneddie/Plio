@@ -5,7 +5,7 @@ import { NCTypes } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapse', 'organization', 'modal', 'magnitude', 'nonconformity', 'router'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router'],
   autorun() {
     this.searchText.depend();
 
@@ -17,6 +17,8 @@ Template.NCList.viewmodel({
     }
   },
   onRendered() {
+    this.expandCollapsed(this.NCId());
+
     const organizationId = this.organizationId();
     const query = { type: 'non-conformity', organizationId };
 

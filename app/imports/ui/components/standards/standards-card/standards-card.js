@@ -89,7 +89,7 @@ Template.StandardsCard.viewmodel({
             FlowRouter.setQueryParams({ by: 'section' });
             Meteor.setTimeout(() => {
               this.goToStandard(_id);
-              this.expandCollapsedStandard(_id);
+              this.expandCollapsed(_id);
             }, 0);
           }
         });
@@ -125,7 +125,7 @@ Template.StandardsCard.viewmodel({
 
               Meteor.setTimeout(() => {
                 this.goToStandard(_id);
-                this.expandCollapsedStandard(_id);
+                this.expandCollapsed(_id);
               }, 0);
             }
           }

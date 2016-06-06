@@ -153,7 +153,7 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelectedStandard() {
-    this.expandCollapsedStandard(this.standardId(), () => {
+    this.expandCollapsed(this.standardId(), () => {
       this.onAfterExpand();
     });
   },
@@ -168,7 +168,7 @@ Template.StandardsList.viewmodel({
 
       Meteor.setTimeout(() => {
         this.goToStandard(_id);
-        this.expandCollapsedStandard(_id);
+        this.expandCollapsed(_id);
       }, 0);
     }
   },

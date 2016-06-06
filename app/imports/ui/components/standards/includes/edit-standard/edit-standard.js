@@ -52,10 +52,10 @@ Template.EditStandard.viewmodel({
 
             if (!!standard) {
               const { _id } = standard;
-              
+
               Meteor.setTimeout(() => {
                 this.goToStandard(_id);
-                this.expandCollapsedStandard(_id);
+                this.expandCollapsed(_id);
               }, 0);
             }
           }
