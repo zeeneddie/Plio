@@ -1,3 +1,3 @@
-import './dropdown';
+import './select-item';
 import './input';
 import './owner';

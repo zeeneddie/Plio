@@ -1,11 +1,11 @@
 <template name="ESBookSection">
   {{#if _id}}
     {{#FormField label="Book section"}}
-      {{> Dropdown items=bookSections _id=selectedBookSectionId onUpdate=onUpdateCb content="ESBookSectionCreate"}}
+      {{> SelectItem items=bookSections _id=selectedBookSectionId onUpdate=onUpdateCb content="ESBookSectionCreate" placeholder="Book section"}}
     {{/FormField}}
   {{else}}
     {{#FormField label="Book section"}}
-      {{> Dropdown items=bookSections onUpdate=onUpdateCb content="ESBookSectionCreate"}}
+      {{> SelectItem items=bookSections onUpdate=onUpdateCb content="ESBookSectionCreate" placeholder="Book section"}}
     {{/FormField}}
   {{/if}}
 </template>

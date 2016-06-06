@@ -9,7 +9,7 @@ Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
   selectedBookSectionId: '',
   section() {
-    const child = this.child('Dropdown');
+    const child = this.child('SelectItem');
     return child && child.value();
   },
   bookSections() {

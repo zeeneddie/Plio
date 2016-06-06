@@ -1,8 +1,6 @@
 import { Template } from 'meteor/templating';
-import { Mongo } from 'meteor/mongo';
 
-Template.Dropdown.viewmodel({
-  mixin: ['search', 'modal', 'organization', 'collapsing'],
+Template.SelectItem.viewmodel({
   onCreated() {
     const items = this.items();
 
@@ -14,12 +12,13 @@ Template.Dropdown.viewmodel({
     } else if (!!this._id() && items.count() > 0) {
       const find = items.fetch().filter(item => item._id === this._id());
       const item = find.length > 0 && find[0];
+
       this.value(item.title);
     }
   },
   value: '',
   _id: '',
-  placeholder: 'Text',
+  placeholder: '',
   content: '',
   select({ _id, title }) {
     this.value(title);
