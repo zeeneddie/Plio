@@ -1,0 +1,15 @@
+<template name="ESIPReviewDate">
+  <div class="form-group row">
+    <div class="form-group-flex col-sm-12">
+      <div class="form-group-flex-flex">
+        {{> Datepicker
+            placeholder=datePlaceholder
+            defaultDate=defaultDate
+            _id=_id
+            date=getDate
+            onChange=onDateChangeCb}}
+      </div>
+      {{> DeleteButton onClick=onDeleteCb}}
+    </div>
+  </div>
+</template>

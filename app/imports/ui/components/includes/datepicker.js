@@ -5,28 +5,34 @@ Template.Datepicker.viewmodel({
   onRendered() {
     this.datepicker.datepicker({
       startDate: new Date(),
-      format: 'dd MM yyyy',
+      format: {
+        toDisplay: (date, format, language) => {
+          return this.renderDate(date);
+        },
+        toValue: (date, format, language) => {
+          return date;
+        }
+      },
       autoclose: true
     });
 
     if (this.date()) {
-      this.datepicker.datepicker('setDate', new Date(this.date()));
+      this.datepicker.datepicker('setDate', this.date());
     } else if (!this.date() && this.defaultDate()) {
       this.datepicker.datepicker('setDate', new Date());
     }
 
     this.datepicker.on('changeDate', (e) => {
-      this.update();
+      this.onChange && this.onChange(this);
     });
   },
   label: 'Date',
   placeholder: 'Date',
   sm: 8,
-  date: '',
   defaultDate: true,
-  onUpdate: () => {},
-  update() {
-    this.onUpdate(this, () => this.destroy());
+  date: '',
+  dateString() {
+    return this.date() ? this.renderDate(this.date()) : '';
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);

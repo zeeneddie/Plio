@@ -5,22 +5,27 @@ Template.ESIPReviewDates.viewmodel({
   mixin: ['addForm', 'date'],
   reviewDates: [],
   addReviewDate() {
-    this.addForm(
-      'Datepicker',
-      { class: 'margin-bottom', placeholder: this.renderDate(new Date()), defaultDate: false, onUpdate: this.update.bind(this) }
-    );
+    this.addForm('ESIPReviewDate', {
+      datePlaceholder: this.renderDate(new Date()),
+      defaultDate: false
+    });
   },
-  onUpdateCb() {
+  onChangeCb() {
     return this.update.bind(this);
   },
-  update(viewmodel, cb) {
-    const { date } = viewmodel.getData();
-    const _id = viewmodel._id && viewmodel._id();
+  onDeleteCb() {
+    return this.delete.bind(this);
+  },
+  update(viewModel) {
+    const _id = viewModel._id && viewModel._id();
+    const { date } = viewModel.getData();
 
     if (_id) {
-      this.set({ _id, date }, cb);
+      this.set({ _id, date });
     } else {
-      this.addToSet({ date }, cb);
+      this.addToSet({ date }, () => {
+        viewModel.destroy();
+      });
     }
   },
   addToSet({ date }, cb) {
@@ -49,6 +54,40 @@ Template.ESIPReviewDates.viewmodel({
     }
 
     this.parent().update({ query }, options, cb);
+  },
+  delete(viewModel) {
+    const _id = viewModel._id && viewModel._id();
+    const date = this.renderDate(viewModel.getData().date);
+
+    if (!_id) {
+      viewModel.destroy();
+      return;
+    }
+
+    swal({
+      title: 'Are you sure?',
+      text: `Review date "${date}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      this.parent().update({}, {
+        $pull: {
+          reviewDates: { _id }
+        }
+      }, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal(
+            'Removed!',
+            `Review date "${date}" was removed successfully.`,
+            'success'
+          );
+        }
+      });
+    });
   },
   getData() {
     const datepickers = this.children('Datepicker');

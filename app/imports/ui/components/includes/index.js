@@ -22,3 +22,4 @@ import './file-item.html';
 import './file-item.js';
 import './clearable-field.html';
 import './fields';
+import './delete-button.html';
