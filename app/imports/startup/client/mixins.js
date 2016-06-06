@@ -5,7 +5,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, ProblemFilters, NCTypes } from '/imports/api/constants.js';
+import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -142,6 +142,25 @@ ViewModel.mixin({
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
     },
+    searchOnAfterKeyUp: _.debounce(function(e) {
+      const value = e.target.value;
+
+      if (this.searchText() === value) return;
+
+      this.searchText(value);
+
+      if (this.isActiveStandardFilter) {
+        if (this.isActiveStandardFilter('deleted')) return;
+      } else if (this.isActiveNCFilter) {
+        if (this.isActiveNCFilter('deleted')) return;
+      }
+
+      if (!!value) {
+        this.expandAllFound();
+      } else {
+        this.expandSelected();
+      }
+    }, 500)
   },
   numberRegex: {
     parseNumber(string) {
@@ -258,11 +277,11 @@ ViewModel.mixin({
     standardId() {
       return FlowRouter.getParam('standardId');
     },
-    activeStandardFilter() {
-      return FlowRouter.getQueryParam('by') || StandardFilters[0];
-    },
     isActiveStandardFilter(filter) {
       return this.activeStandardFilter() === filter;
+    },
+    activeStandardFilter() {
+      return FlowRouter.getQueryParam('by') || StandardFilters[0];
     },
     currentStandard() {
       const _id =  FlowRouter.getParam('standardId');
@@ -346,12 +365,6 @@ ViewModel.mixin({
     riskId() {
       return FlowRouter.getParam('riskId');
     },
-    activeRiskFilter() {
-      return FlowRouter.getQueryParam('by') || RiskFilters[0];
-    },
-    isActiveRiskFilter(filter) {
-      return this.activeRiskFilter() === filter;
-    },
     currentRisk() {
       const _id = this.riskId();
       // return Risks.findOne({ _id });
@@ -361,11 +374,11 @@ ViewModel.mixin({
     NCId() {
       return FlowRouter.getParam('nonconformityId');
     },
-    activeNCFilter() {
-      return FlowRouter.getQueryParam('by') || ProblemFilters[0];
-    },
     isActiveNCFilter(filter) {
       return this.activeNCFilter() === filter;
+    },
+    activeNCFilter() {
+      return FlowRouter.getQueryParam('by') || NonConformityFilters[0];
     },
     currentNC() {
       const _id = this.NCId();

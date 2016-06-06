@@ -3,7 +3,8 @@
     <form class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
         {{#ClearableField clearFn="clearSearchField"}}
-          <input type="text" class="form-control" placeholder="Search..." {{b "value: searchText, throttle: 300"}} />
+          <input type="text" class="form-control" placeholder="Search..."
+              disabled={{animating}} {{b "ref: searchInput, keyup: searchOnAfterKeyUp"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
@@ -14,9 +15,13 @@
     </form>
 
     <div class="list-group list-group-accordion">
-      {{#each _magnitude}}
-        {{> ListItem template='NCSectionItem' title=this.name magnitude=this.value}}
-      {{/each}}
+
+      {{#if isActiveNCFilter 'magnitude'}}
+        {{#each _magnitude}}
+          {{> ListItem template='NCSectionItem' title=this.name magnitude=this.value}}
+        {{/each}}
+      {{/if}}
+
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
       {{/if}}

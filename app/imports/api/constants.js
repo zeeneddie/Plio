@@ -193,11 +193,10 @@ const RiskFilters = [
   'deleted'
 ];
 
-const ProblemFilters = [
-  'department/site',
-  'activity',
-  'review status',
-  'archived',
+const NonConformityFilters = [
+  'magnitude',
+  'status',
+  'department',
   'deleted'
 ];
 
@@ -222,7 +221,7 @@ export {
   PhoneTypes,
   StandardFilters,
   RiskFilters,
-  ProblemFilters,
+  NonConformityFilters,
   ProblemTypes,
   TimeUnits,
   UserMembership,
