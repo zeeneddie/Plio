@@ -70,14 +70,14 @@ Template.OrganizationSettings_MainSettings.viewmodel({
         organizationId, newOwnerId
       }, (err) => {
         if (err) {
-          return;
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal({
+            title: 'Success',
+            text: 'Invitation sent',
+            type: 'success',
+          });
         }
-
-        swal({
-          title: 'Success',
-          text: 'Invitation sent',
-          type: 'success',
-        });
       });
     });
   },
@@ -98,14 +98,14 @@ Template.OrganizationSettings_MainSettings.viewmodel({
         organizationId
       }, (err) => {
         if (err) {
-          return;
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal({
+            title: 'Success',
+            text: 'Transfer canceled',
+            type: 'success',
+          });
         }
-
-        swal({
-          title: 'Success',
-          text: 'Transfer canceled',
-          type: 'success',
-        });
       });
     });
   },

@@ -143,16 +143,7 @@ export default OrganizationService = {
     });
   },
 
-  createTransfer({ organizationId, newOwnerId, currOwnerId }) {
-    const isOnTransfer = !!this.collection.findOne({
-      _id: organizationId,
-      transfer: { $exists: true }
-    });
-
-    if (isOnTransfer) {
-      throw new Meteor.Error(400, 'Organization is already on transfer');
-    }
-
+  _transferCheck(organizationId, newOwnerId, currOwnerId) {
     if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
         400, 'New owner already owns transferred organization'
@@ -177,6 +168,37 @@ export default OrganizationService = {
         400, 'New owner must be a member of transferred organization'
       );
     }
+
+    const newOwner = Meteor.users.findOne({
+      _id: newOwnerId
+    });
+
+    if (!newOwner.hasVerifiedEmail()) {
+      throw new Meteor.Error(
+        400, 'Cannot transfer organization to user with unverified email'
+      );
+    }
+
+    if (!newOwner.hasAcceptedInvite()) {
+      throw new Meteor.Error(
+        400,
+        'Cannot transfer organization to user that did not accept invitation ' +
+        'to become an organization member'
+      );
+    }
+  },
+
+  createTransfer({ organizationId, newOwnerId, currOwnerId }) {
+    const isOnTransfer = !!this.collection.findOne({
+      _id: organizationId,
+      transfer: { $exists: true }
+    });
+
+    if (isOnTransfer) {
+      throw new Meteor.Error(400, 'Organization is already on transfer');
+    }
+
+    this._transferCheck(organizationId, newOwnerId, currOwnerId);
 
     const transferId = Random.id();
 
@@ -211,30 +233,7 @@ export default OrganizationService = {
     const organizationId = organization._id;
     const currOwnerId = organization.ownerId();
 
-    if (currOwnerId === newOwnerId) {
-      throw new Meteor.Error(
-        400, 'New owner already owns transferred organization'
-      );
-    }
-
-    const isOrgMember = !!this.collection.findOne({
-      _id: organizationId,
-      users: {
-        $elemMatch: {
-          userId: newOwnerId,
-          role: UserMembership.ORG_MEMBER,
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false }
-        }
-      }
-    });
-
-    if (!isOrgMember) {
-      throw new Meteor.Error(
-        400, 'New owner must be a member of transferred organization'
-      );
-    }
+    this._transferCheck(organizationId, newOwnerId, currOwnerId);
 
     this.collection.update({
       _id: organizationId,
