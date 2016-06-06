@@ -45,10 +45,10 @@ Template.NCList.viewmodel({
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
+    this.searchResultsNumber(ids.length);
+
     if (vms.length > 0) {
       this.animating(true);
-
-      this.searchResultsNumber(ids.length);
 
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
@@ -62,7 +62,6 @@ Template.NCList.viewmodel({
     this.animating(true);
 
     if (vms.length > 0) {
-
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
         complete: () => this.expandSelectedNC()
