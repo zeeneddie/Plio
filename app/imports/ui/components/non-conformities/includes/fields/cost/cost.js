@@ -17,10 +17,13 @@ Template.NCCost.viewmodel({
   },
   select(currency) {
     this.currency(currency);
+    this.update();
   },
   update() {
     const value = parseInt(this.value(), 10);
     const currency = this.currency();
+
+    if (!value || !currency) return;
 
     if (value === this.templateInstance.data.value && currency === this.templateInstance.data.currency) return;
 
