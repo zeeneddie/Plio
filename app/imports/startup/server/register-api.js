@@ -67,3 +67,9 @@ import '../../api/problems/problems.js';
 import '../../api/problems/problems-schema.js';
 import '../../api/problems/problems-service.js';
 import '../../api/problems/methods.js';
+
+import '../../api/occurences/server/publications.js';
+import '../../api/occurences/occurences.js';
+import '../../api/occurences/occurences-schema.js';
+import '../../api/occurences/occurences-service.js';
+import '../../api/occurences/methods.js';

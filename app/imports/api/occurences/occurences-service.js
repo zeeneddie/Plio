@@ -1,4 +1,4 @@
-import { Occurences } from './lessons.js';
+import { Occurences } from './occurences.js';
 import { Problems } from '../problems/problems.js';
 
 export default {
