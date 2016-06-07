@@ -22,7 +22,7 @@ Template.Datepicker.viewmodel({
       this.datepicker.datepicker('setDate', new Date());
     }
 
-    this.datepicker.on('changeDate', (e) => {
+    this.datepicker.on('change', (e) => {
       this.onChange && this.onChange(this);
     });
   },
