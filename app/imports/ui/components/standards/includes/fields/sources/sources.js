@@ -13,18 +13,18 @@ Template.ESSources.viewmodel({
   sourceHtmlUrl: '',
   fileId: '',
   shouldUpdate() {
-    const { type, url, name } = this.getData();
-    const { sourceType, sourceUrl, sourceName } = this.templateInstance.data;
+    const { type, url, name, htmlUrl } = this.getData();
+    const { sourceType, sourceUrl, sourceName, sourceHtmlUrl } = this.templateInstance.data;
 
     if (type === 'attachment') {
       return _.every([
         (type && name) || (type && url),
-        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName)
+        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) || (htmlUrl !== sourceHtmlUrl)
       ]);
     } else {
       return _.every([
         type && url,
-        (type !== sourceType) || (url !== sourceUrl)
+        (type !== sourceType) || (url !== sourceUrl) || (htmlUrl !== sourceHtmlUrl)
       ]);
     }
   },
@@ -43,7 +43,7 @@ Template.ESSources.viewmodel({
     this.update();
   },
   update(e) {
-    let { type, url, name } = this.getData();
+    let { type, url, name, htmlUrl } = this.getData();
 
     if (!this.shouldUpdate()) {
       return;
@@ -58,7 +58,7 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    const sourceDoc = { type, url };
+    const sourceDoc = { type, url, htmlUrl };
     if (type === 'attachment') {
       sourceDoc.name = name;
 
@@ -84,6 +84,7 @@ Template.ESSources.viewmodel({
 
     uploader.send(fileObj, (error, url) => {
       this.sourceHtmlUrl(url && encodeURI(url) || '');
+      this.update();
     });
   },
   renderDocx(url) {
@@ -172,7 +173,7 @@ Template.ESSources.viewmodel({
     });
   },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name } = this.data();
-    return { type, url, name };
+    const { sourceType:type, sourceUrl:url, sourceName:name, sourceHtmlUrl:htmlUrl } = this.data();
+    return { type, url, name, htmlUrl };
   }
 });
