@@ -30,9 +30,6 @@ Template.TransferOrganizationPage.viewmodel({
           });
 
           if (!organization) {
-            this.error(
-              'Current organization owner canceled transfer or it is already completed'
-            );
             return;
           } else {
             const { name, serialNumber } = organization;
@@ -47,6 +44,9 @@ Template.TransferOrganizationPage.viewmodel({
               this.isTransfered(true);
             }
           });
+        },
+        onError: (e) => {
+          this.error(e.reason);
         }
       });
     });

@@ -85,7 +85,12 @@ FlowRouter.route('/sign-out', {
   name: 'signOut',
   action(params) {
     Meteor.logout();
-    FlowRouter.go('hello');
+    const targetURL = FlowRouter.getQueryParam('b');
+    if (targetURL) {
+      FlowRouter.go(targetURL);
+    } else {
+      FlowRouter.go('hello');
+    }
   }
 });
 

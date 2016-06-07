@@ -146,7 +146,7 @@ export default OrganizationService = {
   _transferCheck(organizationId, newOwnerId, currOwnerId) {
     if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
-        400, 'New owner already owns transferred organization'
+        400, 'The target user already owns the transferred organization'
       );
     }
 
@@ -165,7 +165,7 @@ export default OrganizationService = {
 
     if (!isOrgMember) {
       throw new Meteor.Error(
-        400, 'New owner must be a member of transferred organization'
+        400, 'The target user must be a member of transferred organization'
       );
     }
 
@@ -175,15 +175,14 @@ export default OrganizationService = {
 
     if (!newOwner.hasVerifiedEmail()) {
       throw new Meteor.Error(
-        400, 'Cannot transfer organization to user with unverified email'
+        400, 'The target user should have a verified email address'
       );
     }
 
     if (!newOwner.hasAcceptedInvite()) {
       throw new Meteor.Error(
         400,
-        'Cannot transfer organization to user that did not accept invitation ' +
-        'to become an organization member'
+        'The target user hasn\'t accepted the invitation to the transferred organization yet'
       );
     }
   },

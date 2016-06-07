@@ -4,8 +4,13 @@
     <p><a href="{{pathFor 'dashboardPage' orgSerialNumber=orgSerialNumber}}">Go to dashboard</a></p>
   {{else}}
     {{#if error}}
-      <p class="text-danger">Error. {{error}}</p>
-      <p><a href="{{pathFor 'hello'}}">Return to my organization</a></p>
+      <p class="text-danger">{{error}}</p>
+      <p>
+        <a href="{{pathFor 'hello'}}">
+          <i class="fa fa-arrow-left"></i>
+          Return to my organization
+        </a>
+      </p>
     {{else}}
       {{> Preloader size=3}}
     {{/if}}

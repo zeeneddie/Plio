@@ -74,7 +74,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
         } else {
           swal({
             title: 'Success',
-            text: 'Invitation sent',
+            text: 'An invitation to transfer ownership is successfully sent',
             type: 'success',
           });
         }
@@ -88,7 +88,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Transfer of "${name}" organization will be canceled`,
+      text: `Transfer of the "${name}" organization will be canceled`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'OK',
@@ -102,7 +102,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
         } else {
           swal({
             title: 'Success',
-            text: 'Transfer canceled',
+            text: `Transfer of the "${name}" organization is canceled`,
             type: 'success',
           });
         }
