@@ -54,7 +54,10 @@ Template.ESNotify.viewmodel({
       });
     });
   },
-  removeFromNotifyList(userId) {
-    this.update(userId, '$pull');
+  removeFromNotifyListFn() {
+    return this.removeFromNotifyList.bind(this, Template.currentData());
+  },
+  removeFromNotifyList({ _id }) {
+    this.update(_id, '$pull');
   }
 });

@@ -3,7 +3,7 @@
     {{#each owners}}
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" disabled="" {{b "text: userFullNameOrEmail(this)"}}></button>
-        <button type="button" class="btn btn-secondary" {{b "click: pull(this)"}}><i class="fa fa-times-circle"></i></button>
+        {{> DeleteButton smallIcon=true onClick=deleteOwnerFn}}
       </div>
     {{/each}}
     {{> OwnerField onUpdate=onUpdateCb items=members}}

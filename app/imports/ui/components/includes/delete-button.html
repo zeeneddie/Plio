@@ -1,6 +1,6 @@
 <template name="DeleteButton">
-  <button type="button" class="btn btn-secondary btn-icon margin-left"
-      {{b "click: onClick, class: buttonClass"}}>
+  <button type="button" class="btn btn-secondary {{buttonClass}}"
+        {{b "click: onClick, enable: isEnabled"}}>
     <i class="fa fa-times-circle" {{b "class: iconClass"}}></i>
   </button>
 </template>

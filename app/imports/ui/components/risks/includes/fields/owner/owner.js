@@ -20,6 +20,9 @@ Template.RKOwner.viewmodel({
     const { owner } = viewmodel.getData();
     const modifier = { $addToSet: { owners: owner } };
   },
+  deleteOwnerFn() {
+    return this.pull.bind(this, Template.currentData());
+  },
   pull({ _id }) {
 
   },
