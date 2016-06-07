@@ -5,7 +5,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, OrgCurrencies } from '/imports/api/constants.js';
+import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -415,6 +415,37 @@ ViewModel.mixin({
     },
     currencies() {
       return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }) );
+    }
+  },
+  NCStatus: {
+    getStatusName(status) {
+      return NCStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 1:
+        case 13:
+          return 'success';
+          break;
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 8:
+        case 9:
+        case 11:
+          return 'warning';
+          break;
+        case 3:
+        case 7:
+        case 10:
+        case 12:
+          return 'danger';
+          break;
+        default:
+          return '';
+          break;
+      }
     }
   }
 });

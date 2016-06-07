@@ -38,11 +38,6 @@ const optionalFields = new SimpleSchema({
     type: String,
     optional: true
   },
-  status: {
-    type: Number,
-    allowedValues: _.keys(NCStatuses),
-    optional: true
-  },
   cost: {
     type: Object,
     optional: true
@@ -53,6 +48,18 @@ const optionalFields = new SimpleSchema({
   },
   'cost.value': {
     type: Number
+  },
+  ref: {
+    type: Object,
+    optional: true
+  },
+  'ref.text': {
+    type: String,
+    max: 20
+  },
+  'ref.url': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url
   }
 });
 
@@ -69,6 +76,11 @@ const ProblemsSchema = new SimpleSchema([
     sequentialId: {
       type: String,
       min: 3
+    },
+    status: {
+      type: Number,
+      allowedValues: _.keys(NCStatuses).map(key => parseInt(key, 10)),
+      defaultValue: 1
     }
   }
 ]);

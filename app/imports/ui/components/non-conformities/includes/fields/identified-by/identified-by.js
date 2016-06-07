@@ -4,12 +4,12 @@ import { Meteor } from 'meteor/meteor';
 Template.NCIdentifiedBy.viewmodel({
   mixin: ['search', 'user'],
   identifiedBy: '',
-  owner() {
-    const child = this.child('OwnerField');
-    return child && child.owner();
+  identifiedBySearchText() {
+    const child = this.child('SelectItem');
+    return child && child.value();
   },
   members() {
-    const query = this.searchObject('owner', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
+    const query = this.searchObject('identifiedBySearchText', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
     const options = { sort: { 'profile.firstName': 1 } };
 
     return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );

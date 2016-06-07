@@ -11,13 +11,15 @@
 
           {{> NCStandards _id=this._id standardsIds=this.standards}}
 
-          {{> NCIdentifiedBy _id=this._id identifiedBy=identifiedBy}}
+          {{> NCIdentifiedBy _id=this._id identifiedBy=this.identifiedBy}}
 
-          {{> NCIdentifiedDate _id=this._id identifiedAt=identifiedAt}}
+          {{> NCIdentifiedDate _id=this._id identifiedAt=this.identifiedAt}}
 
-          {{> NCMagnitude _id=this._id magnitude=magnitude}}
+          {{> NCMagnitude _id=this._id magnitude=this.magnitude}}
 
-          {{> NCCost _id=this._id value=cost.value currency=cost.currency}}
+          {{> NCCost _id=this._id value=this.cost.value currency=this.cost.currency}}
+
+          {{> NCRef _id=this._id text=this.ref.text url=this.ref.url}}
         </div>
 
         <div class="card-block card-block-collapse-toggle collapsed shroud" href="#root-cause-analysis" data-toggle="collapse">

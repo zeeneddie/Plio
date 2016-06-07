@@ -4,7 +4,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { Problems } from '/imports/api/problems/problems.js';
 
 Template.NCCard.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus'],
   autorun() {
     this.templateInstance.subscribe('standards', this.organizationId());
   },
@@ -24,6 +24,9 @@ Template.NCCard.viewmodel({
     const options = { sort: { title: 1 } };
 
     return Problems.find(query, options);
+  },
+  getStatus(status) {
+    return status || 1;
   },
   linkedStandard(_id) {
     const standard = Standards.findOne({ _id });
