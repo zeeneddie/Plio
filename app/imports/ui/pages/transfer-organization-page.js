@@ -45,8 +45,11 @@ Template.TransferOrganizationPage.viewmodel({
             }
           });
         },
-        onError: (e) => {
-          this.error(e.reason);
+        onError: (err) => {
+          this.error(err.reason);
+          if (err.error === 403) {
+            Meteor.logout();
+          }
         }
       });
     });

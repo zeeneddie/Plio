@@ -1,7 +1,10 @@
 <template name="TransferOrganizationPage">
   {{#if isTransfered}}
-    <p>Transfer complete. You are an owner of "{{orgName}}" organization now.</p>
-    <p><a href="{{pathFor 'dashboardPage' orgSerialNumber=orgSerialNumber}}">Go to dashboard</a></p>
+    <p>Transfer is completed. You are the owner of the "{{orgName}}" organization now.</p>
+    <p><a href="{{pathFor 'dashboardPage' orgSerialNumber=orgSerialNumber}}">
+      <i class="fa fa-arrow-left"></i>
+      Go to "{{orgName}}"
+    </a></p>
   {{else}}
     {{#if error}}
       <p class="text-danger">{{error}}</p>
