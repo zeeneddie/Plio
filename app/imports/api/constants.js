@@ -4,6 +4,23 @@ const NCTypes = {
   CRITICAL: 'critical'
 };
 
+const NCStatuses = {
+  1: 'Open - just reported',
+  2: 'Open - analysis due today',
+  3: 'Open - analysis overdue',
+  4: 'Open - analysis completed, action needed',
+  5: 'Open - analysis completed, action in place',
+  6: 'Open - action due today',
+  7: 'Open - action overdue',
+  8: 'Open - action completed',
+  9: 'Open - verification due today',
+  10: 'Open - verification past due',
+  11: 'Open - action verified as effective',
+  12: 'Open - action failed verification',
+  13: 'Closed - action verified, standard updated',
+  14: 'Deleted'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -214,6 +231,7 @@ const DocumentTypes = [
 export {
   DefaultStandardTypes,
   NCTypes,
+  NCStatuses,
   OrgCurrencies,
   OrganizationDefaults,
   OrgOwnerRoles,
