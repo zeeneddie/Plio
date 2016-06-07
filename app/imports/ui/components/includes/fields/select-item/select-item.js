@@ -3,16 +3,17 @@ import { Blaze } from 'meteor/blaze';
 
 Template.SelectItem.viewmodel({
   autorun(computation) {
-    if (!this.loading() && this.items().count() > 0) {
-      const items = this.items();
+    const items = this.itemsArray();
 
-      if (!this.selected() && items.count() > 0 && this.selectFirstIfNoSelected()) {
-        const { _id, title } = items.fetch()[0];
+    if (!this.loading() && items.length > 0) {
+
+      if (!this.selected() && items.length > 0 && this.selectFirstIfNoSelected()) {
+        const { _id, title } = items[0];
 
         this.selected(_id);
         this.value(title);
-      } else if (!!this.selected() && items.count() > 0) {
-        const find = items.fetch().filter(item => item._id === this.selected());
+      } else if (!!this.selected() && items.length > 0) {
+        const find = items.filter(item => item._id === this.selected());
         const item = find.length > 0 && find[0];
 
         this.value(item.title);
@@ -29,8 +30,12 @@ Template.SelectItem.viewmodel({
   focused: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,
+  items: [],
+  itemsArray() {
+    return _.isArray(this.items()) ? this.items() : this.items().fetch();
+  },
   itemsFiltered() {
-    return this.items() && this.items().fetch().filter(item => !_.contains(this.excludedItems(), item._id));
+    return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
   },
   select({ _id, title }) {
     this.value(title);
@@ -55,7 +60,7 @@ Template.SelectItem.viewmodel({
     this.focused(false);
 
     if (!!this.selected() && !this.value()) {
-      const find = this.items().fetch().filter(doc => doc._id === this.selected());
+      const find = this.itemsArray().filter(doc => doc._id === this.selected());
       const item = !!find.length > 0 && find[0];
       !!item && this.value(item.title);
     }

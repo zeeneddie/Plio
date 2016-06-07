@@ -1,5 +1,8 @@
 <template name="NCIdentifiedBy">
   {{#FormField label="Identified By"}}
-    {{> OwnerField items=members onUpdate=onUpdateCb}}
+    <!-- {{> OwnerField items=members onUpdate=onUpdateCb}} -->
+    {{> SelectItem
+        items=members
+        selected=identifiedBy}}
   {{/FormField}}
 </template>
