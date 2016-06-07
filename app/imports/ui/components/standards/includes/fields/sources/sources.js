@@ -10,6 +10,7 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  sourceHtmlUrl: '',
   fileId: '',
   shouldUpdate() {
     const { type, url, name } = this.getData();
@@ -78,6 +79,13 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
+  uploadDocxHtml(fileObj) {
+    const uploader = new Slingshot.Upload('standardsAttachments');
+
+    uploader.send(fileObj, (error, url) => {
+      this.sourceHtmlUrl(url && encodeURI(url) || '');
+    });
+  },
   renderDocx(url) {
     const isDocx = url.match(/\.([^\./\?]+)($|\?)/)[1] === 'docx';
     const vmInstance = this;
@@ -91,6 +99,10 @@ Template.ESSources.viewmodel({
             // Mammoth errors
           } else {
             // Upload file to S3
+            const htmlFileName = vmInstance.sourceName() + '.html';
+            const htmlFile = new File([result], htmlFileName, { type: 'text/html' });
+
+            vmInstance.uploadDocxHtml(htmlFile);
           }
         }
       });
