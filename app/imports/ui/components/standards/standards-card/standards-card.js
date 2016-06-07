@@ -50,7 +50,17 @@ Template.StandardsCard.viewmodel({
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
   improvementPlan() {
-    return ImprovementPlans.findOne({ documentId: this.standardId() });
+    const improvementPlan = ImprovementPlans.findOne({ documentId: this.standardId() });
+    const reviewDates = improvementPlan.reviewDates || [];
+    const files = improvementPlan.files || [];
+
+    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate && 
+        !improvementPlan.reviewDates.length && !improvementPlan.owner && 
+        !improvementPlan.files.length) {
+      return;
+    }
+
+    return improvementPlan
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');

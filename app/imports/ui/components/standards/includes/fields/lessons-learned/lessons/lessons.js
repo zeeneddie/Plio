@@ -76,7 +76,7 @@ Template.ESLessons.viewmodel({
     if (cb) cb();
   },
   getDate() {
-    return this.date() && this._id ? this.renderDate(this.date()) : '';
+    return this.date() && this._id ? this.date() : '';
   },
   getData() {
     const { owner } = this.child('ESOwner').getData();
