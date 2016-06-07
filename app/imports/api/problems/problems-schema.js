@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
-import { ProblemTypes } from '../constants.js';
+import { ProblemTypes, NCStatuses } from '../constants.js';
 
 const requiredFields = new SimpleSchema([
   OrganizationIdSchema,
@@ -36,6 +36,11 @@ const optionalFields = new SimpleSchema({
   },
   description: {
     type: String,
+    optional: true
+  },
+  status: {
+    type: Number,
+    allowedValues: _.keys(NCStatuses),
     optional: true
   }
 });
