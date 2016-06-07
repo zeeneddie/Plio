@@ -106,6 +106,11 @@ Template.UserEdit.viewmodel({
     const userId = this.userId && this.userId();
     return Meteor.userId() === userId;
   },
+  isUserOrgOwner() {
+    const organization = this.organization();
+    const ownerId = organization && organization.ownerId();
+    return ownerId && (this.userId() === ownerId);
+  },
   isEditable() {
     return this.isCurrentUser();
   },
@@ -117,12 +122,23 @@ Template.UserEdit.viewmodel({
       return `${userName}'s superpowers for ${orgName}:`;
     }
   },
+  orgOwnerLabel() {
+    const userId = this.userId();
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
+    }
+  },
   isRolesEditable() {
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.EDIT_USER_ROLES,
       this.organizationId()
-    );
+    ) && !this.isUserOrgOwner();
   },
   userHasRole(role) {
     return Roles.userIsInRole(

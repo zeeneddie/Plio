@@ -75,14 +75,19 @@
           <div>
             <div class="list-group">
               <div class="list-group-item">
-              {{#each superpowers this}}
-                <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
-                  <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
-                  </i>
-                  {{value}}
-                </h4>
-              {{/each}}
+                {{#each superpowers this}}
+                  <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
+                    <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
+                    </i>
+                    {{value}}
+                  </h4>
+                {{/each}}
               </div>
+              {{#if orgOwnerLabel}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text text-xs-left">{{orgOwnerLabel}}</p>
+                </div>
+              {{/if}}
               <div class="list-group-item" {{b "if: !isInvitationAccepted(this) || !isEmailVerified(this)"}}>
                 {{#unless (isInvitationAccepted this)}}
                   <h4 class="list-group-item-text">Invitation not yet accepted</h4>

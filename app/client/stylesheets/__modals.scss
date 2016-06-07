@@ -125,3 +125,16 @@
     border-top: 0;
   }
 }
+
+.cancel-org-transfer {
+  .label.text-default {
+    white-space: normal;
+    text-align: left;
+    display: block;
+  }
+
+  .btn.btn-link {
+    margin: 0;
+    padding: 0;
+  }
+}

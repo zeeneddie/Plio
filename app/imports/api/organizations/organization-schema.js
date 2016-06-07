@@ -109,6 +109,20 @@ const OrganizationEditableFields = {
   ...OrganizationCurrencySchema
 };
 
+const transferSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  newOwnerId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  createdAt: {
+    type: Date
+  }
+});
+
 const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
@@ -120,6 +134,10 @@ const OrganizationSchema = new SimpleSchema([
     users: {
       type: [orgUserSchema],
       minCount: 1
+    },
+    transfer: {
+      type: transferSchema,
+      optional: true
     }
   }
 ]);

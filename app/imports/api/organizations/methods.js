@@ -400,8 +400,8 @@ export const removeUser = new ValidatedMethod({
   }
 });
 
-export const transferOrganization = new ValidatedMethod({
-  name: 'Organizations.transfer',
+export const createOrganizationTransfer = new ValidatedMethod({
+  name: 'Organizations.createTransfer',
 
   validate: new SimpleSchema([
     OrganizationIdSchema,
@@ -414,6 +414,10 @@ export const transferOrganization = new ValidatedMethod({
   ]).validator(),
 
   run({ organizationId, newOwnerId }) {
+    if (this.isSimulation) {
+      return;
+    }
+
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -427,10 +431,52 @@ export const transferOrganization = new ValidatedMethod({
       );
     }
 
-    return OrganizationService.transfer({
+    return OrganizationService.createTransfer({
       currOwnerId: userId,
       organizationId,
       newOwnerId
     });
+  }
+});
+
+export const transferOrganization = new ValidatedMethod({
+  name: 'Organizations.transfer',
+
+  validate: new SimpleSchema({
+    transferId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    }
+  }).validator(),
+
+  run({ transferId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot be an organization owner'
+      );
+    }
+
+    return OrganizationService.transfer({
+      newOwnerId: userId,
+      transferId,
+    });
+  }
+});
+
+export const cancelOrganizationTransfer = new ValidatedMethod({
+  name: 'Organizations.cancelTransfer',
+
+  validate: OrganizationIdSchema.validator(),
+
+  run({ organizationId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot cancel transfers'
+      );
+    }
+
+    return OrganizationService.cancelTransfer({ userId, organizationId });
   }
 });
