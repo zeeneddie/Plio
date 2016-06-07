@@ -9,8 +9,6 @@ Template.NCIdentifiedDate.viewmodel({
   update(viewmodel) {
     const { date:identifiedAt } = viewmodel.getData();
 
-    console.log(identifiedAt);
-
     this.identifiedAt(identifiedAt);
 
     if (!this._id) return;
