@@ -5,10 +5,11 @@ import { Standards } from '/imports/api/standards/standards.js';
 Template.NCStandards.viewmodel({
   mixin: ['organization', 'search', 'addForm'],
   text() {
+    // grab the reactive value of the focused input to use it in the query below
     const child = this.child('SelectItem', vm => vm.focused());
     return child && child.value();
   },
-  standardsIds: '',
+  standardsIds: [],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('standards', this.organizationId());
@@ -55,7 +56,7 @@ Template.NCStandards.viewmodel({
   remove(viewmodel, cb) {
     const _id = viewmodel._id && viewmodel._id();
     const options = { $pull: { standards: _id } };
-    this.parent().update({ options }); // TODO: now it removes all docs with passed id
+    this.parent().update({ options });
   },
   addLinkedStandard() {
     this.addForm(
@@ -64,6 +65,8 @@ Template.NCStandards.viewmodel({
         placeholder: 'Link to standard',
         items: this.standards(),
         isExtended: true,
+        selectFirstIfNoSelected: false,
+        excludedItems: this.standardsIds(),
         isReady: this.templateInstance.subscriptionsReady(),
         onUpdate: this.update.bind(this),
         onRemove: this.remove.bind(this)

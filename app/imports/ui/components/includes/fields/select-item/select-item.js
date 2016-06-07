@@ -3,7 +3,7 @@ import { Blaze } from 'meteor/blaze';
 
 Template.SelectItem.viewmodel({
   autorun(computation) {
-    if (this.isReady() && this.items().count() > 0) {
+    if (this.isReady() && this.items().count() > 0 && this.selectFirstIfNoSelected()) {
       const items = this.items();
 
       if (!this.selected() && items.count() > 0) {
@@ -27,6 +27,11 @@ Template.SelectItem.viewmodel({
   isExtended: false,
   isReady: false,
   focused: false,
+  excludedItems: [],
+  selectFirstIfNoSelected: true,
+  itemsFiltered() {
+    return this.items() && this.items().fetch().filter(item => !_.contains(this.excludedItems(), item._id));
+  },
   select({ _id, title }) {
     this.value(title);
     this.selected(_id);
@@ -48,7 +53,7 @@ Template.SelectItem.viewmodel({
   },
   fixValue() {
     this.focused(false);
-    
+
     if (!!this.selected() && !this.value()) {
       const find = this.items().fetch().filter(doc => doc._id === this.selected());
       const item = !!find.length > 0 && find[0];
