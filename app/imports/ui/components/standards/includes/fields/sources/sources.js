@@ -78,6 +78,24 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
+  renderDocx(url) {
+    const isDocx = url.match(/\.([^\./\?]+)($|\?)/)[1] === 'docx';
+    const vmInstance = this;
+
+    if (isDocx) {
+      Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
+        if (error) {
+          // HTTP errors
+        } else {
+          if (result.error) {
+            // Mammoth errors
+          } else {
+            // Upload file to S3
+          }
+        }
+      });
+    }
+  },
   insertFileFn() {
     return this.insertFile.bind(this);
   },
@@ -96,6 +114,7 @@ Template.ESSources.viewmodel({
     }
 
     this.sourceUrl(url);
+    this.renderDocx(url);
     this.update();
   },
   removeAttachmentFn() {
