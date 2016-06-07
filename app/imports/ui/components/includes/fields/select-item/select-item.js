@@ -3,10 +3,10 @@ import { Blaze } from 'meteor/blaze';
 
 Template.SelectItem.viewmodel({
   autorun(computation) {
-    if (this.isReady() && this.items().count() > 0 && this.selectFirstIfNoSelected()) {
+    if (!this.loading() && this.items().count() > 0) {
       const items = this.items();
 
-      if (!this.selected() && items.count() > 0) {
+      if (!this.selected() && items.count() > 0 && this.selectFirstIfNoSelected()) {
         const { _id, title } = items.fetch()[0];
 
         this.selected(_id);
@@ -25,7 +25,7 @@ Template.SelectItem.viewmodel({
   placeholder: '',
   content: '',
   isExtended: false,
-  isReady: false,
+  loading: false,
   focused: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,

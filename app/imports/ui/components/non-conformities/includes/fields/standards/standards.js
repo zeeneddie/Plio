@@ -4,17 +4,20 @@ import { Standards } from '/imports/api/standards/standards.js';
 
 Template.NCStandards.viewmodel({
   mixin: ['organization', 'search', 'addForm'],
+  onCreated(template) {
+    template.autorun(() => {
+      template.subscribe('standards', this.organizationId());
+    });
+  },
+  loading() {
+    return !this.templateInstance.subscriptionsReady();
+  },
   text() {
     // grab the reactive value of the focused input to use it in the query below
     const child = this.child('SelectItem', vm => vm.focused());
     return child && child.value();
   },
   standardsIds: [],
-  onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('standards', this.organizationId());
-    });
-  },
   standards() {
     const organizationId = this.organizationId();
     const query = {

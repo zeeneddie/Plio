@@ -4,8 +4,8 @@
       {{b "value: value, focusout: fixValue, attr: { placeholder: placeholder }, throttle: 200"}}/>
     <span class="input-group-btn" {{b "if: isExtended"}}>
       <button type="button" class="btn btn-secondary btn-icon" {{b "click: remove"}}>
-        <i class="fa fa-times-circle" {{b "if: isReady"}}></i>
-        <i class="fa fa-spinner" {{b "if: !isReady"}}></i>
+        <i class="fa fa-times-circle" {{b "if: !loading"}}></i>
+        <i class="fa fa-spinner" {{b "if: loading"}}></i>
       </button>
     </span>
     <div class="dropdown-menu dropdown-menu-full">
