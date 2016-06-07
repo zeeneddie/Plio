@@ -4,7 +4,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { Problems } from '/imports/api/problems/problems.js';
 
 Template.NCCard.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency'],
   autorun() {
     this.templateInstance.subscribe('standards', this.organizationId());
   },
@@ -36,6 +36,9 @@ Template.NCCard.viewmodel({
       })());
       return { title, href };
     }
+  },
+  renderCost({ value, currency } = {}) {
+    return this.getCurrencySymbol(currency) + value;
   },
   openEditNCModal() {
     this.modal().open({

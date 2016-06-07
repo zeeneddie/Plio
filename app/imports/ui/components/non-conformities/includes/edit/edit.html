@@ -16,6 +16,8 @@
           {{> NCIdentifiedDate _id=this._id identifiedAt=identifiedAt}}
 
           {{> NCMagnitude _id=this._id magnitude=magnitude}}
+
+          {{> NCCost _id=this._id value=cost.value currency=cost.currency}}
         </div>
 
         <div class="card-block card-block-collapse-toggle collapsed shroud" href="#root-cause-analysis" data-toggle="collapse">
