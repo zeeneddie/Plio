@@ -32,7 +32,7 @@ Template.SelectItem.viewmodel({
   selectFirstIfNoSelected: true,
   items: [],
   itemsArray() {
-    return _.isArray(this.items()) ? this.items() : this.items().fetch();
+    return this.items().hasOwnProperty('collection') ? this.items().fetch() : this.items();
   },
   itemsFiltered() {
     return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
@@ -46,6 +46,8 @@ Template.SelectItem.viewmodel({
     this.fixValue();
 
     if (this.selected() === this.templateInstance.data.selected) return;
+
+    if (!this.onUpdate) return;
 
     this.onUpdate(this);
   },
