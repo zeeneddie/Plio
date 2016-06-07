@@ -1,19 +1,24 @@
 import { Template } from 'meteor/templating';
 
 Template.NCIdentifiedDate.viewmodel({
-  identifiedAt: '',
+  mixin: 'date',
+  identifiedAt: new Date(),
   onUpdateCb() {
-    this.update.bind(this);
+    return this.update.bind(this);
   },
   update(viewmodel) {
-    if (!this._id) return;
-
     const { date:identifiedAt } = viewmodel.getData();
+
+    console.log(identifiedAt);
+
+    this.identifiedAt(identifiedAt);
+
+    if (!this._id) return;
 
     this.parent().update({ identifiedAt });
   },
   getData() {
-    const { date:identifiedAt } = this.child('Datepicker').getData();
+    const { identifiedAt } = this.data();
     return { identifiedAt };
   }
 });
