@@ -106,7 +106,7 @@
           {{/with}}
 
           {{#with improvementPlan}}
-            <div class="card-block card-subheading">
+            <div class="card-block card-subheading" {{b "if: IPHasFields(this)"}}>
               <h4 class="card-title">Improvement plan</h4>
             </div>
 

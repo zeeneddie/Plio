@@ -50,17 +50,10 @@ Template.StandardsCard.viewmodel({
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
   improvementPlan() {
-    const improvementPlan = ImprovementPlans.findOne({ documentId: this.standardId() });
-    const reviewDates = improvementPlan.reviewDates || [];
-    const files = improvementPlan.files || [];
-
-    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate && 
-        !improvementPlan.reviewDates.length && !improvementPlan.owner && 
-        !improvementPlan.files.length) {
-      return;
-    }
-
-    return improvementPlan
+    return ImprovementPlans.findOne({ documentId: this.standardId() });
+  },
+  IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {
+    return desiredOutcome || targetDate || owner || ( reviewDates && reviewDates.length > 0 ) || ( files && files.length );
   },
   renderReviewDates(dates) {
     return dates.map(doc => this.renderDate(doc.date)).join(', ');
