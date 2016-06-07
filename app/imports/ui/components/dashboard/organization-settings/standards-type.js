@@ -20,6 +20,9 @@ Template.OrganizationSettings_StandardsType.viewmodel({
       this.callWithFocusCheck(e, () => this.onChange(this));
     }
   },
+  deleteFn() {
+    return this.delete.bind(this);
+  },
   delete() {
     this.onDelete(this);
   },

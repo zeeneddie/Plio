@@ -60,6 +60,9 @@ Template.ESDepartments.viewmodel({
       }
     });
   },
+  deleteDepartmentFn() {
+    return this.update.bind(this, Template.currentData(), '$pull');
+  },
   update(doc, option) {
     const { _id } = doc;
     const query = { _id: this.standard()._id };

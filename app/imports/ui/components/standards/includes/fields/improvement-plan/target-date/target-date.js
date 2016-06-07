@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 Template.ESIPTargetDate.viewmodel({
   mixin: 'date',
   targetDate: '',
-  onUpdateCb() {
+  onChangeCb() {
     return this.update.bind(this);
   },
   update(viewmodel, cb) {
@@ -14,7 +14,7 @@ Template.ESIPTargetDate.viewmodel({
     return this.renderDate(new Date());
   },
   getDate() {
-    return this.targetDate() ? this.renderDate(this.targetDate()) : '';
+    return this.targetDate() || '';
   },
   getData() {
     const { targetDate } = this.data();

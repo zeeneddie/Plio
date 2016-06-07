@@ -7,15 +7,12 @@
               {{b "value: number, focusout: onNumberChanged, enable: isEditable"}} />
         {{/ClearableField}}
       </div>
-      <div>
+      <div class="margin-right">
         <select class="c-select"
           {{b "options: phoneTypes, value: type, enable: isEditable"}}>
         </select>
       </div>
-      <button type="button" class="btn btn-secondary btn-icon margin-left"
-          {{b "click: delete"}}>
-        <i class="fa fa-times-circle"></i>
-      </button>
+      {{> DeleteButton onClick=deleteFn isEnabled=isEditable}}
     </div>
   </div>
 </template>

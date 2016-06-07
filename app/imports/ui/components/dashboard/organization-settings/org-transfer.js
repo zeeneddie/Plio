@@ -4,7 +4,7 @@ import { UserMembership } from '/imports/api/constants.js';
 
 
 Template.OrganizationSettings_OrgTransfer.viewmodel({
-  mixin: ['organization', 'user', 'search'],
+  mixin: ['organization', 'user', 'search', 'date'],
   ownerId: '',
   inputText: '',
   autorun: [
@@ -70,16 +70,44 @@ Template.OrganizationSettings_OrgTransfer.viewmodel({
     });
   },
   isInputEnabled() {
-    return this.isOrgOwner();
+    return this.isOrgOwner() && !this.invitationSent();
   },
   isButtonEnabled() {
     return _.every([
       this.isOrgOwner(),
       !!this.ownerId(),
+      !this.invitationSent(),
       this.ownerId() !== this.templateInstance.data.ownerId
     ]);
   },
   dataToggleAttr() {
     return this.isInputEnabled() ? 'dropdown' : '';
+  },
+  transfer() {
+    return this.organization() && this.organization().transfer;
+  },
+  invitationSent() {
+    const transfer = this.transfer();
+    return !!(transfer && transfer._id && transfer.newOwnerId && transfer.createdAt);
+  },
+  invitationSentText() {
+    const transfer = this.transfer();
+    const date = transfer && transfer.createdAt;
+    const newOwnerId = transfer && transfer.newOwnerId;
+
+    const newOwner = Meteor.users.findOne({
+      _id: newOwnerId
+    });
+
+    if (!newOwner || !date) {
+      return '';
+    }
+
+    const userName = newOwner.fullNameOrEmail();
+    const formattedDate = this.renderDate(date);
+    return `You’ve sent an invitation to transfer ownership to ${userName} on ${formattedDate}`;
+  },
+  cancelOrgTransfer() {
+    this.parent().cancelOrgTransfer();
   }
 });
