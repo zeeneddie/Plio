@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
+import { Random } from 'meteor/random';
 
 import { Organizations } from './organizations.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
@@ -11,6 +12,8 @@ import {
   UserMembership,
   UserRoles
 } from '../constants.js';
+
+import OrgNotificationsSender from './org-notifications-sender.js';
 
 
 export default OrganizationService = {
@@ -140,10 +143,10 @@ export default OrganizationService = {
     });
   },
 
-  transfer({ organizationId, newOwnerId, currOwnerId }) {
+  _transferCheck(organizationId, newOwnerId, currOwnerId) {
     if (currOwnerId === newOwnerId) {
       throw new Meteor.Error(
-        400, 'New owner already owns transferred organization'
+        400, 'The target user already owns the transferred organization'
       );
     }
 
@@ -152,16 +155,84 @@ export default OrganizationService = {
       users: {
         $elemMatch: {
           userId: newOwnerId,
-          role: UserMembership.ORG_MEMBER
+          role: UserMembership.ORG_MEMBER,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
         }
       }
     });
 
     if (!isOrgMember) {
       throw new Meteor.Error(
-        400, 'New owner must be a member of transferred organization'
+        400, 'The target user must be a member of transferred organization'
       );
     }
+
+    const newOwner = Meteor.users.findOne({
+      _id: newOwnerId
+    });
+
+    if (!newOwner.hasVerifiedEmail()) {
+      throw new Meteor.Error(
+        400, 'The target user should have a verified email address'
+      );
+    }
+
+    if (!newOwner.hasAcceptedInvite()) {
+      throw new Meteor.Error(
+        400,
+        'The target user hasn\'t accepted the invitation to the transferred organization yet'
+      );
+    }
+  },
+
+  createTransfer({ organizationId, newOwnerId, currOwnerId }) {
+    const isOnTransfer = !!this.collection.findOne({
+      _id: organizationId,
+      transfer: { $exists: true }
+    });
+
+    if (isOnTransfer) {
+      throw new Meteor.Error(400, 'Organization is already on transfer');
+    }
+
+    this._transferCheck(organizationId, newOwnerId, currOwnerId);
+
+    const transferId = Random.id();
+
+    new OrgNotificationsSender(organizationId).sendOwnershipInvite(newOwnerId, transferId);
+
+    return this.collection.update({
+      _id: organizationId,
+    }, {
+      $set: {
+        transfer: {
+          _id: transferId,
+          newOwnerId,
+          createdAt: new Date()
+        }
+      }
+    });
+  },
+
+  transfer({ newOwnerId, transferId }) {
+    const organization = this.collection.findOne({
+      'transfer._id': transferId,
+      'transfer.newOwnerId': newOwnerId,
+    });
+
+    if (!organization) {
+      throw new Meteor.Error(
+        400,
+        'Current organization owner canceled transfer or it is already completed'
+      );
+    }
+
+    const organizationId = organization._id;
+    const currOwnerId = organization.ownerId();
+
+    this._transferCheck(organizationId, newOwnerId, currOwnerId);
 
     this.collection.update({
       _id: organizationId,
@@ -172,6 +243,7 @@ export default OrganizationService = {
       }
     });
 
+    Roles.removeUsersFromRoles(currOwnerId, OrgMemberRoles, organizationId);
     Roles.addUsersToRoles(newOwnerId, OrgOwnerRoles, organizationId);
 
     this.collection.update({
@@ -185,5 +257,35 @@ export default OrganizationService = {
 
     Roles.removeUsersFromRoles(currOwnerId, OrgOwnerRoles, organizationId);
     Roles.addUsersToRoles(currOwnerId, OrgMemberRoles, organizationId);
+
+    this.collection.update({
+      _id: organizationId,
+    }, {
+      $unset: { transfer: '' }
+    });
+  },
+
+  cancelTransfer({ userId, organizationId }) {
+    const isOrgOwner = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (!isOrgOwner) {
+      throw new Meteor.Error(
+        400, 'Only organization owner can cancel transfers'
+      );
+    }
+
+    return this.collection.update({
+      _id: organizationId,
+    }, {
+      $unset: { transfer: '' }
+    });
   }
 };

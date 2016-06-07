@@ -1,0 +1,57 @@
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
+import { Organizations } from '/imports/api/organizations/organizations.js';
+import { transferOrganization } from '/imports/api/organizations/methods.js';
+
+import Utils from '/imports/core/utils';
+
+
+Template.TransferOrganizationPage.viewmodel({
+  mixin: ['router'],
+  transferId: '',
+  orgName: '',
+  orgSerialNumber: '',
+  isTransfered: false,
+  error: '',
+  onCreated(template) {
+    template.autorun(() => {
+      this.isTransfered(false);
+
+      const transferId = FlowRouter.getParam('transferId');
+      this.transferId(transferId);
+
+      template.subscribe('transferredOrganization', transferId, {
+        onReady: () => {
+          const organization = Organizations.findOne({
+            'transfer._id': transferId,
+            'transfer.newOwnerId': Meteor.userId()
+          });
+
+          if (!organization) {
+            return;
+          } else {
+            const { name, serialNumber } = organization;
+            this.orgName(name);
+            this.orgSerialNumber(serialNumber);
+          }
+
+          transferOrganization.call({ transferId }, (err) => {
+            if (err) {
+              this.error(err.reason);
+            } else {
+              this.isTransfered(true);
+            }
+          });
+        },
+        onError: (err) => {
+          this.error(err.reason);
+          if (err.error === 403) {
+            Meteor.logout();
+          }
+        }
+      });
+    });
+  }
+});

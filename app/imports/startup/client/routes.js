@@ -85,7 +85,12 @@ FlowRouter.route('/sign-out', {
   name: 'signOut',
   action(params) {
     Meteor.logout();
-    FlowRouter.go('hello');
+    const targetURL = FlowRouter.getQueryParam('b');
+    if (targetURL) {
+      FlowRouter.go(targetURL);
+    } else {
+      FlowRouter.go('hello');
+    }
   }
 });
 
@@ -95,6 +100,16 @@ FlowRouter.route('/user-waiting', {
   action(params) {
     BlazeLayout.render('TransitionalLayout', {
       content: 'UserAccountWaitingPage'
+    });
+  }
+});
+
+FlowRouter.route('/transfer-organization/:transferId', {
+  name: 'transferOrganization',
+  triggersEnter: [checkLoggedIn],
+  action(params) {
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'TransferOrganizationPage'
     });
   }
 });

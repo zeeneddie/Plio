@@ -3,7 +3,8 @@ import {
   insert,
   setName,
   setDefaultCurrency,
-  transferOrganization
+  createOrganizationTransfer,
+  cancelOrganizationTransfer
 } from '/imports/api/organizations/methods.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
@@ -59,26 +60,52 @@ Template.OrganizationSettings_MainSettings.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Ownership of the organization "${name}" will be transfered to ${newOwnerName}`,
+      text: `Invitation to become an owner of "${name}" organization will be sent to ${newOwnerName}`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Transfer',
       closeOnConfirm: false
     }, () => {
-      this.modal().callMethod(transferOrganization, {
+      this.modal().callMethod(createOrganizationTransfer, {
         organizationId, newOwnerId
       }, (err) => {
         if (err) {
-          return;
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal({
+            title: 'Success',
+            text: 'An invitation to transfer ownership is successfully sent',
+            type: 'success',
+          });
         }
+      });
+    });
+  },
+  cancelOrgTransfer() {
+    if (!this.isEditable()) return;
 
-        swal({
-          title: 'Success',
-          text: 'Ownership succesfully transfered',
-          type: 'success',
-        }, () => {
-          this.modal().close();
-        });
+    const { _id:organizationId, name } = this.organization();
+
+    swal({
+      title: 'Are you sure?',
+      text: `Transfer of the "${name}" organization will be canceled`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      closeOnConfirm: false
+    }, () => {
+      this.modal().callMethod(cancelOrganizationTransfer, {
+        organizationId
+      }, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal({
+            title: 'Success',
+            text: `Transfer of the "${name}" organization is canceled`,
+            type: 'success',
+          });
+        }
       });
     });
   },

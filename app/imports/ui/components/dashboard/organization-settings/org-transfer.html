@@ -19,5 +19,12 @@
         {{/each}}
       </div>
     </div>
+    <div class="cancel-org-transfer" {{b "if: invitationSent"}}>
+      <span class="label text-default" {{b "text: invitationSentText"}}>
+      </span>
+      <a class="btn btn-link" {{b "click: cancelOrgTransfer"}}>
+        Cancel transfer
+      </a>
+    </div>
   {{/FormField}}
 </template>

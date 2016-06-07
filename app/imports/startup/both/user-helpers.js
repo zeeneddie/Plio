@@ -61,5 +61,11 @@ Meteor.users.helpers({
   },
   skype() {
     return this.profile.skype;
+  },
+  hasVerifiedEmail() {
+    return this.emails[0].verified;
+  },
+  hasAcceptedInvite() {
+    return !this.invitationId && !this.invitationExpirationDate;
   }
 });
