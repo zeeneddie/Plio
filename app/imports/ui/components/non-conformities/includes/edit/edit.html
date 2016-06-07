@@ -38,15 +38,9 @@
         <div class="card-block-collapse collapse" id="notify">
           <div ng-include="'includes/subcards-edit/notify.html'"></div>
         </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#occurrences" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Occurrences</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">1</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="occurrences">
-          <div ng-include="'includes/subcards-edit/occurrences.html'"></div>
-        </div>
+
+        {{> NCOccurences _id=this._id occurencesIds=this.occurences}}
+
         <div class="card-block-collapse collapse" id="nonconformities">
           <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
         </div>

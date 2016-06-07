@@ -6,3 +6,4 @@ import './magnitude';
 import './status';
 import './cost';
 import './ref';
+import './occurences';
