@@ -14,6 +14,9 @@
         <input type="radio" name="options" autocomplete="off"> Video
       </label>
     </div>
+    {{#if sourceHtmlUrl}}
+      <i class="fa fa-file-word-o fa-2x pull-right"></i>
+    {{/if}}
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
