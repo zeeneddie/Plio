@@ -81,7 +81,7 @@ class InvitationSender {
 
     //send notification
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the "${this._organization.name}"!`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system`,
       secondaryText: this._welcomeMessage,
       button: {
         label: 'Go to the dashboard',
@@ -99,7 +99,7 @@ class InvitationSender {
 
     // send invitation
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to the "${this._organization.name}" organization!`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system`,
       secondaryText: this._welcomeMessage,
       button: {
         label: 'Accept the invitation',
@@ -155,10 +155,10 @@ class InvitationSender {
     };
 
     if (isExisting) {
-      notificationSubject = `You have been added to the "${this._organization.name}" organization!`;
+      notificationSubject = `You have been added to the ${this._organization.name} management system`;
       this._sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     } else {
-      notificationSubject = `You have been invited to the "${this._organization.name}" organization!`;
+      notificationSubject = `You have been invited to to join the ${this._organization.name} management system`;
       this._sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     }
   }
