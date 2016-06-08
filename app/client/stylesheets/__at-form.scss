@@ -7,6 +7,12 @@
     line-height: 20px;
     margin-bottom: 0;
   }
+
+  @media (max-width: 767px) {
+    .form-control-label {
+      display: none;
+    }
+  }
 }
 
 .at-title {
@@ -58,7 +64,7 @@
   }
 }
 
-#at-btn {
+.at-btn {
   font-size: 16px;
   display: block;
   margin: 0 auto;
@@ -72,18 +78,15 @@
 #at-plio-logo {
   display: block;
   margin: 4rem auto;
-  max-width: 200px;
+  max-width: 150px;
 
   @media (max-width: 767px) {
     margin: 3rem auto;
     max-width: 100px;
   }
 
-  @media (max-height: 500px) {
+  @media (max-height: 500px) and (max-width: 767px) {
     display: none;
-    & + .card {
-      margin-top: 20px;
-    }
   }
 }
 
