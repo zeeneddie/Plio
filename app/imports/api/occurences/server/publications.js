@@ -8,3 +8,11 @@ Meteor.publish('occurences', function(nonConformityId) {
     return this.ready();
   }
 });
+
+Meteor.publish('occurencesByNCIds', function(ids) {
+  if (this.userId) {
+    return Occurences.find({ nonConformityId: { $in: ids } });
+  } else {
+    return this.ready();
+  }
+});

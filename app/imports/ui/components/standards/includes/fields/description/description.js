@@ -6,6 +6,9 @@ Template.ESDescription.viewmodel({
   update(e) {
     this.callWithFocusCheck(e, () => {
       const { description } = this.getData();
+
+      if (description === this.templateInstance.data.description) return;
+
       this.parent().update({ description });
     });
   },

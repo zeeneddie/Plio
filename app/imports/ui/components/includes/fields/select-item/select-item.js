@@ -12,7 +12,7 @@ Template.SelectItem.viewmodel({
 
         this.selected(_id);
         this.value(title);
-      } else if (!!this.selected() && items.length > 0) {
+      } else if (!!this.selected() && !this.value() && items.length > 0) {
         const find = items.filter(item => item._id === this.selected());
         const item = find.length > 0 && find[0];
 

@@ -18,7 +18,11 @@
 
       {{#if isActiveNCFilter 'magnitude'}}
         {{#each _magnitude}}
-          {{> ListItem template='NCSectionItem' title=this.name magnitude=this.value}}
+          {{> ListItem
+              template='NCSectionItem'
+              title=this.name
+              magnitude=this.value
+              rText=(calculateTotalCost this)}}
         {{/each}}
       {{/if}}
 

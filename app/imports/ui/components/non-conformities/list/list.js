@@ -2,11 +2,12 @@ import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { Problems } from '/imports/api/problems/problems.js';
+import { Occurences } from '/imports/api/occurences/occurences.js';
 import { NCTypes } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils'],
   onCreated() {
     this.searchText('');
   },
@@ -15,7 +16,6 @@ Template.NCList.viewmodel({
 
     const organizationId = this.organizationId();
 
-    // simply encapsulation
     const contains = ((() => {
       const query = { type: 'non-conformity', organizationId, _id: this.NCId(), isDeleted: { $in: [null, false] } };
       return Problems.findOne(query);
@@ -36,6 +36,25 @@ Template.NCList.viewmodel({
         }, 0);
       }
     }
+  },
+  calculateTotalCost({ value }) {
+    const ncs = ((() => {
+      const organizationId = this.organizationId();
+      const query = { magnitude: value, organizationId, cost: { $exists: true } };
+      return Problems.find(query).fetch();
+    })());
+
+    const total = ncs.reduce((prev, cur) => {
+      const { _id, cost } = cur;
+      const { value, currency } = cost;
+      const occurences = ((() => {
+        const query = { nonConformityId: _id };
+        return Occurences.find(query);
+      })());
+      const t = value * occurences.count();
+      return prev + t;
+    }, 0);
+    return this.round(total);
   },
   animating: false,
   expandAllFound() {

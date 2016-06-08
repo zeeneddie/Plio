@@ -2,11 +2,13 @@ import { Template } from 'meteor/templating';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { Problems } from '/imports/api/problems/problems.js';
+import { Occurences } from '/imports/api/occurences/occurences.js';
 
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus'],
   autorun() {
     this.templateInstance.subscribe('standards', this.organizationId());
+    this.templateInstance.subscribe('improvementPlan', this.NCId());
   },
   NC() {
     const organizationId = this.organizationId();
@@ -42,6 +44,10 @@ Template.NCCard.viewmodel({
   },
   renderCost({ value, currency } = {}) {
     return this.getCurrencySymbol(currency) + value;
+  },
+  occurences() {
+    const query = { nonConformityId: this.NCId() };
+    return Occurences.find(query);
   },
   openEditNCModal() {
     this.modal().open({

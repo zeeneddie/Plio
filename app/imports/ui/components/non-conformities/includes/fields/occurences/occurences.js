@@ -6,11 +6,6 @@ import { insert, update, remove } from '/imports/api/occurences/methods.js';
 
 Template.NCOccurences.viewmodel({
   mixin: ['collapse', 'addForm', 'modal', 'date'],
-  autorun() {
-    const _id = this._id && this._id();
-    this.templateInstance.subscribe('occurences', _id);
-  },
-  occurencesIds: [],
   occurences() {
     const query = ((() => {
       const nonConformityId = this._id && this._id();
@@ -69,7 +64,26 @@ Template.NCOccurences.viewmodel({
     if (!_id) {
       viewmodel.destroy();
     } else {
-      this.modal().callMethod(remove, { _id });
+      const seq = viewmodel.sequentialId && viewmodel.sequentialId();
+      swal(
+        {
+          title: 'Are you sure?',
+          text: `The occurence "${seq}" will be removed.`,
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Remove',
+          closeOnConfirm: false
+        },
+        () => {
+          const cb = (err) => {
+            if (!err) {
+              swal('Removed!', `The occurence "${seq}" was removed successfully.`, 'success')
+            }
+          };
+
+          this.modal().callMethod(remove, { _id }, cb);
+        }
+      );
     }
   }
 });

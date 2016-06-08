@@ -58,8 +58,26 @@ Template.NCStandards.viewmodel({
   },
   remove(viewmodel, cb) {
     const _id = viewmodel._id && viewmodel._id();
+    const { value:title } = viewmodel.getData();
     const options = { $pull: { standards: _id } };
-    this.parent().update({ options });
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The standard "${title}" will be unlinked from this non-conformity.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      },
+      () => {
+        const cb = (err) => {
+          if (!err) {
+            swal('Removed!', `The standard "${title}" was unlinked successfully.`, 'success')
+          }
+        };
+        this.parent().update({ options }, cb);
+      }
+    );
   },
   addLinkedStandard() {
     this.addForm(

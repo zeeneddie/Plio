@@ -46,14 +46,18 @@
             </div>
 
             <div class="list-group-item" {{b "if: this.standards"}}>
-              <p class="list-group-item-text">Standards</p>
-              {{#each this.standards}}
-                {{#with linkedStandard this}}
-                  <h4 class="list-group-item-heading">
-                    <a {{b "text: this.title, attr: { href: this.href }"}}></a>
-                  </h4>
-                {{/with}}
-              {{/each}}
+              {{#if Template.subscriptionsReady}}
+                <p class="list-group-item-text">Standards</p>
+                {{#each this.standards}}
+                  {{#with linkedStandard this}}
+                    <h4 class="list-group-item-heading">
+                      <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+                    </h4>
+                  {{/with}}
+                {{/each}}
+              {{else}}
+                {{> Preloader size=2}}
+              {{/if}}
             </div>
 
 
@@ -97,11 +101,13 @@
                 </div>
               </div>
               <div class="col-sm-6">
-                <div class="list-group-item" {{b "if: this.occurences"}}>
-                  {{#with this.occurences}}
+                <div class="list-group-item">
+                  {{#if Template.subscriptionsReady}}
                     <p class="list-group-item-text">Number of occurrences</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.length"}}></h4>
-                  {{/with}}
+                    <h4 class="list-group-item-heading" {{b "text: occurences.count"}}></h4>
+                  {{else}}
+                    {{> Preloader size=2}}
+                  {{/if}}
                 </div>
               </div>
             </div>

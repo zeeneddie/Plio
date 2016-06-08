@@ -6,6 +6,7 @@ export default {
 
   insert({ ...args, nonConformityId }) {
     const lastOccurence = this.collection.findOne({
+      nonConformityId,
       serialNumber: {
         $type: 16 // 32-bit integer
       }
