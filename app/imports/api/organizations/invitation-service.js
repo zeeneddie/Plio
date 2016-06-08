@@ -82,9 +82,14 @@ class InvitationSender {
     //send notification
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system`,
+      avatar: {
+        alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        title: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        url: Meteor.absoluteUrl() + sender.profile.avatar
+      },
       secondaryText: this._welcomeMessage,
       button: {
-        label: 'Go to the dashboard',
+        label: 'Visit this organization on Plio',
         url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
       }
     }, basicNotificationData);
@@ -101,6 +106,11 @@ class InvitationSender {
     let notificationData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system`,
       secondaryText: this._welcomeMessage,
+      avatar: {
+        alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        title: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        url: Meteor.absoluteUrl() + sender.profile.avatar
+      },
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
