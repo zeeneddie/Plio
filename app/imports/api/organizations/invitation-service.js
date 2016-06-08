@@ -85,7 +85,7 @@ class InvitationSender {
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
         title: `${sender.profile.firstName} ${sender.profile.lastName}`,
-        url: Meteor.absoluteUrl() + sender.profile.avatar
+        url: sender.profile.avatar
       },
       secondaryText: this._welcomeMessage,
       button: {
@@ -109,13 +109,13 @@ class InvitationSender {
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
         title: `${sender.profile.firstName} ${sender.profile.lastName}`,
-        url: Meteor.absoluteUrl() + sender.profile.avatar
+        url: sender.profile.avatar
       },
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
       },
-      footerText: `This link expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}`
+      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}`
     }, basicNotificationData);
 
     new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
