@@ -75,7 +75,24 @@
   max-width: 200px;
 
   @media (max-width: 767px) {
-    margin: 2rem auto;
+    margin: 3rem auto;
     max-width: 100px;
+  }
+
+  @media (max-height: 500px) {
+    display: none;
+    & + .card {
+      margin-top: 20px;
+    }
+  }
+}
+
+#at-p-logo {
+  display: block;
+  margin: 4rem auto;
+  max-width: 30px;
+
+  @media (max-width: 767px) {
+    margin: 3rem auto;
   }
 }
