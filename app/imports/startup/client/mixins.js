@@ -26,6 +26,7 @@ ViewModel.mixin({
           }
         });
       }
+
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
@@ -65,13 +66,15 @@ ViewModel.mixin({
 
       !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
 
-      return item.toggleCollapse(() => {
+      const cb = () => {
         !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
 
         if (index === array.length - 1 && _.isFunction(complete)) complete();
 
         return this.expandCollapseItems(array, { index: index + 1, complete, expandNotExpandable });
-      });
+      };
+
+      return item.toggleCollapse(cb);
     }
   },
   modal: {

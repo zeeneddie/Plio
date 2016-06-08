@@ -15,6 +15,19 @@ const RequiredSchema = new SimpleSchema({
   }
 });
 
-const OccurencesSchema = new SimpleSchema([BaseEntitySchema, RequiredSchema]);
+const OccurencesSchema = new SimpleSchema([
+  BaseEntitySchema,
+  RequiredSchema,
+  {
+    serialNumber: {
+      type: Number,
+      min: 0
+    },
+    sequentialId: {
+      type: String,
+      min: 5
+    }
+  }
+]);
 
 export { OccurencesSchema, RequiredSchema };

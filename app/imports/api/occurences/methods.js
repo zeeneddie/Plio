@@ -21,7 +21,7 @@ export const insert = new ValidatedMethod({
       throw new Meteor.Error(403, 'Non-conformity with that ID does not exist');
     }
 
-    return OccurencesService.insert({ ...args });
+    return OccurencesService.insert({ ...args, nonConformityId });
   }
 });
 
