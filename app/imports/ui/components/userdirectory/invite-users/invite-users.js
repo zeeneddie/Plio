@@ -4,7 +4,7 @@ import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: 'modal',
-  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to store documents, complete worksheets and track issues during this project.',
+  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share compliance standards documents, to record non-conformities and risks and to track actions. See you soon.',
   usersEntries: _.range(1, 5).map((i) => {
     return {avatarIndex: i};
   }),
