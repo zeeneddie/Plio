@@ -1,7 +1,9 @@
+import { AvatarPlaceholders } from '/imports/api/constants.js'
+
 export default Utils = {
   getRandomAvatarUrl() {
-    const randomAvatar = Math.floor(Math.random() * 16) + 1;
-    return `/avatars/avatar-placeholder-${randomAvatar}.png`;
+    const randomAvatarIndex = Math.floor(Math.random() * 16);
+    return AvatarPlaceholders[randomAvatarIndex];
   },
 
   showError(errorMsg) {

@@ -3,7 +3,7 @@ import HandlebarsCompiledCache from '/imports/core/HandlebarsCompiledCache';
 
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
-  minimalisticEmail: getAssetPath('email', 'minimalistic-email')
+  minimalisticEmail: getAssetPath('email', 'personal-email')
 }) : false;
 
 Accounts.emailTemplates.siteName = 'Plio';
