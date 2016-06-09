@@ -67,16 +67,11 @@
             documentId=this._id
             documentType="non-conformity"}}
 
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#lessons" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Lessons learned</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">1</span>
-            <span class="label label-warning status-indicator"></span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="lessons">
-          <div ng-include="'includes/subcards-edit/lessons.html'"></div>
-        </div>
+        {{> Subcards_LessonsLearned_Edit
+            documentId=this._id
+            documentType="non-conformity"
+            linkedTo=this.title}}
+
         <div class="card-block card-block-collapse-toggle collapsed shroud" href="#files" data-toggle="collapse">
           <h4 class="card-title pull-xs-left">Other files</h4>
           <h4 class="card-title pull-xs-right">

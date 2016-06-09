@@ -10,14 +10,17 @@
     {{/FormField}}
 
     {{#FormField label="Created date"}}
-      {{> Datepicker placeholder="Created date" date=date}}
+      {{> Datepicker
+          placeholder="Created date"
+          date=date
+          onChange=onChangeDateCb}}
     {{/FormField}}
 
     {{#FormField label="Created by"}}
       {{> SelectItem
           items=members
           selected=owner
-          onUpdate=onUpdateCb}}
+          onUpdate=onUpdateOwnerCb}}
     {{/FormField}}
   </div>
   {{#QuillEditor}}

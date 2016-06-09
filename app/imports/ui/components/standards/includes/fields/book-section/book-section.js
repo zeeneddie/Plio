@@ -7,6 +7,15 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
+  onCreated() {
+    const section = ((() => {
+      const sections = this.bookSections().fetch();
+      return sections.length > 0 && sections[0];
+    })());
+    if (!this.selectedBookSectionId() && section) {
+      this.selectedBookSectionId(section._id);
+    }
+  },
   selectedBookSectionId: '',
   section() {
     const child = this.child('SelectItem');

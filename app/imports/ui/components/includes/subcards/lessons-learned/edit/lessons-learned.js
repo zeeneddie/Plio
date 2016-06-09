@@ -34,7 +34,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
     this.modal().callMethod(insert, { organizationId, documentId, documentType, ...args }, cb);
   },
   update(viewmodel, { _id, title, date, owner, notes }) {
-    const context = this.templateInstance.data;
+    const context = viewmodel.templateInstance.data;
     const cb = () => viewmodel.toggleCollapse();
 
 
@@ -48,10 +48,29 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   remove(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
 
+    const { title } = viewmodel.getData();
+
     if (!_id) {
       return viewmodel.destroy();
     } else {
-      this.modal().callMethod(remove, { _id }, cb);
+      swal(
+        {
+          title: 'Are you sure?',
+          text: `The lesson "${title}" will be removed.`,
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Remove',
+          closeOnConfirm: false
+        },
+        () => {
+          const cb = () => {
+            viewmodel.destroy();
+            swal('Removed!', `The lesson "${title}" was removed successfully.`, 'success');
+          };
+
+          this.modal().callMethod(remove, { _id }, cb);
+        }
+      );
     }
   },
   onSaveCb() {
@@ -60,7 +79,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   save(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
 
-    const { title, date, owner, notes  } = viewmodel.getData();
+    const { title, date, owner, notes } = viewmodel.getData();
 
     if (!_id) {
       this.insert(viewmodel, { title, date, owner, notes });

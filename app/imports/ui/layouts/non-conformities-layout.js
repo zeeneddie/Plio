@@ -20,6 +20,7 @@ Template.NCLayout.viewmodel({
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('problems', _id),
+        this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('occurencesByNCIds', NCIds)
       ]);
     },
