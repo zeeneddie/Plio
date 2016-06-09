@@ -8,9 +8,7 @@ import {
   updateEmail,
   updatePhoneNumber,
   addPhoneNumber,
-  removePhoneNumber,
-  setNotifications,
-  setNotificationSound
+  removePhoneNumber
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
@@ -29,8 +27,6 @@ Template.UserEdit.viewmodel({
   country: '',
   phoneNumbers: [],
   skype: '',
-  isNotificationsEnabled: false,
-  notificationSound: '',
   autorun() {
     const user = this.user();
     if (user) {
@@ -60,18 +56,6 @@ Template.UserEdit.viewmodel({
     this.modal().callMethod(updateEmail, {
       _id: this.userId(),
       email
-    });
-  },
-  setNotifications(enabled) {
-    this.modal().callMethod(setNotifications, {
-      _id: this.userId(),
-      enabled
-    });
-  },
-  setNotificationSound(soundFile) {
-    this.modal().callMethod(setNotificationSound, {
-      _id: this.userId(),
-      soundFile
     });
   },
   uploadAvatarFile(viewModel) {
