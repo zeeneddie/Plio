@@ -12,13 +12,14 @@ import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse'],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
     });
   },
+  closeAllOnCollapse: false,
   standards() {
     const query = { organizationId: this.organizationId() };
     const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
@@ -51,6 +52,11 @@ Template.StandardsCard.viewmodel({
   },
   improvementPlan() {
     const improvementPlan = ImprovementPlans.findOne({ documentId: this.standardId() });
+
+    if (!improvementPlan) {
+      return;
+    }
+
     const reviewDates = improvementPlan.reviewDates || [];
     const files = improvementPlan.files || [];
 

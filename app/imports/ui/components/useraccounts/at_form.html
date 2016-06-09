@@ -14,22 +14,25 @@
           {{#if showResult}}
             {{> atResult}}
           {{/if}}
-          {{#if showMessage}}
-            {{> atMessage}}
-          {{/if}}
           {{#if showPwdForm}}
             {{> atPwdForm}}
           {{/if}}
-          {{#if showSignInLink}}
-            {{> atSigninLink}}
-          {{/if}}
-          {{#if showSignUpLink}}
-            {{> atSignupLink}}
+          {{> atPwdFormBtn}}
+          {{#if showMessage}}
+            {{> atMessage}}
           {{/if}}
         </div>
       </div>
-      <div class="card-footer text-xs-center">
-        {{> atPwdFormBtn}}
+      <div class="card-footer">
+        {{#if showForgotPasswordLink}}
+          {{> atPwdLink}}
+        {{/if}}
+        {{#if showSignInLink}}
+          {{> atSigninLink}}
+        {{/if}}
+        {{#if showSignUpLink}}
+          {{> atSignupLink}}
+        {{/if}}
       </div>
     </div>
   {{/unless}}

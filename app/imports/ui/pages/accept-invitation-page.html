@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 no-padding">
-        <img src="/plio-logo.png" alt="plio logo" id="at-plio-logo">
+        <img src="/plio-text-logo.png" alt="plio logo" id="at-plio-logo">
 
         {{#if Template.subscriptionsReady}}
           {{#unless organization}}
@@ -94,18 +94,20 @@
                       </fieldset>
                     </form>
                   </div>
+                  <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary" {{disabled}}>
+                    Accept invitation
+                  </button>
                 </div>
               </div>
               <div class="card-footer text-xs-center">
-                <button {{b "click: acceptInvitation"}} class="at-btn submit btn btn-primary" {{disabled}}>
-                  Accept invitation
-                </button>
+                You will be able to change your personal information later on.
               </div>
             </div>
           {{/unless}}
         {{else}}
           {{> PreloaderPage}}
         {{/if}}
+        <img src="/p-logo.png" alt="plio logo" id="at-p-logo">
       </div>
     </div>
   </div>
