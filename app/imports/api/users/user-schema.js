@@ -59,6 +59,18 @@ const UserProfileSchema = new SimpleSchema({
   }
 });
 
-const UserSchema = new SimpleSchema([UserProfileSchema]);
+const UserSchema = new SimpleSchema([
+  UserProfileSchema,
+  {
+    isNotificationsEnabled: {
+      type: Boolean,
+      defaultValue: true
+    },
+    notificationSound: {
+      type: String,
+      optional: true
+    }
+  }
+]);
 
 export { UserSchema, UserProfileSchema, PhoneNumberSchema };
