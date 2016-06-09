@@ -7,15 +7,15 @@ import Sounds from '/imports/api/sounds.js';
 Template.UserPreferences.viewmodel({
   mixin: ['modal'],
   userId: '',
-  isNotificationsEnabled: false,
+  areNotificationsEnabled: false,
   notificationSound: '',
   isPlayEnabled: true,
   autorun: [
     function() {
       const user = this.user();
       if (user) {
-        const { isNotificationsEnabled, notificationSound } = user;
-        this.load({ isNotificationsEnabled, notificationSound });
+        const { areNotificationsEnabled, notificationSound } = user.preferences || {};
+        this.load({ areNotificationsEnabled, notificationSound });
       }
     },
     function() {
@@ -44,7 +44,7 @@ Template.UserPreferences.viewmodel({
     });
   },
   updateNotifications() {
-    this.setNotifications(!this.isNotificationsEnabled());
+    this.setNotifications(!this.areNotificationsEnabled());
   },
   updateSound() {
     this.setNotificationSound(this.notificationSound());

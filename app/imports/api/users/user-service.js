@@ -68,11 +68,11 @@ export default {
 
   setNotifications({ _id, enabled }) {
     const update = {
-      $set: { isNotificationsEnabled: enabled }
+      $set: { 'preferences.areNotificationsEnabled': enabled }
     };
 
     if (enabled === false) {
-      update['$unset'] = { notificationSound: '' };
+      update['$unset'] = { 'preferences.notificationSound': '' };
     }
 
     return this.collection.update({ _id }, update);
@@ -82,11 +82,11 @@ export default {
     let update;
     if (soundFile) {
       update = {
-        $set: { notificationSound: soundFile }
+        $set: { 'preferences.notificationSound': soundFile }
       };
     } else {
       update = {
-        $unset: { notificationSound: '' }
+        $unset: { 'preferences.notificationSound': '' }
       };
     }
 

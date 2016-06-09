@@ -95,7 +95,7 @@ class InvitationSender {
       }
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
+    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
@@ -119,7 +119,7 @@ class InvitationSender {
       footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
+    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 

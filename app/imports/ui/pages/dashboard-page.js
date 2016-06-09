@@ -26,6 +26,6 @@ Template.DashboardPage.viewmodel({
   },
   standardsMetrics() {
     const notViewedText = this.standardsNotViewedCount() ? `, ${this.standardsNotViewedCount()} new` : '';
-    return this.isReady() ? `${pluralize('standard', this.standardsCount(), true)} ${notViewedText}` : '';
+    return this.isReady() ? `${pluralize('standard', this.standardsCount(), true)}${notViewedText}` : '';
   }
 });
