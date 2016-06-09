@@ -165,7 +165,18 @@
   }
 }
 
+.card.standard-details {
+  .content-list {
+    width: 100%;
+    border-right: none;
 
+    .list-group-toggle {
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 0;
+    }
 
-
-
+    .list-group-collapse {
+      margin: 0;
+    }
+  }
+}
