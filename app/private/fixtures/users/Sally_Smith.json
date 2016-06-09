@@ -44,5 +44,6 @@
       "create-update-delete-standards",
       "view-team-actions"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

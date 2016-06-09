@@ -41,5 +41,6 @@
       "edit-user-roles",
       "change-org-settings"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

@@ -64,6 +64,33 @@ export default {
         'profile.phoneNumbers': { _id }
       }
     });
+  },
+
+  setNotifications({ _id, enabled }) {
+    const update = {
+      $set: { isNotificationsEnabled: enabled }
+    };
+
+    if (enabled === false) {
+      update['$unset'] = { notificationSound: '' };
+    }
+
+    return this.collection.update({ _id }, update);
+  },
+
+  setNotificationSound({ _id, soundFile }) {
+    let update;
+    if (soundFile) {
+      update = {
+        $set: { notificationSound: soundFile }
+      };
+    } else {
+      update = {
+        $unset: { notificationSound: '' }
+      };
+    }
+
+    return this.collection.update({ _id }, update);
   }
 
 };

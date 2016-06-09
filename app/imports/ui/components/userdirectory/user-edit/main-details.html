@@ -43,5 +43,33 @@
             {{b "value: description, focusout: updateDescription, enable: isEditable"}} />
       {{/ClearableField}}
     {{/FormField}}
+
+    {{#FormField label="Notifications"}}
+      <button type="button" class="btn btn-checkbox btn-secondary"
+          id="notifications-checkbox" data-toggle="button" autocomplete="off"
+          {{b "click: setNotifications, class: {active: isNotificationsEnabled}, enable: isEditable"}}>
+        <i class="ms-Icon ms-Icon--check"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Notification sound"}}
+      <div class="form-group-flex">
+        <div class="form-group-flex-flex margin-right">
+          <select class="c-select" id="notification-sounds"
+              {{b "options: sounds, optionsValue: file, optionsText: name, value: notificationSound, defaultText: 'No sound', enable: isEditable && isNotificationsEnabled"}}>
+          </select>
+        </div>
+        <button type="button" class="btn btn-secondary" {{b "click: playSound, enable: isEditable && isNotificationsEnabled && notificationSound"}}>
+          <i class="fa fa-volume-up fa-lg" aria-hidden="true"></i>
+        </button>
+        {{#if notificationSound}}
+          <audio id="audio">
+            <source src="{{notificationSound}}.mp3" type="audio/mpeg" />
+            <source src="{{notificationSound}}.ogg" type="audio/ogg" />
+            <source src="{{notificationSound}}.m4r" type="audio/mpeg" />
+          </audio>
+        {{/if}}
+      </div>
+    {{/FormField}}
   </div>
 </template>
