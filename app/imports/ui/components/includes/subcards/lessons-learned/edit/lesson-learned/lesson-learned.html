@@ -1,0 +1,30 @@
+<template name="Subcards_LessonLearned">
+  <div class="card-block">
+    {{#FormField label="Title"}}
+      <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+      {{> ClearField field="title"}}
+    {{/FormField}}
+
+    {{#FormField label="Linked to"}}
+      <input type="text" class="form-control" disabled="" {{b "value: linkedTo"}}>
+    {{/FormField}}
+
+    {{#FormField label="Created date"}}
+      {{> Datepicker placeholder="Created date" date=date}}
+    {{/FormField}}
+
+    {{#FormField label="Created by"}}
+      {{> SelectItem
+          items=members
+          selected=owner
+          onUpdate=onUpdateCb}}
+    {{/FormField}}
+  </div>
+  {{#QuillEditor}}
+    {{#if _id}}
+      <div {{b "html: notes"}}></div>
+    {{else}}
+      <div></div>
+    {{/if}}
+  {{/QuillEditor}}
+</template>

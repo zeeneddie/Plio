@@ -18,9 +18,15 @@ export const insert = new ValidatedMethod({
 
   validate: new SimpleSchema([requiredSchema, organizationIdSchema]).validator(),
 
-  run(...args) {
+  run({ documentId }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create a lesson');
+    }
+
+    const lesson = Lessons.findOne({ documentId });
+
+    if (!!lesson) {
+      throw new Meteor.Error(403, 'Lesson learned for that document already exists!');
     }
 
     return LessonsService.insert(...args);

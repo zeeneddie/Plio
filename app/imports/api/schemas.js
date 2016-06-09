@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { TimeUnits } from './constants.js';
+import { TimeUnits, DocumentTypes } from './constants.js';
+
 
 
 export const IdSchema = new SimpleSchema({
@@ -57,6 +58,13 @@ export const UserIdSchema = new SimpleSchema({
 
 export const DocumentIdSchema = new SimpleSchema({
   documentId: idSchemaDoc
+});
+
+export const DocumentTypeSchema = new SimpleSchema({
+  documentType: {
+    type: String,
+    allowedValues: DocumentTypes
+  }
 });
 
 export const optionsSchema = new SimpleSchema({

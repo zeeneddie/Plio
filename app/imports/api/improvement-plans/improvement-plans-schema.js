@@ -1,15 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, DocumentIdSchema } from '../schemas.js';
-import { DocumentTypes } from '../constants.js';
+import { BaseEntitySchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
 
-
-const requiredSchema = new SimpleSchema([DocumentIdSchema, {
-  documentType: {
-    type: String,
-    allowedValues: DocumentTypes
-  }
-}]);
+const requiredSchema = new SimpleSchema([DocumentIdSchema, DocumentTypeSchema]);
 
 const optionalSchema = new SimpleSchema({
   'desiredOutcome': {

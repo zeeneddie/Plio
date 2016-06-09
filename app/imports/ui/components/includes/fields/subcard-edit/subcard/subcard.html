@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
       {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-      <strong {{b "text: _lText"}}></strong>
+      <span {{b "html: _lText"}}></span>
       <span class="pull-xs-right" {{b "text: _rText"}}></span>
     </div>
     <div class="card-block-collapse collapse" {{b "ref: collapse"}}>

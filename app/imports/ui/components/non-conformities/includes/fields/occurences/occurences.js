@@ -6,6 +6,9 @@ import { insert, update, remove } from '/imports/api/occurences/methods.js';
 
 Template.NCOccurences.viewmodel({
   mixin: ['collapse', 'addForm', 'modal', 'date'],
+  renderText({ sequentialId }) {
+    return `<strong>${sequentialId}</strong>`;
+  },
   occurences() {
     const query = ((() => {
       const nonConformityId = this._id && this._id();
