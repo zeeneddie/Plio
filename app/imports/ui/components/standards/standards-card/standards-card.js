@@ -49,11 +49,6 @@ Template.StandardsCard.viewmodel({
   renderNotifyUsers(users) {
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
-  lessons() {
-    const query = { standardId: this.standardId() };
-    const options = { sort: { serialNumber: 1 } };
-    return LessonsLearned.find(query, options);
-  },
   openEditStandardModal() {
     this.modal().open({
       title: 'Compliance standard',
