@@ -81,7 +81,7 @@ class InvitationSender {
 
     //send notification
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system.`,
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
         title: `${sender.profile.firstName} ${sender.profile.lastName}`,
@@ -104,7 +104,7 @@ class InvitationSender {
 
     // send invitation
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system.`,
       secondaryText: this._welcomeMessage,
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
@@ -115,7 +115,7 @@ class InvitationSender {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
       },
-      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}`
+      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
 
     new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
