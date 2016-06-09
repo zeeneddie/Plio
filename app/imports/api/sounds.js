@@ -12,15 +12,15 @@ export default [
     "file": "/sounds/coins"
   },
   {
-    "name": "Gets In The Way'",
+    "name": "Gets In The Way",
     "file": "/sounds/gets-in-the-way"
   },
   {
-    "name": "Graceful'",
+    "name": "Graceful",
     "file": "/sounds/graceful"
   },
   {
-    "name": "Isn't It'",
+    "name": "Isn't It",
     "file": "/sounds/isnt-it"
   },
   {
@@ -28,10 +28,10 @@ export default [
     "file": "/sounds/job-done"
   },
   {
-    "name": "Office 1'",
+    "name": "Office 1",
     "file": "/sounds/office-1" },
   {
-    "name": "Oringz-W428'",
+    "name": "Oringz-W428",
     "file": "/sounds/oringz-w428"
   },
   {

@@ -1,19 +1,9 @@
 import { Template } from 'meteor/templating';
 
-import Sounds from '/imports/api/sounds.js';
-
 
 Template.UserEdit_MainDetails.viewmodel({
   mixin: ['callWithFocusCheck'],
   avatarFile: null,
-  isNotificationsEnabled: false,
-  notificationSound: '',
-  autorun() {
-    if (this.notificationSound() && this.audio()) {
-      // without setTimeout load() doesn't work in safari
-      Meteor.setTimeout(() => this.audio().load(), 100);
-    }
-  },
   isPropChanged(propName, newVal) {
     const savedVal = this.templateInstance.data[propName];
     return newVal && newVal !== savedVal;
@@ -63,28 +53,6 @@ Template.UserEdit_MainDetails.viewmodel({
   },
   isEditable() {
     return this.parent().isEditable();
-  },
-  setNotifications() {
-    this.parent().setNotifications(!this.isNotificationsEnabled());
-  },
-  audio() {
-    return this.templateInstance.$('#audio')[0];
-  },
-  playSound() {
-    if (this.notificationSound()) {
-      this.audio().play();
-    }
-  },
-  sounds() {
-    return Sounds;
-  },
-  updateSound() {
-    this.parent().setNotificationSound(this.notificationSound());
-  },
-  events: {
-    'change #notification-sounds'(e, tpl) {
-      this.updateSound();
-    }
   },
   getData() {
     return {
