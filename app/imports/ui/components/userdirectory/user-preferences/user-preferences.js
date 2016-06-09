@@ -9,6 +9,7 @@ Template.UserPreferences.viewmodel({
   userId: '',
   isNotificationsEnabled: false,
   notificationSound: '',
+  isPlayEnabled: true,
   autorun: [
     function() {
       const user = this.user();
@@ -49,10 +50,11 @@ Template.UserPreferences.viewmodel({
     this.setNotificationSound(this.notificationSound());
   },
   audio() {
-    return this.templateInstance.$('#audio')[0];
+    return this.templateInstance.find('#audio');
   },
   playSound() {
     if (this.notificationSound()) {
+      this.isPlayEnabled(false);
       this.audio().play();
     }
   },
@@ -61,7 +63,11 @@ Template.UserPreferences.viewmodel({
   },
   events: {
     'change #notification-sounds'(e, tpl) {
+      this.isPlayEnabled(true);
       this.updateSound();
-    }
+    },
+    'ended #audio'() {
+      this.isPlayEnabled(true);
+    },
   }
 });
