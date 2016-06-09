@@ -20,7 +20,7 @@
     "lastName": "S",
     "initials": "VS",
     "description": "Software developer",
-    "avatar": "/avatars/avatar-placeholder-4.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/4.png",
     "address": "Ternopil",
     "skype": "loremipsum",
     "country": "UA",

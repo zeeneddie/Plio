@@ -20,7 +20,7 @@
     "lastName": "Rokosh",
     "initials": "MR",
     "description": "IT manager",
-    "avatar": "/avatars/avatar-placeholder-2.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png",
     "skype": "m.rokosh",
     "country": "UK",
     "phoneNumbers": [

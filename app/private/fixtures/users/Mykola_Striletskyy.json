@@ -16,7 +16,7 @@
     }
   ],
   "profile": {
-    "avatar": "/avatars/avatar-placeholder-11.png"
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/11.png"
   },
   "status": "offline",
   "statusConnection": "offline",
