@@ -19,7 +19,18 @@ import OrgNotificationsSender from './org-notifications-sender.js';
 export default OrganizationService = {
   collection: Organizations,
 
+  _ensureNameIsUnique(name) {
+    const nameIsUnique = !this.collection.findOne({ name });
+    if (!nameIsUnique) {
+      throw new Meteor.Error(
+        400, `Organization with name "${name}" already exists`
+      );
+    }
+  },
+
   insert({name, ownerId, currency}) {
+    this._ensureNameIsUnique(name);
+
     const lastOrg = this.collection.findOne({
       serialNumber: {
         $type: 16 // 32-bit integer
@@ -75,6 +86,8 @@ export default OrganizationService = {
   },
 
   setName({_id, name}) {
+    this._ensureNameIsUnique(name);
+
     return this.collection.update({ _id }, {
       $set: { name }
     });
