@@ -11,6 +11,9 @@
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
+                <a class="btn btn-primary" {{b "if: hasDocxAttachment, click: expandStandardModal"}}>
+                  <i class="fa fa-expand"></i>
+                </a>
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
@@ -37,7 +40,7 @@
                 <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
               </h4>
             </a>
-            <div class="list-group-collapse collapse" {{b "ref: collapse"}}>
+            <div class="list-group-collapse" {{b "ref: collapse, class: { collapse: hasDocxAttachment }"}}>
               <div class="list-group">
 
                 <div class="list-group-item" {{b "if: this.description"}}>

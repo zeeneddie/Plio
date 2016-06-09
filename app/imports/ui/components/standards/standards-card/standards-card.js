@@ -17,6 +17,7 @@ Template.StandardsCard.viewmodel({
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
+      this.collapsed(this.hasDocxAttachment());
     });
   },
   closeAllOnCollapse: false,
@@ -30,6 +31,10 @@ Template.StandardsCard.viewmodel({
     const query = { _id: this.standardId(), organizationId: this.organizationId() };
     const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
     return Standards.findOne(filterQuery);
+  },
+  hasDocxAttachment() {
+    const standard = this.standard();
+    return ( standard && standard.source1 && standard.source1.htmlUrl ) || ( standard && standard.source2 && standard.source2.htmlUrl );
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
@@ -60,8 +65,8 @@ Template.StandardsCard.viewmodel({
     const reviewDates = improvementPlan.reviewDates || [];
     const files = improvementPlan.files || [];
 
-    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate && 
-        !improvementPlan.reviewDates.length && !improvementPlan.owner && 
+    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate &&
+        !improvementPlan.reviewDates.length && !improvementPlan.owner &&
         !improvementPlan.files.length) {
       return;
     }
