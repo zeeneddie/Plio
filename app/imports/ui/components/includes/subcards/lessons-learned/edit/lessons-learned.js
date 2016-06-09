@@ -6,23 +6,69 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   mixin: ['collapse', 'modal', 'addForm', 'organization'],
   documentId: '',
   documentType: '',
+  linkedTo: '',
   renderText({ title, serialNumber }) {
     return `<strong>LL${serialNumber}</strong> ${title}`;
   },
   lessons() {
     const documentId = this.documentId();
-    const query = { standardId: documentId };
+    const query = { documentId };
     const options = { sort: { serialNumber: 1 } };
     return LessonsLearned.find(query, options);
   },
-  insert({ ...args }, cb) {
+  addLesson() {
+    this.addForm(
+      'SubCardEdit',
+      {
+        content: 'Subcards_LessonLearned',
+        onSave: this.save.bind(this),
+        onDelete: this.remove.bind(this)
+      }
+    );
+  },
+  insert(viewmodel, { ...args }) {
     const organizationId = this.organizationId();
+    const { documentId, documentType } = this.data();
+    const cb = () => viewmodel.destroy();
+
     this.modal().callMethod(insert, { organizationId, documentId, documentType, ...args }, cb);
   },
-  update({ ...args }, cb) {
-    this.modal().callMethod(update, { ...args }, cb);
+  update(viewmodel, { _id, title, date, owner, notes }) {
+    const context = this.templateInstance.data;
+    const cb = () => viewmodel.toggleCollapse();
+
+
+    if (context['title'] === title &&
+        context['date']  === date  &&
+        context['owner'] === owner &&
+        context['notes'] === notes) return;
+
+    this.modal().callMethod(update, { _id, title, date, owner, notes }, cb);
   },
-  remove({ _id }, cb) {
-    this.modal().callMethod(remove, { _id }, cb);
-  }
+  remove(viewmodel) {
+    const _id = viewmodel._id && viewmodel._id();
+
+    if (!_id) {
+      return viewmodel.destroy();
+    } else {
+      this.modal().callMethod(remove, { _id }, cb);
+    }
+  },
+  onSaveCb() {
+    return this.save.bind(this);
+  },
+  save(viewmodel) {
+    const _id = viewmodel._id && viewmodel._id();
+
+    const { title, date, owner, notes  } = viewmodel.getData();
+
+    if (!_id) {
+      this.insert(viewmodel, { title, date, owner, notes });
+    } else {
+      this.update(viewmodel, { _id, title, date, owner, notes });
+    }
+  },
+  onRemoveCb() {
+    return this.remove.bind(this);
+  },
 });

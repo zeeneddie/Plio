@@ -9,6 +9,7 @@
             owner=this.owner
             notes=this.notes
             serialNumber=this.serialNumber
+            linkedTo=../linkedTo
             _lText=(renderText this)
             content="Subcards_LessonLearned"
             onSave=onSaveCb
@@ -16,7 +17,7 @@
       {{/each}}
     </div>
     <div class="text-xs-center">
-      <button type="button" class="btn btn-link" {{b "click: addForm('Subcards_LessonLearned')"}}>Add a lesson learned</button>
+      <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
     </div>
   {{/SubCardEditWrapper}}
 </template>
