@@ -11,25 +11,15 @@ Template.NCCost.viewmodel({
     }
   },
   currency: '',
-  value: '',
-  currencies() {
-    return _.keys(OrgCurrencies);
-  },
-  select(currency) {
-    this.currency(currency);
-    this.update();
-  },
+  cost: '',
   update() {
-    const value = parseInt(this.value(), 10);
-    const currency = this.currency();
+    const cost = parseInt(this.cost(), 10);
 
-    if (!value || !currency) return;
+    if (!cost) return;
 
-    if (value === this.templateInstance.data.value && currency === this.templateInstance.data.currency) return;
+    if (cost === this.templateInstance.data.cost) return;
 
     if (!this._id) return;
-
-    const cost = { value, currency };
 
     this.parent().update({ cost });
   }

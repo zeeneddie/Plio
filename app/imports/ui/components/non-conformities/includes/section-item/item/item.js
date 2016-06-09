@@ -5,8 +5,13 @@ import { Occurences } from '/imports/api/occurences/occurences.js';
 
 Template.NCItem.viewmodel({
   share: 'window',
-  mixin: ['date', 'nonconformity', 'currency'],
+  mixin: ['date', 'nonconformity', 'currency', 'organization'],
+  onCreated() {
+    const currency = this.organization() && this.organization().currency;
+    this.load({ currency });
+  },
   cost: '',
+  currency: '',
   identifiedAt: '',
   identifiedBy: '',
   magnitude: '',
@@ -23,12 +28,12 @@ Template.NCItem.viewmodel({
     return Occurences.find(query);
   },
   totalCost() {
-    if (!this.cost()) return 0;
-
-    const { currency, value } = this.cost();
-    const symbol = this.getCurrencySymbol(currency);
+    const symbol = this.getCurrencySymbol(this.currency());
     const count = this.occurences().count();
-    return symbol + count * value;
+
+    if (!this.cost()) return symbol + 0;
+
+    return symbol + count * this.cost();
   },
   navigate() {
     if ($(window).width() < 768) {

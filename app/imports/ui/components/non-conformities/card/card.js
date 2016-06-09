@@ -42,8 +42,9 @@ Template.NCCard.viewmodel({
       return { title, href };
     }
   },
-  renderCost({ value, currency } = {}) {
-    return this.getCurrencySymbol(currency) + value;
+  renderCost(cost) {
+    const currency = this.organization() && this.organization().currency;
+    return currency ? this.getCurrencySymbol(currency) + cost : '';
   },
   occurences() {
     const query = { nonConformityId: this.NCId() };

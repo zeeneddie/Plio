@@ -7,7 +7,7 @@ import { NCTypes } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency'],
   onCreated() {
     this.searchText('');
   },
@@ -46,15 +46,17 @@ Template.NCList.viewmodel({
 
     const total = ncs.reduce((prev, cur) => {
       const { _id, cost } = cur;
-      const { value, currency } = cost;
       const occurences = ((() => {
         const query = { nonConformityId: _id };
         return Occurences.find(query);
       })());
-      const t = value * occurences.count();
+      const t = cost * occurences.count();
       return prev + t;
     }, 0);
-    return this.round(total);
+
+    const currency = this.organization() && this.organization().currency;
+
+    return total > 0 ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   animating: false,
   expandAllFound() {

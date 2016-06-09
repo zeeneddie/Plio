@@ -39,15 +39,8 @@ const optionalFields = new SimpleSchema({
     optional: true
   },
   cost: {
-    type: Object,
+    type: Number,
     optional: true
-  },
-  'cost.currency': {
-    type: String,
-    allowedValues: _.values(OrgCurrencies)
-  },
-  'cost.value': {
-    type: Number
   },
   ref: {
     type: Object,
