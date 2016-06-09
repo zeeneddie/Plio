@@ -39,10 +39,8 @@ Template.IPMeansStatement.viewmodel({
     }
 
     const query = {
-      query: {
-        files: {
-          $elemMatch: { _id }
-        }
+      files: {
+        $elemMatch: { _id }
       }
     };
     const options = {

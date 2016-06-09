@@ -6,19 +6,18 @@ Template.SelectItem.viewmodel({
     const items = this.itemsArray();
 
     if (!this.loading() && items.length > 0) {
-
       if (!this.selected() && items.length > 0 && this.selectFirstIfNoSelected()) {
         const { _id, title } = items[0];
 
         this.selected(_id);
         this.value(title);
+        computation.stop();
       } else if (!!this.selected() && !this.value() && items.length > 0) {
-        const find = items.filter(item => item._id === this.selected());
-        const item = find.length > 0 && find[0];
+        const item = this.getSelectedItem();
 
         this.value(item.title);
+        computation.stop();
       }
-      computation.stop();
     }
   },
   value: '',
@@ -45,8 +44,6 @@ Template.SelectItem.viewmodel({
   update() {
     this.fixValue();
 
-    if (this.selected() === this.templateInstance.data.selected) return;
-
     if (!this.onUpdate) return;
 
     this.onUpdate(this);
@@ -62,10 +59,14 @@ Template.SelectItem.viewmodel({
     this.focused(false);
 
     if (!!this.selected() && !this.value()) {
-      const find = this.itemsArray().filter(doc => doc._id === this.selected());
-      const item = !!find.length > 0 && find[0];
+      const item = this.getSelectedItem();
       !!item && this.value(item.title);
     }
+  },
+  getSelectedItem() {
+    const find = this.itemsArray().filter(doc => doc._id === this.selected());
+    const item = !!find.length > 0 && find[0];
+    return item;
   },
   getData() {
     const { value, selected, items } = this.data();

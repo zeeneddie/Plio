@@ -68,7 +68,10 @@
         <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
       </div>
 
-      {{> ESImprovementPlan standard=standard}}
+      {{> Subcards_ImprovementPlan_Edit
+          documentId=standard._id
+          documentType='standard'}}
+      <!-- {{> ESImprovementPlan standard=standard}} -->
 
       {{> ESLessonsLearned standard=standard}}
     </div>

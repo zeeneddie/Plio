@@ -4,7 +4,7 @@ import { Blaze } from 'meteor/blaze';
 import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { insert, update } from '/imports/api/improvement-plans/methods.js';
 
-Template.Subcards_ImprovementPlan.viewmodel({
+Template.Subcards_ImprovementPlan_Edit.viewmodel({
   mixin: ['collapse', 'modal'],
   autorun() {
     this.load(this.document());
@@ -37,6 +37,8 @@ Template.Subcards_ImprovementPlan.viewmodel({
     const _id = this.document() && this.document()._id;
 
     const arguments = { ...args, _id, options, query };
+
+    console.log(arguments);
 
     this.modal().callMethod(update, arguments, cb);
   }

@@ -49,15 +49,6 @@ Template.StandardsCard.viewmodel({
   renderNotifyUsers(users) {
     return users.map(user => this.userFullNameOrEmail(user)).join(', ');
   },
-  improvementPlan() {
-    return ImprovementPlans.findOne({ documentId: this.standardId() });
-  },
-  IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {
-    return desiredOutcome || targetDate || owner || ( reviewDates && reviewDates.length > 0 ) || ( files && files.length );
-  },
-  renderReviewDates(dates) {
-    return dates.map(doc => this.renderDate(doc.date)).join(', ');
-  },
   lessons() {
     const query = { standardId: this.standardId() };
     const options = { sort: { serialNumber: 1 } };

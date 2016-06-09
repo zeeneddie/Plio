@@ -47,7 +47,8 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    const { selectedBookSectionId:sectionId } = this.data();
+    const { selected:sectionId } = this.child('SelectItem').getData();
+    console.log(sectionId);
     return { sectionId };
   }
 });
