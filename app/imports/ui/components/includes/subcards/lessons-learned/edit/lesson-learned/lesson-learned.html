@@ -1,28 +1,34 @@
 <template name="Subcards_LessonLearned">
-  <div class="card-block">
-    {{#FormField label="Title"}}
-      <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
-      {{> ClearField field="title"}}
-    {{/FormField}}
+  {{#FormField label="Title"}}
+    <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+    {{> ClearField field="title"}}
+  {{/FormField}}
 
-    {{#FormField label="Linked to"}}
+  {{#FormField label="Linked to"}}
+    {{#if linkedToId}}
+      <div class="input-group">
+        <span class="input-group-addon" {{b "text: linkedToId"}}></span>
+        <input type="text" class="form-control" disabled="" {{b "value: linkedTo"}}>
+      </div>
+    {{else}}
       <input type="text" class="form-control" disabled="" {{b "value: linkedTo"}}>
-    {{/FormField}}
+    {{/if}}
+  {{/FormField}}
 
-    {{#FormField label="Created date"}}
-      {{> Datepicker
-          placeholder="Created date"
-          date=date
-          onChange=onChangeDateCb}}
-    {{/FormField}}
+  {{#FormField label="Created date"}}
+    {{> Datepicker
+        placeholder="Created date"
+        date=date
+        onChange=onChangeDateCb}}
+  {{/FormField}}
 
-    {{#FormField label="Created by"}}
-      {{> SelectItem
-          items=members
-          selected=owner
-          onUpdate=onUpdateOwnerCb}}
-    {{/FormField}}
-  </div>
+  {{#FormField label="Created by"}}
+    {{> SelectItem
+        items=members
+        selected=owner
+        onUpdate=onUpdateOwnerCb}}
+  {{/FormField}}
+
   {{#QuillEditor}}
     {{#if _id}}
       <div {{b "html: notes"}}></div>

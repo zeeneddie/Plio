@@ -7,6 +7,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   documentId: '',
   documentType: '',
   linkedTo: '',
+  linkedToId: '',
   renderText({ title, serialNumber }) {
     return `<strong>LL${serialNumber}</strong> ${title}`;
   },
@@ -21,6 +22,8 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       'SubCardEdit',
       {
         content: 'Subcards_LessonLearned',
+        linkedTo: this.linkedTo(),
+        linkedToId: this.linkedToId(),
         onSave: this.save.bind(this),
         onDelete: this.remove.bind(this)
       }

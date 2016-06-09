@@ -3,11 +3,19 @@ import { Meteor } from 'meteor/meteor';
 
 Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user'],
+  autorun() {
+    this.title.depend();
+
+    if (!this._id) {
+      this.parent()._lText(this.title.value);
+    }
+  },
   title: '',
   date: new Date(),
   owner: Meteor.userId(),
   notes: '<div></div>',
   linkedTo: '',
+  linkedToId: '',
   ownerSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
