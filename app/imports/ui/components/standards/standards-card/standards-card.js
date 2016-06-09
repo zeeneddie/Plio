@@ -51,6 +51,11 @@ Template.StandardsCard.viewmodel({
   },
   improvementPlan() {
     const improvementPlan = ImprovementPlans.findOne({ documentId: this.standardId() });
+
+    if (!improvementPlan) {
+      return;
+    }
+
     const reviewDates = improvementPlan.reviewDates || [];
     const files = improvementPlan.files || [];
 

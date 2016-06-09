@@ -15,7 +15,7 @@ export default class OrgNotificationsSender {
   sendOwnershipInvite(newOwnerId, transferId) {
     const orgName = this._organization.name;
 
-    const subject = `You have been invited to become an owner of "${orgName}" organization`;
+    const subject = `You have been invited to become an owner of the ${orgName} organization`;
     const secondaryText = `If you agree to be an organization owner, click on "Confirm" button`;
 
     const url = Meteor.absoluteUrl(`transfer-organization/${transferId}`);
