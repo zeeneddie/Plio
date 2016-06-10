@@ -18,6 +18,8 @@ Template.StandardsCard.viewmodel({
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
     });
+
+    this.collapsed(false);
   },
   closeAllOnCollapse: false,
   standards() {
