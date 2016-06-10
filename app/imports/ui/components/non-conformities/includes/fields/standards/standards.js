@@ -85,7 +85,7 @@ Template.NCStandards.viewmodel({
       {
         placeholder: 'Link to standard',
         items: this.standards(),
-        isExtended: true,
+        variation: 'delete',
         selectFirstIfNoSelected: false,
         excludedItems: this.standardsIds(),
         isReady: this.templateInstance.subscriptionsReady(),

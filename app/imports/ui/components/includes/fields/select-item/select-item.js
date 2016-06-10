@@ -24,12 +24,15 @@ Template.SelectItem.viewmodel({
   selected: '',
   placeholder: '',
   content: '',
-  isExtended: false,
   loading: false,
   focused: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
+  variation: '',
+  isVariation(variation) {
+    return this.variation() === variation;
+  },
   itemsArray() {
     return this.items().hasOwnProperty('collection') ? this.items().fetch() : this.items();
   },

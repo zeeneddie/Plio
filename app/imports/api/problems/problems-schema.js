@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, NotifySchema } from '../schemas.js';
 import { ProblemTypes, NCStatuses, OrgCurrencies } from '../constants.js';
 
 const requiredFields = new SimpleSchema([
@@ -28,33 +28,36 @@ const requiredFields = new SimpleSchema([
   }
 ]);
 
-const optionalFields = new SimpleSchema({
-  standards: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  description: {
-    type: String,
-    optional: true
-  },
-  cost: {
-    type: Number,
-    optional: true
-  },
-  ref: {
-    type: Object,
-    optional: true
-  },
-  'ref.text': {
-    type: String,
-    max: 20
-  },
-  'ref.url': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url
+const optionalFields = new SimpleSchema([
+  NotifySchema,
+  {
+    standards: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    description: {
+      type: String,
+      optional: true
+    },
+    cost: {
+      type: Number,
+      optional: true
+    },
+    ref: {
+      type: Object,
+      optional: true
+    },
+    'ref.text': {
+      type: String,
+      max: 20
+    },
+    'ref.url': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url
+    }
   }
-});
+]);
 
 const ProblemsSchema = new SimpleSchema([
   OrganizationIdSchema,

@@ -29,15 +29,10 @@
         <div class="card-block-collapse collapse" id="root-cause-analysis">
           <div ng-include="'includes/subcards-edit/root-cause-analysis.html'"></div>
         </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#notify" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Notify</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">2</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="notify">
-          <div ng-include="'includes/subcards-edit/notify.html'"></div>
-        </div>
+
+        {{> Subcards_Notify_Edit
+            document=this
+            documentType="non-conformity"}}
 
         {{> NCOccurences _id=this._id occurencesIds=this.occurences}}
 

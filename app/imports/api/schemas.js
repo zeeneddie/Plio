@@ -144,3 +144,18 @@ export const BaseEntitySchema = new SimpleSchema([
   UpdatedAtSchema,
   UpdatedBySchema
 ]);
+
+export const NotifySchema = new SimpleSchema({
+  notify: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return [this.userId];
+      } else {
+        this.unset();
+      }
+    }
+  }
+});
