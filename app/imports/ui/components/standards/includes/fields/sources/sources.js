@@ -80,7 +80,7 @@ Template.ESSources.viewmodel({
     }
   },
   uploadDocxHtml(fileObj) {
-    const uploader = new Slingshot.Upload('standardsAttachments');
+    const uploader = new Slingshot.Upload('htmlAttachmentPreview');
 
     uploader.send(fileObj, (error, url) => {
       this.sourceHtmlUrl(url && encodeURI(url) || '');

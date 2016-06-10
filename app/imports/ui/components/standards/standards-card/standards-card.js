@@ -30,6 +30,7 @@ Template.StandardsCard.viewmodel({
   standard() {
     const query = { _id: this.standardId(), organizationId: this.organizationId() };
     const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
+    window.standard = Standards.findOne(filterQuery);
     return Standards.findOne(filterQuery);
   },
   hasDocxAttachment() {

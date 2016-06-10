@@ -3,7 +3,10 @@ import { Template } from 'meteor/templating';
 Template.SCSource.viewmodel({
   mixin: 'urlRegex',
   title() {
-    const id = this.id();
+    const id = this.id && this.id();
+    if (!id) {
+      return;
+    }
     return id === 1 ? 'Source file' : `Source file ${this.id()}`;
   },
   renderVideoSrc(url) {
