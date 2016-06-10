@@ -42,6 +42,10 @@ const optionalFields = new SimpleSchema({
     type: Object,
     optional: true
   },
+  'source1.extension': {
+    type: String,
+    optional: true
+  },
   'source1.type': {
     type: String
   },
@@ -61,6 +65,10 @@ const optionalFields = new SimpleSchema({
   },
   source2: {
     type: Object,
+    optional: true
+  },
+  'source2.extension': {
+    type: String,
     optional: true
   },
   'source2.type': {

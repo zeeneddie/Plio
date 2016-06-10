@@ -9,7 +9,7 @@ Template.ESIPMeansStatement.viewmodel({
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
-    const fileDoc = { _id, name };
+    const fileDoc = { _id, name, extension: name.split('.').pop() };
 
     if (this.files() && this.files().length) {
       this.parent().files(this.files().concat([fileDoc]));
