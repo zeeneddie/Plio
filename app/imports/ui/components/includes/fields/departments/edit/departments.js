@@ -6,12 +6,15 @@ import { Departments } from '/imports/api/departments/departments.js';
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization'],
   departmentsIds: [],
+  departmentsIdsArray() {
+    return Array.from(this.departmentsIds() || []);
+  },
   departmentSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
   },
   departments() {
-    const ids = Array.from(this.departmentsIds() || []);
+    const ids = this.departmentsIdsArray();
     const query = {
       ...this.searchObject('departmentSearchText', 'name'),
       organizationId: this.organizationId(),
@@ -21,7 +24,7 @@ Template.Departments_Edit.viewmodel({
     return Departments.find(query).map(({ name, _id }) => ({ title: name, name, _id }));
   },
   currentDepartments() {
-    const ids = Array.from(this.departmentsIds() || []);
+    const ids = this.departmentsIdsArray();
     const query = { _id: { $in: ids }, organizationId: this.organizationId() };
     return Departments.find(query);
   },
@@ -40,7 +43,7 @@ Template.Departments_Edit.viewmodel({
   onSelect(viewmodel) {
     const { selected:departmentId } = viewmodel.getData();
 
-    if (this.departmentsIds().find(id => id === departmentId)) return;
+    if (this.departmentsIdsArray().find(id => id === departmentId)) return;
 
     const cb = () => {
       viewmodel.value('');
@@ -55,7 +58,7 @@ Template.Departments_Edit.viewmodel({
   remove(e) {
     const { _id } = Blaze.getData(e.target);
 
-    if (!this.departmentsIds().find(id => id === _id)) return;
+    if (!this.departmentsIdsArray().find(id => id === _id)) return;
 
     this.update(_id, '$pull');
   }

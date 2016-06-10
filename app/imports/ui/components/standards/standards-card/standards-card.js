@@ -5,7 +5,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Departments } from '/imports/api/departments/departments.js';
 import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
@@ -38,14 +37,6 @@ Template.StandardsCard.viewmodel({
   type() {
     const _id = !!this.standard() && this.standard().typeId;
     return StandardTypes.findOne({ _id });
-  },
-  departments() {
-    const departmentsIds = !!this.standard() && this.standard().departments || [];
-    const query = { _id: { $in: departmentsIds } };
-    return Departments.find(query);
-  },
-  renderDepartments() {
-    return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
   },
   openEditStandardModal() {
     this.modal().open({

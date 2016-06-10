@@ -81,12 +81,9 @@
 
                 </div>
 
-                <div class="list-group-item" {{b "if: departments.count > 0"}}>
-                  <p class="list-group-item-text">Department(s)</p>
-                  <h4 class="list-group-item-heading">
-                    <span {{b "text: renderDepartments"}}></span>
-                  </h4>
-                </div>
+                {{#with departments}}
+                  {{> Departments_Read departmentsIds=this}}
+                {{/with}}
 
                 {{> SCSource source=this.source1 id=1}}
 

@@ -57,7 +57,6 @@ Template.ESBookSection.viewmodel({
   },
   getData() {
     const { selected:sectionId } = this.child('SelectItem').getData();
-    console.log(sectionId);
     return { sectionId };
   }
 });

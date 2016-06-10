@@ -1,3 +1,2 @@
-import './departments.html';
-import './departments.js';
-import './create';
+import './edit';
+import './read';

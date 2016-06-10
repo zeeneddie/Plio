@@ -40,7 +40,7 @@ Template.DepartmentsCreate.viewmodel({
 
         this.selected(_id);
 
-        ViewModel.findOne('NCDepartments').onSelect(this);
+        ViewModel.findOne('Departments_Edit').onSelect(this);
       }
     });
   },

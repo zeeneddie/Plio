@@ -15,14 +15,9 @@ Template.EditStandard.viewmodel({
     return this.onUpdateNotifyUser.bind(this);
   },
   onUpdateNotifyUser({ query, options }, cb) {
-    return this.update({ query }, options, cb);
+    return this.update({ query, options }, cb);
   },
-  update({ query = {}, ...args }, options = {}, cb) {
-    if (_.isFunction(options)) {
-      cb = options;
-      options = {};
-    }
-
+  update({ query = {}, options = {}, ...args }, cb) {
     const _id = this._id && this._id();
     const organizationId = this.organizationId();
     const modifier = _.extend(args, { _id, options, query, organizationId });

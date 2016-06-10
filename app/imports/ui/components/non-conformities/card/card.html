@@ -104,6 +104,10 @@
 
           </div>
 
+          {{#with departments}}
+            {{> Departments_Read departmentsIds=this}}
+          {{/with}}
+
           {{#with notify}}
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
