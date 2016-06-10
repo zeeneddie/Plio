@@ -50,6 +50,11 @@ const optionalFields = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
+  'source1.htmlUrl': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
   'source1.name': {
     type: String,
     optional: true
@@ -62,6 +67,11 @@ const optionalFields = new SimpleSchema({
     type: String
   },
   'source2.url': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
+  'source2.htmlUrl': {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
     optional: true

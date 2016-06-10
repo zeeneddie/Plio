@@ -1,7 +1,9 @@
 <template name="SCSource">
   {{#with source}}
     <div class="list-group-item">
-      <p class="list-group-item-text" {{b "text: title"}}></p>
+      {{#if this.title}}
+        <p class="list-group-item-text" {{b "text: title"}}></p>
+      {{/if}}
       <h4 class="list-group-item-heading" {{b "if: this.type === 'url'"}}>
         <i class="fa fa-link margin-right"></i>
         <a target="_blank" {{b "href: this.url, text: this.url"}}></a>
