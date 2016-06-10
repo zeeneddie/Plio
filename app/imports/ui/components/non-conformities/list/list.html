@@ -22,7 +22,7 @@
               template="NCSectionItem"
               title=this.name
               magnitude=this.value
-              rText=(calculateTotalCost this)
+              rText=(calculateTotalCost this.value)
               key="magnitude"
               value=this.value}}
         {{/each}}
@@ -34,7 +34,8 @@
               template="NCSectionItem"
               title=(getStatusName this)
               key="status"
-              value=(getStatusInt this)}}
+              value=(getStatusInt this)
+              rText=(calculateTotalCost this)}}
         {{/each}}
       {{/if}}
 

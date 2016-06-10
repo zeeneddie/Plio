@@ -14,10 +14,12 @@ Template.NCList.viewmodel({
   onRendered() {
     this.expandCollapsed(this.NCId());
 
-    const contains = this._getNCByQuery({ isDeleted: { $in: [null, false] }, _id: this.NCId() });
+    const isDeleted = { $in: [null, false] };
+
+    const contains = this._getNCByQuery({ isDeleted, _id: this.NCId() });
 
     if (!contains) {
-      const nc = this._getNCByQuery({ isDeleted: { $in: [null, false] } },  { sort: { serialNumber: 1 } });
+      const nc = this._getNCByQuery({ isDeleted },  { sort: { serialNumber: 1 } });
 
       if (nc) {
         const { _id } = nc;
@@ -42,8 +44,14 @@ Template.NCList.viewmodel({
   getStatusInt(status) {
     return parseInt(status, 10);
   },
-  calculateTotalCost({ value }) {
-    const ncs = this._getNCsByQuery({ magnitude: value, cost: { $exists: true } }).fetch();
+  calculateTotalCost(value) {
+    const ncs = this._getNCsByQuery({
+      $or: [
+        { magnitude: value },
+        { status: this.getStatusInt(value) }
+      ],
+      cost: { $exists: true }
+    }).fetch();
 
     const total = ncs.reduce((prev, cur) => {
       const { _id, cost } = cur;
