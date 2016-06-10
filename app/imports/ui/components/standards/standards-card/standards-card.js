@@ -46,9 +46,6 @@ Template.StandardsCard.viewmodel({
   renderDepartments() {
     return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
   },
-  renderNotifyUsers(users) {
-    return users.map(user => this.userFullNameOrEmail(user)).join(', ');
-  },
   openEditStandardModal() {
     this.modal().open({
       title: 'Compliance standard',
