@@ -64,6 +64,33 @@ export default {
         'profile.phoneNumbers': { _id }
       }
     });
+  },
+
+  setNotifications({ _id, enabled }) {
+    const update = {
+      $set: { 'preferences.areNotificationsEnabled': enabled }
+    };
+
+    if (enabled === false) {
+      update['$unset'] = { 'preferences.notificationSound': '' };
+    }
+
+    return this.collection.update({ _id }, update);
+  },
+
+  setNotificationSound({ _id, soundFile }) {
+    let update;
+    if (soundFile) {
+      update = {
+        $set: { 'preferences.notificationSound': soundFile }
+      };
+    } else {
+      update = {
+        $unset: { 'preferences.notificationSound': '' }
+      };
+    }
+
+    return this.collection.update({ _id }, update);
   }
 
 };

@@ -17,7 +17,14 @@ Template.StandardsCard.viewmodel({
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
+    });
+  },
+  onRendered(template) {
+    template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
+
+      // Workaround for https://github.com/twbs/bootstrap/issues/2274
+      template.$('.list-group-collapse.collapse').height('auto');
     });
   },
   closeAllOnCollapse: false,

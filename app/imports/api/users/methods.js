@@ -271,3 +271,59 @@ export const sendVerificationEmail = new ValidatedMethod({
     }
   }
 });
+
+export const setNotifications = new ValidatedMethod({
+  name: 'Users.setNotifications',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      enabled: { type: Boolean }
+    }
+  ]).validator(),
+
+  run({ _id, enabled }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot change notification settings'
+      );
+    }
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot change another user\'s notification settings'
+      );
+    }
+
+    return UserService.setNotifications({ _id, enabled });
+  }
+});
+
+export const setNotificationSound = new ValidatedMethod({
+  name: 'Users.setNotificationSound',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      soundFile: { type: String }
+    }
+  ]).validator(),
+
+  run({ _id, soundFile }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot change notification sounds'
+      );
+    }
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot change another user\'s notification sounds'
+      );
+    }
+
+    return UserService.setNotificationSound({ _id, soundFile });
+  }
+});
