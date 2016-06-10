@@ -415,11 +415,13 @@ fieldset[disabled] {
 }
 
 .file-item {
+  margin-right: 4px;
+  
   .button-wrapper {
     position: relative;
     display: inline-block;
     float: left;
-    max-width: 280px;
+    max-width: 270px;
     overflow: hidden;
     min-width: 100px;
     text-overflow: ellipsis;

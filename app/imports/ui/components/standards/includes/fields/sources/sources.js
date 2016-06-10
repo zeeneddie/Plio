@@ -10,6 +10,9 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  sourceExtension() {
+    return this.sourceName().split('.').pop();
+  },
   sourceHtmlUrl: '',
   fileId: '',
   shouldUpdate() {
@@ -62,7 +65,9 @@ Template.ESSources.viewmodel({
     if (type === 'attachment') {
       sourceDoc.name = name;
 
-      if (!url) {
+      if (url) {
+        sourceDoc.extension = url.split('.').pop();
+      } else {
         delete sourceDoc.url;
       }
     }
@@ -179,7 +184,7 @@ Template.ESSources.viewmodel({
     };
   },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name, sourceHtmlUrl:htmlUrl } = this.data();
+    const { sourceType:type, sourceUrl:url, sourceName:name, sourceExtension:extension, sourceHtmlUrl:htmlUrl } = this.data();
     return { type, url, name, htmlUrl };
   }
 });
