@@ -20,7 +20,7 @@
     "lastName": "Elliott",
     "initials": "LE",
     "description": "Quality Manager",
-    "avatar": "/avatars/avatar-placeholder-15.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png",
     "skype": "luke.elliot",
     "country": "GB",
     "phoneNumbers": [
@@ -43,5 +43,6 @@
       "create-update-delete-standards",
       "view-team-actions"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

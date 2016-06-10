@@ -86,5 +86,14 @@ Template.UserMenu.viewmodel({
     e.preventDefault();
 
     Meteor.logout(() => FlowRouter.go('signIn'));
+  },
+  openUserPreferences(e) {
+    e.preventDefault();
+
+    this.modal().open({
+      template: 'UserPreferences',
+      title: 'My preferences',
+      userId: Meteor.userId()
+    });
   }
 });

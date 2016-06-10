@@ -1,6 +1,6 @@
 <template name="StandardsCard">
     <div class="content-cards-inner flex scroll">
-      <div class="card">
+      <div class="card standard-details">
         <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
           <h5 {{b "if: !isActiveStandardFilter('deleted')"}}>
             There is no standards yet! Click on the 'Add' button to create your first standard.
@@ -30,77 +30,79 @@
               Compliance standard
             </h3>
           </div>
-          <div class="list-group">
-            <div class="list-group-item">
-              <p class="list-group-item-text">Title</p>
-              <h4 class="list-group-item-heading">
+          <div class="content-list">
+            <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+              <h4 class="list-group-item-heading pull-left">
                 <span {{b "text: this.title"}}></span>
                 <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
               </h4>
-            </div>
+            </a>
+            <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
+              <div class="list-group">
 
-            <div class="list-group-item" {{b "if: this.description"}}>
-              <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-            </div>
-
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Issue number</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                <div class="list-group-item" {{b "if: this.description"}}>
+                  <p class="list-group-item-text">Description</p>
+                  <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Section</p>
-                  {{#with section}}
-                    <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                  {{/with}}
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Issue number</p>
+                      <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Section</p>
+                      {{#with section}}
+                        <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                      {{/with}}
+                    </div>
+                  </div>
+
                 </div>
-              </div>
 
-            </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Type</p>
+                      {{#with type}}
+                        <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                      {{/with}}
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Owner</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                    </div>
+                  </div>
 
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Type</p>
-                  {{#with type}}
-                    <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
-                  {{/with}}
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Owner</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+
+                <div class="list-group-item" {{b "if: departments.count > 0"}}>
+                  <p class="list-group-item-text">Department(s)</p>
+                  <h4 class="list-group-item-heading">
+                    <span {{b "text: renderDepartments"}}></span>
+                  </h4>
                 </div>
+
+                {{> SCSource source=this.source1 id=1}}
+
+                {{> SCSource source=this.source2 id=2}}
+
               </div>
 
+              {{#with notify}}
+                {{> Subcards_Notify_Read users=this}}
+              {{/with}}
+
+              {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+
+              {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>
-
-            <div class="list-group-item" {{b "if: departments.count > 0"}}>
-              <p class="list-group-item-text">Department(s)</p>
-              <h4 class="list-group-item-heading">
-                <span {{b "text: renderDepartments"}}></span>
-              </h4>
-            </div>
-
-            {{> SCSource source=this.source1 id=1}}
-
-            {{> SCSource source=this.source2 id=2}}
-
           </div>
-
-          {{#with notify}}
-            {{> Subcards_Notify_Read users=this}}
-          {{/with}}
-
-          {{> Subcards_ImprovementPlan_Read documentId=this._id}}
-
-          {{> Subcards_LessonsLearned_Read documentId=this._id}}
-
           {{> CardChangelog document=this}}
         {{/with}}
       </div>

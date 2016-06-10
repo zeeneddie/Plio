@@ -228,6 +228,25 @@ const DocumentTypes = [
   'risk'
 ];
 
+const AvatarPlaceholders = [
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/3.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/4.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/5.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/6.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/7.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/8.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/9.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/10.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/11.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/12.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/13.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
+]
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -245,5 +264,6 @@ export {
   UserMembership,
   UserRoles,
   UserRolesNames,
-  DocumentTypes
+  DocumentTypes,
+  AvatarPlaceholders
 };

@@ -19,7 +19,7 @@
     "firstName": "Taras",
     "lastName": "D",
     "organizationName": "D. Inc",
-    "avatar": "/avatars/avatar-placeholder-16.png"
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png"
   },
   "status": "away",
   "statusConnection": "away",
@@ -41,5 +41,6 @@
       "edit-user-roles",
       "change-org-settings"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

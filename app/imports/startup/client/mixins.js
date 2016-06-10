@@ -273,7 +273,10 @@ ViewModel.mixin({
       return this.organization() && this.organization()._id;
     },
     organizationSerialNumber() {
-      return parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+      const querySerialNumberParam = FlowRouter.getParam('orgSerialNumber');
+      const serialNumber = parseInt(querySerialNumberParam, 10);
+
+      return isNaN(serialNumber) ? querySerialNumberParam : serialNumber;
     }
   },
   standard: {

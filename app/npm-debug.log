@@ -1,0 +1,312 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node',
+1 verbose cli   '/Users/Mike/.meteor/packages/meteor-tool/.1.3.2_4.ngvtqf++os.osx.x86_64+web.browser+web.cordova/mt-os.osx.x86_64/dev_bundle/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save' ]
+2 info using npm@2.14.22
+3 info using node@v0.10.43
+4 verbose readDependencies loading dependencies from /Users/Mike/code/Plio/app/package.json
+5 verbose install where, deps [ '/Users/Mike/code/Plio/app',
+5 verbose install   [ 'fibers',
+5 verbose install     'handlebars',
+5 verbose install     'mammoth',
+5 verbose install     'meteor-node-stubs',
+5 verbose install     'path',
+5 verbose install     'pluralize',
+5 verbose install     'quill',
+5 verbose install     'sweetalert' ] ]
+6 verbose install where, peers [ '/Users/Mike/code/Plio/app', [] ]
+7 verbose installManyTop reading for lifecycle /Users/Mike/code/Plio/app/package.json
+8 info preinstall plio@
+9 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/handlebars/package.json
+10 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/mammoth/package.json
+11 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/meteor-node-stubs/package.json
+12 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/path/package.json
+13 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/pluralize/package.json
+14 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/quill/package.json
+15 verbose installManyTop reading scoped package data from /Users/Mike/code/Plio/app/node_modules/sweetalert/package.json
+16 info package.json path@0.12.7 path is also the name of a node core module.
+17 verbose readDependencies loading dependencies from /Users/Mike/code/Plio/app/package.json
+18 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/handlebars/package.json
+19 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/mammoth/package.json
+20 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/meteor-node-stubs/package.json
+21 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/path/package.json
+22 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/pluralize/package.json
+23 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/quill/package.json
+24 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/sweetalert/package.json
+25 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/.bin/handlebars/package.json
+26 verbose targetResolver reading package data from /Users/Mike/code/Plio/app/node_modules/.bin/mammoth/package.json
+27 verbose already installed skipping meteor-node-stubs@^0.2.3 /Users/Mike/code/Plio/app
+28 verbose already installed skipping path@^0.12.7 /Users/Mike/code/Plio/app
+29 verbose already installed skipping pluralize@^2.0.0 /Users/Mike/code/Plio/app
+30 verbose already installed skipping quill@^0.20.1 /Users/Mike/code/Plio/app
+31 verbose already installed skipping sweetalert@^1.1.3 /Users/Mike/code/Plio/app
+32 silly cache add args [ 'fibers@^1.0.13', null ]
+33 verbose cache add spec fibers@^1.0.13
+34 silly cache add parsed spec { raw: 'fibers@^1.0.13',
+34 silly cache add   scope: null,
+34 silly cache add   name: 'fibers',
+34 silly cache add   rawSpec: '^1.0.13',
+34 silly cache add   spec: '>=1.0.13 <2.0.0',
+34 silly cache add   type: 'range' }
+35 silly addNamed fibers@>=1.0.13 <2.0.0
+36 verbose addNamed ">=1.0.13 <2.0.0" is a valid semver range for fibers
+37 silly addNameRange { name: 'fibers', range: '>=1.0.13 <2.0.0', hasData: false }
+38 silly mapToRegistry name fibers
+39 silly mapToRegistry using default registry
+40 silly mapToRegistry registry https://registry.npmjs.org/
+41 silly mapToRegistry uri https://registry.npmjs.org/fibers
+42 verbose addNameRange registry:https://registry.npmjs.org/fibers not in flight; fetching
+43 verbose already installed skipping handlebars@^4.0.5 /Users/Mike/code/Plio/app
+44 verbose already installed skipping mammoth@^1.0.3 /Users/Mike/code/Plio/app
+45 verbose request uri https://registry.npmjs.org/fibers
+46 verbose request no auth needed
+47 info attempt registry request try #1 at 21:28:38
+48 verbose request using bearer token for auth
+49 verbose request id ae91123aa42d14db
+50 verbose etag "B1HLOX4BPCTKAK6BSCUUYM7GU"
+51 http request GET https://registry.npmjs.org/fibers
+52 http 304 https://registry.npmjs.org/fibers
+53 verbose headers { 'cache-control': 'max-age=300',
+53 verbose headers   'accept-ranges': 'bytes',
+53 verbose headers   date: 'Tue, 07 Jun 2016 18:28:39 GMT',
+53 verbose headers   via: '1.1 varnish',
+53 verbose headers   connection: 'keep-alive',
+53 verbose headers   'x-served-by': 'cache-fra1246-FRA',
+53 verbose headers   'x-cache': 'MISS',
+53 verbose headers   'x-cache-hits': '0',
+53 verbose headers   'x-timer': 'S1465324118.925853,VS0,VE418',
+53 verbose headers   vary: 'Accept-Encoding' }
+54 silly get cb [ 304,
+54 silly get   { 'cache-control': 'max-age=300',
+54 silly get     'accept-ranges': 'bytes',
+54 silly get     date: 'Tue, 07 Jun 2016 18:28:39 GMT',
+54 silly get     via: '1.1 varnish',
+54 silly get     connection: 'keep-alive',
+54 silly get     'x-served-by': 'cache-fra1246-FRA',
+54 silly get     'x-cache': 'MISS',
+54 silly get     'x-cache-hits': '0',
+54 silly get     'x-timer': 'S1465324118.925853,VS0,VE418',
+54 silly get     vary: 'Accept-Encoding' } ]
+55 verbose etag https://registry.npmjs.org/fibers from cache
+56 verbose get saving fibers to /Users/Mike/.npm/registry.npmjs.org/fibers/.cache.json
+57 verbose correctMkdir /Users/Mike/.npm correctMkdir not in flight; initializing
+58 silly addNameRange number 2 { name: 'fibers', range: '>=1.0.13 <2.0.0', hasData: true }
+59 silly addNameRange versions [ 'fibers',
+59 silly addNameRange   [ '0.1.0',
+59 silly addNameRange     '0.1.1',
+59 silly addNameRange     '0.1.2',
+59 silly addNameRange     '0.1.3',
+59 silly addNameRange     '0.1.4',
+59 silly addNameRange     '0.1.6',
+59 silly addNameRange     '0.1.7',
+59 silly addNameRange     '0.1.8',
+59 silly addNameRange     '0.2.0',
+59 silly addNameRange     '0.2.1',
+59 silly addNameRange     '0.2.2',
+59 silly addNameRange     '0.2.3',
+59 silly addNameRange     '0.2.4',
+59 silly addNameRange     '0.2.5',
+59 silly addNameRange     '0.2.6',
+59 silly addNameRange     '0.5.0',
+59 silly addNameRange     '0.6.0',
+59 silly addNameRange     '0.5.1',
+59 silly addNameRange     '0.6.1',
+59 silly addNameRange     '0.6.2',
+59 silly addNameRange     '0.6.3',
+59 silly addNameRange     '0.6.4',
+59 silly addNameRange     '0.6.5',
+59 silly addNameRange     '0.6.6',
+59 silly addNameRange     '0.6.7',
+59 silly addNameRange     '0.6.8',
+59 silly addNameRange     '0.6.9',
+59 silly addNameRange     '1.0.0',
+59 silly addNameRange     '1.0.1',
+59 silly addNameRange     '1.0.2',
+59 silly addNameRange     '1.0.4',
+59 silly addNameRange     '1.0.5',
+59 silly addNameRange     '1.0.6-b',
+59 silly addNameRange     '1.0.7',
+59 silly addNameRange     '1.0.8',
+59 silly addNameRange     '1.0.9',
+59 silly addNameRange     '1.0.10',
+59 silly addNameRange     '1.0.11',
+59 silly addNameRange     '1.0.12',
+59 silly addNameRange     '1.0.13' ] ]
+60 silly addNamed fibers@1.0.13
+61 verbose addNamed "1.0.13" is a plain semver version for fibers
+62 silly cache afterAdd fibers@1.0.13
+63 verbose afterAdd /Users/Mike/.npm/fibers/1.0.13/package/package.json not in flight; writing
+64 verbose correctMkdir /Users/Mike/.npm correctMkdir not in flight; initializing
+65 verbose afterAdd /Users/Mike/.npm/fibers/1.0.13/package/package.json written
+66 silly install resolved [ { name: 'fibers',
+66 silly install resolved     version: '1.0.13',
+66 silly install resolved     description: 'Cooperative multi-tasking for Javascript',
+66 silly install resolved     keywords:
+66 silly install resolved      [ 'fiber',
+66 silly install resolved        'fibers',
+66 silly install resolved        'coroutine',
+66 silly install resolved        'thread',
+66 silly install resolved        'async',
+66 silly install resolved        'parallel',
+66 silly install resolved        'worker',
+66 silly install resolved        'future',
+66 silly install resolved        'promise' ],
+66 silly install resolved     homepage: 'https://github.com/laverdet/node-fibers',
+66 silly install resolved     author:
+66 silly install resolved      { name: 'Marcel Laverdet',
+66 silly install resolved        email: 'marcel@laverdet.com',
+66 silly install resolved        url: 'https://github.com/laverdet/' },
+66 silly install resolved     main: 'fibers',
+66 silly install resolved     scripts:
+66 silly install resolved      { install: 'node build.js || nodejs build.js',
+66 silly install resolved        test: 'node test.js || nodejs test.js' },
+66 silly install resolved     repository:
+66 silly install resolved      { type: 'git',
+66 silly install resolved        url: 'git://github.com/laverdet/node-fibers.git' },
+66 silly install resolved     license: 'MIT',
+66 silly install resolved     engines: { node: '>=0.5.2' },
+66 silly install resolved     gitHead: 'dfb51692edc6f93787c602ede6c08067f9ce7bf3',
+66 silly install resolved     bugs: { url: 'https://github.com/laverdet/node-fibers/issues' },
+66 silly install resolved     _id: 'fibers@1.0.13',
+66 silly install resolved     _shasum: '35e0aba17ad9f8cea35f712ef8cc445470f0740d',
+66 silly install resolved     _from: 'fibers@>=1.0.13 <2.0.0',
+66 silly install resolved     _npmVersion: '3.8.6',
+66 silly install resolved     _nodeVersion: '6.0.0',
+66 silly install resolved     _npmUser: { name: 'laverdet', email: 'marcel.npm@laverdet.com' },
+66 silly install resolved     maintainers: [ [Object] ],
+66 silly install resolved     dist:
+66 silly install resolved      { shasum: '35e0aba17ad9f8cea35f712ef8cc445470f0740d',
+66 silly install resolved        tarball: 'https://registry.npmjs.org/fibers/-/fibers-1.0.13.tgz' },
+66 silly install resolved     _npmOperationalInternal:
+66 silly install resolved      { host: 'packages-16-east.internal.npmjs.com',
+66 silly install resolved        tmp: 'tmp/fibers-1.0.13.tgz_1462729077451_0.3959117094054818' },
+66 silly install resolved     directories: {},
+66 silly install resolved     _resolved: 'https://registry.npmjs.org/fibers/-/fibers-1.0.13.tgz',
+66 silly install resolved     readme: 'ERROR: No README data found!' } ]
+67 info install fibers@1.0.13 into /Users/Mike/code/Plio/app
+68 info installOne fibers@1.0.13
+69 verbose installOne of fibers to /Users/Mike/code/Plio/app not in flight; installing
+70 verbose correctMkdir /Users/Mike/.npm/_locks correctMkdir not in flight; initializing
+71 verbose lock using /Users/Mike/.npm/_locks/fibers-fd9e12af6154381d.lock for /Users/Mike/code/Plio/app/node_modules/fibers
+72 silly install write writing fibers 1.0.13 to /Users/Mike/code/Plio/app/node_modules/fibers
+73 verbose unbuild node_modules/fibers
+74 silly gentlyRm /Users/Mike/code/Plio/app/node_modules/fibers is being purged from base /Users/Mike/code/Plio/app
+75 verbose gentlyRm don't care about contents; nuking /Users/Mike/code/Plio/app/node_modules/fibers
+76 verbose tar unpack /Users/Mike/.npm/fibers/1.0.13/package.tgz
+77 verbose tar unpacking to /Users/Mike/code/Plio/app/node_modules/fibers
+78 silly gentlyRm /Users/Mike/code/Plio/app/node_modules/fibers is being purged
+79 verbose gentlyRm don't care about contents; nuking /Users/Mike/code/Plio/app/node_modules/fibers
+80 silly gunzTarPerm modes [ '755', '644' ]
+81 silly gunzTarPerm extractEntry package.json
+82 silly gunzTarPerm extractEntry .npmignore
+83 silly gunzTarPerm extractEntry README.md
+84 silly gunzTarPerm extractEntry LICENSE
+85 silly gunzTarPerm extractEntry quick-test.js
+86 silly gunzTarPerm extractEntry future.js
+87 silly gunzTarPerm extractEntry build.js
+88 silly gunzTarPerm extractEntry test.js
+89 silly gunzTarPerm extractEntry fibers.js
+90 silly gunzTarPerm extractEntry note.txt
+91 silly gunzTarPerm extractEntry binding.gyp
+92 silly gunzTarPerm extractEntry bin/.npmignore
+93 silly gunzTarPerm extractEntry bin/win32-x64-v8-5.0/fibers.node
+94 silly gunzTarPerm extractEntry bin/darwin-ia32-v8-4.6/fibers.node
+95 silly gunzTarPerm extractEntry bin/darwin-ia32-v8-5.0/fibers.node
+96 silly gunzTarPerm extractEntry bin/darwin-x64-v8-4.5/fibers.node
+97 silly gunzTarPerm extractEntry bin/darwin-x64-v8-4.6/fibers.node
+98 silly gunzTarPerm extractEntry bin/darwin-x64-v8-5.0/fibers.node
+99 silly gunzTarPerm extractEntry bin/linux-ia32-v8-4.5/fibers.node
+100 silly gunzTarPerm extractEntry bin/linux-ia32-v8-4.6/fibers.node
+101 silly gunzTarPerm extractEntry bin/linux-ia32-v8-5.0/fibers.node
+102 silly gunzTarPerm extractEntry bin/darwin-ia32-v8-4.5/fibers.node
+103 silly gunzTarPerm extractEntry bin/linux-x64-v8-4.6/fibers.node
+104 silly gunzTarPerm extractEntry bin/linux-x64-v8-5.0/fibers.node
+105 silly gunzTarPerm extractEntry bin/repl
+106 silly gunzTarPerm extractEntry bin/win32-ia32-v8-4.5/fibers.node
+107 silly gunzTarPerm extractEntry bin/win32-ia32-v8-4.6/fibers.node
+108 silly gunzTarPerm extractEntry bin/win32-ia32-v8-5.0/fibers.node
+109 silly gunzTarPerm extractEntry bin/win32-x64-v8-4.5/fibers.node
+110 silly gunzTarPerm extractEntry bin/win32-x64-v8-4.6/fibers.node
+111 silly gunzTarPerm extractEntry bin/linux-x64-v8-4.5/fibers.node
+112 silly gunzTarPerm extractEntry src/coroutine.cc
+113 silly gunzTarPerm extractEntry src/coroutine.h
+114 silly gunzTarPerm extractEntry src/fibers.cc
+115 silly gunzTarPerm extractEntry src/libcoro/README
+116 silly gunzTarPerm extractEntry src/libcoro/LICENSE
+117 silly gunzTarPerm extractEntry src/libcoro/conftest.c
+118 silly gunzTarPerm extractEntry src/libcoro/coro.c
+119 silly gunzTarPerm extractEntry src/libcoro/coro.h
+120 silly gunzTarPerm extractEntry test/already-running.js
+121 silly gunzTarPerm extractEntry test/exit.js
+122 silly gunzTarPerm extractEntry test/fibonacci.js
+123 silly gunzTarPerm extractEntry test/finish-multiple.js
+124 silly gunzTarPerm extractEntry test/future-exception.js
+125 silly gunzTarPerm extractEntry test/exec.js
+126 silly gunzTarPerm extractEntry test/illegal-yield.js
+127 silly gunzTarPerm extractEntry test/pool.js
+128 silly gunzTarPerm extractEntry test/process-title.js
+129 silly gunzTarPerm extractEntry test/stack-overflow.js
+130 silly gunzTarPerm extractEntry test/stack-overflow2.js
+131 silly gunzTarPerm extractEntry test/current.js
+132 silly gunzTarPerm extractEntry test/stack-overflow3.js
+133 silly gunzTarPerm extractEntry test/child-process.js
+134 silly gunzTarPerm extractEntry test/started.js
+135 silly gunzTarPerm extractEntry test/bad-context.js
+136 silly gunzTarPerm extractEntry test/unwind.js
+137 silly gunzTarPerm extractEntry test/future.js
+138 verbose write writing to /Users/Mike/code/Plio/app/node_modules/fibers/package.json
+139 info preinstall fibers@1.0.13
+140 verbose readDependencies loading dependencies from /Users/Mike/code/Plio/app/node_modules/fibers/package.json
+141 verbose readDependencies loading dependencies from /Users/Mike/code/Plio/app/node_modules/fibers/package.json
+142 silly install resolved []
+143 verbose about to build /Users/Mike/code/Plio/app/node_modules/fibers
+144 info build /Users/Mike/code/Plio/app/node_modules/fibers
+145 info linkStuff fibers@1.0.13
+146 silly linkStuff fibers@1.0.13 has /Users/Mike/code/Plio/app/node_modules as its parent node_modules
+147 verbose linkBins fibers@1.0.13
+148 verbose linkMans fibers@1.0.13
+149 verbose rebuildBundles fibers@1.0.13
+150 info install fibers@1.0.13
+151 verbose unsafe-perm in lifecycle false
+152 info fibers@1.0.13 Failed to exec install script
+153 verbose unlock done using /Users/Mike/.npm/_locks/fibers-fd9e12af6154381d.lock for /Users/Mike/code/Plio/app/node_modules/fibers
+154 verbose stack Error: fibers@1.0.13 install: `node build.js || nodejs build.js`
+154 verbose stack spawn ENOENT
+154 verbose stack     at ChildProcess.<anonymous> (/Users/Mike/.meteor/packages/meteor-tool/.1.3.2_4.ngvtqf++os.osx.x86_64+web.browser+web.cordova/mt-os.osx.x86_64/dev_bundle/lib/node_modules/npm/lib/utils/spawn.js:17:16)
+154 verbose stack     at ChildProcess.emit (events.js:98:17)
+154 verbose stack     at maybeClose (child_process.js:766:16)
+154 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:833:5)
+155 verbose pkgid fibers@1.0.13
+156 verbose cwd /Users/Mike/code/Plio/app
+157 error Darwin 14.5.0
+158 error argv "node" "/Users/Mike/.meteor/packages/meteor-tool/.1.3.2_4.ngvtqf++os.osx.x86_64+web.browser+web.cordova/mt-os.osx.x86_64/dev_bundle/bin/npm" "install" "--save"
+159 error node v0.10.43
+160 error npm  v2.14.22
+161 error file sh
+162 error code ELIFECYCLE
+163 error errno ENOENT
+164 error syscall spawn
+165 error fibers@1.0.13 install: `node build.js || nodejs build.js`
+165 error spawn ENOENT
+166 error Failed at the fibers@1.0.13 install script 'node build.js || nodejs build.js'.
+166 error This is most likely a problem with the fibers package,
+166 error not with npm itself.
+166 error Tell the author that this fails on your system:
+166 error     node build.js || nodejs build.js
+166 error You can get information on how to open an issue for this project with:
+166 error     npm bugs fibers
+166 error Or if that isn't available, you can get their info via:
+166 error
+166 error     npm owner ls fibers
+166 error There is likely additional logging output above.
+167 verbose exit [ 1, true ]
+168 verbose unbuild node_modules/fibers
+169 info preuninstall fibers@1.0.13
+170 info uninstall fibers@1.0.13
+171 verbose unbuild rmStuff fibers@1.0.13 from /Users/Mike/code/Plio/app/node_modules
+172 info postuninstall fibers@1.0.13
+173 silly gentlyRm /Users/Mike/code/Plio/app/node_modules/fibers is being purged from base /Users/Mike/code/Plio/app
+174 verbose gentlyRm don't care about contents; nuking /Users/Mike/code/Plio/app/node_modules/fibers
+175 silly vacuum-fs purging /Users/Mike/code/Plio/app/node_modules/fibers
+176 silly vacuum-fs quitting because other entries in /Users/Mike/code/Plio/app/node_modules

@@ -5,7 +5,7 @@ import { Problems } from '/imports/api/problems/problems.js';
 import { Occurences } from '/imports/api/occurences/occurences.js';
 
 Template.NCCard.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus', 'collapse'],
   autorun() {
     this.templateInstance.subscribe('improvementPlan', this.NCId());
   },

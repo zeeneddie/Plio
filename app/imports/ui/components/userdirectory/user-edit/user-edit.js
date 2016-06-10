@@ -31,7 +31,9 @@ Template.UserEdit.viewmodel({
     const user = this.user();
     if (user) {
       this.load(_.extend({}, user.profile, {
-        email: user.email()
+        email: user.email(),
+        isNotificationsEnabled: user.isNotificationsEnabled,
+        notificationSound: user.notificationSound
       }));
     }
   },

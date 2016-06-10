@@ -13,8 +13,12 @@
               {{text}}
             </a>
           {{/each}}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" {{b "click: openUserPreferences"}}>
+            My preferences
+          </a>
           {{#if organizationId}}
-            <div class="dropdown-divider"></div>
+
             <a class="dropdown-item" href="{{pathFor 'userDirectoryUserPage' orgSerialNumber=orgSerialNumber userId=currentUser._id}}" {{b "click: goToMyProfile"}}>
               My profile
             </a>

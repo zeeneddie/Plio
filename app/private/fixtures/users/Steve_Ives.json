@@ -20,7 +20,7 @@
     "lastName": "Ives",
     "initials": "SI",
     "description": "CEO",
-    "avatar": "/avatars/avatar-placeholder-4.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/4.png",
     "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
     "skype": "loremipsum",
     "country": "GB",
@@ -52,5 +52,6 @@
       "create-update-delete-standards",
       "view-team-actions"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

@@ -6,19 +6,20 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse'],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
     });
+
+    this.collapsed(false);
   },
+  closeAllOnCollapse: false,
   standards() {
     const query = { organizationId: this.organizationId() };
     const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
