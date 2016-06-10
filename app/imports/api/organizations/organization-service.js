@@ -20,11 +20,11 @@ export default OrganizationService = {
   collection: Organizations,
 
   _ensureNameIsUnique(name) {
-    const nameIsUnique = !this.collection.findOne({ name });
+    const nameIsUnique = !this.collection.findOne({
+      name: new RegExp(`^${name}$`, 'i')
+    });
     if (!nameIsUnique) {
-      throw new Meteor.Error(
-        400, `Organization with name "${name}" already exists`
-      );
+      throw new Meteor.Error(400, `Organization ${name} already exists`);
     }
   },
 
