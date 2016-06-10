@@ -55,6 +55,11 @@ const optionalFields = new SimpleSchema([
     'ref.url': {
       type: String,
       regEx: SimpleSchema.RegEx.Url
+    },
+    departments: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }
 ]);

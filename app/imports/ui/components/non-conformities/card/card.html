@@ -94,16 +94,10 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-12">
                 <div class="list-group-item" {{b "if: this.cost"}}>
                   <p class="list-group-item-text">Approx cost per occurrence</p>
                   <h4 class="list-group-item-heading" {{b "text: renderCost(this.cost)"}}></h4>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Number of occurrences</p>
-                  <h4 class="list-group-item-heading" {{b "text: occurences.count"}}></h4>
                 </div>
               </div>
             </div>
@@ -112,6 +106,17 @@
 
           {{#with notify}}
             {{> Subcards_Notify_Read users=this}}
+          {{/with}}
+
+          {{#with occurences}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Occurences</h4>
+            </div>
+            <div class="list-group">
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading" {{b "text: occurences.count"}}></h4>
+              </div>
+            </div>
           {{/with}}
 
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
