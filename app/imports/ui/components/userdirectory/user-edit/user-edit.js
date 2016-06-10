@@ -64,7 +64,9 @@ Template.UserEdit.viewmodel({
       return;
     }
 
-    const uploader = new Slingshot.Upload('usersAvatars');
+    const uploader = new Slingshot.Upload('usersAvatars', {
+      userId: this.userId()
+    });
 
     this.modal().clearError();
     this.modal().isSaving(true);

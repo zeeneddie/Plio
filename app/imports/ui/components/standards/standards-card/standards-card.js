@@ -60,9 +60,9 @@ Template.StandardsCard.viewmodel({
     const reviewDates = improvementPlan.reviewDates || [];
     const files = improvementPlan.files || [];
 
-    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate && 
-        !improvementPlan.reviewDates.length && !improvementPlan.owner && 
-        !improvementPlan.files.length) {
+    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate &&
+        !reviewDates.length && !improvementPlan.owner &&
+        !files.length) {
       return;
     }
 

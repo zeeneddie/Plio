@@ -6,12 +6,12 @@ Slingshot.fileRestrictions('usersAvatars', {
   maxSize: 10 * 1024 * 1024 // 10 MB
 });
 
-Slingshot.fileRestrictions('standardsAttachments', {
+Slingshot.fileRestrictions('standardsFiles', {
   allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
   maxSize: 64 * 1024 * 1024 // 64 MB
 });
 
-Slingshot.fileRestrictions('improvementPlanFiles', {
+Slingshot.fileRestrictions('improvementPlansFiles', {
   allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
   maxSize: 64 * 1024 * 1024 // 64 MB
 });

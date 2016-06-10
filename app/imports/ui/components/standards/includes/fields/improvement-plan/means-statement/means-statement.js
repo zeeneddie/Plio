@@ -8,7 +8,7 @@ Template.ESIPMeansStatement.viewmodel({
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
+  insertFile({ _id, name }, cb) {
     const fileDoc = { _id, name };
 
     if (this.files() && this.files().length) {
@@ -18,11 +18,11 @@ Template.ESIPMeansStatement.viewmodel({
         $push: {
           files: fileDoc
         }
-      });
+      }, cb);
     } else {
       this.parent().update({
         files: [fileDoc]
-      });
+      }, cb);
 
       this.parent().files([fileDoc]);
     }
@@ -82,5 +82,10 @@ Template.ESIPMeansStatement.viewmodel({
         }
       });
     });
+  },
+  uploaderMetaContext() {
+    return {
+      improvementPlanId: this.parent().improvementPlanId()
+    };
   }
 })

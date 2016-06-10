@@ -30,7 +30,8 @@
         {{> FileUploader
             insertFile=insertFileFn
             onUpload=onUploadCb
-            slingshotDirective='standardsAttachments'}}
+            slingshotDirective='standardsFiles'
+            metaContext=uploaderMetaContext}}
       </div>
     </div>
     {{#ClearableField field="sourceUrl"}}

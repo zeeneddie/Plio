@@ -1,15 +1,20 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
+import { Random } from 'meteor/random';
+
 import Utils from '/imports/core/utils';
+
 
 const configureSlignshot = () => {
   const {
-    name, acl, avatarsDir,
-    attachmentsDir, improvementPlanFilesDir
-  }  = Meteor.settings.AWSS3Bucket;
+    name, acl, usersAvatarsDir,
+    standardsFilesDir, improvementPlansFilesDir
+  } = Meteor.settings.AWSS3Bucket;
 
-  const fileContentDisposition = (file) => {
+  const fileContentDisposition = (file, metaContext) => {
+    const { isDocxHtml } = metaContext;
     const fileName = file.name;
-    return `attachment; filename="${fileName}"; filename*=utf-8''${fileName}`;
+    const disposition = isDocxHtml === true ? 'inline' : 'attachment';
+    return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
 
   Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
@@ -25,12 +30,13 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${avatarsDir}/${file.name}`;
+    key(file, metaContext) {
+      const { userId } = metaContext;
+      return `${usersAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
+  Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
     bucket: name,
 
     acl: acl,
@@ -45,12 +51,13 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${attachmentsDir}/${file.name}`;
+    key(file, metaContext) {
+      const { standardId } = metaContext;
+      return `${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
     bucket: name,
 
     acl: acl,
@@ -65,8 +72,9 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${improvementPlanFilesDir}/${file.name}`;
+    key(file, metaContext) {
+      const { improvementPlanId } = metaContext;
+      return `${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
     }
   });
 };

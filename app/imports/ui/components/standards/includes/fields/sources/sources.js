@@ -41,7 +41,7 @@ Template.ESSources.viewmodel({
 
     this.update();
   },
-  update(e) {
+  update(e, cb) {
     let { type, url, name } = this.getData();
 
     if (!this.shouldUpdate()) {
@@ -70,7 +70,7 @@ Template.ESSources.viewmodel({
       [`source${this.id()}`]: sourceDoc
     };
 
-    const updateFn = () => this.parent().update(query);
+    const updateFn = () => this.parent().update(query, cb);
 
     if (type === 'attachment') {
       updateFn();
@@ -81,10 +81,10 @@ Template.ESSources.viewmodel({
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
+  insertFile({ _id, name }, cb) {
     this.fileId(_id);
     this.sourceName(name);
-    this.update();
+    this.update(null, cb);
   },
   onUploadCb() {
     return this.onUpload.bind(this);
@@ -139,6 +139,11 @@ Template.ESSources.viewmodel({
         }
       });
     });
+  },
+  uploaderMetaContext() {
+    return {
+      standardId: this.parent().standardId()
+    };
   },
   getData() {
     const { sourceType:type, sourceUrl:url, sourceName:name } = this.data();
