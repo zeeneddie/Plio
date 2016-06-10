@@ -7,7 +7,6 @@ import { Occurences } from '/imports/api/occurences/occurences.js';
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus'],
   autorun() {
-    this.templateInstance.subscribe('standards', this.organizationId());
     this.templateInstance.subscribe('improvementPlan', this.NCId());
   },
   NC() {

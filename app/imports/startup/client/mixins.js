@@ -386,6 +386,14 @@ ViewModel.mixin({
     currentNC() {
       const _id = this.NCId();
       return Problems.findOne({ _id });
+    },
+    _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, type: 'non-conformity', organizationId: this.organizationId() };
+      return Problems.find(query, options);
+    },
+    _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, type: 'non-conformity', organizationId: this.organizationId() };
+      return Problems.findOne(query, options);
     }
   },
   utils: {

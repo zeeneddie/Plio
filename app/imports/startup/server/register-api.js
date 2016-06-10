@@ -73,3 +73,9 @@ import '../../api/occurences/occurences.js';
 import '../../api/occurences/occurences-schema.js';
 import '../../api/occurences/occurences-service.js';
 import '../../api/occurences/methods.js';
+
+import '../../api/analysis/server/publications.js';
+import '../../api/analysis/analysis.js';
+import '../../api/analysis/analysis-schema.js';
+import '../../api/analysis/analysis-service.js';
+import '../../api/analysis/methods.js';

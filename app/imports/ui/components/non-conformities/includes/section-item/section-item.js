@@ -4,17 +4,13 @@ import { Problems } from '/imports/api/problems/problems.js';
 
 Template.NCSectionItem.viewmodel({
   share: 'search',
-  mixin: ['organization', 'search'],
-  magnitude: '',
+  mixin: ['organization', 'search', 'nonconformity'],
+  key: '',
+  value: '',
   NCs() {
-    const organizationId = this.organizationId();
-    const query = { ...this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]),
-                    organizationId,
-                    type: 'non-conformity',
-                    magnitude: this.magnitude() };
-
-    const options = { sort: { title: 1 } };
-
-    return Problems.find(query, options);
+    return this._getNCsByQuery({
+      ...this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]),
+      [this.key()]: this.value()
+    });
   }
 });

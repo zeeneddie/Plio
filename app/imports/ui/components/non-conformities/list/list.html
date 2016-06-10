@@ -16,13 +16,25 @@
 
     <div class="list-group list-group-accordion">
 
-      {{#if isActiveNCFilter 'magnitude'}}
-        {{#each _magnitude}}
+      {{#if isActiveNCFilter "magnitude"}}
+        {{#each magnitude}}
           {{> ListItem
-              template='NCSectionItem'
+              template="NCSectionItem"
               title=this.name
               magnitude=this.value
-              rText=(calculateTotalCost this)}}
+              rText=(calculateTotalCost this)
+              key="magnitude"
+              value=this.value}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveNCFilter "status"}}
+        {{#each statuses}}
+          {{> ListItem
+              template="NCSectionItem"
+              title=(getStatusName this)
+              key="status"
+              value=(getStatusInt this)}}
         {{/each}}
       {{/if}}
 
