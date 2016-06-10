@@ -14,6 +14,12 @@ Template.EditNC.viewmodel({
 
     return Problems.findOne(query);
   },
+  onUpdateNotifyUserCb() {
+    return this.onUpdateNotifyUser.bind(this);
+  },
+  onUpdateNotifyUser({ query, options }, cb) {
+    return this.update({ query, options }, cb);
+  },
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
     const organizationId = this.organizationId();

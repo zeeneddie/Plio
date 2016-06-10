@@ -32,7 +32,8 @@
 
         {{> Subcards_Notify_Edit
             document=this
-            documentType="non-conformity"}}
+            documentType="non-conformity"
+            onUpdate=onUpdateNotifyUserCb}}
 
         {{> NCOccurences _id=this._id occurencesIds=this.occurences}}
 

@@ -11,6 +11,12 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
+  onUpdateNotifyUserCb() {
+    return this.onUpdateNotifyUser.bind(this);
+  },
+  onUpdateNotifyUser({ query, options }, cb) {
+    return this.update({ query }, options, cb);
+  },
   update({ query = {}, ...args }, options = {}, cb) {
     if (_.isFunction(options)) {
       cb = options;

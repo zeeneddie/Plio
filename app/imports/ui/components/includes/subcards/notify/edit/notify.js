@@ -33,6 +33,7 @@ Template.Subcards_Notify_Edit.viewmodel({
     const options = { sort: { 'profile.firstName': 1 } };
     return Meteor.users.find(query, options);
   },
+  onUpdate() {},
   update(userId, option, cb) {
     const _id = this.document() && this.document()._id;
     const query = { _id };
@@ -42,7 +43,7 @@ Template.Subcards_Notify_Edit.viewmodel({
       }
     };
 
-    this.parent().update({ query, options }, cb);
+    this.onUpdate({ query, options }, cb);
   },
   onSelectUserCb() {
     return this.onSelectUser.bind(this);
@@ -64,12 +65,10 @@ Template.Subcards_Notify_Edit.viewmodel({
       viewmodel.value('');
       viewmodel.selected('');
 
-      console.log(this.document());
-
       // TODO need one for non-conformities
       if (this.documentType() === 'standard') {
         addedToNotifyList.call({
-          standardId: this.standard()._id,
+          standardId: this.document()._id,
           userId
         }, (err, res) => {
           if (err) {
