@@ -37,7 +37,7 @@
                 <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
               </h4>
             </a>
-            <div class="list-group-collapse collapse" {{b "ref: collapse"}}>
+            <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
                 <div class="list-group-item" {{b "if: this.description"}}>
