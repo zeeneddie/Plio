@@ -9,4 +9,3 @@ import './departments';
 import './issue-number';
 import './status';
 import './sources';
-import './notify';
