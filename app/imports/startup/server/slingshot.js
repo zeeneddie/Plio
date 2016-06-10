@@ -50,6 +50,24 @@ const configureSlignshot = () => {
     }
   });
 
+  Slingshot.createDirective('htmlAttachmentPreview', Slingshot.S3Storage, {
+    bucket: name,
+
+    acl: acl,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file) {
+      return `${attachmentsDir}/${file.name}`;
+    }
+  });
+
   Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
     bucket: name,
 

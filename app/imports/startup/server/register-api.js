@@ -61,3 +61,5 @@ import '../../api/non-conformities/non-conformities.js';
 import '../../api/non-conformities/non-conformities-schema.js';
 import '../../api/non-conformities/non-conformities-service.js';
 import '../../api/non-conformities/methods.js';
+
+import '../../api/mammoth/methods.js';

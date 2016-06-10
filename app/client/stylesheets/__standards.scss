@@ -77,7 +77,6 @@
     }
   }
 
-
 }
 
 .standard-edit {
@@ -177,6 +176,16 @@
 
     .list-group-collapse {
       margin: 0;
+    }
+  }
+
+  .source-document-preview {
+    border-bottom: 1px solid #ddd;
+    padding: 4%;
+    iframe {
+      height: 70vh;
+      width: 100%;
+      border: none;
     }
   }
 }
