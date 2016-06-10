@@ -3,7 +3,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.ESIPMeansStatement.viewmodel({
-  mixin: 'filesList',
+  mixin: ['filesList', 'organization'],
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
@@ -85,6 +85,7 @@ Template.ESIPMeansStatement.viewmodel({
   },
   uploaderMetaContext() {
     return {
+      organizationId: this.organizationId(),
       improvementPlanId: this.parent().improvementPlanId()
     };
   }

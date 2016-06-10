@@ -52,8 +52,8 @@ const configureSlignshot = () => {
     },
 
     key(file, metaContext) {
-      const { standardId } = metaContext;
-      return `${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
+      const { organizationId, standardId } = metaContext;
+      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
@@ -73,8 +73,8 @@ const configureSlignshot = () => {
     },
 
     key(file, metaContext) {
-      const { improvementPlanId } = metaContext;
-      return `${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
+      const { organizationId, improvementPlanId } = metaContext;
+      return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
     }
   });
 };

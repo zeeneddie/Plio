@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck'],
+  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -142,6 +142,7 @@ Template.ESSources.viewmodel({
   },
   uploaderMetaContext() {
     return {
+      organizationId: this.organizationId(),
       standardId: this.parent().standardId()
     };
   },

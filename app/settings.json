@@ -5,9 +5,9 @@
   "AWSS3Bucket": {
     "name": "",
     "acl": "",
-    "usersAvatarsDir": "images/users-avatars",
-    "standardsFilesDir": "standards-files",
-    "improvementPlansFilesDir": "improvement-plans-files"
+    "usersAvatarsDir": "",
+    "standardsFilesDir": "",
+    "improvementPlansFilesDir": ""
   },
   "mail": {
     "login": "",
