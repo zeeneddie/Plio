@@ -5,9 +5,11 @@ Template.IPReviewDates.viewmodel({
   mixin: ['addForm', 'date'],
   reviewDates: [],
   addReviewDate() {
-    this.addForm('ESIPReviewDate', {
+    this.addForm('IPReviewDate', {
       placeholder: this.renderDate(new Date()),
-      defaultDate: false
+      defaultDate: false,
+      onChange: this.update.bind(this),
+      onDelete: this.delete.bind(this)
     });
   },
   onChangeCb() {
