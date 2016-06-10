@@ -5,9 +5,9 @@
   "AWSS3Bucket": {
     "name": "",
     "acl": "",
-    "avatarsDir": "",
-    "attachmentsDir": "",
-    "improvementPlanFilesDir": ""
+    "usersAvatarsDir": "",
+    "standardsFilesDir": "",
+    "improvementPlansFilesDir": ""
   },
   "mail": {
     "login": "",
@@ -15,6 +15,5 @@
     "hostname": "",
     "port": ""
   },
-
   "invitationExpirationTimeInHours": 72
 }

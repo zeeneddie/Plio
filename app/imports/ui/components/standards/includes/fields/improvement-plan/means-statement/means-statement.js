@@ -3,12 +3,12 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.ESIPMeansStatement.viewmodel({
-  mixin: 'filesList',
+  mixin: ['filesList', 'organization'],
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
+  insertFile({ _id, name }, cb) {
     const fileDoc = { _id, name };
 
     if (this.files() && this.files().length) {
@@ -18,11 +18,11 @@ Template.ESIPMeansStatement.viewmodel({
         $push: {
           files: fileDoc
         }
-      });
+      }, cb);
     } else {
       this.parent().update({
         files: [fileDoc]
-      });
+      }, cb);
 
       this.parent().files([fileDoc]);
     }
@@ -82,5 +82,11 @@ Template.ESIPMeansStatement.viewmodel({
         }
       });
     });
+  },
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      improvementPlanId: this.parent().improvementPlanId()
+    };
   }
 })

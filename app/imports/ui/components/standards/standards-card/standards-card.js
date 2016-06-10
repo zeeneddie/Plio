@@ -74,8 +74,8 @@ Template.StandardsCard.viewmodel({
     const files = improvementPlan.files || [];
 
     if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate &&
-        !improvementPlan.reviewDates.length && !improvementPlan.owner &&
-        !improvementPlan.files.length) {
+        !reviewDates.length && !improvementPlan.owner &&
+        !files.length) {
       return;
     }
 
