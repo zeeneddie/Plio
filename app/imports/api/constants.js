@@ -21,6 +21,11 @@ const NCStatuses = {
   14: 'Deleted'
 };
 
+const AnalysisStatuses = {
+  0: 'Not completed',
+  1: 'Completed'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -251,6 +256,7 @@ export {
   DefaultStandardTypes,
   NCTypes,
   NCStatuses,
+  AnalysisStatuses,
   OrgCurrencies,
   OrganizationDefaults,
   OrgOwnerRoles,

@@ -39,7 +39,7 @@ export const update = new ValidatedMethod({
 
   run({_id, ...args}) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot update a lesson');
+      throw new Meteor.Error(403, 'Unauthorized user cannot update an occurence');
     }
 
     return OccurencesService.update({ _id, ...args });
@@ -53,7 +53,7 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove a lesson');
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove an occurence');
     }
 
     return OccurencesService.remove({ _id });
