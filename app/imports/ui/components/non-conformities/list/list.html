@@ -39,6 +39,17 @@
         {{/each}}
       {{/if}}
 
+      {{#if isActiveNCFilter "department"}}
+        {{#each departments}}
+          {{> ListItem
+              template="NCSectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              key="departments"
+              value=this._id}}
+        {{/each}}
+      {{/if}}
+
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
       {{/if}}

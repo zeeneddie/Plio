@@ -3,6 +3,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { Problems } from '/imports/api/problems/problems.js';
 import { Occurences } from '/imports/api/occurences/occurences.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NCTypes, NCStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
@@ -43,6 +44,12 @@ Template.NCList.viewmodel({
   },
   getStatusInt(status) {
     return parseInt(status, 10);
+  },
+  departments() {
+    const query = { organizationId: this.organizationId() };
+    return Departments.find(query).fetch().filter(({ _id, name }) => {
+      return this._getNCsByQuery({ departments: _id }).count() > 0;
+    });
   },
   calculateTotalCost(value) {
     const ncs = this._getNCsByQuery({
