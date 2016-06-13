@@ -1,3 +1,23 @@
 <template name="NCUpdateOfStandards">
-  {{#FormField label="Update of standard(s)"}}{{/FormField}}
+  <div class="card-block">
+    {{#FormField label="Update of standard(s)"}}{{/FormField}}
+
+    {{> NCRCADate date=targetDate key="updateOfStandards.targetDate"}}
+
+    {{> NCRCAStatus
+      status=status
+      key="updateOfStandards.status"}}
+
+    {{> NCRCADate
+        date=completedAt
+        key="updateOfStandards.completedAt"
+        placeholder="Completed date"
+        label="Completed date"}}
+
+    {{> NCRCABy
+      by=completedBy
+      key="updateOfStandards.completedBy"
+      placeholder="Completed by"
+      label="Completed by"}}
+  </div>
 </template>

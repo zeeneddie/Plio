@@ -1,4 +1,6 @@
 <template name="NCRootCauseAnalysis">
-  {{> NCAnalysis}}
-  {{> NCUpdateOfStandards}}
+  {{> NCAnalysis analysis=analysis}}
+  {{#if isAnalysisCompleted}}
+    {{> NCUpdateOfStandards updateOfStandards=updateOfStandards}}
+  {{/if}}
 </template>

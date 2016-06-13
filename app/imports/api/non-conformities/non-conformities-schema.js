@@ -101,7 +101,8 @@ const OptionalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    ...rootCauseAnalysis
+    ...rootCauseAnalysis,
+    ...updateOfStandards
   }
 ]);
 
