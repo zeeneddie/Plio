@@ -1,5 +1,5 @@
 <template name="StandardsCard">
-    <div class="content-cards-inner flex scroll">
+    <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
       <div class="card standard-details">
         <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
           <h5 {{b "if: !isActiveStandardFilter('deleted')"}}>
@@ -11,8 +11,7 @@
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
-                <a class="btn btn-primary" {{b "if: hasDocxAttachment, click: expandStandardModal"}}>
-                  <i class="fa fa-expand"></i>
+                <a class="btn btn-secondary toggle-expand-btn" {{b "if: hasDocxAttachment, click: toggleScreenMode"}}>
                 </a>
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
@@ -154,7 +153,7 @@
                       <p class="list-group-item-text">Means statement</p>
                       {{#each files}}
                         <a class="btn btn-secondary btn-inline" {{b "href: this.url"}}>
-                          <i class="fa fa-file-{{extension}}-o margin-right">
+                          <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
                           </i>
                           <span>{{this.name}}</span>
                         </a>
