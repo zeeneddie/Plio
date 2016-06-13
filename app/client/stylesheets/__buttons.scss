@@ -1,6 +1,9 @@
 .btn {
   font-family: $font-semibold;
   font-weight: normal;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   @include transition(all .3s ease);
   
 
