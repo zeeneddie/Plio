@@ -14,7 +14,7 @@ Template.NCRCAExecutor.viewmodel({
 
     this.executor(executor);
 
-    this.parent().update({ executor });
+    this.parent().update({ 'analysis.executor': executor });
   },
   getData() {
     const { executor } = this.data();

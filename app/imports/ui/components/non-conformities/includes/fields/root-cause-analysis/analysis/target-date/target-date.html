@@ -1,0 +1,9 @@
+<template name="NCRCATargetDate">
+  {{#FormField label="Target date"}}
+    {{> Datepicker
+        placeholder=placeholder
+        date=targetDate
+        defaultDate=defaultDate
+        onChange=onUpdateCb}}
+  {{/FormField}}
+</template>
