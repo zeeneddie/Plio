@@ -1,7 +1,9 @@
 <template name="SourceWordDocument">
   {{#if source.htmlUrl}}
-    <div class="source-document-preview">
-      <iframe src={{source.htmlUrl}}></iframe>
+    <div class="source-document-item">
+      <div class="source-document-preview">
+        <iframe src={{source.htmlUrl}}></iframe>
+      </div>
       {{> SCSource source=source}}
     </div>
   {{/if}}
