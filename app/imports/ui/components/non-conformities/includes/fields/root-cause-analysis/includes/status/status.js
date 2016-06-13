@@ -1,9 +1,12 @@
 import { Template } from 'meteor/templating';
+
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
 Template.NCRCAStatus.viewmodel({
   status: 0,
   executor: '',
+  key: '',
+  label: 'Status',
   getStatus() {
     return this.status() || 0;
   },
@@ -20,6 +23,6 @@ Template.NCRCAStatus.viewmodel({
 
     this.status(status);
 
-    this.parent().update({ 'analysis.status': parseInt(status, 10) });
+    this.parent().update({ [this.key()]: parseInt(status, 10) });
   }
 });

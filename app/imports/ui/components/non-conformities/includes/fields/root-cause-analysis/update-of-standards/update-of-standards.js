@@ -1,11 +1,10 @@
 import { Template } from 'meteor/templating';
 
-Template.NCAnalysis.viewmodel({
+Template.NCUpdateOfStandards.viewmodel({
   autorun() {
-    this.load(this.analysis());
+    this.load(this.updateOfStandards());
   },
-  analysis: '',
-  executor: '',
+  updateOfStandards: '',
   targetDate: '',
   status: '',
   completedAt: '',

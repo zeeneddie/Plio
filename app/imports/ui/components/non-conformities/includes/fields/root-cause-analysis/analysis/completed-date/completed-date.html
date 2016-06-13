@@ -1,8 +1,8 @@
-<template name="NCRCATargetDate">
-  {{#FormField label="Target date"}}
+<template name="NCRCACompletedDate">
+  {{#FormField label="Completed date"}}
     {{> Datepicker
         placeholder=placeholder
-        date=targetDate
+        date=completedAt
         defaultDate=defaultDate
         onChange=onUpdateCb}}
   {{/FormField}}

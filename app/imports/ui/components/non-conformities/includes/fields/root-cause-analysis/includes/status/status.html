@@ -1,0 +1,8 @@
+<template name="NCRCAStatus">
+  {{#FormField label=label}}
+    {{> SelectItemRadio
+        items=statuses
+        value=getStatus
+        onSelect=onUpdateCb}}
+  {{/FormField}}
+</template>

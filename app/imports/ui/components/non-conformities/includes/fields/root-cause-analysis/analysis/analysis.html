@@ -2,10 +2,29 @@
   <div class="card-block">
     {{#FormField label="Root cause Analysis"}}{{/FormField}}
 
-    {{> NCRCAExecutor executor=analysis.executor}}
+    {{> NCRCABy
+        by=executor
+        key="analysis.executor"
+        placeholder="Who will do it?"
+        label="Who will do it?"}}
 
-    {{> NCRCATargetDate targetDate=analysis.targetDate}}
+    {{> NCRCADate date=targetDate key="analysis.targetDate"}}
 
-    {{> NCRCAStatus status=analysis.status}}
+    {{> NCRCAStatus
+      status=status
+      executor=executor
+      key="analysis.status"}}
+
+    {{> NCRCADate
+        date=completedAt
+        key="analysis.completedAt"
+        placeholder="Completed date"
+        label="Completed date"}}
+
+    {{> NCRCABy
+      by=completedBy
+      key="analysis.completedBy"
+      placeholder="Completed by"
+      label="Completed by"}}
   </div>
 </template>

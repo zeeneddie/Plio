@@ -1,9 +1,0 @@
-<template name="NCRCAExecutor">
-  {{#FormField label="Who will do it?"}}
-    {{> SelectItem
-        selectFirstIfNoSelected=false
-        items=_members
-        selected=executor
-        onUpdate=onUpdateCb}}
-  {{/FormField}}
-</template>
