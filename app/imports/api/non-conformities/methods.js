@@ -20,7 +20,7 @@ export const insert = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a problem'
+        403, 'Unauthorized user cannot create a non-conformity'
       );
     }
 
@@ -39,7 +39,7 @@ export const update = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a problem'
+        403, 'Unauthorized user cannot update a non-conformity'
       );
     }
 
@@ -58,7 +58,7 @@ export const remove = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot delete a problem'
+        403, 'Unauthorized user cannot remove a non-conformity'
       );
     }
     return NonConformitiesService.remove({ _id, deletedBy: userId});

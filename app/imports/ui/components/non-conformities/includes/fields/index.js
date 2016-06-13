@@ -7,3 +7,4 @@ import './status';
 import './cost';
 import './ref';
 import './occurences';
+import './root-cause-analysis';

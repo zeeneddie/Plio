@@ -18,6 +18,8 @@ Template.EditNC.viewmodel({
     const organizationId = this.organizationId();
     const arguments = { ...args, _id, options, query, organizationId };
 
+    console.log(arguments);
+
     this.modal().callMethod(update, arguments, cb);
   }
 });

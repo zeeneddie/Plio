@@ -24,13 +24,7 @@
           {{> NCRef _id=this._id text=this.ref.text url=this.ref.url}}
         </div>
 
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#root-cause-analysis" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Root cause analysis</h4>
-          <i class="fa fa-align-left disclosure-indicator pull-right"></i>
-        </div>
-        <div class="card-block-collapse collapse" id="root-cause-analysis">
-          <div ng-include="'includes/subcards-edit/root-cause-analysis.html'"></div>
-        </div>
+        {{> NCRootCauseAnalysis _id=this._id analysis=this.analysis}}
 
         {{> Subcards_Notify_Edit
             document=this

@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, OrganizationIdSchema, NotifySchema } from '../schemas.js';
-import { NCStatuses, OrgCurrencies } from '../constants.js';
+import { NCStatuses, OrgCurrencies, AnalysisStatuses } from '../constants.js';
 
 const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
@@ -23,6 +23,36 @@ const RequiredSchema = new SimpleSchema([
     }
   }
 ]);
+
+const rootCaseAnalysis = {
+  analysis: {
+    type: Object,
+    optional: true
+  },
+  'analysis.executor': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  'analysis.targetDate': {
+    type: Date,
+    optional: true
+  },
+  'analysis.status': {
+    type: Number,
+    allowedValues: _.keys(AnalysisStatuses),
+    optional: true
+  },
+  'analysis.completedAt': {
+    type: Date,
+    optional: true
+  },
+  'analysis.completedBy': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  }
+};
 
 const OptionalSchema = new SimpleSchema([
   NotifySchema,
@@ -56,7 +86,8 @@ const OptionalSchema = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       optional: true
-    }
+    },
+    ...rootCaseAnalysis
   }
 ]);
 
