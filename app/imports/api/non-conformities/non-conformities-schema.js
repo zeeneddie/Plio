@@ -24,6 +24,29 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
+const getRepeatingFields = (key) => {
+  return {
+    [`${key}.targetDate`]: {
+      type: Date,
+      optional: true
+    },
+    [`${key}.status`]: {
+      type: Number,
+      allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
+      optional: true
+    },
+    [`${key}.completedAt`]: {
+      type: Date,
+      optional: true
+    },
+    [`${key}.completedBy`]: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  };
+};
+
 const rootCauseAnalysis = {
   analysis: {
     type: Object,
@@ -34,24 +57,15 @@ const rootCauseAnalysis = {
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
-  'analysis.targetDate': {
-    type: Date,
+  ...getRepeatingFields('analysis')
+};
+
+const updateOfStandards = {
+  updateOfStandards: {
+    type: Object,
     optional: true
   },
-  'analysis.status': {
-    type: Number,
-    allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
-    optional: true
-  },
-  'analysis.completedAt': {
-    type: Date,
-    optional: true
-  },
-  'analysis.completedBy': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  }
+  ...getRepeatingFields('updateOfStandards')
 };
 
 const OptionalSchema = new SimpleSchema([
