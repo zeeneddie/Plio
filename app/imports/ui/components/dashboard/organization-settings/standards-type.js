@@ -1,5 +1,7 @@
 Template.OrganizationSettings_StandardsType.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
+  name: '',
+  abbreviation: '',
   isChanged() {
     const tplData = this.templateInstance.data;
     const storedName = tplData.name;
@@ -13,12 +15,13 @@ Template.OrganizationSettings_StandardsType.viewmodel({
       (name !== storedName) || (abbreviation !== storedAbbr)
     ]);
   },
-  onFocusOut() {
-    this.callWithFocusCheck(() => {
-      if (this.isChanged()) {
-        this.onChange(this);
-      }
-    });
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
+  },
+  deleteFn() {
+    return this.delete.bind(this);
   },
   delete() {
     this.onDelete(this);

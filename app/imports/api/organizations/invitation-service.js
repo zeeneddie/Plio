@@ -50,16 +50,22 @@ class InvitationSender {
       password: randomPassword,
       profile: {
         avatar: Utils.getRandomAvatarUrl()
-      }
+      },
+      isNotificationsEnabled: true
     };
 
     try {
       const newUserId = Accounts.createUser(userDoc);
+      let invitationExpirationDate = new Date;
+      invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
       Meteor.users.update({
         _id: newUserId,
       }, {
         $set: {
           invitationId: this._invitationId,
+          invitedAt: new Date(),
+          invitedBy: Meteor.userId(),
+          invitationExpirationDate,
           'emails.0.verified': true
         }
       });
@@ -76,32 +82,44 @@ class InvitationSender {
 
     //send notification
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the "${this._organization.name}"!`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system.`,
+      avatar: {
+        alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        title: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        url: sender.profile.avatar
+      },
       secondaryText: this._welcomeMessage,
       button: {
-        label: 'Go to the dashboard',
+        label: 'Visit this organization on Plio',
         url: NotificationSender.getAbsoluteUrl(`${this._organization.serialNumber}`)
       }
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
+    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
   _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
     let sender = Meteor.user();
+    let invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
 
     // send invitation
     let notificationData = Object.assign({
-      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to the "${this._organization.name}" organization!`,
+      title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system.`,
       secondaryText: this._welcomeMessage,
+      avatar: {
+        alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        title: `${sender.profile.firstName} ${sender.profile.lastName}`,
+        url: sender.profile.avatar
+      },
       button: {
         label: 'Accept the invitation',
         url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
-      }
+      },
+      footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'minimalisticEmail', notificationData)
+    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
       .sendEmail(userIdToInvite);
   }
 
@@ -148,10 +166,10 @@ class InvitationSender {
     };
 
     if (isExisting) {
-      notificationSubject = `You have been added to the "${this._organization.name}" organization!`;
+      notificationSubject = `You have been added to the ${this._organization.name} management system`;
       this._sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     } else {
-      notificationSubject = `You have been invited to the "${this._organization.name}" organization!`;
+      notificationSubject = `You have been invited to to join the ${this._organization.name} management system`;
       this._sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData);
     }
   }
@@ -166,6 +184,12 @@ class InvitationSender {
       this._inviteUser(userIdToInvite, true);
     }
   }
+
+  static getInvitationExpirationTime() {
+
+    // 3 days by default
+    return Meteor.settings.public.invitationExpirationTimeInDays || 3;
+  }
 }
 
 export default InvitationService = {
@@ -179,16 +203,25 @@ export default InvitationService = {
 
     let invitedUser = Meteor.users.findOne({invitationId: invitationId});
 
+    userData.initials = Utils.generateUserInitials(userData);
+
     if (invitedUser) {
       Accounts.setPassword(invitedUser._id, password);
 
       let updateUserProfile = Object.assign(invitedUser.profile, userData);
       Meteor.users.update({_id: invitedUser._id}, {
         $set: {profile: updateUserProfile},
-        $unset: {invitationId: ''}
+        $unset: {
+          invitationId: '',
+          invitationExpirationDate: ''
+        }
       });
     } else {
       throw new Meteor.Error(404, 'Invitation does not exist');
     }
+  },
+
+  getInvitationExpirationTime() {
+    return InvitationSender.getInvitationExpirationTime();
   }
 };

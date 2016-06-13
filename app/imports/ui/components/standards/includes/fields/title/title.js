@@ -1,24 +1,25 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESTitle.viewmodel({
-  mixin: ['modal', 'clearableField', 'numberRegex'],
+  mixin: ['callWithFocusCheck', 'numberRegex'],
   titleText: '',
-  update() {
-    this.callWithFocusCheck(() => {
-      const { title } = this.getData();
+  update(e, viewmodel) {
+    this.callWithFocusCheck(e, () => {
+      if (!this._id) return;
 
+      const { value:title } = viewmodel.getData();
+      const modal = ViewModel.findOne('ModalWindow');
       const number = this.parseNumber(title);
       const nestingLevel = (number && number[0].split('.').length) || 1;
 
       if (nestingLevel > 4) {
-        this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
+        modal.setError('Maximum nesting is 4 levels. Please change your title.');
         return;
       }
 
-      if (!this._id) return;
-
       if (!title) {
-        this.modal().setError('Title is required!');
+        modal.setError('Title is required!');
         return;
       }
 
@@ -26,7 +27,7 @@ Template.ESTitle.viewmodel({
     });
   },
   getData() {
-    const { titleText:title } = this.data();
+    const { value:title } = this.child().getData();
     return { title };
   }
 });

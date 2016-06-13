@@ -1,61 +1,102 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
+import { Random } from 'meteor/random';
+
+import Utils from '/imports/core/utils';
 
 
-const {
-  name, acl, avatarsDir,
-  attachmentsDir, improvementPlanFilesDir
-}  = Meteor.settings.AWSS3Bucket;
+const configureSlignshot = () => {
+  const {
+    name, acl, usersAvatarsDir,
+    standardsFilesDir, improvementPlansFilesDir
+  } = Meteor.settings.AWSS3Bucket;
 
-Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
-  bucket: name,
+  const attachmentDisposition = (file, metaContext) => {
+    const fileName = file.name;
+    const disposition = 'attachment';
+    return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
+  };
 
-  acl: acl,
+  Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
+    bucket: name,
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    acl: acl,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { userId } = metaContext;
+      return `${usersAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
     }
+  });
 
-    return true;
-  },
+  Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
+    bucket: name,
 
-  key(file) {
-    return `${avatarsDir}/${file.name}`;
-  }
-});
+    acl: acl,
 
-Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
-  bucket: name,
+    contentDisposition: attachmentDisposition,
 
-  acl: acl,
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { organizationId, standardId } = metaContext;
+      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
+  });
 
-    return true;
-  },
+  Slingshot.createDirective('htmlAttachmentPreview', Slingshot.S3Storage, {
+    bucket: name,
 
-  key(file) {
-    return `${attachmentsDir}/${file.name}`;
-  }
-});
+    acl: acl,
 
-Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
-  bucket: name,
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
 
-  acl: acl,
+      return true;
+    },
 
-  authorize() {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+    key(file, metaContext) {
+      const { organizationId, standardId } = metaContext;
+      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
+  });
 
-    return true;
-  },
+  Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
+    bucket: name,
 
-  key(file) {
-    return `${improvementPlanFilesDir}/${file.name}`;
-  }
-});
+    acl: acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { organizationId, improvementPlanId } = metaContext;
+      return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
+    }
+  });
+};
+
+// if (Utils.isProduction()) {
+  configureSlignshot();
+// }

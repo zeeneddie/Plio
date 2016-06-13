@@ -1,13 +1,15 @@
 Template.OrganizationSettings_NcGuideline.viewmodel({
+  mixin: 'callWithFocusCheck',
+  text: '',
   isChanged() {
     const prev = this.templateInstance.data.text;
     const text = this.text();
-    
+
     return text && text !== prev;
   },
-  onFocusOut() {
+  onFocusOut(e) {
     if (this.isChanged()) {
-      this.onChange(this);
+      this.callWithFocusCheck(e, () => this.onChange(this));
     }
   },
   getData() {

@@ -20,16 +20,18 @@
     "lastName": "Ives",
     "initials": "SI",
     "description": "CEO",
-    "avatar": "/avatars/avatar-placeholder-4.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/4.png",
     "address": "The Pavilions, Eden Park, Ham Green, Bristol BS20 0DD UK",
     "skype": "loremipsum",
     "country": "GB",
     "phoneNumbers": [
       {
+        "_id": "rmPP2K5pmHQtbWPxh",
         "type": "Home",
         "number": "+44 4321 123 456"
       },
       {
+        "_id": "EpqN3iH4MiESzW4Wz",
         "type": "Mobile",
         "number": "+44 0987 654 321"
       }
@@ -50,5 +52,6 @@
       "create-update-delete-standards",
       "view-team-actions"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

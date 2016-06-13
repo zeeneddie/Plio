@@ -1,17 +1,19 @@
 Template.OrganizationSettings_Department.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
+  name: '',
   isChanged() {
     let savedName = this.templateInstance.data.name;
     const name = this.name();
 
     return name && name !== savedName;
   },
-  onFocusOut() {
-    this.callWithFocusCheck(() => {
-      if (this.isChanged()) {
-        this.onChange(this);
-      }
-    });
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
+  },
+  deleteFn() {
+    return this.delete.bind(this);
   },
   delete() {
     this.onDelete(this);

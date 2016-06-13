@@ -5,11 +5,13 @@
           _id=_id
           name=name
           url=url
+          extension=extension
           removeFile=removeFileFn}}
     {{/each}}
     {{> FileUploader
         insertFile=insertFileFn
         onUpload=onUploadCb
-        slingshotDirective='improvementPlanFiles'}}
+        slingshotDirective='improvementPlansFiles'
+        metaContext=uploaderMetaContext}}
   {{/FormField}}
 </template>

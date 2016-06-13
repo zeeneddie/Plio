@@ -14,16 +14,22 @@
             </a>
           {{/each}}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="{{pathFor 'userDirectoryUserPage' orgSerialNumber=orgSerialNumber userId=currentUser._id}}">
-            My profile
+          <a class="dropdown-item" {{b "click: openUserPreferences"}}>
+            My preferences
           </a>
-          <a class="dropdown-item" href="{{pathFor 'userDirectoryPage' orgSerialNumber=orgSerialNumber}}">
-            User directory
-          </a>
-          {{#if canInviteUsers organizationId}}
-            <a class="dropdown-item" {{b "click: onInviteClick"}}>
-              Invite users
+          {{#if organizationId}}
+
+            <a class="dropdown-item" href="{{pathFor 'userDirectoryUserPage' orgSerialNumber=orgSerialNumber userId=currentUser._id}}" {{b "click: goToMyProfile"}}>
+              My profile
             </a>
+            <a class="dropdown-item" href="{{pathFor 'userDirectoryPage' orgSerialNumber=orgSerialNumber}}">
+              User directory
+            </a>
+            {{#if canInviteUsers organizationId}}
+              <a class="dropdown-item" {{b "click: onInviteClick"}}>
+                Invite users
+              </a>
+            {{/if}}
           {{/if}}
           <a class="dropdown-item disabled">
             Standard subcards

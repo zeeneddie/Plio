@@ -20,15 +20,17 @@
     "lastName": "Rokosh",
     "initials": "MR",
     "description": "IT manager",
-    "avatar": "/avatars/avatar-placeholder-2.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png",
     "skype": "m.rokosh",
     "country": "UK",
     "phoneNumbers": [
       {
+        "_id": "sWz653iQ3gbebD4bM",
         "type": "Work",
         "number": "+44 1234 123 456"
       },
       {
+        "_id": "o89nFj8gYHYHCZytG",
         "type": "Mobile",
         "number": "+44 9870 654 321"
       }
@@ -45,5 +47,6 @@
       "edit-user-roles",
       "change-org-settings"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

@@ -1,0 +1,29 @@
+<template name="RisksHeader">
+  <div class="navbar">
+    <span class="navbar-title dropdown">
+      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Risks by - ' + activeRiskFilter"}}>
+      </a>
+      <div class="dropdown-menu">
+        {{#each riskFilters}}
+          <a class="dropdown-item pointer"
+            {{b "class: { active: isActiveRiskFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
+          </a>
+        {{/each}}
+      </div>
+    </span>
+    <ul class="nav navbar-nav pull-xs-left">
+      <li class="nav-item">
+        <a class="nav-link pointer" {{b "click: navigate"}}>
+        	<i class="fa fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav pull-xs-right">
+      <li class="nav-item">
+        <a class="nav-link guidance-toggle collapsed" data-toggle="collapse" href="#guidance-panel-top">
+          <i class="ms-Icon ms-Icon--question"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>

@@ -16,7 +16,7 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 0
+    min: 1
   }
 });
 
@@ -47,8 +47,16 @@ export const OrganizationIdSchema = new SimpleSchema({
   organizationId: idSchemaDoc
 });
 
+export const StandardIdSchema = new SimpleSchema({
+  standardId: idSchemaDoc
+});
+
 export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
+});
+
+export const DocumentIdSchema = new SimpleSchema({
+  documentId: idSchemaDoc
 });
 
 export const optionsSchema = new SimpleSchema({
@@ -63,3 +71,68 @@ export const optionsSchema = new SimpleSchema({
     blackbox: true
   }
 });
+
+export const CreatedAtSchema = new SimpleSchema({
+  createdAt: {
+    type: Date,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return new Date();
+      } else {
+        this.unset();
+      }
+    }
+  }
+});
+
+export const CreatedBySchema = new SimpleSchema({
+  createdBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return this.userId;
+      } else {
+        this.unset();
+      }
+    }
+  }
+});
+
+export const UpdatedAtSchema = new SimpleSchema({
+  updatedAt: {
+    type: Date,
+    optional: true,
+    autoValue() {
+      if (this.isUpdate) {
+        return new Date();
+      } else {
+        this.unset();
+      }
+    }
+  }
+});
+
+export const UpdatedBySchema = new SimpleSchema({
+  updatedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isUpdate) {
+        return this.userId;
+      } else {
+        this.unset();
+      }
+    }
+  }
+});
+
+export const BaseEntitySchema = new SimpleSchema([
+  CreatedAtSchema,
+  CreatedBySchema,
+  UpdatedAtSchema,
+  UpdatedBySchema
+]);

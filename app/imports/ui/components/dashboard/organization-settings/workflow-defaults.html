@@ -1,0 +1,27 @@
+<template name="OrganizationSettings_WorkflowDefaults">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Workflow defaults</h4>
+  </div>
+  <div class="card-block-collapse collapse" id="workflow-defaults" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{> OrganizationSettings_WorkflowDefault
+          title="Minor non-conformities"
+          timeData=workflowDefaults.minorNc
+          type="minorNc"
+          onChange=onChangeCb}}
+
+      {{> OrganizationSettings_WorkflowDefault
+          title="Major non-conformities"
+          timeData=workflowDefaults.majorNc
+          type="majorNc"
+          onChange=onChangeCb}}
+
+      {{> OrganizationSettings_WorkflowDefault
+          title="Critical non-conformities"
+          timeData=workflowDefaults.criticalNc
+          type="criticalNc"
+          onChange=onChangeCb}}
+    </div>
+  </div>
+</template>

@@ -43,3 +43,23 @@ import '../../api/improvement-plans/improvement-plans.js';
 import '../../api/improvement-plans/improvement-plans-schema.js'
 import '../../api/improvement-plans/improvement-plans-service.js';
 import '../../api/improvement-plans/methods.js';
+
+import '../../api/risks/server/publications.js';
+import '../../api/risks/risks.js';
+import '../../api/risks/risks-schema.js';
+import '../../api/risks/risks-service.js';
+import '../../api/risks/methods.js';
+
+import '../../api/risks-sections/server/publications.js';
+import '../../api/risks-sections/risks-sections.js';
+import '../../api/risks-sections/risks-section-schema.js';
+import '../../api/risks-sections/risks-section-service.js';
+import '../../api/risks-sections/methods.js';
+
+import '../../api/non-conformities/server/publications.js';
+import '../../api/non-conformities/non-conformities.js';
+import '../../api/non-conformities/non-conformities-schema.js';
+import '../../api/non-conformities/non-conformities-service.js';
+import '../../api/non-conformities/methods.js';
+
+import '../../api/mammoth/methods.js';

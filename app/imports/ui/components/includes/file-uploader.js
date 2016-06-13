@@ -29,20 +29,28 @@ Template.FileUploader.viewmodel({
     const _id = Random.id();
     const name = file.name;
 
-    this.insertFile({ _id, name });
-
-    const uploader = new Slingshot.Upload(this.slingshotDirective());
-    uploader.send(file, (err, url) => {
-      if (url) {
-        url = encodeURI(url);
-      }
-      this.onUpload(err, { _id, url });
-      this.removeUploadData(_id);
-    });
-
-    this.uploads().push({ fileId: _id, uploader });
-
     this.attachmentFile(null);
+
+    this.insertFile({ _id, name }, (err) => {
+      if (err) {
+        return;
+      }
+
+      const uploader = new Slingshot.Upload(
+        this.slingshotDirective(), this.metaContext()
+      );
+
+      uploader.send(file, (err, url) => {
+        if (url) {
+          url = encodeURI(url);
+        }
+
+        this.onUpload(err, { _id, url });
+        this.removeUploadData(_id);
+      });
+
+      this.uploads().push({ fileId: _id, uploader });
+    });
   },
   cancelUpload(fileId) {
     const uploadData = this.uploadData(fileId);

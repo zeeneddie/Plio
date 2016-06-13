@@ -52,13 +52,16 @@ Template.ESDepartments.viewmodel({
       if (err) {
         swal('Oops... Something went wrong!', err.reason, 'error');
       } else {
-        swal("Added!", `New department "${this.department()}" was added succesfully.`, "success");
+        swal("Added!", `New department "${this.department()}" was added successfully.`, "success");
 
         const newDepartment = Departments.findOne({ _id });
 
         !!newDepartment && this.update(newDepartment, '$addToSet');
       }
     });
+  },
+  deleteDepartmentFn() {
+    return this.update.bind(this, Template.currentData(), '$pull');
   },
   update(doc, option) {
     const { _id } = doc;

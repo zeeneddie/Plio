@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList'],
+  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -10,20 +10,24 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  sourceExtension() {
+    return this.sourceName().split('.').pop();
+  },
+  sourceHtmlUrl: '',
   fileId: '',
   shouldUpdate() {
-    const { type, url, name } = this.getData();
-    const { sourceType, sourceUrl, sourceName } = this.templateInstance.data;
+    const { type, url, name, htmlUrl } = this.getData();
+    const { sourceType, sourceUrl, sourceName, sourceHtmlUrl } = this.templateInstance.data;
 
     if (type === 'attachment') {
       return _.every([
         (type && name) || (type && url),
-        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName)
+        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) || (htmlUrl !== sourceHtmlUrl)
       ]);
     } else {
       return _.every([
         type && url,
-        (type !== sourceType) || (url !== sourceUrl)
+        (type !== sourceType) || (url !== sourceUrl) || (htmlUrl !== sourceHtmlUrl)
       ]);
     }
   },
@@ -41,8 +45,8 @@ Template.ESSources.viewmodel({
 
     this.update();
   },
-  update() {
-    let { type, url, name } = this.getData();
+  update(e, cb) {
+    let { type, url, name, htmlUrl } = this.getData();
 
     if (!this.shouldUpdate()) {
       return;
@@ -57,11 +61,13 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    const sourceDoc = { type, url };
+    const sourceDoc = { type, url, htmlUrl };
     if (type === 'attachment') {
       sourceDoc.name = name;
 
-      if (!url) {
+      if (url) {
+        sourceDoc.extension = url.split('.').pop();
+      } else {
         delete sourceDoc.url;
       }
     }
@@ -70,15 +76,51 @@ Template.ESSources.viewmodel({
       [`source${this.id()}`]: sourceDoc
     };
 
-    this.parent().update(query);
+    const updateFn = () => this.parent().update(query, cb);
+
+    if (type === 'attachment') {
+      updateFn();
+    } else {
+      this.callWithFocusCheck(e, updateFn);
+    }
+  },
+  uploadDocxHtml(fileObj, metaContext) {
+    const uploader = new Slingshot.Upload('htmlAttachmentPreview', this.uploaderMetaContext());
+
+    uploader.send(fileObj, (error, url) => {
+      this.sourceHtmlUrl(url && encodeURI(url) || '');
+      this.update();
+    });
+  },
+  renderDocx(url) {
+    const isDocx = url.match(/\.([^\./\?]+)($|\?)/)[1] === 'docx';
+    const vmInstance = this;
+
+    if (isDocx) {
+      Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
+        if (error) {
+          // HTTP errors
+        } else {
+          if (result.error) {
+            // Mammoth errors
+          } else {
+            // Upload file to S3
+            const htmlFileName = vmInstance.sourceName() + '.html';
+            const htmlFile = new File([result], htmlFileName, { type: 'text/html' });
+
+            vmInstance.uploadDocxHtml(htmlFile);
+          }
+        }
+      });
+    }
   },
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
+  insertFile({ _id, name }, cb) {
     this.fileId(_id);
     this.sourceName(name);
-    this.update();
+    this.update(null, cb);
   },
   onUploadCb() {
     return this.onUpload.bind(this);
@@ -90,6 +132,7 @@ Template.ESSources.viewmodel({
     }
 
     this.sourceUrl(url);
+    this.renderDocx(url);
     this.update();
   },
   removeAttachmentFn() {
@@ -134,8 +177,14 @@ Template.ESSources.viewmodel({
       });
     });
   },
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      standardId: this.parent().standardId()
+    };
+  },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name } = this.data();
-    return { type, url, name };
+    const { sourceType:type, sourceUrl:url, sourceName:name, sourceExtension:extension, sourceHtmlUrl:htmlUrl } = this.data();
+    return { type, url, name, htmlUrl };
   }
 });

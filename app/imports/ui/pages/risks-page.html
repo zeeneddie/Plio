@@ -1,0 +1,8 @@
+<template name="RisksPage">
+  <div class="content-list scroll" {{b "if: !width || width > 768"}}>
+    {{> RisksList}}
+  </div>
+  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
+    {{> RisksCard}}
+  </div>
+</template>

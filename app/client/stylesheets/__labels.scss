@@ -1,9 +1,9 @@
-.label {  
+.label {
   border-radius: 0;
   display: inline-block;
   font-weight: normal;
   font-family: $font-semibold;
-  
+
   /* Colors */
   &-success {
     background: $green-color;
@@ -32,7 +32,7 @@
     margin-right: 12px;
     margin-top: 3px;
   }
-  
+
   &-status {
     font-size: inherit !important;
     margin-right: 5px;
@@ -48,18 +48,18 @@
     text-align: center;
     position: relative;
     top: 1px;
-  
+
     &:empty {
       display: inline-block;
     }
-  } 
-  
+  }
+
   i {
     &.margin-right {
       margin-right: 5px;
     }
   }
-  
+
   &.margin-left {
     margin-left: 10px;
   }
@@ -82,5 +82,14 @@
   margin-right: 0;
 }
 
-
-
+.risk-square {
+  float: left;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  padding: 0;
+  margin-right: 12px;
+  font-weight: normal;
+  //font-family: $SegoeUILight;
+}

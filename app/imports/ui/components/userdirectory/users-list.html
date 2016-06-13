@@ -1,5 +1,5 @@
 <template name="UsersList">
-  <div class="content-list scroll col-sm-4">
+  <div class="content-list scroll col-sm-4" {{b "if: !width || width > 768"}}>
     <div class="card">
       <form class="search-form">
         <div class="form-group row">
@@ -17,17 +17,12 @@
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
-          <a class="list-group-item" {{b "href: getUserPath(this._id), class: { active: isActiveUser(this._id) }"}}>
-            <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
-              <img {{b "src: this.avatar()"}}>
-            </div>
-            <div class="list-group-item-content">
-              <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
-              <p class="list-group-item-text" {{b "text: this.description()"}}></p>
-            </div>
-          </a>
+          {{> UsersListItem}}
         {{/each}}
-        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "if: searchText, text: searchResultsText"}}></div>
+
+        {{#if searchText}}
+          <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+        {{/if}}
       </div>
     </div>
   </div>

@@ -14,14 +14,14 @@ Template.StandardsSectionItem.viewmodel({
 
     const query = {
       $and: [
-        { sectionId: this._id() },
+        { sectionId: this._id && this._id() },
         searchQuery
       ]
     };
 
     if (this.isActiveStandardFilter('type')) {
       query.$and.push({
-        typeId: this.parent().parent()._id()
+        typeId: this.typeId && this.typeId()
       });
     }
 

@@ -4,22 +4,16 @@
       {{#ClearableField field="name"}}
         <input {{b "value: name, focusout: updateName"}} type="text"
             class="form-control" placeholder="Org name" />
-        <button type="button" class="btn btn-link clear-field">
-          <i class="fa fa-times-circle"></i>
-        </button>
       {{/ClearableField}}
     {{/FormField}}
 
-    {{#FormField label="Org owner"}}
-      <div class="input-group">
-        <input type="text" class="form-control" disabled="" {{b "value: owner"}}>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-primary no-margin disabled">
-            Transfer
-          </button>
-        </span>
-      </div>
-    {{/FormField}}
+    {{#if isEditable}}
+      {{> OrganizationSettings_OrgTransfer ownerId=ownerId}}
+    {{else}}
+      {{#FormField label="Org owner"}}
+        <input type="text" class="form-control" disabled value="{{userFullNameOrEmail currentUser}}" />
+      {{/FormField}}
+    {{/if}}
 
     {{#FormField label="Default currency"}}
       <div class="btn-group btn-group-nomargin" data-toggle="buttons">

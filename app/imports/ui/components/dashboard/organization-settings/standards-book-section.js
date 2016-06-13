@@ -1,17 +1,19 @@
 Template.OrganizationSettings_StandardsBookSection.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['modal', 'callWithFocusCheck'],
+  title: '',
   isChanged() {
     const savedTitle = this.templateInstance.data.title;
     const { title } = this.getData();
 
     return title && title !== savedTitle;
   },
-  onFocusOut() {
-    this.callWithFocusCheck(() => {
-      if (this.isChanged()) {
-        this.onChange(this);
-      }
-    });
+  onFocusOut(e) {
+    if (this.isChanged()) {
+      this.callWithFocusCheck(e, () => this.onChange(this));
+    }
+  },
+  deleteFn() {
+    return this.delete.bind(this);
   },
   delete() {
     this.onDelete(this);

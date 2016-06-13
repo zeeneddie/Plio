@@ -1,5 +1,6 @@
 <template name="ClearField">
   <button type="button" class="btn btn-link clear-field" tabindex="-1" {{b "click: clearField"}}>
-    <i class="fa fa-times-circle"></i>
+    <i class="fa fa-times-circle" {{b "if: !animating"}}></i>
+    <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: animating"}}></i>
   </button>
 </template>

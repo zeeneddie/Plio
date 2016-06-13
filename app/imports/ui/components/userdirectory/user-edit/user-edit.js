@@ -1,12 +1,14 @@
 import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
+import { Random } from 'meteor/random';
 
 import {
   updateProfile,
   updateEmail,
   updatePhoneNumber,
-  addPhoneNumber
+  addPhoneNumber,
+  removePhoneNumber
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
@@ -15,29 +17,46 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.UserEdit.viewmodel({
   mixin: ['organization', 'modal'],
+  firstName: '',
+  lastName: '',
+  initials: '',
+  email: '',
+  description: '',
+  avatar: '',
+  address: '',
+  country: '',
+  phoneNumbers: [],
+  skype: '',
+  autorun() {
+    const user = this.user();
+    if (user) {
+      this.load(_.extend({}, user.profile, {
+        email: user.email(),
+        isNotificationsEnabled: user.isNotificationsEnabled,
+        notificationSound: user.notificationSound
+      }));
+    }
+  },
   user() {
+    const userId = this.userId && this.userId();
     return Meteor.users.findOne({
-      _id: this.userId()
+      _id: userId
     });
   },
   organizationId() {
     return this.organization() && this.organization()._id;
   },
-  updateProfile(prop, viewModel) {
-    if (this.isPropChanged(prop, viewModel)) {
-      this.modal().callMethod(updateProfile, {
-        _id: this.userId(),
-        [prop]: viewModel.getData()[prop]
-      });
-    }
+  updateProfile(prop, val) {
+    this.modal().callMethod(updateProfile, {
+      _id: this.userId(),
+      [prop]: val
+    });
   },
-  updateEmail(viewModel) {
-    if (this.isPropChanged('email', viewModel)) {
-      this.modal().callMethod(updateEmail, {
-        _id: this.userId(),
-        email: viewModel.getData().email
-      });
-    }
+  updateEmail(email) {
+    this.modal().callMethod(updateEmail, {
+      _id: this.userId(),
+      email
+    });
   },
   uploadAvatarFile(viewModel) {
     const avatarFile = viewModel.avatarFile();
@@ -45,7 +64,9 @@ Template.UserEdit.viewmodel({
       return;
     }
 
-    const uploader = new Slingshot.Upload('usersAvatars');
+    const uploader = new Slingshot.Upload('usersAvatars', {
+      userId: this.userId()
+    });
 
     this.modal().clearError();
     this.modal().isSaving(true);
@@ -65,45 +86,55 @@ Template.UserEdit.viewmodel({
       });
     });
   },
-  updatePhoneNumber(viewModel) {
+  updatePhoneNumber(viewModel, cb) {
     const { number, type } = viewModel.getData();
-    const index = viewModel.index();
+    const _id = viewModel._id();
+    const userId = this.userId();
 
-    this.modal().callMethod(updatePhoneNumber, {
-      _id: this.userId(),
-      index, number, type
-    });
+    this.modal().callMethod(updatePhoneNumber, { _id, userId, number, type }, cb);
   },
-  addPhoneNumber(viewModel) {
+  addPhoneNumber(viewModel, cb) {
     const { number, type } = viewModel.getData();
+    const userId = this.userId();
+    const _id = Random.id();
 
-    this.modal().callMethod(addPhoneNumber, {
-      _id: this.userId(),
-      number, type
-    }, (err) => {
-      if (!err) {
-        Blaze.remove(viewModel.templateInstance.view);
-      }
-    });
+    this.modal().callMethod(addPhoneNumber, { _id, userId, number, type }, cb);
   },
-  isPropChanged(propName, viewModel) {
-    const val = viewModel.getData()[propName];
-    const savedVal = viewModel.templateInstance.data[propName];
+  removePhoneNumber(viewModel, cb) {
+    const _id = viewModel._id();
+    const userId = this.userId();
 
-    return val && val !== savedVal;
+    this.modal().callMethod(removePhoneNumber, { _id, userId }, cb);
   },
   isCurrentUser() {
-    return Meteor.userId() === this.userId();
+    const userId = this.userId && this.userId();
+    return Meteor.userId() === userId;
+  },
+  isUserOrgOwner() {
+    const organization = this.organization();
+    const ownerId = organization && organization.ownerId();
+    return ownerId && (this.userId() === ownerId);
   },
   isEditable() {
     return this.isCurrentUser();
   },
-  rolesTitle() {
+  rolesLabel() {
     const user = this.user();
     if (user) {
       const userName = user.firstName() || user.lastName() || user.email();
       const orgName = this.organization() && this.organization().name;
-      return `${userName}'s superpowers for ${orgName}`;
+      return `${userName}'s superpowers for ${orgName}:`;
+    }
+  },
+  orgOwnerLabel() {
+    const userId = this.userId();
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
     }
   },
   isRolesEditable() {
@@ -111,11 +142,11 @@ Template.UserEdit.viewmodel({
       Meteor.userId(),
       UserRoles.EDIT_USER_ROLES,
       this.organizationId()
-    );
+    ) && !this.isUserOrgOwner();
   },
   userHasRole(role) {
     return Roles.userIsInRole(
-      this.userId(), role, this.organizationId()
+      this.userId && this.userId(), role, this.organizationId()
     );
   },
   userRoles() {
@@ -161,10 +192,10 @@ Template.UserEdit.viewmodel({
         organizationId: this.organizationId()
       }, (err, res) => {
         if (!err) {
-          // have to wait some time before opening new sweet alert
-          FlowRouter.go('userDirectoryPage', { 
-            orgSerialNumber: this.organization().serialNumber 
+          FlowRouter.go('userDirectoryPage', {
+            orgSerialNumber: this.organization().serialNumber
           });
+          // have to wait some time before opening new sweet alert
           Meteor.setTimeout(() => {
             swal('Removed', 'User has been removed', 'success');
           }, 500);

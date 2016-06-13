@@ -2,13 +2,14 @@
   {{#if currentUser}}
     {{#if isEmailVerified}}
       <h3>Your email address is successfully verified!</h3>
-      <a href="{{pathFor 'hello'}}">Open the dashboard.</a>
+      <a href="{{pathFor 'hello'}}">Open the dashboard</a>
     {{else}}
-      <h3>Confirm your email address to start using the Plio application.</h3>
+      <h3>Verify your email address to start using the Plio application</h3>
+      <p class="text-muted">The verification email has been sent to {{emailToVerify}}. It will expire in {{emailVerificationExpirationTimeInDays}} days</p>
       {{#if isSendingEmail}}
         <span>Sending...</span>
       {{else}}
-        <a class="pointer" {{b "click: sendVerificationEmail"}}>Re-send the confirmation email</a>
+        <a class="pointer" {{b "click: sendVerificationEmail"}}>Re-send the verification email</a>
       {{/if}}
     {{/if}}
   {{/if}}

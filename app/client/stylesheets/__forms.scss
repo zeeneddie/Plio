@@ -120,7 +120,6 @@
   &-menu {
     padding: 0;
     margin-top: 0;
-    border-top: none;
 
     &-full {
       left: 0;
@@ -416,11 +415,13 @@ fieldset[disabled] {
 }
 
 .file-item {
+  margin-right: 4px;
+  
   .button-wrapper {
     position: relative;
     display: inline-block;
     float: left;
-    max-width: 280px;
+    max-width: 270px;
     overflow: hidden;
     min-width: 100px;
     text-overflow: ellipsis;
@@ -450,4 +451,34 @@ fieldset[disabled] {
 
 .no-pointer-events {
   pointer-events: none;
+}
+
+.with-loader {
+  .small-loader {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+  }
+  &.loading {
+    .small-loader {
+      display: block;
+    }
+  }
+}
+
+input[disabled], textarea[disabled] {
+  & ~ .clear-field {
+    display: none;
+  }
+}
+
+#phones-forms {
+  .add-phone {
+    min-width: 60%;
+  }
+}
+
+#notifications-checkbox {
+  margin-bottom: 0;
 }

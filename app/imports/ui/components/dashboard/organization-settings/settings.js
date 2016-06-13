@@ -7,12 +7,14 @@ import {
 
 
 Template.OrganizationSettings.viewmodel({
-  organization() {
-    const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
-    return Organizations.findOne({ serialNumber });
-  },
-  organizationId() {
-    return this.organization()._id;
+  mixin: 'organization',
+  name: '',
+  currency: '',
+  autorun() {
+    const org = this.organization();
+    if (org) {
+      this.load(_.pick(org, ['name', 'currency']));
+    }
   },
   departments() {
     return Departments.find({
@@ -32,33 +34,16 @@ Template.OrganizationSettings.viewmodel({
       sort: { title: 1 }
     });
   },
-  name() {
-    return this.organization().name;
+  ownerId() {
+    return this.organization().ownerId();
   },
-  owner() {
-    const orgOwner = Meteor.users.findOne({
-      _id: this.organization().ownerId()
-    });
-    return orgOwner ? orgOwner.fullName() : '';
-  },
-  currency() {
-    return this.organization().currency;
-  },
-  stepTimes() {
-    return this.organization().ncStepTimes;
+  workflowDefaults() {
+    return this.organization().workflowDefaults;
   },
   reminders() {
-    return this.organization().ncReminders;
+    return this.organization().reminders;
   },
   guidelines() {
     return this.organization().ncGuidelines;
-  },
-  guideHtml() {
-    // TEMPORARY!!!
-    return `<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Praesent vestibulum accumsan nulla, non pulvinar neque.
-      Quisque faucibus tempor imperdiet. Suspendisse feugiat, nibh nec
-      maximus pellentesque, massa nunc mattis ipsum, in dictum magna
-      arcu et ipsum.</p>`;
   }
 });

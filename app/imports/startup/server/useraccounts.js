@@ -7,14 +7,20 @@ import { OrgOwnerRoles } from '/imports/api/constants.js';
 function postSignUpHook(userId, info) {
   const organizationName = info.profile.organizationName || 'My Organization';
 
-  const orgId = OrganizationService.insert({
-    name: organizationName,
-    ownerId: userId
-  });
+  let orgId;
+  try {
+    orgId = OrganizationService.insert({
+      name: organizationName,
+      ownerId: userId
+    });
+  } catch(err) {
+    Meteor.users.remove({ _id: userId });
+    throw err;
+  }
 
   Roles.addUsersToRoles(userId, OrgOwnerRoles, orgId);
 }
 
-AccountsTemplates.configure({ 
+AccountsTemplates.configure({
   postSignUpHook
 });

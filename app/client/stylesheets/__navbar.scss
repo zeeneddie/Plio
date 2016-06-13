@@ -33,9 +33,15 @@
       color: white;
       text-decoration: none;
       display: inline-block;
+      padding: 0 20px 0 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
     }
 
     .dropdown-menu {
+      top: 50px;
       width: 240px;
       left: 50%;
       margin-left: -120px;
@@ -131,6 +137,11 @@
 
     .dropdown-menu {
       left: 10px;
+      top: 80px;
+      
+      .dropdown-divider {
+        margin: 0;
+      }
     }
   }
 
@@ -139,10 +150,6 @@
       @media (max-width: 767px) {
         position: static;
       }
-    }
-
-    .dropdown-menu {
-      right: 10px;
     }
   }
 

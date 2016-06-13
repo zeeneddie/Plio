@@ -1,13 +1,27 @@
 <template name="ESIPReviewDates">
-  {{#FormField label="Improvement plan review dates" sm=7}}
-    {{#each reviewDates}}
-      {{> Datepicker placeholder="Review date" class="margin-bottom" isEditable=true _id=this._id date=(renderDate this.date)}}
-    {{/each}}
-    <div {{b "ref: forms"}}></div>
-    <button type="button" class="btn btn-primary margin-bottom-none"
-      {{b "click: addReviewDate"}}>
-      <i class="fa fa-plus"></i>
-      Add review date
-    </button>
-  {{/FormField}}
+  <div class="row">
+    <label class="form-control-label col-sm-5 col-xs-12 first-row-label">
+      Improvement plan review dates
+    </label>
+    <div class="col-sm-7">
+      <div {{b "ref: forms"}}>
+        {{#each reviewDates}}
+          {{> ESIPReviewDate
+              _id=_id
+              date=date
+              onChange=onChangeCb
+              onDelete=onDeleteCb}}
+        {{/each}}
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-12">
+          <button type="button" class="btn btn-primary margin-bottom-none"
+            {{b "click: addReviewDate"}}>
+            <i class="fa fa-plus"></i>
+            Add review date
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

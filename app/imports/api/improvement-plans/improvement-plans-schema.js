@@ -1,11 +1,15 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-const requiredSchema = new SimpleSchema({
-  standardId: {
+import { BaseEntitySchema, DocumentIdSchema } from '../schemas.js';
+import { documentTypes } from '../constants.js';
+
+
+const requiredSchema = new SimpleSchema([DocumentIdSchema, {
+  documentType: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    allowedValues: documentTypes
   }
-});
+}]);
 
 const optionalSchema = new SimpleSchema({
   'desiredOutcome': {
@@ -32,18 +36,6 @@ const optionalSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
-  'selectedMetric': {
-    type: String,
-    optional: true
-  },
-  'currentValue': {
-    type: String,
-    optional: true
-  },
-  'targetValue': {
-    type: String,
-    optional: true
-  },
   'files': {
     type: [Object],
     optional: true
@@ -52,8 +44,12 @@ const optionalSchema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
+  'files.$.extension': {
+    type: String
+  },
   'files.$.url': {
     type: String,
+    regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
   'files.$.name': {
@@ -61,6 +57,10 @@ const optionalSchema = new SimpleSchema({
   }
 });
 
-const ImprovementPlansSchema = new SimpleSchema([requiredSchema, optionalSchema]);
+const ImprovementPlansSchema = new SimpleSchema([
+  BaseEntitySchema,
+  requiredSchema,
+  optionalSchema
+]);
 
 export { requiredSchema, optionalSchema, ImprovementPlansSchema };

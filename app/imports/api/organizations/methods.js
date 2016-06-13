@@ -7,7 +7,7 @@ import OrganizationService from './organization-service';
 import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
-import { OrganizationEditableFields } from './organization-schema';
+import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
 import { NCTypes, UserRoles, UserMembership } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
@@ -29,11 +29,23 @@ const ncTypeSchema = new SimpleSchema({
 
 const updateErrorMessage = 'Unauthorized user cannot update an organization';
 
+const isOrgOwner = (orgId, userId) => {
+  return !!Organizations.findOne({
+    _id: orgId,
+    users: {
+      $elemMatch: {
+        userId: userId,
+        role: UserMembership.ORG_OWNER
+      }
+    }
+  });
+};
+
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
-  validate: nameSchema.validator(),
+  validate: new SimpleSchema([nameSchema, OrganizationCurrencySchema]).validator(),
 
-  run({name}) {
+  run({name, currency}) {
     const userId = this.userId;
 
     if (!userId) {
@@ -42,10 +54,13 @@ export const insert = new ValidatedMethod({
       );
     }
 
-    return OrganizationService.insert({
-      name,
-      ownerId: userId
-    });
+    if (Meteor.isServer) {
+      return OrganizationService.insert({
+        name,
+        currency,
+        ownerId: userId
+      });
+    }
   }
 });
 
@@ -85,7 +100,7 @@ export const setName = new ValidatedMethod({
     if (!this.userId) {
       throw new Meteor.Error(403, updateErrorMessage);
     }
-    
+
     const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
 
     if (!canEditOrgSettings) {
@@ -119,16 +134,23 @@ export const setDefaultCurrency = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
+
     return OrganizationService.setDefaultCurrency(doc);
   }
 });
 
-export const setStepTime = new ValidatedMethod({
-  name: 'Organizations.setStepTime',
+export const setWorkflowDefaults = new ValidatedMethod({
+  name: 'Organizations.setWorkflowDefaults',
 
   validate: new SimpleSchema([
-    IdSchema, ncTypeSchema, TimePeriodSchema
+    IdSchema,
+    TimePeriodSchema,
+    {
+      type: {
+        type: String,
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc']
+      }
+    }
   ]).validator(),
 
   run(doc) {
@@ -144,8 +166,8 @@ export const setStepTime = new ValidatedMethod({
         'User is not authorized for editing organization settings'
       );
     }
-    
-    return OrganizationService.setStepTime(doc);
+
+    return OrganizationService.setWorkflowDefaults(doc);
   }
 });
 
@@ -153,11 +175,16 @@ export const setReminder = new ValidatedMethod({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
-    IdSchema, ncTypeSchema, TimePeriodSchema,
+    IdSchema,
+    TimePeriodSchema,
     {
+      type: {
+        type: String,
+        allowedValues: ['minorNc', 'majorNc', 'criticalNc', 'improvementPlan']
+      },
       reminderType: {
         type: String,
-        allowedValues: ['interval', 'pastDue']
+        allowedValues: ['start', 'interval', 'until']
       }
     }
   ]).validator(),
@@ -243,6 +270,8 @@ export const inviteUserByEmail = new ValidatedMethod({
     }
 
     InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+
+    return InvitationService.getInvitationExpirationTime();
   }
 });
 
@@ -275,7 +304,8 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
   validate: new SimpleSchema([OrganizationIdSchema, {
     emails: {
-      type: [SimpleSchema.RegEx.Email]
+      type: [String],
+      regEx: SimpleSchema.RegEx.Email
     },
     welcomeMessage: {
       type: String
@@ -303,21 +333,32 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
       );
     }
 
+    let invitedEmails = [];
     let errors = [];
     emails.forEach(email => {
       //aggregate service errors for each email
       try {
-        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage)
+        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        invitedEmails.push(email);
       } catch (err) {
+        console.error(err);
         errors.push(err.reason);
       }
     });
 
-    if (errors.length > 0) {
-      console.log(errors);
-      let errorMsg = `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
-      throw new Meteor.Error(500, errorMsg);
-    }
+    const generateErrorMessage = () => {
+      if (errors.length > 0) {
+        return `Failed to invite ${errors.length} user(s):\n${errors.join('.\n')}`;
+      } else {
+        return null;
+      }
+    };
+
+    return {
+      error: generateErrorMessage(),
+      invitedEmails,
+      expirationTime: InvitationService.getInvitationExpirationTime()
+    };
   }
 });
 
@@ -329,7 +370,7 @@ export const removeUser = new ValidatedMethod({
     UserIdSchema
   ]).validator(),
 
-  run({ userId, organizationId }) {
+  run({userId, organizationId}) {
     const currUserId = this.userId;
     if (!currUserId) {
       throw new Meteor.Error(
@@ -337,23 +378,13 @@ export const removeUser = new ValidatedMethod({
       );
     }
 
-    const isRemovableUserOrgOwner = !!Organizations.findOne({ 
-      _id: organizationId, 
-      users: {
-        $elemMatch: {
-          userId: userId,
-          role: 'owner'
-        }
-      }
-    });
-
-    if (isRemovableUserOrgOwner) {
+    if (isOrgOwner(organizationId, userId)) {
       throw new Meteor.Error(403, 'Organization owner can\'t be removed');
     }
 
     const canRemoveUser = (currUserId === userId) || Roles.userIsInRole(
-      currUserId, UserRoles.DELETE_USERS, organizationId
-    );
+        currUserId, UserRoles.DELETE_USERS, organizationId
+      );
     if (!canRemoveUser) {
       throw new Meteor.Error(
         403,
@@ -366,5 +397,86 @@ export const removeUser = new ValidatedMethod({
       organizationId,
       userId
     });
+  }
+});
+
+export const createOrganizationTransfer = new ValidatedMethod({
+  name: 'Organizations.createTransfer',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      newOwnerId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ organizationId, newOwnerId }) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot transfer organizations'
+      );
+    }
+
+    if (!isOrgOwner(organizationId, userId)) {
+      throw new Meteor.Error(
+        403, 'User is not authorized for transfering organizations'
+      );
+    }
+
+    return OrganizationService.createTransfer({
+      currOwnerId: userId,
+      organizationId,
+      newOwnerId
+    });
+  }
+});
+
+export const transferOrganization = new ValidatedMethod({
+  name: 'Organizations.transfer',
+
+  validate: new SimpleSchema({
+    transferId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    }
+  }).validator(),
+
+  run({ transferId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot be an organization owner'
+      );
+    }
+
+    return OrganizationService.transfer({
+      newOwnerId: userId,
+      transferId,
+    });
+  }
+});
+
+export const cancelOrganizationTransfer = new ValidatedMethod({
+  name: 'Organizations.cancelTransfer',
+
+  validate: OrganizationIdSchema.validator(),
+
+  run({ organizationId }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot cancel transfers'
+      );
+    }
+
+    return OrganizationService.cancelTransfer({ userId, organizationId });
   }
 });

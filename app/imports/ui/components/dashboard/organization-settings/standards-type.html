@@ -6,13 +6,12 @@
             {{b "value: name, focusout: onFocusOut"}} />
       {{/ClearableField}}
     </div>
-    {{#ClearableField field="abbreviation"}}
-      <input type="text" class="form-control margin-left" placeholder="Short"
-          {{b "value: abbreviation, focusout: onFocusOut"}} style="width:100px" />
-    {{/ClearableField}}
-    <button type="button" class="btn btn-secondary btn-icon margin-left"
-        {{b "click: delete"}}>
-      <i class="fa fa-times-circle"></i>
-    </button>
+    <div class="margin-left margin-right">
+      {{#ClearableField field="abbreviation"}}
+        <input type="text" class="form-control" placeholder="Short"
+            {{b "value: abbreviation, focusout: onFocusOut"}} style="width:100px" />
+      {{/ClearableField}}
+    </div>
+    {{> DeleteButton onClick=deleteFn}}
   </div>
 </template>

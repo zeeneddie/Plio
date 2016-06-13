@@ -5,7 +5,7 @@ import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-pla
 import { insert, update } from '/imports/api/improvement-plans/methods.js';
 
 Template.ESImprovementPlan.viewmodel({
-  mixin: ['collapse', 'modal'],
+  mixin: ['collapse', 'modal', 'standard'],
   autorun() {
     this.load(this.improvementPlan());
   },
@@ -13,17 +13,22 @@ Template.ESImprovementPlan.viewmodel({
   targetDate: '',
   owner: '',
   reviewDates: '',
-  selectedMetric: '',
-  currentValue: '',
-  targetValue: '',
   files: [],
+  isTextPresent() {
+    return this.desiredOutcome() || this.files().length;
+  },
   improvementPlan() {
-    return ImprovementPlans.findOne({});
+    return ImprovementPlans.findOne({ documentId: this.standardId() });
+  },
+  improvementPlanId() {
+    const improvementPlan = this.improvementPlan();
+    return improvementPlan && improvementPlan._id;
   },
   insert({ ...args }, cb) {
-    const standardId = this.standard() && this.standard()._id;
+    const documentId = this.standardId();
+    const documentType = 'standard';
 
-    this.modal().callMethod(insert, { standardId, ...args }, cb);
+    this.modal().callMethod(insert, { documentId, documentType, ...args }, cb);
   },
   update({ query = {}, ...args }, options = {}, cb) {
     if (_.isFunction(options)) {
@@ -32,14 +37,12 @@ Template.ESImprovementPlan.viewmodel({
     }
 
     if (!this.improvementPlan()) {
-      return this.insert({ ...args });
+      return this.insert({ ...args }, cb);
     }
 
     const _id = this.improvementPlan() && this.improvementPlan()._id;
 
     const modifier = { ...args, _id, options, query };
-
-    console.log(modifier);
 
     this.modal().callMethod(update, modifier, cb);
   }

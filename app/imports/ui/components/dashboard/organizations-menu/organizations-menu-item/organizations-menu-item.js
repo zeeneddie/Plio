@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { selectOrganization } from '/imports/api/users/methods.js';
 
 Template.OrganizationsMenuItem.viewmodel({
+  mixin: 'router',
   regex() {
     return `^\\/${this.serialNumber()}`;
   },
@@ -14,10 +14,10 @@ Template.OrganizationsMenuItem.viewmodel({
 
     selectOrganization.call({ selectedOrganizationSerialNumber }, (err) => {
       if (err) {
-        toastr.error(err.reason);
+        swal('Oops... Something went wrong', err.reason, 'error');
       }
     });
 
-    FlowRouter.go('dashboardPage', { orgSerialNumber: selectedOrganizationSerialNumber });
+    this.goToDashboard(selectedOrganizationSerialNumber);
   }
 });

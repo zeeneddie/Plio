@@ -20,15 +20,17 @@
     "lastName": "Johnson",
     "initials": "PJ",
     "description": "IT manager",
-    "avatar": "/avatars/avatar-placeholder-7.png",
+    "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/7.png",
     "skype": "peter.johnson",
     "country": "GB",
     "phoneNumbers": [
       {
+        "_id": "HbNgAFPZb75nJRwAN",
         "type": "Work",
         "number": "+44 1234 123 456"
       },
       {
+        "_id": "rhKFWRq2gvLZT4W8E",
         "type": "Mobile",
         "number": "+44 9870 654 321"
       }
@@ -41,5 +43,6 @@
       "create-update-delete-standards",
       "view-team-actions"
     ]
-  }
+  },
+  "isNotificationsEnabled": true
 }

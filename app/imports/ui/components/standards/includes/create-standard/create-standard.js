@@ -1,10 +1,12 @@
 import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/standards/methods.js';
+import { addedToNotifyList } from '/imports/api/standards/methods.js';
+import Utils from '/imports/core/utils.js';
 
 Template.CreateStandard.viewmodel({
-  share: 'standard',
-  mixin: ['modal', 'numberRegex', 'organization', 'collapsing'],
+  share: ['standard'],
+  mixin: ['modal', 'standard', 'numberRegex', 'organization', 'collapsing', 'router'],
   save() {
     const data = this.getChildrenData();
 
@@ -47,13 +49,24 @@ Template.CreateStandard.viewmodel({
       nestingLevel
     };
 
-     this.modal().callMethod(insert, args, (err, _id) => {
+    this.modal().callMethod(insert, args, (err, _id) => {
+      if (err) {
+        return;
+      }
+
+      addedToNotifyList.call({
+        standardId: _id,
+        userId: args.owner
+      }, (err, res) => {
+        if (err) {
+          Utils.showError('Failed to send email to standard\'s owner');
+        }
+      });
+
       this.modal().close();
 
       Meteor.setTimeout(() => {
-        FlowRouter.go('standard', { orgSerialNumber: this.organization().serialNumber, standardId: _id });
-
-        this.selectedStandardId(_id);
+        this.isActiveStandardFilter('deleted') ? this.goToStandard(_id, false) : this.goToStandard(_id);
 
         this.expandCollapsedStandard(_id);
 

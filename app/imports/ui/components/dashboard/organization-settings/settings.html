@@ -2,9 +2,10 @@
 
     {{> OrganizationSettings_MainSettings
         name=name
-        owner=owner
+        ownerId=ownerId
         currency=currency
-        organizationId=organizationId}}
+        organizationId=organizationId
+        isEditable=true}}
 
     {{> OrganizationSettings_Departments
         departments=departments
@@ -18,11 +19,11 @@
         standardsBookSections=standardsBookSections
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_NcStepTimes
-        stepTimes=stepTimes
+    {{> OrganizationSettings_WorkflowDefaults
+        workflowDefaults=workflowDefaults
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_NcReminders
+    {{> OrganizationSettings_Reminders
         reminders=reminders
         organizationId=organizationId}}
 

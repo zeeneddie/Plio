@@ -16,7 +16,19 @@ Template.ModalWindow.viewmodel({
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
+  submitCaptionOnSave: 'Saving...',
+  closeCaption: 'Close',
+  closeCaptionOnSave: 'Saving...',
   guideHtml: 'No help message yet',
+  closeAfterCall: false,
+
+  submitCaptionText() {
+    return this.isSaving() && this.submitCaptionOnSave() ? this.submitCaptionOnSave() : this.submitCaption();
+  },
+
+  closeCaptionText() {
+    return this.isSaving() && !this.variation() ? this.closeCaptionOnSave() : this.closeCaption();
+  },
 
   isVariation(variation) {
     return this.variation() === variation;
@@ -51,6 +63,8 @@ Template.ModalWindow.viewmodel({
         if (err) {
           console.log('Modal submit error:\n', err);
           this.setError(err.reason || 'Internal server error');
+        } else if (this.closeAfterCall()) {
+          this.close();
         }
       }, this.savingStateTimeout());
     };
@@ -66,7 +80,19 @@ Template.ModalWindow.viewmodel({
     this.errorSection.collapse('hide');
   },
 
-  isButtonBlocked() {
+  close() {
+    this.modal.modal('hide');
+  },
+
+  closeModal() {
+    if (this.isWaiting.value || this.isSaving.value) {
+      this.closeAfterCall(true);
+    } else {
+      this.close();
+    }
+  },
+
+  showSpinner() {
     return this.isSaving() || this.isWaiting();
   }
 });

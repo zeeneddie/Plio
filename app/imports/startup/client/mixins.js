@@ -3,7 +3,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
-import { UserRoles, StandardFilters } from '/imports/api/constants.js';
+import { Risks } from '/imports/api/risks/risks.js';
+import { UserRoles, StandardFilters, RiskFilters } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -14,7 +15,7 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    toggleCollapse: _.throttle(function() {
+    toggleCollapse: _.throttle(function(cb) {
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         // hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
@@ -26,10 +27,11 @@ ViewModel.mixin({
       }
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
+      if (_.isFunction(cb)) cb();
     }, 500)
   },
   collapsing: {
-    toggleVMCollapse(name = '', condition = () => {}) {
+    toggleVMCollapse(name = '', condition = () => {}, cb) {
       let vmsToCollapse = [];
 
       if (!name && !!condition) {
@@ -38,19 +40,38 @@ ViewModel.mixin({
         vmsToCollapse = ViewModel.find(name, condition);
       }
 
-      !!vmsToCollapse && vmsToCollapse.forEach(vm => !!vm && !!vm.collapse && vm.toggleCollapse());
+      vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, { complete: cb });
     },
-    expandCollapsedStandard: _.debounce(function(standardId) {
-        const standard = Standards.findOne({ _id: standardId });
+    expandCollapsedStandard: _.debounce(function(_id, cb) {
+      const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
-        if (standard) {
-          this.toggleVMCollapse('ListItem', viewmodel => viewmodel.collapsed() && recursiveSearch(viewmodel));
-        }
+      this.expandCollapseItems(vms, { complete: cb });
+    }, 200),
+    findRecursive(viewmodel, _id) {
+      if (_.isArray(_id)) {
+        return viewmodel && _.some(viewmodel.children(), vm => ( vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id) ));
+      } else {
+        return viewmodel && _.some(viewmodel.children(), vm => (vm._id && vm._id() === _id) || this.findRecursive(vm, _id) );
+      }
+    },
+    // Recursive function to expand items one after another
+    expandCollapseItems(array = [], { index = 0, complete = () => {}, expandNotExpandable = false } = {}) {
+      if (index >= array.length) return;
 
-        function recursiveSearch(viewmodel) {
-          return viewmodel && ( viewmodel.child(vm => (vm._id && vm._id() === standard._id) || recursiveSearch(vm)) );
-        }
-    }, 200)
+      const item = array[index];
+
+      const closeAllOnCollapse = item.closeAllOnCollapse.value; // nonreactive value
+
+      !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
+
+      return item.toggleCollapse(() => {
+        !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
+
+        if (index === array.length - 1 && _.isFunction(complete)) complete();
+
+        return this.expandCollapseItems(array, { index: index + 1, complete, expandNotExpandable });
+      });
+    }
   },
   modal: {
     modal: {
@@ -61,17 +82,16 @@ ViewModel.mixin({
         Blaze.renderWithData(Template.ModalWindow, data, document.body);
       },
       close() {
-        const vm = this.instance();
-        return !!vm && vm.modal.modal('hide');
+        this.instance() && this.instance().modal.modal('hide');
       },
       isSaving(val) {
         const instance = this.instance();
 
         if (val !== undefined) {
-          instance.isSaving(val);
+          instance && instance.isSaving(val);
         }
 
-        return instance.isSaving();
+        return instance && instance.isSaving();
       },
       isWaiting(val) {
         const instance = this.instance();
@@ -83,29 +103,25 @@ ViewModel.mixin({
         return instance.isWaiting();
       },
       setError(err) {
-        this.instance().setError(err);
+        return this.instance() && this.instance().setError(err);
       },
       clearError() {
-        this.instance().clearError();
+        return this.instance() && this.instance().clearError();
       },
       callMethod(method, args, cb) {
-        return this.instance().callMethod(method, args, cb);
+        return this.instance() && this.instance().callMethod(method, args, cb);
       },
       handleMethodResult(cb) {
-        return this.instance().handleMethodResult(cb);
+        return this.instance() && this.instance().handleMethodResult(cb);
       }
     }
   },
   search: {
-    searchResultsNumber: 0,
-    searchResultsText() {
-      return `${this.searchResultsNumber()} matching results`;
-    },
     searchObject(prop, fields) {
       const searchObject = {};
 
       if (this[prop]()) {
-        const words = this[prop]().split(' ');
+        const words = this[prop]().trim().split(' ');
         const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
@@ -120,7 +136,11 @@ ViewModel.mixin({
       }
 
       return searchObject;
-    }
+    },
+    searchResultsNumber: 0,
+    searchResultsText() {
+      return `${this.searchResultsNumber()} matching results`;
+    },
   },
   numberRegex: {
     parseNumber(string) {
@@ -158,7 +178,7 @@ ViewModel.mixin({
         context['onDelete'] = this.onDeleteCb();
       }
 
-      Blaze.renderWithData(
+      return Blaze.renderWithData(
         Template[template],
         context,
         this.forms[0]
@@ -230,7 +250,10 @@ ViewModel.mixin({
       return this.organization() && this.organization()._id;
     },
     organizationSerialNumber() {
-      return parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+      const querySerialNumberParam = FlowRouter.getParam('orgSerialNumber');
+      const serialNumber = parseInt(querySerialNumberParam, 10);
+
+      return isNaN(serialNumber) ? querySerialNumberParam : serialNumber;
     }
   },
   standard: {
@@ -261,14 +284,21 @@ ViewModel.mixin({
       return this.fileUploader() && this.fileUploader().progress(fileId);
     }
   },
-  clearableField: {
-    callWithFocusCheck(updateFn) {
-      this.modal().isWaiting(true);
+  callWithFocusCheck: {
+    callWithFocusCheck(e, updateFn) {
+      const modal = ViewModel.findOne('ModalWindow');
+      modal.isWaiting(true);
 
       Meteor.setTimeout(() => {
-        this.modal().isWaiting(false);
+        modal.isWaiting(false);
 
-        if (this.templateInstance.$('input').is(':focus')) {
+        const tpl = this.templateInstance;
+
+        if (tpl.view.isDestroyed) {
+          return;
+        }
+
+        if (tpl.$(e.target).is(':focus')) {
           return;
         }
 
@@ -280,5 +310,48 @@ ViewModel.mixin({
     get(name) {
       return Counter.get(name);
     }
-  }
+  },
+  router: {
+    goToDashboard(orgSerialNumber) {
+      const params = { orgSerialNumber };
+      FlowRouter.go('dashboardPage', params);
+    },
+    goToStandard(standardId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+      const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
+      FlowRouter.go('standard', params, queryParams);
+    }
+  },
+  mobile: {
+    display() {
+      return this.isMobile() ? 'display: block !important' : '';
+    },
+    isMobile() {
+      return !!this.width() && this.width() < 768;
+    },
+    navigate(e) {
+      e.preventDefault();
+
+      if (this.isMobile()) {
+        this.width(null);
+      } else {
+        FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
+      }
+    }
+  },
+  risk: {
+    riskId() {
+      return FlowRouter.getParam('riskId');
+    },
+    activeRiskFilter() {
+      return FlowRouter.getQueryParam('by') || RiskFilters[0];
+    },
+    isActiveRiskFilter(filter) {
+      return this.activeRiskFilter() === filter;
+    },
+    currentRisk() {
+      const _id = this.riskId();
+      // return Risks.findOne({ _id });
+    }
+  },
 });

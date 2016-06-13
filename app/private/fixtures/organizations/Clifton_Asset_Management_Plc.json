@@ -26,6 +26,10 @@
     {
       "userId": "RifbrzLTCGKPGbENM",
       "role": "member"
+    },
+    {
+      "userId": "kLwSLeYKSxApPFErZ",
+      "role": "member"
     }
   ],
   "timezone": "Europe/London",
@@ -35,48 +39,74 @@
   "updatedAt": null,
   "updatedBy": null,
   "isDeleted": false,
-  "ncStepTimes": {
-    "minor": {
+  "workflowDefaults": {
+    "minorNc": {
       "timeValue": 1,
       "timeUnit": "days"
     },
-    "major": {
+    "majorNc": {
       "timeValue": 2,
       "timeUnit": "days"
     },
-    "critical": {
+    "criticalNc": {
       "timeValue": 3,
       "timeUnit": "days"
     }
   },
-  "ncReminders": {
-    "minor": {
+  "reminders": {
+    "minorNc": {
+      "start": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      },
       "interval": {
         "timeValue": 1,
         "timeUnit": "days"
       },
-      "pastDue": {
+      "until": {
         "timeValue": 2,
         "timeUnit": "days"
       }
     },
-    "major": {
+    "majorNc": {
+      "start": {
+        "timeValue": 2,
+        "timeUnit": "days"
+      },
       "interval": {
         "timeValue": 2,
         "timeUnit": "days"
       },
-      "pastDue": {
+      "until": {
         "timeValue": 4,
         "timeUnit": "days"
       }
     },
-    "critical": {
-      "pastDue": {
-        "timeValue": 6,
+    "criticalNc": {
+      "start": {
+        "timeValue": 3,
         "timeUnit": "days"
       },
       "interval": {
         "timeValue": 3,
+        "timeUnit": "days"
+      },
+      "until": {
+        "timeValue": 6,
+        "timeUnit": "days"
+      }
+    },
+    "improvementPlan": {
+      "start": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      },
+      "interval": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      },
+      "until": {
+        "timeValue": 2,
         "timeUnit": "days"
       }
     }
