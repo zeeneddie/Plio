@@ -1,18 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { Problems } from '/imports/api/problems/problems.js';
-import { update } from '/imports/api/problems/methods.js';
+import { update } from '/imports/api/non-conformities/methods.js';
 
 Template.EditNC.viewmodel({
-  mixin: ['organization', 'modal'],
+  mixin: ['organization', 'modal', 'nonconformity'],
   NC() {
-    const organizationId = this.organizationId();
-    const _id = this._id();
-    const type = 'non-conformity';
-
-    const query = { organizationId, _id, type };
-
-    return Problems.findOne(query);
+    return this._getNCByQuery({ _id: this._id() });
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { insert } from '/imports/api/problems/methods.js';
+import { insert } from '/imports/api/non-conformities/methods.js';
 
 Template.CreateNC.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
@@ -19,14 +19,12 @@ Template.CreateNC.viewmodel({
   },
   insert({ title, identifiedAt, identifiedBy, magnitude }) {
     const organizationId = this.organizationId();
-    const type = 'non-conformity';
 
     const args = {
       title,
       identifiedBy,
       identifiedAt,
       magnitude,
-      type,
       organizationId
     };
 
@@ -42,8 +40,8 @@ Template.CreateNC.viewmodel({
           this.expandCollapsed(_id);
 
           this.modal().open({
-            _id: _id,
-            title: 'non-conformity',
+            _id,
+            title: 'Non-conformity',
             template: 'EditNC'
           });
         }, 400);
@@ -51,11 +49,9 @@ Template.CreateNC.viewmodel({
     });
   },
   getData() {
-    let data = {};
-
-    this.children(vm => vm.getData && vm.getData())
-        .forEach(vm => data = { ...data, ...vm.getData() });
-
-    return data;
+    return this.children(vm => vm.getData)
+                .reduce((prev, cur) => {
+                  return { ...prev, ...cur.getData() };
+                }, {});
   }
 });

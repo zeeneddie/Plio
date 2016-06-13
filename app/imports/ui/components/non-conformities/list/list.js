@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { Problems } from '/imports/api/problems/problems.js';
 import { Occurences } from '/imports/api/occurences/occurences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NCTypes, NCStatuses } from '/imports/api/constants.js';

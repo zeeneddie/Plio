@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { Standards } from '/imports/api/standards/standards.js';
-import { Problems } from '/imports/api/problems/problems.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurences } from '/imports/api/occurences/occurences.js';
 
 Template.NCCard.viewmodel({
@@ -11,21 +11,10 @@ Template.NCCard.viewmodel({
     this.templateInstance.subscribe('departments', this.organizationId());
   },
   NC() {
-    const organizationId = this.organizationId();
-    const _id = this.NCId();
-    const type = 'non-conformity';
-
-    const query = { organizationId, _id, type };
-    return Problems.findOne(query);
+    return this._getNCByQuery({ _id: this.NCId() });
   },
   NCs() {
-    const organizationId = this.organizationId();
-    const type = 'non-conformity';
-
-    const query = { organizationId, type };
-    const options = { sort: { title: 1 } };
-
-    return Problems.find(query, options);
+    return this._getNCsByQuery({});
   },
   getStatus(status) {
     return status || 1;

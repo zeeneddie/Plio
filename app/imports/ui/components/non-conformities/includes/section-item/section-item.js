@@ -1,7 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { Problems } from '/imports/api/problems/problems.js';
-
 Template.NCSectionItem.viewmodel({
   share: 'search',
   mixin: ['organization', 'search', 'nonconformity'],

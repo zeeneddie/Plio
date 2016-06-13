@@ -3,6 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
 import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
@@ -388,15 +389,15 @@ ViewModel.mixin({
     },
     currentNC() {
       const _id = this.NCId();
-      return Problems.findOne({ _id });
+      return NonConformities.findOne({ _id });
     },
     _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, type: 'non-conformity', organizationId: this.organizationId() };
-      return Problems.find(query, options);
+      const query = { ...by, organizationId: this.organizationId() };
+      return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, type: 'non-conformity', organizationId: this.organizationId() };
-      return Problems.findOne(query, options);
+      const query = { ...by, organizationId: this.organizationId() };
+      return NonConformities.findOne(query, options);
     }
   },
   utils: {
