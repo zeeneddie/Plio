@@ -1,6 +1,12 @@
 // Simply 'inherites' helpers from AccountsTemplates
 Template.atForm.helpers(AccountsTemplates.atFormHelpers);
 
+Template.atForm.helpers({
+  showForgotPasswordLink() {
+    return !!AccountsTemplates.options.showForgotPasswordLink && FlowRouter.getRouteName() === 'signIn';
+  }
+});
+
 Template.atForm.events({
   'focusout input#at-field-email'(e, tpl) {
     const email = e.target.value;

@@ -6,7 +6,7 @@
       <div class="dropdown-menu">
         {{#each standardFilters}}
           <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveStandardFilter(this) }, text: 'By ' + this, click: selectedFilter(this)"}}>
+            {{b "class: { active: isActiveStandardFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
           </a>
         {{/each}}
       </div>

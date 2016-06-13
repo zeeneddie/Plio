@@ -2,35 +2,54 @@ import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
-  mixin: ['modal', 'clearableField'],
+  mixin: ['callWithFocusCheck'],
   avatarFile: null,
-  updateFirstName() {
-    this.callWithFocusCheck(() => {
-      this.parent().updateProfile('firstName', this);
-    });
+  isPropChanged(propName, newVal) {
+    const savedVal = this.templateInstance.data[propName];
+    return newVal && newVal !== savedVal;
   },
-  updateLastName() {
-    this.callWithFocusCheck(() => {
-      this.parent().updateProfile('lastName', this);
-    });
+  updateFirstName(e) {
+    const firstName = this.getData().firstName;
+    if (this.isPropChanged('firstName', firstName)) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateProfile('firstName', firstName);
+      });
+    }
   },
-  updateInitials() {
-    this.callWithFocusCheck(() => {
-      this.parent().updateProfile('initials', this);
-    });
+  updateLastName(e) {
+    const lastName = this.getData().lastName;
+    if (this.isPropChanged('lastName', lastName)) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateProfile('lastName', lastName);
+      });
+    }
   },
-  updateDescription() {
-    this.callWithFocusCheck(() => {
-      this.parent().updateProfile('description', this);
-    });
+  updateInitials(e) {
+    const initials = this.getData().initials;
+    if (this.isPropChanged('initials', initials)) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateProfile('initials', initials);
+      });
+    }
+  },
+  updateDescription(e) {
+    const description = this.getData().description;
+    if (this.isPropChanged('description', description)) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateProfile('description', description);
+      });
+    }
   },
   updateAvatar() {
     this.parent().uploadAvatarFile(this);
   },
-  updateEmail() {
-    this.callWithFocusCheck(() => {
-      this.parent().updateEmail(this);
-    });
+  updateEmail(e) {
+    const email = this.getData().email;
+    if (this.isPropChanged('email', email)) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().updateEmail(email);
+      });
+    }
   },
   isEditable() {
     return this.parent().isEditable();

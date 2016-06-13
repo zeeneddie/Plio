@@ -35,82 +35,81 @@ Meteor.publish('invitationInfo', function (invitationId) {
   ]
 });
 
-
-Meteor.publishComposite('currentUserOrganizations', {
-  find: function () {
-    return Organizations.find({'users.userId': this.userId});
-  },
-  children: [{
-    find: function (org) {
-      return Departments.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardTypes.find({
-        organizationId: org._id
-      });
-    }
-  }, {
-    find: function (org) {
-      return StandardsBookSections.find({
-        organizationId: org._id
-      });
-    }
-  }]
-});
-
-Meteor.publishComposite('currentUserOrganizationById', function(orgId) {
-  return {
-    find: function () {
-      return Organizations.find({_id: orgId, 'users.userId': this.userId});
-    },
-    children: [{
-      find: function (org) {
-        return Departments.find({
-          organizationId: org._id
-        });
+Meteor.publish('currentUserOrganizations', function() {
+  if (this.userId) {
+    return Organizations.find({
+      users: {
+        $elemMatch: {
+          userId: this.userId,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
+        }
       }
     }, {
-      find: function (org) {
-        return StandardTypes.find({
-          organizationId: org._id
-        });
+      fields: {
+        name: 1,
+        serialNumber: 1,
+        users: 1
       }
-    }, {
-      find: function (org) {
-        return StandardsBookSections.find({
-          organizationId: org._id
-        });
-      }
-    }]
+    });
+  } else {
+    return this.ready();
   }
 });
 
-Meteor.publishComposite('currentUserOrganizationBySerialNumber', function(serialNumber) {
-  return {
-    find: function () {
-      return Organizations.find({serialNumber, 'users.userId': this.userId});
-    },
-    children: [{
-      find: function (org) {
-        return Departments.find({
-          organizationId: org._id
-        });
+Meteor.publish('currentUserOrganizationById', function(_id) {
+  if (this.userId) {
+    return Organizations.find({
+      _id,
+      users: {
+        $elemMatch: {
+          userId: this.userId,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
+        }
       }
-    }, {
-      find: function (org) {
-        return StandardTypes.find({
-          organizationId: org._id
-        });
+    });
+  } else {
+    return this.ready();
+  }
+});
+
+Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
+  if (this.userId) {
+    return Organizations.find({
+      serialNumber,
+      users: {
+        $elemMatch: {
+          userId: this.userId,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false }
+        }
       }
-    }, {
-      find: function (org) {
-        return StandardsBookSections.find({
-          organizationId: org._id
-        });
-      }
-    }]
-  };
+    });
+  } else {
+    return this.ready();
+  }
+});
+
+Meteor.publish('transferredOrganization', function(transferId) {
+  const userId = this.userId;
+  const organizationCursor = Organizations.find({
+    'transfer._id': transferId,
+  });
+  const organization = organizationCursor.fetch()[0];
+
+  if (userId && organization) {
+    if (organization.transfer && organization.transfer.newOwnerId === userId) {
+      return organizationCursor;
+    } else {
+      throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user'); // 'Your account is not authorized for this action'
+      return this.ready();
+    }
+  } else {
+    throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
+    return this.ready();
+  }
 });

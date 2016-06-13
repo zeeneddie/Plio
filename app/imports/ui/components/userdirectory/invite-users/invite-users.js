@@ -4,8 +4,8 @@ import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: 'modal',
-  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to store documents, complete worksheets and track issues during this project.',
-  usersEntries: _.range(1, 5).map((i) => {
+  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share compliance standards documents, to record non-conformities and risks and to track actions. See you soon.',
+  usersEntries: _.range(0, 4).map((i) => {
     return {avatarIndex: i};
   }),
 
@@ -22,12 +22,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
       this.modal().callMethod(inviteMultipleUsersByEmail, {
         organizationId, emails, welcomeMessage
       }, (err, res) => {
-        if (err) {
-          swal('Error!', `Internal server error: ${err.reason}`, 'error');
-        } else {
+        if (!err) {
           const invitedEmails = res.invitedEmails;
           const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
-
           const failMessagePart = res.error ? `\n${res.error}` : '';
 
           let notificationTitle;
@@ -40,7 +37,9 @@ Template.UserDirectory_InviteUsers.viewmodel({
           } else {
             notificationTitle = 'Invited!'
           }
-          swal(notificationTitle, `${successMessagePart}${failMessagePart}`,
+
+          const expirationMessagePart = `\nExpiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}`;
+          swal(notificationTitle, `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
             failMessagePart ? 'error' : 'success');
           this.modal().close();
         }

@@ -6,3 +6,7 @@ import './standards-layout.js';
 import './user-directory-layout.html';
 import './user-directory-layout.js';
 import './transitional-layout.html';
+import './risks-layout.html';
+import './risks-layout.js';
+import './non-conformities-layout.html';
+import './non-conformities-layout.js';

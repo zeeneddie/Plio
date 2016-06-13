@@ -1,0 +1,15 @@
+<template name="OrganizationSettings_WorkflowDefault">
+  <legend>{{title}}</legend>
+  <div class="form-group row">
+    <label class="form-control-label col-sm-4 col-xs-12">
+      Default step time
+    </label>
+    <div class="col-sm-4 col-xs-12">
+      {{> TimePicker
+          timeValue=timeValue
+          timeUnit=timeUnit
+          onChange=onChangeCb
+          type=type}}
+    </div>
+  </div>
+</template>

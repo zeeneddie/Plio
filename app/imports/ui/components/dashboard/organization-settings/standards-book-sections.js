@@ -7,6 +7,9 @@ import {
 
 Template.OrganizationSettings_StandardsBookSections.viewmodel({
   mixin: ['collapse', 'addForm', 'modal'],
+  autorun() {
+    this.templateInstance.subscribe('standards-book-sections', this.organizationId());
+  },
   standardsBookSectionsCount() {
     return StandardsBookSections.find({
       organizationId: this.organizationId()
@@ -40,13 +43,30 @@ Template.OrganizationSettings_StandardsBookSections.viewmodel({
       return;
     }
 
-    if (!confirm('Delete this standards book section?')) {
-      return;
-    }
+    const { title } = viewModel.getData();
 
-    const _id = viewModel._id();
-    const organizationId = this.organizationId();
+    swal({
+      title: 'Are you sure?',
+      text: `Book section "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      const _id = viewModel._id();
+      const organizationId = this.organizationId();
 
-    this.modal().callMethod(remove, { _id, organizationId });
+      this.modal().callMethod(remove, { _id, organizationId }, (err) => {
+        if (err) {
+          swal('Oops... Something went wrong!', err.reason, 'error');
+        } else {
+          swal(
+            'Removed!',
+            `Book section "${title}" was removed successfully.`,
+            'success'
+          );
+        }
+      });
+    });
   }
 });

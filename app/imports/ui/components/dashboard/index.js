@@ -6,3 +6,4 @@ import './dashboard-header.html';
 import './dashboard-header.js';
 import './dashboard-footer.html';
 import './dashboard-footer.js';
+import './organization-create';

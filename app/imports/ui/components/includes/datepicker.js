@@ -5,37 +5,34 @@ Template.Datepicker.viewmodel({
   onRendered() {
     this.datepicker.datepicker({
       startDate: new Date(),
-      format: 'dd MM yyyy',
+      format: {
+        toDisplay: (date, format, language) => {
+          return this.renderDate(date);
+        },
+        toValue: (date, format, language) => {
+          return date;
+        }
+      },
       autoclose: true
     });
 
-    !!this.date() ? this.datepicker.datepicker('setDate', new Date(this.date())) : this.datepicker.datepicker('setDate', new Date());
+    if (this.date()) {
+      this.datepicker.datepicker('setDate', this.date());
+    } else if (!this.date() && this.defaultDate()) {
+      this.datepicker.datepicker('setDate', new Date());
+    }
 
-    this.datepicker.on('changeDate', (e) => {
-      const { date } = e;
-
-      this.update();
+    this.datepicker.on('change', (e) => {
+      this.onChange && this.onChange(this);
     });
   },
-  isEditable: false,
   label: 'Date',
+  placeholder: 'Date',
   sm: 8,
+  defaultDate: true,
   date: '',
-  update() {
-    const update = ({ ...args }) => {
-      !!(this.parent && this.parent()) ? this.parent().update({ ...args }, this.destroy()) : this.parentVM().update({ ...args }, this.destroy());
-    }
-
-    if (this.isEditable()) {
-      const { date } = this.getData();
-
-      if (!this._id) {
-        update({ date });
-      } else {
-        const _id = this._id();
-        update({ _id, date });
-      }
-    }
+  dateString() {
+    return this.date() ? this.renderDate(this.date()) : '';
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);

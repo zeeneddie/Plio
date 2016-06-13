@@ -1,25 +1,30 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.ESIPMeansStatement.viewmodel({
-  mixin: ['modal', 'filesList'],
+  mixin: ['filesList', 'organization'],
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
-    const fileDoc = { _id, name };
+  insertFile({ _id, name }, cb) {
+    const fileDoc = { _id, name, extension: name.split('.').pop() };
 
     if (this.files() && this.files().length) {
+      this.parent().files(this.files().concat([fileDoc]));
+
       this.parent().update({}, {
         $push: {
           files: fileDoc
         }
-      });
+      }, cb);
     } else {
       this.parent().update({
         files: [fileDoc]
-      });
+      }, cb);
+
+      this.parent().files([fileDoc]);
     }
   },
   onUploadCb() {
@@ -27,7 +32,7 @@ Template.ESIPMeansStatement.viewmodel({
   },
   onUpload(err, { _id, url }) {
     if (err && err.error !== 'Aborted') {
-      this.modal().setError(err.reason);
+      ViewModel.findOne('ModalWindow').setError(err.reason);
       return;
     }
 
@@ -77,5 +82,11 @@ Template.ESIPMeansStatement.viewmodel({
         }
       });
     });
+  },
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      improvementPlanId: this.parent().improvementPlanId()
+    };
   }
 })

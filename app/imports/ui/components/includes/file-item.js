@@ -13,6 +13,9 @@ Template.FileItem.viewmodel({
       });
     }
   },
+  removeClickFn() {
+    return this.onRemoveClick.bind(this);
+  },
   onRemoveClick() {
     this.removeFile(this);
   },

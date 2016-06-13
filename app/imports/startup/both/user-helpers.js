@@ -6,6 +6,9 @@ Meteor.users.helpers({
       return `${firstName} ${lastName}`;
     }
   },
+  fullNameOrEmail() {
+    return this.fullName() || this.email();
+  },
   firstName() {
     return this.profile.firstName;
   },
@@ -41,7 +44,7 @@ Meteor.users.helpers({
     }
 
     // remove address parts that does not include words or numbers
-    parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1); 
+    parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1);
 
     // join address parts with commas
     let addressString = _.map(parts, part => part.replace(/\,\s*$/, '').trim()).join(', ');
@@ -58,5 +61,11 @@ Meteor.users.helpers({
   },
   skype() {
     return this.profile.skype;
+  },
+  hasVerifiedEmail() {
+    return this.emails[0].verified;
+  },
+  hasAcceptedInvite() {
+    return !this.invitationId && !this.invitationExpirationDate;
   }
 });

@@ -3,33 +3,7 @@ import { Template } from 'meteor/templating';
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ListItem.viewmodel({
-  share: ['search', 'listItems'],
+  share: ['search'],
   mixin: ['collapse', 'search', 'standard'],
-  onRendered() {
-    this._rendered(true);
-  },
-  closeAllOnCollapse: true,
-  standards() {
-    const searchQuery = this.searchObject('searchText', [
-      { name: 'title' },
-      { name: 'description' },
-      { name: 'status' }
-    ]);
-
-    const query = {
-      $and: [
-        { sectionId: this._id() },
-        searchQuery
-      ]
-    };
-
-    if (this.isActiveStandardFilter('type')) {
-      query.$and.push({
-        typeId: this.parent()._id()
-      });
-    }
-
-    const options = { sort: { title: 1 } };
-    return Standards.find(query, options);
-  }
+  closeAllOnCollapse: true
 });

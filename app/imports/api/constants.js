@@ -65,48 +65,74 @@ const getDefaultGuideline = (ncType) => {
 };
 
 const OrganizationDefaults = {
-  ncStepTimes: {
-    minor: {
+  workflowDefaults: {
+    minorNc: {
       timeValue: 1,
       timeUnit: TimeUnits.DAYS
     },
-    major : {
+    majorNc: {
       timeValue: 2,
       timeUnit: TimeUnits.DAYS
     },
-    critical: {
+    criticalNc: {
       timeValue: 3,
       timeUnit: TimeUnits.DAYS
     }
   },
-  ncReminders: {
-    minor: {
+  reminders: {
+    minorNc: {
+      start: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
       interval : {
         timeValue: 1,
         timeUnit: TimeUnits.DAYS
       },
-      pastDue: {
+      until: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
       }
     },
-    major: {
+    majorNc: {
+      start: {
+        timeValue: 2,
+        timeUnit: TimeUnits.DAYS
+      },
       interval: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
       },
-      pastDue: {
+      until: {
         timeValue: 4,
         timeUnit: TimeUnits.DAYS
       }
     },
-    critical: {
-      pastDue: {
-        timeValue: 6,
+    criticalNc: {
+      start: {
+        timeValue: 3,
         timeUnit: TimeUnits.DAYS
       },
       interval: {
         timeValue: 3,
+        timeUnit: TimeUnits.DAYS
+      },
+      until: {
+        timeValue: 6,
+        timeUnit: TimeUnits.DAYS
+      }
+    },
+    improvementPlan: {
+      start: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
+      interval: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      },
+      until: {
+        timeValue: 2,
         timeUnit: TimeUnits.DAYS
       }
     }
@@ -128,14 +154,6 @@ const DefaultStandardTypes = [
     abbreviation: 'CHK'
   },
   {
-    name: 'Product specification',
-    abbreviation: 'SPC'
-  },
-  {
-    name: 'Regulation',
-    abbreviation: 'REG'
-  },
-  {
     name: 'Standard Operating Procedure',
     abbreviation: 'SOP'
   },
@@ -144,8 +162,16 @@ const DefaultStandardTypes = [
     abbreviation: 'WRK'
   },
   {
+    name: 'Product specification',
+    abbreviation: 'SPC'
+  },
+  {
     name: 'Test method',
     abbreviation: 'TST'
+  },
+  {
+    name: 'Regulation',
+    abbreviation: 'REG'
   },
   {
     name: 'Other',
@@ -159,6 +185,39 @@ const StandardFilters = [
   'deleted'
 ];
 
+const RiskFilters = [
+  'department/site',
+  'activity',
+  'review status',
+  'archived',
+  'deleted'
+];
+
+const documentTypes = [
+  'standard',
+  'non-conformity',
+  'risk'
+];
+
+const AvatarPlaceholders = [
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/3.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/4.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/5.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/6.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/7.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/8.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/9.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/10.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/11.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/12.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/13.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
+]
+
 export {
   DefaultStandardTypes,
   NCTypes,
@@ -168,8 +227,11 @@ export {
   OrgMemberRoles,
   PhoneTypes,
   StandardFilters,
+  RiskFilters,
   TimeUnits,
   UserMembership,
   UserRoles,
-  UserRolesNames
+  UserRolesNames,
+  documentTypes,
+  AvatarPlaceholders
 };

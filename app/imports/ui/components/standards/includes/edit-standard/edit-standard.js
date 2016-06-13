@@ -6,10 +6,14 @@ import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'organization', 'collapsing'],
+  mixin: ['modal', 'organization', 'collapsing', 'standard', 'router'],
   standard() {
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
+  },
+  standardId() {
+    const standard = this.standard();
+    return standard && standard._id;
   },
   update({ query = {}, ...args }, options = {}, cb) {
     if (_.isFunction(options)) {
@@ -41,12 +45,23 @@ Template.EditStandard.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Removed!', `The standard "${title}" was removed succesfully.`, 'success');
+            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 
             this.modal().close();
-            this.selectedStandardId('');
 
-            FlowRouter.go('standards', { orgSerialNumber: this.organization().serialNumber });
+            const query = { isDeleted: { $in: [null, false] } };
+            const options = { sort: { createdAt: -1 } };
+
+            const standard = Standards.findOne(query, options);
+
+            if (!!standard) {
+              const { _id } = standard;
+
+              Meteor.setTimeout(() => {
+                this.goToStandard(_id);
+                this.expandCollapsedStandard(_id);
+              }, 0);
+            }
           }
         });
       }

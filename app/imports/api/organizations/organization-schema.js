@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
 import { OrgCurrencies,  UserMembership } from '/imports/api/constants.js';
-import { TimePeriodSchema } from '../schemas.js';
+import { BaseEntitySchema, TimePeriodSchema } from '../schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({
@@ -28,36 +29,42 @@ const orgUserSchema = new SimpleSchema({
   }
 });
 
-const ncStepTimesSchema = new SimpleSchema({
-  minor: {
+const workflowDefaultsSchema = new SimpleSchema({
+  minorNc: {
     type: TimePeriodSchema
   },
-  major: {
+  majorNc: {
     type: TimePeriodSchema
   },
-  critical: {
+  criticalNc: {
     type: TimePeriodSchema
   }
 });
 
-const ncReminderSchema = new SimpleSchema({
+const reminderSchema = new SimpleSchema({
+  start: {
+    type: TimePeriodSchema
+  },
   interval: {
     type: TimePeriodSchema
   },
-  pastDue: {
+  until: {
     type: TimePeriodSchema
   }
 });
 
-const ncRemindersSchema = new SimpleSchema({
-  minor: {
-    type: ncReminderSchema
+const remindersSchema = new SimpleSchema({
+  minorNc: {
+    type: reminderSchema
   },
-  major: {
-    type: ncReminderSchema
+  majorNc: {
+    type: reminderSchema
   },
-  critical: {
-    type: ncReminderSchema
+  criticalNc: {
+    type: reminderSchema
+  },
+  improvementPlan: {
+    type: reminderSchema
   }
 });
 
@@ -73,40 +80,66 @@ const ncGuidelinesSchema = new SimpleSchema({
   }
 });
 
+const OrganizationCurrencySchema = {
+  currency: {
+    type: String,
+    allowedValues: _.values(OrgCurrencies),
+    optional: true
+  }
+};
+
 const OrganizationEditableFields = {
   name: {
     type: String,
     min: 1,
     max: 40
   },
-  currency: {
-    type: String,
-    allowedValues: _.values(OrgCurrencies),
+  workflowDefaults: {
+    type: workflowDefaultsSchema,
     optional: true
   },
-  ncStepTimes: {
-    type: ncStepTimesSchema,
-    optional: true
-  },
-  ncReminders: {
-    type: ncRemindersSchema,
+  reminders: {
+    type: remindersSchema,
     optional: true
   },
   ncGuidelines: {
     type: ncGuidelinesSchema,
     optional: true
-  }
+  },
+  ...OrganizationCurrencySchema
 };
 
-const OrganizationSchema = new SimpleSchema([OrganizationEditableFields, {
-  serialNumber: {
-    type: Number,
-    min: 0
+const transferSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
   },
-  users: {
-    type: [orgUserSchema],
-    minCount: 1
+  newOwnerId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  createdAt: {
+    type: Date
   }
-}]);
+});
 
-export { OrganizationEditableFields, OrganizationSchema };
+const OrganizationSchema = new SimpleSchema([
+  BaseEntitySchema,
+  OrganizationEditableFields,
+  {
+    serialNumber: {
+      type: Number,
+      min: 0
+    },
+    users: {
+      type: [orgUserSchema],
+      minCount: 1
+    },
+    transfer: {
+      type: transferSchema,
+      optional: true
+    }
+  }
+]);
+
+export { OrganizationEditableFields, OrganizationSchema, OrganizationCurrencySchema };

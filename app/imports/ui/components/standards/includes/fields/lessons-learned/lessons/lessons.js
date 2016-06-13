@@ -1,27 +1,28 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 import { Random } from 'meteor/random';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ESLessons.viewmodel({
-  mixin: ['collapse', 'date'],
+  mixin: ['collapse', 'date', { standard: 'standard' }],
   onRendered() {
     if (!this._id) {
-      this.toggleCollapse();
+     this.toggleCollapse();
     }
   },
   linkedStandard() {
-    return this.standardId ? Standards.findOne({ _id: this.standardId() }).title : '';
-  },
-  standard() {
-    return ViewModel.findOne('ESLessonsLearned').standard();
+    const _id = this.standardId ? this.standardId() : this.standard.standardId();
+    const standard = Standards.findOne({ _id });
+    return !!standard ? standard.title : '';
   },
   renderSerialNumber() {
     return !!(this._id && this._id() && this.serialNumber && this.serialNumber()) ? `LL ${this.serialNumber()}` : ''
   },
   title: '',
   date: '',
+  linkedTo: '',
   save() {
     const data = this.getData();
     const _id = this._id && this._id();
@@ -33,13 +34,13 @@ Template.ESLessons.viewmodel({
       }
     }
 
-    const { title, date, createdBy, notes } = this.getData();
-    const standardId = this.standard() && this.standard()._id;
+    const { title, date, owner, notes } = this.getData();
+    const standardId = this.standard.standardId();
 
     if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, createdBy, standardId, notes }, () => this.toggleCollapse());
+      ViewModel.findOne('ESLessonsLearned').update({ _id, title, date, owner, standardId, notes }, () => this.toggleCollapse());
     } else {
-      ViewModel.findOne('ESLessonsLearned').insert({ title, date, createdBy, standardId, notes }, (err, _id) => {
+      ViewModel.findOne('ESLessonsLearned').insert({ title, date, owner, standardId, notes }, (err, _id) => {
         this.destroy();
         const sectionToCollapse = ViewModel.findOne('ESLessons', vm => vm._id && vm._id() === _id);
         !!sectionToCollapse && sectionToCollapse.toggleCollapse();
@@ -62,7 +63,7 @@ Template.ESLessons.viewmodel({
         },
         () => {
           ViewModel.findOne('ESLessonsLearned').remove({ _id }, this.destroy(() =>
-            swal('Removed!', `The lesson "${title}" was removed succesfully.`, 'success')));
+            swal('Removed!', `The lesson "${title}" was removed successfully.`, 'success')));
         }
       );
     } else {
@@ -75,14 +76,14 @@ Template.ESLessons.viewmodel({
     if (cb) cb();
   },
   getDate() {
-    return this.date() && this._id ? this.renderDate(this.date()) : '';
+    return this.date() && this._id ? this.date() : '';
   },
   getData() {
-    const { owner:createdBy } = this.child('ESOwner').getData();
+    const { owner } = this.child('ESOwner').getData();
     const { date } = this.child('Datepicker').getData();
     const notes = this.child('QuillEditor').editor().getHTML();
     const { title } = this.data();
-    console.log(date);
-    return { title, date, createdBy, notes };
+
+    return { title, date, owner, notes };
   }
 });

@@ -1,4 +1,7 @@
 import { Standards } from './standards.js';
+import { ImprovementPlans } from '../improvement-plans/improvement-plans.js';
+import { LessonsLearned } from '../lessons/lessons.js';
+
 
 export default {
   collection: Standards,
@@ -14,6 +17,7 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
+    
     return this.collection.update(query, options);
   },
 
@@ -24,18 +28,28 @@ export default {
         viewedBy: userId
       }
     };
-    return this.collection.update({ _id }, options);
+
+    return this.collection.update(query, options);
   },
 
-  remove({ _id, deletedBy }) {
-    const options = {
-      $set: {
-        isDeleted: true,
-        deletedBy,
-        deletedAt: new Date()
-      }
-    };
+  remove({ _id, deletedBy, isDeleted }) {
+    const query = { _id };
 
-    return this.collection.update({ _id }, options);
+    if (isDeleted) {
+      ImprovementPlans.remove({ standardId: _id });
+      LessonsLearned.remove({ standardId: _id });
+
+      return this.collection.remove(query);
+    } else {
+      const options = {
+        $set: {
+          isDeleted: true,
+          deletedBy,
+          deletedAt: new Date()
+        }
+      };
+
+      return this.collection.update(query, options);
+    }
   }
 };

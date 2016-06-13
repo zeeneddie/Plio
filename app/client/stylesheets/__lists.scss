@@ -117,6 +117,8 @@
 
         .list-group-item-heading {
           color: white !important;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .list-group-item-text {

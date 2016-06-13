@@ -1,20 +1,17 @@
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.ESOwner.viewmodel({
-  mixin: ['search', 'user', 'modal'],
+  mixin: ['search', 'user'],
   onCreated() {
-    if (this.hasUser() && !this.isEditable() && this.showCurrentUser && this.showCurrentUser()) {
+    if (this.hasUser() && !this.isEditable() && this.showCurrentUser()) {
       this.selectOwner(Meteor.user());
-    }
-  },
-  autorun() {
-    if (this.selectedOwnerId()) {
-      const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
-
-      this.owner(fullName);
+    } else {
+      this.checkSelectedOwner();
     }
   },
   isEditable: false,
+  showCurrentUser: false,
   label: 'Owner',
   sm: 8,
   owner: '',
@@ -29,6 +26,9 @@ Template.ESOwner.viewmodel({
     const { _id } = doc;
 
     this.selectedOwnerId(_id);
+
+    this.fixOwner();
+
     this.update();
   },
   update() {
@@ -37,11 +37,21 @@ Template.ESOwner.viewmodel({
     const { owner } = this.getData();
 
     if (!owner) {
-      this.modal().setError('Owner is required!');
+      ViewModel.findOne('ModalWindow').setError('Owner is required!');
       return;
     }
 
     this.parent().update({ owner });
+  },
+  checkSelectedOwner() {
+    if (!this.owner() && !!this.selectedOwnerId()) {
+      this.fixOwner();
+    }
+  },
+  fixOwner() {
+    const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
+
+    this.owner(fullName);
   },
   getData() {
     const { selectedOwnerId:owner } = this.data();
@@ -50,7 +60,6 @@ Template.ESOwner.viewmodel({
   events: {
     'focus input'() {
       this.owner('');
-      this.selectedOwnerId('');
     }
   }
 });

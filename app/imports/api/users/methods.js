@@ -7,9 +7,24 @@ import { Roles } from 'meteor/alanning:roles';
 import UserService from './user-service.js';
 import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { IdSchema } from '../schemas.js';
-import { UserRoles } from '../constants.js';
+import { IdSchema, UserIdSchema } from '../schemas.js';
+import { UserRoles, UserMembership } from '../constants.js';
 
+export const remove = new ValidatedMethod({
+  name: 'Users.remove',
+
+  validate: new SimpleSchema({}).validator(),
+
+  run({}) {
+    const _id = this.userId;
+    if (!_id) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot delete account'
+      );
+    }
+    return UserService.remove({ _id });
+  }
+});
 
 export const selectOrganization = new ValidatedMethod({
   name: 'Users.selectOrganization',
@@ -94,28 +109,26 @@ export const updateEmail = new ValidatedMethod({
 export const updatePhoneNumber = new ValidatedMethod({
   name: 'Users.updatePhoneNumber',
 
-  validate: new SimpleSchema([IdSchema, PhoneNumberSchema, {
-    index: {
-      type: Number,
-      min: 0
-    }
-  }]).validator(),
+  validate: new SimpleSchema([
+    UserIdSchema,
+    PhoneNumberSchema
+  ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update phone numbers'
       );
     }
 
-    if (userId !== _id) {
+    if (userId !== currUserId) {
       throw new Meteor.Error(
         403, 'User cannot update another user\'s phone numbers'
       );
     }
 
-    return UserService.updatePhoneNumber(_id, args);
+    return UserService.updatePhoneNumber({ userId, ...args });
   }
 });
 
@@ -123,24 +136,51 @@ export const addPhoneNumber = new ValidatedMethod({
   name: 'Users.addPhoneNumber',
 
   validate: new SimpleSchema([
-    IdSchema, PhoneNumberSchema
+    UserIdSchema,
+    PhoneNumberSchema
   ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot add phone numbers'
       );
     }
 
-    if (userId !== _id) {
+    if (userId !== currUserId) {
       throw new Meteor.Error(
         403, 'User cannot add phone numbers to another users'
       );
     }
 
-    return UserService.addPhoneNumber(_id, args);
+    return UserService.addPhoneNumber({ userId, ...args });
+  }
+});
+
+export const removePhoneNumber = new ValidatedMethod({
+  name: 'Users.removePhoneNumber',
+
+  validate: new SimpleSchema([
+    UserIdSchema,
+    IdSchema
+  ]).validator(),
+
+  run({ userId, ...args }) {
+    const currUserId = this.userId;
+    if (!currUserId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove phone numbers'
+      );
+    }
+
+    if (userId !== currUserId) {
+      throw new Meteor.Error(
+        403, 'User cannot remove another user\'s phone numbers'
+      );
+    }
+
+    return UserService.removePhoneNumber({ userId, ...args });
   }
 });
 
@@ -163,7 +203,25 @@ const ensureUserCanChangeRoles = (userId, orgId) => {
   if (!canChangeRoles) {
     throw new Meteor.Error(
       403,
-      'User is not authorized for changing user\'s permissions in this organization'
+      'User is not authorized for changing user\'s superpowers in this organization'
+    );
+  }
+};
+
+const ensureIsNotOrgOwner = (userId, orgId) => {
+  const isOrgOwner = !!Organizations.findOne({
+    _id: orgId,
+    users: {
+      $elemMatch: {
+        userId,
+        role: UserMembership.ORG_OWNER
+      }
+    }
+  });
+
+  if (isOrgOwner) {
+    throw new Meteor.Error(
+      403, 'Organization owner\'s superpowers cannot be changed'
     );
   }
 };
@@ -176,6 +234,8 @@ export const assignRole = new ValidatedMethod({
   run({ _id, organizationId, role }) {
     ensureUserCanChangeRoles(this.userId, organizationId);
 
+    ensureIsNotOrgOwner(_id, organizationId);
+
     return Roles.addUsersToRoles(_id, role, organizationId);
   }
 });
@@ -187,6 +247,8 @@ export const revokeRole = new ValidatedMethod({
 
   run({ _id, organizationId, role }) {
     ensureUserCanChangeRoles(this.userId, organizationId);
+
+    ensureIsNotOrgOwner(_id, organizationId);
 
     return Roles.removeUsersFromRoles(_id, role, organizationId);
   }
@@ -207,5 +269,61 @@ export const sendVerificationEmail = new ValidatedMethod({
     if (!this.isSimulation) {
       return Accounts.sendVerificationEmail(userId);
     }
+  }
+});
+
+export const setNotifications = new ValidatedMethod({
+  name: 'Users.setNotifications',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      enabled: { type: Boolean }
+    }
+  ]).validator(),
+
+  run({ _id, enabled }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot change notification settings'
+      );
+    }
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot change another user\'s notification settings'
+      );
+    }
+
+    return UserService.setNotifications({ _id, enabled });
+  }
+});
+
+export const setNotificationSound = new ValidatedMethod({
+  name: 'Users.setNotificationSound',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      soundFile: { type: String }
+    }
+  ]).validator(),
+
+  run({ _id, soundFile }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot change notification sounds'
+      );
+    }
+
+    if (userId !== _id) {
+      throw new Meteor.Error(
+        403, 'User cannot change another user\'s notification sounds'
+      );
+    }
+
+    return UserService.setNotificationSound({ _id, soundFile });
   }
 });

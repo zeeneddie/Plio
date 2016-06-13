@@ -4,6 +4,10 @@ import { PhoneTypes } from '../constants.js';
 
 
 const PhoneNumberSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
   number: {
     type: String,
     regEx: /^[\+|0-9][0-9\-\s\(\)]+$/
@@ -55,6 +59,18 @@ const UserProfileSchema = new SimpleSchema({
   }
 });
 
-const UserSchema = new SimpleSchema([UserProfileSchema]);
+const UserSchema = new SimpleSchema([
+  UserProfileSchema,
+  {
+    isNotificationsEnabled: {
+      type: Boolean,
+      defaultValue: true
+    },
+    notificationSound: {
+      type: String,
+      optional: true
+    }
+  }
+]);
 
 export { UserSchema, UserProfileSchema, PhoneNumberSchema };

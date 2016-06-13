@@ -2,13 +2,32 @@ import { Template } from 'meteor/templating';
 import { UserRolesNames } from '../../../api/constants.js';
 
 Template.UsersDetails.viewmodel({
-  mixin: ['user', 'organization', 'modal'],
+  share: 'window',
+  mixin: ['user', 'organization', 'modal', 'mobile'],
   phoneType(type) {
     return `${type} phone`;
+  },
+  isInvitationAccepted(user) {
+    return !user.invitationId;
+  },
+  isEmailVerified(user) {
+    const email = user.emails[0];
+    return email.verified;
   },
   superpowersTitle(user) {
     if (this.organization()) {
       return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
+    }
+  },
+  orgOwnerLabel() {
+    const userId = this.user()._id;
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
     }
   },
   superpowers(user) {

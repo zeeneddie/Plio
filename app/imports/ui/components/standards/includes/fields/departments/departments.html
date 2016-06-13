@@ -3,7 +3,7 @@
     {{#each currentDepartments}}
         <div class="btn-group">
           <button type="button" class="btn btn-secondary" disabled="" {{b "text: this.name"}}></button>
-          <button type="button" class="btn btn-secondary" {{b "click: update(this, '$pull')"}}><i class="fa fa-times-circle"></i></button>
+          {{> DeleteButton smallIcon=true onClick=deleteDepartmentFn}}
         </div>
     {{/each}}
     <div class="dropdown">
