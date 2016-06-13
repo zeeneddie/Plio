@@ -24,7 +24,7 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
-const rootCaseAnalysis = {
+const rootCauseAnalysis = {
   analysis: {
     type: Object,
     optional: true
@@ -40,7 +40,7 @@ const rootCaseAnalysis = {
   },
   'analysis.status': {
     type: Number,
-    allowedValues: _.keys(AnalysisStatuses),
+    allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
     optional: true
   },
   'analysis.completedAt': {
@@ -87,7 +87,7 @@ const OptionalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    ...rootCaseAnalysis
+    ...rootCauseAnalysis
   }
 ]);
 
