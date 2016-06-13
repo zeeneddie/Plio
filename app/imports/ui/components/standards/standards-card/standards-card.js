@@ -28,6 +28,24 @@ Template.StandardsCard.viewmodel({
     });
   },
   closeAllOnCollapse: false,
+  isFullScreenMode: false,
+  toggleScreenMode() {
+    const $div = this.templateInstance.$('.content-cards-inner');
+    const offset = $div.offset();
+    if (this.isFullScreenMode()) {
+      this.isFullScreenMode(false);
+
+      setTimeout(() => {
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto' });
+      }, 300);
+    } else {
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+      setTimeout(() => {
+        this.isFullScreenMode(true);
+      }, 100);
+    }
+    
+  },
   standards() {
     const query = { organizationId: this.organizationId() };
     const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
