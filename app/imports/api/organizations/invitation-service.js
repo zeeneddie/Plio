@@ -49,6 +49,8 @@ class InvitationSender {
       email: this._userEmail,
       password: randomPassword,
       profile: {
+        firstName: 'Invited',
+        lastName: 'User',
         avatar: Utils.getRandomAvatarUrl()
       },
       isNotificationsEnabled: true
@@ -59,15 +61,19 @@ class InvitationSender {
       let invitationExpirationDate = new Date;
       invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
       Meteor.users.update({
-        _id: newUserId,
+        _id: newUserId
       }, {
         $set: {
           invitationId: this._invitationId,
           invitedAt: new Date(),
           invitedBy: Meteor.userId(),
           invitationExpirationDate,
-          'emails.0.verified': true
+          'emails.0.verified': true,
+          'profile.firstName': '',
+          'profile.lastName': ''
         }
+      }, {
+        validate: false
       });
       return newUserId;
     } catch (err) {

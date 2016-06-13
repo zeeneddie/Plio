@@ -3,35 +3,18 @@ import { CountryCodes } from '/imports/api/country-codes.js';
 
 
 Template.UserEdit_ContactDetails.viewmodel({
-  mixin: ['collapse', 'callWithFocusCheck'],
-  isPropChanged(propName, newVal) {
-    const savedVal = this.templateInstance.data[propName];
-    return newVal && newVal !== savedVal;
-  },
+  mixin: ['collapse', 'callWithFocusCheck', 'userEdit'],
   isTextPresent() {
     return this.address() || this.skype() || this.phoneNumbers().length;
   },
   updateAddress(e) {
-    const address = this.getData().address;
-    if (this.isPropChanged('address', address)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('address', address);
-      });
-    }
+    this.updateProfileProperty(e, 'address', true);
   },
   updateSkype(e) {
-    const skype = this.getData().skype;
-    if (this.isPropChanged('skype', skype)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('skype', skype);
-      });
-    }
+    this.updateProfileProperty(e, 'skype', true);
   },
-  updateCountry() {
-    const country = this.getData().country;
-    if (this.isPropChanged('country', country)) {
-      this.parent().updateProfile('country', country);
-    }
+  updateCountry(e) {
+    this.updateProfileProperty(e, 'country');
   },
   updatePhoneNumber(viewModel, cb) {
     this.parent().updatePhoneNumber(viewModel, cb);
