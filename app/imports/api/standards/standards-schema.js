@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { StandardStatuses } from '../constants.js';
 import { BaseEntitySchema, OrganizationIdSchema, NotifySchema } from '../schemas.js';
 
 
@@ -117,7 +118,8 @@ const StandardsSchema = new SimpleSchema([
       type: Number
     },
     status: {
-      type: String
+      type: String,
+      allowedValues: _.keys(StandardStatuses)
     }
   }
 ]);
@@ -156,7 +158,8 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   },
   status: {
     type: String,
-    optional: true
+    optional: true,
+    allowedValues: _.keys(StandardStatuses)
   }
 }]);
 

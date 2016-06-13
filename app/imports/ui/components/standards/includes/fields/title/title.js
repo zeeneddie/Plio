@@ -7,6 +7,8 @@ Template.ESTitle.viewmodel({
     this.callWithFocusCheck(e, () => {
       const { title } = this.getData();
 
+      if (title === this.templateInstance.data.title) return;
+
       const number = this.parseNumber(title);
       const nestingLevel = (number && number[0].split('.').length) || 1;
 

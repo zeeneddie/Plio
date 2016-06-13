@@ -2,13 +2,10 @@ import { Template } from 'meteor/templating';
 
 Template.NCTitle.viewmodel({
   titleText: '',
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
+  update() {
     if (!this._id) return;
 
-    const { value:title } = viewmodel.getData();
+    const title = this.titleText();
 
     if (!title) {
       ViewModel.findOne('ModalWindow').setError('Title is required!');
@@ -18,7 +15,7 @@ Template.NCTitle.viewmodel({
     this.parent().update({ title });
   },
   getData() {
-    const { value:title } = this.child('InputField').getData();
+    const { titleText:title } = this.data();
     return { title };
   }
 });

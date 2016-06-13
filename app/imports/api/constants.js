@@ -21,6 +21,11 @@ const NCStatuses = {
   14: 'Deleted'
 };
 
+const StandardStatuses = {
+  'issued': 'Issued',
+  'draft': 'Draft'
+};
+
 const AnalysisStatuses = {
   0: 'Not completed',
   1: 'Completed'
@@ -257,6 +262,7 @@ export {
   NCTypes,
   NCStatuses,
   AnalysisStatuses,
+  StandardStatuses,
   OrgCurrencies,
   OrganizationDefaults,
   OrgOwnerRoles,

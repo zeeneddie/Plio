@@ -1,65 +1,25 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
+import { Meteor } from 'meteor/meteor';
 
 Template.ESOwner.viewmodel({
-  mixin: ['search', 'user'],
-  onCreated() {
-    if (this.hasUser() && !this.isEditable() && this.showCurrentUser()) {
-      this.selectOwner(Meteor.user());
-    } else {
-      this.checkSelectedOwner();
-    }
+  mixin: ['search', 'user', 'members'],
+  owner: Meteor.userId(),
+  onUpdateCb() {
+    return this.update.bind(this);
   },
-  isEditable: false,
-  showCurrentUser: false,
-  label: 'Owner',
-  sm: 8,
-  owner: '',
-  selectedOwnerId: '',
-  members() {
-    const query = this.searchObject('owner', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
-    const options = { sort: { 'profile.firstName': 1 } };
+  update(viewmodel) {
+    const { selected:owner } = viewmodel.getData();
 
-    return Meteor.users.find(query, options);
-  },
-  selectOwner(doc) {
-    const { _id } = doc;
+    if (owner === this.templateInstance.data.owner) return;
 
-    this.selectedOwnerId(_id);
+    this.owner(owner);
 
-    this.fixOwner();
+    if (!this._id) return;
 
-    this.update();
-  },
-  update() {
-    if (!this.isEditable()) return;
-
-    const { owner } = this.getData();
-
-    if (!owner) {
-      ViewModel.findOne('ModalWindow').setError('Owner is required!');
-      return;
-    }
-
-    this.parent().update({ owner });
-  },
-  checkSelectedOwner() {
-    if (!this.owner() && !!this.selectedOwnerId()) {
-      this.fixOwner();
-    }
-  },
-  fixOwner() {
-    const fullName = this.userFullNameOrEmail(this.selectedOwnerId());
-
-    this.owner(fullName);
+    return this.parent().update({ owner });
   },
   getData() {
-    const { selectedOwnerId:owner } = this.data();
+    const { owner } = this.data();
     return { owner };
-  },
-  events: {
-    'focus input'() {
-      this.owner('');
-    }
   }
 });
