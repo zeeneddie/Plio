@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 Template.Subcards_LessonLearned.viewmodel({
-  mixin: ['search', 'user'],
+  mixin: ['search', 'user', 'members'],
   autorun() {
     this.title.depend();
 
@@ -16,16 +16,6 @@ Template.Subcards_LessonLearned.viewmodel({
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',
-  ownerSearchText() {
-    const child = this.child('SelectItem');
-    return child && child.value();
-  },
-  members() {
-    const query = this.searchObject('ownerSearchText', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]);
-    const options = { sort: { 'profile.firstName': 1 } };
-
-    return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
-  },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);
   },

@@ -470,5 +470,19 @@ ViewModel.mixin({
           break;
       }
     }
+  },
+  members: {
+    _searchString() {
+      const child = this.child('SelectItem');
+      return child && child.value();
+    },
+    _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
+      const query = {
+        ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
+        ..._query
+      };
+
+      return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
+    }
   }
 });

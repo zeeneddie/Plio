@@ -2,13 +2,13 @@
   {{#FormField label="Owner" sm=7}}
     {{#if owner}}
       {{> SelectItem
-          items=members
+          items=_members
           selected=owner
           selectFirstIfNoSelected=false
           onUpdate=onUpdateCb}}
     {{else}}
       {{> SelectItem
-          items=members
+          items=_members
           selectFirstIfNoSelected=false
           onUpdate=onUpdateCb}}
     {{/if}}

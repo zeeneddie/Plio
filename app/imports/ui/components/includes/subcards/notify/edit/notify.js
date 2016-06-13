@@ -4,23 +4,9 @@ import { addedToNotifyList } from '/imports/api/standards/methods.js';
 import Utils from '/imports/core/utils.js';
 
 Template.Subcards_Notify_Edit.viewmodel({
-  mixin: ['search', 'user'],
-  notifySearchText() {
-    const child = this.child('SelectItem');
-    return child && child.value();
-  },
+  mixin: ['search', 'user', 'members'],
   members() {
-    const query = {
-      ...this.searchObject('notifySearchText', [
-                            { name: 'profile.firstName' },
-                            { name: 'profile.lastName' },
-                            { name: 'emails.0.address' }
-                          ]),
-      _id: { $nin: this.currentNotifyUsersIds() }
-    }
-    const options = { sort: { 'profile.firstName': 1 } };
-
-    return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
+    return this._members({ _id: { $nin: this.currentNotifyUsersIds() } });
   },
   document: '',
   documentType: '',
