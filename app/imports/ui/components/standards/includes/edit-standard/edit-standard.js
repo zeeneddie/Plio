@@ -11,6 +11,10 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
+  standardId() {
+    const standard = this.standard();
+    return standard && standard._id;
+  },
   update({ query = {}, ...args }, options = {}, cb) {
     if (_.isFunction(options)) {
       cb = options;
@@ -52,7 +56,7 @@ Template.EditStandard.viewmodel({
 
             if (!!standard) {
               const { _id } = standard;
-              
+
               Meteor.setTimeout(() => {
                 this.goToStandard(_id);
                 this.expandCollapsedStandard(_id);

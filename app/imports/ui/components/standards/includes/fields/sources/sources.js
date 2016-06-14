@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck'],
+  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -10,6 +10,9 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceName: '',
+  sourceExtension() {
+    return this.sourceName().split('.').pop();
+  },
   sourceHtmlUrl: '',
   fileId: '',
   shouldUpdate() {
@@ -42,7 +45,7 @@ Template.ESSources.viewmodel({
 
     this.update();
   },
-  update(e) {
+  update(e, cb) {
     let { type, url, name, htmlUrl } = this.getData();
 
     if (!this.shouldUpdate()) {
@@ -62,7 +65,9 @@ Template.ESSources.viewmodel({
     if (type === 'attachment') {
       sourceDoc.name = name;
 
-      if (!url) {
+      if (url) {
+        sourceDoc.extension = url.split('.').pop();
+      } else {
         delete sourceDoc.url;
       }
     }
@@ -71,7 +76,7 @@ Template.ESSources.viewmodel({
       [`source${this.id()}`]: sourceDoc
     };
 
-    const updateFn = () => this.parent().update(query);
+    const updateFn = () => this.parent().update(query, cb);
 
     if (type === 'attachment') {
       updateFn();
@@ -79,8 +84,8 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
-  uploadDocxHtml(fileObj) {
-    const uploader = new Slingshot.Upload('htmlAttachmentPreview');
+  uploadDocxHtml(fileObj, metaContext) {
+    const uploader = new Slingshot.Upload('htmlAttachmentPreview', this.uploaderMetaContext());
 
     uploader.send(fileObj, (error, url) => {
       this.sourceHtmlUrl(url && encodeURI(url) || '');
@@ -112,10 +117,10 @@ Template.ESSources.viewmodel({
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
+  insertFile({ _id, name }, cb) {
     this.fileId(_id);
     this.sourceName(name);
-    this.update();
+    this.update(null, cb);
   },
   onUploadCb() {
     return this.onUpload.bind(this);
@@ -172,8 +177,14 @@ Template.ESSources.viewmodel({
       });
     });
   },
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      standardId: this.parent().standardId()
+    };
+  },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name, sourceHtmlUrl:htmlUrl } = this.data();
+    const { sourceType:type, sourceUrl:url, sourceName:name, sourceExtension:extension, sourceHtmlUrl:htmlUrl } = this.data();
     return { type, url, name, htmlUrl };
   }
 });

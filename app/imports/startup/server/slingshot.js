@@ -1,15 +1,19 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
+import { Random } from 'meteor/random';
+
 import Utils from '/imports/core/utils';
+
 
 const configureSlignshot = () => {
   const {
-    name, acl, avatarsDir,
-    attachmentsDir, improvementPlanFilesDir
-  }  = Meteor.settings.AWSS3Bucket;
+    name, acl, usersAvatarsDir,
+    standardsFilesDir, improvementPlansFilesDir
+  } = Meteor.settings.AWSS3Bucket;
 
-  const fileContentDisposition = (file) => {
+  const attachmentDisposition = (file, metaContext) => {
     const fileName = file.name;
-    return `attachment; filename="${fileName}"; filename*=utf-8''${fileName}`;
+    const disposition = 'attachment';
+    return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
 
   Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
@@ -25,17 +29,18 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${avatarsDir}/${file.name}`;
+    key(file, metaContext) {
+      const { userId } = metaContext;
+      return `${usersAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('standardsAttachments', Slingshot.S3Storage, {
+  Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
     bucket: name,
 
     acl: acl,
 
-    contentDisposition: fileContentDisposition,
+    contentDisposition: attachmentDisposition,
 
     authorize() {
       if (!this.userId) {
@@ -45,8 +50,9 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${attachmentsDir}/${file.name}`;
+    key(file, metaContext) {
+      const { organizationId, standardId } = metaContext;
+      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
@@ -63,17 +69,18 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${attachmentsDir}/${file.name}`;
+    key(file, metaContext) {
+      const { organizationId, standardId } = metaContext;
+      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
     bucket: name,
 
     acl: acl,
 
-    contentDisposition: fileContentDisposition,
+    contentDisposition: attachmentDisposition,
 
     authorize() {
       if (!this.userId) {
@@ -83,8 +90,9 @@ const configureSlignshot = () => {
       return true;
     },
 
-    key(file) {
-      return `${improvementPlanFilesDir}/${file.name}`;
+    key(file, metaContext) {
+      const { organizationId, improvementPlanId } = metaContext;
+      return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
     }
   });
 };

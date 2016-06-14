@@ -1,5 +1,5 @@
 <template name="StandardsCard">
-    <div class="content-cards-inner flex scroll">
+    <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
       <div class="card standard-details">
         <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
           <h5 {{b "if: !isActiveStandardFilter('deleted')"}}>
@@ -11,9 +11,10 @@
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
-                <a class="btn btn-primary" {{b "if: hasDocxAttachment, click: expandStandardModal"}}>
-                  <i class="fa fa-expand"></i>
-                </a>
+                {{#if hasDocxAttachment}}
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                  </a>
+                {{/if}}
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
@@ -149,19 +150,18 @@
                   </div>
 
 
-                  {{#with files}}
+                  {{#if files}}
                     <div class="list-group-item">
                       <p class="list-group-item-text">Means statement</p>
-                      {{#each this}}
-                        <h4 class="list-group-item-heading">
-                          <i class="fa fa-paperclip margin-right">
+                      {{#each files}}
+                        <a class="btn btn-secondary btn-inline" {{b "href: this.url"}}>
+                          <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
                           </i>
-                          <a {{b "href: this.url, text: this.name"}}>
-                          </a>
-                        </h4>
+                          <span>{{this.name}}</span>
+                        </a>
                       {{/each}}
                     </div>
-                  {{/with}}
+                  {{/if}}
 
                 </div>
               {{/with}}

@@ -1,6 +1,9 @@
 .btn {
   font-family: $font-semibold;
   font-weight: normal;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   @include transition(all .3s ease);
   
 
@@ -166,4 +169,8 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: .25rem;
+}
+
+.btn-inline {
+  margin: 4px 2px 0 0;
 }

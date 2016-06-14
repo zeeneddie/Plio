@@ -27,13 +27,15 @@
             _id=fileId
             name=sourceName
             url=sourceUrl
+            extension=sourceExtension
             removeFile=removeAttachmentFn}}
       {{/with}}
       <div {{b "unless: sourceName"}}>
         {{> FileUploader
             insertFile=insertFileFn
             onUpload=onUploadCb
-            slingshotDirective='standardsAttachments'}}
+            slingshotDirective='standardsFiles'
+            metaContext=uploaderMetaContext}}
       </div>
     </div>
     {{#ClearableField field="sourceUrl"}}

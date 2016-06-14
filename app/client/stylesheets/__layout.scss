@@ -22,6 +22,10 @@ a {
   cursor: pointer;
 }
 
+a:focus {
+  text-decoration: none;
+}
+
 .scroll {
   @include scroll;
 }
@@ -160,4 +164,8 @@ strong {
 
 .collapse {
   overflow: hidden;
+}
+
+.margin-right {
+  margin-right: 5px;
 }

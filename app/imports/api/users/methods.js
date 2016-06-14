@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
+import { ValidationError } from 'meteor/mdg:validation-error';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Accounts } from 'meteor/accounts-base'
 import { Roles } from 'meteor/alanning:roles';
@@ -59,10 +61,20 @@ export const selectOrganization = new ValidatedMethod({
 export const updateProfile = new ValidatedMethod({
   name: 'Users.updateProfile',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    UserProfileSchema
-  ]).validator(),
+  validate(doc) {
+    const validationContext = new SimpleSchema([
+      IdSchema,
+      UserProfileSchema
+    ]).newContext();
+
+    for (let key in doc) {
+      if (!validationContext.validateOne(doc, key)) {
+        const errors = validationContext.invalidKeys();
+        const message = validationContext.keyErrorMessage(errors[0].name);
+        throw new ValidationError(errors, message);
+      }
+    }
+  },
 
   run({ _id, ...args}) {
     const userId = this.userId;
@@ -76,7 +88,44 @@ export const updateProfile = new ValidatedMethod({
       throw new Meteor.Error(403, 'User cannot update another user');
     }
 
-    return UserService.updateProfile(_id, args);
+    UserService.updateProfile(_id, args);
+  }
+});
+
+export const unsetProfileProperty = new ValidatedMethod({
+  name: 'Users.unsetProfileProperty',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      fieldName: {
+        type: String,
+        allowedValues: UserProfileSchema.objectKeys()
+      }
+    }
+  ]).validator(),
+
+  run({ _id, fieldName }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update profile'
+      );
+    }
+
+    if (userId !== _id) {
+      throw new Meteor.Error(403, 'User cannot update another user');
+    }
+
+    const fieldDef = UserProfileSchema.getDefinition(fieldName);
+    if (!(fieldDef.optional === true)) {
+      throw new Meteor.Error(
+        400,
+        UserProfileSchema.messageForError('required', fieldName, null, '')
+      );
+    }
+
+    UserService.unsetProfileProperty({ _id, fieldName });
   }
 });
 

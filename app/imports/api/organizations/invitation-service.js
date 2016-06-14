@@ -49,7 +49,13 @@ class InvitationSender {
       email: this._userEmail,
       password: randomPassword,
       profile: {
-        avatar: Utils.getRandomAvatarUrl()
+        avatar: Utils.getRandomAvatarUrl(),
+        // We need to temporary set firstName and lastName,
+        // because these fields are required by the schema.
+        // When we use Accounts.createUser,
+        // we have no way to skip schema validation.
+        firstName: 'Invited',
+        lastName: 'User'
       },
       isNotificationsEnabled: true
     };
@@ -59,15 +65,24 @@ class InvitationSender {
       let invitationExpirationDate = new Date;
       invitationExpirationDate.setDate(invitationExpirationDate.getDate() + InvitationSender.getInvitationExpirationTime());
       Meteor.users.update({
-        _id: newUserId,
+        _id: newUserId
       }, {
         $set: {
           invitationId: this._invitationId,
           invitedAt: new Date(),
           invitedBy: Meteor.userId(),
           invitationExpirationDate,
-          'emails.0.verified': true
+          'emails.0.verified': true,
+          // unset firstName, lastName and initials
+          'profile.firstName': '',
+          'profile.lastName': '',
+          'profile.initials': ''
         }
+      }, {
+        // Skip schema validation before update.
+        // We need this to unset  "firstName" and "lastName",
+        // beacause these fields are required by the schema.
+        validate: false
       });
       return newUserId;
     } catch (err) {

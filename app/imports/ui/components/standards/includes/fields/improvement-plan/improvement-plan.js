@@ -20,6 +20,10 @@ Template.ESImprovementPlan.viewmodel({
   improvementPlan() {
     return ImprovementPlans.findOne({ documentId: this.standardId() });
   },
+  improvementPlanId() {
+    const improvementPlan = this.improvementPlan();
+    return improvementPlan && improvementPlan._id;
+  },
   insert({ ...args }, cb) {
     const documentId = this.standardId();
     const documentType = 'standard';
@@ -33,7 +37,7 @@ Template.ESImprovementPlan.viewmodel({
     }
 
     if (!this.improvementPlan()) {
-      return this.insert({ ...args });
+      return this.insert({ ...args }, cb);
     }
 
     const _id = this.improvementPlan() && this.improvementPlan()._id;

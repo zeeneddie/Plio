@@ -1,3 +1,8 @@
+import { UserSchema } from '../../api/users/user-schema.js';
+
+
+Meteor.users.attachSchema(UserSchema);
+
 Meteor.users.helpers({
   fullName() {
     const { firstName='', lastName='' } = this.profile;

@@ -2,43 +2,19 @@ import { Template } from 'meteor/templating';
 
 
 Template.UserEdit_MainDetails.viewmodel({
-  mixin: ['callWithFocusCheck'],
+  mixin: ['callWithFocusCheck', 'userEdit'],
   avatarFile: null,
-  isPropChanged(propName, newVal) {
-    const savedVal = this.templateInstance.data[propName];
-    return newVal && newVal !== savedVal;
-  },
   updateFirstName(e) {
-    const firstName = this.getData().firstName;
-    if (this.isPropChanged('firstName', firstName)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('firstName', firstName);
-      });
-    }
+    this.updateProfileProperty(e, 'firstName', true);
   },
   updateLastName(e) {
-    const lastName = this.getData().lastName;
-    if (this.isPropChanged('lastName', lastName)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('lastName', lastName);
-      });
-    }
+    this.updateProfileProperty(e, 'lastName', true);
   },
   updateInitials(e) {
-    const initials = this.getData().initials;
-    if (this.isPropChanged('initials', initials)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('initials', initials);
-      });
-    }
+    this.updateProfileProperty(e, 'initials', true);
   },
   updateDescription(e) {
-    const description = this.getData().description;
-    if (this.isPropChanged('description', description)) {
-      this.callWithFocusCheck(e, () => {
-        this.parent().updateProfile('description', description);
-      });
-    }
+    this.updateProfileProperty(e, 'description', true);
   },
   updateAvatar() {
     this.parent().uploadAvatarFile(this);
@@ -59,7 +35,7 @@ Template.UserEdit_MainDetails.viewmodel({
       email: this.email(),
       firstName: this.firstName(),
       lastName: this.lastName(),
-      initials: this.initials().toUpperCase(),
+      initials: this.initials() && this.initials().toUpperCase(),
       description: this.description(),
       avatar: this.avatar()
     };
