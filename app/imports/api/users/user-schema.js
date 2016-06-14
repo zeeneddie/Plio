@@ -21,11 +21,11 @@ const PhoneNumberSchema = new SimpleSchema({
 const UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
-    min: 2
+    min: 1
   },
   lastName: {
     type: String,
-    min: 2
+    min: 1
   },
   initials: {
     type: String,
