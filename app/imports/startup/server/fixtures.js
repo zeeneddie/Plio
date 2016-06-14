@@ -50,7 +50,7 @@ const getAssets = (assetsDir) => {
 const fillCollection = (collection, assets) => {
   if (!collection.find().count()) {
     return _.each(assets, function(doc) {
-      collection.insert(doc);
+      collection.insert(doc, { validate: false });
     });
   }
 };

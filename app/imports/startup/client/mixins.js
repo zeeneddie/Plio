@@ -354,4 +354,33 @@ ViewModel.mixin({
       // return Risks.findOne({ _id });
     }
   },
+  userEdit: {
+    isPropChanged(propName, newVal) {
+      return newVal !== this.templateInstance.data[propName];
+    },
+    updateProfileProperty(e, propName, withFocusCheck) {
+      const propVal = this.getData()[propName];
+      let updateFn;
+
+      if (!this.isPropChanged(propName, propVal)) {
+        return;
+      }
+
+      if (propVal === '') {
+        updateFn = () => {
+          this.parent().unsetProfileProperty(propName);
+        };
+      } else {
+        updateFn = () => {
+          this.parent().updateProfile(propName, propVal);
+        };
+      }
+
+      if (withFocusCheck) {
+        updateFn();
+      } else {
+        this.callWithFocusCheck(e, updateFn);
+      }
+    }
+  }
 });
