@@ -14,6 +14,9 @@
         <input type="radio" name="options" autocomplete="off"> Video
       </label>
     </div>
+    {{#if sourceHtmlUrl}}
+      <i class="fa fa-align-left disclosure-indicator pull-right"></i>
+    {{/if}}
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
@@ -24,13 +27,15 @@
             _id=fileId
             name=sourceName
             url=sourceUrl
+            extension=sourceExtension
             removeFile=removeAttachmentFn}}
       {{/with}}
       <div {{b "unless: sourceName"}}>
         {{> FileUploader
             insertFile=insertFileFn
             onUpload=onUploadCb
-            slingshotDirective='standardsAttachments'}}
+            slingshotDirective='standardsFiles'
+            metaContext=uploaderMetaContext}}
       </div>
     </div>
     {{#ClearableField field="sourceUrl"}}

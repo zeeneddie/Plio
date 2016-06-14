@@ -1,5 +1,5 @@
 <template name="StandardsCard">
-    <div class="content-cards-inner flex scroll">
+    <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
       <div class="card standard-details">
         <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
           <h5 {{b "if: !isActiveStandardFilter('deleted')"}}>
@@ -11,6 +11,10 @@
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
+                {{#if hasDocxAttachment}}
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                  </a>
+                {{/if}}
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
@@ -37,6 +41,7 @@
                 <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
               </h4>
             </a>
+
             <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
@@ -100,6 +105,9 @@
               {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>
           </div>
+
+          {{> SourceWordDocument source=source1}}
+          {{> SourceWordDocument source=source2}}
           {{> CardChangelog document=this}}
         {{/with}}
       </div>

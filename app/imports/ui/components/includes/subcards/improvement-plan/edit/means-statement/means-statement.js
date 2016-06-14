@@ -3,13 +3,13 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.IPMeansStatement.viewmodel({
-  mixin: 'filesList',
+  mixin: ['filesList', 'organization'],
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }) {
-    const fileDoc = { _id, name };
+  insertFile({ _id, name }, cb) {
+    const fileDoc = { _id, name, extension: name.split('.').pop() };
 
     if (this.files() && this.files().length) {
       this.parent().files(this.files().concat([fileDoc]));
@@ -20,11 +20,11 @@ Template.IPMeansStatement.viewmodel({
         }
       };
 
-      this.parent().update({ options });
+      this.parent().update({ options }, cb);
     } else {
       this.parent().update({
         files: [fileDoc]
-      });
+      }, cb);
 
       this.parent().files([fileDoc]);
     }
@@ -87,5 +87,11 @@ Template.IPMeansStatement.viewmodel({
 
       this.parent().update({ options });
     });
+  },
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      improvementPlanId: this._id()
+    };
   }
 })

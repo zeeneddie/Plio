@@ -37,6 +37,9 @@ Template.SelectItem.viewmodel({
     return this.items().hasOwnProperty('collection') ? this.items().fetch() : this.items();
   },
   itemsFiltered() {
+    if (this.parent().templateName() === 'IPOwner') {
+      console.log(this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id)));
+    }
     return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
   },
   select({ _id, title }) {

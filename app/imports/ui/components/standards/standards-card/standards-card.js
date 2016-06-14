@@ -15,10 +15,38 @@ Template.StandardsCard.viewmodel({
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
     });
+  },
+  onRendered(template) {
+    template.autorun(() => {
+      this.collapsed(this.hasDocxAttachment());
 
-    this.collapsed(false);
+      // Workaround for https://github.com/twbs/bootstrap/issues/2274
+      template.$('.list-group-collapse.collapse').height('auto');
+    });
   },
   closeAllOnCollapse: false,
+  isFullScreenMode: false,
+  toggleScreenMode() {
+    const $div = this.templateInstance.$('.content-cards-inner');
+    const offset = $div.offset();
+    if (this.isFullScreenMode()) {
+      this.isFullScreenMode(false);
+
+      setTimeout(() => {
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
+      }, 150);
+    } else {
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+
+      setTimeout(() => {
+
+        // I hate Safari
+        $div.css({ 'transition': 'all .15s linear' });
+        this.isFullScreenMode(true);
+      }, 100);
+    }
+
+  },
   standards() {
     const query = { organizationId: this.organizationId() };
     const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
@@ -29,6 +57,10 @@ Template.StandardsCard.viewmodel({
     const query = { _id: this.standardId(), organizationId: this.organizationId() };
     const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
     return Standards.findOne(filterQuery);
+  },
+  hasDocxAttachment() {
+    const standard = this.standard();
+    return ( standard && standard.source1 && standard.source1.htmlUrl ) || ( standard && standard.source2 && standard.source2.htmlUrl );
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;

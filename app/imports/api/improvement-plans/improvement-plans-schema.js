@@ -37,6 +37,9 @@ const optionalSchema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
+  'files.$.extension': {
+    type: String
+  },
   'files.$.url': {
     type: String,
     regEx: SimpleSchema.RegEx.Url,

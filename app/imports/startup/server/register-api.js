@@ -79,3 +79,5 @@ import '../../api/analysis/analysis.js';
 import '../../api/analysis/analysis-schema.js';
 import '../../api/analysis/analysis-service.js';
 import '../../api/analysis/methods.js';
+
+import '../../api/mammoth/methods.js';

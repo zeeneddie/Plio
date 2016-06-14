@@ -4,13 +4,6 @@ import { Meteor } from 'meteor/meteor';
 Template.IPOwner.viewmodel({
   mixin: ['search', 'user', 'members'],
   owner: '',
-  autorun(computation) {
-    const child = this.child('SelectItem');
-    if (this.owner() && child) {
-      child.value(this.userFullNameOrEmail(this.owner()));
-      computation.stop();
-    }
-  },
   onUpdateCb() {
     return this.update.bind(this);
   },

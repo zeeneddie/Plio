@@ -1,16 +1,9 @@
 <template name="IPOwner">
   {{#FormField label="Owner" sm=7}}
-    {{#if owner}}
-      {{> SelectItem
-          items=_members
-          selected=owner
-          selectFirstIfNoSelected=false
-          onUpdate=onUpdateCb}}
-    {{else}}
-      {{> SelectItem
-          items=_members
-          selectFirstIfNoSelected=false
-          onUpdate=onUpdateCb}}
-    {{/if}}
+    {{> SelectItem
+        placeholder="Owner"
+        items=_members
+        selectFirstIfNoSelected=false
+        onUpdate=onUpdateCb}}
   {{/FormField}}
 </template>

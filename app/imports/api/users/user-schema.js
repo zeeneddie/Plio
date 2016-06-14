@@ -21,11 +21,11 @@ const PhoneNumberSchema = new SimpleSchema({
 const UserProfileSchema = new SimpleSchema({
   firstName: {
     type: String,
-    optional: true
+    min: 1
   },
   lastName: {
     type: String,
-    optional: true
+    min: 1
   },
   initials: {
     type: String,
@@ -38,8 +38,7 @@ const UserProfileSchema = new SimpleSchema({
     optional: true
   },
   avatar: {
-    type: String,
-    optional: true
+    type: String
   },
   skype: {
     type: String,
@@ -56,21 +55,83 @@ const UserProfileSchema = new SimpleSchema({
   phoneNumbers: {
     type: [PhoneNumberSchema],
     optional: true
+  },
+  organizationName: {
+    type: String,
+    optional: true
   }
 });
 
-const UserSchema = new SimpleSchema([
-  UserProfileSchema,
-  {
-    isNotificationsEnabled: {
-      type: Boolean,
-      defaultValue: true
-    },
-    notificationSound: {
-      type: String,
-      optional: true
-    }
+const UserPreferencesSchema = new SimpleSchema({
+  areNotificationsEnabled: {
+    type: Boolean,
+    defaultValue: true
+  },
+  notificationSound: {
+    type: String,
+    optional: true
   }
-]);
+});
+
+const UserEmailSchema = new SimpleSchema({
+  address: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Email
+  },
+  verified: {
+    type: Boolean,
+    defaultValue: false
+  }
+});
+
+const UserSchema = new SimpleSchema({
+  createdAt: {
+    type: Date
+  },
+  services: {
+    type: Object,
+    blackbox: true
+  },
+  emails: {
+    type: [UserEmailSchema]
+  },
+  profile: {
+    type: UserProfileSchema
+  },
+  status: {
+    type: String,
+    optional: true
+  },
+  statusConnection: {
+    type: String,
+    optional: true
+  },
+  roles: {
+    type: Object,
+    blackbox: true,
+    optional: true
+  },
+  preferences: {
+    type: UserPreferencesSchema
+  },
+  invitationId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  invitedAt: {
+    type: Date,
+    optional: true
+  },
+  invitedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  invitationExpirationDate: {
+    type: Date,
+    optional: true
+  },
+});
 
 export { UserSchema, UserProfileSchema, PhoneNumberSchema };

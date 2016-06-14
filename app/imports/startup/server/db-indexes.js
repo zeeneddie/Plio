@@ -31,6 +31,10 @@ Organizations._ensureIndex({
 });
 
 Organizations._ensureIndex({
+  name: 1
+});
+
+Organizations._ensureIndex({
   'users.userId': 1
 });
 

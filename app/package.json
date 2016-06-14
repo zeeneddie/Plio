@@ -5,7 +5,9 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "fibers": "^1.0.13",
     "handlebars": "^4.0.5",
+    "mammoth": "^1.0.3",
     "meteor-node-stubs": "^0.2.3",
     "path": "^0.12.7",
     "pluralize": "^2.0.0",

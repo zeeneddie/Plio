@@ -5,6 +5,7 @@ import { Random } from 'meteor/random';
 
 import {
   updateProfile,
+  unsetProfileProperty,
   updateEmail,
   updatePhoneNumber,
   addPhoneNumber,
@@ -12,6 +13,7 @@ import {
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
+import { UserUpdateProfileSchema } from '/imports/api/users/user-schema.js';
 import { UserRoles } from '/imports/api/constants.js';
 
 
@@ -30,11 +32,20 @@ Template.UserEdit.viewmodel({
   autorun() {
     const user = this.user();
     if (user) {
-      this.load(_.extend({}, user.profile, {
+      this.load({
         email: user.email(),
+        firstName: user.firstName(),
+        lastName: user.lastName(),
+        initials: user.initials(),
+        description: user.description(),
+        avatar: user.avatar(),
+        address: user.address(),
+        country: user.country(),
+        phoneNumbers: user.phoneNumbers(),
+        skype: user.skype(),
         isNotificationsEnabled: user.isNotificationsEnabled,
         notificationSound: user.notificationSound
-      }));
+      });
     }
   },
   user() {
@@ -52,6 +63,12 @@ Template.UserEdit.viewmodel({
       [prop]: val
     });
   },
+  unsetProfileProperty(prop) {
+    this.modal().callMethod(unsetProfileProperty, {
+      _id: this.userId(),
+      fieldName: prop
+    });
+  },
   updateEmail(email) {
     this.modal().callMethod(updateEmail, {
       _id: this.userId(),
@@ -64,7 +81,9 @@ Template.UserEdit.viewmodel({
       return;
     }
 
-    const uploader = new Slingshot.Upload('usersAvatars');
+    const uploader = new Slingshot.Upload('usersAvatars', {
+      userId: this.userId()
+    });
 
     this.modal().clearError();
     this.modal().isSaving(true);

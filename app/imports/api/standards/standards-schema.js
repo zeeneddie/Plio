@@ -1,11 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardStatuses } from '../constants.js';
-import { BaseEntitySchema, OrganizationIdSchema, NotifySchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 
 
-const optionalFields = new SimpleSchema([
-  NotifySchema,
+const optionalFields = new SimpleSchema(
   {
     description: {
       type: String,
@@ -45,10 +44,19 @@ const optionalFields = new SimpleSchema([
       type: Object,
       optional: true
     },
+    'source1.extension': {
+      type: String,
+      optional: true
+    },
     'source1.type': {
       type: String
     },
     'source1.url': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source1.htmlUrl': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
       optional: true
@@ -61,10 +69,19 @@ const optionalFields = new SimpleSchema([
       type: Object,
       optional: true
     },
+    'source2.extension': {
+      type: String,
+      optional: true
+    },
     'source2.type': {
       type: String
     },
     'source2.url': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source2.htmlUrl': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
       optional: true
@@ -87,9 +104,24 @@ const optionalFields = new SimpleSchema([
           return [this.userId];
         }
       }
+    },
+    notify: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      autoValue() {
+        if (this.isInsert) {
+          const owner = this.field('owner');
+          if (owner.isSet) {
+            return [owner.value];
+          } else {
+            this.unset();
+          }
+        }
+      }
     }
   }
-]);
+);
 
 const StandardsSchema = new SimpleSchema([
   optionalFields,

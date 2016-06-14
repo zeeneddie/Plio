@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
+
 export default {
 
   collection: Meteor.users,
@@ -23,6 +24,12 @@ export default {
 
     return this.collection.update({ _id }, {
       $set: updateDoc
+    });
+  },
+
+  unsetProfileProperty({ _id, fieldName }) {
+    return this.collection.update({ _id }, {
+      $unset: { [`profile.${fieldName}`]: '' }
     });
   },
 
