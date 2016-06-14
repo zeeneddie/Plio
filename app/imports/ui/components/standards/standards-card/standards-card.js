@@ -37,7 +37,7 @@ Template.StandardsCard.viewmodel({
 
       setTimeout(() => {
         $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto' });
-      }, 300);
+      }, 150);
     } else {
       $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
       setTimeout(() => {
