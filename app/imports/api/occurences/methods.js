@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import OccurencesService from './occurences-service.js';
 import { RequiredSchema } from './occurences-schema.js';
 import { Occurences } from './occurences.js';
-import { Problems } from '../problems/problems.js';
+import { NonConformities } from '../non-conformities/non-conformities.js';
 import { IdSchema } from '../schemas.js';
 
 export const insert = new ValidatedMethod({
@@ -17,7 +17,7 @@ export const insert = new ValidatedMethod({
       throw new Meteor.Error(403, 'Unauthorized user cannot create an occurence');
     }
 
-    if (!Problems.findOne({ _id: nonConformityId, type: 'non-conformity' })) {
+    if (!NonConformities.findOne({ _id: nonConformityId })) {
       throw new Meteor.Error(403, 'Non-conformity with that ID does not exist');
     }
 

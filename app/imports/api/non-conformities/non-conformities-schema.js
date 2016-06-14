@@ -71,8 +71,8 @@ const updateOfStandards = {
 const OptionalSchema = new SimpleSchema([
   NotifySchema,
   {
-    standards: {
-      type: [String],
+    standard: {
+      type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },

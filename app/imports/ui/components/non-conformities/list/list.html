@@ -22,6 +22,7 @@
               template="NCSectionItem"
               title=this.name
               magnitude=this.value
+              hideRTextOnExpand=true
               rText=(calculateTotalCost this.value)
               key="magnitude"
               value=this.value}}
@@ -35,6 +36,7 @@
               title=(getStatusName this)
               key="status"
               value=(getStatusInt this)
+              hideRTextOnExpand=true
               rText=(calculateTotalCost this)}}
         {{/each}}
       {{/if}}
@@ -46,7 +48,8 @@
               title=this.name
               closeAllOnCollapse=false
               key="departments"
-              value=this._id}}
+              value=this._id
+            hideRTextOnExpand=true}}
         {{/each}}
       {{/if}}
 

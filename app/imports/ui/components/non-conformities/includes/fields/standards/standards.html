@@ -1,18 +1,10 @@
 <template name="NCStandards">
-  {{#FormField label="Standard(s)"}}
-    {{#each standardsIds}}
-      {{> SelectItem
-          _id=this
-          selected=this
-          placeholder="Link to standard"
-          items=standards
-          excludedItems=standardsIds
-          variation="delete"
-          loading=loading
-          onUpdate=onUpdateCb
-          onRemove=onRemoveCb}}
-    {{/each}}
-    <div {{b "ref: forms"}}></div>
-    <button type="button" class="btn btn-link" {{b "click: addLinkedStandard"}}>Add standard</button>
+  {{#FormField label="Standard"}}
+    {{> SelectItem
+        _id=_id
+        selected=_id
+        placeholder="Link to standard"
+        items=standards
+        onUpdate=onUpdateCb}}
   {{/FormField}}
 </template>

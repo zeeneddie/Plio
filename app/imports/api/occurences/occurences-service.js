@@ -1,5 +1,5 @@
 import { Occurences } from './occurences.js';
-import { Problems } from '../problems/problems.js';
+import { NonConformities } from '../non-conformities/non-conformities.js';
 
 export default {
   collection: Occurences,
@@ -16,7 +16,7 @@ export default {
       }
     });
 
-    const NC = Problems.findOne({ _id: nonConformityId });
+    const NC = NonConformities.findOne({ _id: nonConformityId });
 
     const serialNumber = lastOccurence ? lastOccurence.serialNumber + 1 : 1;
 
