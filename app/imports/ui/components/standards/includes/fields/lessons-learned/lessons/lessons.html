@@ -8,7 +8,8 @@
     <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
       <div class="card-block">
         {{#FormField label="Title"}}
-          <input type="text" class="form-control" placeholder="Title" {{b "value: title"}}>
+          <input type="text" class="form-control" placeholder="Title"
+              {{b "value: title, focusout: updateTitle"}} />
           {{> ClearField field="title"}}
         {{/FormField}}
         {{#FormField label="Linked to"}}
@@ -16,21 +17,26 @@
         {{/FormField}}
 
         {{#FormField label="Created date"}}
-          {{> Datepicker placeholder="Created date" date=(getDate date)}}
+          {{> Datepicker placeholder="Created date" date=getDate onChange=onDateChangeCb}}
         {{/FormField}}
 
-        {{> ESOwner selectedOwnerId=owner label="Created by" showCurrentUser=true}}
+        {{> ESOwner
+            selectedOwnerId=owner
+            label="Created by"
+            showCurrentUser=true
+            onChange=onOwnerChangedCb
+            isEditable=true}}
       </div>
       {{#QuillEditor}}
         {{#if _id}}
-          <div {{b "html: notes"}}></div>
+          <div {{b "html: notes, focusout: updateNotes"}}></div>
         {{else}}
           <div></div>
         {{/if}}
       {{/QuillEditor}}
       <div class="card-block clearfix">
-        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: save"}}>Save</button>
-        <button type="button" class="btn btn-secondary pull-xs-right" {{b "click: delete"}}>Delete</button>
+        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: delete"}}>Delete</button>
+        <button type="button" class="btn btn-secondary pull-xs-right" {{b "click: save"}}>Close</button>
       </div>
     </div>
   </div>

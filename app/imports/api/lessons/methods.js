@@ -30,9 +30,22 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Lessons.update',
 
-  validate: new SimpleSchema([IdSchema, requiredSchema]).validator(),
+  validate(doc) {
+    const validationContext = new SimpleSchema([
+      IdSchema,
+      requiredSchema
+    ]).newContext();
 
-  run({_id, ...args}) {
+    for (let key in doc) {
+      if (!validationContext.validateOne(doc, key)) {
+        const errors = validationContext.invalidKeys();
+        const message = validationContext.keyErrorMessage(errors[0].name);
+        throw new ValidationError(errors, message);
+      }
+    }
+  },
+
+  run({ _id, ...args }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update a lesson');
     }

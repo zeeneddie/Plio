@@ -5,13 +5,15 @@ import { BaseEntitySchema, StandardIdSchema, OrganizationIdSchema } from '../sch
 
 export const requiredSchema = new SimpleSchema([StandardIdSchema, {
   title: {
-    type: String
+    type: String,
+    min: 1
   },
   date: {
     type: Date
   },
   notes: {
-    type: String
+    type: String,
+    min: 1
   },
   owner: {
     type: String,

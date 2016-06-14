@@ -41,7 +41,7 @@ Template.ESOwner.viewmodel({
       return;
     }
 
-    this.parent().update({ owner });
+    this.onChange ? this.onChange(this) : this.parent().update({ owner });
   },
   checkSelectedOwner() {
     if (!this.owner() && !!this.selectedOwnerId()) {
