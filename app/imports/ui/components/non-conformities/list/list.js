@@ -17,6 +17,8 @@ Template.NCList.viewmodel({
     if (!contains) {
       const nc = this._getNCByQuery({ ...query, isDeleted },  { sort: { serialNumber: 1 } });
 
+      console.log(nc);
+
       if (nc) {
         const { _id } = nc;
         Meteor.setTimeout(() => {
@@ -47,7 +49,7 @@ Template.NCList.viewmodel({
         return { status: { $in: this.statuses().map(s => this.getStatusInt(s)) } };
         break;
       case 'department':
-        return { departments: { $in: this.departments() } };
+        return { departments: { $in: this.departments().map(({ _id }) => _id) } };
         break;
       default:
         return {};
