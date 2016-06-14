@@ -11,8 +11,10 @@
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
-                <a class="btn btn-secondary toggle-expand-btn" {{b "if: hasDocxAttachment, click: toggleScreenMode"}}>
-                </a>
+                {{#if hasDocxAttachment}}
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                  </a>
+                {{/if}}
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
