@@ -10,6 +10,9 @@ Template.ESLessons.viewmodel({
   title: '',
   date: '',
   owner: '',
+  isSaving: false,
+  isWaiting: false,
+  closeAfterCall: false,
   onRendered() {
     if (!this._id) {
      this.toggleCollapse();
@@ -38,13 +41,26 @@ Template.ESLessons.viewmodel({
     const parent = ViewModel.findOne('ESLessonsLearned');
 
     let updateFn = () => {
+      this.isWaiting(false);
+      this.isSaving(true);
+
       parent.update({
         _id,
         [propName]: propVal
+      }, (err) => {
+        Meteor.setTimeout(() => {
+          this.isSaving(false);
+
+          if (!err && this.closeAfterCall()) {
+            this.toggleCollapse();
+          }
+          this.closeAfterCall(false);
+        }, 500);
       });
     };
 
     if (withFocusCheck) {
+      this.isWaiting(true);
       this.callWithFocusCheck(e, updateFn);
     } else {
       updateFn();
@@ -71,6 +87,13 @@ Template.ESLessons.viewmodel({
   },
   updateNotes(e) {
     this.update(e, 'notes', true);
+  },
+  close() {
+    if (this.isWaiting.value || this.isSaving.value) {
+      this.closeAfterCall(true);
+    } else {
+      this.toggleCollapse();
+    }
   },
   save() {
     const { title, date, owner, notes } = this.getData();
