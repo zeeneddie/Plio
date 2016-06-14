@@ -16,6 +16,9 @@ Template.NCCard.viewmodel({
   NCs() {
     return this._getNCsByQuery({});
   },
+  hasNCs() {
+    return this.NCs().count() > 0;
+  },
   getStatus(status) {
     return status || 1;
   },

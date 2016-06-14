@@ -7,6 +7,9 @@ Template.NCRCABy.viewmodel({
   selectFirstIfNoSelected: false,
   placeholder: '',
   label: '',
+  getBy() {
+    return this.by() || '';
+  },
   onUpdateCb() {
     return this.update.bind(this);
   },
