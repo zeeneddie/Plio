@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 Template.NCRCADate.viewmodel({
   key: 'analysis',
   date: '',
+  startDate: new Date(),
   defaultDate: false,
   placeholder: 'Target date',
   label: 'Target date',

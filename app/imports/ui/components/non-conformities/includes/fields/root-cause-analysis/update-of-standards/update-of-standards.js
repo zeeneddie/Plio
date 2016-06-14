@@ -5,6 +5,8 @@ Template.NCUpdateOfStandards.viewmodel({
     this.load(this.updateOfStandards());
   },
   updateOfStandards: '',
+  executor: '',
+  defaultTargetDate: '',
   targetDate: '',
   status: '',
   completedAt: '',

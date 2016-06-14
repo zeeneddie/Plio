@@ -1,6 +1,12 @@
 <template name="NCRootCauseAnalysis">
-  {{> NCAnalysis analysis=analysis}}
+  {{> NCAnalysis
+      analysis=analysis
+      defaultTargetDate=defaultTargetDate
+      isAnalysisCompleted=isAnalysisCompleted}}
   {{#if isAnalysisCompleted}}
-    {{> NCUpdateOfStandards updateOfStandards=updateOfStandards}}
+    {{> NCUpdateOfStandards
+        updateOfStandards=updateOfStandards
+        executor=analysis.executor
+        defaultTargetDate=defaultTargetDate}}
   {{/if}}
 </template>

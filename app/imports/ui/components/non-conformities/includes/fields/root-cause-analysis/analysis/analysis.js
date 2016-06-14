@@ -6,6 +6,7 @@ Template.NCAnalysis.viewmodel({
   },
   analysis: '',
   executor: '',
+  defaultTargetDate: '',
   targetDate: '',
   status: '',
   completedAt: '',
