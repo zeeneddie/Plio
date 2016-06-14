@@ -8,7 +8,6 @@ Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus', 'collapse'],
   autorun() {
     this.templateInstance.subscribe('improvementPlan', this.NCId());
-    this.templateInstance.subscribe('departments', this.organizationId());
   },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });

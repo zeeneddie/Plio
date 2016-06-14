@@ -55,7 +55,7 @@ export const update = new ValidatedMethod({
     }
 
     const isAnalysisCompleted = () => NC.analysis.status || NC.analysis.status.toString() === _.invert(AnalysisStatuses)['Completed'];
-    
+
     if (has(args, 'analysis.status', 'updateOfStandards.status')) {
       if (!NC.analysis.executor && NC.analysis.executor !== this.userId) {
         throw new Meteor.Error(

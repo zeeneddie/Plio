@@ -18,6 +18,7 @@ Template.NCLayout.viewmodel({
         this.templateInstance.subscribe('non-conformities', _id),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
+        this.templateInstance.subscribe('departments', _id),
         this.templateInstance.subscribe('occurencesByNCIds', NCIds)
       ]);
     },

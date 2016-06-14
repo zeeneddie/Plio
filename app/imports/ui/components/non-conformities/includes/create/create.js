@@ -30,12 +30,12 @@ Template.CreateNC.viewmodel({
 
     this.modal().callMethod(insert, args, (err, _id) => {
       if (err) {
-        swal('Oops... Something went wrong!', err.reason, 'error');
+        return;
       } else {
         this.modal().close();
 
         Meteor.setTimeout(() => {
-          this.isActiveNCFilter('deleted') ? this.goToNC(_id, false) : this.goToNC(_id);
+          this.goToNC(_id, false);
 
           this.expandCollapsed(_id);
 
@@ -44,7 +44,7 @@ Template.CreateNC.viewmodel({
             title: 'Non-conformity',
             template: 'EditNC'
           });
-        }, 400);
+          }, 400);
       }
     });
   },
