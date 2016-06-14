@@ -47,9 +47,10 @@
               template="NCSectionItem"
               title=this.name
               closeAllOnCollapse=false
+              hideRTextOnExpand=true
+              rText=(calculateTotalCost this)
               key="departments"
-              value=this._id
-            hideRTextOnExpand=true}}
+              value=this._id}}
         {{/each}}
       {{/if}}
 

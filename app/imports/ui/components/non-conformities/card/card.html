@@ -45,19 +45,13 @@
               <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
             </div>
 
-            <div class="list-group-item" {{b "if: this.standards"}}>
-              {{#if Template.subscriptionsReady}}
-                <p class="list-group-item-text">Standards</p>
-                {{#each this.standards}}
-                  {{#with linkedStandard this}}
-                    <h4 class="list-group-item-heading">
-                      <a {{b "text: this.title, attr: { href: this.href }"}}></a>
-                    </h4>
-                  {{/with}}
-                {{/each}}
-              {{else}}
-                {{> Preloader size=2}}
-              {{/if}}
+            <div class="list-group-item" {{b "if: this.standard"}}>
+              <p class="list-group-item-text">Standard</p>
+              {{#with linkedStandard this.standard}}
+                <h4 class="list-group-item-heading">
+                  <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+                </h4>
+              {{/with}}
             </div>
 
 
@@ -128,6 +122,10 @@
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
           {{> CardChangelog document=this}}
+        {{else}}
+          <div class="card-block card-heading">
+            <h5>There is no non-conformities for that filter</h5>
+          </div>
         {{/with}}
       </div>
     </div>

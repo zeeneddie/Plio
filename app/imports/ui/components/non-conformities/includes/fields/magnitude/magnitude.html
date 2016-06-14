@@ -3,13 +3,12 @@
     <div class="form-group-flex">
       <div class="form-group-flex-flex">
         <select class="form-control c-select"
-          {{b "change: update, options: _magnitude, optionsValue: value, optionsText: name, value: magnitude"}}>
+          {{b "change: update, options: _magnitude, optionsValue: value, optionsText: name, value: magnitude, throttle: 200"}}>
         </select>
       </div>
 
       <button type="button" class="btn btn-link btn-collapse" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-        <span {{b "if: collapsed"}}>Guidelines</span>
-        <span {{b "if: !collapsed"}}>Hide guidelines</span>
+        <span {{b "text: guidelinesText"}}></span>
       </button>
     </div>
   {{/FormField}}

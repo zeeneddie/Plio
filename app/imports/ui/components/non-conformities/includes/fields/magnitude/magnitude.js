@@ -6,6 +6,9 @@ Template.NCMagnitude.viewmodel({
     this.load(this.organization().ncGuidelines);
   },
   magnitude: 'major',
+  guidelinesText() {
+    return this.collapsed() ? 'Guidelines' : 'Hide guidelines';
+  },
   update() {
     const magnitude = this.magnitude();
 
