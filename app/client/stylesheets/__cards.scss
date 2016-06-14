@@ -106,8 +106,8 @@
 
   .content-cards-inner {
     position: relative;
-    transition: all .15s linear;
     z-index: 101;
+    transition-property: left, right, top, bottom;
 
     &::before {
       content: '';
@@ -117,7 +117,9 @@
       bottom: 0;
       left: 0;
       background-color: rgba(0, 0, 0, 0);
-      transition: background-color .15s linear;
+      transition: all .15s ease;
+      transition-property: visibility, background-color;
+      visibility: hidden;
       z-index: -1;
     }
     
@@ -129,15 +131,9 @@
       bottom: 0 !important;
       padding-left: 10%;
       padding-right: 10%;
-      
 
       &::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
+        visibility: visible;
         background: rgba(0, 0, 0, 0.5);
       }
       .toggle-expand-btn::before {
@@ -198,8 +194,6 @@
           margin: 0 0 3px;
           font-weight: normal;
           font-family: $font-semilight;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
         
         &-text {
