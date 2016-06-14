@@ -20,6 +20,7 @@ export const convertDocxToHtml = new ValidatedMethod({
         }
     }).validator(),
     run({ url, options }) {
+        this.unblock();
         const fut = new Future();
 
         HTTP.call('GET', url, {
