@@ -293,6 +293,14 @@ ViewModel.mixin({
     currentStandard() {
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
+    },
+    _getStandardsByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Standards.find(query, options);
+    },
+    _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Standards.findOne(query, options);
     }
   },
   date: {

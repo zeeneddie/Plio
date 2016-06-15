@@ -16,12 +16,23 @@
       {{/if}}
     </form>
     <div class="list-group list-group-accordion" id="standardsAccordion">
+
       {{#if isActiveStandardFilter 'section'}}
-        {{> StandardsListWrapper type="standardSection" template="StandardsSectionItem" items=standardsBookSections standards=standards}}
+        {{#each sections}}
+          {{> ListItem
+              template="StandardSectionItem"
+              title=this.title
+              _query=(_getQuery this)}}
+        {{/each}}
       {{/if}}
 
       {{#if isActiveStandardFilter 'type'}}
-        {{> StandardsListWrapper type="standardType" template="StandardsTypeItem" items=standardsTypes standards=standards}}
+        {{#each types}}
+          {{> ListItem
+              template="StandardTypeItem"
+              title=this.name
+              _id=this._id}}
+        {{/each}}
       {{/if}}
 
       {{#if isActiveStandardFilter 'deleted'}}

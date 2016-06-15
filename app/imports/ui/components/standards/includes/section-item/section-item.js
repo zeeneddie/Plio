@@ -1,32 +1,14 @@
 import { Template } from 'meteor/templating';
 
-import { Standards } from '/imports/api/standards/standards.js';
-
-Template.StandardsSectionItem.viewmodel({
+Template.StandardSectionItem.viewmodel({
   share: 'search',
-  mixin: ['search', 'standard'],
+  mixin: ['search', 'standard', 'organization'],
+  _query: {},
   standards() {
-    const searchQuery = this.searchObject('searchText', [
-      { name: 'title' },
-      { name: 'description' },
-      { name: 'status' }
-    ]);
-
-    const query = {
-      $and: [
-        { sectionId: this._id && this._id() },
-        searchQuery
-      ]
-    };
-
-    if (this.isActiveStandardFilter('type')) {
-      query.$and.push({
-        typeId: this.typeId && this.typeId()
-      });
-    }
-
-    const options = { sort: { title: 1 } };
-    return Standards.find(query, options);
+    return this._getStandardsByQuery({
+      ...this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]),
+      ...this._query()
+    });
   },
   isNestingLevel({ nestingLevel }, level) {
     return nestingLevel === level;
