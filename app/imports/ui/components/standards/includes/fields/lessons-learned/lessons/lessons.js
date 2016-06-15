@@ -6,7 +6,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { Standards } from '/imports/api/standards/standards.js';
 
 Template.ESLessons.viewmodel({
-  mixin: ['collapse', 'date', 'callWithFocusCheck', { standard: 'standard' }],
+  mixin: ['collapse', 'subcard', 'date', 'callWithFocusCheck', { standard: 'standard' }],
   title: '',
   date: '',
   owner: '',
@@ -49,22 +49,10 @@ Template.ESLessons.viewmodel({
     const propVal = this.getData()[propName];
     const parent = ViewModel.findOne('ESLessonsLearned');
 
-    let updateFn = () => {
-      this.isWaiting(false);
-      this.isSaving(true);
-
-      parent.update({
+    const updateFn = () => {
+      this.callUpdate(parent.update.bind(parent), {
         _id,
         [propName]: propVal
-      }, (err) => {
-        Meteor.setTimeout(() => {
-          this.isSaving(false);
-
-          if (!err && this.closeAfterCall()) {
-            this.toggleCollapse();
-          }
-          this.closeAfterCall(false);
-        }, 500);
       });
     };
 
@@ -96,19 +84,6 @@ Template.ESLessons.viewmodel({
   },
   updateNotes(e) {
     this.update(e, 'notes', true);
-  },
-  close() {
-    const _id = this._id && this._id();
-
-    if (_id) {
-      if (this.isWaiting.value || this.isSaving.value) {
-        this.closeAfterCall(true);
-      } else {
-        this.toggleCollapse();
-      }
-    } else {
-      this.save();
-    }
   },
   save() {
     const { title, date, owner, notes } = this.getData();

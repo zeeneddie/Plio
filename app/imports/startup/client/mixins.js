@@ -382,5 +382,39 @@ ViewModel.mixin({
         this.callWithFocusCheck(e, updateFn);
       }
     }
+  },
+  subcard: {
+    close() {
+      const _id = this._id && this._id();
+
+      if (_id) {
+        if (this.isWaiting.value || this.isSaving.value) {
+          this.closeAfterCall(true);
+        } else {
+          this.toggleCollapse();
+        }
+      } else {
+        this.save();
+      }
+    },
+    callUpdate(updateFn, args, cb) {
+      this.isWaiting(false);
+      this.isSaving(true);
+
+      updateFn(args, (err, res) => {
+        Meteor.setTimeout(() => {
+          this.isSaving(false);
+
+          if (!err && this.closeAfterCall()) {
+            this.toggleCollapse();
+          }
+          this.closeAfterCall(false);
+        }, 500);
+
+        if (_.isFunction(cb)) {
+          return cb(err, res);
+        }
+      });
+    }
   }
 });
