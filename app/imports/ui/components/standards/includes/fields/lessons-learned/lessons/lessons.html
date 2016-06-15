@@ -6,6 +6,13 @@
       <span {{b "text: title"}}></span>
     </div>
     <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+      <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>
+        <div class="card-block">
+          <i class="fa fa-exclamation-circle fa-3x" aria-hidden="true"></i>
+          <span {{b "text: error"}}>
+          </span>
+        </div>
+      </div>
       <div class="card-block">
         {{#FormField label="Title"}}
           <input type="text" class="form-control" placeholder="Title"

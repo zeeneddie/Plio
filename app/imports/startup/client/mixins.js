@@ -388,17 +388,22 @@ ViewModel.mixin({
     isSaving: false,
     isWaiting: false,
     closeAfterCall: false,
+    error: '',
     callSave(saveFn, args, cb) {
       this.isWaiting(false);
       this.isSaving(true);
+      this.clearError();
 
       saveFn(args, (err, res) => {
         Meteor.setTimeout(() => {
           this.isSaving(false);
 
-          if (!err && this.closeAfterCall()) {
+          if (err) {
+            this.setError(err.reason);
+          } else if (this.closeAfterCall()) {
             this.toggleCollapse();
           }
+
           this.closeAfterCall(false);
         }, 500);
 
@@ -419,6 +424,14 @@ ViewModel.mixin({
       } else {
         this.save && this.save();
       }
+    },
+    setError(errMsg) {
+      this.error(errMsg);
+      this.errorSection.collapse('show');
+    },
+    clearError() {
+      this.error('');
+      this.errorSection.collapse('hide');
     }
   }
 });
