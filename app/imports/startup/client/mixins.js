@@ -384,24 +384,15 @@ ViewModel.mixin({
     }
   },
   subcard: {
-    close() {
-      const _id = this._id && this._id();
-
-      if (_id) {
-        if (this.isWaiting.value || this.isSaving.value) {
-          this.closeAfterCall(true);
-        } else {
-          this.toggleCollapse();
-        }
-      } else {
-        this.save();
-      }
-    },
-    callUpdate(updateFn, args, cb) {
+    isSubcard: true,
+    isSaving: false,
+    isWaiting: false,
+    closeAfterCall: false,
+    callSave(saveFn, args, cb) {
       this.isWaiting(false);
       this.isSaving(true);
 
-      updateFn(args, (err, res) => {
+      saveFn(args, (err, res) => {
         Meteor.setTimeout(() => {
           this.isSaving(false);
 
@@ -415,6 +406,19 @@ ViewModel.mixin({
           return cb(err, res);
         }
       });
+    },
+    close() {
+      const _id = this._id && this._id();
+
+      if (_id) {
+        if (this.isWaiting.value || this.isSaving.value) {
+          this.closeAfterCall(true);
+        } else {
+          this.toggleCollapse();
+        }
+      } else {
+        this.save && this.save();
+      }
     }
   }
 });

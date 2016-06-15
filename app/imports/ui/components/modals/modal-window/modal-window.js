@@ -53,6 +53,10 @@ Template.ModalWindow.viewmodel({
         return;
       }
 
+      if (err) {
+        this.closeAfterCall(false);
+      }
+
       if (this.timeout) {
         Meteor.clearTimeout(this.timeout);
       }
@@ -85,8 +89,18 @@ Template.ModalWindow.viewmodel({
   },
 
   closeModal() {
-    if (this.isWaiting.value || this.isSaving.value) {
+    const subcardsToSave = ViewModel.find((vm) => {
+      const _id = vm._id && vm._id();
+      const isSubcard = vm.isSubcard && vm.isSubcard()
+      return !_id && isSubcard;
+    });
+
+    if (this.isWaiting.value || this.isSaving.value || subcardsToSave.length) {
       this.closeAfterCall(true);
+
+      _.each(subcardsToSave, (subcard) => {
+        subcard.save();
+      });
     } else {
       this.close();
     }

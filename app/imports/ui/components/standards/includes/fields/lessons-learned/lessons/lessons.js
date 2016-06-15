@@ -10,9 +10,6 @@ Template.ESLessons.viewmodel({
   title: '',
   date: '',
   owner: '',
-  isSaving: false,
-  isWaiting: false,
-  closeAfterCall: false,
   onCreated() {
     if (!this.owner()) {
       this.owner(Meteor.userId());
@@ -50,7 +47,7 @@ Template.ESLessons.viewmodel({
     const parent = ViewModel.findOne('ESLessonsLearned');
 
     const updateFn = () => {
-      this.callUpdate(parent.update.bind(parent), {
+      this.callSave(parent.update.bind(parent), {
         _id,
         [propName]: propVal
       });
@@ -89,11 +86,13 @@ Template.ESLessons.viewmodel({
     const { title, date, owner, notes } = this.getData();
     const standardId = this.standard.standardId();
 
-    ViewModel.findOne('ESLessonsLearned').insert({
+    const parent = ViewModel.findOne('ESLessonsLearned');
+
+    this.callSave(parent.insert.bind(parent), {
       title, date, owner, standardId, notes
-    }, (err, _id) => {
+    }, (err) => {
       if (!err) {
-        this.destroy();
+        Meteor.setTimeout(() => this.destroy(), 500);
       }
     });
   },
