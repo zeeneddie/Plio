@@ -132,6 +132,10 @@ const UserSchema = new SimpleSchema({
     type: Date,
     optional: true
   },
+  selectedOrganizationSerialNumber: {
+    type: Number,
+    optional: true
+  }
 });
 
 export { UserSchema, UserProfileSchema, PhoneNumberSchema };
