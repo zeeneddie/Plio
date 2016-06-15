@@ -15,9 +15,7 @@ Template.NCList.viewmodel({
 
     const contains = this._getNCByQuery({ ...query, isDeleted, _id: this.NCId() });
     if (!contains) {
-      const nc = this._getNCByQuery({ ...query, isDeleted },  { sort: { serialNumber: 1 } });
-
-      console.log(nc);
+      const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter(), isDeleted });
 
       if (nc) {
         const { _id } = nc;
@@ -46,10 +44,26 @@ Template.NCList.viewmodel({
         return { magnitude: { $in: this.magnitude().map(({ value }) => value) } };
         break;
       case 'status':
-        return { status: { $in: this.statuses().map(s => this.getStatusInt(s)) } };
+        return { status: { $in: this.statuses() } };
         break;
       case 'department':
         return { departments: { $in: this.departments().map(({ _id }) => _id) } };
+        break;
+      default:
+        return {};
+        break;
+    };
+  },
+  _getFirstNCQueryForFilter() {
+    switch(this.activeNCFilter()) {
+      case 'magnitude':
+        return { magnitude: this.magnitude().length > 0 && this.magnitude()[0].value };
+        break;
+      case 'status':
+        return { status: this.statuses().length > 0 && this.statuses()[0] };
+        break;
+      case 'department':
+        return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
       default:
         return {};
@@ -62,13 +76,9 @@ Template.NCList.viewmodel({
     });
   },
   statuses() {
-    return _.keys(NCStatuses).filter((status) => {
-      status = this.getStatusInt(status);
-      return this._getNCsByQuery({ status }).count() > 0;
-    });
-  },
-  getStatusInt(status) {
-    return parseInt(status, 10);
+    return _.keys(NCStatuses)
+            .map(status => parseInt(status, 10))
+            .filter(status => this._getNCsByQuery({ status }).count() > 0);
   },
   departments() {
     const query = { organizationId: this.organizationId() };
@@ -80,7 +90,7 @@ Template.NCList.viewmodel({
     const ncs = this._getNCsByQuery({
       $or: [
         { magnitude: value },
-        { status: this.getStatusInt(value) },
+        { status: value },
         { departments: value }
       ],
       cost: { $exists: true }
