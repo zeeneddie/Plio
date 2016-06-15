@@ -106,9 +106,11 @@ Template.ESSources.viewmodel({
       Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
         if (error) {
           // HTTP errors
+          vmInstance.renderDocxError(`Unable to get .docx file ${error.message}`);
         } else {
           if (result.error) {
             // Mammoth errors
+            vmInstance.renderDocxError(`Error rendering document ${result.error.message}`);
           } else {
             // Upload file to S3
             const htmlFileName = vmInstance.sourceName() + '.html';
@@ -119,6 +121,13 @@ Template.ESSources.viewmodel({
         }
       });
     }
+  },
+  renderDocxError(error) {
+    this.modal().setError(error);
+    Meteor.setTimeout(() => {
+      this.modal().clearError();
+      this.docxRenderInProgress('');
+    }, 5000);
   },
   insertFileFn() {
     return this.insertFile.bind(this);
