@@ -1,0 +1,8 @@
+<template name="NCOccurencesSubCardContent">
+  {{#FormField label="Date"}}
+    {{> Datepicker placeholder="Date" date=date onChange=onChangeCb}}
+  {{/FormField}}
+  {{#FormField label="Description"}}
+    <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description"}}></textarea>
+  {{/FormField}}
+</template>

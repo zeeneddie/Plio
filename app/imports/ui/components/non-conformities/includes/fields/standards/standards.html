@@ -1,0 +1,11 @@
+<template name="NCStandards">
+  {{#FormField label="Standard"}}
+    {{> SelectItem
+        _id=_id
+        selectFirstIfNoSelected=false
+        selected=_id
+        placeholder="Link to standard"
+        items=standards
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

@@ -1,0 +1,22 @@
+<template name="NCHeader">
+  <div class="navbar">
+    <span class="navbar-title dropdown">
+      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Non-conformities by - ' + activeNCFilter"}}>
+      </a>
+      <div class="dropdown-menu">
+        {{#each filters}}
+          <a class="dropdown-item pointer"
+            {{b "class: { active: isActiveNCFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
+          </a>
+        {{/each}}
+      </div>
+    </span>
+    <ul class="nav navbar-nav pull-xs-left">
+      <li class="nav-item">
+        <a class="nav-link pointer" {{b "click: navigate"}}>
+        	<i class="fa fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>

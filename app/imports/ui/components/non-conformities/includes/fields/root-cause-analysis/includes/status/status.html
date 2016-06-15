@@ -1,0 +1,15 @@
+<template name="NCRCAStatus">
+  {{#FormField label=label}}
+    {{#if isSelectedExecutor}}
+      {{> SelectItemRadio
+          items=statuses
+          value=getStatusValue
+          onSelect=onUpdateCb}}
+    {{else}}
+      <span class="label text-default">
+        <i class="fa fa-circle margin-right" {{b "class: getClassByStatus"}}></i>
+        <span {{b "text: getStatus"}}></span>
+      </span>
+    {{/if}}
+  {{/FormField}}
+</template>

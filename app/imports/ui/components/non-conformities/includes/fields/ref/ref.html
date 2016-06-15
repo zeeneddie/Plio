@@ -1,0 +1,12 @@
+<template name="NCRef">
+  {{#FormField label="Help desk ref"}}
+    <div class="row">
+      <div class="col-sm-4">
+        <input type="text" class="form-control margin-right" placeholder="ID" {{b "value: text, focusout: update"}}>
+      </div>
+      <div class="col-sm-8">
+        <input type="text" class="form-control" placeholder="URL" {{b "value: url, focusout: update"}}>
+      </div>
+    </div>
+  {{/FormField}}
+</template>

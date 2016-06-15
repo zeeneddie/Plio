@@ -1,0 +1,24 @@
+<template name="Subcards_LessonsLearned_Edit">
+  {{#SubCardEditWrapper _lText="Lessons learned" _rText=lessons.count}}
+    <div {{b "ref: forms"}}>
+      {{#each lessons}}
+        {{> SubCardEdit
+            _id=this._id
+            title=this.title
+            date=this.date
+            owner=this.owner
+            notes=this.notes
+            serialNumber=this.serialNumber
+            linkedTo=linkedTo
+            linkedToId=linkedToId
+            _lText=(renderText this)
+            content="Subcards_LessonLearned"
+            onSave=onSaveCb
+            onDelete=onRemoveCb}}
+      {{/each}}
+    </div>
+    <div class="text-xs-center">
+      <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
+    </div>
+  {{/SubCardEditWrapper}}
+</template>

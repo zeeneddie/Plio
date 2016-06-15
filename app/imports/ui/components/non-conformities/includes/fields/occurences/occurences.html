@@ -1,0 +1,21 @@
+<template name="NCOccurences">
+  {{#SubCardEditWrapper _lText="Occurences" _rText=occurences.count}}
+    <div {{b "ref: forms"}}>
+      {{#each occurences}}
+        {{> SubCardEdit
+            _id=this._id
+            date=this.date
+            description=this.description
+            sequentialId=sequentialId
+            _lText=(renderText this)
+            _rText=(renderDate this.date)
+            content="NCOccurencesSubCardContent"
+            onSave=onSaveCb
+            onDelete=onRemoveCb}}
+      {{/each}}
+    </div>
+    <div class="text-xs-center">
+      <button type="button" class="btn btn-link" {{b "click: addOccurence"}}>Add an occurence</button>
+    </div>
+  {{/SubCardEditWrapper}}
+</template>

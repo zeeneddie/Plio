@@ -11,7 +11,7 @@ Template.StandardsList.viewmodel({
     this.searchText('');
   },
   onRendered() {
-    this.expandSelectedStandard();
+    this.expandCollapsed(this.standardId());
   },
   autorun() {
     this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
@@ -33,7 +33,7 @@ Template.StandardsList.viewmodel({
 
     const standardsQuery = {
       $and: [
-        { sectionId: { $in: sectionIds }, organizationId: this.organizationId() },
+        { sectionId: { $in: sectionIds }, organizationId: this.organizationId(), isDeleted: { $in: [null, false] } },
         standardsSearchQuery
       ]
     };
@@ -103,21 +103,6 @@ Template.StandardsList.viewmodel({
 
     return isTypesFirst ? types.concat(sections) : sections.concat(types);
   },
-  onKeyUp: _.debounce(function(e) {
-    const value = e.target.value;
-
-    if (this.searchText() === value) return;
-
-    this.searchText(value);
-
-    if (this.isActiveStandardFilter('deleted')) return;
-
-    if (!!value) {
-      this.expandAllFound();
-    } else {
-      this.expandSelected();
-    }
-  }, 500),
   expandAllFound() {
     const ids = this.standards().fetch().map(standard => standard._id);
 
@@ -153,7 +138,7 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelectedStandard() {
-    this.expandCollapsedStandard(this.standardId(), () => {
+    this.expandCollapsed(this.standardId(), () => {
       this.onAfterExpand();
     });
   },
@@ -168,7 +153,7 @@ Template.StandardsList.viewmodel({
 
       Meteor.setTimeout(() => {
         this.goToStandard(_id);
-        this.expandCollapsedStandard(_id);
+        this.expandCollapsed(_id);
       }, 0);
     }
   },
