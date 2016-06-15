@@ -7,16 +7,16 @@ Slingshot.fileRestrictions('usersAvatars', {
 });
 
 Slingshot.fileRestrictions('standardsFiles', {
-  allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
+  allowedFileTypes: null,
   maxSize: 20 * 1024 * 1024 // 20 MB
 });
 
 Slingshot.fileRestrictions('htmlAttachmentPreview', {
-  allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
+  allowedFileTypes: 'text/html',
   maxSize: 20 * 1024 * 1024 // 20 MB
 });
 
 Slingshot.fileRestrictions('improvementPlansFiles', {
-  allowedFileTypes: /[a-z]+\/[a-z0-9\-]+/i,
+  allowedFileTypes: null,
   maxSize: 20 * 1024 * 1024 // 20 MB
 });
