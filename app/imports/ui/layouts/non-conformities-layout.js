@@ -10,7 +10,6 @@ Template.NCLayout.viewmodel({
       const org = this.organization();
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
-      const NCIds = this._getNCsByQuery({}).fetch().map(({ _id }) => _id);
 
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
@@ -18,8 +17,7 @@ Template.NCLayout.viewmodel({
         this.templateInstance.subscribe('non-conformities', _id),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('occurencesByNCIds', NCIds)
+        this.templateInstance.subscribe('departments', _id)
       ]);
     },
     function() {
