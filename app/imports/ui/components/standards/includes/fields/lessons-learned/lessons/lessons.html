@@ -17,13 +17,12 @@
         {{/FormField}}
 
         {{#FormField label="Created date"}}
-          {{> Datepicker placeholder="Created date" date=getDate onChange=onDateChangeCb}}
+          {{> Datepicker placeholder="Created date" date=date onChange=onDateChangeCb}}
         {{/FormField}}
 
         {{> ESOwner
             selectedOwnerId=owner
             label="Created by"
-            showCurrentUser=true
             onChange=onOwnerChangedCb
             isEditable=true}}
       </div>

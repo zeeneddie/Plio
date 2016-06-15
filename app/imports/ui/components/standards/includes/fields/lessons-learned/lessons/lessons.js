@@ -13,9 +13,18 @@ Template.ESLessons.viewmodel({
   isSaving: false,
   isWaiting: false,
   closeAfterCall: false,
+  onCreated() {
+    if (!this.owner()) {
+      this.owner(Meteor.userId());
+    }
+
+    if (!this.date()) {
+      this.date(new Date());
+    }
+  },
   onRendered() {
     if (!this._id) {
-     this.toggleCollapse();
+      this.toggleCollapse();
     }
   },
   events: {
@@ -89,34 +98,29 @@ Template.ESLessons.viewmodel({
     this.update(e, 'notes', true);
   },
   close() {
-    if (this.isWaiting.value || this.isSaving.value) {
-      this.closeAfterCall(true);
+    const _id = this._id && this._id();
+
+    if (_id) {
+      if (this.isWaiting.value || this.isSaving.value) {
+        this.closeAfterCall(true);
+      } else {
+        this.toggleCollapse();
+      }
     } else {
-      this.toggleCollapse();
+      this.save();
     }
   },
   save() {
     const { title, date, owner, notes } = this.getData();
-    const _id = this._id && this._id();
     const standardId = this.standard.standardId();
 
-    if (_id) {
-      ViewModel.findOne('ESLessonsLearned').update({
-        _id, title, date, owner, standardId, notes
-      }, () => this.toggleCollapse());
-    } else {
-      ViewModel.findOne('ESLessonsLearned').insert({
-        title, date, owner, standardId, notes
-      }, (err, _id) => {
-        if (!err) {
-          this.destroy();
-          const sectionToCollapse = ViewModel.findOne(
-            'ESLessons', vm => vm._id && vm._id() === _id
-          );
-          !!sectionToCollapse && sectionToCollapse.toggleCollapse();
-        }
-      });
-    }
+    ViewModel.findOne('ESLessonsLearned').insert({
+      title, date, owner, standardId, notes
+    }, (err, _id) => {
+      if (!err) {
+        this.destroy();
+      }
+    });
   },
   delete() {
     const _id = this._id && this._id();
@@ -145,9 +149,6 @@ Template.ESLessons.viewmodel({
     Blaze.remove(this.templateInstance.view);
 
     if (cb) cb();
-  },
-  getDate() {
-    return this.date() && this._id ? this.date() : '';
   },
   getData() {
     return {
