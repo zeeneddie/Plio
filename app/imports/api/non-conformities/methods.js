@@ -50,7 +50,7 @@ export const update = new ValidatedMethod({
 
     if (!NC) {
       throw new Meteor.Error(
-        403, 'Non-conformity with the given id does not exists'
+        400, 'Non-conformity with the given id does not exists'
       );
     }
 
@@ -98,13 +98,13 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (!NonConformities.findOne({ _id })) {
       throw new Meteor.Error(
-        403, 'Non-conformity with the given id does not exists'
+        400, 'Non-conformity with the given id does not exists'
       );
     }
 
     if (!!NonConformities.findOne({ _id, viewedBy: this.userId })) {
       throw new Meteor.Error(
-        403, 'You have been already added to this list'
+        400, 'You have been already added to this list'
       );
     }
 
