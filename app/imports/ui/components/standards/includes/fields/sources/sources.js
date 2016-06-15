@@ -98,7 +98,7 @@ Template.ESSources.viewmodel({
   renderDocx(url) {
     check(url, String);
 
-    const isDocx = url.split('.').pop().toLowerCase() === 'docx';
+    const isDocx = this.sourceExtension() === 'docx';
     const vmInstance = this;
 
     if (isDocx) {
