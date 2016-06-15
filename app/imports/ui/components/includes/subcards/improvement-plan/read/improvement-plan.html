@@ -42,12 +42,11 @@
         <div class="list-group-item">
           <p class="list-group-item-text">Means statement</p>
           {{#each this}}
-            <h4 class="list-group-item-heading">
-              <i class="fa fa-paperclip margin-right">
+            <a class="btn btn-secondary btn-inline" {{b "href: this.url"}}>
+              <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
               </i>
-              <a {{b "href: this.url, text: this.name"}}>
-              </a>
-            </h4>
+              <span>{{this.name}}</span>
+            </a>
           {{/each}}
         </div>
       {{/with}}
