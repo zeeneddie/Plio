@@ -1,0 +1,9 @@
+<template name="IPTargetDate">
+  {{#FormField label="Target date for desired outcome" sm=7}}
+    {{> Datepicker
+        placeholder=getTodayDate
+        date=targetDate
+        onChange=onUpdateCb
+        defaultDate=false}}
+  {{/FormField}}
+</template>

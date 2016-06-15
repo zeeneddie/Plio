@@ -164,6 +164,26 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/nonconformities', {
+  name: 'nonconformities',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NCLayout', {
+      content: 'NCPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/nonconformities/:nonconformityId', {
+  name: 'nonconformity',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NCLayout', {
+      content: 'NCPage'
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],

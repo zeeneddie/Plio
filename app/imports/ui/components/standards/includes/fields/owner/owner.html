@@ -1,12 +1,8 @@
 <template name="ESOwner">
-  {{#FormField label=label sm=sm}}
-    <div class="dropdown">
-      <input type="text" class="form-control" placeholder="Owner" data-toggle="dropdown" {{b "value: owner, focusout: checkSelectedOwner, throttle: 300"}} />
-      <div class="dropdown-menu dropdown-menu-full">
-        {{#each members}}
-          <a class="dropdown-item pointer" {{b "click: selectOwner(this), text: userFullNameOrEmail(this)"}}></a>
-        {{/each}}
-      </div>
-    </div>
+  {{#FormField label="Owner"}}
+    {{> SelectItem
+        items=_members
+        selected=owner
+        onUpdate=onUpdateCb}}
   {{/FormField}}
 </template>

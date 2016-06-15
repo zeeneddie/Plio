@@ -1,13 +1,14 @@
 import { Template } from 'meteor/templating';
 
-import { update } from '/imports/api/standards/methods.js';
-
 Template.ESDescription.viewmodel({
   mixin: 'callWithFocusCheck',
   description: '',
   update(e) {
     this.callWithFocusCheck(e, () => {
       const { description } = this.getData();
+
+      if (description === this.templateInstance.data.description) return;
+
       this.parent().update({ description });
     });
   },

@@ -1,0 +1,10 @@
+<template name="NCRCABy">
+  {{#FormField label=label}}
+    {{> SelectItem
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        items=_members
+        selected=getBy
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

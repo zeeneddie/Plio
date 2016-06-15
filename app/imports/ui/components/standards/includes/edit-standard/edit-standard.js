@@ -11,16 +11,13 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
-  standardId() {
-    const standard = this.standard();
-    return standard && standard._id;
+  onUpdateNotifyUserCb() {
+    return this.onUpdateNotifyUser.bind(this);
   },
-  update({ query = {}, ...args }, options = {}, cb) {
-    if (_.isFunction(options)) {
-      cb = options;
-      options = {};
-    }
-
+  onUpdateNotifyUser({ query, options }, cb) {
+    return this.update({ query, options }, cb);
+  },
+  update({ query = {}, options = {}, ...args }, cb) {
     const _id = this._id && this._id();
     const organizationId = this.organizationId();
     const modifier = _.extend(args, { _id, options, query, organizationId });
@@ -59,7 +56,7 @@ Template.EditStandard.viewmodel({
 
               Meteor.setTimeout(() => {
                 this.goToStandard(_id);
-                this.expandCollapsedStandard(_id);
+                this.expandCollapsed(_id);
               }, 0);
             }
           }

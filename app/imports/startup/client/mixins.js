@@ -3,8 +3,10 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { UserRoles, StandardFilters, RiskFilters } from '/imports/api/constants.js';
+import { Problems } from '/imports/api/problems/problems.js';
+import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -25,6 +27,7 @@ ViewModel.mixin({
           }
         });
       }
+
       this.collapse.collapse('toggle');
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
@@ -42,7 +45,7 @@ ViewModel.mixin({
 
       vmsToCollapse.length > 0 && this.expandCollapseItems(vmsToCollapse, { complete: cb });
     },
-    expandCollapsedStandard: _.debounce(function(_id, cb) {
+    expandCollapsed: _.debounce(function(_id, cb) {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
       this.expandCollapseItems(vms, { complete: cb });
@@ -64,13 +67,15 @@ ViewModel.mixin({
 
       !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
 
-      return item.toggleCollapse(() => {
+      const cb = () => {
         !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
 
         if (index === array.length - 1 && _.isFunction(complete)) complete();
 
         return this.expandCollapseItems(array, { index: index + 1, complete, expandNotExpandable });
-      });
+      };
+
+      return item.toggleCollapse(cb);
     }
   },
   modal: {
@@ -141,6 +146,25 @@ ViewModel.mixin({
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
     },
+    searchOnAfterKeyUp: _.debounce(function(e) {
+      const value = e.target.value;
+
+      if (this.searchText() === value) return;
+
+      this.searchText(value);
+
+      if (this.isActiveStandardFilter) {
+        if (this.isActiveStandardFilter('deleted')) return;
+      } else if (this.isActiveNCFilter) {
+        if (this.isActiveNCFilter('deleted')) return;
+      }
+
+      if (!!value) {
+        this.expandAllFound();
+      } else {
+        this.expandSelected();
+      }
+    }, 500)
   },
   numberRegex: {
     parseNumber(string) {
@@ -260,11 +284,11 @@ ViewModel.mixin({
     standardId() {
       return FlowRouter.getParam('standardId');
     },
-    activeStandardFilter() {
-      return FlowRouter.getQueryParam('by') || StandardFilters[0];
-    },
     isActiveStandardFilter(filter) {
       return this.activeStandardFilter() === filter;
+    },
+    activeStandardFilter() {
+      return FlowRouter.getQueryParam('by') || StandardFilters[0];
     },
     currentStandard() {
       const _id =  FlowRouter.getParam('standardId');
@@ -320,6 +344,11 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
       const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
       FlowRouter.go('standard', params, queryParams);
+    },
+    goToNC(nonconformityId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
+      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      FlowRouter.go('nonconformity', params, queryParams);
     }
   },
   mobile: {
@@ -343,15 +372,118 @@ ViewModel.mixin({
     riskId() {
       return FlowRouter.getParam('riskId');
     },
-    activeRiskFilter() {
-      return FlowRouter.getQueryParam('by') || RiskFilters[0];
-    },
-    isActiveRiskFilter(filter) {
-      return this.activeRiskFilter() === filter;
-    },
     currentRisk() {
       const _id = this.riskId();
       // return Risks.findOne({ _id });
+    }
+  },
+  nonconformity: {
+    NCId() {
+      return FlowRouter.getParam('nonconformityId');
+    },
+    isActiveNCFilter(filter) {
+      return this.activeNCFilter() === filter;
+    },
+    activeNCFilter() {
+      return FlowRouter.getQueryParam('by') || NonConformityFilters[0];
+    },
+    currentNC() {
+      const _id = this.NCId();
+      return NonConformities.findOne({ _id });
+    },
+    _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return NonConformities.find(query, options);
+    },
+    _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return NonConformities.findOne(query, options);
+    }
+  },
+  utils: {
+    capitalize(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    round(num) {
+      if (num >= 1000000) {
+        return parseFloat((num / 1000000).toFixed(1)) + 'M';
+      } else if (num >= 1000) {
+        return parseFloat((num / 1000).toFixed(1)) + 'K';
+      } else {
+        return num;
+      }
+    }
+  },
+  magnitude: {
+    _magnitude() {
+      this.load({ mixin: 'utils' });
+      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+    }
+  },
+  currency: {
+    getCurrencySymbol(currency) {
+      switch(currency) {
+        case 'EUR':
+          return '€';
+          break;
+        case 'GBP':
+          return '£';
+          break;
+        case 'USD':
+          return '$';
+          break;
+        default:
+          return '$';
+          break;
+      }
+    },
+    currencies() {
+      return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }) );
+    }
+  },
+  NCStatus: {
+    getStatusName(status) {
+      return NCStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 1:
+        case 13:
+          return 'success';
+          break;
+        case 2:
+        case 4:
+        case 5:
+        case 6:
+        case 8:
+        case 9:
+        case 11:
+          return 'warning';
+          break;
+        case 3:
+        case 7:
+        case 10:
+        case 12:
+          return 'danger';
+          break;
+        default:
+          return '';
+          break;
+      }
+    }
+  },
+  members: {
+    _searchString() {
+      const child = this.child('SelectItem');
+      return child && child.value();
+    },
+    _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
+      const query = {
+        ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
+        ..._query
+      };
+
+      return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
     }
   },
   userEdit: {

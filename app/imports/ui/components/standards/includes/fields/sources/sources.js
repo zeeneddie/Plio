@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { check } from 'meteor/check'
 
 Template.ESSources.viewmodel({
   mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
@@ -11,7 +12,7 @@ Template.ESSources.viewmodel({
   sourceUrl: '',
   sourceName: '',
   sourceExtension() {
-    return this.sourceName().split('.').pop();
+    return this.sourceName().split('.').pop().toLowerCase();
   },
   sourceHtmlUrl: '',
   fileId: '',
@@ -93,7 +94,9 @@ Template.ESSources.viewmodel({
     });
   },
   renderDocx(url) {
-    const isDocx = url.match(/\.([^\./\?]+)($|\?)/)[1] === 'docx';
+    check(url, String);
+
+    const isDocx = url.split('.').pop().toLowerCase() === 'docx';
     const vmInstance = this;
 
     if (isDocx) {
@@ -162,17 +165,20 @@ Template.ESSources.viewmodel({
         fileUploader.cancelUpload(this.fileId());
       }
 
-      this.parent().update({}, {
+      const options = {
         $unset: {
           [`source${this.id()}`]: ''
         }
-      }, (err) =>  {
+      };
+
+      this.parent().update({ options }, (err) =>  {
         if (!err && this.id() === 1) {
-          this.parent().update({}, {
+          const options = {
             $rename: {
               source2: 'source1'
             }
-          });
+          };
+          this.parent().update({ options });
         }
       });
     });
