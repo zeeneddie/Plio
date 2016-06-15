@@ -1,5 +1,3 @@
-import './form-field.html';
-import './form-field.js';
 import './title';
 import './description';
 import './type';
@@ -8,3 +6,4 @@ import './owner';
 import './issue-number';
 import './status';
 import './sources';
+import './source';
