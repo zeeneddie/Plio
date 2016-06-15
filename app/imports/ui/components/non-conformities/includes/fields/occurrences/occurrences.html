@@ -1,7 +1,7 @@
-<template name="NCOccurences">
-  {{#SubCardEditWrapper _lText="Occurences" _rText=occurences.count}}
+<template name="NCOccurrences">
+  {{#SubCardEditWrapper _lText="Occurrences" _rText=occurrences.count}}
     <div {{b "ref: forms"}}>
-      {{#each occurences}}
+      {{#each occurrences}}
         {{> SubCardEdit
             _id=this._id
             date=this.date
@@ -9,7 +9,7 @@
             sequentialId=sequentialId
             _lText=(renderText this)
             _rText=(renderDate this.date)
-            content="NCOccurencesSubCardContent"
+            content="NCOccurrencesSubCardContent"
             onSave=onSaveCb
             onDelete=onRemoveCb}}
       {{/each}}
