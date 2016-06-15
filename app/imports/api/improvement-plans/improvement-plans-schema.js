@@ -38,7 +38,12 @@ const optionalSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   },
   'files.$.extension': {
-    type: String
+    type: String,
+    autoValue() {
+      if (this.isSet) {
+        return this.value.toLowerCase();
+      }
+    },
   },
   'files.$.url': {
     type: String,

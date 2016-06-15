@@ -9,7 +9,7 @@ Template.IPMeansStatement.viewmodel({
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
-    const fileDoc = { _id, name, extension: name.split('.').pop() };
+    const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
 
     if (this.files() && this.files().length) {
       this.parent().files(this.files().concat([fileDoc]));

@@ -46,6 +46,11 @@ const optionalFields = new SimpleSchema(
     },
     'source1.extension': {
       type: String,
+      autoValue() {
+        if (this.isSet) {
+          return this.value.toLowerCase();
+        }
+      },
       optional: true
     },
     'source1.type': {
@@ -71,6 +76,11 @@ const optionalFields = new SimpleSchema(
     },
     'source2.extension': {
       type: String,
+      autoValue() {
+        if (this.isSet) {
+          return this.value.toLowerCase();
+        }
+      },
       optional: true
     },
     'source2.type': {
