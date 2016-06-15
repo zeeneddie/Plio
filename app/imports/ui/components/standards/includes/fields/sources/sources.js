@@ -15,6 +15,7 @@ Template.ESSources.viewmodel({
     return this.sourceName().split('.').pop().toLowerCase();
   },
   sourceHtmlUrl: '',
+  docxRenderInProgress: '',
   fileId: '',
   shouldUpdate() {
     const { type, url, name, htmlUrl } = this.getData();
@@ -90,6 +91,7 @@ Template.ESSources.viewmodel({
 
     uploader.send(fileObj, (error, url) => {
       this.sourceHtmlUrl(url && encodeURI(url) || '');
+      this.docxRenderInProgress('');
       this.update();
     });
   },
@@ -100,6 +102,7 @@ Template.ESSources.viewmodel({
     const vmInstance = this;
 
     if (isDocx) {
+      this.docxRenderInProgress(true);
       Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
         if (error) {
           // HTTP errors
