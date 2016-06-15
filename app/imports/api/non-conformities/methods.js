@@ -84,6 +84,35 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const updateViewedBy = new ValidatedMethod({
+  name: 'NonConformities.updateViewedBy',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update a non-conformity'
+      );
+    }
+
+    if (!NonConformities.findOne({ _id })) {
+      throw new Meteor.Error(
+        403, 'Non-conformity with the given id does not exists'
+      );
+    }
+
+    if (!!NonConformities.findOne({ _id, viewedBy: this.userId })) {
+      throw new Meteor.Error(
+        403, 'You have been already added to this list'
+      );
+    }
+
+    return NonConformitiesService.updateViewedBy({ _id, userId: this.userId });
+  }
+});
+
+
 export const remove = new ValidatedMethod({
   name: 'NonConformities.remove',
 
