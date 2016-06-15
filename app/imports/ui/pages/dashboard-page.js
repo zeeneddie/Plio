@@ -21,10 +21,21 @@ Template.DashboardPage.viewmodel({
   isReady: false,
   _subHandlers: [],
   _renderMetrics(pluralizeWord = '', totalCounterName = '', notViewedCounterName = '') {
+
+    // Workaround for https://github.com/blakeembrey/pluralize/pull/12
+    const lowerCaseLastSChar = (str) => {
+      let lastChar = str.substr(str.length - 1);
+      if (str.length > 2 && lastChar === 'S') {
+        return str.substr(0, str.length - 1) + lastChar.toLowerCase();
+      } else {
+        return str;
+      }
+    }
+
     const total = this.counter.get(totalCounterName);
     const notViewed = this.counter.get(notViewedCounterName);
     const notViewedText = notViewed ? `, ${notViewed} new` : '';
-    return this.isReady() ? pluralize(pluralizeWord, total, true) + notViewedText : '';
+    return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, total, true)) + notViewedText : '';
   },
   standardsMetrics() {
     return this._renderMetrics('standard', 'standards-count', 'standards-not-viewed-count');
