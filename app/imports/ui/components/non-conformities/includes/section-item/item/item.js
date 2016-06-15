@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
-import { Occurences } from '/imports/api/occurences/occurences.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
 Template.NCItem.viewmodel({
@@ -30,17 +30,17 @@ Template.NCItem.viewmodel({
     return !this.viewedBy().find(_id => _id === Meteor.userId());
   },
   renderTitle() {
-    const count = this.occurences().count();
+    const count = this.occurrences().count();
     const title = this.title();
     return count > 0 ? `${title} (x ${count})` : title;
   },
-  occurences() {
+  occurrences() {
     const query = { nonConformityId: this._id && this._id() };
-    return Occurences.find(query);
+    return Occurrences.find(query);
   },
   totalCost() {
     const symbol = this.getCurrencySymbol(this.currency());
-    const count = this.occurences().count();
+    const count = this.occurrences().count();
 
     if (!this.cost()) return symbol + 0;
 

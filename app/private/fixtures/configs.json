@@ -3,5 +3,7 @@
   "Standards": "standards",
   "StandardsBookSections": "standardsBookSections",
   "StandardTypes": "standardTypes",
-  "Meteor.users": "users"
+  "Meteor.users": "users",
+  "NonConformities": "nonConformities",
+  "Occurrences": "occurrences"
 }
