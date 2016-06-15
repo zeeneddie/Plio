@@ -92,11 +92,6 @@ const optionalFields = new SimpleSchema({
   'source2.htmlUrl': {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
-    autoValue() {
-      if (this.isSet) {
-        console.log('sdfdsf', this.value);
-      }
-    },
     optional: true
   },
   'source2.name': {
