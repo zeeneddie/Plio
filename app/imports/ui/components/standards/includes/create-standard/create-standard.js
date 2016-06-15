@@ -68,7 +68,7 @@ Template.CreateStandard.viewmodel({
       Meteor.setTimeout(() => {
         this.isActiveStandardFilter('deleted') ? this.goToStandard(_id, false) : this.goToStandard(_id);
 
-        this.expandCollapsedStandard(_id);
+        this.expandCollapsed(_id);
 
         this.modal().open({
           _id: _id,

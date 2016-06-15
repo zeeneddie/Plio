@@ -1,5 +1,5 @@
 <template name="EditStandard">
-  <form>
+  <div>
     <div class="relative">
       <div class="card-block">
         {{> ESTitle titleText=standard.title _id=standard._id}}
@@ -10,13 +10,13 @@
 
         {{> ESType typeId=standard.typeId _id=standard._id}}
 
-        {{> ESOwner selectedOwnerId=standard.owner _id=standard._id isEditable=true}}
+        {{> ESOwner owner=standard.owner _id=standard._id}}
 
         {{> ESIssueNumber issueNumber=standard.issueNumber _id=standard._id}}
 
         {{> ESStatus status=standard.status _id=standard._id}}
 
-        {{> ESDepartments standard=standard}}
+        {{> Departments_Edit _id=standard._id departmentsIds=standard.departments}}
 
         <hr>
 
@@ -40,7 +40,10 @@
 
       </div>
 
-      {{> ESNotify standard=standard}}
+      {{> Subcards_Notify_Edit
+          document=standard
+          documentType="standard"
+          onUpdate=onUpdateNotifyUserCb}}
 
       <div class="card-block card-block-collapse-toggle collapsed shroud" href="#nonconformities" data-toggle="collapse">
         <h4 class="card-title pull-xs-left">Non-conformities</h4>
@@ -70,12 +73,17 @@
         <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
       </div>
 
-      {{> ESImprovementPlan standard=standard}}
+      {{> Subcards_ImprovementPlan_Edit
+          documentId=standard._id
+          documentType="standard"}}
 
-      {{> ESLessonsLearned standard=standard}}
+      {{> Subcards_LessonsLearned_Edit
+          documentId=standard._id
+          documentType="standard"
+          linkedTo=standard.title}}
     </div>
     <div class="card-block text-xs-center">
       <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
     </div>
-  </form>
+  </div>
 </template>

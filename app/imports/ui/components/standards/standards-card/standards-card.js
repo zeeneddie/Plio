@@ -5,9 +5,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
@@ -48,7 +45,7 @@ Template.StandardsCard.viewmodel({
         this.isFullScreenMode(true);
       }, 100);
     }
-    
+
   },
   standards() {
     const query = { organizationId: this.organizationId() };
@@ -59,7 +56,6 @@ Template.StandardsCard.viewmodel({
   standard() {
     const query = { _id: this.standardId(), organizationId: this.organizationId() };
     const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
-    window.standard = Standards.findOne(filterQuery);
     return Standards.findOne(filterQuery);
   },
   hasDocxAttachment() {
@@ -73,43 +69,6 @@ Template.StandardsCard.viewmodel({
   type() {
     const _id = !!this.standard() && this.standard().typeId;
     return StandardTypes.findOne({ _id });
-  },
-  departments() {
-    const departmentsIds = !!this.standard() && this.standard().departments || [];
-    const query = { _id: { $in: departmentsIds } };
-    return Departments.find(query);
-  },
-  renderDepartments() {
-    return this.departments() && this.departments().fetch().map(doc => doc.name).join(', ');
-  },
-  renderNotifyUsers(users) {
-    return users.map(user => this.userFullNameOrEmail(user)).join(', ');
-  },
-  improvementPlan() {
-    const improvementPlan = ImprovementPlans.findOne({ documentId: this.standardId() });
-
-    if (!improvementPlan) {
-      return;
-    }
-
-    const reviewDates = improvementPlan.reviewDates || [];
-    const files = improvementPlan.files || [];
-
-    if (!improvementPlan.desiredOutcome && !improvementPlan.targetDate &&
-        !reviewDates.length && !improvementPlan.owner &&
-        !files.length) {
-      return;
-    }
-
-    return improvementPlan
-  },
-  renderReviewDates(dates) {
-    return dates.map(doc => this.renderDate(doc.date)).join(', ');
-  },
-  lessons() {
-    const query = { standardId: this.standardId() };
-    const options = { sort: { serialNumber: 1 } };
-    return LessonsLearned.find(query, options);
   },
   openEditStandardModal() {
     this.modal().open({
@@ -140,7 +99,7 @@ Template.StandardsCard.viewmodel({
             FlowRouter.setQueryParams({ by: 'section' });
             Meteor.setTimeout(() => {
               this.goToStandard(_id);
-              this.expandCollapsedStandard(_id);
+              this.expandCollapsed(_id);
             }, 0);
           }
         });
@@ -176,7 +135,7 @@ Template.StandardsCard.viewmodel({
 
               Meteor.setTimeout(() => {
                 this.goToStandard(_id);
-                this.expandCollapsedStandard(_id);
+                this.expandCollapsed(_id);
               }, 0);
             }
           }

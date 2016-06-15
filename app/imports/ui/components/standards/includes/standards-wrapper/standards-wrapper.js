@@ -15,7 +15,7 @@ Template.StandardsListWrapper.viewmodel({
         const { _id } = standards[0];
         Meteor.setTimeout(() => {
           this.goToStandard(_id);
-          this.expandCollapsedStandard(_id);
+          this.expandCollapsed(_id);
         }, 0);
       }
     }

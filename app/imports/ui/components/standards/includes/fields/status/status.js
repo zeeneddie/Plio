@@ -1,23 +1,30 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
+import { StandardStatuses } from '/imports/api/constants.js';
+
 Template.ESStatus.viewmodel({
   status: 'issued',
-  changeStatus(status) {
-    this.status(status);
-    this.update();
+  statuses() {
+    return _.keys(StandardStatuses).map(status => ({ value: status, text: StandardStatuses[status] }) );
   },
-  update() {
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
+    const { value:status } = viewmodel.getData();
+
+    if (status === this.templateInstance.data.status) return;
+
+    this.status(status);
+
     if (!this._id) return;
 
-    const { status } = this.getData();
-    const modal = ViewModel.findOne('ModalWindow');
-
     if (!status) {
-      modal.setError('Status is required!');
+      ViewModel.findOne('ModalWindow').setError('Status is required!');
       return;
     }
-    
+
     this.parent().update({ status });
   },
   getData() {

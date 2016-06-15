@@ -12,6 +12,6 @@ Template.StandardsHeader.viewmodel({
   },
   selectFilter(filter) {
     FlowRouter.setQueryParams({ by: filter });
-    this.expandCollapsedStandard(this.standardId());
+    this.expandCollapsed(this.standardId());
   }
 });

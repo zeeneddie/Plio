@@ -1,0 +1,21 @@
+<template name="Subcards_ImprovementPlan_Edit">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Improvement plan</h4>
+    <i class="fa fa-align-left disclosure-indicator pull-right" {{b "if: isTextPresent"}}></i>
+  </div>
+  <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+    <div class="card-block">
+
+      {{> IPDesiredOutcome desiredOutcome=desiredOutcome}}
+
+      {{> IPTargetDate targetDate=targetDate}}
+
+      {{> IPReviewDates reviewDates=reviewDates}}
+
+      {{> IPOwner owner=owner}}
+
+      {{> IPMeansStatement _id=_id files=files}}
+
+    </div>
+  </div>
+</template>

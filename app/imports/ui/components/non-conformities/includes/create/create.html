@@ -1,0 +1,13 @@
+<template name="CreateNC">
+  <div>
+    <div class="card-block">
+      {{> NCTitle}}
+
+      {{> NCIdentifiedBy identifiedBy=currentUser._id}}
+
+      {{> NCIdentifiedDate}}
+
+      {{> NCMagnitude}}
+    </div>
+  </div>
+</template>

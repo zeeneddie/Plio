@@ -62,4 +62,22 @@ import '../../api/non-conformities/non-conformities-schema.js';
 import '../../api/non-conformities/non-conformities-service.js';
 import '../../api/non-conformities/methods.js';
 
+import '../../api/problems/server/publications.js';
+import '../../api/problems/problems.js';
+import '../../api/problems/problems-schema.js';
+import '../../api/problems/problems-service.js';
+import '../../api/problems/methods.js';
+
+import '../../api/occurences/server/publications.js';
+import '../../api/occurences/occurences.js';
+import '../../api/occurences/occurences-schema.js';
+import '../../api/occurences/occurences-service.js';
+import '../../api/occurences/methods.js';
+
+import '../../api/analysis/server/publications.js';
+import '../../api/analysis/analysis.js';
+import '../../api/analysis/analysis-schema.js';
+import '../../api/analysis/analysis-service.js';
+import '../../api/analysis/methods.js';
+
 import '../../api/mammoth/methods.js';

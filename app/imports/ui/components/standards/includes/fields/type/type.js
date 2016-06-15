@@ -31,7 +31,7 @@ Template.ESType.viewmodel({
 
     this.parent().update({ typeId }, (err) => {
       Tracker.flush();
-      this.expandCollapsedStandard(this.standardId());
+      this.expandCollapsed(this.standardId());
     });
   },
   getData() {
