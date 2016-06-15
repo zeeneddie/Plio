@@ -2,12 +2,14 @@ import { Meteor } from 'meteor/meteor';
 
 // Import all collections that should be filled with fixture data here
 import { Organizations } from '../../api/organizations/organizations.js';
+import { Occurrences } from '../../api/occurrences/occurrences.js';
 import { Standards } from '../../api/standards/standards.js';
 import { StandardTypes } from '../../api/standards-types/standards-types.js';
 import { StandardsBookSections } from '../../api/standards-book-sections/standards-book-sections.js';
+import { NonConformities } from '../../api/non-conformities/non-conformities.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Standards, StandardTypes, StandardsBookSections });
+_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities });
 
 import path from 'path';
 import fs from 'fs';
