@@ -9,3 +9,11 @@ Meteor.publish('non-conformities', function(organizationId) {
     return this.ready();
   }
 });
+
+Meteor.publish('nonConformitiesCount', function(counterName, organizationId) {
+  return new Counter(counterName, NonConformities.find({ organizationId, isDeleted: { $in: [false, null] } }));
+});
+
+Meteor.publish('nonConformitiesNotViewedCount', function(counterName, organizationId) {
+  return new Counter(counterName, NonConformities.find({ organizationId, viewedBy: { $ne: this.userId }, isDeleted: { $in: [false, null] } }));
+});
