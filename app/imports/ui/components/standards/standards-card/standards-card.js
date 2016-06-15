@@ -36,11 +36,15 @@ Template.StandardsCard.viewmodel({
       this.isFullScreenMode(false);
 
       setTimeout(() => {
-        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto' });
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
       }, 150);
     } else {
       $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+
       setTimeout(() => {
+
+        // I hate Safari
+        $div.css({ 'transition': 'all .15s linear' });
         this.isFullScreenMode(true);
       }, 100);
     }
