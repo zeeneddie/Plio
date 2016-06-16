@@ -15,7 +15,7 @@ const RequiredSchema = new SimpleSchema({
   }
 });
 
-const OccurencesSchema = new SimpleSchema([
+const OccurrencesSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   {
@@ -30,4 +30,4 @@ const OccurencesSchema = new SimpleSchema([
   }
 ]);
 
-export { OccurencesSchema, RequiredSchema };
+export { OccurrencesSchema, RequiredSchema };

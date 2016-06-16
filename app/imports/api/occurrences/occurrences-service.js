@@ -1,8 +1,8 @@
-import { Occurences } from './occurences.js';
+import { Occurrences } from './occurrences.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 
 export default {
-  collection: Occurences,
+  collection: Occurrences,
 
   insert({ ...args, nonConformityId }) {
     const lastOccurence = this.collection.findOne({

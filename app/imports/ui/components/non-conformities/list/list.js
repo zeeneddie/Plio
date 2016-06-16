@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Occurences } from '/imports/api/occurences/occurences.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NCTypes, NCStatuses } from '/imports/api/constants.js';
 
@@ -98,11 +98,11 @@ Template.NCList.viewmodel({
 
     const total = ncs.reduce((prev, cur) => {
       const { _id, cost } = cur;
-      const occurences = ((() => {
+      const occurrences = ((() => {
         const query = { nonConformityId: _id };
-        return Occurences.find(query);
+        return Occurrences.find(query);
       })());
-      const t = cost * occurences.count();
+      const t = cost * occurrences.count();
       return prev + t;
     }, 0);
 
