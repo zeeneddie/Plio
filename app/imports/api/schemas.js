@@ -1,5 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { TimeUnits, DocumentTypes } from './constants.js';
+import { Utils } from '/imports/core/utils.js';
 
 
 
@@ -101,7 +102,9 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
-        return this.userId;
+
+        // Workaround for fixtures
+        return this.userId || this.isSet && this.value;
       } else {
         this.unset();
       }
