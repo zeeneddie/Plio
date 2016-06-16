@@ -1,13 +1,8 @@
 <template name="StandardsCard">
-    <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
-      <div class="card standard-details">
-        <div class="card-block card-heading" {{b "if: standards.count === 0"}}>
-          <h5 {{b "if: !isActiveStandardFilter('deleted')"}}>
-            There is no standards yet! Click on the 'Add' button to create your first standard.
-          </h5>
-          <h5 {{b "if: isActiveStandardFilter('deleted')"}}>There is no deleted standards yet!</h5>
-        </div>
-        {{#with standard}}
+  <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
+    {{#if hasStandards}}
+      {{#with standard}}
+        <div class="card standard-details">
           <div class="card-block card-heading">
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
@@ -101,15 +96,23 @@
               {{/with}}
 
               {{> Subcards_ImprovementPlan_Read documentId=this._id}}
-
               {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>
-          </div>
 
-          {{> SourceWordDocument source=source1}}
-          {{> SourceWordDocument source=source2}}
-          {{> CardChangelog document=this}}
-        {{/with}}
+            {{> SourceWordDocument source=source1}}
+            {{> SourceWordDocument source=source2}}
+            {{> CardChangelog document=this}}
+          </div>
+        </div>
+      {{/with}}
+    {{else}}
+      <div class="card-block card-heading">
+        {{#if isActiveStandardFilter 'deleted'}}
+          <h5>There is no deleted standards yet!</h5>
+        {{else}}
+          <h5>There is no standards yet! Click on the 'Add' button to create your first standard.</h5>
+        {{/if}}
       </div>
-    </div>
+    {{/if}}
+  </div>
 </template>

@@ -9,6 +9,10 @@ Template.NCCard.viewmodel({
   autorun() {
     this.templateInstance.subscribe('improvementPlan', this.NCId());
   },
+  isRenderedInitially: false,
+  onRendered() {
+    this.isRenderedInitially(true);
+  },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },
