@@ -24,8 +24,7 @@
               magnitude=this.value
               hideRTextOnExpand=true
               rText=(calculateTotalCost this.value)
-              key="magnitude"
-              value=this.value}}
+              _query=(_getMagnitudeQuery this)}}
         {{/each}}
       {{/if}}
 
@@ -34,8 +33,7 @@
           {{> ListItem
               template="NCSectionItem"
               title=(getStatusName this)
-              key="status"
-              value=this
+              _query=(_getStatusQuery this)
               hideRTextOnExpand=true
               rText=(calculateTotalCost this)}}
         {{/each}}
@@ -49,8 +47,13 @@
               closeAllOnCollapse=false
               hideRTextOnExpand=true
               rText=(calculateTotalCost this._id)
-              key="departments"
-              value=this._id}}
+              _query=(_getDepartmentQuery this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveNCFilter "deleted"}}
+        {{#each NCsDeleted}}
+          {{> NCSectionItem}}
         {{/each}}
       {{/if}}
 

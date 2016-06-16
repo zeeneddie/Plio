@@ -11,10 +11,15 @@ Template.NCLayout.viewmodel({
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
 
+      if (this.isActiveNCFilter('deleted')) {
+        this.templateInstance.subscribe('nonConformities', _id, true);
+      } else {
+        this.templateInstance.subscribe('nonConformities', _id);
+      }
+
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('non-conformities', _id),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('departments', _id)

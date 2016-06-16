@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { NonConformities } from '../non-conformities.js';
 import Counter from '../../counter/server.js';
 
-Meteor.publish('non-conformities', function(organizationId) {
+Meteor.publish('nonConformities', function(organizationId, isDeleted = { $in: [null, false] }) {
   if (this.userId) {
-    return NonConformities.find({ organizationId, isDeleted: { $in: [false, null] } });
+    return NonConformities.find({ organizationId, isDeleted });
   } else {
     return this.ready();
   }

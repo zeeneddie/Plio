@@ -70,21 +70,35 @@ Template.NCList.viewmodel({
         break;
     };
   },
+  _getMagnitudeQuery({ value:magnitude }) {
+    return { magnitude };
+  },
   magnitude() {
     return this._magnitude().filter(({ value:magnitude }) => {
       return this._getNCsByQuery({ magnitude }).count() > 0;
     });
+  },
+  _getStatusQuery(status) {
+    return { status };
   },
   statuses() {
     return _.keys(NCStatuses)
             .map(status => parseInt(status, 10))
             .filter(status => this._getNCsByQuery({ status }).count() > 0);
   },
+  _getDepartmentQuery({ _id:departments }) {
+    return { departments };
+  },
   departments() {
     const query = { organizationId: this.organizationId() };
     return Departments.find(query).fetch().filter(({ _id, name }) => {
       return this._getNCsByQuery({ departments: _id }).count() > 0;
     });
+  },
+  NCsDeleted() {
+    const query = {};
+    const options = { sort: { deletedAt: -1 } };
+    return this._getNCsByQuery(query, options);
   },
   calculateTotalCost(value) {
     const ncs = this._getNCsByQuery({
