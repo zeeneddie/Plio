@@ -5,12 +5,17 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  onCreated() {
+    // variables that don't need to be reactive
+    this.savingStateTimeout = 500;
+    this.timeout = null;
+    this.errors = [];
+  },
   onRendered(template) {
     this.modal.modal('show');
     this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
   },
   variation: '',
-  savingStateTimeout: 500,
   isSaving: false,
   isWaiting: false,
   error: '',
@@ -54,6 +59,7 @@ Template.ModalWindow.viewmodel({
       }
 
       if (err) {
+        this.errors.push(err);
         this.closeAfterCall(false);
       }
 
@@ -64,13 +70,22 @@ Template.ModalWindow.viewmodel({
       this.timeout = Meteor.setTimeout(() => {
         this.isSaving(false);
 
-        if (err) {
-          console.log('Modal submit error:\n', err);
-          this.setError(err.reason || 'Internal server error');
+        const errors = this.errors;
+        let error;
+        if (errors.length === 1) {
+          error = errors[0].reason || 'Internal server error';
+        } else if (errors.length > 1) {
+          error = 'There are errors';
+        }
+
+        if (error) {
+          this.setError(error);
         } else if (this.closeAfterCall()) {
           this.close();
         }
-      }, this.savingStateTimeout());
+
+        this.errors = [];
+      }, this.savingStateTimeout);
     };
   },
 
