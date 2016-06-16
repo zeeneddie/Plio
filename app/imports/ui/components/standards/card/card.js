@@ -16,7 +16,6 @@ Template.StandardsCard.viewmodel({
     });
   },
   onRendered(template) {
-    this.isRenderedInitially(true);
     template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
 
@@ -24,7 +23,6 @@ Template.StandardsCard.viewmodel({
       template.$('.list-group-collapse.collapse').height('auto');
     });
   },
-  isRenderedInitially: false,
   closeAllOnCollapse: false,
   isFullScreenMode: false,
   toggleScreenMode() {
