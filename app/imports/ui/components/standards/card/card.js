@@ -23,9 +23,6 @@ Template.StandardsCard.viewmodel({
       template.$('.list-group-collapse.collapse').height('auto');
     });
   },
-  onDestroyed() {
-    console.log(this.templateInstance.view)
-  },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
   toggleScreenMode() {
