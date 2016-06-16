@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema } from '../schemas.js';
 import { NCStatuses, OrgCurrencies, AnalysisStatuses } from '../constants.js';
 
 const RequiredSchema = new SimpleSchema([
@@ -68,7 +68,8 @@ const updateOfStandards = {
   ...getRepeatingFields('updateOfStandards')
 };
 
-const OptionalSchema = new SimpleSchema(
+const OptionalSchema = new SimpleSchema([
+  DeletedSchema,
   {
     standard: {
       type: String,
@@ -128,7 +129,7 @@ const OptionalSchema = new SimpleSchema(
     ...rootCauseAnalysis,
     ...updateOfStandards
   }
-);
+]);
 
 const NonConformitiesSchema = new SimpleSchema([
   OrganizationIdSchema,
