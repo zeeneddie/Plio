@@ -47,9 +47,6 @@ Template.Subcards_LessonLearned.viewmodel({
   events: {
     'focusout .quill'(e, tpl) {
       this.updateNotes(e);
-    },
-    'focusin .quill'() {
-      console.log('focusback');
     }
   },
   getData() {
