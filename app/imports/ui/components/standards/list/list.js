@@ -24,7 +24,7 @@ Template.StandardsList.viewmodel({
           const params = { orgSerialNumber: this.organizationSerialNumber() };
           const queryParams = { by: FlowRouter.getQueryParam('by') };
           FlowRouter.go('standards', params, queryParams);
-        }, 0)
+        }, 0);
       }
     }
   },
@@ -68,9 +68,6 @@ Template.StandardsList.viewmodel({
   },
   _getQuery({ _id:sectionId }) {
     return { sectionId };
-  },
-  isDeletedQuery() {
-    return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
   },
   sections() {
     const sections = ((() => {

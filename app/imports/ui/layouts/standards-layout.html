@@ -4,7 +4,7 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        {{#if Template.subscriptionsReady}}
+        {{#if isReady}}
           {{#if organization}}
             {{> Template.dynamic template=content}}
           {{else}}
