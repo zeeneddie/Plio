@@ -9,15 +9,13 @@ Template.NCCard.viewmodel({
   autorun() {
     this.templateInstance.subscribe('improvementPlan', this.NCId());
   },
-  isRenderedInitially: false,
-  onRendered() {
-    this.isRenderedInitially(true);
-  },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },
   NCs() {
-    return this._getNCsByQuery({});
+    const list = ViewModel.findOne('NCList');
+    const query = list && list._getQueryForFilter();
+    return this._getNCsByQuery(query);
   },
   hasNCs() {
     return this.NCs().count() > 0;
