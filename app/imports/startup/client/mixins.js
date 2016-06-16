@@ -294,12 +294,15 @@ ViewModel.mixin({
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
     },
+    _getIsDeletedQuery() {
+      return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
     _getStandardsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return Standards.find(query, options);
     },
     _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return Standards.findOne(query, options);
     }
   },

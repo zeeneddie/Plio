@@ -1,19 +1,17 @@
 import { Template } from 'meteor/templating';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { Standards } from '/imports/api/standards/standards.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'standardBookSection', 'standardType', 'collapsing', 'roles', 'router'],
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   autorun() {
-    const isDeleted = { $in: [null, false] };
     const query = this._getQueryForFilter();
 
-    const contains = this._getStandardByQuery({ ...query, isDeleted, _id: this.standardId() });
+    const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
     if (!contains) {
-      const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter(), isDeleted });
+      const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
 
       if (standard) {
         const { _id } = standard;
@@ -71,6 +69,9 @@ Template.StandardsList.viewmodel({
   _getQuery({ _id:sectionId }) {
     return { sectionId };
   },
+  isDeletedQuery() {
+    return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+  },
   sections() {
     const sections = ((() => {
       const query = { organizationId: this.organizationId() };
@@ -92,6 +93,9 @@ Template.StandardsList.viewmodel({
         return this._getStandardsByQuery({ sectionId, typeId }).count() > 0;
       }).length > 0;
     });
+  },
+  standards() {
+    return this._getStandardsByQuery({});
   },
   animating: false,
   sortVms(vms, isTypesFirst = false) {
@@ -148,17 +152,6 @@ Template.StandardsList.viewmodel({
   onAfterExpand() {
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
-  },
-  reroute() {
-    const standard = this.getFirstStandard();
-    if (!!standard) {
-      const { _id } = standard;
-
-      Meteor.setTimeout(() => {
-        this.goToStandard(_id);
-        this.expandCollapsed(_id);
-      }, 0);
-    }
   },
   openAddTypeModal(e) {
     this.modal().open({
