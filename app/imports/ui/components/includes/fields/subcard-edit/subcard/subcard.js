@@ -31,6 +31,10 @@ Template.SubCardEdit.viewmodel({
     }
 
     const propVal = this.getData()[propName];
+    const savedVal = this.templateInstance.data[propName];
+    if (propVal === savedVal) {
+      return;
+    }
 
     const updateFn = () => {
       this.callSave(this.updateFn, {
