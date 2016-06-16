@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import OccurencesService from './occurences-service.js';
-import { RequiredSchema } from './occurences-schema.js';
-import { Occurences } from './occurences.js';
+import OccurrencesService from './occurrences-service.js';
+import { RequiredSchema } from './occurrences-schema.js';
+import { Occurrences } from './occurrences.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { IdSchema } from '../schemas.js';
 
 export const insert = new ValidatedMethod({
-  name: 'Occurences.insert',
+  name: 'Occurrences.insert',
 
   validate: RequiredSchema.validator(),
 
@@ -21,12 +21,12 @@ export const insert = new ValidatedMethod({
       throw new Meteor.Error(403, 'Non-conformity with that ID does not exist');
     }
 
-    return OccurencesService.insert({ ...args, nonConformityId });
+    return OccurrencesService.insert({ ...args, nonConformityId });
   }
 });
 
 export const update = new ValidatedMethod({
-  name: 'Occurences.update',
+  name: 'Occurrences.update',
 
   validate: new SimpleSchema([IdSchema, {
     description: {
@@ -42,12 +42,12 @@ export const update = new ValidatedMethod({
       throw new Meteor.Error(403, 'Unauthorized user cannot update an occurence');
     }
 
-    return OccurencesService.update({ _id, ...args });
+    return OccurrencesService.update({ _id, ...args });
   }
 });
 
 export const remove = new ValidatedMethod({
-  name: 'Occurences.remove',
+  name: 'Occurrences.remove',
 
   validate: IdSchema.validator(),
 
@@ -56,6 +56,6 @@ export const remove = new ValidatedMethod({
       throw new Meteor.Error(403, 'Unauthorized user cannot remove an occurence');
     }
 
-    return OccurencesService.remove({ _id });
+    return OccurrencesService.remove({ _id });
   }
 });

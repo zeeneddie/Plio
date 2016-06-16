@@ -68,11 +68,11 @@ import '../../api/problems/problems-schema.js';
 import '../../api/problems/problems-service.js';
 import '../../api/problems/methods.js';
 
-import '../../api/occurences/server/publications.js';
-import '../../api/occurences/occurences.js';
-import '../../api/occurences/occurences-schema.js';
-import '../../api/occurences/occurences-service.js';
-import '../../api/occurences/methods.js';
+import '../../api/occurrences/server/publications.js';
+import '../../api/occurrences/occurrences.js';
+import '../../api/occurrences/occurrences-schema.js';
+import '../../api/occurrences/occurrences-service.js';
+import '../../api/occurrences/methods.js';
 
 import '../../api/analysis/server/publications.js';
 import '../../api/analysis/analysis.js';

@@ -1,21 +1,21 @@
 import { Template } from 'meteor/templating';
 
-import { Occurences } from '/imports/api/occurences/occurences.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 
-import { insert, update, remove } from '/imports/api/occurences/methods.js';
+import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 
-Template.NCOccurences.viewmodel({
+Template.NCOccurrences.viewmodel({
   mixin: ['collapse', 'addForm', 'modal', 'date'],
   renderText({ sequentialId }) {
     return `<strong>${sequentialId}</strong>`;
   },
-  occurences() {
+  occurrences() {
     const query = ((() => {
       const nonConformityId = this._id && this._id();
       return { nonConformityId };
     })());
     const options = { sort: { serialNumber: 1 } };
-    return Occurences.find(query, options);
+    return Occurrences.find(query, options);
   },
   addOccurence() {
     this.addForm(
@@ -23,7 +23,7 @@ Template.NCOccurences.viewmodel({
       {
         _lText: '',
         _rText: '',
-        content: 'NCOccurencesSubCardContent',
+        content: 'NCOccurrencesSubCardContent',
         onSave: this.save.bind(this),
         onDelete: this.remove.bind(this)
       }
