@@ -96,8 +96,10 @@ Template.StandardsList.viewmodel({
       }).length > 0;
     });
   },
-  standards() {
-    return this._getStandardsByQuery({ ...this._getSearchQuery() });
+  standardsDeleted() {
+    const query = { ...this._getSearchQuery() };
+    const options = { sort: { deletedAt: -1 } };
+    return this._getStandardsByQuery(query, options);
   },
   focused: false,
   animating: false,
