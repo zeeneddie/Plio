@@ -35,10 +35,10 @@ export const update = new ValidatedMethod({
   name: 'NonConformities.update',
 
   validate: new SimpleSchema([
-    IdSchema, NonConformitiesUpdateSchema, OrganizationIdSchema, optionsSchema
+    IdSchema, NonConformitiesUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({_id, options, query, organizationId, ...args }) {
+  run({_id, options, query, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(

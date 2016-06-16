@@ -15,8 +15,7 @@ Template.EditNC.viewmodel({
   },
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
-    const organizationId = this.organizationId();
-    const arguments = { ...args, _id, options, query, organizationId };
+    const arguments = { ...args, _id, options, query };
 
     console.log(arguments);
 
@@ -24,7 +23,6 @@ Template.EditNC.viewmodel({
   },
   remove() {
     const { _id, title } = this.NC();
-    const organizationId = this.organizationId();
 
     swal(
       {
@@ -43,20 +41,14 @@ Template.EditNC.viewmodel({
             swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
 
             this.modal().close();
-
-            const query = { isDeleted: { $in: [null, false] } };
-            const options = { sort: { createdAt: -1 } };
-
-            const NC = this._getNCByQuery(query, options);
-
-            if (!!NC) {
-              const { _id } = NC;
-
-              Meteor.setTimeout(() => {
-                this.goToNC(_id);
-                this.expandCollapsed(_id);
-              }, 0);
-            }
+            // 
+            // const NCs = this._getNCsByQuery({});
+            //
+            // if (!!NCs.count() > 0) {
+            //   Meteor.setTimeout(() => {
+            //     this.goToNCs();
+            //   }, 0);
+            // }
           }
         });
       }

@@ -25,9 +25,7 @@ Template.NCList.viewmodel({
           }, 0);
         } else {
           Meteor.setTimeout(() => {
-            const params = { orgSerialNumber: this.organizationSerialNumber() };
-            const queryParams = { by: FlowRouter.getQueryParam('by') };
-            FlowRouter.go('nonconformities', params, queryParams);
+            this.goToNCs();
           }, 0)
         }
       }
