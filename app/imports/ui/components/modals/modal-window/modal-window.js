@@ -71,15 +71,17 @@ Template.ModalWindow.viewmodel({
         this.isSaving(false);
 
         const errors = this.errors;
-        let error;
+        let errorMsg = '';
         if (errors.length === 1) {
-          error = errors[0].reason || 'Internal server error';
-        } else if (errors.length > 1) {
-          error = 'There are errors';
+          errorMsg = errors[0].reason;
+        } else {
+          _.each(errors, (error, i) => {
+            errorMsg +=`<p>${i + 1}. ${error.reason}.</p>`;
+          });
         }
 
-        if (error) {
-          this.setError(error);
+        if (errorMsg) {
+          this.setError(errorMsg);
         } else if (this.closeAfterCall()) {
           this.close();
         }
