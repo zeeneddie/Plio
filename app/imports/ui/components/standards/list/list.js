@@ -6,30 +6,37 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
-  autorun() {
-    if (!this.focused()) {
-      const query = this._getQueryForFilter();
+  autorun: [
+    function() {
+      if (!this.focused()) {
+        const query = this._getQueryForFilter();
 
-      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
-      if (!contains) {
-        const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+        const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
+        if (!contains) {
+          const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
 
-        if (standard) {
-          const { _id } = standard;
-          Meteor.setTimeout(() => {
-            this.goToStandard(_id);
-            this.expandCollapsed(this.standardId());
-          }, 0);
-        } else {
-          Meteor.setTimeout(() => {
-            const params = { orgSerialNumber: this.organizationSerialNumber() };
-            const queryParams = { by: FlowRouter.getQueryParam('by') };
-            FlowRouter.go('standards', params, queryParams);
-          }, 0);
+          if (standard) {
+            const { _id } = standard;
+            Meteor.setTimeout(() => {
+              this.goToStandard(_id);
+              this.expandCollapsed(this.standardId());
+            }, 0);
+          } else {
+            Meteor.setTimeout(() => {
+              const params = { orgSerialNumber: this.organizationSerialNumber() };
+              const queryParams = { by: FlowRouter.getQueryParam('by') };
+              FlowRouter.go('standards', params, queryParams);
+            }, 0);
+          }
         }
       }
+    },
+    function() {
+      if (this.isActiveStandardFilter('deleted')) {
+        this.searchResultsNumber(this.standardsDeleted().count());
+      }
     }
-  },
+  ],
   onCreated() {
     this.searchText('');
   },
@@ -96,8 +103,10 @@ Template.StandardsList.viewmodel({
       }).length > 0;
     });
   },
-  standards() {
-    return this._getStandardsByQuery({ ...this._getSearchQuery() });
+  standardsDeleted() {
+    const query = { ...this._getSearchQuery() };
+    const options = { sort: { deletedAt: -1 } };
+    return this._getStandardsByQuery(query, options);
   },
   focused: false,
   animating: false,
