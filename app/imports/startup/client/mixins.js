@@ -153,10 +153,12 @@ ViewModel.mixin({
 
       this.searchText(value);
 
-      if (this.isActiveStandardFilter) {
-        if (this.isActiveStandardFilter('deleted')) return;
-      } else if (this.isActiveNCFilter) {
-        if (this.isActiveNCFilter('deleted')) return;
+      if (this.isActiveStandardFilter && this.isActiveStandardFilter('deleted')) {
+        this.searchResultsNumber(this.standardsDeleted().count());
+        return;
+      } else if (this.isActiveNCFilter && this.isActiveNCFilter('deleted')) {
+        this.searchResultsNumber(this.NCsDeleted().count());
+        return;
       }
 
       if (!!value) {

@@ -4,7 +4,7 @@
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
         {{#ClearableField clearFn="clearSearchField"}}
           <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "ref: searchInput, keyup: searchOnAfterKeyUp"}} />
+              disabled={{animating}} {{b "ref: searchInput, focus: focused, keyup: searchOnAfterKeyUp"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
