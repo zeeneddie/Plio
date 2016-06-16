@@ -55,9 +55,6 @@ Template.StandardsCard.viewmodel({
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
   },
-  isStandardRoute() {
-    return FlowRouter.getRouteName() === 'standard';
-  },
   hasDocxAttachment() {
     const standard = this.standard();
     return ( standard && standard.source1 && standard.source1.htmlUrl ) || ( standard && standard.source2 && standard.source2.htmlUrl );
