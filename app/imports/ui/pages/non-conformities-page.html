@@ -1,0 +1,8 @@
+<template name="NCPage">
+  <div class="content-list scroll" {{b "if: !width || width > 768"}}>
+    {{> NCList}}
+  </div>
+  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
+    {{> NCCard}}
+  </div>
+</template>

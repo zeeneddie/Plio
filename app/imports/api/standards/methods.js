@@ -86,7 +86,7 @@ export const updateViewedBy = new ValidatedMethod({
   run({ _id }) {
     if (!this.userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot delete a standard'
+        403, 'Unauthorized user cannot update a standard'
       );
     }
 

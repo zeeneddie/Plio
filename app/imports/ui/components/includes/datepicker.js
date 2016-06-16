@@ -4,7 +4,7 @@ Template.Datepicker.viewmodel({
   mixin: 'date',
   onRendered() {
     this.datepicker.datepicker({
-      startDate: new Date(),
+      startDate: this.startDate(),
       format: {
         toDisplay: (date, format, language) => {
           return this.renderDate(date);
@@ -29,6 +29,7 @@ Template.Datepicker.viewmodel({
   label: 'Date',
   placeholder: 'Date',
   sm: 8,
+  startDate: new Date(),
   defaultDate: true,
   date: '',
   dateString() {

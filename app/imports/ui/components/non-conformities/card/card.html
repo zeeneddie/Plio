@@ -1,0 +1,135 @@
+<template name="NCCard">
+    <div class="content-cards-inner flex scroll">
+      <div class="card">
+        {{#if hasNCs}}
+          {{#with NC}}
+            <div class="card-block card-heading">
+              <div class="card-heading-buttons pull-xs-right">
+                {{#if isDeleted}}
+                  <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                    Restore
+                  </a>
+                  <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                    Delete
+                  </a>
+                {{else}}
+                  <a class="btn btn-primary" {{b "click: openEditNCModal"}}>
+                    <i class="fa fa-pencil"></i>
+                    Edit
+                  </a>
+                {{/if}}
+              </div>
+              <h3 class="card-title">
+                Non-conformity
+              </h3>
+            </div>
+
+            <div class="list-group">
+
+              <div class="list-group-item">
+                <p class="list-group-item-text">Title</p>
+                <h4 class="list-group-item-heading">
+                  <span {{b "text: this.title"}}></span>
+                  <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+                  <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+                </h4>
+              </div>
+
+              <div class="list-group-item" {{b "if: this.description"}}>
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+              </div>
+
+              <div class="list-group-item" {{b "if: this.standard"}}>
+                <p class="list-group-item-text">Standard</p>
+                {{#with linkedStandard this.standard}}
+                  <h4 class="list-group-item-heading">
+                    <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+                  </h4>
+                {{/with}}
+              </div>
+
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Identified by</p>
+                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.identifiedBy)"}}></h4>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Identified date</p>
+                    <h4 class="list-group-item-heading" {{b "text: renderDate(this.identifiedAt)"}}></h4>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Magnitude</p>
+                    <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="list-group-item" {{b "if: this.ref"}}>
+                    {{#with this.ref}}
+                      <p class="list-group-item-text">Help desk ref</p>
+                      <h4 class="list-group-item-heading"><a class="pointer" {{b "text: this.text, attr: { href: this.url }"}}></a></h4>
+                    {{/with}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="list-group-item" {{b "if: this.cost"}}>
+                    <p class="list-group-item-text">Approx cost per occurrence</p>
+                    <h4 class="list-group-item-heading" {{b "text: renderCost(this.cost)"}}></h4>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {{#with departments}}
+              {{> Departments_Read departmentsIds=this}}
+            {{/with}}
+
+            {{#with notify}}
+              {{> Subcards_Notify_Read users=this}}
+            {{/with}}
+
+            <div {{b "if: occurrences.count > 0"}}>
+              <div class="card-block card-subheading">
+                <h4 class="card-title">Occurrences</h4>
+              </div>
+              <div class="list-group">
+                <div class="list-group-item">
+                  <h4 class="list-group-item-heading" {{b "text: occurrences.count"}}></h4>
+                </div>
+              </div>
+            </div>
+
+            {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+
+            {{> Subcards_LessonsLearned_Read documentId=this._id}}
+
+            {{> CardChangelog document=this}}
+          {{else}}
+            <div class="card-block card-heading">
+              <h5>There is no non-conformities for that filter</h5>
+            </div>
+          {{/with}}
+        {{else}}
+          <div class="card-block card-heading" {{b "if: NCs.count === 0"}}>
+            <h5 {{b "if: !isActiveNCFilter('deleted')"}}>
+              There is no non-conformities yet! Click on the 'Add' button to create your first non-conformity.
+            </h5>
+            <h5 {{b "if: isActiveNCFilter('deleted')"}}>There is no deleted non-conformities yet!</h5>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+</template>

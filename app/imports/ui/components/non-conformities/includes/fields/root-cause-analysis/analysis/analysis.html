@@ -1,0 +1,35 @@
+<template name="NCAnalysis">
+  <div class="card-block">
+    {{#FormField label="Root cause Analysis"}}{{/FormField}}
+
+    {{> NCRCABy
+        by=executor
+        key="analysis.executor"
+        placeholder="Who will do it?"
+        label="Who will do it?"}}
+
+    {{> NCRCADate
+        date=targetDate
+        startDate=defaultTargetDate
+        key="analysis.targetDate"}}
+
+    {{> NCRCAStatus
+      status=status
+      executor=executor
+      key="analysis.status"}}
+
+    {{#if isAnalysisCompleted}}
+      {{> NCRCADate
+          date=completedAt
+          key="analysis.completedAt"
+          placeholder="Completed date"
+          label="Completed date"}}
+
+      {{> NCRCABy
+        by=completedBy
+        key="analysis.completedBy"
+        placeholder="Completed by"
+        label="Completed by"}}
+    {{/if}}
+  </div>
+</template>

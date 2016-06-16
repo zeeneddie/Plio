@@ -1,0 +1,62 @@
+<template name="NCList">
+  <div class="card">
+    <form class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField clearFn="clearSearchField"}}
+          <input type="text" class="form-control" placeholder="Search..."
+              disabled={{animating}} {{b "ref: searchInput, keyup: searchOnAfterKeyUp"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      <a class="btn btn-primary" {{b "click: openAddNCModal"}}>
+        <i class="fa fa-plus"></i>
+        <span>Add</span>
+      </a>
+    </form>
+
+    <div class="list-group list-group-accordion">
+
+      {{#if isActiveNCFilter "magnitude"}}
+        {{#each magnitude}}
+          {{> ListItem
+              template="NCSectionItem"
+              title=this.name
+              magnitude=this.value
+              hideRTextOnExpand=true
+              rText=(calculateTotalCost this.value)
+              key="magnitude"
+              value=this.value}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveNCFilter "status"}}
+        {{#each statuses}}
+          {{> ListItem
+              template="NCSectionItem"
+              title=(getStatusName this)
+              key="status"
+              value=this
+              hideRTextOnExpand=true
+              rText=(calculateTotalCost this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveNCFilter "department"}}
+        {{#each departments}}
+          {{> ListItem
+              template="NCSectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              hideRTextOnExpand=true
+              rText=(calculateTotalCost this._id)
+              key="departments"
+              value=this._id}}
+        {{/each}}
+      {{/if}}
+
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

@@ -1,0 +1,32 @@
+<template name="SubCardEdit">
+  <div class="card">
+    <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+      <span {{b "html: _lText"}}></span>
+      <span class="pull-xs-right" {{b "text: _rText"}}></span>
+    </div>
+    <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+      <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>
+        <div class="card-block">
+          <i class="fa fa-exclamation-circle fa-3x" aria-hidden="true"></i>
+          <span {{b "text: error"}}>
+          </span>
+        </div>
+      </div>
+      {{> Template.dynamic template=content}}
+      <div class="card-block clearfix">
+        <button type="button" class="btn btn-secondary pull-xs-right"
+            {{b "click: close, class: {disabled: isSaving}"}}>
+          {{#if isSaving}}
+            <i class="fa fa-spinner fa-pulse fa-fw margin-bottom">
+            </i>
+          {{/if}}
+          {{#if isSaving}} Saving... {{else}} Close {{/if}}
+        </button>
+        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: delete"}}>
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

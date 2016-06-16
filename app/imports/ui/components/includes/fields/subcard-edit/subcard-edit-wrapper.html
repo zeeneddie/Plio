@@ -1,0 +1,13 @@
+<template name="SubCardEditWrapper">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left" {{b "text: _lText"}}></h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted" {{b "text: _rText"}}></span>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{> Template.contentBlock}}
+    </div>
+  </div>
+</template>

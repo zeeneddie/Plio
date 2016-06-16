@@ -1,0 +1,36 @@
+<template name="StandardsList">
+  <div class="card">
+    <form class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField clearFn="clearSearchField"}}
+          <input type="text" class="form-control" placeholder="Search..."
+              disabled={{animating}} {{b "ref: searchInput, keyup: searchOnAfterKeyUp"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      {{#if canCreateStandards organizationId}}
+        <a class="btn btn-primary" {{b "click: openAddTypeModal"}}>
+          <i class="fa fa-plus"></i>
+          <span>Add</span>
+        </a>
+      {{/if}}
+    </form>
+    <div class="list-group list-group-accordion" id="standardsAccordion">
+      {{#if isActiveStandardFilter 'section'}}
+        {{> StandardsListWrapper type="standardSection" template="StandardsSectionItem" items=standardsBookSections standards=standards}}
+      {{/if}}
+
+      {{#if isActiveStandardFilter 'type'}}
+        {{> StandardsListWrapper type="standardType" template="StandardsTypeItem" items=standardsTypes standards=standards}}
+      {{/if}}
+
+      {{#if isActiveStandardFilter 'deleted'}}
+        {{> StandardsDeletedListWrapper items=standardsDeleted}}
+      {{/if}}
+
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

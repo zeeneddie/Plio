@@ -1,0 +1,14 @@
+<template name="Subcards_LessonsLearned_Read">
+  <div {{b "if: lessons.count > 0"}}>
+    <div class="card-block card-subheading">
+      <h4 class="card-title">Lessons learned</h4>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item">
+        {{#each lessons}}
+          <a class="btn btn-secondary pointer"><strong {{b "text: 'LL' + this.serialNumber"}}></strong> <span {{b "text: this.title"}}></span></a>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</template>

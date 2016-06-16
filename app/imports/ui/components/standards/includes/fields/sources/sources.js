@@ -165,17 +165,20 @@ Template.ESSources.viewmodel({
         fileUploader.cancelUpload(this.fileId());
       }
 
-      this.parent().update({}, {
+      const options = {
         $unset: {
           [`source${this.id()}`]: ''
         }
-      }, (err) =>  {
+      };
+
+      this.parent().update({ options }, (err) =>  {
         if (!err && this.id() === 1) {
-          this.parent().update({}, {
+          const options = {
             $rename: {
               source2: 'source1'
             }
-          });
+          };
+          this.parent().update({ options });
         }
       });
     });
