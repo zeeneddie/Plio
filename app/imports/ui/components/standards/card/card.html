@@ -106,13 +106,9 @@
             {{> CardChangelog document=this}}
           {{else}}
             <div class="card-block card-heading">
-              {{#if isStandardRoute}}
-                <h5>There is no standards for that filter</h5>
-              {{else}}
-                <div class="text-xs-center">
-                  {{> Preloader size=2}}
-                </div>
-              {{/if}}
+              <div class="text-xs-center">
+                {{> Preloader size=2}}
+              </div>
             </div>
           {{/with}}
         {{else}}
