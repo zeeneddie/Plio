@@ -7,24 +7,26 @@ Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   autorun() {
-    const query = this._getQueryForFilter();
+    if (!this.focused()) {
+      const query = this._getQueryForFilter();
 
-    const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
-    if (!contains) {
-      const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
+      if (!contains) {
+        const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
 
-      if (standard) {
-        const { _id } = standard;
-        Meteor.setTimeout(() => {
-          this.goToStandard(_id);
-          this.expandCollapsed(this.standardId());
-        }, 0);
-      } else {
-        Meteor.setTimeout(() => {
-          const params = { orgSerialNumber: this.organizationSerialNumber() };
-          const queryParams = { by: FlowRouter.getQueryParam('by') };
-          FlowRouter.go('standards', params, queryParams);
-        }, 0);
+        if (standard) {
+          const { _id } = standard;
+          Meteor.setTimeout(() => {
+            this.goToStandard(_id);
+            this.expandCollapsed(this.standardId());
+          }, 0);
+        } else {
+          Meteor.setTimeout(() => {
+            const params = { orgSerialNumber: this.organizationSerialNumber() };
+            const queryParams = { by: FlowRouter.getQueryParam('by') };
+            FlowRouter.go('standards', params, queryParams);
+          }, 0);
+        }
       }
     }
   },
@@ -69,6 +71,9 @@ Template.StandardsList.viewmodel({
   _getQuery({ _id:sectionId }) {
     return { sectionId };
   },
+  _getSearchQuery() {
+    return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
+  },
   sections() {
     const sections = ((() => {
       const query = { organizationId: this.organizationId() };
@@ -76,7 +81,7 @@ Template.StandardsList.viewmodel({
       return StandardsBookSections.find(query, options).fetch();
     })());
 
-    return sections.filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId }).count() > 0);
+    return sections.filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId, ...this._getSearchQuery() }).count() > 0);
   },
   types() {
     const types = ((() => {
@@ -87,13 +92,14 @@ Template.StandardsList.viewmodel({
 
     return types.filter(({ _id:typeId }) => {
       return this.sections().filter(({ _id:sectionId }) => {
-        return this._getStandardsByQuery({ sectionId, typeId }).count() > 0;
+        return this._getStandardsByQuery({ sectionId, typeId, ...this._getSearchQuery() }).count() > 0;
       }).length > 0;
     });
   },
   standards() {
-    return this._getStandardsByQuery({});
+    return this._getStandardsByQuery({ ...this._getSearchQuery() });
   },
+  focused: false,
   animating: false,
   sortVms(vms, isTypesFirst = false) {
     const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
