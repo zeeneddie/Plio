@@ -4,6 +4,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { AnalysisStatuses } from '/imports/api/constants.js';
 
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus', 'collapse', 'router', 'collapsing'],
@@ -43,6 +44,9 @@ Template.NCCard.viewmodel({
   occurrences() {
     const query = { nonConformityId: this.NCId() };
     return Occurrences.find(query);
+  },
+  getAnalysisStatusName(status) {
+    return AnalysisStatuses[status];
   },
   openEditNCModal() {
     this.modal().open({
