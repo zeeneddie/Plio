@@ -48,7 +48,7 @@ export const insert = new ValidatedMethod({
 
     ensureCanChangeStandards(userId, organizationId);
 
-    return StandardsService.insert(...args);
+    return StandardsService.insert({ organizationId, ...args });
   }
 });
 
