@@ -24,41 +24,26 @@ Template.NCOccurrences.viewmodel({
         _lText: '',
         _rText: '',
         content: 'NCOccurrencesSubCardContent',
-        onSave: this.save.bind(this),
-        onDelete: this.remove.bind(this)
+        insertFn: this.insertFn(),
+        removeFn: this.removeFn(),
+        updateFn: this.updateFn()
       }
     );
   },
-  onSaveCb() {
-    return this.save.bind(this);
+  insertFn() {
+    return this.insert.bind(this);
   },
-  save(viewmodel) {
-    const _id = viewmodel._id && viewmodel._id();
-
-    const { date, description } = viewmodel.getData();
-
-    if (!_id) {
-      this.insert(viewmodel, { date, description });
-    } else {
-      this.update(viewmodel, { _id, date, description });
-    }
-  },
-  insert(viewmodel, { date, description }) {
+  insert({ ...args }, cb) {
     const nonConformityId = this._id && this._id();
-    const cb = () => viewmodel.destroy();
-
-    this.modal().callMethod(insert, { nonConformityId, date, description }, cb);
+    this.modal().callMethod(insert, { nonConformityId, ...args }, cb);
   },
-  update(viewmodel, { _id, date, description }) {
-    const context = this.templateInstance.data;
-
-    if (date === context['date'] && description === context['description']) return;
-
-    const cb = () => viewmodel.toggleCollapse();
-
-    this.modal().callMethod(update, { _id, date, description }, cb);
+  updateFn() {
+    return this.update.bind(this);
   },
-  onRemoveCb() {
+  update({ ...args }, cb) {
+    this.modal().callMethod(update, { ...args }, cb);
+  },
+  removeFn() {
     return this.remove.bind(this);
   },
   remove(viewmodel) {

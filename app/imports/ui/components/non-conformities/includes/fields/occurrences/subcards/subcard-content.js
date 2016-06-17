@@ -3,13 +3,16 @@ import { Template } from 'meteor/templating';
 Template.NCOccurrencesSubCardContent.viewmodel({
   date: new Date(),
   description: '',
-  onChangeCb() {
-    return this.onChange.bind(this);
+  onDateChangedCb() {
+    return this.onDateChanged.bind(this);
   },
-  onChange(viewmodel) {
+  onDateChanged(viewmodel) {
     const { date } = viewmodel.getData();
-
     this.date(date);
+    this.parent().update(null, 'date');
+  },
+  updateDescription(e) {
+    this.parent().update(e, 'description', true);
   },
   getData() {
     const { description, date } = this.data();

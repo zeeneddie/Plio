@@ -50,7 +50,7 @@ export const update = new ValidatedMethod({
 
     if (!NC) {
       throw new Meteor.Error(
-        400, 'Non-conformity with the given id does not exists'
+        400, 'Non-conformity does not exist'
       );
     }
 
@@ -98,7 +98,7 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (!NonConformities.findOne({ _id })) {
       throw new Meteor.Error(
-        400, 'Non-conformity with the given id does not exists'
+        400, 'Non-conformity does not exist'
       );
     }
 
