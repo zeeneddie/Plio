@@ -1,0 +1,10 @@
+<template name="NCOtherFiles">
+  {{#SubCardEditWrapper _lText="Other Files" _rText=files.length}}
+    {{#FormField sm=12}}
+      {{> FileUploader_Wrapper
+          files=files
+          slingshotDirective="nonConformitiesFiles"
+          uploaderMetaContext=uploaderMetaContext}}
+    {{/FormField}}
+  {{/SubCardEditWrapper}}
+</template>

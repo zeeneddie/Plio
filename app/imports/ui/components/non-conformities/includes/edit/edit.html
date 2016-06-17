@@ -65,12 +65,7 @@
             linkedTo=this.title
             linkedToId=this.sequentialId}}
 
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#files" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Other files</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">2</span>
-          </h4>
-        </div>
+        {{> NCOtherFiles _id=this._id files=this.files}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
