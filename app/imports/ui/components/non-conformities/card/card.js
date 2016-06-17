@@ -70,8 +70,9 @@ Template.NCCard.viewmodel({
           } else {
             swal('Restored!', `The non-conformity "${title}" was restored successfully.`, 'success');
 
+            FlowRouter.setQueryParams({ by: 'magnitude' });
             Meteor.setTimeout(() => {
-              this.goToNC(_id, false);
+              this.goToNC(_id);
               this.expandCollapsed(_id);
             }, 0);
           }
