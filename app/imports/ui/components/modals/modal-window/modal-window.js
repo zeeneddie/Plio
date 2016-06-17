@@ -82,7 +82,10 @@ Template.ModalWindow.viewmodel({
           this.setError(error);
 
           Meteor.setTimeout(() => {
-            this.modal.scrollTop($('.subcard.with-error').offset().top);
+            const subcartWithError = $('.subcard.with-error');
+            if (subcartWithError.length) {
+              this.modal.scrollTop(subcartWithError.offset().top);
+            }
           }, 500);
         } else if (this.closeAfterCall()) {
           this.close();
