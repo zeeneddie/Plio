@@ -25,8 +25,8 @@ const ensureCanChangeStandards = (userId, organizationId) => {
   }
 };
 
-const getStandardOrThrow = (standardId) => {
-  const standard = Standards.findOne({ _id: standardId });
+const getStandardOrThrow = (_id) => {
+  const standard = Standards.findOne({ _id });
   if (!standard) {
     throw new Meteor.Error(400, 'Standard does not exist');
   }
@@ -38,16 +38,13 @@ export const insert = new ValidatedMethod({
 
   validate: StandardsSchema.validator(),
 
-  run(...args) {
+  run({ organizationId, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot create a standard'
       );
     }
-
-    const [ doc ] = args;
-    const { organizationId } = doc;
 
     ensureCanChangeStandards(userId, organizationId);
 
@@ -59,10 +56,10 @@ export const update = new ValidatedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema, optionsSchema, OrganizationIdSchema
+    IdSchema, StandardsUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({_id, options, ...args, organizationId }) {
+  run({ _id, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -70,11 +67,13 @@ export const update = new ValidatedMethod({
       );
     }
 
+    const standard = getStandardOrThrow(_id);
+
+    const { organizationId } = standard;
+
     ensureCanChangeStandards(userId, organizationId);
 
-    getStandardOrThrow(_id);
-
-    return StandardsService.update({ _id, options, ...args });
+    return StandardsService.update({ _id, ...args });
   }
 });
 
@@ -90,10 +89,13 @@ export const updateViewedBy = new ValidatedMethod({
       );
     }
 
-    if (!!Standards.findOne({ _id, viewedBy: this.userId })) {
+    const standard = getStandardOrThrow(_id);
+
+    const { viewedBy } = standard;
+
+    if (viewedBy && viewedBy === this.userId) {
       throw new Meteor.Error(
-        403,
-        'You have been already added to this list'
+        400, 'You have been already added to this list'
       );
     }
 
@@ -104,11 +106,9 @@ export const updateViewedBy = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'Standards.remove',
 
-  validate: new SimpleSchema([
-    IdSchema, OrganizationIdSchema
-  ]).validator(),
+  validate: IdSchema.validator(),
 
-  run({ _id, organizationId }) {
+  run({ _id }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -116,11 +116,13 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    ensureCanChangeStandards(userId, organizationId);
-
     const standard = getStandardOrThrow(_id);
 
-    return StandardsService.remove({ _id, deletedBy: userId, isDeleted: standard.isDeleted });
+    const { organizationId, isDeleted } = standard;
+
+    ensureCanChangeStandards(userId, organizationId);
+
+    return StandardsService.remove({ _id, isDeleted, deletedBy: userId });
   }
 });
 
