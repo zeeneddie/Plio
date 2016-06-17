@@ -1,100 +1,107 @@
 import { Template } from 'meteor/templating';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { Standards } from '/imports/api/standards/standards.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
+  autorun() {
+    if (!this.focused()) {
+      const query = this._getQueryForFilter();
+
+      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
+      if (!contains) {
+        const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+
+        if (standard) {
+          const { _id } = standard;
+          Meteor.setTimeout(() => {
+            this.goToStandard(_id);
+            this.expandCollapsed(this.standardId());
+          }, 0);
+        } else {
+          Meteor.setTimeout(() => {
+            const params = { orgSerialNumber: this.organizationSerialNumber() };
+            const queryParams = { by: FlowRouter.getQueryParam('by') };
+            FlowRouter.go('standards', params, queryParams);
+          }, 0);
+        }
+      }
+    }
+  },
   onCreated() {
     this.searchText('');
   },
   onRendered() {
     this.expandCollapsed(this.standardId());
   },
-  autorun() {
-    this.isActiveStandardFilter('deleted') ? this.searchResultsNumber(this.standardsDeleted().count()) : this.searchResultsNumber(this.standards().count());
-  },
-  getFirstStandard() {
-    const query = { organizationId: this.organizationId() };
-    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
-    const options = { sort: { createdAt: -1 } };
-    return Standards.findOne(sQuery, options);
-  },
-  standards(typeId) {
-    const standardsSearchQuery = this.searchObject('searchText', [
-      { name: 'title' },
-      { name: 'description' },
-      { name: 'status' }
-    ]);
-
-    const sectionIds = this.sectionIds();
-
-    const standardsQuery = {
-      $and: [
-        { sectionId: { $in: sectionIds }, organizationId: this.organizationId(), isDeleted: { $in: [null, false] } },
-        standardsSearchQuery
-      ]
+  _getQueryForFilter() {
+    switch(this.activeStandardFilter()) {
+      case 'section':
+        return { sectionId: { $in: this.sections().map(({ _id }) => _id) } };
+        break;
+      case 'type':
+        return { typeId: { $in: this.types().map(({ _id }) => _id) } };
+        break;
+      default:
+        return {};
+        break;
     };
+  },
+  _getFirstStandardQueryForFilter() {
+    switch(this.activeStandardFilter()) {
+      case 'section':
+        return { sectionId: this.sections().length > 0 && this.sections().map(({ _id }) => _id)[0] };
+        break;
+      case 'type':
+        const typeId = this.types().length > 0 && this.types().map(({ _id }) => _id)[0];
+        const sectionIds =
+                this.sections()
+                    .filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId, typeId }).count() > 0)
+                    .map(({ _id }) => _id);
+        const sectionId = sectionIds.length > 0 && sectionIds[0];
+        return { typeId, sectionId };
+        break;
+      default:
+        return {};
+        break;
+    };
+  },
+  _getQuery({ _id:sectionId }) {
+    return { sectionId };
+  },
+  _getSearchQuery() {
+    return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
+  },
+  sections() {
+    const sections = ((() => {
+      const query = { organizationId: this.organizationId() };
+      const options = { sort: { title: 1 } };
+      return StandardsBookSections.find(query, options).fetch();
+    })());
 
-    if (this.isActiveStandardFilter('type') && typeId) {
-      standardsQuery.$and.push({
-        typeId
-      });
-    }
+    return sections.filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId, ...this._getSearchQuery() }).count() > 0);
+  },
+  types() {
+    const types = ((() => {
+      const query = { organizationId: this.organizationId() };
+      const options = { sort: { name: 1 } };
+      return StandardTypes.find(query, options).fetch();
+    })());
 
-    return Standards.find(standardsQuery);
+    return types.filter(({ _id:typeId }) => {
+      return this.sections().filter(({ _id:sectionId }) => {
+        return this._getStandardsByQuery({ sectionId, typeId, ...this._getSearchQuery() }).count() > 0;
+      }).length > 0;
+    });
   },
   standardsDeleted() {
-    const standardsSearchQuery = this.searchObject('searchText', [
-      { name: 'title' },
-      { name: 'description' },
-      { name: 'status' }
-    ]);
-    const query = {
-      $and: [
-        { organizationId: this.organizationId(), isDeleted: true },
-        standardsSearchQuery
-      ]
-    };
+    const query = { ...this._getSearchQuery() };
     const options = { sort: { deletedAt: -1 } };
-    return Standards.find(query, options);
+    return this._getStandardsByQuery(query, options);
   },
-  sectionIds() {
-    const query = { organizationId: this.organizationId() };
-    const availableSections = StandardsBookSections.find(query).fetch();
-    return _.pluck(availableSections, '_id');
-  },
-  standardsBookSections(typeId) {
-    const standards = this.standards(typeId).fetch();
-    const sectionIds = this.sectionIds();
-
-    const filteredSectionIds = sectionIds.filter((id) => {
-      return _.some(standards, (s) => s.sectionId === id);
-    });
-    const sectionsQuery = {
-      $or: [
-        { _id: { $in: filteredSectionIds } }
-      ]
-    };
-
-    const options = { sort: { title: 1 } };
-
-    return StandardsBookSections.find(sectionsQuery, options);
-  },
-  standardsTypes() {
-    const types =  StandardTypes.find({ organizationId: this.organizationId() }).fetch();
-    const typeIds = _.pluck(types, '_id');
-    const filteredTypeIds = typeIds.filter((id) => {
-      const typeSections = this.standardsBookSections(id).fetch();
-      return typeSections.length > 0;
-    });
-    const query = { organizationId: this.organizationId(), _id: { $in: filteredTypeIds } };
-    const options = { sort: { name: 1 } };
-
-    return StandardTypes.find(query, options);
-  },
+  focused: false,
   animating: false,
   sortVms(vms, isTypesFirst = false) {
     const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
@@ -104,13 +111,18 @@ Template.StandardsList.viewmodel({
     return isTypesFirst ? types.concat(sections) : sections.concat(types);
   },
   expandAllFound() {
-    const ids = this.standards().fetch().map(standard => standard._id);
+    const ids = _.flatten(
+      ViewModel.find('StandardSectionItem')
+                .map(vm => vm.standards && vm.standards().fetch().map(({ _id }) => _id))
+    );
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
     const vmsSorted = this.sortVms(vms, true); // to expand top level items first
+
+    this.searchResultsNumber(ids.length);
 
     if (vmsSorted.length > 0) {
       this.animating(true);
@@ -145,17 +157,6 @@ Template.StandardsList.viewmodel({
   onAfterExpand() {
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
-  },
-  reroute() {
-    const standard = this.getFirstStandard();
-    if (!!standard) {
-      const { _id } = standard;
-
-      Meteor.setTimeout(() => {
-        this.goToStandard(_id);
-        this.expandCollapsed(_id);
-      }, 0);
-    }
   },
   openAddTypeModal(e) {
     this.modal().open({
