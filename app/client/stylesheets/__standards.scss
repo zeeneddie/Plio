@@ -220,7 +220,7 @@
 
     .list-group-item {
       background-color: transparent;
-      padding-left: 0;
+      padding-left: 0 !important;
       padding-bottom: 0;
       padding-top: 16px;
       .list-group-item-heading {
