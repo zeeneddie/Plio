@@ -129,8 +129,7 @@ Template.ESSources.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { url }) {
-    if (err && err.error !== 'Aborted') {
-      this.modal().setError(err.reason);
+    if (err) {
       return;
     }
 

@@ -4,6 +4,7 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 
 Template.FileUploader.viewmodel({
+  mixin: 'modal',
   attachmentFile: null,
   uploads: new ReactiveArray(),
   uploadData(fileId) {
@@ -32,7 +33,10 @@ Template.FileUploader.viewmodel({
     this.attachmentFile(null);
 
     this.insertFile({ _id, name }, (err) => {
+      const modal = this.modal();
+
       if (err) {
+        modal.setError(err.reason);
         return;
       }
 
@@ -40,9 +44,19 @@ Template.FileUploader.viewmodel({
         this.slingshotDirective(), this.metaContext()
       );
 
+      modal.clearError();
+      modal.isSaving(false);
+      modal.isUploading(true);
+
       uploader.send(file, (err, url) => {
+        modal.isUploading(false);
+
         if (url) {
           url = encodeURI(url);
+        }
+
+        if (err && err.error !== 'Aborted') {
+          modal.setError(err.reason);
         }
 
         this.onUpload(err, { _id, url });
@@ -50,13 +64,16 @@ Template.FileUploader.viewmodel({
       });
 
       this.uploads().push({ fileId: _id, uploader });
+
+      // prevent modal's default method result handling
+      return true;
     });
   },
   cancelUpload(fileId) {
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     if (uploader) {
-      uploader.xhr.abort();
+      uploader.xhr && uploader.xhr.abort();
       this.removeUploadData(fileId);
     }
   },

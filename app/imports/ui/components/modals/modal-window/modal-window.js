@@ -17,13 +17,16 @@ Template.ModalWindow.viewmodel({
   },
   variation: '',
   isSaving: false,
+  isUploading: false,
   isWaiting: false,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
+  submitCaptionOnUpload: 'Uploading...',
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
+  closeCaptionOnUpload: 'Uploading...',
   guideHtml: 'No help message yet',
   closeAfterCall: false,
 
@@ -32,7 +35,13 @@ Template.ModalWindow.viewmodel({
   },
 
   closeCaptionText() {
-    return this.isSaving() && !this.variation() ? this.closeCaptionOnSave() : this.closeCaption();
+    if (this.isSaving() && !this.variation()) {
+      return this.closeCaptionOnSave();
+    } else if (this.isUploading() && !this.variation()) {
+      return this.closeCaptionOnUpload();
+    } else {
+      return this.closeCaption();
+    }
   },
 
   isVariation(variation) {
@@ -119,7 +128,11 @@ Template.ModalWindow.viewmodel({
     }
   },
 
-  showSpinner() {
-    return this.isSaving() || this.isWaiting();
+  isCloseButtonDisabled() {
+    return this.isSaving() || this.isUploading();
+  },
+
+  showCloseButtonSpinner() {
+    return (this.isSaving() || this.isUploading()) && !this.isVariation('save');
   }
 });

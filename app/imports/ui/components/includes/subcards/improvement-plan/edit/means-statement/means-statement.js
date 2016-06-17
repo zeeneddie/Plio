@@ -33,8 +33,7 @@ Template.IPMeansStatement.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { _id, url }) {
-    if (err && err.error !== 'Aborted') {
-      ViewModel.findOne('ModalWindow').setError(err.reason);
+    if (err) {
       return;
     }
 

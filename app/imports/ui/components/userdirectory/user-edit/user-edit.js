@@ -85,15 +85,16 @@ Template.UserEdit.viewmodel({
       userId: this.userId()
     });
 
-    this.modal().clearError();
-    this.modal().isSaving(true);
+    const modal = this.modal();
+    modal.clearError();
+    modal.isSaving(true);
 
     uploader.send(avatarFile, (err, downloadUrl) => {
-      this.modal().isSaving(false);
+      modal.isSaving(false);
       viewModel.avatarFile(null);
 
       if (err) {
-        this.modal().setError(err);
+        modal.setError(err);
         return;
       }
 

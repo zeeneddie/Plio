@@ -98,6 +98,15 @@ ViewModel.mixin({
 
         return instance && instance.isSaving();
       },
+      isUploading(val) {
+        const instance = this.instance();
+
+        if (val !== undefined) {
+          instance && instance.isUploading(val);
+        }
+
+        return instance && instance.isUploading();
+      },
       isWaiting(val) {
         const instance = this.instance();
 
