@@ -41,14 +41,6 @@ Template.EditNC.viewmodel({
             swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
 
             this.modal().close();
-            // 
-            // const NCs = this._getNCsByQuery({});
-            //
-            // if (!!NCs.count() > 0) {
-            //   Meteor.setTimeout(() => {
-            //     this.goToNCs();
-            //   }, 0);
-            // }
           }
         });
       }
