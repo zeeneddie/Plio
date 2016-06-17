@@ -72,21 +72,12 @@ Template.ModalWindow.viewmodel({
 
         const errors = this.errors;
         let error;
-        if (errors.length === 1) {
+        if (errors.length === 1 && !errors[0].isFromSubcard) {
           error = errors[0].reason || 'Internal server error';
-        } else if (errors.length > 1) {
-          error = 'There are errors';
         }
 
         if (error) {
           this.setError(error);
-
-          Meteor.setTimeout(() => {
-            const subcartWithError = $('.subcard.with-error');
-            if (subcartWithError.length) {
-              this.modal.scrollTop(subcartWithError.offset().top);
-            }
-          }, 500);
         } else if (this.closeAfterCall()) {
           this.close();
         }

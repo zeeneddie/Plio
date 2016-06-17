@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
 Template.SubCardEdit.viewmodel({
-  mixin: ['collapse', 'callWithFocusCheck'],
+  mixin: ['collapse', 'callWithFocusCheck', 'modal'],
   isSubcard: true,
   isSaving: false,
   isWaiting: false,
@@ -22,11 +22,17 @@ Template.SubCardEdit.viewmodel({
     this.clearError();
 
     saveFn(args, (err, res) => {
+      if (err) {
+        err.isFromSubcard = true;
+      }
+
       Meteor.setTimeout(() => {
         this.isSaving(false);
-
         if (err) {
           this.setError(err.reason);
+          err.isSubcardError = true;
+          const currentSubcard = this.subcard;
+          currentSubcard.closest('.modal').animate({ scrollTop: currentSubcard.position().top + 70 }, 500, 'swing');
         } else if (this.closeAfterCall()) {
           this.toggleCollapse();
         }
