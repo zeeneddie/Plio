@@ -2,7 +2,12 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
 Template.SubCardEdit.viewmodel({
-  mixin: ['collapse', 'subcard', 'callWithFocusCheck'],
+  mixin: ['collapse', 'callWithFocusCheck'],
+  isSubcard: true,
+  isSaving: false,
+  isWaiting: false,
+  closeAfterCall: false,
+  error: '',
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
@@ -11,6 +16,65 @@ Template.SubCardEdit.viewmodel({
   _lText: '',
   _rText: '',
   content: '',
+  callSave(saveFn, args, cb) {
+    this.isWaiting(false);
+    this.isSaving(true);
+    this.clearError();
+
+    saveFn(args, (err, res) => {
+      Meteor.setTimeout(() => {
+        this.isSaving(false);
+
+        if (err) {
+          this.setError(err.reason);
+        } else if (this.closeAfterCall()) {
+          this.toggleCollapse();
+        }
+
+        this.closeAfterCall(false);
+      }, 500);
+
+      if (_.isFunction(cb)) {
+        return cb(err, res);
+      }
+    });
+  },
+  close() {
+    const _id = this._id && this._id();
+
+    if (_id) {
+      if (this.isWaiting.value || this.isSaving.value) {
+        this.closeAfterCall(true);
+      } else {
+        this.toggleCollapse();
+      }
+    } else {
+      this.save && this.save();
+    }
+  },
+  setError(errMsg) {
+    const setError = () => {
+      this.error(errMsg);
+      this.errorSection.collapse('show');
+    };
+
+    if (!this.collapse.hasClass('in')) {
+      this.collapse.collapse('show');
+
+      this.collapse.on('shown.bs.collapse', () => {
+        setError();
+      });
+    } else {
+      setError();
+    }
+  },
+  clearError() {
+    this.error('');
+    this.errorSection.collapse('hide');
+  },
+  hasError() {
+    return !!this.error();
+  },
   save() {
     this.callSave(this.insertFn, this.getData(), (err) => {
       if (!err) {

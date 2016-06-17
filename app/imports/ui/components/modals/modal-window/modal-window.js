@@ -71,17 +71,19 @@ Template.ModalWindow.viewmodel({
         this.isSaving(false);
 
         const errors = this.errors;
-        let errorMsg = '';
+        let error;
         if (errors.length === 1) {
-          errorMsg = errors[0].reason;
-        } else {
-          _.each(errors, (error, i) => {
-            errorMsg +=`<p>${i + 1}. ${error.reason}.</p>`;
-          });
+          error = errors[0].reason || 'Internal server error';
+        } else if (errors.length > 1) {
+          error = 'There are errors';
         }
 
-        if (errorMsg) {
-          this.setError(errorMsg);
+        if (error) {
+          this.setError(error);
+
+          Meteor.setTimeout(() => {
+            this.modal.scrollTop($('.subcard.with-error').offset().top);
+          }, 500);
         } else if (this.closeAfterCall()) {
           this.close();
         }
