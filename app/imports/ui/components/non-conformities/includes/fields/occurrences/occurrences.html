@@ -10,8 +10,9 @@
             _lText=(renderText this)
             _rText=(renderDate this.date)
             content="NCOccurrencesSubCardContent"
-            onSave=onSaveCb
-            onDelete=onRemoveCb}}
+            insertFn=insertFn
+            removeFn=removeFn
+            updateFn=updateFn}}
       {{/each}}
     </div>
     <div class="text-xs-center">

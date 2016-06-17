@@ -24,29 +24,28 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
         content: 'Subcards_LessonLearned',
         linkedTo: this.linkedTo(),
         linkedToId: this.linkedToId(),
-        onSave: this.save.bind(this),
-        onDelete: this.remove.bind(this)
+        insertFn: this.insertFn(),
+        removeFn: this.removeFn(),
+        updateFn: this.updateFn()
       }
     );
   },
-  insert(viewmodel, { ...args }) {
+  insertFn() {
+    return this.insert.bind(this);
+  },
+  insert({ ...args }, cb) {
     const organizationId = this.organizationId();
     const { documentId, documentType } = this.data();
-    const cb = () => viewmodel.destroy();
 
-    this.modal().callMethod(insert, { organizationId, documentId, documentType, ...args }, cb);
+    this.modal().callMethod(insert, {
+      organizationId, documentId, documentType, ...args
+    }, cb);
   },
-  update(viewmodel, { _id, title, date, owner, notes }) {
-    const context = viewmodel.templateInstance.data;
-    const cb = () => viewmodel.toggleCollapse();
-
-
-    if (context['title'] === title &&
-        context['date']  === date  &&
-        context['owner'] === owner &&
-        context['notes'] === notes) return;
-
-    this.modal().callMethod(update, { _id, title, date, owner, notes }, cb);
+  updateFn() {
+    return this.update.bind(this);
+  },
+  update({ ...args }, cb) {
+    this.modal().callMethod(update, { ...args }, cb);
   },
   remove(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
@@ -76,21 +75,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       );
     }
   },
-  onSaveCb() {
-    return this.save.bind(this);
-  },
-  save(viewmodel) {
-    const _id = viewmodel._id && viewmodel._id();
-
-    const { title, date, owner, notes } = viewmodel.getData();
-
-    if (!_id) {
-      this.insert(viewmodel, { title, date, owner, notes });
-    } else {
-      this.update(viewmodel, { _id, title, date, owner, notes });
-    }
-  },
-  onRemoveCb() {
+  removeFn() {
     return this.remove.bind(this);
   },
 });

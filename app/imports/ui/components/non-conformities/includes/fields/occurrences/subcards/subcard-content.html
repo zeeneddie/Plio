@@ -1,8 +1,10 @@
 <template name="NCOccurrencesSubCardContent">
-  {{#FormField label="Date"}}
-    {{> Datepicker placeholder="Date" date=date onChange=onChangeCb}}
-  {{/FormField}}
-  {{#FormField label="Description"}}
-    <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description"}}></textarea>
-  {{/FormField}}
+  <div class="card-block">
+    {{#FormField label="Date"}}
+      {{> Datepicker placeholder="Date" date=date onChange=onDateChangedCb}}
+    {{/FormField}}
+    {{#FormField label="Description"}}
+      <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description, focusout: updateDescription"}}></textarea>
+    {{/FormField}}
+  </div>
 </template>

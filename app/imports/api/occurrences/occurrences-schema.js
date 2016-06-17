@@ -8,7 +8,8 @@ const RequiredSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   },
   description: {
-    type: String
+    type: String,
+    min: 1
   },
   date: {
     type: Date

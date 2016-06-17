@@ -5,13 +5,15 @@ import { BaseEntitySchema, OrganizationIdSchema, DocumentIdSchema, DocumentTypeS
 
 const RequiredSchema = new SimpleSchema({
   title: {
-    type: String
+    type: String,
+    min: 1
   },
   date: {
     type: Date
   },
   notes: {
-    type: String
+    type: String,
+    min: 1
   },
   owner: {
     type: String,
