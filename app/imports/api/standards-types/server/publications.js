@@ -1,11 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { StandardTypes } from '../standards-types.js';
+import { isOrgMember } from '../../checkers.js';
 
 
 Meteor.publish('standards-types', function(organizationId) {
-  if (this.userId) {
-    return StandardTypes.find({ organizationId });
-  } else {
+  const userId = this.userId;
+  if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+  return StandardTypes.find({ organizationId });
 });

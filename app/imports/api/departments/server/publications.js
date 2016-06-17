@@ -1,11 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { Departments } from '../departments.js';
+import { isOrgMember } from '../../checkers.js';
 
 
 Meteor.publish('departments', function(organizationId) {
-  if (this.userId) {
-    return Departments.find({ organizationId });
-  } else {
+  const userId = this.userId;
+  if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+  return Departments.find({ organizationId });
 });
