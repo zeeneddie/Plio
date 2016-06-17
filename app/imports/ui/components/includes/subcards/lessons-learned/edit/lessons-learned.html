@@ -1,6 +1,6 @@
 <template name="Subcards_LessonsLearned_Edit">
   {{#SubCardEditWrapper _lText="Lessons learned" _rText=lessons.count}}
-    <div {{b "ref: forms"}}>
+    <div {{b "ref: forms"}} id="lessons">
       {{#each lessons}}
         {{> SubCardEdit
             _id=this._id
@@ -13,8 +13,9 @@
             linkedToId=linkedToId
             _lText=(renderText this)
             content="Subcards_LessonLearned"
-            onSave=onSaveCb
-            onDelete=onRemoveCb}}
+            insertFn=insertFn
+            removeFn=removeFn
+            updateFn=updateFn}}
       {{/each}}
     </div>
     <div class="text-xs-center">

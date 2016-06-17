@@ -16,6 +16,9 @@ Template.Subcards_LessonLearned.viewmodel({
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',
+  updateTitle(e) {
+    this.parent().update(e, 'title', true);
+  },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);
   },
@@ -25,6 +28,7 @@ Template.Subcards_LessonLearned.viewmodel({
     if (this.templateInstance.data.date === date) return;
 
     this.date(date);
+    this.parent().update(null, 'date');
   },
   onUpdateOwnerCb() {
     return this.onUpdateOwner.bind(this);
@@ -35,6 +39,15 @@ Template.Subcards_LessonLearned.viewmodel({
     if (this.templateInstance.data.owner === owner) return;
 
     this.owner(owner);
+    this.parent().update(null, 'owner');
+  },
+  updateNotes(e) {
+    this.parent().update(e, 'notes', true);
+  },
+  events: {
+    'focusout .quill'(e, tpl) {
+      this.updateNotes(e);
+    }
   },
   getData() {
     const { title, date, owner } = this.data();
