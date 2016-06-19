@@ -2,11 +2,12 @@
   {{#FormField label="Means statement - file attachment" sm=7}}
     {{#each files}}
       {{> FileItem
-          _id=_id
-          name=name
-          url=url
+          _id=this._id
+          name=this.name
+          url=this.url
           extension=extension
-          removeFile=removeFileFn}}
+          removeFile=removeFileFn
+          uploader=uploader}}
     {{/each}}
     {{> FileUploader
         insertFile=insertFileFn

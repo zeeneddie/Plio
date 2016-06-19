@@ -3,7 +3,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 
 Template.IPMeansStatement.viewmodel({
-  mixin: ['filesList', 'organization'],
+  mixin: ['organization'],
   files: [],
   insertFileFn() {
     return this.insertFile.bind(this);
@@ -55,7 +55,7 @@ Template.IPMeansStatement.viewmodel({
   },
   removeFile(viewmodel) {
     const { _id, url } = viewmodel.getData();
-    const fileUploader = this.fileUploader();
+    const fileUploader = this.uploader();
 
     const isFileUploading = fileUploader.isFileUploading(_id);
 
@@ -86,6 +86,9 @@ Template.IPMeansStatement.viewmodel({
 
       this.parent().update({ options });
     });
+  },
+  uploader() {
+    return this.child('FileUploader');
   },
   uploaderMetaContext() {
     return {

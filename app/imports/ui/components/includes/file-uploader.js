@@ -46,10 +46,10 @@ Template.FileUploader.viewmodel({
 
       modal.clearError();
       modal.isSaving(false);
-      modal.isUploading(true);
+      modal.incUploadsCount();
 
       uploader.send(file, (err, url) => {
-        modal.isUploading(false);
+        modal.decUploadsCount();
 
         if (url) {
           url = encodeURI(url);

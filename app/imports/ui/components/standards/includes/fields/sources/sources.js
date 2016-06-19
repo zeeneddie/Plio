@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { check } from 'meteor/check'
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
+  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -141,7 +141,7 @@ Template.ESSources.viewmodel({
     return this.removeAttachment.bind(this);
   },
   removeAttachment() {
-    const fileUploader = this.fileUploader();
+    const fileUploader = this.uploader();
 
     const isFileUploading = fileUploader.isFileUploading(this.fileId());
 
@@ -181,6 +181,9 @@ Template.ESSources.viewmodel({
         }
       });
     });
+  },
+  uploader() {
+    return this.child('FileUploader');
   },
   uploaderMetaContext() {
     return {

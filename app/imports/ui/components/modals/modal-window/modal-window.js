@@ -17,13 +17,12 @@ Template.ModalWindow.viewmodel({
   },
   variation: '',
   isSaving: false,
-  isUploading: false,
   isWaiting: false,
+  uploadsCount: 0,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
-  submitCaptionOnUpload: 'Uploading...',
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
   closeCaptionOnUpload: 'Uploading...',
@@ -35,9 +34,9 @@ Template.ModalWindow.viewmodel({
   },
 
   closeCaptionText() {
-    if (this.isSaving() && !this.variation()) {
+    if (this.isSaving() && this.variation() !== 'save') {
       return this.closeCaptionOnSave();
-    } else if (this.isUploading() && !this.variation()) {
+    } else if (this.isUploading() && this.variation() !== 'save') {
       return this.closeCaptionOnUpload();
     } else {
       return this.closeCaption();
@@ -125,6 +124,20 @@ Template.ModalWindow.viewmodel({
       });
     } else {
       this.close();
+    }
+  },
+
+  isUploading() {
+    return this.uploadsCount() > 0;
+  },
+
+  incUploadsCount() {
+    this.uploadsCount(this.uploadsCount() + 1);
+  },
+
+  decUploadsCount() {
+    if (this.uploadsCount() > 0) {
+      this.uploadsCount(this.uploadsCount() - 1);
     }
   },
 
