@@ -14,7 +14,7 @@ Template.NCLayout.viewmodel({
       this._subHandlers([
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('non-conformities', _id),
+        this.templateInstance.subscribe('nonConformities', _id),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('departments', _id)
