@@ -17,7 +17,13 @@ const has = (obj, ...args) => args.some(a => obj.hasOwnProperty(a));
 export const insert = new ValidatedMethod({
   name: 'NonConformities.insert',
 
-  validate: RequiredSchema.validator(),
+  validate: new SimpleSchema([RequiredSchema, {
+    standard: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  }]).validator(),
 
   run({ ...args }) {
     const userId = this.userId;

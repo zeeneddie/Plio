@@ -8,11 +8,14 @@ Template.EditStandard.viewmodel({
   share: 'standard',
   mixin: ['modal', 'organization', 'collapsing', 'standard', 'router'],
   autorun() {
-
+    this.templateInstance.subscribe('nonConformitiesByStandardId', this._id());
   },
   standard() {
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
+  },
+  _getNCsQuery() {
+    return { standard: this._id() };
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);

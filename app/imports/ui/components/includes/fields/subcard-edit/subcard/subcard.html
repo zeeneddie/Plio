@@ -21,7 +21,7 @@
             <i class="fa fa-spinner fa-pulse fa-fw margin-bottom">
             </i>
           {{/if}}
-          {{#if isSaving}} Saving... {{else}} Close {{/if}}
+          {{#if isSaving}} Saving... {{else}} {{#if _id}} Close {{else}} Save {{/if}} {{/if}}
         </button>
         <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: delete"}}>
           Delete
