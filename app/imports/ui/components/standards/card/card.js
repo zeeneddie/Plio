@@ -74,7 +74,7 @@ Template.StandardsCard.viewmodel({
       _id: this.standardId()
     });
   },
-  restore({ _id, title, isDeleted, organizationId }) {
+  restore({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
     swal(
@@ -87,7 +87,7 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, organizationId, isDeleted: false }, (err) => {
+        update.call({ _id, isDeleted: false }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
@@ -103,7 +103,7 @@ Template.StandardsCard.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted, organizationId }) {
+  delete({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
     swal(
@@ -116,7 +116,7 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        remove.call({ _id, organizationId }, (err) => {
+        remove.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
