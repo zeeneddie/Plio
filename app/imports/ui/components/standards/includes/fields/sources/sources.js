@@ -96,7 +96,7 @@ Template.ESSources.viewmodel({
         url,
         name: this.sourceName() + '.html',
         source: `source${this.id()}`,
-        id:  this.parent()._id(),
+        standardId:  this.parent()._id(),
       }, (error, result) => {
         if (error) {
           // HTTP errors
