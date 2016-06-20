@@ -1,9 +1,12 @@
 import { Template } from 'meteor/templating';
 
 Template.FileUploader_Wrapper.viewmodel({
-  mixin: 'filesList',
+  mixin: 'organization',
   files: [],
   slingshotDirective: '',
+  uploader() {
+    return this.child('FileUploader');
+  },
   insertFileFn() {
     return this.insertFile.bind(this);
   },
@@ -52,7 +55,7 @@ Template.FileUploader_Wrapper.viewmodel({
   },
   removeFile(viewmodel) {
     const { _id, url } = viewmodel.getData();
-    const fileUploader = this.fileUploader();
+    const fileUploader = this.uploader();
 
     const isFileUploading = fileUploader.isFileUploading(_id);
 

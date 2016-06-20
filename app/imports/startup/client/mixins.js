@@ -98,6 +98,12 @@ ViewModel.mixin({
 
         return instance && instance.isSaving();
       },
+      incUploadsCount() {
+        this.instance().incUploadsCount();
+      },
+      decUploadsCount() {
+        this.instance().decUploadsCount();
+      },
       isWaiting(val) {
         const instance = this.instance();
 
@@ -311,14 +317,6 @@ ViewModel.mixin({
   date: {
     renderDate(date) {
       return moment.isDate(date) && moment(date).format('DD MMM YYYY');
-    }
-  },
-  filesList: {
-    fileUploader() {
-      return this.child('FileUploader');
-    },
-    fileProgress(fileId) {
-      return this.fileUploader() && this.fileUploader().progress(fileId);
     }
   },
   callWithFocusCheck: {
