@@ -95,6 +95,27 @@ const configureSlignshot = () => {
       return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
     }
   });
+
+  Slingshot.createDirective('nonConformitiesFiles', Slingshot.S3Storage, {
+    bucket: name,
+
+    acl: acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { organizationId, nonConformityId } = metaContext;
+      return `uploads/${organizationId}/${nonConformitiesFilesDir}/${x}/${Random.id()}-${file.name}`;
+    }
+  });
 };
 
 // if (Utils.isProduction()) {

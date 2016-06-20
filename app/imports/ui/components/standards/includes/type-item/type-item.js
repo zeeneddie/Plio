@@ -1,16 +1,23 @@
 import { Template } from 'meteor/templating';
-import { Meteor } from 'meteor/meteor';
 
-import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
+Template.StandardTypeItem.viewmodel({
+  mixin: ['organization', 'standard'],
+  sections() {
+    const sections = ((() => {
+      const query = { organizationId: this.organizationId() };
+      const options = { sort: { title: 1 } };
+      return StandardsBookSections.find(query, options).fetch();
+    })());
 
-Template.StandardsTypeItem.viewmodel({
-  hasStandards() {
-    return this.standardsBookSections().fetch().length > 0;
+    const typeId = this._id();
+
+    return sections.filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId, typeId }).count() > 0);
   },
-  standardsBookSections() {
-    return ViewModel.findOne('StandardsList').standardsBookSections(this._id());
+  _getQuery({ _id:sectionId }) {
+    const typeId = this._id();
+
+    return { sectionId, typeId };
   }
 });

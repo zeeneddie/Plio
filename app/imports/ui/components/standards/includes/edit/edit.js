@@ -19,14 +19,12 @@ Template.EditStandard.viewmodel({
   },
   update({ query = {}, options = {}, ...args }, cb) {
     const _id = this._id && this._id();
-    const organizationId = this.organizationId();
-    const modifier = _.extend(args, { _id, options, query, organizationId });
+    const modifier = _.extend(args, { _id, options, query });
 
     this.modal().callMethod(update, modifier, cb);
   },
   remove() {
     const { _id, title } = this.standard();
-    const organizationId = this.organizationId();
 
     swal(
       {
@@ -38,7 +36,7 @@ Template.EditStandard.viewmodel({
         closeOnConfirm: false
       },
       () => {
-        this.modal().callMethod(remove, { _id, organizationId }, (err) => {
+        this.modal().callMethod(remove, { _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {

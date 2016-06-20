@@ -18,7 +18,7 @@ export const insert = new ValidatedMethod({
     }
 
     if (!NonConformities.findOne({ _id: nonConformityId })) {
-      throw new Meteor.Error(403, 'Non-conformity with that ID does not exist');
+      throw new Meteor.Error(400, 'Non-conformity with that ID does not exist');
     }
 
     return OccurrencesService.insert({ ...args, nonConformityId });
@@ -28,14 +28,24 @@ export const insert = new ValidatedMethod({
 export const update = new ValidatedMethod({
   name: 'Occurrences.update',
 
-  validate: new SimpleSchema([IdSchema, {
-    description: {
-      type: String
-    },
-    date: {
-      type: Date
+  validate(doc) {
+    const validationContext = new SimpleSchema([IdSchema, {
+      description: {
+        type: String
+      },
+      date: {
+        type: Date
+      }
+    }]).newContext();
+
+    for (let key in doc) {
+      if (!validationContext.validateOne(doc, key)) {
+        const errors = validationContext.invalidKeys();
+        const message = validationContext.keyErrorMessage(errors[0].name);
+        throw new ValidationError(errors, message);
+      }
     }
-  }]).validator(),
+  },
 
   run({_id, ...args}) {
     if (!this.userId) {

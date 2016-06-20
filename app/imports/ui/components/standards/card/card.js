@@ -2,7 +2,6 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { update, remove } from '/imports/api/standards/methods.js';
@@ -40,23 +39,21 @@ Template.StandardsCard.viewmodel({
 
       setTimeout(() => {
 
-        // I hate Safari
+        // Safari workaround
         $div.css({ 'transition': 'all .15s linear' });
         this.isFullScreenMode(true);
       }, 100);
     }
 
   },
+  hasStandards() {
+    return this.standards().count() > 0;
+  },
   standards() {
-    const query = { organizationId: this.organizationId() };
-    const sQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
-    const options = { sort: { title: 1 } };
-    return Standards.find(sQuery, options);
+    return this._getStandardsByQuery({});
   },
   standard() {
-    const query = { _id: this.standardId(), organizationId: this.organizationId() };
-    const filterQuery = this.isActiveStandardFilter('deleted') ? { ...query, isDeleted: true } : query;
-    return Standards.findOne(filterQuery);
+    return this._getStandardByQuery({ _id: this.standardId() });
   },
   hasDocxAttachment() {
     const standard = this.standard();
@@ -77,7 +74,7 @@ Template.StandardsCard.viewmodel({
       _id: this.standardId()
     });
   },
-  restore({ _id, title, isDeleted, organizationId }) {
+  restore({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
     swal(
@@ -90,7 +87,7 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, organizationId, isDeleted: false }, (err) => {
+        update.call({ _id, isDeleted: false }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
@@ -106,7 +103,7 @@ Template.StandardsCard.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted, organizationId }) {
+  delete({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
     swal(
@@ -119,16 +116,16 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        remove.call({ _id, organizationId }, (err) => {
+        remove.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
             swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 
-            const query = { organizationId: this.organizationId(), isDeleted: true };
+            const query = {};
             const options = { sort: { deletedAt: -1 } };
 
-            const standard = Standards.findOne(query, options);
+            const standard = this._getStandardByQuery(query, options);
 
             if (!!standard) {
               const { _id } = standard;
