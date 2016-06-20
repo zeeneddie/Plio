@@ -15,6 +15,7 @@ Template.ESSources.viewmodel({
     return this.sourceName().split('.').pop().toLowerCase();
   },
   sourceHtmlUrl: '',
+  docxRenderInProgress: '',
   fileId: '',
   shouldUpdate() {
     const { type, url, name, htmlUrl } = this.getData();
@@ -85,37 +86,39 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
-  uploadDocxHtml(fileObj, metaContext) {
-    const uploader = new Slingshot.Upload('htmlAttachmentPreview', this.uploaderMetaContext());
-
-    uploader.send(fileObj, (error, url) => {
-      this.sourceHtmlUrl(url && encodeURI(url) || '');
-      this.update();
-    });
-  },
   renderDocx(url) {
     check(url, String);
-
-    const isDocx = url.split('.').pop().toLowerCase() === 'docx';
-    const vmInstance = this;
+    const isDocx = this.sourceExtension() === 'docx';
 
     if (isDocx) {
-      Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
+      this.docxRenderInProgress(true);
+      Meteor.call('Mammoth.convertDocxToHtml', {
+        url,
+        name: this.sourceName() + '.html',
+        source: `source${this.id()}`,
+        id:  this.parent()._id(),
+      }, (error, result) => {
         if (error) {
           // HTTP errors
+          this.renderDocxError(`Failed to get .docx file: ${error}`);
         } else {
           if (result.error) {
             // Mammoth errors
+            this.renderDocxError(`Rendering document: ${result.error}`);
           } else {
-            // Upload file to S3
-            const htmlFileName = vmInstance.sourceName() + '.html';
-            const htmlFile = new File([result], htmlFileName, { type: 'text/html' });
-
-            vmInstance.uploadDocxHtml(htmlFile);
+            this.docxRenderInProgress('');
+            this.sourceHtmlUrl(result);
           }
         }
       });
     }
+  },
+  renderDocxError(error) {
+    this.modal().setError(error);
+    Meteor.setTimeout(() => {
+      this.modal().clearError();
+      this.docxRenderInProgress('');
+    }, 5000);
   },
   insertFileFn() {
     return this.insertFile.bind(this);
