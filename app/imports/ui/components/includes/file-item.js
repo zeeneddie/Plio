@@ -23,8 +23,8 @@ Template.FileItem.viewmodel({
     return !this.url();
   },
   progress() {
-    const parent = this.parent();
-    return parent.fileProgress && parent.fileProgress(this._id());
+    const uploader = this.uploader && this.uploader();
+    return uploader && uploader.progress(this._id());
   },
   getData() {
     return {
