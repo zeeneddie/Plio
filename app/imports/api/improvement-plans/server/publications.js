@@ -3,11 +3,19 @@ import { ImprovementPlans } from '../improvement-plans.js';
 import { isOrgMember } from '../../checkers.js';
 
 
-Meteor.publish('improvementPlan', function(documentId, organizationId) {
+Meteor.publish('improvementPlan', function(documentId) {
   const userId = this.userId;
-  if (!userId || !isOrgMember(userId, organizationId)) {
+  if (!userId) {
     return this.ready();
   }
 
-  return ImprovementPlans.find({ documentId });
+  const improvementPlan = ImprovementPlans.find({ documentId });
+  const document = improvementPlan.count() && improvementPlan.fetch()[0].relatedDocument();
+  const organizationId = document && document.organizationId;
+
+  if (!isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  return improvementPlan;
 });
