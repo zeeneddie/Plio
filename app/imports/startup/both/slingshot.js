@@ -8,7 +8,7 @@ Slingshot.fileRestrictions('usersAvatars', {
 
 Slingshot.fileRestrictions('standardsFiles', {
   allowedFileTypes: null,
-  maxSize: 200 * 1024 * 1024 // 200 MB
+  maxSize: 20 * 1024 * 1024 // 20 MB
 });
 
 Slingshot.fileRestrictions('htmlAttachmentPreview', {
@@ -18,5 +18,5 @@ Slingshot.fileRestrictions('htmlAttachmentPreview', {
 
 Slingshot.fileRestrictions('improvementPlansFiles', {
   allowedFileTypes: null,
-  maxSize: 200 * 1024 * 1024 // 200 MB
+  maxSize: 20 * 1024 * 1024 // 20 MB
 });

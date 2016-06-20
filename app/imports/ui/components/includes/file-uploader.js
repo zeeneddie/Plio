@@ -44,6 +44,8 @@ Template.FileUploader.viewmodel({
         this.slingshotDirective(), this.metaContext()
       );
 
+      this.uploads().push({ fileId: _id, uploader });
+
       modal.clearError();
       modal.isSaving(false);
       modal.incUploadsCount();
@@ -62,8 +64,6 @@ Template.FileUploader.viewmodel({
         this.onUpload(err, { _id, url });
         this.removeUploadData(_id);
       });
-
-      this.uploads().push({ fileId: _id, uploader });
 
       // prevent modal's default method result handling
       return true;
