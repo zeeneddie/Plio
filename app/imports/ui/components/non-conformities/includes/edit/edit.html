@@ -2,29 +2,7 @@
   <div>
     <div class="relative">
       {{#with NC}}
-        <div class="card-block">
-          {{> NCTitle _id=this._id titleText=this.title}}
-
-          {{> ESDescription _id=this._id description=this.description}}
-
-          {{> NCStatus _id=this._id}}
-
-          {{> NCStandards _id=this.standard}}
-
-          {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
-
-          {{> NCIdentifiedBy _id=this._id identifiedBy=this.identifiedBy}}
-
-          {{> NCIdentifiedDate _id=this._id identifiedAt=this.identifiedAt}}
-
-          {{> NCMagnitude _id=this._id magnitude=this.magnitude}}
-
-          {{> NCCost _id=this._id cost=this.cost}}
-
-          {{> NCRef _id=this._id text=this.ref.text url=this.ref.url}}
-        </div>
-
-        {{> NCRootCauseAnalysis _id=this._id analysis=this.analysis updateOfStandards=this.updateOfStandards}}
+        {{> EditNC_Main NC=this onUpdate=onUpdateCb}}
 
         {{> Subcards_Notify_Edit
             document=this

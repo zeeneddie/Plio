@@ -13,6 +13,9 @@ Template.EditNC.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
     const organizationId = this.organizationId();
