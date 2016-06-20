@@ -47,7 +47,7 @@ export default {
             ACL: Meteor.settings.AWSS3Bucket.acl,
             Key: `${Meteor.settings.AWSS3Bucket.attachmentsDir}/${name}`,
             Body: result.value,
-            ContentType: 'text/html',
+            ContentType: 'text/html; charset=UTF-8'
           };
 
           const uploader = s3.upload(params, (error, data) => {
