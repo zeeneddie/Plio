@@ -95,6 +95,8 @@ Template.ESSources.viewmodel({
       Meteor.call('Mammoth.convertDocxToHtml', {
         url,
         name: this.sourceName() + '.html',
+        source: `source${this.id()}`,
+        id:  this.parent()._id(),
       }, (error, result) => {
         if (error) {
           // HTTP errors
@@ -106,7 +108,6 @@ Template.ESSources.viewmodel({
           } else {
             this.docxRenderInProgress('');
             this.sourceHtmlUrl(result);
-            this.update();
           }
         }
       });

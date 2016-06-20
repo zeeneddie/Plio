@@ -8,9 +8,17 @@ import Future from 'fibers/future';
 import mammoth from 'mammoth';
 import AWS from 'aws-sdk';
 
+import { Standards } from '/imports/api/standards/standards.js';
+
 AWS.config.update({
     accessKeyId: Meteor.settings.AWSAccessKeyId,
     secretAccessKey: Meteor.settings.AWSSecretAccessKey,
+});
+
+const updateSource = Meteor.bindEnvironment((_id, source, htmlUrl) => {
+    Standards.update(_id, {$set: {
+        [`${source}.htmlUrl`]: htmlUrl
+    }});
 });
 
 export const convertDocxToHtml = new ValidatedMethod({
@@ -22,6 +30,12 @@ export const convertDocxToHtml = new ValidatedMethod({
         name: {
             type: String
         },
+        source: {
+            type: String
+        },
+        id: {
+            type: SimpleSchema.RegEx.Id
+        },
         options: {
             type: Object,
             optional: true,
@@ -31,6 +45,8 @@ export const convertDocxToHtml = new ValidatedMethod({
     run({
         url,
         name,
+        source,
+        id,
         options
     }) {
         this.unblock();
@@ -70,6 +86,7 @@ export const convertDocxToHtml = new ValidatedMethod({
                         if (error) {
                             fut.return(new Meteor.Error(error.message));
                         } else {
+                            updateSource(id, source, data.Location);
                             fut.return(data.Location);
                         };
                     });
