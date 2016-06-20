@@ -3,14 +3,9 @@
     <div id="non-conformities" {{b "ref: forms"}}>
       {{#each NCs}}
         {{> SubCardEdit
+            NC=this
+            currentNC=this
             _id=this._id
-            title=this.title
-            date=this.date
-            owner=this.owner
-            notes=this.notes
-            serialNumber=this.serialNumber
-            linkedTo=linkedTo
-            linkedToId=linkedToId
             _lText=(renderText this)
             content="EditNC_Main"
             insertFn=insertFn

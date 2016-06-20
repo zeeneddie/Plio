@@ -34,6 +34,19 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
     this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, cb);
   },
+  updateFn() {
+    return this.update.bind(this);
+  },
+  update({ query = {}, options = {}, ...args }, cb = () => {}) {
+    console.log(query, options, args)
+    // const _id = this._id();
+    // const organizationId = this.organizationId();
+    // const arguments = { ...args, _id, options, query, organizationId };
+    //
+    // console.log(arguments);
+    //
+    // this.modal().callMethod(update, arguments, cb);
+  },
   removeFn() {
     return this.remove.bind(this);
   },

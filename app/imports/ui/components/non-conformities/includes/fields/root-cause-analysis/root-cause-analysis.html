@@ -2,11 +2,13 @@
   {{> NCAnalysis
       analysis=analysis
       defaultTargetDate=defaultTargetDate
-      isAnalysisCompleted=isAnalysisCompleted}}
+      isAnalysisCompleted=isAnalysisCompleted
+      onUpdate=onUpdateCb}}
   {{#if isAnalysisCompleted}}
     {{> NCUpdateOfStandards
         updateOfStandards=updateOfStandards
         executor=analysis.executor
-        defaultTargetDate=defaultTargetDate}}
+        defaultTargetDate=defaultTargetDate
+        onUpdate=onUpdateCb}}
   {{/if}}
 </template>
