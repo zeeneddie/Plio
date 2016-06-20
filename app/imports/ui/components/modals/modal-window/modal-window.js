@@ -18,12 +18,14 @@ Template.ModalWindow.viewmodel({
   variation: '',
   isSaving: false,
   isWaiting: false,
+  uploadsCount: 0,
   error: '',
   moreInfoLink: '#',
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
+  closeCaptionOnUpload: 'Uploading...',
   guideHtml: 'No help message yet',
   closeAfterCall: false,
 
@@ -32,7 +34,13 @@ Template.ModalWindow.viewmodel({
   },
 
   closeCaptionText() {
-    return this.isSaving() && !this.variation() ? this.closeCaptionOnSave() : this.closeCaption();
+    if (this.isSaving() && this.variation() !== 'save') {
+      return this.closeCaptionOnSave();
+    } else if (this.isUploading() && this.variation() !== 'save') {
+      return this.closeCaptionOnUpload();
+    } else {
+      return this.closeCaption();
+    }
   },
 
   isVariation(variation) {
@@ -119,7 +127,25 @@ Template.ModalWindow.viewmodel({
     }
   },
 
-  showSpinner() {
-    return this.isSaving() || this.isWaiting();
+  isUploading() {
+    return this.uploadsCount() > 0;
+  },
+
+  incUploadsCount() {
+    this.uploadsCount(this.uploadsCount() + 1);
+  },
+
+  decUploadsCount() {
+    if (this.uploadsCount() > 0) {
+      this.uploadsCount(this.uploadsCount() - 1);
+    }
+  },
+
+  isCloseButtonDisabled() {
+    return this.isSaving() || this.isUploading();
+  },
+
+  showCloseButtonSpinner() {
+    return (this.isSaving() || this.isUploading()) && !this.isVariation('save');
   }
 });
