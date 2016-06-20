@@ -86,37 +86,27 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
-  uploadDocxHtml(fileObj, metaContext) {
-    const uploader = new Slingshot.Upload('htmlAttachmentPreview', this.uploaderMetaContext());
-
-    uploader.send(fileObj, (error, url) => {
-      this.sourceHtmlUrl(url && encodeURI(url) || '');
-      this.docxRenderInProgress('');
-      this.update();
-    });
-  },
   renderDocx(url) {
     check(url, String);
-
     const isDocx = this.sourceExtension() === 'docx';
-    const vmInstance = this;
 
     if (isDocx) {
       this.docxRenderInProgress(true);
-      Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
+      Meteor.call('Mammoth.convertDocxToHtml', {
+        url,
+        name: this.sourceName() + '.html',
+      }, (error, result) => {
         if (error) {
           // HTTP errors
-          vmInstance.renderDocxError(`Unable to get .docx file ${error.message}`);
+          this.renderDocxError(`Failed to get .docx file: ${error}`);
         } else {
           if (result.error) {
             // Mammoth errors
-            vmInstance.renderDocxError(`Error rendering document ${result.error.message}`);
+            this.renderDocxError(`Rendering document: ${result.error}`);
           } else {
-            // Upload file to S3
-            const htmlFileName = vmInstance.sourceName() + '.html';
-            const htmlFile = new File([result], htmlFileName, { type: 'text/html' });
-
-            vmInstance.uploadDocxHtml(htmlFile);
+            this.docxRenderInProgress('');
+            this.sourceHtmlUrl(result);
+            this.update();
           }
         }
       });
