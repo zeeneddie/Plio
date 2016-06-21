@@ -22,9 +22,6 @@ Template.NCRootCauseAnalysis.viewmodel({
     const analysis = this.analysis();
     return analysis && analysis.status && analysis.status === parseInt(_.invert(AnalysisStatuses)['Completed'], 10);
   },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
   update({ query = {}, options = {}, ...args }, cb) {
     const arguments = { ...args, options, query };
 

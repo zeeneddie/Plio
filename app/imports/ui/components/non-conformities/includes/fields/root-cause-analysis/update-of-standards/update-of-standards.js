@@ -11,8 +11,7 @@ Template.NCUpdateOfStandards.viewmodel({
   status: '',
   completedAt: '',
   completedBy: '',
-  onUpdate() {},
   update(...args) {
-    this.onUpdate(...args);
+    this.parent().update(...args);
   }
 });

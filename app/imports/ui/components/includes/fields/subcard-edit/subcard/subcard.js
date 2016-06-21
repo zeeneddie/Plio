@@ -100,6 +100,11 @@ Template.SubCardEdit.viewmodel({
       return;
     }
 
+    // Disgusting...
+    if (_.isObject(e) && _.keys(e).length > 0) {
+      this.parent().update({ ...e, _id }, propName);
+    }
+
     const propVal = this.getData()[propName];
     const savedVal = this.templateInstance.data[propName];
     if (propVal === savedVal) {
