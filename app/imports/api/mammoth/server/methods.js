@@ -14,7 +14,7 @@ export const convertDocxToHtml = new ValidatedMethod({
     url: {
       type: SimpleSchema.RegEx.Url
     },
-    name: {
+    fileName: {
       type: String
     },
     source: {
@@ -30,7 +30,7 @@ export const convertDocxToHtml = new ValidatedMethod({
     }
   }).validator(),
 
-  run({ url, name, source, standardId, options }) {
+  run({ url, fileName, source, standardId, options }) {
     const userId = this.userId;
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unathorized user cannot convert docx files');
@@ -47,6 +47,6 @@ export const convertDocxToHtml = new ValidatedMethod({
 
     this.unblock();
 
-    return MammothService.convertToHtml({ url, name, source, standardId, options });
+    return MammothService.convertToHtml({ url, fileName, source, standardId, options });
   }
 });

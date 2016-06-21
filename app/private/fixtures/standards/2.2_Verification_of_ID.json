@@ -8,6 +8,13 @@
   "description": "This is the standard for dealing with verification of ID",
   "approvedAt": {"$date": 1459515600000},
   "notes": null,
+  "source1" : {
+    "type" : "attachment",
+    "url" : "https://plio.s3-eu-west-1.amazonaws.com/uploads/KwKXz5RefrE5hjWJ2/standards-files/HLiWGZdNL5hifyRhJ/ffQRu8pdkqZgJAxsK-demo.docx",
+    "name" : "demo.docx",
+    "extension" : "docx",
+    "htmlUrl" : "https://plio.s3.amazonaws.com/uploads/KwKXz5RefrE5hjWJ2/standards-files/HLiWGZdNL5hifyRhJ/4hMrQfYA5QRKFs8Q5-demo.docx.html"
+  },
   "createdAt": {"$date": 1459508400000},
   "createdBy": "SQHmBKJ94gJvpLKLt",
   "updatedAt": null,
