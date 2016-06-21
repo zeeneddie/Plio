@@ -3,16 +3,20 @@ import { Blaze } from 'meteor/blaze';
 
 Template.SubCardEdit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck', 'modal'],
-  isSubcard: true,
-  isSaving: false,
-  isWaiting: false,
-  closeAfterCall: false,
-  error: '',
+  autorun() {
+    this.load(this.document());
+  },
   onRendered() {
     if (!this._id) {
       this.toggleCollapse();
     }
   },
+  document: '',
+  isSubcard: true,
+  isSaving: false,
+  isWaiting: false,
+  closeAfterCall: false,
+  error: '',
   _lText: '',
   _rText: '',
   content: '',
@@ -94,31 +98,25 @@ Template.SubCardEdit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update(e, propName, withFocusCheck) {
+  update({  e = {}, withFocusCheck = false, ...args }) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
     }
 
-    // Disgusting...
-    if (_.isObject(e) && _.keys(e).length > 0 && !( e instanceof jQuery.Event )) {
-      this.parent().update({ ...e, _id }, propName);
-    }
-
-    const propVal = this.getData()[propName];
-    const savedVal = this.templateInstance.data[propName];
-    if (propVal === savedVal) {
+    if (_.keys(args).every(key => this.data()[key] === args[key])) {
       return;
     }
 
     const updateFn = () => {
       this.callSave(this.updateFn, {
         _id,
-        [propName]: propVal
+        ...args
       });
     };
 
     if (withFocusCheck) {
+      console.log(e);
       this.isWaiting(true);
       this.callWithFocusCheck(e, updateFn);
     } else {

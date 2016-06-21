@@ -316,7 +316,7 @@ ViewModel.mixin({
   },
   date: {
     renderDate(date) {
-      return moment.isDate(date) && moment(date).format('DD MMM YYYY');
+      return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
     }
   },
   callWithFocusCheck: {

@@ -17,7 +17,7 @@ Template.Subcards_LessonLearned.viewmodel({
   linkedTo: '',
   linkedToId: '',
   updateTitle(e) {
-    this.parent().update(e, 'title', true);
+    this.parent().update({ title: this.title(), e, withFocusCheck: true });
   },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);

@@ -38,10 +38,8 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   updateFn() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, _id, ...args }, cb = () => {}) {
-    const allArgs = { ...args, _id, options, query };
-
-    this.modal().callMethod(update, allArgs, cb);
+  update({ _id, ...args }, cb = () => {}) {
+    this.modal().callMethod(update, { _id, ...args }, cb);
   },
   removeFn() {
     return this.remove.bind(this);
