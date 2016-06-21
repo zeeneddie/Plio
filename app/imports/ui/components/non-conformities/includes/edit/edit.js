@@ -16,10 +16,8 @@ Template.EditNC.viewmodel({
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
     const organizationId = this.organizationId();
-    const arguments = { ...args, _id, options, query, organizationId };
+    const allArgs = { ...args, _id, options, query, organizationId };
 
-    console.log(arguments);
-
-    this.modal().callMethod(update, arguments, cb);
+    this.modal().callMethod(update, allArgs, cb);
   }
 });
