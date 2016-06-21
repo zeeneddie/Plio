@@ -28,9 +28,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     const organizationId = this.organizationId();
 
     const cb = (err, _id) => {
-      callback();
       const newNCSubcard = ViewModel.findOne('SubCardEdit', vm => vm._id && vm._id() === _id);
       newNCSubcard && newNCSubcard.toggleCollapse();
+      callback();
     };
 
     this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, cb);
@@ -39,9 +39,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     return this.update.bind(this);
   },
   update({ query = {}, options = {}, _id, ...args }, cb = () => {}) {
-    const arguments = { ...args, _id, options, query };
+    const allArgs = { ...args, _id, options, query };
 
-    this.modal().callMethod(update, arguments, cb);
+    this.modal().callMethod(update, allArgs, cb);
   },
   removeFn() {
     return this.remove.bind(this);

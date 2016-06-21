@@ -23,8 +23,8 @@ Template.NCRootCauseAnalysis.viewmodel({
     return analysis && analysis.status && analysis.status === parseInt(_.invert(AnalysisStatuses)['Completed'], 10);
   },
   update({ query = {}, options = {}, ...args }, cb) {
-    const arguments = { ...args, options, query };
+    const allArgs = { ...args, options, query };
 
-    this.parent().update(arguments, cb);
+    this.parent().update(allArgs, cb);
   }
 });
