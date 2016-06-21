@@ -24,10 +24,11 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ title, identifiedAt, identifiedBy, magnitude }) {
+  insert({ title, identifiedAt, identifiedBy, magnitude }, callback) {
     const organizationId = this.organizationId();
 
     const cb = (err, _id) => {
+      callback();
       const newNCSubcard = ViewModel.findOne('SubCardEdit', vm => vm._id && vm._id() === _id);
       newNCSubcard && newNCSubcard.toggleCollapse();
     };
