@@ -126,11 +126,21 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     const userId = this.userId;
+
     if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot remove a non-conformity'
       );
     }
-    return NonConformitiesService.remove({ _id, deletedBy: userId});
+
+    const NC = NonConformities.findOne({ _id });
+
+    if (!NC) {
+      throw new Meteor.Error(
+        400, 'Non-conformity with the given id does not exists'
+      );
+    }
+
+    return NonConformitiesService.remove({ _id, deletedBy: userId, isDeleted: NC.isDeleted});
   }
 });

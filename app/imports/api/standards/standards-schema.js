@@ -1,26 +1,14 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardStatuses } from '../constants.js';
-import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema } from '../schemas.js';
 
 
-const optionalFields = new SimpleSchema(
+const optionalFields = new SimpleSchema([
+  DeletedSchema,
   {
     description: {
       type: String,
-      optional: true
-    },
-    isDeleted: {
-      type: Boolean,
-      optional: true
-    },
-    deletedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    },
-    deletedAt: {
-      type: Date,
       optional: true
     },
     approved: {
@@ -131,7 +119,7 @@ const optionalFields = new SimpleSchema(
       }
     }
   }
-);
+]);
 
 const StandardsSchema = new SimpleSchema([
   optionalFields,

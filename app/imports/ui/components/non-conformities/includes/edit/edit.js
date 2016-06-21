@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 
-import { update } from '/imports/api/non-conformities/methods.js';
+import { update, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.EditNC.viewmodel({
-  mixin: ['organization', 'modal', 'nonconformity'],
+  mixin: ['organization', 'modal', 'nonconformity', 'router', 'collapsing'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
@@ -18,11 +18,35 @@ Template.EditNC.viewmodel({
   },
   update({ query = {}, options = {}, ...args }, cb = () => {}) {
     const _id = this._id();
-    const organizationId = this.organizationId();
-    const arguments = { ...args, _id, options, query, organizationId };
+    const arguments = { ...args, _id, options, query };
 
     console.log(arguments);
 
     this.modal().callMethod(update, arguments, cb);
+  },
+  remove() {
+    const { _id, title } = this.NC();
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The non-conformity "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      },
+      () => {
+        this.modal().callMethod(remove, { _id }, (err) => {
+          if (err) {
+            swal('Ooops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+
+            this.modal().close();
+          }
+        });
+      }
+    );
   }
 });

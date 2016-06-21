@@ -360,6 +360,11 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformity', params, queryParams);
+    },
+    goToNCs(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      FlowRouter.go('nonconformities', params, queryParams);
     }
   },
   mobile: {
@@ -402,12 +407,18 @@ ViewModel.mixin({
       const _id = this.NCId();
       return NonConformities.findOne({ _id });
     },
+    _getIsDeletedQuery() {
+      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
     _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      if (this.isActiveNCFilter('deleted')) {
+        options = { deletedAt: -1 };
+      }
       return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
     }
   },
