@@ -95,12 +95,17 @@
                 {{> Subcards_Notify_Read users=this}}
               {{/with}}
 
+              {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
+
               {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+
               {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>
 
             {{> SourceWordDocument source=source1}}
+
             {{> SourceWordDocument source=source2}}
+
             {{> CardChangelog document=this}}
           </div>
         </div>
