@@ -116,7 +116,6 @@ Template.SubCardEdit.viewmodel({
     };
 
     if (withFocusCheck) {
-      console.log(e);
       this.isWaiting(true);
       this.callWithFocusCheck(e, updateFn);
     } else {
