@@ -101,7 +101,7 @@ Template.SubCardEdit.viewmodel({
     }
 
     // Disgusting...
-    if (_.isObject(e) && _.keys(e).length > 0) {
+    if (_.isObject(e) && _.keys(e).length > 0 && !( e instanceof jQuery.Event )) {
       this.parent().update({ ...e, _id }, propName);
     }
 
