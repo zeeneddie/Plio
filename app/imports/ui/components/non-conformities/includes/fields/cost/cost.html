@@ -1,12 +1,12 @@
 <template name="NCCost">
   <div class="form-group row">
     <label class="form-control-label col-sm-4 col-xs-12">Approx cost per occurrence</label>
-    <div class="col-sm-4 col-xs-12">
+    <div class="col-sm-5 col-xs-12">
       <div class="input-group">
         {{#ClearableField field="cost"}}
           <div class="input-group">
             <span class="input-group-addon" {{b "text: currency"}}></span>
-            <input type="text" class="form-control" placeholder="Approx cost per occurrence" {{b "value: cost, focusout: update"}}/>
+            <input type="text" class="form-control" placeholder="Approx cost" {{b "value: cost, focusout: update"}}/>
           </div>
         {{/ClearableField}}
       </div>
