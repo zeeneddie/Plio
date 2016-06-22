@@ -22,7 +22,7 @@ ViewModel.mixin({
 
       // Callback is always the last argument
       cb = arguments[arguments.length - 1];
-      timeout = Match.test(timeout, Number) ? timeout : 0;
+      timeout = Match.test(timeout, Number) ? timeout : null;
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
 
         // Hide other collapses
@@ -37,8 +37,13 @@ ViewModel.mixin({
 
       if (this.collapsed()) {
 
-        // We need some time to render the content
-        setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
+        if (timeout) {
+
+          // We need some time to render the content for collapsible sections with dynamic content
+          setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
+        } else {
+          this.collapse.collapse('toggle');
+        }
       } else {
         this.collapse.collapse('toggle');
       }
