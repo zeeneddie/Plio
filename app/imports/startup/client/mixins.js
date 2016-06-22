@@ -18,10 +18,9 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    toggleCollapse: _.throttle(function(timeout, cb) {
+    toggleCollapse: _.throttle(function(cb, timeout) {
 
       // Callback is always the last argument
-      cb = arguments[arguments.length - 1];
       timeout = Match.test(timeout, Number) ? timeout : null;
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
 
@@ -34,9 +33,8 @@ ViewModel.mixin({
         });
       }
 
-
+      console.log('wtf?')
       if (this.collapsed()) {
-
         if (timeout) {
 
           // We need some time to render the content for collapsible sections with dynamic content

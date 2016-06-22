@@ -1,7 +1,7 @@
 <template name="SubCardEdit">
   <div class="card subcard" {{b "class: {with-error: hasError}, ref: subcard"}}>
     <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
-      {{b "click: toggleCollapse(200), class: { collapsed: collapsed }"}}>
+      {{b "click: toggleCollapse(null, 250), class: { collapsed: collapsed }"}}>
       <span {{b "html: _lText"}}></span>
       <span class="pull-xs-right" {{b "text: _rText"}}></span>
     </div>
