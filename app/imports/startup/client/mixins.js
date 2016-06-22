@@ -388,9 +388,29 @@ ViewModel.mixin({
     riskId() {
       return FlowRouter.getParam('riskId');
     },
+    isActiveRiskFilter(filter) {
+      return this.activeRiskFilter() === filter;
+    },
+    activeRiskFilter() {
+      return FlowRouter.getQueryParam('by') || RiskFilters[0];
+    },
     currentRisk() {
       const _id = this.riskId();
-      // return Risks.findOne({ _id });
+      return Risks.findOne({ _id });
+    },
+    _getIsDeletedQuery() {
+      return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
+    _getRisksByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      if (this.isActiveRiskFilter('deleted')) {
+        options = { deletedAt: -1 };
+      }
+      return Risks.find(query, options);
+    },
+    _getRiskByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      return Risks.findOne(query, options);
     }
   },
   nonconformity: {

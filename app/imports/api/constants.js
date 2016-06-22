@@ -213,10 +213,9 @@ const StandardFilters = [
 ];
 
 const RiskFilters = [
-  'department/site',
-  'activity',
-  'review status',
-  'archived',
+  'type',
+  'status',
+  'department',
   'deleted'
 ];
 

@@ -3,20 +3,20 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 
 
-const RisksSectionEditableFields = new SimpleSchema({
+const EditableFields = new SimpleSchema({
   title: {
     type: String,
     min: 1
   }
 });
 
-const RisksSectionSchema = new SimpleSchema([
+const RiskTypesSchema = new SimpleSchema([
   BaseEntitySchema,
-  RisksSectionEditableFields,
+  EditableFields,
   OrganizationIdSchema
 ]);
 
 export {
-  RisksSectionEditableFields,
-  RisksSectionSchema
+  EditableFields,
+  RiskTypesSchema
 };

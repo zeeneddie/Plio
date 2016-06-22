@@ -1,15 +1,15 @@
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 
-import { RisksSections } from '/imports/api/risks-sections/risks-sections.js';
-import { insert } from '/imports/api/risks-sections/methods.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { insert } from '/imports/api/risk-types/methods.js';
 
 Template.RKType.viewmodel({
   mixin: ['collapsing', 'organization', 'modal', 'search'],
   typeId: '',
   section() {
     const _id = this.typeId();
-    const section = RisksSections.findOne({ _id });
+    const section = RiskTypes.findOne({ _id });
     !!section ? section.title : '';
   },
   sectionTitle() {
@@ -28,7 +28,7 @@ Template.RKType.viewmodel({
       ]
     };
     const options = { sort: { title: 1 } };
-    return RisksSections.find(query, options);
+    return RiskTypes.find(query, options);
   },
   onAddSectionCb() {
     return this.addSection.bind(this);
