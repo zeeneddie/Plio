@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
 Template.NCCost.viewmodel({
-  mixin: ['organization', 'callWithFocusCheck'],
+  mixin: 'organization',
   onCreated() {
     if (!this.currency()) {
       const currency = this.organization().currency;
@@ -13,15 +13,13 @@ Template.NCCost.viewmodel({
   currency: '',
   cost: '',
   update(e) {
-    this.callWithFocusCheck(e, () => {
-      const costInt = parseInt(this.cost(), 10);
-      const cost = isNaN(costInt) ? null : costInt;
+    const costInt = parseInt(this.cost(), 10);
+    const cost = isNaN(costInt) ? null : costInt;
 
-      if (cost === this.templateInstance.data.cost) return;
+    if (cost === this.templateInstance.data.cost) return;
 
-      if (!this._id) return;
+    if (!this._id) return;
 
-      this.parent().update({ cost });
-    });
+    this.parent().update({ cost, e, withFocusCheck: true });
   }
 });

@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.EditNC.viewmodel({
-  mixin: ['organization', 'modal', 'nonconformity', 'router', 'collapsing'],
+  mixin: ['organization', 'modal', 'nonconformity', 'router', 'collapsing', 'callWithFocusCheck'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
@@ -16,11 +16,17 @@ Template.EditNC.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ query = {}, options = {}, ...args }, cb = () => {}) {
+  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
     const _id = this._id();
     const allArgs = { ...args, _id, options, query };
 
-    this.modal().callMethod(update, allArgs, cb);
+    const updateFn = () => this.modal().callMethod(update, allArgs, cb);
+
+    if (withFocusCheck) {
+      this.callWithFocusCheck(e, updateFn);
+    } else {
+      updateFn();
+    }
   },
   remove() {
     const { _id, title } = this.NC();
