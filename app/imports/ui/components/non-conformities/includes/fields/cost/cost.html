@@ -5,7 +5,9 @@
       <div class="input-group">
         <div class="input-group">
           <span class="input-group-addon" {{b "text: currency"}}></span>
-          <input type="text" class="form-control" placeholder="Approx cost per occurrence" {{b "value: cost, focusout: update"}}/>
+          {{#ClearableField field="cost"}}
+            <input type="text" class="form-control" placeholder="Approx cost per occurrence" {{b "value: cost, focusout: update"}}/>
+          {{/ClearableField}}
         </div>
       </div>
     </div>

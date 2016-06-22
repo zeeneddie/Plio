@@ -7,7 +7,7 @@ import Utils from '/imports/core/utils';
 const configureSlignshot = () => {
   const {
     bucketName, acl, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir
+    standardsFilesDir, improvementPlansFilesDir, nonConformitiesFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -113,7 +113,7 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, nonConformityId } = metaContext;
-      return `uploads/${organizationId}/${nonConformitiesFilesDir}/${x}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${nonConformitiesFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
     }
   });
 };

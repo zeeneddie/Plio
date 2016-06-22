@@ -17,7 +17,13 @@ const has = (obj, ...args) => args.some(a => obj.hasOwnProperty(a));
 export const insert = new ValidatedMethod({
   name: 'NonConformities.insert',
 
-  validate: RequiredSchema.validator(),
+  validate: new SimpleSchema([RequiredSchema, {
+    standardId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  }]).validator(),
 
   run({ ...args }) {
     const userId = this.userId;
@@ -35,10 +41,10 @@ export const update = new ValidatedMethod({
   name: 'NonConformities.update',
 
   validate: new SimpleSchema([
-    IdSchema, NonConformitiesUpdateSchema, OrganizationIdSchema, optionsSchema
+    IdSchema, NonConformitiesUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({_id, options, query, organizationId, ...args }) {
+  run({_id, options, query, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -116,17 +122,25 @@ export const updateViewedBy = new ValidatedMethod({
 export const remove = new ValidatedMethod({
   name: 'NonConformities.remove',
 
-  validate: new SimpleSchema([
-    IdSchema, OrganizationIdSchema
-  ]).validator(),
+  validate: IdSchema.validator(),
 
-  run({ _id, organizationId }) {
+  run({ _id }) {
     const userId = this.userId;
+
     if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot remove a non-conformity'
       );
     }
-    return NonConformitiesService.remove({ _id, deletedBy: userId});
+
+    const NC = NonConformities.findOne({ _id });
+
+    if (!NC) {
+      throw new Meteor.Error(
+        400, 'Non-conformity with the given id does not exists'
+      );
+    }
+
+    return NonConformitiesService.remove({ _id, deletedBy: userId, isDeleted: NC.isDeleted});
   }
 });

@@ -5,7 +5,7 @@ Template.SelectItem.viewmodel({
   autorun(computation) {
     const items = this.itemsArray();
 
-    if (!this.loading() && items.length > 0) {
+    if (!this.loading() && items.length > 0 && !this.focused()) {
       if (!this.selected() && items.length > 0 && this.selectFirstIfNoSelected()) {
         const { _id, title } = items[0];
 

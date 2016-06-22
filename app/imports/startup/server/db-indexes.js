@@ -5,6 +5,8 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Occurences } from '/imports/api/occurrences/occurrences.js';
 
 
 // indexes for Departments
@@ -70,4 +72,30 @@ Standards._ensureIndex({
 
 Standards._ensureIndex({
   viewedBy: 1
+});
+
+// indexes for NonConformities
+NonConformities._ensureIndex({
+  organizationId: 1
+});
+
+NonConformities._ensureIndex({
+  isDeleted: 1
+});
+
+NonConformities._ensureIndex({
+  viewedBy: 1
+});
+
+NonConformities._ensureIndex({
+  title: 1
+});
+
+NonConformities._ensureIndex({
+  sequentialId: 1
+});
+
+// indexes for Occurences
+Occurrences._ensureIndex({
+  nonConformityId: 1
 });

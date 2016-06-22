@@ -11,9 +11,7 @@ Template.NCAnalysis.viewmodel({
   status: '',
   completedAt: '',
   completedBy: '',
-  update({ query = {}, options = {}, ...args }, cb) {
-    const arguments = { ...args, options, query };
-
-    ViewModel.findOne('EditNC').update(arguments, cb);
+  update(...args) {
+    this.parent().update(...args);
   }
 });
