@@ -4,11 +4,12 @@ import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
 Meteor.publish('nonConformities', function(organizationId, isDeleted = { $in: [null, false] }) {
-  if (this.userId || !isOrgMember(userId, organizationId)) {
-    return NonConformities.find({ organizationId, isDeleted });
-  } else {
+  const userId = this.userId;
+  if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+  return NonConformities.find({ organizationId, isDeleted });
 });
 
 Meteor.publish('nonConformitiesByStandardId', function(standard, isDeleted = { $in: [null, false] }) {
