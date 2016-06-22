@@ -71,7 +71,7 @@ const updateOfStandards = {
 const OptionalSchema = new SimpleSchema([
   DeletedSchema,
   {
-    standard: {
+    standardId: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true

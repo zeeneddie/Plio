@@ -69,7 +69,7 @@ Template.StandardsCard.viewmodel({
     return StandardTypes.findOne({ _id });
   },
   _getNCsQuery() {
-    return { standard: this.standardId() };
+    return { standardId: this.standardId() };
   },
   openEditStandardModal() {
     this.modal().open({

@@ -22,7 +22,7 @@ Meteor.publish('nonConformitiesByStandardId', function(standardId, isDeleted = {
     return this.ready();
   }
 
-  return NonConformities.find({ standard: standardId, isDeleted });
+  return NonConformities.find({ standardId, isDeleted });
 });
 
 Meteor.publish('nonConformitiesCount', function(counterName, organizationId) {

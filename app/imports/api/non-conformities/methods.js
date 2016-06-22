@@ -18,7 +18,7 @@ export const insert = new ValidatedMethod({
   name: 'NonConformities.insert',
 
   validate: new SimpleSchema([RequiredSchema, {
-    standard: {
+    standardId: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true

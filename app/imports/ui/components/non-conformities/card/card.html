@@ -42,7 +42,7 @@
 
             <div class="list-group-item" {{b "if: this.standard"}}>
               <p class="list-group-item-text">Standard</p>
-              {{#with linkedStandard this.standard}}
+              {{#with linkedStandard this.standardId}}
                 <h4 class="list-group-item-heading">
                   <a {{b "text: this.title, attr: { href: this.href }"}}></a>
                 </h4>

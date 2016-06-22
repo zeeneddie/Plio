@@ -12,7 +12,7 @@ Template.EditStandard.viewmodel({
     return Standards.findOne({ _id });
   },
   _getNCsQuery() {
-    return { standard: this._id() };
+    return { standardId: this._id() };
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
