@@ -31,6 +31,7 @@ Template.FileUploader.viewmodel({
     const name = file.name;
 
     this.attachmentFile(null);
+    this.fileInput.val(null);
 
     this.insertFile({ _id, name }, (err) => {
       const modal = this.modal();
