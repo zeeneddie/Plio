@@ -80,4 +80,10 @@ import '../../api/analysis/analysis-schema.js';
 import '../../api/analysis/analysis-service.js';
 import '../../api/analysis/methods.js';
 
+import '../../api/actions/server/publications.js';
+import '../../api/actions/actions.js';
+import '../../api/actions/action-schema.js';
+import '../../api/actions/action-service.js';
+import '../../api/actions/methods.js';
+
 import '../../api/mammoth/server/methods.js';

@@ -31,6 +31,25 @@ const AnalysisStatuses = {
   1: 'Completed'
 };
 
+const ActionTypes = {
+  CORRECTIVE_ACTION: 'CA',
+  PREVENTATIVE_ACTION: 'PA',
+  RISK_CONTROL: 'RC'
+};
+
+const ActionStatuses = {
+  0: 'In progress',
+  1: 'In progress - due for completion today',
+  2: 'In progress - completion overdue',
+  3: 'In progress - completed, not yet verified',
+  4: 'In progress - completed, verification due today',
+  5: 'In progress - completed, verification overdue',
+  6: 'Completed - failed verification',
+  7: 'Completed - verified as effective',
+  8: 'Completed - verified & standardized',
+  9: 'Deleted'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -258,6 +277,8 @@ const AvatarPlaceholders = [
 ]
 
 export {
+  ActionTypes,
+  ActionStatuses,
   DefaultStandardTypes,
   NCTypes,
   NCStatuses,

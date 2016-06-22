@@ -162,3 +162,26 @@ export const NotifySchema = new SimpleSchema({
     }
   }
 });
+
+export const FileSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  extension: {
+    type: String,
+    autoValue() {
+      if (this.isSet) {
+        return this.value.toLowerCase();
+      }
+    },
+  },
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
+  name: {
+    type: String
+  }
+});
