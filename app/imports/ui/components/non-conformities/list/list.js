@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
-import { NCTypes, NCStatuses } from '/imports/api/constants.js';
+import { NCTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
@@ -84,7 +84,7 @@ Template.NCList.viewmodel({
     return { status };
   },
   statuses() {
-    return _.keys(NCStatuses)
+    return _.keys(ProblemsStatuses)
             .map(status => parseInt(status, 10))
             .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery() }).count() > 0);
   },

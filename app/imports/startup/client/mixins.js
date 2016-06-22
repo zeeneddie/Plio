@@ -6,7 +6,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
+import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, ProblemsStatuses, OrgCurrencies } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
@@ -465,7 +465,7 @@ ViewModel.mixin({
   },
   NCStatus: {
     getStatusName(status) {
-      return NCStatuses[status];
+      return ProblemsStatuses[status];
     },
     getClassByStatus(status) {
       switch(status) {

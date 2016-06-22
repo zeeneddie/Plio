@@ -4,7 +4,7 @@ const NCTypes = {
   CRITICAL: 'critical'
 };
 
-const NCStatuses = {
+const ProblemsStatuses = {
   1: 'Open - just reported',
   2: 'Open - analysis due today',
   3: 'Open - analysis overdue',
@@ -14,7 +14,7 @@ const NCStatuses = {
   7: 'Open - action overdue',
   8: 'Open - action completed',
   9: 'Open - verification due today',
-  10: 'Open - verification past due',
+  10: 'Open - verification overdue',
   11: 'Open - action verified as effective',
   12: 'Open - action failed verification',
   13: 'Closed - action verified, standard updated',
@@ -260,7 +260,7 @@ const AvatarPlaceholders = [
 export {
   DefaultStandardTypes,
   NCTypes,
-  NCStatuses,
+  ProblemsStatuses,
   AnalysisStatuses,
   StandardStatuses,
   OrgCurrencies,
