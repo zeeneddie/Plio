@@ -8,6 +8,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
 import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
+import { Match } from 'meteor/check';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -17,9 +18,14 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    toggleCollapse: _.throttle(function(cb) {
+    toggleCollapse: _.throttle(function(timeout, cb) {
+
+      // Callback is always the last argument
+      cb = arguments[arguments.length - 1];
+      timeout = Match.test(timeout, Number) ? timeout : 0;
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
-        // hide other collapses
+
+        // Hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
           if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
@@ -28,7 +34,15 @@ ViewModel.mixin({
         });
       }
 
-      this.collapse.collapse('toggle');
+
+      if (this.collapsed()) {
+
+        // We need some time to render the content
+        setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
+      } else {
+        this.collapse.collapse('toggle');
+      }
+      
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)
@@ -316,7 +330,7 @@ ViewModel.mixin({
   },
   date: {
     renderDate(date) {
-      return moment.isDate(date) && moment(date).format('DD MMM YYYY');
+      return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
     }
   },
   callWithFocusCheck: {
@@ -360,6 +374,11 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformity', params, queryParams);
+    },
+    goToNCs(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      FlowRouter.go('nonconformities', params, queryParams);
     }
   },
   mobile: {
@@ -402,12 +421,18 @@ ViewModel.mixin({
       const _id = this.NCId();
       return NonConformities.findOne({ _id });
     },
+    _getIsDeletedQuery() {
+      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
     _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      if (this.isActiveNCFilter('deleted')) {
+        options = { deletedAt: -1 };
+      }
       return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
     }
   },

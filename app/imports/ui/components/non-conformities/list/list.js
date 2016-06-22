@@ -10,25 +10,24 @@ Template.NCList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'NCStatus'],
   autorun() {
-    const isDeleted = { $in: [null, false] };
-    const query = this._getQueryForFilter();
+    if (!this.focused()) {
+      const query = this._getQueryForFilter();
 
-    const contains = this._getNCByQuery({ ...query, isDeleted, _id: this.NCId() });
-    if (!contains) {
-      const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter(), isDeleted });
+      const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
+      if (!contains) {
+        const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter() });
 
-      if (nc) {
-        const { _id } = nc;
-        Meteor.setTimeout(() => {
-          this.goToNC(_id);
-          this.expandCollapsed(this.NCId());
-        }, 0);
-      } else {
-        Meteor.setTimeout(() => {
-          const params = { orgSerialNumber: this.organizationSerialNumber() };
-          const queryParams = { by: FlowRouter.getQueryParam('by') };
-          FlowRouter.go('nonconformities', params, queryParams);
-        }, 0)
+        if (nc) {
+          const { _id } = nc;
+          Meteor.setTimeout(() => {
+            this.goToNC(_id);
+            this.expandCollapsed(this.NCId());
+          }, 0);
+        } else {
+          Meteor.setTimeout(() => {
+            this.goToNCs();
+          }, 0)
+        }
       }
     }
   },
@@ -70,21 +69,38 @@ Template.NCList.viewmodel({
         break;
     };
   },
+  _getSearchQuery() {
+     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+   },
+  _getMagnitudeQuery({ value:magnitude }) {
+    return { magnitude };
+  },
   magnitude() {
     return this._magnitude().filter(({ value:magnitude }) => {
-      return this._getNCsByQuery({ magnitude }).count() > 0;
+      return this._getNCsByQuery({ magnitude, ...this._getSearchQuery() }).count() > 0;
     });
+  },
+  _getStatusQuery(status) {
+    return { status };
   },
   statuses() {
     return _.keys(NCStatuses)
             .map(status => parseInt(status, 10))
-            .filter(status => this._getNCsByQuery({ status }).count() > 0);
+            .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery() }).count() > 0);
+  },
+  _getDepartmentQuery({ _id:departments }) {
+    return { departments };
   },
   departments() {
     const query = { organizationId: this.organizationId() };
     return Departments.find(query).fetch().filter(({ _id, name }) => {
-      return this._getNCsByQuery({ departments: _id }).count() > 0;
+      return this._getNCsByQuery({ departments: _id, ...this._getSearchQuery() }).count() > 0;
     });
+  },
+  NCsDeleted() {
+    const query = { ...this._getSearchQuery() };
+    const options = { sort: { deletedAt: -1 } };
+    return this._getNCsByQuery(query, options);
   },
   calculateTotalCost(value) {
     const ncs = this._getNCsByQuery({
@@ -110,6 +126,7 @@ Template.NCList.viewmodel({
 
     return total > 0 ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
+  focused: false,
   animating: false,
   expandAllFound() {
     const ids = _.flatten(ViewModel.find('NCSectionItem').map(vm => vm.NCs && vm.NCs().fetch().map(item => item._id)));
