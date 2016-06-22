@@ -9,7 +9,7 @@ Template.CreateRisk.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
+        const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
         this.modal().setError(errorMessage);
         return;
       }

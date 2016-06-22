@@ -33,6 +33,10 @@ const RisksSchema = new SimpleSchema([
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1
+    },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
     }
   }
 ]);
@@ -58,6 +62,10 @@ const RisksUpdateSchema = new SimpleSchema([
     magnitude: {
       type: String,
       optional: true
+    },
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
     }
   }
 ]);

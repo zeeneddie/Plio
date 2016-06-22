@@ -4,7 +4,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 Template.RisksList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal'],
-  risksSections() {
+  types() {
     const organizationId = this.organizationId();
     const query = { organizationId };
     const options = { sort: { title: 1 } };

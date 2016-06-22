@@ -19,9 +19,9 @@ Template.RisksLayout.viewmodel({
       ];
 
       if (this.isActiveRiskFilter('deleted')) {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id, true));
+        _subHandlers.push(this.templateInstance.subscribe('risks', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id));
+        _subHandlers.push(this.templateInstance.subscribe('risks', _id));
       }
 
       this._subHandlers(_subHandlers);
