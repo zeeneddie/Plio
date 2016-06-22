@@ -14,6 +14,7 @@ import './datepicker.html';
 import './datepicker.js';
 import './file-uploader.html';
 import './file-uploader.js';
+import './file-uploader-wrapper';
 import './modal-delete-button.html';
 import './modal-delete-button.js';
 import './clear-field.html';

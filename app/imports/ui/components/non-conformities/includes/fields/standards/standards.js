@@ -22,10 +22,10 @@ Template.NCStandards.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel, cb) {
-    const { selected:standard } = viewmodel.getData();
+    const { selected:standardId } = viewmodel.getData();
     const _id = viewmodel._id && viewmodel._id();
 
-    this.parent().update({ standard }, cb);
+    this.parent().update({ standardId }, cb);
   },
   onRemoveCb() {
     return this.remove.bind(this);

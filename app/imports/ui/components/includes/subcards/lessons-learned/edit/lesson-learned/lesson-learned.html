@@ -1,9 +1,10 @@
 <template name="Subcards_LessonLearned">
   <div class="card-block">
     {{#FormField label="Title"}}
-      <input type="text" class="form-control" placeholder="Title"
-          {{b "value: title, focusout: updateTitle"}} />
-      {{> ClearField field="title"}}
+      {{#ClearableField field="title"}}
+        <input type="text" class="form-control" placeholder="Title"
+            {{b "value: title, focusout: updateTitle"}} />
+      {{/ClearableField}}
     {{/FormField}}
 
     {{#FormField label="Linked to"}}

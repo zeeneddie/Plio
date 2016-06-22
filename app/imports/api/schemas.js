@@ -162,3 +162,19 @@ export const NotifySchema = new SimpleSchema({
     }
   }
 });
+
+export const DeletedSchema = new SimpleSchema({
+  isDeleted: {
+    type: Boolean,
+    optional: true
+  },
+  deletedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  deletedAt: {
+    type: Date,
+    optional: true
+  }
+});

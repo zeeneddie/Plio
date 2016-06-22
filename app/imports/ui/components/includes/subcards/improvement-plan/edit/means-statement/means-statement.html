@@ -1,18 +1,8 @@
 <template name="IPMeansStatement">
   {{#FormField label="Means statement - file attachment" sm=7}}
-    {{#each files}}
-      {{> FileItem
-          _id=this._id
-          name=this.name
-          url=this.url
-          extension=extension
-          removeFile=removeFileFn
-          uploader=uploader}}
-    {{/each}}
-    {{> FileUploader
-        insertFile=insertFileFn
-        onUpload=onUploadCb
-        slingshotDirective='improvementPlansFiles'
-        metaContext=uploaderMetaContext}}
+    {{> FileUploader_Wrapper
+        files=files
+        slingshotDirective="improvementPlansFiles"
+        uploaderMetaContext=uploaderMetaContext}}
   {{/FormField}}
 </template>

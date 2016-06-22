@@ -36,10 +36,10 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
 
     const _id = this.document() && this.document()._id;
 
-    const arguments = { ...args, _id, options, query };
+    const allArgs = { ...args, _id, options, query };
 
-    console.log(arguments);
+    console.log(allArgs);
 
-    this.modal().callMethod(update, arguments, cb);
+    this.modal().callMethod(update, allArgs, cb);
   }
 });

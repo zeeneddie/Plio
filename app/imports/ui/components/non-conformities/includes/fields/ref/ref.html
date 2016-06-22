@@ -2,10 +2,14 @@
   {{#FormField label="Help desk ref"}}
     <div class="row">
       <div class="col-sm-4">
-        <input type="text" class="form-control margin-right" placeholder="ID" {{b "value: text, focusout: update"}}>
+        {{#ClearableField field="text"}}
+          <input type="text" class="form-control margin-right" placeholder="ID" {{b "value: text, focusout: update"}}>
+        {{/ClearableField}}
       </div>
       <div class="col-sm-8">
-        <input type="text" class="form-control" placeholder="URL" {{b "value: url, focusout: update"}}>
+        {{#ClearableField field="url"}}
+          <input type="text" class="form-control" placeholder="URL" {{b "value: url, focusout: update"}}>
+        {{/ClearableField}}
       </div>
     </div>
   {{/FormField}}

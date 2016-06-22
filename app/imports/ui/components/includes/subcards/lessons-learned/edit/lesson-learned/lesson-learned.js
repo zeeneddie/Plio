@@ -17,7 +17,7 @@ Template.Subcards_LessonLearned.viewmodel({
   linkedTo: '',
   linkedToId: '',
   updateTitle(e) {
-    this.parent().update(e, 'title', true);
+    this.parent().update({ title: this.title(), e, withFocusCheck: true });
   },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);
@@ -28,7 +28,7 @@ Template.Subcards_LessonLearned.viewmodel({
     if (this.templateInstance.data.date === date) return;
 
     this.date(date);
-    this.parent().update(null, 'date');
+    this.parent().update({ date });
   },
   onUpdateOwnerCb() {
     return this.onUpdateOwner.bind(this);
@@ -39,10 +39,11 @@ Template.Subcards_LessonLearned.viewmodel({
     if (this.templateInstance.data.owner === owner) return;
 
     this.owner(owner);
-    this.parent().update(null, 'owner');
+    this.parent().update({ owner });
   },
   updateNotes(e) {
-    this.parent().update(e, 'notes', true);
+    const { notes } = this.getData();
+    this.parent().update({ notes, e, withFocusCheck: true });
   },
   events: {
     'focusout .quill'(e, tpl) {

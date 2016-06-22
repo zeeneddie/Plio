@@ -42,7 +42,7 @@
 
             <div class="list-group-item" {{b "if: this.standard"}}>
               <p class="list-group-item-text">Standard</p>
-              {{#with linkedStandard this.standard}}
+              {{#with linkedStandard this.standardId}}
                 <h4 class="list-group-item-heading">
                   <a {{b "text: this.title, attr: { href: this.href }"}}></a>
                 </h4>
@@ -59,7 +59,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="list-group-item">
-                  <p class="list-group-item-text">Identified date</p>
+                  <p class="list-group-item-text">Date identified</p>
                   <h4 class="list-group-item-heading" {{b "text: renderDate(this.identifiedAt)"}}></h4>
                 </div>
               </div>
@@ -91,10 +91,97 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-sm-12">
+                {{#with departments}}
+                  {{> Departments_Read departmentsIds=this}}
+                {{/with}}
+              </div>
+            </div>
+
           </div>
 
-          {{#with departments}}
-            {{> Departments_Read departmentsIds=this}}
+          {{#with analysis}}
+            <div class="card-block card-subheading"
+              {{b "if: this.executor || this.targetDate || this.status"}}>
+              <h4 class="card-title">Root cause analysis</h4>
+            </div>
+            <div class="list-group">
+
+              {{#with executor}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Who will do it?</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with targetDate}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Target date</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with status}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Status</p>
+                  <h4 class="list-group-item-heading" {{b "text: getAnalysisStatusName(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with completedAt}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Completed date</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with completedBy}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Completed by</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                </div>
+              {{/with}}
+
+            </div>
+          {{/with}}
+
+          {{#with updateOfStandards}}
+            <div class="card-block card-subheading"
+              {{b "if: this.targetDate || this.status"}}>
+              <h4 class="card-title">Update of standards</h4>
+            </div>
+            <div class="list-group">
+
+              {{#with targetDate}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Target date</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with status}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Status</p>
+                  <h4 class="list-group-item-heading" {{b "text: getAnalysisStatusName(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with completedAt}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Completed date</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+                </div>
+              {{/with}}
+
+              {{#with completedBy}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Completed by</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+                </div>
+              {{/with}}
+
+            </div>
           {{/with}}
 
           {{#with notify}}
@@ -115,6 +202,21 @@
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
+
+          {{#with files}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Other files</h4>
+            </div>
+            <div class="list-group-item">
+              {{#each this}}
+                <a class="btn btn-secondary btn-inline" {{b "href: this.url || '#'"}}>
+                  <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
+                  </i>
+                  <span>{{this.name}}</span>
+                </a>
+              {{/each}}
+            </div>
+          {{/with}}
 
           {{> CardChangelog document=this}}
         {{/with}}

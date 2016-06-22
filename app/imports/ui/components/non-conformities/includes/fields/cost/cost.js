@@ -12,15 +12,14 @@ Template.NCCost.viewmodel({
   },
   currency: '',
   cost: '',
-  update() {
-    const cost = parseInt(this.cost(), 10);
-
-    if (!cost) return;
+  update(e) {
+    const costInt = parseInt(this.cost(), 10);
+    const cost = isNaN(costInt) ? null : costInt;
 
     if (cost === this.templateInstance.data.cost) return;
 
     if (!this._id) return;
 
-    this.parent().update({ cost });
+    this.parent().update({ cost, e, withFocusCheck: true });
   }
 });
