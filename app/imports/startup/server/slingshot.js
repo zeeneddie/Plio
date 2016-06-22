@@ -6,8 +6,8 @@ import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
   const {
-    name, acl, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir, nonConformitiesFilesDir
+    bucketName, acl, usersAvatarsDir,
+    standardsFilesDir, improvementPlansFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -17,7 +17,7 @@ const configureSlignshot = () => {
   };
 
   Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
-    bucket: name,
+    bucket: bucketName,
 
     acl: acl,
 
@@ -36,7 +36,7 @@ const configureSlignshot = () => {
   });
 
   Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
-    bucket: name,
+    bucket: bucketName,
 
     acl: acl,
 
@@ -57,7 +57,7 @@ const configureSlignshot = () => {
   });
 
   Slingshot.createDirective('htmlAttachmentPreview', Slingshot.S3Storage, {
-    bucket: name,
+    bucket: bucketName,
 
     acl: acl,
 
@@ -76,7 +76,7 @@ const configureSlignshot = () => {
   });
 
   Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
-    bucket: name,
+    bucket: bucketName,
 
     acl: acl,
 
@@ -97,7 +97,7 @@ const configureSlignshot = () => {
   });
 
   Slingshot.createDirective('nonConformitiesFiles', Slingshot.S3Storage, {
-    bucket: name,
+    bucket: bucketName,
 
     acl: acl,
 

@@ -35,18 +35,26 @@ Meteor.publish('invitationInfo', function (invitationId) {
   ]
 });
 
+const getUserOrganizations = (userId, orgSelector = {}, options = {}) => {
+  const selector = {
+    users: {
+      $elemMatch: {
+        userId,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  };
+
+  _.extend(selector, orgSelector);
+
+  return Organizations.find(selector, options);
+};
+
 Meteor.publish('currentUserOrganizations', function() {
   if (this.userId) {
-    return Organizations.find({
-      users: {
-        $elemMatch: {
-          userId: this.userId,
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false }
-        }
-      }
-    }, {
+    return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
         serialNumber: 1,
@@ -60,17 +68,7 @@ Meteor.publish('currentUserOrganizations', function() {
 
 Meteor.publish('currentUserOrganizationById', function(_id) {
   if (this.userId) {
-    return Organizations.find({
-      _id,
-      users: {
-        $elemMatch: {
-          userId: this.userId,
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false }
-        }
-      }
-    });
+    return getUserOrganizations(this.userId, { _id });
   } else {
     return this.ready();
   }
@@ -78,17 +76,7 @@ Meteor.publish('currentUserOrganizationById', function(_id) {
 
 Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
   if (this.userId) {
-    return Organizations.find({
-      serialNumber,
-      users: {
-        $elemMatch: {
-          userId: this.userId,
-          isRemoved: false,
-          removedBy: { $exists: false },
-          removedAt: { $exists: false }
-        }
-      }
-    });
+    return getUserOrganizations(this.userId, { serialNumber });
   } else {
     return this.ready();
   }
