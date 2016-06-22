@@ -98,6 +98,7 @@ Template.ModalWindow.viewmodel({
   setError(errMessage) {
     this.error(errMessage);
     this.errorSection.collapse('show');
+    this.modal.animate({ scrollTop: 0 }, 250, 'swing');
   },
 
   clearError() {
