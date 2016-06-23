@@ -8,7 +8,7 @@ Template.SubCardEdit.viewmodel({
   },
   onRendered() {
     if (!this._id) {
-      this.toggleCollapse();
+      this.toggleCollapse(null, 250);
     }
   },
   document: '',
@@ -20,6 +20,13 @@ Template.SubCardEdit.viewmodel({
   _lText: '',
   _rText: '',
   content: '',
+  handleToggleCollapse() {
+    if (this._id) {
+      this.toggleCollapse(null, 250);
+    } else {
+      console.log('Save this subcard first.');
+    }
+  },
   callInsert(insertFn, args, cb) {
     this.beforeSave();
 
@@ -35,7 +42,7 @@ Template.SubCardEdit.viewmodel({
             'SubCardEdit', vm => vm._id && vm._id() === res
           );
           if (newSubcard) {
-            newSubcard.toggleCollapse();
+            newSubcard.toggleCollapse(null, 250);
             newSubcard.subcard.closest('.modal').animate({
               scrollTop: newSubcard.subcard.position().top + 70
             }, 500, 'swing');

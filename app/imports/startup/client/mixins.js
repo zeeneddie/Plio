@@ -33,15 +33,10 @@ ViewModel.mixin({
         });
       }
 
-      console.log('wtf?')
-      if (this.collapsed()) {
-        if (timeout) {
+      if (this.collapsed() && timeout) {
 
-          // We need some time to render the content for collapsible sections with dynamic content
-          setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
-        } else {
-          this.collapse.collapse('toggle');
-        }
+        // We need some time to render the content for collapsible sections with dynamic content
+        setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
       } else {
         this.collapse.collapse('toggle');
       }
