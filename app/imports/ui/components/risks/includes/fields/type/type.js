@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { RiskTypes } from '/imports/api/standards-types/standards-types.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 
 Template.RKType.viewmodel({
   mixin: ['organization', 'collapsing', 'risk'],
@@ -16,7 +16,7 @@ Template.RKType.viewmodel({
   types() {
     const organizationId = this.organizationId();
     const types = RiskTypes.find({ organizationId }).fetch();
-    return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
+    return  !this._id ? [{ _id: '', title: '' }].concat(types) : types; // add empty option
   },
   update() {
     if (!this._id) return;
