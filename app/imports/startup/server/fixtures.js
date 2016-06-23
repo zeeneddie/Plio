@@ -7,9 +7,10 @@ import { Standards } from '../../api/standards/standards.js';
 import { StandardTypes } from '../../api/standards-types/standards-types.js';
 import { StandardsBookSections } from '../../api/standards-book-sections/standards-book-sections.js';
 import { NonConformities } from '../../api/non-conformities/non-conformities.js';
+import { Actions } from '../../api/actions/actions.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities });
+_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions });
 
 import path from 'path';
 import fs from 'fs';
