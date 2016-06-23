@@ -15,9 +15,25 @@
     </form>
 
     <div class="list-group list-group-accordion">
-      {{#each risksSections}}
-        {{> ListItem template='RisksSectionsItem' title=title _id=_id}}
-      {{/each}}
+
+      {{#if isActiveRiskFilter 'type'}}
+        {{#each types}}
+          {{> ListItem
+              template='RiskSectionItem'
+              title=this.title
+              _query=(_getTypeQuery this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveRiskFilter 'status'}}
+        {{#each statuses}}
+          {{> ListItem
+              template="RiskSectionItem"
+              title=(getStatusName this)
+              _query=(_getStatusQuery this)}}
+        {{/each}}
+      {{/if}}
+
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
       {{/if}}

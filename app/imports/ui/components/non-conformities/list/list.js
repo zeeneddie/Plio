@@ -93,8 +93,9 @@ Template.NCList.viewmodel({
   },
   departments() {
     const query = { organizationId: this.organizationId() };
-    return Departments.find(query).fetch().filter(({ _id, name }) => {
-      return this._getNCsByQuery({ departments: _id, ...this._getSearchQuery() }).count() > 0;
+    const options = { sort: { name: 1 } };
+    return Departments.find(query, options).fetch().filter(({ _id:departments }) => {
+      return this._getNCsByQuery({ departments, ...this._getSearchQuery() }).count() > 0;
     });
   },
   NCsDeleted() {
