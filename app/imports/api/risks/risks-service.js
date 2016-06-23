@@ -23,6 +23,17 @@ export default {
     return this.collection.update(query, options);
   },
 
+  updateViewedBy({ _id, userId }) {
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        viewedBy: userId
+      }
+    };
+
+    return this.collection.update(query, options);
+  },
+
   remove({ _id, deletedBy, isDeleted }) {
     const query = { _id };
 

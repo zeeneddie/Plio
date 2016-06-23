@@ -1,9 +1,13 @@
 <template name="RiskItem">
-  <a class="list-group-item active" {{b "click: navigate"}}>
+  <a class="list-group-item" {{b "click: navigate, class: { active: this._id === riskId }"}}>
     <span class="label label-danger risk-square" {{b "text: score"}}></span>
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading" {{b "text: title"}}></h4>
-      <p class="list-group-item-text">RK99999 - Industrial accidents</p>
+      <h4 class="list-group-item-heading">
+        <span {{b "text: title"}}></span>
+        <span class="label label-primary" {{b "if: isNew"}}>New</span>
+      </h4>
+      <p class="list-group-item-text pull-left" {{b "text: this.sequentialId"}}></p>
+      <p class="list-group-item-text pull-right" {{b "text: renderDate(this.createdAt)"}}></p>
     </div>
   </a>
 </template>
