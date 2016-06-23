@@ -1,9 +1,13 @@
 import { Template } from 'meteor/templating';
 
 Template.RiskSectionItem.viewmodel({
-  mixin: ['organization', 'risk'],
+  share: 'search',
+  mixin: ['organization', 'risk', 'search'],
   _query: {},
   risks() {
-    return this._getRisksByQuery({ ...this._query() });
+    return this._getRisksByQuery({
+      ...this._query(),
+      ...this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }])
+    });
   }
 });

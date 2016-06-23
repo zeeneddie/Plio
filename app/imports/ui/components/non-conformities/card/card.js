@@ -7,7 +7,7 @@ import { update, remove } from '/imports/api/non-conformities/methods.js';
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
 Template.NCCard.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus', 'collapse', 'router', 'collapsing'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing'],
   autorun() {
     this.templateInstance.subscribe('improvementPlan', this.NCId());
   },

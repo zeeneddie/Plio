@@ -8,7 +8,7 @@ import { NCTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'NCStatus'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
     if (!this.focused()) {
       const query = this._getQueryForFilter();

@@ -365,6 +365,16 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
+    },
+    goToRisk(riskId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
+      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      FlowRouter.go('risk', params, queryParams);
+    },
+    goToRisks(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      FlowRouter.go('risks', params, queryParams);
     }
   },
   mobile: {
@@ -483,7 +493,7 @@ ViewModel.mixin({
       return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }) );
     }
   },
-  NCStatus: {
+  problemsStatus: {
     getStatusName(status) {
       return ProblemsStatuses[status];
     },

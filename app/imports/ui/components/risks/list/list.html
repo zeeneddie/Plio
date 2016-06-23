@@ -34,6 +34,22 @@
         {{/each}}
       {{/if}}
 
+      {{#if isActiveRiskFilter "department"}}
+        {{#each departments}}
+          {{> ListItem
+              template="RiskSectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              _query=(_getDepartmentQuery this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveRiskFilter 'deleted'}}
+        {{#each risksDeleted}}
+          {{> RiskItem}}
+        {{/each}}
+      {{/if}}
+
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
       {{/if}}
