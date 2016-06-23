@@ -17,18 +17,15 @@ Template.CreateRisk.viewmodel({
 
     this.insert(data);
   },
-  insert({ title, typeId, owner }) {
+  insert({ ...args }) {
     const organizationId = this.organizationId();
-    const owners = [owner];
 
-    const args = {
-      title,
-      typeId,
-      owners,
+    const allArgs = {
+      ...args,
       organizationId
     };
 
-    this.modal().callMethod(insert, args, (err, _id) => {
+    this.modal().callMethod(insert, allArgs, (err, _id) => {
       if (err) {
         return;
       }

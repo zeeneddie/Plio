@@ -3,7 +3,15 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
 import { ProblemsStatuses } from '../constants.js';
 
-const RequiredSchema = BaseProblemsRequiredSchema;
+const RequiredSchema = new SimpleSchema([
+  BaseProblemsRequiredSchema,
+  {
+    typeId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    }
+  }
+]);
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
@@ -33,10 +41,6 @@ const RisksSchema = new SimpleSchema([
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1
-    },
-    typeId: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
     }
   }
 ]);
@@ -65,7 +69,8 @@ const RisksUpdateSchema = new SimpleSchema([
     },
     typeId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }
 ]);
