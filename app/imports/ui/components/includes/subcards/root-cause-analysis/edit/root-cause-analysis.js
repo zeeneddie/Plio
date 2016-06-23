@@ -2,12 +2,12 @@ import { Template } from 'meteor/templating';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.NCRootCauseAnalysis.viewmodel({
+Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'date'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
     const found = _.keys(workflowDefaults)
-                    .find(key => this._getNCByQuery({ _id: this._id() }).magnitude === key.replace('Nc', ''));
+                    .find(key => this.magnitude() === key.replace('Nc', ''));
     const workflowDefault = workflowDefaults[found];
     if (workflowDefault) {
       const { timeUnit, timeValue } = workflowDefault;
@@ -16,6 +16,7 @@ Template.NCRootCauseAnalysis.viewmodel({
       return date.toDate();
     }
   },
+  magnitude: '',
   analysis: '',
   updateOfStandards: '',
   isAnalysisCompleted() {

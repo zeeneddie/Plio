@@ -255,6 +255,7 @@ export const BaseProblemsOptionalSchema = ((() => {
       [`${key}.status`]: {
         type: Number,
         allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
+        defaultValue: 0,
         optional: true
       },
       [`${key}.completedAt`]: {

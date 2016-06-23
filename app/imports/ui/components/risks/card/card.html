@@ -1,12 +1,7 @@
 <template name="RisksCard">
-    <div class="content-cards-inner flex scroll">
+  <div class="content-cards-inner flex scroll">
+    {{#if hasRisks}}
       <div class="card">
-        <div class="card-block card-heading" {{b "if: risks.count === 0"}}>
-          <h5 {{b "if: !isActiveRiskFilter('deleted')"}}>
-            There is no problems yet! Click on the 'Add' button to create your first problem.
-          </h5>
-          <h5 {{b "if: isActiveRiskFilter('deleted')"}}>There is no deleted problems yet!</h5>
-        </div>
         {{#with risk}}
           <div class="card-block card-heading">
             <div class="card-heading-buttons pull-xs-right">
@@ -18,27 +13,127 @@
                   Delete
                 </a>
               {{else}}
-                <a class="btn btn-primary" {{b "click: openEditRiskModal"}}>
+                <a class="btn btn-primary" {{b "click: openEditNCModal"}}>
                   <i class="fa fa-pencil"></i>
                   Edit
                 </a>
               {{/if}}
             </div>
             <h3 class="card-title">
-              Non-conformity
+              Risk
             </h3>
           </div>
+
           <div class="list-group">
+
             <div class="list-group-item">
               <p class="list-group-item-text">Title</p>
               <h4 class="list-group-item-heading">
                 <span {{b "text: this.title"}}></span>
+                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
               </h4>
             </div>
+
+            <div class="list-group-item" {{b "if: this.description"}}>
+              <p class="list-group-item-text">Description</p>
+              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+            </div>
+
+            <div class="list-group-item" {{b "if: this.standard"}}>
+              <p class="list-group-item-text">Standard</p>
+              {{#with linkedStandard this.standardId}}
+                <h4 class="list-group-item-heading">
+                  <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+                </h4>
+              {{/with}}
+            </div>
+
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Identified by</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.identifiedBy)"}}></h4>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Date identified</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.identifiedAt)"}}></h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Magnitude</p>
+                  <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Type</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderType(this.typeId)"}}></h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                {{#with departments}}
+                  {{> Departments_Read departmentsIds=this}}
+                {{/with}}
+              </div>
+            </div>
+
           </div>
+
+          {{> Subcards_RootCauseAnalysis_Read
+              analysis=this.analysis
+              updateOfStandards=this.updateOfStandards}}
+
+          {{#with notify}}
+            {{> Subcards_Notify_Read users=this}}
+          {{/with}}
+
+          {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+
+          {{> Subcards_LessonsLearned_Read documentId=this._id}}
+
+          {{#with files}}
+            <div class="card-block card-subheading">
+              <h4 class="card-title">Other files</h4>
+            </div>
+            <div class="list-group-item">
+              {{#each this}}
+                <a class="btn btn-secondary btn-inline" {{b "href: this.url || '#'"}}>
+                  <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
+                  </i>
+                  <span>{{this.name}}</span>
+                </a>
+              {{/each}}
+            </div>
+          {{/with}}
 
           {{> CardChangelog document=this}}
         {{/with}}
       </div>
-    </div>
+    {{else}}
+      <div class="card">
+        <div class="card-block card-heading">
+          {{#if isActiveRiskFilter 'deleted'}}
+            <h5>There is no deleted risks yet.</h5>
+          {{else}}
+            {{#if isActiveRiskFilter 'department'}}
+              <h5>There is no risks with departments yet.</h5>
+            {{else}}
+              <h5>There is no risks yet! Click on the 'Add' button to create your first risk.</h5>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
 </template>
