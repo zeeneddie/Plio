@@ -44,71 +44,52 @@ Template.NCCard.viewmodel({
     const query = { nonConformityId: this.NCId() };
     return Occurrences.find(query);
   },
-  openEditNCModal() {
+  onOpenEditModalCb() {
+    return this.openEditModal.bind(this);
+  },
+  openEditModal() {
     this.modal().open({
       title: 'Non-conformity',
       template: 'EditNC',
       _id: this.NCId()
     });
   },
-  restore({ _id, title, isDeleted }) {
-    if (!isDeleted) return;
-
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The non-conformity "${title}" will be restored!`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Restore',
-        closeOnConfirm: false,
-      },
-      () => {
-        update.call({ _id, isDeleted: false }, (err) => {
-          if (err) {
-            swal('Oops... Something went wrong!', err.reason, 'error');
-          } else {
-            swal('Restored!', `The non-conformity "${title}" was restored successfully.`, 'success');
-
-            FlowRouter.setQueryParams({ by: 'magnitude' });
-            Meteor.setTimeout(() => {
-              this.goToNC(_id);
-              this.expandCollapsed(_id);
-            }, 0);
-          }
-        });
-      }
-    );
+  onRestoreCb() {
+    return this.restore.bind(this);
   },
-  delete({ _id, title, isDeleted }) {
+  restore({ _id, isDeleted, title }, cb = () => {}) {
     if (!isDeleted) return;
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The non-conformity "${title}" will be deleted permanently!`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        closeOnConfirm: false,
-      },
-      () => {
-        remove.call({ _id }, (err) => {
-          if (err) {
-            swal('Oops... Something went wrong!', err.reason, 'error');
-          } else {
-            swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+    const callback = (err) => {
+      cb(err, () => {
+        FlowRouter.setQueryParams({ by: 'magnitude' });
+        Meteor.setTimeout(() => {
+          this.goToNC(_id);
+          this.expandCollapsed(_id);
+        }, 0);
+      });
+    };
 
-            const NCs = this._getNCsByQuery({});
+    update.call({ _id, isDeleted: false }, callback);
+  },
+  onDeleteCb() {
+    return this.delete.bind(this);
+  },
+  delete({ _id, title, isDeleted }, cb = () => {}) {
+    if (!isDeleted) return;
 
-            if (NCs.count() > 0) {
-              Meteor.setTimeout(() => {
-                this.goToNCs();
-              }, 0);
-            }
-          }
-        });
-      }
-    );
+    const callback = (err) => {
+      cb(err, () => {
+        const NCs = this._getNCsByQuery({});
+
+        if (NCs.count() > 0) {
+          Meteor.setTimeout(() => {
+            this.goToNCs();
+          }, 0);
+        }
+      });
+    };
+
+    remove.call({ _id }, callback);
   }
 });

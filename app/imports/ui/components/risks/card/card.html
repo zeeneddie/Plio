@@ -1,29 +1,14 @@
 <template name="RisksCard">
   <div class="content-cards-inner flex scroll">
     {{#if hasRisks}}
-      <div class="card">
-        {{#with risk}}
-          <div class="card-block card-heading">
-            <div class="card-heading-buttons pull-xs-right">
-              {{#if isDeleted}}
-                <a class="btn btn-secondary" {{b "click: restore(this)"}}>
-                  Restore
-                </a>
-                <a class="btn btn-primary" {{b "click: delete(this)"}}>
-                  Delete
-                </a>
-              {{else}}
-                <a class="btn btn-primary" {{b "click: openEditNCModal"}}>
-                  <i class="fa fa-pencil"></i>
-                  Edit
-                </a>
-              {{/if}}
-            </div>
-            <h3 class="card-title">
-              Risk
-            </h3>
-          </div>
+      {{#Card_Read
+        cardTitle="Risk"
+        document=risk
+        onRestore=onRestoreCb
+        onDelete=onDeleteCb
+        onOpenEditModal=onOpenEditModalCb}}
 
+        {{#with risk}}
           <div class="list-group">
 
             <div class="list-group-item">
@@ -116,10 +101,8 @@
               {{/each}}
             </div>
           {{/with}}
-
-          {{> CardChangelog document=this}}
         {{/with}}
-      </div>
+      {{/Card_Read}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
