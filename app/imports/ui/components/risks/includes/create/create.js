@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { insert } from '/imports/api/risks/methods.js';
 
 Template.CreateRisk.viewmodel({
-  mixin: ['modal', 'organization'],
+  mixin: ['modal', 'organization', 'router', 'collapsing'],
   save() {
     const data = this.getData();
 
@@ -31,6 +31,18 @@ Template.CreateRisk.viewmodel({
       }
 
       this.modal().close();
+
+      Meteor.setTimeout(() => {
+        this.goToRisk(_id, false);
+
+        this.expandCollapsed(_id);
+
+        this.modal().open({
+          _id,
+          title: 'Risk',
+          template: 'EditRisk'
+        });
+        }, 400);
     });
   },
   getData() {
