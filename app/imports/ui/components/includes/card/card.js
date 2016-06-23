@@ -6,11 +6,11 @@ Template.Card_Read.viewmodel({
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
-  handleMethodCall(err = '', title = '', cb = () => {}) {
+  handleMethodCall(err = '', title = '', action = 'updated', cb = () => {}) {
     if (err) {
       swal('Oops... Something went wrong!', err.reason, 'error');
     } else {
-      swal('Removed!', `The document "${title}" was restored successfully.`, 'success');
+      swal('Removed!', `The document "${title}" was ${action} successfully.`, 'success');
 
       cb();
     }
@@ -29,7 +29,7 @@ Template.Card_Read.viewmodel({
       },
       () => {
         this.onRestore({ _id, title, isDeleted, ...args }, (err, cb) => {
-          this.handleMethodCall(err, title, cb);
+          this.handleMethodCall(err, title, 'restored', cb);
         });
       }
     );
@@ -48,7 +48,7 @@ Template.Card_Read.viewmodel({
       },
       () => {
         this.onDelete({ _id, title, isDeleted, ...args }, (err, cb) => {
-          this.handleMethodCall(err, title, cb);
+          this.handleMethodCall(err, title, 'deleted', cb);
         });
       }
     );
