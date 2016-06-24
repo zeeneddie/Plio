@@ -5,9 +5,9 @@
 
       {{> ESDescription _id=this._id description=this.description}}
 
-      {{> NCStatus _id=this._id}}
+      {{> NCStatus _id=this._id status=this.status}}
 
-      {{> NCStandards _id=this.standardId}}
+      {{> Standard_Edit _id=this.standardId}}
 
       {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
 

@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.NCTitle.viewmodel({
+  label: 'Non-conformity name',
   titleText: '',
   update(e) {
     if (!this._id) return;

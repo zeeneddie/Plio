@@ -25,15 +25,7 @@
               <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
             </div>
 
-            <div class="list-group-item" {{b "if: this.standard"}}>
-              <p class="list-group-item-text">Standard</p>
-              {{#with linkedStandard this.standardId}}
-                <h4 class="list-group-item-heading">
-                  <a {{b "text: this.title, attr: { href: this.href }"}}></a>
-                </h4>
-              {{/with}}
-            </div>
-
+            {{> Standard_Read _id=this.standardId}}
 
             <div class="row">
               <div class="col-sm-6">

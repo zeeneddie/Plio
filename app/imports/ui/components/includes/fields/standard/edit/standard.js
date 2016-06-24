@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
-Template.NCStandards.viewmodel({
+Template.Standard_Edit.viewmodel({
   mixin: ['organization', 'search'],
   searchString() {
     const child = this.child('SelectItem');

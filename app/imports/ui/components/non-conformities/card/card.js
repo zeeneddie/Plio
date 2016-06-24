@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
@@ -23,18 +22,6 @@ Template.NCCard.viewmodel({
   },
   getStatus(status) {
     return status || 1;
-  },
-  linkedStandard(_id) {
-    const standard = Standards.findOne({ _id });
-    if (standard) {
-      const { title } = standard;
-      const href = ((() => {
-        const orgSerialNumber = this.organizationSerialNumber();
-        const standardId = _id;
-        return FlowRouter.path('standard', { orgSerialNumber, standardId });
-      })());
-      return { title, href };
-    }
   },
   renderCost(cost) {
     const currency = this.organization() && this.organization().currency;

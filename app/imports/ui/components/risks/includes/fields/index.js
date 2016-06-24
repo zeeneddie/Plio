@@ -1,2 +1,1 @@
-import './title';
 import './type';

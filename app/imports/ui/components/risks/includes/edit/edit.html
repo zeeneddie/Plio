@@ -1,7 +1,29 @@
 <template name="EditRisk">
-  {{#with document}}
+  {{#with risk}}
     <div class="card-block">
-      {{> RKTitle _id=this._id titleText=this.title}}
+      {{> NCTitle _id=this._id titleText=this.title label="Risk name"}}
+
+      {{> ESDescription _id=this._id description=this.description}}
+
+      {{> NCStatus _id=this._id status=this.status}}
+
+      {{> Standard_Edit _id=this.standardId}}
+
+      {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
+
+      {{> NCIdentifiedBy _id=this._id identifiedBy=this.identifiedBy}}
+
+      {{> NCIdentifiedDate _id=this._id identifiedAt=this.identifiedAt}}
+
+      {{> NCMagnitude _id=this._id magnitude=this.magnitude}}
+
+      {{> RKType _id=this._id typeId=this.typeId}}
     </div>
+
+    {{> Subcards_RootCauseAnalysis_Edit
+        _id=this._id
+        analysis=this.analysis
+        updateOfStandards=this.updateOfStandards
+        magnitude=this.magnitude}}
   {{/with}}
 </template>

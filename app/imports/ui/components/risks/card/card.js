@@ -4,7 +4,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { update, remove } from '/imports/api/risks/methods.js';
 
 Template.RisksCard.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'standard'],
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing'],
   hasRisks() {
     return this.risks().count() > 0;
   },
@@ -15,18 +15,6 @@ Template.RisksCard.viewmodel({
   },
   risk() {
     return this._getRiskByQuery({ _id: this.riskId() });
-  },
-  linkedStandard(_id) {
-    const standard = this._getStandardByQuery({ _id });
-    if (standard) {
-      const { title } = standard;
-      const href = ((() => {
-        const orgSerialNumber = this.organizationSerialNumber();
-        const standardId = _id;
-        return FlowRouter.path('standard', { orgSerialNumber, standardId });
-      })());
-      return { title, href };
-    }
   },
   renderType(_id) {
     const type = RiskTypes.findOne({ _id });
