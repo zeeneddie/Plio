@@ -48,7 +48,23 @@ export default {
           const s3 = new AWS.S3();
 
           // Add some styles here
-          const htmlString = '<style>img { max-width: 100%; }</style>' + result.value;
+          const htmlString = `
+            <style>
+              img { 
+                max-width: 100% !important; 
+              } 
+              body {
+                padding: 30px 30px 0px 30px !important;
+              }
+              @media (max-width: 500px) {
+                body {
+                  padding: 20px 20px 0px 20px !important;
+                }
+              }
+            </style>
+            ${result.value}
+          `;
+          
           const params = {
             Bucket: bucketName,
             ACL: acl,
