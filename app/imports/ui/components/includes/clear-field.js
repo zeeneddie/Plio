@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.ClearField.viewmodel({
   field: '',
-  clearFn: '',
+  clearFn: null,
   clearField() {
     this.templateInstance
       .$('.clear-field')
@@ -10,9 +10,11 @@ Template.ClearField.viewmodel({
       .find('input')
       .focus();
     if (this.field()) {
-      this.parent()[this.field()]('');
-    } else if (this.clearFn()) {
-      this.parent()[this.clearFn()]();
+
+      // this.parent() is Template.ClearableField 
+      this.parent().parent()[this.field()]('');
+    } else if (this.clearFn) {
+      this.parent().parent()[this.clearFn()]();
     }
   },
   editable() {

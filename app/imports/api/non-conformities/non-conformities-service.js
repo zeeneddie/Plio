@@ -59,6 +59,8 @@ export default {
         }
       };
 
+      console.log(query, options);
+
       return this.collection.update(query, options);
     }
   }

@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.NCTitle.viewmodel({
   titleText: '',
-  update() {
+  update(e) {
     if (!this._id) return;
 
     const title = this.titleText();
@@ -12,7 +12,7 @@ Template.NCTitle.viewmodel({
       return;
     }
 
-    this.parent().update({ title });
+    this.parent().update({ title, e, withFocusCheck: true });
   },
   getData() {
     const { titleText:title } = this.data();

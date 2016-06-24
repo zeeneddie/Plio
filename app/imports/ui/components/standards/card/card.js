@@ -13,6 +13,7 @@ Template.StandardsCard.viewmodel({
     template.autorun(() => {
       template.subscribe('improvementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
+      template.subscribe('nonConformitiesByStandardId', this.standardId());
     });
   },
   onRendered(template) {
@@ -66,6 +67,9 @@ Template.StandardsCard.viewmodel({
   type() {
     const _id = !!this.standard() && this.standard().typeId;
     return StandardTypes.findOne({ _id });
+  },
+  _getNCsQuery() {
+    return { standardId: this.standardId() };
   },
   openEditStandardModal() {
     this.modal().open({

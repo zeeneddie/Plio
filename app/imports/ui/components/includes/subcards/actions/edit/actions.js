@@ -45,7 +45,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   actions() {
     return Actions.find({
       type: this.type(),
-      linkedTo: this.linkedTo()
+      'linkedTo.documentId': this.linkedTo()
     });
   },
   addAction() {

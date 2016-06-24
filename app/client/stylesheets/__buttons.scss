@@ -172,5 +172,9 @@
 }
 
 .btn-inline {
-  margin: 4px 2px 0 0;
+  margin: 0 2px 4px 0;
+}
+
+.input-group-btn .btn {
+  min-height: 34px;
 }

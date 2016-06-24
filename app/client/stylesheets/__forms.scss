@@ -226,6 +226,10 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
+  
+  &.focused > .clear-field {
+    visibility: visible;
+  }
 
   .clear-field {
     right: 2px;

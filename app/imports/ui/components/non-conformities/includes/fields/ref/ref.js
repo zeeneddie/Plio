@@ -4,12 +4,13 @@ Template.NCRef.viewmodel({
   mixin: 'urlRegex',
   text: '',
   url: '',
-  update() {
+  update(e) {
     let { text, url } = this.data();
+    const context = this.templateInstance.data;
 
     if (!text || !url) return;
 
-    if (text === this.templateInstance.data.text && url === this.templateInstance.data.url) return;
+    if (text === context.text && url === context.url) return;
 
     if (!this._id) return;
 
@@ -24,6 +25,6 @@ Template.NCRef.viewmodel({
 
     const ref = { text, url };
 
-    this.parent().update({ ref });
+    this.parent().update({ ref, e, withFocusCheck: true });
   }
 });

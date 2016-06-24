@@ -10,6 +10,6 @@ Template.Actions_Edit.viewmodel({
     action && this.load(action);
   },
   getData() {
-    return { title: 'fuck you' };
+    return { title: this.title() };
   }
 });

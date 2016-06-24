@@ -1,6 +1,6 @@
 <template name="Subcards_Actions_Edit">
   {{#SubCardEditWrapper _lText=title _rText=lessons.count}}
-    <div {{b "ref: forms"}} id="actions">
+    <div {{b "ref: forms"}} id="actions" class="card">
       {{#each actions}}
         {{> SubCardEdit
             _id=this._id

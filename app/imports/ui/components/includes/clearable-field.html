@@ -1,5 +1,5 @@
 <template name="ClearableField">
-  <div class="clearable-field-container">
+  <div class="clearable-field-container" {{b "class: { focused: isFocused }"}}>
     {{> Template.contentBlock}}
     {{> ClearField field=field clearFn=clearFn animating=animating}}
   </div>

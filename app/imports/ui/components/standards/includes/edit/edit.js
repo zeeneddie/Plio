@@ -11,6 +11,9 @@ Template.EditStandard.viewmodel({
     const _id = this._id && this._id();
     return Standards.findOne({ _id });
   },
+  _getNCsQuery() {
+    return { standardId: this._id() };
+  },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
   },
