@@ -1,84 +1,77 @@
 <template name="EditStandard">
-  <div>
-    <div class="relative">
-      <div class="card-block">
-        {{> ESTitle titleText=standard.title _id=standard._id}}
+  <div class="card-block">
+    {{> ESTitle titleText=standard.title _id=standard._id}}
 
-        {{> ESDescription description=standard.description}}
+    {{> ESDescription description=standard.description}}
 
-        {{> ESBookSection selectedBookSectionId=standard.sectionId _id=standard.sectionId}}
+    {{> ESBookSection selectedBookSectionId=standard.sectionId _id=standard.sectionId}}
 
-        {{> ESType typeId=standard.typeId _id=standard._id}}
+    {{> ESType typeId=standard.typeId _id=standard._id}}
 
-        {{> ESOwner owner=standard.owner _id=standard._id}}
+    {{> ESOwner owner=standard.owner _id=standard._id}}
 
-        {{> ESIssueNumber issueNumber=standard.issueNumber _id=standard._id}}
+    {{> ESIssueNumber issueNumber=standard.issueNumber _id=standard._id}}
 
-        {{> ESStatus status=standard.status _id=standard._id}}
+    {{> ESStatus status=standard.status _id=standard._id}}
 
-        {{> Departments_Edit _id=standard._id departmentsIds=standard.departments}}
+    {{> Departments_Edit _id=standard._id departmentsIds=standard.departments}}
 
-        <hr>
+    <hr>
 
-        {{> ESSources
-            sourceType=standard.source1.type
-            sourceUrl=standard.source1.url
-            sourceName=standard.source1.name
-            sourceHtmlUrl = standard.source1.htmlUrl
-            label="Source file"
-            id=1}}
+    {{> ESSources
+        sourceType=standard.source1.type
+        sourceUrl=standard.source1.url
+        sourceName=standard.source1.name
+        sourceHtmlUrl = standard.source1.htmlUrl
+        label="Source file"
+        id=1}}
 
-        {{#if standard.source1}}
-          {{> ESSources
-              sourceType=standard.source2.type
-              sourceUrl=standard.source2.url
-              sourceName=standard.source2.name
-              sourceHtmlUrl = standard.source2.htmlUrl
-              label="Source file 2"
-              id=2}}
-        {{/if}}
+    {{#if standard.source1}}
+      {{> ESSources
+          sourceType=standard.source2.type
+          sourceUrl=standard.source2.url
+          sourceName=standard.source2.name
+          sourceHtmlUrl = standard.source2.htmlUrl
+          label="Source file 2"
+          id=2}}
+    {{/if}}
 
-      </div>
-
-      {{> Subcards_Notify_Edit
-          document=standard
-          documentType="standard"
-          onUpdate=onUpdateNotifyUserCb}}
-
-      {{> Subcards_NonConformities_Edit
-          _query=_getNCsQuery
-          _args=_getNCsQuery}}
-
-      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
-        <h4 class="card-title pull-xs-left">Corrective actions</h4>
-        <h4 class="card-title pull-xs-right">
-          <span class="text-muted">0</span>
-        </h4>
-      </div>
-      <div class="card-block-collapse collapse" id="corrective-actions">
-        <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
-      </div>
-      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
-        <h4 class="card-title pull-xs-left">Preventative actions</h4>
-        <h4 class="card-title pull-xs-right">
-          <span class="text-muted">0</span>
-        </h4>
-      </div>
-      <div class="card-block-collapse collapse" id="preventative-actions">
-        <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
-      </div>
-
-      {{> Subcards_ImprovementPlan_Edit
-          documentId=standard._id
-          documentType="standard"}}
-
-      {{> Subcards_LessonsLearned_Edit
-          documentId=standard._id
-          documentType="standard"
-          linkedTo=standard.title}}
-    </div>
-    <div class="card-block text-xs-center">
-      <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
-    </div>
   </div>
+
+  {{> Subcards_Notify_Edit
+      document=standard
+      documentType="standard"
+      onUpdate=onUpdateNotifyUserCb}}
+
+  {{> Subcards_NonConformities_Edit
+      _query=_getNCsQuery
+      _args=_getNCsQuery}}
+
+  <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
+    <h4 class="card-title pull-xs-left">Corrective actions</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted">0</span>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="corrective-actions">
+    <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
+  </div>
+  <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
+    <h4 class="card-title pull-xs-left">Preventative actions</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted">0</span>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="preventative-actions">
+    <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
+  </div>
+
+  {{> Subcards_ImprovementPlan_Edit
+      documentId=standard._id
+      documentType="standard"}}
+
+  {{> Subcards_LessonsLearned_Edit
+      documentId=standard._id
+      documentType="standard"
+      linkedTo=standard.title}}
 </template>

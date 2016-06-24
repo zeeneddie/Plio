@@ -1,15 +1,11 @@
 import { Template } from 'meteor/templating';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-
-import { Standards } from '/imports/api/standards/standards.js';
-import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'organization', 'collapsing', 'standard', 'router'],
+  mixin: ['organization', 'standard'],
   standard() {
     const _id = this._id && this._id();
-    return Standards.findOne({ _id });
+    return this._getStandardByQuery({ _id });
   },
   _getNCsQuery() {
     return { standardId: this._id() };
@@ -20,11 +16,8 @@ Template.EditStandard.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  update({ query = {}, options = {}, ...args }, cb) {
-    const _id = this._id && this._id();
-    const modifier = _.extend(args, { _id, options, query });
-
-    this.modal().callMethod(update, modifier, cb);
+  update(...args) {
+    this.parent().update(...args);
   },
   remove() {
     const { _id, title } = this.standard();
@@ -50,7 +43,7 @@ Template.EditStandard.viewmodel({
             const query = { isDeleted: { $in: [null, false] } };
             const options = { sort: { createdAt: -1 } };
 
-            const standard = Standards.findOne(query, options);
+            const standard = this._getStandardByQuery(query, options);
 
             if (!!standard) {
               const { _id } = standard;

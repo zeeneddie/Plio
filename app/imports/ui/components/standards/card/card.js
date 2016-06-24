@@ -74,8 +74,29 @@ Template.StandardsCard.viewmodel({
   openEditStandardModal() {
     this.modal().open({
       title: 'Compliance standard',
-      template: 'EditStandard',
+      template: 'Card_Edit',
+      content: 'EditStandard',
+      document: this.standard(),
+      onUpdate: this.update.bind(this),
+      onRemove: this.remove.bind(this),
       _id: this.standardId()
+    });
+  },
+  update({ _id, ...args }, cb) {
+    const callback = (err) => {
+      if (err) return;
+      cb();
+    };
+    this.modal().callMethod(update, { _id, ...args }, callback);
+  },
+  remove({ _id }) {
+    const { title } = this.standard();
+
+    this.modal().callMethod(remove, { _id }, (err) => {
+      if (err) return;
+      swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+
+      this.modal().close();
     });
   },
   restore({ _id, title, isDeleted }) {
