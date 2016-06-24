@@ -8,7 +8,7 @@ Template.SubCardEdit.viewmodel({
   },
   onRendered() {
     if (!this._id) {
-      this.toggleCollapse();
+      this.toggleCollapse(null, 250);
     }
   },
   document: '',
@@ -20,34 +20,83 @@ Template.SubCardEdit.viewmodel({
   _lText: '',
   _rText: '',
   content: '',
-  callSave(saveFn, args, cb) {
+  handleToggleCollapse() {
+    if (this._id) {
+      this.toggleCollapse(null, 250);
+    } else {
+      console.log('Save this subcard first.');
+    }
+  },
+  callInsert(insertFn, args, cb) {
+    this.beforeSave();
+
+    // We need this setTimeout to display a Saving... state
+    Meteor.setTimeout(() => {
+      this.subcard.addClass('hidden');
+      insertFn(args, (err, res) => {
+        this.afterSave(err, res, cb);
+
+        if (!err) {
+          this.destroy();
+          const newSubcard = ViewModel.findOne(
+            'SubCardEdit', vm => vm._id && vm._id() === res
+          );
+          if (newSubcard) {
+            newSubcard.toggleCollapse(null, 250);
+            newSubcard.subcard.closest('.modal').animate({
+              scrollTop: newSubcard.subcard.position().top + 70
+            }, 500, 'swing');
+          } 
+        }
+      });
+    }, 500);
+  },
+  callUpdate(updateFn, args, cb) {
+    this.beforeSave();
+
+    updateFn(args, (err, res) => {
+      this.afterSave(err, res, cb, 500);
+    });
+  },
+  beforeSave() {
     this.isWaiting(false);
     this.isSaving(true);
     this.clearError();
-
-    saveFn(args, (err, res) => {
+  },
+  afterSave(err, res, cb, timeout) {
+    const afterSaveFn = () => {
       if (err) {
         err.isFromSubcard = true;
       }
 
-      Meteor.setTimeout(() => {
-        this.isSaving(false);
-        if (err) {
-          this.setError(err.reason);
-          err.isSubcardError = true;
-          const currentSubcard = this.subcard;
-          currentSubcard.closest('.modal').animate({ scrollTop: currentSubcard.position().top + 70 }, 500, 'swing');
-        } else if (this.closeAfterCall()) {
-          this.toggleCollapse();
-        }
+      this.isSaving(false);
 
-        this.closeAfterCall(false);
-      }, 500);
+      if (err) {
+        this.subcard.removeClass('hidden');
+        this.setError(err.reason);
+
+        const currentSubcard = this.subcard;
+        currentSubcard.closest('.modal').animate({
+          scrollTop: currentSubcard.position().top + 70
+        }, 500, 'swing');
+      } else if (this.closeAfterCall()) {
+        this.toggleCollapse();
+      }
+
+      this.closeAfterCall(false);
 
       if (_.isFunction(cb)) {
         return cb(err, res);
       }
-    });
+    };
+
+    if (_.isFinite(timeout) && (timeout >= 0)) {
+      Meteor.setTimeout(() => {
+        afterSaveFn();
+      }, timeout);
+    } else {
+      afterSaveFn();
+    }
   },
   close() {
     const _id = this._id && this._id();
@@ -86,11 +135,7 @@ Template.SubCardEdit.viewmodel({
     return !!this.error();
   },
   save() {
-    this.callSave(this.insertFn, this.getData(), (err) => {
-      if (!err) {
-        Meteor.setTimeout(() => this.destroy(), 500);
-      }
-    });
+    this.callInsert(this.insertFn, this.getData());
   },
   delete() {
     this.removeFn(this);
@@ -109,7 +154,7 @@ Template.SubCardEdit.viewmodel({
     }
 
     const updateFn = () => {
-      this.callSave(this.updateFn, {
+      this.callUpdate(this.updateFn, {
         _id,
         ...args
       });

@@ -8,6 +8,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
 import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, ProblemsStatuses, OrgCurrencies } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
+import { Match } from 'meteor/check';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -17,9 +18,13 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    toggleCollapse: _.throttle(function(cb) {
+    toggleCollapse: _.throttle(function(cb, timeout) {
+
+      // Callback is always the last argument
+      timeout = Match.test(timeout, Number) ? timeout : null;
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
-        // hide other collapses
+
+        // Hide other collapses
         ViewModel.find('ListItem').forEach((vm) => {
           if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
             vm.collapse.collapse('hide');
@@ -28,7 +33,14 @@ ViewModel.mixin({
         });
       }
 
-      this.collapse.collapse('toggle');
+      if (this.collapsed() && timeout) {
+
+        // We need some time to render the content for collapsible sections with dynamic content
+        setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
+      } else {
+        this.collapse.collapse('toggle');
+      }
+      
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)

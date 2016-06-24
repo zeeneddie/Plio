@@ -4,6 +4,10 @@
   cursor: pointer;
   font-size: 15px;
   min-height: 57px;
+
+  &.new {
+    cursor: default;
+  }
   
   &:before {
     content: "\f105";

@@ -1,5 +1,9 @@
 .modal {
-
+  .relative {
+    .card {
+      position: inherit;
+    }
+  }
   &-dialog {
     @media (max-width: 600px) {
       width: auto;
