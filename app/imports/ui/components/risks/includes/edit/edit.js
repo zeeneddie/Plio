@@ -13,5 +13,12 @@ Template.EditRisk.viewmodel({
   },
   update(...args) {
     return this.parent().update(...args);
+  },
+  slingshotDirective: 'risksFiles',
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      riskId: this._id()
+    };
   }
 });

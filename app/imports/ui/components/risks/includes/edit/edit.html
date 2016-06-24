@@ -36,5 +36,11 @@
         documentType="risk"
         linkedTo=this.title
         linkedToId=this.sequentialId}}
+
+    {{> Subcards_OtherFiles_Edit
+        _id=this._id
+        files=this.files
+        uploaderMetaContext=uploaderMetaContext
+        slingshotDirective=slingshotDirective}}
   {{/with}}
 </template>

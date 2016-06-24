@@ -41,6 +41,10 @@
         linkedTo=this.title
         linkedToId=this.sequentialId}}
 
-    {{> NCOtherFiles _id=this._id files=this.files}}
+    {{> Subcards_OtherFiles_Edit
+        _id=this._id
+        files=this.files
+        uploaderMetaContext=uploaderMetaContext
+        slingshotDirective=slingshotDirective}}
   {{/with}}
 </template>

@@ -16,5 +16,12 @@ Template.EditNC.viewmodel({
   },
   update(...args) {
     this.parent().update(...args);
+  },
+  slingshotDirective: 'nonConformitiesFiles',
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      nonConformityId: this._id()
+    };
   }
 });
