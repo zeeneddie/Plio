@@ -12,6 +12,6 @@
     "meteor-node-stubs": "^0.2.3",
     "path": "^0.12.7",
     "pluralize": "^2.0.0",
-    "quill": "^0.20.1",
+    "quill": "^0.20.1"
   }
 }

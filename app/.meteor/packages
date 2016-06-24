@@ -53,4 +53,4 @@ manuel:reactivearray
 percolate:synced-cron
 force-ssl
 peerlibrary:aws-sdk
-kit:sweetalert
+plio:bootstrap-sweetalert
