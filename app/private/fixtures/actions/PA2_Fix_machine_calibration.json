@@ -11,7 +11,7 @@
   "type": "PA",
   "status": 3,
   "ownerId": "SQHmBKJ94gJvpLKLt",
-  "isPlanInPlace": true,
+  "planInPlace": "Yes",
   "serialNumber": 2,
   "sequentialId": "PA2",
   "isCompleted": true,

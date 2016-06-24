@@ -6,7 +6,7 @@ import {
   FileSchema,
   NotifySchema
 } from '../schemas.js';
-import { ActionTypes, ProblemTypes } from '../constants.js';
+import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
 
 
 const linkedToSchema = new SimpleSchema({
@@ -44,9 +44,9 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    isPlanInPlace: {
-      type: Boolean,
-      defaultValue: false
+    planInPlace: {
+      type: String,
+      allowedValues: _.values(ActionPlanOptions)
     },
     serialNumber: {
       type: Number,

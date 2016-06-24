@@ -50,6 +50,12 @@ const ActionStatuses = {
   9: 'Deleted'
 };
 
+const ActionPlanOptions = {
+  YES: 'Yes',
+  NO: 'No',
+  NOT_NEEDED: 'Not needed'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -279,6 +285,7 @@ const AvatarPlaceholders = [
 export {
   ActionTypes,
   ActionStatuses,
+  ActionPlanOptions,
   DefaultStandardTypes,
   NCTypes,
   NCStatuses,
