@@ -54,24 +54,14 @@
       <div class="card-block-collapse collapse" id="nonconformities">
         <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
       </div>
-      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
-        <h4 class="card-title pull-xs-left">Corrective actions</h4>
-        <h4 class="card-title pull-xs-right">
-          <span class="text-muted">0</span>
-        </h4>
-      </div>
-      <div class="card-block-collapse collapse" id="corrective-actions">
-        <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
-      </div>
-      <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
-        <h4 class="card-title pull-xs-left">Preventative actions</h4>
-        <h4 class="card-title pull-xs-right">
-          <span class="text-muted">0</span>
-        </h4>
-      </div>
-      <div class="card-block-collapse collapse" id="preventative-actions">
-        <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
-      </div>
+
+      {{> Subcards_Actions_Edit
+          type="CA"
+          linkedTo=standard._id}}
+
+      {{> Subcards_Actions_Edit
+          type="PA"
+          linkedTo=standard._id}}
 
       {{> Subcards_ImprovementPlan_Edit
           documentId=standard._id

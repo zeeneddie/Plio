@@ -1,0 +1,21 @@
+<template name="Subcards_Actions_Edit">
+  {{#SubCardEditWrapper _lText=title _rText=lessons.count}}
+    <div {{b "ref: forms"}} id="actions">
+      {{#each actions}}
+        {{> SubCardEdit
+            _id=this._id
+            action=this
+            _lText=actionCardTitle
+            content="Actions_Edit"
+            insertFn=insertFn
+            removeFn=removeFn
+            updateFn=updateFn}}
+      {{/each}}
+    </div>
+    <div class="text-xs-center">
+      <button type="button" class="btn btn-link" {{b "click: addAction"}}>
+        {{addButtonText}}
+      </button>
+    </div>
+  {{/SubCardEditWrapper}}
+</template>

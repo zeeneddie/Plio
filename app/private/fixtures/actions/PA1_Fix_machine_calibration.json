@@ -2,7 +2,12 @@
   "_id": "eXCXzSFtcJcw7ESGw",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Fix machine calibration",
-  "linkedTo": "4hecb3Gzvg5dPp7rD",
+  "linkedTo": [
+    {
+      "documentId": "4hecb3Gzvg5dPp7rD",
+      "documentType": "standard"
+    }
+  ],
   "type": "PA",
   "status": "In progress - due for completion today",
   "ownerId": "SQHmBKJ94gJvpLKLt",

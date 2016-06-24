@@ -28,7 +28,7 @@ export default {
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
-    this._ensureActionIsExist();
+    this._ensureActionExists(_id);
 
     if (!_.keys(query).length > 0) {
       query = { _id };
@@ -41,7 +41,7 @@ export default {
   },
 
   updateViewedBy({ _id, userId }) {
-    this._ensureActionIsExist();
+    this._ensureActionExists(_id);
 
     if (!!this.collection.findOne({ _id, viewedBy: userId })) {
       throw new Meteor.Error(
@@ -57,7 +57,7 @@ export default {
   },
 
   remove({ _id, deletedBy, isDeleted }) {
-    this._ensureActionIsExist();
+    this._ensureActionExists(_id);
 
     const query = { _id };
 
@@ -76,7 +76,7 @@ export default {
     }
   },
 
-  _ensureActionIsExist(_id) {
+  _ensureActionExists(_id) {
     if (!this.collection.findOne({ _id })) {
       throw new Meteor.Error(400, 'Action does not exist');
     }

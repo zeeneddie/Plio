@@ -1,0 +1,87 @@
+<template name="Actions_Edit">
+  <div class="card-block">
+    {{> Actions_Title title=action.title}}
+
+    <!--{{> Actions_LinkedTo linkedTo=action.linkedTo}}-->
+
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">Linked to</label>
+      <div class="col-sm-8 col-xs-12">
+        <div class="input-group">
+          <span class="input-group-addon">NC216</span>
+          <input type="text" class="form-control" value="Brackets getting corroded" disabled=""/>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">Status</label>
+      <div class="col-sm-8 col-xs-12">
+        <span class="label text-default"><i class="fa fa-circle text-warning margin-right"></i> In progress - due for completion today</span>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">Owner</label>
+      <div class="col-sm-8 col-xs-12">
+        <div class="dropdown">
+          <input type="text" class="form-control" value="Mike Smith" placeholder="Owner" data-toggle="dropdown"/>
+          <div class="dropdown-menu dropdown-menu-full">
+            <a class="dropdown-item" href="#">Jack Herbert</a>
+            <a class="dropdown-item" href="#">Steve Ives</a>
+            <a class="dropdown-item" href="#">Mark Leusink</a>
+            <a class="dropdown-item" href="#">Steve Saunders</a>
+            <a class="dropdown-item active" href="#">Mike Smith</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">Plan in place?</label>
+      <div class="col-sm-8 col-xs-12">
+        <div class="btn-group btn-group-nomargin" data-toggle="buttons">
+          <label class="btn btn-secondary active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> Yes
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="options" id="option2" autocomplete="off"> No
+          </label>
+          <label class="btn btn-secondary">
+            <input type="radio" name="options" id="option2" autocomplete="off"> Not needed
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">Completion - target date</label>
+      <div class="col-sm-8 col-xs-12">
+        <input type="text" class="form-control" value="20 Jun 2015" placeholder="Completion - target date">
+		    <button type="button" class="btn btn-link clear-field">
+          <i class="fa fa-times-circle"></i>
+        </button>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="form-control-label col-sm-4 col-xs-12">To be completed by</label>
+      <div class="col-sm-8 col-xs-12">
+        <div class="form-group-flex">
+          <div class="dropdown form-group-flex-flex">
+            <input type="text" class="form-control" value="Mike Smith" placeholder="To be completed by" data-toggle="dropdown"/>
+            <div class="dropdown-menu dropdown-menu-full">
+              <a class="dropdown-item" href="#">Jack Herbert</a>
+              <a class="dropdown-item" href="#">Steve Ives</a>
+              <a class="dropdown-item" href="#">Mark Leusink</a>
+              <a class="dropdown-item" href="#">Steve Saunders</a>
+              <a class="dropdown-item active" href="#">Mike Smith</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success margin-left">Complete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

@@ -6,8 +6,19 @@ import {
   FileSchema,
   NotifySchema
 } from '../schemas.js';
-import { ActionTypes, ActionStatuses } from '../constants.js';
+import { ActionTypes, ActionStatuses, DocumentTypes } from '../constants.js';
 
+
+const linkedToSchema = new SimpleSchema({
+  documentId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  documentType: {
+    type: String,
+    allowedValues: DocumentTypes
+  }
+});
 
 const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
@@ -26,8 +37,7 @@ const RequiredSchema = new SimpleSchema([
       allowedValues: _.values(ActionStatuses)
     },
     linkedTo: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
+      type: [linkedToSchema]
     },
     ownerId: {
       type: String,

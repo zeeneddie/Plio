@@ -16,7 +16,8 @@ Template.StandardsLayout.viewmodel({
         this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('standards-book-sections', _id),
-        this.templateInstance.subscribe('standards-types', _id)
+        this.templateInstance.subscribe('standards-types', _id),
+        this.templateInstance.subscribe('actions', _id),
       ];
 
       if (this.isActiveStandardFilter('deleted')) {
