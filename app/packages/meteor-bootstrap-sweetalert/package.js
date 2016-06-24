@@ -18,7 +18,7 @@ Package.onUse(function(api) {
     api.use('ecmascript', 'client');
 
     api.addFiles([
-        'bootstrap-sweetalert/dist/sweetalert.css',
-        'bootstrap-sweetalert/dev/sweetalert.es6.js'
+        'dist/sweetalert.css',
+        'dev/sweetalert.es6.js'
     ], ['client']);
 });
