@@ -25,5 +25,10 @@
         analysis=this.analysis
         updateOfStandards=this.updateOfStandards
         magnitude=this.magnitude}}
+
+    {{> Subcards_Notify_Edit
+        document=this
+        documentType="risk"
+        onUpdate=onUpdateNotifyUserCb}}
   {{/with}}
 </template>
