@@ -11,6 +11,8 @@ import {
   UserIdSchema
 } from '../schemas.js';
 
+import { checkAnalysis } from '../checkers.js';
+
 export const insert = new ValidatedMethod({
   name: 'Risks.insert',
 

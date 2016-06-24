@@ -12,6 +12,8 @@ Template.RKTitle.viewmodel({
       return;
     }
 
+    if (title === this.templateInstance.data.title) return;
+
     this.parent().update({ title, e, withFocusCheck: true });
   },
   getData() {

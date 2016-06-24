@@ -1,10 +1,10 @@
 import { Template } from 'meteor/templating';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { Standards } from '/imports/api/standards/standards.js';
+import { update, remove } from '/imports/api/risks/methods.js';
 
 Template.RisksCard.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing'],
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'standard'],
   hasRisks() {
     return this.risks().count() > 0;
   },
@@ -17,7 +17,7 @@ Template.RisksCard.viewmodel({
     return this._getRiskByQuery({ _id: this.riskId() });
   },
   linkedStandard(_id) {
-    const standard = Standards.findOne({ _id });
+    const standard = this._getStandardByQuery({ _id });
     if (standard) {
       const { title } = standard;
       const href = ((() => {
@@ -38,8 +38,28 @@ Template.RisksCard.viewmodel({
   openEditModal() {
     this.modal().open({
       title: 'Risk',
-      template: 'EditRisk',
+      template: 'Card_Edit',
+      content: 'EditRisk',
+      document: this.risk(),
+      onUpdate: this.update.bind(this),
+      onRemove: this.remove.bind(this),
       _id: this.riskId()
+    });
+  },
+  update({ _id, ...args }, cb) {
+    const callback = (err) => {
+      if (err) return;
+      cb();
+    };
+    this.modal().callMethod(update, { _id, ...args }, callback);
+  },
+  remove({ _id }) {
+    const { title } = this.risk();
+    this.modal().callMethod(remove, { _id }, (err) => {
+      if (err) return;
+      swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
+
+      this.modal().close();
     });
   },
   onRestoreCb() {
