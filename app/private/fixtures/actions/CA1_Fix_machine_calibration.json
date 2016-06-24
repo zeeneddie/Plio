@@ -9,7 +9,7 @@
     }
   ],
   "type": "CA",
-  "status": "In progress - due for completion today",
+  "status" : 1,
   "ownerId": "SQHmBKJ94gJvpLKLt",
   "isPlanInPlace": true,
   "serialNumber": 1,

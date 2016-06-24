@@ -6,7 +6,7 @@ import {
   FileSchema,
   NotifySchema
 } from '../schemas.js';
-import { ActionTypes, ActionStatuses, ProblemTypes } from '../constants.js';
+import { ActionTypes, ProblemTypes } from '../constants.js';
 
 
 const linkedToSchema = new SimpleSchema({
@@ -33,8 +33,9 @@ const RequiredSchema = new SimpleSchema([
       allowedValues: _.values(ActionTypes)
     },
     status: {
-      type: String,
-      allowedValues: _.values(ActionStatuses)
+      type: Number,
+      min: 0,
+      max: 9
     },
     linkedTo: {
       type: [linkedToSchema]

@@ -6,7 +6,11 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, NCStatuses, OrgCurrencies } from '/imports/api/constants.js';
+import {
+  UserRoles, StandardFilters, RiskFilters,
+  NonConformityFilters, NCTypes, NCStatuses,
+  OrgCurrencies, ActionStatuses
+} from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
 
@@ -40,7 +44,7 @@ ViewModel.mixin({
       } else {
         this.collapse.collapse('toggle');
       }
-      
+
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)
@@ -503,6 +507,31 @@ ViewModel.mixin({
         default:
           return '';
           break;
+      }
+    }
+  },
+  ActionStatus: {
+    getStatusName(status) {
+      return ActionStatuses[status];
+    },
+    getClassByStatus(status) {
+      console.log(typeof status);
+      switch(status) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          return 'warning';
+        case 6:
+        case 7:
+        case 8:
+          return 'success';
+        case 9:
+          return 'danger';
+        default:
+          return '';
       }
     }
   },

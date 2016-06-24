@@ -14,12 +14,16 @@
         {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType="non-conformity"
+            linkedTo=this.title
+            linkedToId=this.sequentialId}}
 
         {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType="non-conformity"
+            linkedTo=this.title
+            linkedToId=this.sequentialId}}
 
         {{> Subcards_ImprovementPlan_Edit
             documentId=this._id

@@ -49,19 +49,25 @@ Template.Subcards_Actions_Edit.viewmodel({
       'linkedTo.documentType': this.documentType()
     });
   },
-  linkedDocs() {
-    const action = Template.currentData();
-
-    return _.map(action.linkedDocuments(), (doc) => {
-      const { sequentialId, title } = doc;
-      return { sequentialId, title };
-    });
+  linkedDocs(action) {
+    if (action) {
+      return _.map(action.linkedDocuments(), (doc) => {
+        const { sequentialId, title } = doc;
+        return { sequentialId, title };
+      });
+    } else {
+      return [{
+        sequentialId: this.linkedToId(),
+        title: this.linkedTo()
+      }];
+    }
   },
   addAction() {
     this.addForm(
       'SubCardEdit',
       {
         content: 'Actions_Edit',
+        linkedDocs: this.linkedDocs(),
         insertFn: this.insertFn(),
         removeFn: this.removeFn(),
         updateFn: this.updateFn()

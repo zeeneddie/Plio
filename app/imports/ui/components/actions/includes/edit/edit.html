@@ -1,15 +1,11 @@
 <template name="Actions_Edit">
   <div class="card-block">
-    {{> Actions_Title title=action.title}}
+    {{> Actions_Title title=title}}
 
     {{> Actions_LinkedTo linkedDocs=linkedDocs}}
 
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">Status</label>
-      <div class="col-sm-8 col-xs-12">
-        <span class="label text-default"><i class="fa fa-circle text-warning margin-right"></i> In progress - due for completion today</span>
-      </div>
-    </div>
+    {{> Actions_Status status=status}}
+
     <div class="form-group row">
       <label class="form-control-label col-sm-4 col-xs-12">Owner</label>
       <div class="col-sm-8 col-xs-12">

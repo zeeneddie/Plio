@@ -6,7 +6,7 @@
           {{> SubCardEdit
               _id=this._id
               action=this
-              linkedDocs=linkedDocs
+              linkedDocs=(linkedDocs this)
               _lText=actionCardTitle
               content="Actions_Edit"
               insertFn=insertFn
