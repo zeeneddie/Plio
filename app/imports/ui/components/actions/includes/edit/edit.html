@@ -6,23 +6,8 @@
 
     {{> Actions_Status status=status}}
 
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">Owner</label>
-      <div class="col-sm-8 col-xs-12">
-        <div class="dropdown">
-          <input type="text" class="form-control" value="Mike Smith" placeholder="Owner" data-toggle="dropdown"/>
-          <div class="dropdown-menu dropdown-menu-full">
-            <a class="dropdown-item" href="#">Jack Herbert</a>
-            <a class="dropdown-item" href="#">Steve Ives</a>
-            <a class="dropdown-item" href="#">Mark Leusink</a>
-            <a class="dropdown-item" href="#">Steve Saunders</a>
-            <a class="dropdown-item active" href="#">Mike Smith</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
-          </div>
-        </div>
-      </div>
-    </div>
+    {{> Actions_Owner ownerId=ownerId}}
+
     <div class="form-group row">
       <label class="form-control-label col-sm-4 col-xs-12">Plan in place?</label>
       <div class="col-sm-8 col-xs-12">

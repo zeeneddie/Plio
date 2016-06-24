@@ -6,6 +6,7 @@ Template.Actions_Edit.viewmodel({
   _id: '',
   title: '',
   status: 0,
+  ownerId: Meteor.userId(),
   onCreated() {
     const action = this.action && this.action();
     action && this.load(action);
