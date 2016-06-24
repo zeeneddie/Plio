@@ -1,4 +1,4 @@
-<template name="NCOccurrences">
+<template name="Subcards_Occurrences_Edit">
   {{#SubCardEditWrapper _lText="Occurrences" _rText=occurrences.count}}
     {{#if occurrences.count}}
       <div class="card">
@@ -10,7 +10,7 @@
               sequentialId=sequentialId
               _lText=(renderText this)
               _rText=(renderDate this.date)
-              content="NCOccurrencesSubCardContent"
+              content="Subcards_Occurrence"
               insertFn=insertFn
               removeFn=removeFn
               updateFn=updateFn}}
@@ -19,7 +19,7 @@
     {{/if}}
     <div class="card new-cards" {{b "ref: forms"}}></div>
     <div class="text-xs-center">
-      <button type="button" class="btn btn-link" {{b "click: addOccurence"}}>Add an occurence</button>
+      <button type="button" class="btn btn-link" {{b "click: addOccurrence"}}>Add an occurrence</button>
     </div>
   {{/SubCardEditWrapper}}
 </template>

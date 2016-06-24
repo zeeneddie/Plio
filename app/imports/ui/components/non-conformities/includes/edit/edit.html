@@ -7,7 +7,7 @@
         documentType="non-conformity"
         onUpdate=onUpdateNotifyUserCb}}
 
-    {{> NCOccurrences _id=this._id occurrencesIds=this.occurrences}}
+    {{> Subcards_Occurrences_Edit _id=this._id occurrencesIds=this.occurrences}}
 
     <div class="card-block-collapse collapse" id="nonconformities">
       <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>

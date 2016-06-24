@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCOccurrencesSubCardContent.viewmodel({
+Template.Subcards_Occurrence.viewmodel({
   date: new Date(),
   description: '',
   onDateChangedCb() {

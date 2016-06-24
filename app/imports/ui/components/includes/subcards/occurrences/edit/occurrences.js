@@ -4,7 +4,7 @@ import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 
-Template.NCOccurrences.viewmodel({
+Template.Subcards_Occurrences_Edit.viewmodel({
   mixin: ['collapse', 'addForm', 'modal', 'date'],
   renderText({ sequentialId }) {
     return `<strong>${sequentialId}</strong>`;
@@ -17,13 +17,13 @@ Template.NCOccurrences.viewmodel({
     const options = { sort: { serialNumber: 1 } };
     return Occurrences.find(query, options);
   },
-  addOccurence() {
+  addOccurrence() {
     this.addForm(
       'SubCardEdit',
       {
         _lText: '',
         _rText: '',
-        content: 'NCOccurrencesSubCardContent',
+        content: 'Subcards_Occurrence',
         insertFn: this.insertFn(),
         removeFn: this.removeFn(),
         updateFn: this.updateFn()
@@ -56,7 +56,7 @@ Template.NCOccurrences.viewmodel({
       swal(
         {
           title: 'Are you sure?',
-          text: `The occurence "${seq}" will be removed.`,
+          text: `The occurrence "${seq}" will be removed.`,
           type: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Remove',
@@ -65,7 +65,7 @@ Template.NCOccurrences.viewmodel({
         () => {
           const cb = (err) => {
             if (!err) {
-              swal('Removed!', `The occurence "${seq}" was removed successfully.`, 'success')
+              swal('Removed!', `The occurrence "${seq}" was removed successfully.`, 'success')
             }
           };
 

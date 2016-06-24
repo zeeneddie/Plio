@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NCCard.viewmodel({
@@ -26,10 +25,6 @@ Template.NCCard.viewmodel({
   renderCost(cost) {
     const currency = this.organization() && this.organization().currency;
     return currency ? this.getCurrencySymbol(currency) + cost : '';
-  },
-  occurrences() {
-    const query = { nonConformityId: this.NCId() };
-    return Occurrences.find(query);
   },
   onOpenEditModalCb() {
     return this.openEditModal.bind(this);
