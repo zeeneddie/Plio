@@ -45,7 +45,16 @@ Template.Subcards_Actions_Edit.viewmodel({
   actions() {
     return Actions.find({
       type: this.type(),
-      'linkedTo.documentId': this.linkedTo()
+      'linkedTo.documentId': this.documentId(),
+      'linkedTo.documentType': this.documentType()
+    });
+  },
+  linkedDocs() {
+    const action = Template.currentData();
+
+    return _.map(action.linkedDocuments(), (doc) => {
+      const { sequentialId, title } = doc;
+      return { sequentialId, title };
     });
   },
   addAction() {

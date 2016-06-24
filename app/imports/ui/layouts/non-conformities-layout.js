@@ -15,7 +15,8 @@ Template.NCLayout.viewmodel({
         this.templateInstance.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('departments', _id)
+        this.templateInstance.subscribe('departments', _id),
+        this.templateInstance.subscribe('actions', _id)
       ];
 
       if (this.isActiveNCFilter('deleted')) {

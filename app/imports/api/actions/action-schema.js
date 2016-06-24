@@ -6,7 +6,7 @@ import {
   FileSchema,
   NotifySchema
 } from '../schemas.js';
-import { ActionTypes, ActionStatuses, DocumentTypes } from '../constants.js';
+import { ActionTypes, ActionStatuses, ProblemTypes } from '../constants.js';
 
 
 const linkedToSchema = new SimpleSchema({
@@ -16,7 +16,7 @@ const linkedToSchema = new SimpleSchema({
   },
   documentType: {
     type: String,
-    allowedValues: DocumentTypes
+    allowedValues: ProblemTypes
   }
 });
 
