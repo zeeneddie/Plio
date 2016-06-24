@@ -1,32 +1,34 @@
 <template name="SubCardEdit">
-  <div class="card subcard" {{b "class: {with-error: hasError}, ref: subcard"}}>
-    <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
-      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-      <span {{b "html: _lText"}}></span>
-      <span class="pull-xs-right" {{b "text: _rText"}}></span>
+  <div class="card-block card-block-collapse-toggle"  aria-expanded="false"
+    {{b "click: handleToggleCollapse, class: { with-error: hasError, new: !this._id, collapsed: collapsed }, ref: subcard"}}>
+    <span {{b "html: _lText"}}></span>
+    <span class="pull-xs-right" {{b "text: _rText"}}></span>
+  </div>
+  <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+    <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>
+      <div class="card-block">
+        <i class="fa fa-exclamation-circle fa-3x" aria-hidden="true"></i>
+        <span {{b "text: error"}}>
+        </span>
+      </div>
     </div>
-    <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
-      <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>
-        <div class="card-block">
-          <i class="fa fa-exclamation-circle fa-3x" aria-hidden="true"></i>
-          <span {{b "text: error"}}>
-          </span>
+    <div class="subcard-content">
+      {{#unless collapsed}}
+        {{> Template.dynamic template=content}}
+        <div class="card-block clearfix">
+          <button type="button" class="btn btn-secondary pull-xs-right"
+              {{b "click: close, class: {disabled: isSaving}"}}>
+            {{#if isSaving}}
+              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom">
+              </i>
+            {{/if}}
+            {{#if isSaving}} Saving... {{else}} {{#if _id}} Close {{else}} Save {{/if}} {{/if}}
+          </button>
+          <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: delete"}}>
+            Delete
+          </button>
         </div>
-      </div>
-      {{> Template.dynamic template=content}}
-      <div class="card-block clearfix">
-        <button type="button" class="btn btn-secondary pull-xs-right"
-            {{b "click: close, class: {disabled: isSaving}"}}>
-          {{#if isSaving}}
-            <i class="fa fa-spinner fa-pulse fa-fw margin-bottom">
-            </i>
-          {{/if}}
-          {{#if isSaving}} Saving... {{else}} {{#if _id}} Close {{else}} Save {{/if}} {{/if}}
-        </button>
-        <button type="button" class="btn btn-secondary pull-xs-left" {{b "click: delete"}}>
-          Delete
-        </button>
-      </div>
+      {{/unless}}
     </div>
   </div>
 </template>

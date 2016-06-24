@@ -3,6 +3,9 @@
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   margin-bottom: 30px;
   z-index: 101;
+  &:empty {
+    display: none;
+  }
 
   .search-results-meta {
     padding-left: 14px !important;
@@ -11,6 +14,18 @@
 
   iframe {
     max-width: 100%;
+  }
+
+  &.new-cards {
+    position: inherit;
+
+    .card-block-collapse-toggle {
+      padding-left: 20px;
+      
+      &::before {
+        display: none;
+      }
+    }
   }
 
   @media (max-width:767px) {

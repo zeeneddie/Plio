@@ -26,7 +26,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   insert({ title, identifiedAt, identifiedBy, magnitude }, callback) {
     const organizationId = this.organizationId();
-
+    
     const cb = (err, _id) => {
       if (err) {
         callback(err, _id);
