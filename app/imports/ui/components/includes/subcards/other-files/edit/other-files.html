@@ -1,10 +1,12 @@
 <template name="Subcards_OtherFiles_Edit">
   {{#SubCardEditWrapper _lText="Other Files" _rText=files.length}}
-    {{#FormField sm=12}}
-      {{> FileUploader_Wrapper
-          files=files
-          slingshotDirective=slingshotDirective
-          uploaderMetaContext=uploaderMetaContext}}
-    {{/FormField}}
+    <div class="card-block">
+      {{#FormField sm=12}}
+        {{> FileUploader_Wrapper
+            files=files
+            slingshotDirective=slingshotDirective
+            uploaderMetaContext=uploaderMetaContext}}
+      {{/FormField}}
+    </div>
   {{/SubCardEditWrapper}}
 </template>

@@ -1,25 +1,27 @@
 <template name="Subcards_Occurrences_Edit">
   {{#SubCardEditWrapper _lText="Occurrences" _rText=occurrences.count}}
-    {{#if occurrences.count}}
-      <div class="card">
-        {{#each occurrences}}
-          {{> SubCardEdit
-              _id=this._id
-              date=this.date
-              description=this.description
-              sequentialId=sequentialId
-              _lText=(renderText this)
-              _rText=(renderDate this.date)
-              content="Subcards_Occurrence"
-              insertFn=insertFn
-              removeFn=removeFn
-              updateFn=updateFn}}
-        {{/each}}
+    <div class="card-block">
+      {{#if occurrences.count}}
+        <div class="card">
+          {{#each occurrences}}
+            {{> SubCardEdit
+                _id=this._id
+                date=this.date
+                description=this.description
+                sequentialId=sequentialId
+                _lText=(renderText this)
+                _rText=(renderDate this.date)
+                content="Subcards_Occurrence"
+                insertFn=insertFn
+                removeFn=removeFn
+                updateFn=updateFn}}
+          {{/each}}
+        </div>
+      {{/if}}
+      <div class="card new-cards" {{b "ref: forms"}}></div>
+      <div class="text-xs-center">
+        <button type="button" class="btn btn-link" {{b "click: addOccurrence"}}>Add an occurrence</button>
       </div>
-    {{/if}}
-    <div class="card new-cards" {{b "ref: forms"}}></div>
-    <div class="text-xs-center">
-      <button type="button" class="btn btn-link" {{b "click: addOccurrence"}}>Add an occurrence</button>
     </div>
   {{/SubCardEditWrapper}}
 </template>

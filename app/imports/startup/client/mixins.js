@@ -40,7 +40,7 @@ ViewModel.mixin({
       } else {
         this.collapse.collapse('toggle');
       }
-      
+
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)
@@ -576,6 +576,19 @@ ViewModel.mixin({
         updateFn();
       } else {
         this.callWithFocusCheck(e, updateFn);
+      }
+    }
+  },
+  riskScore: {
+    getClassByScore(score) {
+      if (score >= 0 && score < 25) {
+        return 'vlow';
+      } else if (score >= 25 && score < 50) {
+        return 'low';
+      } else if (score >= 50 && score < 75) {
+        return 'medium';
+      } else {
+        return 'high';
       }
     }
   }

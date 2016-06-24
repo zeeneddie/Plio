@@ -1,0 +1,29 @@
+<template name="ScoreTable_Edit">
+  <div class="table-risk-grading">
+    <table class="table">
+      <tbody>
+        {{#with tableData}}
+          <tr>
+            <th rowspan="7" class="impacts-heading hidden-xs-down"><span {{b "text: this.yHeading"}}></span></th>
+          </tr>
+          {{#each this.data}}
+            <tr>
+              <th class="impact-label" {{b "text: this.label"}}></th>
+              {{#each this.rows}}
+                {{#if isLast ..}}
+                  <th class="impact-label" {{b "text: this"}}></th>
+                {{else}}
+                  <td class="impact" {{b "text: this, class: 'impact-'+getClassByScore(this)"}}></td>
+                {{/if}}
+              {{/each}}
+            </tr>
+          {{/each}}
+          <tr class="hidden-xs-down">
+            <th colspan="2">&nbsp;</th>
+            <th colspan="5" class="probability-heading"><span {{b "text: this.xHeading"}}></span></th>
+          </tr>
+        {{/with}}
+      </tbody>
+    </table>
+  </div>
+</template>

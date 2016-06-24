@@ -28,3 +28,4 @@ import './delete-button.html';
 import './delete-button.js';
 import './subcards';
 import './card';
+import './score-table';
