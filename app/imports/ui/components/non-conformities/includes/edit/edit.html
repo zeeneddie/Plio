@@ -1,53 +1,46 @@
 <template name="EditNC">
-  <div>
-    <div class="relative">
-      {{#with NC}}
-        {{> EditNC_Main NC=this onUpdate=onUpdateCb}}
+  {{#with NC}}
+    {{> EditNC_Main NC=this onUpdate=onUpdateCb}}
 
-        {{> Subcards_Notify_Edit
-            document=this
-            documentType="non-conformity"
-            onUpdate=onUpdateNotifyUserCb}}
+    {{> Subcards_Notify_Edit
+        document=this
+        documentType="non-conformity"
+        onUpdate=onUpdateNotifyUserCb}}
 
-        {{> NCOccurrences _id=this._id occurrencesIds=this.occurrences}}
+    {{> NCOccurrences _id=this._id occurrencesIds=this.occurrences}}
 
-        <div class="card-block-collapse collapse" id="nonconformities">
-          <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
-        </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Corrective actions</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">0</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="corrective-actions">
-          <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
-        </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Preventative actions</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">0</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="preventative-actions">
-          <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
-        </div>
-
-        {{> Subcards_ImprovementPlan_Edit
-            documentId=this._id
-            documentType="non-conformity"}}
-
-        {{> Subcards_LessonsLearned_Edit
-            documentId=this._id
-            documentType="non-conformity"
-            linkedTo=this.title
-            linkedToId=this.sequentialId}}
-
-        {{> NCOtherFiles _id=this._id files=this.files}}
-      {{/with}}
-      <div class="card-block text-xs-center">
-        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
-      </div>
+    <div class="card-block-collapse collapse" id="nonconformities">
+      <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
     </div>
-  </div>
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Corrective actions</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">0</span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="corrective-actions">
+      <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
+    </div>
+    <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
+      <h4 class="card-title pull-xs-left">Preventative actions</h4>
+      <h4 class="card-title pull-xs-right">
+        <span class="text-muted">0</span>
+      </h4>
+    </div>
+    <div class="card-block-collapse collapse" id="preventative-actions">
+      <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
+    </div>
+
+    {{> Subcards_ImprovementPlan_Edit
+        documentId=this._id
+        documentType="non-conformity"}}
+
+    {{> Subcards_LessonsLearned_Edit
+        documentId=this._id
+        documentType="non-conformity"
+        linkedTo=this.title
+        linkedToId=this.sequentialId}}
+
+    {{> NCOtherFiles _id=this._id files=this.files}}
+  {{/with}}
 </template>

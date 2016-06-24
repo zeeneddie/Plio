@@ -37,8 +37,28 @@ Template.NCCard.viewmodel({
   openEditModal() {
     this.modal().open({
       title: 'Non-conformity',
-      template: 'EditNC',
+      template: 'Card_Edit',
+      content: 'EditNC',
+      document: this.NC(),
+      onUpdate: this.update.bind(this),
+      onRemove: this.remove.bind(this),
       _id: this.NCId()
+    });
+  },
+  update({ _id, ...args }, cb) {
+    const callback = (err) => {
+      if (err) return;
+      cb();
+    };
+    this.modal().callMethod(update, { _id, ...args }, callback);
+  },
+  remove({ _id }) {
+    const { title } = this.NC();
+    this.modal().callMethod(remove, { _id }, (err) => {
+      if (err) return;
+      swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+
+      this.modal().close();
     });
   },
   onRestoreCb() {
