@@ -9,10 +9,11 @@ Template.NCOccurrencesSubCardContent.viewmodel({
   onDateChanged(viewmodel) {
     const { date } = viewmodel.getData();
     this.date(date);
-    this.parent().update(null, 'date');
+    this.parent().update({ date });
   },
   updateDescription(e) {
-    this.parent().update(e, 'description', true);
+    const { description } = this.getData();
+    this.parent().update({ description, e, withFocusCheck: true });
   },
   getData() {
     const { description, date } = this.data();
