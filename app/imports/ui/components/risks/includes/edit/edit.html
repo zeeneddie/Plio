@@ -30,5 +30,11 @@
         document=this
         documentType="risk"
         onUpdate=onUpdateNotifyUserCb}}
+
+    {{> Subcards_LessonsLearned_Edit
+        documentId=this._id
+        documentType="risk"
+        linkedTo=this.title
+        linkedToId=this.sequentialId}}
   {{/with}}
 </template>
