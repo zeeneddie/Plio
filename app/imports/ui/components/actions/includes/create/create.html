@@ -1,0 +1,24 @@
+<template name="Actions_Create">
+  <div class="card-block">
+    {{> Actions_Title title=title}}
+
+    {{> Actions_LinkedTo linkedDocs=linkedDocs}}
+
+    {{> Actions_Owner ownerId=ownerId}}
+
+    {{> Actions_PlanInPlace planInPlace=planInPlace}}
+
+    <hr />
+
+    {{> Actions_CompletionTargetDate completionTargetDate=completionTargetDate}}
+
+    {{> Actions_ToBeCompletedBy toBeCompletedBy=toBeCompletedBy}}
+
+    <hr />
+
+    {{> Actions_VerificationTargetDate completionTargetDate=completionTargetDate}}
+
+    {{> Actions_ToBeVerifiedBy toBeVerifiedBy=toBeVerifiedBy}}
+
+  </div>
+</template>

@@ -1,0 +1,10 @@
+<template name="Actions_VerificationTargetDate">
+  {{#FormField label="Verification - target date"}}
+    {{> Datepicker
+        date=verificationTargetDate
+        startDate=startDate
+        defaultDate=defaultDate
+        placeholder=placeholder
+        onChange=onUpdateCb}}
+  {{/FormField}}
+</template>

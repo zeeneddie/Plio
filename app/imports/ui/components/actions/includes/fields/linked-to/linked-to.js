@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 Template.Actions_LinkedTo.viewmodel({
   mixin: 'callWithFocusCheck',
-  title: '',
+  linkedDocs: [],
   update(e) {
     const { title } = this.getData();
     if (title === this.templateInstance.data.title) {
@@ -13,8 +13,5 @@ Template.Actions_LinkedTo.viewmodel({
     this.callWithFocusCheck(e, () => {
       this.parent().update({ title });
     });
-  },
-  getData() {
-    return { title: this.title() };
   }
 });

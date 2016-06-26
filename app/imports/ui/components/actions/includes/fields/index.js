@@ -1,5 +1,9 @@
+import './completion-target-date';
 import './linked-to';
 import './owner';
 import './plan-in-place';
 import './status';
 import './title';
+import './to-be-completed-by';
+import './to-be-verified-by';
+import './verification-target-date';

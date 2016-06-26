@@ -26,6 +26,6 @@ Template.Actions_PlanInPlace.viewmodel({
     this.parent().update({ planInPlace });
   },
   getData() {
-    return { isPlanInPlace: this.isPlanInPlace() };
+    return { planInPlace: this.planInPlace() };
   }
 });

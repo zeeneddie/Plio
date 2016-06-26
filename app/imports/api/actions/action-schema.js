@@ -60,7 +60,7 @@ const RequiredSchema = new SimpleSchema([
       type: Boolean,
       defaultValue: false
     },
-    completionTarget: {
+    completionTargetDate: {
       type: Date
     },
     toBeCompletedBy: {
@@ -97,7 +97,7 @@ const ActionSchema = new SimpleSchema([
       max: 40,
       optional: true
     },
-    verificationTarget: {
+    verificationTargetDate: {
       type: Date,
       optional: true
     },

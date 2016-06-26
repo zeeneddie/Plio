@@ -1,0 +1,10 @@
+<template name="Actions_ToBeVerifiedBy">
+  {{#FormField label="To be verified by"}}
+    {{> SelectItem
+        items=_members
+        selected=toBeVerifiedBy
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

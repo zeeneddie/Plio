@@ -1,0 +1,10 @@
+<template name="Actions_CompletionTargetDate">
+  {{#FormField label="Completion - target date"}}
+    {{> Datepicker
+        date=completionTargetDate
+        startDate=startDate
+        defaultDate=defaultDate
+        placeholder=placeholder
+        onChange=onUpdateCb}}
+  {{/FormField}}
+</template>

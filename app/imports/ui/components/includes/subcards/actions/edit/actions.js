@@ -66,7 +66,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     this.addForm(
       'SubCardEdit',
       {
-        content: 'Actions_Edit',
+        content: 'Actions_Create',
         linkedDocs: this.linkedDocs(),
         insertFn: this.insertFn(),
         removeFn: this.removeFn(),
