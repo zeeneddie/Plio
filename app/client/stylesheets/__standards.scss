@@ -199,16 +199,11 @@
         iframe {
           display: block;
           position: relative;
-          padding: 30px 30px 0px 30px;
           background: transparent;
           height: 100%;
           width: 100%;
           border: none;
           z-index: 1;
-
-          @media (max-width: 500px) {
-            padding: 20px 20px 0px 20px;
-          }
         }
       }
 

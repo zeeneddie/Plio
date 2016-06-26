@@ -25,3 +25,8 @@ Slingshot.fileRestrictions('nonConformitiesFiles', {
   allowedFileTypes: null,
   maxSize: 20 * 1024 * 1024 // 20 MB
 });
+
+Slingshot.fileRestrictions('risksFiles', {
+  allowedFileTypes: null,
+  maxSize: 20 * 1024 * 1024 // 20 MB
+});

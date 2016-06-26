@@ -7,7 +7,7 @@ import Utils from '/imports/core/utils';
 const configureSlignshot = () => {
   const {
     bucketName, acl, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir, nonConformitiesFilesDir
+    standardsFilesDir, improvementPlansFilesDir, nonConformitiesFilesDir, risksFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -114,6 +114,27 @@ const configureSlignshot = () => {
     key(file, metaContext) {
       const { organizationId, nonConformityId } = metaContext;
       return `uploads/${organizationId}/${nonConformitiesFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
+    }
+  });
+
+  Slingshot.createDirective('risksFiles', Slingshot.S3Storage, {
+    bucket: bucketName,
+
+    acl: acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { organizationId, riskId } = metaContext;
+      return `uploads/${organizationId}/${risksFilesDir}/${riskId}/${Random.id()}-${file.name}`;
     }
   });
 };
