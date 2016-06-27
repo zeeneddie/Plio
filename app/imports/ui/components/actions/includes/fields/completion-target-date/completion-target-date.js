@@ -6,6 +6,7 @@ Template.Actions_CompletionTargetDate.viewmodel({
   startDate: new Date(),
   defaultDate: false,
   placeholder: 'Completion - target date',
+  enabled: true,
   onUpdateCb() {
     return this.update.bind(this);
   },

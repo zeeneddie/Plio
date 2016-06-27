@@ -1,11 +1,10 @@
-<template name="Actions_CompletionTargetDate">
-  {{#FormField label="Completion - target date"}}
+<template name="Actions_VerifiedOn">
+  {{#FormField label="Verified as effective on"}}
     {{> Datepicker
-        date=completionTargetDate
+        date=verifiedAt
         startDate=startDate
         defaultDate=defaultDate
         placeholder=placeholder
-        enabled=enabled
         onChange=onUpdateCb}}
   {{/FormField}}
 </template>

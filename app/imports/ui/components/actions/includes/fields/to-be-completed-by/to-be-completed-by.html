@@ -1,10 +1,17 @@
 <template name="Actions_ToBeCompletedBy">
   {{#FormField label="To be completed by"}}
-    {{> SelectItem
-        items=_members
-        selected=toBeCompletedBy
-        placeholder=placeholder
-        selectFirstIfNoSelected=selectFirstIfNoSelected
-        onUpdate=onUpdateCb}}
+    <div class="form-group-flex">
+      {{> SelectItem
+          items=_members
+          selected=toBeCompletedBy
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          onUpdate=onUpdateCb}}
+      {{#if showCompleteButton}}
+        <button type="button" class="btn btn-success margin-left" {{b "click: onComplete"}}>
+          Complete
+        </button>
+      {{/if}}
+    </div>
   {{/FormField}}
 </template>

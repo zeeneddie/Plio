@@ -1,10 +1,17 @@
 <template name="Actions_ToBeVerifiedBy">
   {{#FormField label="To be verified by"}}
-    {{> SelectItem
-        items=_members
-        selected=toBeVerifiedBy
-        placeholder=placeholder
-        selectFirstIfNoSelected=selectFirstIfNoSelected
-        onUpdate=onUpdateCb}}
+    <div class="form-group-flex">
+      {{> SelectItem
+          items=_members
+          selected=toBeVerifiedBy
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          onUpdate=onUpdateCb}}
+      {{#if showVerifyButton}}
+        <button type="button" class="btn btn-success margin-left" {{b "click: onVerify"}}>
+          Verify
+        </button>
+      {{/if}}
+    </div>
   {{/FormField}}
 </template>

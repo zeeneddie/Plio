@@ -1,0 +1,11 @@
+<template name="Actions_CompletedBy">
+  {{#FormField label="Completed by"}}
+    {{> SelectItem
+        items=_members
+        selected=completedBy
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        enabled=enabled
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

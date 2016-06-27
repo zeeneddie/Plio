@@ -32,11 +32,6 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       allowedValues: _.values(ActionTypes)
     },
-    status: {
-      type: Number,
-      min: 0,
-      max: 9
-    },
     linkedTo: {
       type: [linkedToSchema]
     },
@@ -48,18 +43,6 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       allowedValues: _.values(ActionPlanOptions)
     },
-    serialNumber: {
-      type: Number,
-      min: 1
-    },
-    sequentialId: {
-      type: String,
-      regEx: /^(?:CA|PA|RC)[1-9][0-9]*$/
-    },
-    isCompleted: {
-      type: Boolean,
-      defaultValue: false
-    },
     completionTargetDate: {
       type: Date
     },
@@ -67,14 +50,15 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    isVerified: {
-      type: Boolean,
-      defaultValue: false
+    verificationTargetDate: {
+      type: Date,
+      optional: true
     },
-    isDeleted: {
-      type: Boolean,
-      defaultValue: false
-    },
+    toBeVerifiedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
   }
 ]);
 
@@ -83,6 +67,24 @@ const ActionSchema = new SimpleSchema([
   RequiredSchema,
   NotifySchema,
   {
+    serialNumber: {
+      type: Number,
+      min: 1
+    },
+    sequentialId: {
+      type: String,
+      regEx: /^(?:CA|PA|RC)[1-9][0-9]*$/
+    },
+    status: {
+      type: Number,
+      min: 0,
+      max: 9,
+      defaultValue: 0
+    },
+    isCompleted: {
+      type: Boolean,
+      defaultValue: false
+    },
     completedAt: {
       type: Date,
       optional: true
@@ -97,14 +99,9 @@ const ActionSchema = new SimpleSchema([
       max: 40,
       optional: true
     },
-    verificationTargetDate: {
-      type: Date,
-      optional: true
-    },
-    toBeVerifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
+    isVerified: {
+      type: Boolean,
+      defaultValue: false
     },
     verifiedAt: {
       type: Date,
@@ -119,6 +116,10 @@ const ActionSchema = new SimpleSchema([
       type: String,
       max: 40,
       optional: true
+    },
+    isDeleted: {
+      type: Boolean,
+      defaultValue: false
     },
     deletedBy: {
       type: String,

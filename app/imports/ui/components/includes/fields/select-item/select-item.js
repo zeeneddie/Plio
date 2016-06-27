@@ -30,6 +30,7 @@ Template.SelectItem.viewmodel({
   selectFirstIfNoSelected: true,
   items: [],
   variation: '',
+  enabled: true,
   isVariation(variation) {
     return this.variation() === variation;
   },

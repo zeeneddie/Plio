@@ -32,6 +32,7 @@ Template.Datepicker.viewmodel({
   startDate: new Date(),
   defaultDate: true,
   date: '',
+  enabled: true,
   dateString() {
     return this.date() ? this.renderDate(this.date()) : '';
   },

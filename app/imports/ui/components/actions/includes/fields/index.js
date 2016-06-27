@@ -1,3 +1,6 @@
+import './completed-by';
+import './completed-on';
+import './completion-result';
 import './completion-target-date';
 import './linked-to';
 import './owner';
@@ -7,3 +10,5 @@ import './title';
 import './to-be-completed-by';
 import './to-be-verified-by';
 import './verification-target-date';
+import './verified-by';
+import './verified-on';

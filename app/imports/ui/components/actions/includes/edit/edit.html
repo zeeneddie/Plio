@@ -10,35 +10,50 @@
 
     {{> Actions_PlanInPlace planInPlace=planInPlace}}
 
-    <hr>
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">Completion - target date</label>
-      <div class="col-sm-8 col-xs-12">
-        <input type="text" class="form-control" value="20 Jun 2015" placeholder="Completion - target date">
-		    <button type="button" class="btn btn-link clear-field">
-          <i class="fa fa-times-circle"></i>
-        </button>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12">To be completed by</label>
-      <div class="col-sm-8 col-xs-12">
-        <div class="form-group-flex">
-          <div class="dropdown form-group-flex-flex">
-            <input type="text" class="form-control" value="Mike Smith" placeholder="To be completed by" data-toggle="dropdown"/>
-            <div class="dropdown-menu dropdown-menu-full">
-              <a class="dropdown-item" href="#">Jack Herbert</a>
-              <a class="dropdown-item" href="#">Steve Ives</a>
-              <a class="dropdown-item" href="#">Mark Leusink</a>
-              <a class="dropdown-item" href="#">Steve Saunders</a>
-              <a class="dropdown-item active" href="#">Mike Smith</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#"><strong>Add new user</strong></a>
-            </div>
-          </div>
-          <button type="button" class="btn btn-success margin-left">Complete</button>
-        </div>
-      </div>
-    </div>
+    <hr />
+
+    {{> Actions_CompletionTargetDate
+        completionTargetDate=completionTargetDate
+        enabled=isCompletionEditable}}
+
+    {{#unless isActionCompleted}}
+
+      {{> Actions_ToBeCompletedBy
+          toBeCompletedBy=toBeCompletedBy
+          onComplete=onComplete}}
+
+    {{else}}
+
+      {{> Actions_CompletedOn
+          completedAt=completedAt
+          enabled=isCompletionEditable}}
+
+      {{> Actions_CompletedBy
+          completedBy=completedBy
+          enabled=isCompletionEditable}}
+
+      {{> Actions_CompletionResult
+          completionResult=completionResult
+          enabled=isCompletionEditable}}
+
+      <hr />
+
+      {{> Actions_VerificationTargetDate verificationTargetDate=verificationTargetDate}}
+
+      {{#unless isActionVerified}}
+
+        {{> Actions_ToBeVerifiedBy
+            toBeVerifiedBy=toBeVerifiedBy
+            onVerify=onVerify}}
+
+      {{else}}
+
+        {{> Actions_VerifiedOn verifiedAt=verifiedAt}}
+
+        {{> Actions_VerifiedBy verifiedBy=verifiedBy}}
+
+      {{/unless}}
+
+    {{/unless}}
   </div>
 </template>

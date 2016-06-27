@@ -81,7 +81,13 @@ Template.Subcards_Actions_Edit.viewmodel({
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, {
-      organizationId, ...args
+      organizationId,
+      linkedTo: [{
+        documentId: this.documentId(),
+        documentType: this.documentType()
+      }],
+      type: this.type(),
+      ...args
     }, cb);
   },
   updateFn() {
@@ -124,4 +130,16 @@ Template.Subcards_Actions_Edit.viewmodel({
   removeFn() {
     return this.remove.bind(this);
   },
+  completeFn() {
+    return this.complete.bind(this);
+  },
+  complete() {
+    console.log('complete');
+  },
+  verifyFn() {
+    return this.verify.bind(this);
+  },
+  verify() {
+    console.log('verify');
+  }
 });

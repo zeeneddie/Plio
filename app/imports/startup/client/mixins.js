@@ -515,7 +515,6 @@ ViewModel.mixin({
       return ActionStatuses[status];
     },
     getClassByStatus(status) {
-      console.log(typeof status);
       switch(status) {
         case 0:
         case 1:
