@@ -75,6 +75,8 @@
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
 
+          {{> Subcards_RiskAnalysis_Read score=this.score}}
+
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}

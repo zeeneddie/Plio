@@ -580,6 +580,19 @@ ViewModel.mixin({
     }
   },
   riskScore: {
+    getNameByScore(score) {
+      if (score >= 0 && score < 20) {
+        return 'Very low';
+      } else if (score >= 20 && score < 40) {
+        return 'Low';
+      } else if (score >= 40 && score < 60) {
+        return 'Medium';
+      } else if (score >= 60 && score < 80) {
+        return 'High';
+      } else {
+        return 'Very high';
+      }
+    },
     getClassByScore(score) {
       if (score >= 0 && score < 25) {
         return 'vlow';
