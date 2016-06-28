@@ -70,6 +70,73 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
+export const complete = new ValidatedMethod({
+  name: 'Actions.complete',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot complete an action'
+      );
+    }
+
+    return ActionService.complete({ _id, userId });
+  }
+});
+
+export const undoCompletion = new ValidatedMethod({
+  name: 'Actions.undoCompletion',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo an action'
+      );
+    }
+
+    return ActionService.undoCompletion({ _id, userId });
+  }
+});
+
+export const verify = new ValidatedMethod({
+  name: 'Actions.verify',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot verify an action'
+      );
+    }
+
+    return ActionService.verify({ _id, userId });
+  }
+});
+
+export const undoVerification = new ValidatedMethod({
+  name: 'Actions.undoVerification',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo an action'
+      );
+    }
+
+    return ActionService.undoVerification({ _id, userId });
+  }
+});
 
 export const remove = new ValidatedMethod({
   name: 'Actions.remove',

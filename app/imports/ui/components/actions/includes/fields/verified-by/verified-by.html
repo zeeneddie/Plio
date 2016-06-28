@@ -1,10 +1,17 @@
 <template name="Actions_VerifiedBy">
   {{#FormField label="Verified by"}}
-    {{> SelectItem
-        items=_members
-        selected=verifiedBy
-        placeholder=placeholder
-        selectFirstIfNoSelected=selectFirstIfNoSelected
-        onUpdate=onUpdateCb}}
+    <div class="form-group-flex">
+      {{> SelectItem
+          items=_members
+          selected=verifiedBy
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          onUpdate=onUpdateCb}}
+      {{#if showUndoButton}}
+        <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
+          Undo
+        </button>
+      {{/if}}
+    </div>
   {{/FormField}}
 </template>

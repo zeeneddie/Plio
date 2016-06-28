@@ -28,7 +28,7 @@ export default {
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
-    this._ensureActionExists(_id);
+    this._getActionOrThrow(_id);
 
     if (!_.keys(query).length > 0) {
       query = { _id };
@@ -40,8 +40,104 @@ export default {
     return this.collection.update(query, options);
   },
 
+  complete({ _id, userId }) {
+    const { isCompleted, toBeCompletedBy } = this._getActionOrThrow(_id);
+
+    if (userId !== toBeCompletedBy) {
+      throw new Meteor.Error(400, 'You cannot complete this action');
+    }
+
+    if (isCompleted === true) {
+      throw new Meteor.Error(400, 'This action is already completed');
+    }
+
+    this.collection.update({
+      _id
+    }, {
+      $set: {
+        isCompleted: true,
+        completedBy: userId,
+        completedAt: new Date()
+      }
+    });
+  },
+
+  undoCompletion({ _id, userId }) {
+    const { isCompleted, completedBy, isVerified } = this._getActionOrThrow(_id);
+
+    if (userId !== completedBy) {
+      throw new Meteor.Error(400, 'You cannot undo completion of this action');
+    }
+
+    if (isCompleted !== true) {
+      throw new Meteor.Error(400, 'This action is not completed');
+    }
+
+    if (isVerified === true) {
+      throw new Meteor.Error(400, 'This action is already verified');
+    }
+
+    this.collection.update({
+      _id
+    }, {
+      $set: { isCompleted: false },
+      $unset: {
+        completedBy: '',
+        completedAt: ''
+      }
+    });
+  },
+
+  verify({ _id, userId }) {
+    const { isCompleted, isVerified, toBeVerifiedBy } = this._getActionOrThrow(_id);
+
+    if (userId !== toBeVerifiedBy) {
+      throw new Meteor.Error(400, 'You cannot verify this action');
+    }
+
+    if (isCompleted === false) {
+      throw new Meteor.Error(400, 'This action is not completed');
+    }
+
+    if (isVerified === true) {
+      throw new Meteor.Error(400, 'This action is already verified');
+    }
+
+    this.collection.update({
+      _id
+    }, {
+      $set: {
+        isVerified: true,
+        verifiedBy: userId,
+        verifiedAt: new Date
+      }
+    });
+  },
+
+  undoVerification({ _id, userId }) {
+    const { isVerified, verifiedBy } = this._getActionOrThrow(_id);
+
+    if (userId !== verifiedBy) {
+      throw new Meteor.Error(400, 'You cannot undo verification of this action');
+    }
+
+    if (isVerified === false) {
+      throw new Meteor.Error(400, 'This action is not verified');
+    }
+
+    this.collection.update({
+      _id
+    }, {
+      $set: { isVerified: false },
+      $unset: {
+        verifiedBy: '',
+        verifiedAt: ''
+      }
+    });
+  },
+
   updateViewedBy({ _id, userId }) {
-    this._ensureActionExists(_id);
+    this._getActionOrThrow(_id);
 
     if (!!this.collection.findOne({ _id, viewedBy: userId })) {
       throw new Meteor.Error(
@@ -57,7 +153,7 @@ export default {
   },
 
   remove({ _id, deletedBy, isDeleted }) {
-    this._ensureActionExists(_id);
+    this._getActionOrThrow(_id);
 
     const query = { _id };
 
@@ -76,9 +172,11 @@ export default {
     }
   },
 
-  _ensureActionExists(_id) {
-    if (!this.collection.findOne({ _id })) {
+  _getActionOrThrow(_id) {
+    const action = this.collection.findOne({ _id });
+    if (!action) {
       throw new Meteor.Error(400, 'Action does not exist');
     }
+    return action;
   }
 };

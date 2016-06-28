@@ -2,7 +2,15 @@ import { Template } from 'meteor/templating';
 
 import { ActionTypes } from '/imports/api/constants.js';
 import { Actions } from '/imports/api/actions/actions.js';
-import { insert, update, remove } from '/imports/api/actions/methods.js';
+import {
+  insert,
+  update,
+  remove,
+  complete,
+  verify,
+  undoCompletion,
+  undoVerification
+} from '/imports/api/actions/methods.js';
 
 
 Template.Subcards_Actions_Edit.viewmodel({
@@ -154,13 +162,25 @@ Template.Subcards_Actions_Edit.viewmodel({
   completeFn() {
     return this.complete.bind(this);
   },
-  complete() {
-    console.log('complete');
+  complete({ ...args }, cb) {
+    this.modal().callMethod(complete, { ...args }, cb);
+  },
+  undoCompletionFn() {
+    return this.undoCompletion.bind(this);
+  },
+  undoCompletion({ ...args }, cb) {
+    this.modal().callMethod(undoCompletion, { ...args }, cb);
   },
   verifyFn() {
     return this.verify.bind(this);
   },
-  verify() {
-    console.log('verify');
+  verify({ ...args }, cb) {
+    this.modal().callMethod(verify, { ...args }, cb);
+  },
+  undoVerificationFn() {
+    return this.undoVerification.bind(this);
+  },
+  undoVerification({ ...args }, cb) {
+    this.modal().callMethod(undoVerification, { ...args }, cb);
   }
 });

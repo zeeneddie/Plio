@@ -17,6 +17,9 @@ Template.Actions_CompletedBy.viewmodel({
 
     return this.parent().update({ completedBy });
   },
+  showUndoButton() {
+    return this.onUndo && (this.completedBy() === Meteor.userId()) && this.enabled();
+  },
   getData() {
     return { completedBy: this.completedBy() };
   }

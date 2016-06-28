@@ -49,15 +49,6 @@ const RequiredSchema = new SimpleSchema([
     toBeCompletedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id
-    },
-    verificationTargetDate: {
-      type: Date,
-      optional: true
-    },
-    toBeVerifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
     }
   }
 ]);
@@ -102,6 +93,15 @@ const ActionSchema = new SimpleSchema([
     isVerified: {
       type: Boolean,
       defaultValue: false
+    },
+    verificationTargetDate: {
+      type: Date,
+      optional: true
+    },
+    toBeVerifiedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     },
     verifiedAt: {
       type: Date,

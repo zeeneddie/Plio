@@ -38,10 +38,32 @@ Template.Actions_Edit.viewmodel({
     this.parent().update({ ...args });
   },
   onComplete() {
-    return this.completeFn;
+    return () => {
+      this.parent().callUpdate(this.completeFn, {
+        _id: this._id()
+      });
+    };
+  },
+  onUndoCompletion() {
+    return () => {
+      this.parent().callUpdate(this.undoCompletionFn, {
+        _id: this._id()
+      });
+    };
   },
   onVerify() {
-    return this.verifyFn;
+    return () => {
+      this.parent().callUpdate(this.verifyFn, {
+        _id: this._id()
+      });
+    };
+  },
+  onUndoVerification() {
+    return () => {
+      this.parent().callUpdate(this.undoVerificationFn, {
+        _id: this._id()
+      });
+    };
   },
   subcard() {
     return this.parent();

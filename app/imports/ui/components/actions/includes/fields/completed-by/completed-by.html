@@ -1,11 +1,18 @@
 <template name="Actions_CompletedBy">
   {{#FormField label="Completed by"}}
-    {{> SelectItem
-        items=_members
-        selected=completedBy
-        placeholder=placeholder
-        selectFirstIfNoSelected=selectFirstIfNoSelected
-        enabled=enabled
-        onUpdate=onUpdateCb}}
+    <div class="form-group-flex">
+      {{> SelectItem
+          items=_members
+          selected=completedBy
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          enabled=enabled
+          onUpdate=onUpdateCb}}
+      {{#if showUndoButton}}
+        <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
+          Undo
+        </button>
+      {{/if}}
+    </div>
   {{/FormField}}
 </template>
