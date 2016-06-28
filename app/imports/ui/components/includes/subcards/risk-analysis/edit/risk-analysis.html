@@ -1,5 +1,5 @@
 <template name="Subcards_RiskAnalysis_Edit">
-  {{#SubCardEditWrapper _lText="Risk analysis" _rText="8"}}
+  {{#SubCardEditWrapper _lText="Risk analysis" _rText=getScore}}
     {{> ScoreTable_Edit
         tableData=tableData
         onUpdate=onUpdateCb

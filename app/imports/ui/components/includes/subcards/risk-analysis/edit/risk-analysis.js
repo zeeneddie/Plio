@@ -40,11 +40,18 @@ Template.Subcards_RiskAnalysis_Edit.viewmodel({
       ]
     };
   },
+  getScore() {
+    return this.score() ? this.score().value : '';
+  },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update({ rowId, value }) {
     const score = { rowId, value };
     this.parent().update({ score });
+  },
+  getData() {
+    const { score } = this.data();
+    return { score };
   }
 });
