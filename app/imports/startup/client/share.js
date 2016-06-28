@@ -4,9 +4,6 @@ ViewModel.share({
   window: {
     width: null
   },
-  standard: {
-    selectedStandardId: ''
-  },
   search: {
     searchText: ''
   }

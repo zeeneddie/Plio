@@ -26,28 +26,8 @@ Template.RisksCard.viewmodel({
   openEditModal() {
     this.modal().open({
       title: 'Risk',
-      template: 'Card_Edit',
-      content: 'EditRisk',
-      document: this.risk(),
-      onUpdate: this.update.bind(this),
-      onRemove: this.remove.bind(this),
+      template: 'EditRisk',
       _id: this.riskId()
-    });
-  },
-  update({ _id, ...args }, cb) {
-    const callback = (err) => {
-      if (err) return;
-      cb();
-    };
-    this.modal().callMethod(update, { _id, ...args }, callback);
-  },
-  remove({ _id }) {
-    const { title } = this.risk();
-    this.modal().callMethod(remove, { _id }, (err) => {
-      if (err) return;
-      swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
-
-      this.modal().close();
     });
   },
   onRestoreCb() {
