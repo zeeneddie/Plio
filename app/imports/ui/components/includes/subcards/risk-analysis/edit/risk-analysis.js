@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Subcards_RiskAnalysis_Edit.viewmodel({
+  mixin: 'riskScore',
   score: '',
   tableData() {
     return {
@@ -40,8 +41,8 @@ Template.Subcards_RiskAnalysis_Edit.viewmodel({
       ]
     };
   },
-  getScore() {
-    return this.score() ? this.score().value : '';
+  getScoreLabel() {
+    return this.score() ? `<span class="label impact-${this.getClassByScore(this.score().value)}">${this.score().value}</span>` : '';
   },
   onUpdateCb() {
     return this.update.bind(this);
