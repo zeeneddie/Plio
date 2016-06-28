@@ -11,6 +11,8 @@ Template.Actions_CompletionResult.viewmodel({
       return;
     }
 
+    this.subcard && this.subcard().isWaiting(true);
+
     this.callWithFocusCheck(e, () => {
       this.parent().update({ completionResult });
     });

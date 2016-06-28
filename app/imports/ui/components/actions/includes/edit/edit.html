@@ -35,7 +35,8 @@
 
       {{> Actions_CompletionResult
           completionResult=completionResult
-          enabled=isCompletionEditable}}
+          enabled=isCompletionEditable
+          subcard=subcard}}
 
       <hr />
 
@@ -55,6 +56,10 @@
         {{> Actions_VerifiedBy
             verifiedBy=verifiedBy
             onUndo=onUndoVerification}}
+
+        {{> Actions_VerificationResult
+            verificationResult=verificationResult
+            subcard=subcard}}
 
       {{/unless}}
 

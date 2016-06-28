@@ -1,0 +1,8 @@
+<template name="Actions_VerificationResult">
+  {{#FormField label="Result"}}
+    {{#ClearableField field="verificationResult"}}
+      <input type="text" class="form-control" placeholder="Result"
+          {{b "value: verificationResult, focusout: update, enable: enabled"}} />
+    {{/ClearableField}}
+  {{/FormField}}
+</template>
