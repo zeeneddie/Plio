@@ -25,7 +25,7 @@ Template.NCOccurrences.viewmodel({
     this.addForm(
       'SubCardEdit',
       {
-        _lText: `<strong>${this.nonConformity().sequentialId}-NEW-OCCURANCE</strong>`,
+        _lText: `${this.nonConformity().sequentialId}-new occurance`,
         _rText: '',
         content: 'NCOccurrencesSubCardContent',
         insertFn: this.insertFn(),

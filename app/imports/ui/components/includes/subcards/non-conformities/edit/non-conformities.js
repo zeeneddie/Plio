@@ -16,7 +16,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       'SubCardEdit',
       {
         content: 'CreateNC',
-        _lText: '<strong>NEW-NON-CONFORMITY</strong>',
+        _lText: 'New non-conformity',
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
       }
