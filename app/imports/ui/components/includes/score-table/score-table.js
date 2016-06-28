@@ -18,8 +18,8 @@ Template.ScoreTable_Edit.viewmodel({
     return this.update.bind(this);
   },
   onUpdate() {},
-  update(...args) {
-    this.onUpdate(...args);
+  update({ rowId, value }) {
+    this.onUpdate({ rowId, value });
   },
   getData() {
     const { active } = this.data();

@@ -61,6 +61,12 @@ export const update = new ValidatedMethod({
 
     checkAnalysis(risk, args);
 
+    if (_.has('args', ['scoredBy', 'scoredAt']) && !risk.score) {
+      throw new Meteor.Error(
+        403, 'Access denied'
+      )
+    }
+
     return RisksService.update({ _id, options, query, ...args });
   }
 });

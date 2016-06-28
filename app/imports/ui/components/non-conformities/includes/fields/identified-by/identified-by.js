@@ -4,6 +4,8 @@ import { Meteor } from 'meteor/meteor';
 Template.NCIdentifiedBy.viewmodel({
   mixin: ['search', 'user', 'members'],
   identifiedBy: Meteor.userId(),
+  label: 'Identified by',
+  placeholder: 'Identified by',
   onUpdateCb() {
     return this.update.bind(this);
   },

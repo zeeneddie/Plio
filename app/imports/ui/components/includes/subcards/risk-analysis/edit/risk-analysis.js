@@ -1,8 +1,11 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor';
 
 Template.Subcards_RiskAnalysis_Edit.viewmodel({
   mixin: 'riskScore',
   score: '',
+  scoredBy: '',
+  scoredAt: '',
   tableData() {
     return {
       xHeading: 'Probability',
@@ -47,9 +50,11 @@ Template.Subcards_RiskAnalysis_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update({ rowId, value }) {
-    const score = { rowId, value };
-    this.parent().update({ score });
+  update({ ...args }, cb) {
+    const _args = _.keys(args)
+                    .map(key => ({ [`score.${key}`]: args[key] }) )
+                    .reduce((prev, cur) => ({ ...prev, ...cur }));
+    this.parent().update(_args, cb);
   },
   getData() {
     const { score } = this.data();

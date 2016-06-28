@@ -1,9 +1,10 @@
-<template name="NCIdentifiedBy">
+<template name="RiskAnalysis_ScoredBy">
   {{#FormField label=label}}
     {{> SelectItem
+        selectFirstIfNoSelected=selectFirstIfNoSelected
         placeholder=placeholder
         items=_members
-        selected=identifiedBy
+        selected=scoredBy
         onUpdate=onUpdateCb}}
   {{/FormField}}
 </template>

@@ -32,6 +32,15 @@ const OptionalSchema = new SimpleSchema([
       type: Number,
       min: 1,
       max: 100
+    },
+    'score.scoredBy': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    'score.scoredAt': {
+      type: Date,
+      optional: true
     }
   }
 ]);
