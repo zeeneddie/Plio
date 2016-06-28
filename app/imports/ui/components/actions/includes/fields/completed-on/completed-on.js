@@ -19,7 +19,7 @@ Template.Actions_CompletedOn.viewmodel({
 
     this.completedAt(date);
 
-    this.parent().update({ completedAt: date });
+    this.parent().update && this.parent().update({ completedAt: date });
   },
   getData() {
     return { completedAt: this.completedAt() };

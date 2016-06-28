@@ -12,7 +12,7 @@ Template.Actions_Owner.viewmodel({
 
     this.ownerId(ownerId);
 
-    return this.parent().update({ ownerId });
+    this.parent().update && this.parent().update({ ownerId });
   },
   getData() {
     return { ownerId: this.ownerId() };

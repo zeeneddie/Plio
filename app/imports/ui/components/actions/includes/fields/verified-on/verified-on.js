@@ -18,7 +18,7 @@ Template.Actions_VerifiedOn.viewmodel({
 
     this.verifiedAt(date);
 
-    this.parent().update({ verifiedAt: date });
+    this.parent().update && this.parent().update({ verifiedAt: date });
   },
   getData() {
     return { verifiedAt: this.verifiedAt() };

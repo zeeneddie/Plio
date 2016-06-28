@@ -14,7 +14,7 @@ Template.Actions_VerifiedBy.viewmodel({
 
     this.verifiedBy(verifiedBy);
 
-    return this.parent().update({ verifiedBy });
+    this.parent().update && this.parent().update({ verifiedBy });
   },
   showUndoButton() {
     return this.onUndo && (this.verifiedBy() === Meteor.userId());

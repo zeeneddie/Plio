@@ -12,7 +12,7 @@ Template.Actions_Title.viewmodel({
 
     this.subcard && this.subcard().isWaiting(true);
 
-    this.callWithFocusCheck(e, () => {
+    this.parent().update && this.callWithFocusCheck(e, () => {
       this.parent().update({ title });
     });
   },

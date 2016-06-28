@@ -15,7 +15,7 @@ Template.Actions_ToBeCompletedBy.viewmodel({
 
     this.toBeCompletedBy(selected);
 
-    return this.parent().update({ toBeCompletedBy: selected });
+    this.parent().update && this.parent().update({ toBeCompletedBy: selected });
   },
   showCompleteButton() {
     return this.onComplete && (this.toBeCompletedBy() === Meteor.userId());

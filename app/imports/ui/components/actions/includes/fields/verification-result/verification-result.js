@@ -13,7 +13,7 @@ Template.Actions_VerificationResult.viewmodel({
 
     this.subcard && this.subcard().isWaiting(true);
 
-    this.callWithFocusCheck(e, () => {
+    this.parent().update && this.callWithFocusCheck(e, () => {
       this.parent().update({ verificationResult });
     });
   },

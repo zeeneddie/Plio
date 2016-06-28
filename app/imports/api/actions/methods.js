@@ -10,7 +10,13 @@ import { IdSchema, optionsSchema } from '../schemas.js';
 export const insert = new ValidatedMethod({
   name: 'Actions.insert',
 
-  validate: RequiredSchema.validator(),
+  validate(doc) {
+    RequiredSchema.clean(doc, {
+      removeEmptyStrings: true
+    });
+
+    return RequiredSchema.validator()(doc);
+  },
 
   run({ ...args }) {
     const userId = this.userId;

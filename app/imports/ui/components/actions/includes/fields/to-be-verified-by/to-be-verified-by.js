@@ -15,7 +15,7 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
 
     this.toBeVerifiedBy(selected);
 
-    return this.parent().update({ toBeVerifiedBy: selected });
+    this.parent().update && this.parent().update({ toBeVerifiedBy: selected });
   },
   showVerifyButton() {
     return this.onVerify && (this.toBeVerifiedBy() === Meteor.userId());

@@ -23,7 +23,7 @@ Template.Actions_PlanInPlace.viewmodel({
 
     this.planInPlace(planInPlace);
 
-    this.parent().update({ planInPlace });
+    this.parent().update && this.parent().update({ planInPlace });
   },
   getData() {
     return { planInPlace: this.planInPlace() };

@@ -99,11 +99,6 @@ Template.Subcards_Actions_Edit.viewmodel({
   insert({ ...args }, cb) {
     const organizationId = this.organizationId();
 
-    _.each(
-      _.filter(_.keys(args), key => args[key] === ''),
-      key => delete args[key]
-    );
-
     this.modal().callMethod(insert, {
       organizationId,
       linkedTo: [{
@@ -118,11 +113,6 @@ Template.Subcards_Actions_Edit.viewmodel({
     return this.update.bind(this);
   },
   update({ ...args }, cb) {
-    _.each(
-      _.filter(_.keys(args), key => args[key] === ''),
-      key => args[key] = undefined
-    );
-
     this.modal().callMethod(update, { ...args }, cb);
   },
   remove(viewmodel) {
