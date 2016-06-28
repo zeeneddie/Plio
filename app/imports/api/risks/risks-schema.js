@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
-import { ProblemsStatuses } from '../constants.js';
+import { ProblemsStatuses, TreatmentPlanPriorities, TreatmentPlanDecisions } from '../constants.js';
 
 const RequiredSchema = new SimpleSchema([
   BaseProblemsRequiredSchema,
@@ -13,6 +13,53 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
+const riskAnalysisScore = {
+  score: {
+    type: Object,
+    optional: true
+  },
+  'score.rowId': {
+    type: Number
+  },
+  'score.value': {
+    type: Number,
+    min: 1,
+    max: 100
+  },
+  'score.scoredBy': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  'score.scoredAt': {
+    type: Date,
+    optional: true
+  }
+};
+
+const treatmentPlan = {
+  treatmentPlan: {
+    type: Object,
+    optional: true
+  },
+  'treatmentPlan.comments': {
+    type: String,
+    max: 140
+  },
+  'treatmentPlan.prevLossExp': {
+    type: String,
+    max: 140
+  },
+  'treatmentPlan.priority': {
+    type: String,
+    allowedValues: _.keys(TreatmentPlanPriorities)
+  },
+  'treatmentPlan.decision': {
+    type: String,
+    allowedValues: _.keys(TreatmentPlanDecisions)
+  }
+};
+
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
   {
@@ -21,27 +68,8 @@ const OptionalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    score: {
-      type: Object,
-      optional: true
-    },
-    'score.rowId': {
-      type: Number
-    },
-    'score.value': {
-      type: Number,
-      min: 1,
-      max: 100
-    },
-    'score.scoredBy': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    },
-    'score.scoredAt': {
-      type: Date,
-      optional: true
-    }
+    ...riskAnalysisScore,
+    ...treatmentPlan
   }
 ]);
 

@@ -254,7 +254,20 @@ const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
-]
+];
+
+const TreatmentPlanPriorities = {
+  'low': 'Low',
+  'medium': 'Medium',
+  'high': 'High'
+};
+
+const TreatmentPlanDecisions = {
+  'tolerate': 'Tolerate',
+  'treat': 'Treat',
+  'transfer': 'Transfer',
+  'terminate': 'Terminate'
+};
 
 export {
   DefaultStandardTypes,
@@ -276,5 +289,7 @@ export {
   UserRoles,
   UserRolesNames,
   DocumentTypes,
-  AvatarPlaceholders
+  AvatarPlaceholders,
+  TreatmentPlanPriorities,
+  TreatmentPlanDecisions
 };
