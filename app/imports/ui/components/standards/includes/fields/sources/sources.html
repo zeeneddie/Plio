@@ -14,7 +14,7 @@
         <input type="radio" name="options" autocomplete="off"> Video
       </label>
     </div>
-      <i class="fa pull-right margin-top" {{b "class: { 'fa-spin fa-cog': docxRenderInProgress, 'fa-align-left': sourceHtmlUrl }"}}></i>
+      <i class="fa pull-right margin-top" {{b "class: { 'fa-spinner fa-pulse': docxRenderInProgress, 'fa-align-left': !docxRenderInProgress && sourceHtmlUrl }"}}></i>
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
