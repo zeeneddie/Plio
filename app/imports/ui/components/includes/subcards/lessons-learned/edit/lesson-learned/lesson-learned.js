@@ -3,13 +3,6 @@ import { Meteor } from 'meteor/meteor';
 
 Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
-  autorun() {
-    this.title.depend();
-
-    if (!this._id) {
-      this.parent()._lText(this.title.value);
-    }
-  },
   title: '',
   date: new Date(),
   owner: Meteor.userId(),

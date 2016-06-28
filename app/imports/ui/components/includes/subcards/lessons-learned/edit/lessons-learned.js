@@ -22,6 +22,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       'SubCardEdit',
       {
         content: 'Subcards_LessonLearned',
+        _lText: `<strong>NEW-LESSONS-LEARNED</strong>`,
         linkedTo: this.linkedTo(),
         linkedToId: this.linkedToId(),
         insertFn: this.insertFn(),
