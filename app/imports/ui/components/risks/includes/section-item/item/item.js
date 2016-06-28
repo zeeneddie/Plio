@@ -6,7 +6,7 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 
 Template.RiskItem.viewmodel({
   share: 'window',
-  mixin: ['risk', 'date'],
+  mixin: ['risk', 'date', 'riskScore'],
   autorun() {
     if (this._id() === this.riskId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
@@ -19,6 +19,7 @@ Template.RiskItem.viewmodel({
   type: '',
   status: '',
   title: '',
+  score: '',
   viewedBy: [],
   isNew() {
     return !this.viewedBy().find(_id => _id === Meteor.userId());

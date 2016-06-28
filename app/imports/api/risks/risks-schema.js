@@ -20,6 +20,18 @@ const OptionalSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true
+    },
+    score: {
+      type: Object,
+      optional: true
+    },
+    'score.rowId': {
+      type: Number
+    },
+    'score.value': {
+      type: Number,
+      min: 1,
+      max: 100
     }
   }
 ]);

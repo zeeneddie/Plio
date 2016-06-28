@@ -63,6 +63,12 @@
   &.margin-left {
     margin-left: 10px;
   }
+
+  &.impact-vlow { background: $green-color; }
+  &.impact-low { background: $yellow-color; }
+  &.impact-medium { background: $amber-color; }
+  &.impact-high { background: $red-color; }
+  &.impact-vhigh { background: $red-color; }
 }
 
 .form-group .label {

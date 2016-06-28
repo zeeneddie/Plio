@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ScoreTable_Edit.viewmodel({
-  mixin: 'riskScore',
+  score: '',
   tableData() {
     return {
       xHeading: '',
@@ -14,7 +14,15 @@ Template.ScoreTable_Edit.viewmodel({
       ]
     };
   },
-  isLast(elem) {
-    return _.isEqual(_.last(this.tableData().data), elem);
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  onUpdate() {},
+  update(...args) {
+    this.onUpdate(...args);
+  },
+  getData() {
+    const { active } = this.data();
+    return { active };
   }
 });

@@ -7,16 +7,13 @@
             <th rowspan="7" class="impacts-heading hidden-xs-down"><span {{b "text: this.yHeading"}}></span></th>
           </tr>
           {{#each this.data}}
-            <tr>
-              <th class="impact-label" {{b "text: this.label"}}></th>
-              {{#each this.rows}}
-                {{#if isLast ..}}
-                  <th class="impact-label" {{b "text: this"}}></th>
-                {{else}}
-                  <td class="impact" {{b "text: this, class: 'impact-'+getClassByScore(this)"}}></td>
-                {{/if}}
-              {{/each}}
-            </tr>
+            {{> ScoreTable_Item
+                score=score
+                rowId=this._id
+                rows=this.rows
+                label=this.label
+                tableData=tableData
+                onUpdate=onUpdateCb}}
           {{/each}}
           <tr class="hidden-xs-down">
             <th colspan="2">&nbsp;</th>

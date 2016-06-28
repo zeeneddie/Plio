@@ -1,6 +1,8 @@
 <template name="RiskItem">
   <a class="list-group-item" {{b "click: navigate, class: { active: this._id === riskId }"}}>
-    <span class="label label-danger risk-square" {{b "text: score"}}></span>
+    {{#if score}}
+      <span class="label risk-square" {{b "text: score.value, class: 'impact-'+getClassByScore(score.value)"}}></span>
+    {{/if}}
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading">
         <span {{b "text: title"}}></span>
