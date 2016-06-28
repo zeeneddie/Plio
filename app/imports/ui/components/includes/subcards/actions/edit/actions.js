@@ -6,7 +6,7 @@ import { insert, update, remove } from '/imports/api/actions/methods.js';
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['collapse', 'modal', 'addForm', 'organization'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus'],
   type: '',
   title() {
     let title = '';
@@ -38,9 +38,20 @@ Template.Subcards_Actions_Edit.viewmodel({
     }
     return buttonText;
   },
-  actionCardTitle() {
-    const { sequentialId, title } = Template.currentData();
+  lText(action) {
+    const { sequentialId, title } = action;
     return `<strong>${sequentialId}</strong> ${title}`;
+  },
+  rText(action) {
+    const { isCompleted, completedAt, completionTargetDate, status } = action;
+
+    let date = (isCompleted && completedAt) ? completedAt : completionTargetDate;
+    date = this.renderDate(date);
+
+    let indicatorClass = this.getClassByStatus(status);
+
+    return `<span class="hidden-xs-down">${date}</span>
+           <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
   actions() {
     return Actions.find({
@@ -80,6 +91,11 @@ Template.Subcards_Actions_Edit.viewmodel({
   insert({ ...args }, cb) {
     const organizationId = this.organizationId();
 
+    _.each(
+      _.filter(_.keys(args), key => args[key] === ''),
+      key => delete args[key]
+    );
+
     this.modal().callMethod(insert, {
       organizationId,
       linkedTo: [{
@@ -94,6 +110,11 @@ Template.Subcards_Actions_Edit.viewmodel({
     return this.update.bind(this);
   },
   update({ ...args }, cb) {
+    _.each(
+      _.filter(_.keys(args), key => args[key] === ''),
+      key => args[key] = undefined
+    );
+
     this.modal().callMethod(update, { ...args }, cb);
   },
   remove(viewmodel) {

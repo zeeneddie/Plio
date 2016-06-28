@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
 Template.Actions_Status.viewmodel({
-  mixin: 'ActionStatus',
+  mixin: 'actionStatus',
   status: 0
 });

@@ -510,7 +510,7 @@ ViewModel.mixin({
       }
     }
   },
-  ActionStatus: {
+  actionStatus: {
     getStatusName(status) {
       return ActionStatuses[status];
     },
@@ -519,10 +519,10 @@ ViewModel.mixin({
         case 0:
         case 1:
         case 2:
+          return 'warning';
         case 3:
         case 4:
         case 5:
-          return 'warning';
         case 6:
         case 7:
         case 8:

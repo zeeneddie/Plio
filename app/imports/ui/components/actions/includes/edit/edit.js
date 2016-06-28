@@ -4,25 +4,24 @@ import { ActionPlanOptions } from '/imports/api/constants.js';
 
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['collapse', 'modal', 'addForm', 'organization'],
   _id: '',
   title: '',
   status: 0,
   ownerId: Meteor.userId(),
   planInPlace: ActionPlanOptions.NO,
   isCompleted: false,
-  completionTargerDate: '',
+  completionTargetDate: '',
   toBeCompletedBy: '',
   completedAt: '',
   completedBy: '',
   completionResult: '',
   isVerified: false,
-  verificationTargerDate: '',
+  verificationTargetDate: '',
   toBeVerifiedBy: '',
   verifiedAt: '',
   verifiedBy: '',
   verificationResult: '',
-  onCreated() {
+  autorun() {
     const action = this.action && this.action();
     action && this.load(action);
   },
@@ -36,16 +35,16 @@ Template.Actions_Edit.viewmodel({
     return !this.isVerified();
   },
   update({ ...args }) {
-    this.updateFn({
-      _id: this._id(),
-      ...args
-    });
+    this.parent().update({ ...args });
   },
   onComplete() {
     return this.completeFn;
   },
   onVerify() {
     return this.verifyFn;
+  },
+  subcard() {
+    return this.parent();
   },
   getData() {
     return { title: this.title() };

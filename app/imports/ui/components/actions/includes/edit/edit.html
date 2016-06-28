@@ -1,6 +1,6 @@
 <template name="Actions_Edit">
   <div class="card-block">
-    {{> Actions_Title title=title}}
+    {{> Actions_Title title=title subcard=subcard}}
 
     {{> Actions_LinkedTo linkedDocs=linkedDocs}}
 
@@ -38,7 +38,8 @@
 
       <hr />
 
-      {{> Actions_VerificationTargetDate verificationTargetDate=verificationTargetDate}}
+      {{> Actions_VerificationTargetDate
+          verificationTargetDate=verificationTargetDate}}
 
       {{#unless isActionVerified}}
 

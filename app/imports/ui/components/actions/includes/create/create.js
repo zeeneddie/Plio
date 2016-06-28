@@ -4,7 +4,6 @@ import { ActionPlanOptions } from '/imports/api/constants.js';
 
 
 Template.Actions_Create.viewmodel({
-  mixin: ['collapse', 'modal', 'addForm', 'organization'],
   title: '',
   ownerId: Meteor.userId(),
   planInPlace: ActionPlanOptions.NO,

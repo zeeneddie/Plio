@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
 Template.SubCardEdit.viewmodel({
-  mixin: ['collapse', 'callWithFocusCheck', 'modal'],
+  mixin: ['collapse'],
   autorun() {
     this.load(this.document());
   },
@@ -46,7 +46,7 @@ Template.SubCardEdit.viewmodel({
             newSubcard.subcard.closest('.modal').animate({
               scrollTop: newSubcard.subcard.position().top + 70
             }, 500, 'swing');
-          } 
+          }
         }
       });
     }, 500);
@@ -143,7 +143,7 @@ Template.SubCardEdit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update({  e = {}, withFocusCheck = false, ...args }) {
+  update({ ...args }) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
@@ -153,19 +153,10 @@ Template.SubCardEdit.viewmodel({
       return;
     }
 
-    const updateFn = () => {
-      this.callUpdate(this.updateFn, {
-        _id,
-        ...args
-      });
-    };
-
-    if (withFocusCheck) {
-      this.isWaiting(true);
-      this.callWithFocusCheck(e, updateFn);
-    } else {
-      updateFn();
-    }
+    this.callUpdate(this.updateFn, {
+      _id,
+      ...args
+    });
   },
   getData() {
     return this.child(this.content()).getData();
