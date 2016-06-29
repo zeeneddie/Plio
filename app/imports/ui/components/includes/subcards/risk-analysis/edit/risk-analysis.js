@@ -43,7 +43,7 @@ Template.Subcards_RiskAnalysis_Edit.viewmodel({
     };
   },
   getScoreLabel() {
-    const score = this.score().value;
+    const score = this.score() && this.score().value;
     return this.score() ? `<span>${this.getNameByScore(score)}</span> <span class="label impact-${this.getClassByScore(score)}">${score}</span>` : '';
   },
   onUpdateCb() {

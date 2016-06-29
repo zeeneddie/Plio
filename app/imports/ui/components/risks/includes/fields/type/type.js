@@ -12,11 +12,15 @@ Template.RKType.viewmodel({
       Tracker.nonreactive(() => this.update());
     }
   },
+  onCreated() {
+    if (!this.typeId() && this.types().length > 0) {
+      this.typeId(this.types()[0]._id);
+    }
+  },
   typeId: '',
   types() {
     const organizationId = this.organizationId();
-    const types = RiskTypes.find({ organizationId }).fetch();
-    return  !this._id ? [{ _id: '', title: '' }].concat(types) : types; // add empty option
+    return RiskTypes.find({ organizationId }).fetch();
   },
   update() {
     if (!this._id) return;

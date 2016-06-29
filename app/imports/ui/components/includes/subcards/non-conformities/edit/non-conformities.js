@@ -6,7 +6,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   _query: {},
   _args: {},
   NCs() {
-    return this._getNCsByQuery({ ...this._query() });
+    return this._getNCsByQuery({ ...this._query() }, { sort: { sequentialId: 1 } });
   },
   renderText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;
@@ -25,17 +25,8 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ title, identifiedAt, identifiedBy, magnitude }, callback) {
+  insert({ title, identifiedAt, identifiedBy, magnitude }, cb) {
     const organizationId = this.organizationId();
-    
-    const cb = (err, _id) => {
-      if (err) {
-        callback(err, _id);
-        return;
-      }
-      const newNCSubcard = ViewModel.findOne('SubCardEdit', vm => vm._id && vm._id() === _id);
-      callback(err, _id);
-    };
 
     this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, cb);
   },

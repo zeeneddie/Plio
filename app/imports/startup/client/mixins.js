@@ -426,7 +426,7 @@ ViewModel.mixin({
     _getRisksByQuery(by = {}, options = { sort: { title: 1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       if (this.isActiveRiskFilter('deleted')) {
-        options = { deletedAt: -1 };
+        options = { sort: { deletedAt: -1 } };
       }
       return Risks.find(query, options);
     },
@@ -455,7 +455,7 @@ ViewModel.mixin({
     _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       if (this.isActiveNCFilter('deleted')) {
-        options = { deletedAt: -1 };
+        options = { sort: { deletedAt: -1 } };
       }
       return NonConformities.find(query, options);
     },
