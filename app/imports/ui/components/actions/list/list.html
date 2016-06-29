@@ -1,0 +1,24 @@
+<template name="ActionsList">
+  <div class="card">
+    <form class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField clearFn="clearSearchField"}}
+          <input type="text" class="form-control" placeholder="Search..."
+              disabled={{animating}} {{b "ref: searchInput, focus: focused, keyup: searchOnAfterKeyUp"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      <a class="btn btn-primary" {{b "click: openCreateModal"}}>
+        <i class="fa fa-plus"></i>
+        <span>Add</span>
+      </a>
+    </form>
+
+    <div class="list-group list-group-accordion">
+
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

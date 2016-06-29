@@ -252,6 +252,13 @@ const NonConformityFilters = [
   'deleted'
 ];
 
+const ActionFilters = [
+  'My current actions',
+  'Team current actions',
+  'My completed actions',
+  'Team completed actions'
+];
+
 const ProblemTypes = [
   'non-conformity',
   'risk'
@@ -305,5 +312,6 @@ export {
   UserRoles,
   UserRolesNames,
   DocumentTypes,
-  AvatarPlaceholders
+  AvatarPlaceholders,
+  ActionFilters
 };

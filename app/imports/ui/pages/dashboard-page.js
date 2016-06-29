@@ -6,12 +6,16 @@ Template.DashboardPage.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
   autorun: [
     function() {
+      const template = this.templateInstance;
+      const organizationId = this.organizationId();
       this._subHandlers([
-        this.templateInstance.subscribe('standardsCount', 'standards-count', this.organizationId()),
-        this.templateInstance.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', this.organizationId()),
-        this.templateInstance.subscribe('organizationUsers', this.organization().users.map(user => user.userId)),
-        this.templateInstance.subscribe('nonConformitiesCount', 'non-conformities-count', this.organizationId()),
-        this.templateInstance.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count', this.organizationId())
+        template.subscribe('standardsCount', 'standards-count', organizationId),
+        template.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', organizationId),
+        template.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id)),
+        template.subscribe('nonConformitiesCount', 'non-conformities-count', organizationId),
+        template.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count', organizationId),
+        template.subscribe('actionsCount', 'actions-count', organizationId),
+        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId)
       ]);
     },
     function() {
@@ -40,7 +44,10 @@ Template.DashboardPage.viewmodel({
   standardsMetrics() {
     return this._renderMetrics('standard', 'standards-count', 'standards-not-viewed-count');
   },
-  NCMetrics() {
+  NCsMetrics() {
     return this._renderMetrics('NC', 'non-conformities-count', 'non-conformities-not-viewed-count');
+  },
+  actionsMetrics() {
+    return this._renderMetrics('Action', 'actions-count', 'actions-not-viewed-count');
   }
 });

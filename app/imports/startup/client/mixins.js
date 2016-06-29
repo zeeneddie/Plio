@@ -6,10 +6,11 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
+import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, NCTypes, NCStatuses,
-  OrgCurrencies, ActionStatuses
+  OrgCurrencies, ActionStatuses, ActionFilters
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -436,6 +437,35 @@ ViewModel.mixin({
     _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
+    }
+  },
+  action: {
+    actionId() {
+      return FlowRouter.getParam('actionId');
+    },
+    isActiveActionFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeActionFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentAction() {
+      const _id = this.actionId();
+      return Actions.findOne({ _id });
+    },
+    _getIsDeletedQuery() {
+      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
+    _getActionsByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      if (this.isActiveActionFilter('deleted')) {
+        options = { deletedAt: -1 };
+      }
+      return Actions.find(query, options);
+    },
+    _getActionByQuery(by = {}, options = { sort: { title: 1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      return Actions.findOne(query, options);
     }
   },
   utils: {
