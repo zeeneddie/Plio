@@ -16,6 +16,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       'SubCardEdit',
       {
         content: 'CreateNC',
+        _lText: 'New non-conformity',
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
       }
@@ -26,8 +27,18 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   insert({ title, identifiedAt, identifiedBy, magnitude }, callback) {
     const organizationId = this.organizationId();
+    
+    const cb = (err, _id) => {
+      if (err) {
+        callback(err, _id);
+        return;
+      }
+      const newNCSubcard = ViewModel.findOne('SubCardEdit', vm => vm._id && vm._id() === _id);
+      newNCSubcard && newNCSubcard.toggleCollapse();
+      callback(err, _id);
+    };
 
-    this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, callback);
+    this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, cb);
   },
   updateFn() {
     return this.update.bind(this);
@@ -56,8 +67,14 @@ Template.Subcards_NonConformities_Edit.viewmodel({
           closeOnConfirm: false
         },
         () => {
-          const cb = () => {
+          const cb = (err) => {
+            if (err) {
+              swal.close();
+              return;
+            }
+
             viewmodel.destroy();
+
             swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
           };
 
