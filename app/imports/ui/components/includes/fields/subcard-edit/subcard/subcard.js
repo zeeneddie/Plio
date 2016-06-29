@@ -22,8 +22,6 @@ Template.SubCardEdit.viewmodel({
   handleToggleCollapse() {
     if (this._id) {
       this.toggleCollapse(null, 250);
-    } else {
-      console.log('Save this subcard first.');
     }
   },
   callInsert(insertFn, args, cb) {
