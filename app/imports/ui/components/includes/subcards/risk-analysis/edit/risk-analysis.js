@@ -4,8 +4,6 @@ import { Meteor } from 'meteor/meteor';
 Template.Subcards_RiskAnalysis_Edit.viewmodel({
   mixin: 'riskScore',
   score: '',
-  scoredBy: '',
-  scoredAt: '',
   tableData() {
     return {
       xHeading: 'Probability',

@@ -4,12 +4,12 @@
         tableData=tableData
         onUpdate=onUpdateCb
         score=score}}
-    {{#if score}}
+    {{#with score}}
       <div class="card-block">
-        {{> RiskAnalysis_ScoredBy scoredBy=score.scoredBy}}
+        {{> RiskAnalysis_ScoredBy scoredBy=this.scoredBy}}
 
-        {{> RiskAnalysis_ScoredAt scoredAt=score.scoredAt}}
+        {{> RiskAnalysis_ScoredAt scoredAt=this.scoredAt}}
       </div>
-    {{/if}}
+    {{/with}}
   {{/SubCardEditWrapper}}
 </template>
