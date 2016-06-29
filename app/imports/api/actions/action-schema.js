@@ -9,6 +9,24 @@ import {
 import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
 
 
+const checkDate = function() {
+  const value = this.value;
+  if (!(value instanceof Date)) {
+    return;
+  }
+
+  const utcValue = new Date(
+    value.getTime() + (value.getTimezoneOffset() * 60000)
+  );
+
+  const now = new Date();
+  const utcNow = new Date(
+    now.getTime() + (now.getTimezoneOffset() * 60000)
+  );
+
+  return (utcValue >= utcNow) ? 'badDate' : true;
+};
+
 const linkedToSchema = new SimpleSchema({
   documentId: {
     type: String,
@@ -78,7 +96,8 @@ const ActionSchema = new SimpleSchema([
     },
     completedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: checkDate
     },
     completedBy: {
       type: String,
@@ -105,7 +124,8 @@ const ActionSchema = new SimpleSchema([
     },
     verifiedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: checkDate
     },
     verifiedBy: {
       type: String,

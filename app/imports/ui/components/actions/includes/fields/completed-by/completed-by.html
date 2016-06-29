@@ -8,11 +8,16 @@
           selectFirstIfNoSelected=selectFirstIfNoSelected
           enabled=enabled
           onUpdate=onUpdateCb}}
-      {{#if showUndoButton}}
+      {{#if canBeUndone}}
         <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
           Undo
         </button>
       {{/if}}
     </div>
+    {{#if canBeUndone}}
+      <p class="text-muted">
+        Completed {{passedFromCompleted}}, {{leftToUndo}} left to undo
+      </p>
+    {{/if}}
   {{/FormField}}
 </template>

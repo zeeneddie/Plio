@@ -37,6 +37,8 @@ const ActionTypes = {
   RISK_CONTROL: 'RC'
 };
 
+const ActionUndoTimeInHours = 1;
+
 const ActionStatuses = {
   0: 'In progress',
   1: 'In progress - due for completion today',
@@ -286,6 +288,7 @@ export {
   ActionTypes,
   ActionStatuses,
   ActionPlanOptions,
+  ActionUndoTimeInHours,
   DefaultStandardTypes,
   NCTypes,
   NCStatuses,

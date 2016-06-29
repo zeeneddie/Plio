@@ -4,6 +4,7 @@ import { Template } from 'meteor/templating';
 Template.Actions_VerifiedOn.viewmodel({
   verifiedAt: '',
   startDate: new Date(),
+  endDate: new Date(),
   defaultDate: false,
   placeholder: 'Verified as effective on',
   onUpdateCb() {
