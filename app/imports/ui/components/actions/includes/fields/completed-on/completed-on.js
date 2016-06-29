@@ -11,7 +11,7 @@ Template.Actions_CompletedOn.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { date } = viewmodel.getData();
+    const date = viewmodel.getData().date || '';
 
     if (date === this.templateInstance.data.completedAt) {
       return;

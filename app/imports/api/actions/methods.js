@@ -34,9 +34,21 @@ export const update = new ValidatedMethod({
   name: 'Actions.update',
 
   validate(doc) {
-    const validationContext = new SimpleSchema([
+    const schema = new SimpleSchema([
       IdSchema, ActionSchema, optionsSchema
-    ]).newContext();
+    ]);
+
+    const validationContext = schema.newContext();
+
+    _.each(
+      _.filter(_.keys(doc), key => doc[key] === ''),
+      key => {
+        const fieldDef = schema.getDefinition(key);
+        if (fieldDef.optional !== true) {
+          doc[key] = undefined
+        }
+      }
+    );
 
     for (let key in doc) {
       if (!validationContext.validateOne(doc, key)) {

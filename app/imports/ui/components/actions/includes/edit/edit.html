@@ -16,7 +16,7 @@
         completionTargetDate=completionTargetDate
         enabled=isCompletionEditable}}
 
-    {{#unless isActionCompleted}}
+    {{#unless isCompleted}}
 
       {{> Actions_ToBeCompletedBy
           toBeCompletedBy=toBeCompletedBy
@@ -43,7 +43,7 @@
       {{> Actions_VerificationTargetDate
           verificationTargetDate=verificationTargetDate}}
 
-      {{#unless isActionVerified}}
+      {{#unless isVerified}}
 
         {{> Actions_ToBeVerifiedBy
             toBeVerifiedBy=toBeVerifiedBy

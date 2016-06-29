@@ -143,7 +143,7 @@ Template.SubCardEdit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update({ ...args }) {
+  update({ e = {}, withFocusCheck = false, ...args }) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
@@ -153,10 +153,19 @@ Template.SubCardEdit.viewmodel({
       return;
     }
 
-    this.callUpdate(this.updateFn, {
-      _id,
-      ...args
-    });
+    const updateFn = () => {
+      this.callUpdate(this.updateFn, {
+        _id,
+        ...args
+      });
+    };
+
+    if (withFocusCheck) {
+      this.isWaiting(true);
+      this.callWithFocusCheck(e, updateFn);
+    } else {
+      updateFn();
+    }
   },
   getData() {
     return this.child(this.content()).getData();

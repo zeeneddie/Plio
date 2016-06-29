@@ -25,12 +25,6 @@ Template.Actions_Edit.viewmodel({
     const action = this.action && this.action();
     action && this.load(action);
   },
-  isActionCompleted() {
-    return this.isCompleted() && this.completedAt() && this.completedBy();
-  },
-  isActionVerified() {
-    return this.isVerified() && this.verifiedAt() && this.verifiedBy();
-  },
   isCompletionEditable() {
     return !this.isVerified();
   },
