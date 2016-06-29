@@ -14,7 +14,6 @@ Template.Subcards_TreatmentPlan_Edit.viewmodel({
     const _args = _.keys(args)
                     .map(key => ({ [`treatmentPlan.${key}`]: args[key] }) )
                     .reduce((prev, cur) => ({ ...prev, ...cur }));
-                    console.log(_args);
     this.parent().update(_args, cb);
   }
 });

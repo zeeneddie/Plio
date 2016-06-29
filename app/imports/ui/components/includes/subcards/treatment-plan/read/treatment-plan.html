@@ -1,0 +1,43 @@
+<template name="Subcards_TreatmentPlan_Read">
+  {{#with treatmentPlan}}
+    <div class="card-block card-subheading">
+      <h4 class="card-title">Treatment plan</h4>
+    </div>
+    <div class="list-group">
+
+      {{#if this.comments}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Comments</p>
+          <h4 class="list-group-item-heading" {{b "text: this.comments"}}></h4>
+        </div>
+      {{/if}}
+
+      {{#if this.prevLossExp}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Previous loss experience</p>
+          <h4 class="list-group-item-heading" {{b "text: this.prevLossExp"}}></h4>
+        </div>
+      {{/if}}
+
+      <div class="row">
+        <div class="col-sm-6">
+          {{#if this.decision}}
+            <div class="list-group-item">
+              <p class="list-group-item-text">Treatment decision</p>
+              <h4 class="list-group-item-heading" {{b "text: capitalize(this.decision)"}}></h4>
+            </div>
+          {{/if}}
+        </div>
+        <div class="col-sm-6">
+          {{#if this.priority}}
+            <div class="list-group-item">
+              <p class="list-group-item-text">Treatment priority</p>
+              <h4 class="list-group-item-heading" {{b "text: capitalize(this.priority)"}}></h4>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+
+    </div>
+  {{/with}}
+</template>
