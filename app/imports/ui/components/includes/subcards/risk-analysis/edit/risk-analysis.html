@@ -4,9 +4,9 @@
         tableData=tableData
         onUpdate=onUpdateCb
         score=score}}
-    {{#if score}}
-      {{> RiskAnalysis_ScoredBy scoredBy=score.scoredBy}}
-      {{> RiskAnalysis_ScoredAt scoredAt=score.scoredAt}}
-    {{/if}}
+    {{#with score}}
+      {{> RiskAnalysis_ScoredBy scoredBy=this.scoredBy}}
+      {{> RiskAnalysis_ScoredAt scoredAt=this.scoredAt}}
+    {{/with}}
   {{/SubCardEditWrapper}}
 </template>

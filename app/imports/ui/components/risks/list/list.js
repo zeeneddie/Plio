@@ -62,6 +62,9 @@ Template.RisksList.viewmodel({
       case 'department':
         return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
+      case 'deleted':
+        return { _id: this.risksDeleted().count() > 0 && this.risksDeleted().fetch()[0]._id };
+        break;
       default:
         return {};
         break;

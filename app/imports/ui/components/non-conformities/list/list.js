@@ -64,6 +64,9 @@ Template.NCList.viewmodel({
       case 'department':
         return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
+      case 'deleted':
+        return { _id: this.NCsDeleted().count() > 0 && this.NCsDeleted().fetch()[0]._id };
+        break;
       default:
         return {};
         break;
