@@ -34,7 +34,6 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         return;
       }
       const newNCSubcard = ViewModel.findOne('SubCardEdit', vm => vm._id && vm._id() === _id);
-      newNCSubcard && newNCSubcard.toggleCollapse();
       callback(err, _id);
     };
 
