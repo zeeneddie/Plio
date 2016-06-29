@@ -1,6 +1,6 @@
 <template name="Subcards_OtherFiles_Edit">
   {{#SubCardEditWrapper _lText="Other Files" _rText=files.length}}
-    <div class="card-block">
+    <div id="other-files">
       {{#FormField sm=12}}
         {{> FileUploader_Wrapper
             files=files

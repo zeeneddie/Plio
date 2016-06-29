@@ -5,11 +5,8 @@
         onUpdate=onUpdateCb
         score=score}}
     {{#if score}}
-      <div class="card-block">
-        {{> RiskAnalysis_ScoredBy scoredBy=score.scoredBy}}
-
-        {{> RiskAnalysis_ScoredAt scoredAt=score.scoredAt}}
-      </div>
+      {{> RiskAnalysis_ScoredBy scoredBy=score.scoredBy}}
+      {{> RiskAnalysis_ScoredAt scoredAt=score.scoredAt}}
     {{/if}}
   {{/SubCardEditWrapper}}
 </template>

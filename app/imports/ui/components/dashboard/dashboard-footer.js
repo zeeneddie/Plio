@@ -19,5 +19,12 @@ Template.DashboardFooter.viewmodel({
       variation: 'save',
       organizationId
     });
+  },
+  openAddNCModal() {
+    this.modal().open({
+      title: 'Non-conformity',
+      template: 'CreateNC',
+      variation: 'save'
+    });
   }
 });
