@@ -1,8 +1,8 @@
 <template name="Subcards_LessonsLearned_Edit">
   {{#SubCardEditWrapper _lText="Lessons learned" _rText=lessons.count}}
-    <div class="card-block">
-      <div id="lessons">
-        {{#if lessons.count}}
+    {{#if lessons.count}}
+      <div class="card-block">
+        <div id="lessons">
           <div class="card">
             {{#each lessons}}
               {{> SubCardEdit
@@ -21,9 +21,9 @@
                   updateFn=updateFn}}
             {{/each}}
           </div>
-        {{/if}}
+        </div>
       </div>
-    </div>
+    {{/if}}
     <div class="card new-cards" {{b "ref: forms"}}></div>
     <div class="text-xs-center">
       <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
