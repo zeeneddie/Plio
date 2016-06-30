@@ -17,7 +17,6 @@ Template.SubCardEdit.viewmodel({
   isWaiting: false,
   closeAfterCall: false,
   error: '',
-  _lText: '',
   _rText: '',
   content: '',
   handleToggleCollapse() {
