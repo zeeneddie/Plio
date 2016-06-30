@@ -1,0 +1,40 @@
+{
+  "_id": "t3Zz3WuEc5ugs99bL",
+  "organizationId": "KwKXz5RefrE5hjWQ2",
+  "title": "Fix machine calibration",
+  "linkedTo": [
+    {
+      "documentId": "P98SExuNHZ4y8bhjc",
+      "documentType": "non-conformity"
+    }
+  ],
+  "type": "PA",
+  "status": 7,
+  "ownerId": "TCstWknRczHkvP6j4",
+  "planInPlace": "Yes",
+  "serialNumber": 3,
+  "sequentialId": "PA3",
+  "isCompleted": true,
+  "completionTargetDate": {"$date": 1459508400000},
+  "toBeCompletedBy": "TCstWknRczHkvP6j4",
+  "completedAt": {"$date": 1459508400000},
+  "completedBy": "TCstWknRczHkvP6j4",
+  "completionResult": "",
+  "isVerified": true,
+  "verificationTargetDate": {"$date": 1459508400000},
+  "toBeVerifiedBy": "TCstWknRczHkvP6j4",
+  "verifiedAt": {"$date": 1459508400000},
+  "verifiedBy": "TCstWknRczHkvP6j4",
+  "verificationResult": "",
+  "notes": "",
+  "files": [],
+  "viewedBy": [],
+  "notify" : [
+    "TCstWknRczHkvP6j4"
+  ],
+  "isDeleted": false,
+  "createdAt" : {"$date": 1459508400000},
+  "createdBy" : "TCstWknRczHkvP6j4",
+  "updatedAt" : {"$date": 1459515600000},
+  "updatedBy" : "TCstWknRczHkvP6j4"
+}

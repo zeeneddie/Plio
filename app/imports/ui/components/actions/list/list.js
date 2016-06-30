@@ -3,14 +3,14 @@ import { Meteor } from 'meteor/meteor';
 
 Template.ActionsList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user'],
   onCreated() {
     this.searchText('');
   },
-  _getActionsQuery(isForMe = false, isCompleted = false) {
+  _getActionsQuery(isToBeVerifiedByMe = false, isCompleted = false) {
     const userId = Meteor.userId();
-    const toBeCompletedBy = isForMe ? userId : { $ne: userId };
-    return { toBeCompletedBy: Meteor.userId(), isCompleted: false };
+    const toBeVerifiedBy = isToBeVerifiedByMe ? userId : { $ne: userId };
+    return { toBeVerifiedBy, isCompleted };
   },
   myCurrentActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(true, false) })

@@ -22,9 +22,27 @@
         {{/each}}
       {{/if}}
 
+      {{#if isActiveActionFilter 'Team current actions'}}
+        {{#each teamCurrentActions}}
+          {{> ListItem
+              template='ActionSectionItem'
+              title=(userFullNameOrEmail this.toBeVerifiedBy)
+              _query=(_getActionsQuery false false)}}
+        {{/each}}
+      {{/if}}
+
       {{#if isActiveActionFilter 'My completed actions'}}
         {{#each myCompletedActions}}
           {{> ActionItem}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveActionFilter 'Team completed actions'}}
+        {{#each teamCompletedActions}}
+          {{> ListItem
+              template='ActionSectionItem'
+              title=(userFullNameOrEmail this.toBeVerifiedBy
+              _query=(_getActionsQuery false true))}}
         {{/each}}
       {{/if}}
 

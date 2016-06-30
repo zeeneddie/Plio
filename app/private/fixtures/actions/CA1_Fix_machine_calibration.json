@@ -17,6 +17,8 @@
   "isCompleted": false,
   "completionTargetDate": {"$date": 1459508400000},
   "toBeCompletedBy": "SQHmBKJ94gJvpLKLt",
+  "isVerified": false,
+  "toBeVerifiedBy": "SQHmBKJ94gJvpLKLt",
   "notes": "",
   "files": [],
   "viewedBy": [],
