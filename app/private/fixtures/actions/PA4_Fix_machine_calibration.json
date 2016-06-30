@@ -1,5 +1,5 @@
 {
-  "_id": "t3Zz3WuEc5ugs99bL",
+  "_id": "t3Zz3CuEc5ugs99bL",
   "organizationId": "KwKXz5RefrE5hjWQ2",
   "title": "Fix machine calibration",
   "linkedTo": [
@@ -12,9 +12,9 @@
   "status": 7,
   "ownerId": "TCstWknRczHkvP6j4",
   "planInPlace": "Yes",
-  "serialNumber": 3,
-  "sequentialId": "PA3",
-  "isCompleted": true,
+  "serialNumber": 4,
+  "sequentialId": "PA4",
+  "isCompleted": false,
   "completionTargetDate": {"$date": 1459508400000},
   "toBeCompletedBy": "TCstWknRczHkvP6j4",
   "completedAt": {"$date": 1459508400000},

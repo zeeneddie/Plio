@@ -385,6 +385,16 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
+    },
+    goToAction(actionId, withQueryParams = true) {
+      const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('action', params, queryParams);
+    },
+    goToActions(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('actions', params, queryParams);
     }
   },
   mobile: {

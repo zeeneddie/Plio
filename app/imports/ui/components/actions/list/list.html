@@ -23,10 +23,10 @@
       {{/if}}
 
       {{#if isActiveActionFilter 'Team current actions'}}
-        {{#each teamCurrentActions}}
+        {{#each teamCurrentActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
-              title=(userFullNameOrEmail this.toBeVerifiedBy)
+              title=(userFullNameOrEmail this)
               _query=(_getActionsQuery false false)}}
         {{/each}}
       {{/if}}
@@ -38,10 +38,10 @@
       {{/if}}
 
       {{#if isActiveActionFilter 'Team completed actions'}}
-        {{#each teamCompletedActions}}
+        {{#each teamCompletedActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
-              title=(userFullNameOrEmail this.toBeVerifiedBy
+              title=(userFullNameOrEmail this
               _query=(_getActionsQuery false true))}}
         {{/each}}
       {{/if}}
