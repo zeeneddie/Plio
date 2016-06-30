@@ -9,7 +9,7 @@
             documentType="non-conformity"
             onUpdate=onUpdateNotifyUserCb}}
 
-        {{> NCOccurrences _id=this._id occurrencesIds=this.occurrences}}
+        {{> Subcards_Occurrences_Edit _id=this._id occurrencesIds=this.occurrences}}
 
         <div class="card-block-collapse collapse" id="nonconformities">
           <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
@@ -43,7 +43,11 @@
             linkedTo=this.title
             linkedToId=this.sequentialId}}
 
-        {{> NCOtherFiles _id=this._id files=this.files}}
+        {{> Subcards_OtherFiles_Edit
+            _id=this._id
+            files=this.files
+            uploaderMetaContext=uploaderMetaContext
+            slingshotDirective=slingshotDirective}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

@@ -26,5 +26,20 @@ export default Utils = {
     }
 
     return initials.toUpperCase();
+  },
+
+  generateSerialNumber(collection, query = {}) {
+    const last = collection.findOne({
+      ...query,
+      serialNumber: {
+        $type: 16 // 32-bit integer
+      }
+    }, {
+      sort: {
+        serialNumber: -1
+      }
+    });
+
+    return last ? last.serialNumber + 1 : 1;
   }
 }

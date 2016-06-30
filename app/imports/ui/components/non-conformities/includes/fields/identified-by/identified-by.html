@@ -1,6 +1,7 @@
 <template name="NCIdentifiedBy">
-  {{#FormField label="Identified By"}}
+  {{#FormField label=label}}
     {{> SelectItem
+        placeholder=placeholder
         items=_members
         selected=identifiedBy
         onUpdate=onUpdateCb}}

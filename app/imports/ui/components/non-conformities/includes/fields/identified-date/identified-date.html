@@ -1,5 +1,5 @@
 <template name="NCIdentifiedDate">
-  {{#FormField label="Identified date"}}
-    {{> Datepicker placeholder="Identified date" onChange=onUpdateCb date=identifiedAt}}
+  {{#FormField label=label}}
+    {{> Datepicker placeholder=placeholder onChange=onUpdateCb date=identifiedAt}}
   {{/FormField}}
 </template>

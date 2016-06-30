@@ -14,7 +14,7 @@ export const insert = new ValidatedMethod({
 
   run({ ...args, nonConformityId }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create an occurence');
+      throw new Meteor.Error(403, 'Unauthorized user cannot create an occurrence');
     }
 
     if (!Problems.findOne({ _id: nonConformityId, type: 'non-conformity' })) {

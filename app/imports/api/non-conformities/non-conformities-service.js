@@ -1,22 +1,12 @@
 import { NonConformities } from './non-conformities.js';
+import { generateSerialNumber } from '/imports/core/utils.js';
 
 
 export default {
   collection: NonConformities,
 
   insert({ organizationId, ...args }) {
-    const lastNC = this.collection.findOne({
-      organizationId,
-      serialNumber: {
-        $type: 16 // 32-bit integer
-      }
-    }, {
-      sort: {
-        serialNumber: -1
-      }
-    });
-
-    const serialNumber = lastNC ? lastNC.serialNumber + 1 : 1;
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
 
     const sequentialId = `NC${serialNumber}`;
 

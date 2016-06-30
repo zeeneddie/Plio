@@ -1,15 +1,12 @@
 import { Template } from 'meteor/templating';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Standards } from '/imports/api/standards/standards.js';
 import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.EditStandard.viewmodel({
-  share: 'standard',
-  mixin: ['modal', 'organization', 'collapsing', 'standard', 'router'],
+  mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck'],
   standard() {
     const _id = this._id && this._id();
-    return Standards.findOne({ _id });
+    return this._getStandardByQuery({ _id });
   },
   _getNCsQuery() {
     return { standardId: this._id() };
@@ -20,11 +17,17 @@ Template.EditStandard.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  update({ query = {}, options = {}, ...args }, cb) {
-    const _id = this._id && this._id();
-    const modifier = _.extend(args, { _id, options, query });
+  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
+    const _id = this._id();
+    const allArgs = { ...args, _id, options, query };
 
-    this.modal().callMethod(update, modifier, cb);
+    const updateFn = () => this.modal().callMethod(update, allArgs, cb);
+
+    if (withFocusCheck) {
+      this.callWithFocusCheck(e, updateFn);
+    } else {
+      updateFn();
+    }
   },
   remove() {
     const { _id, title } = this.standard();
@@ -40,27 +43,11 @@ Template.EditStandard.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal('Oops... Something went wrong!', err.reason, 'error');
-          } else {
-            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+          if (err) return;
 
-            this.modal().close();
-
-            const query = { isDeleted: { $in: [null, false] } };
-            const options = { sort: { createdAt: -1 } };
-
-            const standard = Standards.findOne(query, options);
-
-            if (!!standard) {
-              const { _id } = standard;
-
-              Meteor.setTimeout(() => {
-                this.goToStandard(_id);
-                this.expandCollapsed(_id);
-              }, 0);
-            }
-          }
+          swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+          
+          this.modal().close();
         });
       }
     );

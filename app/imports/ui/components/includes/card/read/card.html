@@ -1,0 +1,28 @@
+<template name="Card_Read">
+  {{#with document}}
+    <div class="card">
+      <div class="card-block card-heading">
+        <div class="card-heading-buttons pull-xs-right">
+          {{#if isDeleted}}
+            <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+              Restore
+            </a>
+            <a class="btn btn-primary" {{b "click: delete(this)"}}>
+              Delete
+            </a>
+          {{else}}
+            <a class="btn btn-primary" {{b "click: onOpenEditModal"}}>
+              <i class="fa fa-pencil"></i>
+              Edit
+            </a>
+          {{/if}}
+        </div>
+        <h3 class="card-title" {{b "text: cardTitle"}}></h3>
+      </div>
+
+      {{> Template.contentBlock}}
+
+      {{> CardChangelog document=this}}
+    </div>
+  {{/with}}
+</template>

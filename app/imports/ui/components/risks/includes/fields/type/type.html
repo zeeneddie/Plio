@@ -1,7 +1,9 @@
 <template name="RKType">
-  {{> SectionField
-      label="Risk type"
-      items=sections
-      onUpdate=onUpdateCb
-      onAddSection=onAddSectionCb}}
+  {{#FormField label="Risk type"}}
+    <div class="dropdown">
+      <select class="form-control c-select"
+        {{b "options: types, optionsValue: _id, optionsText: title, value: typeId"}}>
+      </select>
+    </div>
+  {{/FormField}}
 </template>

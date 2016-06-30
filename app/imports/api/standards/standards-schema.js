@@ -1,11 +1,13 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardStatuses } from '../constants.js';
-import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema, ViewedBySchema, getNotifySchema } from '../schemas.js';
 
 
 const optionalFields = new SimpleSchema([
   DeletedSchema,
+  ViewedBySchema,
+  getNotifySchema('owner'),
   {
     description: {
       type: String,
@@ -92,31 +94,6 @@ const optionalFields = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       optional: true
-    },
-    viewedBy: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      autoValue() {
-        if (this.isInsert) {
-          return [this.userId];
-        }
-      }
-    },
-    notify: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      autoValue() {
-        if (this.isInsert) {
-          const owner = this.field('owner');
-          if (owner.isSet) {
-            return [owner.value];
-          } else {
-            this.unset();
-          }
-        }
-      }
     }
   }
 ]);
