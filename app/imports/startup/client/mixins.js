@@ -456,18 +456,12 @@ ViewModel.mixin({
       const _id = this.actionId();
       return Actions.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
     _getActionsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveActionFilter('deleted')) {
-        options = { deletedAt: -1 };
-      }
+      const query = { ...by, organizationId: this.organizationId() };
       return Actions.find(query, options);
     },
     _getActionByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
     }
   },

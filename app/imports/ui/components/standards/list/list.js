@@ -8,7 +8,6 @@ Template.StandardsList.viewmodel({
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   autorun() {
     if (!this.focused() && !this.animating()) {
-      console.log('trigger')
       const query = this._getQueryForFilter();
 
       const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
