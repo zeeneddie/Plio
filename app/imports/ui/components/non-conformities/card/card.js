@@ -6,7 +6,7 @@ import { update, remove } from '/imports/api/non-conformities/methods.js';
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing'],
   autorun() {
-    this.templateInstance.subscribe('improvementPlan', this.NCId());
+    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
