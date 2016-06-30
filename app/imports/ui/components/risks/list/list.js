@@ -8,7 +8,7 @@ Template.RisksList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router'],
   autorun() {
-    if (!this.focused()) {
+    if (!this.focused() && !this.animating()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });

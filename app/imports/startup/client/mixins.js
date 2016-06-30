@@ -171,13 +171,18 @@ ViewModel.mixin({
 
       this.searchText(value);
 
-      if (this.isActiveStandardFilter && this.isActiveStandardFilter('deleted')) {
-        this.searchResultsNumber(this.standardsDeleted().count());
-        return;
-      } else if (this.isActiveNCFilter && this.isActiveNCFilter('deleted')) {
-        this.searchResultsNumber(this.NCsDeleted().count());
-        return;
-      }
+      const checkIsDeletedFilter = (fn, counterName) => {
+        if (this[fn] && this[fn]('deleted')) {
+          this.searchResultsNumber(this[counterName]().count());
+          return true;
+        }
+      };
+
+      if (checkIsDeletedFilter('isActiveStandardFilter', 'standardsDeleted')) return;
+
+      if (checkIsDeletedFilter('isActiveNCFilter', 'NCsDeleted')) return;
+
+      if (checkIsDeletedFilter('isActiveRiskFilter', 'risksDeleted')) return;
 
       if (!!value) {
         this.expandAllFound();
