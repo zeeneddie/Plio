@@ -7,14 +7,15 @@ import { ActionUndoTimeInHours } from '/imports/api/constants.js';
 Template.Actions_CompletedBy.viewmodel({
   mixin: ['search', 'user', 'members'],
   completedBy: '',
+  completedAt: '',
   placeholder: 'Completed by',
   selectFirstIfNoSelected: false,
   enabled: true,
-  currentDate: '',
+  currentTime: '',
   undoDeadline: '',
   onCreated() {
     this.interval = Meteor.setInterval(() => {
-      this.currentDate(new Date());
+      this.currentTime(Date.now());
     }, 1000);
   },
   autorun() {
@@ -39,21 +40,21 @@ Template.Actions_CompletedBy.viewmodel({
     this.parent().update && this.parent().update({ completedBy });
   },
   canBeUndone() {
-    const currentDate = this.currentDate();
+    const currentTime = this.currentTime();
     const undoDeadline = this.undoDeadline();
 
     let isTimeLeftToUndo = false;
-    if ((currentDate instanceof Date) && (undoDeadline instanceof Date)) {
-      isTimeLeftToUndo = currentDate < undoDeadline;
+    if (_.isDate(undoDeadline) && _.isFinite(currentTime)) {
+      isTimeLeftToUndo = currentTime < undoDeadline;
     }
 
     return isTimeLeftToUndo && (this.completedBy() === Meteor.userId()) && this.enabled();
   },
   passedFromCompleted() {
-    return moment(this.completedAt()).from(this.currentDate());
+    return moment(this.completedAt()).from(this.currentTime());
   },
   leftToUndo() {
-    return moment(this.undoDeadline()).to(this.currentDate(), true);
+    return moment(this.undoDeadline()).to(this.currentTime(), true);
   },
   getData() {
     return { completedBy: this.completedBy() };

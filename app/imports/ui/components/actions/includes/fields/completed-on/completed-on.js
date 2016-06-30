@@ -3,8 +3,6 @@ import { Template } from 'meteor/templating';
 
 Template.Actions_CompletedOn.viewmodel({
   completedAt: '',
-  startDate: new Date(),
-  endDate: new Date(),
   defaultDate: false,
   placeholder: 'Completed on',
   enabled: true,

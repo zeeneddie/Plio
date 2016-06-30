@@ -7,24 +7,16 @@ import {
   NotifySchema
 } from '../schemas.js';
 import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
+import { compareDates } from '../helpers.js';
 
 
 const checkDate = function() {
   const value = this.value;
-  if (!(value instanceof Date)) {
+  if (!_.isDate(value)) {
     return;
   }
 
-  const utcValue = new Date(
-    value.getTime() + (value.getTimezoneOffset() * 60000)
-  );
-
-  const now = new Date();
-  const utcNow = new Date(
-    now.getTime() + (now.getTimezoneOffset() * 60000)
-  );
-
-  return (utcValue >= utcNow) ? 'badDate' : true;
+  return (compareDates(value, new Date()) > -1) ? 'badDate' : true;
 };
 
 const linkedToSchema = new SimpleSchema({
