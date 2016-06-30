@@ -182,6 +182,9 @@ ViewModel.mixin({
       } else if (this.isActiveNCFilter && this.isActiveNCFilter('deleted')) {
         this.searchResultsNumber(this.NCsDeleted().count());
         return;
+      } else if (this.isActiveRiskFilter && this.isActiveRiskFilter('deleted')) {
+        this.searchResultsNumber(this.risksDeleted().count());
+        return;
       }
 
       if (!!value) {

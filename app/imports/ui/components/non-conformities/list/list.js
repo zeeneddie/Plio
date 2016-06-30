@@ -10,7 +10,7 @@ Template.NCList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'NCStatus'],
   autorun() {
-    if (!this.focused()) {
+    if (!this.focused() && !this.animating()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
