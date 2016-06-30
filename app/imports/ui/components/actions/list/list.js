@@ -95,5 +95,64 @@ Template.ActionsList.viewmodel({
   },
   teamCompletedActionsAssignees() {
     return this._getUniqueAssignees('teamCompletedActions');
+  },
+  focused: false,
+  animating: false,
+  expandAllFound() {
+    const sections = ViewModel.find('ActionSectionItem');
+    const ids = _.flatten(!!sections && sections.map(vm => vm.actions && vm.actions().fetch().map(({ _id }) => _id)));
+
+    const vms = ViewModel.find('ListItem', (viewmodel) => {
+      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
+    });
+
+    if (this.isActiveActionFilter('My current actions') || this.isActiveActionFilter('My completed actions')) {
+      const count = this._getActionsByQuery({ ...this._getQueryForFilter() }).count();
+
+      this.searchResultsNumber(count);
+
+      return;
+    }
+
+    this.searchResultsNumber(ids.length);
+
+    if (vms.length > 0) {
+      this.animating(true);
+
+      this.expandCollapseItems(vms, {
+        expandNotExpandable: true,
+        complete: () => this.onAfterExpand()
+      });
+    }
+  },
+  expandSelected() {
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
+
+    this.animating(true);
+
+    if (vms && vms.length > 0) {
+      this.expandCollapseItems(vms, {
+        expandNotExpandable: true,
+        complete: () => this.expandSelectedAction()
+      });
+    } else {
+      this.expandSelectedAction();
+    }
+  },
+  expandSelectedAction() {
+    this.expandCollapsed(this.actionId(), () => {
+      this.onAfterExpand();
+    });
+  },
+  onAfterExpand() {
+    this.animating(false);
+    Meteor.setTimeout(() => this.searchInput.focus(), 0);
+  },
+  openAddNCModal() {
+    this.modal().open({
+      title: 'Non-conformity',
+      template: 'CreateNC',
+      variation: 'save'
+    });
   }
 });

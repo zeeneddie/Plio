@@ -76,6 +76,8 @@ ViewModel.mixin({
     },
     // Recursive function to expand items one after another
     expandCollapseItems(array = [], { index = 0, complete = () => {}, expandNotExpandable = false } = {}) {
+      if (array.length === 0 && _.isFunction(complete)) return complete();
+
       if (index >= array.length) return;
 
       const item = array[index];
