@@ -38,8 +38,6 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
 
     const allArgs = { ...args, _id, options, query };
 
-    console.log(allArgs);
-
     this.modal().callMethod(update, allArgs, cb);
   }
 });

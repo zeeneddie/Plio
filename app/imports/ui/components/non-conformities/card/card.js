@@ -9,7 +9,7 @@ import { AnalysisStatuses } from '/imports/api/constants.js';
 Template.NCCard.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'NCStatus', 'collapse', 'router', 'collapsing'],
   autorun() {
-    this.templateInstance.subscribe('improvementPlan', this.NCId());
+    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
