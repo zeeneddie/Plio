@@ -41,14 +41,14 @@ export default {
   },
 
   complete({ _id, userId }) {
-    const { isCompleted, toBeCompletedBy } = this._getActionOrThrow(_id);
+    const action = this._getActionOrThrow(_id);
 
-    if (userId !== toBeCompletedBy) {
+    if (userId !== action.toBeCompletedBy) {
       throw new Meteor.Error(400, 'You cannot complete this action');
     }
 
-    if (isCompleted === true) {
-      throw new Meteor.Error(400, 'This action is already completed');
+    if (!action.canBeCompleted()) {
+      throw new Meteor.Error(400, 'This action cannot be completed');
     }
 
     this.collection.update({
@@ -57,30 +57,30 @@ export default {
       $set: {
         isCompleted: true,
         completedBy: userId,
-        completedAt: new Date()
+        completedAt: new Date(),
+        status: 3
       }
     });
   },
 
   undoCompletion({ _id, userId }) {
-    const { isCompleted, completedBy, isVerified } = this._getActionOrThrow(_id);
+    const action = this._getActionOrThrow(_id);
 
-    if (userId !== completedBy) {
+    if (userId !== action.completedBy) {
       throw new Meteor.Error(400, 'You cannot undo completion of this action');
     }
 
-    if (isCompleted !== true) {
-      throw new Meteor.Error(400, 'This action is not completed');
-    }
-
-    if (isVerified === true) {
-      throw new Meteor.Error(400, 'This action is already verified');
+    if (!action.canCompletionBeUndone()) {
+      throw new Meteor.Error(400, 'Completion of this action cannot be undone');
     }
 
     this.collection.update({
       _id
     }, {
-      $set: { isCompleted: false },
+      $set: {
+        isCompleted: false,
+        status: 0
+      },
       $unset: {
         completedBy: '',
         completedAt: ''
@@ -89,18 +89,14 @@ export default {
   },
 
   verify({ _id, userId }) {
-    const { isCompleted, isVerified, toBeVerifiedBy } = this._getActionOrThrow(_id);
+    const action = this._getActionOrThrow(_id);
 
-    if (userId !== toBeVerifiedBy) {
+    if (userId !== action.toBeVerifiedBy) {
       throw new Meteor.Error(400, 'You cannot verify this action');
     }
 
-    if (isCompleted === false) {
-      throw new Meteor.Error(400, 'This action is not completed');
-    }
-
-    if (isVerified === true) {
-      throw new Meteor.Error(400, 'This action is already verified');
+    if (!action.canBeVerified()) {
+      throw new Meteor.Error(400, 'This action cannot be verified');
     }
 
     this.collection.update({
@@ -109,26 +105,30 @@ export default {
       $set: {
         isVerified: true,
         verifiedBy: userId,
-        verifiedAt: new Date
+        verifiedAt: new Date,
+        status: 7
       }
     });
   },
 
   undoVerification({ _id, userId }) {
-    const { isVerified, verifiedBy } = this._getActionOrThrow(_id);
+    const action = this._getActionOrThrow(_id);
 
-    if (userId !== verifiedBy) {
+    if (userId !== action.verifiedBy) {
       throw new Meteor.Error(400, 'You cannot undo verification of this action');
     }
 
-    if (isVerified === false) {
-      throw new Meteor.Error(400, 'This action is not verified');
+    if (!action.canVerificationBeUndone()) {
+      throw new Meteor.Error(400, 'Verification of this action cannot be undone');
     }
 
     this.collection.update({
       _id
     }, {
-      $set: { isVerified: false },
+      $set: {
+        isVerified: false,
+        status: 3
+      },
       $unset: {
         verifiedBy: '',
         verifiedAt: ''

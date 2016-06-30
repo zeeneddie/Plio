@@ -7,7 +7,17 @@ import {
   NotifySchema
 } from '../schemas.js';
 import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
+import { compareDates } from '../helpers.js';
 
+
+const checkDate = function() {
+  const value = this.value;
+  if (!_.isDate(value)) {
+    return;
+  }
+
+  return (compareDates(value, new Date()) > -1) ? 'badDate' : true;
+};
 
 const linkedToSchema = new SimpleSchema({
   documentId: {
@@ -78,7 +88,8 @@ const ActionSchema = new SimpleSchema([
     },
     completedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: checkDate
     },
     completedBy: {
       type: String,
@@ -105,7 +116,8 @@ const ActionSchema = new SimpleSchema([
     },
     verifiedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: checkDate
     },
     verifiedBy: {
       type: String,

@@ -3,7 +3,6 @@ import { Template } from 'meteor/templating';
 
 Template.Actions_CompletionTargetDate.viewmodel({
   completionTargetDate: '',
-  startDate: new Date(),
   defaultDate: false,
   placeholder: 'Completion - target date',
   enabled: true,

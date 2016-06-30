@@ -3,7 +3,6 @@ import { Template } from 'meteor/templating';
 
 Template.Actions_VerificationTargetDate.viewmodel({
   verificationTargetDate: '',
-  startDate: new Date(),
   defaultDate: false,
   placeholder: 'Verification - target date',
   onUpdateCb() {

@@ -30,6 +30,7 @@
 
       {{> Actions_CompletedBy
           completedBy=completedBy
+          completedAt=completedAt
           enabled=isCompletionEditable
           onUndo=onUndoCompletion}}
 
@@ -55,6 +56,7 @@
 
         {{> Actions_VerifiedBy
             verifiedBy=verifiedBy
+            verifiedAt=verifiedAt
             onUndo=onUndoVerification}}
 
         {{> Actions_VerificationResult

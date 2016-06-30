@@ -7,11 +7,16 @@
           placeholder=placeholder
           selectFirstIfNoSelected=selectFirstIfNoSelected
           onUpdate=onUpdateCb}}
-      {{#if showUndoButton}}
+      {{#if canBeUndone}}
         <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
           Undo
         </button>
       {{/if}}
     </div>
+    {{#if canBeUndone}}
+      <p class="text-muted">
+        Verified {{passedFromVerified}}, {{leftToUndo}} left to undo
+      </p>
+    {{/if}}
   {{/FormField}}
 </template>
