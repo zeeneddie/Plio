@@ -71,11 +71,14 @@ Template.ActionsList.viewmodel({
    },
   _getActionsQuery(isToBeVerifiedByMe = false, isCompleted = false) {
     const userId = Meteor.userId();
-    const toBeVerifiedBy = isToBeVerifiedByMe ? userId : { $ne: userId };
-    return { toBeVerifiedBy, isCompleted, ...this._getSearchQuery() };
+    const toBeCompletedBy = isToBeVerifiedByMe ? userId : { $ne: userId };
+    return { toBeCompletedBy, isCompleted, ...this._getSearchQuery() };
+  },
+  _getAssigneeQuery(toBeCompletedBy, isCompleted) {
+    return { toBeCompletedBy, ...this._getActionsQuery(false, isCompleted) };
   },
   _getUniqueAssignees(prop) {
-    const userIds = this[prop]().fetch().map(({ toBeVerifiedBy }) => toBeVerifiedBy);
+    const userIds = this[prop]().fetch().map(({ toBeCompletedBy }) => toBeCompletedBy);
     return [...new Set(userIds)];
   },
   myCurrentActions() {
@@ -148,11 +151,11 @@ Template.ActionsList.viewmodel({
     this.animating(false);
     Meteor.setTimeout(() => this.searchInput.focus(), 0);
   },
-  openAddNCModal() {
+  openModal() {
     this.modal().open({
-      title: 'Non-conformity',
-      template: 'CreateNC',
-      variation: 'save'
+      title: 'Add',
+      template: 'Actions_ChooseTypeModal',
+      variation: 'simple'
     });
   }
 });

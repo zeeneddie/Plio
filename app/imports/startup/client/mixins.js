@@ -10,7 +10,8 @@ import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, NCTypes, NCStatuses,
-  OrgCurrencies, ActionStatuses, ActionFilters
+  OrgCurrencies, ActionStatuses, ActionFilters,
+  ActionTypes
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -468,11 +469,24 @@ ViewModel.mixin({
       const _id = this.actionId();
       return Actions.findOne({ _id });
     },
-    _getActionsByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId() };
       return Actions.find(query, options);
     },
-    _getActionByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
     }
