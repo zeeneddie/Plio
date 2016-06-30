@@ -6,7 +6,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   _query: {},
   _args: {},
   NCs() {
-    return this._getNCsByQuery({ ...this._query() }, { sort: { sequentialId: 1 } });
+    return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
   },
   renderText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;

@@ -428,14 +428,14 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getRisksByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getRisksByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       if (this.isActiveRiskFilter('deleted')) {
         options = { sort: { deletedAt: -1 } };
       }
       return Risks.find(query, options);
     },
-    _getRiskByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return Risks.findOne(query, options);
     }
@@ -457,14 +457,14 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getNCsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       if (this.isActiveNCFilter('deleted')) {
         options = { sort: { deletedAt: -1 } };
       }
       return NonConformities.find(query, options);
     },
-    _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
     }
