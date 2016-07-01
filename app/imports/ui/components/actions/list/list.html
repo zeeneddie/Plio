@@ -8,7 +8,7 @@
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
-      <a class="btn btn-primary" {{b "click: openCreateModal"}}>
+      <a class="btn btn-primary" {{b "click: openModal"}}>
         <i class="fa fa-plus"></i>
         <span>Add</span>
       </a>
@@ -23,11 +23,11 @@
       {{/if}}
 
       {{#if isActiveActionFilter 'Team current actions'}}
-        {{#each teamCurrentActions}}
+        {{#each teamCurrentActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
-              title=(userFullNameOrEmail this.toBeVerifiedBy)
-              _query=(_getActionsQuery false false)}}
+              title=(userFullNameOrEmail this)
+              _query=(_getAssigneeQuery this._id false)}}
         {{/each}}
       {{/if}}
 
@@ -38,11 +38,11 @@
       {{/if}}
 
       {{#if isActiveActionFilter 'Team completed actions'}}
-        {{#each teamCompletedActions}}
+        {{#each teamCompletedActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
-              title=(userFullNameOrEmail this.toBeVerifiedBy
-              _query=(_getActionsQuery false true))}}
+              title=(userFullNameOrEmail this
+              _query=(_getAssigneeQuery this._id true))}}
         {{/each}}
       {{/if}}
 

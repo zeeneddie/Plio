@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 
 import { ActionTypes } from '/imports/api/constants.js';
-import { Actions } from '/imports/api/actions/actions.js';
 import {
   insert,
   update,
@@ -15,22 +14,10 @@ import {
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action'],
   type: '',
   title() {
-    let title = '';
-    switch (this.type()) {
-      case ActionTypes.CORRECTIVE_ACTION:
-        title = 'Corrective actions';
-        break;
-      case ActionTypes.PREVENTATIVE_ACTION:
-        title = 'Preventative actions';
-        break;
-      case ActionTypes.RISK_CONTROL:
-        title = 'Risk controls';
-        break;
-    }
-    return title;
+    return this._getNameByType(this.type());
   },
   addButtonText() {
     let buttonText = '';
@@ -63,7 +50,7 @@ Template.Subcards_Actions_Edit.viewmodel({
            <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
   actions() {
-    return Actions.find({
+    return this._getActionsByQuery({
       type: this.type(),
       'linkedTo.documentId': this.documentId(),
       'linkedTo.documentType': this.documentType()

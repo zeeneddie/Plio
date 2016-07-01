@@ -1,7 +1,9 @@
 <template name="Actions_Create">
   {{> Actions_Title title=title}}
 
-  {{> Actions_LinkedTo linkedDocs=linkedDocs}}
+  {{#if linkedDocs}}
+    {{> Actions_LinkedTo linkedDocs=linkedDocs}}
+  {{/if}}
 
   {{> Actions_Owner ownerId=ownerId}}
 
