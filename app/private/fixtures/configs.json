@@ -6,5 +6,6 @@
   "Meteor.users": "users",
   "NonConformities": "nonConformities",
   "Occurrences": "occurrences",
-  "RiskTypes": "riskTypes"
+  "RiskTypes": "riskTypes",
+  "Risks": "risks"
 }

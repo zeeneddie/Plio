@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "aws-sdk": "^2.4.0",
+    "aws-sdk": "^2.4.3",
     "fibers": "^1.0.13",
     "handlebars": "^4.0.5",
     "mammoth": "^1.0.3",

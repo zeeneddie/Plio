@@ -106,6 +106,10 @@ const UserSchema = new SimpleSchema({
     type: String,
     optional: true
   },
+  statusDefault: {
+    type: String,
+    optional: true
+  },
   roles: {
     type: Object,
     blackbox: true,
