@@ -7,7 +7,7 @@ Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   autorun() {
-    if (!this.focused()) {
+    if (!this.focused() && !this.animating()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
@@ -167,12 +167,5 @@ Template.StandardsList.viewmodel({
       template: 'CreateStandard',
       variation: 'save'
     });
-  },
-  clearSearchField() {
-    if (this.searchText()) {
-      this.searchInput.val('');
-      this.searchText('');
-      this.expandSelected();
-    }
   }
 });
