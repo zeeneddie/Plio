@@ -2,7 +2,7 @@
   <div class="card-block">
     {{> Actions_Title title=title subcard=subcard}}
 
-    {{> Actions_LinkedTo linkedDocs=linkedDocs}}
+    {{> Actions_LinkedTo linkedDocs=action.linkedDocuments isEditable=isLinkedToEditable}}
 
     {{> Actions_Status status=status}}
 

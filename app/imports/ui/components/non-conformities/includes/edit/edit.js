@@ -3,9 +3,16 @@ import { Template } from 'meteor/templating';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.EditNC.viewmodel({
-  mixin: ['organization', 'modal', 'nonconformity', 'router', 'collapsing', 'callWithFocusCheck'],
+  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
+  },
+  slingshotDirective: 'nonConformitiesFiles',
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      nonConformityId: this._id()
+    };
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -29,7 +36,8 @@ Template.EditNC.viewmodel({
     }
   },
   remove() {
-    const { _id, title } = this.NC();
+    const { title } = this.NC();
+    const _id = this._id();
 
     swal(
       {
@@ -42,15 +50,12 @@ Template.EditNC.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal('Ooops... Something went wrong!', err.reason, 'error');
-          } else {
-            swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+          if (err) return;
+          swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
 
-            this.modal().close();
-          }
+          this.modal().close();
         });
       }
     );
-  }
+  },
 });

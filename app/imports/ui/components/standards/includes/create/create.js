@@ -72,7 +72,7 @@ Template.CreateStandard.viewmodel({
 
         this.modal().open({
           _id: _id,
-          title: 'Compliance standard',
+          _title: 'Compliance standard',
           template: 'EditStandard'
         });
       }, 400);

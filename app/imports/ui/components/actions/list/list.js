@@ -153,9 +153,9 @@ Template.ActionsList.viewmodel({
   },
   openModal() {
     this.modal().open({
-      title: 'Add',
+      _title: 'Add',
       template: 'Actions_ChooseTypeModal',
-      variation: 'simple'
+      variation: 'simple',
     });
   }
 });

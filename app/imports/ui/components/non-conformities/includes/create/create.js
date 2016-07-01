@@ -4,12 +4,6 @@ import { insert } from '/imports/api/non-conformities/methods.js';
 
 Template.CreateNC.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
-  autorun() {
-    const title = this.getData().title;
-    if (!this._id && this.parent().templateName() === 'SubCardEdit') {
-      this.parent()._lText(title);
-    }
-  },
   save() {
     const data = this.getData();
 
@@ -47,7 +41,7 @@ Template.CreateNC.viewmodel({
 
           this.modal().open({
             _id,
-            title: 'Non-conformity',
+            _title: 'Non-conformity',
             template: 'EditNC'
           });
           }, 400);

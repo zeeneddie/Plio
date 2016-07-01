@@ -4,7 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import NonConformitiesService from './non-conformities-service.js';
 import { NonConformitiesUpdateSchema, RequiredSchema } from './non-conformities-schema.js';
 import { NonConformities } from './non-conformities.js';
-import { AnalysisStatuses } from '../constants.js';
 import {
   IdSchema,
   OrganizationIdSchema,
@@ -12,7 +11,7 @@ import {
   UserIdSchema
 } from '../schemas.js';
 
-const has = (obj, ...args) => args.some(a => obj.hasOwnProperty(a));
+import { checkAnalysis } from '../checkers.js';
 
 export const insert = new ValidatedMethod({
   name: 'NonConformities.insert',
@@ -54,37 +53,7 @@ export const update = new ValidatedMethod({
 
     const NC = NonConformities.findOne({ _id });
 
-    if (!NC) {
-      throw new Meteor.Error(
-        400, 'Non-conformity does not exist'
-      );
-    }
-
-    const isAnalysisCompleted = () => NC.analysis.status || NC.analysis.status.toString() === _.invert(AnalysisStatuses)['Completed'];
-
-    if (has(args, 'analysis.status', 'updateOfStandards.status')) {
-      if (!NC.analysis.executor && NC.analysis.executor !== this.userId) {
-        throw new Meteor.Error(
-          403, 'Access denied'
-        );
-      }
-    }
-
-    if (_.keys(args).find(key => key.includes('updateOfStandards'))) {
-      if (!isAnalysisCompleted) {
-        throw new Meteor.Error(
-          403, 'Access denied'
-        );
-      }
-    }
-
-    if (has(args, 'analysis.completedAt', 'analysis.completedBy')) {
-      if (!isAnalysisCompleted) {
-        throw new Meteor.Error(
-          403, 'Access denied'
-        );
-      }
-    }
+    checkAnalysis(NC, args);
 
     return NonConformitiesService.update({ _id, options, query, ...args });
   }

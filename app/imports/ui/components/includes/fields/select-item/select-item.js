@@ -68,16 +68,19 @@ Template.SelectItem.viewmodel({
     }
   },
   getSelectedItem() {
-    const find = this.itemsArray().filter(doc => doc._id === this.selected());
-    const item = !!find.length > 0 && find[0];
-    return item;
+    return this.itemsArray().find(({ _id }) => _id === this.selected());
   },
   getData() {
-    const { value, selected, items } = this.data();
+    const { value, selected, items} = this.data();
     return { value, selected, items };
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);
+  },
+  clear() {
+    this.focused(false);
+    this.selected('');
+    this.value('');
   },
   events: {
     'focus input'() {

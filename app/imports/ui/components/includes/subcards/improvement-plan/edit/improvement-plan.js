@@ -19,6 +19,9 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   isTextPresent() {
     return this.desiredOutcome() || this.files().length;
   },
+  getTextIndicator() {
+    return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';
+  },
   document() {
     return ImprovementPlans.findOne({ documentId: this.documentId() });
   },
@@ -37,8 +40,6 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
     const _id = this.document() && this.document()._id;
 
     const allArgs = { ...args, _id, options, query };
-
-    console.log(allArgs);
 
     this.modal().callMethod(update, allArgs, cb);
   }

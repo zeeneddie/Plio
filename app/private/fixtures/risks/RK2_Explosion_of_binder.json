@@ -1,0 +1,35 @@
+{
+  "_id" : "aqtqWNPrc9fNi6wyp",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "serialNumber" : 2,
+  "sequentialId" : "RK2",
+  "title" : "Explosion of binder",
+  "identifiedBy" : "SQHmBKJ94gJvpLKLt",
+  "identifiedAt" : {"$date": 1459508500000},
+  "magnitude" : "major",
+  "typeId" : "jzNDq2RgCd8JshYD9",
+  "createdAt" : {"$date": 1459508500000},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "viewedBy" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "analysis" : {
+    "status" : 0
+  },
+  "updateOfStandards" : {
+    "status" : 0
+  },
+  "status" : 1,
+  "updatedAt" : {"$date": 1459508500000},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "score" : {
+    "rowId" : 1,
+    "value" : 65,
+    "scoredBy" : "SQHmBKJ94gJvpLKLt",
+    "scoredAt" : {"$date": 1459508500000}
+  },
+  "standardId" : "Mc7jjwYJ9gXPkibS8"
+}

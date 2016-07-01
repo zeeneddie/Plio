@@ -4,6 +4,10 @@ import { ActionPlanOptions } from '/imports/api/constants.js';
 
 
 Template.Actions_Edit.viewmodel({
+  autorun() {
+    const action = this.action && this.action();
+    action && this.load(action);
+  },
   _id: '',
   title: '',
   status: 0,
@@ -21,15 +25,12 @@ Template.Actions_Edit.viewmodel({
   verifiedAt: '',
   verifiedBy: '',
   verificationResult: '',
-  autorun() {
-    const action = this.action && this.action();
-    action && this.load(action);
-  },
+  isLinkedToEditable: true,
   isCompletionEditable() {
     return !this.isVerified();
   },
-  update({ ...args }) {
-    this.parent().update({ ...args });
+  update({ ...args }, cb) {
+    this.parent().update({ ...args }, cb);
   },
   onComplete() {
     return () => {

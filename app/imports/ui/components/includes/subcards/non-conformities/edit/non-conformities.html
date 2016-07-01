@@ -1,7 +1,7 @@
 <template name="Subcards_NonConformities_Edit">
   {{#SubCardEditWrapper _lText="Non-conformities" _rText=NCs.count}}
     {{#if NCs.count}}
-      <div id="non-conformities" class="card">
+      <div class="card">
         {{#each NCs}}
           {{> SubCardEdit
               NC=this

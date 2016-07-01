@@ -2,9 +2,7 @@
   <div class="card-block">
     {{> Actions_Title title=title}}
 
-    {{#if linkedDocs}}
-      {{> Actions_LinkedTo linkedDocs=linkedDocs}}
-    {{/if}}
+    {{> Actions_LinkedTo linkedDocs=linkedDocs isEditable=isLinkedToEditable}}
 
     {{> Actions_Owner ownerId=ownerId}}
 

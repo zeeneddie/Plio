@@ -65,7 +65,7 @@ Template.UserMenu.viewmodel({
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
-      title: 'Invite users',
+      _title: 'Invite users',
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
@@ -92,7 +92,7 @@ Template.UserMenu.viewmodel({
 
     this.modal().open({
       template: 'UserPreferences',
-      title: 'My preferences',
+      _title: 'My preferences',
       userId: Meteor.userId()
     });
   }

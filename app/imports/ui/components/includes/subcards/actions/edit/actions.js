@@ -83,7 +83,8 @@ Template.Subcards_Actions_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ ...args }, cb) {
+  // ignore linkedTo that comes from subcomponent
+  insert({ linkedTo, ...args }, cb) {
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, {

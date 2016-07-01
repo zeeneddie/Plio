@@ -11,7 +11,7 @@ Template.StandardsCard.viewmodel({
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse'],
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('improvementPlan', this.standardId());
+      template.subscribe('standardImprovementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
       template.subscribe('nonConformitiesByStandardId', this.standardId());
     });
@@ -73,7 +73,7 @@ Template.StandardsCard.viewmodel({
   },
   openEditStandardModal() {
     this.modal().open({
-      title: 'Compliance standard',
+      _title: 'Compliance standard',
       template: 'EditStandard',
       _id: this.standardId()
     });

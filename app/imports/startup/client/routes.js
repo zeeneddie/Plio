@@ -164,7 +164,7 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/nonconformities', {
+FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
@@ -174,7 +174,7 @@ FlowRouter.route('/:orgSerialNumber/nonconformities', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/nonconformities/:nonconformityId', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {

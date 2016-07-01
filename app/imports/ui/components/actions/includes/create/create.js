@@ -5,10 +5,7 @@ import { insert } from '/imports/api/actions/methods.js';
 
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'organization', 'router', 'collapsing'],
-  onCreated() {
-    this.title('');
-  },
+  mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),
@@ -33,12 +30,10 @@ Template.Actions_Create.viewmodel({
   insert({ ...args }) {
     const organizationId = this.organizationId();
     const { type } = this.data();
-    const linkedTo = [];
 
     const allArgs = {
       type,
       organizationId,
-      linkedTo,
       ...args
     };
 
@@ -49,13 +44,15 @@ Template.Actions_Create.viewmodel({
         this.modal().close();
 
         Meteor.setTimeout(() => {
+          const action = this._getActionByQuery({ _id });
           this.goToAction(_id, false);
 
           this.expandCollapsed(_id);
 
           this.modal().open({
             _id,
-            title: '',
+            action,
+            _title: action ? this._getNameByType(action.type) : '',
             template: 'Actions_Edit'
           });
         }, 400);

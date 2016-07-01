@@ -1,19 +1,25 @@
 <template name="Actions_LinkedTo">
-  <div class="row">
-    <label class="form-control-label col-sm-4 col-xs-12 first-row-label">
-      Linked to
-    </label>
-    <div class="col-sm-8">
+  {{#FormField label="Linked to"}}
+    {{#if isEditable}}
       {{#each linkedDocs}}
-        <div class="form-group row">
-          <div class="col-sm-12">
-            <div class="input-group">
-              <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
-              <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
-            </div>
-          </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" type="button" disabled=""
+              {{b "text: this.sequentialId + ' ' + this.title"}}></button>
+          {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
         </div>
       {{/each}}
-    </div>
-  </div>
+      {{> SelectItem
+          placeholder="Linked to"
+          items=items
+          selectFirstIfNoSelected=false
+          onUpdate=onSelectCb}}
+    {{else}}
+      {{#each linkedDocs}}
+        <div class="input-group">
+          <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
+          <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
+        </div>
+      {{/each}}
+    {{/if}}
+  {{/FormField}}
 </template>

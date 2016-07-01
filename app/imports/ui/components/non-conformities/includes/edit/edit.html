@@ -9,7 +9,7 @@
             documentType="non-conformity"
             onUpdate=onUpdateNotifyUserCb}}
 
-        {{> NCOccurrences _id=this._id occurrencesIds=this.occurrences}}
+        {{> Subcards_Occurrences_Edit _id=this._id occurrencesIds=this.occurrences}}
 
         {{> Subcards_Actions_Edit
             type="CA"
@@ -35,7 +35,11 @@
             linkedTo=this.title
             linkedToId=this.sequentialId}}
 
-        {{> NCOtherFiles _id=this._id files=this.files}}
+        {{> Subcards_OtherFiles_Edit
+            _id=this._id
+            files=this.files
+            uploaderMetaContext=uploaderMetaContext
+            slingshotDirective=slingshotDirective}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
