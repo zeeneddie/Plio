@@ -102,7 +102,7 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
-
+        
         // Workaround for fixtures
         return this.userId || this.isSet && this.value;
       } else {
