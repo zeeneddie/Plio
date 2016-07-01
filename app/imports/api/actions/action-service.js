@@ -1,5 +1,7 @@
 import { Actions } from './actions.js';
 import { ActionTypes } from '../constants.js';
+import { NonConformities } from '../non-conformities/non-conformities.js';
+import { Risks } from '../risks/risks.js';
 
 
 export default {
@@ -38,6 +40,39 @@ export default {
     }
 
     return this.collection.update(query, options);
+  },
+
+  linkToDocument({ _id, documentId, documentType }) {
+    let docCollection;
+    if (documentType === 'non-conformity') {
+      docCollection = NonConformities;
+    } else if (documentType === 'risk') {
+      docCollection = Risks;
+    }
+
+    if (!docCollection) {
+      throw new Meteor.Error(400, 'Invalid document type');
+    }
+
+    const doc = docCollection.findOne({ _id: documentId });
+
+    if (!doc) {
+      throw new Meteor.Error(400, 'Invalid document id');
+    }
+
+    const action = this._getActionOrThrow(_id);
+
+    if (action.isLinkedTo(documentId, documentType)) {
+      throw new Meteor.Error(
+        400, 'This action is already linked to specified document'
+      );
+    }
+
+    this.collection.update({
+      _id
+    }, {
+      $push: { linkedTo: { documentId, documentType } }
+    });
   },
 
   complete({ _id, userId }) {

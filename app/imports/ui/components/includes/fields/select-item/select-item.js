@@ -24,6 +24,7 @@ Template.SelectItem.viewmodel({
   selected: '',
   placeholder: '',
   content: '',
+  contentData: '',
   loading: false,
   focused: false,
   excludedItems: [],
@@ -39,6 +40,9 @@ Template.SelectItem.viewmodel({
   },
   itemsFiltered() {
     return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
+  },
+  itemHtml(item) {
+    return item.html || item.title;
   },
   select({ _id, title }) {
     this.value(title);
@@ -75,6 +79,9 @@ Template.SelectItem.viewmodel({
   getData() {
     const { value, selected, items } = this.data();
     return { value, selected, items };
+  },
+  getContentData() {
+    return _.extend({}, this.getData(), this.contentData());
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);
