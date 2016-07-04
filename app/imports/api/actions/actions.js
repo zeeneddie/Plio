@@ -68,6 +68,11 @@ Actions.helpers({
     undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
 
     return compareDates(undoDeadline, new Date()) === 1;
+  },
+  isLinkedTo(docId, docType) {
+    return _.filter(this.linkedTo, ({ documentId, documentType }) => {
+      return (documentId === docId) && (documentType === docType);
+    }).length > 0;
   }
 });
 

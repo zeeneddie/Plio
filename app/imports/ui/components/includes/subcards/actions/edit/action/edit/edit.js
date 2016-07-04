@@ -11,12 +11,8 @@ import {
   undoVerification
 } from '/imports/api/actions/methods.js';
 
-Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'modal', 'callWithFocusCheck', 'router', 'action', 'collapsing'],
-  autorun() {
-    const action = this.action && this.action();
-    action && this.load(action);
-  },
+
+Template.Actions_EditSubcard.viewmodel({
   _id: '',
   title: '',
   status: 0,

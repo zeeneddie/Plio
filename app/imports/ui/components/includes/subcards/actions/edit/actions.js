@@ -5,6 +5,7 @@ import {
   insert,
   update,
   remove,
+  linkToDocument,
   complete,
   verify,
   undoCompletion,
@@ -48,11 +49,28 @@ Template.Subcards_Actions_Edit.viewmodel({
     return `<span class="hidden-xs-down">${date}</span>
            <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
+  newSubcardTitle() {
+    let newSubcardTitle = '';
+    switch (this.type()) {
+      case ActionTypes.CORRECTIVE_ACTION:
+        newSubcardTitle = 'New corrective action';
+        break;
+      case ActionTypes.PREVENTATIVE_ACTION:
+        newSubcardTitle = 'New preventative action';
+        break;
+      case ActionTypes.RISK_CONTROL:
+        newSubcardTitle = 'New risk control';
+        break;
+    }
+    return newSubcardTitle;
+  },
   actions() {
     return this._getActionsByQuery({
       type: this.type(),
       'linkedTo.documentId': this.documentId(),
       'linkedTo.documentType': this.documentType()
+    }, {
+      sort: { sequentialId: 1 }
     });
   },
   linkedDocs(action) {
@@ -72,8 +90,12 @@ Template.Subcards_Actions_Edit.viewmodel({
     this.addForm(
       'SubCardEdit',
       {
-        content: 'Actions_Create',
+        content: 'Actions_AddSubcard',
+        _lText: this.newSubcardTitle(),
         linkedDocs: this.linkedDocs(),
+        type: this.type(),
+        documentId: this.documentId(),
+        documentType: this.documentType(),
         insertFn: this.insertFn(),
         removeFn: this.removeFn(),
         updateFn: this.updateFn()
@@ -83,19 +105,26 @@ Template.Subcards_Actions_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  // ignore linkedTo that comes from subcomponent
-  insert({ linkedTo, ...args }, cb) {
-    const organizationId = this.organizationId();
-
-    this.modal().callMethod(insert, {
-      organizationId,
-      linkedTo: [{
+  insert({ _id, linkedTo, ...args }, cb) {
+    if (_id) {
+      this.modal().callMethod(linkToDocument, {
+        _id,
         documentId: this.documentId(),
         documentType: this.documentType()
-      }],
-      type: this.type(),
-      ...args
-    }, cb);
+      }, cb);
+    } else {
+      const organizationId = this.organizationId();
+
+      this.modal().callMethod(insert, {
+        organizationId,
+        linkedTo: [{
+          documentId: this.documentId(),
+          documentType: this.documentType()
+        }],
+        type: this.type(),
+        ...args
+      }, cb);
+    }
   },
   updateFn() {
     return this.update.bind(this);

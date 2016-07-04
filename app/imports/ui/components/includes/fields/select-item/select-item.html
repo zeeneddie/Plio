@@ -27,9 +27,9 @@
 
     <div class="dropdown-menu dropdown-menu-full">
       {{#each itemsFiltered}}
-        <a class="dropdown-item pointer" {{b "text: this.title, click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+        <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
       {{/each}}
-      {{> Template.dynamic template=content data=getData}}
+      {{> Template.dynamic template=content data=getContentData}}
     </div>
   </div>
 </template>

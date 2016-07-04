@@ -5,6 +5,7 @@ import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
 import { IdSchema, optionsSchema } from '../schemas.js';
+import { ProblemTypes } from '../constants.js';
 
 
 export const insert = new ValidatedMethod({
@@ -85,6 +86,35 @@ export const updateViewedBy = new ValidatedMethod({
     }
 
     return ActionService.updateViewedBy({ _id, userId });
+  }
+});
+
+export const linkToDocument = new ValidatedMethod({
+  name: 'Actions.linkToDocument',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      documentId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      },
+      documentType: {
+        type: String,
+        allowedValues: ProblemTypes
+      }
+    }
+  ]).validator(),
+
+  run({ ...args }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot link actions to documents'
+      );
+    }
+
+    return ActionService.linkToDocument({ ...args });
   }
 });
 
