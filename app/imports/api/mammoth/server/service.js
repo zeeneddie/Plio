@@ -13,11 +13,20 @@ export default {
   convertToHtml({ url, fileName, source, standardId, options }) {
     const standard = Standards.findOne({ _id: standardId });
     const organizationId = standard && standard.organizationId;
+    const doesSourceExist = Meteor.bindEnvironment(() => {
+      const standardQuery = { _id: standardId };
+      standardQuery[source] = { $exists: true };
+      const standard = Standards.findOne(standardQuery);
+      return !!standard;
+    });
+
     const updateSource = Meteor.bindEnvironment((_id, source, htmlUrl) => {
-      StandardsService.update({
-        _id,
-        [`${source}.htmlUrl`]: htmlUrl
-      });
+      if (doesSourceExist()) {
+        StandardsService.update({
+          _id,
+          [`${source}.htmlUrl`]: htmlUrl
+        });
+      }
     });
 
     const { bucketName, acl, standardsFilesDir } = Meteor.settings.AWSS3Bucket;
@@ -72,7 +81,7 @@ export default {
             Body: htmlString,
             ContentType: 'text/html; charset=UTF-8'
           };
-
+      
           const uploader = s3.upload(params, (error, data) => {
             if (error) {
               fut.return(new Meteor.Error(error.message));
