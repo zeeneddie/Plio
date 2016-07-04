@@ -4,8 +4,7 @@ import {
   BaseEntitySchema,
   OrganizationIdSchema,
   FileSchema,
-  NotifySchema,
-  StandardIdSchema
+  NotifySchema
 } from '../schemas.js';
 import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
 import { compareDates } from '../helpers.js';
@@ -33,7 +32,6 @@ const linkedToSchema = new SimpleSchema({
 
 const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
-  StandardIdSchema,
   {
     title: {
       type: String,

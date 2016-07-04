@@ -10,9 +10,6 @@ Template.Actions_Title.viewmodel({
       return;
     }
 
-    console.log('Actions_Title:');
-    console.log(title);
-
     this.parent().update && this.parent().update({ e, title, withFocusCheck: true });
   },
   getData() {
