@@ -74,8 +74,9 @@ Template.ActionsList.viewmodel({
     const toBeCompletedBy = isToBeVerifiedByMe ? userId : { $ne: userId };
     return { toBeCompletedBy, isCompleted, ...this._getSearchQuery() };
   },
-  _getAssigneeQuery(toBeCompletedBy, isCompleted) {
-    return { toBeCompletedBy, ...this._getActionsQuery(false, isCompleted) };
+  _getAssigneeQuery(toBeCompletedBy, isCompletedArg) {
+    const { isCompleted } = this._getActionsQuery(false, isCompletedArg);
+    return { toBeCompletedBy, isCompleted};
   },
   _getUniqueAssignees(prop) {
     const userIds = this[prop]().fetch().map(({ toBeCompletedBy }) => toBeCompletedBy);

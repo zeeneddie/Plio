@@ -91,6 +91,11 @@ Template.Actions_LinkedTo.viewmodel({
 
     const newArray = linkedTo.filter(({ documentId }) => documentId !== _id);
 
+    if (this._id && newArray.length === 0) {
+      ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document.');
+      return;
+    }
+
     this.linkedTo(newArray);
 
     const newDocs = newArray.map(({ documentId }) => this.getDoc(documentId));

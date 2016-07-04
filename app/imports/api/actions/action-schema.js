@@ -4,7 +4,8 @@ import {
   BaseEntitySchema,
   OrganizationIdSchema,
   FileSchema,
-  NotifySchema
+  getNotifySchema,
+  ViewedBySchema
 } from '../schemas.js';
 import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
 import { compareDates } from '../helpers.js';
@@ -43,7 +44,8 @@ const RequiredSchema = new SimpleSchema([
       allowedValues: _.values(ActionTypes)
     },
     linkedTo: {
-      type: [linkedToSchema]
+      type: [linkedToSchema],
+      minCount: 1
     },
     ownerId: {
       type: String,
@@ -66,7 +68,8 @@ const RequiredSchema = new SimpleSchema([
 const ActionSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
-  NotifySchema,
+  ViewedBySchema,
+  getNotifySchema('ownerId'),
   {
     serialNumber: {
       type: Number,
@@ -149,16 +152,6 @@ const ActionSchema = new SimpleSchema([
     files: {
       type: [FileSchema],
       optional: true
-    },
-    viewedBy: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true,
-      autoValue() {
-        if (this.isInsert) {
-          return [this.userId];
-        }
-      }
     }
   }
 ]);
