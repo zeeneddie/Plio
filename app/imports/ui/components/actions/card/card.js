@@ -21,8 +21,7 @@ Template.ActionsCard.viewmodel({
     this.modal().open({
       _title,
       template: 'Actions_Edit',
-      _id: this.actionId(),
-      action: this.action()
+      _id: this.actionId()
     });
   }
 });

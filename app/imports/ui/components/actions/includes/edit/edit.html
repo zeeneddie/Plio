@@ -5,7 +5,10 @@
         {{#with action}}
           {{> Actions_Title title=this.title}}
 
-          {{> Actions_LinkedTo _id=this._id linkedDocs=this.linkedDocuments isEditable=isLinkedToEditable}}
+          {{> Actions_LinkedTo
+              _id=this._id
+              linkedDocs=this.linkedDocuments
+              isEditable=isLinkedToEditable}}
 
           {{> Actions_Status status=this.status}}
 
@@ -67,6 +70,11 @@
             {{/unless}}
 
           {{/unless}}
+
+          {{> Subcards_Notify_Edit
+              document=this
+              documentType="action"
+              onUpdate=onUpdateNotifyUserCb}}
         {{/with}}
       </div>
     </div>

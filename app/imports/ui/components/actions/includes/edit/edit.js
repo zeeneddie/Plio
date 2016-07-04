@@ -12,13 +12,17 @@ import {
 } from '/imports/api/actions/methods.js';
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck'],
+  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
   },
   isCompletionEditable(isVerified) {
     return !isVerified;
+  },
+  callUpdate(method, args = {}, cb = () => {}) {
+    const _id = this._id();
+    this.modal().callMethod(method, { _id, ...args }, cb);
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -30,10 +34,8 @@ Template.Actions_Edit.viewmodel({
     return this.update.bind(this);
   },
   update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
-    const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
 
-    const updateFn = () => this.modal().callMethod(update, allArgs, cb);
+    const updateFn = () => this.callUpdate(update, { query, options, ...args }, cb);
 
     if (withFocusCheck) {
       this.callWithFocusCheck(e, updateFn);
@@ -41,35 +43,41 @@ Template.Actions_Edit.viewmodel({
       updateFn();
     }
   },
-  onComplete() {
-    return () => {
-      this.child('SubCardEdit').callUpdate(this.completeFn, {
-        _id: this._id()
-      });
-    };
-  },
   completeFn() {
     return this.complete.bind(this);
   },
-  complete({ ...args }, cb) {
-    this.modal().callMethod(complete, { ...args }, cb);
+  complete(e) {
+    this.callUpdate(complete, {}, this.generateCallback('My completed actions'));
   },
   undoCompletionFn() {
     return this.undoCompletion.bind(this);
   },
-  undoCompletion({ ...args }, cb) {
-    this.modal().callMethod(undoCompletion, { ...args }, cb);
+  undoCompletion(e) {
+    this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
   },
   verifyFn() {
     return this.verify.bind(this);
   },
-  verify({ ...args }, cb) {
-    this.modal().callMethod(verify, { ...args }, cb);
+  verify(e) {
+    this.callUpdate(verify);
   },
   undoVerificationFn() {
     return this.undoVerification.bind(this);
   },
-  undoVerification({ ...args }, cb) {
-    this.modal().callMethod(undoVerification, { ...args }, cb);
+  undoVerification(e) {
+    this.callUpdate(undoVerification);
+  },
+  generateCallback(queryParam) {
+    const _id = this._id();
+
+    return (err) => {
+      if (!err) {
+        FlowRouter.setQueryParams({ by: queryParam });
+        Meteor.setTimeout(() => {
+          this.goToAction(_id);
+          this.expandCollapsed(_id);
+        }, 100);
+      }
+    }
   }
 });
