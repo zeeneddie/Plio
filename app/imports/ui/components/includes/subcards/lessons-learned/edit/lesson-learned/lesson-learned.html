@@ -33,7 +33,7 @@
     {{/FormField}}
   </div>
 
-  {{#QuillEditor}}
+  {{#QuillEditor onUpdate=onUpdateNotesCb}}
     {{#if _id}}
       <div {{b "html: notes"}}></div>
     {{else}}

@@ -1,0 +1,7 @@
+<template name="Subcards_Notes_Edit">
+  {{#SubCardEditWrapper _lText=label}}
+    {{#QuillEditor onUpdate=onUpdateCb}}
+      <div {{b "html: notes"}}></div>
+    {{/QuillEditor}}
+  {{/SubCardEditWrapper}}
+</template>

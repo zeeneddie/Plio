@@ -20,6 +20,13 @@ Template.Actions_Edit.viewmodel({
   isCompletionEditable(isVerified) {
     return !isVerified;
   },
+  slingshotDirective: 'actionsFiles',
+  uploaderMetaContext() {
+    return {
+      organizationId: this.organizationId(),
+      action: this._id()
+    };
+  },
   callUpdate(method, args = {}, cb = () => {}) {
     const _id = this._id();
     this.modal().callMethod(method, { _id, ...args }, cb);
