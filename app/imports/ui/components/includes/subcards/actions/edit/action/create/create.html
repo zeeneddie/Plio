@@ -1,25 +1,15 @@
 <template name="Actions_CreateSubcard">
-  <div class="card-block">
-    <div class="form-group row">
-      <label class="form-control-label col-sm-4 col-xs-12"></label>
-      <div class="col-sm-8 col-xs-12">
-        <div class="btn-group btn-group-nomargin" data-toggle="buttons">
-          <label class="btn btn-secondary"
-              {{b "click: selectForm('Actions_Create'), class: {active: form === 'Actions_Create'}"}}>
-            <input type="radio" autocomplete="off" />
-            New
-          </label>
-          <label class="btn btn-secondary"
-              {{b "click: selectForm('Actions_SelectExisting'), class: {active: form === 'Actions_SelectExisting'}"}}>
-            <input type="radio" autocomplete="off" />
-            Existing
-          </label>
-        </div>
-      </div>
-    </div>
+  {{> Actions_Title title=title}}
 
-    <hr />
+  {{> Actions_LinkedTo linkedDocs=linkedDocs}}
 
-    {{> Template.dynamic template=form data=getFormData}}
-  </div>
+  {{> Actions_Owner ownerId=ownerId}}
+
+  {{> Actions_PlanInPlace planInPlace=planInPlace}}
+
+  <hr />
+
+  {{> Actions_CompletionTargetDate completionTargetDate=completionTargetDate}}
+
+  {{> Actions_ToBeCompletedBy toBeCompletedBy=toBeCompletedBy}}
 </template>

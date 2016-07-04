@@ -7,9 +7,6 @@ Template.Actions_SelectExisting.viewmodel({
   mixin: ['organization', 'search'],
   type: '',
   actionId: '',
-  onCreated() {
-    console.log(this.templateInstance.data);
-  },
   actionSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
@@ -38,7 +35,7 @@ Template.Actions_SelectExisting.viewmodel({
     };
   },
   onDropdownAdd(title) {
-    this.parent().showForm && this.parent().showForm('Actions_Create', { title });
+    this.parent().showForm && this.parent().showForm('Actions_CreateSubcard', { title });
   },
   onActionSelectedCb() {
     return this.onActionSelected.bind(this);

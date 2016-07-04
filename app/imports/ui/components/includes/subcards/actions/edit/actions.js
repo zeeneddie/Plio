@@ -49,6 +49,21 @@ Template.Subcards_Actions_Edit.viewmodel({
     return `<span class="hidden-xs-down">${date}</span>
            <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
+  newSubcardTitle() {
+    let newSubcardTitle = '';
+    switch (this.type()) {
+      case ActionTypes.CORRECTIVE_ACTION:
+        newSubcardTitle = 'New corrective action';
+        break;
+      case ActionTypes.PREVENTATIVE_ACTION:
+        newSubcardTitle = 'New preventative action';
+        break;
+      case ActionTypes.RISK_CONTROL:
+        newSubcardTitle = 'New risk control';
+        break;
+    }
+    return newSubcardTitle;
+  },
   actions() {
     return this._getActionsByQuery({
       type: this.type(),
@@ -75,7 +90,8 @@ Template.Subcards_Actions_Edit.viewmodel({
     this.addForm(
       'SubCardEdit',
       {
-        content: 'Actions_CreateSubcard',
+        content: 'Actions_AddSubcard',
+        _lText: this.newSubcardTitle(),
         linkedDocs: this.linkedDocs(),
         type: this.type(),
         documentId: this.documentId(),

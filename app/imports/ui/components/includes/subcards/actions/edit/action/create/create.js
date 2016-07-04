@@ -1,27 +1,22 @@
 import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
+import { insert } from '/imports/api/actions/methods.js';
 
 
 Template.Actions_CreateSubcard.viewmodel({
-  form: 'Actions_Create',
-  formData: '',
-  getFormData() {
-    return _.extend({}, {
-      type: this.type(),
-      linkedDocs: this.linkedDocs()
-    }, this.formData());
-  },
-  selectForm(formName) {
-    this.formData('');
-    this.form(formName);
-  },
-  showForm(formName, formData) {
-    this.form(formName);
-    this.formData(formData);
-  },
+  type: '',
+  title: '',
+  ownerId: Meteor.userId(),
+  planInPlace: ActionPlanOptions.NO,
+  completionTargetDate: '',
+  toBeCompletedBy: '',
+  verificationTargetDate: '',
+  toBeVerifiedBy: '',
   getData() {
-    const form = this.child(this.form());
-    return form && form.getData();
+    return this.children(vm => vm.getData)
+                .reduce((prev, cur) => {
+                  return { ...prev, ...cur.getData() };
+                }, {});
   }
 });
