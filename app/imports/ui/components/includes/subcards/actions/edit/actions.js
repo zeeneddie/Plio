@@ -137,11 +137,25 @@ Template.Subcards_Actions_Edit.viewmodel({
   removeFn() {
     return this.remove.bind(this);
   },
+  onComplete() {
+    return () => {
+      this.child('SubCardEdit').callUpdate(this.completeFn, {
+        _id: this._id()
+      });
+    };
+  },
   completeFn() {
     return this.complete.bind(this);
   },
   complete({ ...args }, cb) {
     this.modal().callMethod(complete, { ...args }, cb);
+  },
+  onUndoCompletion() {
+    return () => {
+      this.child('SubCardEdit').callUpdate(this.undoCompletionFn, {
+        _id: this._id()
+      });
+    };
   },
   undoCompletionFn() {
     return this.undoCompletion.bind(this);
@@ -149,11 +163,25 @@ Template.Subcards_Actions_Edit.viewmodel({
   undoCompletion({ ...args }, cb) {
     this.modal().callMethod(undoCompletion, { ...args }, cb);
   },
+  onVerify() {
+    return () => {
+      this.child('SubCardEdit').callUpdate(this.verifyFn, {
+        _id: this._id()
+      });
+    };
+  },
   verifyFn() {
     return this.verify.bind(this);
   },
   verify({ ...args }, cb) {
     this.modal().callMethod(verify, { ...args }, cb);
+  },
+  onUndoVerification() {
+    return () => {
+      this.child('SubCardEdit').callUpdate(this.undoVerificationFn, {
+        _id: this._id()
+      });
+    };
   },
   undoVerificationFn() {
     return this.undoVerification.bind(this);

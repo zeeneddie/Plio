@@ -51,7 +51,6 @@ Template.Actions_Create.viewmodel({
 
           this.modal().open({
             _id,
-            action,
             _title: action ? this._getNameByType(action.type) : '',
             template: 'Actions_Edit'
           });

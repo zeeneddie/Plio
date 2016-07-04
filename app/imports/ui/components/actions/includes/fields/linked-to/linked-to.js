@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Blaze } from 'meteor/blaze';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
@@ -35,7 +36,7 @@ Template.Actions_LinkedTo.viewmodel({
     return this.update.bind(this);
   },
   getDoc(documentId) {
-    return this.getInstanceOfCollection([NonConformities, Risks], documentId).findOne({ _id: documentId });
+    return this.getCollectionInstance(documentId, NonConformities, Risks).findOne({ _id: documentId });
   },
   getCollectionType(collection) {
     switch(collection) {
@@ -51,7 +52,7 @@ Template.Actions_LinkedTo.viewmodel({
     }
   },
   getDocumentType(collections, _id) {
-    const collection = this.getInstanceOfCollection([...collections], _id);
+    const collection = this.getCollectionInstance(_id, ...collections);
     return this.getCollectionType(collection);
   },
   update(viewmodel) {
