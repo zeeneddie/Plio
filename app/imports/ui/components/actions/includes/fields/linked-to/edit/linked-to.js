@@ -4,7 +4,7 @@ import { Blaze } from 'meteor/blaze';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 
-Template.Actions_LinkedTo.viewmodel({
+Template.Actions_LinkedTo_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils'],
   onCreated() {
     if ((!this.linkedTo() || this.linkedTo().length === 0) && this.linkedDocsIds().length > 0) {

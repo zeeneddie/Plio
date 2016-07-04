@@ -19,8 +19,12 @@
               <p class="list-group-item-text">Title</p>
               <h4 class="list-group-item-heading">
                 <span {{b "text: this.title"}}></span>
+                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
               </h4>
             </div>
+
+            {{> Actions_LinkedTo_Read linkedDocs=this.linkedDocuments}}
 
           </div>
 
@@ -30,11 +34,7 @@
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
-          {{#if isActiveActionFilter 'deleted'}}
-            <h5>There are no deleted actions yet.</h5>
-          {{else}}
-            <h5>There are no actions yet! Click on the 'Add' button to create your first action.</h5>
-          {{/if}}
+          <h5>There are no actions yet! Click on the 'Add' button to create your first action.</h5>
         </div>
       </div>
     {{/if}}

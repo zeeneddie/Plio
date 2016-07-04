@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ActionsCard.viewmodel({
-  mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing'],
+  mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
     return this._getActionByQuery({ _id: this.actionId() });
   },

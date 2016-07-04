@@ -5,7 +5,7 @@
         <div class="card-block">
           {{> Actions_Title title=this.title}}
 
-          {{> Actions_LinkedTo
+          {{> Actions_LinkedTo_Edit
               _id=this._id
               linkedDocs=this.linkedDocuments
               isEditable=isLinkedToEditable}}
@@ -71,7 +71,7 @@
 
           {{/unless}}
         </div>
-        
+
         {{> Subcards_Notify_Edit
             document=this
             documentType="action"
