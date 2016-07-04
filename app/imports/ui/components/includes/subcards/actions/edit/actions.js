@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import pluralize from 'pluralize';
 
 import { ActionTypes } from '/imports/api/constants.js';
 import {
@@ -17,7 +18,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action'],
   type: '',
   title() {
-    return this._getNameByType(this.type());
+    return pluralize(this._getNameByType(this.type()));
   },
   addButtonText() {
     let buttonText = '';

@@ -10,11 +10,10 @@ Template.Actions_Title.viewmodel({
       return;
     }
 
-    this.subcard && this.subcard().isWaiting(true);
+    console.log('Actions_Title:');
+    console.log(title);
 
-    this.parent().update && this.callWithFocusCheck(e, () => {
-      this.parent().update({ title });
-    });
+    this.parent().update && this.parent().update({ e, title, withFocusCheck: true });
   },
   getData() {
     return { title: this.title() };

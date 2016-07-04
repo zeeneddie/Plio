@@ -11,11 +11,7 @@ Template.Actions_VerificationResult.viewmodel({
       return;
     }
 
-    this.subcard && this.subcard().isWaiting(true);
-
-    this.parent().update && this.callWithFocusCheck(e, () => {
-      this.parent().update({ verificationResult });
-    });
+    this.parent().update && this.parent().update({ e, verificationResult, withFocusCheck: true });
   },
   getData() {
     return { verificationResult: this.verificationResult() };
