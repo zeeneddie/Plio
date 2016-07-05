@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 Template.NCTitle.viewmodel({
   label: 'Non-conformity name',
   titleText: '',
+  sequentialId: '',
   update(e) {
     if (!this._id) return;
 

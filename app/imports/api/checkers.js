@@ -40,7 +40,10 @@ export const isOrgMember = (userId, organizationId) => {
 export const checkAnalysis = (doc = {}, args = {}) => {
   const has = (obj, ...args) => args.some(a => obj.hasOwnProperty(a));
 
-  const isAnalysisCompleted = () => doc.analysis.status || doc.analysis.status.toString() === _.invert(AnalysisStatuses)['Completed'];
+  const isCompleted = prop => prop && prop.status && prop.status.toString() === _.invert(AnalysisStatuses)['Completed'];
+
+  const isAnalysisCompleted = isCompleted(doc.analysis);
+  const isUpdateOfStandardsCompleted = isCompleted(doc.updateOfStandards);
 
   if (has(args, 'analysis.status', 'updateOfStandards.status')) {
     if (!doc.analysis.executor && doc.analysis.executor !== this.userId) {
@@ -55,6 +58,14 @@ export const checkAnalysis = (doc = {}, args = {}) => {
       throw new Meteor.Error(
         403, 'Access denied'
       );
+    }
+
+    if (has(args, 'updateOfStandards.completedAt', 'updateOfStandards.completedBy')) {
+      if (!isUpdateOfStandardsCompleted) {
+        throw new Meteor.Error(
+          403, 'Access denied'
+        );
+      }
     }
   }
 

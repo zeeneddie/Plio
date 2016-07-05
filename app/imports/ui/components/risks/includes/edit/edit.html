@@ -3,7 +3,7 @@
     <div class="relative">
       {{#with risk}}
         <div class="card-block">
-          {{> NCTitle _id=this._id titleText=this.title label="Risk name"}}
+          {{> NCTitle _id=this._id titleText=this.title sequentialId=this.sequentialId label="Risk name"}}
 
           {{> ESDescription _id=this._id description=this.description}}
 

@@ -1,7 +1,7 @@
 <template name="EditNC_Main">
   {{#with NC}}
     <div class="card-block">
-      {{> NCTitle _id=this._id titleText=this.title}}
+      {{> NCTitle _id=this._id titleText=this.title sequentialId=this.sequentialId}}
 
       {{> ESDescription _id=this._id description=this.description}}
 
