@@ -6,13 +6,14 @@ import {
   insert,
   update,
   remove,
-  linkProblem,
   complete,
   verify,
   undoCompletion,
   undoVerification,
   linkStandard,
-  unlinkStandard
+  unlinkStandard,
+  linkProblem,
+  unlinkProblem
 } from '/imports/api/actions/methods.js';
 
 
@@ -205,5 +206,17 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   unlinkStandard({ ...args }, cb) {
     this.modal().callMethod(unlinkStandard, { ...args }, cb);
+  },
+  linkProblemFn() {
+    return this.linkProblem.bind(this);
+  },
+  linkProblem({ ...args }, cb) {
+    this.modal().callMethod(linkProblem, { ...args }, cb);
+  },
+  unlinkProblemFn() {
+    return this.unlinkProblem.bind(this);
+  },
+  unlinkProblem({ ...args }, cb) {
+    this.modal().callMethod(unlinkProblem, { ...args }, cb);
   }
 });

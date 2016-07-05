@@ -3,6 +3,7 @@ import { Blaze } from 'meteor/blaze';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
+
 Template.Actions_LinkedStandards.viewmodel({
   mixin: ['search', 'organization'],
   standardsIds: [],
@@ -37,7 +38,7 @@ Template.Actions_LinkedStandards.viewmodel({
 
     if (this.standardsIdsArray().find(id => id === standardId)) return;
 
-    this.onLink(standardId, () => {
+    this.onLink({ standardId }, () => {
       viewmodel.value('');
       viewmodel.selected('');
     });
@@ -46,10 +47,10 @@ Template.Actions_LinkedStandards.viewmodel({
     return this.remove.bind(this);
   },
   remove(e) {
-    const { _id } = Blaze.getData(e.target);
+    const { _id:standardId } = Blaze.getData(e.target);
 
-    if (!this.standardsIdsArray().find(id => id === _id)) return;
+    if (!this.standardsIdsArray().find(id => id === standardId)) return;
 
-    this.onUnlink(_id);
+    this.onUnlink({ standardId });
   }
 });

@@ -31,7 +31,7 @@ export default {
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
-    this._getActionOrThrow(_id);
+    this._ensureActionExists(_id);
 
     if (!_.keys(query).length > 0) {
       query = { _id };
@@ -48,7 +48,7 @@ export default {
       throw new Meteor.Error(400, 'Standard does not exist');
     }
 
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (action.isLinkedToStandard(standardId)) {
       throw new Meteor.Error(
@@ -64,7 +64,7 @@ export default {
   },
 
   unlinkStandard({ _id, standardId }) {
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (!action.isLinkedToStandard(standardId)) {
       throw new Meteor.Error(
@@ -88,7 +88,7 @@ export default {
     }
 
     if (!docCollection) {
-      throw new Meteor.Error(400, 'Invalid problemId type');
+      throw new Meteor.Error(400, 'Invalid problem type');
     }
 
     const doc = docCollection.findOne({ _id: problemId });
@@ -97,7 +97,7 @@ export default {
       throw new Meteor.Error(400, 'Problem document does not exist');
     }
 
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(
@@ -112,8 +112,24 @@ export default {
     });
   },
 
+  unlinkProblem({ _id, problemId, problemType }) {
+    const action = this._getAction(_id);
+
+    if (!action.isLinkedToProblem(problemId, problemType)) {
+      throw new Meteor.Error(
+        400, 'This action is not linked to specified problem document'
+      );
+    }
+
+    return this.collection.update({
+      _id
+    }, {
+      $pull: { linkedProblems: { problemId, problemType } }
+    });
+  },
+
   complete({ _id, userId }) {
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (userId !== action.toBeCompletedBy) {
       throw new Meteor.Error(400, 'You cannot complete this action');
@@ -123,7 +139,7 @@ export default {
       throw new Meteor.Error(400, 'This action cannot be completed');
     }
 
-    this.collection.update({
+    return this.collection.update({
       _id
     }, {
       $set: {
@@ -136,7 +152,7 @@ export default {
   },
 
   undoCompletion({ _id, userId }) {
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (userId !== action.completedBy) {
       throw new Meteor.Error(400, 'You cannot undo completion of this action');
@@ -146,7 +162,7 @@ export default {
       throw new Meteor.Error(400, 'Completion of this action cannot be undone');
     }
 
-    this.collection.update({
+    return this.collection.update({
       _id
     }, {
       $set: {
@@ -161,7 +177,7 @@ export default {
   },
 
   verify({ _id, userId }) {
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (userId !== action.toBeVerifiedBy) {
       throw new Meteor.Error(400, 'You cannot verify this action');
@@ -171,7 +187,7 @@ export default {
       throw new Meteor.Error(400, 'This action cannot be verified');
     }
 
-    this.collection.update({
+    return this.collection.update({
       _id
     }, {
       $set: {
@@ -184,7 +200,7 @@ export default {
   },
 
   undoVerification({ _id, userId }) {
-    const action = this._getActionOrThrow(_id);
+    const action = this._getAction(_id);
 
     if (userId !== action.verifiedBy) {
       throw new Meteor.Error(400, 'You cannot undo verification of this action');
@@ -194,7 +210,7 @@ export default {
       throw new Meteor.Error(400, 'Verification of this action cannot be undone');
     }
 
-    this.collection.update({
+    return this.collection.update({
       _id
     }, {
       $set: {
@@ -209,7 +225,7 @@ export default {
   },
 
   updateViewedBy({ _id, userId }) {
-    this._getActionOrThrow(_id);
+    this._ensureActionExists(_id);
 
     if (!!this.collection.findOne({ _id, viewedBy: userId })) {
       throw new Meteor.Error(
@@ -225,7 +241,7 @@ export default {
   },
 
   remove({ _id, deletedBy, isDeleted }) {
-    this._getActionOrThrow(_id);
+    this._ensureActionExists(_id);
 
     const query = { _id };
 
@@ -244,11 +260,17 @@ export default {
     }
   },
 
-  _getActionOrThrow(_id) {
+  _ensureActionExists(_id) {
+    if (!this.collection.findOne({ _id })) {
+      throw new Meteor.Error(400, 'Action does not exist');
+    }
+  },
+
+  _getAction(_id) {
     const action = this.collection.findOne({ _id });
     if (!action) {
       throw new Meteor.Error(400, 'Action does not exist');
     }
     return action;
-  }
+  },
 };

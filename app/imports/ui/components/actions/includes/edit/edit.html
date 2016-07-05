@@ -7,7 +7,11 @@
         onLink=onLinkStandard
         onUnlink=onUnlinkStandard}}
 
-    {{> Actions_LinkedProblems linkedProblems=linkedProblems}}
+    {{> Actions_LinkedProblems
+        linkedProblems=linkedProblems
+        standardsIds=linkedStandardsIds
+        onLink=onLinkProblem
+        onUnlink=onUnlinkProblem}}
 
     {{> Actions_Status status=status}}
 

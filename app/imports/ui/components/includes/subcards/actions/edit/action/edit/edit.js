@@ -36,7 +36,7 @@ Template.Actions_EditSubcard.viewmodel({
     };
   },
   getLinkStandardFn() {
-    return (standardId, cb) => {
+    return ({ standardId }, cb) => {
       this.parent().callUpdate(this.linkStandardFn, {
         _id: this._id(),
         standardId
@@ -44,10 +44,29 @@ Template.Actions_EditSubcard.viewmodel({
     };
   },
   getUnlinkStandardFn() {
-    return (standardId, cb) => {
+    return ({ standardId }, cb) => {
       this.parent().callUpdate(this.unlinkStandardFn, {
         _id: this._id(),
         standardId
+      }, cb);
+    };
+  },
+  getLinkProblemFn() {
+    return ({ problemId, problemType }, cb) => {
+      this.parent().callUpdate(this.linkProblemFn, {
+        _id: this._id(),
+        problemId,
+        problemType
+      }, cb);
+    };
+  },
+  getUnlinkProblemFn() {
+    return ({ problemId, problemType }, cb) => {
+      console.log(problemId, problemType);
+      this.parent().callUpdate(this.unlinkProblemFn, {
+        _id: this._id(),
+        problemId,
+        problemType
       }, cb);
     };
   }

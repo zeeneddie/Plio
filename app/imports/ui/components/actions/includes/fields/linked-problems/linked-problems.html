@@ -1,19 +1,45 @@
 <template name="Actions_LinkedProblems">
-  <div class="row">
-    <label class="form-control-label col-sm-4 col-xs-12 first-row-label">
-      Linked to
-    </label>
-    <div class="col-sm-8">
-      {{#each linkedDocs}}
-        <div class="form-group row">
-          <div class="col-sm-12">
-            <div class="input-group">
-              <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
-              <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
-            </div>
-          </div>
+  {{#if isEditable}}
+
+    {{#FormField label="Linked to"}}
+      {{#each linkedProblemsDocs}}
+        <div class="btn-group">
+          <button class="btn btn-secondary" type="button" disabled=""
+              {{b "text: this.title"}}></button>
+          {{> DeleteButton
+              _id=this._id
+              problemType=this.problemType
+              smallIcon=true
+              onClick=onRemoveCb}}
         </div>
       {{/each}}
+
+      {{> SelectItem
+          placeholder="Linked to"
+          items=problems
+          selectFirstIfNoSelected=false
+          onUpdate=onSelectCb}}
+    {{/FormField}}
+
+  {{else}}
+
+    <div class="row">
+      <label class="form-control-label col-sm-4 col-xs-12 first-row-label">
+        Linked to
+      </label>
+      <div class="col-sm-8">
+        {{#each linkedProblemsDocs}}
+          <div class="form-group row">
+            <div class="col-sm-12">
+              <div class="input-group">
+                <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
+                <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
     </div>
-  </div>
+
+  {{/if}}
 </template>

@@ -50,5 +50,11 @@ Template.Actions_Edit.viewmodel({
   },
   onUnlinkStandard() {
     return this.unlinkStandardFn;
+  },
+  onLinkProblem() {
+    return this.linkProblemFn;
+  },
+  onUnlinkProblem() {
+    return this.unlinkProblemFn;
   }
 });
