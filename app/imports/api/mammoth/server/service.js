@@ -63,6 +63,7 @@ export default {
                 max-width: 100% !important; 
               } 
               body {
+                background-color: #fff !important;
                 padding: 30px 30px 0px 30px !important;
               }
               @media (max-width: 500px) {
