@@ -2,7 +2,7 @@
   "name": "plio",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --settings settings-local.json"
   },
   "dependencies": {
     "aws-sdk": "^2.4.3",
