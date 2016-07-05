@@ -14,8 +14,8 @@ Template.ESSources.viewmodel({
   sourceExtension() {
     return this.sourceName().split('.').pop().toLowerCase();
   },
-  sourceHtmlUrl: '',
-  docxRenderInProgress: '',
+  sourceHtmlUrl: null,
+  docxRenderInProgress: null,
   fileId: '',
   shouldUpdate() {
     const { type, url, name, htmlUrl } = this.getData();

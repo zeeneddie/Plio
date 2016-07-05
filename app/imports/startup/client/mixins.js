@@ -66,7 +66,7 @@ ViewModel.mixin({
     expandCollapsed: _.debounce(function(_id, cb) {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
-      this.expandCollapseItems(vms, { complete: cb });
+      return this.expandCollapseItems(vms, { complete: cb });
     }, 200),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
@@ -197,7 +197,14 @@ ViewModel.mixin({
       } else {
         this.expandSelected();
       }
-    }, 500)
+    }, 500),
+    clearSearchField() {
+      if (this.searchText()) {
+        this.searchInput.val('');
+        this.searchText('');
+        this.expandSelected();
+      }
+    }
   },
   numberRegex: {
     parseNumber(string) {
