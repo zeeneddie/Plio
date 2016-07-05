@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.Standard_Read.viewmodel({
+Template.Fields_Standard_Read.viewmodel({
   mixin: ['organization', 'standard'],
   _id: '',
   standard() {
