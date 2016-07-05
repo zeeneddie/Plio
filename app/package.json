@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "meteor run --settings settings-local.json",
-    "debug": "meteor debug --settings settings-local.json"
+    "debug": "meteor debug --settings settings-local.json",
+    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-local.json"
   },
   "dependencies": {
     "aws-sdk": "^2.4.3",
