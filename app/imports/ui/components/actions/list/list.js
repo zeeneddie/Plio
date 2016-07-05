@@ -86,7 +86,7 @@ Template.ActionsList.viewmodel({
     return this._getActionsByQuery({ ...this._getActionsQuery(true, false) })
   },
   myCompletedActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(true, true) });
+    return this._getActionsByQuery({ ...this._getActionsQuery(true, true) }, { sort: { completedAt: -1 } });
   },
   teamCurrentActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(false, false) });
@@ -95,7 +95,7 @@ Template.ActionsList.viewmodel({
     return this._getUniqueAssignees('teamCurrentActions');
   },
   teamCompletedActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(false, true) });
+    return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
   },
   teamCompletedActionsAssignees() {
     return this._getUniqueAssignees('teamCompletedActions');

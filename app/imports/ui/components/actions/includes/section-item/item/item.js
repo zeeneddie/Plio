@@ -13,6 +13,9 @@ Template.ActionItem.viewmodel({
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
+  getDate() {
+    return this.isCompleted() ? this.renderDate(this.completedAt()) : this.renderDate(this.createdAt());
+  },
   isNew() {
     return !this.viewedBy().find(_id => _id === Meteor.userId());
   },
