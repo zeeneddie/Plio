@@ -14,9 +14,15 @@
           <span>{{this.name}}</span>
         </a>
       </h4>
-      <iframe width="560" height="315" frameborder="0" allowfullscreen
-        {{b "if: this.type === 'video', attr: { src: renderVideoSrc(this.url) }"}}>
-      </iframe>
+      {{#if isVideo this.type}}
+        <div class="iframe-wrapper video">
+          <div class="iframe-placeholder"></div>
+          {{#if isIframeReady}}
+            <iframe width="560" height="315" frameborder="0" allowfullscreen src={{renderVideoSrc this.url}}>
+            </iframe>
+          {{/if}}
+        </div>
+      {{/if}}
     </div>
   {{/with}}
 </template>

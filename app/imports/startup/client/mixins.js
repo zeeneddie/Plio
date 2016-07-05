@@ -51,6 +51,14 @@ ViewModel.mixin({
       if (_.isFunction(cb)) cb();
     }, 500)
   },
+  iframe: {
+    isIframeReady: false,
+    onRendered() {
+      Meteor.setTimeout(() => {
+        this.isIframeReady(true);
+      }, 300);
+    }
+  },
   collapsing: {
     toggleVMCollapse(name = '', condition = () => {}, cb) {
       let vmsToCollapse = [];
