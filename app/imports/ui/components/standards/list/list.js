@@ -44,6 +44,9 @@ Template.StandardsList.viewmodel({
       case 'type':
         return { typeId: { $in: this.types().map(({ _id }) => _id) } };
         break;
+      case 'deleted':
+        return { _id: this.standardsDeleted().count() > 0 && this.standardsDeleted().fetch()[0]._id };
+        break;
       default:
         return {};
         break;
@@ -164,12 +167,5 @@ Template.StandardsList.viewmodel({
       template: 'CreateStandard',
       variation: 'save'
     });
-  },
-  clearSearchField() {
-    if (this.searchText()) {
-      this.searchInput.val('');
-      this.searchText('');
-      this.expandSelected();
-    }
   }
 });

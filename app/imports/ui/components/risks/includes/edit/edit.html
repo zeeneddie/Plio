@@ -1,0 +1,61 @@
+<template name="EditRisk">
+  <div>
+    <div class="relative">
+      {{#with risk}}
+        <div class="card-block">
+          {{> NCTitle _id=this._id titleText=this.title label="Risk name"}}
+
+          {{> ESDescription _id=this._id description=this.description}}
+
+          {{> NCStatus _id=this._id status=this.status}}
+
+          {{> Standard_Edit _id=this.standardId}}
+
+          {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
+
+          {{> NCIdentifiedBy _id=this._id identifiedBy=this.identifiedBy}}
+
+          {{> NCIdentifiedDate _id=this._id identifiedAt=this.identifiedAt}}
+
+          {{> NCMagnitude _id=this._id magnitude=this.magnitude}}
+
+          {{> RKType _id=this._id typeId=this.typeId}}
+        </div>
+
+        {{> Subcards_RootCauseAnalysis_Edit
+            _id=this._id
+            analysis=this.analysis
+            updateOfStandards=this.updateOfStandards
+            magnitude=this.magnitude}}
+
+        {{> Subcards_Notify_Edit
+            document=this
+            documentType="risk"
+            onUpdate=onUpdateNotifyUserCb}}
+
+        {{> Subcards_RiskAnalysis_Edit
+            _id=this._id
+            score=this.score}}
+
+        {{> Subcards_TreatmentPlan_Edit
+            _id=this._id
+            treatmentPlan=this.treatmentPlan}}
+
+        {{> Subcards_LessonsLearned_Edit
+            documentId=this._id
+            documentType="risk"
+            linkedTo=this.title
+            linkedToId=this.sequentialId}}
+
+        {{> Subcards_OtherFiles_Edit
+            _id=this._id
+            files=this.files
+            uploaderMetaContext=uploaderMetaContext
+            slingshotDirective=slingshotDirective}}
+      {{/with}}
+      <div class="card-block text-xs-center">
+        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+      </div>
+    </div>
+  </div>
+</template>

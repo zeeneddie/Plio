@@ -9,7 +9,7 @@ import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, NCStatuses,
+  NonConformityFilters, NCTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, ActionFilters,
   ActionTypes
 } from '/imports/api/constants.js';
@@ -66,7 +66,7 @@ ViewModel.mixin({
     expandCollapsed: _.debounce(function(_id, cb) {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
-      this.expandCollapseItems(vms, { complete: cb });
+      return this.expandCollapseItems(vms, { complete: cb });
     }, 200),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
@@ -179,23 +179,32 @@ ViewModel.mixin({
 
       this.searchText(value);
 
-      if (this.isActiveStandardFilter && this.isActiveStandardFilter('deleted')) {
-        this.searchResultsNumber(this.standardsDeleted().count());
-        return;
-      } else if (this.isActiveNCFilter && this.isActiveNCFilter('deleted')) {
-        this.searchResultsNumber(this.NCsDeleted().count());
-        return;
-      } else if (this.isActiveRiskFilter && this.isActiveRiskFilter('deleted')) {
-        this.searchResultsNumber(this.risksDeleted().count());
-        return;
-      }
+      const checkIsDeletedFilter = (fn, counterName) => {
+        if (this[fn] && this[fn]('deleted')) {
+          this.searchResultsNumber(this[counterName]().count());
+          return true;
+        }
+      };
+
+      if (checkIsDeletedFilter('isActiveStandardFilter', 'standardsDeleted')) return;
+
+      if (checkIsDeletedFilter('isActiveNCFilter', 'NCsDeleted')) return;
+
+      if (checkIsDeletedFilter('isActiveRiskFilter', 'risksDeleted')) return;
 
       if (!!value) {
         this.expandAllFound();
       } else {
         this.expandSelected();
       }
-    }, 500)
+    }, 500),
+    clearSearchField() {
+      if (this.searchText()) {
+        this.searchInput.val('');
+        this.searchText('');
+        this.expandSelected();
+      }
+    }
   },
   numberRegex: {
     parseNumber(string) {
@@ -398,6 +407,16 @@ ViewModel.mixin({
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
       FlowRouter.go('actions', params, queryParams);
+    },
+    goToRisk(riskId, withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
+      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      FlowRouter.go('risk', params, queryParams);
+    },
+    goToRisks(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      FlowRouter.go('risks', params, queryParams);
     }
   },
   mobile: {
@@ -421,9 +440,29 @@ ViewModel.mixin({
     riskId() {
       return FlowRouter.getParam('riskId');
     },
+    isActiveRiskFilter(filter) {
+      return this.activeRiskFilter() === filter;
+    },
+    activeRiskFilter() {
+      return FlowRouter.getQueryParam('by') || RiskFilters[0];
+    },
     currentRisk() {
       const _id = this.riskId();
-      // return Risks.findOne({ _id });
+      return Risks.findOne({ _id });
+    },
+    _getIsDeletedQuery() {
+      return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    },
+    _getRisksByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      if (this.isActiveRiskFilter('deleted')) {
+        options = { sort: { deletedAt: -1 } };
+      }
+      return Risks.find(query, options);
+    },
+    _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      return Risks.findOne(query, options);
     }
   },
   nonconformity: {
@@ -443,14 +482,14 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getNCsByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getNCsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       if (this.isActiveNCFilter('deleted')) {
-        options = { deletedAt: -1 };
+        options = { sort: { deletedAt: -1 } };
       }
       return NonConformities.find(query, options);
     },
-    _getNCByQuery(by = {}, options = { sort: { title: 1 } }) {
+    _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
     }
@@ -532,9 +571,9 @@ ViewModel.mixin({
       return _.values(OrgCurrencies).map(c => ({ [c]: this.getCurrencySymbol(c) }) );
     }
   },
-  NCStatus: {
+  problemsStatus: {
     getStatusName(status) {
-      return NCStatuses[status];
+      return ProblemsStatuses[status];
     },
     getClassByStatus(status) {
       switch(status) {
@@ -627,6 +666,32 @@ ViewModel.mixin({
         updateFn();
       } else {
         this.callWithFocusCheck(e, updateFn);
+      }
+    }
+  },
+  riskScore: {
+    getNameByScore(score) {
+      if (score >= 0 && score < 20) {
+        return 'Very low';
+      } else if (score >= 20 && score < 40) {
+        return 'Low';
+      } else if (score >= 40 && score < 60) {
+        return 'Medium';
+      } else if (score >= 60 && score < 80) {
+        return 'High';
+      } else {
+        return 'Very high';
+      }
+    },
+    getClassByScore(score) {
+      if (score >= 0 && score < 25) {
+        return 'vlow';
+      } else if (score >= 25 && score < 50) {
+        return 'low';
+      } else if (score >= 50 && score < 75) {
+        return 'medium';
+      } else {
+        return 'high';
       }
     }
   }

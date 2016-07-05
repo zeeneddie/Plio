@@ -1,11 +1,15 @@
 <template name="CreateRisk">
   <div>
     <div class="card-block">
-      {{> RKTitle}}
+      {{> NCTitle label="Risk name"}}
+
+      {{> NCIdentifiedBy}}
+
+      {{> NCIdentifiedDate}}
+
+      {{> NCMagnitude}}
 
       {{> RKType}}
-
-      {{> RKOwner}}
     </div>
   </div>
 </template>

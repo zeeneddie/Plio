@@ -6,7 +6,7 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Occurences } from '/imports/api/occurrences/occurrences.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 
 
 // indexes for Departments
@@ -95,7 +95,7 @@ NonConformities._ensureIndex({
   sequentialId: 1
 });
 
-// indexes for Occurences
+// indexes for Occurrences
 Occurrences._ensureIndex({
   nonConformityId: 1
 });

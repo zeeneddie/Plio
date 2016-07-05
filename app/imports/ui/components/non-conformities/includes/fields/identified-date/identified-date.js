@@ -3,6 +3,8 @@ import { Template } from 'meteor/templating';
 Template.NCIdentifiedDate.viewmodel({
   mixin: 'date',
   identifiedAt: new Date(),
+  label: 'Identified date',
+  placeholder: 'Identified date',
   onUpdateCb() {
     return this.update.bind(this);
   },

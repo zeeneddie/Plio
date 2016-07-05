@@ -3,6 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
+import { AnalysisStatuses } from './constants.js';
 
 
 export const canChangeStandards = (userId, organizationId) => {
@@ -34,4 +35,34 @@ export const isOrgMember = (userId, organizationId) => {
       }
     }
   });
+};
+
+export const checkAnalysis = (doc = {}, args = {}) => {
+  const has = (obj, ...args) => args.some(a => obj.hasOwnProperty(a));
+
+  const isAnalysisCompleted = () => doc.analysis.status || doc.analysis.status.toString() === _.invert(AnalysisStatuses)['Completed'];
+
+  if (has(args, 'analysis.status', 'updateOfStandards.status')) {
+    if (!doc.analysis.executor && doc.analysis.executor !== this.userId) {
+      throw new Meteor.Error(
+        403, 'Access denied'
+      );
+    }
+  }
+
+  if (_.keys(args).find(key => key.includes('updateOfStandards'))) {
+    if (!isAnalysisCompleted) {
+      throw new Meteor.Error(
+        403, 'Access denied'
+      );
+    }
+  }
+
+  if (has(args, 'analysis.completedAt', 'analysis.completedBy')) {
+    if (!isAnalysisCompleted) {
+      throw new Meteor.Error(
+        403, 'Access denied'
+      );
+    }
+  }
 };

@@ -14,7 +14,7 @@ export const insert = new ValidatedMethod({
 
   run({ ...args, nonConformityId }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create an occurence');
+      throw new Meteor.Error(403, 'Unauthorized user cannot create an occurrence');
     }
 
     if (!NonConformities.findOne({ _id: nonConformityId })) {
@@ -49,7 +49,7 @@ export const update = new ValidatedMethod({
 
   run({_id, ...args}) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot update an occurence');
+      throw new Meteor.Error(403, 'Unauthorized user cannot update an occurrence');
     }
 
     return OccurrencesService.update({ _id, ...args });
@@ -63,7 +63,7 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove an occurence');
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove an occurrence');
     }
 
     return OccurrencesService.remove({ _id });

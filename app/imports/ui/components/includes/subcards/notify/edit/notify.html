@@ -1,18 +1,20 @@
 <template name="Subcards_Notify_Edit">
   {{#SubCardEditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
-    <div class="form-group form-group-buttons">
-      {{#each currentNotifyUsers}}
-        <div class="btn-group">
-          <button class="btn btn-secondary" type="button" disabled=""
-              {{b "text: userFullNameOrEmail(this)"}}></button>
-          {{> DeleteButton smallIcon=true onClick=removeFromNotifyListFn}}
-        </div>
-      {{/each}}
-      {{> SelectItem
-          variation='caret'
-          items=members
-          selectFirstIfNoSelected=false
-          onUpdate=onSelectUserCb}}
+    <div id="notify">
+      <div class="form-group form-group-buttons">
+        {{#each currentNotifyUsers}}
+          <div class="btn-group">
+            <button class="btn btn-secondary" type="button" disabled=""
+                {{b "text: userFullNameOrEmail(this)"}}></button>
+            {{> DeleteButton smallIcon=true onClick=removeFromNotifyListFn}}
+          </div>
+        {{/each}}
+        {{> SelectItem
+            variation='caret'
+            items=members
+            selectFirstIfNoSelected=false
+            onUpdate=onSelectUserCb}}
+      </div>
     </div>
   {{/SubCardEditWrapper}}
 </template>

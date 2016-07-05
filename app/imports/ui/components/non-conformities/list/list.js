@@ -4,11 +4,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
-import { NCTypes, NCStatuses } from '/imports/api/constants.js';
+import { NCTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'NCStatus'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
     if (!this.focused() && !this.animating()) {
       const query = this._getQueryForFilter();
@@ -64,6 +64,9 @@ Template.NCList.viewmodel({
       case 'department':
         return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
+      case 'deleted':
+        return { _id: this.NCsDeleted().count() > 0 && this.NCsDeleted().fetch()[0]._id };
+        break;
       default:
         return {};
         break;
@@ -84,7 +87,7 @@ Template.NCList.viewmodel({
     return { status };
   },
   statuses() {
-    return _.keys(NCStatuses)
+    return _.keys(ProblemsStatuses)
             .map(status => parseInt(status, 10))
             .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery() }).count() > 0);
   },
@@ -93,8 +96,9 @@ Template.NCList.viewmodel({
   },
   departments() {
     const query = { organizationId: this.organizationId() };
-    return Departments.find(query).fetch().filter(({ _id, name }) => {
-      return this._getNCsByQuery({ departments: _id, ...this._getSearchQuery() }).count() > 0;
+    const options = { sort: { name: 1 } };
+    return Departments.find(query, options).fetch().filter(({ _id:departments }) => {
+      return this._getNCsByQuery({ departments, ...this._getSearchQuery() }).count() > 0;
     });
   },
   NCsDeleted() {

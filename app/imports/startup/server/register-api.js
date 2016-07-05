@@ -50,11 +50,11 @@ import '../../api/risks/risks-schema.js';
 import '../../api/risks/risks-service.js';
 import '../../api/risks/methods.js';
 
-import '../../api/risks-sections/server/publications.js';
-import '../../api/risks-sections/risks-sections.js';
-import '../../api/risks-sections/risks-section-schema.js';
-import '../../api/risks-sections/risks-section-service.js';
-import '../../api/risks-sections/methods.js';
+import '../../api/risk-types/server/publications.js';
+import '../../api/risk-types/risk-types.js';
+import '../../api/risk-types/risk-types-schema.js';
+import '../../api/risk-types/risk-types-service.js';
+import '../../api/risk-types/methods.js';
 
 import '../../api/non-conformities/server/publications.js';
 import '../../api/non-conformities/non-conformities.js';
