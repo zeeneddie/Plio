@@ -13,6 +13,9 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
+  onCreated() {
+    console.log(this.templateInstance.data);
+  },
   getData() {
     return this.children(vm => vm.getData)
                 .reduce((prev, cur) => {

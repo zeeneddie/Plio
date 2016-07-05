@@ -2,10 +2,13 @@
   "_id": "hR3QzcjMKfZv9RQLe",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Fix machine calibration",
-  "linkedTo": [
+  "linkedStandardsIds": [
+    "Zty4NCagWvrcuLYoy", "HLiWGZdNL5hifyRhJ"
+  ],
+  "linkedProblems": [
     {
-      "documentId": "P98SExuNHZ4y8bhjc",
-      "documentType": "non-conformity"
+      "problemId": "P98SExuNHZ4y8bhjc",
+      "problemType": "non-conformity"
     }
   ],
   "type": "CA",

@@ -6,11 +6,13 @@ import {
   insert,
   update,
   remove,
-  linkToDocument,
+  linkProblem,
   complete,
   verify,
   undoCompletion,
-  undoVerification
+  undoVerification,
+  linkStandard,
+  unlinkStandard
 } from '/imports/api/actions/methods.js';
 
 
@@ -68,15 +70,15 @@ Template.Subcards_Actions_Edit.viewmodel({
   actions() {
     return this._getActionsByQuery({
       type: this.type(),
-      'linkedTo.documentId': this.documentId(),
-      'linkedTo.documentType': this.documentType()
+      'linkedProblems.problemId': this.documentId(),
+      'linkedProblems.problemType': this.documentType()
     }, {
       sort: { sequentialId: 1 }
     });
   },
   linkedDocs(action) {
     if (action) {
-      return _.map(action.linkedDocuments(), (doc) => {
+      return _.map(action.getLinkedDocuments(), (doc) => {
         const { sequentialId, title } = doc;
         return { sequentialId, title };
       });
@@ -93,6 +95,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       {
         content: 'Actions_AddSubcard',
         _lText: this.newSubcardTitle(),
+        linkedStandardsIds: [this.standardId()],
         linkedDocs: this.linkedDocs(),
         type: this.type(),
         documentId: this.documentId(),
@@ -108,19 +111,19 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   insert({ _id, ...args }, cb) {
     if (_id) {
-      this.modal().callMethod(linkToDocument, {
+      this.modal().callMethod(linkProblem, {
         _id,
-        documentId: this.documentId(),
-        documentType: this.documentType()
+        problemId: this.documentId(),
+        problemType: this.documentType()
       }, cb);
     } else {
       const organizationId = this.organizationId();
 
       this.modal().callMethod(insert, {
         organizationId,
-        linkedTo: [{
-          documentId: this.documentId(),
-          documentType: this.documentType()
+        linkedProblems: [{
+          problemId: this.documentId(),
+          problemType: this.documentType()
         }],
         type: this.type(),
         ...args
@@ -190,5 +193,17 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   undoVerification({ ...args }, cb) {
     this.modal().callMethod(undoVerification, { ...args }, cb);
+  },
+  linkStandardFn() {
+    return this.linkStandard.bind(this);
+  },
+  linkStandard({ ...args }, cb) {
+    this.modal().callMethod(linkStandard, { ...args }, cb);
+  },
+  unlinkStandardFn() {
+    return this.unlinkStandard.bind(this);
+  },
+  unlinkStandard({ ...args }, cb) {
+    this.modal().callMethod(unlinkStandard, { ...args }, cb);
   }
 });

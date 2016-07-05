@@ -34,5 +34,21 @@ Template.Actions_EditSubcard.viewmodel({
         _id: this._id()
       });
     };
+  },
+  getLinkStandardFn() {
+    return (standardId, cb) => {
+      this.parent().callUpdate(this.linkStandardFn, {
+        _id: this._id(),
+        standardId
+      }, cb);
+    };
+  },
+  getUnlinkStandardFn() {
+    return (standardId, cb) => {
+      this.parent().callUpdate(this.unlinkStandardFn, {
+        _id: this._id(),
+        standardId
+      }, cb);
+    };
   }
 });

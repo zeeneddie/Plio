@@ -21,6 +21,8 @@ Template.Actions_Edit.viewmodel({
   verifiedAt: '',
   verifiedBy: '',
   verificationResult: '',
+  linkedStandardsIds: [],
+  linkedProblems: [],
   autorun() {
     const action = this.action && this.action();
     action && this.load(action);
@@ -42,5 +44,11 @@ Template.Actions_Edit.viewmodel({
   },
   onUndoVerification() {
     return this.undoVerificationFn;
+  },
+  onLinkStandard() {
+    return this.linkStandardFn;
+  },
+  onUnlinkStandard() {
+    return this.unlinkStandardFn;
   }
 });

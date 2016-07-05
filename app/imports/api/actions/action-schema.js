@@ -19,12 +19,12 @@ const checkDate = function() {
   return (compareDates(value, new Date()) > -1) ? 'badDate' : true;
 };
 
-const linkedToSchema = new SimpleSchema({
-  documentId: {
+const linkedProblemSchema = new SimpleSchema({
+  problemId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
   },
-  documentType: {
+  problemType: {
     type: String,
     allowedValues: ProblemTypes
   }
@@ -42,8 +42,12 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       allowedValues: _.values(ActionTypes)
     },
-    linkedTo: {
-      type: [linkedToSchema]
+    linkedStandardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id
+    },
+    linkedProblems: {
+      type: [linkedProblemSchema]
     },
     ownerId: {
       type: String,

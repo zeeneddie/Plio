@@ -11,7 +11,7 @@ const Actions = new Mongo.Collection('Actions');
 Actions.attachSchema(ActionSchema);
 
 Actions.helpers({
-  linkedDocuments() {
+  getLinkedDocuments() {
     const NCsIds = [];
     const RisksIds = [];
 
@@ -69,10 +69,13 @@ Actions.helpers({
 
     return compareDates(undoDeadline, new Date()) === 1;
   },
-  isLinkedTo(docId, docType) {
-    return _.filter(this.linkedTo, ({ documentId, documentType }) => {
-      return (documentId === docId) && (documentType === docType);
+  isLinkedToProblem(docId, docType) {
+    return _.filter(this.linkedProblems, ({ problemId, problemType }) => {
+      return (problemId === docId) && (problemType === docType);
     }).length > 0;
+  },
+  isLinkedToStandard(standardId) {
+    return _.filter(this.linkedStandardsIds, id => standardId === id).length > 0;
   }
 });
 

@@ -2,7 +2,12 @@
   <div class="card-block">
     {{> Actions_Title title=title}}
 
-    {{> Actions_LinkedTo linkedDocs=linkedDocs}}
+    {{> Actions_LinkedStandards
+        standardsIds=linkedStandardsIds
+        onLink=onLinkStandard
+        onUnlink=onUnlinkStandard}}
+
+    {{> Actions_LinkedProblems linkedProblems=linkedProblems}}
 
     {{> Actions_Status status=status}}
 

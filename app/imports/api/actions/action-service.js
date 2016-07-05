@@ -1,5 +1,6 @@
 import { Actions } from './actions.js';
 import { ActionTypes } from '../constants.js';
+import { Standards } from '../standards/standards.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 
@@ -42,36 +43,72 @@ export default {
     return this.collection.update(query, options);
   },
 
-  linkToDocument({ _id, documentId, documentType }) {
-    let docCollection;
-    if (documentType === 'non-conformity') {
-      docCollection = NonConformities;
-    } else if (documentType === 'risk') {
-      docCollection = Risks;
-    }
-
-    if (!docCollection) {
-      throw new Meteor.Error(400, 'Invalid document type');
-    }
-
-    const doc = docCollection.findOne({ _id: documentId });
-
-    if (!doc) {
-      throw new Meteor.Error(400, 'Invalid document id');
+  linkStandard({ _id, standardId }) {
+    if (!Standards.findOne({ _id: standardId })) {
+      throw new Meteor.Error(400, 'Standard does not exist');
     }
 
     const action = this._getActionOrThrow(_id);
 
-    if (action.isLinkedTo(documentId, documentType)) {
+    if (action.isLinkedToStandard(standardId)) {
       throw new Meteor.Error(
-        400, 'This action is already linked to specified document'
+        400, 'Action is already linked to specified standard'
+      );
+    }
+
+    return this.collection.update({
+      _id
+    }, {
+      $addToSet: { linkedStandardsIds: standardId }
+    });
+  },
+
+  unlinkStandard({ _id, standardId }) {
+    const action = this._getActionOrThrow(_id);
+
+    if (!action.isLinkedToStandard(standardId)) {
+      throw new Meteor.Error(
+        400, 'Action is not linked to specified standard'
+      );
+    }
+
+    return this.collection.update({
+      _id
+    }, {
+      $pull: { linkedStandardsIds: standardId }
+    });
+  },
+
+  linkProblem({ _id, problemId, problemType }) {
+    let docCollection;
+    if (problemType === 'non-conformity') {
+      docCollection = NonConformities;
+    } else if (problemType === 'risk') {
+      docCollection = Risks;
+    }
+
+    if (!docCollection) {
+      throw new Meteor.Error(400, 'Invalid problemId type');
+    }
+
+    const doc = docCollection.findOne({ _id: problemId });
+
+    if (!doc) {
+      throw new Meteor.Error(400, 'Problem document does not exist');
+    }
+
+    const action = this._getActionOrThrow(_id);
+
+    if (action.isLinkedToProblem(problemId, problemType)) {
+      throw new Meteor.Error(
+        400, 'This action is already linked to specified problem document'
       );
     }
 
     this.collection.update({
       _id
     }, {
-      $push: { linkedTo: { documentId, documentType } }
+      $push: { linkedProblems: { problemId, problemType } }
     });
   },
 
