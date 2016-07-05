@@ -1,9 +1,11 @@
 <template name="Actions_CreateSubcard">
   {{> Actions_Title title=title}}
 
-  {{> Actions_LinkedStandards
-      standardsIds=linkedStandardsIds
-      isEditable=false}}
+  {{#if showLinkedStandards}}
+    {{> Actions_LinkedStandards
+        standardsIds=linkedStandardsIds
+        isEditable=false}}
+  {{/if}}
 
   {{> Actions_LinkedProblems linkedProblems=linkedProblems}}
 

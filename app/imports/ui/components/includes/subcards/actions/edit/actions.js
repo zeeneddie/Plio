@@ -95,7 +95,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       {
         content: 'Actions_AddSubcard',
         _lText: this.newSubcardTitle(),
-        linkedStandardsIds: [this.standardId()],
+        linkedStandardsIds: this.standardId() && [this.standardId()],
         linkedDocs: this.linkedDocs(),
         type: this.type(),
         documentId: this.documentId(),

@@ -13,8 +13,9 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
-  onCreated() {
-    console.log(this.templateInstance.data);
+  linkedStandardsIds: [],
+  showLinkedStandards() {
+    return !!this.linkedStandardsIds() && !!this.linkedStandardsIds().length;
   },
   getData() {
     return this.children(vm => vm.getData)
