@@ -139,7 +139,7 @@ All fixure documents are defined in the json format in `app/private/fixtures`.
 
 To add a new document, you need to create a new json file under the proper directory.
 Each directory stands for a Meteor collection.
-To add a new collection, you need to create a new directory within the `app/fixtures` folder. Aso, you need to add names of the collection variable and the directory to the `app/fixtures/config.json` file like this:
+To add a new collection, you need to create a new directory within the `app/private/fixtures` folder. Aso, you need to add names of the collection variable and the directory to the `app/private/fixtures/config.json` file like this:
 
 ```
 "Meteor.users": "users"
