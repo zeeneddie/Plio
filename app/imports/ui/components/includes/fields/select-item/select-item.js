@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
 Template.SelectItem.viewmodel({
+  mixin: 'utils',
   autorun(computation) {
     const items = this.itemsArray();
 
@@ -34,7 +35,7 @@ Template.SelectItem.viewmodel({
     return this.variation() === variation;
   },
   itemsArray() {
-    return this.items().hasOwnProperty('collection') ? this.items().fetch() : this.items();
+    return this.toArray(this.items());
   },
   itemsFiltered() {
     return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));

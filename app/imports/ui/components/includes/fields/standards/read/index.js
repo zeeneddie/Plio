@@ -1,2 +1,2 @@
-import './standard.html';
-import './standard.js';
+import './standards.html';
+import './standards.js';
