@@ -10,7 +10,6 @@ Template.SCSource.viewmodel({
     return id === 1 ? 'Source file' : `Source file ${this.id()}`;
   },
   isVideo(type) {
-    console.log('type', type);
     return type === 'video';
   },
   renderVideoSrc(url) {
