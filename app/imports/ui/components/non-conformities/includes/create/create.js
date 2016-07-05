@@ -17,18 +17,15 @@ Template.CreateNC.viewmodel({
 
     this.insert(data);
   },
-  insert({ title, identifiedAt, identifiedBy, magnitude }) {
+  insert({ ...args }) {
     const organizationId = this.organizationId();
 
-    const args = {
-      title,
-      identifiedBy,
-      identifiedAt,
-      magnitude,
+    const allArgs = {
+      ...args,
       organizationId
     };
 
-    this.modal().callMethod(insert, args, (err, _id) => {
+    this.modal().callMethod(insert, allArgs, (err, _id) => {
       if (err) {
         return;
       } else {

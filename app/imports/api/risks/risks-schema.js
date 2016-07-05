@@ -120,6 +120,12 @@ const RisksUpdateSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1,
+      optional: true
     }
   }
 ]);
