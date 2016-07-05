@@ -3,7 +3,13 @@ import { Template } from 'meteor/templating';
 Template.Subcards_Notes_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
   label: 'Notes',
-  notes: '<div></div>',
+  notes: '',
+  isTextPresent() {
+    return $(this.notes()).text();
+  },
+  getTextIndicator() {
+    return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';
+  },
   onUpdateCb() {
     return this.update.bind(this);
   },
