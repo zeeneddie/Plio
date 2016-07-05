@@ -16,6 +16,9 @@ Template.ActionsCard.viewmodel({
   hasActions() {
     return this.actions().count() > 0;
   },
+  onOpenEditModalCb() {
+    return this.openEditActionModal.bind(this);
+  },
   openEditActionModal() {
     const _title = this.getActionTitle();
     this.modal().open({

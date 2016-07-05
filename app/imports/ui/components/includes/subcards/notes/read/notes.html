@@ -1,0 +1,10 @@
+<template name="Subcards_Notes_Read">
+  {{#if notes}}
+    <div class="card-block card-subheading">
+      <h4 class="card-title">Notes</h4>
+    </div>
+    <div class="list-group">
+      <div class="list-group-item" {{b "html: notes"}}></div>
+    </div>
+  {{/if}}
+</template>

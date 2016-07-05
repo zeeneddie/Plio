@@ -1,17 +1,11 @@
 <template name="ActionsCard">
   <div class="content-cards-inner flex scroll">
     {{#if hasActions}}
-      <div class="card">
-        {{#with action}}
-          <div class="card-block card-heading">
-            <div class="card-heading-buttons pull-xs-right">
-              <a class="btn btn-primary" {{b "click: openEditActionModal"}}>
-                <i class="fa fa-pencil"></i>
-                Edit
-              </a>
-            </div>
-            <h3 class="card-title" {{b "text: _getNameByType(this.type)"}}></h3>
-          </div>
+      {{#with action}}
+        {{#Card_Read
+          cardTitle=(_getNameByType this.type)
+          document=this
+          onOpenEditModal=onOpenEditModalCb}}
 
           <div class="list-group">
 
@@ -26,11 +20,107 @@
 
             {{> Actions_LinkedTo_Read linkedDocs=this.linkedDocuments}}
 
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Created date</p>
+                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.createdAt)"}}></h4>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Owner</p>
+                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.ownerId)"}}></h4>
+                </div>
+              </div>
+            </div>
+
+            <div class="list-group-item">
+              <p class="list-group-item-text">Plan in place?</p>
+              <h4 class="list-group-item-heading"
+                {{b "text: this.planInPlace, class: { text-success: this.planInPlace === 'Yes', text-danger: this.planInPlace === 'No', text-primary: this.planInPlace === 'Not needed' }"}}></h4>
+            </div>
+
           </div>
 
-          {{> CardChangelog document=this}}
-        {{/with}}
-      </div>
+          <div class="list-group">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  {{#if this.isCompleted}}
+                    <p class="list-group-item-text">Completed date</p>
+                    <h4 class="list-group-item-heading" {{b "text: renderDate(this.completedAt)"}}></h4>
+                  {{else}}
+                    <p class="list-group-item-text">Completion target date</p>
+                    <h4 class="list-group-item-heading" {{b "text: renderDate(this.completionTargetDate)"}}></h4>
+                  {{/if}}
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="list-group-item">
+                  {{#if this.isCompleted}}
+                    <p class="list-group-item-text">Completed by</p>
+                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.completedBy)"}}></h4>
+                  {{else}}
+                    <p class="list-group-item-text">To be completed by</p>
+                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeCompletedBy)"}}></h4>
+                  {{/if}}
+                </div>
+              </div>
+            </div>
+            {{#with this.completionResult}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Result</p>
+                <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+              </div>
+            {{/with}}
+          </div>
+
+          {{#if this.toBeVerifiedBy}}
+            <div class="list-group">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    {{#if this.isVerified}}
+                      <p class="list-group-item-text">Verified as effective date</p>
+                      <h4 class="list-group-item-heading" {{b "text: renderDate(this.verifiedAt)"}}></h4>
+                    {{else}}
+                      <p class="list-group-item-text">Verification target date</p>
+                      <h4 class="list-group-item-heading" {{b "text: renderDate(this.verificationTargetDate)"}}></h4>
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    {{#if this.isVerified}}
+                      <p class="list-group-item-text">Verified by</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.verifiedBy)"}}></h4>
+                    {{else}}
+                      <p class="list-group-item-text">To be verified by</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeVerifiedBy)"}}></h4>
+                    {{/if}}
+                  </div>
+                </div>
+              </div>
+              {{#with this.verificationResult}}
+                <div class="list-group-item">
+                  <p class="list-group-item-text">Result</p>
+                  <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+                </div>
+              {{/with}}
+            </div>
+          {{/if}}
+
+          {{#with this.notify}}
+            {{> Subcards_Notify_Read users=this}}
+          {{/with}}
+
+          {{> Subcards_Notes_Read notes=this.notes}}
+
+          {{> Subcards_OtherFiles_Read label="Files" files=this.files}}
+        {{/Card_Read}}
+
+      {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">

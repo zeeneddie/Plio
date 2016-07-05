@@ -1,2 +1,2 @@
-import './notes.html';
-import './notes.js';
+import './edit';
+import './read';

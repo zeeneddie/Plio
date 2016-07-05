@@ -92,20 +92,7 @@
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{#with files}}
-            <div class="card-block card-subheading">
-              <h4 class="card-title">Other files</h4>
-            </div>
-            <div class="list-group-item">
-              {{#each this}}
-                <a class="btn btn-secondary btn-inline" {{b "href: this.url || '#'"}}>
-                  <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
-                  </i>
-                  <span>{{this.name}}</span>
-                </a>
-              {{/each}}
-            </div>
-          {{/with}}
+          {{> Subcards_OtherFiles_Read files=this.files}}
         {{/with}}
       {{/Card_Read}}
     {{else}}
