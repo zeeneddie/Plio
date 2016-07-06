@@ -3,13 +3,13 @@
     <div class="source-document-item">
       <div class="iframe-wrapper word-document">
         <div class="iframe-placeholder"></div>
-          {{#if isIframeReady}}
-            <div class="source-document-preview-wrapper">
-              <div class="source-document-preview">
-                <iframe src={{source.htmlUrl}}></iframe>
-              </div>
-            </div>
-          {{/if}}
+        <div class="source-document-preview-wrapper">
+          <div class="source-document-preview">
+            {{#if isIframeReady}}
+              <iframe src={{source.htmlUrl}}></iframe>
+            {{/if}}
+          </div>
+        </div>
       </div>
       {{> SCSource source=source}}
     </div>

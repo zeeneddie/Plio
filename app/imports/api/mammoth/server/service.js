@@ -61,10 +61,10 @@ export default {
             <!DOCTYPE html>
             <html>
               <head>
-                <link rel="stylesheet" type="text/css" href="https://s3-eu-west-1.amazonaws.com/plio/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.css">
-                <link rel="stylesheet" type="text/css" href="https://s3-eu-west-1.amazonaws.com/plio/lib/document-preview/custom.css">
-                <script src="https://s3-eu-west-1.amazonaws.com/plio/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-                <script src="https://s3-eu-west-1.amazonaws.com/plio/lib/document-preview/custom.js"></script>
+                <link rel="stylesheet" type="text/css" href="https://plio.s3.amazonaws.com/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.css">
+                <link rel="stylesheet" type="text/css" href="https://plio.s3.amazonaws.com/lib/document-preview/custom.css">
+                <script src="https://plio.s3.amazonaws.com/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+                <script src="https://plio.s3.amazonaws.com/lib/document-preview/custom.js"></script>
               </head>
               <body>
                 <div id="content">
