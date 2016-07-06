@@ -89,10 +89,17 @@ Template.Actions_LinkedProblems.viewmodel({
 
     if (this.linkedProblemsIds().find(id => id === problemId)) return;
 
-    this.onLink({ problemId, problemType }, () => {
+    const resetSelectItemVm = () => {
       viewmodel.value('');
       viewmodel.selected('');
-    });
+    };
+
+    if (this.onLink) {
+      this.onLink({ problemId, problemType }, resetSelectItemVm);
+    } else {
+      this.linkedProblems().push({ problemId, problemType });
+      resetSelectItemVm();
+    }
   },
   onRemoveCb() {
     return this.remove.bind(this);
@@ -102,7 +109,16 @@ Template.Actions_LinkedProblems.viewmodel({
 
     if (!this.linkedProblemsIds().find(id => id === problemId)) return;
 
-    this.onUnlink({ problemId, problemType });
+    if (this.onUnlink) {
+      this.onUnlink({ problemId, problemType });
+    } else {
+      this.linkedProblems().remove((item) => {
+        return (item.problemId === problemId) && (item.problemType === problemType);
+      });
+    }
+  },
+  getData() {
+    return { linkedProblems: this.linkedProblems().array() };
   },
   _getProbemIds(problemType) {
     let problemsDocs;

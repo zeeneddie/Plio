@@ -15,9 +15,21 @@ Template.Actions_SelectExisting.viewmodel({
     const query = {
       ...this.searchObject('actionSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      type: this.type(),
-      'linkedTo.documentId': { $ne: this.documentId() }
+      type: this.type()
     };
+
+    const documentId = this.documentId && this.documentId();
+    const standardsIds = this.linkedStandardsIds && this.linkedStandardsIds().array();
+
+    if (documentId) {
+      _.extend(query, {
+        'linkedProblems.problemId': { $ne: documentId }
+      });
+    } else if (standardsIds) {
+      _.extend(query, {
+        linkedStandardsIds: { $nin: standardsIds }
+      });
+    }
 
     return Actions.find(query, {
       sort: {

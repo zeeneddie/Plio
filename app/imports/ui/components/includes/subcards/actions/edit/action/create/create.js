@@ -15,6 +15,9 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeVerifiedBy: '',
   linkedStandardsIds: [],
   linkedProblems: [],
+  isLinkedProblemsEditable() {
+    return !this.linkedProblems().length;
+  },
   getData() {
     return this.children(vm => vm.getData)
                 .reduce((prev, cur) => {

@@ -56,5 +56,11 @@ Template.Actions_Edit.viewmodel({
   },
   onUnlinkProblem() {
     return this.unlinkProblemFn;
+  },
+  getData() {
+    return this.children(vm => vm.getData)
+                .reduce((prev, cur) => {
+                  return { ...prev, ...cur.getData() };
+                }, {});
   }
 });

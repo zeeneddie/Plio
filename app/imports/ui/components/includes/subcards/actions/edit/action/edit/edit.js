@@ -68,5 +68,8 @@ Template.Actions_EditSubcard.viewmodel({
         problemType
       }, cb);
     };
+  },
+  getData() {
+    return this.child('Actions_Edit').getData();
   }
 });

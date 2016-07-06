@@ -44,10 +44,12 @@ const RequiredSchema = new SimpleSchema([
     },
     linkedStandardsIds: {
       type: [String],
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1
     },
     linkedProblems: {
-      type: [linkedProblemSchema]
+      type: [linkedProblemSchema],
+      minCount: 1
     },
     ownerId: {
       type: String,

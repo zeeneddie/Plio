@@ -69,56 +69,101 @@ Template.Subcards_Actions_Edit.viewmodel({
     return newSubcardTitle;
   },
   actions() {
-    return this._getActionsByQuery({
-      type: this.type(),
-      'linkedProblems.problemId': this.documentId(),
-      'linkedProblems.problemType': this.documentType()
-    }, {
-      sort: { sequentialId: 1 }
-    });
+    const query = {
+      type: this.type()
+    };
+
+    const documentId = this.documentId && this.documentId();
+    const documentType = this.documentType && this.documentType();
+    const standardId = this.standardId && this.standardId();
+
+    if (standardId) {
+      _.extend(query, {
+        linkedStandardsIds: standardId
+      });
+    }
+
+    if (documentId && documentType) {
+      _.extend(query, {
+        'linkedProblems.problemId': documentId,
+        'linkedProblems.problemType': documentType
+      });
+    }
+
+    return this._getActionsByQuery(query, { sort: { sequentialId: 1 } });
   },
   addAction() {
-    this.addForm(
-      'SubCardEdit',
-      {
-        content: 'Actions_AddSubcard',
-        _lText: this.newSubcardTitle(),
-        linkedStandardsIds: this.standardId() && [this.standardId()],
+    const newSubcardData = {
+      content: 'Actions_AddSubcard',
+      _lText: this.newSubcardTitle(),
+      type: this.type(),
+      insertFn: this.insertFn(),
+      removeFn: this.removeFn(),
+      updateFn: this.updateFn()
+    };
+
+    const documentId = this.documentId && this.documentId();
+    const documentType = this.documentType && this.documentType();
+    const standardId = this.standardId && this.standardId();
+
+    if (standardId) {
+      _.extend(newSubcardData, {
+        linkedStandardsIds: [standardId]
+      });
+    }
+
+    if (documentId && documentType) {
+      _.extend(newSubcardData, {
+        documentId,
+        documentType,
         linkedProblems: [{
-          problemId: this.documentId(),
-          problemType: this.documentType()
-        }],
-        type: this.type(),
-        documentId: this.documentId(),
-        documentType: this.documentType(),
-        insertFn: this.insertFn(),
-        removeFn: this.removeFn(),
-        updateFn: this.updateFn()
-      }
-    );
+          problemId: documentId,
+          problemType: documentType
+        }]
+      });
+    }
+
+    this.addForm('SubCardEdit', newSubcardData);
   },
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, ...args }, cb) {
+  insert({ _id, linkedStandardsIds, linkedProblems, ...args }, cb) {
     if (_id) {
-      this.modal().callMethod(linkProblem, {
-        _id,
-        problemId: this.documentId(),
-        problemType: this.documentType()
-      }, cb);
+      const documentId = this.documentId && this.documentId();
+      const documentType = this.documentType && this.documentType();
+      const standardId = this.standardId && this.standardId();
+
+      if (documentId && documentType) {
+        this.modal().callMethod(linkProblem, {
+          _id,
+          problemId: documentId,
+          problemType: documentType
+        }, cb);
+      } else if (standardId) {
+        this.modal().callMethod(linkStandard, {
+          _id,
+          standardId
+        }, cb);
+      }
     } else {
       const organizationId = this.organizationId();
 
-      this.modal().callMethod(insert, {
+      const doc = {
         organizationId,
-        linkedProblems: [{
-          problemId: this.documentId(),
-          problemType: this.documentType()
-        }],
         type: this.type(),
         ...args
-      }, cb);
+      };
+
+      if (linkedStandardsIds && linkedStandardsIds.length > 0) {
+        _.extend(doc, { linkedStandardsIds });
+      }
+
+      if (linkedProblems && linkedProblems.length > 0) {
+        _.extend(doc, { linkedProblems });
+      }
+
+      this.modal().callMethod(insert, doc, cb);
     }
   },
   updateFn() {

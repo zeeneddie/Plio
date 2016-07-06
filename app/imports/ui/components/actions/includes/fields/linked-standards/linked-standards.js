@@ -38,10 +38,14 @@ Template.Actions_LinkedStandards.viewmodel({
 
     if (this.standardsIdsArray().find(id => id === standardId)) return;
 
-    this.onLink({ standardId }, () => {
-      viewmodel.value('');
-      viewmodel.selected('');
-    });
+    if (this.onLink) {
+      this.onLink({ standardId }, () => {
+        viewmodel.value('');
+        viewmodel.selected('');
+      });
+    } else {
+      this.standardIds().push(standardId);
+    }
   },
   onRemoveCb() {
     return this.remove.bind(this);
@@ -51,6 +55,13 @@ Template.Actions_LinkedStandards.viewmodel({
 
     if (!this.standardsIdsArray().find(id => id === standardId)) return;
 
-    this.onUnlink({ standardId });
+    if (this.onUnlink) {
+      this.onUnlink({ standardId });
+    } else {
+      this.standardsIds().remove(id => id === standardId);
+    }
+  },
+  getData() {
+    return { linkedStandardsIds: this.standardsIds().array() };
   }
 });
