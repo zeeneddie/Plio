@@ -9,7 +9,7 @@ Template.EditStandard.viewmodel({
     return this._getStandardByQuery({ _id });
   },
   _getNCsQuery() {
-    return { standardId: this._id() };
+    return { standardsIds: this._id && this._id() };
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -46,7 +46,7 @@ Template.EditStandard.viewmodel({
           if (err) return;
 
           swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
-          
+
           this.modal().close();
         });
       }

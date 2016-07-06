@@ -498,6 +498,12 @@ ViewModel.mixin({
       } else {
         return num;
       }
+    },
+    cutString(str, length) {
+      return str.length > length ? str.substring(0, length - 3) + "..." : str;
+    },
+    toArray(arrayLike = []) {
+      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
     }
   },
   magnitude: {

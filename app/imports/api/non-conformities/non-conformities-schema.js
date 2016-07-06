@@ -70,6 +70,12 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
     magnitude: {
       type: String,
       optional: true
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1,
+      optional: true
     }
   }
 ]);
