@@ -41,7 +41,7 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
   const isCompleted = ({ status = '' }) => status.toString() === _.invert(AnalysisStatuses)['Completed'];
   const findArg = _args => _find => _.keys(_args).find(key => key.includes(_find));
   const findSubstring = (str = '', ...toFind) => toFind.find(s => str.includes(s));
-  const check = (predicate) => {
+  const checkAndThrow = (predicate) => {
     if (!predicate) {
       throw new Meteor.Error(403, 'Access denied');
     }
@@ -56,15 +56,15 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
   const isUpdateOfStandards = find('updateOfStandards');
 
   if (find('analysis.status') || find('updateOfStandards.status')) {
-    check(analysis || analysis.executor || analysis.executor === this.userId);
+    checkAndThrow(analysis || analysis.executor || analysis.executor === this.userId);
   }
 
   if ( find('updateOfStandards') || (isAnalysis && findSubstring(isAnalysis, 'completedAt', 'completedBy')) ) {
-    check(isAnalysisCompleted);
+    checkAndThrow(isAnalysisCompleted);
   }
 
   if (findSubstring(isUpdateOfStandards, 'completedAt', 'completedBy')) {
-    check(isUpdateOfStandardsCompleted);
+    checkAndThrow(isUpdateOfStandardsCompleted);
   }
 
   return true;
