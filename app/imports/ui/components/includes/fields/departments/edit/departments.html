@@ -1,4 +1,4 @@
-<template name="Departments_Edit">
+<!-- <template name="Departments_Edit">
   {{#FormField label="Department(s)"}}
     {{#each currentDepartments}}
       <div class="btn-group">
@@ -12,6 +12,32 @@
         items=departments
         selectFirstIfNoSelected=false
         onUpdate=onSelectCb
+        content="DepartmentsCreate"}}
+  {{/FormField}}
+</template> -->
+
+<!-- <template name="Departments_Edit">
+  {{#FormField label="Department(s)"}}
+    {{> Select_Multi
+        selected=currentDepartments
+        items=departments
+        placeholder="Department(s)"
+        selectFirstIfNoSelected=false
+        onUpdate=onSelectCb
+        onRemove=onRemoveCb
+        content="DepartmentsCreate"}}
+  {{/FormField}}
+</template> -->
+
+<template name="Departments_Edit">
+  {{#FormField label="Department(s)"}}
+    {{> Select_Multi
+        selected=selected
+        items=departments
+        placeholder="Department(s)"
+        selectFirstIfNoSelected=false
+        onUpdate=onUpdateCb
+        onRemove=onRemoveCb
         content="DepartmentsCreate"}}
   {{/FormField}}
 </template>
