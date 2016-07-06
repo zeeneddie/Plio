@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.EditNC_Main.viewmodel({
+Template.NC_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },

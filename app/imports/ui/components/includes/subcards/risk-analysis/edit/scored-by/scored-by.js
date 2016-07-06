@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RiskAnalysis_ScoredBy.viewmodel({
+Template.RiskAnalysis_ScoredBy_Edit.viewmodel({
   mixin: ['members', 'search', 'user'],
   scoredBy: '',
   label: 'Scored by',

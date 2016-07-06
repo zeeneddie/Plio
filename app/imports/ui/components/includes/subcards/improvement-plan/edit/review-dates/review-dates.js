@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
-Template.IPReviewDates.viewmodel({
+Template.IP_ReviewDate_Edits.viewmodel({
   mixin: ['addForm', 'date'],
   reviewDates: [],
   addReviewDate() {
-    this.addForm('IPReviewDate', {
+    this.addForm('IP_ReviewDate_Edit', {
       placeholder: this.renderDate(new Date()),
       defaultDate: false,
       onChange: this.update.bind(this),

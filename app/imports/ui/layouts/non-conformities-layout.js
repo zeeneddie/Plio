@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCLayout.viewmodel({
+Template.NC_Layout.viewmodel({
   mixin: ['organization', 'nonconformity'],
   _subHandlers: [],
   isReady: false,

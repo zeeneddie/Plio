@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { NonConformityFilters } from '/imports/api/constants.js';
 
-Template.NCHeader.viewmodel({
+Template.NC_Header.viewmodel({
   share: 'window',
   mixin: ['nonconformity', 'mobile', 'organization', 'collapsing'],
   filters() {
