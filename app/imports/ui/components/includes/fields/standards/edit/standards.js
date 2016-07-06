@@ -24,7 +24,7 @@ Template.Fields_Standards_Edit.viewmodel({
     const { selected = [] } = viewmodel.getData();
 
     if (selected.length === 0 && this._id) {
-      ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
+      ViewModel.findOne('ModalWindow').setError('Link cannot be removed. A Non-conformity must to be linked to at least one Standard.');
       viewmodel.selected(this.selected());
       return;
     }
