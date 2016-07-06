@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert } from '/imports/api/departments/methods.js';
 
-Template.DepartmentsCreate.viewmodel({
+Template.Departments_Create.viewmodel({
   mixin: ['organization', 'modal'],
   value: '',
   departmentHintText() {

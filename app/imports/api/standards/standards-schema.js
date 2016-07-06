@@ -25,7 +25,7 @@ const optionalFields = new SimpleSchema([
       type: String,
       optional: true
     },
-    departments: {
+    departmentsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       optional: true
