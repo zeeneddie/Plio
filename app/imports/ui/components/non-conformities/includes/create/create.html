@@ -3,7 +3,9 @@
     <div class="card-block">
       {{> NCTitle}}
 
-      {{> Fields_Standards_Edit}}
+      {{> Fields_Standards_Edit
+          isEditable=isStandardsEditable
+          standardsIds=standardsIds}}
 
       {{> NCIdentifiedBy}}
 

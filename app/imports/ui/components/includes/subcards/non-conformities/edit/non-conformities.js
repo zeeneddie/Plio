@@ -4,7 +4,7 @@ import { insert, update, remove } from '/imports/api/non-conformities/methods.js
 Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
   _query: {},
-  _args: {},
+  isStandardsEditable: false,
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
   },
@@ -16,6 +16,8 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       'SubCardEdit',
       {
         content: 'CreateNC',
+        isStandardsEditable: this.isStandardsEditable(),
+        standardsIds: [this._id && this._id()],
         _lText: 'New non-conformity',
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
@@ -25,10 +27,10 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ title, identifiedAt, identifiedBy, magnitude }, cb) {
+  insert({ ...args }, cb) {
     const organizationId = this.organizationId();
 
-    this.modal().callMethod(insert, { title, identifiedAt, identifiedBy, magnitude, organizationId, ...this._args() }, cb);
+    this.modal().callMethod(insert, { ...args, organizationId }, cb);
   },
   updateFn() {
     return this.update.bind(this);

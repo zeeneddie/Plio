@@ -4,6 +4,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
+  isEditable: true,
   standardsIds: [],
   selected() {
     const standardsIds = Array.from(this.standardsIds() || []);
@@ -22,7 +23,7 @@ Template.Fields_Standards_Edit.viewmodel({
   update(viewmodel) {
     const { selected = [] } = viewmodel.getData();
 
-    if (selected.length === 0) {
+    if (selected.length === 0 && this._id) {
       ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
       viewmodel.selected(this.selected());
       return;

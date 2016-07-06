@@ -4,6 +4,8 @@ import { insert } from '/imports/api/non-conformities/methods.js';
 
 Template.CreateNC.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
+  isStandardsEditable: true,
+  standardsIds: [],
   save() {
     const data = this.getData();
 
