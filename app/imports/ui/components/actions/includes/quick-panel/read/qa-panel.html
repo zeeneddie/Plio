@@ -1,13 +1,15 @@
 <template name="Actions_QAPanel_Read">
   {{#with document}}
-    <div class="alert alert-danger">
-      <button type="button" class="btn btn-success pull-right" {{b "click: openQAModal(this)"}}>
-        <i class="fa fa-check margin-right"></i>
-        <span {{b "text: getActionButtonText(this)"}}></span>
-      </button>
-      <strong>To do</strong>
-      <br>
-      <span {{b "text: getActionDescription(this)"}}></span>
-    </div>
+    {{#if showQAPanel this}}
+      <div class="alert alert-danger">
+        <button type="button" class="btn btn-success pull-right" {{b "click: openQAModal(this)"}}>
+          <i class="fa fa-check margin-right"></i>
+          <span {{b "text: getActionButtonText(this)"}}></span>
+        </button>
+        <strong>To do</strong>
+        <br>
+        <span {{b "text: getActionDescription(this)"}}></span>
+      </div>
+    {{/if}}
   {{/with}}
 </template>
