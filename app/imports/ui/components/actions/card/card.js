@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
+import { ActionPlanOptions } from '/imports/api/constants.js';
+
 Template.ActionsCard.viewmodel({
   mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
@@ -7,6 +9,22 @@ Template.ActionsCard.viewmodel({
   },
   getActionTitle() {
     return this._getNameByType(this.action() && this.action().type);
+  },
+  getClassForPlanInPlace(plan) {
+    switch(plan) {
+      case ActionPlanOptions.YES:
+        return 'text-success';
+        break;
+      case ActionPlanOptions.NO:
+        return 'text-danger';
+        break;
+      case ActionPlanOptions.NOT_NEEDED:
+        return 'text-primary';
+        break;
+      default:
+        return 'text-primary';
+        break;
+    }
   },
   actions() {
     const list = ViewModel.findOne('ActionsList');
