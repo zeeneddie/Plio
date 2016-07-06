@@ -545,6 +545,9 @@ ViewModel.mixin({
     },
     getCollectionInstance(_id, ...collections) {
       return collections.find(collection => collection instanceof Mongo.Collection && collection.findOne({ _id }));
+    },
+    chooseOne(predicate) {
+      return (i1, i2) => predicate ? i1 : i2;
     }
   },
   magnitude: {

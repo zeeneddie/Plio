@@ -18,7 +18,7 @@ Template.ActionsCard.viewmodel({
       case ActionPlanOptions.NO:
         return 'text-danger';
         break;
-      case ActionPlanOptions.NOT_NEEDED:
+      case ActionPlanOptions.NOT_NEEDED: 
         return 'text-primary';
         break;
       default:

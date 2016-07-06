@@ -1,4 +1,6 @@
 <template name="ActionsCard">
+  {{> Actions_QAPanel_Read document=action}}
+
   <div class="content-cards-inner flex scroll">
     {{#if hasActions}}
       {{#with action}}
