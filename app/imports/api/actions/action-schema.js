@@ -26,7 +26,7 @@ const linkedProblemSchema = new SimpleSchema({
   },
   problemType: {
     type: String,
-    allowedValues: ProblemTypes
+    allowedValues: _.values(ProblemTypes)
   }
 });
 

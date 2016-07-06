@@ -77,19 +77,6 @@ Template.Subcards_Actions_Edit.viewmodel({
       sort: { sequentialId: 1 }
     });
   },
-  linkedDocs(action) {
-    if (action) {
-      return _.map(action.getLinkedDocuments(), (doc) => {
-        const { sequentialId, title } = doc;
-        return { sequentialId, title };
-      });
-    } else {
-      return [{
-        sequentialId: this.linkedToId(),
-        title: this.linkedTo()
-      }];
-    }
-  },
   addAction() {
     this.addForm(
       'SubCardEdit',
@@ -97,7 +84,10 @@ Template.Subcards_Actions_Edit.viewmodel({
         content: 'Actions_AddSubcard',
         _lText: this.newSubcardTitle(),
         linkedStandardsIds: this.standardId() && [this.standardId()],
-        linkedDocs: this.linkedDocs(),
+        linkedProblems: [{
+          problemId: this.documentId(),
+          problemType: this.documentType()
+        }],
         type: this.type(),
         documentId: this.documentId(),
         documentType: this.documentType(),

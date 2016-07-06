@@ -10,6 +10,7 @@ Template.Actions_AddSubcard.viewmodel({
     return _.extend({}, {
       type: this.type(),
       linkedStandardsIds: this.linkedStandardsIds(),
+      linkedProblems: this.linkedProblems(),
       documentId: this.documentId(),
       documentType: this.documentType()
     }, this.formData());

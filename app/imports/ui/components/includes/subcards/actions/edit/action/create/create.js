@@ -14,9 +14,7 @@ Template.Actions_CreateSubcard.viewmodel({
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   linkedStandardsIds: [],
-  showLinkedStandards() {
-    return !!this.linkedStandardsIds() && !!this.linkedStandardsIds().length;
-  },
+  linkedProblems: [],
   getData() {
     return this.children(vm => vm.getData)
                 .reduce((prev, cur) => {

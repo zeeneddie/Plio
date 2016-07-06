@@ -141,7 +141,7 @@ export const linkProblem = new ValidatedMethod({
       },
       problemType: {
         type: String,
-        allowedValues: ProblemTypes
+        allowedValues: _.values(ProblemTypes)
       }
     }
   ]).validator(),
@@ -170,7 +170,7 @@ export const unlinkProblem = new ValidatedMethod({
       },
       problemType: {
         type: String,
-        allowedValues: ProblemTypes
+        allowedValues: _.values(ProblemTypes)
       }
     }
   ]).validator(),

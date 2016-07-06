@@ -1,5 +1,5 @@
 import { Actions } from './actions.js';
-import { ActionTypes } from '../constants.js';
+import { ActionTypes, ProblemTypes } from '../constants.js';
 import { Standards } from '../standards/standards.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
@@ -72,18 +72,41 @@ export default {
       );
     }
 
+    const NCsIds = action.getLinkedNCsIds();
+    const standardNCsIds = _.pluck(
+      NonConformities.find({ _id: { $in: NCsIds }, standardId }).fetch(),
+      '_id'
+    );
+
+    const risksIds = action.getLinkedRisksIds();
+    const standardRisksIds = _.pluck(
+      Risks.find({ _id: { $in: risksIds }, standardId }).fetch(),
+      '_id'
+    );
+
     return this.collection.update({
       _id
     }, {
-      $pull: { linkedStandardsIds: standardId }
+      $pull: {
+        linkedStandardsIds: standardId,
+        linkedProblems: {
+          $or: [{
+            problemId: { $in: standardNCsIds },
+            problemType: ProblemTypes.NC
+          }, {
+            problemId: { $in: standardRisksIds },
+            problemType: ProblemTypes.RISK
+          }]
+        }
+      }
     });
   },
 
   linkProblem({ _id, problemId, problemType }) {
     let docCollection;
-    if (problemType === 'non-conformity') {
+    if (problemType === ProblemTypes.NC) {
       docCollection = NonConformities;
-    } else if (problemType === 'risk') {
+    } else if (problemType === ProblemTypes.RISK) {
       docCollection = Risks;
     }
 
@@ -92,10 +115,11 @@ export default {
     }
 
     const doc = docCollection.findOne({ _id: problemId });
-
     if (!doc) {
       throw new Meteor.Error(400, 'Problem document does not exist');
     }
+
+    const standardId = doc.standardId;
 
     const action = this._getAction(_id);
 
@@ -105,10 +129,13 @@ export default {
       );
     }
 
-    this.collection.update({
+    return this.collection.update({
       _id
     }, {
-      $push: { linkedProblems: { problemId, problemType } }
+      $push: {
+        linkedStandardsIds: standardId,
+        linkedProblems: { problemId, problemType }
+      }
     });
   },
 

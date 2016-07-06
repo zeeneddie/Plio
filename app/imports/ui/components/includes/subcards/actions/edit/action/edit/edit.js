@@ -62,7 +62,6 @@ Template.Actions_EditSubcard.viewmodel({
   },
   getUnlinkProblemFn() {
     return ({ problemId, problemType }, cb) => {
-      console.log(problemId, problemType);
       this.parent().callUpdate(this.unlinkProblemFn, {
         _id: this._id(),
         problemId,

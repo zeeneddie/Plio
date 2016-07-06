@@ -5,7 +5,7 @@
       {{#each linkedProblemsDocs}}
         <div class="btn-group">
           <button class="btn btn-secondary" type="button" disabled=""
-              {{b "text: this.title"}}></button>
+              {{b "text: this.sequentialId + ' ' + this.title"}}></button>
           {{> DeleteButton
               _id=this._id
               problemType=this.problemType

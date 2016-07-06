@@ -3,6 +3,7 @@ import { Blaze } from 'meteor/blaze';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
+import { ProblemTypes } from '/imports/api/constants.js';
 
 
 Template.Actions_LinkedProblems.viewmodel({
@@ -14,10 +15,10 @@ Template.Actions_LinkedProblems.viewmodel({
     return this._getProbemIds();
   },
   NCsIds() {
-    return this._getProbemIds('non-conformity');
+    return this._getProbemIds(ProblemTypes.NC);
   },
   RisksIds() {
-    return this._getProbemIds('risk');
+    return this._getProbemIds(ProblemTypes.RISK);
   },
   standardsIdsArray() {
     return Array.from(this.standardsIds() || []);
@@ -39,7 +40,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, problemType: 'non-conformity', ...args };
+      return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.NC, ...args };
     });
 
     const riskQuery = {
@@ -51,7 +52,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, problemType: 'risk', ...args };
+      return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.RISK, ...args };
     });
 
     return NCs.concat(risks);
@@ -65,9 +66,8 @@ Template.Actions_LinkedProblems.viewmodel({
       organizationId: this.organizationId(),
       standardId: { $in: this.standardsIdsArray() }
     };
-    const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
-      const fullTitle = `${sequentialId} ${title}`;
-      return { sequentialId, title: fullTitle, problemType: 'non-conformity', ...args };
+    const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
+      return { problemType: ProblemTypes.NC, ...args };
     });
 
     const riskQuery = {
@@ -75,10 +75,8 @@ Template.Actions_LinkedProblems.viewmodel({
       organizationId: this.organizationId(),
       standardId: { $in: this.standardsIdsArray() }
     };
-    const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
-      const fullTitle = `${sequentialId} ${title}`;
-      const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { sequentialId, title: fullTitle, problemType: 'risk', ...args };
+    const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
+      return { problemType: ProblemTypes.RISK, ...args };
     });
 
     return NCs.concat(risks);

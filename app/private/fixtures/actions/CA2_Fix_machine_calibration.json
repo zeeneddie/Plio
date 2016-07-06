@@ -2,6 +2,9 @@
   "_id": "8NBgjzoZdnDtvJMih",
   "organizationId": "KwKXz5RefrE5hjWJ2",
   "title": "Fix machine calibration",
+  "linkedStandardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ],
   "linkedProblems": [
     {
       "problemId": "P98SExuNHZ4y8bhjc",
