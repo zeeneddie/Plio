@@ -3,4 +3,5 @@ import './select-item-radio';
 import './subcard-edit';
 import './departments';
 import './form-field';
-import './standard';
+import './standards';
+import './select-multi';
