@@ -9,7 +9,7 @@ Template.SelectItemRadio.viewmodel({
 
     this.value(value);
 
-    this.onSelect(this);
+    this.update(this);
   },
   getData() {
     const { value } = this.data();
