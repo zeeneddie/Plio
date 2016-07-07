@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { ActionPlanOptions } from '/imports/api/constants.js';
 
 
-Template.Actions_Edit.viewmodel({
+Template.Actions_EditMain.viewmodel({
   _id: '',
   title: '',
   status: 0,
