@@ -1,6 +1,6 @@
 <template name="TreatmentPlan_Priority">
   {{#FormField label="Treatment priority"}}
-    {{> SelectItemRadio
+    {{> Select_Single_Radio
         items=priorityList
         value=priority
         onSelect=onUpdateCb}}

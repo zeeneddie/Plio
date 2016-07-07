@@ -28,8 +28,8 @@ Template.Departments_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update(viewmodel) {
-    const { selected = [] } = viewmodel.getData();
+  update(viewmodel, option = '$addToSet') {
+    const { selected = [], selectedItemId } = viewmodel.getData();
 
     if (selected.length === this.selected().length > 0 &&  selected.every(({ _id:itemId }) => this.selected().find(({ _id }) => _id === itemId))) return;
 
@@ -39,13 +39,19 @@ Template.Departments_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.parent().update({ departmentsIds });
+    const options = {
+      [`${option}`]: {
+        departmentsIds: selectedItemId
+      }
+    };
+
+    this.parent().update({ options });
   },
   onRemoveCb() {
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel);
+    this.update(viewmodel, '$pull');
   },
   getData() {
     const { departmentsIds } = this.data();

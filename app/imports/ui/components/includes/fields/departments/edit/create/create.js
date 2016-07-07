@@ -37,11 +37,13 @@ Template.Departments_Create.viewmodel({
       if (err) {
         swal('Oops... Something went wrong!', err.reason, 'error');
       } else {
+        const departmentsEdit = ViewModel.findOne('Departments_Edit');
+        const selectMulti = departmentsEdit.child('Select_Multi');
+
+        this.selected( Array.from(departmentsEdit.selected() || []).concat([_id]) );
+        departmentsEdit.update(this);
+
         swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
-
-        this.selected( Array.from(this.selected() || []).concat([_id]) );
-
-        ViewModel.findOne('Departments_Edit').update(this);
       }
     });
   },

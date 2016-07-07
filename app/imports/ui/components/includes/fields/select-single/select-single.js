@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-Template.SelectItem.viewmodel({
+Template.Select_Single.viewmodel({
   mixin: 'utils',
   autorun(computation) {
     const items = this.itemsArray();
