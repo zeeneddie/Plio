@@ -91,13 +91,12 @@ Template.ActionsList.viewmodel({
     return this._getActionsByQuery({ ...this._getActionsQuery(true, true) }, { sort: { completedAt: -1 } });
   },
   teamCurrentActions() {
-    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $ne: Meteor.userId() }) });
-    const userIds = this._getUniqueAssignees(actions);
-    userIds.filter(userId => this._getActionsByQuery({ ...this._getCurrentActionsQuery(userId) }).count() > 0);
+    const userIds = this.teamCurrentActionsAssignees();
     return this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $in: userIds }) });
   },
   teamCurrentActionsAssignees() {
-    return this._getUniqueAssignees(this.teamCurrentActions());
+    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $ne: Meteor.userId() }) });
+    return this._getUniqueAssignees(actions);
   },
   teamCompletedActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
