@@ -5,6 +5,7 @@ import { insert } from '/imports/api/departments/methods.js';
 
 Template.Departments_Create.viewmodel({
   mixin: ['organization', 'modal'],
+  selected: [],
   value: '',
   departmentHintText() {
     return this.value() ? `Add "${this.value()}" department` : 'Start typing...';
@@ -38,9 +39,9 @@ Template.Departments_Create.viewmodel({
       } else {
         swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
 
-        this.selected(_id);
+        this.selected(Array.from(this.selected() || []).concat([_id]));
 
-        ViewModel.findOne('Departments_Edit').onSelect(this);
+        ViewModel.findOne('Departments_Edit').update(this);
       }
     });
   },
