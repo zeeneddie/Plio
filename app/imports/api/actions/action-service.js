@@ -103,10 +103,24 @@ export default {
   },
 
   linkProblem({ _id, problemId, problemType }) {
+    const action = this._getAction(_id);
+
     let docCollection;
     if (problemType === ProblemTypes.NC) {
+      if (action.type === ActionTypes.RISK_CONTROL) {
+        throw new Meteor.Error(
+          400, 'Risk control cannot be linked to a non-conformity'
+        );
+      }
+
       docCollection = NonConformities;
     } else if (problemType === ProblemTypes.RISK) {
+      if (action.type === ActionTypes.PREVENTATIVE_ACTION) {
+        throw new Meteor.Error(
+          400, 'Preventative action cannot be linked to a risk'
+        );
+      }
+
       docCollection = Risks;
     }
 
@@ -120,8 +134,6 @@ export default {
     }
 
     const standardId = doc.standardId;
-
-    const action = this._getAction(_id);
 
     if (action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(

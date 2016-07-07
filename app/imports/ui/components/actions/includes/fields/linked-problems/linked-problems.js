@@ -3,7 +3,7 @@ import { Blaze } from 'meteor/blaze';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { ProblemTypes } from '/imports/api/constants.js';
+import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 
 
 Template.Actions_LinkedProblems.viewmodel({
@@ -17,7 +17,7 @@ Template.Actions_LinkedProblems.viewmodel({
   NCsIds() {
     return this._getProbemIds(ProblemTypes.NC);
   },
-  RisksIds() {
+  risksIds() {
     return this._getProbemIds(ProblemTypes.RISK);
   },
   standardsIdsArray() {
@@ -27,9 +27,21 @@ Template.Actions_LinkedProblems.viewmodel({
     const child = this.child('SelectItem');
     return child && child.value();
   },
-  problems() {
+  problemsDocs() {
+    const actionType = this.type();
+
+    if (actionType === ActionTypes.CORRECTIVE_ACTION) {
+      return this.NCsDocs().concat(this.risksDocs());
+    } else if (actionType === ActionTypes.PREVENTATIVE_ACTION) {
+      return this.NCsDocs();
+    } else if (actionType === ActionTypes.RISK_CONTROL) {
+      return this.risksDocs();
+    } else {
+      return [];
+    }
+  },
+  NCsDocs() {
     const NCsIds = this.NCsIds();
-    const RisksIds = this.RisksIds();
 
     const NCQuery = {
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
@@ -37,29 +49,31 @@ Template.Actions_LinkedProblems.viewmodel({
       _id: { $nin: NCsIds },
       standardId: { $in: this.standardsIdsArray() }
     };
-    const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
+
+    return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.NC, ...args };
     });
+  },
+  risksDocs() {
+    const risksIds = this.risksIds();
 
     const riskQuery = {
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      _id: { $nin: RisksIds },
+      _id: { $nin: risksIds },
       standardId: { $in: this.standardsIdsArray() }
     };
-    const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
+    return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.RISK, ...args };
     });
-
-    return NCs.concat(risks);
   },
   linkedProblemsDocs() {
     const NCsIds = this.NCsIds();
-    const RisksIds = this.RisksIds();
+    const risksIds = this.risksIds();
 
     const NCQuery = {
       _id: { $in: NCsIds },
@@ -71,7 +85,7 @@ Template.Actions_LinkedProblems.viewmodel({
     });
 
     const riskQuery = {
-      _id: { $in: RisksIds },
+      _id: { $in: risksIds },
       organizationId: this.organizationId(),
       standardId: { $in: this.standardsIdsArray() }
     };

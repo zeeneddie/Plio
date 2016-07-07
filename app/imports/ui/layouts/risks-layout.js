@@ -17,7 +17,8 @@ Template.RisksLayout.viewmodel({
         this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('departments', _id),
         this.templateInstance.subscribe('riskTypes', _id),
-        this.templateInstance.subscribe('actions', _id)
+        this.templateInstance.subscribe('actions', _id),
+        this.templateInstance.subscribe('nonConformities', _id)
       ];
 
       if (this.isActiveRiskFilter('deleted')) {
