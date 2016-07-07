@@ -97,9 +97,7 @@ Template.ActionsList.viewmodel({
     return this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $in: userIds }) });
   },
   teamCurrentActionsAssignees() {
-    return this._getUniqueAssignees(this.teamCurrentActions()).filter((userId) => {
-      return this._getActionsByQuery({ ...this._getCurrentActionsQuery(userId) }).count() > 0;
-    });
+    return this._getUniqueAssignees(this.teamCurrentActions());
   },
   teamCompletedActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
