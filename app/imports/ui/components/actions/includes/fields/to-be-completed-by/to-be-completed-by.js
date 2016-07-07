@@ -7,6 +7,8 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   toBeCompletedBy: '',
   placeholder: 'To be completed by',
   selectFirstIfNoSelected: false,
+  isCompleteFormVisible: false,
+  completionResult: '',
   onUpdateCb() {
     return this.update.bind(this);
   },
@@ -17,8 +19,17 @@ Template.Actions_ToBeCompletedBy.viewmodel({
 
     this.parent().update && this.parent().update({ toBeCompletedBy: selected });
   },
-  showCompleteButton() {
-    return this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
+  isCompleteButtonVisible() {
+    return this.toBeCompletedBy() === Meteor.userId();
+  },
+  showCompleteForm() {
+    this.isCompleteFormVisible(true);
+  },
+  hideCompleteForm() {
+    this.isCompleteFormVisible(false);
+  },
+  complete() {
+    this.onComplete({ completionResult: this.completionResult() });
   },
   getData() {
     return { toBeCompletedBy: this.toBeCompletedBy() };

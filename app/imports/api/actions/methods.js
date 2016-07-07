@@ -150,9 +150,17 @@ export const unlinkProblem = new ValidatedMethod({
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionResult: {
+        type: String,
+        max: 40
+      }
+    }
+  ]).validator(),
 
-  run({ _id }) {
+  run({ _id, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -160,7 +168,7 @@ export const complete = new ValidatedMethod({
       );
     }
 
-    return ActionService.complete({ _id, userId });
+    return ActionService.complete({ _id, userId, ...args });
   }
 });
 

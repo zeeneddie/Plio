@@ -104,7 +104,7 @@ export default {
     });
   },
 
-  complete({ _id, userId }) {
+  complete({ _id, userId, completionResult }) {
     const action = this._getAction(_id);
 
     if (userId !== action.toBeCompletedBy) {
@@ -122,7 +122,8 @@ export default {
         isCompleted: true,
         completedBy: userId,
         completedAt: new Date(),
-        status: 3
+        status: 3,
+        completionResult
       }
     });
   },
