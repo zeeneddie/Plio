@@ -47,7 +47,7 @@ Template.Actions_LinkedProblems.viewmodel({
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
       _id: { $nin: NCsIds },
-      standardId: { $in: this.standardsIdsArray() }
+      standardsIds: { $in: this.standardsIdsArray() }
     };
 
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
@@ -63,7 +63,7 @@ Template.Actions_LinkedProblems.viewmodel({
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
       _id: { $nin: risksIds },
-      standardId: { $in: this.standardsIdsArray() }
+      standardsIds: { $in: this.standardsIdsArray() }
     };
     return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
@@ -78,7 +78,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const NCQuery = {
       _id: { $in: NCsIds },
       organizationId: this.organizationId(),
-      standardId: { $in: this.standardsIdsArray() }
+      standardsIds: { $in: this.standardsIdsArray() }
     };
     const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
       return { problemType: ProblemTypes.NC, ...args };
@@ -87,7 +87,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const riskQuery = {
       _id: { $in: risksIds },
       organizationId: this.organizationId(),
-      standardId: { $in: this.standardsIdsArray() }
+      standardsIds: { $in: this.standardsIdsArray() }
     };
     const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
       return { problemType: ProblemTypes.RISK, ...args };

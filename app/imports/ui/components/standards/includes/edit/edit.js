@@ -51,5 +51,8 @@ Template.EditStandard.viewmodel({
         });
       }
     );
+  },
+  standardsIds() {
+    return [this.standard()._id];
   }
 });

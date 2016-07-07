@@ -82,12 +82,12 @@ Actions.helpers({
     return compareDates(undoDeadline, new Date()) === 1;
   },
   isLinkedToProblem(docId, docType) {
-    return _.filter(this.linkedProblems, ({ problemId, problemType }) => {
+    return !!_.find(this.linkedProblems, ({ problemId, problemType }) => {
       return (problemId === docId) && (problemType === docType);
-    }).length > 0;
+    });
   },
   isLinkedToStandard(standardId) {
-    return _.filter(this.linkedStandardsIds, id => standardId === id).length > 0;
+    return _.contains(this.linkedStandardsIds, standardId);
   }
 });
 

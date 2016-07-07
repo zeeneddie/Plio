@@ -75,11 +75,11 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
-    const standardId = this.standardId && this.standardId();
+    const standardsIds = this.standardsIds && this.standardsIds();
 
-    if (standardId) {
+    if (standardsIds) {
       _.extend(query, {
-        linkedStandardsIds: standardId
+        linkedStandardsIds: { $in: standardsIds.array() }
       });
     }
 
@@ -104,11 +104,11 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
-    const standardId = this.standardId && this.standardId();
+    const standardsIds = this.standardsIds && this.standardsIds();
 
-    if (standardId) {
+    if (standardsIds) {
       _.extend(newSubcardData, {
-        linkedStandardsIds: [standardId]
+        linkedStandardsIds: standardsIds
       });
     }
 
@@ -132,7 +132,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     if (_id) {
       const documentId = this.documentId && this.documentId();
       const documentType = this.documentType && this.documentType();
-      const standardId = this.standardId && this.standardId();
+      const standardsIds = this.standardsIds && this.standardsIds();
 
       if (documentId && documentType) {
         this.modal().callMethod(linkProblem, {
@@ -140,10 +140,10 @@ Template.Subcards_Actions_Edit.viewmodel({
           problemId: documentId,
           problemType: documentType
         }, cb);
-      } else if (standardId) {
+      } else if (standardsIds && (standardsIds.length === 1)) {
         this.modal().callMethod(linkStandard, {
           _id,
-          standardId
+          standardId: standardsIds[0]
         }, cb);
       }
     } else {

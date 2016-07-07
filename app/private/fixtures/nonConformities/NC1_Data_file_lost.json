@@ -18,5 +18,7 @@
   "updatedBy" : "SQHmBKJ94gJvpLKLt",
   "standard" : "Mc7jjwYJ9gXPkibS8",
   "cost" : 9230,
-  "standardId": "Mc7jjwYJ9gXPkibS8"
+  "standardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ]
 }

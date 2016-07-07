@@ -74,15 +74,22 @@ export default {
 
     const NCsIds = action.getLinkedNCsIds();
     const standardNCsIds = _.pluck(
-      NonConformities.find({ _id: { $in: NCsIds }, standardId }).fetch(),
+      NonConformities.find({ _id: { $in: NCsIds }, standardsIds: standardId }).fetch(),
       '_id'
     );
 
     const risksIds = action.getLinkedRisksIds();
     const standardRisksIds = _.pluck(
-      Risks.find({ _id: { $in: risksIds }, standardId }).fetch(),
+      Risks.find({ _id: { $in: risksIds }, standardsIds: standardId }).fetch(),
       '_id'
     );
+
+    if (standardNCsIds.length + standardRisksIds.length === action.linkedProblems.length) {
+      throw new Meteor.Error(
+        400,
+        'Link cannot be removed. Action must have at least one linked document'
+      );
+    }
 
     return this.collection.update({
       _id
@@ -133,7 +140,7 @@ export default {
       throw new Meteor.Error(400, 'Problem document does not exist');
     }
 
-    const standardId = doc.standardId;
+    const standardsIds = doc.standardsIds;
 
     if (action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(
@@ -144,8 +151,10 @@ export default {
     return this.collection.update({
       _id
     }, {
+      $addToSet: {
+        linkedStandardsIds: { $each: standardsIds }
+      },
       $push: {
-        linkedStandardsIds: standardId,
         linkedProblems: { problemId, problemType }
       }
     });
@@ -157,6 +166,13 @@ export default {
     if (!action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(
         400, 'This action is not linked to specified problem document'
+      );
+    }
+
+    if (action.linkedProblems.length === 1) {
+      throw new Meteor.Error(
+        400,
+        'Link cannot be removed. Action must have at least one linked document'
       );
     }
 
