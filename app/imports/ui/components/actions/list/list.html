@@ -41,8 +41,8 @@
         {{#each teamCompletedActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
-              title=(userFullNameOrEmail this
-              _query=(_getAssigneeQuery this true))}}
+              title=(userFullNameOrEmail this)
+              _query=(_getAssigneeQuery this true)}}
         {{/each}}
       {{/if}}
 

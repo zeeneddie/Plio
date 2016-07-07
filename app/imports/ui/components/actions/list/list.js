@@ -69,14 +69,13 @@ Template.ActionsList.viewmodel({
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
-  _getActionsQuery(isToBeVerifiedByMe = false, isCompleted = false) {
+  _getActionsQuery(isToBeCompletedByMe = false, isCompleted = false) {
     const userId = Meteor.userId();
-    const toBeCompletedBy = isToBeVerifiedByMe ? userId : { $ne: userId };
+    const toBeCompletedBy = isToBeCompletedByMe ? userId : { $ne: userId };
     return { toBeCompletedBy, isCompleted, ...this._getSearchQuery() };
   },
-  _getAssigneeQuery(toBeCompletedBy, isCompletedArg) {
-    const { isCompleted } = this._getActionsQuery(false, isCompletedArg);
-    return { toBeCompletedBy, isCompleted};
+  _getAssigneeQuery(toBeCompletedBy, isCompleted) {
+    return { toBeCompletedBy, isCompleted };
   },
   _getUniqueAssignees(prop) {
     const userIds = this[prop]().fetch().map(({ toBeCompletedBy }) => toBeCompletedBy);
@@ -95,6 +94,7 @@ Template.ActionsList.viewmodel({
     return this._getUniqueAssignees('teamCurrentActions');
   },
   teamCompletedActions() {
+    const actions = this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } }).fetch();
     return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
   },
   teamCompletedActionsAssignees() {
