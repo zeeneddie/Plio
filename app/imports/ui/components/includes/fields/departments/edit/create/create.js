@@ -39,7 +39,7 @@ Template.Departments_Create.viewmodel({
       } else {
         swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
 
-        this.selected(Array.from(this.selected() || []).concat([_id]));
+        this.selected( Array.from(this.selected() || []).concat([_id]) );
 
         ViewModel.findOne('Departments_Edit').update(this);
       }
