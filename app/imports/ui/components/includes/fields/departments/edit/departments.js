@@ -4,13 +4,11 @@ import { Blaze } from 'meteor/blaze';
 import { Departments } from '/imports/api/departments/departments.js';
 
 Template.Departments_Edit.viewmodel({
-  mixin: ['search', 'organization'],
+  mixin: ['search', 'organization', 'department'],
   departmentsIds: [],
   selected() {
     const departmentsIds = Array.from(this.departmentsIds() || []);
-    const query = { organizationId: this.organizationId(), _id: { $in: departmentsIds } };
-    const options = { sort: { name: 1 } };
-    return Departments.find(query, options).map(({ name, ...args }) => ({ title: name, name, ...args }));
+    return this._getDepartmentsByQuery( {_id: { $in: departmentsIds }} );
   },
   value() {
     const child = this.child('Select_Multi');

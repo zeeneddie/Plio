@@ -28,7 +28,11 @@ Template.Fields_Standards_Edit.viewmodel({
       viewmodel.selected(this.selected());
       return;
     }
-    if(!this.standardsIds().includes(selectedItemId)) return;
+    if(option === '$addToSet') {
+      if(this.standardsIds().includes(selectedItemId)) return;
+    } else if(option === '$pull') {
+      if(!this.standardsIds().includes(selectedItemId)) return;
+    }
 
     if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 

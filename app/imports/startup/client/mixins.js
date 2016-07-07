@@ -3,6 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
@@ -346,6 +347,17 @@ ViewModel.mixin({
     _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return Standards.findOne(query, options);
+    }
+  },
+  department: {
+    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+      const query = {
+        ...by,
+        organizationId: this.organizationId()
+      };
+
+      return Departments.find(query, options)
+                .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
     }
   },
   date: {
