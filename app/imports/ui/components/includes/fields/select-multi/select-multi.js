@@ -3,13 +3,14 @@ import { Template } from 'meteor/templating';
 Template.Select_Multi.viewmodel({
   mixin: ['organization', 'utils'],
   selected: [],
+  selectedItemId: null,
   items: [],
   placeholder: '',
   selectFirstIfNoSelected: false,
   renderTitle(str) {
     return this.cutString(str, 19);
   },
-  value() {
+  value(e) {
     const child = this.child('SelectItem');
     return !!child && child.value();
   },
@@ -25,6 +26,7 @@ Template.Select_Multi.viewmodel({
   onUpdate() {},
   update(viewmodel) {
     const { item } = viewmodel.getData();
+    this.selectedItemId(item._id);
 
     viewmodel.clear();
 
@@ -44,19 +46,22 @@ Template.Select_Multi.viewmodel({
   onRemove() {},
   remove(e) {
     const { _id:targetId } = Blaze.getData(e.target);
-
     const selected = this.selectedArray();
 
     if (!selected.find(({ _id }) => _id === targetId)) return;
 
     const newArray = selected.filter(({ _id }) => _id !== targetId);
 
+    this.selectedItemId(targetId)
     this.selected(newArray);
 
     this.onRemove(this);
   },
   getData() {
-    const { selected } = this.data();
-    return { selected: [...new Set(selected)] };
+    const { selected, selectedItemId } = this.data();
+    return {
+      selected: [...new Set(selected)],
+      selectedItemId
+    };
   }
 });
