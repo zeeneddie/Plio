@@ -20,14 +20,15 @@ Template.Fields_Standards_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update(viewmodel) {
-    const { selected = [] } = viewmodel.getData();
+  update(viewmodel, option = '$addToSet') {
+    const { selected = [], selectedItemId } = viewmodel.getData();
 
     if (selected.length === 0 && this._id) {
       ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
       viewmodel.selected(this.selected());
       return;
     }
+    if(!this.standardsIds().includes(selectedItemId)) return;
 
     if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
@@ -37,13 +38,19 @@ Template.Fields_Standards_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.parent().update({ standardsIds })
+    const options = {
+      [`${option}`]: {
+        standardsIds: selectedItemId
+      }
+    };
+
+    this.parent().update({ options });
   },
   onRemoveCb() {
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel);
+    this.update(viewmodel, '$pull');
   },
   getData() {
     const { standardsIds } = this.data();
