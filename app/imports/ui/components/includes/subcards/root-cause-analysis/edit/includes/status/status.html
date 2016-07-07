@@ -1,7 +1,7 @@
 <template name="NCRCAStatus">
   {{#FormField label=label}}
     {{#if isSelectedExecutor}}
-      {{> SelectItemRadio
+      {{> Select_Single_Radio
           items=statuses
           value=getStatusValue
           onSelect=onUpdateCb}}

@@ -11,7 +11,7 @@ Template.Select_Multi.viewmodel({
     return this.cutString(str, 19);
   },
   value(e) {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return !!child && child.value();
   },
   selectedArray() {

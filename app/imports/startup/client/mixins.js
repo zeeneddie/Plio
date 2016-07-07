@@ -566,7 +566,7 @@ ViewModel.mixin({
   },
   members: {
     _searchString() {
-      const child = this.child('SelectItem');
+      const child = this.child('Select_Single');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {

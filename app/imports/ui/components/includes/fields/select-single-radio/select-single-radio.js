@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.SelectItemRadio.viewmodel({
+Template.Select_Single_Radio.viewmodel({
   value: '',
   items: [],
   onSelect() {},

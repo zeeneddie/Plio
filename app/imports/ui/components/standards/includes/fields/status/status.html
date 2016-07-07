@@ -1,6 +1,6 @@
 <template name="ESStatus">
   {{#FormField label="Status"}}
-    {{> SelectItemRadio
+    {{> Select_Single_Radio
         items=statuses
         value=status
         onSelect=onUpdateCb}}
