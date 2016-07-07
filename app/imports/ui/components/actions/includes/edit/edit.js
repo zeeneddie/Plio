@@ -66,7 +66,7 @@ Template.Actions_Edit.viewmodel({
     return this.verify.bind(this);
   },
   verify(e) {
-    this.callUpdate(verify);
+    this.callUpdate(verify, {}, this.generateCallback('My completed actions'));
   },
   undoVerificationFn() {
     return this.undoVerification.bind(this);
@@ -78,7 +78,7 @@ Template.Actions_Edit.viewmodel({
     const _id = this._id();
 
     return (err) => {
-      if (!err) {
+      if (!err && FlowRouter.getQueryParam('by') !== queryParam) {
         FlowRouter.setQueryParams({ by: queryParam });
         Meteor.setTimeout(() => {
           this.goToAction(_id);

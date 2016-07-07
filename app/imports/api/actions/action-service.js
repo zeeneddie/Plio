@@ -2,14 +2,14 @@ import { Actions } from './actions.js';
 import { ActionTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import { generateSerialNumber } from '/imports/core/utils.js';
+import Utils from '/imports/core/utils.js';
 
 
 export default {
   collection: Actions,
 
   insert({ organizationId, type, ...args }) {
-    const serialNumber = generateSerialNumber(this.collection, { organizationId });
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
 
     const sequentialId = `${type}${serialNumber}`;
 

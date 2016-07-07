@@ -53,14 +53,14 @@ Template.ActionsList.viewmodel({
     };
   },
   _getQueryForFilter() {
-    const getIds = (array) => array.map(prop => ({ _id: { $in: this[prop]().fetch().map(({ _id }) => _id) } }));
+    const getIds = (array) => array.map(prop => ({ _id: { $in: this[prop]().map(({ _id }) => _id) } }));
 
     const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions']);
 
     return this._getQueryForCurrentFilter(query);
   },
   _getFirstActionQueryForFilter() {
-    const getIds = (array) => array.map(prop => ({ _id: this[prop]().count() > 0 && this[prop]().fetch().map(({ _id }) => _id)[0] }));
+    const getIds = (array) => array.map(prop => ({ _id: this[prop]().count() > 0 && this[prop]().map(({ _id }) => _id)[0] }));
 
     const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions']);
 
@@ -77,28 +77,35 @@ Template.ActionsList.viewmodel({
   _getAssigneeQuery(toBeCompletedBy, isCompleted) {
     return { toBeCompletedBy, isCompleted };
   },
-  _getUniqueAssignees(prop) {
-    const userIds = this[prop]().fetch().map(({ toBeCompletedBy }) => toBeCompletedBy);
-    return [...new Set(userIds)];
+  _getCurrentActionsQuery(userId) {
+    return { $or: [ { toBeCompletedBy: userId, isCompleted: false }, { toBeVerifiedBy: userId, isVerified: false } ] };
+  },
+  _getUniqueAssignees(collection) {
+    const userIds = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);
+    return [...new Set(_.flatten(userIds).filter(_id => !!_id && _id !== Meteor.userId()))];
   },
   myCurrentActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(true, false) })
+    return this._getActionsByQuery({ ...this._getCurrentActionsQuery(Meteor.userId()) });
   },
   myCompletedActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(true, true) }, { sort: { completedAt: -1 } });
   },
   teamCurrentActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(false, false) });
+    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $ne: Meteor.userId() }) });
+    const userIds = this._getUniqueAssignees(actions);
+    userIds.filter(userId => this._getActionsByQuery({ ...this._getCurrentActionsQuery(userId) }).count() > 0);
+    return this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $in: userIds }) });
   },
   teamCurrentActionsAssignees() {
-    return this._getUniqueAssignees('teamCurrentActions');
+    return this._getUniqueAssignees(this.teamCurrentActions()).filter((userId) => {
+      return this._getActionsByQuery({ ...this._getCurrentActionsQuery(userId) }).count() > 0;
+    });
   },
   teamCompletedActions() {
-    const actions = this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } }).fetch();
     return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
   },
   teamCompletedActionsAssignees() {
-    return this._getUniqueAssignees('teamCompletedActions');
+    return this._getUniqueAssignees(this.teamCompletedActions());
   },
   focused: false,
   animating: false,
