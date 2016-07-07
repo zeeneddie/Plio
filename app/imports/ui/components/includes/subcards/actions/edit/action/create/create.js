@@ -13,7 +13,6 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
-  linkedStandardsIds: [],
   linkedProblems: [],
   isLinkedProblemsEditable() {
     return !this.linkedProblems().length;

@@ -9,7 +9,6 @@ import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 Template.Actions_LinkedProblems.viewmodel({
   mixin: ['search', 'organization'],
   linkedProblems: [],
-  standardsIds: [],
   isEditable: true,
   linkedProblemsIds() {
     return this._getProbemIds();
@@ -19,9 +18,6 @@ Template.Actions_LinkedProblems.viewmodel({
   },
   risksIds() {
     return this._getProbemIds(ProblemTypes.RISK);
-  },
-  standardsIdsArray() {
-    return Array.from(this.standardsIds() || []);
   },
   problemSearchText() {
     const child = this.child('SelectItem');
@@ -46,8 +42,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const NCQuery = {
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      _id: { $nin: NCsIds },
-      standardsIds: { $in: this.standardsIdsArray() }
+      _id: { $nin: NCsIds }
     };
 
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
@@ -62,8 +57,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const riskQuery = {
       ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      _id: { $nin: risksIds },
-      standardsIds: { $in: this.standardsIdsArray() }
+      _id: { $nin: risksIds }
     };
     return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
@@ -77,8 +71,7 @@ Template.Actions_LinkedProblems.viewmodel({
 
     const NCQuery = {
       _id: { $in: NCsIds },
-      organizationId: this.organizationId(),
-      standardsIds: { $in: this.standardsIdsArray() }
+      organizationId: this.organizationId()
     };
     const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
       return { problemType: ProblemTypes.NC, ...args };
@@ -86,8 +79,7 @@ Template.Actions_LinkedProblems.viewmodel({
 
     const riskQuery = {
       _id: { $in: risksIds },
-      organizationId: this.organizationId(),
-      standardsIds: { $in: this.standardsIdsArray() }
+      organizationId: this.organizationId()
     };
     const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
       return { problemType: ProblemTypes.RISK, ...args };

@@ -85,9 +85,6 @@ Actions.helpers({
     return !!_.find(this.linkedProblems, ({ problemId, problemType }) => {
       return (problemId === docId) && (problemType === docType);
     });
-  },
-  isLinkedToStandard(standardId) {
-    return _.contains(this.linkedStandardsIds, standardId);
   }
 });
 

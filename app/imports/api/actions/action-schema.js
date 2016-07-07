@@ -42,14 +42,10 @@ const RequiredSchema = new SimpleSchema([
       type: String,
       allowedValues: _.values(ActionTypes)
     },
-    linkedStandardsIds: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id,
-      minCount: 1
-    },
     linkedProblems: {
       type: [linkedProblemSchema],
-      minCount: 1
+      defaultValue: [],
+      optional: true
     },
     ownerId: {
       type: String,

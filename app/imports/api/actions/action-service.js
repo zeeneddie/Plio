@@ -1,6 +1,5 @@
 import { Actions } from './actions.js';
 import { ActionTypes, ProblemTypes } from '../constants.js';
-import { Standards } from '../standards/standards.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 
@@ -43,72 +42,6 @@ export default {
     return this.collection.update(query, options);
   },
 
-  linkStandard({ _id, standardId }) {
-    if (!Standards.findOne({ _id: standardId })) {
-      throw new Meteor.Error(400, 'Standard does not exist');
-    }
-
-    const action = this._getAction(_id);
-
-    if (action.isLinkedToStandard(standardId)) {
-      throw new Meteor.Error(
-        400, 'Action is already linked to specified standard'
-      );
-    }
-
-    return this.collection.update({
-      _id
-    }, {
-      $addToSet: { linkedStandardsIds: standardId }
-    });
-  },
-
-  unlinkStandard({ _id, standardId }) {
-    const action = this._getAction(_id);
-
-    if (!action.isLinkedToStandard(standardId)) {
-      throw new Meteor.Error(
-        400, 'Action is not linked to specified standard'
-      );
-    }
-
-    const NCsIds = action.getLinkedNCsIds();
-    const standardNCsIds = _.pluck(
-      NonConformities.find({ _id: { $in: NCsIds }, standardsIds: standardId }).fetch(),
-      '_id'
-    );
-
-    const risksIds = action.getLinkedRisksIds();
-    const standardRisksIds = _.pluck(
-      Risks.find({ _id: { $in: risksIds }, standardsIds: standardId }).fetch(),
-      '_id'
-    );
-
-    if (standardNCsIds.length + standardRisksIds.length === action.linkedProblems.length) {
-      throw new Meteor.Error(
-        400,
-        'Link cannot be removed. Action must have at least one linked document'
-      );
-    }
-
-    return this.collection.update({
-      _id
-    }, {
-      $pull: {
-        linkedStandardsIds: standardId,
-        linkedProblems: {
-          $or: [{
-            problemId: { $in: standardNCsIds },
-            problemType: ProblemTypes.NC
-          }, {
-            problemId: { $in: standardRisksIds },
-            problemType: ProblemTypes.RISK
-          }]
-        }
-      }
-    });
-  },
-
   linkProblem({ _id, problemId, problemType }) {
     const action = this._getAction(_id);
 
@@ -140,8 +73,6 @@ export default {
       throw new Meteor.Error(400, 'Problem document does not exist');
     }
 
-    const standardsIds = doc.standardsIds;
-
     if (action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(
         400, 'This action is already linked to specified problem document'
@@ -152,9 +83,6 @@ export default {
       _id
     }, {
       $addToSet: {
-        linkedStandardsIds: { $each: standardsIds }
-      },
-      $push: {
         linkedProblems: { problemId, problemType }
       }
     });
@@ -166,13 +94,6 @@ export default {
     if (!action.isLinkedToProblem(problemId, problemType)) {
       throw new Meteor.Error(
         400, 'This action is not linked to specified problem document'
-      );
-    }
-
-    if (action.linkedProblems.length === 1) {
-      throw new Meteor.Error(
-        400,
-        'Link cannot be removed. Action must have at least one linked document'
       );
     }
 

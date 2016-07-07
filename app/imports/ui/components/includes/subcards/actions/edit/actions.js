@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 
-import { ActionTypes } from '/imports/api/constants.js';
+import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Risks } from '/imports/api/risks/risks.js';
 import {
   insert,
   update,
@@ -69,24 +71,39 @@ Template.Subcards_Actions_Edit.viewmodel({
     return newSubcardTitle;
   },
   actions() {
+    const actionType = this.type();
     const query = {
-      type: this.type()
+      type: actionType
     };
 
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
-    const standardsIds = this.standardsIds && this.standardsIds();
-
-    if (standardsIds) {
-      _.extend(query, {
-        linkedStandardsIds: { $in: standardsIds.array() }
-      });
-    }
+    const standardId = this.standardId && this.standardId();
 
     if (documentId && documentType) {
       _.extend(query, {
         'linkedProblems.problemId': documentId,
         'linkedProblems.problemType': documentType
+      });
+    } else if (standardId) {
+      const NCsIds = _.pluck(
+        NonConformities.find({ standardsIds: standardId }).fetch(),
+        '_id'
+      );
+
+      const risksIds = _.pluck(
+        Risks.find({ standardsIds: standardId }).fetch(),
+        '_id'
+      );
+
+      _.extend(query, {
+        $or: [{
+          'linkedProblems.problemId': { $in: NCsIds },
+          'linkedProblems.problemType': ProblemTypes.NC
+        }, {
+          'linkedProblems.problemId': { $in: risksIds },
+          'linkedProblems.problemType': ProblemTypes.RISK
+        }]
       });
     }
 
@@ -104,13 +121,6 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
-    const standardsIds = this.standardsIds && this.standardsIds();
-
-    if (standardsIds) {
-      _.extend(newSubcardData, {
-        linkedStandardsIds: standardsIds
-      });
-    }
 
     if (documentId && documentType) {
       _.extend(newSubcardData, {
@@ -128,42 +138,24 @@ Template.Subcards_Actions_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, linkedStandardsIds, linkedProblems, ...args }, cb) {
+  insert({ _id, ...args }, cb) {
     if (_id) {
       const documentId = this.documentId && this.documentId();
       const documentType = this.documentType && this.documentType();
-      const standardsIds = this.standardsIds && this.standardsIds();
 
-      if (documentId && documentType) {
-        this.modal().callMethod(linkProblem, {
-          _id,
-          problemId: documentId,
-          problemType: documentType
-        }, cb);
-      } else if (standardsIds && (standardsIds.length === 1)) {
-        this.modal().callMethod(linkStandard, {
-          _id,
-          standardId: standardsIds[0]
-        }, cb);
-      }
+      this.modal().callMethod(linkProblem, {
+        _id,
+        problemId: documentId,
+        problemType: documentType
+      }, cb);
     } else {
       const organizationId = this.organizationId();
 
-      const doc = {
+      this.modal().callMethod(insert, {
         organizationId,
         type: this.type(),
         ...args
-      };
-
-      if (linkedStandardsIds && linkedStandardsIds.length > 0) {
-        _.extend(doc, { linkedStandardsIds });
-      }
-
-      if (linkedProblems && linkedProblems.length > 0) {
-        _.extend(doc, { linkedProblems });
-      }
-
-      this.modal().callMethod(insert, doc, cb);
+      }, cb);
     }
   },
   updateFn() {
@@ -229,18 +221,6 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   undoVerification({ ...args }, cb) {
     this.modal().callMethod(undoVerification, { ...args }, cb);
-  },
-  linkStandardFn() {
-    return this.linkStandard.bind(this);
-  },
-  linkStandard({ ...args }, cb) {
-    this.modal().callMethod(linkStandard, { ...args }, cb);
-  },
-  unlinkStandardFn() {
-    return this.unlinkStandard.bind(this);
-  },
-  unlinkStandard({ ...args }, cb) {
-    this.modal().callMethod(unlinkStandard, { ...args }, cb);
   },
   linkProblemFn() {
     return this.linkProblem.bind(this);

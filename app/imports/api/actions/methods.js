@@ -89,46 +89,6 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
-export const linkStandard = new ValidatedMethod({
-  name: 'Actions.linkStandard',
-
-  validate: new SimpleSchema([
-    IdSchema,
-    StandardIdSchema
-  ]).validator(),
-
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot link actions to standards'
-      );
-    }
-
-    return ActionService.linkStandard({ ...args });
-  }
-});
-
-export const unlinkStandard = new ValidatedMethod({
-  name: 'Actions.unlinkStandard',
-
-  validate: new SimpleSchema([
-    IdSchema,
-    StandardIdSchema
-  ]).validator(),
-
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove action\'s links to standards'
-      );
-    }
-
-    return ActionService.unlinkStandard({ ...args });
-  }
-});
-
 export const linkProblem = new ValidatedMethod({
   name: 'Actions.linkProblem',
 

@@ -2,7 +2,6 @@ import './completed-by';
 import './completed-on';
 import './completion-result';
 import './completion-target-date';
-import './linked-standards';
 import './linked-problems';
 import './owner';
 import './plan-in-place';
