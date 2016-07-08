@@ -534,6 +534,9 @@ ViewModel.mixin({
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
+    lowercase(string) {
+      return string.charAt(0).toLowerCase() + string.slice(1);
+    },
     round(num) {
       if (num >= 1000000) {
         return parseFloat((num / 1000000).toFixed(1)) + 'M';
