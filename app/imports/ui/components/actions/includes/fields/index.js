@@ -2,7 +2,7 @@ import './completed-by';
 import './completed-on';
 import './completion-comments';
 import './completion-target-date';
-import './linked-problems';
+import './linked-to';
 import './owner';
 import './plan-in-place';
 import './status';

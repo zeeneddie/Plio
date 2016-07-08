@@ -1,14 +1,14 @@
-<template name="Actions_LinkedProblems">
+<template name="Actions_LinkedTo">
   {{#if isEditable}}
 
     {{#FormField label="Linked to"}}
-      {{#each linkedProblemsDocs}}
+      {{#each linkedDocs}}
         <div class="btn-group">
           <button class="btn btn-secondary" type="button" disabled=""
               {{b "text: this.sequentialId + ' ' + this.title"}}></button>
           {{> DeleteButton
               _id=this._id
-              problemType=this.problemType
+              documentType=this.documentType
               smallIcon=true
               onClick=onRemoveCb}}
         </div>
@@ -16,7 +16,7 @@
 
       {{> SelectItem
           placeholder="Linked to"
-          items=problemsDocs
+          items=docs
           selectFirstIfNoSelected=false
           onUpdate=onSelectCb}}
     {{/FormField}}
@@ -28,7 +28,7 @@
         Linked to
       </label>
       <div class="col-sm-8">
-        {{#each linkedProblemsDocs}}
+        {{#each linkedDocs}}
           <div class="form-group row">
             <div class="col-sm-12">
               <div class="input-group">

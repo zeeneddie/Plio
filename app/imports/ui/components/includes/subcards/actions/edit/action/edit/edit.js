@@ -54,21 +54,21 @@ Template.Actions_EditSubcard.viewmodel({
       }, cb);
     };
   },
-  getLinkProblemFn() {
-    return ({ problemId, problemType }, cb) => {
-      this.parent().callUpdate(this.linkProblemFn, {
+  getLinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.parent().callUpdate(this.linkDocumentFn, {
         _id: this._id(),
-        problemId,
-        problemType
+        documentId,
+        documentType
       }, cb);
     };
   },
-  getUnlinkProblemFn() {
-    return ({ problemId, problemType }, cb) => {
-      this.parent().callUpdate(this.unlinkProblemFn, {
+  getUnlinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.parent().callUpdate(this.unlinkDocumentFn, {
         _id: this._id(),
-        problemId,
-        problemType
+        documentId,
+        documentType
       }, cb);
     };
   },

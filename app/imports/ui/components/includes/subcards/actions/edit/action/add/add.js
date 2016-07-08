@@ -7,7 +7,7 @@ Template.Actions_AddSubcard.viewmodel({
   form: 'Actions_CreateSubcard',
   formData: '',
   getFormData() {
-    const linkedProblems = this.linkedProblems && this.linkedProblems();
+    const linkedTo = this.linkedTo && this.linkedTo();
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
 
@@ -15,8 +15,8 @@ Template.Actions_AddSubcard.viewmodel({
       type: this.type()
     };
 
-    if (linkedProblems) {
-      _.extend(defaultData, { linkedProblems });
+    if (linkedTo) {
+      _.extend(defaultData, { linkedTo });
     }
 
     if (documentId && documentType) {

@@ -14,8 +14,8 @@ import {
   undoVerification,
   linkStandard,
   unlinkStandard,
-  linkProblem,
-  unlinkProblem
+  linkDocument,
+  unlinkDocument
 } from '/imports/api/actions/methods.js';
 
 
@@ -82,8 +82,8 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     if (documentId && documentType) {
       _.extend(query, {
-        'linkedProblems.problemId': documentId,
-        'linkedProblems.problemType': documentType
+        'linkedTo.documentId': documentId,
+        'linkedTo.documentType': documentType
       });
     } else if (standardId) {
       const NCsIds = _.pluck(
@@ -98,11 +98,11 @@ Template.Subcards_Actions_Edit.viewmodel({
 
       _.extend(query, {
         $or: [{
-          'linkedProblems.problemId': { $in: NCsIds },
-          'linkedProblems.problemType': ProblemTypes.NC
+          'linkedTo.documentId': { $in: NCsIds },
+          'linkedTo.documentType': ProblemTypes.NC
         }, {
-          'linkedProblems.problemId': { $in: risksIds },
-          'linkedProblems.problemType': ProblemTypes.RISK
+          'linkedTo.documentId': { $in: risksIds },
+          'linkedTo.documentType': ProblemTypes.RISK
         }]
       });
     }
@@ -126,9 +126,9 @@ Template.Subcards_Actions_Edit.viewmodel({
       _.extend(newSubcardData, {
         documentId,
         documentType,
-        linkedProblems: [{
-          problemId: documentId,
-          problemType: documentType
+        linkedTo: [{
+          documentId: documentId,
+          documentType: documentType
         }]
       });
     }
@@ -143,10 +143,10 @@ Template.Subcards_Actions_Edit.viewmodel({
       const documentId = this.documentId && this.documentId();
       const documentType = this.documentType && this.documentType();
 
-      this.modal().callMethod(linkProblem, {
+      this.modal().callMethod(linkDocument, {
         _id,
-        problemId: documentId,
-        problemType: documentType
+        documentId: documentId,
+        documentType: documentType
       }, cb);
     } else {
       const organizationId = this.organizationId();
@@ -222,16 +222,16 @@ Template.Subcards_Actions_Edit.viewmodel({
   undoVerification({ ...args }, cb) {
     this.modal().callMethod(undoVerification, { ...args }, cb);
   },
-  linkProblemFn() {
-    return this.linkProblem.bind(this);
+  linkDocumentFn() {
+    return this.linkDocument.bind(this);
   },
-  linkProblem({ ...args }, cb) {
-    this.modal().callMethod(linkProblem, { ...args }, cb);
+  linkDocument({ ...args }, cb) {
+    this.modal().callMethod(linkDocument, { ...args }, cb);
   },
-  unlinkProblemFn() {
-    return this.unlinkProblem.bind(this);
+  unlinkDocumentFn() {
+    return this.unlinkDocument.bind(this);
   },
-  unlinkProblem({ ...args }, cb) {
-    this.modal().callMethod(unlinkProblem, { ...args }, cb);
+  unlinkDocument({ ...args }, cb) {
+    this.modal().callMethod(unlinkDocument, { ...args }, cb);
   }
 });

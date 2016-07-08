@@ -89,17 +89,17 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
-export const linkProblem = new ValidatedMethod({
-  name: 'Actions.linkProblem',
+export const linkDocument = new ValidatedMethod({
+  name: 'Actions.linkDocument',
 
   validate: new SimpleSchema([
     IdSchema,
     {
-      problemId: {
+      documentId: {
         type: String,
         regEx: SimpleSchema.RegEx.Id
       },
-      problemType: {
+      documentType: {
         type: String,
         allowedValues: _.values(ProblemTypes)
       }
@@ -110,25 +110,25 @@ export const linkProblem = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot link actions to problems'
+        403, 'Unauthorized user cannot link actions to documents'
       );
     }
 
-    return ActionService.linkProblem({ ...args });
+    return ActionService.linkDocument({ ...args });
   }
 });
 
-export const unlinkProblem = new ValidatedMethod({
-  name: 'Actions.unlinkProblem',
+export const unlinkDocument = new ValidatedMethod({
+  name: 'Actions.unlinkDocument',
 
   validate: new SimpleSchema([
     IdSchema,
     {
-      problemId: {
+      documentId: {
         type: String,
         regEx: SimpleSchema.RegEx.Id
       },
-      problemType: {
+      documentType: {
         type: String,
         allowedValues: _.values(ProblemTypes)
       }
@@ -139,11 +139,12 @@ export const unlinkProblem = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot link remove action\'s links to problems'
+        403,
+        'Unauthorized user cannot link remove action\'s links to documents'
       );
     }
 
-    return ActionService.unlinkProblem({ ...args });
+    return ActionService.unlinkDocument({ ...args });
   }
 });
 

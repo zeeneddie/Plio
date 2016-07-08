@@ -6,24 +6,24 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 
 
-Template.Actions_LinkedProblems.viewmodel({
+Template.Actions_LinkedTo.viewmodel({
   mixin: ['search', 'organization'],
-  linkedProblems: [],
+  linkedTo: [],
   isEditable: true,
-  linkedProblemsIds() {
-    return this._getProbemIds();
+  linkedToIds() {
+    return this._getDocsIds();
   },
   NCsIds() {
-    return this._getProbemIds(ProblemTypes.NC);
+    return this._getDocsIds(ProblemTypes.NC);
   },
   risksIds() {
-    return this._getProbemIds(ProblemTypes.RISK);
+    return this._getDocsIds(ProblemTypes.RISK);
   },
-  problemSearchText() {
+  docSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
   },
-  problemsDocs() {
+  docs() {
     const actionType = this.type();
 
     if (actionType === ActionTypes.CORRECTIVE_ACTION) {
@@ -40,7 +40,7 @@ Template.Actions_LinkedProblems.viewmodel({
     const NCsIds = this.NCsIds();
 
     const NCQuery = {
-      ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
+      ...this.searchObject('docSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
       _id: { $nin: NCsIds }
     };
@@ -48,24 +48,24 @@ Template.Actions_LinkedProblems.viewmodel({
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.NC, ...args };
+      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NC, ...args };
     });
   },
   risksDocs() {
     const risksIds = this.risksIds();
 
     const riskQuery = {
-      ...this.searchObject('problemSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
+      ...this.searchObject('docSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
       _id: { $nin: risksIds }
     };
     return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, problemType: ProblemTypes.RISK, ...args };
+      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.RISK, ...args };
     });
   },
-  linkedProblemsDocs() {
+  linkedDocs() {
     const NCsIds = this.NCsIds();
     const risksIds = this.risksIds();
 
@@ -74,7 +74,7 @@ Template.Actions_LinkedProblems.viewmodel({
       organizationId: this.organizationId()
     };
     const NCs = NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
-      return { problemType: ProblemTypes.NC, ...args };
+      return { documentType: ProblemTypes.NC, ...args };
     });
 
     const riskQuery = {
@@ -82,7 +82,7 @@ Template.Actions_LinkedProblems.viewmodel({
       organizationId: this.organizationId()
     };
     const risks = Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ ...args }) => {
-      return { problemType: ProblemTypes.RISK, ...args };
+      return { documentType: ProblemTypes.RISK, ...args };
     });
 
     return NCs.concat(risks);
@@ -91,9 +91,9 @@ Template.Actions_LinkedProblems.viewmodel({
     return this.onSelect.bind(this);
   },
   onSelect(viewmodel) {
-    const { _id:problemId, problemType } = viewmodel.getSelectedItem();
+    const { _id:documentId, documentType } = viewmodel.getSelectedItem();
 
-    if (this.linkedProblemsIds().find(id => id === problemId)) return;
+    if (this.linkedToIds().find(id => id === documentId)) return;
 
     const resetSelectItemVm = () => {
       viewmodel.value('');
@@ -101,9 +101,9 @@ Template.Actions_LinkedProblems.viewmodel({
     };
 
     if (this.onLink) {
-      this.onLink({ problemId, problemType }, resetSelectItemVm);
+      this.onLink({ documentId, documentType }, resetSelectItemVm);
     } else {
-      this.linkedProblems().push({ problemId, problemType });
+      this.linkedTo().push({ documentId, documentType });
       resetSelectItemVm();
     }
   },
@@ -111,31 +111,31 @@ Template.Actions_LinkedProblems.viewmodel({
     return this.remove.bind(this);
   },
   remove(e) {
-    const { _id:problemId, problemType } = Blaze.getData(e.target);
+    const { _id:documentId, documentType } = Blaze.getData(e.target);
 
-    if (!this.linkedProblemsIds().find(id => id === problemId)) return;
+    if (!this.linkedToIds().find(id => id === documentId)) return;
 
     if (this.onUnlink) {
-      this.onUnlink({ problemId, problemType });
+      this.onUnlink({ documentId, documentType });
     } else {
-      this.linkedProblems().remove((item) => {
-        return (item.problemId === problemId) && (item.problemType === problemType);
+      this.linkedTo().remove(({ docId, docType }) => {
+        return (docId === documentId) && (docType === documentType);
       });
     }
   },
   getData() {
-    return { linkedProblems: this.linkedProblems().array() };
+    return { linkedTo: this.linkedTo().array() };
   },
-  _getProbemIds(problemType) {
-    let problemsDocs;
-    if (problemType) {
-      problemsDocs = _.filter(
-        this.linkedProblems(),
-        ({ problemType }) => problemType === problemType
+  _getDocsIds(docType) {
+    let docs;
+    if (docType) {
+      docs = _.filter(
+        this.linkedTo(),
+        ({ documentType }) => documentType === docType
       );
     } else {
-      problemsDocs = this.linkedProblems();
+      docs = this.linkedTo();
     }
-    return _.pluck(problemsDocs, 'problemId');
+    return _.pluck(docs, 'documentId');
   }
 });

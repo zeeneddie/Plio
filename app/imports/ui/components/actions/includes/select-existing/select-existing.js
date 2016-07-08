@@ -23,7 +23,7 @@ Template.Actions_SelectExisting.viewmodel({
 
     if (documentId) {
       _.extend(query, {
-        'linkedProblems.problemId': { $ne: documentId }
+        'linkedTo.documentId': { $ne: documentId }
       });
     } else if (standardsIds) {
       _.extend(query, {

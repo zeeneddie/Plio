@@ -13,9 +13,9 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
-  linkedProblems: [],
-  isLinkedProblemsEditable() {
-    return !this.linkedProblems().length;
+  linkedTo: [],
+  isLinkedToEditable() {
+    return !this.linkedTo().length;
   },
   getData() {
     return this.children(vm => vm.getData)

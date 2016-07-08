@@ -22,7 +22,7 @@ Template.Actions_EditMain.viewmodel({
   verifiedBy: '',
   verificationComments: '',
   linkedStandardsIds: [],
-  linkedProblems: [],
+  linkedTo: [],
   autorun() {
     const action = this.action && this.action();
     action && this.load(action);
@@ -51,11 +51,11 @@ Template.Actions_EditMain.viewmodel({
   onUnlinkStandard() {
     return this.unlinkStandardFn;
   },
-  onLinkProblem() {
-    return this.linkProblemFn;
+  onLinkDocument() {
+    return this.linkDocumentFn;
   },
-  onUnlinkProblem() {
-    return this.unlinkProblemFn;
+  onUnlinkDocument() {
+    return this.unlinkDocumentFn;
   },
   getData() {
     return this.children(vm => vm.getData)

@@ -42,11 +42,11 @@ export default {
     return this.collection.update(query, options);
   },
 
-  linkProblem({ _id, problemId, problemType }) {
+  linkDocument({ _id, documentId, documentType }) {
     const action = this._getAction(_id);
 
     let docCollection;
-    if (problemType === ProblemTypes.NC) {
+    if (documentType === ProblemTypes.NC) {
       if (action.type === ActionTypes.RISK_CONTROL) {
         throw new Meteor.Error(
           400, 'Risk control cannot be linked to a non-conformity'
@@ -54,7 +54,7 @@ export default {
       }
 
       docCollection = NonConformities;
-    } else if (problemType === ProblemTypes.RISK) {
+    } else if (documentType === ProblemTypes.RISK) {
       if (action.type === ActionTypes.PREVENTATIVE_ACTION) {
         throw new Meteor.Error(
           400, 'Preventative action cannot be linked to a risk'
@@ -65,17 +65,17 @@ export default {
     }
 
     if (!docCollection) {
-      throw new Meteor.Error(400, 'Invalid problem type');
+      throw new Meteor.Error(400, 'Invalid document type');
     }
 
-    const doc = docCollection.findOne({ _id: problemId });
+    const doc = docCollection.findOne({ _id: documentId });
     if (!doc) {
-      throw new Meteor.Error(400, 'Problem document does not exist');
+      throw new Meteor.Error(400, 'Document does not exist');
     }
 
-    if (action.isLinkedToProblem(problemId, problemType)) {
+    if (action.isLinkedToDocument(documentId, documentType)) {
       throw new Meteor.Error(
-        400, 'This action is already linked to specified problem document'
+        400, 'This action is already linked to specified document'
       );
     }
 
@@ -83,24 +83,24 @@ export default {
       _id
     }, {
       $addToSet: {
-        linkedProblems: { problemId, problemType }
+        linkedTo: { documentId, documentType }
       }
     });
   },
 
-  unlinkProblem({ _id, problemId, problemType }) {
+  unlinkDocument({ _id, documentId, documentType }) {
     const action = this._getAction(_id);
 
-    if (!action.isLinkedToProblem(problemId, problemType)) {
+    if (!action.isLinkedToDocument(documentId, documentType)) {
       throw new Meteor.Error(
-        400, 'This action is not linked to specified problem document'
+        400, 'This action is not linked to specified document'
       );
     }
 
     return this.collection.update({
       _id
     }, {
-      $pull: { linkedProblems: { problemId, problemType } }
+      $pull: { linkedTo: { documentId, documentType } }
     });
   },
 

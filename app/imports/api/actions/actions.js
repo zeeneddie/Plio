@@ -10,19 +10,19 @@ import { compareDates } from '../helpers.js';
 const Actions = new Mongo.Collection('Actions');
 Actions.attachSchema(ActionSchema);
 
-const getProbemDocsIds = (linkedProblems, problemType) => {
+const getLinkedDocsIds = (linkedDocs, docType) => {
   return _.pluck(
     _.filter(
-      linkedProblems,
-      ({ problemType }) => problemType === problemType
+      linkedDocs,
+      ({ documentType }) => documentType === docType
     ),
-    'problemId'
+    'documentId'
   );
 };
 
 Actions.helpers({
   getLinkedNCsIds() {
-    return getProbemDocsIds(this.linkedProblems, ProblemTypes.NC);
+    return getLinkedDocsIds(this.linkedTo, ProblemTypes.NC);
   },
   getLinkedNCs() {
     return NonConformities.find({
@@ -32,7 +32,7 @@ Actions.helpers({
     }).fetch();
   },
   getLinkedRisksIds() {
-    return getProbemDocsIds(this.linkedProblems, ProblemTypes.RISK);
+    return getProbemDocsIds(this.linkedTo, ProblemTypes.RISK);
   },
   getLinkedRisks() {
     return Risks.find({
@@ -81,9 +81,9 @@ Actions.helpers({
 
     return compareDates(undoDeadline, new Date()) === 1;
   },
-  isLinkedToProblem(docId, docType) {
-    return !!_.find(this.linkedProblems, ({ problemId, problemType }) => {
-      return (problemId === docId) && (problemType === docType);
+  isLinkedToDocument(docId, docType) {
+    return !!_.find(this.linkedTo, ({ documentId, documentType }) => {
+      return (documentId === docId) && (documentType === docType);
     });
   }
 });
