@@ -121,7 +121,6 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
-
     if (documentId && documentType) {
       _.extend(newSubcardData, {
         documentId,
@@ -131,6 +130,11 @@ Template.Subcards_Actions_Edit.viewmodel({
           documentType: documentType
         }]
       });
+    }
+
+    const standardId = this.standardId && this.standardId();
+    if (standardId) {
+      _.extend(newSubcardData, { standardId });
     }
 
     this.addForm('SubCardEdit', newSubcardData);

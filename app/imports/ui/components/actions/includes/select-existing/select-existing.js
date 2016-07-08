@@ -19,15 +19,10 @@ Template.Actions_SelectExisting.viewmodel({
     };
 
     const documentId = this.documentId && this.documentId();
-    const standardsIds = this.linkedStandardsIds && this.linkedStandardsIds().array();
 
     if (documentId) {
       _.extend(query, {
         'linkedTo.documentId': { $ne: documentId }
-      });
-    } else if (standardsIds) {
-      _.extend(query, {
-        linkedStandardsIds: { $nin: standardsIds }
       });
     }
 
@@ -56,7 +51,11 @@ Template.Actions_SelectExisting.viewmodel({
     const { selected } = viewModel.getData();
     this.actionId(selected);
   },
-  getData() {
-    return { _id: this.actionId() };
+  actionLinkedTo() {
+    const selectedAction = Actions.findOne({ _id: this.actionId() });
+    return selectedAction && selectedAction.linkedTo;
+  },
+  showLinkedTo() {
+    return this.standardId && this.standardId() && this.actionId();
   }
 });

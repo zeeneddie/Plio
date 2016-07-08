@@ -132,7 +132,8 @@ Template.SubCardEdit.viewmodel({
     return !!this.error();
   },
   save() {
-    this.callInsert(this.insertFn, this.getData());
+    const insertData = this.getData();
+    insertData && this.callInsert(this.insertFn, insertData);
   },
   delete() {
     this.removeFn(this);
@@ -165,6 +166,7 @@ Template.SubCardEdit.viewmodel({
     }
   },
   getData() {
-    return this.child(this.content()).getData();
+    const child = this.child(this.content());
+    return child.getData && child.getData();
   }
 });

@@ -9,4 +9,10 @@
         contentData=dropdownAddActionData
         onUpdate=onActionSelectedCb}}
   {{/FormField}}
+  {{#if showLinkedTo}}
+    {{> Actions_LinkedTo
+        linkedTo=actionLinkedTo
+        type=type
+        standardId=standardId}}
+  {{/if}}
 </template>

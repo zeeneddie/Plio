@@ -73,6 +73,6 @@ Template.Actions_EditSubcard.viewmodel({
     };
   },
   getData() {
-    return this.child('Actions_Edit').getData();
+    return this.child('Actions_EditMain').getData();
   }
 });

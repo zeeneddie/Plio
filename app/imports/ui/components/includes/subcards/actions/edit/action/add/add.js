@@ -10,6 +10,7 @@ Template.Actions_AddSubcard.viewmodel({
     const linkedTo = this.linkedTo && this.linkedTo();
     const documentId = this.documentId && this.documentId();
     const documentType = this.documentType && this.documentType();
+    const standardId = this.standardId && this.standardId();
 
     const defaultData = {
       type: this.type()
@@ -21,6 +22,10 @@ Template.Actions_AddSubcard.viewmodel({
 
     if (documentId && documentType) {
       _.extend(defaultData, { documentId, documentType });
+    }
+
+    if (standardId) {
+      _.extend(defaultData, { standardId });
     }
 
     return _.extend({}, defaultData, this.formData());
@@ -35,6 +40,6 @@ Template.Actions_AddSubcard.viewmodel({
   },
   getData() {
     const form = this.child(this.form());
-    return form && form.getData();
+    return form && form.getData && form.getData();
   }
 });

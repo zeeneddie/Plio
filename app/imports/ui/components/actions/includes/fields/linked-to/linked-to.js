@@ -42,8 +42,13 @@ Template.Actions_LinkedTo.viewmodel({
     const NCQuery = {
       ...this.searchObject('docSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      _id: { $nin: NCsIds }
+      _id: { $nin: NCsIds },
     };
+
+    const standardId = this.standardId && this.standardId();
+    if (standardId) {
+      _.extend(NCQuery, { standardsIds: standardId });
+    }
 
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
@@ -59,6 +64,12 @@ Template.Actions_LinkedTo.viewmodel({
       organizationId: this.organizationId(),
       _id: { $nin: risksIds }
     };
+
+    const standardId = this.standardId && this.standardId();
+    if (standardId) {
+      _.extend(riskQuery, { standardsIds: standardId });
+    }
+
     return Risks.find(riskQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
