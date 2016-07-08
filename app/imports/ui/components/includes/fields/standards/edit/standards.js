@@ -20,7 +20,13 @@ Template.Fields_Standards_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update(viewmodel, option = '$addToSet') {
+  update(viewmodel) {
+    const { selectedItemId } = viewmodel.getData();
+    if(this.standardsIds().includes(selectedItemId)) return;
+
+    this.callUpdate(viewmodel, '$addToSet');
+  },
+  callUpdate(viewmodel, option) {
     const { selected = [], selectedItemId } = viewmodel.getData();
 
     if (selected.length === 0 && this._id) {
@@ -42,14 +48,6 @@ Template.Fields_Standards_Edit.viewmodel({
         standardsIds: selectedItemId
       }
     };
-    this.updateOnParent(options);
-  },
-  updateOnParent(options) {
-    if(options['$addToSet']) {
-      if(this.standardsIds().includes(options['$addToSet'].standardsIds)) return;
-    } else if(options['$pull']) {
-      if(!this.standardsIds().includes(options['$pull'].standardsIds)) return;
-    }
 
     this.parent().update({ options });
   },
@@ -57,7 +55,10 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel, '$pull');
+    const { selectedItemId } = viewmodel.getData();
+    if(!this.standardsIds().includes(selectedItemId)) return;
+
+    this.callUpdate(viewmodel, '$pull');
   },
   getData() {
     const { standardsIds } = this.data();

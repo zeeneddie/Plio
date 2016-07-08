@@ -22,7 +22,7 @@ Template.Select_Single.viewmodel({
     }
   },
   value: '',
-  selected: '',
+  selected: null,
   placeholder: '',
   content: '',
   loading: false,
@@ -43,6 +43,7 @@ Template.Select_Single.viewmodel({
   select({ _id, title }) {
     this.value(title);
     this.selected(_id);
+
     this.update();
   },
   update() {
@@ -68,12 +69,11 @@ Template.Select_Single.viewmodel({
     }
   },
   getSelectedItem() {
-    const find = this.itemsArray().filter(({ _id }) => _id === this.selected());
-    const item = !!find.length > 0 && find[0];
-    return item;
+    return this.itemsArray().find(({ _id }) => _id === this.selected());
   },
   getData() {
     const { value, selected, items } = this.data();
+    this.selected(this.itemsArray()[0]._id);
     const item = this.getSelectedItem();
     return { value, selected, items, item };
   },

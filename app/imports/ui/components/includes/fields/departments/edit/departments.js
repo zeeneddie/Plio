@@ -28,7 +28,7 @@ Template.Departments_Edit.viewmodel({
   },
   update(viewmodel, option = '$addToSet') {
     const { selected = [], selectedItemId } = viewmodel.getData();
-
+    
     if (selected.length === this.selected().length > 0 &&  selected.every(({ _id:itemId }) => this.selected().find(({ _id }) => _id === itemId))) return;
 
     const departmentsIds = selected.map(({ _id }) => _id);
