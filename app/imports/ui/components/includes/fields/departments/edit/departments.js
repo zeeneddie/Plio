@@ -26,10 +26,20 @@ Template.Departments_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
-  update(viewmodel, option = '$addToSet') {
+  update(viewmodel) {
+    const { selectedItemId } = viewmodel.getData();
+    if(this.departmentsIds().includes(selectedItemId)) return;
+
+    this.callUpdate(viewmodel, '$addToSet');
+  },
+  callUpdate(viewmodel, option) {
     const { selected = [], selectedItemId } = viewmodel.getData();
-    
-    if (selected.length === this.selected().length > 0 &&  selected.every(({ _id:itemId }) => this.selected().find(({ _id }) => _id === itemId))) return;
+
+    if (selected.length === 0 && this._id) {
+      ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
+      viewmodel.selected(this.selected());
+      return;
+    }
 
     const departmentsIds = selected.map(({ _id }) => _id);
 
@@ -49,7 +59,10 @@ Template.Departments_Edit.viewmodel({
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel, '$pull');
+    const { selectedItemId } = viewmodel.getData();
+    if(!this.departmentsIds().includes(selectedItemId)) return;
+
+    this.callUpdate(viewmodel, '$pull');
   },
   getData() {
     const { departmentsIds } = this.data();

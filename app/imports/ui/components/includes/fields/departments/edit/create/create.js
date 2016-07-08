@@ -38,23 +38,24 @@ Template.Departments_Create.viewmodel({
         const departmentsEdit = ViewModel.findOne('Departments_Edit');
         const selectMulti = departmentsEdit.child('Select_Multi');
         selectMulti.selectedItemId(_id);
-        console.log(departmentsEdit.getData())
-        console.log('selectMulti:')
-        console.log(selectMulti.getData())
-        console.log('this.data():')
-        console.log(this.data())
-        console.log('parent')
-        console.log(this.parent().templateName())
-        console.log(this.parent().data())
+        // console.log(departmentsEdit.getData())
+        // console.log('selectMulti:')
+        // console.log(selectMulti.getData())
+        // console.log('this.data():')
+        // console.log(this.data())
+        // console.log('parent')
+        // console.log(this.parent().templateName())
+        // console.log(this.parent().data())
         this.selected( Array.from(departmentsEdit.selected() || []).concat([_id]) );
-        departmentsEdit.update(selectMulti, '$addToSet');
+        departmentsEdit.update(selectMulti);
+        // departmentsEdit.update(this);
 
         swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
       }
     });
   },
   getData() {
-    const { value, selected } = this.data();
-    return { value, selected };
+    const { value, selected:selectedItemId } = this.data();
+    return { value, selectedItemId };
   }
 });
