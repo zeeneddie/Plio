@@ -8,20 +8,20 @@
           selectFirstIfNoSelected=selectFirstIfNoSelected
           onUpdate=onUpdateCb}}
       {{#if isCompleteButtonVisible}}
-        {{#unless isCompleteFormVisible}}
+        {{#unless isCompletionFormVisible}}
           <button type="button" class="btn btn-success margin-left"
-              {{b "click: showCompleteForm"}}>
+              {{b "click: showCompletionForm"}}>
             Complete
           </button>
         {{else}}
           <button type="button" class="btn btn-link margin-left"
-              {{b "click: hideCompleteForm"}}>
+              {{b "click: hideCompletionForm"}}>
             Cancel
           </button>
         {{/unless}}
       {{/if}}
     </div>
-    {{#if isCompleteFormVisible}}
+    {{#if isCompletionFormVisible}}
       <div class="form-group">
         <textarea class="form-control" rows="3" placeholder="Comments"
             {{b "value: completionComments"}}></textarea>

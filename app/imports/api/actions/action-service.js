@@ -154,7 +154,7 @@ export default {
     });
   },
 
-  verify({ _id, userId }) {
+  verify({ _id, userId, success, verificationComments }) {
     const action = this._getAction(_id);
 
     if (userId !== action.toBeVerifiedBy) {
@@ -165,6 +165,8 @@ export default {
       throw new Meteor.Error(400, 'This action cannot be verified');
     }
 
+    const status = (success === true) ? 7 : 6;
+
     return this.collection.update({
       _id
     }, {
@@ -172,7 +174,8 @@ export default {
         isVerified: true,
         verifiedBy: userId,
         verifiedAt: new Date,
-        status: 7
+        status,
+        verificationComments
       }
     });
   },
@@ -197,7 +200,8 @@ export default {
       },
       $unset: {
         verifiedBy: '',
-        verifiedAt: ''
+        verifiedAt: '',
+        verificationComments: ''
       }
     });
   },

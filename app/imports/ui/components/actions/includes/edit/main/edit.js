@@ -20,7 +20,7 @@ Template.Actions_EditMain.viewmodel({
   toBeVerifiedBy: '',
   verifiedAt: '',
   verifiedBy: '',
-  verificationResult: '',
+  verificationComments: '',
   linkedStandardsIds: [],
   linkedProblems: [],
   autorun() {

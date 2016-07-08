@@ -189,9 +189,15 @@ export const undoCompletion = new ValidatedMethod({
 export const verify = new ValidatedMethod({
   name: 'Actions.verify',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      success: { type: Boolean },
+      verificationComments: { type: String }
+    }
+  ]).validator(),
 
-  run({ _id }) {
+  run({ _id, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -199,7 +205,7 @@ export const verify = new ValidatedMethod({
       );
     }
 
-    return ActionService.verify({ _id, userId });
+    return ActionService.verify({ _id, userId, ...args });
   }
 });
 

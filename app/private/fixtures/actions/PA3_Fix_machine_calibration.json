@@ -25,7 +25,7 @@
   "toBeVerifiedBy": "SQHmBKJ94gJvpLKLt",
   "verifiedAt": {"$date": 1459508400000},
   "verifiedBy": "SQHmBKJ94gJvpLKLt",
-  "verificationResult": "",
+  "verificationComments": "",
   "notes": "",
   "files": [],
   "viewedBy": [],

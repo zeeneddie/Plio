@@ -125,9 +125,8 @@ const ActionSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    verificationResult: {
+    verificationComments: {
       type: String,
-      max: 40,
       optional: true
     },
     isDeleted: {

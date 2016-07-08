@@ -23,9 +23,11 @@ Template.Actions_EditSubcard.viewmodel({
     };
   },
   getVerifyFn() {
-    return () => {
+    return ({ success, verificationComments }) => {
       this.parent().callUpdate(this.verifyFn, {
-        _id: this._id()
+        _id: this._id(),
+        success,
+        verificationComments
       });
     };
   },

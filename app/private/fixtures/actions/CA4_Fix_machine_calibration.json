@@ -29,7 +29,7 @@
   "toBeVerifiedBy": "TCstWknRczHkvP6j4",
   "verifiedAt": {"$date": 1459508400000},
   "verifiedBy": "TCstWknRczHkvP6j4",
-  "verificationResult": "",
+  "verificationComments": "",
   "notes": "",
   "files": [],
   "viewedBy": [],
