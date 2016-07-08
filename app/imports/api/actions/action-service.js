@@ -104,7 +104,7 @@ export default {
     });
   },
 
-  complete({ _id, userId, completionResult }) {
+  complete({ _id, userId, completionComments }) {
     const action = this._getAction(_id);
 
     if (userId !== action.toBeCompletedBy) {
@@ -123,7 +123,7 @@ export default {
         completedBy: userId,
         completedAt: new Date(),
         status: 3,
-        completionResult
+        completionComments
       }
     });
   },
@@ -148,7 +148,8 @@ export default {
       },
       $unset: {
         completedBy: '',
-        completedAt: ''
+        completedAt: '',
+        completionComments: ''
       }
     });
   },

@@ -23,7 +23,7 @@
   "toBeCompletedBy": "SQHmBKJ94gJvpLKLt",
   "completedAt": {"$date": 1459508400000},
   "completedBy": "SQHmBKJ94gJvpLKLt",
-  "completionResult": "",
+  "completionComments": "",
   "isVerified": true,
   "verificationTargetDate": {"$date": 1459508400000},
   "toBeVerifiedBy": "SQHmBKJ94gJvpLKLt",

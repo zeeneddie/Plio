@@ -98,9 +98,8 @@ const ActionSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    completionResult: {
+    completionComments: {
       type: String,
-      max: 40,
       optional: true
     },
     isVerified: {

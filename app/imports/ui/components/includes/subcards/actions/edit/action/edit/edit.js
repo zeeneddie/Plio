@@ -8,10 +8,10 @@ Template.Actions_EditSubcard.viewmodel({
     this.parent().update({ ...args });
   },
   getCompleteFn() {
-    return ({ completionResult }) => {
+    return ({ completionComments }) => {
       this.parent().callUpdate(this.completeFn, {
         _id: this._id(),
-        completionResult
+        completionComments
       });
     };
   },

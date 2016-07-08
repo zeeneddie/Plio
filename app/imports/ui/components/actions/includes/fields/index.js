@@ -1,6 +1,6 @@
 import './completed-by';
 import './completed-on';
-import './completion-result';
+import './completion-comments';
 import './completion-target-date';
 import './linked-problems';
 import './owner';

@@ -14,7 +14,7 @@ Template.Actions_EditMain.viewmodel({
   toBeCompletedBy: '',
   completedAt: '',
   completedBy: '',
-  completionResult: '',
+  completionComments: '',
   isVerified: false,
   verificationTargetDate: '',
   toBeVerifiedBy: '',

@@ -153,10 +153,7 @@ export const complete = new ValidatedMethod({
   validate: new SimpleSchema([
     IdSchema,
     {
-      completionResult: {
-        type: String,
-        max: 40
-      }
+      completionComments: { type: String }
     }
   ]).validator(),
 
