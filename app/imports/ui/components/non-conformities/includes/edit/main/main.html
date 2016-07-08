@@ -1,13 +1,13 @@
 <template name="NC_Card_Edit_Main">
   {{#with NC}}
     <div class="card-block">
-      {{> NC_Title_Edit _id=this._id titleText=this.title}}
+      {{> NC_Title_Edit _id=this._id titleText=this.title sequentialId=this.sequentialId}}
 
       {{> ES_Description_Edit _id=this._id description=this.description}}
 
       {{> NC_Status_Edit _id=this._id status=this.status}}
 
-      {{> Standard_Edit _id=this.standardId}}
+      {{> Fields_Standards_Edit _id=this._id isEditable=isStandardsEditable standardsIds=this.standardsIds}}
 
       {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
 

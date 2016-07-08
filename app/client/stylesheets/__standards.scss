@@ -205,7 +205,7 @@
       display: table;
       height: 100%;
       width: 100%;
-      z-index: 1;
+      z-index: 0;
 
       &::before {
         display: table-cell;
@@ -231,13 +231,13 @@
 
     .source-document-preview-wrapper {
       position: relative;
+      background-color: #fff;
 
       .source-document-preview {
         position: relative;
         box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
         height: 70vh;
         width: 100%;
-        overflow: scroll;
         z-index: 1;
         
         iframe {
@@ -265,7 +265,7 @@
         background: -ms-linear-gradient(top, rgba(137,255,241,0) 0%,rgba(0,0,0,1) 100%);
         background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 12%,rgba(179, 179, 179, 0.32) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0089fff1', endColorstr='#000000',GradientType=0 );
-        z-index: 1;
+        z-index: 0;
       }
     }
 

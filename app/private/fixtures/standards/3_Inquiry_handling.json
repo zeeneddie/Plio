@@ -8,6 +8,10 @@
   "description": "This is the standard for dealing with inquiry handling",
   "approvedAt": {"$date": 1358205756553},
   "notes": null,
+  "source1" : {
+    "type" : "video",
+    "url" : "https://www.youtube.com/watch?v=RUp_P2g8sAc"
+  },
   "createdAt": {"$date": 1459508400000},
   "createdBy": "SQHmBKJ94gJvpLKLt",
   "updatedAt": null,

@@ -3,6 +3,10 @@
     <div class="card-block">
       {{> NC_Title_Edit}}
 
+      {{> Fields_Standards_Edit
+          isEditable=isStandardsEditable
+          standardsIds=standardsIds}}
+
       {{> NC_IdentifiedBy_Edit}}
 
       {{> NC_IdentifiedDate_Edit}}

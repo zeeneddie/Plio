@@ -102,7 +102,7 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
-        
+
         // Workaround for fixtures
         return this.userId || this.isSet && this.value;
       } else {
@@ -241,6 +241,11 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     },
     magnitude: {
       type: String
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1
     }
   }
 ]);
@@ -297,11 +302,6 @@ export const BaseProblemsOptionalSchema = ((() => {
     FilesSchema,
     getNotifySchema('identifiedBy'),
     {
-      standardId: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true
-      },
       description: {
         type: String,
         optional: true

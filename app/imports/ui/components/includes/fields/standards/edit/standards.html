@@ -1,0 +1,16 @@
+<template name="Fields_Standards_Edit">
+  {{#FormField label="Standard(s)"}}
+    {{#if isEditable}}
+      {{> Select_Multi
+          selected=selected
+          items=standards
+          placeholder="Link to standard(s)"
+          onUpdate=onUpdateCb
+          onRemove=onRemoveCb}}
+    {{else}}
+      {{#each selected}}
+        <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
+      {{/each}}
+    {{/if}}
+  {{/FormField}}
+</template>
