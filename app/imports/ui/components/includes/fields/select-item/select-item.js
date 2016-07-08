@@ -21,6 +21,22 @@ Template.SelectItem.viewmodel({
       }
     }
   },
+  onRendered() {
+    this.dropdown.on('show.bs.dropdown', () => this.onShow());
+    this.dropdown.on('hide.bs.dropdown', () => this.onHide());
+  },
+  onShow() {
+    this.focused(true);
+    this.value('');
+  },
+  onHide() {
+    this.focused(false);
+
+    if (!!this.selected() && !this.value()) {
+      const item = this.getSelectedItem();
+      !!item && this.value(item.title);
+    }
+  },
   value: '',
   selected: '',
   placeholder: '',
@@ -30,47 +46,28 @@ Template.SelectItem.viewmodel({
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
-  variation: '',
-  isVariation(variation) {
-    return this.variation() === variation;
+  showContent() {
+    return this.itemsFiltered().length > 0 || !!Template[this.content()];
   },
   itemsArray() {
     return this.toArray(this.items());
   },
   itemsFiltered() {
-    return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
+    return this.itemsArray().filter(({ _id }) => !this.excludedItems().includes(_id));
   },
   select({ _id, title }) {
     this.value(title);
     this.selected(_id);
     this.update();
   },
+  onUpdate() {},
   update() {
-    this.fixValue();
-
-    if (!this.onUpdate) return;
+    this.onHide();
 
     this.onUpdate(this);
   },
-  remove() {
-    if (!this._id) {
-      this.destroy();
-    } else {
-      this.onRemove(this, this.destroy());
-    }
-  },
-  fixValue() {
-    this.focused(false);
-
-    if (!!this.selected() && !this.value()) {
-      const item = this.getSelectedItem();
-      !!item && this.value(item.title);
-    }
-  },
   getSelectedItem() {
-    const find = this.itemsArray().filter(({ _id }) => _id === this.selected());
-    const item = !!find.length > 0 && find[0];
-    return item;
+    return this.itemsArray().find(({ _id }) => _id === this.selected());
   },
   getData() {
     const { value, selected, items } = this.data();
@@ -83,11 +80,5 @@ Template.SelectItem.viewmodel({
   clear() {
     this.value('');
     this.selected('');
-  },
-  events: {
-    'focus input'() {
-      this.focused(true);
-      this.value('');
-    }
   }
 });
