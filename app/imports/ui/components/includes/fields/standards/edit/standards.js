@@ -21,24 +21,21 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selectedItemId } = viewmodel.getData();
-    if(this.standardsIds().includes(selectedItemId)) return;
+    const { selectedItemId, selected } = viewmodel.getData();
+    if(this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(viewmodel, '$addToSet');
+    this.callUpdate(selectedItemId, '$addToSet', selected);
   },
-  callUpdate(viewmodel, option) {
-    const { selected = [], selectedItemId } = viewmodel.getData();
-
+  callUpdate(selectedItemId, option, selected) {
     if (selected.length === 0 && this._id) {
-      ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
-      viewmodel.selected(this.selected());
+      ViewModel.findOne('ModalWindow')
+                  .setError('A document must be linked to at least one standard.');
       return;
     }
 
     if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
-
     this.standardsIds(standardsIds);
 
     if (!this._id) return;
@@ -55,10 +52,13 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    const { selectedItemId } = viewmodel.getData();
-    if(!this.standardsIds().includes(selectedItemId)) return;
+    const { selectedItemId, selected } = viewmodel.getData();
+    if(!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(viewmodel, '$pull');
+    this.callUpdate(selectedItemId, '$pull', selected);
+  },
+  areIdsIncludesItemId(selectedItemId) {
+    return this.standardsIds().includes(selectedItemId);
   },
   getData() {
     const { standardsIds } = this.data();

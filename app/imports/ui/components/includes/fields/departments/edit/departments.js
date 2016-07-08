@@ -1,8 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { Departments } from '/imports/api/departments/departments.js';
-
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization', 'department'],
   departmentsIds: [],
@@ -16,34 +14,28 @@ Template.Departments_Edit.viewmodel({
   },
   departments() {
     const query = {
-      ...this.searchObject('value', 'name'),
-      organizationId: this.organizationId()
+      ...this.searchObject('value', 'name')
     };
-    const options = { sort: { name: 1 } };
 
-    return Departments.find(query, options).map(({ name, ...args }) => ({ title: name, name, ...args }));
+    return this._getDepartmentsByQuery(query);
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selectedItemId } = viewmodel.getData();
-    if(this.departmentsIds().includes(selectedItemId)) return;
+    const { selectedItemId, selected } = viewmodel.getData();
+    if(this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(viewmodel, '$addToSet');
-  },
-  callUpdate(viewmodel, option) {
-    const { selected = [], selectedItemId } = viewmodel.getData();
-
-    if (selected.length === 0 && this._id) {
-      ViewModel.findOne('ModalWindow').setError('A document must be linked to at least one standard.');
-      viewmodel.selected(this.selected());
-      return;
-    }
-
-    const departmentsIds = selected.map(({ _id }) => _id);
-
+    const departmentsIds = this.departmentsIds().concat([selectedItemId]);
     this.departmentsIds(departmentsIds);
+
+    this.callUpdate(selectedItemId, '$addToSet', selected);
+  },
+  callUpdate(selectedItemId, option, selected) {
+    if (selected.length === this.selected().length &&
+        selected.every( ({ _id:itemId }) => this.selected().find(
+          ({ _id }) => _id === itemId) )
+      ) return;
 
     if (!this._id) return;
 
@@ -59,10 +51,18 @@ Template.Departments_Edit.viewmodel({
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    const { selectedItemId } = viewmodel.getData();
-    if(!this.departmentsIds().includes(selectedItemId)) return;
+    const { selectedItemId, selected } = viewmodel.getData();
+    if(!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(viewmodel, '$pull');
+    const departmentsIds = this.departmentsIds().filter(
+      _id => _id !== selectedItemId
+    );
+    this.departmentsIds(departmentsIds);
+
+    this.callUpdate(selectedItemId, '$pull', selected);
+  },
+  areIdsIncludesItemId(selectedItemId) {
+    return this.departmentsIds().includes(selectedItemId);
   },
   getData() {
     const { departmentsIds } = this.data();
