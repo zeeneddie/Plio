@@ -73,7 +73,6 @@ Template.Select_Single.viewmodel({
   },
   getData() {
     const { value, selected, items } = this.data();
-    this.selected(this.itemsArray()[0]._id);
     const item = this.getSelectedItem();
     return { value, selected, items, item };
   },
