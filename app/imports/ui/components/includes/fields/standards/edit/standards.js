@@ -28,11 +28,6 @@ Template.Fields_Standards_Edit.viewmodel({
       viewmodel.selected(this.selected());
       return;
     }
-    if(option === '$addToSet') {
-      if(this.standardsIds().includes(selectedItemId)) return;
-    } else if(option === '$pull') {
-      if(!this.standardsIds().includes(selectedItemId)) return;
-    }
 
     if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
@@ -47,6 +42,14 @@ Template.Fields_Standards_Edit.viewmodel({
         standardsIds: selectedItemId
       }
     };
+    this.updateOnParent(options);
+  },
+  updateOnParent(options) {
+    if(options['$addToSet']) {
+      if(this.standardsIds().includes(options['$addToSet'].standardsIds)) return;
+    } else if(options['$pull']) {
+      if(!this.standardsIds().includes(options['$pull'].standardsIds)) return;
+    }
 
     this.parent().update({ options });
   },
