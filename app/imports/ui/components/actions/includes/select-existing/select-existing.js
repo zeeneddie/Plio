@@ -7,6 +7,7 @@ Template.Actions_SelectExisting.viewmodel({
   mixin: ['organization', 'search'],
   type: '',
   actionId: '',
+  linkTo: '',
   actionSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
@@ -55,7 +56,16 @@ Template.Actions_SelectExisting.viewmodel({
     const selectedAction = Actions.findOne({ _id: this.actionId() });
     return selectedAction && selectedAction.linkedTo;
   },
-  showLinkedTo() {
+  showLinkTo() {
     return this.standardId && this.standardId() && this.actionId();
+  },
+  onSelectDocCb() {
+    return this.onSelectDoc.bind(this);
+  },
+  onSelectDoc({ documentId, documentType }) {
+    this.linkTo({ documentId, documentType });
+  },
+  getData() {
+    return { _id: this.actionId(), linkTo: this.linkTo() };
   }
 });

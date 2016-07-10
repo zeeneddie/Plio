@@ -142,15 +142,20 @@ Template.Subcards_Actions_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, ...args }, cb) {
+  insert({ _id, linkTo, ...args }, cb) {
     if (_id) {
-      const documentId = this.documentId && this.documentId();
-      const documentType = this.documentType && this.documentType();
+      let documentId, documentType;
+
+      if (_.isObject(linkTo)) {
+        documentId = linkTo.documentId;
+        documentType = linkTo.documentType;
+      } else {
+        documentId = this.documentId && this.documentId();
+        documentType = this.documentType && this.documentType();
+      }
 
       this.modal().callMethod(linkDocument, {
-        _id,
-        documentId: documentId,
-        documentType: documentType
+        _id, documentId, documentType
       }, cb);
     } else {
       const organizationId = this.organizationId();
