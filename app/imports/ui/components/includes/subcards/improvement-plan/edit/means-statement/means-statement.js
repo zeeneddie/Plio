@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 
-Template.IPMeansStatement.viewmodel({
+Template.IP_MeansStatement_Edit.viewmodel({
   mixin: 'organization',
   files: [],
   uploaderMetaContext() {

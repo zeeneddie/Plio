@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCAnalysis.viewmodel({
+Template.NC_Analysis_Edit.viewmodel({
   autorun() {
     this.load(this.analysis());
   },

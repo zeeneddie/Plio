@@ -1,0 +1,19 @@
+import { Template } from 'meteor/templating';
+
+Template.Actions_ChooseTypeModal.viewmodel({
+  mixin: ['modal', 'action'],
+  openCreateModal(type) {
+    this.modal().close();
+
+    Meteor.setTimeout(() => {
+      const title = this._getNameByType(type);
+
+      this.modal().open({
+        title,
+        type,
+        template: 'Actions_Create',
+        variation: 'save'
+      });
+    }, 400);
+  }
+});

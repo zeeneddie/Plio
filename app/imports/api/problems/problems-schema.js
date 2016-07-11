@@ -8,7 +8,7 @@ const requiredFields = new SimpleSchema([
   {
     type: {
       type: String,
-      allowedValues: ProblemTypes
+      allowedValues: _.values(ProblemTypes)
     },
     title: {
       type: String,
@@ -91,7 +91,7 @@ const ProblemsUpdateSchema = new SimpleSchema([
   {
     type: {
       type: String,
-      allowedValues: ProblemTypes,
+      allowedValues: _.values(ProblemTypes),
       optional: true
     },
     title: {

@@ -304,6 +304,7 @@ export const inviteMultipleUsersByEmail = new ValidatedMethod({
 
   validate: new SimpleSchema([OrganizationIdSchema, {
     emails: {
+      label: "Email address",
       type: [String],
       regEx: SimpleSchema.RegEx.Email
     },

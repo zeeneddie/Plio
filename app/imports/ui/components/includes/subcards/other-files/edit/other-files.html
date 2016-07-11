@@ -1,5 +1,5 @@
 <template name="Subcards_OtherFiles_Edit">
-  {{#SubCardEditWrapper _lText="Other Files" _rText=files.length}}
+  {{#SubCard_EditWrapper _lText="Other Files" _rText=files.length}}
     <div id="other-files">
       {{#FormField sm=12}}
         {{> FileUploader_Wrapper
@@ -8,5 +8,5 @@
             uploaderMetaContext=uploaderMetaContext}}
       {{/FormField}}
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

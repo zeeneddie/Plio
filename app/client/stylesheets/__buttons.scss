@@ -97,6 +97,10 @@
 */
 
 .btn {
+  &:focus, &:active, &:focus:active {
+    outline: none;
+  }
+
   i {
     &.margin-right {
       margin-right: 5px;

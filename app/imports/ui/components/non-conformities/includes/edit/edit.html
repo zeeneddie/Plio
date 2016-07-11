@@ -1,8 +1,8 @@
-<template name="EditNC">
+<template name="NC_Card_Edit">
   <div>
     <div class="relative">
       {{#with NC}}
-        {{> EditNC_Main NC=this}}
+        {{> NC_Card_Edit_Main NC=this}}
 
         {{> Subcards_Notify_Edit
             document=this
@@ -11,27 +11,15 @@
 
         {{> Subcards_Occurrences_Edit _id=this._id occurrencesIds=this.occurrences}}
 
-        <div class="card-block-collapse collapse" id="nonconformities">
-          <div ng-include="'includes/subcards-edit/nonconformities.html'"></div>
-        </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#corrective-actions" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Corrective actions</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">0</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="corrective-actions">
-          <div ng-include="'includes/subcards-edit/corrective-actions.html'"></div>
-        </div>
-        <div class="card-block card-block-collapse-toggle collapsed shroud" href="#preventative-actions" data-toggle="collapse">
-          <h4 class="card-title pull-xs-left">Preventative actions</h4>
-          <h4 class="card-title pull-xs-right">
-            <span class="text-muted">0</span>
-          </h4>
-        </div>
-        <div class="card-block-collapse collapse" id="preventative-actions">
-          <div ng-include="'includes/subcards-edit/preventative-actions.html'"></div>
-        </div>
+        {{> Subcards_Actions_Edit
+            type="CA"
+            documentId=this._id
+            documentType="non-conformity"}}
+
+        {{> Subcards_Actions_Edit
+            type="PA"
+            documentId=this._id
+            documentType="non-conformity"}}
 
         {{> Subcards_ImprovementPlan_Edit
             documentId=this._id

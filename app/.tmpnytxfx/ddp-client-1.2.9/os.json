@@ -1,0 +1,128 @@
+{
+  "format": "isopack-2-unibuild",
+  "declaredExports": [
+    {
+      "name": "DDP",
+      "testOnly": false
+    },
+    {
+      "name": "LivedataTest",
+      "testOnly": true
+    }
+  ],
+  "uses": [
+    {
+      "package": "meteor"
+    },
+    {
+      "package": "check"
+    },
+    {
+      "package": "random"
+    },
+    {
+      "package": "ejson"
+    },
+    {
+      "package": "underscore"
+    },
+    {
+      "package": "tracker"
+    },
+    {
+      "package": "retry"
+    },
+    {
+      "package": "id-map"
+    },
+    {
+      "package": "ddp-common"
+    },
+    {
+      "package": "diff-sequence"
+    },
+    {
+      "package": "mongo-id"
+    }
+  ],
+  "node_modules": "npm/node_modules",
+  "resources": [
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/namespace.js",
+      "length": 119,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "namespace.js",
+      "hash": "e3e0cb8ea9ea1796dddd76e5397b3533f567ac95",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/id_map.js",
+      "length": 145,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "id_map.js",
+      "hash": "a7108216275830f0ffdae11dbe988d427b02789d",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/stream_client_nodejs.js",
+      "length": 6608,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "stream_client_nodejs.js",
+      "hash": "193f7e1c7be3bd211f9bdf1805d574d8fa1ba95d",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/stream_client_common.js",
+      "length": 7747,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "stream_client_common.js",
+      "hash": "f8b5cf47f2c1b832f2c00a2f9dec6b47a2e9f300",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/livedata_common.js",
+      "length": 323,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "livedata_common.js",
+      "hash": "2fc4d310b39c89e9bf0b897e4163fcd7d6b543b0",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/random_stream.js",
+      "length": 333,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "random_stream.js",
+      "hash": "11ecce413240915c8bfd01278f096c2e655b8f21",
+      "fileOptions": {}
+    },
+    {
+      "type": "source",
+      "extension": "js",
+      "file": "os/livedata_connection.js",
+      "length": 67031,
+      "offset": 0,
+      "usesDefaultSourceProcessor": true,
+      "path": "livedata_connection.js",
+      "hash": "c9ef48c6e7db4b48ce853208c757d31be2dda0f4",
+      "fileOptions": {}
+    }
+  ]
+}

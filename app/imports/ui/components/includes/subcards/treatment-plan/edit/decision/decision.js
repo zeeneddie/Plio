@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { TreatmentPlanDecisions } from '/imports/api/constants.js';
 
-Template.TreatmentPlan_Decision.viewmodel({
+Template.TreatmentPlan_Decision_Edit.viewmodel({
   decision: '',
   decisionList() {
     return _.keys(TreatmentPlanDecisions).map(key => ({ value: key, text: TreatmentPlanDecisions[key] }) );

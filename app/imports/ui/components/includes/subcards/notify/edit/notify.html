@@ -1,5 +1,5 @@
 <template name="Subcards_Notify_Edit">
-  {{#SubCardEditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
+  {{#SubCard_EditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
     <div id="notify">
       <div class="form-group form-group-buttons">
         {{#each currentNotifyUsers}}
@@ -16,5 +16,5 @@
             onUpdate=onSelectUserCb}}
       </div>
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

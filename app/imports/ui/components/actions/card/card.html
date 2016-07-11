@@ -1,0 +1,53 @@
+<template name="ActionsCard">
+  <div class="content-cards-inner flex scroll">
+    {{#if hasActions}}
+      <div class="card">
+        {{#with action}}
+          <div class="card-block card-heading">
+            <div class="card-heading-buttons pull-xs-right">
+              {{#if isDeleted}}
+                <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                  Restore
+                </a>
+                <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                  Delete
+                </a>
+              {{else}}
+                <a class="btn btn-primary" {{b "click: openEditNCModal"}}>
+                  <i class="fa fa-pencil"></i>
+                  Edit
+                </a>
+              {{/if}}
+            </div>
+            <h3 class="card-title">
+              Non-conformity
+            </h3>
+          </div>
+
+          <div class="list-group">
+
+            <div class="list-group-item">
+              <p class="list-group-item-text">Title</p>
+              <h4 class="list-group-item-heading">
+                <span {{b "text: this.title"}}></span>
+              </h4>
+            </div>
+
+          </div>
+
+          {{> CardChangelog document=this}}
+        {{/with}}
+      </div>
+    {{else}}
+      <div class="card">
+        <div class="card-block card-heading">
+          {{#if isActiveActionFilter 'deleted'}}
+            <h5>There are no deleted actions yet.</h5>
+          {{else}}
+            <h5>There are no actions yet! Click on the 'Add' button to create your first non-conformity.</h5>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</template>

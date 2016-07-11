@@ -1,0 +1,73 @@
+<template name="Actions_EditMain">
+  <div class="card-block">
+    {{> Actions_Title title=title}}
+
+    {{> Actions_LinkedTo
+        type=type
+        linkedTo=linkedTo
+        standardId=standardId
+        onLink=onLinkDocument
+        onUnlink=onUnlinkDocument}}
+
+    {{> Actions_Status status=status}}
+
+    {{> Actions_Owner ownerId=ownerId}}
+
+    {{> Actions_PlanInPlace planInPlace=planInPlace}}
+
+    <hr />
+
+    {{> Actions_CompletionTargetDate
+        completionTargetDate=completionTargetDate
+        enabled=isCompletionEditable}}
+
+    {{#unless isCompleted}}
+
+      {{> Actions_ToBeCompletedBy
+          toBeCompletedBy=toBeCompletedBy
+          onComplete=onComplete}}
+
+    {{else}}
+
+      {{> Actions_CompletedOn
+          completedAt=completedAt
+          enabled=isCompletionEditable}}
+
+      {{> Actions_CompletedBy
+          completedBy=completedBy
+          completedAt=completedAt
+          enabled=isCompletionEditable
+          onUndo=onUndoCompletion}}
+
+      {{> Actions_CompletionComments
+          completionComments=completionComments
+          enabled=isCompletionEditable}}
+
+      <hr />
+
+      {{> Actions_VerificationTargetDate
+          verificationTargetDate=verificationTargetDate}}
+
+      {{#unless isVerified}}
+
+        {{> Actions_ToBeVerifiedBy
+            toBeVerifiedBy=toBeVerifiedBy
+            onVerify=onVerify}}
+
+      {{else}}
+
+        {{> Actions_VerifiedOn verifiedAt=verifiedAt}}
+
+        {{> Actions_VerifiedBy
+            verifiedBy=verifiedBy
+            verifiedAt=verifiedAt
+            onUndo=onUndoVerification}}
+
+        {{> Actions_VerificationComments
+            verificationComments=verificationComments}}
+
+      {{/unless}}
+
+    {{/unless}}
+  </div>
+</template>

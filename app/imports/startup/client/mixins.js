@@ -6,7 +6,13 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, ProblemsStatuses, OrgCurrencies } from '/imports/api/constants.js';
+import { Actions } from '/imports/api/actions/actions.js';
+import {
+  UserRoles, StandardFilters, RiskFilters,
+  NonConformityFilters, NCTypes, ProblemsStatuses,
+  OrgCurrencies, ActionStatuses, ActionFilters,
+  ActionTypes
+} from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
 
@@ -400,6 +406,16 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
+    goToAction(actionId, withQueryParams = true) {
+      const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('action', params, queryParams);
+    },
+    goToActions(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('actions', params, queryParams);
+    },
     goToRisk(riskId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
       const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
@@ -486,6 +502,42 @@ ViewModel.mixin({
       return NonConformities.findOne(query, options);
     }
   },
+  action: {
+    actionId() {
+      return FlowRouter.getParam('actionId');
+    },
+    isActiveActionFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeActionFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentAction() {
+      const _id = this.actionId();
+      return Actions.findOne({ _id });
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
+    }
+  },
   utils: {
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -562,6 +614,30 @@ ViewModel.mixin({
         default:
           return '';
           break;
+      }
+    }
+  },
+  actionStatus: {
+    getStatusName(status) {
+      return ActionStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+        case 1:
+        case 2:
+          return 'warning';
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+          return 'success';
+        case 9:
+          return 'danger';
+        default:
+          return '';
       }
     }
   },

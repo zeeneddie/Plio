@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.IPDesiredOutcome.viewmodel({
+Template.IP_DesiredOutcome_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
   desiredOutcome: '',
   update(e) {

@@ -3,21 +3,21 @@
     <div class="relative">
       {{#with risk}}
         <div class="card-block">
-          {{> NCTitle _id=this._id titleText=this.title sequentialId=this.sequentialId label="Risk name"}}
+          {{> NC_Title_Edit _id=this._id titleText=this.title sequentialId=this.sequentialId label="Risk name"}}
 
-          {{> ESDescription _id=this._id description=this.description}}
+          {{> ES_Description_Edit _id=this._id description=this.description}}
 
-          {{> NCStatus _id=this._id status=this.status}}
+          {{> NC_Status_Edit _id=this._id status=this.status}}
 
           {{> Fields_Standards_Edit _id=this._id standardsIds=this.standardsIds}}
 
           {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
 
-          {{> NCIdentifiedBy _id=this._id identifiedBy=this.identifiedBy}}
+          {{> NC_IdentifiedBy_Edit _id=this._id identifiedBy=this.identifiedBy}}
 
-          {{> NCIdentifiedDate _id=this._id identifiedAt=this.identifiedAt}}
+          {{> NC_IdentifiedDate_Edit _id=this._id identifiedAt=this.identifiedAt}}
 
-          {{> NCMagnitude _id=this._id magnitude=this.magnitude}}
+          {{> NC_Magnitude_Edit _id=this._id magnitude=this.magnitude}}
 
           {{> RKType _id=this._id typeId=this.typeId}}
         </div>
@@ -40,6 +40,16 @@
         {{> Subcards_TreatmentPlan_Edit
             _id=this._id
             treatmentPlan=this.treatmentPlan}}
+
+        {{> Subcards_Actions_Edit
+            type="CA"
+            documentId=this._id
+            documentType="risk"}}
+
+        {{> Subcards_Actions_Edit
+            type="RC"
+            documentId=this._id
+            documentType="risk"}}
 
         {{> Subcards_LessonsLearned_Edit
             documentId=this._id

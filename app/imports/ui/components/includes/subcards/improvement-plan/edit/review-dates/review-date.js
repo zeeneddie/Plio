@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { Blaze } from 'meteor/blaze';
 
-Template.IPReviewDate.viewmodel({
+Template.IP_ReviewDate_Edit.viewmodel({
   mixin: ['date'],
   _id: '',
   date: '',

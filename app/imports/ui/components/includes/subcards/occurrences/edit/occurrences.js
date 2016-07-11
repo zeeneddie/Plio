@@ -23,7 +23,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
   },
   addOccurrence() {
     this.addForm(
-      'SubCardEdit',
+      'SubCard_Edit',
       {
         _lText: `${this.nonConformity().sequentialId}-new occurance`,
         _rText: '',

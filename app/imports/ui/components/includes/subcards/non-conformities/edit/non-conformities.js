@@ -13,7 +13,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   addNC() {
     this.addForm(
-      'SubCardEdit',
+      'SubCard_Edit',
       {
         content: 'CreateNC',
         isStandardsEditable: this.isStandardsEditable(),

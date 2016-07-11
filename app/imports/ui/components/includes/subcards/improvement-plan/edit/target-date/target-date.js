@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.IPTargetDate.viewmodel({
+Template.IP_TargetDate_Edit.viewmodel({
   mixin: 'date',
   targetDate: '',
   onUpdateCb() {

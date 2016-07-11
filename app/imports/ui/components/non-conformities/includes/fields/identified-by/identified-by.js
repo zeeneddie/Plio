@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-Template.NCIdentifiedBy.viewmodel({
+Template.NC_IdentifiedBy_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
   identifiedBy: Meteor.userId(),
   label: 'Identified by',
