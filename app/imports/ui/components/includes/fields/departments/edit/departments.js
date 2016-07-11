@@ -6,16 +6,14 @@ Template.Departments_Edit.viewmodel({
   departmentsIds: [],
   selected() {
     const departmentsIds = Array.from(this.departmentsIds() || []);
-    return this._getDepartmentsByQuery( {_id: { $in: departmentsIds }} );
+    return this._getDepartmentsByQuery({ _id: { $in: departmentsIds }});
   },
   value() {
     const child = this.child('Select_Multi');
     return child && child.value();
   },
   departments() {
-    const query = {
-      ...this.searchObject('value', 'name')
-    };
+    const query = { ...this.searchObject('value', 'name') };
 
     return this._getDepartmentsByQuery(query);
   },
@@ -24,19 +22,16 @@ Template.Departments_Edit.viewmodel({
   },
   update(viewmodel) {
     const { selectedItemId, selected } = viewmodel.getData();
-    if(this.areIdsIncludesItemId(selectedItemId)) return;
 
-    const departmentsIds = this.departmentsIds().concat([selectedItemId]);
-    this.departmentsIds(departmentsIds);
+    if (this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, '$addToSet', selected);
+    const newDepartmentsIds = this.concatIds(this.departmentsIds(), selectedItemId);
+
+    this.departmentsIds(newDepartmentsIds);
+
+    this.callUpdate(selectedItemId, selected, '$addToSet');
   },
-  callUpdate(selectedItemId, option, selected) {
-    if (selected.length === this.selected().length &&
-        selected.every( ({ _id:itemId }) => this.selected().find(
-          ({ _id }) => _id === itemId) )
-      ) return;
-
+  callUpdate(selectedItemId, selected, option) {
     if (!this._id) return;
 
     const options = {
@@ -52,14 +47,20 @@ Template.Departments_Edit.viewmodel({
   },
   remove(viewmodel) {
     const { selectedItemId, selected } = viewmodel.getData();
-    if(!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    const departmentsIds = this.departmentsIds().filter(
-      _id => _id !== selectedItemId
-    );
-    this.departmentsIds(departmentsIds);
+    if (!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, '$pull', selected);
+    const newDepartmentsIds = this.filterIds(this.departmentsIds(), selectedItemId);
+
+    this.departmentsIds(newDepartmentsIds);
+
+    this.callUpdate(selectedItemId, selected, '$pull');
+  },
+  concatIds(ids, id) {
+    return Array.from(ids || []).concat([id]);
+  },
+  filterIds(ids, id) {
+    return Array.from(ids || []).filter(_id => _id !== id);
   },
   areIdsIncludesItemId(selectedItemId) {
     return this.departmentsIds().includes(selectedItemId);

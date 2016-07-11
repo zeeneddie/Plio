@@ -22,11 +22,11 @@ Template.Fields_Standards_Edit.viewmodel({
   },
   update(viewmodel) {
     const { selectedItemId, selected } = viewmodel.getData();
-    if(this.areIdsIncludesItemId(selectedItemId)) return;
+    if (this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, '$addToSet', selected);
+    this.callUpdate(selectedItemId, selected, '$addToSet');
   },
-  callUpdate(selectedItemId, option, selected) {
+  callUpdate(selectedItemId, selected, option) {
     if (selected.length === 0 && this._id) {
       ViewModel.findOne('ModalWindow')
                   .setError('A document must be linked to at least one standard.');
@@ -36,6 +36,7 @@ Template.Fields_Standards_Edit.viewmodel({
     if (selected.length === this.selected().count() &&  selected.every(({ _id:itemId }) => this.selected().fetch().find(({ _id }) => _id === itemId))) return;
 
     const standardsIds = selected.map(({ _id }) => _id);
+
     this.standardsIds(standardsIds);
 
     if (!this._id) return;
@@ -53,9 +54,10 @@ Template.Fields_Standards_Edit.viewmodel({
   },
   remove(viewmodel) {
     const { selectedItemId, selected } = viewmodel.getData();
-    if(!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.callUpdate(selectedItemId, '$pull', selected);
+    if (!this.areIdsIncludesItemId(selectedItemId)) return;
+
+    this.callUpdate(selectedItemId, selected, '$pull');
   },
   areIdsIncludesItemId(selectedItemId) {
     return this.standardsIds().includes(selectedItemId);
