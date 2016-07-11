@@ -168,7 +168,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NCLayout', {
+    BlazeLayout.render('NC_Layout', {
       content: 'NCPage'
     });
   }
@@ -178,7 +178,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NCLayout', {
+    BlazeLayout.render('NC_Layout', {
       content: 'NCPage'
     });
   }

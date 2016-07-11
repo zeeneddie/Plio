@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.TreatmentPlan_PrevLossExp.viewmodel({
+Template.TreatmentPlan_PrevLossExp_Edit.viewmodel({
   prevLossExp: '',
   update() {
     const { prevLossExp } = this.getData();

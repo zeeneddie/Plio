@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RiskAnalysis_ScoredAt.viewmodel({
+Template.RiskAnalysis_ScoredAt_Edit.viewmodel({
   scoredAt: '',
   label: 'Date',
   placeholder: 'Date',

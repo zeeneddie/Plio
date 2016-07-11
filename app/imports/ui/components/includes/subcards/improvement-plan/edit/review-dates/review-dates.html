@@ -1,4 +1,4 @@
-<template name="IPReviewDates">
+<template name="IP_ReviewDate_Edits">
   <div class="row">
     <label class="form-control-label col-sm-5 col-xs-12 first-row-label">
       Improvement plan review dates
@@ -6,7 +6,7 @@
     <div class="col-sm-7">
       <div {{b "ref: forms"}}>
         {{#each reviewDates}}
-          {{> IPReviewDate
+          {{> IP_ReviewDate_Edit
               _id=_id
               date=date
               onChange=onChangeCb

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.NCRCAStatus.viewmodel({
+Template.NC_RCA_Status_Edit.viewmodel({
   status: 0,
   executor: '',
   key: '',
