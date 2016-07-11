@@ -1,4 +1,12 @@
-import './fields';
+import './departments';
+import './nc-guidelines';
+import './org-currency';
+import './org-name';
+import './org-transfer';
+import './reminders';
+import './standards-book-sections';
+import './standards-types';
+import './workflow-defaults';
 import './main.html';
 import './main.js';
 import './settings.html';
