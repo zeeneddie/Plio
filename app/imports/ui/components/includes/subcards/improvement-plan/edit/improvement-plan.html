@@ -1,17 +1,15 @@
 <template name="Subcards_ImprovementPlan_Edit">
-  {{#SubCardEditWrapper _lText="ImprovementPlan" _rText=getTextIndicator}}
-    <div class="card-block">
-      <div id="improvement-plan">
-        {{> IPDesiredOutcome desiredOutcome=desiredOutcome}}
+  {{#SubCard_EditWrapper _lText="ImprovementPlan" _rText=getTextIndicator}}
+    <div class="card-block" id="improvement-plan">
+      {{> IP_DesiredOutcome_Edit desiredOutcome=desiredOutcome}}
 
-        {{> IPTargetDate targetDate=targetDate}}
-  
-        {{> IPReviewDates reviewDates=reviewDates}}
+      {{> IP_TargetDate_Edit targetDate=targetDate}}
 
-        {{> IPOwner owner=owner}}
+      {{> IP_ReviewDate_Edits reviewDates=reviewDates}}
 
-        {{> IPMeansStatement _id=_id files=files}}
-      </div>
+      {{> IP_Owner_Edit owner=owner}}
+
+      {{> IP_MeansStatement_Edit _id=_id files=files}}
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

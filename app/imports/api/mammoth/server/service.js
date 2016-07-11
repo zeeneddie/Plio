@@ -58,20 +58,20 @@ export default {
 
           // Add some styles here
           const htmlString = `
-            <style>
-              img { 
-                max-width: 100% !important; 
-              } 
-              body {
-                padding: 30px 30px 0px 30px !important;
-              }
-              @media (max-width: 500px) {
-                body {
-                  padding: 20px 20px 0px 20px !important;
-                }
-              }
-            </style>
-            ${result.value}
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <link rel="stylesheet" type="text/css" href="https://plio.s3.amazonaws.com/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.css">
+                <link rel="stylesheet" type="text/css" href="https://plio.s3.amazonaws.com/lib/document-preview/custom.css">
+                <script src="https://plio.s3.amazonaws.com/lib/document-preview/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+                <script src="https://plio.s3.amazonaws.com/lib/document-preview/custom.js"></script>
+              </head>
+              <body>
+                <div id="content">
+                  ${result.value}
+                </div>
+              </body>
+            </html>
           `;
           
           const params = {

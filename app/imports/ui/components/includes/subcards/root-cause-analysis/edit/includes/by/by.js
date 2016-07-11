@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCRCABy.viewmodel({
+Template.NC_RCA_By_Edit.viewmodel({
   mixin: ['user', 'search', 'members'],
   key: '',
   by: '',

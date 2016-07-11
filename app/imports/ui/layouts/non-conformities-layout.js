@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCLayout.viewmodel({
+Template.NC_Layout.viewmodel({
   mixin: ['organization', 'nonconformity'],
   _subHandlers: [],
   isReady: false,
@@ -16,7 +16,8 @@ Template.NCLayout.viewmodel({
         this.templateInstance.subscribe('standards', _id),
         this.templateInstance.subscribe('lessons', _id),
         this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('actions', _id)
+        this.templateInstance.subscribe('actions', _id),
+        this.templateInstance.subscribe('risks', _id)
       ];
 
       if (this.isActiveNCFilter('deleted')) {

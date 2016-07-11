@@ -1,4 +1,4 @@
-<template name="NCCard">
+<template name="NC_Card_Read">
   <div class="content-cards-inner flex scroll">
     {{#if hasNCs}}
       {{#Card_Read
@@ -25,7 +25,7 @@
               <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
             </div>
 
-            {{> Standard_Read _id=this.standardId}}
+            {{> Fields_Standards_Read standardsIds=this.standardsIds}}
 
             <div class="row">
               <div class="col-sm-6">

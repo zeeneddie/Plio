@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-Template.SubCardEdit.viewmodel({
+Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
     this.load(this.document());
@@ -36,7 +36,7 @@ Template.SubCardEdit.viewmodel({
         if (!err) {
           this.destroy();
           const newSubcard = ViewModel.findOne(
-            'SubCardEdit', vm => vm._id && vm._id() === res
+            'SubCard_Edit', vm => vm._id && vm._id() === res
           );
           if (newSubcard) {
             newSubcard.toggleCollapse(null, 250);
@@ -132,7 +132,8 @@ Template.SubCardEdit.viewmodel({
     return !!this.error();
   },
   save() {
-    this.callInsert(this.insertFn, this.getData());
+    const insertData = this.getData();
+    insertData && this.callInsert(this.insertFn, insertData);
   },
   delete() {
     this.removeFn(this);
@@ -165,6 +166,7 @@ Template.SubCardEdit.viewmodel({
     }
   },
   getData() {
-    return this.child(this.content()).getData();
+    const child = this.child(this.content());
+    return child.getData && child.getData();
   }
 });

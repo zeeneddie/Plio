@@ -260,10 +260,10 @@ const ActionFilters = [
   'Team completed actions'
 ];
 
-const ProblemTypes = [
-  'non-conformity',
-  'risk'
-];
+const ProblemTypes = {
+  NC: 'non-conformity',
+  RISK: 'risk'
+};
 
 const DocumentTypes = [
   'standard',

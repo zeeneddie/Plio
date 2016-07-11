@@ -264,6 +264,11 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     },
     magnitude: {
       type: String
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1
     }
   }
 ]);
@@ -320,11 +325,6 @@ export const BaseProblemsOptionalSchema = ((() => {
     FilesSchema,
     getNotifySchema('identifiedBy'),
     {
-      standardId: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true
-      },
       description: {
         type: String,
         optional: true

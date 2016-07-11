@@ -1,7 +1,11 @@
 <template name="Actions_CreateSubcard">
   {{> Actions_Title title=title}}
 
-  {{> Actions_LinkedTo_Edit linkedDocs=linkedDocs}}
+  {{> Actions_LinkedTo
+      type=type
+      linkedTo=linkedTo
+      standardId=standardId
+      isEditable=isLinkedToEditable}}
 
   {{> Actions_Owner ownerId=ownerId}}
 

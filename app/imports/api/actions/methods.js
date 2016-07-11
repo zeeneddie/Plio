@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
-import { IdSchema, optionsSchema } from '../schemas.js';
+import { IdSchema, optionsSchema, StandardIdSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
 
 
@@ -89,8 +89,8 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
-export const linkToDocument = new ValidatedMethod({
-  name: 'Actions.linkToDocument',
+export const linkDocument = new ValidatedMethod({
+  name: 'Actions.linkDocument',
 
   validate: new SimpleSchema([
     IdSchema,
@@ -101,7 +101,7 @@ export const linkToDocument = new ValidatedMethod({
       },
       documentType: {
         type: String,
-        allowedValues: ProblemTypes
+        allowedValues: _.values(ProblemTypes)
       }
     }
   ]).validator(),
@@ -114,16 +114,51 @@ export const linkToDocument = new ValidatedMethod({
       );
     }
 
-    return ActionService.linkToDocument({ ...args });
+    return ActionService.linkDocument({ ...args });
+  }
+});
+
+export const unlinkDocument = new ValidatedMethod({
+  name: 'Actions.unlinkDocument',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      documentId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      },
+      documentType: {
+        type: String,
+        allowedValues: _.values(ProblemTypes)
+      }
+    }
+  ]).validator(),
+
+  run({ ...args }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403,
+        'Unauthorized user cannot link remove action\'s links to documents'
+      );
+    }
+
+    return ActionService.unlinkDocument({ ...args });
   }
 });
 
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
 
-  run({ _id }) {
+  run({ _id, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -131,7 +166,7 @@ export const complete = new ValidatedMethod({
       );
     }
 
-    return ActionService.complete({ _id, userId });
+    return ActionService.complete({ _id, userId, ...args });
   }
 });
 
@@ -155,9 +190,15 @@ export const undoCompletion = new ValidatedMethod({
 export const verify = new ValidatedMethod({
   name: 'Actions.verify',
 
-  validate: IdSchema.validator(),
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      success: { type: Boolean },
+      verificationComments: { type: String }
+    }
+  ]).validator(),
 
-  run({ _id }) {
+  run({ _id, ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -165,7 +206,7 @@ export const verify = new ValidatedMethod({
       );
     }
 
-    return ActionService.verify({ _id, userId });
+    return ActionService.verify({ _id, userId, ...args });
   }
 });
 

@@ -1,10 +1,3 @@
-import Utils from '/imports/core/utils';
-
-
-if (!Utils.isProduction()) {
-  return;
-}
-
 SyncedCron.config({
 
   // Log job run details to console

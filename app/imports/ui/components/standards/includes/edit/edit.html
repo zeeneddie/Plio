@@ -4,7 +4,7 @@
       <div class="card-block">
         {{> ESTitle titleText=standard.title _id=standard._id}}
 
-        {{> ESDescription description=standard.description}}
+        {{> ES_Description_Edit description=standard.description}}
 
         {{> ESBookSection selectedBookSectionId=standard.sectionId _id=standard.sectionId}}
 
@@ -46,16 +46,20 @@
           onUpdate=onUpdateNotifyUserCb}}
 
       {{> Subcards_NonConformities_Edit
-          _query=_getNCsQuery
-          _args=_getNCsQuery}}
+          _id=this._id
+          _query=_getNCsQuery}}
 
       {{> Subcards_Actions_Edit
           type="CA"
-          linkedTo=standard._id}}
+          standardId=standard._id}}
 
       {{> Subcards_Actions_Edit
           type="PA"
-          linkedTo=standard._id}}
+          standardId=standard._id}}
+
+      {{> Subcards_Actions_Edit
+          type="RC"
+          standardId=standard._id}}
 
       {{> Subcards_ImprovementPlan_Edit
           documentId=standard._id

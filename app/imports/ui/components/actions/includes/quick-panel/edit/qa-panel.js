@@ -16,9 +16,9 @@ Template.Actions_QAPanel_Edit.viewmodel({
   update(method, { ...args }, cb = () => {}) {
     const _id = this._id();
     const callback = (err) => {
-      const { sequentialId, title } = this.action() || {};
-      const operation = this.getOperation();
-      const handleResult = (err) => {
+      if (!err) {
+        const { sequentialId, title } = this.action() || {};
+        const operation = this.getOperation();
         if (!err) {
           swal(
             operation,
@@ -30,16 +30,9 @@ Template.Actions_QAPanel_Edit.viewmodel({
         }
 
         cb(err);
-      };
-
-      if (!err && _.keys(args).length > 0) {
-        this.modal().callMethod(update, { _id, ...args }, handleResult);
-        return;
       }
-
-      handleResult(err);
     };
 
-    this.modal().callMethod(method, { _id }, callback);
+    this.modal().callMethod(method, { _id, ...args }, callback);
   }
 });

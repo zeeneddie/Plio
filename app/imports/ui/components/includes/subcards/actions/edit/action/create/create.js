@@ -13,6 +13,10 @@ Template.Actions_CreateSubcard.viewmodel({
   toBeCompletedBy: '',
   verificationTargetDate: '',
   toBeVerifiedBy: '',
+  linkedTo: [],
+  isLinkedToEditable() {
+    return !this.linkedTo().length;
+  },
   getData() {
     return this.children(vm => vm.getData)
                 .reduce((prev, cur) => {

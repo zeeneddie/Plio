@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { OrgCurrencies } from '/imports/api/constants.js';
 
-Template.NCCost.viewmodel({
+Template.NC_Cost_Edit.viewmodel({
   mixin: 'organization',
   onCreated() {
     if (!this.currency()) {

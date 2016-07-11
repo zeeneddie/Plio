@@ -18,6 +18,8 @@ Template.StandardsLayout.viewmodel({
         this.templateInstance.subscribe('standards-book-sections', _id),
         this.templateInstance.subscribe('standards-types', _id),
         this.templateInstance.subscribe('actions', _id),
+        this.templateInstance.subscribe('nonConformities', _id),
+        this.templateInstance.subscribe('risks', _id)
       ];
 
       if (this.isActiveStandardFilter('deleted')) {

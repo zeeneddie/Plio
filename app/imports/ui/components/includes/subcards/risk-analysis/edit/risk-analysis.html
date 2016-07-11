@@ -1,14 +1,14 @@
 <template name="Subcards_RiskAnalysis_Edit">
-  {{#SubCardEditWrapper _lText="Risk analysis" _rText=getScoreLabel}}
+  {{#SubCard_EditWrapper _lText="Risk analysis" _rText=getScoreLabel}}
     <div class="card-block">
       {{> ScoreTable_Edit
           tableData=tableData
           onUpdate=onUpdateCb
           score=score}}
       {{#with score}}
-        {{> RiskAnalysis_ScoredBy scoredBy=this.scoredBy}}
-        {{> RiskAnalysis_ScoredAt scoredAt=this.scoredAt}}
+        {{> RiskAnalysis_ScoredBy_Edit scoredBy=this.scoredBy}}
+        {{> RiskAnalysis_ScoredAt_Edit scoredAt=this.scoredAt}}
       {{/with}}
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

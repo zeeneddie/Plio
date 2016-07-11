@@ -3,31 +3,43 @@ import { Mongo } from 'meteor/mongo';
 import { ActionSchema } from './action-schema.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import { ActionUndoTimeInHours } from '../constants.js';
+import { ActionUndoTimeInHours, ProblemTypes } from '../constants.js';
 import { compareDates } from '../helpers.js';
 
 
 const Actions = new Mongo.Collection('Actions');
 Actions.attachSchema(ActionSchema);
 
+const getLinkedDocsIds = (linkedDocs, docType) => {
+  return _.pluck(
+    _.filter(
+      linkedDocs,
+      ({ documentType }) => documentType === docType
+    ),
+    'documentId'
+  );
+};
+
 Actions.helpers({
-  linkedDocuments() {
-    const NCsIds = [];
-    const RisksIds = [];
-
-    _.each(this.linkedTo, (doc) => {
-      const docType = doc.documentType;
-      if (docType === 'non-conformity') {
-        NCsIds.push(doc.documentId);
-      } else if (docType === 'risk') {
-        RisksIds.push(doc.documentId);
+  getLinkedNCsIds() {
+    return getLinkedDocsIds(this.linkedTo, ProblemTypes.NC);
+  },
+  getLinkedNCs() {
+    return NonConformities.find({
+      _id: {
+        $in: this.getLinkedNCsIds()
       }
-    });
-
-    const NCs = NonConformities.find({ _id: { $in: NCsIds } }).fetch();
-    const risks = Risks.find({ _id: { $in: RisksIds } }).fetch();
-
-    return NCs.concat(risks);
+    }).fetch();
+  },
+  getLinkedRisksIds() {
+    return getProbemDocsIds(this.linkedTo, ProblemTypes.RISK);
+  },
+  getLinkedRisks() {
+    return Risks.find({
+      _id: {
+        $in: this.getLinkedRisksIds()
+      }
+    }).fetch();
   },
   canBeCompleted() {
     return _.every([
@@ -69,10 +81,10 @@ Actions.helpers({
 
     return compareDates(undoDeadline, new Date()) === 1;
   },
-  isLinkedTo(docId, docType) {
-    return _.filter(this.linkedTo, ({ documentId, documentType }) => {
+  isLinkedToDocument(docId, docType) {
+    return !!_.find(this.linkedTo, ({ documentId, documentType }) => {
       return (documentId === docId) && (documentType === docType);
-    }).length > 0;
+    });
   }
 });
 

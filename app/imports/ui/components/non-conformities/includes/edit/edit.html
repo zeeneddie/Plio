@@ -1,10 +1,8 @@
-<template name="EditNC">
+<template name="NC_Card_Edit">
   <div>
     <div class="relative">
       {{#with NC}}
-        {{> EditNC_Main
-            NC=this
-            onUpdate=onUpdateCb}}
+        {{> NC_Card_Edit_Main NC=this}}
 
         {{> Subcards_Notify_Edit
             document=this
@@ -18,16 +16,12 @@
         {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="non-conformity"
-            linkedTo=this.title
-            linkedToId=this.sequentialId}}
+            documentType="non-conformity"}}
 
         {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="non-conformity"
-            linkedTo=this.title
-            linkedToId=this.sequentialId}}
+            documentType="non-conformity"}}
 
         {{> Subcards_ImprovementPlan_Edit
             documentId=this._id

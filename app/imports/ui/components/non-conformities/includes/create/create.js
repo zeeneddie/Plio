@@ -4,6 +4,8 @@ import { insert } from '/imports/api/non-conformities/methods.js';
 
 Template.CreateNC.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
+  isStandardsEditable: true,
+  standardsIds: [],
   save() {
     const data = this.getData();
 
@@ -17,18 +19,15 @@ Template.CreateNC.viewmodel({
 
     this.insert(data);
   },
-  insert({ title, identifiedAt, identifiedBy, magnitude }) {
+  insert({ ...args }) {
     const organizationId = this.organizationId();
 
-    const args = {
-      title,
-      identifiedBy,
-      identifiedAt,
-      magnitude,
+    const allArgs = {
+      ...args,
       organizationId
     };
 
-    this.modal().callMethod(insert, args, (err, _id) => {
+    this.modal().callMethod(insert, allArgs, (err, _id) => {
       if (err) {
         return;
       } else {
@@ -41,10 +40,10 @@ Template.CreateNC.viewmodel({
 
           this.modal().open({
             _id,
-            _title: 'Non-conformity',
-            template: 'EditNC'
+            title: 'Non-conformity',
+            template: 'NC_Card_Edit'
           });
-          }, 400);
+        }, 400);
       }
     });
   },

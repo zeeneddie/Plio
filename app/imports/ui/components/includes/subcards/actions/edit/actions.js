@@ -1,15 +1,21 @@
 import { Template } from 'meteor/templating';
+import pluralize from 'pluralize';
 
-import { ActionTypes } from '/imports/api/constants.js';
+import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Risks } from '/imports/api/risks/risks.js';
 import {
   insert,
   update,
   remove,
-  linkToDocument,
   complete,
   verify,
   undoCompletion,
-  undoVerification
+  undoVerification,
+  linkStandard,
+  unlinkStandard,
+  linkDocument,
+  unlinkDocument
 } from '/imports/api/actions/methods.js';
 
 
@@ -17,7 +23,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action'],
   type: '',
   title() {
-    return this._getNameByType(this.type());
+    return pluralize(this._getNameByType(this.type()));
   },
   addButtonText() {
     let buttonText = '';
@@ -65,62 +71,97 @@ Template.Subcards_Actions_Edit.viewmodel({
     return newSubcardTitle;
   },
   actions() {
-    return this._getActionsByQuery({
-      type: this.type(),
-      'linkedTo.documentId': this.documentId(),
-      'linkedTo.documentType': this.documentType()
-    }, {
-      sort: { sequentialId: 1 }
-    });
-  },
-  linkedDocs(action) {
-    if (action) {
-      return _.map(action.linkedDocuments(), (doc) => {
-        const { sequentialId, title } = doc;
-        return { sequentialId, title };
+    const actionType = this.type();
+    const query = {
+      type: actionType
+    };
+
+    const documentId = this.documentId && this.documentId();
+    const documentType = this.documentType && this.documentType();
+    const standardId = this.standardId && this.standardId();
+
+    if (documentId && documentType) {
+      _.extend(query, {
+        'linkedTo.documentId': documentId,
+        'linkedTo.documentType': documentType
       });
-    } else {
-      return [{
-        sequentialId: this.linkedToId(),
-        title: this.linkedTo()
-      }];
+    } else if (standardId) {
+      const NCsIds = _.pluck(
+        NonConformities.find({ standardsIds: standardId }).fetch(),
+        '_id'
+      );
+
+      const risksIds = _.pluck(
+        Risks.find({ standardsIds: standardId }).fetch(),
+        '_id'
+      );
+
+      _.extend(query, {
+        $or: [{
+          'linkedTo.documentId': { $in: NCsIds },
+          'linkedTo.documentType': ProblemTypes.NC
+        }, {
+          'linkedTo.documentId': { $in: risksIds },
+          'linkedTo.documentType': ProblemTypes.RISK
+        }]
+      });
     }
+
+    return this._getActionsByQuery(query, { sort: { sequentialId: 1 } });
   },
   addAction() {
-    this.addForm(
-      'SubCardEdit',
-      {
-        content: 'Actions_AddSubcard',
-        _lText: this.newSubcardTitle(),
-        linkedDocs: this.linkedDocs(),
-        type: this.type(),
-        documentId: this.documentId(),
-        documentType: this.documentType(),
-        insertFn: this.insertFn(),
-        removeFn: this.removeFn(),
-        updateFn: this.updateFn()
-      }
-    );
+    const newSubcardData = {
+      content: 'Actions_AddSubcard',
+      _lText: this.newSubcardTitle(),
+      type: this.type(),
+      insertFn: this.insertFn(),
+      removeFn: this.removeFn(),
+      updateFn: this.updateFn()
+    };
+
+    const documentId = this.documentId && this.documentId();
+    const documentType = this.documentType && this.documentType();
+    if (documentId && documentType) {
+      _.extend(newSubcardData, {
+        documentId,
+        documentType,
+        linkedTo: [{
+          documentId: documentId,
+          documentType: documentType
+        }]
+      });
+    }
+
+    const standardId = this.standardId && this.standardId();
+    if (standardId) {
+      _.extend(newSubcardData, { standardId });
+    }
+
+    this.addForm('SubCard_Edit', newSubcardData);
   },
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, linkedTo, ...args }, cb) {
+  insert({ _id, linkTo, ...args }, cb) {
     if (_id) {
-      this.modal().callMethod(linkToDocument, {
-        _id,
-        documentId: this.documentId(),
-        documentType: this.documentType()
+      let documentId, documentType;
+
+      if (_.isObject(linkTo)) {
+        documentId = linkTo.documentId;
+        documentType = linkTo.documentType;
+      } else {
+        documentId = this.documentId && this.documentId();
+        documentType = this.documentType && this.documentType();
+      }
+
+      this.modal().callMethod(linkDocument, {
+        _id, documentId, documentType
       }, cb);
     } else {
       const organizationId = this.organizationId();
 
       this.modal().callMethod(insert, {
         organizationId,
-        linkedTo: [{
-          documentId: this.documentId(),
-          documentType: this.documentType()
-        }],
         type: this.type(),
         ...args
       }, cb);
@@ -168,7 +209,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   onComplete() {
     return () => {
-      this.child('SubCardEdit').callUpdate(this.completeFn, {
+      this.child('SubCard_Edit').callUpdate(this.completeFn, {
         _id: this._id()
       });
     };
@@ -181,7 +222,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   onUndoCompletion() {
     return () => {
-      this.child('SubCardEdit').callUpdate(this.undoCompletionFn, {
+      this.child('SubCard_Edit').callUpdate(this.undoCompletionFn, {
         _id: this._id()
       });
     };
@@ -194,7 +235,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   onVerify() {
     return () => {
-      this.child('SubCardEdit').callUpdate(this.verifyFn, {
+      this.child('SubCard_Edit').callUpdate(this.verifyFn, {
         _id: this._id()
       });
     };
@@ -207,7 +248,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   onUndoVerification() {
     return () => {
-      this.child('SubCardEdit').callUpdate(this.undoVerificationFn, {
+      this.child('SubCard_Edit').callUpdate(this.undoVerificationFn, {
         _id: this._id()
       });
     };
@@ -217,5 +258,17 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   undoVerification({ ...args }, cb) {
     this.modal().callMethod(undoVerification, { ...args }, cb);
+  },
+  linkDocumentFn() {
+    return this.linkDocument.bind(this);
+  },
+  linkDocument({ ...args }, cb) {
+    this.modal().callMethod(linkDocument, { ...args }, cb);
+  },
+  unlinkDocumentFn() {
+    return this.unlinkDocument.bind(this);
+  },
+  unlinkDocument({ ...args }, cb) {
+    this.modal().callMethod(unlinkDocument, { ...args }, cb);
   }
 });

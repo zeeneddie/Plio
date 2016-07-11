@@ -27,7 +27,7 @@ const linkedToSchema = new SimpleSchema({
   },
   documentType: {
     type: String,
-    allowedValues: ProblemTypes
+    allowedValues: _.values(ProblemTypes)
   }
 });
 
@@ -99,9 +99,8 @@ const ActionSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    completionResult: {
+    completionComments: {
       type: String,
-      max: 40,
       optional: true
     },
     isVerified: {
@@ -127,9 +126,8 @@ const ActionSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    verificationResult: {
+    verificationComments: {
       type: String,
-      max: 40,
       optional: true
     },
     isDeleted: {

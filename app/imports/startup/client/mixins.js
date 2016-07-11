@@ -9,9 +9,9 @@ import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, NCStatuses,
-  ProblemsStatuses, OrgCurrencies, ActionStatuses,
-  ActionFilters, ActionTypes
+  NonConformityFilters, NCTypes, ProblemsStatuses,
+  OrgCurrencies, ActionStatuses, ActionFilters,
+  ActionTypes
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -50,6 +50,14 @@ ViewModel.mixin({
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)
+  },
+  iframe: {
+    isIframeReady: false,
+    onRendered() {
+      Meteor.setTimeout(() => {
+        this.isIframeReady(true);
+      }, 300);
+    }
   },
   collapsing: {
     toggleVMCollapse(name = '', condition = () => {}, cb) {
@@ -551,6 +559,15 @@ ViewModel.mixin({
     },
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
+    },
+    cutString(str, length) {
+      return str.length > length ? str.substring(0, length - 3) + "..." : str;
+    },
+    toArray(arrayLike = []) {
+      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+    },
+    compose(...fns) {
+      return fns.reduce((f, g) => (...args) => f(g(...args)));
     }
   },
   magnitude: {

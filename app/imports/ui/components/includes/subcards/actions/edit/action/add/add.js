@@ -7,12 +7,28 @@ Template.Actions_AddSubcard.viewmodel({
   form: 'Actions_CreateSubcard',
   formData: '',
   getFormData() {
-    return _.extend({}, {
-      type: this.type(),
-      linkedDocs: this.linkedDocs(),
-      documentId: this.documentId(),
-      documentType: this.documentType()
-    }, this.formData());
+    const linkedTo = this.linkedTo && this.linkedTo();
+    const documentId = this.documentId && this.documentId();
+    const documentType = this.documentType && this.documentType();
+    const standardId = this.standardId && this.standardId();
+
+    const defaultData = {
+      type: this.type()
+    };
+
+    if (linkedTo) {
+      _.extend(defaultData, { linkedTo });
+    }
+
+    if (documentId && documentType) {
+      _.extend(defaultData, { documentId, documentType });
+    }
+
+    if (standardId) {
+      _.extend(defaultData, { standardId });
+    }
+
+    return _.extend({}, defaultData, this.formData());
   },
   selectForm(formName) {
     this.formData('');
@@ -24,6 +40,6 @@ Template.Actions_AddSubcard.viewmodel({
   },
   getData() {
     const form = this.child(this.form());
-    return form && form.getData();
+    return form && form.getData && form.getData();
   }
 });

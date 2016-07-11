@@ -13,90 +13,75 @@ import {
 
 
 Template.Actions_EditSubcard.viewmodel({
-  _id: '',
-  title: '',
-  status: 0,
-  ownerId: Meteor.userId(),
-  planInPlace: ActionPlanOptions.NO,
-  isCompleted: false,
-  completionTargetDate: '',
-  toBeCompletedBy: '',
-  completedAt: '',
-  completedBy: '',
-  completionResult: '',
-  isVerified: false,
-  verificationTargetDate: '',
-  toBeVerifiedBy: '',
-  verifiedAt: '',
-  verifiedBy: '',
-  verificationResult: '',
-  isLinkedToEditable: true,
-  action() {
-    return this._getActionByQuery({ _id: this._id() });
+  update({ ...args }) {
+    this.parent().update({ ...args });
   },
-  isCompletionEditable() {
-    return !this.isVerified();
-  },
-  update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
-    const _id = this._id();
-    const allArgs = { ...args, _id, options, query };
-
-    const updateFn = () => this.modal().callMethod(update, allArgs, cb);
-
-    if (withFocusCheck) {
-      this.callWithFocusCheck(e, updateFn);
-    } else {
-      updateFn();
-    }
-  },
-  callUpdate(method, { ...args }, cb) {
-    const _id = this._id();
-    this.modal().callMethod(method, { _id, ...args }, cb);
-  },
-  onComplete() {
-    return this.complete.bind(this);
-  },
-  complete({ ...args }, cb) {
-    const _id = this._id();
-
-    const callback = (err) => {
-      if (!err) {
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-        }, 0);
-      }
-      _.isFunction(cb) && cb(err);
+  getCompleteFn() {
+    return ({ completionComments }) => {
+      this.parent().callUpdate(this.completeFn, {
+        _id: this._id(),
+        completionComments
+      });
     };
-
+  },
+  getUndoCompletionFn() {
     return () => {
-      FlowRouter.setQueryParams({ by: 'My completed actions' });
-
-      this.callUpdate(complete, { ...args }, callback);
-    }
+      this.parent().callUpdate(this.undoCompletionFn, {
+        _id: this._id()
+      });
+    };
   },
-  onUndoCompletion() {
-    return this.undoCompletion.bind(this);
+  getVerifyFn() {
+    return ({ success, verificationComments }) => {
+      this.parent().callUpdate(this.verifyFn, {
+        _id: this._id(),
+        success,
+        verificationComments
+      });
+    };
   },
-  undoCompletion(...args) {
-    return () => this.callUpdate(undoCompletion, ...args);
+  getUndoVerificationFn() {
+    return () => {
+      this.parent().callUpdate(this.undoVerificationFn, {
+        _id: this._id()
+      });
+    };
   },
-  onVerify() {
-    return this.verify.bind(this);
+  getLinkStandardFn() {
+    return ({ standardId }, cb) => {
+      this.parent().callUpdate(this.linkStandardFn, {
+        _id: this._id(),
+        standardId
+      }, cb);
+    };
   },
-  verify(...args) {
-    return () => this.callUpdate(verify, ...args);
+  getUnlinkStandardFn() {
+    return ({ standardId }, cb) => {
+      this.parent().callUpdate(this.unlinkStandardFn, {
+        _id: this._id(),
+        standardId
+      }, cb);
+    };
   },
-  onUndoVerification() {
-    return this.undoVerification.bind(this);
+  getLinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.parent().callUpdate(this.linkDocumentFn, {
+        _id: this._id(),
+        documentId,
+        documentType
+      }, cb);
+    };
   },
-  undoVerification(...args) {
-    return () => this.callUpdate(undoVerification, ...args);
-  },
-  subcard() {
-    return this.parent();
+  getUnlinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.parent().callUpdate(this.unlinkDocumentFn, {
+        _id: this._id(),
+        documentId,
+        documentType
+      }, cb);
+    };
   },
   getData() {
-    return { title: this.title() };
+    return this.child('Actions_Card_Edit_Main').getData();
   }
 });

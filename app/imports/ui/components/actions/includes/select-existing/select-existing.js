@@ -7,6 +7,7 @@ Template.Actions_SelectExisting.viewmodel({
   mixin: ['organization', 'search'],
   type: '',
   actionId: '',
+  linkTo: '',
   actionSearchText() {
     const child = this.child('SelectItem');
     return child && child.value();
@@ -15,9 +16,16 @@ Template.Actions_SelectExisting.viewmodel({
     const query = {
       ...this.searchObject('actionSearchText', [{ name: 'title' }, { name: 'sequentialId' }]),
       organizationId: this.organizationId(),
-      type: this.type(),
-      'linkedTo.documentId': { $ne: this.documentId() }
+      type: this.type()
     };
+
+    const documentId = this.documentId && this.documentId();
+
+    if (documentId) {
+      _.extend(query, {
+        'linkedTo.documentId': { $ne: documentId }
+      });
+    }
 
     return Actions.find(query, {
       sort: {
@@ -44,7 +52,20 @@ Template.Actions_SelectExisting.viewmodel({
     const { selected } = viewModel.getData();
     this.actionId(selected);
   },
+  actionLinkedTo() {
+    const selectedAction = Actions.findOne({ _id: this.actionId() });
+    return selectedAction && selectedAction.linkedTo;
+  },
+  showLinkTo() {
+    return this.standardId && this.standardId() && this.actionId();
+  },
+  onSelectDocCb() {
+    return this.onSelectDoc.bind(this);
+  },
+  onSelectDoc({ documentId, documentType }) {
+    this.linkTo({ documentId, documentType });
+  },
   getData() {
-    return { _id: this.actionId() };
+    return { _id: this.actionId(), linkTo: this.linkTo() };
   }
 });

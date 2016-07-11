@@ -4,15 +4,18 @@ import {
   insert,
   update,
   remove,
-  linkToDocument,
   complete,
   verify,
   undoCompletion,
-  undoVerification
+  undoVerification,
+  linkStandard,
+  unlinkStandard,
+  linkDocument,
+  unlinkDocument
 } from '/imports/api/actions/methods.js';
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
+  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
@@ -50,31 +53,39 @@ Template.Actions_Edit.viewmodel({
       updateFn();
     }
   },
-  completeFn() {
-    return this.complete.bind(this);
+  getCompleteFn() {
+    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed actions', cb));
   },
-  complete(e) {
-    this.callUpdate(complete, {}, this.generateCallback('My completed actions'));
+  getUndoCompletionFn() {
+    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
   },
-  undoCompletionFn() {
-    return this.undoCompletion.bind(this);
+  getVerifyFn() {
+    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed actions', cb));
   },
-  undoCompletion(e) {
-    this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
+  getUndoVerificationFn() {
+    return (e) => this.callUpdate(undoVerification);
   },
-  verifyFn() {
-    return this.verify.bind(this);
+  getLinkStandardFn() {
+    return ({ standardId }, cb) => {
+      this.callUpdate(linkStandard, { standardId }, cb);
+    };
   },
-  verify(e) {
-    this.callUpdate(verify, {}, this.generateCallback('My completed actions'));
+  getUnlinkStandardFn() {
+    return ({ standardId }, cb) => {
+      this.callUpdate(unlinkStandard, { standardId }, cb);
+    };
   },
-  undoVerificationFn() {
-    return this.undoVerification.bind(this);
+  getLinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.callUpdate(linkDocument, { documentId, documentType }, cb);
+    };
   },
-  undoVerification(e) {
-    this.callUpdate(undoVerification);
+  getUnlinkDocumentFn() {
+    return ({ documentId, documentType }, cb) => {
+      this.callUpdate(unlinkDocument, { documentId, documentType }, cb);
+    };
   },
-  generateCallback(queryParam) {
+  generateCallback(queryParam, cb = () => {}) {
     const _id = this._id();
 
     return (err) => {
@@ -83,7 +94,10 @@ Template.Actions_Edit.viewmodel({
         Meteor.setTimeout(() => {
           this.goToAction(_id);
           this.expandCollapsed(_id);
+          cb(undefined);
         }, 100);
+      } else {
+        return cb(err);
       }
     }
   }

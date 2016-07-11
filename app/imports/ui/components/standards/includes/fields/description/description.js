@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.ESDescription.viewmodel({
+Template.ES_Description_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
   description: '',
   update(e) {
