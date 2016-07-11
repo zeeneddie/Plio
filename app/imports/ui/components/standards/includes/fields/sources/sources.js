@@ -59,7 +59,7 @@ Template.ESSources.viewmodel({
     }
 
     if (url && !this.IsValidUrl(url)) {
-      ViewModel.findOne('ModalWindow').setError('Url is not valid!');
+      ViewModel.findOne('ModalWindow').setError('Please, check url link for source file, it is not valid');
       return;
     }
 
