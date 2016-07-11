@@ -6,5 +6,6 @@ SimpleSchema.messages({
   "regEx number": [
     {msg: '"[value]" is not a valid phone number'},
   ],
-  "minNumber timeValue": "Please, set correct time for reminders (can`t be [value])"
+  "minNumber timeValue": "Please, set correct time for reminders (can`t be [value])",
+  "minCount standardsIds": "At least one standard must be attached",
 });
