@@ -44,7 +44,7 @@ Template.SelectItem.viewmodel({
   selected: '',
   placeholder: '',
   content: '',
-  contentData: '',
+  contentData: {},
   loading: false,
   focused: false,
   excludedItems: [],
