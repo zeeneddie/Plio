@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
 
-Template.ListSubItem.viewmodel({
+Template.Standards_Item_Read.viewmodel({
   share: ['standard', 'window'],
   mixin: ['organization', 'standard', 'user', 'date'],
   title: '',
