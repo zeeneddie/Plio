@@ -122,7 +122,9 @@ const StandardsSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id
     },
     issueNumber: {
-      type: Number
+      type: Number,
+      min: 1,
+      max: 1000
     },
     status: {
       type: String,

@@ -8,7 +8,7 @@ Template.ESIssueNumber.viewmodel({
     if (!this._id) return;
     const { issueNumber } = this.getData();
     if (!issueNumber) {
-      ViewModel.findOne('ModalWindow').setError('Issue number is required!');
+      ViewModel.findOne('ModalWindow').setError('Issue number can`t be 0');
       return;
     }
     this.callWithFocusCheck(e, () => {
