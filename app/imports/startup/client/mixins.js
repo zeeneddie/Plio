@@ -193,9 +193,6 @@ ViewModel.mixin({
       } else {
         this.expandSelected();
       }
-    },
-    clearSearchField() {
-      this.searchText() && this.searchText('');
     }
   },
   numberRegex: {
