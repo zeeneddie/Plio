@@ -1,3 +1,5 @@
+import { Template } from 'meteor/templating';
+
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
@@ -6,7 +8,7 @@ import {
 } from '/imports/api/standards-book-sections/standards-book-sections.js';
 
 
-Template.OrganizationSettings.viewmodel({
+Template.OrgSettings.viewmodel({
   mixin: 'organization',
   name: '',
   currency: '',

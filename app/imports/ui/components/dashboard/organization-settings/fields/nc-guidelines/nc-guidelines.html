@@ -1,0 +1,24 @@
+<template name="OrgSettings_NcGuidelines">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Non-conformity guidelines</h4>
+  </div>
+  <div class="card-block-collapse collapse" id="nonconformity-guidelines" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{> OrgSettings_NcGuideline
+          ncType="minor"
+          text=minor
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_NcGuideline
+          ncType="major"
+          text=major
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_NcGuideline
+          ncType="critical"
+          text=critical
+          onChange=onChangeCb}}
+    </div>
+  </div>
+</template>

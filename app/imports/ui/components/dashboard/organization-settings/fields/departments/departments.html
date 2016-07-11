@@ -1,0 +1,25 @@
+<template name="OrgSettings_Departments">
+  <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Departments</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted" {{b "if: templateInstance.subscriptionsReady, text: departmentsCount"}}></span>
+      <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: !templateInstance.subscriptionsReady"}}></i>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="departments" {{b "ref: collapse"}}>
+    <div class="card-block">
+      <div id="departments-forms" {{b "ref: forms"}}>
+        {{#each departments}}
+          {{> OrgSettings_Department
+              _id=this._id
+              name=this.name
+              onChange=onChangeCb
+              onDelete=onDeleteCb}}
+        {{/each}}
+      </div>
+      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_Department')"}}>
+        Add department
+      </button>
+    </div>
+  </div>
+</template>

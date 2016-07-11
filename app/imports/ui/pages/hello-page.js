@@ -4,6 +4,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { remove } from '/imports/api/users/methods.js';
+import { OrgCurrencies } from '/imports/api/constants.js';
+
 
 Template.HelloPage.viewmodel({
   mixin: ['router', 'modal'],
@@ -39,11 +41,11 @@ Template.HelloPage.viewmodel({
     e.preventDefault();
 
     this.modal().open({
-      template: 'OrganizationSettings_MainSettings',
+      template: 'OrganizationCreate',
       title: 'New organization',
       variation: 'save',
-      owner: Meteor.user().fullName(),
-      currency: 'GBP'
+      ownerName: Meteor.user().fullName(),
+      currency: OrgCurrencies.GBP
     });
   },
   deleteAccount(e) {

@@ -2,6 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { OrgCurrencies } from '/imports/api/constants.js';
+
 
 Template.OrganizationsMenu.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
@@ -14,7 +16,7 @@ Template.OrganizationsMenu.viewmodel({
   openOrgSettings(e) {
     e.preventDefault();
     this.modal().open({
-      template: 'OrganizationSettings',
+      template: 'OrgSettings',
       title: 'Org Settings',
       organizationId: this.organization()._id
     });
@@ -22,11 +24,11 @@ Template.OrganizationsMenu.viewmodel({
   openCreateNewOrgModal(e) {
     e.preventDefault();
     this.modal().open({
-      template: 'OrganizationSettings_MainSettings',
+      template: 'OrganizationCreate',
       title: 'New organization',
       variation: 'save',
-      owner: Meteor.user().fullName(),
-      currency: 'GBP'
+      ownerName: Meteor.user().fullName(),
+      currency: OrgCurrencies.GBP
     });
   }
 });
