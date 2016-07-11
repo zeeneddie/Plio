@@ -1,9 +1,9 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCardEditWrapper _lText=title _rText=lessons.count}}
+  {{#SubCard_EditWrapper _lText=title _rText=lessons.count}}
     {{#if actions.count}}
       <div id="actions" class="card">
         {{#each actions}}
-          {{> SubCardEdit
+          {{> SubCard_Edit
               _id=this._id
               action=this
               type=type
@@ -31,5 +31,5 @@
         {{addButtonText}}
       </button>
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>
