@@ -555,7 +555,8 @@ ViewModel.mixin({
       return str.length > length ? str.substring(0, length - 3) + "..." : str;
     },
     toArray(arrayLike = []) {
-      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      return Array.from(array || []);
     }
   },
   magnitude: {

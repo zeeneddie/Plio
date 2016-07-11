@@ -1,35 +1,27 @@
 <template name="SelectItem">
-  <div class="dropdown form-group-flex-flex" {{b "class: { input-group-typeahead: isVariation('delete') || isVariation('caret') }"}}>
+  <div class="dropdown-wrapper">
+    <div class="input-group dropdown" {{b "ref: dropdown"}}>
+      <div {{b "click: openDropdownMenu"}}>
+        <input type="text" class="form-control"
+          {{b "value: value, attr: { placeholder: placeholder }, throttle: 200"}}/>
+      </div>
 
-    <input type="text" class="form-control" data-toggle="dropdown"
-      {{b "if: !variation, value: value, focusout: fixValue, attr: { placeholder: placeholder }, throttle: 200, enable: enabled"}}/>
-
-    <div class="input-group" data-toggle="dropdown" {{b "if: isVariation('delete') || isVariation('caret')"}}>
-      <input type="text" class="form-control"
-        {{b "value: value, focusout: fixValue, attr: { placeholder: placeholder }, throttle: 200"}}/>
-
-      <span class="input-group-btn">
-        {{#if isVariation 'delete'}}
-          <button type="button" class="btn btn-secondary btn-icon" {{b "click: remove"}}>
-            <i class="fa fa-times-circle" {{b "if: !loading"}}></i>
-            <i class="fa fa-spinner" {{b "if: loading"}}></i>
-          </button>
+      <div class="dropdown-menu dropdown-menu-full">
+        {{#each itemsFiltered}}
+          <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+        {{/each}}
+        {{#if showContent}}
+          {{> Template.dynamic template=content data=getData}}
+        {{else}}
+          <div class="dropdown-item"><strong>There are no available items...</strong></div>
         {{/if}}
+      </div>
 
-        {{#if isVariation 'caret'}}
-          <button type="button" class="btn btn-secondary btn-icon">
-            <i class="fa fa-caret-down" {{b "if: !loading"}}></i>
-            <i class="fa fa-spinner" {{b "if: loading"}}></i>
-          </button>
-        {{/if}}
+      <span class="input-group-btn" data-toggle="dropdown">
+        <button type="button" class="btn btn-secondary btn-icon" {{b "click: handleButtonClick"}}>
+          <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+        </button>
       </span>
-    </div>
-
-    <div class="dropdown-menu dropdown-menu-full">
-      {{#each itemsFiltered}}
-        <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
-      {{/each}}
-      {{> Template.dynamic template=content data=getContentData}}
     </div>
   </div>
 </template>
