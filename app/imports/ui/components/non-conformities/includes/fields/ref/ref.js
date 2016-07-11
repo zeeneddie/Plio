@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCRef.viewmodel({
+Template.NC_Ref_Edit.viewmodel({
   mixin: 'urlRegex',
   text: '',
   url: '',

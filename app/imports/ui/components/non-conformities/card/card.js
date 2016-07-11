@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
-Template.NCCard.viewmodel({
+Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing'],
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
@@ -32,7 +32,7 @@ Template.NCCard.viewmodel({
   openEditModal() {
     this.modal().open({
       title: 'Non-conformity',
-      template: 'EditNC',
+      template: 'NC_Card_Edit',
       _id: this.NCId()
     });
   },

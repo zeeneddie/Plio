@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 
-
 Template.DeleteButton.viewmodel({
   isEnabled: true,
   smallIcon: false,

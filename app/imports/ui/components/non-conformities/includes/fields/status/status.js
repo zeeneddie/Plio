@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCStatus.viewmodel({
+Template.NC_Status_Edit.viewmodel({
   mixin: 'problemsStatus',
   status: 1
 });

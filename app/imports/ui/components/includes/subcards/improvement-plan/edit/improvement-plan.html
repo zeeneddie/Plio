@@ -1,15 +1,15 @@
 <template name="Subcards_ImprovementPlan_Edit">
-  {{#SubCardEditWrapper _lText="ImprovementPlan" _rText=getTextIndicator}}
+  {{#SubCard_EditWrapper _lText="ImprovementPlan" _rText=getTextIndicator}}
     <div id="improvement-plan">
-      {{> IPDesiredOutcome desiredOutcome=desiredOutcome}}
+      {{> IP_DesiredOutcome_Edit desiredOutcome=desiredOutcome}}
 
-      {{> IPTargetDate targetDate=targetDate}}
+      {{> IP_TargetDate_Edit targetDate=targetDate}}
 
-      {{> IPReviewDates reviewDates=reviewDates}}
+      {{> IP_ReviewDate_Edits reviewDates=reviewDates}}
 
-      {{> IPOwner owner=owner}}
+      {{> IP_Owner_Edit owner=owner}}
 
-      {{> IPMeansStatement _id=_id files=files}}
+      {{> IP_MeansStatement_Edit _id=_id files=files}}
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

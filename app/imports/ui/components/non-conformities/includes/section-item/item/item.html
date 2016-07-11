@@ -1,4 +1,4 @@
-<template name="NCItem">
+<template name="NC_Item_Read">
   <a class="list-group-item" {{b "click: navigate, class: { active: this._id === NCId }"}}>
 	  <span class="label label-status-indicator"
       {{b "class: { label-success: this.magnitude === 'minor', label-warning: this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span>

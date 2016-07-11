@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCIdentifiedDate.viewmodel({
+Template.NC_IdentifiedDate_Edit.viewmodel({
   mixin: 'date',
   identifiedAt: new Date(),
   label: 'Identified date',

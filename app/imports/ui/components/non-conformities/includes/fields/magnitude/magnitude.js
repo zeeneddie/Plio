@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCMagnitude.viewmodel({
+Template.NC_Magnitude_Edit.viewmodel({
   mixin: ['collapse', 'organization', 'magnitude', 'collapsing', 'nonconformity'],
   onCreated() {
     this.load(this.organization().ncGuidelines);
