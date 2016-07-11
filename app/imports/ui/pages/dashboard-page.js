@@ -14,6 +14,8 @@ Template.DashboardPage.viewmodel({
         template.subscribe('organizationUsers', this.organization().users.map(user => user.userId)),
         template.subscribe('nonConformitiesCount', 'non-conformities-count', organizationId),
         template.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count', organizationId),
+        template.subscribe('actionsCount', 'actions-count', organizationId),
+        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId),
         template.subscribe('risksCount', 'risks-count', organizationId),
         template.subscribe('risksNotViewedCount', 'risks-not-viewed-count', organizationId)
       ]);
@@ -44,8 +46,11 @@ Template.DashboardPage.viewmodel({
   standardsMetrics() {
     return this._renderMetrics('standard', 'standards-count', 'standards-not-viewed-count');
   },
-  NCMetrics() {
+  NCsMetrics() {
     return this._renderMetrics('NC', 'non-conformities-count', 'non-conformities-not-viewed-count');
+  },
+  actionsMetrics() {
+    return this._renderMetrics('Action', 'actions-count', 'actions-not-viewed-count');
   },
   risksMetrics() {
     return this._renderMetrics('Risk', 'risks-count', 'risks-not-viewed-count');

@@ -1,0 +1,19 @@
+<template name="Actions_SelectExisting">
+  {{#FormField label="Existing action"}}
+    {{> SelectItem
+        items=actions
+        placeholder='Existing action'
+        selectFirstIfNoSelected=false
+        variation='caret'
+        content="Actions_DropdownAddAction"
+        contentData=dropdownAddActionData
+        onUpdate=onActionSelectedCb}}
+  {{/FormField}}
+  {{#if showLinkTo}}
+    {{> Actions_LinkTo
+        linkedTo=actionLinkedTo
+        type=type
+        standardId=standardId
+        onLink=onSelectDocCb}}
+  {{/if}}
+</template>

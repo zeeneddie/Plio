@@ -31,6 +31,33 @@ const AnalysisStatuses = {
   1: 'Completed'
 };
 
+const ActionTypes = {
+  CORRECTIVE_ACTION: 'CA',
+  PREVENTATIVE_ACTION: 'PA',
+  RISK_CONTROL: 'RC'
+};
+
+const ActionUndoTimeInHours = 1;
+
+const ActionStatuses = {
+  0: 'In progress',
+  1: 'In progress - due for completion today',
+  2: 'In progress - completion overdue',
+  3: 'In progress - completed, not yet verified',
+  4: 'In progress - completed, verification due today',
+  5: 'In progress - completed, verification overdue',
+  6: 'Completed - failed verification',
+  7: 'Completed - verified as effective',
+  8: 'Completed - verified & standardized',
+  9: 'Deleted'
+};
+
+const ActionPlanOptions = {
+  YES: 'Yes',
+  NO: 'No',
+  NOT_NEEDED: 'Not needed'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -226,10 +253,17 @@ const NonConformityFilters = [
   'deleted'
 ];
 
-const ProblemTypes = [
-  'non-conformity',
-  'risk'
+const ActionFilters = [
+  'My current actions',
+  'Team current actions',
+  'My completed actions',
+  'Team completed actions'
 ];
+
+const ProblemTypes = {
+  NC: 'non-conformity',
+  RISK: 'risk'
+};
 
 const DocumentTypes = [
   'standard',
@@ -270,6 +304,10 @@ const TreatmentPlanDecisions = {
 };
 
 export {
+  ActionTypes,
+  ActionStatuses,
+  ActionPlanOptions,
+  ActionUndoTimeInHours,
   DefaultStandardTypes,
   NCTypes,
   ProblemsStatuses,
@@ -290,6 +328,7 @@ export {
   UserRolesNames,
   DocumentTypes,
   AvatarPlaceholders,
+  ActionFilters,
   TreatmentPlanPriorities,
   TreatmentPlanDecisions
 };

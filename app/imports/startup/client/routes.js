@@ -204,6 +204,26 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/actions', {
+  name: 'actions',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/actions/:actionId', {
+  name: 'action',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
+    });
+  }
+});
+
 function redirectHandler() {
   const targetURL = FlowRouter.getQueryParam('b');
   if (targetURL) {

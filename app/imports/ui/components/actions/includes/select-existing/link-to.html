@@ -1,0 +1,9 @@
+<template name="Actions_LinkTo">
+  {{#FormField label="Link to"}}
+    {{> SelectItem
+        placeholder="Link to"
+        items=docs
+        selectFirstIfNoSelected=false
+        onUpdate=onSelectCb}}
+  {{/FormField}}
+</template>

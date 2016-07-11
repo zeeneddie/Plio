@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
+
 Template.SubCard_Edit.viewmodel({
-  mixin: ['collapse', 'callWithFocusCheck', 'modal'],
+  mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
     this.load(this.document());
   },
@@ -43,7 +44,7 @@ Template.SubCard_Edit.viewmodel({
             newSubcard.subcard.closest('.modal').animate({
               scrollTop: newSubcard.subcard.position().top + 70
             }, 500, 'swing');
-          } 
+          }
         }
       });
     }, 500);
@@ -132,7 +133,8 @@ Template.SubCard_Edit.viewmodel({
     return !!this.error();
   },
   save() {
-    this.callInsert(this.insertFn, this.getData());
+    const insertData = this.getData();
+    insertData && this.callInsert(this.insertFn, insertData);
   },
   delete() {
     this.removeFn(this);
@@ -140,7 +142,7 @@ Template.SubCard_Edit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update({  e = {}, withFocusCheck = false, ...args }) {
+  update({ e = {}, withFocusCheck = false, ...args }) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
@@ -165,6 +167,7 @@ Template.SubCard_Edit.viewmodel({
     }
   },
   getData() {
-    return this.child(this.content()).getData();
+    const child = this.child(this.content());
+    return child.getData && child.getData();
   }
 });

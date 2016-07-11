@@ -25,12 +25,14 @@ Template.SelectItem.viewmodel({
   selected: '',
   placeholder: '',
   content: '',
+  contentData: '',
   loading: false,
   focused: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
   variation: '',
+  enabled: true,
   isVariation(variation) {
     return this.variation() === variation;
   },
@@ -39,6 +41,9 @@ Template.SelectItem.viewmodel({
   },
   itemsFiltered() {
     return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
+  },
+  itemHtml(item) {
+    return item.html || item.title;
   },
   select({ _id, title }) {
     this.value(title);
@@ -76,6 +81,9 @@ Template.SelectItem.viewmodel({
     const { value, selected, items } = this.data();
     const item = this.getSelectedItem();
     return { value, selected, items, item };
+  },
+  getContentData() {
+    return _.extend({}, this.getData(), this.contentData());
   },
   destroy() {
     Blaze.remove(this.templateInstance.view);
