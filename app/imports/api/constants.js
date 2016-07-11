@@ -70,6 +70,11 @@ const OrgCurrencies = {
   USD: 'USD'
 };
 
+const OrgWorkflows = {
+  THREE_STEP: '3-step',
+  SIX_STEP: '6-step'
+};
+
 const UserMembership = {
   ORG_OWNER: 'owner',
   ORG_MEMBER: 'member'
@@ -120,17 +125,26 @@ const getDefaultGuideline = (ncType) => {
 
 const OrganizationDefaults = {
   workflowDefaults: {
-    minorNc: {
-      timeValue: 1,
-      timeUnit: TimeUnits.DAYS
+    minorProblem: {
+      workflowType: OrgWorkflows.THREE_STEP,
+      stepTime: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      }
     },
-    majorNc: {
-      timeValue: 2,
-      timeUnit: TimeUnits.DAYS
+    majorProblem: {
+      workflowType: OrgWorkflows.SIX_STEP,
+      stepTime: {
+        timeValue: 2,
+        timeUnit: TimeUnits.DAYS
+      }
     },
-    criticalNc: {
-      timeValue: 3,
-      timeUnit: TimeUnits.DAYS
+    criticalProblem: {
+      workflowType: OrgWorkflows.SIX_STEP,
+      stepTime: {
+        timeValue: 3,
+        timeUnit: TimeUnits.DAYS
+      }
     }
   },
   reminders: {
@@ -317,6 +331,7 @@ export {
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
+  OrgWorkflows,
   PhoneTypes,
   StandardFilters,
   RiskFilters,

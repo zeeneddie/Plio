@@ -14,6 +14,30 @@ export const canChangeStandards = (userId, organizationId) => {
   );
 };
 
+export const canChangeOrgSettings = (userId, organizationId) => {
+  return Roles.userIsInRole(
+    userId,
+    UserRoles.CHANGE_ORG_SETTINGS,
+    organizationId
+  );
+};
+
+export const canInviteUsers = (userId, organizationId) => {
+  return Roles.userIsInRole(
+    userId,
+    UserRoles.INVITE_USERS,
+    organizationId
+  );
+};
+
+export const canDeleteUsers = (userId, organizationId) => {
+  return Roles.userIsInRole(
+    userId,
+    UserRoles.DELETE_USERS,
+    organizationId
+  );
+};
+
 export const isOrgMember = (userId, organizationId) => {
   const areArgsValid = _.every([
     SimpleSchema.RegEx.Id.test(userId),

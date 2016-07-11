@@ -28,7 +28,7 @@ export default OrganizationService = {
     }
   },
 
-  insert({name, ownerId, currency}) {
+  insert({ name, ownerId, currency }) {
     this._ensureNameIsUnique(name);
 
     const lastOrg = this.collection.findOne({
@@ -87,7 +87,7 @@ export default OrganizationService = {
 
   },
 
-  setName({_id, name}) {
+  setName({ _id, name }) {
     this._ensureNameIsUnique(name);
 
     return this.collection.update({ _id }, {
@@ -95,21 +95,22 @@ export default OrganizationService = {
     });
   },
 
-  setDefaultCurrency({_id, currency}) {
+  setDefaultCurrency({ _id, currency }) {
     return this.collection.update({ _id }, {
       $set: { currency }
     });
   },
 
-  setWorkflowDefaults({_id, type, timeValue, timeUnit}) {
-    return this.collection.update({ _id }, {
-      $set: {
-        [`workflowDefaults.${type}`]: {timeValue, timeUnit}
-      }
-    });
+  setWorkflowDefaults({ _id, type, ...args }) {
+    const $set = {};
+    for (let key in args) {
+      $set[`workflowDefaults.${type}.${key}`] = args[key];
+    }
+
+    return this.collection.update({ _id }, { $set });
   },
 
-  setReminder({_id, type, reminderType, timeValue, timeUnit}) {
+  setReminder({ _id, type, reminderType, timeValue, timeUnit }) {
     return this.collection.update({ _id }, {
       $set: {
         [`reminders.${type}.${reminderType}`]: {timeValue, timeUnit}
@@ -117,7 +118,7 @@ export default OrganizationService = {
     });
   },
 
-  setGuideline({_id, ncType, text}) {
+  setGuideline({ _id, ncType, text }) {
     return this.collection.update({ _id }, {
       $set: {
         [`ncGuidelines.${ncType}`]: text
@@ -126,6 +127,20 @@ export default OrganizationService = {
   },
 
   removeUser({ userId, organizationId, removedBy }) {
+    const isOrgOwner = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (isOrgOwner) {
+      throw new Meteor.Error(400, 'Organization owner can\'t be removed');
+    }
+
     const isAlreadyRemoved = !!this.collection.findOne({
       _id: organizationId,
       users: {
@@ -203,6 +218,22 @@ export default OrganizationService = {
   },
 
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
+    const isOrgOwner = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId: currOwnerId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (!isOrgOwner) {
+      throw new Meteor.Error(
+        400, 'User is not authorized for transfering organizations'
+      );
+    }
+
     const isOnTransfer = !!this.collection.findOne({
       _id: organizationId,
       transfer: { $exists: true }

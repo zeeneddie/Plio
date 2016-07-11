@@ -40,17 +40,26 @@
   "updatedBy": null,
   "isDeleted": false,
   "workflowDefaults": {
-    "minorNc": {
-      "timeValue": 1,
-      "timeUnit": "days"
+    "minorProblem": {
+      "workflowType": "3-step",
+      "stepTime": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      }
     },
-    "majorNc": {
-      "timeValue": 2,
-      "timeUnit": "days"
+    "majorProblem": {
+      "workflowType": "6-step",
+      "stepTime": {
+        "timeValue": 2,
+        "timeUnit": "days"
+      }
     },
-    "criticalNc": {
-      "timeValue": 3,
-      "timeUnit": "days"
+    "criticalProblem": {
+      "workflowType": "6-step",
+      "stepTime": {
+        "timeValue": 3,
+        "timeUnit": "days"
+      }
     }
   },
   "reminders": {
