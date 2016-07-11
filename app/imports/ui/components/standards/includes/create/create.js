@@ -12,7 +12,7 @@ Template.CreateStandard.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `The new standard cannot be created without a ${key}. Please enter a ${key} for your standard.`;
+        const errorMessage = `Please, choose type for new standard`;
         this.modal().setError(errorMessage);
         return;
       }
