@@ -43,7 +43,7 @@ Template.CreateNC.viewmodel({
             title: 'Non-conformity',
             template: 'NC_Card_Edit'
           });
-          }, 400);
+        }, 400);
       }
     });
   },

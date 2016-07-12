@@ -34,18 +34,20 @@ Template.Subcards_LessonLearned.viewmodel({
     this.owner(owner);
     this.parent().update({ owner });
   },
-  updateNotes(e) {
-    const { notes } = this.getData();
-    this.parent().update({ notes, e, withFocusCheck: true });
+  onUpdateNotesCb() {
+    return this.updateNotes.bind(this);
   },
-  events: {
-    'focusout .quill'(e, tpl) {
-      this.updateNotes(e);
-    }
+  updateNotes(e, viewmodel) {
+    const { html:notes } = viewmodel.getData();
+
+    if (this.templateInstance.notes === notes) return;
+
+    this.notes(notes);
+
+    this.parent().update({ e, withFocusCheck: true, notes });
   },
   getData() {
-    const { title, date, owner } = this.data();
-    const notes = this.child('QuillEditor').editor().getHTML();
+    const { title, date, owner, notes } = this.data();
     return { title, date, owner, notes };
   }
 });

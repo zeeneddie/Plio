@@ -1,0 +1,35 @@
+<template name="Actions_Edit">
+  <div>
+    <div class="relative">
+      {{#with action}}
+        {{> Actions_Card_Edit_Main
+            isLinkedToEditable=isLinkedToEditable
+            action=this
+            type=this.type
+            completeFn=getCompleteFn
+            undoCompletionFn=getUndoCompletionFn
+            verifyFn=getVerifyFn
+            undoVerificationFn=getUndoVerificationFn
+            linkStandardFn=getLinkStandardFn
+            unlinkStandardFn=getUnlinkStandardFn
+            linkDocumentFn=getLinkDocumentFn
+            unlinkDocumentFn=getUnlinkDocumentFn}}
+
+        {{> Subcards_Notify_Edit
+            document=this
+            documentType="action"
+            onUpdate=onUpdateNotifyUserCb}}
+
+        {{> Subcards_Notes_Edit
+            notes=this.notes}}
+
+        {{> Subcards_OtherFiles_Edit
+            label="Files"
+            _id=this._id
+            files=this.files
+            uploaderMetaContext=uploaderMetaContext
+            slingshotDirective=slingshotDirective}}
+      {{/with}}
+    </div>
+  </div>
+</template>

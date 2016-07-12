@@ -18,7 +18,7 @@ Template.OrganizationsMenu.viewmodel({
     e.preventDefault();
     this.modal().open({
       template: 'OrgSettings',
-      title: 'Org Settings',
+      _title: 'Org Settings',
       organizationId: this.organization()._id
     });
   },
@@ -26,7 +26,7 @@ Template.OrganizationsMenu.viewmodel({
     e.preventDefault();
     this.modal().open({
       template: 'OrganizationCreate',
-      title: 'New organization',
+      _title: 'New organization',
       variation: 'save',
       timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),

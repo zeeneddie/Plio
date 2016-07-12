@@ -2,8 +2,8 @@ import { Template } from 'meteor/templating';
 
 
 Template.Actions_CompletionTargetDate.viewmodel({
-  completionTargetDate: '',
-  defaultDate: false,
+  completionTargetDate: new Date(),
+  defaultDate: true,
   placeholder: 'Completion - target date',
   enabled: true,
   onUpdateCb() {

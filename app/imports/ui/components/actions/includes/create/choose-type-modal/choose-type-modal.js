@@ -6,13 +6,14 @@ Template.Actions_ChooseTypeModal.viewmodel({
     this.modal().close();
 
     Meteor.setTimeout(() => {
-      const title = this._getNameByType(type);
+      const _title = this._getNameByType(type);
 
       this.modal().open({
-        title,
+        _title,
         type,
         template: 'Actions_Create',
-        variation: 'save'
+        variation: 'save',
+        isLinkedToEditable: true
       });
     }, 400);
   }

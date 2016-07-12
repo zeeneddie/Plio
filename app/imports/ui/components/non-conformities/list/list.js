@@ -175,7 +175,7 @@ Template.NCList.viewmodel({
   },
   openAddNCModal() {
     this.modal().open({
-      title: 'Non-conformity',
+      _title: 'Non-conformity',
       template: 'CreateNC',
       variation: 'save'
     });

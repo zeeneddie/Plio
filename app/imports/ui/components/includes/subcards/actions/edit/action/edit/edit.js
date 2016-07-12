@@ -1,9 +1,19 @@
 import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
+import {
+  insert,
+  update,
+  remove,
+  complete,
+  verify,
+  undoCompletion,
+  undoVerification
+} from '/imports/api/actions/methods.js';
 
 
 Template.Actions_EditSubcard.viewmodel({
+  isLinkedToEditable: true,
   update({ ...args }) {
     this.parent().update({ ...args });
   },
@@ -73,6 +83,6 @@ Template.Actions_EditSubcard.viewmodel({
     };
   },
   getData() {
-    return this.child('Actions_EditMain').getData();
+    return this.child('Actions_Card_Edit_Main').getData();
   }
 });

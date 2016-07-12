@@ -152,7 +152,7 @@ Template.RisksList.viewmodel({
   },
   openAddRiskModal() {
     this.modal().open({
-      title: 'Risk',
+      _title: 'Risk',
       template: 'CreateRisk',
       variation: 'save'
     });

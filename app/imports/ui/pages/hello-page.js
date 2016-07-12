@@ -43,7 +43,7 @@ Template.HelloPage.viewmodel({
 
     this.modal().open({
       template: 'OrganizationCreate',
-      title: 'New organization',
+      _title: 'New organization',
       variation: 'save',
       timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),

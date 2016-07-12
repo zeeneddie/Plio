@@ -2,25 +2,14 @@ import { Actions } from './actions.js';
 import { ActionTypes, ProblemTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
+import Utils from '/imports/core/utils.js';
 
 
 export default {
   collection: Actions,
 
   insert({ organizationId, type, ...args }) {
-    const lastAction = this.collection.findOne({
-      organizationId,
-      type,
-      serialNumber: {
-        $type: 16 // 32-bit integer
-      }
-    }, {
-      sort: {
-        serialNumber: -1
-      }
-    });
-
-    const serialNumber = lastAction ? lastAction.serialNumber + 1 : 1;
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
 
     const sequentialId = `${type}${serialNumber}`;
 

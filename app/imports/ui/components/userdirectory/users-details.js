@@ -49,7 +49,7 @@ Template.UsersDetails.viewmodel({
 
     this.modal().open({
       template: 'UserEdit',
-      title: 'Edit User',
+      _title: 'Edit User',
       userId: this.user()._id
     });
   }
