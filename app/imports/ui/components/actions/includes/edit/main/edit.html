@@ -2,9 +2,11 @@
   <div class="card-block">
     {{> Actions_Title title=title}}
 
-    {{> Actions_LinkedTo
-        type=type
+    {{> Actions_LinkedTo_Edit
+        _id=_id
+        isEditable=isLinkedToEditable
         linkedTo=linkedTo
+        type=type
         standardId=standardId
         onLink=onLinkDocument
         onUnlink=onUnlinkDocument}}

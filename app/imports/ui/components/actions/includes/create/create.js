@@ -10,7 +10,7 @@ Template.Actions_Create.viewmodel({
   title: '',
   ownerId: Meteor.userId(),
   planInPlace: ActionPlanOptions.NO,
-  completionTargetDate: '',
+  completionTargetDate: new Date(),
   toBeCompletedBy: Meteor.userId(),
   verificationTargetDate: '',
   toBeVerifiedBy: '',

@@ -3,6 +3,7 @@
     <div class="relative">
       {{#with action}}
         {{> Actions_Card_Edit_Main
+            isLinkedToEditable=isLinkedToEditable
             action=this
             type=this.type
             completeFn=getCompleteFn

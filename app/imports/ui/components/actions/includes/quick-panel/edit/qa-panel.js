@@ -1,7 +1,5 @@
 import { Template } from 'meteor/templating';
 
-import { update } from '/imports/api/actions/methods.js';
-
 Template.Actions_QAPanel_Edit.viewmodel({
   mixin: ['modal', 'organization', 'action', 'utils'],
   content: 'Actions_QAPanel_Edit_Complete',

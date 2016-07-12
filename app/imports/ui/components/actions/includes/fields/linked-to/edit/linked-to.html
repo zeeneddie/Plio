@@ -1,18 +1,12 @@
 <template name="Actions_LinkedTo_Edit">
   {{#FormField label="Linked to"}}
     {{#if isEditable}}
-      {{#each linkedDocs}}
-        <div class="btn-group">
-          <button class="btn btn-secondary" type="button" disabled=""
-              {{b "text: this.sequentialId + ' ' + this.title"}}></button>
-          {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
-        </div>
-      {{/each}}
-      {{> SelectItem
-          placeholder="Linked to"
+      {{> Select_Multi
+          selected=linkedDocs
           items=items
-          selectFirstIfNoSelected=false
-          onUpdate=onSelectCb}}
+          placeholder=placeholder
+          onUpdate=onUpdateFn
+          onRemove=onRemoveFn}}
     {{else}}
       {{#each linkedDocs}}
         <div class="input-group">

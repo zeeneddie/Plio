@@ -568,6 +568,9 @@ ViewModel.mixin({
     },
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
+    },
+    findParentRecursive(templateName, instance) {
+      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     }
   },
   magnitude: {

@@ -3,108 +3,116 @@ import { Blaze } from 'meteor/blaze';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
+import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 
 Template.Actions_LinkedTo_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils'],
-  onCreated() {
-    if ((!this.linkedTo() || this.linkedTo().length === 0) && this.linkedDocsIds().length > 0) {
-      const linked = Array.from(this.linkedDocs() || [])
-                          .map(({ _id:documentId }) =>
-                              ({ documentId, documentType: this.getDocumentType([NonConformities, Risks], documentId)}));
-      this.linkedTo(linked);
-    }
-  },
-  linkedDocs: [],
   linkedTo: '',
-  selected: '',
+  standardId: '',
   isEditable: false,
+  placeholder: 'Linked to',
+  type: '',
   value() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Multi');
     return !!child && child.value();
   },
+  linkedDocs() {
+    const { linkedTo } = this.getData();
+    const ids = linkedTo.map(({ documentId }) => documentId);
+    const query = { _id: { $in: ids } };
+    const options = { sort: { serialNumber: 1 } };
+    return this.getDocs(query, options).reduce((prev, cur) => [...prev, ...cur]);
+  },
   linkedDocsIds() {
-    return Array.from(this.linkedDocs() || []).map(({ _id }) => _id);
+    return this.toArray(this.linkedDocs()).map(({ _id }) => _id);
+  },
+  mapDocs(array, type) {
+    return array.map(({ sequentialId, title, ...args }) => ({ title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
+  },
+  getDocs(query, options) {
+    const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NC);
+    const risks = this.mapDocs(this._getRisksByQuery(query, options), ProblemTypes.RISK);
+    return [ncs, risks];
   },
   items() {
     const searchQuery = this.searchObject('value', [{ name: 'sequentialId' }, { name: 'title' }]);
-    const query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
+    let query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
+    if (this.standardId()) {
+      query = { ...query, standardsIds: this.standardId() };
+    }
     const options = { sort: { serialNumber: 1 } };
-    return this._getNCsByQuery(query, options).fetch().concat(this._getRisksByQuery(query, options).fetch())
-                .map(({ sequentialId, title, ...args }) => ({ title: `${sequentialId} ${title}`, sequentialId, ...args }));
+    const [ncs, risks] = this.getDocs(query, options);
+    return this.getDocsByType(this.type(), ncs, risks);
   },
-  onSelectCb() {
-    return this.update.bind(this);
-  },
-  getDoc(documentId) {
-    return this.getCollectionInstance(documentId, NonConformities, Risks).findOne({ _id: documentId });
-  },
-  getCollectionType(collection) {
-    switch(collection) {
-      case NonConformities:
-        return 'non-conformity';
+  getDocsByType(type = '', ncs = [], risks = []) {
+    switch(type) {
+      case ActionTypes.CORRECTIVE_ACTION:
+        return ncs.concat(risks);
         break;
-      case Risks:
-        return 'risk';
+      case ActionTypes.PREVENTATIVE_ACTION:
+        return ncs;
+        break;
+      case ActionTypes.RISK_CONTROL:
+        return risks;
         break;
       default:
-        return undefined;
+        return [];
         break;
     }
   },
-  getDocumentType(collections, _id) {
-    const collection = this.getCollectionInstance(_id, ...collections);
-    return this.getCollectionType(collection);
+  onLink() {},
+  onUpdateFn() {
+    return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected:documentId, items } = viewmodel.getData();
-    const { _id } = items.find(({ _id }) => _id === documentId);
-
-    viewmodel.clear();
-
-    const documentType = this.getDocumentType([NonConformities, Risks], documentId);
-    const linkedDocs = Array.from(this.linkedDocs() || []);
+    const { selectedItem = {}, selected } = viewmodel.getData();
+    const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
 
-    if (linkedDocs.find(({ _id }) => _id === documentId)) return;
+    if (linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.concat([{ documentId, documentType }]);
+    const newDocs = Array.from(this.linkedDocs() || []).concat([selectedItem]);
 
     this.linkedTo(newLinkedTo);
-
-    const newDocs = linkedDocs.concat([ this.getDoc(documentId) ]);
-
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.parent().update({ ...this.getData() });
+    this.onLink({ documentId, documentType });
   },
-  onRemoveCb() {
+  onUnlink() {},
+  onRemoveFn() {
     return this.remove.bind(this);
   },
-  remove(e) {
-    const { _id } = Blaze.getData(e.target);
-
+  remove(viewmodel) {
+    const { selectedItem = {}, selected } = viewmodel.getData();
+    const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
 
-    if (!linkedTo.find(({ documentId }) => documentId === _id)) return;
+    if (!linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
-    const newArray = linkedTo.filter(({ documentId }) => documentId !== _id);
+    const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
+    const newDocs = Array.from(this.linkedDocs() || []).filter(({ _id }) => _id !== documentId);
 
-    if (this._id && newArray.length === 0) {
-      ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document.');
+    const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
+
+    // if we are viewing subcard show error in subcard, otherwise in modal
+    if (this._id && newLinkedTo.length === 0) {
+      if (!subcard) {
+        ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
+      } else {
+        subcard.setError && subcard.setError('An action must be linked to at least one document');
+      }
       return;
     }
 
-    this.linkedTo(newArray);
-
-    const newDocs = newArray.map(({ documentId }) => this.getDoc(documentId));
-
+    this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.parent().update({ ...this.getData() });
+    this.onUnlink({ documentId, documentType });
   },
   getData() {
     const { linkedTo } = this.data();

@@ -154,5 +154,4 @@ const ActionSchema = new SimpleSchema([
   }
 ]);
 
-
 export { RequiredSchema, ActionSchema };

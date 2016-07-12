@@ -13,6 +13,7 @@ import {
 
 
 Template.Actions_EditSubcard.viewmodel({
+  isLinkedToEditable: true,
   update({ ...args }) {
     this.parent().update({ ...args });
   },
