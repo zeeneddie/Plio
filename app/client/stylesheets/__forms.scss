@@ -496,3 +496,7 @@ input[disabled], textarea[disabled] {
   border-top-left-radius: .25rem;
   border-bottom-left-radius: .25rem;
 }
+
+input[type="number"] {
+  min-width: 60px;
+}
