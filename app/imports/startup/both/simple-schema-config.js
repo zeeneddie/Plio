@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 SimpleSchema.messages({
   "regEx": [
     {msg: "Failed regular expression validation"},
@@ -10,4 +12,5 @@ SimpleSchema.messages({
   "minCount standardsIds": "At least one standard must be attached",
   "minNumber issueNumber": "Issue number must be in range of 1 to 1000",
   "maxNumber issueNumber": "Issue number must be in range of 1 to 1000",
+  "minString title": "[label] must be at least [min] character(s)"
 });
