@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-
 Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {

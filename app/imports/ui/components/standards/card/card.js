@@ -73,7 +73,7 @@ Template.StandardsCard.viewmodel({
   },
   openEditStandardModal() {
     this.modal().open({
-      title: 'Compliance standard',
+      _title: 'Compliance standard',
       template: 'EditStandard',
       _id: this.standardId()
     });

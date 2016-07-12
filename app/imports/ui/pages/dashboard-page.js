@@ -6,18 +6,18 @@ Template.DashboardPage.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
   autorun: [
     function() {
-      const organizationId = this.organizationId();
       const template = this.templateInstance;
+      const organizationId = this.organizationId();
       this._subHandlers([
         template.subscribe('standardsCount', 'standards-count', organizationId),
         template.subscribe('standardsNotViewedCount', 'standards-not-viewed-count', organizationId),
-        template.subscribe('organizationUsers', this.organization().users.map(user => user.userId)),
+        template.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id)),
         template.subscribe('nonConformitiesCount', 'non-conformities-count', organizationId),
         template.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count', organizationId),
-        template.subscribe('actionsCount', 'actions-count', organizationId),
-        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId),
         template.subscribe('risksCount', 'risks-count', organizationId),
-        template.subscribe('risksNotViewedCount', 'risks-not-viewed-count', organizationId)
+        template.subscribe('risksNotViewedCount', 'risks-not-viewed-count', organizationId),
+        template.subscribe('actionsCount', 'actions-count', organizationId),
+        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId)
       ]);
     },
     function() {

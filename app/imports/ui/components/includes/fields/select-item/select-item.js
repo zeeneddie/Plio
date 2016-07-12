@@ -82,6 +82,14 @@ Template.SelectItem.viewmodel({
 
     this.onUpdate(this);
   },
+  clear() {
+    this.focused(false);
+    this.selected('');
+    this.value('');
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
+  },
   getSelectedItem() {
     return this.itemsArray().find(({ _id }) => _id === this.selected());
   },
@@ -92,12 +100,5 @@ Template.SelectItem.viewmodel({
   },
   getContentData() {
     return _.extend({}, this.getData(), this.contentData());
-  },
-  destroy() {
-    Blaze.remove(this.templateInstance.view);
-  },
-  clear() {
-    this.value('');
-    this.selected('');
   }
 });

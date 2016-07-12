@@ -1,17 +1,16 @@
 import { Template } from 'meteor/templating';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 
 Template.Subcards_Occurrences_Edit.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal', 'date'],
+  mixin: ['collapse', 'addForm', 'modal', 'date', 'organization', 'nonconformity'],
   renderText({ sequentialId }) {
     return `<strong>${sequentialId}</strong>`;
   },
   nonConformity() {
-    return NonConformities.findOne({ _id: this._id() });
+    return this._getNCByQuery({ _id: this._id && this._id() });
   },
   occurrences() {
     const query = ((() => {
@@ -22,10 +21,11 @@ Template.Subcards_Occurrences_Edit.viewmodel({
     return Occurrences.find(query, options);
   },
   addOccurrence() {
+    const seqId = this.nonConformity() ? this.nonConformity().sequentialId : '';
     this.addForm(
       'SubCard_Edit',
       {
-        _lText: `${this.nonConformity().sequentialId}-new occurance`,
+        _lText: `${seqId}-new occurance`,
         _rText: '',
         content: 'Subcards_Occurrence',
         insertFn: this.insertFn(),

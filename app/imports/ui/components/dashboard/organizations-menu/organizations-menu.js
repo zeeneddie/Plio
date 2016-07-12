@@ -15,7 +15,7 @@ Template.OrganizationsMenu.viewmodel({
     e.preventDefault();
     this.modal().open({
       template: 'OrganizationSettings',
-      title: 'Org Settings',
+      _title: 'Org Settings',
       organizationId: this.organization()._id
     });
   },
@@ -23,7 +23,7 @@ Template.OrganizationsMenu.viewmodel({
     e.preventDefault();
     this.modal().open({
       template: 'OrganizationSettings_MainSettings',
-      title: 'New organization',
+      _title: 'New organization',
       variation: 'save',
       owner: Meteor.user().fullName(),
       currency: 'GBP'

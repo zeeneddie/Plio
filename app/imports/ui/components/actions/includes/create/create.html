@@ -1,17 +1,20 @@
 <template name="Actions_Create">
-  {{> Actions_Title title=title}}
+  <div class="card-block">
+    {{> Actions_Title title=title}}
 
-  {{#if linkedDocs}}
-    {{> Actions_LinkedTo linkedTo=linkedTo}}
-  {{/if}}
+    {{> Actions_LinkedTo_Edit
+        type=type
+        linkedDocs=linkedDocs
+        isEditable=isLinkedToEditable}}
 
-  {{> Actions_Owner ownerId=ownerId}}
+    {{> Actions_Owner ownerId=ownerId}}
 
-  {{> Actions_PlanInPlace planInPlace=planInPlace}}
+    {{> Actions_PlanInPlace planInPlace=planInPlace}}
 
-  <hr />
+    <hr />
 
-  {{> Actions_CompletionTargetDate completionTargetDate=completionTargetDate}}
+    {{> Actions_CompletionTargetDate completionTargetDate=completionTargetDate}}
 
-  {{> Actions_ToBeCompletedBy toBeCompletedBy=toBeCompletedBy}}
+    {{> Actions_ToBeCompletedBy toBeCompletedBy=toBeCompletedBy}}
+  </div>
 </template>

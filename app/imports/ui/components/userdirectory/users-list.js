@@ -23,7 +23,7 @@ Template.UsersList.viewmodel({
 
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
-      title: 'Invite users',
+      _title: 'Invite users',
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',

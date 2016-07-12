@@ -40,7 +40,7 @@ Template.HelloPage.viewmodel({
 
     this.modal().open({
       template: 'OrganizationSettings_MainSettings',
-      title: 'New organization',
+      _title: 'New organization',
       variation: 'save',
       owner: Meteor.user().fullName(),
       currency: 'GBP'

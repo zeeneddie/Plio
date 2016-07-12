@@ -25,7 +25,7 @@ Template.RisksCard.viewmodel({
   },
   openEditModal() {
     this.modal().open({
-      title: 'Risk',
+      _title: 'Risk',
       template: 'EditRisk',
       _id: this.riskId()
     });

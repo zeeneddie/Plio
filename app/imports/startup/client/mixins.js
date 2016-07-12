@@ -529,6 +529,9 @@ ViewModel.mixin({
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
+    lowercase(string) {
+      return string.charAt(0).toLowerCase() + string.slice(1);
+    },
     round(num) {
       if (num >= 1000000) {
         return parseFloat((num / 1000000).toFixed(1)) + 'M';
@@ -537,6 +540,18 @@ ViewModel.mixin({
       } else {
         return num;
       }
+    },
+    getCollectionInstance(_id, ...collections) {
+      return collections.find(collection => collection instanceof Mongo.Collection && collection.findOne({ _id }));
+    },
+    chooseOne(predicate) {
+      return (i1, i2) => predicate ? i1 : i2;
+    },
+    compose(...fns) {
+      return fns.reduce((f, g) => (...args) => f(g(...args)));
+    },
+    findParentRecursive(templateName, instance) {
+      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
