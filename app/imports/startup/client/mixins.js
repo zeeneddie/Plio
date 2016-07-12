@@ -547,9 +547,6 @@ ViewModel.mixin({
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
     },
-    cutString(str, length) {
-      return str.length > length ? str.substring(0, length - 3) + "..." : str;
-    },
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
