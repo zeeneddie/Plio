@@ -10,7 +10,7 @@ Template.NCList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
-    if (!this.focused() && !this.animating()) {
+    if (!this.focused() && !this.animating() && !this.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
@@ -151,7 +151,7 @@ Template.NCList.viewmodel({
     }
   },
   expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.NCId()));
 
     this.animating(true);
 
@@ -171,7 +171,7 @@ Template.NCList.viewmodel({
   },
   onAfterExpand() {
     this.animating(false);
-    Meteor.setTimeout(() => this.searchInput.focus(), 0);
+    Meteor.setTimeout(() => this.focused(true), 500);
   },
   openAddNCModal() {
     this.modal().open({

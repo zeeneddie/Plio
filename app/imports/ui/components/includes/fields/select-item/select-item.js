@@ -12,59 +12,26 @@ Template.SelectItem.viewmodel({
 
         this.selected(_id);
         this.value(title);
+        this.lastSelectedItem({ _id, title });
         computation.stop();
       } else if (!!this.selected() && !this.value() && items.length > 0) {
         const item = this.getSelectedItem();
 
         this.value(item.title);
+        this.lastSelectedItem({ title: item.title });
         computation.stop();
       }
     }
   },
-  value: '',
-  selected: '',
-  placeholder: '',
-  content: '',
-  contentData: '',
-  loading: false,
-  focused: false,
-  excludedItems: [],
-  selectFirstIfNoSelected: true,
-  items: [],
-  variation: '',
-  enabled: true,
-  isVariation(variation) {
-    return this.variation() === variation;
+  onRendered() {
+    this.dropdown.on('show.bs.dropdown', () => this.onShow());
+    this.dropdown.on('hide.bs.dropdown', () => this.onHide());
   },
-  itemsArray() {
-    return this.toArray(this.items());
+  onShow() {
+    this.focused(true);
+    this.value('');
   },
-  itemsFiltered() {
-    return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
-  },
-  itemHtml(item) {
-    return item.html || item.title;
-  },
-  select({ _id, title }) {
-    this.value(title);
-    this.selected(_id);
-    this.update();
-  },
-  update() {
-    this.fixValue();
-
-    if (!this.onUpdate) return;
-
-    this.onUpdate(this);
-  },
-  remove() {
-    if (!this._id) {
-      this.destroy();
-    } else {
-      this.onRemove(this, this.destroy());
-    }
-  },
-  fixValue() {
+  onHide() {
     this.focused(false);
 
     if (!!this.selected() && !this.value()) {
@@ -72,10 +39,51 @@ Template.SelectItem.viewmodel({
       !!item && this.value(item.title);
     }
   },
+  lastSelectedItem: null,
+  value: '',
+  selected: '',
+  placeholder: '',
+  content: '',
+  contentData: {},
+  loading: false,
+  focused: false,
+  excludedItems: [],
+  selectFirstIfNoSelected: true,
+  items: [],
+  showContent() {
+    return this.itemsFiltered().length > 0 || !!Template[this.content()];
+  },
+  itemsArray() {
+    return this.toArray(this.items());
+  },
+  itemsFiltered() {
+    return this.itemsArray().filter(({ _id }) => !this.excludedItems().includes(_id));
+  },
+  itemHtml(item) {
+    return item.html || item.title;
+  },
+  select({ _id, title }) {
+    this.value(title);
+    this.selected(_id);
+    this.lastSelectedItem({ _id, title });
+    this.update();
+  },
+  openDropdownMenu(e) {
+    if(!this.dropdown.hasClass('open')) {
+      this.dropdown.find('[data-toggle="dropdown"]').dropdown('toggle');
+    }
+  },
+  handleButtonClick() {
+    this.value(this.lastSelectedItem() && this.lastSelectedItem().title || '');
+  },
+  onUpdate() {},
+  update() {
+    this.onHide();
+
+    this.onUpdate(this);
+  },
   getSelectedItem() {
-    const find = this.itemsArray().filter(({ _id }) => _id === this.selected());
-    const item = !!find.length > 0 && find[0];
-    return item;
+    return this.itemsArray().find(({ _id }) => _id === this.selected());
   },
   getData() {
     const { value, selected, items } = this.data();
@@ -91,11 +99,5 @@ Template.SelectItem.viewmodel({
   clear() {
     this.value('');
     this.selected('');
-  },
-  events: {
-    'focus input'() {
-      this.focused(true);
-      this.value('');
-    }
   }
 });

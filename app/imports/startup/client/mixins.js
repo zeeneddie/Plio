@@ -180,13 +180,7 @@ ViewModel.mixin({
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
     },
-    searchOnAfterKeyUp: _.debounce(function(e) {
-      const value = e.target.value;
-
-      if (this.searchText() === value) return;
-
-      this.searchText(value);
-
+    searchOnAfterKeyUp(value) {
       const checkIsDeletedFilter = (fn, counterName) => {
         if (this[fn] && this[fn]('deleted')) {
           this.searchResultsNumber(this[counterName]().count());
@@ -203,13 +197,6 @@ ViewModel.mixin({
       if (!!value) {
         this.expandAllFound();
       } else {
-        this.expandSelected();
-      }
-    }, 500),
-    clearSearchField() {
-      if (this.searchText()) {
-        this.searchInput.val('');
-        this.searchText('');
         this.expandSelected();
       }
     }
@@ -551,11 +538,9 @@ ViewModel.mixin({
         return num;
       }
     },
-    cutString(str, length) {
-      return str.length > length ? str.substring(0, length - 3) + "..." : str;
-    },
     toArray(arrayLike = []) {
-      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      return Array.from(array || []);
     }
   },
   magnitude: {

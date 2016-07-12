@@ -226,7 +226,7 @@
   .source-document-item {
     position: relative;
     border-bottom: 1px solid #ddd;
-    padding: 4%;
+    padding: 30px;
     background-color: #f5f5f5;
 
     .source-document-preview-wrapper {
@@ -239,11 +239,13 @@
         height: 70vh;
         width: 100%;
         z-index: 1;
+        overflow: scroll;
         
         iframe {
           display: block;
           position: relative;
           background: transparent;
+          overflow: scroll;
           height: 100%;
           width: 100%;
           border: none;

@@ -19,7 +19,8 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 1
+    min: 1,
+    max: 999
   }
 });
 
