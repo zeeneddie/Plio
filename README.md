@@ -2,7 +2,7 @@
 
 The first on-demand system for compliance management in the enterprise, using lean principles
 
-Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](guide.meteor.com).
+Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](https://guide.meteor.com).
 
 # MOTIVATION
 
