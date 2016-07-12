@@ -31,5 +31,7 @@
   },
   "updatedAt" : {"$date": 1459508600000},
   "updatedBy" : "SQHmBKJ94gJvpLKLt",
-  "standardId" : "Mc7jjwYJ9gXPkibS8"
+  "standardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ]
 }

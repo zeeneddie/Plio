@@ -1,0 +1,22 @@
+<template name="Actions_VerifiedBy">
+  {{#FormField label="Verified by"}}
+    <div class="form-group-flex">
+      {{> SelectItem
+          items=_members
+          selected=verifiedBy
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          onUpdate=onUpdateCb}}
+      {{#if canBeUndone}}
+        <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
+          Undo
+        </button>
+      {{/if}}
+    </div>
+    {{#if canBeUndone}}
+      <p class="text-muted">
+        Verified {{passedFromVerified}}, {{leftToUndo}} left to undo
+      </p>
+    {{/if}}
+  {{/FormField}}
+</template>

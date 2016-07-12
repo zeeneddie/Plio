@@ -1,0 +1,9 @@
+<template name="Actions_VerifiedOn">
+  {{#FormField label="Verified as effective on"}}
+    {{> Datepicker
+        date=verifiedAt
+        defaultDate=defaultDate
+        placeholder=placeholder
+        onChange=onUpdateCb}}
+  {{/FormField}}
+</template>

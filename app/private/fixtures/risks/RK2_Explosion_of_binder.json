@@ -31,5 +31,7 @@
     "scoredBy" : "SQHmBKJ94gJvpLKLt",
     "scoredAt" : {"$date": 1459508500000}
   },
-  "standardId" : "Mc7jjwYJ9gXPkibS8"
+  "standardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ]
 }

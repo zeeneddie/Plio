@@ -4,7 +4,9 @@ Template.Datepicker.viewmodel({
   mixin: 'date',
   onRendered() {
     this.datepicker.datepicker({
-      startDate: this.startDate(),
+      // BUG: if date is less than startDate, it is not displayed in text input
+      // startDate: this.startDate(),
+      endDate: this.endDate(),
       format: {
         toDisplay: (date, format, language) => {
           return this.renderDate(date);
@@ -30,8 +32,10 @@ Template.Datepicker.viewmodel({
   placeholder: 'Date',
   sm: 8,
   startDate: new Date(),
+  endDate: Infinity,
   defaultDate: true,
   date: '',
+  enabled: true,
   dateString() {
     return this.date() ? this.renderDate(this.date()) : '';
   },
