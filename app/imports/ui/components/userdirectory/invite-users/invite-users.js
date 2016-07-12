@@ -15,6 +15,11 @@ Template.UserDirectory_InviteUsers.viewmodel({
       .map(userEntryViewModel => userEntryViewModel.email()) // get emails
       .filter(email => !!email); // get rid of empty strings
 
+    if(emails.length <= 0) {
+      this.modal().setError('You need to fill in at least one valid email address first');
+      return;
+    }
+
     let welcomeMessage = this.welcomeMessage();
     let organizationId = this.organizationId();
 
