@@ -12,10 +12,11 @@ Template.OrgSettings.viewmodel({
   mixin: 'organization',
   name: '',
   currency: '',
+  timezone: '',
   autorun() {
     const org = this.organization();
     if (org) {
-      this.load(_.pick(org, ['name', 'currency']));
+      this.load(_.pick(org, ['name', 'currency', 'timezone']));
     }
   },
   departments() {

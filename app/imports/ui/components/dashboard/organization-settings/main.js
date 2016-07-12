@@ -4,6 +4,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import {
   insert,
   setName,
+  setTimezone,
   setDefaultCurrency,
   createOrganizationTransfer,
   cancelOrganizationTransfer
@@ -14,6 +15,7 @@ Template.OrgSettings_MainSettings.viewmodel({
   mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router'],
   name: '',
   currency: '',
+  timezone: '',
   owner: '',
   isEditable: false,
   updateName({ e, name }) {
@@ -24,6 +26,13 @@ Template.OrgSettings_MainSettings.viewmodel({
 
       this.modal().callMethod(setName, { _id, name });
     });
+  },
+  updateTimezone({ e, timezone }) {
+    if (!this.isEditable()) return;
+
+    const _id = this.organizationId();
+
+    this.modal().callMethod(setTimezone, { _id, timezone });
   },
   updateCurrency({e, currency }) {
     if (!this.isEditable()) return;

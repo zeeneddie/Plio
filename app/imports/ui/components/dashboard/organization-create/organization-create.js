@@ -9,9 +9,9 @@ Template.OrganizationCreate.viewmodel({
   mixin: ['modal', 'router'],
   name: '',
   save() {
-    const { name, currency } = this.getData();
+    const { name, timezone, currency } = this.getData();
 
-    this.modal().callMethod(insert, { name, currency }, this.onAfterInsert.bind(this));
+    this.modal().callMethod(insert, { name, timezone, currency }, this.onAfterInsert.bind(this));
   },
   onAfterInsert(err, _id) {
     if (!err) {

@@ -1,7 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import moment from 'moment-timezone';
+
 import { TimeUnits, DocumentTypes, AnalysisStatuses } from './constants.js';
 import { Utils } from '/imports/core/utils.js';
-
 
 
 export const IdSchema = new SimpleSchema({
@@ -340,3 +341,11 @@ export const BaseProblemsOptionalSchema = ((() => {
   ]);
 
 })());
+
+export const TimezoneSchema = new SimpleSchema({
+  timezone: {
+    type: String,
+    allowedValues: moment.tz.names(),
+    optional: true
+  }
+});

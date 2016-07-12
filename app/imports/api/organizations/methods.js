@@ -13,7 +13,7 @@ import { canChangeOrgSettings, canInviteUsers, canDeleteUsers } from '../checker
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
-  UserIdSchema
+  UserIdSchema, TimezoneSchema
 } from '../schemas';
 
 
@@ -31,15 +31,34 @@ const ncTypeSchema = new SimpleSchema({
 const unauthorizedErrorMessage = 'Unauthorized user cannot update an organization';
 const changeOrgErrorMessage = 'User is not authorized for editing organization settings';
 
+const checkUser = (userId, orgId) => {
+  if (!userId) {
+    throw new Meteor.Error(403, unauthorizedErrorMessage);
+  }
+
+  if (!canChangeOrgSettings(userId, orgId)) {
+    throw new Meteor.Error(403, changeOrgErrorMessage);
+  }
+};
+
 export const insert = new ValidatedMethod({
   name: 'Organizations.insert',
 
-  validate: new SimpleSchema([
-    nameSchema,
-    OrganizationCurrencySchema
-  ]).validator(),
+  validate(doc) {
+    const schema = new SimpleSchema([
+      nameSchema,
+      TimezoneSchema,
+      OrganizationCurrencySchema
+    ]);
 
-  run({ name, currency }) {
+    schema.clean(doc, {
+      removeEmptyStrings: true
+    });
+
+    return schema.validator()(doc);
+  },
+
+  run({ name, timezone, currency }) {
     const userId = this.userId;
 
     if (!userId) {
@@ -51,6 +70,7 @@ export const insert = new ValidatedMethod({
     if (Meteor.isServer) {
       return OrganizationService.insert({
         name,
+        timezone,
         currency,
         ownerId: userId
       });
@@ -67,16 +87,9 @@ export const update = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
-
-    return OrganizationService.update(doc);
+    return OrganizationService.update({ _id, ...args });
   }
 });
 
@@ -89,16 +102,24 @@ export const setName = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
-
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
     return OrganizationService.setName({ _id, ...args });
+  }
+});
+
+export const setTimezone = new ValidatedMethod({
+  name: 'Organizations.setTimezone',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    TimezoneSchema
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    checkUser(this.userId, _id);
+
+    return OrganizationService.setTimezone({ _id, ...args });
   }
 });
 
@@ -110,14 +131,7 @@ export const setDefaultCurrency = new ValidatedMethod({
   }]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
-
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
     return OrganizationService.setDefaultCurrency({ _id, ...args });
   }
@@ -146,14 +160,7 @@ export const setWorkflowDefaults = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
-
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
     return OrganizationService.setWorkflowDefaults({ _id, ...args });
   }
@@ -178,14 +185,7 @@ export const setReminder = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
-
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
     return OrganizationService.setReminder({ _id, ...args });
   }
@@ -203,14 +203,7 @@ export const setGuideline = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(403, unauthorizedErrorMessage);
-    }
-
-    if (!canChangeOrgSettings(userId, _id)) {
-      throw new Meteor.Error(403, changeOrgErrorMessage);
-    }
+    checkUser(this.userId, _id);
 
     return OrganizationService.setGuideline({ _id, ...args });
   }

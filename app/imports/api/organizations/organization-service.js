@@ -28,7 +28,7 @@ export default OrganizationService = {
     }
   },
 
-  insert({ name, ownerId, currency }) {
+  insert({ name, timezone, currency, ownerId }) {
     this._ensureNameIsUnique(name);
 
     const lastOrg = this.collection.findOne({
@@ -47,6 +47,7 @@ export default OrganizationService = {
 
     const organizationId = this.collection.insert({
       name,
+      timezone,
       currency,
       serialNumber,
       users: [{
@@ -92,6 +93,12 @@ export default OrganizationService = {
 
     return this.collection.update({ _id }, {
       $set: { name }
+    });
+  },
+
+  setTimezone({ _id, timezone }) {
+    return this.collection.update({ _id }, {
+      $set: { timezone }
     });
   },
 

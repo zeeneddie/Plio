@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
@@ -27,6 +28,7 @@ Template.OrganizationsMenu.viewmodel({
       template: 'OrganizationCreate',
       title: 'New organization',
       variation: 'save',
+      timezone: moment.tz.guess(),
       ownerName: Meteor.user().fullName(),
       currency: OrgCurrencies.GBP
     });
