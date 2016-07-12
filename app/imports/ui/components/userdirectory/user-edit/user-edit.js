@@ -186,6 +186,13 @@ Template.UserEdit.viewmodel({
     }
   },
   isDeleteButtonEnabled() {
+    const organization = this.organization();
+    const userId = this.userId();
+
+    if (userId === organization.ownerId()) {
+      return false;
+    }
+
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.DELETE_USERS,

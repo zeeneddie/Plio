@@ -180,13 +180,7 @@ ViewModel.mixin({
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
     },
-    searchOnAfterKeyUp: _.debounce(function(e) {
-      const value = e.target.value;
-
-      if (this.searchText() === value) return;
-
-      this.searchText(value);
-
+    searchOnAfterKeyUp(value) {
       const checkIsDeletedFilter = (fn, counterName) => {
         if (this[fn] && this[fn]('deleted')) {
           this.searchResultsNumber(this[counterName]().count());
@@ -203,13 +197,6 @@ ViewModel.mixin({
       if (!!value) {
         this.expandAllFound();
       } else {
-        this.expandSelected();
-      }
-    }, 500),
-    clearSearchField() {
-      if (this.searchText()) {
-        this.searchInput.val('');
-        this.searchText('');
         this.expandSelected();
       }
     }
@@ -560,17 +547,15 @@ ViewModel.mixin({
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
     },
-    cutString(str, length) {
-      return str.length > length ? str.substring(0, length - 3) + "..." : str;
-    },
-    toArray(arrayLike = []) {
-      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
-    },
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
     findParentRecursive(templateName, instance) {
       return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
+    },
+    toArray(arrayLike = []) {
+      const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      return Array.from(array || []);
     }
   },
   magnitude: {

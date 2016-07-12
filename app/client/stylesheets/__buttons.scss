@@ -97,6 +97,10 @@
 */
 
 .btn {
+  &:focus, &:active, &:focus:active {
+    outline: none;
+  }
+
   i {
     &.margin-right {
       margin-right: 5px;
@@ -177,4 +181,5 @@
 
 .input-group-btn .btn {
   min-height: 34px;
+  text-overflow: initial;
 }

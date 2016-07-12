@@ -8,7 +8,7 @@ Template.RisksList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router'],
   autorun() {
-    if (!this.focused() && !this.animating()) {
+    if (!this.focused() && !this.animating() && !this.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });
@@ -128,7 +128,7 @@ Template.RisksList.viewmodel({
     }
   },
   expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.riskId()));
 
     this.animating(true);
 
@@ -148,7 +148,7 @@ Template.RisksList.viewmodel({
   },
   onAfterExpand() {
     this.animating(false);
-    Meteor.setTimeout(() => this.searchInput.focus(), 0);
+    Meteor.setTimeout(() => this.focused(true), 500);
   },
   openAddRiskModal() {
     this.modal().open({
