@@ -7,9 +7,6 @@ Template.Select_Multi.viewmodel({
   placeholder: '',
   selectFirstIfNoSelected: false,
   selectedItem: '',
-  renderTitle(str) {
-    return this.cutString(str, 19);
-  },
   value() {
     const child = this.child('SelectItem');
     return !!child && child.value();

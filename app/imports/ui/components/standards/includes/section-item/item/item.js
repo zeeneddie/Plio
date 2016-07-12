@@ -3,9 +3,18 @@ import { Template } from 'meteor/templating';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
 
-Template.ListSubItem.viewmodel({
+Template.Standards_Item_Read.viewmodel({
   share: ['standard', 'window'],
   mixin: ['organization', 'standard', 'user', 'date'],
+  title: '',
+  sectionId: '',
+  typeId: '',
+  owner: '',
+  issueNumber: '',
+  status: 'issued',
+  nestingLevel: 1,
+  viewedBy: [],
+  notify: '',
   autorun() {
     if (this._id() === this.standardId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
@@ -25,7 +34,7 @@ Template.ListSubItem.viewmodel({
     if ($(window).width() < 768) {
       this.width($(window).width());
     }
-    
+
     FlowRouter.setParams({ standardId: this._id() });
   },
   updateViewedBy() {
