@@ -538,9 +538,6 @@ ViewModel.mixin({
         return num;
       }
     },
-    cutString(str, length) {
-      return str.length > length ? str.substring(0, length - 3) + "..." : str;
-    },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
