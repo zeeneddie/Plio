@@ -12,7 +12,12 @@ Template.CreateStandard.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `Please, choose type for new standard`;
+        let errorMessage;
+        if (key === 'typeId') {
+          errorMessage = `The new standard cannot be created without a type. You can create a new type in Org settings`;
+        } else if (key === 'sectionId') {
+          errorMessage = `The new standard cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+        }
         this.modal().setError(errorMessage);
         return;
       }

@@ -8,9 +8,10 @@ SimpleSchema.messages({
   "regEx number": [
     {msg: '"[value]" is not a valid phone number'},
   ],
-  "minNumber timeValue": "Please, set correct time for reminders (can`t be [value])",
+  "minNumber timeValue": "Reminders for actions should be in range of [min] and [max]",
+  "maxNumber timeValue": "Reminders for actions should be in range of [min] and [max]",
   "minCount standardsIds": "At least one standard must be attached",
-  "minNumber issueNumber": "Issue number must be in range of 1 to 1000",
-  "maxNumber issueNumber": "Issue number must be in range of 1 to 1000",
+  "minNumber issueNumber": "Issue number must be in range of [min] and [max]",
+  "maxNumber issueNumber": "Issue number must be in range of [min] and [max]",
   "minString title": "[label] must be at least [min] character(s)"
 });
