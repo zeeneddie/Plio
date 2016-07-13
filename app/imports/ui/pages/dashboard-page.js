@@ -17,7 +17,8 @@ Template.DashboardPage.viewmodel({
         template.subscribe('risksCount', 'risks-count', organizationId),
         template.subscribe('risksNotViewedCount', 'risks-not-viewed-count', organizationId),
         template.subscribe('actionsCount', 'actions-count', organizationId),
-        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId)
+        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId),
+        template.subscribe('myCurrentFailedActions', 'actions-failed-count', organizationId)
       ]);
     },
     function() {
@@ -51,6 +52,9 @@ Template.DashboardPage.viewmodel({
   },
   actionsMetrics() {
     return this._renderMetrics('Action', 'actions-count', 'actions-not-viewed-count');
+  },
+  actionsLabel() {
+    return this.counter.get('actions-failed-count');
   },
   risksMetrics() {
     return this._renderMetrics('Risk', 'risks-count', 'risks-not-viewed-count');
