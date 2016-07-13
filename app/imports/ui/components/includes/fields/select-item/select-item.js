@@ -87,7 +87,7 @@ Template.SelectItem.viewmodel({
     return { value, selected, items, item };
   },
   getContentData() {
-    return _.extend({}, this.getData(), this.contentData());
+    return { ...this.getData(), ...this.contentData() };
   },
   events: {
     'click input'(e) {
