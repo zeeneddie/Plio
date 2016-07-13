@@ -12,13 +12,11 @@ Template.SelectItem.viewmodel({
 
         this.selected(_id);
         this.value(title);
-        this.lastSelectedItem({ _id, title });
         computation.stop();
       } else if (!!this.selected() && !this.value() && items.length > 0) {
         const item = this.getSelectedItem();
 
         this.value(item.title);
-        this.lastSelectedItem({ title: item.title });
         computation.stop();
       }
     }
@@ -39,7 +37,6 @@ Template.SelectItem.viewmodel({
       !!item && this.value(item.title);
     }
   },
-  lastSelectedItem: null,
   value: '',
   selected: '',
   placeholder: '',
@@ -59,22 +56,13 @@ Template.SelectItem.viewmodel({
   itemsFiltered() {
     return this.itemsArray().filter(({ _id }) => !this.excludedItems().includes(_id));
   },
-  itemHtml(item) {
-    return item.html || item.title;
+  itemHtml({ html, title }) {
+    return html || title;
   },
   select({ _id, title }) {
     this.value(title);
     this.selected(_id);
-    this.lastSelectedItem({ _id, title });
     this.update();
-  },
-  openDropdownMenu(e) {
-    if(!this.dropdown.hasClass('open')) {
-      this.dropdown.find('[data-toggle="dropdown"]').dropdown('toggle');
-    }
-  },
-  handleButtonClick() {
-    this.value(this.lastSelectedItem() && this.lastSelectedItem().title || '');
   },
   onUpdate() {},
   update() {
@@ -100,5 +88,12 @@ Template.SelectItem.viewmodel({
   },
   getContentData() {
     return _.extend({}, this.getData(), this.contentData());
+  },
+  events: {
+    'click input'(e) {
+      if (this.dropdown.is('.open')) {
+        e.stopPropagation();
+      }
+    }
   }
 });
