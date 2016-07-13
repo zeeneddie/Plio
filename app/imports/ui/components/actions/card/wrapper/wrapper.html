@@ -1,0 +1,13 @@
+<template name="Actions_Card_Read_Wrapper">
+  {{#if _is_ 'Actions'}}
+    {{> Actions_Card_Read}}
+  {{/if}}
+
+  {{#if _is_ 'NonConformities'}}
+    {{> NC_Card_Read NC=NC}}
+  {{/if}}
+
+  {{#if _is_ 'Risks'}}
+    {{> Risks_Card_Read risk=risk}}
+  {{/if}}
+</template>

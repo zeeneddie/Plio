@@ -6,16 +6,23 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { updateViewedBy } from '/imports/api/actions/methods.js';
 
 Template.ActionItem.viewmodel({
-  share: 'window',
+  share: ['window', 'action'],
   mixin: ['date', 'action', 'organization', 'actionStatus'],
-  autorun() {
-    if (this._id() === this.actionId() && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
+  _documentType_: '',
+  autorun: [
+    function() {
+      if (this._id() === this.actionId() && this.isNew()) {
+        Tracker.nonreactive(() => this.updateViewedBy());
+      }
+    },
+    function() {
+      // TODO pass _documentType_ to the component through mapping array of documents
+      // Used to determine action (Action, NC, Risk, ...)
+      if (this._id() === this.actionId()) {
+        this.actionDocType(this._documentType_());
+      }
     }
-  },
-  getDate() {
-    return this.isCompleted() ? this.renderDate(this.completedAt()) : this.renderDate(this.createdAt());
-  },
+  ],
   isNew() {
     return !this.viewedBy().find(_id => _id === Meteor.userId());
   },

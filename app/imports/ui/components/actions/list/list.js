@@ -3,12 +3,16 @@ import { Meteor } from 'meteor/meteor';
 
 Template.ActionsList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user', 'nonconformity', 'risk', 'utils'],
   autorun() {
     if (!this.focused() && !this.animating()) {
       const query = this._getQueryForFilter();
 
-      const contains = this._getActionsByQuery(query).fetch().find(({ _id }) => _id === this.actionId());
+      const actions = this._getActionsByQuery(query).fetch();
+      const NCs = this._getNCsByQuery(query).fetch();
+      const risks = this._getRisksByQuery(query).fetch();
+
+      const contains = actions.concat(NCs, risks).find(({ _id }) => _id === this.actionId());
 
       if (!contains) {
         const action = this._getActionByQuery({ ...this._getFirstActionQueryForFilter() });
@@ -60,7 +64,7 @@ Template.ActionsList.viewmodel({
     return this._getQueryForCurrentFilter(query);
   },
   _getFirstActionQueryForFilter() {
-    const getIds = (array) => array.map(prop => ({ _id: this[prop]().count() > 0 && this[prop]().map(({ _id }) => _id)[0] }));
+    const getIds = (array) => array.map(prop => ({ _id: this.toArray(this[prop]()).length > 0 && this[prop]().map(({ _id }) => _id)[0] }));
 
     const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions']);
 
@@ -84,8 +88,18 @@ Template.ActionsList.viewmodel({
     const userIds = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);
     return [...new Set(_.flatten(userIds).filter(_id => !!_id && _id !== Meteor.userId()))];
   },
+  NCsPending() {
+    return this._getNCsByQuery({ status: { $in: [1, 2, 3, 4] } });
+  },
+  risksPending() {
+    return this._getRisksByQuery({ status: { $in: [1, 2, 3, 4] } });
+  },
   myCurrentActions() {
-    return this._getActionsByQuery({ ...this._getCurrentActionsQuery(Meteor.userId()) });
+    const analysisQuery = { executor: Meteor.userId() };
+    const NCs = this.NCsPending(analysisQuery).fetch();
+    const risks = this.risksPending(analysisQuery).fetch();
+    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery(Meteor.userId()) }).fetch();
+    return actions.concat(NCs, risks).sort(({ updatedAt:u1 }, { updatedAt:u2 }) => u2 - u1);
   },
   myCompletedActions() {
     return this._getActionsByQuery({ ...this._getActionsQuery(true, true) }, { sort: { completedAt: -1 } });

@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
 
-Template.ActionsCard.viewmodel({
+Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
     return this._getActionByQuery({ _id: this.actionId() });
