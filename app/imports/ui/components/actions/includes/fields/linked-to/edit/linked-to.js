@@ -95,10 +95,10 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
     const newDocs = Array.from(this.linkedDocs() || []).filter(({ _id }) => _id !== documentId);
 
-    const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
-
     // if we are viewing subcard show error in subcard, otherwise in modal
     if (this._id && newLinkedTo.length === 0) {
+      const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
+
       if (!subcard) {
         ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
       } else {
