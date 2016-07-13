@@ -622,21 +622,24 @@ ViewModel.mixin({
     },
     getClassByStatus(status) {
       switch(status) {
-        case 0:
         case 1:
-        case 2:
-          return 'warning';
-        case 3:
         case 4:
-        case 5:
-        case 6:
+          return 'warning';
+          break;
+        case 0:
+        case 3:
         case 7:
         case 8:
           return 'success';
-        case 9:
+          break;
+        case 2:
+        case 5:
+        case 6:
           return 'danger';
+          break;
         default:
           return '';
+          break;
       }
     }
   },
