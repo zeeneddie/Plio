@@ -8,7 +8,7 @@ import { update, remove } from '/imports/api/standards/methods.js';
 
 Template.StandardsCard.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('standardImprovementPlan', this.standardId());

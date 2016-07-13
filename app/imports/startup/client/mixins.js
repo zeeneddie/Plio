@@ -503,6 +503,9 @@ ViewModel.mixin({
       const _id = this.actionId();
       return Actions.findOne({ _id });
     },
+    ActionTypes() {
+      return ActionTypes;
+    },
     _getNameByType(type) {
       switch (type) {
         case ActionTypes.CORRECTIVE_ACTION:
