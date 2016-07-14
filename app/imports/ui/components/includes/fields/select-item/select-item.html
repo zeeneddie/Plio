@@ -1,9 +1,15 @@
 <template name="SelectItem">
   <div class="dropdown-wrapper form-group-flex-flex">
-    <div class="input-group dropdown" {{b "ref: dropdown"}}>
-      <div {{b "click: openDropdownMenu"}}>
+    <div class="input-group-typeahead dropdown" {{b "ref: dropdown"}}>
+      <div class="input-group" data-toggle="dropdown">
         <input type="text" class="form-control"
-          {{b "value: value, attr: { placeholder: placeholder }"}}/>
+          {{b "value: value, focus: focused, attr: { placeholder: placeholder }, throttle: 300"}}/>
+
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-secondary btn-icon">
+            <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+          </button>
+        </span>
       </div>
 
       <div class="dropdown-menu dropdown-menu-full">
@@ -16,12 +22,6 @@
           <div class="dropdown-item"><strong>There are no available items...</strong></div>
         {{/if}}
       </div>
-
-      <span class="input-group-btn" data-toggle="dropdown">
-        <button type="button" class="btn btn-secondary btn-icon" {{b "click: handleButtonClick"}}>
-          <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
-        </button>
-      </span>
     </div>
   </div>
 </template>
