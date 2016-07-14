@@ -6,14 +6,14 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { update, remove } from '/imports/api/standards/methods.js';
 
-Template.StandardsCard.viewmodel({
+Template.Standards_Card_Read.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('standardImprovementPlan', this.standardId());
       template.subscribe('departments', this.organizationId());
-      template.subscribe('nonConformitiesByStandardId', this.standardId());
+      template.subscribe('standardImprovementPlan', this.standard() && this.standard()._id);
+      template.subscribe('nonConformitiesByStandardId', this.standard() && this.standard()._id);
     });
   },
   onRendered(template) {
@@ -54,7 +54,7 @@ Template.StandardsCard.viewmodel({
     return this._getStandardsByQuery({});
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this.standard() && this.standard()._id });
   },
   hasDocxAttachment() {
     const standard = this.standard();
@@ -69,13 +69,13 @@ Template.StandardsCard.viewmodel({
     return StandardTypes.findOne({ _id });
   },
   _getNCsQuery() {
-    return { standardsIds: this.standardId() };
+    return { standardsIds: this.standard() && this.standard()._id };
   },
   openEditStandardModal() {
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standardId()
+      _id: this.standard() && this.standard()._id
     });
   },
   restore({ _id, title, isDeleted }) {

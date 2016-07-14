@@ -4,7 +4,7 @@
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
         {{#ClearableField clearFn="clearSearchField"}}
           <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "ref: searchInput, focus: focused, keyup: searchOnAfterKeyUp"}} />
+              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
@@ -27,7 +27,7 @@
           {{> ListItem
               template='ActionSectionItem'
               title=(userFullNameOrEmail this)
-              _query=(_getCurrentActionsQuery this)}}
+              actions=(teamCurrentActions this)}}
         {{/each}}
       {{/if}}
 
@@ -42,7 +42,7 @@
           {{> ListItem
               template='ActionSectionItem'
               title=(userFullNameOrEmail this)
-              _query=(_getAssigneeQuery this true)}}
+              actions=(teamCompletedActions this)}}
         {{/each}}
       {{/if}}
 

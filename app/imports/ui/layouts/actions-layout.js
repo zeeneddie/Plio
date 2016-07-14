@@ -14,8 +14,8 @@ Template.ActionsLayout.viewmodel({
         this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         this.templateInstance.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('nonConformitiesPending', _id),
-        this.templateInstance.subscribe('risksPending', _id)
+        this.templateInstance.subscribe('nonConformities', _id),
+        this.templateInstance.subscribe('risks', _id),
       ];
 
       this._subHandlers(_subHandlers);

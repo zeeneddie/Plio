@@ -5,7 +5,7 @@ Template.ActionsList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user', 'nonconformity', 'risk', 'utils'],
   autorun() {
-    if (!this.focused() && !this.animating()) {
+    if (!this.focused() && !this.animating() && !this.searchText()) {
       const query = this._getQueryForFilter();
 
       const actions = this._getActionsByQuery(query).fetch();
@@ -15,7 +15,9 @@ Template.ActionsList.viewmodel({
       const contains = actions.concat(NCs, risks).find(({ _id }) => _id === this.actionId());
 
       if (!contains) {
-        const action = this._getActionByQuery({ ...this._getFirstActionQueryForFilter() });
+        const action = this._getActionByQuery({ ...this._getFirstActionQueryForFilter() })   ||
+                       this._getNCByQuery({ ...this._getFirstActionQueryForFilter() })       ||
+                       this._getRiskByQuery({ ...this._getFirstActionQueryForFilter() });
 
         if (action) {
           const { _id } = action;
@@ -73,47 +75,66 @@ Template.ActionsList.viewmodel({
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
-  _getActionsQuery(isToBeCompletedByMe = false, isCompleted = false) {
-    const userId = Meteor.userId();
-    const toBeCompletedBy = isToBeCompletedByMe ? userId : { $ne: userId };
-    return { toBeCompletedBy, isCompleted, ...this._getSearchQuery() };
-  },
   _getAssigneeQuery(toBeCompletedBy, isCompleted) {
     return { toBeCompletedBy, isCompleted };
   },
-  _getCurrentActionsQuery(userId) {
-    return { $or: [ { toBeCompletedBy: userId, isCompleted: false }, { toBeVerifiedBy: userId, isVerified: false } ] };
+  _getActions(_query, _options) {
+    return (userQuery, isDone = false) => {
+      const query = {
+        $and: [
+          { ...this._getSearchQuery() },
+          {
+            $or: [
+              { toBeCompletedBy: { $exists: true, ...userQuery}, isCompleted: isDone },
+              { toBeVerifiedBy: { $exists: true, ...userQuery}, isVerified: isDone }
+            ]
+          }
+        ]
+      };
+      return this._getActionsByQuery({ ..._query, ...query }, _options).fetch();
+    };
+  },
+  _getPendingProblemsByQuery(_query) {
+    const query = { ..._query, ...this._getSearchQuery(), status: { $in: [1, 4, 11] } }; // should be 4, 11
+    const NCs = this._getNCsByQuery(query).fetch();
+    const risks = this._getRisksByQuery(query).fetch();
+    return NCs.concat(risks).map(({ analysis, ...args }) => ({ toBeCompletedBy: analysis.executor, analysis, ...args }));
   },
   _getUniqueAssignees(collection) {
-    const userIds = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);
-    return [...new Set(_.flatten(userIds).filter(_id => !!_id && _id !== Meteor.userId()))];
-  },
-  NCsPending() {
-    return this._getNCsByQuery({ status: { $in: [1, 2, 3, 4] } });
-  },
-  risksPending() {
-    return this._getRisksByQuery({ status: { $in: [1, 2, 3, 4] } });
+    const userIdsData = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);
+    const userIds = Array.from(userIdsData || [])
+                           .reduce((prev, cur) => [...prev, ...cur], [])
+                           .filter(_id => !!_id && _id !== Meteor.userId());
+    return [...new Set(userIds)];
   },
   myCurrentActions() {
-    const analysisQuery = { executor: Meteor.userId() };
-    const NCs = this.NCsPending(analysisQuery).fetch();
-    const risks = this.risksPending(analysisQuery).fetch();
-    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery(Meteor.userId()) }).fetch();
-    return actions.concat(NCs, risks).sort(({ updatedAt:u1 }, { updatedAt:u2 }) => u2 - u1);
+    const problems = this._getPendingProblemsByQuery({ 'analysis.executor': Meteor.userId() });
+    const actions = this._getActions({})({ $eq: Meteor.userId() }, false);
+    return actions.concat(problems).sort(({ createdAt:c1 }, { createdAt:c2 }) => c2 - c1);
   },
   myCompletedActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(true, true) }, { sort: { completedAt: -1 } });
+    return this._getActions({}, { sort: { completedAt: -1 } })({ $eq: Meteor.userId() }, true);
   },
-  teamCurrentActions() {
-    const userIds = this.teamCurrentActionsAssignees();
-    return this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $in: userIds }) });
+  teamCurrentActions(userId) {
+    const problems = ((() => {
+      const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
+      const analysisQuery = { 'analysis.executor': { $exists: true, ...userQuery } };
+      return this._getPendingProblemsByQuery(analysisQuery);
+    })());
+
+    const actions = ((() => {
+      const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
+      return this._getActions({})(userQuery, false);
+    })());
+
+    return actions.concat(problems).sort(({ createdAt:c1 }, { createdAt:c2 }) => c2 - c1);
   },
   teamCurrentActionsAssignees() {
-    const actions = this._getActionsByQuery({ ...this._getCurrentActionsQuery({ $ne: Meteor.userId() }) });
-    return this._getUniqueAssignees(actions);
+    return this._getUniqueAssignees(this.teamCurrentActions());
   },
-  teamCompletedActions() {
-    return this._getActionsByQuery({ ...this._getActionsQuery(false, true) }, { sort: { completedAt: -1 } });
+  teamCompletedActions(userId) {
+    const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
+    return this._getActions({}, { completedAt: -1 })(userQuery, true);
   },
   teamCompletedActionsAssignees() {
     return this._getUniqueAssignees(this.teamCompletedActions());
@@ -122,18 +143,21 @@ Template.ActionsList.viewmodel({
   animating: false,
   expandAllFound() {
     const sections = ViewModel.find('ActionSectionItem');
-    const ids = _.flatten(!!sections && sections.map(vm => vm.actions && vm.actions().fetch().map(({ _id }) => _id)));
+    const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ _id }) => _id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
-    if (this.isActiveActionFilter('My current actions') || this.isActiveActionFilter('My completed actions')) {
-      const count = this._getActionsByQuery({ ...this._getQueryForFilter() }).count();
+    if (this.isActiveActionFilter('My current actions')) {
+      const count = this.myCurrentActions().length;
 
       this.searchResultsNumber(count);
-
       return;
+    } else if (this.isActiveActionFilter('My completed actions')) {
+      const count = this.myCompletedActions().count();
+
+      return this.searchResultsNumber(count);
     }
 
     this.searchResultsNumber(ids.length);
@@ -148,7 +172,9 @@ Template.ActionsList.viewmodel({
     }
   },
   expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.actionId()));
+
+    if (this.isActiveActionFilter('My current actions') || this.isActiveActionFilter('My completed actions')) return;
 
     this.animating(true);
 
@@ -168,7 +194,7 @@ Template.ActionsList.viewmodel({
   },
   onAfterExpand() {
     this.animating(false);
-    Meteor.setTimeout(() => this.searchInput.focus(), 0);
+    Meteor.setTimeout(() => this.focused(true), 500);
   },
   openModal() {
     this.modal().open({
