@@ -1,0 +1,10 @@
+<template name="Actions_CompletedOn">
+  {{#FormField label="Completed on"}}
+    {{> Datepicker
+        date=completedAt
+        defaultDate=defaultDate
+        placeholder=placeholder
+        enabled=enabled
+        onChange=onUpdateCb}}
+  {{/FormField}}
+</template>

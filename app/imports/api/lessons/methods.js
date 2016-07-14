@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import LessonsService from './lessons-service.js';
-import { LessonsSchema, requiredSchema } from './lessons-schema.js';
+import { LessonsSchema, RequiredSchema } from './lessons-schema.js';
 import { Lessons } from './lessons.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
 
 const organizationIdSchema = new SimpleSchema({
   organizationId: {
@@ -16,23 +16,37 @@ const organizationIdSchema = new SimpleSchema({
 export const insert = new ValidatedMethod({
   name: 'Lessons.insert',
 
-  validate: new SimpleSchema([requiredSchema, organizationIdSchema]).validator(),
+  validate: new SimpleSchema([RequiredSchema, organizationIdSchema, DocumentIdSchema, DocumentTypeSchema]).validator(),
 
-  run(...args) {
+  run({ ...args }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create a lesson');
     }
 
-    return LessonsService.insert(...args);
+    return LessonsService.insert({ ...args });
   }
 });
 
 export const update = new ValidatedMethod({
   name: 'Lessons.update',
 
-  validate: new SimpleSchema([IdSchema, requiredSchema]).validator(),
 
-  run({_id, ...args}) {
+  validate(doc) {
+    const validationContext = new SimpleSchema([
+      IdSchema,
+      RequiredSchema
+    ]).newContext();
+
+    for (let key in doc) {
+      if (!validationContext.validateOne(doc, key)) {
+        const errors = validationContext.invalidKeys();
+        const message = validationContext.keyErrorMessage(errors[0].name);
+        throw new ValidationError(errors, message);
+      }
+    }
+  },
+
+  run({ _id, ...args }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update a lesson');
     }

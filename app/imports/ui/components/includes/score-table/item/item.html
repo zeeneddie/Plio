@@ -1,0 +1,12 @@
+<template name="ScoreTable_Item">
+  <tr>
+    <th class="impact-label" {{b "text: this.label"}}></th>
+    {{#each this.rows}}
+      {{#if isLast}}
+        <th class="impact-label" {{b "text: this"}}></th>
+      {{else}}
+        <td class="impact {{#if isActive this}}active{{/if}}" {{b "click: onClick(this), text: this, class: 'impact-'+getClassByScore(this)"}}></td>
+      {{/if}}
+    {{/each}}
+  </tr>
+</template>

@@ -1,31 +1,37 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, StandardIdSchema, OrganizationIdSchema } from '../schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
 
 
-export const requiredSchema = new SimpleSchema([StandardIdSchema, {
+const RequiredSchema = new SimpleSchema({
   title: {
-    type: String
+    type: String,
+    min: 1
   },
   date: {
     type: Date
   },
   notes: {
-    type: String
+    type: String,
+    min: 1
   },
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
   }
-}]);
+});
 
-export const LessonsSchema = new SimpleSchema([
+const LessonsSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
-  requiredSchema,
+  RequiredSchema,
+  DocumentIdSchema,
+  DocumentTypeSchema,
   {
     serialNumber: {
       type: Number
     }
   }
 ]);
+
+export { RequiredSchema, LessonsSchema };

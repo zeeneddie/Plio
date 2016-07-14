@@ -2,7 +2,7 @@
 
 The first on-demand system for compliance management in the enterprise, using lean principles
 
-Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](guide.meteor.com).
+Plio is built using the Meteor JS framework, following the architecture, style guide and best practices defined in [Meteor Guide 1.3](https://guide.meteor.com).
 
 # MOTIVATION
 
@@ -139,7 +139,7 @@ All fixure documents are defined in the json format in `app/private/fixtures`.
 
 To add a new document, you need to create a new json file under the proper directory.
 Each directory stands for a Meteor collection.
-To add a new collection, you need to create a new directory within the `app/fixtures` folder. Aso, you need to add names of the collection variable and the directory to the `app/fixtures/config.json` file like this:
+To add a new collection, you need to create a new directory within the `app/private/fixtures` folder. Aso, you need to add names of the collection variable and the directory to the `app/private/fixtures/config.json` file like this:
 
 ```
 "Meteor.users": "users"

@@ -1,10 +1,38 @@
 import { Meteor } from 'meteor/meteor';
 import { ImprovementPlans } from '../improvement-plans.js';
+import { Standards } from '../../standards/standards.js';
+import { NonConformities } from '../../non-conformities/non-conformities.js';
+import { isOrgMember } from '../../checkers.js';
 
-Meteor.publish('improvementPlan', function(documentId) {
-  if (this.userId) {
-    return ImprovementPlans.find({ documentId });
-  } else {
+
+Meteor.publish('NCImprovementPlan', function(NCId) {
+  const userId = this.userId;
+  if (!userId) {
     return this.ready();
   }
+
+  const NC = NonConformities.findOne({ _id: NCId });
+  const organizationId = NC && NC.organizationId;
+
+  if (!isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  return ImprovementPlans.find({ documentId: NCId });
+});
+
+Meteor.publish('standardImprovementPlan', function(standardId) {
+  const userId = this.userId;
+  if (!userId) {
+    return this.ready();
+  }
+
+  const standard = Standards.findOne({ _id: standardId });
+  const organizationId = standard && standard.organizationId;
+
+  if (!isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  return ImprovementPlans.find({ documentId: standardId });
 });

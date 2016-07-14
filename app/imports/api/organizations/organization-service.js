@@ -55,14 +55,16 @@ export default OrganizationService = {
       }],
       workflowDefaults,
       reminders,
-      ncGuidelines
+      ncGuidelines,
+      createdBy: ownerId
     });
 
     _.each(DefaultStandardTypes, ({ name, abbreviation }) => {
       StandardsTypeService.insert({
         name,
         abbreviation,
-        organizationId
+        organizationId,
+        createdBy: ownerId
       });
     });
 

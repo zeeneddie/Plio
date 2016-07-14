@@ -1,59 +1,43 @@
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { RisksSections } from '/imports/api/risks-sections/risks-sections.js';
-import { insert } from '/imports/api/risks-sections/methods.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 
 Template.RKType.viewmodel({
-  mixin: ['collapsing', 'organization', 'modal', 'search'],
+  mixin: ['organization', 'collapsing', 'risk'],
+  autorun() {
+    // to fix bug wich randomly calls method
+    if (this.typeId() !== this.templateInstance.data.typeId) {
+      Tracker.nonreactive(() => this.update());
+    }
+  },
+  onCreated() {
+    if (!this.typeId() && this.types().length > 0) {
+      this.typeId(this.types()[0]._id);
+    }
+  },
   typeId: '',
-  section() {
-    const _id = this.typeId();
-    const section = RisksSections.findOne({ _id });
-    !!section ? section.title : '';
-  },
-  sectionTitle() {
-    const child = this.child('SectionField');
-    return child && child.section();
-  },
-  sections() {
-    const query = {
-      $and: [
-        {
-          ...this.searchObject('sectionTitle', 'title')
-        },
-        {
-          organizationId: this.organizationId()
-        }
-      ]
-    };
-    const options = { sort: { title: 1 } };
-    return RisksSections.find(query, options);
-  },
-  onAddSectionCb() {
-    return this.addSection.bind(this);
-  },
-  addSection(viewmodel, cb) {
-    const { section:title } = viewmodel.getData();
+  types() {
     const organizationId = this.organizationId();
-
-    this.modal().callMethod(insert, { title, organizationId }, cb);
+    return RiskTypes.find({ organizationId }).fetch();
   },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
+  update() {
     if (!this._id) return;
 
-    const { sectionId } = viewmodel.getData();
+    const { typeId } = this.getData();
 
-    this.parent().update({ sectionId }, () => {
+    if (!typeId) {
+      ViewModel.findOne('ModalWindow').setError('Type is required!');
+    }
+
+    this.parent().update({ typeId }, (err) => {
       Tracker.flush();
-      this.expandCollapsedStandard(this.standardId());
+      this.expandCollapsed(this.riskId());
     });
   },
   getData() {
-    const { sectionId:typeId } = this.child().getData();
+    const { typeId } = this.data();
     return { typeId };
   }
 });

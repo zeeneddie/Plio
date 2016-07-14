@@ -1,0 +1,15 @@
+<template name="Subcards_ImprovementPlan_Edit">
+  {{#SubCard_EditWrapper _lText="ImprovementPlan" _rText=getTextIndicator}}
+    <div class="card-block" id="improvement-plan">
+      {{> IP_DesiredOutcome_Edit desiredOutcome=desiredOutcome}}
+
+      {{> IP_TargetDate_Edit targetDate=targetDate}}
+
+      {{> IP_ReviewDate_Edits reviewDates=reviewDates}}
+
+      {{> IP_Owner_Edit owner=owner}}
+
+      {{> IP_MeansStatement_Edit _id=_id files=files}}
+    </div>
+  {{/SubCard_EditWrapper}}
+</template>

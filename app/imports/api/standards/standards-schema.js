@@ -1,126 +1,102 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { StandardStatuses } from '../constants.js';
+import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema, ViewedBySchema, getNotifySchema } from '../schemas.js';
 
 
-const optionalFields = new SimpleSchema({
-  description: {
-    type: String,
-    optional: true
-  },
-  isDeleted: {
-    type: Boolean,
-    optional: true
-  },
-  deletedBy: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  deletedAt: {
-    type: Date,
-    optional: true
-  },
-  approved: {
-    type: Boolean,
-    optional: true
-  },
-  approvedAt: {
-    type: Date,
-    optional: true
-  },
-  notes: {
-    type: String,
-    optional: true
-  },
-  departments: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  source1: {
-    type: Object,
-    optional: true
-  },
-  'source1.extension': {
-    type: String,
-    optional: true
-  },
-  'source1.type': {
-    type: String
-  },
-  'source1.url': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url,
-    optional: true
-  },
-  'source1.htmlUrl': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url,
-    optional: true
-  },
-  'source1.name': {
-    type: String,
-    optional: true
-  },
-  source2: {
-    type: Object,
-    optional: true
-  },
-  'source2.extension': {
-    type: String,
-    optional: true
-  },
-  'source2.type': {
-    type: String
-  },
-  'source2.url': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url,
-    optional: true
-  },
-  'source2.htmlUrl': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Url,
-    optional: true
-  },
-  'source2.name': {
-    type: String,
-    optional: true
-  },
-  notify: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    autoValue() {
-      if (this.isInsert) {
-        const owner = this.field('owner');
-        if (owner.isSet) {
-          return [owner.value];
-        } else {
-          this.unset();
+const optionalFields = new SimpleSchema([
+  DeletedSchema,
+  ViewedBySchema,
+  getNotifySchema('owner'),
+  {
+    description: {
+      type: String,
+      optional: true
+    },
+    approved: {
+      type: Boolean,
+      optional: true
+    },
+    approvedAt: {
+      type: Date,
+      optional: true
+    },
+    notes: {
+      type: String,
+      optional: true
+    },
+    departments: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    source1: {
+      type: Object,
+      optional: true
+    },
+    'source1.extension': {
+      type: String,
+      autoValue() {
+        if (this.isSet) {
+          return this.value.toLowerCase();
         }
-      } else {
-        this.unset();
-      }
-    }
-  },
-  lessons: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  viewedBy: {
-    type: [String],
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    autoValue() {
-      if (this.isInsert) {
-        return [this.userId];
-      }
+      },
+      optional: true
+    },
+    'source1.type': {
+      type: String
+    },
+    'source1.url': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source1.htmlUrl': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source1.name': {
+      type: String,
+      optional: true
+    },
+    source2: {
+      type: Object,
+      optional: true
+    },
+    'source2.extension': {
+      type: String,
+      autoValue() {
+        if (this.isSet) {
+          return this.value.toLowerCase();
+        }
+      },
+      optional: true
+    },
+    'source2.type': {
+      type: String
+    },
+    'source2.url': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source2.htmlUrl': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    'source2.name': {
+      type: String,
+      optional: true
+    },
+    lessons: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }
-});
+]);
 
 const StandardsSchema = new SimpleSchema([
   optionalFields,
@@ -146,10 +122,13 @@ const StandardsSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id
     },
     issueNumber: {
-      type: Number
+      type: Number,
+      min: 1,
+      max: 1000
     },
     status: {
-      type: String
+      type: String,
+      allowedValues: _.keys(StandardStatuses)
     }
   }
 ]);
@@ -188,7 +167,8 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   },
   status: {
     type: String,
-    optional: true
+    optional: true,
+    allowedValues: _.keys(StandardStatuses)
   }
 }]);
 

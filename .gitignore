@@ -1,6 +1,8 @@
 .meteor/local
+.meteor/dev_bundle
 node_modules
 deploy
 .idea
 .DS_Store
 settings-local.json
+npm-debug.log

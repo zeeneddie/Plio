@@ -5,6 +5,7 @@
 
 .form-control {
   color: #333;
+  min-height: 34px;
 
   &:disabled {
     color: black;
@@ -225,6 +226,10 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
+  
+  &.focused > .clear-field {
+    visibility: visible;
+  }
 
   .clear-field {
     right: 2px;
@@ -263,7 +268,6 @@ input:focus ~ .clear-field {
 /* Risk Grading */
 
 .table-risk-grading {
-  border-top: 1px solid #ddd;
 
   table {
     margin-bottom: 10px;
@@ -416,12 +420,13 @@ fieldset[disabled] {
 
 .file-item {
   margin-right: 4px;
-  
+  max-width: 100%;
+
   .button-wrapper {
     position: relative;
     display: inline-block;
     float: left;
-    max-width: 270px;
+    max-width: calc(100% - 36px);
     overflow: hidden;
     min-width: 100px;
     text-overflow: ellipsis;
@@ -479,6 +484,19 @@ input[disabled], textarea[disabled] {
   }
 }
 
+.dropdown-divider {
+  margin: 0;
+}
+
 #notifications-checkbox {
   margin-bottom: 0;
+}
+
+.input-group .form-control:only-child {
+  border-top-left-radius: .25rem;
+  border-bottom-left-radius: .25rem;
+}
+
+input[type="number"] {
+  min-width: 60px;
 }

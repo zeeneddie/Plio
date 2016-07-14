@@ -1,0 +1,33 @@
+{
+  "_id": "hR3QzcjMKfZv9RQLe",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "title": "Fix machine calibration",
+  "linkedTo": [
+    {
+      "documentId": "fNcP9ifXiqK6MqYoC",
+      "documentType": "non-conformity"
+    }
+  ],
+  "type": "CA",
+  "status" : 0,
+  "ownerId": "SQHmBKJ94gJvpLKLt",
+  "planInPlace": "Yes",
+  "serialNumber": 1,
+  "sequentialId": "CA1",
+  "isCompleted": false,
+  "completionTargetDate": {"$date": 1459508400000},
+  "toBeCompletedBy": "SQHmBKJ94gJvpLKLt",
+  "isVerified": false,
+  "toBeVerifiedBy": "SQHmBKJ94gJvpLKLt",
+  "notes": "",
+  "files": [],
+  "viewedBy": [],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "isDeleted": false,
+  "createdAt" : {"$date": 1459508400000},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1459515600000},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt"
+}

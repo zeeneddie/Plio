@@ -1,0 +1,29 @@
+<template name="NC_UpdateOfStandards_Edit">
+  <div class="card-block">
+    {{#FormField label="Update of standard(s)"}}{{/FormField}}
+
+    {{> NC_RCA_Date_Edit
+        startDate=defaultTargetDate
+        date=targetDate
+        key="updateOfStandards.targetDate"}}
+
+    {{> NC_RCA_Status_Edit
+      status=status
+      executor=executor
+      key="updateOfStandards.status"}}
+
+    {{#if updateOfStandards.status}}
+      {{> NC_RCA_Date_Edit
+          date=completedAt
+          key="updateOfStandards.completedAt"
+          placeholder="Completed date"
+          label="Completed date"}}
+
+      {{> NC_RCA_By_Edit
+        by=completedBy
+        key="updateOfStandards.completedBy"
+        placeholder="Completed by"
+        label="Completed by"}}
+    {{/if}}
+  </div>
+</template>

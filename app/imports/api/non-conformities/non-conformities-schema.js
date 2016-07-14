@@ -1,40 +1,83 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
+import { ProblemsStatuses } from '../constants.js';
 
-const optionalFields = new SimpleSchema({
+const RequiredSchema = BaseProblemsRequiredSchema;
 
-});
-
-const NonConformitiesSchema = new SimpleSchema([
-  OrganizationIdSchema,
-  BaseEntitySchema,
+const OptionalSchema = new SimpleSchema([
+  BaseProblemsOptionalSchema,
   {
-    title: {
+    cost: {
+      type: Number,
+      optional: true
+    },
+    ref: {
+      type: Object,
+      optional: true
+    },
+    'ref.text': {
       type: String,
-      min: 1,
-      max: 40
+      max: 20
     },
-    serialNumber: {
+    'ref.url': {
       type: String,
-      min: 3
-    },
-    standards: {
-      type: [String],
-      regEx: SimpleSchema.RegEx.Id
-    },
-    identifiedBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
-    },
-    identifiedAt: {
-      type: Date
-    },
-    magnitude: {
-      type: String,
-
+      regEx: SimpleSchema.RegEx.Url
     }
   }
 ]);
 
-export { NonConformitiesSchema };
+
+const NonConformitiesSchema = new SimpleSchema([
+  BaseEntitySchema,
+  RequiredSchema,
+  OptionalSchema,
+  {
+    serialNumber: {
+      type: Number,
+      min: 0
+    },
+    sequentialId: {
+      type: String,
+      min: 3
+    },
+    status: {
+      type: Number,
+      allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
+      defaultValue: 1
+    }
+  }
+]);
+
+const NonConformitiesUpdateSchema = new SimpleSchema([
+  OptionalSchema,
+  {
+    title: {
+      type: String,
+      min: 1,
+      max: 40,
+      optional: true
+    },
+    identifiedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    identifiedAt: {
+      type: Date,
+      optional: true
+    },
+    magnitude: {
+      type: String,
+      optional: true
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1,
+      optional: true
+    }
+  }
+]);
+
+export { NonConformitiesSchema, NonConformitiesUpdateSchema, RequiredSchema, OptionalSchema };

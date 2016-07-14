@@ -1,0 +1,56 @@
+<template name="Subcards_ImprovementPlan_Read">
+  {{#with document}}
+    <div class="card-block card-subheading" {{b "if: IPHasFields(this)"}}>
+      <h4 class="card-title">Improvement plan</h4>
+    </div>
+
+    <div class="list-group">
+      {{#with desiredOutcome}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Statement of desired outcome</p>
+          <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+        </div>
+      {{/with}}
+
+      {{#with targetDate}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Target date for desired outcome</p>
+          <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+        </div>
+      {{/with}}
+
+      {{#with reviewDates}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Improvement plan review dates</p>
+          <h4 class="list-group-item-heading" {{b "text: renderReviewDates(this)"}}></h4>
+        </div>
+      {{/with}}
+
+      <div class="row">
+        {{#with owner}}
+          <div class="col-sm-6">
+            <div class="list-group-item">
+              <p class="list-group-item-text">Owner</p>
+              <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+            </div>
+          </div>
+        {{/with}}
+      </div>
+
+
+      {{#with files}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Means statement</p>
+          {{#each this}}
+            <a class="btn btn-secondary btn-inline" {{b "href: this.url"}}>
+              <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
+              </i>
+              <span>{{this.name}}</span>
+            </a>
+          {{/each}}
+        </div>
+      {{/with}}
+
+    </div>
+  {{/with}}
+</template>

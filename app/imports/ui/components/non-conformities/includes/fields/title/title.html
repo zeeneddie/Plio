@@ -1,0 +1,10 @@
+<template name="NC_Title_Edit">
+  {{#FormField label=label}}
+    {{#ClearableField field="titleText"}}
+      <div {{b "class: { input-group: sequentialId }"}}>
+        <div class="input-group-addon" {{b "if: sequentialId, text: sequentialId"}}></div>
+        <input type="text" class="form-control" placeholder="Title" {{b "value: titleText, focusout: update"}}>
+      </div>
+    {{/ClearableField}}
+  {{/FormField}}
+</template>

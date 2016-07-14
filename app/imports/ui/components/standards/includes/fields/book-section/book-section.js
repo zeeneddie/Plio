@@ -3,15 +3,23 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { insert } from '/imports/api/standards-book-sections/methods.js';
 
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
+  onCreated() {
+    const section = ((() => {
+      const sections = this.bookSections().fetch();
+      return sections.length > 0 && sections[0];
+    })());
+    if (!this.selectedBookSectionId() && section) {
+      this.selectedBookSectionId(section._id);
+    }
+  },
   selectedBookSectionId: '',
   section() {
-    const child = this.child('SectionField');
-    return child && child.section();
+    const child = this.child('SelectItem');
+    return child && child.value();
   },
   bookSections() {
     const query = {
@@ -27,22 +35,15 @@ Template.ESBookSection.viewmodel({
     const options = { sort: { title: 1 } };
     return StandardsBookSections.find(query, options);
   },
-  onAddSectionCb() {
-    return this.addSection.bind(this);
-  },
-  addSection(viewmodel, cb) {
-    const { section:title } = viewmodel.getData();
-    const organizationId = this.organizationId();
-
-    this.modal().callMethod(insert, { title, organizationId }, cb);
-  },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    if (!this._id) return;
+    const { selected:sectionId } = viewmodel.getData();
 
-    const { sectionId } = viewmodel.getData();
+    this.selectedBookSectionId(sectionId);
+
+    if (!this._id) return;
 
     if (!sectionId) {
       this.modal().setError('Book section is required!');
@@ -51,10 +52,11 @@ Template.ESBookSection.viewmodel({
 
     this.parent().update({ sectionId }, () => {
       Tracker.flush();
-      this.expandCollapsedStandard(this.standardId());
+      this.expandCollapsed(this.standardId());
     });
   },
   getData() {
-    return this.child('SectionField').getData();
+    const { selected:sectionId } = this.child('SelectItem').getData();
+    return { sectionId };
   }
 });

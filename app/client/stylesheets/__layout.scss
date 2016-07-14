@@ -162,8 +162,12 @@ strong {
   padding: 0 !important;
 }
 
-.collapse {
-  overflow: hidden;
+.hidden {
+  display: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
 }
 
 .margin-right {
