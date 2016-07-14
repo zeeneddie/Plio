@@ -4,6 +4,60 @@ const NCTypes = {
   CRITICAL: 'critical'
 };
 
+const ProblemsStatuses = {
+  1: 'Open - just reported',
+  2: 'Open - analysis due today',
+  3: 'Open - analysis overdue',
+  4: 'Open - analysis completed, action needed',
+  5: 'Open - analysis completed, action in place',
+  6: 'Open - action due today',
+  7: 'Open - action overdue',
+  8: 'Open - action completed',
+  9: 'Open - verification due today',
+  10: 'Open - verification overdue',
+  11: 'Open - action verified as effective',
+  12: 'Open - action failed verification',
+  13: 'Closed - action verified, standard updated',
+  14: 'Deleted'
+};
+
+const StandardStatuses = {
+  'issued': 'Issued',
+  'draft': 'Draft'
+};
+
+const AnalysisStatuses = {
+  0: 'Not completed',
+  1: 'Completed'
+};
+
+const ActionTypes = {
+  CORRECTIVE_ACTION: 'CA',
+  PREVENTATIVE_ACTION: 'PA',
+  RISK_CONTROL: 'RC'
+};
+
+const ActionUndoTimeInHours = 1;
+
+const ActionStatuses = {
+  0: 'In progress',
+  1: 'In progress - due for completion today',
+  2: 'In progress - completion overdue',
+  3: 'In progress - completed, not yet verified',
+  4: 'In progress - completed, verification due today',
+  5: 'In progress - completed, verification overdue',
+  6: 'Completed - failed verification',
+  7: 'Completed - verified as effective',
+  8: 'Completed - verified & standardized',
+  9: 'Deleted'
+};
+
+const ActionPlanOptions = {
+  YES: 'Yes',
+  NO: 'No',
+  NOT_NEEDED: 'Not needed'
+};
+
 const TimeUnits = {
   HOURS: 'hours',
   DAYS: 'days',
@@ -186,14 +240,32 @@ const StandardFilters = [
 ];
 
 const RiskFilters = [
-  'department/site',
-  'activity',
-  'review status',
-  'archived',
+  'type',
+  'status',
+  'department',
   'deleted'
 ];
 
-const documentTypes = [
+const NonConformityFilters = [
+  'magnitude',
+  'status',
+  'department',
+  'deleted'
+];
+
+const ActionFilters = [
+  'My current actions',
+  'Team current actions',
+  'My completed actions',
+  'Team completed actions'
+];
+
+const ProblemTypes = {
+  NC: 'non-conformity',
+  RISK: 'risk'
+};
+
+const DocumentTypes = [
   'standard',
   'non-conformity',
   'risk'
@@ -216,11 +288,31 @@ const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
-]
+];
+
+const TreatmentPlanPriorities = {
+  'low': 'Low',
+  'medium': 'Medium',
+  'high': 'High'
+};
+
+const TreatmentPlanDecisions = {
+  'tolerate': 'Tolerate',
+  'treat': 'Treat',
+  'transfer': 'Transfer',
+  'terminate': 'Terminate'
+};
 
 export {
+  ActionTypes,
+  ActionStatuses,
+  ActionPlanOptions,
+  ActionUndoTimeInHours,
   DefaultStandardTypes,
   NCTypes,
+  ProblemsStatuses,
+  AnalysisStatuses,
+  StandardStatuses,
   OrgCurrencies,
   OrganizationDefaults,
   OrgOwnerRoles,
@@ -228,10 +320,15 @@ export {
   PhoneTypes,
   StandardFilters,
   RiskFilters,
+  NonConformityFilters,
+  ProblemTypes,
   TimeUnits,
   UserMembership,
   UserRoles,
   UserRolesNames,
-  documentTypes,
-  AvatarPlaceholders
+  DocumentTypes,
+  AvatarPlaceholders,
+  ActionFilters,
+  TreatmentPlanPriorities,
+  TreatmentPlanDecisions
 };

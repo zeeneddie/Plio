@@ -1,0 +1,24 @@
+{
+  "_id" : "P98SExuNHZ4y8bhjc",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "serialNumber" : 2,
+  "sequentialId" : "NC2",
+  "title" : "Inquiry not recorded",
+  "identifiedBy" : "SQHmBKJ94gJvpLKLt",
+  "identifiedAt" : {"$date": 1459508400000},
+  "magnitude" : "critical",
+  "createdAt" : {"$date": 1459508400000},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "status" : 1,
+  "description" : "Deal valuations not carried out with new client resulting in problems agreeing valuations later",
+  "updatedAt" : {"$date": 1459515600000},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "standard" : "HvtALDZBHG3wRF7xp",
+  "cost" : 5000,
+  "standardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ]
+}

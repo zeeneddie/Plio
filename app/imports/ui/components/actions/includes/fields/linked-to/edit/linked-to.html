@@ -1,0 +1,19 @@
+<template name="Actions_LinkedTo_Edit">
+  {{#FormField label="Linked to"}}
+    {{#if isEditable}}
+      {{> Select_Multi
+          selected=linkedDocs
+          items=items
+          placeholder=placeholder
+          onUpdate=onUpdateFn
+          onRemove=onRemoveFn}}
+    {{else}}
+      {{#each linkedDocs}}
+        <div class="input-group">
+          <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
+          <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
+        </div>
+      {{/each}}
+    {{/if}}
+  {{/FormField}}
+</template>

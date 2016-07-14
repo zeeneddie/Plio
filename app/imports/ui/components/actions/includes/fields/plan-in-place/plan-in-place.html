@@ -1,0 +1,8 @@
+<template name="Actions_PlanInPlace">
+  {{#FormField label="Plan in place?"}}
+    {{> SelectItemRadio
+        items=planInPlaceOptions
+        value=planInPlace
+        onSelect=onUpdateCb}}
+  {{/FormField}}
+</template>

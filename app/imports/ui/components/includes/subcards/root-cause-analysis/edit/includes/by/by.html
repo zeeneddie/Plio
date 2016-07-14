@@ -1,0 +1,10 @@
+<template name="NC_RCA_By_Edit">
+  {{#FormField label=label}}
+    {{> SelectItem
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        items=_members
+        selected=getBy
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

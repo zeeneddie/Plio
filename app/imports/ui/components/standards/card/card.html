@@ -1,0 +1,136 @@
+<template name="StandardsCard">
+  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
+    {{#if hasStandards}}
+      {{#with standard}}
+        <div class="card standard-details">
+          <div class="card-block card-heading">
+            {{#if canCreateStandards organizationId}}
+              <div class="card-heading-buttons pull-xs-right">
+                {{#if hasDocxAttachment}}
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                  </a>
+                {{/if}}
+                {{#if isDeleted}}
+                  <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                    Restore
+                  </a>
+                  <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                    Delete
+                  </a>
+                {{else}}
+                  <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
+                    <i class="fa fa-pencil"></i>
+                    Edit
+                  </a>
+                {{/if}}
+              </div>
+            {{/if}}
+            <h3 class="card-title">
+              Compliance standard
+            </h3>
+          </div>
+          <div class="content-list">
+            <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+              <h4 class="list-group-item-heading pull-left">
+                <span {{b "text: this.title"}}></span>
+                <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
+                  <span {{b "text: 'Issue ' + this.issueNumber"}}></span>
+                  <span>Draft</span>
+                </span>
+              </h4>
+            </a>
+
+            <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
+              <div class="list-group">
+
+                <div class="list-group-item" {{b "if: this.description"}}>
+                  <p class="list-group-item-text">Description</p>
+                  <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Issue number</p>
+                      <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Section</p>
+                      {{#with section}}
+                        <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                      {{/with}}
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Type</p>
+                      {{#with type}}
+                        <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                      {{/with}}
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Owner</p>
+                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                    </div>
+                  </div>
+
+                </div>
+
+                {{#with departments}}
+                  {{> Departments_Read departmentsIds=this}}
+                {{/with}}
+
+                {{> SCSource source=this.source1 id=1}}
+
+                {{> SCSource source=this.source2 id=2}}
+
+              </div>
+
+              {{#with notify}}
+                {{> Subcards_Notify_Read users=this}}
+              {{/with}}
+
+              {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
+
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.CORRECTIVE_ACTION
+                  standardId=this._id}}
+
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.PREVENTATIVE_ACTION
+                  standardId=this._id}}
+
+              {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+
+              {{> Subcards_LessonsLearned_Read documentId=this._id}}
+            </div>
+
+            {{> SourceWordDocument source=source1}}
+
+            {{> SourceWordDocument source=source2}}
+
+            {{> CardChangelog document=this}}
+          </div>
+        </div>
+      {{/with}}
+    {{else}}
+      <div class="card">
+        <div class="card-block card-heading">
+          {{#if isActiveStandardFilter 'deleted'}}
+            <h5>There are no deleted standards yet!</h5>
+          {{else}}
+            <h5>There are no standards yet! Click on the 'Add' button to create your first standard.</h5>
+          {{/if}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</template>

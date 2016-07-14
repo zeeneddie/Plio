@@ -164,6 +164,26 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/non-conformities', {
+  name: 'nonconformities',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NC_Layout', {
+      content: 'NCPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
+  name: 'nonconformity',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NC_Layout', {
+      content: 'NCPage'
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -180,6 +200,26 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   action(params) {
     BlazeLayout.render('RisksLayout', {
       content: 'RisksPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/actions', {
+  name: 'actions',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/actions/:actionId', {
+  name: 'action',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
     });
   }
 });

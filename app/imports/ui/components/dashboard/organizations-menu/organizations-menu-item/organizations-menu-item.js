@@ -4,6 +4,7 @@ import { selectOrganization } from '/imports/api/users/methods.js';
 
 Template.OrganizationsMenuItem.viewmodel({
   mixin: 'router',
+  serialNumber: '',
   regex() {
     return `^\\/${this.serialNumber()}`;
   },

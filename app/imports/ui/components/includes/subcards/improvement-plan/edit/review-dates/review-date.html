@@ -1,0 +1,15 @@
+<template name="IP_ReviewDate_Edit">
+  <div class="form-group row">
+    <div class="form-group-flex col-sm-12">
+      <div class="form-group-flex-flex margin-right">
+        {{> Datepicker
+            placeholder=placeholder
+            defaultDate=defaultDate
+            _id=_id
+            date=date
+            onChange=onDateChangeCb}}
+      </div>
+      {{> DeleteButton onClick=onDeleteCb}}
+    </div>
+  </div>
+</template>

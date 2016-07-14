@@ -1,6 +1,9 @@
 .btn {
   font-family: $font-semibold;
   font-weight: normal;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
   @include transition(all .3s ease);
   
 
@@ -94,6 +97,10 @@
 */
 
 .btn {
+  &:focus, &:active, &:focus:active {
+    outline: none;
+  }
+
   i {
     &.margin-right {
       margin-right: 5px;
@@ -169,5 +176,10 @@
 }
 
 .btn-inline {
-  margin: 4px 2px 0 0;
+  margin: 0 2px 4px 0;
+}
+
+.input-group-btn .btn {
+  min-height: 34px;
+  text-overflow: initial;
 }

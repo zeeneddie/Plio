@@ -1,0 +1,9 @@
+<template name="NC_IdentifiedBy_Edit">
+  {{#FormField label=label}}
+    {{> SelectItem
+        placeholder=placeholder
+        items=_members
+        selected=identifiedBy
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

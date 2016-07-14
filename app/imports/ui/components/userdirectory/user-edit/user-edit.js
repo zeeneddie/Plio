@@ -5,6 +5,7 @@ import { Random } from 'meteor/random';
 
 import {
   updateProfile,
+  unsetProfileProperty,
   updateEmail,
   updatePhoneNumber,
   addPhoneNumber,
@@ -12,6 +13,7 @@ import {
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
+import { UserUpdateProfileSchema } from '/imports/api/users/user-schema.js';
 import { UserRoles } from '/imports/api/constants.js';
 
 
@@ -30,11 +32,20 @@ Template.UserEdit.viewmodel({
   autorun() {
     const user = this.user();
     if (user) {
-      this.load(_.extend({}, user.profile, {
+      this.load({
         email: user.email(),
+        firstName: user.firstName(),
+        lastName: user.lastName(),
+        initials: user.initials(),
+        description: user.description(),
+        avatar: user.avatar(),
+        address: user.address(),
+        country: user.country(),
+        phoneNumbers: user.phoneNumbers(),
+        skype: user.skype(),
         isNotificationsEnabled: user.isNotificationsEnabled,
         notificationSound: user.notificationSound
-      }));
+      });
     }
   },
   user() {
@@ -50,6 +61,12 @@ Template.UserEdit.viewmodel({
     this.modal().callMethod(updateProfile, {
       _id: this.userId(),
       [prop]: val
+    });
+  },
+  unsetProfileProperty(prop) {
+    this.modal().callMethod(unsetProfileProperty, {
+      _id: this.userId(),
+      fieldName: prop
     });
   },
   updateEmail(email) {
@@ -68,15 +85,16 @@ Template.UserEdit.viewmodel({
       userId: this.userId()
     });
 
-    this.modal().clearError();
-    this.modal().isSaving(true);
+    const modal = this.modal();
+    modal.clearError();
+    modal.isSaving(true);
 
     uploader.send(avatarFile, (err, downloadUrl) => {
-      this.modal().isSaving(false);
+      modal.isSaving(false);
       viewModel.avatarFile(null);
 
       if (err) {
-        this.modal().setError(err);
+        modal.setError(err);
         return;
       }
 
@@ -168,6 +186,13 @@ Template.UserEdit.viewmodel({
     }
   },
   isDeleteButtonEnabled() {
+    const organization = this.organization();
+    const userId = this.userId();
+
+    if (userId === organization.ownerId()) {
+      return false;
+    }
+
     return Roles.userIsInRole(
       Meteor.userId(),
       UserRoles.DELETE_USERS,

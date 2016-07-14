@@ -1,10 +1,10 @@
 <template name="DashboardPage">
   <div class="dashboard-items">
     {{> SimpleCard route="standards" icon="fa-book" title="Compliance standards" text=standardsMetrics }}
-    {{> SimpleCard route="discussions" icon="fa-comments" title="Discussions" text="Coming soon" disabled=true}}
-    {{> SimpleCard route="nonconformities" icon="fa-exclamation-triangle" title="Non-conformities" text="Coming soon" disabled=true}}
-    {{> SimpleCard route="actions" icon="fa-inbox" title="Actions" text="Coming soon" labelText="1" disabled=true}}
-    {{> SimpleCard route="risks" icon="fa-bolt" title="Risk register" text="Coming soon"}}
+    {{> SimpleCard route="nonconformities" icon="fa-exclamation-triangle" title="Non-conformities" text=NCsMetrics}}
+    {{> SimpleCard route="actions" icon="fa-inbox" title="Actions" labelText=actionsLabel text=actionsMetrics}}
+    {{> SimpleCard route="risks" icon="fa-bolt" title="Risk register" text=risksMetrics}}
+    {{> SimpleCard route="calendar" icon="fa-calendar" title="Complience Calendar" text="Coming soon" disabled=true}}
   </div>
   <hr>
   {{> UserStats}}

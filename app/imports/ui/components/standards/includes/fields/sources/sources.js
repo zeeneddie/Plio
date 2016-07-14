@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
+import { check } from 'meteor/check'
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'filesList', 'callWithFocusCheck', 'organization'],
+  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -11,9 +12,10 @@ Template.ESSources.viewmodel({
   sourceUrl: '',
   sourceName: '',
   sourceExtension() {
-    return this.sourceName().split('.').pop();
+    return this.sourceName().split('.').pop().toLowerCase();
   },
-  sourceHtmlUrl: '',
+  sourceHtmlUrl: null,
+  docxRenderInProgress: null,
   fileId: '',
   shouldUpdate() {
     const { type, url, name, htmlUrl } = this.getData();
@@ -57,7 +59,7 @@ Template.ESSources.viewmodel({
     }
 
     if (url && !this.IsValidUrl(url)) {
-      ViewModel.findOne('ModalWindow').setError('Url is not valid!');
+      ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
       return;
     }
 
@@ -84,35 +86,39 @@ Template.ESSources.viewmodel({
       this.callWithFocusCheck(e, updateFn);
     }
   },
-  uploadDocxHtml(fileObj, metaContext) {
-    const uploader = new Slingshot.Upload('htmlAttachmentPreview', this.uploaderMetaContext());
-
-    uploader.send(fileObj, (error, url) => {
-      this.sourceHtmlUrl(url && encodeURI(url) || '');
-      this.update();
-    });
-  },
   renderDocx(url) {
-    const isDocx = url.match(/\.([^\./\?]+)($|\?)/)[1] === 'docx';
-    const vmInstance = this;
+    check(url, String);
+    const isDocx = this.sourceExtension() === 'docx';
 
     if (isDocx) {
-      Meteor.call('Mammoth.convertDocxToHtml', { url }, (error, result) => {
+      this.docxRenderInProgress(true);
+      Meteor.call('Mammoth.convertDocxToHtml', {
+        url,
+        fileName: this.sourceName() + '.html',
+        source: `source${this.id()}`,
+        standardId:  this.parent()._id(),
+      }, (error, result) => {
         if (error) {
           // HTTP errors
+          this.renderDocxError(`Failed to get .docx file: ${error}`);
         } else {
           if (result.error) {
             // Mammoth errors
+            this.renderDocxError(`Rendering document: ${result.error}`);
           } else {
-            // Upload file to S3
-            const htmlFileName = vmInstance.sourceName() + '.html';
-            const htmlFile = new File([result], htmlFileName, { type: 'text/html' });
-
-            vmInstance.uploadDocxHtml(htmlFile);
+            this.docxRenderInProgress('');
+            this.sourceHtmlUrl(result);
           }
         }
       });
     }
+  },
+  renderDocxError(error) {
+    this.modal().setError(error);
+    Meteor.setTimeout(() => {
+      this.modal().clearError();
+      this.docxRenderInProgress('');
+    }, 5000);
   },
   insertFileFn() {
     return this.insertFile.bind(this);
@@ -126,8 +132,7 @@ Template.ESSources.viewmodel({
     return this.onUpload.bind(this);
   },
   onUpload(err, { url }) {
-    if (err && err.error !== 'Aborted') {
-      this.modal().setError(err.reason);
+    if (err) {
       return;
     }
 
@@ -139,7 +144,7 @@ Template.ESSources.viewmodel({
     return this.removeAttachment.bind(this);
   },
   removeAttachment() {
-    const fileUploader = this.fileUploader();
+    const fileUploader = this.uploader();
 
     const isFileUploading = fileUploader.isFileUploading(this.fileId());
 
@@ -162,20 +167,26 @@ Template.ESSources.viewmodel({
         fileUploader.cancelUpload(this.fileId());
       }
 
-      this.parent().update({}, {
+      const options = {
         $unset: {
           [`source${this.id()}`]: ''
         }
-      }, (err) =>  {
+      };
+
+      this.parent().update({ options }, (err) =>  {
         if (!err && this.id() === 1) {
-          this.parent().update({}, {
+          const options = {
             $rename: {
               source2: 'source1'
             }
-          });
+          };
+          this.parent().update({ options });
         }
       });
     });
+  },
+  uploader() {
+    return this.child('FileUploader');
   },
   uploaderMetaContext() {
     return {

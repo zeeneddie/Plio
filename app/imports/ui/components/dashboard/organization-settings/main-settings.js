@@ -115,9 +115,7 @@ Template.OrganizationSettings_MainSettings.viewmodel({
     const { name, currency } = this.data();
 
     this.modal().callMethod(insert, { name, currency }, (err, _id) => {
-      if (err) {
-        swal('Oops... Something went wrong!', err.reason, 'error');
-      } else {
+      if (!err) {
         this.modal().close();
 
         const org = Organizations.findOne({ _id });

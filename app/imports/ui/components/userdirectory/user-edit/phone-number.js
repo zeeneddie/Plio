@@ -20,10 +20,7 @@ Template.UserEdit_PhoneNumber.viewmodel({
 
     const { number, type } = this.getData();
 
-    return _.every([
-      number && type,
-      (number !== savedNumber) || (type !== savedType)
-    ]);
+    return (number !== savedNumber) || (type !== savedType);
   },
   onTypeChanged() {
     if (this.isChanged()) {

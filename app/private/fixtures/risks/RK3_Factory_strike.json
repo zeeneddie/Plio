@@ -1,0 +1,37 @@
+{
+  "_id" : "wT7nRwywbkTMzmPwQ",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "serialNumber" : 3,
+  "sequentialId" : "RK3",
+  "title" : "Factory strike",
+  "identifiedBy" : "SQHmBKJ94gJvpLKLt",
+  "identifiedAt" : {"$date": 1459508600000},
+  "magnitude" : "major",
+  "typeId" : "66C975NwGcCEsfDFC",
+  "createdAt" : {"$date": 1459508600000},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "viewedBy" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "analysis" : {
+    "status" : 0
+  },
+  "updateOfStandards" : {
+    "status" : 0
+  },
+  "status" : 1,
+  "score" : {
+    "rowId" : 5,
+    "value" : 20,
+    "scoredBy" : "SQHmBKJ94gJvpLKLt",
+    "scoredAt" : {"$date": 1459508600000}
+  },
+  "updatedAt" : {"$date": 1459508600000},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "standardsIds": [
+    "Mc7jjwYJ9gXPkibS8"
+  ]
+}

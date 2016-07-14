@@ -179,16 +179,79 @@
     }
   }
 
+  .iframe-wrapper.video  {
+    height: 315px;
+    max-width: 560px;
+
+    .iframe-placeholder::before {
+      content: "\f04b";
+    }
+  }
+
+  .iframe-wrapper.word-document {
+    height: 70vh;
+
+    .iframe-placeholder::before {
+      content: "\f1c2";
+    }
+  }
+
+  .iframe-wrapper {
+    position: relative;
+    background-color: #fff;
+
+    .iframe-placeholder {
+      position: absolute;
+      display: table;
+      height: 100%;
+      width: 100%;
+      z-index: 0;
+
+      &::before {
+        display: table-cell;
+        font-family: FontAwesome;
+        font-size: 4rem;
+        vertical-align: middle;
+        text-align: center;
+        color: #ccc;
+      }
+    }
+
+    iframe {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
   .source-document-item {
     position: relative;
     border-bottom: 1px solid #ddd;
-    padding: 4%;
-    background-color: #eee;
+    padding: 30px;
+    background-color: #f5f5f5;
 
-    .source-document-preview {
+    .source-document-preview-wrapper {
       position: relative;
-      box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
       background-color: #fff;
+
+      .source-document-preview {
+        position: relative;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+        height: 70vh;
+        width: 100%;
+        z-index: 1;
+        overflow: scroll;
+        
+        iframe {
+          display: block;
+          position: relative;
+          background: transparent;
+          overflow: scroll;
+          height: 100%;
+          width: 100%;
+          border: none;
+          z-index: 1;
+        }
+      }
 
       &::after {
         content: '';
@@ -206,21 +269,11 @@
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0089fff1', endColorstr='#000000',GradientType=0 );
         z-index: 0;
       }
-      iframe {
-        display: block;
-        position: relative;
-        padding: 30px 30px 0px 30px;
-        background: transparent;
-        height: 70vh;
-        width: 100%;
-        border: none;
-        z-index: 1;
-      }
     }
 
     .list-group-item {
       background-color: transparent;
-      padding-left: 0;
+      padding-left: 0 !important;
       padding-bottom: 0;
       padding-top: 16px;
       .list-group-item-heading {

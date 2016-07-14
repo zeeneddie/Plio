@@ -1,5 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { TimeUnits } from './constants.js';
+import { TimeUnits, DocumentTypes, AnalysisStatuses } from './constants.js';
+import { Utils } from '/imports/core/utils.js';
+
 
 
 export const IdSchema = new SimpleSchema({
@@ -16,7 +18,8 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 1
+    min: 1,
+    max: 999
   }
 });
 
@@ -59,6 +62,13 @@ export const DocumentIdSchema = new SimpleSchema({
   documentId: idSchemaDoc
 });
 
+export const DocumentTypeSchema = new SimpleSchema({
+  documentType: {
+    type: String,
+    allowedValues: DocumentTypes
+  }
+});
+
 export const optionsSchema = new SimpleSchema({
   options: {
     type: Object,
@@ -93,7 +103,9 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
-        return this.userId;
+
+        // Workaround for fixtures
+        return this.userId || this.isSet && this.value;
       } else {
         this.unset();
       }
@@ -136,3 +148,196 @@ export const BaseEntitySchema = new SimpleSchema([
   UpdatedAtSchema,
   UpdatedBySchema
 ]);
+
+export const FilesSchema = new SimpleSchema({
+  'files': {
+    type: [Object],
+    optional: true
+  },
+  'files.$._id': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  'files.$.extension': {
+    type: String,
+    autoValue() {
+      if (this.isSet) {
+        return this.value.toLowerCase();
+      }
+    },
+  },
+  'files.$.url': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
+  'files.$.name': {
+    type: String
+  }
+});
+
+export const getNotifySchema = (field) => {
+  return new SimpleSchema({
+    notify: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true,
+      autoValue() {
+        if (this.isInsert) {
+          const userIdField = this.field(field);
+          if (userIdField.isSet) {
+            return [userIdField.value];
+          } else {
+            this.unset();
+          }
+        }
+      }
+    }
+  });
+};
+
+export const ViewedBySchema = new SimpleSchema({
+  viewedBy: {
+    type: [String],
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isInsert) {
+        return [this.userId];
+      }
+    }
+  }
+});
+
+export const DeletedSchema = new SimpleSchema({
+  isDeleted: {
+    type: Boolean,
+    optional: true
+  },
+  deletedBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
+  deletedAt: {
+    type: Date,
+    optional: true
+  }
+});
+
+export const FileSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  extension: {
+    type: String,
+    autoValue() {
+      if (this.isSet) {
+        return this.value.toLowerCase();
+      }
+    },
+  },
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
+  name: {
+    type: String
+  }
+});
+
+export const BaseProblemsRequiredSchema = new SimpleSchema([
+  OrganizationIdSchema,
+  {
+    title: {
+      type: String,
+      min: 1,
+      max: 40
+    },
+    identifiedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    identifiedAt: {
+      type: Date
+    },
+    magnitude: {
+      type: String
+    },
+    standardsIds: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
+      minCount: 1
+    }
+  }
+]);
+
+export const BaseProblemsOptionalSchema = ((() => {
+  const getRepeatingFields = (key) => {
+    return {
+      [`${key}.targetDate`]: {
+        type: Date,
+        optional: true
+      },
+      [`${key}.status`]: {
+        type: Number,
+        allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
+        defaultValue: 0,
+        optional: true
+      },
+      [`${key}.completedAt`]: {
+        type: Date,
+        optional: true
+      },
+      [`${key}.completedBy`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
+      }
+    };
+  };
+
+  const analysis = {
+    analysis: {
+      type: Object,
+      optional: true
+    },
+    'analysis.executor': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    ...getRepeatingFields('analysis')
+  };
+
+  const updateOfStandards = {
+    updateOfStandards: {
+      type: Object,
+      optional: true
+    },
+    ...getRepeatingFields('updateOfStandards')
+  };
+
+  return new SimpleSchema([
+    DeletedSchema,
+    ViewedBySchema,
+    FilesSchema,
+    getNotifySchema('identifiedBy'),
+    {
+      description: {
+        type: String,
+        optional: true
+      },
+      departments: {
+        type: [String],
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
+      },
+      ...analysis,
+      ...updateOfStandards
+    }
+  ]);
+
+})());
