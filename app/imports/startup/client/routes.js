@@ -204,8 +204,8 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions', {
-  name: 'actions',
+FlowRouter.route('/:orgSerialNumber/work-inbox', {
+  name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('ActionsLayout', {
@@ -214,8 +214,8 @@ FlowRouter.route('/:orgSerialNumber/actions', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions/:actionId', {
-  name: 'action',
+FlowRouter.route('/:orgSerialNumber/work-inbox/:actionId', {
+  name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('ActionsLayout', {

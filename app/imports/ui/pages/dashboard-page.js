@@ -72,9 +72,9 @@ Template.DashboardPage.viewmodel({
     return this._renderMetrics('NC', this.NCsViewedCount(), this.NCsNotViewedCount());
   },
   actionsMetrics() {
-    return this._renderMetrics('Action', this.actionsViewedCount(), this.actionsNotViewedCount());
+    return this._renderMetrics('item', this.actionsViewedCount(), this.actionsNotViewedCount());
   },
   risksMetrics() {
-    return this._renderMetrics('Risk', this.risksViewedCount(), this.risksNotViewedCount());
+    return this._renderMetrics('risk', this.risksViewedCount(), this.risksNotViewedCount());
   }
 });

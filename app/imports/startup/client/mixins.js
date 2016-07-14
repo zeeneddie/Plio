@@ -396,12 +396,12 @@ ViewModel.mixin({
     goToAction(actionId, withQueryParams = true) {
       const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('action', params, queryParams);
+      FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToActions(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('actions', params, queryParams);
+      FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
@@ -487,6 +487,45 @@ ViewModel.mixin({
     _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
+    }
+  },
+  workInbox: {
+    workItemId() {
+      return FlowRouter.getParam('workItem');
+    },
+    isActiveWorkInboxFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentWorkItem() {
+      const _id = this.workItemId();
+      return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getWorkItemsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getWorkItemByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
     }
   },
   action: {
