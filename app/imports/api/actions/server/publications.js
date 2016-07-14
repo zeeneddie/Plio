@@ -40,3 +40,19 @@ Meteor.publish('actionsNotViewedCount', function(counterName, organizationId) {
     isDeleted: { $in: [false, null] }
   }));
 });
+
+Meteor.publish('myCurrentFailedActions', function(counterName, organizationId) {
+  const userId = this.userId;
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  return new Counter(counterName, Actions.find({
+    organizationId,
+    status: { $in: [2, 5, 6] },
+    $or: [
+      { toBeCompletedBy: userId, isCompleted: false },
+      { toBeVerifiedBy: userId, isVerified: false }
+    ]
+  }));
+});

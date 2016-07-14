@@ -20,33 +20,30 @@ import {
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action', 'utils'],
   type: '',
   title() {
     return pluralize(this._getNameByType(this.type()));
   },
   addButtonText() {
-    let buttonText = '';
-    switch (this.type()) {
-      case ActionTypes.CORRECTIVE_ACTION:
-        buttonText = 'Add corrective action';
-        break;
-      case ActionTypes.PREVENTATIVE_ACTION:
-        buttonText = 'Add preventative action';
-        break;
-      case ActionTypes.RISK_CONTROL:
-        buttonText = 'Add risk control';
-        break;
-    }
-    return buttonText;
+    const name = this.lowercase(this._getNameByType(this.type()));
+    return `Add ${name}`;
   },
-  lText(action) {
-    const { sequentialId, title } = action;
+  actionsIndicators() {
+    const actions = this.actions().fetch();
+    const amber = actions.filter(({ status }) => [1, 4].includes(status));
+    const red = actions.filter(({ status }) => [2, 5, 6].includes(status));
+    const count = array => array.length > 0 ? array.length : '';
+    const generateHtml = (array, color) => count(array) ? `<span class="hidden-xs-down">${count(array)}</span>
+                                                           <i class="fa fa-circle text-${color} margin-left"></i> `
+                                                        :  '';
+
+    return generateHtml(amber, 'warning') + generateHtml(red, 'danger');
+  },
+  lText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;
   },
-  rText(action) {
-    const { isCompleted, completedAt, completionTargetDate, status } = action;
-
+  rText({ isCompleted, completedAt, completionTargetDate, status }) {
     let date = (isCompleted && completedAt) ? completedAt : completionTargetDate;
     date = this.renderDate(date);
 
@@ -56,19 +53,8 @@ Template.Subcards_Actions_Edit.viewmodel({
            <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
   },
   newSubcardTitle() {
-    let newSubcardTitle = '';
-    switch (this.type()) {
-      case ActionTypes.CORRECTIVE_ACTION:
-        newSubcardTitle = 'New corrective action';
-        break;
-      case ActionTypes.PREVENTATIVE_ACTION:
-        newSubcardTitle = 'New preventative action';
-        break;
-      case ActionTypes.RISK_CONTROL:
-        newSubcardTitle = 'New risk control';
-        break;
-    }
-    return newSubcardTitle;
+    const name = this.lowercase(this._getNameByType(this.type()));
+    return `New ${name}`;
   },
   actions() {
     const actionType = this.type();

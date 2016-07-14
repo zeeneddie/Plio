@@ -100,6 +100,14 @@
 
               {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.CORRECTIVE_ACTION
+                  standardId=this._id}}
+
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.PREVENTATIVE_ACTION
+                  standardId=this._id}}
+
               {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
               {{> Subcards_LessonsLearned_Read documentId=this._id}}

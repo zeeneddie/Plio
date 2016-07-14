@@ -4,7 +4,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { update, remove } from '/imports/api/risks/methods.js';
 
 Template.RisksCard.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing'],
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
   hasRisks() {
     return this.risks().count() > 0;
   },
