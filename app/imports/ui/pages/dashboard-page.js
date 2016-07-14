@@ -17,8 +17,7 @@ Template.DashboardPage.viewmodel({
         template.subscribe('risksCount', 'risks-count', organizationId),
         template.subscribe('risksNotViewedCount', 'risks-not-viewed-count', organizationId),
         template.subscribe('actionsCount', 'actions-count', organizationId),
-        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId),
-        template.subscribe('myCurrentFailedActions', 'actions-failed-count', organizationId)
+        template.subscribe('actionsNotViewedCount', 'actions-not-viewed-count', organizationId)
       ]);
     },
     function() {
@@ -27,7 +26,7 @@ Template.DashboardPage.viewmodel({
   ],
   isReady: false,
   _subHandlers: [],
-  _renderMetrics(pluralizeWord = '', totalCounterName = '', notViewedCounterName = '') {
+  _renderMetrics(pluralizeWord = '', totalCount = 0, notViewedCount = 0) {
 
     // Workaround for https://github.com/blakeembrey/pluralize/pull/12
     const lowerCaseLastSChar = (str) => {
@@ -39,24 +38,43 @@ Template.DashboardPage.viewmodel({
       }
     }
 
-    const total = this.counter.get(totalCounterName);
-    const notViewed = this.counter.get(notViewedCounterName);
-    const notViewedText = notViewed ? `, ${notViewed} new` : '';
-    return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, total, true)) + notViewedText : '';
+    const notViewedText = notViewedCount ? `, ${notViewedCount} new` : '';
+    return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, totalCount, true)) + notViewedText : '';
+  },
+  standardsViewedCount() {
+    return this.counter.get('standards-count');
+  },
+  standardsNotViewedCount() {
+    return this.counter.get('standards-not-viewed-count');
+  },
+  NCsViewedCount() {
+    return this.counter.get('non-conformities-count');
+  },
+  NCsNotViewedCount() {
+    return this.counter.get('non-conformities-not-viewed-count');
+  },
+  actionsViewedCount() {
+    return this.counter.get('actions-count');
+  },
+  actionsNotViewedCount() {
+    return this.counter.get('actions-not-viewed-count');
+  },
+  risksViewedCount() {
+    return this.counter.get('risks-count');
+  },
+  risksNotViewedCount() {
+    return this.counter.get('risks-not-viewed-count');
   },
   standardsMetrics() {
-    return this._renderMetrics('standard', 'standards-count', 'standards-not-viewed-count');
+    return this._renderMetrics('standard', this.standardsViewedCount(), this.standardsNotViewedCount());
   },
   NCsMetrics() {
-    return this._renderMetrics('NC', 'non-conformities-count', 'non-conformities-not-viewed-count');
+    return this._renderMetrics('NC', this.NCsViewedCount(), this.NCsNotViewedCount());
   },
   actionsMetrics() {
-    return this._renderMetrics('Action', 'actions-count', 'actions-not-viewed-count');
-  },
-  actionsLabel() {
-    return this.counter.get('actions-failed-count');
+    return this._renderMetrics('Action', this.actionsViewedCount(), this.actionsNotViewedCount());
   },
   risksMetrics() {
-    return this._renderMetrics('Risk', 'risks-count', 'risks-not-viewed-count');
+    return this._renderMetrics('Risk', this.risksViewedCount(), this.risksNotViewedCount());
   }
 });
