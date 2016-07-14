@@ -41,6 +41,61 @@ export default {
     return this.collection.update(query, options);
   },
 
+  setAnalysisTargetDate({ _id, targetDate }) {
+    const NC = this._getNC(_id);
+
+    if (NC.isAnalysisCompleted()) {
+      throw new Meteor.Error(
+        400,
+        'Cannot set target date for root cause analysis that is already completed'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      'analysis.targetDate': targetDate
+    });
+
+    Meteor.isServer && Meteor.defer(() => {
+      WorkflowService.onNCAnalysisDateChanged(_id)
+    });
+
+    return ret;
+  },
+
+  completeAnalysis({ _id, userId }) {
+    const NC = this._getNC(_id);
+    const { analysis } = NC;
+    const { executor } = analysis;
+
+    if (userId !== executor) {
+      throw new Meteor.Error(
+        400, 'You cannot complete this root cause analysis'
+      );
+    }
+
+    if (NC.isAnalysisCompleted()) {
+      throw new Meteor.Error(
+        400, 'This root cause analysis is already completed'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      'analysis.status': 1, // Completed
+      'analysis.completedAt': new Date(),
+      'analysis.completedBy': userId
+    });
+
+    Meteor.isServer && Meteor.defer(() => {
+      WorkflowService.onNCAnalysisCompleted(_id)
+    });
+
+    return ret;
+  },
+
   updateViewedBy({ _id, userId }) {
     const query = { _id };
     const options = {
@@ -68,5 +123,13 @@ export default {
 
       return this.collection.update(query, options);
     }
+  },
+
+  _getNC(_id) {
+    const NC = this.collection.findOne({ _id });
+    if (!NC) {
+      throw new Meteor.Error(400, 'Non-conformity does not exist');
+    }
+    return NC;
   }
 };
