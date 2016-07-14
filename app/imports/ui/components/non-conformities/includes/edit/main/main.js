@@ -8,6 +8,12 @@ Template.NC_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
+  updateAnalysisTargetDate(...args) {
+    this.parent().updateAnalysisTargetDate(...args);
+  },
+  completeAnalysis() {
+    this.parent().completeAnalysis();
+  },
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
     return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);

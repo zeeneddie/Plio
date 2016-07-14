@@ -13,5 +13,11 @@ Template.NC_Analysis_Edit.viewmodel({
   completedBy: '',
   update(...args) {
     this.parent().update(...args);
+  },
+  updateAnalysisTargetDate(...args) {
+    this.parent().updateAnalysisTargetDate(...args);
+  },
+  completeAnalysis() {
+    this.parent().completeAnalysis();
   }
 });

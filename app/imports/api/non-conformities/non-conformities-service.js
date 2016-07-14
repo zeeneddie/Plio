@@ -47,14 +47,14 @@ export default {
     if (NC.isAnalysisCompleted()) {
       throw new Meteor.Error(
         400,
-        'Cannot set target date for root cause analysis that is already completed'
+        'Cannot set target date for completed root cause analysis'
       );
     }
 
     const ret = this.collection.update({
       _id
     }, {
-      'analysis.targetDate': targetDate
+      $set: { 'analysis.targetDate': targetDate }
     });
 
     Meteor.isServer && Meteor.defer(() => {
@@ -84,9 +84,11 @@ export default {
     const ret = this.collection.update({
       _id
     }, {
-      'analysis.status': 1, // Completed
-      'analysis.completedAt': new Date(),
-      'analysis.completedBy': userId
+      $set: {
+        'analysis.status': 1, // Completed
+        'analysis.completedAt': new Date(),
+        'analysis.completedBy': userId
+      }
     });
 
     Meteor.isServer && Meteor.defer(() => {

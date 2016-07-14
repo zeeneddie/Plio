@@ -31,10 +31,16 @@ Template.NC_RCA_Status_Edit.viewmodel({
 
     const status = parseInt(statusValue, 10);
 
-    if (status === this.templateInstance.data.status) return;
+    if (status === this.templateInstance.data.status) {
+      return;
+    }
 
     this.status(status);
 
-    this.parent().update({ [this.key()]: status });
+    if (status === 1) {
+      this.parent().completeAnalysis();
+    } else if (status === 0) {
+      // undo analysis
+    }
   }
 });
