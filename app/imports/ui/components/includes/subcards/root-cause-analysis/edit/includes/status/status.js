@@ -40,7 +40,7 @@ Template.NC_RCA_Status_Edit.viewmodel({
     if (status === 1) {
       this.parent().completeAnalysis();
     } else if (status === 0) {
-      // undo analysis
+      this.parent().undoAnalysis();
     }
   }
 });

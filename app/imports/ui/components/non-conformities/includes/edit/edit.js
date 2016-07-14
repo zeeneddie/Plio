@@ -2,7 +2,8 @@ import { Template } from 'meteor/templating';
 
 import {
   update, remove,
-  completeAnalysis, setAnalysisTargetDate
+  completeAnalysis, undoAnalysis,
+  setAnalysisTargetDate
 } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Edit.viewmodel({
@@ -45,6 +46,10 @@ Template.NC_Card_Edit.viewmodel({
   completeAnalysis() {
     const _id = this._id();
     this.modal().callMethod(completeAnalysis, { _id });
+  },
+  undoAnalysis() {
+    const _id = this._id();
+    this.modal().callMethod(undoAnalysis, { _id });
   },
   remove() {
     const { title } = this.NC();

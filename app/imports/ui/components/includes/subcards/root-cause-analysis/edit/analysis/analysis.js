@@ -19,5 +19,8 @@ Template.NC_Analysis_Edit.viewmodel({
   },
   completeAnalysis() {
     this.parent().completeAnalysis();
+  },
+  undoAnalysis() {
+    this.parent().undoAnalysis();
   }
 });

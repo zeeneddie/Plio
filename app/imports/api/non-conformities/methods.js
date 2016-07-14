@@ -97,6 +97,23 @@ export const completeAnalysis = new ValidatedMethod({
   }
 });
 
+export const undoAnalysis = new ValidatedMethod({
+  name: 'NonConformities.undoAnalysis',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo root cause analysis'
+      );
+    }
+
+    return NonConformitiesService.undoAnalysis({ _id, userId });
+  }
+});
+
 export const updateViewedBy = new ValidatedMethod({
   name: 'NonConformities.updateViewedBy',
 

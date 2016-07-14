@@ -98,6 +98,30 @@ export default {
     return ret;
   },
 
+  undoAnalysis({ _id, userId }) {
+    const NC = this._getNC(_id);
+    const { analysis } = NC;
+    const { completedBy } = analysis;
+
+    if (userId !== completedBy) {
+      throw new Meteor.Error(400, 'You cannot undo this root cause analysis');
+    }
+
+    if (!NC.isAnalysisCompleted()) {
+      throw new Meteor.Error(400, 'This root cause analysis is not completed');
+    }
+
+    return this.collection.update({
+      _id
+    }, {
+      $set: { 'analysis.status': 0 }, // Not completed
+      $unset: {
+        'analysis.completedAt': '',
+        'analysis.completedBy': ''
+      }
+    });
+  },
+
   updateViewedBy({ _id, userId }) {
     const query = { _id };
     const options = {
