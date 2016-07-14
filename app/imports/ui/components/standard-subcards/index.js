@@ -1,3 +1,3 @@
 import './card';
-import './header.html';
-import './header.js';
+import './header';
+import './modal';

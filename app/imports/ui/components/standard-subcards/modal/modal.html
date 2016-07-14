@@ -1,0 +1,66 @@
+<template name="SS_Card_Modal">
+  <div>
+    <div class="relative">
+      {{#with custom}}
+
+        {{! NON-CONFORMITIES SUBCARDS}}
+
+        {{> Subcards_Notify_Edit
+            document=this.NC
+            documentType="non-conformity"}}
+
+        {{> Subcards_Occurrences_Edit
+            _id=this.NC._id
+            occurrencesIds=this.NC.occurrences}}
+
+        {{> Subcards_Actions_Edit
+            type="CA"
+            documentId=this.NC._id
+            documentType="non-conformity"}}
+
+        {{> Subcards_Actions_Edit
+            type="PA"
+            documentId=this.NC._id
+            documentType="non-conformity"}}
+
+        {{> Subcards_Actions_Edit
+            type="RC"
+            standardId="Zty4NCagWvrcuLYoy"}}
+
+        {{> Subcards_ImprovementPlan_Edit
+            documentId=this.NC._id
+            documentType="non-conformity"}}
+
+        {{> Subcards_LessonsLearned_Edit
+            documentId=this.NC._id
+            documentType="non-conformity"
+            linkedTo=this.NC.title
+            linkedToId=this.NC.sequentialId}}
+
+        {{> Subcards_OtherFiles_Edit
+            _id=this.NC._id
+            files=this.NC.files}}
+
+
+        {{! STANDARDS SUBCARDS}}
+
+        {{> Subcards_NonConformities_Edit
+            _id=this.NC._id
+            _query=this.emptyQuery}}
+
+
+        {{! RISKS SUBCARDS}}
+
+        {{> Subcards_TreatmentPlan_Edit
+            _id=this.Risk._id
+            treatmentPlan=this.Risk.treatmentPlan}}
+
+
+        {{! ACTIONS SUBCARDS}}
+
+        {{> Subcards_Notes_Edit}}
+
+      {{/with}}
+    </div>
+  </div>
+</template>
