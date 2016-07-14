@@ -1,0 +1,32 @@
+<template name="SS_Card_Read">
+  <div class="content-cards-inner flex scroll">
+    {{#Card_Read
+      cardTitle="Standard subcards"
+      document=customNC
+      onOpenEditModal=onOpenEditModalCb}}
+
+      {{! NON-CONFORMITIES SUBCARDS}}
+
+      {{> Subcards_RootCauseAnalysis_Read
+        analysis=customNC.analysis
+        updateOfStandards=customNC.updateOfStandards}}
+      {{> Subcards_Notify_Read users=customNC.notify}}
+      {{> Departments_Read departmentsIds=customNC.departments}}
+      {{> Subcards_Occurrences_Read _query=getCustomQuery}}
+      {{> Subcards_ImprovementPlan_Read document=docForIP}}
+      {{> Subcards_LessonsLearned_Read documentId="P98SExuNHZ4y8bhjc"}}
+      {{> Subcards_OtherFiles_Read files=docForIP.files}}
+
+      {{! STANDARDS SUBCARDS}}
+
+      {{> Subcards_NonConformities_Read _query=getCustomNCsQuery}}
+
+      {{! RISKS SUBCARDS}}
+
+      {{> Fields_Standards_Read standardsIds=customNC.standardsIds}}
+      {{> Subcards_RiskAnalysis_Read score=customRisk.score}}
+      {{> Subcards_TreatmentPlan_Read treatmentPlan=customRisk.treatmentPlan}}
+
+    {{/Card_Read}}
+      </div>
+    </template>
