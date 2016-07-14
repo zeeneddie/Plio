@@ -4,23 +4,31 @@ const NCTypes = {
   CRITICAL: 'critical'
 };
 
+const ProblemMagnitudes = {
+  MINOR: 'minor',
+  MAJOR: 'major',
+  CRITICAL: 'critical'
+};
+
 const ProblemsStatuses = {
-  1: 'Open - just reported, awaiting action',
-  2: 'Open - just reported, awaiting analysis',
-  3: 'Open - action(s) due today',
-  4: 'Open - action(s) overdue',
-  5: 'Open - action(s) completed',
-  6: 'Open - action(s) completed, awaiting verification',
-  7: 'Open - analysis due today',
-  8: 'Open - analysis overdue',
-  9: 'Open - analysis completed, action needed',
-  10: 'Open - analysis completed, action(s) in place',
+  0: 'Open - just reported',
+  1: 'Open - just reported, awaiting analysis',
+  2: 'Open - just reported, awaiting action',
+  3: 'Open - analysis due today',
+  4: 'Open - analysis overdue',
+  5: 'Open - analysis completed, action needed',
+  6: 'Open - analysis completed, action(s) in place',
+  7: 'Open - action(s) due today',
+  8: 'Open - action(s) overdue',
+  9: 'Open - action(s) completed',
+  10: 'Open - action(s) completed, awaiting verification',
   11: 'Open - verification due today',
-  12: 'Open - verification overdue',
+  12: 'Open - verification past due',
   13: 'Open - action(s) verified as effective, awaiting update of standard(s)',
   14: 'Open - action(s) failed verification',
-  15: 'Closed - action(s) verified, standard(s) updated',
-  16: 'Deleted'
+  15: 'Closed - action(s) completed',
+  16: 'Closed - action(s) verified, standard(s) reviewed',
+  17: 'Deleted'
 };
 
 const StandardStatuses = {
@@ -73,7 +81,7 @@ const OrgCurrencies = {
   USD: 'USD'
 };
 
-const OrgWorkflows = {
+const WorkflowTypes = {
   THREE_STEP: '3-step',
   SIX_STEP: '6-step'
 };
@@ -129,21 +137,21 @@ const getDefaultGuideline = (ncType) => {
 const OrganizationDefaults = {
   workflowDefaults: {
     minorProblem: {
-      workflowType: OrgWorkflows.THREE_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 1,
         timeUnit: TimeUnits.DAYS
       }
     },
     majorProblem: {
-      workflowType: OrgWorkflows.SIX_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
       }
     },
     criticalProblem: {
-      workflowType: OrgWorkflows.SIX_STEP,
+      workflowType: WorkflowTypes.SIX_STEP,
       stepTime: {
         timeValue: 3,
         timeUnit: TimeUnits.DAYS
@@ -334,11 +342,11 @@ export {
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
-  OrgWorkflows,
   PhoneTypes,
   StandardFilters,
   RiskFilters,
   NonConformityFilters,
+  ProblemMagnitudes,
   ProblemTypes,
   TimeUnits,
   UserMembership,
@@ -348,5 +356,6 @@ export {
   AvatarPlaceholders,
   ActionFilters,
   TreatmentPlanPriorities,
-  TreatmentPlanDecisions
+  TreatmentPlanDecisions,
+  WorkflowTypes
 };

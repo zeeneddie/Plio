@@ -7,6 +7,8 @@
 
           {{> ES_Description_Edit _id=this._id description=this.description}}
 
+          {{> NC_WorkflowType workflowType=this.workflowType}}
+
           {{> NC_Status_Edit _id=this._id status=this.status}}
 
           {{> Fields_Standards_Edit _id=this._id standardsIds=this.standardsIds}}
@@ -22,11 +24,13 @@
           {{> RKType _id=this._id typeId=this.typeId}}
         </div>
 
-        {{> Subcards_RootCauseAnalysis_Edit
-            _id=this._id
-            analysis=this.analysis
-            updateOfStandards=this.updateOfStandards
-            magnitude=this.magnitude}}
+        {{#if showRootCauseAnalysis}}
+          {{> Subcards_RootCauseAnalysis_Edit
+              _id=this._id
+              analysis=this.analysis
+              updateOfStandards=this.updateOfStandards
+              magnitude=this.magnitude}}
+        {{/if}}
 
         {{> Subcards_Notify_Edit
             document=this

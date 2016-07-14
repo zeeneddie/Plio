@@ -8,7 +8,7 @@ import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
-import { OrgWorkflows, NCTypes, UserRoles, UserMembership } from '../constants';
+import { WorkflowTypes, NCTypes, UserRoles, UserMembership } from '../constants';
 import { canChangeOrgSettings, canInviteUsers, canDeleteUsers } from '../checkers.js';
 import {
   IdSchema, TimePeriodSchema,
@@ -149,7 +149,7 @@ export const setWorkflowDefaults = new ValidatedMethod({
       },
       workflowType: {
         type: String,
-        allowedValues: _.values(OrgWorkflows),
+        allowedValues: _.values(WorkflowTypes),
         optional: true
       },
       stepTime: {

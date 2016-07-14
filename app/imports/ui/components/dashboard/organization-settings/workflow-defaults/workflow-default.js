@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { OrgWorkflows } from '/imports/api/constants.js';
+import { WorkflowTypes } from '/imports/api/constants.js';
 
 
 Template.OrgSettings_WorkflowDefault.viewmodel({
   workflows() {
-    return _.map(_.values(OrgWorkflows), (workflowId) => {
+    return _.map(_.values(WorkflowTypes), (workflowId) => {
       return { _id: workflowId, title: workflowId };
     });
   },

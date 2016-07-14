@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import { update, remove } from '/imports/api/risks/methods.js';
+import { WorkflowTypes } from '/imports/api/constants.js';
+
 
 Template.EditRisk.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
@@ -55,4 +57,7 @@ Template.EditRisk.viewmodel({
       }
     );
   },
+  showRootCauseAnalysis() {
+    return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);
+  }
 });

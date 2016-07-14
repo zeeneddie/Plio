@@ -7,7 +7,7 @@ import {
   getNotifySchema,
   ViewedBySchema
 } from '../schemas.js';
-import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
+import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes } from '../constants.js';
 import { compareDates } from '../helpers.js';
 
 
@@ -81,8 +81,7 @@ const ActionSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      min: 0,
-      max: 9,
+      allowedValues: _.keys(ActionStatuses).map(key => parseInt(key, 10)),
       defaultValue: 0
     },
     isCompleted: {

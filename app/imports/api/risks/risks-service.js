@@ -1,15 +1,33 @@
+import { Meteor } from 'meteor/meteor';
+
+import { Organizations } from '../organizations/organizations.js';
 import { Risks } from './risks.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
+import WorkflowService from '../workflow/workflow-service.js';
+
 
 export default {
   collection: Risks,
 
-  insert({ organizationId, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+  insert({ organizationId, magnitude, ...args }) {
+    const organization = Organizations.findOne({ _id: organizationId });
+    if (!organization) {
+      throw new Meteor.Error(400, 'Organization does not exist');
+    }
 
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `RK${serialNumber}`;
 
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, ...args });
+    const workflowType = organization.workflowType(magnitude);
+
+    const riskId = this.collection.insert({
+      organizationId, serialNumber, sequentialId,
+      magnitude, workflowType, ...args
+    });
+
+    Meteor.isServer && Meteor.defer(() => WorkflowService.onRiskCreated(riskId));
+
+    return riskId;
   },
 
   update({ _id, query = {}, options = {}, ...args }) {

@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
-import { ProblemsStatuses } from '../constants.js';
+import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
 
@@ -44,7 +44,11 @@ const NonConformitiesSchema = new SimpleSchema([
     status: {
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
-      defaultValue: 1
+      defaultValue: 0
+    },
+    workflowType: {
+      type: String,
+      allowedValues: _.values(WorkflowTypes)
     }
   }
 ]);

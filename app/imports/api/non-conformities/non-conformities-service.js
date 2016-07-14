@@ -1,16 +1,33 @@
+import { Meteor } from 'meteor/meteor';
+
 import { NonConformities } from './non-conformities.js';
+import { Organizations } from '../organizations/organizations.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
+import WorkflowService from '../workflow/workflow-service.js';
 
 
 export default {
   collection: NonConformities,
 
-  insert({ organizationId, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+  insert({ organizationId, magnitude, ...args }) {
+    const organization = Organizations.findOne({ _id: organizationId });
+    if (!organization) {
+      throw new Meteor.Error(400, 'Organization does not exist');
+    }
 
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `NC${serialNumber}`;
 
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, ...args });
+    const workflowType = organization.workflowType(magnitude);
+
+    const NCId = this.collection.insert({
+      organizationId, serialNumber, sequentialId,
+      workflowType, magnitude, ...args
+    });
+
+    Meteor.isServer && Meteor.defer(() => WorkflowService.onNCCreated(NCId));
+
+    return NCId;
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -48,8 +65,6 @@ export default {
           deletedAt: new Date()
         }
       };
-
-      console.log(query, options);
 
       return this.collection.update(query, options);
     }

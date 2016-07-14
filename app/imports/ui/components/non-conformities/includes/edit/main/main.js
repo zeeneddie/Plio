@@ -1,9 +1,16 @@
 import { Template } from 'meteor/templating';
 
+import { WorkflowTypes } from '/imports/api/constants.js';
+
+
 Template.NC_Card_Edit_Main.viewmodel({
   isStandardsEditable: true,
   update(...args) {
     this.parent().update(...args);
+  },
+  showRootCauseAnalysis() {
+    const NC = this.NC && this.NC();
+    return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);
   },
   getData() {
     return this.children(vm => vm.getData)
