@@ -3,6 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
@@ -341,6 +342,17 @@ ViewModel.mixin({
       return Standards.findOne(query, options);
     }
   },
+  department: {
+    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+      const query = {
+        ...by,
+        organizationId: this.organizationId()
+      };
+
+      return Departments.find(query, options)
+                .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
+    }
+  },
   date: {
     renderDate(date) {
       return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
@@ -648,7 +660,7 @@ ViewModel.mixin({
   },
   members: {
     _searchString() {
-      const child = this.child('SelectItem');
+      const child = this.child('Select_Single');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {

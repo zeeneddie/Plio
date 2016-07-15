@@ -1,6 +1,6 @@
 <template name="TreatmentPlan_Decision_Edit">
   {{#FormField label="Treatment decision"}}
-    {{> SelectItemRadio
+    {{> Select_Single_Radio
         items=decisionList
         value=decision
         onSelect=onUpdateCb}}
