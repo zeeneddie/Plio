@@ -155,9 +155,10 @@ Template.ActionsList.viewmodel({
       this.searchResultsNumber(count);
       return;
     } else if (this.isActiveActionFilter('My completed actions')) {
-      const count = this.myCompletedActions().count();
+      const count = this.myCompletedActions().length;
 
-      return this.searchResultsNumber(count);
+      this.searchResultsNumber(count);
+      return;
     }
 
     this.searchResultsNumber(ids.length);
