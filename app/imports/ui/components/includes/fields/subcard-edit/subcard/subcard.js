@@ -167,6 +167,6 @@ Template.SubCard_Edit.viewmodel({
   },
   getData() {
     const child = this.child(this.content());
-    return child.getData && child.getData();
+    return child && child.getData && child.getData();
   }
 });

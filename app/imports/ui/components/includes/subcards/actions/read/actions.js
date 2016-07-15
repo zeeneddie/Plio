@@ -32,7 +32,7 @@ Template.Subcards_Actions_Read.viewmodel({
 
     return this._getActionsByQuery(query, options).map(({ _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, ...args }) => {
       const href = ((() => {
-        const params = { orgSerialNumber: this.organizationSerialNumber(), actionId: _id };
+        const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: _id };
         const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified });
         return FlowRouter.path('workInboxItem', params, queryParams);
       })());

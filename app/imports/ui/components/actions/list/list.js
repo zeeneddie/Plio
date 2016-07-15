@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
+import { ActionDocumentTypes } from '/imports/api/constants.js';
+
 Template.ActionsList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user', 'nonconformity', 'risk', 'utils'],
@@ -23,7 +25,7 @@ Template.ActionsList.viewmodel({
           const { _id } = action;
           Meteor.setTimeout(() => {
             this.goToAction(_id);
-            this.expandCollapsed(this.actionId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
@@ -91,14 +93,16 @@ Template.ActionsList.viewmodel({
           }
         ]
       };
-      return this._getActionsByQuery({ ..._query, ...query }, _options).fetch();
+      return this._getActionsByQuery({ ..._query, ...query }, _options)
+                    .map(({ ...args }) => ({ ...args, _documentType: ActionDocumentTypes.ACTION }));
     };
   },
   _getPendingProblemsByQuery(_query) {
     const query = { ..._query, ...this._getSearchQuery(), status: { $in: [1, 4, 11] } }; // should be 4, 11
-    const NCs = this._getNCsByQuery(query).fetch();
-    const risks = this._getRisksByQuery(query).fetch();
-    return NCs.concat(risks).map(({ analysis, ...args }) => ({ toBeCompletedBy: analysis.executor, analysis, ...args }));
+    const NCs = this._getNCsByQuery(query).map(({ ...args }) => ({ _documentType: ActionDocumentTypes.NC, ...args }));
+    const risks = this._getRisksByQuery(query).map(({ ...args }) => ({ _documentType: ActionDocumentTypes.RISK, ...args }));
+    return NCs.concat(risks).map(({ analysis, ...args }) =>
+                              ({ toBeCompletedBy: (analysis && analysis.executor) ? analysis.executor : '', analysis, ...args }));
   },
   _getUniqueAssignees(collection) {
     const userIdsData = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);

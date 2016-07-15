@@ -271,6 +271,11 @@ const DocumentTypes = [
   'risk'
 ];
 
+const ActionDocumentTypes = {
+  'ACTION': 'action',
+  ...ProblemTypes
+};
+
 const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png',
@@ -330,5 +335,6 @@ export {
   AvatarPlaceholders,
   ActionFilters,
   TreatmentPlanPriorities,
-  TreatmentPlanDecisions
+  TreatmentPlanDecisions,
+  ActionDocumentTypes
 };
