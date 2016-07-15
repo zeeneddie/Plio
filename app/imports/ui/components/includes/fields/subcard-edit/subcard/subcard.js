@@ -21,8 +21,15 @@ Template.SubCard_Edit.viewmodel({
   content: '',
   handleToggleCollapse() {
     if (this._id) {
+      if(this.isNew()) {
+        this.parent().updateViewedByFn(this._id());
+      }
       this.toggleCollapse(null, 250);
     }
+  },
+  isNew() {
+    const { viewedBy } = this.document();
+    return viewedBy && !viewedBy.find(_id => _id === Meteor.userId());
   },
   callInsert(insertFn, args, cb) {
     this.beforeSave();
