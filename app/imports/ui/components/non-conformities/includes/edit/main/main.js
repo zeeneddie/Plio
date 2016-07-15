@@ -5,7 +5,13 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 Template.NC_Card_Edit_Main.viewmodel({
   isStandardsEditable: true,
   onRendered(templateInstance) {
-    updateViewedBy.call({ _id: templateInstance.data._id });
+    if(this.isNew()) {
+      updateViewedBy.call({ _id: templateInstance.data._id });
+    }
+  },
+  isNew() {
+    const { viewedBy } = this.document();
+    return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
   update(...args) {
     this.parent().update(...args);

@@ -5,6 +5,9 @@ Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
     this.load(this.document());
+    if (this._id() === this.standardId() && this.isNew()) {
+      Tracker.nonreactive(() => this.updateViewedBy());
+    }
   },
   onRendered() {
     if (!this._id) {
@@ -26,7 +29,7 @@ Template.SubCard_Edit.viewmodel({
   },
   isNew() {
     const { viewedBy } = this.document();
-    return viewedBy && !viewedBy.find(_id => _id === Meteor.userId());
+    return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
   callInsert(insertFn, args, cb) {
     this.beforeSave();
