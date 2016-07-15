@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
-
+import { updateViewedBy } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Edit_Main.viewmodel({
   _id: '',
@@ -23,6 +23,9 @@ Template.Actions_Card_Edit_Main.viewmodel({
   verificationComments: '',
   linkedStandardsIds: [],
   linkedTo: [],
+  onRendered(templateInstance) {
+    updateViewedBy.call({ _id: templateInstance.data.action._id });
+  },
   autorun() {
     const action = this.action && this.action();
     action && this.load(action);

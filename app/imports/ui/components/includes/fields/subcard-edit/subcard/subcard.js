@@ -21,9 +21,6 @@ Template.SubCard_Edit.viewmodel({
   content: '',
   handleToggleCollapse() {
     if (this._id) {
-      if(this.isNew()) {
-        this.parent().updateViewedByFn(this._id());
-      }
       this.toggleCollapse(null, 250);
     }
   },

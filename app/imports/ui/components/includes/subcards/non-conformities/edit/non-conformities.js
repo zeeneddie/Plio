@@ -1,8 +1,6 @@
 import { Template } from 'meteor/templating';
 import { insert, update, remove } from '/imports/api/non-conformities/methods.js';
 
-import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
-
 Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
   _query: {},
@@ -33,9 +31,6 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, { ...args, organizationId }, cb);
-  },
-  updateViewedByFn(_id) {
-    updateViewedBy.call({ _id });
   },
   updateFn() {
     return this.update.bind(this);
