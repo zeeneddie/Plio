@@ -5,19 +5,17 @@ import Utils from '/imports/core/utils.js';
 
 Template.Subcards_Notify_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
-  members() {
-    return this._members({ _id: { $nin: this.currentNotifyUsersIds() } });
-  },
   document: '',
   documentType: '',
+  placeholder: 'User to notify',
   currentNotifyUsersIds() {
-    return this.currentNotifyUsers().fetch().map(({ _id }) => _id) || [];
+    return Array.from(this.currentNotifyUsers() || []).map(({ _id }) => _id);
   },
   currentNotifyUsers() {
     const usersIds = (this.document() && this.document().notify) || [];
     const query = { _id: { $in: usersIds } };
     const options = { sort: { 'profile.firstName': 1 } };
-    return Meteor.users.find(query, options);
+    return this._mapMembers(Meteor.users.find(query, options));
   },
   onUpdate() {},
   update(userId, option, cb) {
@@ -32,26 +30,21 @@ Template.Subcards_Notify_Edit.viewmodel({
     this.onUpdate({ query, options }, cb);
   },
   onSelectUserCb() {
-    return this.updateUser.bind(this);
+    return this.onSelectUser.bind(this);
   },
   onSelectUser(viewmodel) {
-    const { selected:userId } = viewmodel.getData();
-    const currentNotifyUsersIds = this.currentNotifyUsersIds();
+    const { selectedItemId:userId } = viewmodel.getData();
+    const currentNotifyUsersIds = Array.from(this.currentNotifyUsersIds() || []);
 
-    if (_.contains(currentNotifyUsersIds, userId)) return;
+    if (currentNotifyUsersIds.find(_id => _id === userId)) return;
 
     this.addToNotifyList(userId, viewmodel);
   },
   addToNotifyList(userId, viewmodel) {
-    this.update(userId, '$addToSet', (err, res) => {
-      if (err) {
-        return;
-      }
+    const callback = (err, res) => {
+      if (err) return;
 
-      viewmodel.value('');
-      viewmodel.selected('');
-
-      // TODO need one for non-conformities
+      // TODO need one for Non-conformities, risks, actions
       if (this.documentType() === 'standard') {
         addedToNotifyList.call({
           standardId: this.document()._id,
@@ -64,12 +57,19 @@ Template.Subcards_Notify_Edit.viewmodel({
           }
         });
       }
-    });
+    };
+
+    this.update(userId, '$addToSet', callback);
   },
-  removeFromNotifyListFn() {
-    return this.removeFromNotifyList.bind(this, Template.currentData());
+  onRemoveFromNotifyListCb() {
+    return this.removeFromNotifyList.bind(this);
   },
-  removeFromNotifyList({ _id }) {
-    this.update(_id, '$pull');
+  removeFromNotifyList(viewmodel) {
+    const { selectedItemId:userId } = viewmodel.getData();
+    const currentNotifyUsersIds = Array.from(this.currentNotifyUsersIds() || []);
+
+    if (!currentNotifyUsersIds.find(_id => _id === userId)) return;
+
+    this.update(userId, '$pull');
   }
 });

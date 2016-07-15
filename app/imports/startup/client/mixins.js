@@ -660,7 +660,7 @@ ViewModel.mixin({
   },
   members: {
     _searchString() {
-      const child = this.child('Select_Single');
+      const child = this.child('Select_Single') || this.child('Select_Multi');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
@@ -669,7 +669,10 @@ ViewModel.mixin({
         ..._query
       };
 
-      return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
+      return this._mapMembers(Meteor.users.find(query, options));
+    },
+    _mapMembers(array) {
+      return array.map(doc => ({ title: this.userFullNameOrEmail(doc), ...doc }));
     }
   },
   userEdit: {

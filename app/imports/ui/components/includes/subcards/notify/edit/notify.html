@@ -1,20 +1,12 @@
 <template name="Subcards_Notify_Edit">
-  <!-- TODO: use Select_Multi component -->
   {{#SubCard_EditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
     <div class="card-block" id="notify">
-      <div class="form-group form-group-buttons">
-        {{#each currentNotifyUsers}}
-          <div class="btn-group">
-            <button class="btn btn-secondary" type="button" disabled=""
-                {{b "text: userFullNameOrEmail(this)"}}></button>
-            {{> DeleteButton smallIcon=true onClick=removeFromNotifyListFn}}
-          </div>
-        {{/each}}
-        {{> Select_Single
-            items=members
-            selectFirstIfNoSelected=false
-            onUpdate=onSelectUserCb}}
-      </div>
+      {{> Select_Multi
+          selected=currentNotifyUsers
+          items=_members
+          placeholder=placeholder
+          onUpdate=onSelectUserCb
+          onRemove=onRemoveFromNotifyListCb}}
     </div>
   {{/SubCard_EditWrapper}}
 </template>
