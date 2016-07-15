@@ -1,5 +1,5 @@
-import './select-item';
-import './select-item-radio';
+import './select-single';
+import './select-single-radio';
 import './subcard-edit';
 import './departments';
 import './form-field';

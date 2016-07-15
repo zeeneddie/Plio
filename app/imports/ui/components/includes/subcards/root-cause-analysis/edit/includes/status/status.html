@@ -1,7 +1,7 @@
 <template name="NC_RCA_Status_Edit">
   {{#FormField label=label}}
     {{#if isSelectedExecutor}}
-      {{> SelectItemRadio
+      {{> Select_Single_Radio
           items=statuses
           value=getStatusValue
           onSelect=onUpdateCb}}

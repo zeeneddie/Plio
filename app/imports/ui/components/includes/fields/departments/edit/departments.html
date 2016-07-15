@@ -1,17 +1,12 @@
 <template name="Departments_Edit">
   {{#FormField label="Department(s)"}}
-    {{#each currentDepartments}}
-      <div class="btn-group">
-        <button class="btn btn-secondary" type="button" disabled=""
-            {{b "text: this.name"}}></button>
-        {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
-      </div>
-    {{/each}}
-    {{> SelectItem
-        placeholder="Department(s)"
+    {{> Select_Multi
+        selected=selected
         items=departments
+        placeholder="Department(s)"
         selectFirstIfNoSelected=false
-        onUpdate=onSelectCb
-        content="DepartmentsCreate"}}
+        onUpdate=onUpdateCb
+        onRemove=onRemoveCb
+        content="Departments_Create"}}
   {{/FormField}}
 </template>

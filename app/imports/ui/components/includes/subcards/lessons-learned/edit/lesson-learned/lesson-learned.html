@@ -26,7 +26,7 @@
     {{/FormField}}
 
     {{#FormField label="Created by"}}
-      {{> SelectItem
+      {{> Select_Single
           items=_members
           selected=owner
           onUpdate=onUpdateOwnerCb}}

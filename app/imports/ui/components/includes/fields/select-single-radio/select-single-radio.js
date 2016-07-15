@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.SelectItemRadio.viewmodel({
+Template.Select_Single_Radio.viewmodel({
   value: '',
   items: [],
   onSelect() {},
@@ -9,7 +9,7 @@ Template.SelectItemRadio.viewmodel({
 
     this.value(value);
 
-    this.onSelect(this);
+    this.update(this);
   },
   getData() {
     const { value } = this.data();
