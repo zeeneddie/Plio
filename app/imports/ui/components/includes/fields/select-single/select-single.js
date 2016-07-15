@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-Template.SelectItem.viewmodel({
+Template.Select_Single.viewmodel({
   mixin: 'utils',
   autorun(computation) {
     const items = this.itemsArray();
@@ -38,7 +38,7 @@ Template.SelectItem.viewmodel({
     }
   },
   value: '',
-  selected: '',
+  selected: null,
   placeholder: '',
   content: '',
   contentData: {},
@@ -62,6 +62,7 @@ Template.SelectItem.viewmodel({
   select({ _id, title }) {
     this.value(title);
     this.selected(_id);
+
     this.update();
   },
   onUpdate() {},

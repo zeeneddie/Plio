@@ -1,6 +1,6 @@
 <template name="ESOwner">
   {{#FormField label="Owner"}}
-    {{> SelectItem
+    {{> Select_Single
         items=_members
         selected=owner
         onUpdate=onUpdateCb}}
