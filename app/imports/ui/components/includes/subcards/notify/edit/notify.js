@@ -32,7 +32,7 @@ Template.Subcards_Notify_Edit.viewmodel({
     this.onUpdate({ query, options }, cb);
   },
   onSelectUserCb() {
-    return this.updateUser.bind(this);
+    return this.onSelectUser.bind(this);
   },
   onSelectUser(viewmodel) {
     const { selected:userId } = viewmodel.getData();
