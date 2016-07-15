@@ -18,7 +18,8 @@ export const TimePeriodSchema = new SimpleSchema({
   },
   timeValue: {
     type: Number,
-    min: 1
+    min: 1,
+    max: 999
   }
 });
 
@@ -221,6 +222,29 @@ export const DeletedSchema = new SimpleSchema({
   deletedAt: {
     type: Date,
     optional: true
+  }
+});
+
+export const FileSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  extension: {
+    type: String,
+    autoValue() {
+      if (this.isSet) {
+        return this.value.toLowerCase();
+      }
+    },
+  },
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    optional: true
+  },
+  name: {
+    type: String
   }
 });
 

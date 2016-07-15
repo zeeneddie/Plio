@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCTitle.viewmodel({
+Template.NC_Title_Edit.viewmodel({
   label: 'Non-conformity name',
   titleText: '',
   sequentialId: '',

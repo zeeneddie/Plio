@@ -7,7 +7,7 @@ Template.StandardsList.viewmodel({
   share: ['search', 'standard'],
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
   autorun() {
-    if (!this.focused() && !this.animating()) {
+    if (!this.focused() && !this.animating() && !this.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
@@ -137,7 +137,7 @@ Template.StandardsList.viewmodel({
     }
   },
   expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed());
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.standardId()));
 
     this.animating(true);
 
@@ -159,11 +159,11 @@ Template.StandardsList.viewmodel({
   },
   onAfterExpand() {
     this.animating(false);
-    Meteor.setTimeout(() => this.searchInput.focus(), 0);
+    Meteor.setTimeout(() => this.focused(true), 500);
   },
   openAddTypeModal(e) {
     this.modal().open({
-      title: 'Compliance standard',
+      _title: 'Compliance standard',
       template: 'CreateStandard',
       variation: 'save'
     });

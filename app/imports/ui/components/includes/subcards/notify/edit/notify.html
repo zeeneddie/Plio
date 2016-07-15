@@ -1,6 +1,6 @@
 <template name="Subcards_Notify_Edit">
-  {{#SubCardEditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
-    <div id="notify">
+  {{#SubCard_EditWrapper _lText="Notify" _rText=currentNotifyUsers.count}}
+    <div class="card-block" id="notify">
       <div class="form-group form-group-buttons">
         {{#each currentNotifyUsers}}
           <div class="btn-group">
@@ -9,12 +9,11 @@
             {{> DeleteButton smallIcon=true onClick=removeFromNotifyListFn}}
           </div>
         {{/each}}
-        {{> Select_Single
-            variation='caret'
+        {{> SelectItem
             items=members
             selectFirstIfNoSelected=false
             onUpdate=onSelectUserCb}}
       </div>
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

@@ -7,7 +7,13 @@ import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
-import { UserRoles, StandardFilters, RiskFilters, NonConformityFilters, NCTypes, ProblemsStatuses, OrgCurrencies } from '/imports/api/constants.js';
+import { Actions } from '/imports/api/actions/actions.js';
+import {
+  UserRoles, StandardFilters, RiskFilters,
+  NonConformityFilters, NCTypes, ProblemsStatuses,
+  OrgCurrencies, ActionStatuses, ActionFilters,
+  ActionTypes
+} from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
 
@@ -175,13 +181,7 @@ ViewModel.mixin({
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
     },
-    searchOnAfterKeyUp: _.debounce(function(e) {
-      const value = e.target.value;
-
-      if (this.searchText() === value) return;
-
-      this.searchText(value);
-
+    searchOnAfterKeyUp(value) {
       const checkIsDeletedFilter = (fn, counterName) => {
         if (this[fn] && this[fn]('deleted')) {
           this.searchResultsNumber(this[counterName]().count());
@@ -198,13 +198,6 @@ ViewModel.mixin({
       if (!!value) {
         this.expandAllFound();
       } else {
-        this.expandSelected();
-      }
-    }, 500),
-    clearSearchField() {
-      if (this.searchText()) {
-        this.searchInput.val('');
-        this.searchText('');
         this.expandSelected();
       }
     }
@@ -412,6 +405,16 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
+    goToAction(actionId, withQueryParams = true) {
+      const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('workInboxItem', params, queryParams);
+    },
+    goToActions(withQueryParams = true) {
+      const params = { orgSerialNumber: this.organizationSerialNumber() };
+      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      FlowRouter.go('workInbox', params, queryParams);
+    },
     goToRisk(riskId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
       const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
@@ -498,9 +501,90 @@ ViewModel.mixin({
       return NonConformities.findOne(query, options);
     }
   },
+  workInbox: {
+    workItemId() {
+      return FlowRouter.getParam('workItem');
+    },
+    isActiveWorkInboxFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentWorkItem() {
+      const _id = this.workItemId();
+      return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getWorkItemsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getWorkItemByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
+    }
+  },
+  action: {
+    actionId() {
+      return FlowRouter.getParam('actionId');
+    },
+    isActiveActionFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeActionFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentAction() {
+      const _id = this.actionId();
+      return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
+    }
+  },
   utils: {
     capitalize(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    lowercase(string) {
+      return string.charAt(0).toLowerCase() + string.slice(1);
     },
     round(num) {
       if (num >= 1000000) {
@@ -511,11 +595,21 @@ ViewModel.mixin({
         return num;
       }
     },
-    cutString(str, length) {
-      return str.length > length ? str.substring(0, length - 3) + "..." : str;
+    getCollectionInstance(_id, ...collections) {
+      return collections.find(collection => collection instanceof Mongo.Collection && collection.findOne({ _id }));
+    },
+    chooseOne(predicate) {
+      return (i1, i2) => predicate ? i1 : i2;
+    },
+    compose(...fns) {
+      return fns.reduce((f, g) => (...args) => f(g(...args)));
+    },
+    findParentRecursive(templateName, instance) {
+      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
-      return arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
+      return Array.from(array || []);
     }
   },
   magnitude: {
@@ -568,6 +662,33 @@ ViewModel.mixin({
         case 7:
         case 10:
         case 12:
+          return 'danger';
+          break;
+        default:
+          return '';
+          break;
+      }
+    }
+  },
+  actionStatus: {
+    getStatusName(status) {
+      return ActionStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 1:
+        case 4:
+          return 'warning';
+          break;
+        case 0:
+        case 3:
+        case 7:
+        case 8:
+          return 'success';
+          break;
+        case 2:
+        case 5:
+        case 6:
           return 'danger';
           break;
         default:

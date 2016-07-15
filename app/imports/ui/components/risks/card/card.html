@@ -79,6 +79,14 @@
 
           {{> Subcards_TreatmentPlan_Read treatmentPlan=this.treatmentPlan}}
 
+          {{> Subcards_Actions_Read
+              type=ActionTypes.CORRECTIVE_ACTION
+              documentId=this._id}}
+
+          {{> Subcards_Actions_Read
+              type=ActionTypes.RISK_CONTROL
+              documentId=this._id}}
+
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}

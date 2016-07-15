@@ -1,10 +1,12 @@
 <template name="Fields_Standards_Read">
-  <div class="list-group-item" {{b "if: standards.length > 0"}}>
-    <p class="list-group-item-text">Standard(s)</p>
-    {{#each standards}}
-      <h4 class="list-group-item-heading">
-        <a {{b "text: this.title, attr: { href: this.href }"}}></a>
-      </h4>
-    {{/each}}
-  </div>
+  {{#if standards.length}}
+    <div class="list-group-item">
+      <p class="list-group-item-text">Standard(s)</p>
+      {{#each standards}}
+        <h4 class="list-group-item-heading">
+          <a {{b "text: this.title, attr: { href: this.href }"}}></a>
+        </h4>
+      {{/each}}
+    </div>
+  {{/if}}
 </template>

@@ -21,24 +21,43 @@ Template.Select_Single.viewmodel({
       }
     }
   },
+  onRendered() {
+    this.dropdown.on('show.bs.dropdown', () => this.onShow());
+    this.dropdown.on('hide.bs.dropdown', () => this.onHide());
+  },
+  onShow() {
+    this.focused(true);
+    this.value('');
+  },
+  onHide() {
+    this.focused(false);
+
+    if (!!this.selected() && !this.value()) {
+      const item = this.getSelectedItem();
+      !!item && this.value(item.title);
+    }
+  },
   value: '',
   selected: null,
   placeholder: '',
   content: '',
+  contentData: {},
   loading: false,
   focused: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
-  variation: '',
-  isVariation(variation) {
-    return this.variation() === variation;
+  showContent() {
+    return this.itemsFiltered().length > 0 || !!Template[this.content()];
   },
   itemsArray() {
     return this.toArray(this.items());
   },
   itemsFiltered() {
-    return this.itemsArray().length > 0 && this.itemsArray().filter(item => !_.contains(this.excludedItems(), item._id));
+    return this.itemsArray().filter(({ _id }) => !this.excludedItems().includes(_id));
+  },
+  itemHtml({ html, title }) {
+    return html || title;
   },
   select({ _id, title }) {
     this.value(title);
@@ -46,27 +65,19 @@ Template.Select_Single.viewmodel({
 
     this.update();
   },
+  onUpdate() {},
   update() {
-    this.fixValue();
-
-    if (!this.onUpdate) return;
+    this.onHide();
 
     this.onUpdate(this);
   },
-  remove() {
-    if (!this._id) {
-      this.destroy();
-    } else {
-      this.onRemove(this, this.destroy());
-    }
-  },
-  fixValue() {
+  clear() {
     this.focused(false);
-
-    if (!!this.selected() && !this.value()) {
-      const item = this.getSelectedItem();
-      !!item && this.value(item.title);
-    }
+    this.selected('');
+    this.value('');
+  },
+  destroy() {
+    Blaze.remove(this.templateInstance.view);
   },
   getSelectedItem() {
     return this.itemsArray().find(({ _id }) => _id === this.selected());
@@ -76,17 +87,14 @@ Template.Select_Single.viewmodel({
     const item = this.getSelectedItem();
     return { value, selected, items, item };
   },
-  destroy() {
-    Blaze.remove(this.templateInstance.view);
-  },
-  clear() {
-    this.value('');
-    this.selected('');
+  getContentData() {
+    return { ...this.getData(), ...this.contentData() };
   },
   events: {
-    'focus input'() {
-      this.focused(true);
-      this.value('');
+    'click input'(e) {
+      if (this.dropdown.is('.open')) {
+        e.stopPropagation();
+      }
     }
   }
 });

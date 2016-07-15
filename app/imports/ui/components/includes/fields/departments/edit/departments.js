@@ -63,7 +63,7 @@ Template.Departments_Edit.viewmodel({
     return Array.from(ids || []).filter(_id => _id !== id);
   },
   areIdsIncludesItemId(selectedItemId) {
-    return this.departmentsIds().includes(selectedItemId);
+    return this.departmentsIds() && this.departmentsIds().includes && this.departmentsIds().includes(selectedItemId);
   },
   getData() {
     const { departmentsIds } = this.data();

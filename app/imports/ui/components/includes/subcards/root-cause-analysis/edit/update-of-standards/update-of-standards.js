@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCUpdateOfStandards.viewmodel({
+Template.NC_UpdateOfStandards_Edit.viewmodel({
   autorun() {
     this.load(this.updateOfStandards());
   },

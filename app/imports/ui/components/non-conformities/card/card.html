@@ -1,4 +1,4 @@
-<template name="NCCard">
+<template name="NC_Card_Read">
   <div class="content-cards-inner flex scroll">
     {{#if hasNCs}}
       {{#Card_Read
@@ -88,24 +88,19 @@
 
           {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}}
 
+          {{> Subcards_Actions_Read
+              type=ActionTypes.CORRECTIVE_ACTION
+              documentId=this._id}}
+
+          {{> Subcards_Actions_Read
+              type=ActionTypes.PREVENTATIVE_ACTION
+              documentId=this._id}}
+
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{#with files}}
-            <div class="card-block card-subheading">
-              <h4 class="card-title">Other files</h4>
-            </div>
-            <div class="list-group-item">
-              {{#each this}}
-                <a class="btn btn-secondary btn-inline" {{b "href: this.url || '#'"}}>
-                  <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
-                  </i>
-                  <span>{{this.name}}</span>
-                </a>
-              {{/each}}
-            </div>
-          {{/with}}
+          {{> Subcards_OtherFiles_Read files=this.files}}
         {{/with}}
       {{/Card_Read}}
     {{else}}

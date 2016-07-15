@@ -1,0 +1,8 @@
+<template name="Actions_Owner">
+  {{#FormField label="Owner"}}
+    {{> SelectItem
+        items=_members
+        selected=ownerId
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

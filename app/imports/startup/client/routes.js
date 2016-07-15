@@ -168,7 +168,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NCLayout', {
+    BlazeLayout.render('NC_Layout', {
       content: 'NCPage'
     });
   }
@@ -178,7 +178,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('NCLayout', {
+    BlazeLayout.render('NC_Layout', {
       content: 'NCPage'
     });
   }
@@ -200,6 +200,26 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   action(params) {
     BlazeLayout.render('RisksLayout', {
       content: 'RisksPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/work-inbox', {
+  name: 'workInbox',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/work-inbox/:actionId', {
+  name: 'workInboxItem',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('ActionsLayout', {
+      content: 'ActionsPage'
     });
   }
 });

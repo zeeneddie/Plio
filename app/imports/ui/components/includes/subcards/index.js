@@ -1,3 +1,4 @@
+import './actions';
 import './improvement-plan';
 import './lessons-learned';
 import './notify';
@@ -7,3 +8,4 @@ import './occurrences';
 import './other-files';
 import './risk-analysis';
 import './treatment-plan';
+import './notes';

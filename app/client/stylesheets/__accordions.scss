@@ -39,6 +39,10 @@
     .text-muted {
       color: #777;
       font-weight: normal;
+
+      & > span {
+        margin-left: 5px;
+      } 
     }
   }
 

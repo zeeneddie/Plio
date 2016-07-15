@@ -28,8 +28,7 @@ Template.Fields_Standards_Edit.viewmodel({
   },
   callUpdate(selectedItemId, selected, option) {
     if (selected.length === 0 && this._id) {
-      ViewModel.findOne('ModalWindow')
-                  .setError('A document must be linked to at least one standard.');
+      ViewModel.findOne('ModalWindow').setError('Link cannot be removed. There must be at least one Standard linked to this document.');
       return;
     }
 

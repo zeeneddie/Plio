@@ -1,0 +1,13 @@
+<template name="Actions_LinkedTo_Read">
+  <div class="list-group-item">
+    <p class="list-group-item-text">Linked to</p>
+    {{#each linkedDocs}}
+      <h4 class="list-group-heading">
+        <a {{b "attr: { href: getLink(this) }"}}>
+          <strong {{b "text: this.sequentialId"}}></strong>
+          <span {{b "text: this.title"}}></span>
+        </a>
+      </h4>
+    {{/each}}
+  </div>
+</template>

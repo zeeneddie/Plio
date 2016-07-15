@@ -12,7 +12,7 @@ Template.DashboardFooter.viewmodel({
     let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
     this.modal().open({
       template: 'UserDirectory_InviteUsers',
-      title: 'Invite users',
+      _title: 'Invite users',
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
@@ -22,7 +22,7 @@ Template.DashboardFooter.viewmodel({
   },
   openAddNCModal() {
     this.modal().open({
-      title: 'Non-conformity',
+      _title: 'Non-conformity',
       template: 'CreateNC',
       variation: 'save'
     });

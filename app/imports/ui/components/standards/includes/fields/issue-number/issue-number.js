@@ -7,10 +7,6 @@ Template.ESIssueNumber.viewmodel({
   update(e) {
     if (!this._id) return;
     const { issueNumber } = this.getData();
-    if (!issueNumber) {
-      ViewModel.findOne('ModalWindow').setError('Issue number is required!');
-      return;
-    }
     this.callWithFocusCheck(e, () => {
       this.parent().update({ issueNumber });
     });

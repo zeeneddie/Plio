@@ -1,14 +1,14 @@
 <template name="Subcards_Occurrences_Edit">
-  {{#SubCardEditWrapper _lText="Occurrences" _rText=occurrences.count}}
-    <div id="occurances">
+  {{#SubCard_EditWrapper _lText="Occurrences" _rText=occurrences.count}}
+    <div class="card-block" id="occurences">
       {{#if occurrences.count}}
         <div class="card">
           {{#each occurrences}}
-            {{> SubCardEdit
+            {{> SubCard_Edit
                 _id=this._id
                 date=this.date
                 description=this.description
-                sequentialId=sequentialId
+                sequentialId=this.sequentialId
                 _lText=(renderText this)
                 _rText=(renderDate this.date)
                 content="Subcards_Occurrence"
@@ -23,5 +23,5 @@
         <button type="button" class="btn btn-link" {{b "click: addOccurrence"}}>Add an occurrence</button>
       </div>
     </div>
-  {{/SubCardEditWrapper}}
+  {{/SubCard_EditWrapper}}
 </template>

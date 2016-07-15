@@ -1,11 +1,13 @@
 <template name="Subcards_TreatmentPlan_Edit">
-  {{#SubCardEditWrapper _lText="Treatment plan" _rText=(capitalize decision)}}
-    {{> TreatmentPlan_Comments comments=comments}}
+  {{#SubCard_EditWrapper _lText="Treatment plan" _rText=(capitalize decision)}}
+    <div class="card-block">
+      {{> TreatmentPlan_Comments_Edit comments=comments}}
 
-    {{> TreatmentPlan_PrevLossExp prevLossExp=prevLossExp}}
+      {{> TreatmentPlan_PrevLossExp_Edit prevLossExp=prevLossExp}}
 
-    {{> TreatmentPlan_Priority priority=priority}}
+      {{> TreatmentPlan_Priority_Edit priority=priority}}
 
-    {{> TreatmentPlan_Decision decision=decision}}
-  {{/SubCardEditWrapper}}
+      {{> TreatmentPlan_Decision_Edit decision=decision}}
+    </div>
+  {{/SubCard_EditWrapper}}
 </template>

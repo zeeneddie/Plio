@@ -7,7 +7,9 @@ import Utils from '/imports/core/utils';
 const configureSlignshot = () => {
   const {
     bucketName, acl, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir, nonConformitiesFilesDir, risksFilesDir
+    standardsFilesDir, improvementPlansFilesDir,
+    nonConformitiesFilesDir, risksFilesDir,
+    actionsFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {

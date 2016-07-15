@@ -20,3 +20,5 @@ import './transfer-organization-page.html';
 import './transfer-organization-page.js';
 import './non-conformities-page.html';
 import './non-conformities-page.js';
+import './actions-page.html';
+import './actions-page.js';

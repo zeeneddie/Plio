@@ -39,7 +39,7 @@ Template.CreateRisk.viewmodel({
 
         this.modal().open({
           _id,
-          title: 'Risk',
+          _title: 'Risk',
           template: 'EditRisk'
         });
         }, 400);

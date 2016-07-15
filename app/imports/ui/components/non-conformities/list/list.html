@@ -2,9 +2,9 @@
   <div class="card">
     <form class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField clearFn="clearSearchField"}}
+        {{#ClearableField field="searchText"}}
           <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "ref: searchInput, focus: focused, keyup: searchOnAfterKeyUp"}} />
+              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
@@ -53,7 +53,7 @@
 
       {{#if isActiveNCFilter "deleted"}}
         {{#each NCsDeleted}}
-          {{> NCItem}}
+          {{> NC_Item_Read}}
         {{/each}}
       {{/if}}
 

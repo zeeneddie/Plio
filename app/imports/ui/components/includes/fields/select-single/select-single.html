@@ -1,35 +1,24 @@
 <template name="Select_Single">
-  <div class="dropdown" {{b "class: { input-group-typeahead: isVariation('delete') || isVariation('caret') }"}}>
-
-    <input type="text" class="form-control" data-toggle="dropdown"
-      {{b "if: !variation, value: value, focusout: fixValue, attr: { placeholder: placeholder }, throttle: 200"}}/>
-
-    <div class="input-group" data-toggle="dropdown" {{b "if: isVariation('delete') || isVariation('caret')"}}>
+  <div class="dropdown input-group-typeahead form-group-flex-flex" {{b "ref: dropdown"}}>
+    <div class="input-group" data-toggle="dropdown">
       <input type="text" class="form-control"
-        {{b "value: value, focusout: fixValue, attr: { placeholder: placeholder }, throttle: 200"}}/>
+        {{b "value: value, focus: focused, attr: { placeholder: placeholder }, throttle: 300"}}/>
 
       <span class="input-group-btn">
-        {{#if isVariation 'delete'}}
-          <button type="button" class="btn btn-secondary btn-icon" {{b "click: remove"}}>
-            <i class="fa fa-times-circle" {{b "if: !loading"}}></i>
-            <i class="fa fa-spinner" {{b "if: loading"}}></i>
-          </button>
-        {{/if}}
-
-        {{#if isVariation 'caret'}}
-          <button type="button" class="btn btn-secondary btn-icon">
-            <i class="fa fa-caret-down" {{b "if: !loading"}}></i>
-            <i class="fa fa-spinner" {{b "if: loading"}}></i>
-          </button>
-        {{/if}}
+        <button type="button" class="btn btn-secondary btn-icon">
+          <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+        </button>
       </span>
     </div>
-
     <div class="dropdown-menu dropdown-menu-full">
       {{#each itemsFiltered}}
-        <a class="dropdown-item pointer" {{b "text: this.title, click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+        <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
       {{/each}}
-      {{> Template.dynamic template=content data=getData}}
+      {{#if showContent}}
+        {{> Template.dynamic template=content data=getContentData}}
+      {{else}}
+        <div class="dropdown-item"><strong>There are no available items...</strong></div>
+      {{/if}}
     </div>
   </div>
 </template>

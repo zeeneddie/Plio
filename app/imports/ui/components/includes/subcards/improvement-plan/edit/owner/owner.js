@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-Template.IPOwner.viewmodel({
+Template.IP_Owner_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
   owner: '',
   onUpdateCb() {

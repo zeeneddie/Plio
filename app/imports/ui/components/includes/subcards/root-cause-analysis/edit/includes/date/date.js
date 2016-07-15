@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCRCADate.viewmodel({
+Template.NC_RCA_Date_Edit.viewmodel({
   key: 'analysis',
   date: '',
   startDate: new Date(),

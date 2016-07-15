@@ -1,5 +1,5 @@
 <template name="StandardsCard">
-  <div class="content-cards-inner flex scroll" {{b "class: { expanded: isFullScreenMode }"}}>
+  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
     {{#if hasStandards}}
       {{#with standard}}
         <div class="card standard-details">
@@ -33,7 +33,10 @@
             <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <h4 class="list-group-item-heading pull-left">
                 <span {{b "text: this.title"}}></span>
-                <span class="label label-danger" {{b "if: this.status === 'draft'"}}>Draft</span>
+                <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
+                  <span {{b "text: 'Issue ' + this.issueNumber"}}></span>
+                  <span>Draft</span>
+                </span>
               </h4>
             </a>
 
@@ -96,6 +99,14 @@
               {{/with}}
 
               {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
+
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.CORRECTIVE_ACTION
+                  standardId=this._id}}
+
+              {{> Subcards_Actions_Read
+                  type=ActionTypes.PREVENTATIVE_ACTION
+                  standardId=this._id}}
 
               {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
