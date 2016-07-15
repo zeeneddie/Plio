@@ -26,11 +26,26 @@ Template.Standards_Card_Read.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
-  style() {
-    const offset = this.card.offset();
-    return this.isFullScreenMode()
-            ? 'position: inherit; top: auto; right: auto; bottom: auto; left: auto; transition: none'
-            : `position: inherit; top: ${offset.top}; right: 0; bottom: 0; left: ${offset.left}; transition: all .15s linear`;
+  toggleScreenMode() {
+    const $div = this.templateInstance.$('.content-cards-inner');
+    const offset = $div.offset();
+    if (this.isFullScreenMode()) {
+      this.isFullScreenMode(false);
+
+      setTimeout(() => {
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
+      }, 150);
+    } else {
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+
+      setTimeout(() => {
+
+        // Safari workaround
+        $div.css({ 'transition': 'all .15s linear' });
+        this.isFullScreenMode(true);
+      }, 100);
+    }
+
   },
   hasStandards() {
     return this.standards().count() > 0;
@@ -39,7 +54,7 @@ Template.Standards_Card_Read.viewmodel({
     return this._getStandardsByQuery({});
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this.standard() && this.standard()._id });
   },
   hasDocxAttachment() {
     const standard = this.standard();

@@ -1,5 +1,5 @@
 <template name="Standards_Card_Read">
-  <div class="content-cards-inner flex" {{b "ref: card, class: { expanded: isFullScreenMode }, style: style"}}>
+  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
     {{#if hasStandards}}
       {{#with standard}}
         <div class="card standard-details">
@@ -7,7 +7,7 @@
             {{#if canCreateStandards organizationId}}
               <div class="card-heading-buttons pull-xs-right">
                 {{#if hasDocxAttachment}}
-                  <a class="btn btn-secondary toggle-expand-btn" {{b "toggle: isFullScreenMode"}}>
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
                   </a>
                 {{/if}}
                 {{#if isDeleted}}
