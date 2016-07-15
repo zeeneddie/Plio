@@ -54,7 +54,7 @@ Template.Standards_Card_Read.viewmodel({
     return this._getStandardsByQuery({});
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standard() && this.standard()._id });
+    return this._getStandardByQuery({ _id: this.standardId() });
   },
   hasDocxAttachment() {
     const standard = this.standard();

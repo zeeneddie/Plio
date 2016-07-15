@@ -9,7 +9,7 @@ Template.Select_Single_Radio.viewmodel({
 
     this.value(value);
 
-    this.update(this);
+    this.onSelect(this);
   },
   getData() {
     const { value } = this.data();
