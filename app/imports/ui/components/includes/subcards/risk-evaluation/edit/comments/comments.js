@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.TreatmentPlan_Comments_Edit.viewmodel({
+Template.RiskEvaluation_Comments_Edit.viewmodel({
   comments: '',
   update() {
     const { comments } = this.getData();

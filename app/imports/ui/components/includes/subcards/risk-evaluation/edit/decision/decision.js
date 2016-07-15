@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { TreatmentPlanDecisions } from '/imports/api/constants.js';
+import { RiskEvaluationDecisions } from '/imports/api/constants.js';
 
-Template.TreatmentPlan_Decision_Edit.viewmodel({
+Template.RiskEvaluation_Decision_Edit.viewmodel({
   decision: '',
   decisionList() {
-    return _.keys(TreatmentPlanDecisions).map(key => ({ value: key, text: TreatmentPlanDecisions[key] }) );
+    return _.keys(RiskEvaluationDecisions).map(key => ({ value: key, text: RiskEvaluationDecisions[key] }) );
   },
   onUpdateCb() {
     return this.update.bind(this);

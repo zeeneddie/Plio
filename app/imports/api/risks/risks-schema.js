@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
-import { ProblemsStatuses, TreatmentPlanPriorities, TreatmentPlanDecisions } from '../constants.js';
+import { ProblemsStatuses, RiskEvaluationPriorities, RiskEvaluationDecisions } from '../constants.js';
 
 const RequiredSchema = new SimpleSchema([
   BaseProblemsRequiredSchema,
@@ -37,26 +37,28 @@ const riskAnalysisScore = {
   }
 };
 
-const treatmentPlan = {
-  treatmentPlan: {
+const riskEvaluation = {
+  riskEvaluation: {
     type: Object,
     optional: true
   },
-  'treatmentPlan.comments': {
+  'riskEvaluation.comments': {
     type: String,
-    max: 140
+    max: 140,
+    optional: true
   },
-  'treatmentPlan.prevLossExp': {
+  'riskEvaluation.prevLossExp': {
     type: String,
-    max: 140
+    max: 140,
+    optional: true
   },
-  'treatmentPlan.priority': {
+  'riskEvaluation.priority': {
     type: String,
-    allowedValues: _.keys(TreatmentPlanPriorities)
+    allowedValues: _.keys(RiskEvaluationPriorities)
   },
-  'treatmentPlan.decision': {
+  'riskEvaluation.decision': {
     type: String,
-    allowedValues: _.keys(TreatmentPlanDecisions)
+    allowedValues: _.keys(RiskEvaluationDecisions)
   }
 };
 
@@ -69,7 +71,7 @@ const OptionalSchema = new SimpleSchema([
       optional: true
     },
     ...riskAnalysisScore,
-    ...treatmentPlan
+    ...riskEvaluation
   }
 ]);
 

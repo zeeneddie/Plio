@@ -290,13 +290,13 @@ const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
 ];
 
-const TreatmentPlanPriorities = {
+const RiskEvaluationPriorities = {
   'low': 'Low',
   'medium': 'Medium',
   'high': 'High'
 };
 
-const TreatmentPlanDecisions = {
+const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
   'treat': 'Treat',
   'transfer': 'Transfer',
@@ -329,6 +329,6 @@ export {
   DocumentTypes,
   AvatarPlaceholders,
   ActionFilters,
-  TreatmentPlanPriorities,
-  TreatmentPlanDecisions
+  RiskEvaluationPriorities,
+  RiskEvaluationDecisions
 };

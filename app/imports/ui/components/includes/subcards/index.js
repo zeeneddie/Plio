@@ -7,5 +7,5 @@ import './root-cause-analysis';
 import './occurrences';
 import './other-files';
 import './risk-analysis';
-import './treatment-plan';
+import './risk-evaluation';
 import './notes';
