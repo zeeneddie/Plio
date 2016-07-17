@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '../organizations/organizations.js';
 import { Risks } from './risks.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
-import WorkflowService from '../workflow/workflow-service.js';
 
 
 export default {

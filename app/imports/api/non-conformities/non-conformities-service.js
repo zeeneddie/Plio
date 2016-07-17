@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { NonConformities } from './non-conformities.js';
 import { Organizations } from '../organizations/organizations.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
-import WorkflowService from '../workflow/workflow-service.js';
 
 
 export default {
