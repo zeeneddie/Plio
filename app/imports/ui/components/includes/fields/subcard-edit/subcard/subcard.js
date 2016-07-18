@@ -5,7 +5,7 @@ Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
     this.load(this.document());
-    if (this._id() === this.standardId() && this.isNew()) {
+    if (this._id() === this.document()._id && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
