@@ -41,6 +41,11 @@
             _id=this._id
             riskEvaluation=this.riskEvaluation}}
 
+        {{> Subcards_ImprovementPlan_Edit
+            _heading="Treatment plan"
+            documentId=this._id
+            documentType="risk"}}
+
         {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
