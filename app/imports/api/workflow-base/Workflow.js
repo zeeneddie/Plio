@@ -6,6 +6,7 @@ export default class Workflow {
   constructor(_id) {
     this._id = _id;
     this._doc = this._getDoc();
+    this._timezone = this._getOrgTimezone();
   }
 
   refreshStatus() {
@@ -49,6 +50,12 @@ export default class Workflow {
 
   _getWorkflowType() {
     // Implement in child class
+  }
+
+  _getOrgTimezone() {
+    const { organizationId:_id } = this._doc;
+    const { timezone } = Organizations.findOne({ _id }) || {};
+    return timezone || 'UTC';
   }
 
   static _collection() {

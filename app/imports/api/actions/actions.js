@@ -41,6 +41,9 @@ Actions.helpers({
       }
     }).fetch();
   },
+  getLinkedDocuments() {
+    return this.getLinkedNCs().concat(this.getLinkedRisks());
+  },
   canBeCompleted() {
     return _.every([
       this.isCompleted === false,

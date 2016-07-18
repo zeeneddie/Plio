@@ -213,9 +213,7 @@ export default class ProblemWorkflow extends Workflow {
       }
     }
 
-    const { timezone } = Organizations.findOne({
-      _id: this._doc.organizationId
-    });
+    const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {
       return 5; // Open - analysis overdue
