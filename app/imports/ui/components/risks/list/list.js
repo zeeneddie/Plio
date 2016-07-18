@@ -43,7 +43,7 @@ Template.RisksList.viewmodel({
       case 'status':
         return { status: { $in: this.statuses() } };
         break;
-      case 'department':
+      case 'department/sector':
         return { departments: { $in: this.departments().map(({ _id }) => _id) } };
         break;
       default:
@@ -59,7 +59,7 @@ Template.RisksList.viewmodel({
       case 'status':
         return { status: this.statuses().length > 0 && this.statuses()[0] };
         break;
-      case 'department':
+      case 'department/sector':
         return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
       case 'deleted':

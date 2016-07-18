@@ -580,11 +580,11 @@ ViewModel.mixin({
     }
   },
   utils: {
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalize(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     },
-    lowercase(string) {
-      return string.charAt(0).toLowerCase() + string.slice(1);
+    lowercase(str) {
+      return str ? str.charAt(0).toLowerCase() + str.slice(1) : '';
     },
     round(num) {
       if (num >= 1000000) {

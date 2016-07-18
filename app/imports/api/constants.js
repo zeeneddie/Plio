@@ -248,14 +248,14 @@ const StandardFilters = [
 const RiskFilters = [
   'type',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
 const NonConformityFilters = [
   'magnitude',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
