@@ -9,3 +9,4 @@ import './other-files';
 import './risk-analysis';
 import './risk-evaluation';
 import './notes';
+import './review';

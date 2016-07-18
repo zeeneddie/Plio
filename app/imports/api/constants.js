@@ -31,6 +31,12 @@ const AnalysisStatuses = {
   1: 'Completed'
 };
 
+const ReviewStatuses = {
+  0: 'Overdue',
+  1: 'Awaiting review',
+  2: 'Up-to-date'
+};
+
 const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
@@ -330,5 +336,6 @@ export {
   AvatarPlaceholders,
   ActionFilters,
   RiskEvaluationPriorities,
-  RiskEvaluationDecisions
+  RiskEvaluationDecisions,
+  ReviewStatuses
 };

@@ -9,7 +9,7 @@ Template.Subcards_ImprovementPlan_Read.viewmodel({
   },
   documentId: '',
   documentType: '',
-  _heading: 'Improvement plan',
+  label: 'Improvement plan',
   desiredOutcome: '',
   targetDate: '',
   owner: '',

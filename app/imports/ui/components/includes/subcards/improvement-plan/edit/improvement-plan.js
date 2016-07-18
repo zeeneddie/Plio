@@ -11,7 +11,7 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   },
   documentId: '',
   documentType: '',
-  _heading: 'Improvement plan',
+  label: 'Improvement plan',
   _id: '',
   desiredOutcome: '',
   targetDate: '',

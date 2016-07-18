@@ -768,5 +768,26 @@ ViewModel.mixin({
         return 'high';
       }
     }
+  },
+  reviewStatus: {
+    getNameByStatus(status) {
+      return ReviewStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'danger';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'success';
+          break;
+        default:
+          return '';
+          break;
+      }
+    }
   }
 });
