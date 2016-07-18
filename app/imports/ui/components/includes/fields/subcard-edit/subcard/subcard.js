@@ -5,9 +5,6 @@ Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
     this.load(this.document());
-    if (this._id() === this.document()._id && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
-    }
   },
   onRendered() {
     if (!this._id) {
@@ -26,10 +23,6 @@ Template.SubCard_Edit.viewmodel({
     if (this._id) {
       this.toggleCollapse(null, 250);
     }
-  },
-  isNew() {
-    const { viewedBy } = this.document();
-    return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
   callInsert(insertFn, args, cb) {
     this.beforeSave();
