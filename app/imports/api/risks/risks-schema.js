@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
+import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema, ReviewSchema } from '../schemas.js';
 import { ProblemsStatuses, RiskEvaluationPriorities, RiskEvaluationDecisions } from '../constants.js';
 
 const RequiredSchema = new SimpleSchema([
@@ -64,6 +64,7 @@ const riskEvaluation = {
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
+  ReviewSchema,
   {
     type: {
       type: String,

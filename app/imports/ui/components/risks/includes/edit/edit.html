@@ -67,6 +67,11 @@
             files=this.files
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
+
+        {{> Subcards_Review_Edit
+            _id=this._id
+            review=this.review
+            onUpdate=onUpdateCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

@@ -1,3 +1,5 @@
 <template name="Review_Comments">
-  
+  {{#FormField label=label}}
+    <textarea class="form-control" rows="3" {{b "value: comments, focusout: onUpdate, attr: { placeholder: placeholder }"}}></textarea>
+  {{/FormField}}
 </template>

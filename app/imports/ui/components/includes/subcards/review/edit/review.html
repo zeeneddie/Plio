@@ -3,6 +3,14 @@
     <div class="card-block">
       <div id="review">
 
+        {{> Review_Status status=status}}
+
+        {{> Review_LastReviewed reviewedAt=reviewedAt}}
+
+        {{> Review_ReviewedBy reviewedBy=reviewedBy}}
+
+        {{> Review_Comments comments=comments}}
+
       </div>
     </div>
   {{/SubCard_EditWrapper}}

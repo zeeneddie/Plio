@@ -12,7 +12,7 @@ import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, NCTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, ActionFilters,
-  ActionTypes
+  ActionTypes, ReviewStatuses
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -770,7 +770,7 @@ ViewModel.mixin({
     }
   },
   reviewStatus: {
-    getNameByStatus(status) {
+    getStatusName(status) {
       return ReviewStatuses[status];
     },
     getClassByStatus(status) {

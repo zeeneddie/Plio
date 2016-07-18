@@ -20,6 +20,9 @@ Template.EditRisk.viewmodel({
       riskId: this._id()
     };
   },
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
   update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
     const _id = this._id();
     const allArgs = { ...args, _id, options, query };
