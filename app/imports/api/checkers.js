@@ -61,6 +61,20 @@ export const isOrgMember = (userId, organizationId) => {
   });
 };
 
+export const isDueToday = (targetDate, timezone) => {
+  const tzNow = moment(new Date()).tz(timezone);
+  const tzTargetDate = moment(targetDate).tz(timezone);
+
+  return tzNow.date() === tzTargetDate.date();
+};
+
+export const isOverdue = (targetDate, timezone) => {
+  const tzNow = moment(new Date()).tz(timezone);
+  const tzTargetDate = moment(targetDate).tz(timezone);
+
+  return tzNow.date() > tzTargetDate.date();
+};
+
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = {}) => {
   const isCompleted = ({ status = '' }) => status.toString() === _.invert(AnalysisStatuses)['Completed'];
   const findArg = _args => _find => _.keys(_args).find(key => key.includes(_find));

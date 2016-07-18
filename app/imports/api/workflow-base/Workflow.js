@@ -14,7 +14,7 @@ export default class Workflow {
   }
 
   _getStatus() {
-    const { workflowType } = this._doc;
+    const workflowType = this._getWorkflowType();
 
     if (workflowType === WorkflowTypes.THREE_STEP) {
       return this._getThreeStepStatus();
@@ -27,10 +27,10 @@ export default class Workflow {
     const { status:savedStatus } = this._doc;
 
     if (savedStatus !== status) {
-      this.constructor._collection().update({ 
-        _id: this._id 
-      }, { 
-        $set: { status } 
+      this.constructor._collection().update({
+        _id: this._id
+      }, {
+        $set: { status }
       });
     }
   }
@@ -44,6 +44,10 @@ export default class Workflow {
   }
 
   _getSixStepStatus() {
+    // Implement in child class
+  }
+
+  _getWorkflowType() {
     // Implement in child class
   }
 

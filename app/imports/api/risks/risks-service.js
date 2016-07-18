@@ -24,8 +24,6 @@ export default {
       magnitude, workflowType, ...args
     });
 
-    Meteor.isServer && Meteor.defer(() => WorkflowService.onRiskCreated(riskId));
-
     return riskId;
   },
 

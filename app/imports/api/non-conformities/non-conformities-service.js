@@ -24,8 +24,6 @@ export default {
       workflowType, magnitude, ...args
     });
 
-    Meteor.isServer && Meteor.defer(() => WorkflowService.onNCCreated(NCId));
-
     return NCId;
   },
 
@@ -56,10 +54,6 @@ export default {
       $set: { 'analysis.targetDate': targetDate }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      WorkflowService.onNCAnalysisDateChanged(_id)
-    });
-
     return ret;
   },
 
@@ -88,10 +82,6 @@ export default {
         'analysis.completedAt': new Date(),
         'analysis.completedBy': userId
       }
-    });
-
-    Meteor.isServer && Meteor.defer(() => {
-      WorkflowService.onNCAnalysisCompleted(_id)
     });
 
     return ret;

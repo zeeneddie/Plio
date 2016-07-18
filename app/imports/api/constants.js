@@ -11,24 +11,24 @@ const ProblemMagnitudes = {
 };
 
 const ProblemsStatuses = {
-  0: 'Open - just reported',
-  1: 'Open - just reported, awaiting analysis',
-  2: 'Open - just reported, awaiting action',
-  3: 'Open - analysis due today',
-  4: 'Open - analysis overdue',
-  5: 'Open - analysis completed, action needed',
-  6: 'Open - analysis completed, action(s) in place',
-  7: 'Open - action(s) due today',
-  8: 'Open - action(s) overdue',
-  9: 'Open - action(s) completed',
-  10: 'Open - action(s) completed, awaiting verification',
-  11: 'Open - verification due today',
-  12: 'Open - verification past due',
-  13: 'Open - action(s) verified as effective, awaiting update of standard(s)',
-  14: 'Open - action(s) failed verification',
-  15: 'Closed - action(s) completed',
-  16: 'Closed - action(s) verified, standard(s) reviewed',
-  17: 'Deleted'
+  1: 'Open - just reported',
+  2: 'Open - just reported, awaiting analysis',
+  3: 'Open - just reported, awaiting action',
+  4: 'Open - analysis due today',
+  5: 'Open - analysis overdue',
+  6: 'Open - analysis completed, action needed',
+  7: 'Open - analysis completed, action(s) in place',
+  8: 'Open - action(s) due today',
+  9: 'Open - action(s) overdue',
+  10: 'Open - action(s) completed',
+  11: 'Open - action(s) completed, awaiting verification',
+  12: 'Open - verification due today',
+  13: 'Open - verification past due',
+  14: 'Open - action(s) verified as effective, awaiting update of standard(s)',
+  15: 'Open - action(s) failed verification',
+  16: 'Closed - action(s) completed',
+  17: 'Closed - action(s) verified, standard(s) reviewed',
+  18: 'Deleted'
 };
 
 const StandardStatuses = {
@@ -50,15 +50,14 @@ const ActionTypes = {
 const ActionUndoTimeInHours = 1;
 
 const ActionStatuses = {
-  0: 'In progress',
-  1: 'In progress - due for completion today',
-  2: 'In progress - completion overdue',
-  3: 'In progress - completed, not yet verified',
-  4: 'In progress - completed, verification due today',
-  5: 'In progress - completed, verification overdue',
-  6: 'Completed - failed verification',
-  7: 'Completed - verified as effective',
-  8: 'Completed - verified & standardized',
+  1: 'In progress',
+  2: 'In progress - due for completion today',
+  3: 'In progress - completion overdue',
+  4: 'In progress - completed, not yet verified',
+  5: 'In progress - completed, verification due today',
+  6: 'In progress - completed, verification overdue',
+  7: 'Completed - failed verification',
+  8: 'Completed - verified as effective',
   9: 'Completed',
   10: 'Deleted'
 };
