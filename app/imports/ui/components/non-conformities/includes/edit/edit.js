@@ -1,9 +1,23 @@
 import { Template } from 'meteor/templating';
 
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { update, remove, updateViewedBy } from '/imports/api/non-conformities/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
+  autorun() {
+    const doc = this.NC();
+    const userId = Meteor.userId();
+
+    if (!isViewed(doc, userId)) {
+      Tracker.nonreactive(() => updateViewedBy());
+    }
+  },
+  updateViewedBy() {
+    const _id = this._id();
+
+    updateViewedBy.call({ _id });
+  },
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },

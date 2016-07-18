@@ -1,10 +1,16 @@
 import { Template } from 'meteor/templating';
 
 import { update, updateViewedBy, remove } from '/imports/api/risks/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditRisk.viewmodel({
   onRendered(templateInstance) {
-    updateViewedBy.call({ _id: templateInstance.data._id });
+    const doc = this.risk();
+    const userId = Meteor.userId();
+
+    if(!isViewed(doc, userId)) {
+      updateViewedBy.call({ _id: doc._id });
+    }
   },
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
   risk() {
