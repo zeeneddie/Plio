@@ -1,0 +1,25 @@
+<template name="Subcards_RiskScoring_Edit">
+  {{#SubCard_EditWrapper _lText=label _rText=(getScoreLabel scores.[0])}}
+    <div class="card-block">
+      {{#if scores.length}}
+        <div class="card">
+          {{#each scores}}
+            {{> SubCard_Edit
+                _id=this._id
+                score=this
+                _lText=(renderDate this.scoredAt)
+                _rText=(getScoreLabel this)
+                tableData=tableData
+                content="Subcards_RiskScore"
+                insertFn=insertFn
+                removeFn=removeFn}}
+          {{/each}}
+        </div>
+      {{/if}}
+      <div class="card new-cards" {{b "ref: forms"}}></div>
+      <div class="text-xs-center">
+        <button type="button" class="btn btn-link" {{b "click: add"}}>Add a risk score</button>
+      </div>
+    </div>
+  {{/SubCard_EditWrapper}}
+</template>

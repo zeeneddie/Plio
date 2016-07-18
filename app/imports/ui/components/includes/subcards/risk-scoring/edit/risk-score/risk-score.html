@@ -1,0 +1,12 @@
+<template name="Subcards_RiskScore">
+  {{> ScoreTable_Edit
+      tableData=tableData
+      onUpdate=onScoreUpdate
+      score=score}}
+  {{#with score}}
+    <div class="card-block">
+      {{> RiskScoring_ScoredBy_Edit scoredBy=this.scoredBy}}
+      {{> RiskScoring_ScoredAt_Edit scoredAt=this.scoredAt}}
+    </div>
+  {{/with}}
+</template>

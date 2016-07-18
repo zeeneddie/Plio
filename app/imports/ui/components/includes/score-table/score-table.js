@@ -20,9 +20,5 @@ Template.ScoreTable_Edit.viewmodel({
   onUpdate() {},
   update({ rowId, value }) {
     this.onUpdate({ rowId, value });
-  },
-  getData() {
-    const { active } = this.data();
-    return { active };
   }
 });

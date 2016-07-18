@@ -13,29 +13,32 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
-const riskAnalysisScore = {
-  score: {
-    type: Object,
-    optional: true
-  },
-  'score.rowId': {
-    type: Number
-  },
-  'score.value': {
-    type: Number,
-    min: 1,
-    max: 100
-  },
-  'score.scoredBy': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  'score.scoredAt': {
-    type: Date,
-    optional: true
-  }
-};
+const RiskScoresSchema = ((() => {
+  const schema = new SimpleSchema({
+    rowId: {
+      type: Number
+    },
+    value: {
+      type: Number,
+      min: 1,
+      max: 100
+    },
+    scoredBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    scoredAt: {
+      type: Date
+    }
+  });
+
+  return new SimpleSchema({
+    scores: {
+      type: [schema],
+      optional: true
+    }
+  });
+})());
 
 const riskEvaluation = {
   riskEvaluation: {
@@ -65,13 +68,13 @@ const riskEvaluation = {
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
   ReviewSchema,
+  RiskScoresSchema,
   {
     type: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    ...riskAnalysisScore,
     ...riskEvaluation
   }
 ]);

@@ -6,7 +6,7 @@ import './non-conformities';
 import './root-cause-analysis';
 import './occurrences';
 import './other-files';
-import './risk-analysis';
+import './risk-scoring';
 import './risk-evaluation';
 import './notes';
 import './review';

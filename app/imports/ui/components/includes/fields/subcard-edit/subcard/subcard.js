@@ -147,6 +147,8 @@ Template.SubCard_Edit.viewmodel({
       return;
     }
 
+    console.log(args);
+
     if (_.keys(args).every(key => this.data()[key] === args[key])) {
       return;
     }

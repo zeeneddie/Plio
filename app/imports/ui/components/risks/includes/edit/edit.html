@@ -33,9 +33,10 @@
             documentType="risk"
             onUpdate=onUpdateNotifyUserCb}}
 
-        {{> Subcards_RiskAnalysis_Edit
+        {{> Subcards_RiskScoring_Edit
             _id=this._id
-            score=this.score}}
+            scores=this.scores
+            onUpdate=onUpdateCb}}
 
         {{> Subcards_RiskEvaluation_Edit
             _id=this._id
