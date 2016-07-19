@@ -645,10 +645,26 @@ ViewModel.mixin({
     },
     getClassByStatus(status) {
       switch(status) {
-        case 0:
         case 1:
         case 2:
+        case 3:
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+        case 10:
+        case 11:
+        case 12:
+        case 14:
           return 'warning';
+        case 5:
+        case 9:
+        case 13:
+        case 15:
+          return 'danger';
+        case 16:
+        case 17:
+          return 'success';
         default:
           return '';
       }
@@ -660,20 +676,18 @@ ViewModel.mixin({
     },
     getClassByStatus(status) {
       switch(status) {
-        case 0:
-        case 3:
-        case 7:
+        case 1:
+        case 4:
         case 8:
         case 9:
           return 'success';
-        case 1:
-        case 4:
-          return 'warning';
         case 2:
         case 5:
+          return 'warning';
+        case 3:
         case 6:
+        case 7:
           return 'danger';
-        case 10:
         default:
           return '';
       }
