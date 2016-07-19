@@ -27,25 +27,28 @@ Template.SubCard_Edit.viewmodel({
   callInsert(insertFn, args, cb) {
     this.beforeSave();
 
+    const afterInsert = (err, res) => {
+      this.afterSave(err, res, cb);
+
+      if (!err) {
+        this.destroy();
+        const newSubcard = ViewModel.findOne(
+          'SubCard_Edit', vm => vm._id && vm._id() === res
+        );
+
+        if (newSubcard) {
+          newSubcard.toggleCollapse(null, 250);
+          newSubcard.subcard.closest('.modal').animate({
+            scrollTop: newSubcard.subcard.position().top + 70
+          }, 500, 'swing');
+        }
+      }
+    };
+
     // We need this setTimeout to display a Saving... state
     Meteor.setTimeout(() => {
       this.subcard.addClass('hidden');
-      insertFn(args, (err, res) => {
-        this.afterSave(err, res, cb);
-
-        if (!err) {
-          this.destroy();
-          const newSubcard = ViewModel.findOne(
-            'SubCard_Edit', vm => vm._id && vm._id() === res
-          );
-          if (newSubcard) {
-            newSubcard.toggleCollapse(null, 250);
-            newSubcard.subcard.closest('.modal').animate({
-              scrollTop: newSubcard.subcard.position().top + 70
-            }, 500, 'swing');
-          }
-        }
-      });
+      insertFn(args, afterInsert);
     }, 500);
   },
   callUpdate(updateFn, args, cb) {
@@ -146,8 +149,6 @@ Template.SubCard_Edit.viewmodel({
     if (!_id) {
       return;
     }
-
-    console.log(args);
 
     if (_.keys(args).every(key => this.data()[key] === args[key])) {
       return;

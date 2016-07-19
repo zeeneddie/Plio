@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 Template.Subcards_RiskScoring_Edit.viewmodel({
-  mixin: ['riskScore', 'date', 'addForm'],
+  mixin: ['riskScore', 'date', 'addForm', 'utils'],
   label: 'Risk scoring',
   scores: '',
   scoresSorted() {
@@ -78,14 +78,32 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   },
   onRemove() {},
   removeFn() {
-    return (viewmodel, cb) => {
+    return (viewmodel, cb = () => {}) => {
       const { document:score = {} } = viewmodel.data();
       const { _id } = score;
 
       if (!_id) {
         viewmodel.destroy();
       } else {
-        this.onRemove({ score }, cb);
+        swal(
+          {
+            title: 'Are you sure?',
+            text: `Risk score will be removed.`,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Remove',
+            closeOnConfirm: false
+          },
+          () => {
+            const showSuccess = (err) => {
+              if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
+            };
+
+            const callback = this.combine(showSuccess, cb);
+
+            this.onRemove({ score }, callback);
+          }
+        );
       }
     };
   }

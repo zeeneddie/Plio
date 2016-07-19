@@ -1,6 +1,4 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Random } from 'meteor/random';
-import { Mongo } from 'meteor/mongo';
 
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema, ReviewSchema } from '../schemas.js';
 import { ProblemsStatuses, RiskEvaluationPriorities, RiskEvaluationDecisions } from '../constants.js';
@@ -19,14 +17,7 @@ const RiskScoreSchema = new SimpleSchema({
   _id: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true,
-    autoValue() {
-      if (this.isSet) {
-        this.unset();
-      } else {
-        return Random.id();
-      }
-    }
+    optional: true
   },
   rowId: {
     type: Number
