@@ -28,3 +28,5 @@ import './standards-types.html';
 import './standards-types.js';
 import './standards-type.html';
 import './standards-type.js';
+import './rk-guidelines.html';
+import './rk-guidelines.js';
