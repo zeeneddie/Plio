@@ -2,6 +2,12 @@
   <div class="card-block">
     {{#FormField label="Update of standard(s)"}}{{/FormField}}
 
+    {{> NC_RCA_By_Edit
+        by=executor
+        key="updateOfStandards.executor"
+        placeholder="Who will do it?"
+        label="Who will do it?"}}
+
     {{> NC_RCA_Date_Edit
         startDate=defaultTargetDate
         date=targetDate

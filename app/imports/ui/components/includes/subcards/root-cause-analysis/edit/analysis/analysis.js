@@ -22,5 +22,8 @@ Template.NC_Analysis_Edit.viewmodel({
   },
   onAnalysisUndone() {
     return this.parent().undoAnalysis.bind(this);
+  },
+  onTargetDateUpdate() {
+    return this.parent().updateAnalysisTargetDate.bind(this);
   }
 });

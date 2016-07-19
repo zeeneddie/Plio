@@ -8,8 +8,9 @@
         placeholder="Who will do it?"
         label="Who will do it?"}}
 
-    {{> NC_RCA_TargetDate_Edit
-        targetDate=targetDate}}
+    {{> NC_RCA_Date_Edit
+        date=targetDate
+        onUpdate=onTargetDateUpdate}}
 
     {{> NC_RCA_Status_Edit
         status=status

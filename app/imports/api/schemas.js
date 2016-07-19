@@ -282,6 +282,11 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: Date,
         optional: true
       },
+      [`${key}.executor`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
+      },
       [`${key}.status`]: {
         type: Number,
         allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
@@ -303,11 +308,6 @@ export const BaseProblemsOptionalSchema = ((() => {
   const analysis = {
     analysis: {
       type: Object,
-      optional: true
-    },
-    'analysis.executor': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     ...getRepeatingFields('analysis')

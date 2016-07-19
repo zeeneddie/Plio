@@ -27,7 +27,7 @@ export default class ProblemWorkflow extends Workflow {
   _getSixStepStatus() {
     // 2: Open - just reported, awaiting analysis
     return this._getDeletedStatus()
-        || this._getStandardUpdateStatus()
+        || this._getStandardsUpdateStatus()
         || this._getActionStatus()
         || this._getAnalysisStatus()
         || 2;
@@ -39,7 +39,7 @@ export default class ProblemWorkflow extends Workflow {
     }
   }
 
-  _getStandardUpdateStatus() {
+  _getStandardsUpdateStatus() {
     const { updateOfStandards } = this._doc || {};
     const { status, completedAt, completedBy } = updateOfStandards || {};
 
@@ -117,7 +117,7 @@ export default class ProblemWorkflow extends Workflow {
     }
   }
 
-  _getActionVerificationStatus() {
+  _getActionVerificationStatus(actions) {
     // check if all actions are verified
     const verifiedLength = _.filter(actions, ({ status }) => {
       return status === 8; // Completed - verified as effective

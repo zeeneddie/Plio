@@ -40,9 +40,9 @@ Template.NC_Card_Edit.viewmodel({
       updateFn();
     }
   },
-  updateAnalysisTargetDate({ targetDate }) {
+  updateAnalysisTargetDate({ date }) {
     const _id = this._id();
-    this.modal().callMethod(setAnalysisTargetDate, { _id, targetDate });
+    this.modal().callMethod(setAnalysisTargetDate, { _id, targetDate: date });
   },
   completeAnalysis() {
     const _id = this._id();

@@ -104,9 +104,9 @@ export default {
   undoAnalysis({ _id, userId }) {
     const NC = this._getNC(_id);
     const { analysis } = NC;
-    const { completedBy } = analysis;
+    const { executor } = analysis;
 
-    if (userId !== completedBy) {
+    if (userId !== executor) {
       throw new Meteor.Error(400, 'You cannot undo this root cause analysis');
     }
 
@@ -134,9 +134,9 @@ export default {
   updateStandards({ _id, userId }) {
     const NC = this._getNC(_id);
     const { updateOfStandards } = NC;
+    const { executor } = updateOfStandards;
 
-    const allowedUsersIds = _.pluck(NC.getLinkedStandards(), 'owner');
-    if (!_.contains(allowedUsersIds, userId)) {
+    if (userId !== executor) {
       throw new Meteor.Error(400, 'You cannot update standards');
     }
 
@@ -189,9 +189,9 @@ export default {
   undoStandardsUpdate({ _id, userId }) {
     const NC = this._getNC(_id);
     const { updateOfStandards } = NC;
+    const { executor } = updateOfStandards;
 
-    const allowedUsersIds = _.pluck(NC.getLinkedStandards(), 'owner');
-    if (!_.contains(allowedUsersIds, userId)) {
+    if (userId !== executor) {
       throw new Meteor.Error(400, 'You cannot undo update of standards');
     }
 
