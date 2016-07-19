@@ -71,6 +71,6 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
 };
 
 export const isViewed = (doc, userId) => {
-  const viewedBy = doc.viewedBy || [];
+  const viewedBy = doc && doc.viewedBy || [];
   return !!viewedBy.length && _.contains(viewedBy, userId);
 };

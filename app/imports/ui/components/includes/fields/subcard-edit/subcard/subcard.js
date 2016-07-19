@@ -11,6 +11,10 @@ Template.SubCard_Edit.viewmodel({
       this.toggleCollapse(null, 250);
     }
   },
+  isNew() {
+    const { viewedBy } = this.document();
+    return viewedBy && !_.contains(viewedBy, Meteor.userId());
+  },
   document: '',
   isSubcard: true,
   isSaving: false,

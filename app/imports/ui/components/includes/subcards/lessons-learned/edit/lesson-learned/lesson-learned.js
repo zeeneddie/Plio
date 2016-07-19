@@ -1,6 +1,10 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
+import { updateViewedBy } from '/imports/api/lessons/methods.js';
+
+import { isViewed } from '/imports/api/checkers.js';
+
 Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
   title: '',
@@ -9,6 +13,18 @@ Template.Subcards_LessonLearned.viewmodel({
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',
+  onRendered(templateInstance) {
+    updateViewedBy.call({ _id: this._id() });
+  },
+  onRendered(templateInstance) {
+    const doc = templateInstance.data.document;
+    if(!doc) return;
+    const userId = Meteor.userId();
+
+    if(!isViewed(doc, userId)) {
+      updateViewedBy.call({ _id: doc._id });
+    }
+  },
   updateTitle(e) {
     this.parent().update({ title: this.title(), e, withFocusCheck: true });
   },
