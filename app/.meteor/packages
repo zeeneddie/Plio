@@ -54,3 +54,4 @@ percolate:synced-cron
 force-ssl
 peerlibrary:aws-sdk
 plio:bootstrap-sweetalert
+meteorhacks:subs-manager
