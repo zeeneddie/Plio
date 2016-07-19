@@ -3,6 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
@@ -341,6 +342,17 @@ ViewModel.mixin({
       return Standards.findOne(query, options);
     }
   },
+  department: {
+    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+      const query = {
+        ...by,
+        organizationId: this.organizationId()
+      };
+
+      return Departments.find(query, options)
+                .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
+    }
+  },
   date: {
     renderDate(date) {
       return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
@@ -396,12 +408,12 @@ ViewModel.mixin({
     goToAction(actionId, withQueryParams = true) {
       const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('action', params, queryParams);
+      FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToActions(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('actions', params, queryParams);
+      FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
@@ -487,6 +499,45 @@ ViewModel.mixin({
     _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
       return NonConformities.findOne(query, options);
+    }
+  },
+  workInbox: {
+    workItemId() {
+      return FlowRouter.getParam('workItem');
+    },
+    isActiveWorkInboxFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentWorkItem() {
+      const _id = this.workItemId();
+      return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getWorkItemsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getWorkItemByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
     }
   },
   action: {
@@ -630,7 +681,7 @@ ViewModel.mixin({
   },
   members: {
     _searchString() {
-      const child = this.child('SelectItem');
+      const child = this.child('Select_Single');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {

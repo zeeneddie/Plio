@@ -34,7 +34,7 @@ Template.Subcards_Actions_Read.viewmodel({
       const href = ((() => {
         const params = { orgSerialNumber: this.organizationSerialNumber(), actionId: _id };
         const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified });
-        return FlowRouter.path('action', params, queryParams);
+        return FlowRouter.path('workInboxItem', params, queryParams);
       })());
       return { _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, href, ...args };
     });

@@ -18,7 +18,7 @@ Template.ESBookSection.viewmodel({
   },
   selectedBookSectionId: '',
   section() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   bookSections() {
@@ -56,7 +56,7 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    const { selected:sectionId } = this.child('SelectItem').getData();
+    const { selected:sectionId } = this.child('Select_Single').getData();
     return { sectionId };
   }
 });
