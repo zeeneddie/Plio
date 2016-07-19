@@ -17,6 +17,12 @@ Template.NC_Card_Edit_Main.viewmodel({
   undoAnalysis() {
     this.parent().undoAnalysis();
   },
+  updateStandards() {
+    this.parent().updateStandards();
+  },
+  undoStandardsUpdate() {
+    this.parent().undoStandardsUpdate();
+  },
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
     return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);

@@ -97,6 +97,40 @@ export const completeAnalysis = new ValidatedMethod({
   }
 });
 
+export const updateStandards = new ValidatedMethod({
+  name: 'NonConformities.updateStandards',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards'
+      );
+    }
+
+    return NonConformitiesService.updateStandards({ _id, userId });
+  }
+});
+
+export const undoStandardsUpdate = new ValidatedMethod({
+  name: 'NonConformities.undoStandardsUpdate',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo standards update'
+      );
+    }
+
+    return NonConformitiesService.undoStandardsUpdate({ _id, userId });
+  }
+});
+
 export const undoAnalysis = new ValidatedMethod({
   name: 'NonConformities.undoAnalysis',
 

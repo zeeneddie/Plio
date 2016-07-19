@@ -1,5 +1,6 @@
 import { Roles } from 'meteor/alanning:roles';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import moment from 'moment-timezone';
 
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
@@ -62,6 +63,12 @@ export const isOrgMember = (userId, organizationId) => {
 };
 
 export const isDueToday = (targetDate, timezone) => {
+  if (!targetDate) {
+    return false;
+  }
+
+  timezone = timezone || moment.tz.guess();
+
   const tzNow = moment(new Date()).tz(timezone);
   const tzTargetDate = moment(targetDate).tz(timezone);
 
@@ -69,6 +76,12 @@ export const isDueToday = (targetDate, timezone) => {
 };
 
 export const isOverdue = (targetDate, timezone) => {
+  if (!targetDate) {
+    return false;
+  }
+
+  timezone = timezone || moment.tz.guess();
+
   const tzNow = moment(new Date()).tz(timezone);
   const tzTargetDate = moment(targetDate).tz(timezone);
 

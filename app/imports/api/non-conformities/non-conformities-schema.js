@@ -44,7 +44,7 @@ const NonConformitiesSchema = new SimpleSchema([
     status: {
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
-      defaultValue: 0
+      defaultValue: 1
     },
     workflowType: {
       type: String,

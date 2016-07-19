@@ -36,5 +36,11 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   },
   undoAnalysis() {
     this.parent().undoAnalysis();
+  },
+  updateStandards() {
+    this.parent().updateStandards();
+  },
+  undoStandardsUpdate() {
+    this.parent().undoStandardsUpdate();
   }
 });

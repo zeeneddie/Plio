@@ -82,7 +82,7 @@ const ActionSchema = new SimpleSchema([
     status: {
       type: Number,
       allowedValues: _.keys(ActionStatuses).map(key => parseInt(key, 10)),
-      defaultValue: 0
+      defaultValue: 1
     },
     isCompleted: {
       type: Boolean,

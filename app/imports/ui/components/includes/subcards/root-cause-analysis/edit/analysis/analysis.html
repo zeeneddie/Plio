@@ -12,9 +12,10 @@
         targetDate=targetDate}}
 
     {{> NC_RCA_Status_Edit
-      status=status
-      executor=executor
-      key="analysis.status"}}
+        status=status
+        executor=executor
+        onComplete=onAnalysisCompleted
+        onUndo=onAnalysisUndone}}
 
     {{#if isAnalysisCompleted}}
       {{> NC_RCA_Date_Edit

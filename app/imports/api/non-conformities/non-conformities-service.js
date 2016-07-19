@@ -2,7 +2,9 @@ import { Meteor } from 'meteor/meteor';
 
 import { NonConformities } from './non-conformities.js';
 import { Organizations } from '../organizations/organizations.js';
+import { Actions } from '../actions/actions.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
+import NCWorkflow from './NCWorkflow.js';
 
 
 export default {
@@ -22,6 +24,10 @@ export default {
     const NCId = this.collection.insert({
       organizationId, serialNumber, sequentialId,
       workflowType, magnitude, ...args
+    });
+
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(NCId).refreshStatus();
     });
 
     return NCId;
@@ -54,6 +60,10 @@ export default {
       $set: { 'analysis.targetDate': targetDate }
     });
 
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
     return ret;
   },
 
@@ -84,6 +94,10 @@ export default {
       }
     });
 
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
     return ret;
   },
 
@@ -100,7 +114,7 @@ export default {
       throw new Meteor.Error(400, 'This root cause analysis is not completed');
     }
 
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
       $set: { 'analysis.status': 0 }, // Not completed
@@ -109,6 +123,99 @@ export default {
         'analysis.completedBy': ''
       }
     });
+
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
+    return ret;
+  },
+
+  updateStandards({ _id, userId }) {
+    const NC = this._getNC(_id);
+    const { updateOfStandards } = NC;
+
+    const allowedUsersIds = _.pluck(NC.getLinkedStandards(), 'owner');
+    if (!_.contains(allowedUsersIds, userId)) {
+      throw new Meteor.Error(400, 'You cannot update standards');
+    }
+
+    if (NC.areStandardsUpdated()) {
+      throw new Meteor.Error(400, 'Standards are already updated');
+    }
+
+    const actionsLength = Actions.find({
+      'linkedTo.documentId': _id,
+      isDeleted: false
+    }).count();
+
+    if (actionsLength === 0) {
+      throw new Meteor.Error(
+        400, 'At least one action must be created before standards can be updated'
+      );
+    }
+
+    const verifiedLength = Actions.find({
+      'linkedTo.documentId': _id,
+      isDeleted: false,
+      isVerified: true,
+      verifiedAt: { $exists: true },
+      verifiedBy: { $exists: true }
+    }).count();
+
+    if (actionsLength !== verifiedLength) {
+      throw new Meteor.Error(
+        400, 'All actions must be verified before standards can be updated'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 1, // Completed
+        'updateOfStandards.completedAt': new Date(),
+        'updateOfStandards.completedBy': userId
+      }
+    });
+
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
+    return ret;
+  },
+
+  undoStandardsUpdate({ _id, userId }) {
+    const NC = this._getNC(_id);
+    const { updateOfStandards } = NC;
+
+    const allowedUsersIds = _.pluck(NC.getLinkedStandards(), 'owner');
+    if (!_.contains(allowedUsersIds, userId)) {
+      throw new Meteor.Error(400, 'You cannot undo update of standards');
+    }
+
+    if (!NC.areStandardsUpdated()) {
+      throw new Meteor.Error(400, 'Standards are not updated');
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 0 // Not completed
+      },
+      $unset: {
+        'updateOfStandards.completedAt': '',
+        'updateOfStandards.completedBy': ''
+      }
+    });
+
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
+    return ret;
   },
 
   updateViewedBy({ _id, userId }) {
@@ -124,9 +231,10 @@ export default {
 
   remove({ _id, deletedBy, isDeleted }) {
     const query = { _id };
+    let ret;
 
     if (isDeleted) {
-      return this.collection.remove(query);
+      ret = this.collection.remove(query);
     } else {
       const options = {
         $set: {
@@ -136,8 +244,14 @@ export default {
         }
       };
 
-      return this.collection.update(query, options);
+      ret = this.collection.update(query, options);
     }
+
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
+
+    return ret;
   },
 
   _getNC(_id) {

@@ -17,10 +17,10 @@ Template.NC_Analysis_Edit.viewmodel({
   updateAnalysisTargetDate(...args) {
     this.parent().updateAnalysisTargetDate(...args);
   },
-  completeAnalysis() {
-    this.parent().completeAnalysis();
+  onAnalysisCompleted() {
+    return this.parent().completeAnalysis.bind(this);
   },
-  undoAnalysis() {
-    this.parent().undoAnalysis();
+  onAnalysisUndone() {
+    return this.parent().undoAnalysis.bind(this);
   }
 });

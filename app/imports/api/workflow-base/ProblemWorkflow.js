@@ -7,6 +7,14 @@ import Workflow from './Workflow.js';
 
 export default class ProblemWorkflow extends Workflow {
 
+  constructor(_id) {
+    super(_id);
+    this._linkedActions = Actions.find({
+      'linkedTo.documentId': _id,
+      isDeleted: false
+    });
+  }
+
   _getWorkflowType() {
     return this._doc.workflowType;
   }
@@ -47,13 +55,8 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getActionStatus() {
-    const actions = Actions.find({
-      'linkedTo.documentId': this._id,
-      isDeleted: false
-    }).fetch();
-
+    const actions = this._linkedActions.fetch();
     const actionsLength = actions.length;
-
     if (actionsLength === 0) {
       return;
     }
@@ -147,7 +150,7 @@ export default class ProblemWorkflow extends Workflow {
           return status === 5; // In progress - completed, verification due today
         });
         // 12: Open - verification due today
-        return !!overduded ? 12 : false;
+        return !!dueToday ? 12 : false;
       },
 
       // check if there is failed verification
@@ -168,7 +171,7 @@ export default class ProblemWorkflow extends Workflow {
         return !!overduded ? 9 : false;
       },
 
-      // check if there is an action that must completed today
+      // check if there is an action that must be completed today
       (actions) => {
         const dueToday = _.find(actions, ({ status }) => {
           return status === 2; // In progress - due for completion today
@@ -201,10 +204,7 @@ export default class ProblemWorkflow extends Workflow {
     ]);
 
     if (isAnalysisCompleted) {
-      const actionsCount = Actions.find({
-        'linkedTo.documentId': this._id,
-        isDeleted: false
-      }).count();
+      const actionsCount = this._linkedActions.count();
 
       if (actionsCount > 0) {
         return 7; // Open - analysis completed, action(s) in place

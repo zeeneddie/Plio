@@ -8,9 +8,11 @@
         key="updateOfStandards.targetDate"}}
 
     {{> NC_RCA_Status_Edit
-      status=status
-      executor=executor
-      key="updateOfStandards.status"}}
+        status=status
+        executor=executor
+        onComplete=onStandardsUpdated
+        onUndo=onStandardsUpdateUndone
+      }}
 
     {{#if updateOfStandards.status}}
       {{> NC_RCA_Date_Edit
