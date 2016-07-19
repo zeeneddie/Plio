@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
 import { updateViewedBy } from '/imports/api/actions/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.Actions_Card_Edit_Main.viewmodel({
   _id: '',
@@ -24,7 +25,12 @@ Template.Actions_Card_Edit_Main.viewmodel({
   linkedStandardsIds: [],
   linkedTo: [],
   onRendered(templateInstance) {
-    updateViewedBy.call({ _id: templateInstance.data.action._id });
+    const action = templateInstance.data.action;
+    const userId = Meteor.userId();
+    
+    if (action && !isViewed(action, userId)) {
+      updateViewedBy.call({ _id: action._id });
+    }
   },
   autorun() {
     const action = this.action && this.action();

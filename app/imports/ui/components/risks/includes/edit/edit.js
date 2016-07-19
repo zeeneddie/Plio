@@ -4,7 +4,8 @@ import { update, updateViewedBy, remove } from '/imports/api/risks/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditRisk.viewmodel({
-  onRendered(templateInstance) {
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
+  autorun() {
     const doc = this.risk();
     const userId = Meteor.userId();
 
@@ -12,7 +13,6 @@ Template.EditRisk.viewmodel({
       updateViewedBy.call({ _id: doc._id });
     }
   },
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
   },

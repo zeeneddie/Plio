@@ -20,7 +20,7 @@ export const insert = new ValidatedMethod({
 
   run({ ...args }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create a lesson');
+      throw new Meteor.Error(403, 'Unauthorized user cannot create a Lessons learned document');
     }
 
     return LessonsService.insert({ ...args });
@@ -48,7 +48,7 @@ export const update = new ValidatedMethod({
 
   run({ _id, ...args }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot update a lesson');
+      throw new Meteor.Error(403, 'Unauthorized user cannot update a Lessons learned document');
     }
 
     return LessonsService.update({ _id, ...args });
@@ -63,18 +63,18 @@ export const updateViewedBy = new ValidatedMethod({
   run({ _id }) {
     if (!this.userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a lesson'
+        403, 'Unauthorized user cannot update a Lessons learned document'
       );
     }
     if (!LessonsLearned.findOne({ _id })) {
       throw new Meteor.Error(
-        400, 'Lesson does not exist'
+        400, 'Lessons learned document does not exist'
       );
     }
 
     if (!!LessonsLearned.findOne({ _id, viewedBy: this.userId })) {
       throw new Meteor.Error(
-        400, 'You have been already added to this lesson'
+        400, 'You have been already added to this Lessons learned document'
       );
     }
 
@@ -89,7 +89,7 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove a lesson');
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove a Lessons learned document');
     }
 
     return LessonsService.remove({ _id });
