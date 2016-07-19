@@ -613,6 +613,9 @@ ViewModel.mixin({
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
+    },
+    $not(predicate) {
+      return !predicate;
     }
   },
   magnitude: {

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { update, remove } from '/imports/api/risks/methods.js';
+import { update, remove, insertScore, removeScore } from '/imports/api/risks/methods.js';
 
 Template.EditRisk.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
@@ -58,4 +58,20 @@ Template.EditRisk.viewmodel({
       }
     );
   },
+  onInsertScoreCb() {
+    return this.insertScore.bind(this);
+  },
+  insertScore({ ...args }, cb) {
+    const _id = this._id();
+
+    this.modal().callMethod(insertScore, { _id, ...args }, cb);
+  },
+  onRemoveScoreCb() {
+    return this.removeScore.bind(this);
+  },
+  removeScore({ ...args }, cb) {
+    const _id = this._id();
+
+    this.modal().callMethod(removeScore, { _id, ...args }, cb);
+  }
 });

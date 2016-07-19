@@ -1,4 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { Random } from 'meteor/random';
+import { Mongo } from 'meteor/mongo';
 
 import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema, ReviewSchema } from '../schemas.js';
 import { ProblemsStatuses, RiskEvaluationPriorities, RiskEvaluationDecisions } from '../constants.js';
@@ -13,32 +15,42 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
-const RiskScoresSchema = ((() => {
-  const schema = new SimpleSchema({
-    rowId: {
-      type: Number
-    },
-    value: {
-      type: Number,
-      min: 1,
-      max: 100
-    },
-    scoredBy: {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id
-    },
-    scoredAt: {
-      type: Date
+const RiskScoreSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true,
+    autoValue() {
+      if (this.isSet) {
+        this.unset();
+      } else {
+        return Random.id();
+      }
     }
-  });
+  },
+  rowId: {
+    type: Number
+  },
+  value: {
+    type: Number,
+    min: 1,
+    max: 100
+  },
+  scoredBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  scoredAt: {
+    type: Date
+  }
+});
 
-  return new SimpleSchema({
-    scores: {
-      type: [schema],
-      optional: true
-    }
-  });
-})());
+ const RiskScoresSchema = new SimpleSchema({
+  scores: {
+    type: [RiskScoreSchema],
+    optional: true
+  }
+});
 
 const riskEvaluation = {
   riskEvaluation: {
@@ -136,4 +148,4 @@ const RisksUpdateSchema = new SimpleSchema([
   }
 ]);
 
-export { RisksSchema, RisksUpdateSchema, RequiredSchema, OptionalSchema };
+export { RisksSchema, RisksUpdateSchema, RequiredSchema, OptionalSchema, RiskScoreSchema, RiskScoresSchema };

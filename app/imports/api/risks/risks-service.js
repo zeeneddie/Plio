@@ -50,5 +50,29 @@ export default {
 
       return this.collection.update(query, options);
     }
+  },
+
+  'scores.insert'({ _id, ...args }) {
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        scores: { ...args }
+      }
+    };
+
+    return this.collection.update(query, options);
+  },
+
+  'scores.remove'({ _id, score }) {
+    const query = { _id };
+    const options = {
+      '$pull': {
+        'scores': score
+      }
+    };
+
+    console.log(options);
+
+    return this.collection.update(query, options);
   }
 };

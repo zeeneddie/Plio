@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import RisksService from './risks-service.js';
-import { RisksUpdateSchema, RequiredSchema } from './risks-schema.js';
+import { RisksUpdateSchema, RequiredSchema, RiskScoreSchema } from './risks-schema.js';
 import { Risks } from './risks.js';
 import {
   IdSchema,
@@ -123,5 +123,61 @@ export const remove = new ValidatedMethod({
     }
 
     return RisksService.remove({ _id, deletedBy: userId, isDeleted: risk.isDeleted});
+  }
+});
+
+export const insertScore = new ValidatedMethod({
+  name: 'Risks.scores.insert',
+
+  validate: new SimpleSchema([IdSchema, RiskScoreSchema]).validator(),
+
+  run({ _id, ...args }) {
+    const userId = this.userId;
+
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove a risk'
+      );
+    }
+
+    const risk = Risks.findOne({ _id });
+
+    if (!risk) {
+      throw new Meteor.Error(
+        400, 'Risk with the given id does not exist'
+      );
+    }
+
+    return RisksService['scores.insert']({ _id, ...args });
+  }
+});
+
+export const removeScore = new ValidatedMethod({
+  name: 'Risks.scores.remove',
+
+  validate: new SimpleSchema([IdSchema, {
+    score: {
+      type: RiskScoreSchema
+    }
+  }]).validator(),
+
+  run({ _id, score }) {
+    const userId = this.userId;
+
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot remove a risk'
+      );
+    }
+
+    const risk = Risks.findOne({ _id });
+
+    if (!risk) {
+      throw new Meteor.Error(
+        400, 'Risk with the given id does not exist'
+      );
+    }
+
+    return RisksService['scores.remove']({ _id, score });
   }
 });

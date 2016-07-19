@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Subcards_RiskScore.viewmodel({
+  disabled: false,
   tableData: '',
   score: '',
   onScoreUpdate() {

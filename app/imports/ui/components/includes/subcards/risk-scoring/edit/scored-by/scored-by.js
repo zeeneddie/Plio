@@ -6,6 +6,7 @@ Template.RiskScoring_ScoredBy_Edit.viewmodel({
   label: 'Scored by',
   placeholder: 'Scored by',
   selectFirstIfNoSelected: false,
+  disabled: false,
   onUpdateCb() {
     return this.update.bind(this);
   },

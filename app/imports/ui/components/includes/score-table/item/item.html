@@ -5,7 +5,7 @@
       {{#if isLast}}
         <th class="impact-label" {{b "text: this"}}></th>
       {{else}}
-        <td class="impact {{#if isActive this}}active{{/if}}" {{b "click: onClick(this), text: this, class: 'impact-'+getClassByScore(this)"}}></td>
+        <td class="impact" {{b "click: onClick(this), text: this, class: className(this)"}}></td>
       {{/if}}
     {{/each}}
   </tr>

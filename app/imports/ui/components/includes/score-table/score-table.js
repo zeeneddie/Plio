@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ScoreTable_Edit.viewmodel({
+  disabled: false,
   score: '',
   tableData() {
     return {

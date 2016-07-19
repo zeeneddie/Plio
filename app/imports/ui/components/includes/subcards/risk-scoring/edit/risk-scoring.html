@@ -3,15 +3,18 @@
     <div class="card-block">
       {{#if scores.length}}
         <div class="card">
-          {{#each scores}}
+          {{#each scoresSorted}}
             {{> SubCard_Edit
+                document=this
                 _id=this._id
                 score=this
                 _lText=(renderDate this.scoredAt)
                 _rText=(getScoreLabel this)
                 tableData=tableData
+                disabled=true
                 content="Subcards_RiskScore"
                 insertFn=insertFn
+                updateFn=updateFn
                 removeFn=removeFn}}
           {{/each}}
         </div>

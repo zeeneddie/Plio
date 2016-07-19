@@ -36,7 +36,8 @@
         {{> Subcards_RiskScoring_Edit
             _id=this._id
             scores=this.scores
-            onUpdate=onUpdateCb}}
+            onInsert=onInsertScoreCb
+            onRemove=onRemoveScoreCb}}
 
         {{> Subcards_RiskEvaluation_Edit
             _id=this._id

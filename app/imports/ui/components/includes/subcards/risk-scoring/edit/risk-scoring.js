@@ -6,6 +6,9 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   mixin: ['riskScore', 'date', 'addForm'],
   label: 'Risk scoring',
   scores: '',
+  scoresSorted() {
+    return Array.from(this.scores() || []).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
+  },
   tableData() {
     return {
       xHeading: 'Probability',
@@ -64,40 +67,26 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
       }
     );
   },
-  onUpdate() {},
+  onInsert() {},
   insertFn() {
     return ({ ...args }, cb) => {
-      const options = {
-        $addToSet: {
-          scores: {
-            _id: Random.id(),
-            ...args
-          }
-        }
-      };
-
-      this.onUpdate({ options }, cb)
+      this.onInsert({ ...args }, cb)
     };
   },
+  updateFn() {
+    return ({ ...args }, cb = () => {}) => cb();
+  },
+  onRemove() {},
   removeFn() {
     return (viewmodel, cb) => {
-      const { _id } = viewmodel;
+      const { document:score = {} } = viewmodel.data();
+      const { _id } = score;
 
       if (!_id) {
         viewmodel.destroy();
       } else {
-        const options = {
-          $pull: {
-            scores: { _id }
-          }
-        };
-
-        this.onUpdate({ options }, cb);
+        this.onRemove({ score }, cb);
       }
     };
-  },
-  getData() {
-    const { score } = this.data();
-    return { score };
   }
 });

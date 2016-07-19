@@ -8,6 +8,7 @@
           </tr>
           {{#each this.data}}
             {{> ScoreTable_Item
+                disabled=disabled
                 score=score
                 rowId=this._id
                 rows=this.rows
