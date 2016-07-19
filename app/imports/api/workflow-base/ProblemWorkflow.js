@@ -56,141 +56,103 @@ export default class ProblemWorkflow extends Workflow {
 
   _getActionStatus() {
     const actions = this._linkedActions.fetch();
-    const actionsLength = actions.length;
-    if (actionsLength === 0) {
+
+    if (actions.length === 0) {
       return;
     }
 
     const workflowType = this._getWorkflowType();
-    let actionChecks = [];
 
     if (workflowType === WorkflowTypes.THREE_STEP) {
-      actionChecks = this._getThreeStepActionChecks();
+      return this._getActionCompletionStatus(actions);
     } else if (workflowType === WorkflowTypes.SIX_STEP) {
-      actionChecks = this._getSixStepActionChecks();
+      return this._getActionVerificationStatus(actions)
+          || this._getActionCompletionStatus(actions);
+    }
+  }
+
+  _getActionCompletionStatus(actions) {
+    const workflowType = this._getWorkflowType();
+
+    // check if all actions are completed
+    const completedLength = _.filter(actions, ({ status }) => {
+      // 4: In progress - completed, not yet verified
+      // 9: Completed
+      return (status === 4) || (status === 9);
+    }).length;
+
+    if (completedLength === actions.length) {
+      if (workflowType === WorkflowTypes.THREE_STEP) {
+        return 16; // Closed - action(s) completed
+      } else if (workflowType === WorkflowTypes.SIX_STEP) {
+        return 11; // Open - action(s) completed, awaiting verification
+      }
     }
 
-    for (let i = 0; i < actionChecks.length; i++) {
-      const fn = actionChecks[i];
-      const status = fn(actions);
+    // check if there is overduded action
+    const overduded = _.find(actions, ({ status }) => {
+      return status === 3; // In progress - completion overdue
+    });
 
-      if (_.isFinite(status)) {
-        return status;
+    if (overduded) {
+      return 9; // Open - action(s) overdue
+    }
+
+    // check if there is an action that must completed today
+    const dueToday = _.find(actions, ({ status }) => {
+      return status === 2; // In progress - due for completion today
+    });
+
+    if (dueToday) {
+      return 8; // Open - action(s) due today
+    }
+
+    // check if there is at least one completed action
+    if (completedLength >= 1) {
+      if (workflowType === WorkflowTypes.THREE_STEP) {
+        return 10; // Open - action(s) completed
+      } else if (workflowType === WorkflowTypes.SIX_STEP) {
+        return 11; // Open - action(s) completed, awaiting verification
       }
     }
   }
 
-  _getThreeStepActionChecks() {
-    return [
-      // check if all actions are completed
-      (actions) => {
-        const completedLength = _.filter(actions, ({ status }) => {
-          // 4: In progress - completed, not yet verified
-          // 9: Completed
-          return (status === 4) || (status === 9);
-        }).length;
-        // 16: Closed - action(s) completed
-        return (completedLength === actions.length) ? 16 : false;
-      },
+  _getActionVerificationStatus() {
+    // check if all actions are verified
+    const verifiedLength = _.filter(actions, ({ status }) => {
+      return status === 8; // Completed - verified as effective
+    }).length;
 
-      // check if there is overduded action
-      (actions) => {
-        const overduded = _.find(actions, ({ status }) => {
-          return status === 3; // In progress - completion overdue
-        });
-        // 9: Open - action(s) overdue
-        return !!overduded ? 9 : false;
-      },
+    if (verifiedLength === actions.length) {
+      return 14; // Open - action(s) verified as effective, awaiting update of standard(s)
+    }
 
-      // check if there is an action that must completed today
-      (actions) => {
-        const dueToday = _.find(actions, ({ status }) => {
-          return status === 2; // In progress - due for completion today
-        });
-        // 8: Open - action(s) due today
-        return !!dueToday ? 8 : false;
-      },
+    // check if there is overduded verification
+    const overduded = _.find(actions, ({ status }) => {
+      return status === 6; // In progress - completed, verification overdue
+    });
 
-      // check if there is at least one completed action
-      (actions) => {
-        const completed = _.find(actions, ({ status }) => {
-          // 4: In progress - completed, not yet verified
-          // 9: Completed
-          return (status === 4) || (status === 9);
-        });
-        // 10: Open - action(s) completed
-        return !!completed ? 10 : false;
-      }
-    ];
-  }
+    if (overduded) {
+      return 13; // Open - verification past due
+    }
 
-  _getSixStepActionChecks() {
-    return [
-      // check if all actions are verified
-      (actions) => {
-        const verifiedLength = _.filter(actions, ({ status }) => {
-          return status === 8; // Completed - verified as effective
-        }).length;
-        // 14: Open - action(s) verified as effective, awaiting update of standard(s)
-        return (verifiedLength === actions.length) ? 14 : false;
-      },
+    // check if there is verification for today
+    const dueToday = _.find(actions, ({ status }) => {
+      return status === 5; // In progress - completed, verification due today
+    });
 
-      // check if there is overduded verification
-      (actions) => {
-        const overduded = _.find(actions, ({ status }) => {
-          return status === 6; // In progress - completed, verification overdue
-        });
-        // 13: Open - verification past due
-        return !!overduded ? 13 : false;
-      },
+    if (dueToday) {
+      return 12; // Open - verification due today
+    }
 
-      // check if there is verification for today
-      (actions) => {
-        const dueToday = _.find(actions, ({ status }) => {
-          return status === 5; // In progress - completed, verification due today
-        });
-        // 12: Open - verification due today
-        return !!dueToday ? 12 : false;
-      },
+    // check if there is failed verification
+    const failed = _.find(actions, ({ status }) => {
+      return status === 7; // Completed - failed verification
+    });
 
-      // check if there is failed verification
-      (actions) => {
-        const failed = _.find(actions, ({ status }) => {
-          return status === 7; // Completed - failed verification
-        });
-        // 15: Open - action(s) failed verification
-        return !!failed ? 15 : false;
-      },
-
-      // check if there is overduded action
-      (actions) => {
-        const overduded = _.find(actions, ({ status }) => {
-          return status === 3; // In progress - completion overdue
-        });
-        // 9: Open - action(s) overdue
-        return !!overduded ? 9 : false;
-      },
-
-      // check if there is an action that must be completed today
-      (actions) => {
-        const dueToday = _.find(actions, ({ status }) => {
-          return status === 2; // In progress - due for completion today
-        });
-        // 8: Open - action(s) due today
-        return !!dueToday ? 8 : false;
-      },
-
-      // check if there is at least one completed action
-      (actions) => {
-        const completed = _.find(actions, ({ status }) => {
-          // 4: In progress - completed, not yet verified
-          // 9: Completed
-          return (status === 4) || (status === 9);
-        }).length;
-        // 11: Open - action(s) completed, awaiting verification
-        return !!completed ? 11 : false;
-      },
-    ];
+    if (failed) {
+      return 15; // Open - action(s) failed verification
+    }
   }
 
   _getAnalysisStatus() {
