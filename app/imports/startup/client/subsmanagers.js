@@ -8,4 +8,4 @@ const CountSubs = new SubsManager({
   expireIn: 5
 });
 
-export { OrgSubs, UserSubs, StandardSubs, CountSubs };
+export { OrgSubs, UserSubs, CountSubs };
