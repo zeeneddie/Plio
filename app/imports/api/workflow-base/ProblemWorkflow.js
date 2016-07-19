@@ -43,13 +43,13 @@ export default class ProblemWorkflow extends Workflow {
     const { updateOfStandards } = this._doc || {};
     const { status, completedAt, completedBy } = updateOfStandards || {};
 
-    const isStandardUpdated = _.every([
+    const areStandardsUpdated = _.every([
       status === 1,
       !!completedAt,
       !!completedBy
     ]);
 
-    if (isStandardUpdated) {
+    if (areStandardsUpdated) {
       return 17; // Closed - action(s) verified, standard(s) reviewed
     }
   }
