@@ -19,7 +19,7 @@ Template.Subcards_RiskScore.viewmodel({
   guidelinesText() {
     const text = this.guidePanelCollapsed() ? 'Guidelines' : 'Hide guidelines';
 
-    return (`<button type="button" class="btn btn-link btn-collapse toggle-collapse">
+    return (`<button type="button" class="btn btn-link btn-collapse toggle-collapse no-padding">
                <span>${text}</span>
              </button>`);
   },

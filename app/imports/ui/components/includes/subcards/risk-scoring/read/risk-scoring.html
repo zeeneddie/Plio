@@ -1,34 +1,36 @@
 <template name="Subcards_RiskScoring_Read">
-  <div class="card-block card-subheading" {{b "if: scores.length > 0"}}>
-    <h4 class="card-title">Risk scoring</h4>
-  </div>
-  <div class="list-group">
-    {{#if scores.length}}
-      <table class="table borderless big">
-        <thead>
-          <tr>
-            <th>Score</th>
-            <th>Scored date</th>
-            <th>Scored by</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each scoresSorted}}
+  {{#if scores.length}}
+    <div class="card-block card-subheading">
+      <h4 class="card-title">Risk scoring</h4>
+    </div>
+    <div class="list-group">
+      {{#if scores.length}}
+        <table class="table borderless big">
+          <thead>
             <tr>
-              <td>
-                <span class="label" {{b "text: this.value, class: 'impact-'+getClassByScore(this.value)"}}></span>
-                <span {{b "text: getNameByScore(this.value)"}}></span>
-              </td>
-              <td>
-                <span {{b "text: renderDate(this.scoredAt)"}}></span>
-              </td>
-              <td>
-                <span {{b "text: userFullNameOrEmail(this.scoredBy)"}}></span>
-              </td>
+              <th>Score</th>
+              <th>Scored date</th>
+              <th>Scored by</th>
             </tr>
-          {{/each}}
-        </tbody>
-      </table>
-    {{/if}}
-  </div>
+          </thead>
+          <tbody>
+            {{#each scoresSorted}}
+              <tr>
+                <td>
+                  <span class="label" {{b "text: this.value, class: 'impact-'+getClassByScore(this.value)"}}></span>
+                  <span {{b "text: getNameByScore(this.value)"}}></span>
+                </td>
+                <td>
+                  <span {{b "text: renderDate(this.scoredAt)"}}></span>
+                </td>
+                <td>
+                  <span {{b "text: userFullNameOrEmail(this.scoredBy)"}}></span>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
+    </div>
+  {{/if}}
 </template>

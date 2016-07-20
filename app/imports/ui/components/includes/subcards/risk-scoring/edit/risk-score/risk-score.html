@@ -5,6 +5,7 @@
       onUpdate=onScoreUpdate
       onGuidePanelToggle=onGuidePanelToggle
       score=score}}
+  {{> RiskScoring_Guidelines guideHtml=guideHtml}}
   {{#with score}}
     <div class="card-block">
       {{> RiskScoring_ScoredBy_Edit
@@ -16,6 +17,4 @@
           scoredAt=this.scoredAt}}
     </div>
   {{/with}}
-
-  {{> RiskScoring_Guidelines guideHtml=guideHtml}}
 </template>
