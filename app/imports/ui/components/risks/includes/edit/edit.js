@@ -1,6 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { update, remove } from '/imports/api/risks/methods.js';
+import {
+  update, remove,
+  completeAnalysis, undoAnalysis,
+  setAnalysisTargetDate,
+  updateStandards, undoStandardsUpdate
+} from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/api/constants.js';
 
 
@@ -56,6 +61,26 @@ Template.EditRisk.viewmodel({
         });
       }
     );
+  },
+  updateAnalysisTargetDate({ date }) {
+    const _id = this._id();
+    this.modal().callMethod(setAnalysisTargetDate, { _id, targetDate: date });
+  },
+  completeAnalysis() {
+    const _id = this._id();
+    this.modal().callMethod(completeAnalysis, { _id });
+  },
+  undoAnalysis() {
+    const _id = this._id();
+    this.modal().callMethod(undoAnalysis, { _id });
+  },
+  updateStandards() {
+    const _id = this._id();
+    this.modal().callMethod(updateStandards, { _id });
+  },
+  undoStandardsUpdate() {
+    const _id = this._id();
+    this.modal().callMethod(undoStandardsUpdate, { _id });
   },
   showRootCauseAnalysis() {
     return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);

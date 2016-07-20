@@ -3,7 +3,10 @@ import { Mongo } from 'meteor/mongo';
 import { ActionSchema } from './action-schema.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import { ActionUndoTimeInHours, ProblemTypes } from '../constants.js';
+import {
+  ActionUndoTimeInHours, ProblemMagnitudes,
+  ProblemTypes, WorkflowTypes
+} from '../constants.js';
 import { compareDates } from '../helpers.js';
 
 
@@ -32,7 +35,7 @@ Actions.helpers({
     }).fetch();
   },
   getLinkedRisksIds() {
-    return getProbemDocsIds(this.linkedTo, ProblemTypes.RISK);
+    return getLinkedDocsIds(this.linkedTo, ProblemTypes.RISK);
   },
   getLinkedRisks() {
     return Risks.find({
@@ -88,6 +91,53 @@ Actions.helpers({
     return !!_.find(this.linkedTo, ({ documentId, documentType }) => {
       return (documentId === docId) && (documentType === docType);
     });
+  },
+  completed() {
+    return _.every([
+      this.isCompleted === true,
+      !!this.completedAt,
+      !!this.completedBy
+    ]);
+  },
+  verified() {
+    return _.every([
+      this.isVerified === true,
+      !!this.verifiedAt,
+      !!this.verifiedBy
+    ]);
+  },
+  verifiedAsEffective() {
+    return this.verified() && (this.isVerifiedAsEffective === true);
+  },
+  deleted() {
+    return _.every([
+      this.isDeleted === true,
+      !!this.deletedAt,
+      !!this.deletedBy
+    ]);
+  },
+  getWorkflowType() {
+    const linkedDocs = this.getLinkedDocuments();
+
+    if (linkedDocs.length === 0) {
+      return WorkflowTypes.THREE_STEP;
+    }
+
+    const docsByMagnitude = _.groupBy(linkedDocs, doc => doc.magnitude);
+
+    const withHighestMagnitude = docsByMagnitude[ProblemMagnitudes.CRITICAL]
+        || docsByMagnitude[ProblemMagnitudes.MAJOR]
+        || docsByMagnitude[ProblemMagnitudes.MINOR]
+        || [];
+
+    const docsByWorkflowType = _.groupBy(withHighestMagnitude, doc => doc.workflowType);
+
+    const withHighestWorkflow = docsByWorkflowType[WorkflowTypes.SIX_STEP]
+        || docsByWorkflowType[WorkflowTypes.THREE_STEP]
+        || [];
+
+    return (withHighestWorkflow.length && withHighestWorkflow[0].workflowType)
+        || WorkflowTypes.THREE_STEP;
   }
 });
 

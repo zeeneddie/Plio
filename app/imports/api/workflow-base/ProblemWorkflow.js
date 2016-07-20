@@ -34,22 +34,13 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getDeletedStatus() {
-    if (this._doc.isDeleted) {
+    if (this._doc.deleted()) {
       return 18; // Deleted
     }
   }
 
   _getStandardsUpdateStatus() {
-    const { updateOfStandards } = this._doc || {};
-    const { status, completedAt, completedBy } = updateOfStandards || {};
-
-    const areStandardsUpdated = _.every([
-      status === 1,
-      !!completedAt,
-      !!completedBy
-    ]);
-
-    if (areStandardsUpdated) {
+    if (this._doc.areStandardsUpdated()) {
       return 17; // Closed - action(s) verified, standard(s) reviewed
     }
   }
@@ -68,52 +59,6 @@ export default class ProblemWorkflow extends Workflow {
     } else if (workflowType === WorkflowTypes.SIX_STEP) {
       return this._getActionVerificationStatus(actions)
           || this._getActionCompletionStatus(actions);
-    }
-  }
-
-  _getActionCompletionStatus(actions) {
-    const workflowType = this._getWorkflowType();
-
-    // check if all actions are completed
-    const completedLength = _.filter(actions, ({ status }) => {
-      // 4: In progress - completed, not yet verified
-      // 9: Completed
-      return (status === 4) || (status === 9);
-    }).length;
-
-    if (completedLength === actions.length) {
-      if (workflowType === WorkflowTypes.THREE_STEP) {
-        return 16; // Closed - action(s) completed
-      } else if (workflowType === WorkflowTypes.SIX_STEP) {
-        return 11; // Open - action(s) completed, awaiting verification
-      }
-    }
-
-    // check if there is overduded action
-    const overduded = _.find(actions, ({ status }) => {
-      return status === 3; // In progress - completion overdue
-    });
-
-    if (overduded) {
-      return 9; // Open - action(s) overdue
-    }
-
-    // check if there is an action that must completed today
-    const dueToday = _.find(actions, ({ status }) => {
-      return status === 2; // In progress - due for completion today
-    });
-
-    if (dueToday) {
-      return 8; // Open - action(s) due today
-    }
-
-    // check if there is at least one completed action
-    if (completedLength >= 1) {
-      if (workflowType === WorkflowTypes.THREE_STEP) {
-        return 10; // Open - action(s) completed
-      } else if (workflowType === WorkflowTypes.SIX_STEP) {
-        return 11; // Open - action(s) completed, awaiting verification
-      }
     }
   }
 
@@ -155,26 +100,72 @@ export default class ProblemWorkflow extends Workflow {
     }
   }
 
-  _getAnalysisStatus() {
-    const { analysis } = this._doc || {};
-    const { status, targetDate, completedAt, completedBy } = analysis || {};
+  _getActionCompletionStatus(actions) {
+    const workflowType = this._getWorkflowType();
 
-    const isAnalysisCompleted = _.every([
-      status === 1,
-      !!completedAt,
-      !!completedBy
-    ]);
+    // check if all actions are completed
+    const completedLength = _.filter(actions, ({ status }) => {
+      // 4: In progress - completed, not yet verified
+      // 5: In progress - completed, verification due today
+      // 6: In progress - completed, verification overdue
+      // 7: Completed - failed verification
+      // 8: Completed - verified as effective
+      // 9: Completed
+      return _.contains([4, 5, 6, 7, 8, 9], status);
+    }).length;
 
-    if (isAnalysisCompleted) {
-      const actionsCount = this._linkedActions.count();
+    if (completedLength === actions.length) {
+      const completedStatuses = {
+        [WorkflowTypes.THREE_STEP]: 16, // Closed - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
+      };
 
-      if (actionsCount > 0) {
-        return 7; // Open - analysis completed, action(s) in place
-      } else {
-        return 6; // Open - analysis completed, action needed
-      }
+      return completedStatuses[workflowType];
     }
 
+    // check if there is overduded action
+    const overduded = _.find(actions, ({ status }) => {
+      return status === 3; // In progress - completion overdue
+    });
+
+    if (overduded) {
+      return 9; // Open - action(s) overdue
+    }
+
+    // check if there is an action that must completed today
+    const dueToday = _.find(actions, ({ status }) => {
+      return status === 2; // In progress - due for completion today
+    });
+
+    if (dueToday) {
+      return 8; // Open - action(s) due today
+    }
+
+    // check if there is at least one completed action
+    if (completedLength >= 1) {
+      const completedStatuses = {
+        [WorkflowTypes.THREE_STEP]: 10, // Open - action(s) completed
+        [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
+      };
+
+      return completedStatuses[workflowType];
+    }
+  }
+
+  _getAnalysisStatus() {
+    const doc = this._doc;
+
+    if (doc.isAnalysisCompleted()) {
+      const actionsCount = this._linkedActions.count();
+      if (actionsCount > 0) {
+        return 7; // Open - analysis completed, action(s) in place
+      }
+
+      return 6; // Open - analysis completed, action needed
+    }
+
+    const { analysis } = doc || {};
+    const { targetDate } = analysis || {};
     const timezone = this._timezone;
 
     if (isOverdue(targetDate, timezone)) {

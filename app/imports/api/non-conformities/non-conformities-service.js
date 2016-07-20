@@ -26,9 +26,7 @@ export default {
       workflowType, magnitude, ...args
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(NCId).refreshStatus();
-    });
+    this._refreshStatus(NCId);
 
     return NCId;
   },
@@ -60,9 +58,7 @@ export default {
       $set: { 'analysis.targetDate': targetDate }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -94,9 +90,7 @@ export default {
       }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -124,9 +118,7 @@ export default {
       }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -151,7 +143,8 @@ export default {
 
     if (actionsLength === 0) {
       throw new Meteor.Error(
-        400, 'At least one action must be created before standards can be updated'
+        400,
+        'At least one action must be created before standards can be updated'
       );
     }
 
@@ -159,13 +152,15 @@ export default {
       'linkedTo.documentId': _id,
       isDeleted: false,
       isVerified: true,
+      isVerifiedAsEffective: true,
       verifiedAt: { $exists: true },
       verifiedBy: { $exists: true }
     }).count();
 
     if (actionsLength !== verifiedLength) {
       throw new Meteor.Error(
-        400, 'All actions must be verified before standards can be updated'
+        400,
+        'All actions must be verified as effective before standards can be updated'
       );
     }
 
@@ -179,9 +174,7 @@ export default {
       }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -211,9 +204,7 @@ export default {
       }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -231,10 +222,9 @@ export default {
 
   remove({ _id, deletedBy, isDeleted }) {
     const query = { _id };
-    let ret;
 
     if (isDeleted) {
-      ret = this.collection.remove(query);
+      return this.collection.remove(query);
     } else {
       const options = {
         $set: {
@@ -244,12 +234,12 @@ export default {
         }
       };
 
-      ret = this.collection.update(query, options);
-    }
+      const ret = this.collection.update(query, options);
 
-    Meteor.isServer && Meteor.defer(() => {
-      new NCWorkflow(_id).refreshStatus();
-    });
+      this._refreshStatus(_id);
+
+      return ret;
+    }
 
     return ret;
   },
@@ -260,5 +250,11 @@ export default {
       throw new Meteor.Error(400, 'Non-conformity does not exist');
     }
     return NC;
+  },
+
+  _refreshStatus(_id) {
+    Meteor.isServer && Meteor.defer(() => {
+      new NCWorkflow(_id).refreshStatus();
+    });
   }
 };

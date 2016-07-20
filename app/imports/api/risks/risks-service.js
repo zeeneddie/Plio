@@ -1,8 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '../organizations/organizations.js';
+import { Actions } from '../actions/actions.js';
 import { Risks } from './risks.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
+import RiskWorkflow from './RiskWorkflow.js';
 
 
 export default {
@@ -24,6 +26,8 @@ export default {
       magnitude, workflowType, ...args
     });
 
+    this._refreshStatus(riskId);
+
     return riskId;
   },
 
@@ -36,6 +40,172 @@ export default {
     }
 
     return this.collection.update(query, options);
+  },
+
+  setAnalysisTargetDate({ _id, targetDate }) {
+    const risk = this._getRisk(_id);
+
+    if (risk.isAnalysisCompleted()) {
+      throw new Meteor.Error(
+        400,
+        'Cannot set target date for completed root cause analysis'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { 'analysis.targetDate': targetDate }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  completeAnalysis({ _id, userId }) {
+    const risk = this._getRisk(_id);
+    const { analysis } = risk;
+    const { executor } = analysis;
+
+    if (userId !== executor) {
+      throw new Meteor.Error(
+        400, 'You cannot complete this root cause analysis'
+      );
+    }
+
+    if (risk.isAnalysisCompleted()) {
+      throw new Meteor.Error(
+        400, 'This root cause analysis is already completed'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'analysis.status': 1, // Completed
+        'analysis.completedAt': new Date(),
+        'analysis.completedBy': userId
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  undoAnalysis({ _id, userId }) {
+    const risk = this._getRisk(_id);
+    const { analysis } = risk;
+    const { executor } = analysis;
+
+    if (userId !== executor) {
+      throw new Meteor.Error(400, 'You cannot undo this root cause analysis');
+    }
+
+    if (!risk.isAnalysisCompleted()) {
+      throw new Meteor.Error(400, 'This root cause analysis is not completed');
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { 'analysis.status': 0 }, // Not completed
+      $unset: {
+        'analysis.completedAt': '',
+        'analysis.completedBy': ''
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  updateStandards({ _id, userId }) {
+    const risk = this._getRisk(_id);
+    const { updateOfStandards } = risk;
+    const { executor } = updateOfStandards;
+
+    if (userId !== executor) {
+      throw new Meteor.Error(400, 'You cannot update standards');
+    }
+
+    if (risk.areStandardsUpdated()) {
+      throw new Meteor.Error(400, 'Standards are already updated');
+    }
+
+    const actionsLength = Actions.find({
+      'linkedTo.documentId': _id,
+      isDeleted: false
+    }).count();
+
+    if (actionsLength === 0) {
+      throw new Meteor.Error(
+        400, 'At least one action must be created before standards can be updated'
+      );
+    }
+
+    const verifiedLength = Actions.find({
+      'linkedTo.documentId': _id,
+      isDeleted: false,
+      isVerified: true,
+      isVerifiedAsEffective: true,
+      verifiedAt: { $exists: true },
+      verifiedBy: { $exists: true }
+    }).count();
+
+    if (actionsLength !== verifiedLength) {
+      throw new Meteor.Error(
+        400,
+        'All actions must be verified as effective before standards can be updated'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 1, // Completed
+        'updateOfStandards.completedAt': new Date(),
+        'updateOfStandards.completedBy': userId
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  undoStandardsUpdate({ _id, userId }) {
+    const risk = this._getRisk(_id);
+    const { updateOfStandards } = risk;
+    const { executor } = updateOfStandards;
+
+    if (userId !== executor) {
+      throw new Meteor.Error(400, 'You cannot undo update of standards');
+    }
+
+    if (!risk.areStandardsUpdated()) {
+      throw new Meteor.Error(400, 'Standards are not updated');
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 0 // Not completed
+      },
+      $unset: {
+        'updateOfStandards.completedAt': '',
+        'updateOfStandards.completedBy': ''
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   updateViewedBy({ _id, userId }) {
@@ -65,5 +235,19 @@ export default {
 
       return this.collection.update(query, options);
     }
+  },
+
+  _getRisk(_id) {
+    const risk = this.collection.findOne({ _id });
+    if (!risk) {
+      throw new Meteor.Error(400, 'Risk does not exist');
+    }
+    return risk;
+  },
+
+  _refreshStatus(_id) {
+    Meteor.isServer && Meteor.defer(() => {
+      new RiskWorkflow(_id).refreshStatus();
+    });
   }
 };

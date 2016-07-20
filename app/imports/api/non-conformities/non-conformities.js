@@ -18,6 +18,10 @@ NonConformities.helpers({
   },
   getLinkedStandards() {
     return Standards.find({ _id: { $in: this.standardsIds } }).fetch();
+  },
+  deleted() {
+    const { isDeleted, deletedAt, deletedBy } = this;
+    return (isDeleted === true) && deletedAt && deletedBy;
   }
 });
 

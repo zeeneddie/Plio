@@ -1,21 +1,30 @@
 import { Actions } from './actions.js';
-import { ActionTypes, ProblemTypes } from '../constants.js';
+import { ActionTypes, ProblemTypes, WorkflowTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
+import ActionWorkflow from './ActionWorkflow.js';
+import NCWorkflow from '../non-conformities/NCWorkflow.js';
+import RiskWorkflow from '../risks/RiskWorkflow.js';
 import Utils from '/imports/core/utils.js';
 
 
 export default {
   collection: Actions,
 
-  insert({ organizationId, type, ...args }) {
+  insert({ organizationId, type, linkedTo, ...args }) {
+    linkedTo && this._checkLinkedDocs(linkedTo);
+
     const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
 
     const sequentialId = `${type}${serialNumber}`;
 
-    return this.collection.insert({
-      organizationId, type, serialNumber, sequentialId, ...args
+    const actionId = this.collection.insert({
+      organizationId, type, linkedTo, serialNumber, sequentialId, ...args
     });
+
+    this._refreshStatus(actionId);
+
+    return actionId;
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -68,13 +77,19 @@ export default {
       );
     }
 
-    return this.collection.update({
+    this._checkLinkedDocs([{ documentId, documentType }]);
+
+    const ret = this.collection.update({
       _id
     }, {
       $addToSet: {
         linkedTo: { documentId, documentType }
       }
     });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   unlinkDocument({ _id, documentId, documentType }) {
@@ -86,11 +101,27 @@ export default {
       );
     }
 
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
-      $pull: { linkedTo: { documentId, documentType } }
+      $pull: {
+        linkedTo: { documentId, documentType }
+      }
     });
+
+    Meteor.isServer && Meteor.defer(() => {
+      const workflowConstructors = {
+        [ProblemTypes.NC]: NCWorkflow,
+        [ProblemTypes.RISK]: RiskWorkflow
+      };
+      new workflowConstructors[documentType](documentId).refreshStatus();
+
+      const workflow = new ActionWorkflow(_id);
+      workflow.refreshStatus();
+      workflow.refreshLinkedDocsStatuses();
+    });
+
+    return ret;
   },
 
   complete({ _id, userId, completionComments }) {
@@ -104,17 +135,20 @@ export default {
       throw new Meteor.Error(400, 'This action cannot be completed');
     }
 
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
       $set: {
         isCompleted: true,
         completedBy: userId,
         completedAt: new Date(),
-        status: 3,
         completionComments
       }
     });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   undoCompletion({ _id, userId }) {
@@ -128,12 +162,11 @@ export default {
       throw new Meteor.Error(400, 'Completion of this action cannot be undone');
     }
 
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
       $set: {
-        isCompleted: false,
-        status: 0
+        isCompleted: false
       },
       $unset: {
         completedBy: '',
@@ -141,6 +174,10 @@ export default {
         completionComments: ''
       }
     });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   verify({ _id, userId, success, verificationComments }) {
@@ -154,19 +191,21 @@ export default {
       throw new Meteor.Error(400, 'This action cannot be verified');
     }
 
-    const status = (success === true) ? 7 : 6;
-
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
       $set: {
         isVerified: true,
+        isVerifiedAsEffective: success,
         verifiedBy: userId,
         verifiedAt: new Date,
-        status,
         verificationComments
       }
     });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   undoVerification({ _id, userId }) {
@@ -180,12 +219,11 @@ export default {
       throw new Meteor.Error(400, 'Verification of this action cannot be undone');
     }
 
-    return this.collection.update({
+    const ret = this.collection.update({
       _id
     }, {
       $set: {
-        isVerified: false,
-        status: 3
+        isVerified: false
       },
       $unset: {
         verifiedBy: '',
@@ -193,6 +231,10 @@ export default {
         verificationComments: ''
       }
     });
+
+    this._refreshStatus(_id);
+
+    return ret;
   },
 
   updateViewedBy({ _id, userId }) {
@@ -227,7 +269,11 @@ export default {
         }
       };
 
-      return this.collection.update(query, options);
+      const ret = this.collection.update(query, options);
+
+      this._refreshStatus(_id);
+
+      return ret;
     }
   },
 
@@ -244,4 +290,39 @@ export default {
     }
     return action;
   },
+
+  _refreshStatus(_id) {
+    Meteor.isServer && Meteor.defer(() => {
+      const workflow = new ActionWorkflow(_id);
+      workflow.refreshStatus();
+      workflow.refreshLinkedDocsStatuses();
+    });
+  },
+
+  _checkLinkedDocs(linkedTo) {
+    const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
+
+    const NCsIds = _.pluck(linkedToByType[ProblemTypes.NC], 'documentId');
+    const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
+
+    const docWithUncompletedAnalysis = NonConformities.findOne({
+      _id: { $in: NCsIds },
+      workflowType: WorkflowTypes.SIX_STEP,
+      'analysis.status': 0 // Not completed
+    }) || Risks.findOne({
+      _id: { $in: risksIds },
+      workflowType: WorkflowTypes.SIX_STEP,
+      'analysis.status': 0 // Not completed
+    });
+
+    if (docWithUncompletedAnalysis) {
+      const { sequentialId, title } = docWithUncompletedAnalysis;
+      const docName = `${sequentialId} ${title}`;
+
+      throw new Meteor.Error(
+        400,
+        `Action can not be linked to "${docName}" while its root cause analysis is uncompleted`
+      );
+    }
+  }
 };

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions, WorkflowTypes } from '/imports/api/constants.js';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({
@@ -56,6 +56,10 @@ Template.Actions_Card_Edit_Main.viewmodel({
   },
   onUnlinkDocument() {
     return this.unlinkDocumentFn;
+  },
+  showVerification() {
+    const action = this.action && this.action();
+    return action && action.getWorkflowType() === WorkflowTypes.SIX_STEP;
   },
   getData() {
     return this.children(vm => vm.getData)

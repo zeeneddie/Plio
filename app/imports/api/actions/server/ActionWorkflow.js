@@ -1,15 +1,25 @@
 import { Actions } from '../actions.js';
-import { ProblemMagnitudes, WorkflowTypes } from '../../constants.js';
+import { WorkflowTypes } from '../../constants.js';
 import { isDueToday, isOverdue } from '../../checkers.js';
 
 import Workflow from '../../workflow-base/Workflow.js';
-
+import NCWorkflow from '../../non-conformities/NCWorkflow.js';
+import RiskWorkflow from '../../risks/RiskWorkflow.js';
 
 export default class ActionWorkflow extends Workflow {
 
   constructor(_id) {
     super(_id);
     this._workflowType = this._getWorkflowType();
+  }
+
+  refreshLinkedDocsStatuses() {
+    const action = this._doc;
+    const NCsIds = action.getLinkedNCsIds();
+    const risksIds = action.getLinkedRisksIds();
+
+    _.each(NCsIds, id => new NCWorkflow(id).refreshStatus());
+    _.each(risksIds, id => new RiskWorkflow(id).refreshStatus());
   }
 
   _getThreeStepStatus() {
@@ -26,27 +36,24 @@ export default class ActionWorkflow extends Workflow {
   }
 
   _getDeletedStatus() {
-    if (this._doc.isDeleted) {
+    if (this._doc.deleted()) {
       return 10; // Deleted
     }
   }
 
   _getCompletionStatus() {
-    const {
-      isCompleted, completedBy,
-      completedAt, completionTargetDate
-    } = this._doc;
+    const action = this._doc;
 
-    const isActionCompleted = _.every([
-      isCompleted === true,
-      !!completedAt,
-      !!completedBy
-    ]);
+    if (action.completed()) {
+      const completedStatuses = {
+        [WorkflowTypes.THREE_STEP]: 9, // Completed
+        [WorkflowTypes.SIX_STEP]: 4 // In progress - completed, not yet verified
+      };
 
-    if (isActionCompleted) {
-      return 4; // In progress - completed, not yet verified
+      return completedStatuses[this._workflowType];
     }
 
+    const { completionTargetDate } = action;
     const timezone = this._timezone;
 
     if (isOverdue(completionTargetDate, timezone)) {
@@ -59,26 +66,21 @@ export default class ActionWorkflow extends Workflow {
   }
 
   _getVerificationStatus() {
-    const {
-      isVerified, verifiedBy,
-      verifiedAt, isVerifiedAsEffective,
-      verificationTargetDate
-    } = this._doc;
+    const action = this._doc;
 
-    const isActionVerified = _.every([
-      isVerified === true,
-      !!verifiedAt,
-      !!verifiedBy
-    ]);
-
-    if (isActionVerified) {
-      if (isVerifiedAsEffective) {
-        return 7; // Completed - failed verification
-      } else {
-        return 8; // Completed - verified as effective
-      }
+    if (!action.completed()) {
+      return;
     }
 
+    if (action.verified()) {
+      if (action.verifiedAsEffective()) {
+        return 8; // Completed - verified as effective
+      }
+
+      return 7; // Completed - failed verification
+    }
+
+    const { verificationTargetDate } = action;
     const timezone = this._timezone;
 
     if (isOverdue(verificationTargetDate, timezone)) {
@@ -91,27 +93,7 @@ export default class ActionWorkflow extends Workflow {
   }
 
   _getWorkflowType() {
-    const linkedDocs = this._doc.getLinkedDocuments();
-
-    if (linkedDocs.length === 0) {
-      return WorkflowTypes.THREE_STEP;
-    }
-
-    const docsByMagnitude = _.groupBy(linkedDocs, doc => doc.magnitude);
-
-    const withHighestMagnitude = docsByMagnitude[ProblemMagnitudes.CRITICAL]
-        || docsByMagnitude[ProblemMagnitudes.MAJOR]
-        || docsByMagnitude[ProblemMagnitudes.MINOR]
-        || [];
-
-    const docsByWorkflowType = _.groupBy(withHighestMagnitude, doc => doc.workflowType);
-
-    const withHighestWorkflow = docsByWorkflowType[WorkflowTypes.SIX_STEP]
-        || docsByWorkflowType[WorkflowTypes.THREE_STEP]
-        || [];
-
-    return (withHighestWorkflow.length && withHighestWorkflow[0].workflowType)
-        || WorkflowTypes.THREE_STEP;
+    return this._doc.getWorkflowType();
   }
 
   static _collection() {

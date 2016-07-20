@@ -106,6 +106,10 @@ const ActionSchema = new SimpleSchema([
       type: Boolean,
       defaultValue: false
     },
+    isVerifiedAsEffective: {
+      type: Boolean,
+      defaultValue: false
+    },
     verificationTargetDate: {
       type: Date,
       optional: true
