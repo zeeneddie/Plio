@@ -1,48 +1,12 @@
 import { Template } from 'meteor/templating';
 
 Template.SS_Card_Read.viewmodel({
-  mixin: ['modal'],
-  customNC: {
-    "_id": "P98SExuNHZ4y8bhjc",
-    "organizationId": "KwKXz5RefrE5hjWJ2",
-    "serialNumber": 2,
-    "sequentialId": "NC2",
-    "title": "Inquiry not recorded",
-    "identifiedBy": "SQHmBKJ94gJvpLKLt",
-    "identifiedAt": "2016-04-01T11:00:00.000Z",
-    "magnitude": "critical",
-    "createdAt": new Date( "2016-07-05T13:06:37.419Z"),
-    "createdBy": "SQHmBKJ94gJvpLKLt",
-    "notify": [
-      "SQHmBKJ94gJvpLKLt"
-    ],
-    "updatedAt": new Date("2016-07-13T12:58:32.945Z"),
-    "updatedBy": "SQHmBKJ94gJvpLKLt",
-    "status": 1,
-    "description": "Deal valuations not carried out with new client resulting in problems agreeing valuations later",
-    "cost": 5000,
-    "viewedBy": [
-      null,
-      "SQHmBKJ94gJvpLKLt"
-    ],
-    "analysis": {
-      "status": 0,
-      "executor": "RifbrzLTCGKPGbENM",
-      "targetDate": new Date("2016-07-24T21:00:00.000Z")
-    },
-    "updateOfStandards": {
-      "status": 0
-    },
-    "standardsIds": [
-      "Mc7jjwYJ9gXPkibS8"
-    ],
-    "departments": [
-      "m72qqQWLSE2o3E7NZ",
-      "ya3tYSktWn9nQwCDG"
-    ],
-    "departmentsIds": [
-      "3SubXSZtEZEXzDgK2"
-    ]
+  mixin: ['modal', 'nonconformity'],
+  // NC from fixture: "Inquiry not recorded"
+  NCId: "P98SExuNHZ4y8bhjc",
+  organizationId: "KwKXz5RefrE5hjWJ2",
+  autorun() {
+    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
   customIP: {
     "_id" : "7dNe83CStYvYj4r8b",
@@ -82,6 +46,9 @@ Template.SS_Card_Read.viewmodel({
     // need for Subcards_Occurrences_Read && Subcards_NonConformities_Read
     return {};
   },
+  NC() {
+    return this._getNCByQuery({ _id: this.NCId() });
+  },
   onOpenEditModalCb() {
     return this.openEditModal.bind(this);
   },
@@ -89,12 +56,13 @@ Template.SS_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Standard subcards',
       template: 'SS_Card_Modal',
-      custom: {
-        NC: this.customNC(),
-        IP: this.customIP(),
-        Risk: this.customRisk(),
-        emptyQuery: this.emptyQuery()
-      }
+      NCId: this.NCId(),
+      // custom: {
+      //   NC: this.customNC(),
+      //   IP: this.customIP(),
+      //   Risk: this.customRisk(),
+      //   emptyQuery: this.emptyQuery()
+      // }
     });
   },
 });

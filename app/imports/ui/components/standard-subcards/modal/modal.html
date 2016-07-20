@@ -1,48 +1,46 @@
 <template name="SS_Card_Modal">
   <div>
     <div class="relative">
-      {{#with custom}}
+      {{! NON-CONFORMITIES SUBCARDS}}
 
-        {{! NON-CONFORMITIES SUBCARDS}}
-
+      {{#with NC}}
         {{> Subcards_Notify_Edit
-            document=this.NC
-            documentType="non-conformity"}}
+            document=this
+            documentType="non-conformity"
+            onUpdate=onUpdateNotifyUserCb}}
 
         {{> Subcards_Occurrences_Edit
-            _id=this.NC._id
-            occurrencesIds=this.NC.occurrences}}
+            _id=this._id
+            occurrencesIds=this.occurrences}} {{! can`t find occurences. Where are they?}}
 
         {{> Subcards_Actions_Edit
             type="CA"
-            documentId=this.NC._id
+            documentId=this._id
             documentType="non-conformity"}}
 
         {{> Subcards_Actions_Edit
             type="PA"
-            documentId=this.NC._id
+            documentId=this._id
             documentType="non-conformity"}}
 
-        {{> Subcards_Actions_Edit
-            type="RC"
-            standardId="Zty4NCagWvrcuLYoy"}}
-
         {{> Subcards_ImprovementPlan_Edit
-            documentId=this.NC._id
+            documentId=this._id
             documentType="non-conformity"}}
 
         {{> Subcards_LessonsLearned_Edit
-            documentId=this.NC._id
+            documentId=this._id
             documentType="non-conformity"
-            linkedTo=this.NC.title
-            linkedToId=this.NC.sequentialId}}
+            linkedTo=this.title
+            linkedToId=this.sequentialId}}
 
         {{> Subcards_OtherFiles_Edit
-            _id=this.NC._id
-            files=this.NC.files}}
+            _id=this._id
+            files=this.files
+            uploaderMetaContext=uploaderMetaContext
+            slingshotDirective=slingshotDirective}}
+      {{/with}}
 
-
-        {{! STANDARDS SUBCARDS}}
+        <!-- {{! STANDARDS SUBCARDS}}
 
         {{> Subcards_NonConformities_Edit
             _id=this.NC._id
@@ -58,9 +56,8 @@
 
         {{! ACTIONS SUBCARDS}}
 
-        {{> Subcards_Notes_Edit}}
+        {{> Subcards_Notes_Edit}} -->
 
-      {{/with}}
     </div>
   </div>
 </template>

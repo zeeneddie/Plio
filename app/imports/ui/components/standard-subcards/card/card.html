@@ -2,31 +2,34 @@
   <div class="content-cards-inner flex scroll">
     {{#Card_Read
       cardTitle="Standard subcards"
-      document=customNC
+      document=NC
       onOpenEditModal=onOpenEditModalCb}}
 
       {{! NON-CONFORMITIES SUBCARDS}}
 
-      {{> Subcards_RootCauseAnalysis_Read
-        analysis=customNC.analysis
-        updateOfStandards=customNC.updateOfStandards}}
-      {{> Subcards_Notify_Read users=customNC.notify}}
-      {{> Fields_Standards_Read standardsIds=customNC.standardsIds}}
-      {{> Departments_Read departmentsIds=customNC.departments}}
-      {{> Subcards_Occurrences_Read _query=emptyQuery}}
-      {{> Subcards_ImprovementPlan_Read document=customIP}}
-      {{> Subcards_LessonsLearned_Read documentId=customNC._id}}
-      {{> Subcards_OtherFiles_Read files=customIP.files}}
+      {{#with NC}}
+        {{> Subcards_RootCauseAnalysis_Read
+          analysis=this.analysis
+          updateOfStandards=this.updateOfStandards}}
+        {{#with notify}}
+          {{> Subcards_Notify_Read users=this}}
+        {{/with}}
+        {{> Fields_Standards_Read standardsIds=this.standardsIds}}
+        {{> Departments_Read departmentsIds=this.departments}}
+        {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}} {{! Where can I find _getOccurrencesQuery ?}}
+        {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+        {{> Subcards_LessonsLearned_Read documentId=this._id}}
+        {{> Subcards_OtherFiles_Read files=this.files}}
+      {{/with}}
 
-      {{! STANDARDS SUBCARDS}}
+        <!-- {{! STANDARDS SUBCARDS}}
 
-      {{> Subcards_NonConformities_Read _query=emptyQuery}}
+        {{> Subcards_NonConformities_Read _query=emptyQuery}}
 
-      {{! RISKS SUBCARDS}}
+        {{! RISKS SUBCARDS}}
 
-      {{> Subcards_RiskAnalysis_Read score=customRisk.score}}
-      {{> Subcards_TreatmentPlan_Read treatmentPlan=customRisk.treatmentPlan}}
-
+        {{> Subcards_RiskAnalysis_Read score=customRisk.score}}
+        {{> Subcards_TreatmentPlan_Read treatmentPlan=customRisk.treatmentPlan}} -->
     {{/Card_Read}}
   </div>
 </template>
