@@ -43,7 +43,7 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
-    const { workflowDefaults, reminders, ncGuidelines, rkScoringGuidelines } = OrganizationDefaults;
+    const { workflowDefaults, reminders, ncGuidelines, rkGuidelines, rkScoringGuidelines } = OrganizationDefaults;
 
     const organizationId = this.collection.insert({
       name,
@@ -56,6 +56,7 @@ export default OrganizationService = {
       workflowDefaults,
       reminders,
       ncGuidelines,
+      rkGuidelines,
       rkScoringGuidelines,
       createdBy: ownerId
     });
@@ -118,12 +119,22 @@ export default OrganizationService = {
     });
   },
 
-  setGuideline({_id, ncType, text}) {
+  setNCGuideline({_id, type, text}) {
     return this.collection.update({ _id }, {
       $set: {
-        [`ncGuidelines.${ncType}`]: text
+        [`ncGuidelines.${type}`]: text
       }
     });
+  },
+
+  setRKGuideline({ _id, type, text }) {
+    const query = { _id };
+    const options = {
+      $set: {
+        [`rkGuidelines.${type}`]: text
+      }
+    };
+    return this.collection.update(query, options);
   },
 
   setRKScoringGuidelines({ _id, rkScoringGuidelines }) {

@@ -3,21 +3,40 @@
     <div class="relative">
       {{#with risk}}
         <div class="card-block">
-          {{> NC_Title_Edit _id=this._id titleText=this.title sequentialId=this.sequentialId label="Risk name"}}
+          {{> NC_Title_Edit
+              _id=this._id
+              titleText=this.title
+              sequentialId=this.sequentialId
+              label="Risk name"}}
 
-          {{> ES_Description_Edit _id=this._id description=this.description}}
+          {{> ES_Description_Edit
+              _id=this._id
+              description=this.description}}
 
-          {{> NC_Status_Edit _id=this._id status=this.status}}
+          {{> NC_Status_Edit
+              _id=this._id
+              status=this.status}}
 
-          {{> Fields_Standards_Edit _id=this._id standardsIds=this.standardsIds}}
+          {{> Fields_Standards_Edit
+              _id=this._id
+              standardsIds=this.standardsIds}}
 
-          {{> Departments_Edit _id=this._id departmentsIds=this.departmentsIds}}
+          {{> Departments_Edit
+              _id=this._id
+              departmentsIds=this.departmentsIds}}
 
-          {{> NC_IdentifiedBy_Edit _id=this._id identifiedBy=this.identifiedBy}}
+          {{> NC_IdentifiedBy_Edit
+              _id=this._id
+              identifiedBy=this.identifiedBy}}
 
-          {{> NC_IdentifiedDate_Edit _id=this._id identifiedAt=this.identifiedAt}}
+          {{> NC_IdentifiedDate_Edit
+              _id=this._id
+              identifiedAt=this.identifiedAt}}
 
-          {{> NC_Magnitude_Edit _id=this._id magnitude=this.magnitude}}
+          {{> Problems_Magnitude_Edit
+              _id=this._id
+              magnitude=this.magnitude
+              guidelines=RKGuidelines}}
 
           {{> RKType _id=this._id typeId=this.typeId}}
         </div>

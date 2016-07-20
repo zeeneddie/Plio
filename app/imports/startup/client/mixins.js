@@ -10,7 +10,7 @@ import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, ProblemsStatuses,
+  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, ActionFilters,
   ActionTypes, ReviewStatuses
 } from '/imports/api/constants.js';
@@ -621,7 +621,7 @@ ViewModel.mixin({
   magnitude: {
     _magnitude() {
       this.load({ mixin: 'utils' });
-      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+      return _.values(ProblemGuidelineTypes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   },
   currency: {

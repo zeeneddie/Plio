@@ -5,6 +5,8 @@ import {
   StandardsBookSections
 } from '/imports/api/standards-book-sections/standards-book-sections.js';
 
+import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
+
 
 Template.OrganizationSettings.viewmodel({
   mixin: 'organization',
@@ -46,7 +48,16 @@ Template.OrganizationSettings.viewmodel({
   NCGuidelines() {
     return this.organization().ncGuidelines;
   },
+  RKGuidelines() {
+    return this.organization().rkGuidelines;
+  },
   rkScoringGuidelines() {
     return this.organization().rkScoringGuidelines;
+  },
+  setNCGuidelineMethod() {
+    return setNCGuideline;
+  },
+  setRKGuidelineMethod() {
+    return setRKGuideline;
   }
 });

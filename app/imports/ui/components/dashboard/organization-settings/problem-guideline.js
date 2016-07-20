@@ -1,6 +1,7 @@
-Template.OrganizationSettings_NcGuideline.viewmodel({
+Template.OrganizationSettings_ProblemGuideline.viewmodel({
   mixin: 'callWithFocusCheck',
   text: '',
+  type: '',
   isChanged() {
     const prev = this.templateInstance.data.text;
     const text = this.text();

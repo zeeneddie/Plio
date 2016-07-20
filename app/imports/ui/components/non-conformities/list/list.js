@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
-import { NCTypes, ProblemsStatuses } from '/imports/api/constants.js';
+import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
