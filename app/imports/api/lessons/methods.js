@@ -74,7 +74,7 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (!!LessonsLearned.findOne({ _id, viewedBy: this.userId })) {
       throw new Meteor.Error(
-        400, 'You have been already added to this Lessons learned document'
+        400, 'You have been already added to the viewedBy list of this Lessons learned document'
       );
     }
 

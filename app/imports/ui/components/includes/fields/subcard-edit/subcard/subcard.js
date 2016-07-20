@@ -4,7 +4,7 @@ import { Blaze } from 'meteor/blaze';
 Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
-    this.load(this.document());
+    this.load(this.doc());
   },
   onRendered() {
     if (!this._id) {
@@ -12,10 +12,10 @@ Template.SubCard_Edit.viewmodel({
     }
   },
   isNew() {
-    const { viewedBy } = this.document();
+    const { viewedBy } = this.doc();
     return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
-  document: '',
+  doc: '',
   isSubcard: true,
   isSaving: false,
   isWaiting: false,

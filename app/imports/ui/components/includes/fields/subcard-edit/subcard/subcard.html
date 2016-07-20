@@ -3,7 +3,9 @@
     {{b "click: handleToggleCollapse, class: { with-error: hasError, new: !this._id, collapsed: collapsed }, ref: subcard"}}>
     <span {{b "html: _lText"}}></span>
     <span class="pull-xs-right" {{b "html: _rText"}}></span>
-    <span class="label label-primary" {{b "if: isNew"}}>New</span>
+    {{#if isNew}}
+      <span class="label label-primary">New</span>
+    {{/if}}
   </div>
   <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
     <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>
