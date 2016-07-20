@@ -126,6 +126,12 @@ export default OrganizationService = {
     });
   },
 
+  setRKScoringGuidelines({ _id, rkScoringGuidelines }) {
+    const query = { _id };
+    const options = { $set: { rkScoringGuidelines } };
+    return this.collection.update(query, options);
+  },
+
   removeUser({ userId, organizationId, removedBy }) {
     const isAlreadyRemoved = !!this.collection.findOne({
       _id: organizationId,

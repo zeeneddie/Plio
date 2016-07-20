@@ -1,5 +1,15 @@
 import { Template } from 'meteor/templating';
 
-Template.OrganizationSettings_RKGuidelines.viewmodel({
+import { setRKScoringGuidelines } from '/imports/api/organizations/methods.js';
 
+Template.OrganizationSettings_RKScoringGuidelines.viewmodel({
+  mixin: 'modal',
+  label: 'Risk scoring guidelines',
+  guidelines: '',
+  organizationId: '',
+  update({ notes:rkScoringGuidelines }) {
+    const _id = this.organizationId();
+
+    this.modal().callMethod(setRKScoringGuidelines, { _id, rkScoringGuidelines });
+  }
 });

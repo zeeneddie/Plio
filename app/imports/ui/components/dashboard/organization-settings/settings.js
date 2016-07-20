@@ -43,7 +43,10 @@ Template.OrganizationSettings.viewmodel({
   reminders() {
     return this.organization().reminders;
   },
-  guidelines() {
+  NCGuidelines() {
     return this.organization().ncGuidelines;
+  },
+  rkScoringGuidelines() {
+    return this.organization().rkScoringGuidelines;
   }
 });

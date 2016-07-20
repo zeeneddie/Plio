@@ -235,6 +235,33 @@ export const setGuideline = new ValidatedMethod({
   }
 });
 
+export const setRKScoringGuidelines = new ValidatedMethod({
+  name: 'Organizations.setRKScoringGuidelines',
+
+  validate: new SimpleSchema([
+    IdSchema, {
+      rkScoringGuidelines: { type: String }
+    }
+  ]).validator(),
+
+  run({ _id, rkScoringGuidelines }) {
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
+
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, _id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
+    return OrganizationService.setRKScoringGuidelines({ _id, rkScoringGuidelines });
+  }
+});
+
 export const inviteUserByEmail = new ValidatedMethod({
   name: 'Organizations.inviteUserByEmail',
 
