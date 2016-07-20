@@ -4,7 +4,7 @@ import { update, updateViewedBy, remove, insertScore, removeScore } from '/impor
 import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditRisk.viewmodel({
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
   autorun() {
     const doc = this.risk();
     const userId = Meteor.userId();

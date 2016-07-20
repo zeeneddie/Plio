@@ -4,6 +4,7 @@ Template.NC_Analysis_Edit.viewmodel({
   autorun() {
     this.load(this.analysis());
   },
+  label: 'Root cause analysis',
   analysis: '',
   executor: '',
   defaultTargetDate: '',

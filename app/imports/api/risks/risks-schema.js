@@ -20,7 +20,8 @@ const RiskScoreSchema = new SimpleSchema({
     optional: true
   },
   rowId: {
-    type: Number
+    type: Number,
+    label: 'Risk score'
   },
   value: {
     type: Number,
@@ -32,7 +33,8 @@ const RiskScoreSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   },
   scoredAt: {
-    type: Date
+    type: Date,
+    label: 'Date'
   }
 });
 
