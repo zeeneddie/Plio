@@ -106,6 +106,10 @@ const OrganizationEditableFields = {
     type: ncGuidelinesSchema,
     optional: true
   },
+  rkScoringGuidelines: {
+    type: String,
+    optional: true
+  },
   ...OrganizationCurrencySchema
 };
 

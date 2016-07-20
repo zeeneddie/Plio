@@ -43,7 +43,7 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
-    const { workflowDefaults, reminders, ncGuidelines } = OrganizationDefaults;
+    const { workflowDefaults, reminders, ncGuidelines, rkScoringGuidelines } = OrganizationDefaults;
 
     const organizationId = this.collection.insert({
       name,
@@ -56,6 +56,7 @@ export default OrganizationService = {
       workflowDefaults,
       reminders,
       ncGuidelines,
+      rkScoringGuidelines,
       createdBy: ownerId
     });
 

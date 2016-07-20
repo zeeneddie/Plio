@@ -3,11 +3,15 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 Template.Subcards_RiskScoring_Edit.viewmodel({
-  mixin: ['riskScore', 'date', 'addForm', 'utils'],
+  mixin: ['riskScore', 'date', 'addForm', 'utils', 'organization'],
   label: 'Risk scoring',
   scores: '',
   scoresSorted() {
     return Array.from(this.scores() || []).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
+  },
+  guideHtml() {
+    const { rkScoringGuidelines } = this.organization() || {};
+    return rkScoringGuidelines;
   },
   tableData() {
     return {

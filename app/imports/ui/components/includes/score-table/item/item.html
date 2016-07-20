@@ -1,6 +1,6 @@
 <template name="ScoreTable_Item">
   <tr>
-    <th class="impact-label" {{b "text: this.label"}}></th>
+    <th class="impact-label" {{b "html: this.label"}}></th>
     {{#each this.rows}}
       {{#if isLast}}
         <th class="impact-label" {{b "text: this"}}></th>

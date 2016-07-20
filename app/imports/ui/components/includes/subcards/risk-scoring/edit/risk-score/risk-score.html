@@ -1,8 +1,9 @@
 <template name="Subcards_RiskScore">
   {{> ScoreTable_Edit
       disabled=disabled
-      tableData=tableData
+      tableData=tableDataWithGuidelines
       onUpdate=onScoreUpdate
+      onGuidePanelToggle=onGuidePanelToggle
       score=score}}
   {{#with score}}
     <div class="card-block">
@@ -15,4 +16,6 @@
           scoredAt=this.scoredAt}}
     </div>
   {{/with}}
+
+  {{> RiskScoring_Guidelines guideHtml=guideHtml}}
 </template>

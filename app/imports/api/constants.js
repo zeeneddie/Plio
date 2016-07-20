@@ -119,10 +119,8 @@ const PhoneTypes = {
   MOBILE: 'Mobile'
 };
 
-const getDefaultGuideline = (ncType) => {
-  return `Please go to Org Settings to define what a ${ncType} `
-    + `non-conformity means in your organization.`;
-};
+const getDefaultGuideline = (type, documentType = 'non-conformity') => (
+  `Please go to Org Settings to define what a ${type} ${documentType} means in your organization.`);
 
 const OrganizationDefaults = {
   workflowDefaults: {
@@ -201,7 +199,8 @@ const OrganizationDefaults = {
     minor: getDefaultGuideline(NCTypes.MINOR),
     major: getDefaultGuideline(NCTypes.MAJOR),
     critical: getDefaultGuideline(NCTypes.CRITICAL)
-  }
+  },
+  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
 };
 
 const DefaultStandardTypes = [

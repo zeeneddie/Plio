@@ -21,5 +21,11 @@ Template.ScoreTable_Edit.viewmodel({
   onUpdate() {},
   update({ rowId, value }) {
     this.onUpdate({ rowId, value });
+  },
+  onGuidePanelToggle() {},
+  events: {
+    'click .toggle-collapse'(e) {
+      this.onGuidePanelToggle(this);
+    }
   }
 });
