@@ -1,7 +1,7 @@
-<template name="OrganizationSettings_NcGuideline">
+<template name="OrganizationSettings_ProblemGuideline">
   <div class="form-group">
     <label class="form-control-label">
-      Guideline for magnitude = {{ncType}}
+      Guideline for magnitude = <span {{b "text: type"}}></span>
     </label>
     <textarea class="form-control" rows="3" {{b "value: text, focusout: onFocusOut"}}>
     </textarea>
