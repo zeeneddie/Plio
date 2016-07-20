@@ -41,7 +41,7 @@ Template.ActionsList.viewmodel({
   onRendered() {
     this.expandCollapsed(this.actionId());
   },
-  _getQueryForCurrentFilter([ma, ta, mca, tca]) {
+  _getQueryForCurrentFilter([ma, ta, mca, tca, da]) {
     switch(this.activeActionFilter()) {
       case 'My current actions':
         return ma;
@@ -55,6 +55,9 @@ Template.ActionsList.viewmodel({
       case 'Team completed actions':
         return tca;
         break;
+      case 'Deleted actions':
+        return { ...da, isDeleted: true };
+        break;
       default:
         return {};
         break;
@@ -63,14 +66,14 @@ Template.ActionsList.viewmodel({
   _getQueryForFilter() {
     const getIds = (array) => array.map(prop => ({ _id: { $in: this[prop]().map(({ _id }) => _id) } }));
 
-    const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions']);
+    const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions', 'actionsDeleted']);
 
     return this._getQueryForCurrentFilter(query);
   },
   _getFirstActionQueryForFilter() {
     const getIds = (array) => array.map(prop => ({ _id: this.toArray(this[prop]()).length > 0 && this[prop]().map(({ _id }) => _id)[0] }));
 
-    const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions']);
+    const query = getIds(['myCurrentActions', 'teamCurrentActions', 'myCompletedActions', 'teamCompletedActions', 'actionsDeleted']);
 
     return this._getQueryForCurrentFilter(query);
   },
@@ -143,6 +146,11 @@ Template.ActionsList.viewmodel({
   teamCompletedActionsAssignees() {
     return this._getUniqueAssignees(this.teamCompletedActions());
   },
+  actionsDeleted() {
+    const query = { isDeleted: true, ...this._getSearchQuery() };
+    const options = { sort: { deletedAt: -1 } };
+    return this._getActionsByQuery(query, options);
+  },
   focused: false,
   animating: false,
   expandAllFound() {
@@ -160,6 +168,11 @@ Template.ActionsList.viewmodel({
       return;
     } else if (this.isActiveActionFilter('My completed actions')) {
       const count = this.myCompletedActions().length;
+
+      this.searchResultsNumber(count);
+      return;
+    } else if (this.isActiveActionFilter('Deleted actions')) {
+      const count = this.actionsDeleted().count();
 
       this.searchResultsNumber(count);
       return;

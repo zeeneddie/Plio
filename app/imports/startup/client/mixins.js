@@ -531,11 +531,11 @@ ViewModel.mixin({
           break;
       }
     },
-    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);
     },
-    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
     }
