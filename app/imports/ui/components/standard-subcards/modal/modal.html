@@ -2,7 +2,6 @@
   <div>
     <div class="relative">
       {{! NON-CONFORMITIES SUBCARDS}}
-
       {{#with NC}}
         {{> Subcards_Notify_Edit
             document=this
@@ -51,17 +50,22 @@
           standardId=this._id}}
       {{/with}}
 
-
-        <!-- {{! RISKS SUBCARDS}}
+      {{! RISKS SUBCARDS}}
+      {{#with risk}}
+        {{> Subcards_RiskAnalysis_Edit
+            _id=this._id
+            score=this.score}}
 
         {{> Subcards_TreatmentPlan_Edit
-            _id=this.Risk._id
-            treatmentPlan=this.Risk.treatmentPlan}} -->
+            _id=this._id
+            treatmentPlan=this.treatmentPlan}}
+      {{/with}}
 
-
-        <!-- {{! ACTIONS SUBCARDS}}
-
-        {{> Subcards_Notes_Edit}} -->
+      {{! ACTIONS SUBCARDS}}
+      {{#with action}}
+        {{> Subcards_Notes_Edit
+            notes=this.notes}}
+      {{/with}}
 
     </div>
   </div>

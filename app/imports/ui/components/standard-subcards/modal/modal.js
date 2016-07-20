@@ -2,8 +2,10 @@ import { Template } from 'meteor/templating';
 
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
+// import { update, remove } from '/imports/api/risks/methods.js';
+
 Template.SS_Card_Modal.viewmodel({
-  mixin: ['organization', 'nonconformity', 'standard', 'modal', 'callWithFocusCheck'],
+  mixin: ['organization', 'nonconformity', 'standard', 'risk', 'action', 'modal', 'callWithFocusCheck'],
   // For NC
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
@@ -39,5 +41,13 @@ Template.SS_Card_Modal.viewmodel({
   },
   _getNCsQuery() {
     return { standardsIds: this.StandardId() };
+  },
+  // For Risk
+  risk() {
+    return this._getRiskByQuery({ _id: this.RiskId() });
+  },
+  // For Action
+  action() {
+    return this._getActionByQuery({ _id: "hR3QzcjMKfZv9RQLe" });
   },
 });

@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.SS_Card_Read.viewmodel({
-  mixin: ['modal', 'nonconformity', 'standard'],
+  mixin: ['modal', 'nonconformity', 'standard', 'risk'],
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
@@ -10,8 +10,13 @@ Template.SS_Card_Read.viewmodel({
   organizationId: "KwKXz5RefrE5hjWJ2",
   // Standard from fixture: "3. Inquiry handling"
   StandardId: "4hecb3Gzvg5dPp7rD",
+  // Risk from fixture: "Explosion of binder"
+  RiskId: "aqtqWNPrc9fNi6wyp",
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
+  },
+  risk() {
+    return this._getRiskByQuery({ _id: this.RiskId() });
   },
   _getNCsQuery() {
     return { standardsIds: this.StandardId() };
@@ -24,7 +29,8 @@ Template.SS_Card_Read.viewmodel({
       _title: 'Standard subcards',
       template: 'SS_Card_Modal',
       NCId: this.NCId(),
-      StandardId: this.StandardId()
+      StandardId: this.StandardId(),
+      RiskId: this.RiskId()
     });
   },
 });

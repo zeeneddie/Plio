@@ -26,11 +26,13 @@
 
       {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
-      <!--
-        {{! RISKS SUBCARDS}}
 
-        {{> Subcards_RiskAnalysis_Read score=customRisk.score}}
-        {{> Subcards_TreatmentPlan_Read treatmentPlan=customRisk.treatmentPlan}} -->
+      {{! RISKS SUBCARDS}}
+
+      {{#with risk}}
+        {{> Subcards_RiskAnalysis_Read score=this.score}}
+        {{> Subcards_TreatmentPlan_Read treatmentPlan=this.treatmentPlan}}
+      {{/with}}
     {{/Card_Read}}
   </div>
 </template>
