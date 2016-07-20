@@ -6,6 +6,14 @@ import { isViewed } from '/imports/api/checkers.js';
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: 'organization',
   isStandardsEditable: true,
+  onRendered(templateInstance) {
+    const doc = templateInstance.data.NC;
+    const userId = Meteor.userId();
+
+    if(!isViewed(doc, userId)) {
+      updateViewedBy.call({ _id: doc._id });
+    }
+  },
   NCGuidelines() {
     return this.organization() && this.organization().ncGuidelines;
   },
@@ -16,11 +24,6 @@ Template.NC_Card_Edit_Main.viewmodel({
     if (!isViewed(doc, userId)) {
       Tracker.nonreactive(() => updateViewedBy());
     }
-  },
-  updateViewedBy() {
-    const _id = this._id();
-
-    updateViewedBy.call({ _id });
   },
   update(...args) {
     this.parent().update(...args);
