@@ -604,6 +604,19 @@ ViewModel.mixin({
     getStatusName(status) {
       return ProblemsStatuses[status];
     },
+    getShortStatusName(status) {
+      switch(status) {
+        case 4:
+          return 'awaiting analysis';
+          break;
+        case 11:
+          return 'awaiting update of standard(s)';
+          break;
+        default:
+          return '';
+          break;
+      }
+    },
     getClassByStatus(status) {
       switch(status) {
         case 1:
