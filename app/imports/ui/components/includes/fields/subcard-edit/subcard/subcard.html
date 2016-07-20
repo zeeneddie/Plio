@@ -5,7 +5,9 @@
     {{#if isNew}}
       <span class="label label-primary">New</span>
     {{/if}}
-    <span class="pull-xs-right" {{b "html: _rText"}}></span>
+    {{#if _rText}}
+      <span class="pull-xs-right" {{b "html: _rText"}}></span>
+    {{/if}}
   </div>
   <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
     <div class="collapse subcard-error-section" {{b "ref: errorSection"}}>

@@ -10,9 +10,9 @@ import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, ProblemsStatuses,
+  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, ActionFilters,
-  ActionTypes
+  ActionTypes, ReviewStatuses
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -581,11 +581,11 @@ ViewModel.mixin({
     }
   },
   utils: {
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalize(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     },
-    lowercase(string) {
-      return string.charAt(0).toLowerCase() + string.slice(1);
+    lowercase(str) {
+      return str ? str.charAt(0).toLowerCase() + str.slice(1) : '';
     },
     round(num) {
       if (num >= 1000000) {
@@ -605,18 +605,24 @@ ViewModel.mixin({
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
+    combine(...fns) {
+      return (...args) => fns.forEach(fn => fn(...args));
+    },
     findParentRecursive(templateName, instance) {
       return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
+    },
+    $not(predicate) {
+      return !predicate;
     }
   },
   magnitude: {
     _magnitude() {
       this.load({ mixin: 'utils' });
-      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+      return _.values(ProblemGuidelineTypes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   },
   currency: {
@@ -764,6 +770,27 @@ ViewModel.mixin({
         return 'medium';
       } else {
         return 'high';
+      }
+    }
+  },
+  reviewStatus: {
+    getStatusName(status) {
+      return ReviewStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'danger';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'success';
+          break;
+        default:
+          return '';
+          break;
       }
     }
   }
