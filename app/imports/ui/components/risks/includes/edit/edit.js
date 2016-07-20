@@ -16,6 +16,9 @@ Template.EditRisk.viewmodel({
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
   },
+  RKGuidelines() {
+    return this.organization() && this.organization().rkGuidelines;
+  },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
   },

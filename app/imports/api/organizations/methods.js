@@ -8,7 +8,7 @@ import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
-import { NCTypes, UserRoles, UserMembership } from '../constants';
+import { ProblemGuidelineTypes, UserRoles, UserMembership, RKTypes } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
@@ -20,10 +20,10 @@ const nameSchema = new SimpleSchema({
   name: {type: String}
 });
 
-const ncTypeSchema = new SimpleSchema({
-  ncType: {
+const problemGuidelineTypeSchema = new SimpleSchema({
+  type: {
     type: String,
-    allowedValues: _.values(NCTypes)
+    allowedValues: _.values(ProblemGuidelineTypes)
   }
 });
 
@@ -207,11 +207,11 @@ export const setReminder = new ValidatedMethod({
   }
 });
 
-export const setGuideline = new ValidatedMethod({
-  name: 'Organizations.setGuideline',
+export const setNCGuideline = new ValidatedMethod({
+  name: 'Organizations.setNCGuideline',
 
   validate: new SimpleSchema([
-    IdSchema, ncTypeSchema,
+    IdSchema, problemGuidelineTypeSchema,
     {
       text: {type: String}
     }
@@ -231,7 +231,35 @@ export const setGuideline = new ValidatedMethod({
       );
     }
 
-    return OrganizationService.setGuideline(doc);
+    return OrganizationService.setNCGuideline(doc);
+  }
+});
+
+export const setRKGuideline = new ValidatedMethod({
+  name: 'Organizations.setRKGuideline',
+
+  validate: new SimpleSchema([
+    IdSchema, problemGuidelineTypeSchema,
+    {
+      text: {type: String}
+    }
+  ]).validator(),
+
+  run(doc) {
+    if (!this.userId) {
+      throw new Meteor.Error(403, updateErrorMessage);
+    }
+
+    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, doc._id);
+
+    if (!canEditOrgSettings) {
+      throw new Meteor.Error(
+        403,
+        'User is not authorized for editing organization settings'
+      );
+    }
+
+    return OrganizationService.setRKGuideline(doc);
   }
 });
 
