@@ -14,14 +14,10 @@ Template.Subcards_LessonLearned.viewmodel({
   linkedTo: '',
   linkedToId: '',
   onRendered(templateInstance) {
-    updateViewedBy.call({ _id: this._id() });
-  },
-  onRendered(templateInstance) {
     const doc = templateInstance.data.document;
-    if(!doc) return;
     const userId = Meteor.userId();
-
-    if(!isViewed(doc, userId)) {
+    
+    if(doc && !isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }
   },
