@@ -25,6 +25,7 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
+    collapseTimeout: '',
     toggleCollapse: _.throttle(function(cb, timeout) {
 
       // Callback is always the last argument

@@ -91,7 +91,7 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (!!Risks.findOne({ _id, viewedBy: this.userId })) {
       throw new Meteor.Error(
-        400, 'You have been already added to this list'
+        400, 'You have been already added to the viewedBy list of this risk'
       );
     }
 
@@ -110,7 +110,7 @@ export const remove = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
+        403, 'Unauthorized user cannot remove risks'
       );
     }
 

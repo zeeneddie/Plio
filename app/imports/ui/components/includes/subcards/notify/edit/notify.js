@@ -8,20 +8,20 @@ Template.Subcards_Notify_Edit.viewmodel({
   members() {
     return this._members({ _id: { $nin: this.currentNotifyUsersIds() } });
   },
-  document: '',
+  doc: '',
   documentType: '',
   currentNotifyUsersIds() {
     return this.currentNotifyUsers().fetch().map(({ _id }) => _id) || [];
   },
   currentNotifyUsers() {
-    const usersIds = (this.document() && this.document().notify) || [];
+    const usersIds = (this.doc() && this.doc().notify) || [];
     const query = { _id: { $in: usersIds } };
     const options = { sort: { 'profile.firstName': 1 } };
     return Meteor.users.find(query, options);
   },
   onUpdate() {},
   update(userId, option, cb) {
-    const _id = this.document() && this.document()._id;
+    const _id = this.doc() && this.doc()._id;
     const query = { _id };
     const options = {
       [`${option}`]: {
@@ -54,7 +54,7 @@ Template.Subcards_Notify_Edit.viewmodel({
       // TODO need one for non-conformities
       if (this.documentType() === 'standard') {
         addedToNotifyList.call({
-          standardId: this.document()._id,
+          standardId: this.doc()._id,
           userId
         }, (err, res) => {
           if (err) {
