@@ -40,21 +40,26 @@
             slingshotDirective=slingshotDirective}}
       {{/with}}
 
-        <!-- {{! STANDARDS SUBCARDS}}
-
+      {{! STANDARDS SUBCARDS}}
+      {{#with standard}}
         {{> Subcards_NonConformities_Edit
-            _id=this.NC._id
-            _query=this.emptyQuery}}
+          _id=this._id
+          _query=_getNCsQuery}}
+
+      {{> Subcards_Actions_Edit
+          type="RC"
+          standardId=this._id}}
+      {{/with}}
 
 
-        {{! RISKS SUBCARDS}}
+        <!-- {{! RISKS SUBCARDS}}
 
         {{> Subcards_TreatmentPlan_Edit
             _id=this.Risk._id
-            treatmentPlan=this.Risk.treatmentPlan}}
+            treatmentPlan=this.Risk.treatmentPlan}} -->
 
 
-        {{! ACTIONS SUBCARDS}}
+        <!-- {{! ACTIONS SUBCARDS}}
 
         {{> Subcards_Notes_Edit}} -->
 

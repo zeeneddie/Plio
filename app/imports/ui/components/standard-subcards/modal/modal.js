@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.SS_Card_Modal.viewmodel({
-  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
+  mixin: ['organization', 'nonconformity', 'standard', 'modal', 'callWithFocusCheck'],
   // For NC
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
@@ -33,6 +33,11 @@ Template.SS_Card_Modal.viewmodel({
       updateFn();
     }
   },
-  // /For NC
-
+  // For Standard
+  standard() {
+    return this._getStandardByQuery({ _id: this.StandardId() });
+  },
+  _getNCsQuery() {
+    return { standardsIds: this.StandardId() };
+  },
 });

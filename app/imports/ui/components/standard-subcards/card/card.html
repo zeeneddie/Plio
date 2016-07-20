@@ -22,10 +22,11 @@
         {{> Subcards_OtherFiles_Read files=this.files}}
       {{/with}}
 
-        <!-- {{! STANDARDS SUBCARDS}}
+      {{! STANDARDS SUBCARDS}}
 
-        {{> Subcards_NonConformities_Read _query=emptyQuery}}
+      {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
+      <!--
         {{! RISKS SUBCARDS}}
 
         {{> Subcards_RiskAnalysis_Read score=customRisk.score}}
