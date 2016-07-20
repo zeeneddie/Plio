@@ -14,7 +14,7 @@ Template.CreateStandard.viewmodel({
       if (!data[key]) {
         let errorMessage;
         if (key === 'title') {
-          errorMessage = `The new standard cannot be created without a title`;
+          errorMessage = `The new standard cannot be created without a title. Please enter a title for your standard`;
           this.modal().setError(errorMessage);
           return;
         } else if (key === 'sectionId') {
