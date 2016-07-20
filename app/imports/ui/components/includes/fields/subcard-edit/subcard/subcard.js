@@ -3,6 +3,15 @@ import { Blaze } from 'meteor/blaze';
 
 Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
+  doc: '',
+  parentFirstNode: '',
+  isSubcard: true,
+  isSaving: false,
+  isWaiting: false,
+  closeAfterCall: false,
+  error: '',
+  _rText: '',
+  content: '',
   autorun() {
     this.load(this.doc());
   },
@@ -15,20 +24,14 @@ Template.SubCard_Edit.viewmodel({
     const { viewedBy } = this.doc();
     return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
-  doc: '',
-  isSubcard: true,
-  isSaving: false,
-  isWaiting: false,
-  closeAfterCall: false,
-  error: '',
-  _rText: '',
-  content: '',
   handleToggleCollapse() {
     if (this._id) {
       this.toggleCollapse(null, 250);
     }
   },
   callInsert(insertFn, args, cb) {
+    const $parentFirstNode = $(this.templateInstance.firstNode).closest('.card-block-collapse');
+    
     this.beforeSave();
 
     const afterInsert = (err, res) => {
@@ -45,6 +48,8 @@ Template.SubCard_Edit.viewmodel({
           newSubcard.subcard.closest('.modal').animate({
             scrollTop: newSubcard.subcard.position().top + 70
           }, 500, 'swing');
+        } else if ($parentFirstNode.length) {
+          $parentFirstNode.closest('.modal').scrollTop($parentFirstNode.position().top + 20);
         }
       }
     };
