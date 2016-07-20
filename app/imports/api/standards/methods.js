@@ -85,7 +85,7 @@ export const updateViewedBy = new ValidatedMethod({
   run({ _id }) {
     if (!this.userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a standard'
+        403, 'Unauthorized user cannot update standards'
       );
     }
 
@@ -95,7 +95,7 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (viewedBy && viewedBy === this.userId) {
       throw new Meteor.Error(
-        400, 'You have been already added to this list'
+        400, 'You have been already added to the viewedBy list of this standard'
       );
     }
 

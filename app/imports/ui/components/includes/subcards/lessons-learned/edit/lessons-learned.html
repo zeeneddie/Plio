@@ -5,6 +5,7 @@
         <div class="card">
           {{#each lessons}}
             {{> SubCard_Edit
+                doc=this
                 _id=this._id
                 title=this.title
                 date=this.date

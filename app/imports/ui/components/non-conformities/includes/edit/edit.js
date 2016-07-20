@@ -1,9 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { update, remove, updateViewedBy } from '/imports/api/non-conformities/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
+
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },

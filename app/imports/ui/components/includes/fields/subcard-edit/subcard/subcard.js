@@ -4,14 +4,18 @@ import { Blaze } from 'meteor/blaze';
 Template.SubCard_Edit.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   autorun() {
-    this.load(this.document());
+    this.load(this.doc());
   },
   onRendered() {
     if (!this._id) {
       this.toggleCollapse(null, 250);
     }
   },
-  document: '',
+  isNew() {
+    const { viewedBy } = this.doc();
+    return viewedBy && !_.contains(viewedBy, Meteor.userId());
+  },
+  doc: '',
   isSubcard: true,
   isSaving: false,
   isWaiting: false,
