@@ -4,12 +4,13 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ActionFilters } from '/imports/api/constants.js';
 
 Template.ActionsHeader.viewmodel({
-  share: 'window',
+  share: ['window', 'search'],
   mixin: ['action', 'mobile', 'organization', 'collapsing'],
   filters() {
     return ActionFilters;
   },
   selectFilter(filter) {
+    this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
     this.expandCollapsed(this.actionId());
   }

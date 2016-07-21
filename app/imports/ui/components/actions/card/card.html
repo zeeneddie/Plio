@@ -1,13 +1,13 @@
-<template name="ActionsCard">
-  {{> Actions_QAPanel_Read document=action}}
-
+<template name="Actions_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasActions}}
+    {{#if actions.count}}
       {{#with action}}
         {{#Card_Read
           cardTitle=(_getNameByType this.type)
           document=this
-          onOpenEditModal=onOpenEditModalCb}}
+          onOpenEditModal=onOpenEditModalCb
+          onRestore=onRestoreCb
+          onDelete=onDeleteCb}}
 
           <div class="list-group">
 
@@ -20,7 +20,7 @@
               </h4>
             </div>
 
-            {{> Actions_LinkedTo_Read linkedDocs=this.linkedDocuments}}
+            {{> Actions_LinkedTo_Read linkedTo=this.linkedTo}}
 
             <div class="row">
               <div class="col-sm-6">

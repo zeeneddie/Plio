@@ -100,7 +100,7 @@ Template.StandardsList.viewmodel({
     });
   },
   standardsDeleted() {
-    const query = { ...this._getSearchQuery() };
+    const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getStandardsByQuery(query, options);
   },
