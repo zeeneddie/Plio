@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
-
+import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.DashboardLayout.viewmodel({
   mixin: 'organization',
@@ -14,7 +14,7 @@ Template.DashboardLayout.viewmodel({
       const { _id, users } = !!this.organization() && this.organization();
       const userIds = _.pluck(users, 'userId');
       this._subHandlers([
-        this.templateInstance.subscribe('currentUserOrganizationById', _id),
+        OrgSubs.subscribe('currentUserOrganizationById', _id),
       ]);
     }
   ]

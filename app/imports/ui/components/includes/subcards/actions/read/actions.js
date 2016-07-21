@@ -33,25 +33,10 @@ Template.Subcards_Actions_Read.viewmodel({
     return this._getActionsByQuery(query, options).map(({ _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, ...args }) => {
       const href = ((() => {
         const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: _id };
-        const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified });
+        const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified })(Meteor.userId());
         return FlowRouter.path('workInboxItem', params, queryParams);
       })());
       return { _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, href, ...args };
     });
-  },
-  _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
-    const userId = Meteor.userId();
-
-    if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
-      return { by: 'My current actions' };
-    } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
-      return { by: 'My completed actions' };
-    } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
-      return { by: 'Team current actions' };
-    } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
-      return { by: 'Team completed actions' };
-    } else {
-      return { by: 'My current actions' };
-    }
   }
 });

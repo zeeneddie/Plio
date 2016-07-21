@@ -1,4 +1,4 @@
-const NCTypes = {
+const ProblemGuidelineTypes = {
   MINOR: 'minor',
   MAJOR: 'major',
   CRITICAL: 'critical'
@@ -29,6 +29,17 @@ const StandardStatuses = {
 const AnalysisStatuses = {
   0: 'Not completed',
   1: 'Completed'
+};
+
+const ReviewStatuses = {
+  0: 'Overdue',
+  1: 'Awaiting review',
+  2: 'Up-to-date'
+};
+
+const ProblemTypes = {
+  NC: 'non-conformity',
+  RISK: 'risk'
 };
 
 const ActionTypes = {
@@ -113,10 +124,8 @@ const PhoneTypes = {
   MOBILE: 'Mobile'
 };
 
-const getDefaultGuideline = (ncType) => {
-  return `Please go to Org Settings to define what a ${ncType} `
-    + `non-conformity means in your organization.`;
-};
+const getDefaultGuideline = (type, problemType) => (
+  `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
 
 const OrganizationDefaults = {
   workflowDefaults: {
@@ -192,10 +201,16 @@ const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(NCTypes.MINOR),
-    major: getDefaultGuideline(NCTypes.MAJOR),
-    critical: getDefaultGuideline(NCTypes.CRITICAL)
-  }
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NC),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NC),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NC)
+  },
+  rkGuidelines: {
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
+  },
+  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
 };
 
 const DefaultStandardTypes = [
@@ -242,14 +257,14 @@ const StandardFilters = [
 const RiskFilters = [
   'type',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
 const NonConformityFilters = [
   'magnitude',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
@@ -260,11 +275,6 @@ const ActionFilters = [
   'Team completed actions',
   'Deleted actions'
 ];
-
-const ProblemTypes = {
-  NC: 'non-conformity',
-  RISK: 'risk'
-};
 
 const DocumentTypes = [
   'standard',
@@ -296,13 +306,13 @@ const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
 ];
 
-const TreatmentPlanPriorities = {
+const RiskEvaluationPriorities = {
   'low': 'Low',
   'medium': 'Medium',
   'high': 'High'
 };
 
-const TreatmentPlanDecisions = {
+const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
   'treat': 'Treat',
   'transfer': 'Transfer',
@@ -315,7 +325,7 @@ export {
   ActionPlanOptions,
   ActionUndoTimeInHours,
   DefaultStandardTypes,
-  NCTypes,
+  ProblemGuidelineTypes,
   ProblemsStatuses,
   AnalysisStatuses,
   StandardStatuses,
@@ -337,5 +347,9 @@ export {
   ActionFilters,
   TreatmentPlanPriorities,
   TreatmentPlanDecisions,
-  ActionDocumentTypes
+  ActionDocumentTypes,
+  RiskEvaluationPriorities,
+  RiskEvaluationDecisions,
+  ReviewStatuses,
+  RKTypes
 };

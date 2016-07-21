@@ -3,6 +3,9 @@ import { Blaze } from 'meteor/blaze';
 
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization', 'department'],
+  label: 'Department/sector(s)',
+  placeholder: 'Department/sector',
+  selectFirstIfNoSelected: false,
   departmentsIds: [],
   selected() {
     const departmentsIds = Array.from(this.departmentsIds() || []);

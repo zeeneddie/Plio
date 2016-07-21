@@ -45,7 +45,10 @@ Template.Actions_Create.viewmodel({
 
         Meteor.setTimeout(() => {
           const action = this._getActionByQuery({ _id });
-          this.goToAction(_id, false);
+
+          const queryParams = this._getQueryParams(action)(Meteor.userId());
+
+          this.goToAction(_id, queryParams);
 
           this.expandCollapsed(_id);
 

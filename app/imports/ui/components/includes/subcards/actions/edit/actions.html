@@ -6,6 +6,7 @@
           {{#each actions}}
             {{> SubCard_Edit
                 _id=this._id
+                doc=this
                 action=this
                 type=type
                 isLinkedToEditable=true
@@ -16,7 +17,6 @@
                 removeFn=removeFn
                 updateFn=updateFn
                 completeFn=completeFn
-                undoCompletionFn=undoCompletionFn
                 verifyFn=verifyFn
                 undoVerificationFn=undoVerificationFn
                 linkStandardFn=linkStandardFn

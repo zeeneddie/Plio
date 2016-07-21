@@ -16,6 +16,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
       return date.toDate();
     }
   },
+  RCALabel: 'Root cause analysis',
+  UOSLabel: 'Update of standard(s)',
   magnitude: '',
   analysis: '',
   updateOfStandards: '',
