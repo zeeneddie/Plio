@@ -237,6 +237,46 @@ export default {
     return ret;
   },
 
+  setCompletionDate({ _id, targetDate }) {
+    const action = this._getAction(_id);
+
+    if (action.completed()) {
+      throw new Meteor.Error(
+        400, 'Cannot set completion date for completed action'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { completionTargetDate: targetDate }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setVerificationDate({ _id, targetDate }) {
+    const action = this._getAction(_id);
+
+    if (action.verified()) {
+      throw new Meteor.Error(
+        400, 'Cannot set verification date for verified action'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { verificationTargetDate: targetDate }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
   updateViewedBy({ _id, userId }) {
     this._ensureActionExists(_id);
 

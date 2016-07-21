@@ -82,6 +82,22 @@ Template.Actions_EditSubcard.viewmodel({
       }, cb);
     };
   },
+  getUpdateCompletionDateFn() {
+    return ({ targetDate }, cb) => {
+      this.parent().callUpdate(this.updateCompletionDateFn, {
+        _id: this._id(),
+        targetDate
+      }, cb);
+    };
+  },
+  getUpdateVerificationDateFn() {
+    return ({ targetDate }, cb) => {
+      this.parent().callUpdate(this.updateVerificationDateFn, {
+        _id: this._id(),
+        targetDate
+      }, cb);
+    };
+  },
   getData() {
     return this.child('Actions_Card_Edit_Main').getData();
   }

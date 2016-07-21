@@ -57,6 +57,12 @@ Template.Actions_Card_Edit_Main.viewmodel({
   onUnlinkDocument() {
     return this.unlinkDocumentFn;
   },
+  onUpdateCompletionDate() {
+    return this.updateCompletionDateFn;
+  },
+  onUpdateVerificationDate() {
+    return this.updateVerificationDateFn;
+  },
   showVerification() {
     const action = this.action && this.action();
     return action && action.getWorkflowType() === WorkflowTypes.SIX_STEP;

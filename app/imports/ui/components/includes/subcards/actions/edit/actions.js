@@ -15,7 +15,9 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setVerificationDate
 } from '/imports/api/actions/methods.js';
 
 
@@ -256,5 +258,17 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   unlinkDocument({ ...args }, cb) {
     this.modal().callMethod(unlinkDocument, { ...args }, cb);
+  },
+  updateCompletionDateFn() {
+    return this.updateCompletionDate.bind(this);
+  },
+  updateCompletionDate({ ...args }, cb) {
+    this.modal().callMethod(setCompletionDate, { ...args }, cb);
+  },
+  updateVerificationDateFn() {
+    return this.updateVerificationDate.bind(this);
+  },
+  updateVerificationDate({ ...args }, cb) {
+    this.modal().callMethod(setVerificationDate, { ...args }, cb);
   }
 });

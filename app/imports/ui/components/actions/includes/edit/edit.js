@@ -11,7 +11,9 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setVerificationDate
 } from '/imports/api/actions/methods.js';
 
 Template.Actions_Edit.viewmodel({
@@ -83,6 +85,16 @@ Template.Actions_Edit.viewmodel({
   getUnlinkDocumentFn() {
     return ({ documentId, documentType }, cb) => {
       this.callUpdate(unlinkDocument, { documentId, documentType }, cb);
+    };
+  },
+  getUpdateCompletionDateFn() {
+    return ({ targetDate }, cb) => {
+      this.callUpdate(setCompletionDate, { targetDate }, cb);
+    };
+  },
+  getUpdateVerificationDateFn() {
+    return ({ targetDate }, cb) => {
+      this.callUpdate(setVerificationDate, { targetDate }, cb);
     };
   },
   generateCallback(queryParam, cb = () => {}) {

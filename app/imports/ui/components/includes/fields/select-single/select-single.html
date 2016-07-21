@@ -1,24 +1,30 @@
 <template name="Select_Single">
-  <div class="dropdown input-group-typeahead form-group-flex-flex" {{b "ref: dropdown"}}>
-    <div class="input-group" data-toggle="dropdown">
-      <input type="text" class="form-control"
-        {{b "value: value, focus: focused, attr: { placeholder: placeholder }, throttle: 300"}}/>
+  {{#if enabled}}
+    <div class="dropdown input-group-typeahead form-group-flex-flex" {{b "ref: dropdown"}}>
+      <div class="input-group" data-toggle="dropdown">
+        <input type="text" class="form-control"
+          {{b "value: value, focus: focused, attr: { placeholder: placeholder }, throttle: 300, enable: enabled"}}/>
 
-      <span class="input-group-btn">
-        <button type="button" class="btn btn-secondary btn-icon">
-          <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
-        </button>
-      </span>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-secondary btn-icon">
+            <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+          </button>
+        </span>
+      </div>
+
+      <div class="dropdown-menu dropdown-menu-full">
+        {{#each itemsFiltered}}
+          <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+        {{/each}}
+        {{#if showContent}}
+          {{> Template.dynamic template=content data=getContentData}}
+        {{else}}
+          <div class="dropdown-item"><strong>There are no available items...</strong></div>
+        {{/if}}
+      </div>
     </div>
-    <div class="dropdown-menu dropdown-menu-full">
-      {{#each itemsFiltered}}
-        <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
-      {{/each}}
-      {{#if showContent}}
-        {{> Template.dynamic template=content data=getContentData}}
-      {{else}}
-        <div class="dropdown-item"><strong>There are no available items...</strong></div>
-      {{/if}}
-    </div>
-  </div>
+  {{else}}
+    <input type="text" class="form-control" disabled="disabled"
+        {{b "value: value, attr: { placeholder: placeholder }"}}/>
+  {{/if}}
 </template>

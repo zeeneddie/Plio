@@ -21,7 +21,8 @@
 
     {{> Actions_CompletionTargetDate
         completionTargetDate=completionTargetDate
-        enabled=isCompletionEditable}}
+        enabled=isCompletionEditable
+        onUpdate=onUpdateCompletionDate}}
 
     {{#unless isCompleted}}
 
@@ -49,7 +50,8 @@
         <hr />
 
         {{> Actions_VerificationTargetDate
-            verificationTargetDate=verificationTargetDate}}
+            verificationTargetDate=verificationTargetDate
+            onUpdate=onUpdateVerificationDate}}
 
         {{#unless isVerified}}
 
