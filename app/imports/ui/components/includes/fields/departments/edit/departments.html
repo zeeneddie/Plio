@@ -1,10 +1,10 @@
 <template name="Departments_Edit">
-  {{#FormField label="Department(s)"}}
+  {{#FormField label=label}}
     {{> Select_Multi
         selected=selected
         items=departments
-        placeholder="Department(s)"
-        selectFirstIfNoSelected=false
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
         onUpdate=onUpdateCb
         onRemove=onRemoveCb
         content="Departments_Create"}}

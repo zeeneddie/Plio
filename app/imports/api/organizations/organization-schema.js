@@ -78,7 +78,7 @@ const remindersSchema = new SimpleSchema({
   }
 });
 
-const ncGuidelinesSchema = new SimpleSchema({
+const guidelinesSchema = new SimpleSchema({
   minor: {
     type: String
   },
@@ -113,7 +113,15 @@ const OrganizationEditableFields = {
     optional: true
   },
   ncGuidelines: {
-    type: ncGuidelinesSchema,
+    type: guidelinesSchema,
+    optional: true
+  },
+  rkGuidelines: {
+    type: guidelinesSchema,
+    optional: true
+  },
+  rkScoringGuidelines: {
+    type: String,
     optional: true
   },
   ...OrganizationCurrencySchema,

@@ -1,0 +1,13 @@
+<template name="Subcards_RiskEvaluation_Edit">
+  {{#SubCard_EditWrapper _lText="Risk evaluation" _rText=(capitalize decision)}}
+    <div class="card-block">
+      {{> RiskEvaluation_Comments_Edit comments=comments}}
+
+      {{> RiskEvaluation_PrevLossExp_Edit prevLossExp=prevLossExp}}
+
+      {{> RiskEvaluation_Decision_Edit decision=decision}}
+      
+      {{> RiskEvaluation_Priority_Edit priority=priority}}
+    </div>
+  {{/SubCard_EditWrapper}}
+</template>

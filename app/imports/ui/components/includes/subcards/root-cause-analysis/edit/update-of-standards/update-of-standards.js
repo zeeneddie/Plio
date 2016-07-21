@@ -4,6 +4,7 @@ Template.NC_UpdateOfStandards_Edit.viewmodel({
   autorun() {
     this.load(this.updateOfStandards());
   },
+  label: 'Update of standard(s)',
   updateOfStandards: '',
   executor: '',
   defaultTargetDate: '',

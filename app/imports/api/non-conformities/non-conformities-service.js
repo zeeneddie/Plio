@@ -42,7 +42,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  setAnalysisTargetDate({ _id, targetDate }) {
+  setAnalysisDate({ _id, targetDate }) {
     const NC = this._getNC(_id);
 
     if (NC.isAnalysisCompleted()) {
@@ -240,8 +240,6 @@ export default {
 
       return ret;
     }
-
-    return ret;
   },
 
   _getNC(_id) {

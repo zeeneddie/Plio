@@ -120,3 +120,8 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
 
   return true;
 };
+
+export const isViewed = (doc, userId) => {
+  const viewedBy = doc && doc.viewedBy || [];
+  return !!viewedBy.length && _.contains(viewedBy, userId);
+};

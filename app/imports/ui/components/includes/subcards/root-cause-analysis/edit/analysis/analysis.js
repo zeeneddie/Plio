@@ -4,6 +4,7 @@ Template.NC_Analysis_Edit.viewmodel({
   autorun() {
     this.load(this.analysis());
   },
+  label: 'Root cause analysis',
   analysis: '',
   executor: '',
   defaultTargetDate: '',
@@ -14,8 +15,8 @@ Template.NC_Analysis_Edit.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
-  updateAnalysisTargetDate(...args) {
-    this.parent().updateAnalysisTargetDate(...args);
+  updateAnalysisDate(...args) {
+    this.parent().updateAnalysisDate(...args);
   },
   onAnalysisCompleted() {
     return this.parent().completeAnalysis.bind(this);
@@ -24,6 +25,6 @@ Template.NC_Analysis_Edit.viewmodel({
     return this.parent().undoAnalysis.bind(this);
   },
   onTargetDateUpdate() {
-    return this.parent().updateAnalysisTargetDate.bind(this);
+    return this.parent().updateAnalysisDate.bind(this);
   }
 });

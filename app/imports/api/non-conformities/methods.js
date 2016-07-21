@@ -59,8 +59,8 @@ export const update = new ValidatedMethod({
   }
 });
 
-export const setAnalysisTargetDate = new ValidatedMethod({
-  name: 'NonConformities.setAnalysisTargetDate',
+export const setAnalysisDate = new ValidatedMethod({
+  name: 'NonConformities.setAnalysisDate',
 
   validate: new SimpleSchema([
     IdSchema,
@@ -76,7 +76,7 @@ export const setAnalysisTargetDate = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.setAnalysisTargetDate({ _id, ...args });
+    return NonConformitiesService.setAnalysisDate({ _id, ...args });
   }
 });
 
@@ -156,7 +156,7 @@ export const updateViewedBy = new ValidatedMethod({
   run({ _id }) {
     if (!this.userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a non-conformity'
+        403, 'Unauthorized user cannot update non-conformities'
       );
     }
 
@@ -168,7 +168,7 @@ export const updateViewedBy = new ValidatedMethod({
 
     if (!!NonConformities.findOne({ _id, viewedBy: this.userId })) {
       throw new Meteor.Error(
-        400, 'You have been already added to this list'
+        400, 'You have been already added to the viewedBy list of this non-conformity'
       );
     }
 
@@ -187,7 +187,7 @@ export const remove = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a non-conformity'
+        403, 'Unauthorized user cannot remove non-conformities'
       );
     }
 

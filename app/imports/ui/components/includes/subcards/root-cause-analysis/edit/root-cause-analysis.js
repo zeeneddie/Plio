@@ -16,6 +16,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
       return date.toDate();
     }
   },
+  RCALabel: 'Root cause analysis',
+  UOSLabel: 'Update of standard(s)',
   magnitude: '',
   analysis: '',
   updateOfStandards: '',
@@ -28,8 +30,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
 
     this.parent().update(allArgs, cb);
   },
-  updateAnalysisTargetDate(...args) {
-    this.parent().updateAnalysisTargetDate(...args);
+  updateAnalysisDate(...args) {
+    this.parent().updateAnalysisDate(...args);
   },
   completeAnalysis() {
     this.parent().completeAnalysis();

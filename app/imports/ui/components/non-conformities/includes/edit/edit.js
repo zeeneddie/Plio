@@ -1,11 +1,13 @@
 import { Template } from 'meteor/templating';
 
 import {
-  update, remove,
+  update, remove, updateViewedBy,
   completeAnalysis, undoAnalysis,
-  setAnalysisTargetDate,
+  setAnalysisDate,
   updateStandards, undoStandardsUpdate
 } from '/imports/api/non-conformities/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
+
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
@@ -40,9 +42,9 @@ Template.NC_Card_Edit.viewmodel({
       updateFn();
     }
   },
-  updateAnalysisTargetDate({ date }) {
+  updateAnalysisDate({ date }) {
     const _id = this._id();
-    this.modal().callMethod(setAnalysisTargetDate, { _id, targetDate: date });
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: date });
   },
   completeAnalysis() {
     const _id = this._id();

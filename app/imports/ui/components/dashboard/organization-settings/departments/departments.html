@@ -1,6 +1,6 @@
 <template name="OrgSettings_Departments">
   <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left">Departments</h4>
+    <h4 class="card-title pull-xs-left">Department/sector(s)</h4>
     <h4 class="card-title pull-xs-right">
       <span class="text-muted" {{b "if: templateInstance.subscriptionsReady, text: departmentsCount"}}></span>
       <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: !templateInstance.subscriptionsReady"}}></i>

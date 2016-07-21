@@ -27,11 +27,15 @@ Template.Select_Single.viewmodel({
       this.dropdown.on('hide.bs.dropdown', () => this.onHide());
     }
   },
-  onShow() {
+  onShow(e) {
+    if (this.disabled()) {
+      e.preventDefault();
+      return;
+    }
     this.focused(true);
     this.value('');
   },
-  onHide() {
+  onHide(e) {
     this.focused(false);
 
     if (!!this.selected() && !this.value()) {
@@ -49,7 +53,7 @@ Template.Select_Single.viewmodel({
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
-  enabled: true,
+  disabled: false,
   showContent() {
     return this.itemsFiltered().length > 0 || !!Template[this.content()];
   },

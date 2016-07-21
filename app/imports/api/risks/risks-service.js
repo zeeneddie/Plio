@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Random } from 'meteor/random';
 
 import { Organizations } from '../organizations/organizations.js';
 import { Actions } from '../actions/actions.js';
@@ -42,7 +43,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  setAnalysisTargetDate({ _id, targetDate }) {
+  setAnalysisDate({ _id, targetDate }) {
     const risk = this._getRisk(_id);
 
     if (risk.isAnalysisCompleted()) {
@@ -235,6 +236,32 @@ export default {
 
       return this.collection.update(query, options);
     }
+  },
+
+  'scores.insert'({ _id, ...args }) {
+    const id = Random.id();
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        scores: { _id: id, ...args }
+      }
+    };
+
+    return (async () => {
+      const res = await this.collection.update(query, options);
+      return res ? id : res;
+    })();
+  },
+
+  'scores.remove'({ _id, score }) {
+    const query = { _id };
+    const options = {
+      '$pull': {
+        'scores': score
+      }
+    };
+
+    return this.collection.update(query, options);
   },
 
   _getRisk(_id) {

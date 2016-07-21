@@ -1,10 +1,11 @@
 import './departments';
-import './nc-guidelines';
 import './org-currency';
 import './org-name';
 import './org-timezone';
 import './org-transfer';
+import './problem-guidelines';
 import './reminders';
+import './rk-scoring-guidelines';
 import './standards-book-sections';
 import './standards-types';
 import './workflow-defaults';
