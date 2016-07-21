@@ -52,12 +52,14 @@
 
       {{! RISKS SUBCARDS}}
       {{#with risk}}
-        {{> Subcards_RiskAnalysis_Edit
+        {{> Subcards_RiskScoring_Edit
             _id=this._id
             score=this.score}}
 
-        {{> Subcards_TreatmentPlan_Edit
+        {{> Subcards_ImprovementPlan_Edit
             _id=this._id
+            documentType="risk"
+            label="Treatment plan"
             treatmentPlan=this.treatmentPlan}}
       {{/with}}
 

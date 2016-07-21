@@ -30,8 +30,8 @@
       {{! RISKS SUBCARDS}}
 
       {{#with risk}}
-        {{> Subcards_RiskAnalysis_Read score=this.score}}
-        {{> Subcards_TreatmentPlan_Read treatmentPlan=this.treatmentPlan}}
+        {{> Subcards_RiskScoring_Read score=this.score}}
+        {{> Subcards_ImprovementPlan_Read documentType="risk" label="Treatment plan" treatmentPlan=this.treatmentPlan}}
       {{/with}}
     {{/Card_Read}}
   </div>
