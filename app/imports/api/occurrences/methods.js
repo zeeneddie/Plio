@@ -7,6 +7,33 @@ import { Occurrences } from './occurrences.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { IdSchema } from '../schemas.js';
 
+export const updateViewedBy = new ValidatedMethod({
+  name: 'Occurrences.updateViewedBy',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update occurrences'
+      );
+    }
+    if (!Occurrences.findOne({ _id })) {
+      throw new Meteor.Error(
+        400, 'Occurrence does not exist'
+      );
+    }
+
+    if (!!Occurrences.findOne({ _id, viewedBy: this.userId })) {
+      throw new Meteor.Error(
+        400, 'You have been already added to the viewedBy list of this occurrence'
+      );
+    }
+
+    return OccurrencesService.updateViewedBy({ _id, userId: this.userId });
+  }
+});
+
 export const insert = new ValidatedMethod({
   name: 'Occurrences.insert',
 
@@ -63,7 +90,7 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove an occurrence');
+      throw new Meteor.Error(403, 'Unauthorized user cannot remove occurrences');
     }
 
     return OccurrencesService.remove({ _id });

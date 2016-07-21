@@ -19,7 +19,7 @@ Template.Actions_LinkTo.viewmodel({
     return this._getDocsIds(ProblemTypes.RISK);
   },
   docSearchText() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   docs() {

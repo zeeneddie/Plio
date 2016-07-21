@@ -3,11 +3,12 @@ import { Template } from 'meteor/templating';
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert } from '/imports/api/departments/methods.js';
 
-Template.DepartmentsCreate.viewmodel({
+Template.Departments_Create.viewmodel({
   mixin: ['organization', 'modal'],
+  selected: [],
   value: '',
   departmentHintText() {
-    return this.value() ? `Add "${this.value()}" department` : 'Start typing...';
+    return this.value() ? `Add "${this.value()}" department/sector` : 'Start typing...';
   },
   addNewDepartment() {
     if (!this.value()) return;
@@ -18,7 +19,7 @@ Template.DepartmentsCreate.viewmodel({
     swal(
       {
         title: "Are you sure?",
-        text: `New department "${this.value()}" will be added.`,
+        text: `New department/sector "${this.value()}" will be added.`,
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Add",
@@ -30,22 +31,22 @@ Template.DepartmentsCreate.viewmodel({
     );
   },
   onAlertConfirm() {
-    const organizationId = this.organization() && this.organization()._id;
-
-    this.modal().callMethod(insert, { name: this.value(), organizationId }, (err, _id) => {
-      if (err) {
-        swal('Oops... Something went wrong!', err.reason, 'error');
-      } else {
-        swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
-
+    this.modal().callMethod(insert, {
+      name: this.value(),
+      organizationId: this.organizationId()
+    }, (err, _id) => {
+      if (!err) {
+        const departmentsEdit = ViewModel.findOne('Departments_Edit');
         this.selected(_id);
 
-        ViewModel.findOne('Departments_Edit').onSelect(this);
+        departmentsEdit.update(this);
+
+        swal("Added!", `New department/sector "${this.value()}" was added successfully.`, "success");
       }
     });
   },
   getData() {
-    const { value, selected } = this.data();
-    return { value, selected };
+    const { value, selected:selectedItemId } = this.data();
+    return { value, selectedItemId };
   }
 });

@@ -1,0 +1,10 @@
+<template name="RiskScoring_ScoredAt_Edit">
+  {{#FormField label=label}}
+    {{> Datepicker
+        placeholder=placeholder
+        onChange=onUpdateCb
+        date=scoredAt
+        enabled=($not disabled)
+        defaultDate=defaultDate}}
+  {{/FormField}}
+</template>

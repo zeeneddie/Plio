@@ -4,6 +4,17 @@ import { NonConformities } from '../non-conformities/non-conformities.js';
 export default {
   collection: Occurrences,
 
+  updateViewedBy({ _id, userId }) {
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        viewedBy: userId
+      }
+    };
+
+    return this.collection.update(query, options);
+  },
+
   insert({ ...args, nonConformityId }) {
     const lastOccurrence = this.collection.findOne({
       nonConformityId,

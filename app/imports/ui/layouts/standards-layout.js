@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrgSubs, UserSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardsLayout.viewmodel({
   mixin: ['organization', 'standard'],
@@ -12,9 +13,9 @@ Template.StandardsLayout.viewmodel({
       const userIds = _.pluck(users, 'userId');
 
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('standards-book-sections', _id),
         this.templateInstance.subscribe('standards-types', _id),
         this.templateInstance.subscribe('actions', _id),

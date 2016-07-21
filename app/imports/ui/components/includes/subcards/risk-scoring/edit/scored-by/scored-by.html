@@ -1,0 +1,11 @@
+<template name="RiskScoring_ScoredBy_Edit">
+  {{#FormField label=label}}
+    {{> Select_Single
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        placeholder=placeholder
+        items=_members
+        selected=scoredBy
+        disabled=disabled
+        onUpdate=onUpdateCb}}
+  {{/FormField}}
+</template>

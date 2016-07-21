@@ -21,11 +21,14 @@ Template.Fields_Standards_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected = [] } = viewmodel.getData();
+    const { selectedItemId, selected } = viewmodel.getData();
+    if (this.areIdsIncludesItemId(selectedItemId)) return;
 
+    this.callUpdate(selectedItemId, selected, '$addToSet');
+  },
+  callUpdate(selectedItemId, selected, option) {
     if (selected.length === 0 && this._id) {
       ViewModel.findOne('ModalWindow').setError('Link cannot be removed. There must be at least one Standard linked to this document.');
-      viewmodel.selected(this.selected());
       return;
     }
 
@@ -37,13 +40,26 @@ Template.Fields_Standards_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.parent().update({ standardsIds })
+    const options = {
+      [`${option}`]: {
+        standardsIds: selectedItemId
+      }
+    };
+
+    this.parent().update({ options });
   },
   onRemoveCb() {
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel);
+    const { selectedItemId, selected } = viewmodel.getData();
+
+    if (!this.areIdsIncludesItemId(selectedItemId)) return;
+
+    this.callUpdate(selectedItemId, selected, '$pull');
+  },
+  areIdsIncludesItemId(selectedItemId) {
+    return this.standardsIds().includes(selectedItemId);
   },
   getData() {
     const { standardsIds } = this.data();

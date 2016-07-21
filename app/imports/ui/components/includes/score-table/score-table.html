@@ -1,5 +1,5 @@
 <template name="ScoreTable_Edit">
-  <div class="table-risk-grading">
+  <div class="table-risk-grading card-block">
     <table class="table">
       <tbody>
         {{#with tableData}}
@@ -8,6 +8,7 @@
           </tr>
           {{#each this.data}}
             {{> ScoreTable_Item
+                disabled=disabled
                 score=score
                 rowId=this._id
                 rows=this.rows

@@ -6,6 +6,9 @@ Template.CreateNC.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
   isStandardsEditable: true,
   standardsIds: [],
+  NCGuidelines() {
+    return this.organization().ncGuidelines;
+  },
   save() {
     const data = this.getData();
 

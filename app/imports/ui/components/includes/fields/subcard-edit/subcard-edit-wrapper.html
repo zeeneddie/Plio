@@ -2,7 +2,9 @@
   <div class="card-block card-block-collapse-toggle" {{b "click: toggleCollapse(null, 200), class: { collapsed: collapsed }"}}>
     <h4 class="card-title pull-xs-left" {{b "text: _lText"}}></h4>
     <h4 class="card-title pull-xs-right">
-      <span class="text-muted" {{b "html: _rText"}}></span>
+      {{#if _rText}}
+        <span class="text-muted" {{b "html: _rText"}}></span>
+      {{/if}}
     </h4>
   </div>
   <div class="card-block-collapse collapse" {{b "ref: collapse"}}>

@@ -59,7 +59,7 @@
 
             <div class="row">
               <div class="col-sm-12">
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
               </div>
@@ -75,9 +75,21 @@
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
 
-          {{> Subcards_RiskAnalysis_Read score=this.score}}
+          {{> Subcards_RiskScoring_Read scores=this.scores}}
 
-          {{> Subcards_TreatmentPlan_Read treatmentPlan=this.treatmentPlan}}
+          {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
+
+          {{> Subcards_ImprovementPlan_Read
+              documentId=this._id
+              label="Treatment plan"}}
+
+          {{> Subcards_Actions_Read
+              type=ActionTypes.CORRECTIVE_ACTION
+              documentId=this._id}}
+
+          {{> Subcards_Actions_Read
+              type=ActionTypes.RISK_CONTROL
+              documentId=this._id}}
 
           {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 

@@ -1,0 +1,24 @@
+<template name="OrganizationSettings_ProblemGuidelines">
+  <div class="card-block card-block-collapse-toggle collapsed"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left" {{b "text: label"}}></h4>
+  </div>
+  <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+    <div class="card-block">
+      {{> OrganizationSettings_ProblemGuideline
+          type="minor"
+          text=minor
+          onChange=onChangeCb}}
+
+      {{> OrganizationSettings_ProblemGuideline
+          type="major"
+          text=major
+          onChange=onChangeCb}}
+
+      {{> OrganizationSettings_ProblemGuideline
+          type="critical"
+          text=critical
+          onChange=onChangeCb}}
+    </div>
+  </div>
+</template>

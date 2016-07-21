@@ -1,6 +1,12 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, OrganizationIdSchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
+import {
+  BaseEntitySchema,
+  OrganizationIdSchema,
+  DocumentIdSchema,
+  DocumentTypeSchema,
+  ViewedBySchema
+} from '../schemas.js';
 
 
 const RequiredSchema = new SimpleSchema({
@@ -27,6 +33,7 @@ const LessonsSchema = new SimpleSchema([
   RequiredSchema,
   DocumentIdSchema,
   DocumentTypeSchema,
+  ViewedBySchema,
   {
     serialNumber: {
       type: Number

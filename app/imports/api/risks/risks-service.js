@@ -1,5 +1,6 @@
 import { Risks } from './risks.js';
 import { generateSerialNumber } from '/imports/core/utils.js';
+import { Random } from 'meteor/random';
 
 export default {
   collection: Risks,
@@ -50,5 +51,31 @@ export default {
 
       return this.collection.update(query, options);
     }
+  },
+
+  'scores.insert'({ _id, ...args }) {
+    const id = Random.id();
+    const query = { _id };
+    const options = {
+      $addToSet: {
+        scores: { _id: id, ...args }
+      }
+    };
+
+    return (async () => {
+      const res = await this.collection.update(query, options);
+      return res ? id : res;
+    })();
+  },
+
+  'scores.remove'({ _id, score }) {
+    const query = { _id };
+    const options = {
+      '$pull': {
+        'scores': score
+      }
+    };
+
+    return this.collection.update(query, options);
   }
 };

@@ -11,6 +11,8 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   },
   documentId: '',
   documentType: '',
+  label: 'Improvement plan',
+  _id: '',
   desiredOutcome: '',
   targetDate: '',
   owner: '',
@@ -32,7 +34,6 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
     this.modal().callMethod(insert, { documentId, documentType, ...args }, cb);
   },
   update({ query = {}, options = {}, ...args }, cb) {
-
     if (!this.document()) {
       return this.insert({ ...args }, cb);
     }
