@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
-import { update, remove } from '/imports/api/actions/methods.js';
+import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
@@ -54,14 +54,14 @@ Template.Actions_Card_Read.viewmodel({
       cb(err, () => {
         const queryParams = this._getQueryParams({ _id, isDeleted, title, ...args })(Meteor.userId());
         FlowRouter.setQueryParams(queryParams);
-        Meteor.defer(() => {
+        Meteor.setTimeout(() => {
           this.goToAction(_id);
           this.expandCollapsed(_id);
-        });
+        }, 0);
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);

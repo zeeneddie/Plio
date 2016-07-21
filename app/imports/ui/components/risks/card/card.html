@@ -1,6 +1,6 @@
 <template name="Risks_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasRisks}}
+    {{#if risks.count}}
       {{#Card_Read
         cardTitle="Risk"
         document=risk

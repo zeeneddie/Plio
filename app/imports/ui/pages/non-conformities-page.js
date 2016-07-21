@@ -6,5 +6,6 @@ Template.NCPage.viewmodel({
   autorun() {
     const NCIds = this._getNCsByQuery({}).fetch().map(({ _id }) => _id);
     this.templateInstance.subscribe('occurrencesByNCIds', NCIds)
+    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   }
 });
