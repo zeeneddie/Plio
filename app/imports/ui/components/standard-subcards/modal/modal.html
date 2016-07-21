@@ -1,10 +1,10 @@
 <template name="SS_Card_Modal">
   <div>
     <div class="relative">
-      {{! NON-CONFORMITIES SUBCARDS}}
+      <!-- {{! NON-CONFORMITIES SUBCARDS}}
       {{#with NC}}
         {{> Subcards_Notify_Edit
-            document=this
+            doc=this
             documentType="non-conformity"
             onUpdate=onUpdateNotifyUserCb}}
 
@@ -37,9 +37,10 @@
             files=this.files
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
-      {{/with}}
+      {{/with}} -->
+      {{> NC_Subcards}}
 
-      {{! STANDARDS SUBCARDS}}
+      <!-- {{! STANDARDS SUBCARDS}}
       {{#with standard}}
         {{> Subcards_NonConformities_Edit
           _id=this._id
@@ -48,9 +49,10 @@
       {{> Subcards_Actions_Edit
           type="RC"
           standardId=this._id}}
-      {{/with}}
+      {{/with}} -->
+      {{> Standards_Subcards}}
 
-      {{! RISKS SUBCARDS}}
+      <!-- {{! RISKS SUBCARDS}}
       {{#with risk}}
         {{> Subcards_RiskScoring_Edit
             _id=this._id
@@ -61,13 +63,15 @@
             documentType="risk"
             label="Treatment plan"
             treatmentPlan=this.treatmentPlan}}
-      {{/with}}
+      {{/with}} -->
+      {{> Risks_Subcards}}
 
-      {{! ACTIONS SUBCARDS}}
+      <!-- {{! ACTIONS SUBCARDS}}
       {{#with action}}
         {{> Subcards_Notes_Edit
             notes=this.notes}}
-      {{/with}}
+      {{/with}} -->
+      {{> Actions_Subcards}}
 
     </div>
   </div>
