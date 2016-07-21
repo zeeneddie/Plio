@@ -8,6 +8,8 @@ import ProblemsService from '../problems/problems-service.js';
 export default _.extend({}, ProblemsService, {
   collection: NonConformities,
 
+  _abbr: 'NC',
+
   _getDoc(_id) {
     const NC = this.collection.findOne({ _id });
     if (!NC) {

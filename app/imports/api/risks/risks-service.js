@@ -9,6 +9,8 @@ import ProblemsService from '../problems/problems-service.js';
 export default _.extend({}, ProblemsService, {
   collection: Risks,
 
+  _abbr: 'RK',
+
   'scores.insert'({ _id, ...args }) {
     const id = Random.id();
     const query = { _id };
