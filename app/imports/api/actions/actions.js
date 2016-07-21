@@ -48,17 +48,15 @@ Actions.helpers({
     return this.getLinkedNCs().concat(this.getLinkedRisks());
   },
   canBeCompleted() {
-    return _.every([
-      this.isCompleted === false,
-      this.isVerified === false
-    ]);
+    const { isCompleted, isVerified } = this;
+    return isCompleted && isVerified;
   },
   canCompletionBeUndone() {
-    const completedAt = this.completedAt;
+    const { isCompleted, isVerified, completedAt } = this;
 
     if (!_.every([
-          this.isCompleted === true,
-          this.isVerified === false,
+          isCompleted === true,
+          isVerified === false,
           _.isDate(completedAt)
         ])) {
       return false;
@@ -70,15 +68,13 @@ Actions.helpers({
     return compareDates(undoDeadline, new Date()) === 1;
   },
   canBeVerified() {
-    return _.every([
-      this.isCompleted === true,
-      this.isVerified === false
-    ]);
+    const { isCompleted, isVerified } = this;
+    return (isCompleted === true) && (isVerified === false);
   },
   canVerificationBeUndone() {
-    const verifiedAt = this.verifiedAt;
+    const { isVerified, verifiedAt } = this;
 
-    if (!(this.isVerified === true && _.isDate(verifiedAt))) {
+    if (!(isVerified === true && _.isDate(verifiedAt))) {
       return false;
     }
 
@@ -93,28 +89,19 @@ Actions.helpers({
     });
   },
   completed() {
-    return _.every([
-      this.isCompleted === true,
-      !!this.completedAt,
-      !!this.completedBy
-    ]);
+    const { isCompleted, completedAt, completedBy } = this;
+    return (isCompleted === true) && completedAt && completedBy;
   },
   verified() {
-    return _.every([
-      this.isVerified === true,
-      !!this.verifiedAt,
-      !!this.verifiedBy
-    ]);
+    const { isVerified, verifiedAt, verifiedBy } = this;
+    return (isVerified === true) && verifiedAt && verifiedBy;
   },
   verifiedAsEffective() {
     return this.verified() && (this.isVerifiedAsEffective === true);
   },
   deleted() {
-    return _.every([
-      this.isDeleted === true,
-      !!this.deletedAt,
-      !!this.deletedBy
-    ]);
+    const { isDeleted, deletedAt, deletedBy } = this;
+    return (isDeleted === true) && deletedAt && deletedBy;
   },
   getWorkflowType() {
     const linkedDocs = this.getLinkedDocuments();
