@@ -104,27 +104,26 @@ Actions.helpers({
     return (isDeleted === true) && deletedAt && deletedBy;
   },
   getWorkflowType() {
-    const linkedDocs = this.getLinkedDocuments();
+    // Action has 6-step workflow if at least one linked document has 6-step workflow
+    const { linkedTo } = this;
 
-    if (linkedDocs.length === 0) {
+    if (!linkedTo || !linkedTo.length) {
       return WorkflowTypes.THREE_STEP;
     }
 
-    const docsByMagnitude = _.groupBy(linkedDocs, doc => doc.magnitude);
+    const query = {
+      isDeleted: false,
+      deletedAt: { $exists: false },
+      deletedBy: { $exists: false },
+      workflowType: WorkflowTypes.SIX_STEP
+    };
 
-    const withHighestMagnitude = docsByMagnitude[ProblemMagnitudes.CRITICAL]
-        || docsByMagnitude[ProblemMagnitudes.MAJOR]
-        || docsByMagnitude[ProblemMagnitudes.MINOR]
-        || [];
+    const ncQuery = _.extend({ _id: { $in: this.getLinkedNCsIds() } }, query);
+    const riskQuery = _.extend({ _id: { $in: this.getLinkedRisksIds() } }, query);
 
-    const docsByWorkflowType = _.groupBy(withHighestMagnitude, doc => doc.workflowType);
+    const sixStepDoc = NonConformities.findOne(ncQuery) || Risks.findOne(riskQuery);
 
-    const withHighestWorkflow = docsByWorkflowType[WorkflowTypes.SIX_STEP]
-        || docsByWorkflowType[WorkflowTypes.THREE_STEP]
-        || [];
-
-    return (withHighestWorkflow.length && withHighestWorkflow[0].workflowType)
-        || WorkflowTypes.THREE_STEP;
+    return sixStepDoc ? WorkflowTypes.SIX_STEP : WorkflowTypes.THREE_STEP;
   }
 });
 
