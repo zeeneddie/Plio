@@ -47,14 +47,11 @@ Template.Standards_Card_Read.viewmodel({
     }
 
   },
-  hasStandards() {
-    return this.standards().count() > 0;
-  },
   standards() {
     return this._getStandardsByQuery({});
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standard() && this.standard()._id });
+    return this._getStandardByQuery({ _id: this.standardId() });
   },
   hasDocxAttachment() {
     const standard = this.standard();

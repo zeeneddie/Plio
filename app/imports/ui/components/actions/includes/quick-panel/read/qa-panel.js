@@ -11,10 +11,10 @@ Template.Actions_QAPanel_Read.viewmodel({
   isAction() {
     return this._documentType() === ActionDocumentTypes.ACTION;
   },
-  showQAPanel({ isVerified, isCompleted, toBeCompletedBy, toBeVerifiedBy, analysis: { executor, status } = {} } ) {
+  showQAPanel({ isDeleted, isVerified, isCompleted, toBeCompletedBy, toBeVerifiedBy, analysis: { executor, status } = {} } ) {
     const aCondition = !isVerified && this.chooseOne(isCompleted)(toBeVerifiedBy, toBeCompletedBy) === Meteor.userId();
     const pCondition = status === 0 && executor === Meteor.userId();
-    return (this.isAction() && aCondition) || pCondition;
+    return !isDeleted && ((this.isAction() && aCondition) || pCondition);
   },
   getActionButtonText({ isCompleted, analysis: { status } = {} }) {
     const aText = isCompleted ? 'Verify' : 'Complete';

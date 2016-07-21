@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
-
 import { update, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
@@ -47,12 +47,13 @@ Template.Actions_Card_Read.viewmodel({
   onRestoreCb() {
     return this.restore.bind(this);
   },
-  restore({ _id, isDeleted, title }, cb = () => {}) {
+  restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
     if (!isDeleted) return;
 
     const callback = (err) => {
       cb(err, () => {
-        FlowRouter.setQueryParams({ by: 'My current actions' });
+        const queryParams = this._getQueryParams({ _id, isDeleted, title, ...args })(Meteor.userId());
+        FlowRouter.setQueryParams(queryParams);
         Meteor.defer(() => {
           this.goToAction(_id);
           this.expandCollapsed(_id);
