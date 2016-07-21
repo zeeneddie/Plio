@@ -37,6 +37,13 @@ Template.Departments_Create.viewmodel({
     }, (err, _id) => {
       if (!err) {
         const departmentsEdit = ViewModel.findOne('Departments_Edit');
+
+        try {
+          departmentsEdit.child('Select_Multi').child('Select_Single').clear();
+        } catch(err) {
+          console.log(err);
+        }
+
         this.selected(_id);
 
         departmentsEdit.update(this);

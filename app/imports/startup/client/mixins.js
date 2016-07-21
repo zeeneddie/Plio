@@ -331,15 +331,12 @@ ViewModel.mixin({
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getStandardsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
     _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Standards.findOne(query, options);
     }
   },
@@ -460,15 +457,12 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getRisksByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveRiskFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getRisksByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Risks.find(query, options);
     },
     _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Risks.findOne(query, options);
     }
   },
@@ -486,18 +480,12 @@ ViewModel.mixin({
       const _id = this.NCId();
       return NonConformities.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getNCsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveNCFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return NonConformities.findOne(query, options);
     }
   },

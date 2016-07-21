@@ -48,7 +48,8 @@ Template.Standards_Card_Read.viewmodel({
 
   },
   standards() {
-    return this._getStandardsByQuery({});
+    const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
+    return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
