@@ -216,7 +216,8 @@ export const ViewedBySchema = new SimpleSchema({
 export const DeletedSchema = new SimpleSchema({
   isDeleted: {
     type: Boolean,
-    optional: true
+    optional: true,
+    defaultValue: false
   },
   deletedBy: {
     type: String,

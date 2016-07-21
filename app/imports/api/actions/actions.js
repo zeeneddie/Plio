@@ -49,7 +49,7 @@ Actions.helpers({
   },
   canBeCompleted() {
     const { isCompleted, isVerified } = this;
-    return isCompleted && isVerified;
+    return (isCompleted === false) && (isVerified === false);
   },
   canCompletionBeUndone() {
     const { isCompleted, isVerified, completedAt } = this;
