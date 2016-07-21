@@ -331,15 +331,12 @@ ViewModel.mixin({
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getStandardsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
     _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Standards.findOne(query, options);
     }
   },
@@ -406,9 +403,8 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToAction(workItemId, withQueryParams = true) {
+    goToAction(workItemId, queryParams = { by: this.activeActionFilter() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
       FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToActions(withQueryParams = true) {
@@ -461,15 +457,12 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getRisksByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveRiskFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getRisksByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Risks.find(query, options);
     },
     _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Risks.findOne(query, options);
     }
   },
@@ -487,18 +480,12 @@ ViewModel.mixin({
       const _id = this.NCId();
       return NonConformities.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getNCsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveNCFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return NonConformities.findOne(query, options);
     }
   },
@@ -532,13 +519,28 @@ ViewModel.mixin({
           break;
       }
     },
-    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);
     },
-    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
+    },
+    _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
+      return (userId) => {
+        if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
+          return { by: 'My current actions' };
+        } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
+          return { by: 'My completed actions' };
+        } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
+          return { by: 'Team current actions' };
+        } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
+          return { by: 'Team completed actions' };
+        } else {
+          return { by: 'My current actions' };
+        }
+      };
     }
   },
   utils: {
@@ -610,6 +612,19 @@ ViewModel.mixin({
   problemsStatus: {
     getStatusName(status) {
       return ProblemsStatuses[status];
+    },
+    getShortStatusName(status) {
+      switch(status) {
+        case 4:
+          return 'awaiting analysis';
+          break;
+        case 11:
+          return 'awaiting update of standard(s)';
+          break;
+        default:
+          return '';
+          break;
+      }
     },
     getClassByStatus(status) {
       switch(status) {

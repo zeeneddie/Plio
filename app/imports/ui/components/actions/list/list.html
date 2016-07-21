@@ -46,6 +46,12 @@
         {{/each}}
       {{/if}}
 
+      {{#if isActiveActionFilter 'Deleted actions'}}
+        {{#each actionsDeleted}}
+          {{> ActionItem}}
+        {{/each}}
+      {{/if}}
+
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
       {{/if}}

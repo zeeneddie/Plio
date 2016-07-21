@@ -44,7 +44,10 @@ Template.RisksList.viewmodel({
         return { status: { $in: this.statuses() } };
         break;
       case 'department/sector':
-        return { departments: { $in: this.departments().map(({ _id }) => _id) } };
+        return { departmentsIds: { $in: this.departments().map(({ _id }) => _id) } };
+        break;
+      case 'deleted':
+        return { isDeleted: true };
         break;
       default:
         return {};
@@ -60,7 +63,7 @@ Template.RisksList.viewmodel({
         return { status: this.statuses().length > 0 && this.statuses()[0] };
         break;
       case 'department/sector':
-        return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
+        return { departmentsIds: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
       case 'deleted':
         return { _id: this.risksDeleted().count() > 0 && this.risksDeleted().fetch()[0]._id };
@@ -92,18 +95,18 @@ Template.RisksList.viewmodel({
             .map(status => parseInt(status, 10))
             .filter(status => this._getRisksByQuery({ status, ...this._getSearchQuery() }).count() > 0);
   },
-  _getDepartmentQuery({ _id:departments }) {
-    return { departments };
+  _getDepartmentQuery({ _id:departmentsIds }) {
+    return { departmentsIds };
   },
   departments() {
     const query = { organizationId: this.organizationId() };
     const options = { sort: { name: 1 } };
-    return Departments.find(query, options).fetch().filter(({ _id:departments }) => {
-      return this._getRisksByQuery({ departments, ...this._getSearchQuery() }).count() > 0;
+    return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
+      return this._getRisksByQuery({ departmentsIds, ...this._getSearchQuery() }).count() > 0;
     });
   },
   risksDeleted() {
-    const query = { ...this._getSearchQuery() };
+    const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getRisksByQuery(query, options);
   },

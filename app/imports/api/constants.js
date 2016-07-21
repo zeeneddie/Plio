@@ -272,7 +272,8 @@ const ActionFilters = [
   'My current actions',
   'Team current actions',
   'My completed actions',
-  'Team completed actions'
+  'Team completed actions',
+  'Deleted actions'
 ];
 
 const DocumentTypes = [
