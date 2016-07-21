@@ -6,7 +6,6 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
