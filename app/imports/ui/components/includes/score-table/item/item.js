@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.ScoreTable_Item.viewmodel({
   mixin: 'riskScore',
+  disabled: false,
   score: {
     rowId: '',
     value: ''
@@ -11,6 +12,12 @@ Template.ScoreTable_Item.viewmodel({
   rows: '',
   tableData: '',
   row: '',
+  className(val) {
+    const disabled = this.disabled() ? 'disabled' : '';
+    const impact = `impact-${this.getClassByScore(val)}`;
+    const active = this.isActive(val) ? 'active' : '';
+    return `${disabled} ${impact} ${active}`;
+  },
   onUpdate() {},
   onClick(value) {
     const data = {

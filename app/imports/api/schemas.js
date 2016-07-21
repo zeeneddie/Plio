@@ -1,5 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { TimeUnits, DocumentTypes, AnalysisStatuses } from './constants.js';
+import {
+  TimeUnits, DocumentTypes, AnalysisStatuses,
+  ReviewStatuses
+} from './constants.js';
 import { Utils } from '/imports/core/utils.js';
 
 
@@ -330,7 +333,7 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: String,
         optional: true
       },
-      departments: {
+      departmentsIds: {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
         optional: true
@@ -340,4 +343,35 @@ export const BaseProblemsOptionalSchema = ((() => {
     }
   ]);
 
+})());
+
+export const ReviewSchema = ((() => {
+  const schema = new SimpleSchema({
+    status: {
+      type: Number,
+      allowedValues: _.keys(ReviewStatuses).map(status => parseInt(status, 10)),
+      defaultValue: 2
+    },
+    reviewedAt: {
+      type: Date,
+      optional: true
+    },
+    reviewedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    comments: {
+      type: String,
+      max: 140,
+      optional: true
+    }
+  });
+
+  return new SimpleSchema({
+    review: {
+      type: schema,
+      optional: true
+    }
+  });
 })());

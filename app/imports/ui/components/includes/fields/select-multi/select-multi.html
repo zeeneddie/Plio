@@ -6,10 +6,11 @@
       {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
     </div>
   {{/each}}
-  {{> SelectItem
+  {{> Select_Single
       placeholder=placeholder
       items=items
       excludedItems=selectedIds
       selectFirstIfNoSelected=selectFirstIfNoSelected
-      onUpdate=onSelectCb}}
+      onUpdate=onSelectCb
+      content=content}}
 </template>

@@ -1,11 +1,12 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCard_EditWrapper _lText=title _rText=lessons.count}}
+  {{#SubCard_EditWrapper _lText=title _rText=actionsIndicators}}
     <div class="card-block">
       {{#if actions.count}}
         <div id="actions" class="card">
           {{#each actions}}
             {{> SubCard_Edit
                 _id=this._id
+                doc=this
                 action=this
                 type=type
                 isLinkedToEditable=true
@@ -16,7 +17,6 @@
                 removeFn=removeFn
                 updateFn=updateFn
                 completeFn=completeFn
-                undoCompletionFn=undoCompletionFn
                 verifyFn=verifyFn
                 undoVerificationFn=undoVerificationFn
                 linkStandardFn=linkStandardFn

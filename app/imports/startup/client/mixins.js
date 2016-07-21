@@ -3,15 +3,16 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, ProblemsStatuses,
+  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, ActionFilters,
-  ActionTypes
+  ActionTypes, ReviewStatuses
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -24,6 +25,7 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
+    collapseTimeout: '',
     toggleCollapse: _.throttle(function(cb, timeout) {
 
       // Callback is always the last argument
@@ -341,6 +343,17 @@ ViewModel.mixin({
       return Standards.findOne(query, options);
     }
   },
+  department: {
+    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+      const query = {
+        ...by,
+        organizationId: this.organizationId()
+      };
+
+      return Departments.find(query, options)
+                .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
+    }
+  },
   date: {
     renderDate(date) {
       return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
@@ -396,12 +409,12 @@ ViewModel.mixin({
     goToAction(actionId, withQueryParams = true) {
       const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('action', params, queryParams);
+      FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToActions(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('actions', params, queryParams);
+      FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
@@ -489,6 +502,45 @@ ViewModel.mixin({
       return NonConformities.findOne(query, options);
     }
   },
+  workInbox: {
+    workItemId() {
+      return FlowRouter.getParam('workItem');
+    },
+    isActiveWorkInboxFilter(filter) {
+      return this.activeActionFilter() === filter;
+    },
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    },
+    currentWorkItem() {
+      const _id = this.workItemId();
+      return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
+    },
+    _getWorkItemsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getWorkItemByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
+    }
+  },
   action: {
     actionId() {
       return FlowRouter.getParam('actionId');
@@ -502,6 +554,9 @@ ViewModel.mixin({
     currentAction() {
       const _id = this.actionId();
       return Actions.findOne({ _id });
+    },
+    ActionTypes() {
+      return ActionTypes;
     },
     _getNameByType(type) {
       switch (type) {
@@ -526,11 +581,11 @@ ViewModel.mixin({
     }
   },
   utils: {
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalize(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     },
-    lowercase(string) {
-      return string.charAt(0).toLowerCase() + string.slice(1);
+    lowercase(str) {
+      return str ? str.charAt(0).toLowerCase() + str.slice(1) : '';
     },
     round(num) {
       if (num >= 1000000) {
@@ -550,18 +605,24 @@ ViewModel.mixin({
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
+    combine(...fns) {
+      return (...args) => fns.forEach(fn => fn(...args));
+    },
     findParentRecursive(templateName, instance) {
       return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
+    },
+    $not(predicate) {
+      return !predicate;
     }
   },
   magnitude: {
     _magnitude() {
       this.load({ mixin: 'utils' });
-      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+      return _.values(ProblemGuidelineTypes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   },
   currency: {
@@ -622,27 +683,30 @@ ViewModel.mixin({
     },
     getClassByStatus(status) {
       switch(status) {
-        case 0:
         case 1:
-        case 2:
-          return 'warning';
-        case 3:
         case 4:
-        case 5:
-        case 6:
+          return 'warning';
+          break;
+        case 0:
+        case 3:
         case 7:
         case 8:
           return 'success';
-        case 9:
+          break;
+        case 2:
+        case 5:
+        case 6:
           return 'danger';
+          break;
         default:
           return '';
+          break;
       }
     }
   },
   members: {
     _searchString() {
-      const child = this.child('SelectItem');
+      const child = this.child('Select_Single');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
@@ -706,6 +770,27 @@ ViewModel.mixin({
         return 'medium';
       } else {
         return 'high';
+      }
+    }
+  },
+  reviewStatus: {
+    getStatusName(status) {
+      return ReviewStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'danger';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'success';
+          break;
+        default:
+          return '';
+          break;
       }
     }
   }

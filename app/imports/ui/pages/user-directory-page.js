@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { UserSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.UserDirectoryPage.viewmodel({
   share: 'search',
@@ -13,7 +14,7 @@ Template.UserDirectoryPage.viewmodel({
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
     if (userIds && userIds.length) {
-      const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+      const organizationUsersHandle = UserSubs.subscribe('organizationUsers', userIds);
       if (!this.activeUser() && organizationUsersHandle.ready()) {
         FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
           orgSerialNumber: this.organizationSerialNumber(),

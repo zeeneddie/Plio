@@ -25,7 +25,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
     this.addForm(
       'SubCard_Edit',
       {
-        _lText: `${seqId}-new occurance`,
+        _lText: `${seqId}-new occurrence`,
         _rText: '',
         content: 'Subcards_Occurrence',
         insertFn: this.insertFn(),

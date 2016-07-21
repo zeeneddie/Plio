@@ -1,0 +1,10 @@
+<template name="Review_ReviewedBy">
+  {{#FormField label=label}}
+    {{> Select_Single
+        placeholder=placeholder
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        items=_members
+        selected=reviewedBy
+        onUpdate=onUpdate}}
+  {{/FormField}}
+</template>
