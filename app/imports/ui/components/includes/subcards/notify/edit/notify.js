@@ -8,9 +8,6 @@ Template.Subcards_Notify_Edit.viewmodel({
   doc: '',
   documentType: '',
   placeholder: 'User to notify',
-  members() {
-    return this._members({ _id: { $nin: this.currentNotifyUsersIds() } });
-  },
   currentNotifyUsersIds() {
     return Array.from(this.currentNotifyUsers() || []).map(({ _id }) => _id);
   },
