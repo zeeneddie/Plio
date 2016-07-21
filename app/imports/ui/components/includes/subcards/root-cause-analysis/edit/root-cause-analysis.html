@@ -1,10 +1,12 @@
 <template name="Subcards_RootCauseAnalysis_Edit">
   {{> NC_Analysis_Edit
+      label=RCALabel
       analysis=analysis
       defaultTargetDate=defaultTargetDate
       isAnalysisCompleted=isAnalysisCompleted}}
   {{#if isAnalysisCompleted}}
     {{> NC_UpdateOfStandards_Edit
+        label=UOSLabel
         updateOfStandards=updateOfStandards
         executor=analysis.executor
         defaultTargetDate=defaultTargetDate}}

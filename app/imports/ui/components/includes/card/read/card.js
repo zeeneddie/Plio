@@ -6,6 +6,9 @@ Template.Card_Read.viewmodel({
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
+  openModal: _.throttle(function() {
+    this.onOpenEditModal();
+  }, 3000),
   handleMethodCall(err = '', title = '', action = 'updated', cb = () => {}) {
     if (err) {
       swal('Oops... Something went wrong!', err.reason, 'error');

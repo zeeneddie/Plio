@@ -81,7 +81,19 @@ export const updateViewedBy = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update an action'
+        403, 'Unauthorized user cannot update actions'
+      );
+    }
+
+    if (!Actions.findOne({ _id })) {
+      throw new Meteor.Error(
+        400, 'Action does not exist'
+      );
+    }
+
+    if (!!Actions.findOne({ _id, viewedBy: this.userId })) {
+      throw new Meteor.Error(
+        400, 'You have been already added to the viewedBy list of this action'
       );
     }
 

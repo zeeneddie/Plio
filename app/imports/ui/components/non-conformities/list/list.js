@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
-import { NCTypes, ProblemsStatuses } from '/imports/api/constants.js';
+import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.NCList.viewmodel({
   share: 'search',
@@ -45,7 +45,7 @@ Template.NCList.viewmodel({
       case 'status':
         return { status: { $in: this.statuses() } };
         break;
-      case 'department':
+      case 'department/sector':
         return { departments: { $in: this.departments().map(({ _id }) => _id) } };
         break;
       default:
@@ -61,7 +61,7 @@ Template.NCList.viewmodel({
       case 'status':
         return { status: this.statuses().length > 0 && this.statuses()[0] };
         break;
-      case 'department':
+      case 'department/sector':
         return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
         break;
       case 'deleted':

@@ -8,7 +8,7 @@ Template.Departments_Create.viewmodel({
   selected: [],
   value: '',
   departmentHintText() {
-    return this.value() ? `Add "${this.value()}" department` : 'Start typing...';
+    return this.value() ? `Add "${this.value()}" department/sector` : 'Start typing...';
   },
   addNewDepartment() {
     if (!this.value()) return;
@@ -19,7 +19,7 @@ Template.Departments_Create.viewmodel({
     swal(
       {
         title: "Are you sure?",
-        text: `New department "${this.value()}" will be added.`,
+        text: `New department/sector "${this.value()}" will be added.`,
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Add",
@@ -41,7 +41,7 @@ Template.Departments_Create.viewmodel({
 
         departmentsEdit.update(this);
 
-        swal("Added!", `New department "${this.value()}" was added successfully.`, "success");
+        swal("Added!", `New department/sector "${this.value()}" was added successfully.`, "success");
       }
     });
   },

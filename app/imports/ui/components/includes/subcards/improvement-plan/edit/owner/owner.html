@@ -2,6 +2,7 @@
   {{#FormField label="Owner" sm=7}}
     {{> Select_Single
         placeholder="Owner"
+        selected=owner
         items=_members
         selectFirstIfNoSelected=false
         onUpdate=onUpdateCb}}
