@@ -9,7 +9,7 @@ export default {
   collection: Actions,
 
   insert({ organizationId, type, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
 
     const sequentialId = `${type}${serialNumber}`;
 

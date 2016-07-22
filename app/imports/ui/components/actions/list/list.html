@@ -2,7 +2,7 @@
   <div class="card">
     <form class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField clearFn="clearSearchField"}}
+        {{#ClearableField field="searchText"}}
           <input type="text" class="form-control" placeholder="Search..."
               disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
         {{/ClearableField}}
