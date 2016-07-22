@@ -74,7 +74,7 @@ Template.RisksList.viewmodel({
     };
   },
   _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+    return this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]);
   },
   _getTypeQuery({ _id:typeId }) {
     return { typeId };
