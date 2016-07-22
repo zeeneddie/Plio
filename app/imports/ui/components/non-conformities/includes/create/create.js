@@ -43,7 +43,7 @@ Template.CreateNC.viewmodel({
 
           this.modal().open({
             _id,
-            title: 'Non-conformity',
+            _title: 'Non-conformity',
             template: 'NC_Card_Edit'
           });
         }, 400);
