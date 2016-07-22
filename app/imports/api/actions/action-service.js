@@ -211,9 +211,9 @@ export default {
     });
   },
 
-  remove({ _id, deletedBy, isDeleted }) {
-    this._ensureActionExists(_id);
-
+  remove({ _id, deletedBy }) {
+    const action = this._getAction(_id);
+    const { isDeleted } = action;
     const query = { _id };
 
     if (isDeleted) {
@@ -227,7 +227,35 @@ export default {
         }
       };
 
+      // XXX - We need to change the status as well
+
       return this.collection.update(query, options);
+    }
+  },
+
+  restore({ _id }) {
+    this._ensureActionIsDeleted(_id);
+
+    const query = { _id };
+    const options = {
+      $set: {
+        isDeleted: false
+      },
+      $unset: {
+        deletedBy: '',
+        deletedAt: ''
+      }
+    };
+
+    // XXX - We need to change the status as well
+
+    return this.collection.update(query, options);
+  },
+
+  _ensureActionIsDeleted(_id) {
+    const action = this._getAction(_id);
+    if (!action.isDeleted) {
+      throw new Meteor.Error(400, 'Action needs to be deleted first');
     }
   },
 
@@ -243,5 +271,5 @@ export default {
       throw new Meteor.Error(400, 'Action does not exist');
     }
     return action;
-  },
+  }
 };

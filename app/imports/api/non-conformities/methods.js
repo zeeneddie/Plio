@@ -102,14 +102,6 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    const NC = NonConformities.findOne({ _id });
-
-    if (!NC) {
-      throw new Meteor.Error(
-        400, 'Non-conformity with the given id does not exists'
-      );
-    }
-
-    return NonConformitiesService.remove({ _id, deletedBy: userId, isDeleted: NC.isDeleted});
+    return NonConformitiesService.remove({ _id });
   }
 });

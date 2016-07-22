@@ -252,6 +252,23 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return ActionService.remove({ _id, deletedBy: userId});
+    return ActionService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'Actions.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore an action'
+      );
+    }
+
+    return ActionService.restore({ _id });
   }
 });
