@@ -23,15 +23,16 @@ export default {
   },
 
   restore({ _id }) {
-    this._ensureWorkItemExists(_id);
+    this._ensureWorkItemIsDeleted(_id);
 
-    try {
-      const res = this._service.restore({ _id });
-    } catch(err) {
+    return this._service.restore({ _id });
+  },
+
+  _ensureWorkItemIsDeleted(_id) {
+    const workItem = this._getWorkItem(_id);
+    if (!workItem.isDeleted) {
       throw new Meteor.Error(400, 'Work item needs to be deleted first');
     }
-
-    return res;
   },
 
   _ensureUserHasNotViewed({ _id, viewedBy }) {

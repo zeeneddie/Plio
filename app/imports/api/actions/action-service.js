@@ -3,10 +3,13 @@ import { ActionTypes, ProblemTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import Utils from '/imports/core/utils.js';
+import BaseEntityService from '../base-entity-service.js';
 
 
 export default {
   collection: Actions,
+
+  _service: new BaseEntityService(Actions),
 
   insert({ organizationId, type, ...args }) {
     const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
@@ -195,67 +198,38 @@ export default {
     });
   },
 
-  updateViewedBy({ _id, userId }) {
-    this._ensureActionExists(_id);
+  updateViewedBy({ _id, userId:viewedBy }) {
+    this._ensureUserHasNotViewed({ _id, viewedBy });
 
-    if (!!this.collection.findOne({ _id, viewedBy: userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
-
-    return this.collection.update({ _id }, {
-      $addToSet: {
-        viewedBy: userId
-      }
-    });
+    this._service.updateViewedBy({ _id, viewedBy });
   },
 
   remove({ _id, deletedBy }) {
-    const action = this._getAction(_id);
-    const { isDeleted } = action;
-    const query = { _id };
+    this._ensureActionExists(_id);
 
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
-
-      // XXX - We need to change the status as well
-
-      return this.collection.update(query, options);
-    }
+    this._service.remove({ _id, deletedBy });
   },
 
   restore({ _id }) {
     this._ensureActionIsDeleted(_id);
 
-    const query = { _id };
-    const options = {
-      $set: {
-        isDeleted: false
-      },
-      $unset: {
-        deletedBy: '',
-        deletedAt: ''
-      }
-    };
-
-    // XXX - We need to change the status as well
-
-    return this.collection.update(query, options);
+    return this._service.restore({ _id });
   },
 
   _ensureActionIsDeleted(_id) {
     const action = this._getAction(_id);
     if (!action.isDeleted) {
       throw new Meteor.Error(400, 'Action needs to be deleted first');
+    }
+  },
+
+  _ensureUserHasNotViewed({ _id, viewedBy }) {
+    this._ensureActionExists(_id);
+
+    if (!!this.collection.findOne({ _id, viewedBy })) {
+      throw new Meteor.Error(
+        400, 'You have been already added to this list'
+      );
     }
   },
 

@@ -83,18 +83,6 @@ export const updateViewedBy = new ValidatedMethod({
       );
     }
 
-    if (!Risks.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Risk does not exist'
-      );
-    }
-
-    if (!!Risks.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this risk'
-      );
-    }
-
     return RisksService.updateViewedBy({ _id, userId: this.userId });
   }
 });
@@ -114,15 +102,25 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    const risk = Risks.findOne({ _id });
+    return RisksService.remove({ _id, deletedBy: userId });
+  }
+});
 
-    if (!risk) {
+export const restore = new ValidatedMethod({
+  name: 'Risks.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
-        400, 'Risk with the given id does not exist'
+        403, 'Unauthorized user cannot restore risks'
       );
     }
 
-    return RisksService.remove({ _id, deletedBy: userId, isDeleted: risk.isDeleted});
+    return RisksService.restore({ _id });
   }
 });
 
@@ -136,7 +134,7 @@ export const insertScore = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
+        403, 'Unauthorized user cannot score a risk'
       );
     }
 
@@ -166,7 +164,7 @@ export const removeScore = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
+        403, 'Unauthorized user cannot remove a score'
       );
     }
 

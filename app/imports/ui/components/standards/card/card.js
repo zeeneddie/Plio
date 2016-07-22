@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { update, remove } from '/imports/api/standards/methods.js';
+import { restore, remove } from '/imports/api/standards/methods.js';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'standard',
@@ -89,7 +89,7 @@ Template.Standards_Card_Read.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, isDeleted: false }, (err) => {
+        restore.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {

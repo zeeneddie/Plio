@@ -71,18 +71,6 @@ export const updateViewedBy = new ValidatedMethod({
       );
     }
 
-    if (!NonConformities.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Non-conformity does not exist'
-      );
-    }
-
-    if (!!NonConformities.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this non-conformity'
-      );
-    }
-
     return NonConformitiesService.updateViewedBy({ _id, userId: this.userId });
   }
 });
@@ -103,5 +91,22 @@ export const remove = new ValidatedMethod({
     }
 
     return NonConformitiesService.remove({ _id });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'NonConformities.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore non-conformities'
+      );
+    }
+
+    return NonConformitiesService.restore({ _id });
   }
 });

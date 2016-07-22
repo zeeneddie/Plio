@@ -37,23 +37,17 @@ export default class BaseEntityService {
   }
 
   restore({ _id }) {
-    const { isDeleted } = this.collection.findOne({ _id });
+    const query = { _id };
+    const options = {
+      $set: {
+        isDeleted: false
+      },
+      $unset: {
+        deletedBy: '',
+        deletedAt: ''
+      }
+    };
 
-    if (isDeleted) {
-      throw new Error(400);
-    } else {
-      const query = { _id };
-      const options = {
-        $set: {
-          isDeleted: false
-        },
-        $unset: {
-          deletedBy: '',
-          deletedAt: ''
-        }
-      };
-
-      return this.collection.update(query, options);
-    }
+    return this.collection.update(query, options);
   }
 }

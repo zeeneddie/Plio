@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
@@ -49,7 +49,7 @@ Template.NC_Card_Read.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);
