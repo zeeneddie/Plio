@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
-
+import { Actions } from '/imports/api/actions/actions.js';
 
 Template.Actions_Create.viewmodel({
   mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
@@ -45,7 +45,10 @@ Template.Actions_Create.viewmodel({
 
         Meteor.setTimeout(() => {
           const action = this._getActionByQuery({ _id });
-          this.goToAction(_id, false);
+
+          const queryParams = this._getQueryParams(action)(Meteor.userId());
+
+          this.goToAction(_id, queryParams);
 
           this.expandCollapsed(_id);
 

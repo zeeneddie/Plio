@@ -5,19 +5,19 @@ const ProblemGuidelineTypes = {
 };
 
 const ProblemsStatuses = {
-  1: 'Open - just reported',
+  1: 'Open - just reported, awaiting analysis',
   2: 'Open - analysis due today',
   3: 'Open - analysis overdue',
   4: 'Open - analysis completed, action needed',
-  5: 'Open - analysis completed, action in place',
-  6: 'Open - action due today',
-  7: 'Open - action overdue',
-  8: 'Open - action completed',
+  5: 'Open - analysis completed, action(s) in place',
+  6: 'Open - action(s) due today',
+  7: 'Open - action(s) overdue',
+  8: 'Open - action(s) completed, awaiting verification',
   9: 'Open - verification due today',
-  10: 'Open - verification overdue',
-  11: 'Open - action verified as effective',
-  12: 'Open - action failed verification',
-  13: 'Closed - action verified, standard updated',
+  10: 'Open - verification past due',
+  11: 'Open - action(s) verified as effective, awaiting update of standard(s)',
+  12: 'Open - action(s) failed verification',
+  13: 'Closed - action(s) verified, standard(s) updated',
   14: 'Deleted'
 };
 
@@ -272,7 +272,8 @@ const ActionFilters = [
   'My current actions',
   'Team current actions',
   'My completed actions',
-  'Team completed actions'
+  'Team completed actions',
+  'Deleted actions'
 ];
 
 const DocumentTypes = [
@@ -280,6 +281,11 @@ const DocumentTypes = [
   'non-conformity',
   'risk'
 ];
+
+const ActionDocumentTypes = {
+  'ACTION': 'action',
+  ...ProblemTypes
+};
 
 const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
@@ -339,6 +345,7 @@ export {
   DocumentTypes,
   AvatarPlaceholders,
   ActionFilters,
+  ActionDocumentTypes,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
   ReviewStatuses,

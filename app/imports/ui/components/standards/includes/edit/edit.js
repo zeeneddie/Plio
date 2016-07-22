@@ -10,7 +10,7 @@ Template.EditStandard.viewmodel({
     const userId = Meteor.userId();
 
     if (!isViewed(doc, userId)) {
-      Tracker.nonreactive(() => updateViewedBy());
+      Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
   updateViewedBy() {

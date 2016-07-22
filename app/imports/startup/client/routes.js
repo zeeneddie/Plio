@@ -214,7 +214,7 @@ FlowRouter.route('/:orgSerialNumber/work-inbox', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/work-inbox/:actionId', {
+FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {

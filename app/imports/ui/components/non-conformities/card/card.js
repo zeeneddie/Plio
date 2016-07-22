@@ -6,7 +6,7 @@ import { update, remove } from '/imports/api/non-conformities/methods.js';
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
   autorun() {
-    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
+    this.templateInstance.subscribe('NCImprovementPlan', this.NC() && this.NC()._id);
   },
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
@@ -33,7 +33,7 @@ Template.NC_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
-      _id: this.NCId()
+      _id: this.NC() && this.NC()._id
     });
   },
   onRestoreCb() {

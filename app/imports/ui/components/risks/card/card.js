@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { update, remove } from '/imports/api/risks/methods.js';
 
-Template.RisksCard.viewmodel({
+Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
   hasRisks() {
     return this.risks().count() > 0;
@@ -27,7 +27,7 @@ Template.RisksCard.viewmodel({
     this.modal().open({
       _title: 'Risk',
       template: 'EditRisk',
-      _id: this.riskId()
+      _id: this.risk() && this.risk()._id
     });
   },
   onRestoreCb() {
