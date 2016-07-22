@@ -12,10 +12,10 @@ Template.ActionsLayout.viewmodel({
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
       const _subHandlers = [
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('nonConformities', _id),
         this.templateInstance.subscribe('risks', _id),
-        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        UserSubs.subscribe('organizationUsers', userIds)
       ];
 
       if (this.isActiveActionFilter('Deleted actions')) {

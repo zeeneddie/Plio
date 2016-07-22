@@ -345,8 +345,6 @@ export {
   DocumentTypes,
   AvatarPlaceholders,
   ActionFilters,
-  TreatmentPlanPriorities,
-  TreatmentPlanDecisions,
   ActionDocumentTypes,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,

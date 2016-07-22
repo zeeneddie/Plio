@@ -5,19 +5,8 @@ import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditRisk.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
-  autorun() {
-    const doc = this.risk();
-    const userId = Meteor.userId();
-
-    if(!isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
-    }
-  },
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
-  },
-  RKGuidelines() {
-    return this.organization() && this.organization().rkGuidelines;
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
