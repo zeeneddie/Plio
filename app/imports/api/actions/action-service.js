@@ -118,7 +118,6 @@ export default {
 
       const workflow = new ActionWorkflow(_id);
       workflow.refreshStatus();
-      workflow.refreshLinkedDocsStatuses();
     });
 
     return ret;
@@ -335,7 +334,6 @@ export default {
     Meteor.isServer && Meteor.defer(() => {
       const workflow = new ActionWorkflow(_id);
       workflow.refreshStatus();
-      workflow.refreshLinkedDocsStatuses();
     });
   },
 

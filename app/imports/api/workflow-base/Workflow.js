@@ -1,11 +1,26 @@
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+
 import { WorkflowTypes } from '../constants.js';
 
 
 export default class Workflow {
 
-  constructor(_id) {
-    this._id = _id;
-    this._doc = this._getDoc();
+  constructor(idOrDoc) {
+    const isId = SimpleSchema.RegEx.Id.test(idOrDoc);
+    const isDoc = _.isObject(idOrDoc);
+
+    if (!(isId || isDoc)) {
+      throw new Error('Invalid argument for Workflow constructor');
+    }
+
+    if (isId) {
+      this._id = idOrDoc;
+      this._doc = this._getDoc();
+    } else {
+      this._doc = idOrDoc;
+      this._id = this._doc._id;
+    }
+
     this._timezone = this._getOrgTimezone();
   }
 
@@ -33,7 +48,13 @@ export default class Workflow {
       }, {
         $set: { status }
       });
+
+      this._onUpdateStatus(status);
     }
+  }
+
+  _onUpdateStatus(status) {
+    // Implement in child class
   }
 
   _getDoc() {

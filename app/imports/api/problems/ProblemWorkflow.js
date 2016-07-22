@@ -7,10 +7,10 @@ import Workflow from '../workflow-base/Workflow.js';
 
 export default class ProblemWorkflow extends Workflow {
 
-  constructor(_id) {
-    super(_id);
+  constructor(idOrDoc) {
+    super(idOrDoc);
     this._linkedActions = Actions.find({
-      'linkedTo.documentId': _id,
+      'linkedTo.documentId': this._id,
       isDeleted: false
     });
   }

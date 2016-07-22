@@ -8,18 +8,9 @@ import RiskWorkflow from '../../risks/RiskWorkflow.js';
 
 export default class ActionWorkflow extends Workflow {
 
-  constructor(_id) {
-    super(_id);
+  constructor(idOrDoc) {
+    super(idOrDoc);
     this._workflowType = this._getWorkflowType();
-  }
-
-  refreshLinkedDocsStatuses() {
-    const action = this._doc;
-    const NCsIds = action.getLinkedNCsIds();
-    const risksIds = action.getLinkedRisksIds();
-
-    _.each(NCsIds, id => new NCWorkflow(id).refreshStatus());
-    _.each(risksIds, id => new RiskWorkflow(id).refreshStatus());
   }
 
   _getThreeStepStatus() {
@@ -33,6 +24,15 @@ export default class ActionWorkflow extends Workflow {
         || this._getVerificationStatus()
         || this._getCompletionStatus()
         || 1;
+  }
+
+  _onUpdateStatus(status) {
+    const action = this._doc;
+    const NCs = action.getLinkedNCs();
+    const risks = action.getLinkedRisks();
+
+    _.each(NCs, doc => new NCWorkflow(doc).refreshStatus());
+    _.each(risks, doc => new RiskWorkflow(doc).refreshStatus());
   }
 
   _getDeletedStatus() {
