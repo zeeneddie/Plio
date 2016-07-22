@@ -48,6 +48,25 @@ const ActionTypes = {
   RISK_CONTROL: 'RC'
 };
 
+const WorkItemTypes = {
+  COMPLETE_ACTION: 'complete action',
+  VERIFY_ACTION: 'verify action',
+  COMPLETE_ANALYSIS: 'complete analysis',
+  COMPLETE_UPDATE_OF_STANDARDS: 'complete update of standards'
+};
+
+const WorkItemLinkedDocTypes = {
+  ...ActionTypes,
+  ...ProblemTypes
+};
+
+WorkItemStatuses = {
+  0: 'in progress',
+  1: 'due today',
+  2: 'overdue',
+  3: 'completed'
+};
+
 const ActionUndoTimeInHours = 1;
 
 const ActionStatuses = {
@@ -349,5 +368,7 @@ export {
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
   ReviewStatuses,
-  RKTypes
+  WorkItemTypes,
+  WorkItemLinkedDocTypes,
+  WorkItemStatuses
 };

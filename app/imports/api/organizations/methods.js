@@ -8,7 +8,7 @@ import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
 import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
-import { ProblemGuidelineTypes, UserRoles, UserMembership, RKTypes } from '../constants';
+import { ProblemGuidelineTypes, UserRoles, UserMembership } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
