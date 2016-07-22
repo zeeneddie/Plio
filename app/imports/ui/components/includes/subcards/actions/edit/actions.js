@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
+import moment from 'moment-timezone';
 
 import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 
@@ -263,13 +265,25 @@ Template.Subcards_Actions_Edit.viewmodel({
   updateCompletionDateFn() {
     return this.updateCompletionDate.bind(this);
   },
-  updateCompletionDate({ ...args }, cb) {
-    this.modal().callMethod(setCompletionDate, { ...args }, cb);
+  updateCompletionDate({ targetDate, ...args }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(targetDate, timezone);
+
+    this.modal().callMethod(setCompletionDate, {
+      targetDate: tzDate,
+      ...args
+    }, cb);
   },
   updateVerificationDateFn() {
     return this.updateVerificationDate.bind(this);
   },
-  updateVerificationDate({ ...args }, cb) {
-    this.modal().callMethod(setVerificationDate, { ...args }, cb);
+  updateVerificationDate({ targetDate, ...args }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(targetDate, timezone);
+
+    this.modal().callMethod(setVerificationDate, {
+      targetDate: tzDate,
+      ...args
+    }, cb);
   }
 });

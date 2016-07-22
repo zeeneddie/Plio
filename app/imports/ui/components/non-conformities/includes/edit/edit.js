@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import {
   update, remove, updateViewedBy,
@@ -7,6 +8,7 @@ import {
   updateStandards, undoStandardsUpdate
 } from '/imports/api/non-conformities/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 
 
 Template.NC_Card_Edit.viewmodel({
@@ -44,7 +46,11 @@ Template.NC_Card_Edit.viewmodel({
   },
   updateAnalysisDate({ date }) {
     const _id = this._id();
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: date });
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate });
   },
   completeAnalysis() {
     const _id = this._id();
@@ -53,6 +59,16 @@ Template.NC_Card_Edit.viewmodel({
   undoAnalysis() {
     const _id = this._id();
     this.modal().callMethod(undoAnalysis, { _id });
+  },
+  updateStandardsDate({ date, ...args }) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(update, {
+      _id: this._id(),
+      'updateOfStandards.targetDate': tzDate,
+      ...args
+    });
   },
   updateStandards() {
     const _id = this._id();

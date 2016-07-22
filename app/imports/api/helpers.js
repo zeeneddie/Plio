@@ -1,3 +1,6 @@
+import moment from 'moment-timezone';
+
+
 const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
@@ -39,4 +42,10 @@ const compareDates = (date1, date2) => {
   }
 };
 
-export { handleMethodResult, compareDates };
+const getTzTargetDate = (targetDate, timezone) => {
+  return moment.tz([
+    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
+  ], timezone).toDate();
+};
+
+export { handleMethodResult, compareDates, getTzTargetDate };

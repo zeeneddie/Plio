@@ -1,6 +1,6 @@
 import { Risks } from '../risks.js';
 
-import ProblemWorkflow from '../../workflow-base/ProblemWorkflow.js';
+import ProblemWorkflow from '../../problems/ProblemWorkflow.js';
 
 
 export default class RiskWorkflow extends ProblemWorkflow {

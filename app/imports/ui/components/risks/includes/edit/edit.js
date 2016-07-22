@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import {
   update, remove, updateViewedBy,
@@ -9,6 +10,7 @@ import {
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 
 
 Template.EditRisk.viewmodel({
@@ -80,7 +82,11 @@ Template.EditRisk.viewmodel({
   },
   updateAnalysisDate({ date }) {
     const _id = this._id();
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: date });
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate });
   },
   completeAnalysis() {
     const _id = this._id();
@@ -89,6 +95,16 @@ Template.EditRisk.viewmodel({
   undoAnalysis() {
     const _id = this._id();
     this.modal().callMethod(undoAnalysis, { _id });
+  },
+  updateStandardsDate({ date, ...args }) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(update, {
+      _id: this._id(),
+      'updateOfStandards.targetDate': tzDate,
+      ...args
+    });
   },
   updateStandards() {
     const _id = this._id();

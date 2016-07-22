@@ -62,30 +62,31 @@ export const isOrgMember = (userId, organizationId) => {
   });
 };
 
-export const isDueToday = (targetDate, timezone) => {
+const checkTargetDate = (targetDate, timezone) => {
   if (!targetDate) {
     return false;
   }
 
   timezone = timezone || moment.tz.guess();
 
-  const tzNow = moment(new Date()).tz(timezone);
-  const tzTargetDate = moment(targetDate).tz(timezone);
+  const tzNow = moment(new Date()).tz(timezone).date();
+  const tzTargetDate = moment(targetDate).tz(timezone).date();
 
-  return tzNow.date() === tzTargetDate.date();
+  if (tzNow > tzTargetDate) {
+    return 1;
+  } else if (tzNow === tzTargetDate) {
+    return 0;
+  } else if (tzNow < tzTargetDate) {
+    return -1;
+  }
+};
+
+export const isDueToday = (targetDate, timezone) => {
+  return checkTargetDate(targetDate, timezone) === 0;
 };
 
 export const isOverdue = (targetDate, timezone) => {
-  if (!targetDate) {
-    return false;
-  }
-
-  timezone = timezone || moment.tz.guess();
-
-  const tzNow = moment(new Date()).tz(timezone);
-  const tzTargetDate = moment(targetDate).tz(timezone);
-
-  return tzNow.date() > tzTargetDate.date();
+  return checkTargetDate(targetDate, timezone) === -1;
 };
 
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = {}) => {

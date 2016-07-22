@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import {
   insert,
@@ -15,6 +16,7 @@ import {
   setCompletionDate,
   setVerificationDate
 } from '/imports/api/actions/methods.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 
 Template.Actions_Edit.viewmodel({
   mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
@@ -89,12 +91,18 @@ Template.Actions_Edit.viewmodel({
   },
   getUpdateCompletionDateFn() {
     return ({ targetDate }, cb) => {
-      this.callUpdate(setCompletionDate, { targetDate }, cb);
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
     };
   },
   getUpdateVerificationDateFn() {
     return ({ targetDate }, cb) => {
-      this.callUpdate(setVerificationDate, { targetDate }, cb);
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
     };
   },
   generateCallback(queryParam, cb = () => {}) {

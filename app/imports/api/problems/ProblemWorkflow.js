@@ -2,7 +2,7 @@ import { WorkflowTypes } from '../constants.js';
 import { Organizations } from '../organizations/organizations.js';
 import { isDueToday, isOverdue } from '../checkers.js';
 
-import Workflow from './Workflow.js';
+import Workflow from '../workflow-base/Workflow.js';
 
 
 export default class ProblemWorkflow extends Workflow {

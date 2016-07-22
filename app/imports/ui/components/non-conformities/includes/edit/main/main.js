@@ -39,6 +39,9 @@ Template.NC_Card_Edit_Main.viewmodel({
   undoAnalysis() {
     this.parent().undoAnalysis();
   },
+  updateStandardsDate(...args) {
+    this.parent().updateStandardsDate(...args);
+  },
   updateStandards() {
     this.parent().updateStandards();
   },
