@@ -69,14 +69,14 @@ const checkTargetDate = (targetDate, timezone) => {
 
   timezone = timezone || moment.tz.guess();
 
-  const tzNow = moment(new Date()).tz(timezone).date();
-  const tzTargetDate = moment(targetDate).tz(timezone).date();
+  const tzNow = moment(new Date()).tz(timezone);
+  const tzTargetDate = moment(targetDate).tz(timezone);
 
-  if (tzNow > tzTargetDate) {
+  if (tzNow.isAfter(tzTargetDate, 'day')) {
     return 1;
-  } else if (tzNow === tzTargetDate) {
+  } else if (tzNow.isSame(tzTargetDate, 'day')) {
     return 0;
-  } else if (tzNow < tzTargetDate) {
+  } else if (tzNow.isBefore(tzTargetDate, 'day')) {
     return -1;
   }
 };
@@ -86,7 +86,7 @@ export const isDueToday = (targetDate, timezone) => {
 };
 
 export const isOverdue = (targetDate, timezone) => {
-  return checkTargetDate(targetDate, timezone) === -1;
+  return checkTargetDate(targetDate, timezone) === 1;
 };
 
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = {}) => {
