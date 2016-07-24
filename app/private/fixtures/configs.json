@@ -4,5 +4,9 @@
   "StandardsBookSections": "standardsBookSections",
   "StandardTypes": "standardTypes",
   "Meteor.users": "users",
-  "RiskTypes": "riskTypes"
+  "NonConformities": "nonConformities",
+  "Occurrences": "occurrences",
+  "Actions": "actions",
+  "RiskTypes": "riskTypes",
+  "Risks": "risks"
 }
