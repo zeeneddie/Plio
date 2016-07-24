@@ -36,8 +36,8 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   actionsIndicators() {
     const actions = this.actions().fetch();
-    const amber = actions.filter(({ status }) => [1, 4].includes(status));
-    const red = actions.filter(({ status }) => [2, 5, 6].includes(status));
+    const amber = actions.filter(({ status }) => [2, 5].includes(status));
+    const red = actions.filter(({ status }) => [3, 6, 7].includes(status));
     const count = array => array.length > 0 ? array.length : '';
     const generateHtml = (array, color) => count(array) ? `<span class="hidden-xs-down">${count(array)}</span>
                                                            <i class="fa fa-circle text-${color} margin-left"></i> `
