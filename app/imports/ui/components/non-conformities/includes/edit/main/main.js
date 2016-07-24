@@ -30,24 +30,6 @@ Template.NC_Card_Edit_Main.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
-  updateAnalysisDate(...args) {
-    this.parent().updateAnalysisDate(...args);
-  },
-  completeAnalysis() {
-    this.parent().completeAnalysis();
-  },
-  undoAnalysis() {
-    this.parent().undoAnalysis();
-  },
-  updateStandardsDate(...args) {
-    this.parent().updateStandardsDate(...args);
-  },
-  updateStandards() {
-    this.parent().updateStandards();
-  },
-  undoStandardsUpdate() {
-    this.parent().undoStandardsUpdate();
-  },
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
     return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);

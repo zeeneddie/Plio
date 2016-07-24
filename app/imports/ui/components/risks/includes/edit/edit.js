@@ -80,39 +80,38 @@ Template.EditRisk.viewmodel({
       }
     );
   },
-  updateAnalysisDate({ date }) {
+  updateAnalysisDate({ date }, cb) {
     const _id = this._id();
 
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate });
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
   },
-  completeAnalysis() {
+  completeAnalysis(cb) {
     const _id = this._id();
-    this.modal().callMethod(completeAnalysis, { _id });
+    this.modal().callMethod(completeAnalysis, { _id }, cb);
   },
-  undoAnalysis() {
+  undoAnalysis(cb) {
     const _id = this._id();
-    this.modal().callMethod(undoAnalysis, { _id });
+    this.modal().callMethod(undoAnalysis, { _id }, cb);
   },
-  updateStandardsDate({ date, ...args }) {
+  updateStandardsDate({ date }, cb) {
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
     this.modal().callMethod(update, {
       _id: this._id(),
-      'updateOfStandards.targetDate': tzDate,
-      ...args
-    });
+      'updateOfStandards.targetDate': tzDate
+    }, cb);
   },
-  updateStandards() {
+  updateStandards(cb) {
     const _id = this._id();
-    this.modal().callMethod(updateStandards, { _id });
+    this.modal().callMethod(updateStandards, { _id }, cb);
   },
-  undoStandardsUpdate() {
+  undoStandardsUpdate(cb) {
     const _id = this._id();
-    this.modal().callMethod(undoStandardsUpdate, { _id });
+    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
   },
   showRootCauseAnalysis() {
     return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);

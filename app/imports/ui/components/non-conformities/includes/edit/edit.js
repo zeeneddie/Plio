@@ -44,39 +44,56 @@ Template.NC_Card_Edit.viewmodel({
       updateFn();
     }
   },
-  updateAnalysisDate({ date }) {
+  getUpdateAnalysisDateFn() {
+    return this.updateAnalysisDate.bind(this);
+  },
+  updateAnalysisDate({ date }, cb) {
     const _id = this._id();
 
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate });
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
   },
-  completeAnalysis() {
+  getCompleteAnalysisFn() {
+    return this.completeAnalysis.bind(this);
+  },
+  completeAnalysis(cb) {
     const _id = this._id();
-    this.modal().callMethod(completeAnalysis, { _id });
+    this.modal().callMethod(completeAnalysis, { _id }, cb);
   },
-  undoAnalysis() {
+  getUndoAnalysisFn() {
+    return this.undoAnalysis.bind(this);
+  },
+  undoAnalysis(cb) {
     const _id = this._id();
-    this.modal().callMethod(undoAnalysis, { _id });
+    this.modal().callMethod(undoAnalysis, { _id }, cb);
   },
-  updateStandardsDate({ date, ...args }) {
+  getUpdateStandardsDateFn() {
+    return this.updateStandardsDate.bind(this);
+  },
+  updateStandardsDate({ date }, cb) {
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
     this.modal().callMethod(update, {
       _id: this._id(),
-      'updateOfStandards.targetDate': tzDate,
-      ...args
-    });
+      'updateOfStandards.targetDate': tzDate
+    }, cb);
   },
-  updateStandards() {
-    const _id = this._id();
-    this.modal().callMethod(updateStandards, { _id });
+  getUpdateStandardsFn() {
+    return this.updateStandards.bind(this);
   },
-  undoStandardsUpdate() {
+  updateStandards(cb) {
     const _id = this._id();
-    this.modal().callMethod(undoStandardsUpdate, { _id });
+    this.modal().callMethod(updateStandards, { _id }, cb);
+  },
+  getUndoStandardsUpdateFn() {
+    return this.undoStandardsUpdate.bind(this);
+  },
+  undoStandardsUpdate(cb) {
+    const _id = this._id();
+    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
   },
   remove() {
     const { title } = this.NC();
