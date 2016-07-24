@@ -9,10 +9,57 @@ export default class ProblemWorkflow extends Workflow {
 
   constructor(idOrDoc) {
     super(idOrDoc);
-    this._linkedActions = Actions.find({
+    
+    const actions = Actions.find({
       'linkedTo.documentId': this._id,
-      isDeleted: false
-    });
+      isDeleted: false,
+      deletedAt: { $exists: false },
+      deletedBy: { $exists: false }
+    }).fetch();
+
+    this._actions = actions;
+    
+    this._completedActionsLength = this._getCompletedActionsLength();
+
+    let verifiedLength;
+    if (this._getWorkflowType() === WorkflowTypes.SIX_STEP) {
+      verifiedLength = this._getVerifiedActionsLength();
+    }
+    this._verifiedActionsLength = verifiedLength;
+  }
+
+  _getVerifiedActionsLength() {
+    return _.filter(this._actions, ({ status }) => {
+      return status === 8; // Completed - verified as effective
+    }).length;
+  }
+
+  _getCompletedActionsLength() {
+    return _.filter(this._actions, ({ status }) => {
+      // 4: In progress - completed, not yet verified
+      // 5: In progress - completed, verification due today
+      // 6: In progress - completed, verification overdue
+      // 7: Completed - failed verification
+      // 8: Completed - verified as effective
+      // 9: Completed
+      return _.contains([4, 5, 6, 7, 8, 9], status);
+    }).length;
+  }
+
+  _standardsUpdated() {
+    return this._doc.areStandardsUpdated();
+  }
+
+  _allActionsVerified() {
+    return this._verifiedActionsLength === this._actions.length;
+  }
+
+  _allActionsCompleted() {
+    return this._completedActionsLength === this._actions.length;
+  }
+
+  _analysisCompleted() {
+    return this._doc.isAnalysisCompleted();
   }
 
   _getWorkflowType() {
@@ -40,37 +87,40 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getStandardsUpdateStatus() {
-    if (this._doc.areStandardsUpdated()) {
+    if (this._analysisCompleted()
+          && this._allActionsCompleted()
+          && this._allActionsVerified()
+          && this._standardsUpdated()) {
       return 17; // Closed - action(s) verified, standard(s) reviewed
     }
   }
 
   _getActionStatus() {
-    const actions = this._linkedActions.fetch();
-
-    if (actions.length === 0) {
+    if (this._actions.length === 0) {
       return;
     }
 
     const workflowType = this._getWorkflowType();
 
     if (workflowType === WorkflowTypes.THREE_STEP) {
-      return this._getActionCompletionStatus(actions);
+      return this._getActionCompletionStatus();
     } else if (workflowType === WorkflowTypes.SIX_STEP) {
-      return this._getActionVerificationStatus(actions)
-          || this._getActionCompletionStatus(actions);
+      return this._getActionVerificationStatus()
+          || this._getActionCompletionStatus();
     }
   }
 
-  _getActionVerificationStatus(actions) {
-    // check if all actions are verified
-    const verifiedLength = _.filter(actions, ({ status }) => {
-      return status === 8; // Completed - verified as effective
-    }).length;
+  _getActionVerificationStatus() {
+    if (!(this._analysisCompleted() && this._allActionsCompleted())) {
+      return;
+    }
 
-    if (verifiedLength === actions.length) {
+    // check if all actions are verified
+    if (this._allActionsVerified()) {
       return 14; // Open - action(s) verified as effective, awaiting update of standard(s)
     }
+
+    const actions = this._actions;
 
     // check if there is overduded verification
     const overduded = _.find(actions, ({ status }) => {
@@ -100,21 +150,16 @@ export default class ProblemWorkflow extends Workflow {
     }
   }
 
-  _getActionCompletionStatus(actions) {
+  _getActionCompletionStatus() {
     const workflowType = this._getWorkflowType();
 
-    // check if all actions are completed
-    const completedLength = _.filter(actions, ({ status }) => {
-      // 4: In progress - completed, not yet verified
-      // 5: In progress - completed, verification due today
-      // 6: In progress - completed, verification overdue
-      // 7: Completed - failed verification
-      // 8: Completed - verified as effective
-      // 9: Completed
-      return _.contains([4, 5, 6, 7, 8, 9], status);
-    }).length;
+    if ((workflowType === WorkflowTypes.SIX_STEP) 
+          && !this._analysisCompleted()) {
+      return;
+    }
 
-    if (completedLength === actions.length) {
+    // check if all actions are completed
+    if (this._allActionsCompleted()) {
       const completedStatuses = {
         [WorkflowTypes.THREE_STEP]: 16, // Closed - action(s) completed
         [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
@@ -122,6 +167,8 @@ export default class ProblemWorkflow extends Workflow {
 
       return completedStatuses[workflowType];
     }
+
+    const actions = this._actions;
 
     // check if there is overduded action
     const overduded = _.find(actions, ({ status }) => {
@@ -142,7 +189,7 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is at least one completed action
-    if (completedLength >= 1) {
+    if (this._completedActionsLength >= 1) {
       const completedStatuses = {
         [WorkflowTypes.THREE_STEP]: 10, // Open - action(s) completed
         [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
@@ -153,18 +200,15 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getAnalysisStatus() {
-    const doc = this._doc;
-
-    if (doc.isAnalysisCompleted()) {
-      const actionsCount = this._linkedActions.count();
-      if (actionsCount > 0) {
+    if (this._analysisCompleted()) {
+      if (this._actions.length > 0) {
         return 7; // Open - analysis completed, action(s) in place
       }
 
       return 6; // Open - analysis completed, action needed
     }
 
-    const { analysis } = doc || {};
+    const { analysis } = this._doc || {};
     const { targetDate } = analysis || {};
     const timezone = this._timezone;
 
