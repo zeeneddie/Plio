@@ -296,7 +296,8 @@ const ActionFilters = [
   'My current actions',
   'Team current actions',
   'My completed actions',
-  'Team completed actions'
+  'Team completed actions',
+  'Deleted actions'
 ];
 
 const DocumentTypes = [
@@ -304,6 +305,11 @@ const DocumentTypes = [
   'non-conformity',
   'risk'
 ];
+
+const ActionDocumentTypes = {
+  'ACTION': 'action',
+  ...ProblemTypes
+};
 
 const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
@@ -364,6 +370,7 @@ export {
   DocumentTypes,
   AvatarPlaceholders,
   ActionFilters,
+  ActionDocumentTypes,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
   ReviewStatuses,

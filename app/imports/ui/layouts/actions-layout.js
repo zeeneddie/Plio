@@ -14,8 +14,15 @@ Template.ActionsLayout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('actions', _id)
+        this.templateInstance.subscribe('nonConformities', _id),
+        this.templateInstance.subscribe('risks', _id),
       ];
+
+      if (this.isActiveActionFilter('Deleted actions')) {
+        _subHandlers.push(this.templateInstance.subscribe('actions', _id, true));
+      } else {
+        _subHandlers.push(this.templateInstance.subscribe('actions', _id));
+      }
 
       this._subHandlers(_subHandlers);
     },

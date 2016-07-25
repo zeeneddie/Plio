@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
+import { update, remove } from '/imports/api/actions/methods.js';
 
-Template.ActionsCard.viewmodel({
+Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
     return this._getActionByQuery({ _id: this.actionId() });
@@ -31,9 +33,6 @@ Template.ActionsCard.viewmodel({
     const query = list && list._getQueryForFilter();
     return this._getActionsByQuery(query);
   },
-  hasActions() {
-    return this.actions().count() > 0;
-  },
   onOpenEditModalCb() {
     return this.openEditActionModal.bind(this);
   },
@@ -44,5 +43,44 @@ Template.ActionsCard.viewmodel({
       template: 'Actions_Edit',
       _id: this.actionId()
     });
+  },
+  onRestoreCb() {
+    return this.restore.bind(this);
+  },
+  restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
+    if (!isDeleted) return;
+
+    const callback = (err) => {
+      cb(err, () => {
+        const queryParams = this._getQueryParams({ _id, isDeleted, title, ...args })(Meteor.userId());
+        FlowRouter.setQueryParams(queryParams);
+        Meteor.defer(() => {
+          this.goToAction(_id);
+          this.expandCollapsed(_id);
+        });
+      });
+    };
+
+    update.call({ _id, isDeleted: false }, callback);
+  },
+  onDeleteCb() {
+    return this.delete.bind(this);
+  },
+  delete({ _id, title, isDeleted }, cb = () => {}) {
+    if (!isDeleted) return;
+
+    const callback = (err) => {
+      cb(err, () => {
+        const actions = this._getActionsByQuery({});
+
+        if (actions.count() > 0) {
+          Meteor.defer(() => {
+            this.goToActions();
+          });
+        }
+      });
+    };
+
+    remove.call({ _id }, callback);
   }
 });

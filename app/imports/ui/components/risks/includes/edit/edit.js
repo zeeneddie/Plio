@@ -15,19 +15,8 @@ import { getTzTargetDate } from '/imports/api/helpers.js';
 
 Template.EditRisk.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
-  autorun() {
-    const doc = this.risk();
-    const userId = Meteor.userId();
-
-    if (!isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
-    }
-  },
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
-  },
-  RKGuidelines() {
-    return this.organization() && this.organization().rkGuidelines;
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -80,6 +69,9 @@ Template.EditRisk.viewmodel({
       }
     );
   },
+  getUpdateAnalysisDateFn() {
+    return this.updateAnalysisDate.bind(this);
+  },
   updateAnalysisDate({ date }, cb) {
     const _id = this._id();
 
@@ -88,13 +80,22 @@ Template.EditRisk.viewmodel({
 
     this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
   },
+  getCompleteAnalysisFn() {
+    return this.completeAnalysis.bind(this);
+  },
   completeAnalysis(cb) {
     const _id = this._id();
     this.modal().callMethod(completeAnalysis, { _id }, cb);
   },
+  getUndoAnalysisFn() {
+    return this.undoAnalysis.bind(this);
+  },
   undoAnalysis(cb) {
     const _id = this._id();
     this.modal().callMethod(undoAnalysis, { _id }, cb);
+  },
+  getUpdateStandardsDateFn() {
+    return this.updateStandardsDate.bind(this);
   },
   updateStandardsDate({ date }, cb) {
     const { timezone } = this.organization();
@@ -105,9 +106,15 @@ Template.EditRisk.viewmodel({
       'updateOfStandards.targetDate': tzDate
     }, cb);
   },
+  getUpdateStandardsFn() {
+    return this.updateStandards.bind(this);
+  },
   updateStandards(cb) {
     const _id = this._id();
     this.modal().callMethod(updateStandards, { _id }, cb);
+  },
+  getUndoStandardsUpdateFn() {
+    return this.undoStandardsUpdate.bind(this);
   },
   undoStandardsUpdate(cb) {
     const _id = this._id();

@@ -19,14 +19,6 @@ Template.NC_Card_Edit_Main.viewmodel({
   NCGuidelines() {
     return this.organization() && this.organization().ncGuidelines;
   },
-  autorun() {
-    const doc = this.NC();
-    const userId = Meteor.userId();
-
-    if (!isViewed(doc, userId)) {
-      Tracker.nonreactive(() => updateViewedBy());
-    }
-  },
   update(...args) {
     this.parent().update(...args);
   },

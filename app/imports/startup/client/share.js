@@ -6,5 +6,8 @@ ViewModel.share({
   },
   search: {
     searchText: ''
+  },
+  action: {
+    actionDocType: ''
   }
 });

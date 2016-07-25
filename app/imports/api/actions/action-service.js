@@ -14,7 +14,7 @@ export default {
   insert({ organizationId, type, linkedTo, ...args }) {
     linkedTo && this._checkLinkedDocs(linkedTo);
 
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
 
     const sequentialId = `${type}${serialNumber}`;
 

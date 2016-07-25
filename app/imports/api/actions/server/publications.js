@@ -4,7 +4,7 @@ import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
 
-Meteor.publish('actions', function(organizationId) {
+Meteor.publish('actions', function(organizationId, isDeleted = { $in: [null, false] }) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -12,7 +12,7 @@ Meteor.publish('actions', function(organizationId) {
 
   return Actions.find({
     organizationId,
-    isDeleted: { $in: [false, null] }
+    isDeleted
   });
 });
 
