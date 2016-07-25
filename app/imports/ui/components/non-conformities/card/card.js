@@ -4,7 +4,7 @@ import { NonConformities } from '/imports/api/non-conformities/non-conformities.
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },

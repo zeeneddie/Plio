@@ -5,7 +5,7 @@ import { ActionFilters } from '/imports/api/constants.js';
 
 Template.ActionsHeader.viewmodel({
   share: ['window', 'search'],
-  mixin: ['action', 'mobile', 'organization', 'collapsing'],
+  mixin: ['workInbox', 'mobile', 'organization', 'collapsing'],
   filters() {
     return ActionFilters;
   },

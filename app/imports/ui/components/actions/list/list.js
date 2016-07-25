@@ -5,7 +5,7 @@ import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.ActionsList.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'action', 'router', 'user', 'nonconformity', 'risk', 'utils'],
+  mixin: ['search', 'collapsing', 'organization', 'modal', 'workInbox', 'router', 'user', 'nonconformity', 'risk', 'utils'],
   autorun() {
     if (!this.focused() && !this.animating() && !this.searchText()) {
       const query = this._getQueryForFilter();

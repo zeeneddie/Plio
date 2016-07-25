@@ -489,7 +489,7 @@ ViewModel.mixin({
       return NonConformities.findOne(query, options);
     }
   },
-  action: {
+  workInbox: {
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },

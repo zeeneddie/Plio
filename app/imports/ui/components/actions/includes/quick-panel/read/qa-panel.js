@@ -5,7 +5,7 @@ import { AnalysisStatuses } from '/imports/api/constants.js';
 import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.Actions_QAPanel_Read.viewmodel({
-  mixin: ['action', 'user', 'date', 'utils', 'modal'],
+  mixin: ['workInbox', 'user', 'date', 'utils', 'modal'],
   document: '',
   _documentType: '',
   isAction() {

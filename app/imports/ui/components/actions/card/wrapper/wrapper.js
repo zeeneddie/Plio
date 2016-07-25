@@ -6,7 +6,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.Actions_Card_Read_Wrapper.viewmodel({
-  mixin: ['action', 'utils', 'nonconformity', 'risk', 'organization', 'standard'],
+  mixin: ['workInbox', 'utils', 'nonconformity', 'risk', 'organization', 'standard'],
   _is_(name) {
     const collection = this.getCollectionInstance(this.workItemId(), Actions, NonConformities, Risks);
     return collection && collection._name === name;

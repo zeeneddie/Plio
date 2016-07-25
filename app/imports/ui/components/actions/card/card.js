@@ -5,7 +5,7 @@ import { ActionPlanOptions } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
-  mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
+  mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
     return this._getActionByQuery({ _id: this.workItemId() });
   },

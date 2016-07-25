@@ -4,7 +4,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
 
 Template.Risks_Card_Read.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   risks() {
     const list = ViewModel.findOne('RisksList');
     const query = list && list._getQueryForFilter();

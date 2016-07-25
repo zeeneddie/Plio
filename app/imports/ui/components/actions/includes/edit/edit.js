@@ -15,7 +15,7 @@ import {
 } from '/imports/api/actions/methods.js';
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
+  mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });

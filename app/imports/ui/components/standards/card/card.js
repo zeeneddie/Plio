@@ -8,7 +8,7 @@ import { restore, remove } from '/imports/api/standards/methods.js';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('departments', this.organizationId());

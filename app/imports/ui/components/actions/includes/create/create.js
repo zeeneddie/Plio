@@ -5,7 +5,7 @@ import { insert } from '/imports/api/actions/methods.js';
 import { Actions } from '/imports/api/actions/actions.js';
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
+  mixin: ['modal', 'workInbox', 'organization', 'router', 'collapsing'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),

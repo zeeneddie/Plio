@@ -8,7 +8,7 @@ import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.ActionItem.viewmodel({
   share: 'window',
-  mixin: ['date', 'action', 'organization', 'actionStatus', 'user'],
+  mixin: ['date', 'workInbox', 'organization', 'actionStatus', 'user'],
   autorun() {
     if (this._id() === this.workItemId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
