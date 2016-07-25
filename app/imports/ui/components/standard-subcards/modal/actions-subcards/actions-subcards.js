@@ -8,7 +8,6 @@ Template.Actions_Subcards.viewmodel({
     return this._getActionByQuery({ _id: "hR3QzcjMKfZv9RQLe" });
   },
   callUpdate(method, args = {}, cb = () => {}) {
-    console.log(this)
     const _id = this.ActionId();
     this.modal().callMethod(method, { _id, ...args }, cb);
   },
