@@ -2,6 +2,8 @@ import { Template } from 'meteor/templating';
 
 import { update, remove } from '/imports/api/non-conformities/methods.js';
 
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+
 Template.NC_Subcards.viewmodel({
   mixin: ['organization', 'nonconformity', 'standard', 'risk', 'action', 'modal', 'callWithFocusCheck'],
   NC() {
@@ -31,5 +33,5 @@ Template.NC_Subcards.viewmodel({
     } else {
       updateFn();
     }
-  }
+  },
 });

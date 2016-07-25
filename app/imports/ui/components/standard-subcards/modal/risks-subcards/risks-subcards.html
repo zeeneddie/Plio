@@ -3,7 +3,9 @@
   {{#with risk}}
     {{> Subcards_RiskScoring_Edit
         _id=this._id
-        score=this.score}}
+        scores=this.scores
+        onInsert=onInsertScoreCb
+        onRemove=onRemoveScoreCb}}
 
     {{> Subcards_ImprovementPlan_Edit
         _id=this._id
