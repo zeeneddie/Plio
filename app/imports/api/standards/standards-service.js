@@ -32,8 +32,6 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    this._ensureStandardExists(_id);
-
     this._service.remove({ _id, deletedBy });
   },
 
@@ -44,7 +42,7 @@ export default {
   },
 
   _ensureStandardIsDeleted(_id) {
-    const { isDeleted } = this._getStandard(_id);
+    const { isDeleted } = this.collection.findOne({ _id });
     if (!isDeleted) {
       throw new Meteor.Error(400, 'Standard needs to be deleted first');
     }
@@ -56,19 +54,5 @@ export default {
         400, 'You have been already added to this list'
       );
     }
-  },
-
-  _ensureStandardExists(_id) {
-    if (!this.collection.findOne({ _id })) {
-      throw new Meteor.Error(400, 'Standard does not exist');
-    }
-  },
-
-  _getStandard(_id) {
-    const standard = this.collection.findOne({ _id });
-    if (!standard) {
-      throw new Meteor.Error(400, 'Standard does not exist');
-    }
-    return standard;
   }
 };
