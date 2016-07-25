@@ -54,13 +54,13 @@ Template.Actions_Edit.viewmodel({
     }
   },
   getCompleteFn() {
-    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed work items', cb));
   },
   getUndoCompletionFn() {
-    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
+    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current work items'));
   },
   getVerifyFn() {
-    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed work items', cb));
   },
   getUndoVerificationFn() {
     return (e) => this.callUpdate(undoVerification);

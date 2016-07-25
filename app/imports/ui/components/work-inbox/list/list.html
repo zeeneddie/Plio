@@ -1,0 +1,60 @@
+<template name="WorkInbox_List">
+  <div class="card">
+    <form class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField field="searchText"}}
+          <input type="text" class="form-control" placeholder="Search..."
+              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      <a class="btn btn-primary" {{b "click: openModal"}}>
+        <i class="fa fa-plus"></i>
+        <span>Add</span>
+      </a>
+    </form>
+
+    <div class="list-group list-group-accordion">
+
+      {{#if isActiveWorkInboxFilter 'My current work items'}}
+        {{#each myCurrent}}
+          {{> WorkInbox_Item}}
+        {{/each}}
+      {{/if}}
+
+      <!-- {{#if isActiveWorkInboxFilter 'Team current work items'}}
+        {{#each teamCurrent}}
+          {{> ListItem
+              template='WorkInbox_SectionItem'
+              title=(userFullNameOrEmail this)
+              items=(teamCurrentWorkItems this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveWorkInboxFilter 'My completed work items'}}
+        {{#each myCompleted}}
+          {{> WorkInbox_Item}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveWorkInboxFilter 'Team completed work items'}}
+        {{#each teamCompleted}}
+          {{> ListItem
+              template='WorkInbox_SectionItem'
+              title=(userFullNameOrEmail this)
+              items=(teamCompletedWorkItems this)}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveWorkInboxFilter 'Deleted work items'}}
+        {{#each deleted}}
+          {{> WorkInbox_Item}}
+        {{/each}}
+      {{/if}} -->
+
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

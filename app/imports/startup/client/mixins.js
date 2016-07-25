@@ -8,6 +8,7 @@ import { NonConformities } from '/imports/api/non-conformities/non-conformities.
 import { Risks } from '/imports/api/risks/risks.js';
 import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
@@ -512,6 +513,21 @@ ViewModel.mixin({
           break;
       }
     },
+    _getWorkItemsByQuery(
+      {
+        isDeleted = { $in: [null, false] },
+        organizationId = this.organizationId(),
+        ...args
+      } = {},
+        options = { sort: { createdAt: -1 } }
+    ) {
+      const query = { isDeleted, organizationId, ...args };
+      return WorkItems.find(query, options);
+    },
+    _getWorkItemByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by };
+      return WorkItems.findOne(query, options);
+    },
     _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);
@@ -523,15 +539,15 @@ ViewModel.mixin({
     _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
       return (userId) => {
         if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
-          return { by: 'My current actions' };
+          return { by: 'My current work items' };
         } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
-          return { by: 'My completed actions' };
+          return { by: 'My completed work items' };
         } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
-          return { by: 'Team current actions' };
+          return { by: 'Team current work items' };
         } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
-          return { by: 'Team completed actions' };
+          return { by: 'Team completed work items' };
         } else {
-          return { by: 'My current actions' };
+          return { by: 'My current work items' };
         }
       };
     }

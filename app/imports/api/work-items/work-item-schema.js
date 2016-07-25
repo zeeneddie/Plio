@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, ViewedBySchema } from '../schemas.js';
+import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema } from '../schemas.js';
 import { WorkItemTypes, WorkItemLinkedDocTypes, WorkItemStatuses } from '../constants.js';
 
 const linkedDocSchema = new SimpleSchema({
@@ -17,7 +17,11 @@ const linkedDocSchema = new SimpleSchema({
 const WorkItemsSchema = new SimpleSchema([
   BaseEntitySchema,
   ViewedBySchema,
+  OrganizationIdSchema,
   {
+    targetDate: {
+      type: Date
+    },
     linkedDoc: {
       type: linkedDocSchema
     },

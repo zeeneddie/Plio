@@ -1,5 +1,7 @@
 {
   "_id": "c6unh36FLDAiauTmA",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "targetDate": {"$date": 1469445653159},
   "type": "complete analysis",
   "status": 0,
   "assigneeId": "SQHmBKJ94gJvpLKLt",

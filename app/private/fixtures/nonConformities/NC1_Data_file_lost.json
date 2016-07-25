@@ -7,6 +7,11 @@
   "identifiedBy" : "SQHmBKJ94gJvpLKLt",
   "identifiedAt" : {"$date": 1459508400000},
   "magnitude" : "major",
+  "analysis": {
+    "executor": "SQHmBKJ94gJvpLKLt",
+    "targetDate": {"$date": 1459508400000},
+    "status": 0
+  },
   "createdAt" : {"$date": 1459508400000},
   "createdBy" : "SQHmBKJ94gJvpLKLt",
   "notify" : [

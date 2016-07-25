@@ -15,3 +15,4 @@ import './quill-editor';
 import './risks';
 import './non-conformities';
 import './actions';
+import './work-inbox';
