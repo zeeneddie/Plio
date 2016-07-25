@@ -403,13 +403,13 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToAction(workItemId, queryParams = { by: this.activeActionFilter() }) {
+    goToAction(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
       FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToActions(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilter() } : {};
       FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
@@ -490,21 +490,14 @@ ViewModel.mixin({
     }
   },
   action: {
-    actionId() {
+    workItemId() {
       return FlowRouter.getParam('workItemId');
     },
-    isActiveActionFilter(filter) {
-      return this.activeActionFilter() === filter;
+    isActiveWorkInboxFilter(filter) {
+      return this.activeWorkInboxFilter() === filter;
     },
-    activeActionFilter() {
+    activeWorkInboxFilter() {
       return FlowRouter.getQueryParam('by') || ActionFilters[0];
-    },
-    currentAction() {
-      const _id = this.actionId();
-      return Actions.findOne({ _id });
-    },
-    ActionTypes() {
-      return ActionTypes;
     },
     _getNameByType(type) {
       switch (type) {

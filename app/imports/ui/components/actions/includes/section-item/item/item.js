@@ -10,7 +10,7 @@ Template.ActionItem.viewmodel({
   share: 'window',
   mixin: ['date', 'action', 'organization', 'actionStatus', 'user'],
   autorun() {
-    if (this._id() === this.actionId() && this.isNew()) {
+    if (this._id() === this.workItemId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },

@@ -8,19 +8,19 @@ import { ActionDocumentTypes } from '/imports/api/constants.js';
 Template.Actions_Card_Read_Wrapper.viewmodel({
   mixin: ['action', 'utils', 'nonconformity', 'risk', 'organization', 'standard'],
   _is_(name) {
-    const collection = this.getCollectionInstance(this.actionId(), Actions, NonConformities, Risks);
+    const collection = this.getCollectionInstance(this.workItemId(), Actions, NonConformities, Risks);
     return collection && collection._name === name;
   },
   ActionDocumentTypes() {
     return ActionDocumentTypes;
   },
   action() {
-    return this._getActionByQuery({ _id: this.actionId() });
+    return this._getActionByQuery({ _id: this.workItemId() });
   },
   NC() {
-    return this._getNCByQuery({ _id: this.actionId() });
+    return this._getNCByQuery({ _id: this.workItemId() });
   },
   risk() {
-    return this._getRiskByQuery({ _id: this.actionId() });
+    return this._getRiskByQuery({ _id: this.workItemId() });
   }
 });

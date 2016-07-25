@@ -18,7 +18,7 @@ Template.ActionsLayout.viewmodel({
         this.templateInstance.subscribe('risks', _id),
       ];
 
-      if (this.isActiveActionFilter('Deleted actions')) {
+      if (this.isActiveWorkInboxFilter('Deleted actions')) {
         _subHandlers.push(this.templateInstance.subscribe('actions', _id, true));
       } else {
         _subHandlers.push(this.templateInstance.subscribe('actions', _id));

@@ -14,7 +14,7 @@ Template.ActionsList.viewmodel({
       const NCs = this._getNCsByQuery(query).fetch();
       const risks = this._getRisksByQuery(query).fetch();
 
-      const contains = actions.concat(NCs, risks).find(({ _id }) => _id === this.actionId());
+      const contains = actions.concat(NCs, risks).find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
         const action = this._getActionByQuery({ ...this._getFirstActionQueryForFilter() })   ||
@@ -39,10 +39,10 @@ Template.ActionsList.viewmodel({
     this.searchText('');
   },
   onRendered() {
-    this.expandCollapsed(this.actionId());
+    this.expandCollapsed(this.workItemId());
   },
   _getQueryForCurrentFilter([ma, ta, mca, tca, da]) {
-    switch(this.activeActionFilter()) {
+    switch(this.activeWorkInboxFilter()) {
       case 'My current actions':
         return ma;
         break;
@@ -161,17 +161,17 @@ Template.ActionsList.viewmodel({
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
-    if (this.isActiveActionFilter('My current actions')) {
+    if (this.isActiveWorkInboxFilter('My current actions')) {
       const count = this.myCurrentActions().length;
 
       this.searchResultsNumber(count);
       return;
-    } else if (this.isActiveActionFilter('My completed actions')) {
+    } else if (this.isActiveWorkInboxFilter('My completed actions')) {
       const count = this.myCompletedActions().length;
 
       this.searchResultsNumber(count);
       return;
-    } else if (this.isActiveActionFilter('Deleted actions')) {
+    } else if (this.isActiveWorkInboxFilter('Deleted actions')) {
       const count = this.actionsDeleted().count();
 
       this.searchResultsNumber(count);
@@ -190,9 +190,9 @@ Template.ActionsList.viewmodel({
     }
   },
   expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.actionId()));
+    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.workItemId()));
 
-    if (this.isActiveActionFilter('My current actions') || this.isActiveActionFilter('My completed actions')) return;
+    if (this.isActiveWorkInboxFilter('My current actions') || this.isActiveWorkInboxFilter('My completed actions')) return;
 
     this.animating(true);
 
@@ -206,7 +206,7 @@ Template.ActionsList.viewmodel({
     }
   },
   expandSelectedAction() {
-    this.expandCollapsed(this.actionId(), () => {
+    this.expandCollapsed(this.workItemId(), () => {
       this.onAfterExpand();
     });
   },

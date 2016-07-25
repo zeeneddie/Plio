@@ -16,13 +16,13 @@
 
     <div class="list-group list-group-accordion">
 
-      {{#if isActiveActionFilter 'My current actions'}}
+      {{#if isActiveWorkInboxFilter 'My current actions'}}
         {{#each myCurrentActions}}
           {{> ActionItem}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveActionFilter 'Team current actions'}}
+      {{#if isActiveWorkInboxFilter 'Team current actions'}}
         {{#each teamCurrentActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
@@ -31,13 +31,13 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveActionFilter 'My completed actions'}}
+      {{#if isActiveWorkInboxFilter 'My completed actions'}}
         {{#each myCompletedActions}}
           {{> ActionItem}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveActionFilter 'Team completed actions'}}
+      {{#if isActiveWorkInboxFilter 'Team completed actions'}}
         {{#each teamCompletedActionsAssignees}}
           {{> ListItem
               template='ActionSectionItem'
@@ -46,7 +46,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveActionFilter 'Deleted actions'}}
+      {{#if isActiveWorkInboxFilter 'Deleted actions'}}
         {{#each actionsDeleted}}
           {{> ActionItem}}
         {{/each}}

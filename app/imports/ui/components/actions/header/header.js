@@ -12,6 +12,6 @@ Template.ActionsHeader.viewmodel({
   selectFilter(filter) {
     this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
-    this.expandCollapsed(this.actionId());
+    this.expandCollapsed(this.workItemId());
   }
 });
