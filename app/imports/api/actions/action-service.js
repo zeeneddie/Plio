@@ -87,6 +87,29 @@ export default {
       }
     });
 
+    if (!action.verified()
+          && (doc.workflowType === WorkflowTypes.SIX_STEP)
+          && doc.areStandardsUpdated()) {
+      docCollection.update({ _id: documentId }, {
+        $set: {
+          'updateOfStandards.status': 0, // Not completed
+        },
+        $unset: {
+          'updateOfStandards.completedAt': '',
+          'updateOfStandards.completedBy': ''
+        }
+      });
+
+      Meteor.isServer && Meteor.defer(() => {
+        const workflowConstructors = {
+          [ProblemTypes.NC]: NCWorkflow,
+          [ProblemTypes.RISK]: RiskWorkflow
+        };
+
+        new workflowConstructors[documentType](documentId).refreshStatus();
+      });
+    }
+
     this._refreshStatus(_id);
 
     return ret;

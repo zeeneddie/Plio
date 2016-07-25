@@ -9,7 +9,7 @@ export default class ProblemWorkflow extends Workflow {
 
   constructor(idOrDoc) {
     super(idOrDoc);
-    
+
     const actions = Actions.find({
       'linkedTo.documentId': this._id,
       isDeleted: false,
@@ -18,7 +18,7 @@ export default class ProblemWorkflow extends Workflow {
     }).fetch();
 
     this._actions = actions;
-    
+
     this._completedActionsLength = this._getCompletedActionsLength();
 
     let verifiedLength;
@@ -153,7 +153,7 @@ export default class ProblemWorkflow extends Workflow {
   _getActionCompletionStatus() {
     const workflowType = this._getWorkflowType();
 
-    if ((workflowType === WorkflowTypes.SIX_STEP) 
+    if ((workflowType === WorkflowTypes.SIX_STEP)
           && !this._analysisCompleted()) {
       return;
     }

@@ -44,8 +44,7 @@ const RequiredSchema = new SimpleSchema([
       allowedValues: _.values(ActionTypes)
     },
     linkedTo: {
-      type: [linkedToSchema],
-      minCount: 1
+      type: [linkedToSchema]
     },
     ownerId: {
       type: String,
