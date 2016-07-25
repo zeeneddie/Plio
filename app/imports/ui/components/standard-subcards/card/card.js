@@ -12,6 +12,8 @@ Template.SS_Card_Read.viewmodel({
   StandardId: "4hecb3Gzvg5dPp7rD",
   // Risk from fixture: "Explosion of binder"
   RiskId: "aqtqWNPrc9fNi6wyp",
+  // Action from fixture: "CA1 Fix machine calibration"
+  ActionId: "hR3QzcjMKfZv9RQLe",
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },
@@ -30,7 +32,8 @@ Template.SS_Card_Read.viewmodel({
       template: 'SS_Card_Modal',
       NCId: this.NCId(),
       StandardId: this.StandardId(),
-      RiskId: this.RiskId()
+      RiskId: this.RiskId(),
+      ActionId: this.ActionId()
     });
   },
 });
