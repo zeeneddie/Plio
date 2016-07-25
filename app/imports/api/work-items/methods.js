@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import WorkItemService from './work-item-service.js';
-import { WorkItemSchema } from './work-item-schema.js';
+import { WorkItemsSchema } from './work-item-schema.js';
 import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
 import { WorkItemTypes } from '../constants.js';

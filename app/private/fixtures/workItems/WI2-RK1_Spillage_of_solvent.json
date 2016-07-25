@@ -1,0 +1,20 @@
+{
+  "_id": "SmoZqz3aseaRHZNd8",
+  "type": "complete analysis",
+  "status": 0,
+  "assigneeId": "SQHmBKJ94gJvpLKLt",
+  "linkedDoc": {
+    "_id": "movmNy9rFvYHshu6X",
+    "type": "risk"
+  },
+  "createdAt" : {"$date": 1469445653157},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1469445653157},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "viewedBy" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ]
+}

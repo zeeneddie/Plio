@@ -8,5 +8,6 @@
   "Occurrences": "occurrences",
   "Actions": "actions",
   "RiskTypes": "riskTypes",
-  "Risks": "risks"
+  "Risks": "risks",
+  "WorkItems": "workItems"
 }
