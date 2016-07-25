@@ -218,6 +218,35 @@ export default {
       throw new Meteor.Error(400, 'Verification of this action cannot be undone');
     }
 
+    const query = {
+      'updateOfStandards.status': 1, // Completed
+      'updateOfStandards.completedAt': { $exists: true },
+      'updateOfStandards.completedBy': { $exists: true }
+    };
+
+    const modifier = {
+      $set: {
+        'updateOfStandards.status': 0, // Not completed
+      },
+      $unset: {
+        'updateOfStandards.completedAt': '',
+        'updateOfStandards.completedBy': ''
+      }
+    };
+
+    const linkedNCsIds = action.getLinkedNCsIds();
+    const linkedRisksIds = action.getLinkedRisksIds();
+
+    if (linkedNCsIds.length) {
+      const NCQuery = _.extend({ _id: { $in: linkedNCsIds } }, query);
+      NonConformities.update(NCQuery, modifier, { multi: true });
+    }
+
+    if (linkedRisksIds.length) {
+      const riskQuery = _.extend({ _id: { $in: linkedRisksIds } }, query);
+      Risks.update(riskQuery, modifier, { multi: true });
+    }
+
     const ret = this.collection.update({
       _id
     }, {
