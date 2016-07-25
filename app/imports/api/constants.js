@@ -287,7 +287,7 @@ const NonConformityFilters = [
   'deleted'
 ];
 
-const ActionFilters = [
+const WorkInboxFilters = [
   'My current actions',
   'Team current actions',
   'My completed actions',
@@ -363,7 +363,7 @@ export {
   UserRolesNames,
   DocumentTypes,
   AvatarPlaceholders,
-  ActionFilters,
+  WorkInboxFilters,
   ActionDocumentTypes,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,

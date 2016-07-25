@@ -11,7 +11,7 @@ import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
-  OrgCurrencies, ActionStatuses, ActionFilters,
+  OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
@@ -497,7 +497,7 @@ ViewModel.mixin({
       return this.activeWorkInboxFilter() === filter;
     },
     activeWorkInboxFilter() {
-      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+      return FlowRouter.getQueryParam('by') || WorkInboxFilters[0];
     },
     _getNameByType(type) {
       switch (type) {

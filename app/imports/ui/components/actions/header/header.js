@@ -1,13 +1,13 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ActionFilters } from '/imports/api/constants.js';
+import { WorkInboxFilters } from '/imports/api/constants.js';
 
 Template.ActionsHeader.viewmodel({
   share: ['window', 'search'],
   mixin: ['workInbox', 'mobile', 'organization', 'collapsing'],
   filters() {
-    return ActionFilters;
+    return WorkInboxFilters;
   },
   selectFilter(filter) {
     this.searchText('');
