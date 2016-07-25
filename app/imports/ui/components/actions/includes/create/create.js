@@ -3,6 +3,8 @@ import { Template } from 'meteor/templating';
 import { ActionPlanOptions } from '/imports/api/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
 
 Template.Actions_Create.viewmodel({
   mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
@@ -27,13 +29,17 @@ Template.Actions_Create.viewmodel({
 
     this.insert(data);
   },
-  insert({ ...args }) {
+  insert({ completionTargetDate, ...args }) {
     const organizationId = this.organizationId();
     const { type } = this.data();
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(completionTargetDate, timezone);
 
     const allArgs = {
       type,
       organizationId,
+      completionTargetDate: tzDate,
       ...args
     };
 

@@ -6,7 +6,6 @@ import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-
 import {
   insert,
   update,
@@ -133,7 +132,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, linkTo, ...args }, cb) {
+  insert({ _id, linkTo, completionTargetDate, ...args }, cb) {
     if (_id) {
       let documentId, documentType;
 
@@ -151,9 +150,13 @@ Template.Subcards_Actions_Edit.viewmodel({
     } else {
       const organizationId = this.organizationId();
 
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(completionTargetDate, timezone);
+
       this.modal().callMethod(insert, {
         organizationId,
         type: this.type(),
+        completionTargetDate: tzDate,
         ...args
       }, cb);
     }
