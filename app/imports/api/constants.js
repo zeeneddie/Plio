@@ -25,10 +25,12 @@ const ProblemsStatuses = {
   12: 'Open - verification due today',
   13: 'Open - verification past due',
   14: 'Open - action(s) verified as effective, awaiting update of standard(s)',
-  15: 'Open - action(s) failed verification',
-  16: 'Closed - action(s) completed',
-  17: 'Closed - action(s) verified, standard(s) reviewed',
-  18: 'Deleted'
+  15: 'Open - action(s) verified as effective, update of standard(s) due today',
+  16: 'Open - action(s) verified as effective, update of standard(s) past due',
+  17: 'Open - action(s) failed verification',
+  18: 'Closed - action(s) completed',
+  19: 'Closed - action(s) verified, standard(s) reviewed',
+  20: 'Deleted'
 };
 
 const StandardStatuses = {

@@ -148,6 +148,27 @@ export const undoAnalysis = new ValidatedMethod({
   }
 });
 
+export const setStandardsUpdateDate = new ValidatedMethod({
+  name: 'NonConformities.setStandardsUpdateDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set date for standards update'
+      );
+    }
+
+    return NonConformitiesService.setStandardsUpdateDate({ _id, ...args });
+  }
+});
+
 export const updateViewedBy = new ValidatedMethod({
   name: 'NonConformities.updateViewedBy',
 

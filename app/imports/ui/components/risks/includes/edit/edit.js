@@ -4,9 +4,8 @@ import moment from 'moment-timezone';
 import {
   update, remove, updateViewedBy,
   insertScore, removeScore,
-  completeAnalysis, undoAnalysis,
-  setAnalysisDate,
-  updateStandards, undoStandardsUpdate
+  completeAnalysis, undoAnalysis, setAnalysisDate,
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
@@ -98,13 +97,12 @@ Template.EditRisk.viewmodel({
     return this.updateStandardsDate.bind(this);
   },
   updateStandardsDate({ date }, cb) {
+    const _id = this._id();
+
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
-    this.modal().callMethod(update, {
-      _id: this._id(),
-      'updateOfStandards.targetDate': tzDate
-    }, cb);
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
   },
   getUpdateStandardsFn() {
     return this.updateStandards.bind(this);

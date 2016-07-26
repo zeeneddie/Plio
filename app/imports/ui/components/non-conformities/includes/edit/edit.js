@@ -3,9 +3,8 @@ import moment from 'moment-timezone';
 
 import {
   update, remove, updateViewedBy,
-  completeAnalysis, undoAnalysis,
-  setAnalysisDate,
-  updateStandards, undoStandardsUpdate
+  completeAnalysis, undoAnalysis, setAnalysisDate,
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
 } from '/imports/api/non-conformities/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
@@ -73,13 +72,12 @@ Template.NC_Card_Edit.viewmodel({
     return this.updateStandardsDate.bind(this);
   },
   updateStandardsDate({ date }, cb) {
+    const _id = this._id();
+
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
-    this.modal().callMethod(update, {
-      _id: this._id(),
-      'updateOfStandards.targetDate': tzDate
-    }, cb);
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
   },
   getUpdateStandardsFn() {
     return this.updateStandards.bind(this);

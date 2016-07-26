@@ -82,16 +82,31 @@ export default class ProblemWorkflow extends Workflow {
 
   _getDeletedStatus() {
     if (this._doc.deleted()) {
-      return 18; // Deleted
+      return 20; // Deleted
     }
   }
 
   _getStandardsUpdateStatus() {
-    if (this._analysisCompleted()
+    if (!(this._analysisCompleted()
           && this._allActionsCompleted()
-          && this._allActionsVerified()
-          && this._standardsUpdated()) {
-      return 17; // Closed - action(s) verified, standard(s) reviewed
+          && this._allActionsVerified())) {
+      return;
+    }
+
+    if (this._standardsUpdated()) {
+      return 19; // Closed - action(s) verified, standard(s) reviewed
+    }
+
+    const { updateOfStandards } = this._doc || {};
+    const { targetDate } = updateOfStandards || {};
+    const timezone = this._timezone;
+
+    if (isOverdue(targetDate, timezone)) {
+      return 16; // Open - action(s) verified as effective, update of standard(s) past due
+    }
+
+    if (isDueToday(targetDate, timezone)) {
+      return 15; // Open - action(s) verified as effective, update of standard(s) due today
     }
   }
 
@@ -146,7 +161,7 @@ export default class ProblemWorkflow extends Workflow {
     });
 
     if (failed) {
-      return 15; // Open - action(s) failed verification
+      return 17; // Open - action(s) failed verification
     }
   }
 
@@ -161,7 +176,7 @@ export default class ProblemWorkflow extends Workflow {
     // check if all actions are completed
     if (this._allActionsCompleted()) {
       const completedStatuses = {
-        [WorkflowTypes.THREE_STEP]: 16, // Closed - action(s) completed
+        [WorkflowTypes.THREE_STEP]: 18, // Closed - action(s) completed
         [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
       };
 

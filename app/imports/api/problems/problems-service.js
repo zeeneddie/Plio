@@ -206,6 +206,27 @@ export default {
     return ret;
   },
 
+  setStandardsUpdateDate({ _id, targetDate }) {
+    const doc = this._getDoc(_id);
+
+    if (doc.areStandardsUpdated()) {
+      throw new Meteor.Error(
+        400,
+        'Cannot set target date for completed standards update'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { 'updateOfStandards.targetDate': targetDate }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
   updateViewedBy({ _id, userId }) {
     const query = { _id };
     const options = {

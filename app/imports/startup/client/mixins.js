@@ -638,14 +638,16 @@ ViewModel.mixin({
         case 11:
         case 12:
         case 14:
+        case 15:
           return 'warning';
         case 5:
         case 9:
         case 13:
-        case 15:
-          return 'danger';
         case 16:
         case 17:
+          return 'danger';
+        case 18:
+        case 19:
           return 'success';
         default:
           return '';

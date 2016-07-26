@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
-import { 
+import {
   insert, update, remove,
   setAnalysisDate, completeAnalysis, undoAnalysis,
-  updateStandards, undoStandardsUpdate
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
@@ -109,10 +109,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     const { timezone } = this.organization();
     const tzDate = getTzTargetDate(date, timezone);
 
-    this.modal().callMethod(update, {
-      _id,
-      'updateOfStandards.targetDate': tzDate
-    }, cb);
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
   },
   updateStandardsFn() {
     return this.updateStandards.bind(this);
