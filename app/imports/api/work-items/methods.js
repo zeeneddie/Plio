@@ -7,6 +7,23 @@ import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
 import { WorkItemTypes } from '../constants.js';
 
+export const updateViewedBy = new ValidatedMethod({
+  name: 'WorkItems.updateViewedBy',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update actions'
+      );
+    }
+
+    return WorkItemService.updateViewedBy({ _id, userId });
+  }
+});
+
 export const remove = new ValidatedMethod({
   name: 'WorkItems.remove',
 

@@ -16,37 +16,37 @@
 
     <div class="list-group list-group-accordion">
 
-      {{#if isActiveWorkInboxFilter 'My current work items'}}
-        {{#each myCurrent}}
+      {{#if isActiveWorkInboxFilter "My current work items"}}
+        {{#each items.my.current}}
           {{> WorkInbox_Item}}
         {{/each}}
       {{/if}}
 
-      <!-- {{#if isActiveWorkInboxFilter 'Team current work items'}}
-        {{#each teamCurrent}}
+      {{#if isActiveWorkInboxFilter "Team current work items"}}
+        {{#each assignees.current}}
           {{> ListItem
-              template='WorkInbox_SectionItem'
+              template="WorkInbox_SectionItem"
               title=(userFullNameOrEmail this)
-              items=(teamCurrentWorkItems this)}}
+              items=(getTeamItems this "current")}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter 'My completed work items'}}
-        {{#each myCompleted}}
+      {{#if isActiveWorkInboxFilter "My completed work items"}}
+        {{#each items.my.completed}}
           {{> WorkInbox_Item}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter 'Team completed work items'}}
-        {{#each teamCompleted}}
+      {{#if isActiveWorkInboxFilter "Team completed work items"}}
+        {{#each assignees.completed}}
           {{> ListItem
               template='WorkInbox_SectionItem'
               title=(userFullNameOrEmail this)
-              items=(teamCompletedWorkItems this)}}
+              items=(getTeamItems this "completed")}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter 'Deleted work items'}}
+      <!-- {{#if isActiveWorkInboxFilter 'Deleted work items'}}
         {{#each deleted}}
           {{> WorkInbox_Item}}
         {{/each}}

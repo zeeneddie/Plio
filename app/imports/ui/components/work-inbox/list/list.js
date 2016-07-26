@@ -2,34 +2,32 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 import { ActionDocumentTypes, WorkItemTypes } from '/imports/api/constants.js';
+const STATUSES = {
+  IN_PROGRESS: [0, 1, 2],
+  COMPLETED: 3
+};
 
 Template.WorkInbox_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'workInbox', 'router', 'user', 'nonconformity', 'risk', 'utils'],
   autorun() {
     if (!this.focused() && !this.animating() && !this.searchText()) {
-      const query = this._getQueryForFilter();
+      const items = this._getItemsByFilter() || [];
 
-      const actions = this._getActionsByQuery(query).fetch();
-      const NCs = this._getNCsByQuery(query).fetch();
-      const risks = this._getRisksByQuery(query).fetch();
-
-      const contains = actions.concat(NCs, risks).find(({ _id }) => _id === this.workItemId());
+      const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
-        const action = this._getActionByQuery({ ...this._getFirstActionQueryForFilter() })   ||
-                       this._getNCByQuery({ ...this._getFirstActionQueryForFilter() })       ||
-                       this._getRiskByQuery({ ...this._getFirstActionQueryForFilter() });
+        const item = items.find((el, i, arr) => arr.length); // get first element if it exists
 
-        if (action) {
-          const { _id } = action;
+        if (item) {
+          const { _id } = item;
           Meteor.setTimeout(() => {
-            this.goToAction(_id);
+            this.goToWorkItem(_id);
             this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
-            this.goToActions();
+            this.goToWorkInbox();
           }, 0)
         }
       }
@@ -41,41 +39,29 @@ Template.WorkInbox_List.viewmodel({
   onRendered() {
     this.expandCollapsed(this.workItemId());
   },
-  _getQueryForCurrentFilter([mwi, twi, mcwi, tcwi, dwi]) {
+  _getItemsByFilter() {
+    const { my = {}, team = {} } = this.items() || {};
+
     switch(this.activeWorkInboxFilter()) {
       case 'My current work items':
-        return mwi;
+        return my.current;
         break;
       case 'Team current work items':
-        return twi;
+        return team.current;
         break;
       case 'My completed work items':
-        return mcwi;
+        return my.completed;
         break;
       case 'Team completed work items':
-        return tcwi;
+        return team.completed;
         break;
       case 'Deleted work items':
-        return { ...dwi, isDeleted: true };
+        return null;
         break;
       default:
         return {};
         break;
     };
-  },
-  _getQueryForFilter() {
-    const getIds = (array) => array.map(prop => ({ _id: { $in: this[prop]().map(({ _id }) => _id) } }));
-
-    const query = getIds(['myCurrent', 'teamCurrent', 'myCompleted', 'teamCompleted', 'deleted']);
-
-    return this._getQueryForCurrentFilter(query);
-  },
-  _getFirstActionQueryForFilter() {
-    const getIds = (array) => array.map(prop => ({ _id: this.toArray(this[prop]()).length > 0 && this[prop]().map(({ _id }) => _id)[0] }));
-
-    const query = getIds(['myCurrent', 'teamCurrent', 'myCompleted', 'teamCompleted', 'deleted']);
-
-    return this._getQueryForCurrentFilter(query);
   },
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
@@ -100,25 +86,23 @@ Template.WorkInbox_List.viewmodel({
                     .map(({ ...args }) => ({ ...args, _documentType: ActionDocumentTypes.ACTION }));
     };
   },
-  _getPendingProblemsByQuery(_query = {}) {
+  getPendingProblems(_query = {}) {
     const workItems = this._getWorkItemsByQuery({}).fetch();
 
     const problemsDocs = ((() => {
       const ids = workItems.map(({ linkedDoc: { _id } = {} }) => _id);
       const query = { _id: { $in: ids }, ..._query, ...this._getSearchQuery() };
-      const withDocType = docType => ({ ...args }) => ({ docType, ...args });
+      const withSource = ({ _id, ...args }) => {
+        const _source = workItems.find(({ linkedDoc: { _id:targetId } = {} }) => _id === targetId);
+        return { _source, _id, ...args };
+      };
 
-      const NCs = this._getNCsByQuery(query).map(withDocType(ActionDocumentTypes.NC));
-      const risks = this._getRisksByQuery(query).map(withDocType(ActionDocumentTypes.RISK));
+      const NCs = this._getNCsByQuery(query).map(withSource);
+      const risks = this._getRisksByQuery(query).map(withSource);
       return NCs.concat(risks);
     })());
 
-    const problemsDocsWithSource = problemsDocs.map(({ _id, ...args }) => {
-      const _source = workItems.find(({ linkedDoc: { _id:targetId } = {} }) => _id === targetId);
-      return { _id, _source, ...args };
-    });
-
-    const problems = problemsDocsWithSource.map(({
+    const problems = problemsDocs.map(({
       _source: { type, ...sourceArgs }, analysis = {},
       updateOfStandards = {}, ...args
     }) => {
@@ -141,46 +125,56 @@ Template.WorkInbox_List.viewmodel({
 
     return problems;
   },
-  _getUniqueAssignees(collection) {
-    const userIdsData = collection.map(({ toBeCompletedBy, toBeVerifiedBy }) => [toBeCompletedBy, toBeVerifiedBy]);
-    const userIds = Array.from(userIdsData || [])
-                           .reduce((prev, cur) => [...prev, ...cur], [])
-                           .filter(_id => !!_id && _id !== Meteor.userId());
-    return [...new Set(userIds)];
-  },
-  myCurrent() {
-    const problems = this._getPendingProblemsByQuery({ 'analysis.executor': Meteor.userId() });
-    const sorted = problems.sort(({ _source: { targetDate:d1 } }, { _source: { targetDate:d2 } }) => d2 - d1);
-    return sorted;
-    // const actions = this._getActions({})({ $eq: Meteor.userId() }, false);
-    // return actions.concat(problems).sort(({ createdAt:c1 }, { createdAt:c2 }) => c2 - c1);
-  },
-  myCompleted() {
-    return this._getActions({}, { sort: { completedAt: -1 } })({ $eq: Meteor.userId() }, true);
-  },
-  teamCurrent(userId) {
-    const problems = ((() => {
-      const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
-      const analysisQuery = { 'analysis.executor': { $exists: true, ...userQuery } };
-      return this._getPendingProblemsByQuery(analysisQuery);
-    })());
+  assignees() {
+    const getIds = (predicate) => {
+      const ids = this.toArray(this._getWorkItemsByQuery({}))
+                      .filter(({ assigneeId, status }) => assigneeId !== Meteor.userId() && predicate(status))
+                      .map(({ assigneeId }) => assigneeId);
+      return [...new Set(ids)];
+    };
 
-    const actions = ((() => {
-      const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
-      return this._getActions({})(userQuery, false);
-    })());
+    const current = getIds(status => STATUSES.IN_PROGRESS.includes(status));
+    const completed = getIds(status => status === STATUSES.COMPLETED);
 
-    return actions.concat(problems).sort(({ createdAt:c1 }, { createdAt:c2 }) => c2 - c1);
+    return {
+      current,
+      completed
+    }
   },
-  teamCurrentAssignees() {
-    return this._getUniqueAssignees(this.teamCurrent());
+  getTeamItems(userId, prop) {
+    const { team = {} } = this.items(userId) || {};
+    return team[prop];
   },
-  teamCompleted(userId) {
-    const userQuery = userId ? { $eq: userId } : { $ne: Meteor.userId() };
-    return this._getActions({}, { completedAt: -1 })(userQuery, true);
-  },
-  teamCompletedAssignees() {
-    return this._getUniqueAssignees(this.teamCompleted());
+  items(userId) {
+    const sortItems = array => (
+      array.sort(({ _source: { targetDate:d1 } = {} }, { _source: { targetDate:d2 } = {} }) => d2 - d1)
+    );
+    const getItems = (predicate1) => {
+      const items = this.getPendingProblems().filter(({ _source: { assigneeId } = {} }) => predicate1(assigneeId));
+
+      return (predicate2) => sortItems(items.filter(({ _source: { status } }) => predicate2(status)));
+    };
+
+    const myItems = getItems(assigneeId => assigneeId === Meteor.userId());
+    const teamItems = getItems(assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
+
+    const isInProgress = status => STATUSES.IN_PROGRESS.includes(status);
+    const isCompleted = status => STATUSES.COMPLETED === status;
+
+    const my = {
+      current: myItems(isInProgress),
+      completed: myItems(isCompleted)
+    };
+
+    const team = {
+      current: teamItems(isInProgress),
+      completed: teamItems(isCompleted)
+    };
+
+    return {
+      my,
+      team
+    }
   },
   deleted() {
     const query = { isDeleted: true, ...this._getSearchQuery() };

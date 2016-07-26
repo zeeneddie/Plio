@@ -404,11 +404,11 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToAction(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
+    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
       FlowRouter.go('workInboxItem', params, queryParams);
     },
-    goToActions(withQueryParams = true) {
+    goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilter() } : {};
       FlowRouter.go('workInbox', params, queryParams);

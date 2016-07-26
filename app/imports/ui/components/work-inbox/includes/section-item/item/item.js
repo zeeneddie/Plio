@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { updateViewedBy } from '/imports/api/actions/methods.js';
+import { updateViewedBy } from '/imports/api/work-items/methods.js';
 import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.WorkInbox_Item.viewmodel({
@@ -14,12 +14,13 @@ Template.WorkInbox_Item.viewmodel({
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
-  docType: '',
   onCreated() {
-    this.loadStatusMixinByDocType(this.docType());
+    const { _source: { linkedDoc: { type } = {} } = {} } = this.data();
+    this.loadStatusMixinByDocType(type);
   },
-  getDate({ isDeleted, deletedAt, createdAt }) {
-    const date = isDeleted ? deletedAt : createdAt;
+  _source: {},
+  getDate({ isDeleted, deletedAt, _source: { targetDate } = {} }) {
+    const date = isDeleted ? deletedAt : targetDate;
     return this.renderDate(date);
   },
   getUserText({ isDeleted, createdBy, deletedBy }) {
@@ -42,10 +43,11 @@ Template.WorkInbox_Item.viewmodel({
     }
   },
   isNew() {
-    return !this.viewedBy().find(_id => _id === Meteor.userId());
+    const { _source: { viewedBy = [] } = {} } = this.data();
+    return !viewedBy.find(_id => _id === Meteor.userId());
   },
   updateViewedBy() {
-    const _id = this._id();
+    const { _source: { _id } = {} } = this.data();
 
     updateViewedBy.call({ _id });
   },
