@@ -12,7 +12,7 @@ SyncedCron.add({
   name: 'Update workflow statuses',
 
   schedule(parser) {
-    return parser.text('every 1 hour');
+    return parser.text('every 5 mins');
   },
 
   job() {
@@ -36,9 +36,15 @@ SyncedCron.add({
 
     const problemDocQuery = {
       workflowType: WorkflowTypes.SIX_STEP,
-      'analysis.status': 0, // Not completed
-      'analysis.completedAt': { $exists: false },
-      'analysis.completedBy': { $exists: false }
+      $or: [{
+        'analysis.status': 0, // Not completed
+        'analysis.completedAt': { $exists: false },
+        'analysis.completedBy': { $exists: false }
+      }, {
+        'updateOfStandards.status': 0, // Not completed
+        'updateOfStandards.completedAt': { $exists: false },
+        'updateOfStandards.completedBy': { $exists: false }
+      }]
     };
 
     const NCs = NonConformities.find(problemDocQuery);
