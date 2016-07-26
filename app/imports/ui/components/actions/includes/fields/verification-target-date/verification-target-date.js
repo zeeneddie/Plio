@@ -17,7 +17,7 @@ Template.Actions_VerificationTargetDate.viewmodel({
 
     this.verificationTargetDate(date);
 
-    this.parent().update && this.parent().update({ verificationTargetDate: date });
+    this.onUpdate && this.onUpdate({ targetDate: date });
   },
   getData() {
     return { verificationTargetDate: this.verificationTargetDate() };

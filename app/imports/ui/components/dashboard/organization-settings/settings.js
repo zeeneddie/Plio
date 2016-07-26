@@ -1,3 +1,5 @@
+import { Template } from 'meteor/templating';
+
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
@@ -8,14 +10,15 @@ import {
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
 
-Template.OrganizationSettings.viewmodel({
+Template.OrgSettings.viewmodel({
   mixin: 'organization',
   name: '',
   currency: '',
+  timezone: '',
   autorun() {
     const org = this.organization();
     if (org) {
-      this.load(_.pick(org, ['name', 'currency']));
+      this.load(_.pick(org, ['name', 'currency', 'timezone']));
     }
   },
   departments() {

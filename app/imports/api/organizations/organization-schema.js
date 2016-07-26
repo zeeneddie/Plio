@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { OrgCurrencies,  UserMembership } from '/imports/api/constants.js';
-import { BaseEntitySchema, TimePeriodSchema } from '../schemas.js';
+import { OrgCurrencies,  WorkflowTypes, UserMembership } from '/imports/api/constants.js';
+import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from '../schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({
@@ -29,15 +29,25 @@ const orgUserSchema = new SimpleSchema({
   }
 });
 
+const problemWorkflowSchema = new SimpleSchema({
+  workflowType: {
+    type: String,
+    allowedValues: _.values(WorkflowTypes)
+  },
+  stepTime: {
+    type: TimePeriodSchema
+  }
+});
+
 const workflowDefaultsSchema = new SimpleSchema({
-  minorNc: {
-    type: TimePeriodSchema
+  minorProblem: {
+    type: problemWorkflowSchema
   },
-  majorNc: {
-    type: TimePeriodSchema
+  majorProblem: {
+    type: problemWorkflowSchema
   },
-  criticalNc: {
-    type: TimePeriodSchema
+  criticalProblem: {
+    type: problemWorkflowSchema
   }
 });
 
@@ -114,7 +124,8 @@ const OrganizationEditableFields = {
     type: String,
     optional: true
   },
-  ...OrganizationCurrencySchema
+  ...OrganizationCurrencySchema,
+  ...TimezoneSchema.schema()
 };
 
 const transferSchema = new SimpleSchema({

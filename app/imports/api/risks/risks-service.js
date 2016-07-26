@@ -1,57 +1,15 @@
-import { Risks } from './risks.js';
-import { generateSerialNumber } from '/imports/core/utils.js';
+import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
-export default {
+import { Risks } from './risks.js';
+import RiskWorkflow from './RiskWorkflow.js';
+import ProblemsService from '../problems/problems-service.js';
+
+
+export default _.extend({}, ProblemsService, {
   collection: Risks,
 
-  insert({ organizationId, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
-
-    const sequentialId = `RK${serialNumber}`;
-
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, ...args });
-  },
-
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
-    }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
-    }
-
-    return this.collection.update(query, options);
-  },
-
-  updateViewedBy({ _id, userId }) {
-    const query = { _id };
-    const options = {
-      $addToSet: {
-        viewedBy: userId
-      }
-    };
-
-    return this.collection.update(query, options);
-  },
-
-  remove({ _id, deletedBy, isDeleted }) {
-    const query = { _id };
-
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
-
-      return this.collection.update(query, options);
-    }
-  },
+  _abbr: 'RK',
 
   'scores.insert'({ _id, ...args }) {
     const id = Random.id();
@@ -77,5 +35,19 @@ export default {
     };
 
     return this.collection.update(query, options);
+  },
+
+  _getDoc(_id) {
+    const risk = this.collection.findOne({ _id });
+    if (!risk) {
+      throw new Meteor.Error(400, 'Risk does not exist');
+    }
+    return risk;
+  },
+
+  _refreshStatus(_id) {
+    Meteor.isServer && Meteor.defer(() => {
+      new RiskWorkflow(_id).refreshStatus();
+    });
   }
-};
+});

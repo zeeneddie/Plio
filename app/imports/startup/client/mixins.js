@@ -6,7 +6,6 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
@@ -629,27 +628,29 @@ ViewModel.mixin({
     getClassByStatus(status) {
       switch(status) {
         case 1:
-        case 13:
-          return 'success';
-          break;
         case 2:
-        case 4:
-        case 5:
-        case 6:
-        case 8:
-        case 9:
-        case 11:
-          return 'warning';
-          break;
         case 3:
+        case 4:
+        case 6:
         case 7:
+        case 8:
         case 10:
+        case 11:
         case 12:
+        case 14:
+        case 15:
+          return 'warning';
+        case 5:
+        case 9:
+        case 13:
+        case 16:
+        case 17:
           return 'danger';
-          break;
+        case 18:
+        case 19:
+          return 'success';
         default:
           return '';
-          break;
       }
     }
   },
@@ -661,22 +662,18 @@ ViewModel.mixin({
       switch(status) {
         case 1:
         case 4:
-          return 'warning';
-          break;
-        case 0:
-        case 3:
-        case 7:
         case 8:
+        case 9:
           return 'success';
-          break;
         case 2:
         case 5:
+          return 'warning';
+        case 3:
         case 6:
+        case 7:
           return 'danger';
-          break;
         default:
           return '';
-          break;
       }
     }
   },

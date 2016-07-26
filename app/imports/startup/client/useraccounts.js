@@ -1,3 +1,6 @@
+import moment from 'moment-timezone';
+
+
 AccountsTemplates.configure({
   texts: {
     signInLink_pre: "Already have an account?",
@@ -58,4 +61,10 @@ AccountsTemplates.addField({
   required: true,
   minLength: 1,
   maxLength: 40
+});
+
+AccountsTemplates.configure({
+  preSignUpHook(password, info) {
+    info.profile['organizationTimezone'] = moment.tz.guess();
+  }
 });

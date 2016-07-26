@@ -18,7 +18,7 @@ Template.Actions_CompletionTargetDate.viewmodel({
 
     this.completionTargetDate(date);
 
-    this.parent().update && this.parent().update({ completionTargetDate: date });
+    this.onUpdate && this.onUpdate({ targetDate: date });
   },
   getData() {
     return { completionTargetDate: this.completionTargetDate() };

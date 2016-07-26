@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
 import { OrganizationSchema } from './organization-schema.js';
-import { UserMembership } from '../constants';
+import { UserMembership, ProblemMagnitudes } from '../constants';
 
 
 const Organizations = new Mongo.Collection('Organizations');
@@ -14,6 +14,15 @@ Organizations.helpers({
     });
 
     return ownerDoc ? ownerDoc.userId : null;
+  },
+  workflowType(problemMagnitude) {
+    const keyMapping = {
+      [ProblemMagnitudes.MINOR]: 'minorProblem',
+      [ProblemMagnitudes.MAJOR]: 'majorProblem',
+      [ProblemMagnitudes.CRITICAL]: 'criticalProblem'
+    };
+
+    return this.workflowDefaults[keyMapping[problemMagnitude]].workflowType;
   }
 });
 

@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import {
   insert,
@@ -11,8 +12,11 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setVerificationDate
 } from '/imports/api/actions/methods.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 
 Template.Actions_Edit.viewmodel({
   mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
@@ -83,6 +87,22 @@ Template.Actions_Edit.viewmodel({
   getUnlinkDocumentFn() {
     return ({ documentId, documentType }, cb) => {
       this.callUpdate(unlinkDocument, { documentId, documentType }, cb);
+    };
+  },
+  getUpdateCompletionDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
+    };
+  },
+  getUpdateVerificationDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
     };
   },
   generateCallback(queryParam, cb = () => {}) {
