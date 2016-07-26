@@ -1,78 +1,15 @@
 <template name="SS_Card_Modal">
   <div>
     <div class="relative">
-      <!-- {{! NON-CONFORMITIES SUBCARDS}}
-      {{#with NC}}
-        {{> Subcards_Notify_Edit
-            doc=this
-            documentType="non-conformity"
-            onUpdate=onUpdateNotifyUserCb}}
-
-        {{> Subcards_Occurrences_Edit
-            _id=this._id
-            occurrencesIds=this.occurrences}} {{! can`t find occurences. Where are they?}}
-
-        {{> Subcards_Actions_Edit
-            type="CA"
-            documentId=this._id
-            documentType="non-conformity"}}
-
-        {{> Subcards_Actions_Edit
-            type="PA"
-            documentId=this._id
-            documentType="non-conformity"}}
-
-        {{> Subcards_ImprovementPlan_Edit
-            documentId=this._id
-            documentType="non-conformity"}}
-
-        {{> Subcards_LessonsLearned_Edit
-            documentId=this._id
-            documentType="non-conformity"
-            linkedTo=this.title
-            linkedToId=this.sequentialId}}
-
-        {{> Subcards_OtherFiles_Edit
-            _id=this._id
-            files=this.files
-            uploaderMetaContext=uploaderMetaContext
-            slingshotDirective=slingshotDirective}}
-      {{/with}} -->
       {{> NC_Subcards}}
 
-      <!-- {{! STANDARDS SUBCARDS}}
-      {{#with standard}}
-        {{> Subcards_NonConformities_Edit
-          _id=this._id
-          _query=_getNCsQuery}}
-
-      {{> Subcards_Actions_Edit
-          type="RC"
-          standardId=this._id}}
-      {{/with}} -->
       {{> Standards_Subcards}}
 
-      <!-- {{! RISKS SUBCARDS}}
-      {{#with risk}}
-        {{> Subcards_RiskScoring_Edit
-            _id=this._id
-            score=this.score}}
-
-        {{> Subcards_ImprovementPlan_Edit
-            _id=this._id
-            documentType="risk"
-            label="Treatment plan"
-            treatmentPlan=this.treatmentPlan}}
-      {{/with}} -->
       {{> Risks_Subcards}}
 
-      <!-- {{! ACTIONS SUBCARDS}}
-      {{#with action}}
-        {{> Subcards_Notes_Edit
-            notes=this.notes}}
-      {{/with}} -->
       {{> Actions_Subcards}}
 
+      {{> Users_Subcards}}
     </div>
   </div>
 </template>

@@ -1,7 +1,11 @@
 import { Template } from 'meteor/templating';
+import { UserRolesNames } from '../../../../api/constants.js';
+
+import { Organizations } from '/imports/api/organizations/organizations.js';
 
 Template.SS_Card_Read.viewmodel({
-  mixin: ['modal', 'nonconformity', 'standard', 'risk', 'action'],
+  share: 'window',
+  mixin: ['modal', 'nonconformity', 'standard', 'risk', 'action', 'user', 'mobile'],
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
@@ -14,6 +18,8 @@ Template.SS_Card_Read.viewmodel({
   RiskId: "aqtqWNPrc9fNi6wyp",
   // Action from fixture: "CA1 Fix machine calibration"
   ActionId: "hR3QzcjMKfZv9RQLe",
+  // Steve Ives ID
+  UserId: "SQHmBKJ94gJvpLKLt",
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },
@@ -23,8 +29,53 @@ Template.SS_Card_Read.viewmodel({
   action() {
     return this._getActionByQuery({ _id: this.ActionId() });
   },
+  organization() {
+    return Organizations.findOne();
+  },
+  user() {
+    return Meteor.users.findOne("SQHmBKJ94gJvpLKLt");
+  },
   _getNCsQuery() {
     return { standardsIds: this.StandardId() };
+  },
+  phoneType(type) {
+    return `${type} phone`;
+  },
+  isInvitationAccepted(user) {
+    return !user.invitationId;
+  },
+  isEmailVerified(user) {
+    const email = user.emails[0];
+    return email.verified;
+  },
+  superpowersTitle(user) {
+    if (this.organization()) {
+      return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
+    }
+  },
+  orgOwnerLabel() {
+    const userId = this.UserId();
+    const organization = this.organization();
+
+    if (userId && organization) {
+      const orgName = organization.name;
+      if (userId === organization.ownerId()) {
+        return `Organization owner for organization "${orgName}"`;
+      }
+    }
+  },
+  superpowers(user) {
+    if (this.organization()) {
+      const orgId = this.organization()._id;
+      const userRoles = user.roles[orgId] || [];
+
+      const superpowers = Object.keys(UserRolesNames).map((key) => {
+        return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
+      });
+      return superpowers.sort((a, b) => {
+        return b.flag - a.flag;
+      });
+    }
   },
   onOpenEditModalCb() {
     return this.openEditModal.bind(this);
@@ -36,7 +87,8 @@ Template.SS_Card_Read.viewmodel({
       NCId: this.NCId(),
       StandardId: this.StandardId(),
       RiskId: this.RiskId(),
-      ActionId: this.ActionId()
+      ActionId: this.ActionId(),
+      UserId: this.UserId()
     });
   },
 });

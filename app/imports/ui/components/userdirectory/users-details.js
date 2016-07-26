@@ -38,7 +38,6 @@ Template.UsersDetails.viewmodel({
       const superpowers = Object.keys(UserRolesNames).map((key) => {
         return { key, value: UserRolesNames[key], flag: userRoles.indexOf(key) !== -1 };
       });
-
       return superpowers.sort((a, b) => {
         return b.flag - a.flag;
       });
