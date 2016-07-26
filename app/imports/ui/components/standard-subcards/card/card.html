@@ -24,12 +24,17 @@
 
       {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
-
       {{! RISKS SUBCARDS}}
 
       {{#with risk}}
-        {{> Subcards_RiskScoring_Read score=this.score}}
+        {{> Subcards_RiskScoring_Read scores=this.scores}}
         {{> Subcards_ImprovementPlan_Read documentType="risk" label="Treatment plan" treatmentPlan=this.treatmentPlan}}
+      {{/with}}
+
+      {{! ACTIONS SUBCARDS}}
+
+      {{#with action}}
+        {{> Subcards_Notes_Read notes=this.notes}}
       {{/with}}
     {{/Card_Read}}
   </div>

@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.SS_Card_Read.viewmodel({
-  mixin: ['modal', 'nonconformity', 'standard', 'risk'],
+  mixin: ['modal', 'nonconformity', 'standard', 'risk', 'action'],
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
@@ -19,6 +19,9 @@ Template.SS_Card_Read.viewmodel({
   },
   risk() {
     return this._getRiskByQuery({ _id: this.RiskId() });
+  },
+  action() {
+    return this._getActionByQuery({ _id: this.ActionId() });
   },
   _getNCsQuery() {
     return { standardsIds: this.StandardId() };
