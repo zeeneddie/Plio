@@ -12,7 +12,7 @@ SyncedCron.add({
   name: 'Update workflow statuses',
 
   schedule(parser) {
-    return parser.text('every 1 hour');
+    return parser.text('every 15 mins');
   },
 
   job() {
