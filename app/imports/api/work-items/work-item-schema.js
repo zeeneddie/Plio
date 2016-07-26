@@ -1,7 +1,9 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema } from '../schemas.js';
-import { WorkItemTypes, WorkItemLinkedDocTypes, WorkItemStatuses } from '../constants.js';
+import { WorkItemsStore } from '../constants.js';
+
+const { TYPES, LINKED_TYPES, STATUSES } = WorkItemsStore;
 
 const linkedDocSchema = new SimpleSchema({
   _id: {
@@ -10,7 +12,7 @@ const linkedDocSchema = new SimpleSchema({
   },
   type: {
     type: String,
-    allowedValues: _.values(WorkItemLinkedDocTypes)
+    allowedValues: _.values(LINKED_TYPES)
   }
 });
 
@@ -27,11 +29,11 @@ const WorkItemsSchema = new SimpleSchema([
     },
     type: {
       type: String,
-      allowedValues: _.values(WorkItemTypes)
+      allowedValues: _.values(TYPES)
     },
     status: {
       type: Number,
-      allowedValues: _.keys(WorkItemStatuses).map(status => parseInt(status, 10))
+      allowedValues: _.keys(STATUSES).map(status => parseInt(status, 10))
     },
     assigneeId: {
       type: String,

@@ -4,7 +4,9 @@ import { Tracker } from 'meteor/tracker';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { updateViewedBy } from '/imports/api/work-items/methods.js';
-import { ActionDocumentTypes } from '/imports/api/constants.js';
+import { WorkItemsStore } from '/imports/api/constants.js';
+
+const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Item.viewmodel({
   share: 'window',
@@ -30,11 +32,13 @@ Template.WorkInbox_Item.viewmodel({
   },
   loadStatusMixinByDocType(docType) {
     switch(docType) {
-      case ActionDocumentTypes.ACTION:
+      case LINKED_TYPES.CORRECTIVE_ACTION:
+      case LINKED_TYPES.PREVENTATIVE_ACTION:
+      case LINKED_TYPES.RISK_CONTROL:
         this.load({ mixin: 'actionStatus' });
         break;
-      case ActionDocumentTypes.NC:
-      case ActionDocumentTypes.RISK:
+      case LINKED_TYPES.NC:
+      case LINKED_TYPES.RISK:
         this.load({ mixin: 'problemsStatus' });
         break;
       default:

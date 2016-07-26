@@ -15,7 +15,8 @@ Template.WorkInbox_Layout.viewmodel({
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
         this.templateInstance.subscribe('nonConformities', _id),
-        this.templateInstance.subscribe('risks', _id)
+        this.templateInstance.subscribe('risks', _id),
+        this.templateInstance.subscribe('actions', _id)
       ];
 
       if (this.isActiveWorkInboxFilter('Deleted actions')) {

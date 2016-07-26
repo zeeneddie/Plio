@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { ActionDocumentTypes, WorkItemTypes } from '/imports/api/constants.js';
+import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
+const { TYPES } = WorkItemsStore;
 const STATUSES = {
   IN_PROGRESS: [0, 1, 2],
   COMPLETED: 3
@@ -66,64 +67,52 @@ Template.WorkInbox_List.viewmodel({
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
-  _getAssigneeQuery(toBeCompletedBy, isCompleted) {
-    return { toBeCompletedBy, isCompleted };
-  },
-  _getActions(_query, _options) {
-    return (userQuery, isDone = false) => {
-      const query = {
-        $and: [
-          { ...this._getSearchQuery() },
-          {
-            $or: [
-              { toBeCompletedBy: { $exists: true, ...userQuery}, isCompleted: isDone },
-              { toBeVerifiedBy: { $exists: true, ...userQuery}, isVerified: isDone }
-            ]
-          }
-        ]
-      };
-      return this._getActionsByQuery({ ..._query, ...query }, _options)
-                    .map(({ ...args }) => ({ ...args, _documentType: ActionDocumentTypes.ACTION }));
-    };
-  },
-  getPendingProblems(_query = {}) {
-    const workItems = this._getWorkItemsByQuery({}).fetch();
-
-    const problemsDocs = ((() => {
+  getPendingItems(_query = {}) {
+    const docs = ((() => {
+      const workItems = this._getWorkItemsByQuery({ ..._query }).fetch();
       const ids = workItems.map(({ linkedDoc: { _id } = {} }) => _id);
-      const query = { _id: { $in: ids }, ..._query, ...this._getSearchQuery() };
+      const query = { _id: { $in: ids }, ...this._getSearchQuery() };
       const withSource = ({ _id, ...args }) => {
         const _source = workItems.find(({ linkedDoc: { _id:targetId } = {} }) => _id === targetId);
         return { _source, _id, ...args };
       };
 
-      const NCs = this._getNCsByQuery(query).map(withSource);
-      const risks = this._getRisksByQuery(query).map(withSource);
-      return NCs.concat(risks);
+      const _docs = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery'].map(prop => this[prop](query).map(withSource))
+                                                                                .reduce((prev, cur) => [...prev, ...cur]);
+      return _docs;
     })());
 
-    const problems = problemsDocs.map(({
+    const docsWithPreciselyChosenExecutor = ({
       _source: { type, ...sourceArgs }, analysis = {},
-      updateOfStandards = {}, ...args
+      updateOfStandards = {}, toBeCompletedBy:e3, toBeVerifiedBy:e4, ...args
     }) => {
       const toBeCompletedBy = ((() => {
         const [{ executor:e1 }, { executor:e2 }] = [analysis, updateOfStandards];
         switch(type) {
-          case WorkItemTypes.COMPLETE_ANALYSIS:
+          case TYPES.COMPLETE_ANALYSIS:
             return e1;
             break;
-          case WorkItemTypes.COMPLETE_UPDATE_OF_STANDARDS:
+          case TYPES.COMPLETE_UPDATE_OF_STANDARDS:
             return e2;
+            break;
+          case TYPES.COMPLETE_ACTION:
+            return e3;
+            break;
+          case TYPES.VERIFY_ACTION:
+            return e4;
             break;
           default:
             return undefined;
             break;
         }
       })());
-      return { toBeCompletedBy, analysis, updateOfStandards, _source: { type, ...sourceArgs }, ...args };
-    });
 
-    return problems;
+      return { toBeCompletedBy, analysis, updateOfStandards, _source: { type, ...sourceArgs }, ...args };
+    };
+
+    const items = docs.map(docsWithPreciselyChosenExecutor);
+
+    return items;
   },
   assignees() {
     const getIds = (predicate) => {
@@ -150,7 +139,7 @@ Template.WorkInbox_List.viewmodel({
       array.sort(({ _source: { targetDate:d1 } = {} }, { _source: { targetDate:d2 } = {} }) => d2 - d1)
     );
     const getItems = (predicate1) => {
-      const items = this.getPendingProblems().filter(({ _source: { assigneeId } = {} }) => predicate1(assigneeId));
+      const items = this.getPendingItems().filter(({ _source: { assigneeId } = {} }) => predicate1(assigneeId));
 
       return (predicate2) => sortItems(items.filter(({ _source: { status } }) => predicate2(status)));
     };
@@ -171,15 +160,13 @@ Template.WorkInbox_List.viewmodel({
       completed: teamItems(isCompleted)
     };
 
+    const deleted = this.getPendingItems({ isDeleted: true });
+
     return {
       my,
-      team
+      team,
+      deleted
     }
-  },
-  deleted() {
-    const query = { isDeleted: true, ...this._getSearchQuery() };
-    const options = { sort: { deletedAt: -1 } };
-    return this._getActionsByQuery(query, options);
   },
   focused: false,
   animating: false,
@@ -191,20 +178,16 @@ Template.WorkInbox_List.viewmodel({
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
 
-    if (this.isActiveWorkInboxFilter('My current work items')) {
-      const count = this.myCurrent().length;
+    const { deleted, my: { current, completed } = {} } = this.items();
 
-      this.searchResultsNumber(count);
+    if (this.isActiveWorkInboxFilter('My current work items')) {
+      this.searchResultsNumber(current.length);
       return;
     } else if (this.isActiveWorkInboxFilter('My completed work items')) {
-      const count = this.myCompleted().length;
-
-      this.searchResultsNumber(count);
+      this.searchResultsNumber(completed.length);
       return;
     } else if (this.isActiveWorkInboxFilter('Deleted work items')) {
-      const count = this.deleted().count();
-
-      this.searchResultsNumber(count);
+      this.searchResultsNumber(deleted.length);
       return;
     }
 

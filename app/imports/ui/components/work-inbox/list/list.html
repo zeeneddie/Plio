@@ -46,11 +46,11 @@
         {{/each}}
       {{/if}}
 
-      <!-- {{#if isActiveWorkInboxFilter 'Deleted work items'}}
-        {{#each deleted}}
+      {{#if isActiveWorkInboxFilter 'Deleted work items'}}
+        {{#each items.deleted}}
           {{> WorkInbox_Item}}
         {{/each}}
-      {{/if}} -->
+      {{/if}}
 
       {{#if searchText}}
         <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>

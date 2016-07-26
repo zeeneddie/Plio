@@ -5,7 +5,6 @@ import WorkItemService from './work-item-service.js';
 import { WorkItemsSchema } from './work-item-schema.js';
 import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
-import { WorkItemTypes } from '../constants.js';
 
 export const updateViewedBy = new ValidatedMethod({
   name: 'WorkItems.updateViewedBy',
