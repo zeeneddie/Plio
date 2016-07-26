@@ -33,20 +33,13 @@ Template.SS_Card_Read.viewmodel({
     return Organizations.findOne();
   },
   user() {
-    return Meteor.users.findOne("SQHmBKJ94gJvpLKLt");
+    return Meteor.users.findOne(this.UserId());
   },
   _getNCsQuery() {
     return { standardsIds: this.StandardId() };
   },
   phoneType(type) {
     return `${type} phone`;
-  },
-  isInvitationAccepted(user) {
-    return !user.invitationId;
-  },
-  isEmailVerified(user) {
-    const email = user.emails[0];
-    return email.verified;
   },
   superpowersTitle(user) {
     if (this.organization()) {

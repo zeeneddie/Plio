@@ -33,5 +33,14 @@
   },
   "standardsIds": [
     "Mc7jjwYJ9gXPkibS8"
+  ],
+  "scores": [
+    {
+      "_id": "geZoaui4epXSWTjET",
+      "rowId": 1,
+      "value": 100,
+      "scoredBy": "jxqMcYJnutasmKKZH",
+      "scoredAt": "2016-08-01T21:00:00.000Z"
+    }
   ]
 }

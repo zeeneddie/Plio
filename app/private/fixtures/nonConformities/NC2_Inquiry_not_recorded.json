@@ -1,5 +1,8 @@
 {
   "_id" : "P98SExuNHZ4y8bhjc",
+  "analysis": {
+    "executor": "SQHmBKJ94gJvpLKLt"
+  },
   "organizationId" : "KwKXz5RefrE5hjWJ2",
   "serialNumber" : 2,
   "sequentialId" : "NC2",
@@ -19,6 +22,15 @@
   "standard" : "HvtALDZBHG3wRF7xp",
   "cost" : 5000,
   "standardsIds": [
+    "4hecb3Gzvg5dPp7rD",
     "Mc7jjwYJ9gXPkibS8"
+  ],
+  "files": [
+    {
+      "_id": "f9Y5xWCpzKxPkg2ui",
+      "name": "important.html",
+      "extension": "html",
+      "url": "https://plio.s3-eu-west-1.amazonaws.com/uploads/KwKXz5RefrE5hjWJ2/non-conformities-files/P98SExuNHZ4y8bhjc/j42ezBpjEq5dNqqgR-important.html"
+    }
   ]
 }

@@ -1,5 +1,4 @@
 import './modal.html';
-import './modal.js';
 
 import './nc-subcards';
 import './standards-subcards';
