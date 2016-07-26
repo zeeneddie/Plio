@@ -10,15 +10,11 @@ const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'workInbox', 'organization', 'user', 'utils'],
+  mixin: ['date', 'workInbox', 'organization', 'user', 'utils', 'workItemStatus'],
   autorun() {
     if (this._id() === this.workItemId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
     }
-  },
-  onCreated() {
-    const { _source: { linkedDoc: { type } = {} } = {} } = this.data();
-    this.loadStatusMixinByDocType(type);
   },
   _source: {},
   getTypeText({ _source: { type } = {} }) {
@@ -32,22 +28,6 @@ Template.WorkInbox_Item.viewmodel({
     return isDeleted
             ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
             : '';
-  },
-  loadStatusMixinByDocType(docType) {
-    switch(docType) {
-      case LINKED_TYPES.CORRECTIVE_ACTION:
-      case LINKED_TYPES.PREVENTATIVE_ACTION:
-      case LINKED_TYPES.RISK_CONTROL:
-        this.load({ mixin: 'actionStatus' });
-        break;
-      case LINKED_TYPES.NC:
-      case LINKED_TYPES.RISK:
-        this.load({ mixin: 'problemsStatus' });
-        break;
-      default:
-        return;
-        break;
-    }
   },
   isNew() {
     const { _source: { viewedBy = [] } = {} } = this.data();
@@ -63,6 +43,8 @@ Template.WorkInbox_Item.viewmodel({
       this.width($(window).width());
     }
 
-    FlowRouter.setParams({ workItemId: this._id() });
+    const { _source: { _id:workItemId } = {} } = this.data();
+
+    FlowRouter.setParams({ workItemId });
   }
 });

@@ -6,10 +6,10 @@ import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.Actions_QAPanel_Read.viewmodel({
   mixin: ['workInbox', 'user', 'date', 'utils', 'modal'],
-  document: '',
-  _documentType: '',
+  doc: '',
+  _docType: '',
   isAction() {
-    return this._documentType() === ActionDocumentTypes.ACTION;
+    return this._docType() === ActionDocumentTypes.ACTION;
   },
   showQAPanel({ isDeleted, isVerified, isCompleted, toBeCompletedBy, toBeVerifiedBy, analysis: { executor, status } = {} } ) {
     const aCondition = !isVerified && this.chooseOne(isCompleted)(toBeVerifiedBy, toBeCompletedBy) === Meteor.userId();
@@ -36,7 +36,7 @@ Template.Actions_QAPanel_Read.viewmodel({
     this.modal().open({
       _title,
       content,
-      document: { _id, isCompleted, analysis, ...args },
+      doc: { _id, isCompleted, analysis, ...args },
       isAction: this.isAction(),
       closeCaption: 'Cancel',
       template: 'Actions_QAPanel_Edit'

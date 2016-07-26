@@ -13,7 +13,7 @@ import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
-  ActionTypes, ReviewStatuses
+  ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -682,6 +682,30 @@ ViewModel.mixin({
         case 5:
         case 6:
           return 'danger';
+          break;
+        default:
+          return '';
+          break;
+      }
+    }
+  },
+  workInboxStatus: {
+    getStatusName(status) {
+      return WorkItemsStore.STATUSES[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return '';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'danger';
+          break;
+        case 3:
+          return 'success';
           break;
         default:
           return '';

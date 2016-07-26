@@ -1,7 +1,7 @@
 <template name="WorkInbox_Item">
-  <a class="list-group-item" {{b "click: navigate, class: { active: this._id === workItemId }"}}>
+  <a class="list-group-item" {{b "click: navigate, class: { active: _source._id === workItemId }"}}>
 	  <span class="label label-status-indicator"
-      {{b "class: 'label-'+getClassByStatus(this.status)"}}></span>
+      {{b "class: 'label-'+getClassByStatus(_source.status)"}}></span>
     <div class="list-group-item-content">
 			<h4 class="list-group-item-heading pull-left">
 			  <span {{b "text: getTypeText(this)"}}></span>

@@ -15,13 +15,12 @@ Template.WorkInbox_List.viewmodel({
     if (!this.focused() && !this.animating() && !this.searchText()) {
       const items = this._getItemsByFilter() || [];
 
-      const contains = items.find(({ _id }) => _id === this.workItemId());
+      const contains = items.find(({ _source: { _id } = {} }) => _id === this.workItemId());
 
       if (!contains) {
-        const item = items.find((el, i, arr) => arr.length); // get first element if it exists
+        const { _source: { _id } = {} } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
 
-        if (item) {
-          const { _id } = item;
+        if (_id) {
           Meteor.setTimeout(() => {
             this.goToWorkItem(_id);
             this.expandCollapsed(_id);
@@ -116,9 +115,9 @@ Template.WorkInbox_List.viewmodel({
   },
   assignees() {
     const getIds = (predicate) => {
-      const ids = this.toArray(this._getWorkItemsByQuery({}))
-                      .filter(({ assigneeId, status }) => assigneeId !== Meteor.userId() && predicate(status))
-                      .map(({ assigneeId }) => assigneeId);
+      const ids = this.getPendingItems()
+                      .filter(({ _source: { assigneeId, status } = {} }) => assigneeId !== Meteor.userId() && predicate(status))
+                      .map(({ _source: { assigneeId } = {} }) => assigneeId);
       return [...new Set(ids)];
     };
 
@@ -128,7 +127,7 @@ Template.WorkInbox_List.viewmodel({
     return {
       current,
       completed
-    }
+    };
   },
   getTeamItems(userId, prop) {
     const { team = {} } = this.items(userId) || {};
