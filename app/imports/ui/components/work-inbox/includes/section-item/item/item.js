@@ -10,7 +10,7 @@ const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'workInbox', 'organization', 'user'],
+  mixin: ['date', 'workInbox', 'organization', 'user', 'utils'],
   autorun() {
     if (this._id() === this.workItemId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
@@ -21,6 +21,9 @@ Template.WorkInbox_Item.viewmodel({
     this.loadStatusMixinByDocType(type);
   },
   _source: {},
+  getTypeText({ _source: { type } = {} }) {
+    return this.capitalize(type);
+  },
   getDate({ isDeleted, deletedAt, _source: { targetDate } = {} }) {
     const date = isDeleted ? deletedAt : targetDate;
     return this.renderDate(date);

@@ -4,11 +4,11 @@
       {{b "class: 'label-'+getClassByStatus(this.status)"}}></span>
     <div class="list-group-item-content">
 			<h4 class="list-group-item-heading pull-left">
-			  <span {{b "text: this.sequentialId"}}></span>
+			  <span {{b "text: getTypeText(this)"}}></span>
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
 			</h4>
       <p class="list-group-item-text pull-right" {{b "text: getUserText(this)"}}></p>
-      <p class="list-group-item-text pull-left" {{b "text: this.title"}}></p>
+      <p class="list-group-item-text pull-left" {{b "text: this.sequentialId + ' - ' + this.title"}}></p>
       <p class="list-group-item-text pull-right" {{b "text: getDate(this)"}}></p>
     </div>
 	</a>
