@@ -87,9 +87,7 @@ export default {
       }
     });
 
-    if (!action.verified()
-          && (doc.workflowType === WorkflowTypes.SIX_STEP)
-          && doc.areStandardsUpdated()) {
+    if (doc.areStandardsUpdated() && !action.verified()) {
       docCollection.update({ _id: documentId }, {
         $set: {
           'updateOfStandards.status': 0, // Not completed
@@ -99,17 +97,9 @@ export default {
           'updateOfStandards.completedBy': ''
         }
       });
-
-      Meteor.isServer && Meteor.defer(() => {
-        const workflowConstructors = {
-          [ProblemTypes.NC]: NCWorkflow,
-          [ProblemTypes.RISK]: RiskWorkflow
-        };
-
-        new workflowConstructors[documentType](documentId).refreshStatus();
-      });
     }
 
+    this._refreshLinkedDocStatus(documentId, documentType);
     this._refreshStatus(_id);
 
     return ret;
@@ -132,16 +122,8 @@ export default {
       }
     });
 
-    Meteor.isServer && Meteor.defer(() => {
-      const workflowConstructors = {
-        [ProblemTypes.NC]: NCWorkflow,
-        [ProblemTypes.RISK]: RiskWorkflow
-      };
-      new workflowConstructors[documentType](documentId).refreshStatus();
-
-      const workflow = new ActionWorkflow(_id);
-      workflow.refreshStatus();
-    });
+    this._refreshLinkedDocStatus(documentId, documentType);
+    this._refreshStatus(_id);
 
     return ret;
   },
@@ -386,6 +368,17 @@ export default {
     Meteor.isServer && Meteor.defer(() => {
       const workflow = new ActionWorkflow(_id);
       workflow.refreshStatus();
+    });
+  },
+
+  _refreshLinkedDocStatus(documentId, documentType) {
+    Meteor.isServer && Meteor.defer(() => {
+      const workflowConstructors = {
+        [ProblemTypes.NC]: NCWorkflow,
+        [ProblemTypes.RISK]: RiskWorkflow
+      };
+
+      new workflowConstructors[documentType](documentId).refreshStatus();
     });
   },
 
