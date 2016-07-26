@@ -14,8 +14,6 @@
         {{#with notify}}
           {{> Subcards_Notify_Read users=this}}
         {{/with}}
-        {{> Fields_Standards_Read standardsIds=this.standardsIds}}
-        {{> Departments_Read departmentsIds=this.departments}}
         {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}} {{! Where can I find _getOccurrencesQuery ?}}
         {{> Subcards_ImprovementPlan_Read documentId=this._id}}
         {{> Subcards_LessonsLearned_Read documentId=this._id}}
