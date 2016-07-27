@@ -26,8 +26,6 @@ import '../../api/problems';
 
 import '../../api/occurrences';
 
-import '../../api/analysis';
-
 import '../../api/mammoth';
 
 import '../../api/work-items';

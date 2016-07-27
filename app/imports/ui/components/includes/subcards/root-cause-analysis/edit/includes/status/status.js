@@ -6,7 +6,6 @@ import { AnalysisStatuses } from '/imports/api/constants.js';
 Template.NC_RCA_Status_Edit.viewmodel({
   status: 0,
   executor: '',
-  key: '',
   label: 'Status',
   isSelectedExecutor() {
     return this.executor() === Meteor.userId();
@@ -31,10 +30,16 @@ Template.NC_RCA_Status_Edit.viewmodel({
 
     const status = parseInt(statusValue, 10);
 
-    if (status === this.templateInstance.data.status) return;
+    if (status === this.templateInstance.data.status) {
+      return;
+    }
 
     this.status(status);
 
-    this.parent().update({ [this.key()]: status });
+    if (status === 1) {
+      this.onComplete();
+    } else if (status === 0) {
+      this.onUndo();
+    }
   }
 });

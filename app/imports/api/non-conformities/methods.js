@@ -59,19 +59,131 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const setAnalysisDate = new ValidatedMethod({
+  name: 'NonConformities.setAnalysisDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update root cause analysis'
+      );
+    }
+
+    return NonConformitiesService.setAnalysisDate({ _id, ...args });
+  }
+});
+
+export const completeAnalysis = new ValidatedMethod({
+  name: 'NonConformities.completeAnalysis',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot complete root cause analysis'
+      );
+    }
+
+    return NonConformitiesService.completeAnalysis({ _id, userId });
+  }
+});
+
+export const updateStandards = new ValidatedMethod({
+  name: 'NonConformities.updateStandards',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards'
+      );
+    }
+
+    return NonConformitiesService.updateStandards({ _id, userId });
+  }
+});
+
+export const undoStandardsUpdate = new ValidatedMethod({
+  name: 'NonConformities.undoStandardsUpdate',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo standards update'
+      );
+    }
+
+    return NonConformitiesService.undoStandardsUpdate({ _id, userId });
+  }
+});
+
+export const undoAnalysis = new ValidatedMethod({
+  name: 'NonConformities.undoAnalysis',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo root cause analysis'
+      );
+    }
+
+    return NonConformitiesService.undoAnalysis({ _id, userId });
+  }
+});
+
+export const setStandardsUpdateDate = new ValidatedMethod({
+  name: 'NonConformities.setStandardsUpdateDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set date for standards update'
+      );
+    }
+
+    return NonConformitiesService.setStandardsUpdateDate({ _id, ...args });
+  }
+});
+
 export const updateViewedBy = new ValidatedMethod({
   name: 'NonConformities.updateViewedBy',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update non-conformities'
       );
     }
 
-    return NonConformitiesService.updateViewedBy({ _id, userId: this.userId });
+    return NonConformitiesService.updateViewedBy({ _id, viewedBy: userId });
   }
 });
 
@@ -90,7 +202,7 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.remove({ _id });
+    return NonConformitiesService.remove({ _id, deletedBy: userId });
   }
 });
 

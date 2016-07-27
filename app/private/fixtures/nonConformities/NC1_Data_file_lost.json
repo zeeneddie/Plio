@@ -12,12 +12,13 @@
     "targetDate": {"$date": 1459508400000},
     "status": 0
   },
+  "workflowType" : "6-step",
   "createdAt" : {"$date": 1459508400000},
   "createdBy" : "SQHmBKJ94gJvpLKLt",
   "notify" : [
     "SQHmBKJ94gJvpLKLt"
   ],
-  "status" : 1,
+  "status" : 2,
   "description" : "Important data file is lost. It contains information about asian carp travel patterns.",
   "updatedAt" : {"$date": 1459515600000},
   "updatedBy" : "SQHmBKJ94gJvpLKLt",

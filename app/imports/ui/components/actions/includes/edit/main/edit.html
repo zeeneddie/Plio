@@ -21,7 +21,8 @@
 
     {{> Actions_CompletionTargetDate
         completionTargetDate=completionTargetDate
-        enabled=isCompletionEditable}}
+        enabled=isCompletionEditable
+        onUpdate=onUpdateCompletionDate}}
 
     {{#unless isCompleted}}
 
@@ -45,30 +46,33 @@
           completionComments=completionComments
           enabled=isCompletionEditable}}
 
-      <hr />
+      {{#if showVerification}}
+        <hr />
 
-      {{> Actions_VerificationTargetDate
-          verificationTargetDate=verificationTargetDate}}
+        {{> Actions_VerificationTargetDate
+            verificationTargetDate=verificationTargetDate
+            onUpdate=onUpdateVerificationDate}}
 
-      {{#unless isVerified}}
+        {{#unless isVerified}}
 
-        {{> Actions_ToBeVerifiedBy
-            toBeVerifiedBy=toBeVerifiedBy
-            onVerify=onVerify}}
+          {{> Actions_ToBeVerifiedBy
+              toBeVerifiedBy=toBeVerifiedBy
+              onVerify=onVerify}}
 
-      {{else}}
+        {{else}}
 
-        {{> Actions_VerifiedOn verifiedAt=verifiedAt}}
+          {{> Actions_VerifiedOn verifiedAt=verifiedAt}}
 
-        {{> Actions_VerifiedBy
-            verifiedBy=verifiedBy
-            verifiedAt=verifiedAt
-            onUndo=onUndoVerification}}
+          {{> Actions_VerifiedBy
+              verifiedBy=verifiedBy
+              verifiedAt=verifiedAt
+              onUndo=onUndoVerification}}
 
-        {{> Actions_VerificationComments
-            verificationComments=verificationComments}}
+          {{> Actions_VerificationComments
+              verificationComments=verificationComments}}
 
-      {{/unless}}
+        {{/unless}}
+      {{/if}}
 
     {{/unless}}
   </div>

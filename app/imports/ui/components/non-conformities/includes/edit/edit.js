@@ -1,11 +1,17 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
-import { update, remove, updateViewedBy } from '/imports/api/non-conformities/methods.js';
+import {
+  update, remove, updateViewedBy,
+  completeAnalysis, undoAnalysis, setAnalysisDate,
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
+} from '/imports/api/non-conformities/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
-
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
@@ -36,6 +42,56 @@ Template.NC_Card_Edit.viewmodel({
     } else {
       updateFn();
     }
+  },
+  getUpdateAnalysisDateFn() {
+    return this.updateAnalysisDate.bind(this);
+  },
+  updateAnalysisDate({ date }, cb) {
+    const _id = this._id();
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
+  },
+  getCompleteAnalysisFn() {
+    return this.completeAnalysis.bind(this);
+  },
+  completeAnalysis(cb) {
+    const _id = this._id();
+    this.modal().callMethod(completeAnalysis, { _id }, cb);
+  },
+  getUndoAnalysisFn() {
+    return this.undoAnalysis.bind(this);
+  },
+  undoAnalysis(cb) {
+    const _id = this._id();
+    this.modal().callMethod(undoAnalysis, { _id }, cb);
+  },
+  getUpdateStandardsDateFn() {
+    return this.updateStandardsDate.bind(this);
+  },
+  updateStandardsDate({ date }, cb) {
+    const _id = this._id();
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
+  },
+  getUpdateStandardsFn() {
+    return this.updateStandards.bind(this);
+  },
+  updateStandards(cb) {
+    const _id = this._id();
+    this.modal().callMethod(updateStandards, { _id }, cb);
+  },
+  getUndoStandardsUpdateFn() {
+    return this.undoStandardsUpdate.bind(this);
+  },
+  undoStandardsUpdate(cb) {
+    const _id = this._id();
+    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
   },
   remove() {
     const { title } = this.NC();

@@ -101,6 +101,48 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
+export const setCompletionDate = new ValidatedMethod({
+  name: 'Actions.setCompletionDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set target date for action completion'
+      );
+    }
+
+    return ActionService.setCompletionDate({ _id, ...args });
+  }
+});
+
+export const setVerificationDate = new ValidatedMethod({
+  name: 'Actions.setVerificationDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set target date for action verification'
+      );
+    }
+
+    return ActionService.setVerificationDate({ _id, ...args });
+  }
+});
+
 export const linkDocument = new ValidatedMethod({
   name: 'Actions.linkDocument',
 

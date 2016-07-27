@@ -22,8 +22,10 @@ Template.Select_Single.viewmodel({
     }
   },
   onRendered() {
-    this.dropdown.on('show.bs.dropdown', e => this.onShow(e));
-    this.dropdown.on('hide.bs.dropdown', e => this.onHide(e));
+    if (this.dropdown) {
+      this.dropdown.on('show.bs.dropdown', () => this.onShow());
+      this.dropdown.on('hide.bs.dropdown', () => this.onHide());
+    }
   },
   onShow(e) {
     if (this.disabled()) {
@@ -48,10 +50,10 @@ Template.Select_Single.viewmodel({
   contentData: {},
   loading: false,
   focused: false,
-  disabled: false,
   excludedItems: [],
   selectFirstIfNoSelected: true,
   items: [],
+  disabled: false,
   showContent() {
     return this.itemsFiltered().length > 0 || !!Template[this.content()];
   },

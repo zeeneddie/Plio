@@ -71,19 +71,131 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const setAnalysisDate = new ValidatedMethod({
+  name: 'Risks.setAnalysisDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update root cause analysis'
+      );
+    }
+
+    return RisksService.setAnalysisDate({ _id, ...args });
+  }
+});
+
+export const completeAnalysis = new ValidatedMethod({
+  name: 'Risks.completeAnalysis',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot complete root cause analysis'
+      );
+    }
+
+    return RisksService.completeAnalysis({ _id, userId });
+  }
+});
+
+export const updateStandards = new ValidatedMethod({
+  name: 'Risks.updateStandards',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards'
+      );
+    }
+
+    return RisksService.updateStandards({ _id, userId });
+  }
+});
+
+export const undoStandardsUpdate = new ValidatedMethod({
+  name: 'Risks.undoStandardsUpdate',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo standards update'
+      );
+    }
+
+    return RisksService.undoStandardsUpdate({ _id, userId });
+  }
+});
+
+export const undoAnalysis = new ValidatedMethod({
+  name: 'Risks.undoAnalysis',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot undo root cause analysis'
+      );
+    }
+
+    return RisksService.undoAnalysis({ _id, userId });
+  }
+});
+
+export const setStandardsUpdateDate = new ValidatedMethod({
+  name: 'Risks.setStandardsUpdateDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set date for standards update'
+      );
+    }
+
+    return RisksService.setStandardsUpdateDate({ _id, ...args });
+  }
+});
+
 export const updateViewedBy = new ValidatedMethod({
   name: 'Risks.updateViewedBy',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update a risk'
       );
     }
 
-    return RisksService.updateViewedBy({ _id, userId: this.userId });
+    return RisksService.updateViewedBy({ _id, viewedBy: userId });
   }
 });
 

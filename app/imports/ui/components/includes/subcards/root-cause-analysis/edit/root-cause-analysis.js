@@ -29,5 +29,23 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
     const allArgs = { ...args, options, query };
 
     this.parent().update(allArgs, cb);
+  },
+  updateAnalysisDate(...args) {
+    this.parent().updateAnalysisDate(...args);
+  },
+  completeAnalysis() {
+    this.parent().completeAnalysis();
+  },
+  undoAnalysis() {
+    this.parent().undoAnalysis();
+  },
+  updateStandardsDate(...args) {
+    this.parent().updateStandardsDate(...args);
+  },
+  updateStandards() {
+    this.parent().updateStandards();
+  },
+  undoStandardsUpdate() {
+    this.parent().undoStandardsUpdate();
   }
 });

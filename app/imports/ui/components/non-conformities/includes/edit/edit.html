@@ -2,7 +2,14 @@
   <div>
     <div class="relative">
       {{#with NC}}
-        {{> NC_Card_Edit_Main NC=this}}
+        {{> NC_Card_Edit_Main 
+            NC=this
+            updateAnalysisDate=getUpdateAnalysisDateFn
+            completeAnalysis=getCompleteAnalysisFn
+            undoAnalysis=getUndoAnalysisFn
+            updateStandardsDate=getUpdateStandardsDateFn
+            updateStandards=getUpdateStandardsFn
+            undoStandardsUpdate=getUndoStandardsUpdateFn}}
 
         {{> Subcards_Notify_Edit
             doc=this

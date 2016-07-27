@@ -7,6 +7,7 @@
   "identifiedBy" : "SQHmBKJ94gJvpLKLt",
   "identifiedAt" : {"$date": 1459508400000},
   "magnitude" : "critical",
+  "workflowType" : "6-step",
   "createdAt" : {"$date": 1459508400000},
   "createdBy" : "SQHmBKJ94gJvpLKLt",
   "notify" : [

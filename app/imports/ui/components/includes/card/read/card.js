@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Card_Read.viewmodel({
+  mixin: 'utils',
   cardTitle: 'Title',
   document: '',
   onRestore() {},
@@ -13,7 +14,7 @@ Template.Card_Read.viewmodel({
     if (err) {
       swal('Oops... Something went wrong!', err.reason, 'error');
     } else {
-      swal('Removed!', `The document "${title}" was ${action} successfully.`, 'success');
+      swal(this.capitalize(action), `The document "${title}" was ${action} successfully.`, 'success');
 
       cb();
     }

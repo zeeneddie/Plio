@@ -27,7 +27,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return this.toArray(this.linkedDocs()).map(({ _id }) => _id);
   },
   mapDocs(array, type) {
-    return array.map(({ sequentialId, title, ...args }) => ({ title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
+    return array.map(({ sequentialId, title, ...args }) => ({ docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
   },
   getDocs(query, options) {
     const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NC);

@@ -12,6 +12,7 @@ Template.RisksList.viewmodel({
       const query = this._getQueryForFilter();
 
       const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });
+
       if (!contains) {
         const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() });
 
@@ -19,12 +20,12 @@ Template.RisksList.viewmodel({
           const { _id } = risk;
           Meteor.setTimeout(() => {
             this.goToRisk(_id);
-            this.expandCollapsed(this.riskId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
             this.goToRisks();
-          }, 0)
+          }, 0);
         }
       }
     }
@@ -74,7 +75,7 @@ Template.RisksList.viewmodel({
     };
   },
   _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+    return this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]);
   },
   _getTypeQuery({ _id:typeId }) {
     return { typeId };

@@ -1,10 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import moment from 'moment-timezone';
+
 import {
   TimeUnits, DocumentTypes, AnalysisStatuses,
   ReviewStatuses
 } from './constants.js';
 import { Utils } from '/imports/core/utils.js';
-
 
 
 export const IdSchema = new SimpleSchema({
@@ -215,7 +216,8 @@ export const ViewedBySchema = new SimpleSchema({
 export const DeletedSchema = new SimpleSchema({
   isDeleted: {
     type: Boolean,
-    optional: true
+    optional: true,
+    defaultValue: false
   },
   deletedBy: {
     type: String,
@@ -284,6 +286,11 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: Date,
         optional: true
       },
+      [`${key}.executor`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
+      },
       [`${key}.status`]: {
         type: Number,
         allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
@@ -305,11 +312,6 @@ export const BaseProblemsOptionalSchema = ((() => {
   const analysis = {
     analysis: {
       type: Object,
-      optional: true
-    },
-    'analysis.executor': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     ...getRepeatingFields('analysis')
@@ -344,6 +346,15 @@ export const BaseProblemsOptionalSchema = ((() => {
   ]);
 
 })());
+
+
+export const TimezoneSchema = new SimpleSchema({
+  timezone: {
+    type: String,
+    allowedValues: moment.tz.names(),
+    optional: true
+  }
+});
 
 export const ReviewSchema = ((() => {
   const schema = new SimpleSchema({
