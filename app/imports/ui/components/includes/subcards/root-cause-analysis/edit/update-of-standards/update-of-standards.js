@@ -14,5 +14,14 @@ Template.NC_UpdateOfStandards_Edit.viewmodel({
   completedBy: '',
   update(...args) {
     this.parent().update(...args);
+  },
+  onStandardsDateUpdated() {
+    return this.parent().updateStandardsDate.bind(this);
+  },
+  onStandardsUpdated() {
+    return this.parent().updateStandards.bind(this);
+  },
+  onStandardsUpdateUndone() {
+    return this.parent().undoStandardsUpdate.bind(this);
   }
 });

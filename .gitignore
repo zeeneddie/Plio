@@ -1,5 +1,5 @@
-.meteor/local
-.meteor/dev_bundle
+app/.meteor/local
+app/.meteor/dev_bundle
 node_modules
 deploy
 .idea

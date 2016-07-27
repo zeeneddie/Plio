@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
 import {
   insert,
@@ -11,8 +12,11 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setVerificationDate
 } from '/imports/api/actions/methods.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 
 Template.Actions_Edit.viewmodel({
   mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
@@ -85,6 +89,22 @@ Template.Actions_Edit.viewmodel({
       this.callUpdate(unlinkDocument, { documentId, documentType }, cb);
     };
   },
+  getUpdateCompletionDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
+    };
+  },
+  getUpdateVerificationDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
+    };
+  },
   generateCallback(queryParam, cb = () => {}) {
     const _id = this._id();
 
@@ -100,5 +120,29 @@ Template.Actions_Edit.viewmodel({
         return cb(err);
       }
     }
+  },
+  remove() {
+    const { title } = this.action();
+    const _id = this._id();
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `An action "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      },
+      () => {
+        this.modal().callMethod(remove, { _id }, (err) => {
+          if (err) return;
+
+          swal('Removed!', `An action "${title}" was removed successfully.`, 'success');
+
+          this.modal().close();
+        });
+      }
+    );
   }
 });

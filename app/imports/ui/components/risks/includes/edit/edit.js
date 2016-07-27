@@ -1,23 +1,21 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
-import { update, updateViewedBy, remove, insertScore, removeScore } from '/imports/api/risks/methods.js';
+import {
+  update, remove, updateViewedBy,
+  insertScore, removeScore,
+  completeAnalysis, undoAnalysis, setAnalysisDate,
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
+} from '/imports/api/risks/methods.js';
+import { WorkflowTypes } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
 
 Template.EditRisk.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
-  autorun() {
-    const doc = this.risk();
-    const userId = Meteor.userId();
-
-    if(!isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
-    }
-  },
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
-  },
-  RKGuidelines() {
-    return this.organization() && this.organization().rkGuidelines;
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -69,6 +67,59 @@ Template.EditRisk.viewmodel({
         });
       }
     );
+  },
+  getUpdateAnalysisDateFn() {
+    return this.updateAnalysisDate.bind(this);
+  },
+  updateAnalysisDate({ date }, cb) {
+    const _id = this._id();
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
+  },
+  getCompleteAnalysisFn() {
+    return this.completeAnalysis.bind(this);
+  },
+  completeAnalysis(cb) {
+    const _id = this._id();
+    this.modal().callMethod(completeAnalysis, { _id }, cb);
+  },
+  getUndoAnalysisFn() {
+    return this.undoAnalysis.bind(this);
+  },
+  undoAnalysis(cb) {
+    const _id = this._id();
+    this.modal().callMethod(undoAnalysis, { _id }, cb);
+  },
+  getUpdateStandardsDateFn() {
+    return this.updateStandardsDate.bind(this);
+  },
+  updateStandardsDate({ date }, cb) {
+    const _id = this._id();
+
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
+  },
+  getUpdateStandardsFn() {
+    return this.updateStandards.bind(this);
+  },
+  updateStandards(cb) {
+    const _id = this._id();
+    this.modal().callMethod(updateStandards, { _id }, cb);
+  },
+  getUndoStandardsUpdateFn() {
+    return this.undoStandardsUpdate.bind(this);
+  },
+  undoStandardsUpdate(cb) {
+    const _id = this._id();
+    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
+  },
+  showRootCauseAnalysis() {
+    return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);
   },
   onInsertScoreCb() {
     return this.insertScore.bind(this);

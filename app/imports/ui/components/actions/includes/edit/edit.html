@@ -13,7 +13,9 @@
             linkStandardFn=getLinkStandardFn
             unlinkStandardFn=getUnlinkStandardFn
             linkDocumentFn=getLinkDocumentFn
-            unlinkDocumentFn=getUnlinkDocumentFn}}
+            unlinkDocumentFn=getUnlinkDocumentFn
+            updateCompletionDateFn=getUpdateCompletionDateFn
+            updateVerificationDateFn=getUpdateVerificationDateFn}}
 
         {{> Subcards_Notify_Edit
             doc=this
@@ -30,6 +32,9 @@
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
       {{/with}}
+      <div class="card-block text-xs-center">
+        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+      </div>
     </div>
   </div>
 </template>

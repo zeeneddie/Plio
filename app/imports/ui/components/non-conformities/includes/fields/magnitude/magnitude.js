@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 Template.Problems_Magnitude_Edit.viewmodel({
   mixin: ['collapse', 'organization', 'magnitude', 'collapsing', 'nonconformity'],
   onCreated() {
-    this.load(this.guidelines());
+    this.guidelines && this.load(this.guidelines());
   },
   _id: '',
   magnitude: 'major',
@@ -19,7 +19,7 @@ Template.Problems_Magnitude_Edit.viewmodel({
 
     if (magnitude === this.templateInstance.data.magnitude) return;
 
-    if (!this._id) return;
+    if (!this._id()) return;
 
     const cb = () => {
       this.expandCollapsed(this._id(), () => {
