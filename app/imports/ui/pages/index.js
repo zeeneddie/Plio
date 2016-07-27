@@ -22,3 +22,5 @@ import './non-conformities-page.html';
 import './non-conformities-page.js';
 import './actions-page.html';
 import './actions-page.js';
+import './standard-subcards-page.html';
+import './standard-subcards-page.js';
