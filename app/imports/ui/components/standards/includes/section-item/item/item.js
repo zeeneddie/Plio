@@ -15,10 +15,12 @@ Template.Standards_Item_Read.viewmodel({
   nestingLevel: 1,
   viewedBy: [],
   notify: '',
-  autorun() {
-    if (this._id() === this.standardId() && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
-    }
+  onCreated(template) {
+    template.autorun((computation) => {
+      if (this._id() === this.standardId() && this.isNew()) {
+        Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
+      }
+    });
   },
   standardType() {
     const typeId = this.typeId && this.typeId();
@@ -37,9 +39,9 @@ Template.Standards_Item_Read.viewmodel({
 
     FlowRouter.setParams({ standardId: this._id() });
   },
-  updateViewedBy() {
+  updateViewedBy(cb) {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    updateViewedBy.call({ _id }, cb);
   }
 });

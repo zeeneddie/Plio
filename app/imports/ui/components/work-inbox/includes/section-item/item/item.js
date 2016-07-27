@@ -11,10 +11,13 @@ const { LINKED_TYPES } = WorkItemsStore;
 Template.WorkInbox_Item.viewmodel({
   share: 'window',
   mixin: ['date', 'workInbox', 'organization', 'user', 'utils', 'workItemStatus'],
-  autorun() {
-    if (this._id() === this.workItemId() && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
-    }
+  onCreated(template) {
+    template.autorun((computation) => {
+      const { _source: { _id } = {} } = this.data();
+      if (_id === this.workItemId() && this.isNew()) {
+        Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
+      }
+    });
   },
   _source: {},
   getTypeText({ _source: { type } = {} }) {

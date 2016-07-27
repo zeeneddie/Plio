@@ -10,8 +10,8 @@ export default {
     return this.collection.insert({ ...args });
   },
 
-  updateViewedBy({ _id, userId:viewedBy }) {
-    this._ensureUserHasNotViewed({ _id, viewedBy });
+  updateViewedBy({ _id, viewedBy }) {
+    this._ensureWorkItemExists(_id);
 
     return this._service.updateViewedBy({ _id, viewedBy });
   },
@@ -32,16 +32,6 @@ export default {
     const workItem = this._getWorkItem(_id);
     if (!workItem.isDeleted) {
       throw new Meteor.Error(400, 'Work item needs to be deleted first');
-    }
-  },
-
-  _ensureUserHasNotViewed({ _id, viewedBy }) {
-    this._ensureWorkItemExists(_id);
-
-    if (!!this.collection.findOne({ _id, viewedBy })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
     }
   },
 

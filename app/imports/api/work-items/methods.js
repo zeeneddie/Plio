@@ -19,7 +19,7 @@ export const updateViewedBy = new ValidatedMethod({
       );
     }
 
-    return WorkItemService.updateViewedBy({ _id, userId });
+    return WorkItemService.updateViewedBy({ _id, viewedBy: userId });
   }
 });
 
