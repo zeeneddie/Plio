@@ -15,6 +15,9 @@
           {{> Subcards_Notify_Read users=this}}
         {{/with}}
         {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}}
+        {{> Subcards_Actions_Read
+            type=ActionTypes.CORRECTIVE_ACTION
+            documentId=this._id}}
         {{> Subcards_ImprovementPlan_Read documentId=this._id}}
         {{> Subcards_LessonsLearned_Read documentId=this._id}}
         {{> Subcards_OtherFiles_Read files=this.files}}

@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.NC_RCA_Date_Edit.viewmodel({
-  key: 'analysis',
+  key: '',
   date: '',
   startDate: new Date(),
   defaultDate: false,
@@ -17,7 +17,11 @@ Template.NC_RCA_Date_Edit.viewmodel({
 
     this.date(date);
 
-    this.parent().update({ [this.key()]: date });
+    if (this.key()) {
+      this.parent().update({ [this.key()]: date });
+    } else if (this.onUpdate) {
+      this.onUpdate({ date });
+    }
   },
   getData() {
     const { date } = this.data();

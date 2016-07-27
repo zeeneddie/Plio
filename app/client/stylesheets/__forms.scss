@@ -455,6 +455,11 @@ fieldset[disabled] {
       height: 100%;
       background-color: #fff;
       opacity: 0.7;
+      transition: width 0.5s ease;
+      
+      &.uploaded {
+        width: 0;
+      }
     }
   }
 }

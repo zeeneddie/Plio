@@ -1,0 +1,30 @@
+<template name="OrgSettings_OrgTransfer">
+  {{#FormField label="Org owner"}}
+    <div class="dropdown">
+      <div class="input-group" {{b "attr: {data-toggle: dataToggleAttr}"}}>
+        <input type="text" class="form-control"
+            {{b "value: inputText, focusin: clearInput, focusout: restore, enable: isInputEnabled"}} />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary no-margin"
+              {{b "enable: isButtonEnabled, click: transferOrg"}}>
+            Transfer
+          </button>
+        </span>
+      </div>
+      <div class="dropdown-menu dropdown-menu-full">
+        {{#each orgMembers}}
+          <a class="dropdown-item pointer"
+              {{b "click: selectOwner(this), text: userFullNameOrEmail(this)"}}>
+          </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="cancel-org-transfer" {{b "if: invitationSent"}}>
+      <span class="label text-default" {{b "text: invitationSentText"}}>
+      </span>
+      <a class="btn btn-link" {{b "click: cancelOrgTransfer"}}>
+        Cancel transfer
+      </a>
+    </div>
+  {{/FormField}}
+</template>

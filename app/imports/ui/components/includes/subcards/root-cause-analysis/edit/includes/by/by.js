@@ -18,8 +18,6 @@ Template.NC_RCA_By_Edit.viewmodel({
 
     if (by === this.templateInstance.data.by) return;
 
-    this.by(by);
-
     this.parent().update({ [this.key()]: by });
   }
 });

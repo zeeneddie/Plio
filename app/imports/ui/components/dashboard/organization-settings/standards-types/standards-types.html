@@ -1,0 +1,26 @@
+<template name="OrgSettings_StandardTypes">
+  <div class="card-block card-block-collapse-toggle collapsed" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left">Standards types</h4>
+    <h4 class="card-title pull-xs-right">
+      <span class="text-muted" {{b "if: templateInstance.subscriptionsReady, text: standardsTypesCount"}}></span>
+      <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: !templateInstance.subscriptionsReady"}}></i>
+    </h4>
+  </div>
+  <div class="card-block-collapse collapse" id="standard-types" {{b "ref: collapse"}}>
+    <div class="card-block">
+      <div id="standard-types-forms" {{b "ref: forms"}}>
+        {{#each standardsTypes}}
+          {{> OrgSettings_StandardsType
+              _id=this._id
+              name=this.name
+              abbreviation=this.abbreviation
+              onChange=onChangeCb
+              onDelete=onDeleteCb}}
+        {{/each}}
+      </div>
+      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_StandardsType')"}}>
+        Add standards type
+      </button>
+    </div>
+  </div>
+</template>
