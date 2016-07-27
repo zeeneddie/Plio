@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
-import { update, remove } from '/imports/api/actions/methods.js';
+import { update, remove, restore } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
@@ -61,7 +61,7 @@ Template.Actions_Card_Read.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);

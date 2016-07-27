@@ -650,7 +650,7 @@ ViewModel.mixin({
         case 19:
           return 'success';
         default:
-          return '';
+          return 'default';
       }
     }
   },
@@ -673,7 +673,7 @@ ViewModel.mixin({
         case 7:
           return 'danger';
         default:
-          return '';
+          return 'default';
       }
     }
   },
