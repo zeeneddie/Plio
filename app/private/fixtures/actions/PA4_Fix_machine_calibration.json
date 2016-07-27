@@ -21,6 +21,7 @@
   "completedBy": "TCstWknRczHkvP6j4",
   "completionComments": "",
   "isVerified": true,
+  "isVerifiedAsEffective": true,
   "verificationTargetDate": {"$date": 1459508400000},
   "toBeVerifiedBy": "TCstWknRczHkvP6j4",
   "verifiedAt": {"$date": 1459508400000},

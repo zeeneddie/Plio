@@ -29,17 +29,20 @@ Template.NC_RCA_Status_Edit.viewmodel({
     const { value:statusValue } = viewmodel.getData();
 
     const status = parseInt(statusValue, 10);
+    const savedStatus = this.templateInstance.data.status;
 
-    if (status === this.templateInstance.data.status) {
+    if (status === savedStatus) {
       return;
     }
 
     this.status(status);
 
+    const cb = err => err && this.status(savedStatus);
+
     if (status === 1) {
-      this.onComplete();
+      this.onComplete(cb);
     } else if (status === 0) {
-      this.onUndo();
+      this.onUndo(cb);
     }
   }
 });

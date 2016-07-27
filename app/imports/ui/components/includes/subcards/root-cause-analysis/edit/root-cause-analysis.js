@@ -33,19 +33,19 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   updateAnalysisDate(...args) {
     this.parent().updateAnalysisDate(...args);
   },
-  completeAnalysis() {
-    this.parent().completeAnalysis();
+  completeAnalysis(cb) {
+    this.parent().completeAnalysis(cb);
   },
-  undoAnalysis() {
-    this.parent().undoAnalysis();
+  undoAnalysis(cb) {
+    this.parent().undoAnalysis(cb);
   },
   updateStandardsDate(...args) {
     this.parent().updateStandardsDate(...args);
   },
-  updateStandards() {
-    this.parent().updateStandards();
+  updateStandards(cb) {
+    this.parent().updateStandards(cb);
   },
-  undoStandardsUpdate() {
-    this.parent().undoStandardsUpdate();
+  undoStandardsUpdate(cb) {
+    this.parent().undoStandardsUpdate(cb);
   }
 });
