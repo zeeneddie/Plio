@@ -69,6 +69,11 @@
   &.impact-medium { background: $amber-color; }
   &.impact-high { background: $red-color; }
   &.impact-vhigh { background: $red-color; }
+
+  &.doc-status {
+    white-space: normal;
+    text-align: left;
+  }
 }
 
 .form-group .label {

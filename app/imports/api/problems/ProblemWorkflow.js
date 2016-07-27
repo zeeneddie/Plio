@@ -51,11 +51,13 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _allActionsVerified() {
-    return this._verifiedActionsLength === this._actions.length;
+    const actionsLength = this._actions.length;
+    return (actionsLength > 0) && (this._verifiedActionsLength === actionsLength);
   }
 
   _allActionsCompleted() {
-    return this._completedActionsLength === this._actions.length;
+    const actionsLength = this._actions.length;
+    return (actionsLength > 0) && (this._completedActionsLength === actionsLength);
   }
 
   _analysisCompleted() {
