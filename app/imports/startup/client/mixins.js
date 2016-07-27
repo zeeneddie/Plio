@@ -500,19 +500,6 @@ ViewModel.mixin({
     activeWorkInboxFilter() {
       return FlowRouter.getQueryParam('by') || WorkInboxFilters[0];
     },
-    _getNameByType(type) {
-      switch (type) {
-        case ActionTypes.CORRECTIVE_ACTION:
-          return 'Corrective action';
-          break;
-        case ActionTypes.PREVENTATIVE_ACTION:
-          return 'Preventative action';
-          break;
-        case ActionTypes.RISK_CONTROL:
-          return 'Risk control';
-          break;
-      }
-    },
     _getWorkItemsByQuery(
       {
         isDeleted = { $in: [null, false] },
@@ -535,6 +522,19 @@ ViewModel.mixin({
     _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
       const query = { ...by, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
+    },
+    _getNameByType(type) {
+      switch (type) {
+        case ActionTypes.CORRECTIVE_ACTION:
+          return 'Corrective action';
+          break;
+        case ActionTypes.PREVENTATIVE_ACTION:
+          return 'Preventative action';
+          break;
+        case ActionTypes.RISK_CONTROL:
+          return 'Risk control';
+          break;
+      }
     },
     _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
       return (userId) => {
@@ -689,14 +689,14 @@ ViewModel.mixin({
       }
     }
   },
-  workInboxStatus: {
+  workItemStatus: {
     getStatusName(status) {
       return WorkItemsStore.STATUSES[status];
     },
     getClassByStatus(status) {
       switch(status) {
         case 0:
-          return '';
+          return 'default';
           break;
         case 1:
           return 'warning';
@@ -708,10 +708,12 @@ ViewModel.mixin({
           return 'success';
           break;
         default:
-          return '';
+          return 'default';
           break;
       }
-    }
+    },
+    IN_PROGRESS: [0, 1, 2],
+    COMPLETED: 3
   },
   members: {
     _searchString() {

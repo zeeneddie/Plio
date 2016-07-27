@@ -9,13 +9,6 @@ import { restore, remove } from '/imports/api/standards/methods.js';
 Template.Standards_Card_Read.viewmodel({
   share: 'standard',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
-  onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('departments', this.organizationId());
-      template.subscribe('standardImprovementPlan', this.standard() && this.standard()._id);
-      template.subscribe('nonConformitiesByStandardId', this.standard() && this.standard()._id);
-    });
-  },
   onRendered(template) {
     template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
@@ -52,7 +45,7 @@ Template.Standards_Card_Read.viewmodel({
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this._id() });
   },
   hasDocxAttachment() {
     const standard = this.standard();

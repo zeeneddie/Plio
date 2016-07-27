@@ -1,0 +1,17 @@
+<template name="WorkInbox_QAPanel_Edit_Complete">
+  <div class="form-group">
+    <button type="button" class="btn btn-success pull-xs-left" {{b "click: update(true)"}}>
+      <i class="fa fa-check margin-right"></i>
+      <span {{b "text: getPositiveButtonText(true, this)"}}></span>
+    </button>
+    {{#if isType 'VERIFY_ACTION'}}
+      <button type="button" class="btn btn-danger pull-xs-right" {{b "click: update(false)"}}>
+        <i class="fa fa-times margin-right"></i>
+        Assessed as ineffective
+      </button>
+    {{/if}}
+  </div>
+  <div class="form-group">
+    <textarea class="form-control" placeholder="Comments" rows="6" {{b "value: comments"}}></textarea>
+  </div>
+</template>

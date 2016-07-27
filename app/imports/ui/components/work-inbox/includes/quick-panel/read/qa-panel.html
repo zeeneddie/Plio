@@ -1,0 +1,15 @@
+<template name="WorkInbox_QAPanel_Read">
+  {{#with doc}}
+    {{#if showQAPanel this}}
+      <div class="alert alert-danger">
+        <button type="button" class="btn btn-success pull-right" {{b "click: openQAModal(this)"}}>
+          <i class="fa fa-check margin-right"></i>
+          <span {{b "text: getButtonText(this)"}}></span>
+        </button>
+        <strong>To do</strong>
+        <br>
+        <span {{b "text: getDescription(this)"}}></span>
+      </div>
+    {{/if}}
+  {{/with}}
+</template>

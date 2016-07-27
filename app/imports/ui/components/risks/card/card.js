@@ -11,7 +11,7 @@ Template.Risks_Card_Read.viewmodel({
     return this._getRisksByQuery(query);
   },
   risk() {
-    return this._getRiskByQuery({ _id: this.riskId() });
+    return this._getRiskByQuery({ _id: this._id() });
   },
   renderType(_id) {
     const type = RiskTypes.findOne({ _id });
@@ -24,7 +24,7 @@ Template.Risks_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Risk',
       template: 'EditRisk',
-      _id: this.risk() && this.risk()._id
+      _id: this._id()
     });
   },
   onRestoreCb() {

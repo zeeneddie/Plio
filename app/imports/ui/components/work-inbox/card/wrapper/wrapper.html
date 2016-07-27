@@ -1,20 +1,20 @@
 <template name="WorkInbox_Card_Read_Wrapper">
   {{#if workItemId}}
     {{#if _is_ LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
-      {{> Actions_QAPanel_Read doc=action}}
-      {{> Actions_Card_Read action=action}}
+      {{> WorkInbox_QAPanel_Read doc=workItem}}
+      {{> Actions_Card_Read _id=linkedDocId}}
     {{/if}}
 
     {{#if _is_ LINKED_TYPES.NC}}
-      {{> Actions_QAPanel_Read doc=NC}}
-      {{> NC_Card_Read NC=NC}}
+      {{> WorkInbox_QAPanel_Read doc=workItem}}
+      {{> NC_Card_Read _id=linkedDocId}}
     {{/if}}
 
     {{#if _is_ LINKED_TYPES.RISK}}
-      {{> Actions_QAPanel_Read doc=risk}}
-      {{> Risks_Card_Read risk=risk}}
+      {{> WorkInbox_QAPanel_Read doc=workItem}}
+      {{> Risks_Card_Read _id=linkedDocId}}
     {{/if}}
   {{else}}
-    {{> Actions_Card_Read}}
+    {{> Actions_Card_Read _id=""}}
   {{/if}}
 </template>

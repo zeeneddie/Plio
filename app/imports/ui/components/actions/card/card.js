@@ -7,7 +7,7 @@ import { restore, remove } from '/imports/api/actions/methods.js';
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   action() {
-    return this._getActionByQuery({ _id: this.workItemId() });
+    return this._getActionByQuery({ _id: this._id() });
   },
   getActionTitle() {
     return this._getNameByType(this.action() && this.action().type);
@@ -41,7 +41,7 @@ Template.Actions_Card_Read.viewmodel({
     this.modal().open({
       _title,
       template: 'Actions_Edit',
-      _id: this.workItemId()
+      _id: this._id()
     });
   },
   onRestoreCb() {

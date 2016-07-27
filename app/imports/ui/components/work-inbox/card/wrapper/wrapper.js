@@ -5,7 +5,7 @@ import { WorkItemsStore } from '/imports/api/constants.js';
 const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
-  mixin: ['workInbox', 'utils', 'nonconformity', 'risk', 'organization', 'standard'],
+  mixin: ['workInbox', 'organization', 'utils'],
   _is_(...args) {
     const { linkedDoc: { type } = {} } = this.workItem() || {};
     return args.some(arg => arg === type);
@@ -14,18 +14,9 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
     return LINKED_TYPES;
   },
   workItem() {
-    return this._getWorkItemByQuery({ _id: this.workItemId() });
+    return this._getWorkItemByQuery({ _id: this._id() });
   },
-  action() {
-    return this._getActionByQuery({ _id: this._getLinkedDocId() });
-  },
-  NC() {
-    return this._getNCByQuery({ _id: this._getLinkedDocId() });
-  },
-  risk() {
-    return this._getRiskByQuery({ _id: this._getLinkedDocId() });
-  },
-  _getLinkedDocId() {
+  linkedDocId() {
     const { linkedDoc: { _id } = {} } = this.workItem() || {};
     return _id;
   }

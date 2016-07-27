@@ -3,14 +3,15 @@ import { Meteor } from 'meteor/meteor';
 
 import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
 const { TYPES } = WorkItemsStore;
-const STATUSES = {
-  IN_PROGRESS: [0, 1, 2],
-  COMPLETED: 3
-};
 
 Template.WorkInbox_List.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'workInbox', 'router', 'user', 'nonconformity', 'risk', 'utils'],
+  mixin: [
+    'search', 'collapsing', 'organization',
+    'modal', 'workInbox', 'router',
+    'user', 'nonconformity', 'risk',
+    'utils', { STATUSES: 'workItemStatus' }
+  ],
   autorun() {
     if (!this.focused() && !this.animating() && !this.searchText()) {
       const items = this._getItemsByFilter() || [];
@@ -121,8 +122,8 @@ Template.WorkInbox_List.viewmodel({
       return [...new Set(ids)];
     };
 
-    const current = getIds(status => STATUSES.IN_PROGRESS.includes(status));
-    const completed = getIds(status => status === STATUSES.COMPLETED);
+    const current = getIds(status => this.STATUSES.IN_PROGRESS().includes(status));
+    const completed = getIds(status => status === this.STATUSES.COMPLETED());
 
     return {
       current,
@@ -146,8 +147,8 @@ Template.WorkInbox_List.viewmodel({
     const myItems = getItems(assigneeId => assigneeId === Meteor.userId());
     const teamItems = getItems(assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
 
-    const isInProgress = status => STATUSES.IN_PROGRESS.includes(status);
-    const isCompleted = status => STATUSES.COMPLETED === status;
+    const isInProgress = status => this.STATUSES.IN_PROGRESS().includes(status);
+    const isCompleted = status => this.STATUSES.COMPLETED() === status;
 
     const my = {
       current: myItems(isInProgress),
