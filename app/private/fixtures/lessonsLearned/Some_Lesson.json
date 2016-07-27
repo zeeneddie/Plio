@@ -1,0 +1,16 @@
+{
+  "_id": "cqqa9ytFEqJFdm4XD",
+  "documentId": "P98SExuNHZ4y8bhjc",
+  "documentType": "non-conformity",
+  "title": "Some lesson",
+  "date": "2016-07-26T08:25:11.147Z",
+  "owner": "SQHmBKJ94gJvpLKLt",
+  "notes": "<div>Lesson text</div>",
+  "organizationId": "KwKXz5RefrE5hjWJ2",
+  "serialNumber": 1,
+  "createdAt": "2016-07-26T08:27:37.523Z",
+  "createdBy": "SQHmBKJ94gJvpLKLt",
+  "viewedBy": [
+    "SQHmBKJ94gJvpLKLt"
+  ]
+}
