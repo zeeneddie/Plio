@@ -18,17 +18,17 @@ Template.NC_Subcard_Edit.viewmodel({
     };
   },
   getCompleteAnalysisFn() {
-    return () => {
+    return (cb) => {
       this.parent().callUpdate(this.completeAnalysisFn, {
         _id: this.NCId(),
-      });
+      }, cb);
     };
   },
   getUndoAnalysisFn() {
-    return () => {
+    return (cb) => {
       this.parent().callUpdate(this.undoAnalysisFn, {
         _id: this.NCId(),
-      });
+      }, cb);
     };
   },
   getUpdateStandardsDateFn() {
@@ -40,17 +40,17 @@ Template.NC_Subcard_Edit.viewmodel({
     };
   },
   getUpdateStandardsFn() {
-    return () => {
+    return (cb) => {
       this.parent().callUpdate(this.updateStandardsFn, {
         _id: this.NCId(),
-      });
+      }, cb);
     };
   },
   getUndoStandardsUpdateFn() {
-    return () => {
+    return (cb) => {
       this.parent().callUpdate(this.undoStandardsUpdateFn, {
         _id: this.NCId(),
-      });
+      }, cb);
     };
   },
   getData() {

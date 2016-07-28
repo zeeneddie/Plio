@@ -332,7 +332,7 @@ export default {
   },
 
   updateViewedBy({ _id, userId:viewedBy }) {
-    this._ensureUserHasNotViewed({ _id, viewedBy });
+    this._ensureActionExists(_id);
 
     this._service.updateViewedBy({ _id, viewedBy });
   },
@@ -344,28 +344,17 @@ export default {
   },
 
   restore({ _id }) {
-    this._ensureActionIsDeleted(_id);
+    const action = this._getAction(_id);
+    
+    if (!action.deleted()) {
+      throw new Meteor.Error(
+        400, 'This action is not deleted so can not be restored'
+      );
+    }
 
     this._refreshStatus(_id);
 
     return this._service.restore({ _id });
-  },
-
-  _ensureActionIsDeleted(_id) {
-    const action = this._getAction(_id);
-    if (!action.isDeleted) {
-      throw new Meteor.Error(400, 'Action needs to be deleted first');
-    }
-  },
-
-  _ensureUserHasNotViewed({ _id, viewedBy }) {
-    this._ensureActionExists(_id);
-
-    if (!!this.collection.findOne({ _id, viewedBy })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
   },
 
   _ensureActionExists(_id) {

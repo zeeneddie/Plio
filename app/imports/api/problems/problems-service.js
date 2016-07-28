@@ -317,11 +317,11 @@ export default {
   },
 
   restore({ _id }) {
-    const { isDeleted } = this._getDoc(_id);
+    const doc = this._getDoc(_id);
 
-    if (!isDeleted) {
+    if (!doc.deleted()) {
       throw new Meteor.Error(
-        400, 'Cannot restore existing document'
+        400, 'This document is not deleted so can not be restored'
       );
     }
 

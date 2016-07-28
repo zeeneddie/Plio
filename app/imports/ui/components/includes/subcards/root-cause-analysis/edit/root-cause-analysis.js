@@ -39,11 +39,11 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   onExecutorUpdate(...args) {
     this.parent().updateExecutor(...args);
   },
-  completeAnalysis() {
-    this.parent().completeAnalysis();
+  completeAnalysis(cb) {
+    this.parent().completeAnalysis(cb);
   },
-  undoAnalysis() {
-    this.parent().undoAnalysis();
+  undoAnalysis(cb) {
+    this.parent().undoAnalysis(cb);
   },
   updateStandardsExecutor(...args) {
     this.parent().updateStandardsExecutor(...args);
@@ -51,10 +51,10 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   updateStandardsDate(...args) {
     this.parent().updateStandardsDate(...args);
   },
-  updateStandards() {
-    this.parent().updateStandards();
+  updateStandards(cb) {
+    this.parent().updateStandards(cb);
   },
-  undoStandardsUpdate() {
-    this.parent().undoStandardsUpdate();
+  undoStandardsUpdate(cb) {
+    this.parent().undoStandardsUpdate(cb);
   }
 });

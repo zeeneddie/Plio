@@ -14,3 +14,5 @@ import './actions-layout.html';
 import './actions-layout.js';
 import './work-inbox-layout.html';
 import './work-inbox-layout.js';
+import './standard-subcards-layout.html';
+import './standard-subcards-layout.js';

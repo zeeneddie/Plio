@@ -235,7 +235,6 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
-
 export const remove = new ValidatedMethod({
   name: 'NonConformities.remove',
 
