@@ -238,6 +238,28 @@ export default {
     return this.collection.update(query, options);
   },
 
+  restore({ _id, userId }) {
+    const doc = this._getDoc(_id);
+
+    if (!doc.deleted()) {
+      throw new Meteor.Error(
+        400, 'This document is not deleted so can not be restored'
+      );
+    }
+
+    const ret = this.collection.update({ _id }, {
+      $set: { isDeleted: false },
+      $unset: {
+        deletedAt: '',
+        deletedBy: ''
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
   remove({ _id, deletedBy, isDeleted }) {
     const query = { _id };
 

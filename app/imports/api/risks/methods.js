@@ -209,6 +209,22 @@ export const updateViewedBy = new ValidatedMethod({
   }
 });
 
+export const restore = new ValidatedMethod({
+  name: 'Risks.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore risks'
+      );
+    }
+
+    return RisksService.restore({ _id, userId});
+  }
+});
 
 export const remove = new ValidatedMethod({
   name: 'Risks.remove',

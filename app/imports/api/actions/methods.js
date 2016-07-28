@@ -281,6 +281,23 @@ export const undoVerification = new ValidatedMethod({
   }
 });
 
+export const restore = new ValidatedMethod({
+  name: 'Actions.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore actions'
+      );
+    }
+
+    return ActionService.restore({ _id, userId});
+  }
+});
+
 export const remove = new ValidatedMethod({
   name: 'Actions.remove',
 
