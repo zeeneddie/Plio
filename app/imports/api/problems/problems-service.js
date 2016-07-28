@@ -3,6 +3,8 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '../organizations/organizations.js';
 import { Actions } from '../actions/actions.js';
 import Utils from '/imports/core/utils.js';
+import WorkItemService from '../work-items/work-item-service.js';
+import { WorkItemsStore } from '../constants.js';
 
 
 export default {
@@ -39,8 +41,32 @@ export default {
     return this.collection.update(query, options);
   },
 
+  setAnalysisExecutor({ _id, executor }) {
+    const doc = this._getDoc(_id);
+    const { analysis: { executor:exec, ...analysis } = {}, ...rest } = doc;
+
+    if (doc.isAnalysisCompleted()) {
+      throw new Meteor.Error(
+        400, 'Cannot set "Who will do it?" for completed analysis'
+      );
+    }
+
+    const query = { _id };
+    const options = { $set: { 'analysis.executor': executor } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    const WIType = WorkItemsStore.TYPES.COMPLETE_ANALYSIS;
+    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { executor, ...analysis }, ...rest }); // updated doc
+
+    return ret;
+  },
+
   setAnalysisDate({ _id, targetDate }) {
     const doc = this._getDoc(_id);
+    const { analysis: { targetDate:td, ...analysis } = {}, ...rest } = doc;
 
     if (doc.isAnalysisCompleted()) {
       throw new Meteor.Error(
@@ -49,21 +75,22 @@ export default {
       );
     }
 
-    const ret = this.collection.update({
-      _id
-    }, {
-      $set: { 'analysis.targetDate': targetDate }
-    });
+    const query = { _id };
+    const options = { $set: { 'analysis.targetDate': targetDate } };
+
+    const ret = this.collection.update(query, options);
 
     this._refreshStatus(_id);
+
+    const WIType = WorkItemsStore.TYPES.COMPLETE_ANALYSIS;
+    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { targetDate, ...analysis }, ...rest }); // updated doc
 
     return ret;
   },
 
   completeAnalysis({ _id, userId }) {
     const doc = this._getDoc(_id);
-    const { analysis } = doc;
-    const { executor } = analysis;
+    const { analysis: { executor } = {} } = doc;
 
     if (userId !== executor) {
       throw new Meteor.Error(
@@ -206,8 +233,32 @@ export default {
     return ret;
   },
 
+  setStandardsUpdateExecutor({ _id, executor }) {
+    const doc = this._getDoc(_id);
+    const { updateOfStandards: { executor:exec, ...updateOfStandards } = {}, ...rest } = doc;
+
+    if (doc.areStandardsUpdated()) {
+      throw new Meteor.Error(
+        400, 'Cannot set "who will do it" for completed standards update'
+      );
+    }
+
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.executor': executor } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    const WIType = WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS;
+    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { executor, ...updateOfStandards }, ...rest }); // updated doc
+
+    return ret;
+  },
+
   setStandardsUpdateDate({ _id, targetDate }) {
     const doc = this._getDoc(_id);
+    const { updateOfStandards: { targetDate:td, ...updateOfStandards } = {}, ...rest } = doc;
 
     if (doc.areStandardsUpdated()) {
       throw new Meteor.Error(
@@ -223,6 +274,9 @@ export default {
     });
 
     this._refreshStatus(_id);
+
+    const WIType = WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS;
+    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { targetDate, ...updateOfStandards }, ...rest }); // updated doc
 
     return ret;
   },
@@ -287,6 +341,5 @@ export default {
     this._refreshStatus(_id);
 
     return ret;
-  },
-
+  }
 };

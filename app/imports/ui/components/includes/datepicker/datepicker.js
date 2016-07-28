@@ -7,14 +7,7 @@ Template.Datepicker.viewmodel({
       // BUG: if date is less than startDate, it is not displayed in text input
       // startDate: this.startDate(),
       endDate: this.endDate(),
-      format: {
-        toDisplay: (date, format, language) => {
-          return this.renderDate(date);
-        },
-        toValue: (date, format, language) => {
-          return date;
-        }
-      },
+      format: 'dd M yyyy',
       autoclose: true
     });
 

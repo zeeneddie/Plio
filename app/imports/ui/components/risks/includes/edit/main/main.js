@@ -5,16 +5,16 @@ import { isViewed } from '/imports/api/checkers.js';
 
 Template.Risk_Card_Edit_Main.viewmodel({
   mixin: 'organization',
-  onRendered(templateInstance) {
-    const doc = templateInstance.data.risk;
+  onRendered(template) {
+    const doc = template.data.risk;
     const userId = Meteor.userId();
 
-    if(doc && !isViewed(doc, userId)) {
+    if (doc && !isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }
   },
-  NCGuidelines() {
-    return this.organization() && this.organization().ncGuidelines;
+  RKGuidelines() {
+    return this.organization() && this.organization().rkGuidelines;
   },
   update(...args) {
     this.parent().update(...args);

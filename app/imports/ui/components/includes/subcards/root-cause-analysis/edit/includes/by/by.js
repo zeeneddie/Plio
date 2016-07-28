@@ -13,11 +13,14 @@ Template.NC_RCA_By_Edit.viewmodel({
   onUpdateCb() {
     return this.update.bind(this);
   },
+  onUpdate() {},
   update(viewmodel) {
-    const { selected:by } = viewmodel.getData();
+    const { selected:executor } = viewmodel.getData();
 
-    if (by === this.templateInstance.data.by) return;
+    if (executor === this.templateInstance.data.by) return;
 
-    this.parent().update({ [this.key()]: by });
+    this.by(executor);
+
+    this.onUpdate({ executor });
   }
 });

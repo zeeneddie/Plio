@@ -3,12 +3,15 @@ import { Meteor } from 'meteor/meteor';
 import { Risks } from './risks.js';
 import RiskWorkflow from './RiskWorkflow.js';
 import ProblemsService from '../problems/problems-service.js';
+import { ProblemTypes } from '../constants.js';
 
 
 export default _.extend({}, ProblemsService, {
   collection: Risks,
 
   _abbr: 'RK',
+
+  _docType: ProblemTypes.RISK,
 
   'scores.insert'({ _id, ...args }) {
     const id = Random.id();
@@ -19,10 +22,9 @@ export default _.extend({}, ProblemsService, {
       }
     };
 
-    return (async () => {
-      const res = await this.collection.update(query, options);
-      return res ? id : res;
-    })();
+    this.collection.update(query, options);
+    
+    return id;
   },
 
   'scores.remove'({ _id, score }) {

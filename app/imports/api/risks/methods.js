@@ -71,6 +71,30 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const setAnalysisExecutor = new ValidatedMethod({
+  name: 'Risks.setAnalysisExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannnot update root cause analysis'
+      );
+    }
+
+    return RisksService.setAnalysisExecutor({ _id, executor });
+  }
+});
+
 export const setAnalysisDate = new ValidatedMethod({
   name: 'Risks.setAnalysisDate',
 
@@ -157,6 +181,30 @@ export const undoAnalysis = new ValidatedMethod({
     }
 
     return RisksService.undoAnalysis({ _id, userId });
+  }
+});
+
+export const setStandardsUpdateExecutor = new ValidatedMethod({
+  name: 'Risks.setStandardsUpdateExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards update'
+      );
+    }
+
+    return RisksService.setStandardsUpdateExecutor({ _id, executor });
   }
 });
 

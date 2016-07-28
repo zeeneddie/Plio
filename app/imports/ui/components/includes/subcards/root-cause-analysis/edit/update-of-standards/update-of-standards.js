@@ -15,6 +15,9 @@ Template.NC_UpdateOfStandards_Edit.viewmodel({
   update(...args) {
     this.parent().update(...args);
   },
+  onStandardsExecutorUpdated() {
+    return this.parent().updateStandardsExecutor.bind(this);
+  },
   onStandardsDateUpdated() {
     return this.parent().updateStandardsDate.bind(this);
   },

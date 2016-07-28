@@ -1,5 +1,5 @@
 import { Actions } from './actions.js';
-import { ActionTypes, ProblemTypes, WorkflowTypes } from '../constants.js';
+import { ActionTypes, ProblemTypes, WorkflowTypes, WorkItemsStore } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import ActionWorkflow from './ActionWorkflow.js';
@@ -7,6 +7,7 @@ import NCWorkflow from '../non-conformities/NCWorkflow.js';
 import RiskWorkflow from '../risks/RiskWorkflow.js';
 import Utils from '/imports/core/utils.js';
 import BaseEntityService from '../base-entity-service.js';
+import WorkItemService from '../work-items/work-item-service.js';
 
 
 export default {
@@ -14,7 +15,10 @@ export default {
 
   _service: new BaseEntityService(Actions),
 
-  insert({ organizationId, type, linkedTo, ...args }) {
+  insert({
+    organizationId, type, linkedTo,
+    completionTargetDate, toBeCompletedBy, ...args
+  }) {
     linkedTo && this._checkLinkedDocs(linkedTo);
 
     const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
@@ -22,10 +26,24 @@ export default {
     const sequentialId = `${type}${serialNumber}`;
 
     const actionId = this.collection.insert({
-      organizationId, type, linkedTo, serialNumber, sequentialId, ...args
+      organizationId, type, linkedTo,
+      serialNumber, sequentialId, completionTargetDate,
+      toBeCompletedBy, ...args
     });
 
     this._refreshStatus(actionId);
+
+    WorkItemService.insert({
+      organizationId,
+      targetDate: completionTargetDate,
+      assigneeId: toBeCompletedBy,
+      type: WorkItemsStore.TYPES.COMPLETE_ACTION,
+      status: 0, // in progress
+      linkedDoc: {
+        type,
+        _id: actionId
+      }
+    });
 
     return actionId;
   },

@@ -54,7 +54,7 @@ Template.Actions_Create.viewmodel({
 
           const queryParams = this._getQueryParams(action)(Meteor.userId());
 
-          this.goToAction(_id, queryParams);
+          this.goToWorkItem(_id, queryParams);
 
           this.expandCollapsed(_id);
 

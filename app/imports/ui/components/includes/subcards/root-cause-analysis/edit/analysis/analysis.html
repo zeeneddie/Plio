@@ -1,35 +1,37 @@
 <template name="NC_Analysis_Edit">
   <div class="card-block">
-    {{#FormField label=label}}{{/FormField}}
-
-    {{> NC_RCA_By_Edit
-        by=executor
-        key="analysis.executor"
-        placeholder="Who will do it?"
-        label="Who will do it?"}}
-
-    {{> NC_RCA_Date_Edit
-        date=targetDate
-        onUpdate=onTargetDateUpdate}}
-
-    {{> NC_RCA_Status_Edit
-        status=status
-        executor=executor
-        onComplete=onAnalysisCompleted
-        onUndo=onAnalysisUndone}}
-
-    {{#if isAnalysisCompleted}}
-      {{> NC_RCA_Date_Edit
-          date=completedAt
-          key="analysis.completedAt"
-          placeholder="Completed date"
-          label="Completed date"}}
+    {{#with analysis}}
+      {{#FormField label=label}}{{/FormField}}
 
       {{> NC_RCA_By_Edit
-        by=completedBy
-        key="analysis.completedBy"
-        placeholder="Completed by"
-        label="Completed by"}}
-    {{/if}}
+          by=this.executor
+          placeholder="Who will do it?"
+          label="Who will do it?"
+          onUpdate=onUpdateAnalysisExecutor}}
+
+      {{> NC_RCA_Date_Edit
+          date=this.targetDate
+          onUpdate=onTargetDateUpdate}}
+
+      {{> NC_RCA_Status_Edit
+          status=this.status
+          executor=this.executor
+          onComplete=onAnalysisCompleted
+          onUndo=onAnalysisUndone}}
+
+      {{#if isAnalysisCompleted}}
+        {{> NC_RCA_Date_Edit
+            date=this.completedAt
+            key="analysis.completedAt"
+            placeholder="Completed date"
+            label="Completed date"}}
+
+        {{> NC_RCA_By_Edit
+          by=this.completedBy
+          key="analysis.completedBy"
+          placeholder="Completed by"
+          label="Completed by"}}
+      {{/if}}
+    {{/with}}
   </div>
 </template>

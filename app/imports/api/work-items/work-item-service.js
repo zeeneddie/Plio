@@ -1,5 +1,6 @@
 import { WorkItems } from './work-items.js';
 import BaseEntityService from '../base-entity-service.js';
+import { WorkItemsStore } from '../constants.js';
 
 export default {
   collection: WorkItems,
@@ -26,6 +27,45 @@ export default {
     this._ensureWorkItemIsDeleted(_id);
 
     return this._service.restore({ _id });
+  },
+
+  onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId }) {
+    if (!targetDate || !assigneeId) return;
+
+    const update = () => {
+      const query = { linkedDoc: { _id } };
+      const options = { $set: { targetDate, assigneeId } };
+
+      return this.collection.update(query, options);
+    };
+
+    const insert = () => {
+      this.collection.insert({
+        organizationId,
+        targetDate,
+        assigneeId,
+        type,
+        status: 0, // in progress
+        linkedDoc: {
+          _id,
+          type: docType
+        }
+      });
+    };
+
+    if (this.collection.findOne({ linkedDoc: { _id } })) {
+      return update();
+    } else {
+      return insert();
+    }
+  },
+
+  connectedAnalysisUpdated(type, docType, { _id, organizationId, analysis: { targetDate, executor:assigneeId } = {}, ...args }) {
+    this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
+  },
+
+  connectedStandardsUpdated(type, docType, { _id, organizationId, updateOfStandards: { targetDate, executor:assigneeId } = {}, ...args }) {
+    this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
   },
 
   _ensureWorkItemIsDeleted(_id) {
