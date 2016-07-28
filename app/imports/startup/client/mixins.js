@@ -254,7 +254,7 @@ ViewModel.mixin({
       }
 
       if (user) {
-        const {firstName='Ghost', lastName='user'} = user.profile;
+        const {firstName='', lastName=''} = user.profile;
 
         if (firstName && lastName) {
           return `${firstName} ${lastName}`;
