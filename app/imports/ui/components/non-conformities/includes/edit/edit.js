@@ -2,12 +2,10 @@ import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
 
 import {
-  update, remove, updateViewedBy,
-  completeAnalysis, undoAnalysis, setAnalysisDate,
-  updateStandards, undoStandardsUpdate, setStandardsUpdateDate,
-  setAnalysisExecutor, setStandardsUpdateExecutor
+  update, remove, completeAnalysis, undoAnalysis,
+  setAnalysisDate, updateStandards, undoStandardsUpdate,
+  setStandardsUpdateDate, setAnalysisExecutor, setStandardsUpdateExecutor
 } from '/imports/api/non-conformities/methods.js';
-import { isViewed } from '/imports/api/checkers.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
 

@@ -11,7 +11,7 @@ Template.NC_Card_Edit_Main.viewmodel({
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
-
+    
     if (!isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
+import { updateViewedBy } from '/imports/api/risks/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
 
 Template.Risk_Card_Edit_Main.viewmodel({

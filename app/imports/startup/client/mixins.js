@@ -254,13 +254,15 @@ ViewModel.mixin({
       }
 
       if (user) {
-        const {firstName='', lastName=''} = user.profile;
+        const {firstName='Ghost', lastName='user'} = user.profile;
 
         if (firstName && lastName) {
           return `${firstName} ${lastName}`;
         } else {
           return user.emails[0].address;
         }
+      } else {
+        return 'Ghost user';
       }
     },
     hasUser() {
