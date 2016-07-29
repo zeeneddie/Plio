@@ -21,9 +21,6 @@ Template.WorkInbox_QAPanel_Edit.viewmodel({
       }
     };
 
-    this.combine(callback, cb)(null);
-    return;
-
-    this.modal().callMethod(method, { _id, ...args }, this.combine(callback, cb));
+    this.modal().callMethod(method, { _id, ...args }, this.chain(callback, cb));
   }
 });

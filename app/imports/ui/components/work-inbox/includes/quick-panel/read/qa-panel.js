@@ -33,7 +33,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     return `${this.lowercase(this.getButtonText({ type }))}d`;
   },
   openQAModal({ type, ...args }) {
-    const _title = this.getButtonText({ type });
+    const _title = this.capitalize(type);
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),

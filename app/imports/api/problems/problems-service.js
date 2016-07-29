@@ -43,7 +43,7 @@ export default {
 
   setAnalysisExecutor({ _id, executor }) {
     const doc = this._getDoc(_id);
-    const { analysis: { executor:exec, ...analysis } = {}, ...rest } = doc;
+    const { analysis = {}, ...rest } = doc;
 
     if (doc.isAnalysisCompleted()) {
       throw new Meteor.Error(
@@ -59,7 +59,7 @@ export default {
     this._refreshStatus(_id);
 
     const WIType = WorkItemsStore.TYPES.COMPLETE_ANALYSIS;
-    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { executor, ...analysis }, ...rest }); // updated doc
+    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { ...analysis, executor }, ...rest }); // updated doc
 
     return ret;
   },
@@ -88,7 +88,7 @@ export default {
     return ret;
   },
 
-  completeAnalysis({ _id, userId }) {
+  completeAnalysis({ _id, completionComments, userId }) {
     const doc = this._getDoc(_id);
     const { analysis: { executor } = {} } = doc;
 
@@ -110,7 +110,8 @@ export default {
       $set: {
         'analysis.status': 1, // Completed
         'analysis.completedAt': new Date(),
-        'analysis.completedBy': userId
+        'analysis.completedBy': userId,
+        'analysis.completionComments': completionComments
       }
     });
 
@@ -138,7 +139,8 @@ export default {
       $set: { 'analysis.status': 0 }, // Not completed
       $unset: {
         'analysis.completedAt': '',
-        'analysis.completedBy': ''
+        'analysis.completedBy': '',
+        'analysis.completionComments': ''
       }
     });
 
@@ -147,7 +149,7 @@ export default {
     return ret;
   },
 
-  updateStandards({ _id, userId }) {
+  updateStandards({ _id, completionComments, userId }) {
     const doc = this._getDoc(_id);
     const { updateOfStandards } = doc;
     const { executor } = updateOfStandards;
@@ -194,7 +196,8 @@ export default {
       $set: {
         'updateOfStandards.status': 1, // Completed
         'updateOfStandards.completedAt': new Date(),
-        'updateOfStandards.completedBy': userId
+        'updateOfStandards.completedBy': userId,
+        'updateOfStandards.completionComments': completionComments
       }
     });
 
@@ -224,7 +227,8 @@ export default {
       },
       $unset: {
         'updateOfStandards.completedAt': '',
-        'updateOfStandards.completedBy': ''
+        'updateOfStandards.completedBy': '',
+        'updateOfStandards.completionComments': ''
       }
     });
 
@@ -235,7 +239,7 @@ export default {
 
   setStandardsUpdateExecutor({ _id, executor }) {
     const doc = this._getDoc(_id);
-    const { updateOfStandards: { executor:exec, ...updateOfStandards } = {}, ...rest } = doc;
+    const { updateOfStandards = {}, ...rest } = doc;
 
     if (doc.areStandardsUpdated()) {
       throw new Meteor.Error(
@@ -251,7 +255,7 @@ export default {
     this._refreshStatus(_id);
 
     const WIType = WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS;
-    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { executor, ...updateOfStandards }, ...rest }); // updated doc
+    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { ...updateOfStandards, executor }, ...rest }); // updated doc
 
     return ret;
   },

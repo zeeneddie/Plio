@@ -2,7 +2,7 @@
   <div class="form-group">
     <button type="button" class="btn btn-success pull-xs-left" {{b "click: update(true)"}}>
       <i class="fa fa-check margin-right"></i>
-      <span {{b "text: getPositiveButtonText(true, this)"}}></span>
+      <span {{b "text: getPositiveButtonText(this)"}}></span>
     </button>
     {{#if isType 'VERIFY_ACTION'}}
       <button type="button" class="btn btn-danger pull-xs-right" {{b "click: update(false)"}}>

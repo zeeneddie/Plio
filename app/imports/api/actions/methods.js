@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema } from '../schemas.js';
+import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
 
 
@@ -205,12 +205,7 @@ export const unlinkDocument = new ValidatedMethod({
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    {
-      completionComments: { type: String }
-    }
-  ]).validator(),
+  validate: CompleteActionSchema.validator(),
 
   run({ _id, ...args }) {
     const userId = this.userId;

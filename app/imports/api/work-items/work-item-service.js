@@ -33,7 +33,7 @@ export default {
     if (!targetDate || !assigneeId) return;
 
     const update = () => {
-      const query = { linkedDoc: { _id } };
+      const query = { linkedDoc: { _id }, status: { $ne: 3 } }; // 3 - completed
       const options = { $set: { targetDate, assigneeId } };
 
       return this.collection.update(query, options);
