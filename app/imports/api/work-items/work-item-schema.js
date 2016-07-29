@@ -38,6 +38,10 @@ const WorkItemsSchema = new SimpleSchema([
     assigneeId: {
       type: String,
       regEx: SimpleSchema.RegEx.Id
+    },
+    isCompleted: {
+      type: Boolean,
+      defaultValue: false
     }
   }
 ]);

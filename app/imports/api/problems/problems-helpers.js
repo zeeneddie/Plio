@@ -1,4 +1,5 @@
 import { Standards } from '../standards/standards.js';
+import { WorkItems } from '../work-items/work-items.js';
 
 
 export default {
@@ -20,6 +21,10 @@ export default {
   deleted() {
     const { isDeleted, deletedAt, deletedBy } = this;
     return (isDeleted === true) && deletedAt && deletedBy;
+  },
+
+  getWorkItems() {
+    return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
   }
 
 };
