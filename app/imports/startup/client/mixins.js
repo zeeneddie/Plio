@@ -591,8 +591,11 @@ ViewModel.mixin({
     $not(predicate) {
       return !predicate;
     },
-    $m(...args) {
-      return args.every(arg => !!arg);
+    $every(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
+    },
+    $some(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {
