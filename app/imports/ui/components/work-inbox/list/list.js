@@ -42,7 +42,7 @@ Template.WorkInbox_List.viewmodel({
     this.expandCollapsed(_id);
   },
   _getItemsByFilter() {
-    const { my = {}, team = {} } = this.items() || {};
+    const { my = {}, team = {}, deleted = [] } = this.items() || {};
 
     switch(this.activeWorkInboxFilter()) {
       case 'My current work items':
@@ -58,7 +58,7 @@ Template.WorkInbox_List.viewmodel({
         return team.completed;
         break;
       case 'Deleted work items':
-        return null;
+        return deleted;
         break;
       default:
         return {};

@@ -4,6 +4,8 @@ import { WorkItemsStore } from '/imports/api/constants.js';
 
 const { LINKED_TYPES } = WorkItemsStore;
 
+// TODO - Rewrite original docs for deleted filter
+
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   mixin: ['workInbox', 'organization', 'utils'],
   _is_(...args) {

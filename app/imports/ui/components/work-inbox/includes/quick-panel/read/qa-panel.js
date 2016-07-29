@@ -2,14 +2,15 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 import { WorkItemsStore } from '/imports/api/constants.js';
+import { remove } from '/imports/api/work-items/methods.js';
 
 const { TYPES } = WorkItemsStore;
 
 Template.WorkInbox_QAPanel_Read.viewmodel({
-  mixin: ['user', 'date', 'utils', 'modal', 'workItemStatus'],
+  mixin: ['user', 'date', 'utils', 'modal', 'workItemStatus', 'router'],
   doc: '',
-  showQAPanel({ status, assigneeId } ) {
-    return Meteor.userId() === assigneeId && this.IN_PROGRESS().includes(status);
+  showQAPanel({ status, assigneeId, isDeleted }) {
+    return !isDeleted && Meteor.userId() === assigneeId && this.IN_PROGRESS().includes(status);
   },
   getButtonText({ type }) {
     if (type === TYPES.VERIFY_ACTION) {
@@ -42,5 +43,30 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });
+  },
+  delete({ _id, isDeleted, type }) {
+    if (isDeleted) return;
+
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `The work item "${this.capitalize(type)}" will be deleted!`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Delete',
+        closeOnConfirm: false,
+      },
+      () => {
+        const callback = (err) => {
+          if (err) {
+            swal('Oops... Something went wrong!', err.reason, 'error');
+          } else {
+            swal('Deleted', `The work item "${this.capitalize(type)}" was deleted successfully.`, 'success');
+          }
+        };
+
+        remove.call({ _id }, callback);
+      }
+    );
   }
 });
