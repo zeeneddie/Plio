@@ -64,9 +64,9 @@ Template.NC_Card_Edit.viewmodel({
   getCompleteAnalysisFn() {
     return this.completeAnalysis.bind(this);
   },
-  completeAnalysis(cb) {
+  completeAnalysis({ completionComments }, cb) {
     const _id = this._id();
-    this.modal().callMethod(completeAnalysis, { _id }, cb);
+    this.modal().callMethod(completeAnalysis, { _id, completionComments }, cb);
   },
   getUndoAnalysisFn() {
     return this.undoAnalysis.bind(this);
@@ -97,9 +97,9 @@ Template.NC_Card_Edit.viewmodel({
   getUpdateStandardsFn() {
     return this.updateStandards.bind(this);
   },
-  updateStandards(cb) {
+  updateStandards({ completionComments }, cb) {
     const _id = this._id();
-    this.modal().callMethod(updateStandards, { _id }, cb);
+    this.modal().callMethod(updateStandards, { _id, completionComments }, cb);
   },
   getUndoStandardsUpdateFn() {
     return this.undoStandardsUpdate.bind(this);

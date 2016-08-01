@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
 
 import { WorkItemsStore } from '/imports/api/constants.js';
+import { restore, remove } from '/imports/api/work-items/methods.js';
 
 const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   mixin: ['workInbox', 'organization', 'utils'],
-  _is_(...args) {
+  isDocType(...args) {
     const { linkedDoc: { type } = {} } = this.workItem() || {};
     return args.some(arg => arg === type);
   },

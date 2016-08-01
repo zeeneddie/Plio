@@ -6,6 +6,7 @@ import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
+  isReadOnly: false,
   action() {
     return this._getActionByQuery({ _id: this._id() });
   },
@@ -41,46 +42,46 @@ Template.Actions_Card_Read.viewmodel({
     this.modal().open({
       _title,
       template: 'Actions_Edit',
-      _id: this._id()
+      _id: this.action() && this.action()._id
     });
   },
-  onRestoreCb() {
-    return this.restore.bind(this);
-  },
-  restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
-    if (!isDeleted) return;
-
-    const callback = (err) => {
-      cb(err, () => {
-        const queryParams = this._getQueryParams({ _id, isDeleted, title, ...args })(Meteor.userId());
-        FlowRouter.setQueryParams(queryParams);
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-        }, 0);
-      });
-    };
-
-    restore.call({ _id }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
-  },
-  delete({ _id, title, isDeleted }, cb = () => {}) {
-    if (!isDeleted) return;
-
-    const callback = (err) => {
-      cb(err, () => {
-        const actions = this._getActionsByQuery({});
-
-        if (actions.count() > 0) {
-          Meteor.defer(() => {
-            this.goToActions();
-          });
-        }
-      });
-    };
-
-    remove.call({ _id }, callback);
-  }
+  // onRestoreCb() {
+  //   return this.restore.bind(this);
+  // },
+  // restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
+  //   if (!isDeleted) return;
+  //
+  //   const callback = (err) => {
+  //     cb(err, () => {
+  //       const queryParams = this._getQueryParams({ ...args })(Meteor.userId());
+  //       FlowRouter.setQueryParams(queryParams);
+  //       Meteor.setTimeout(() => {
+  //         this.goToAction(_id);
+  //         this.expandCollapsed(_id);
+  //       }, 0);
+  //     });
+  //   };
+  //
+  //   restore.call({ _id }, callback);
+  // },
+  // onDeleteCb() {
+  //   return this.delete.bind(this);
+  // },
+  // delete({ _id, title, isDeleted }, cb = () => {}) {
+  //   if (!isDeleted) return;
+  //
+  //   const callback = (err) => {
+  //     cb(err, () => {
+  //       const actions = this._getActionsByQuery({});
+  //
+  //       if (actions.count() > 0) {
+  //         Meteor.defer(() => {
+  //           this.goToActions();
+  //         });
+  //       }
+  //     });
+  //   };
+  //
+  //   remove.call({ _id }, callback);
+  // }
 });

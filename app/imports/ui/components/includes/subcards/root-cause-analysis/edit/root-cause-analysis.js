@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
+Template.Subcards_RCA_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'date'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
@@ -36,11 +36,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   updateAnalysisDate(...args) {
     this.parent().updateAnalysisDate(...args);
   },
-  onExecutorUpdate(...args) {
-    this.parent().updateExecutor(...args);
-  },
-  completeAnalysis(cb) {
-    this.parent().completeAnalysis(cb);
+  completeAnalysis(...args) {
+    this.parent().completeAnalysis(...args);
   },
   undoAnalysis(cb) {
     this.parent().undoAnalysis(cb);
@@ -51,8 +48,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   updateStandardsDate(...args) {
     this.parent().updateStandardsDate(...args);
   },
-  updateStandards(cb) {
-    this.parent().updateStandards(cb);
+  updateStandards(...args) {
+    this.parent().updateStandards(...args);
   },
   undoStandardsUpdate(cb) {
     this.parent().undoStandardsUpdate(cb);

@@ -58,16 +58,16 @@ Template.Actions_Edit.viewmodel({
     }
   },
   getCompleteFn() {
-    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed work items', cb));
+    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current work items'));
+    return (cb) => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
-    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed work items', cb));
+    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (e) => this.callUpdate(undoVerification);
+    return (cb) => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
@@ -104,22 +104,6 @@ Template.Actions_Edit.viewmodel({
 
       this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
     };
-  },
-  generateCallback(queryParam, cb = () => {}) {
-    const _id = this._id();
-
-    return (err) => {
-      if (!err && FlowRouter.getQueryParam('by') !== queryParam) {
-        FlowRouter.setQueryParams({ by: queryParam });
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-          cb(undefined);
-        }, 100);
-      } else {
-        return cb(err);
-      }
-    }
   },
   remove() {
     const { title } = this.action();

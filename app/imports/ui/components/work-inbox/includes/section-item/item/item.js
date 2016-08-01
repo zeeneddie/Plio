@@ -23,11 +23,11 @@ Template.WorkInbox_Item.viewmodel({
   getTypeText({ _source: { type } = {} }) {
     return this.capitalize(type);
   },
-  getDate({ isDeleted, deletedAt, _source: { targetDate } = {} }) {
+  getDate({ _source: { isDeleted, deletedAt, targetDate } = {} }) {
     const date = isDeleted ? deletedAt : targetDate;
     return this.renderDate(date);
   },
-  getUserText({ isDeleted, createdBy, deletedBy }) {
+  getUserText({ _source: { isDeleted, createdBy, deletedBy } }) {
     return isDeleted
             ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
             : '';

@@ -8,7 +8,8 @@ import {
   IdSchema,
   OrganizationIdSchema,
   optionsSchema,
-  UserIdSchema
+  UserIdSchema,
+  CompleteActionSchema
 } from '../schemas.js';
 
 import { checkAnalysis } from '../checkers.js';
@@ -107,9 +108,9 @@ export const setAnalysisDate = new ValidatedMethod({
 export const completeAnalysis = new ValidatedMethod({
   name: 'NonConformities.completeAnalysis',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -117,16 +118,16 @@ export const completeAnalysis = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.completeAnalysis({ _id, userId });
+    return NonConformitiesService.completeAnalysis({ _id, completionComments, userId });
   }
 });
 
 export const updateStandards = new ValidatedMethod({
   name: 'NonConformities.updateStandards',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -134,7 +135,7 @@ export const updateStandards = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.updateStandards({ _id, userId });
+    return NonConformitiesService.updateStandards({ _id, completionComments, userId });
   }
 });
 

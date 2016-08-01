@@ -1,20 +1,42 @@
 <template name="WorkInbox_Card_Read_Wrapper">
   {{#if workItemId}}
-    {{#if _is_ LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+    {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> Actions_Card_Read _id=linkedDocId}}
+      {{> Actions_Card_Read
+          isReadOnly=workItem.isDeleted
+          _id=linkedDocId}}
     {{/if}}
 
-    {{#if _is_ LINKED_TYPES.NC}}
+    {{#if isDocType LINKED_TYPES.NC}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> NC_Card_Read _id=linkedDocId}}
+      {{> NC_Card_Read
+          isReadOnly=workItem.isDeleted
+          _id=linkedDocId}}
     {{/if}}
 
-    {{#if _is_ LINKED_TYPES.RISK}}
+    {{#if isDocType LINKED_TYPES.RISK}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> Risks_Card_Read _id=linkedDocId}}
+      {{> Risks_Card_Read
+          isReadOnly=workItem.isDeleted
+          _id=linkedDocId}}
     {{/if}}
   {{else}}
-    {{> Actions_Card_Read _id=""}}
+    <div class="content-cards-inner flex scroll">
+      <div class="card">
+        <div class="card-block card-heading">
+          {{#if $some (isActiveWorkInboxFilter 'My current work items') (isActiveWorkInboxFilter 'Team current work items')}}
+            <h5>There are no current work items</h5>
+          {{/if}}
+
+          {{#if $some (isActiveWorkInboxFilter 'My completed work items') (isActiveWorkInboxFilter 'Team completed work items')}}
+            <h5>There are no completed work items</h5>
+          {{/if}}
+
+          {{#if isActiveWorkInboxFilter 'Deleted work items'}}
+            <h5>There are no deleted work items</h5>
+          {{/if}}
+        </div>
+      </div>
+    </div>
   {{/if}}
 </template>

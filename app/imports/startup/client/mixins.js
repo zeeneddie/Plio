@@ -537,18 +537,20 @@ ViewModel.mixin({
           break;
       }
     },
-    _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
+    _getQueryParams({ status, assigneeId = Meteor.userId() }) {
       return (userId) => {
-        if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
-          return { by: 'My current work items' };
-        } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
-          return { by: 'My completed work items' };
-        } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
-          return { by: 'Team current work items' };
-        } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
-          return { by: 'Team completed work items' };
+        if (status === 3) { // completed
+          if (assigneeId === userId) {
+            return { by: 'My completed work items' };
+          } else {
+            return { by: 'Team completed work items' };
+          }
         } else {
-          return { by: 'My current work items' };
+          if (assigneeId === userId) {
+            return { by: 'My current work items' };
+          } else {
+            return { by: 'Team current work items' };
+          }
         }
       };
     }
@@ -578,7 +580,7 @@ ViewModel.mixin({
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
-    combine(...fns) {
+    chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
     },
     findParentRecursive(templateName, instance) {
@@ -588,8 +590,17 @@ ViewModel.mixin({
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
     },
+    $eq(val1, val2) {
+      return val1 === val2;
+    },
     $not(predicate) {
       return !predicate;
+    },
+    $every(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
+    },
+    $some(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {

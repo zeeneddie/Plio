@@ -5,6 +5,7 @@ import { restore, remove } from '/imports/api/risks/methods.js';
 
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
   risks() {
     const list = ViewModel.findOne('RisksList');
     const query = list && list._getQueryForFilter();
@@ -24,7 +25,7 @@ Template.Risks_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Risk',
       template: 'EditRisk',
-      _id: this._id()
+      _id: this.risk() && this.risk()._id
     });
   },
   onRestoreCb() {
