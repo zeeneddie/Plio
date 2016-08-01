@@ -61,13 +61,13 @@ Template.Actions_Edit.viewmodel({
     return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (e) => this.callUpdate(undoCompletion, {}, cb);
+    return (cb) => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
     return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (e) => this.callUpdate(undoVerification);
+    return (cb) => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
