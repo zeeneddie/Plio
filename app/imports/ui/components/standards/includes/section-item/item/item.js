@@ -30,7 +30,7 @@ Template.Standards_Item_Read.viewmodel({
     return this.standardType() && this.standardType().name;
   },
   isNew() {
-    return this.viewedBy && !_.contains(this.viewedBy(), Meteor.userId());
+    return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
   },
   select() {
     if ($(window).width() < 768) {

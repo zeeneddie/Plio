@@ -45,43 +45,43 @@ Template.Actions_Card_Read.viewmodel({
       _id: this.action() && this.action()._id
     });
   },
-  onRestoreCb() {
-    return this.restore.bind(this);
-  },
-  restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
-    if (!isDeleted) return;
-
-    const callback = (err) => {
-      cb(err, () => {
-        const queryParams = this._getQueryParams({ ...args })(Meteor.userId());
-        FlowRouter.setQueryParams(queryParams);
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-        }, 0);
-      });
-    };
-
-    restore.call({ _id }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
-  },
-  delete({ _id, title, isDeleted }, cb = () => {}) {
-    if (!isDeleted) return;
-
-    const callback = (err) => {
-      cb(err, () => {
-        const actions = this._getActionsByQuery({});
-
-        if (actions.count() > 0) {
-          Meteor.defer(() => {
-            this.goToActions();
-          });
-        }
-      });
-    };
-
-    remove.call({ _id }, callback);
-  }
+  // onRestoreCb() {
+  //   return this.restore.bind(this);
+  // },
+  // restore({ _id, isDeleted, title, ...args }, cb = () => {}) {
+  //   if (!isDeleted) return;
+  //
+  //   const callback = (err) => {
+  //     cb(err, () => {
+  //       const queryParams = this._getQueryParams({ ...args })(Meteor.userId());
+  //       FlowRouter.setQueryParams(queryParams);
+  //       Meteor.setTimeout(() => {
+  //         this.goToAction(_id);
+  //         this.expandCollapsed(_id);
+  //       }, 0);
+  //     });
+  //   };
+  //
+  //   restore.call({ _id }, callback);
+  // },
+  // onDeleteCb() {
+  //   return this.delete.bind(this);
+  // },
+  // delete({ _id, title, isDeleted }, cb = () => {}) {
+  //   if (!isDeleted) return;
+  //
+  //   const callback = (err) => {
+  //     cb(err, () => {
+  //       const actions = this._getActionsByQuery({});
+  //
+  //       if (actions.count() > 0) {
+  //         Meteor.defer(() => {
+  //           this.goToActions();
+  //         });
+  //       }
+  //     });
+  //   };
+  //
+  //   remove.call({ _id }, callback);
+  // }
 });
