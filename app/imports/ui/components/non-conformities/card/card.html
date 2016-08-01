@@ -2,8 +2,9 @@
   <div class="content-cards-inner flex scroll">
     {{#if hasNCs}}
       {{#Card_Read
+        isReadOnly=isReadOnly
         cardTitle="Non-conformity"
-        document=NC
+        doc=NC
         onRestore=onRestoreCb
         onDelete=onDeleteCb
         onOpenEditModal=onOpenEditModalCb}}

@@ -6,6 +6,7 @@ import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
+  isReadOnly: false,
   action() {
     return this._getActionByQuery({ _id: this._id() });
   },
@@ -41,7 +42,7 @@ Template.Actions_Card_Read.viewmodel({
     this.modal().open({
       _title,
       template: 'Actions_Edit',
-      _id: this._id()
+      _id: this.action() && this.action()._id
     });
   },
   onRestoreCb() {
@@ -52,7 +53,7 @@ Template.Actions_Card_Read.viewmodel({
 
     const callback = (err) => {
       cb(err, () => {
-        const queryParams = this._getQueryParams({ _id, isDeleted, title, ...args })(Meteor.userId());
+        const queryParams = this._getQueryParams({ ...args })(Meteor.userId());
         FlowRouter.setQueryParams(queryParams);
         Meteor.setTimeout(() => {
           this.goToAction(_id);

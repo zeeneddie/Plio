@@ -2,17 +2,23 @@
   {{#if workItemId}}
     {{#if _is_ LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> Actions_Card_Read _id=linkedDocId}}
+      {{> Actions_Card_Read
+          isReadOnly=workItem.isDeleted
+          action=action}}
     {{/if}}
 
     {{#if _is_ LINKED_TYPES.NC}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> NC_Card_Read _id=linkedDocId}}
+      {{> NC_Card_Read
+          isReadOnly=workItem.isDeleted
+          NC=NC}}
     {{/if}}
 
     {{#if _is_ LINKED_TYPES.RISK}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
-      {{> Risks_Card_Read _id=linkedDocId}}
+      {{> Risks_Card_Read
+          isReadOnly=workItem.isDeleted
+          risk=risk}}
     {{/if}}
   {{else}}
     <div class="content-cards-inner flex scroll">

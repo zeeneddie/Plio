@@ -2,8 +2,9 @@
   <div class="content-cards-inner flex scroll">
     {{#if risks.count}}
       {{#Card_Read
+        isReadOnly=isReadOnly
         cardTitle="Risk"
-        document=risk
+        doc=risk
         onRestore=onRestoreCb
         onDelete=onDeleteCb
         onOpenEditModal=onOpenEditModalCb}}

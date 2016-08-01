@@ -3,8 +3,9 @@
     {{#if actions.count}}
       {{#with action}}
         {{#Card_Read
+          isReadOnly=isReadOnly
           cardTitle=(_getNameByType this.type)
-          document=this
+          doc=this
           onOpenEditModal=onOpenEditModalCb
           onRestore=onRestoreCb
           onDelete=onDeleteCb}}

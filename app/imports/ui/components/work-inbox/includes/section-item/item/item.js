@@ -23,7 +23,7 @@ Template.WorkInbox_Item.viewmodel({
   getTypeText({ _source: { type } = {} }) {
     return this.capitalize(type);
   },
-  getDate({ _source: { isDeleted, deletedAt, argetDate } = {} }) {
+  getDate({ _source: { isDeleted, deletedAt, targetDate } = {} }) {
     const date = isDeleted ? deletedAt : targetDate;
     return this.renderDate(date);
   },
