@@ -1,24 +1,24 @@
 <template name="WorkInbox_Card_Read_Wrapper">
   {{#if workItemId}}
-    {{#if _is_ LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+    {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
       {{> Actions_Card_Read
           isReadOnly=workItem.isDeleted
-          action=action}}
+          _id=linkedDocId}}
     {{/if}}
 
-    {{#if _is_ LINKED_TYPES.NC}}
+    {{#if isDocType LINKED_TYPES.NC}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
       {{> NC_Card_Read
           isReadOnly=workItem.isDeleted
-          NC=NC}}
+          _id=linkedDocId}}
     {{/if}}
 
-    {{#if _is_ LINKED_TYPES.RISK}}
+    {{#if isDocType LINKED_TYPES.RISK}}
       {{> WorkInbox_QAPanel_Read doc=workItem}}
       {{> Risks_Card_Read
           isReadOnly=workItem.isDeleted
-          risk=risk}}
+          _id=linkedDocId}}
     {{/if}}
   {{else}}
     <div class="content-cards-inner flex scroll">
