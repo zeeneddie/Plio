@@ -19,7 +19,8 @@ Template.WorkInbox_Layout.viewmodel({
         this.templateInstance.subscribe('actions', _id)
       ];
 
-      if (this.isActiveWorkInboxFilter('Deleted work items')) {
+      if (this.isActiveWorkInboxFilter('My deleted work items') ||
+          this.isActiveWorkInboxFilter('Team deleted work items')) {
         _subHandlers.push(this.templateInstance.subscribe('workItems', _id, true));
       } else {
         _subHandlers.push(this.templateInstance.subscribe('workItems', _id));
