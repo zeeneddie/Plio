@@ -24,16 +24,16 @@
     <div class="content-cards-inner flex scroll">
       <div class="card">
         <div class="card-block card-heading">
-          {{#if $some (isActiveWorkInboxFilter 'My current work items') (isActiveWorkInboxFilter 'Team current work items')}}
-            <h5>There are no current work items</h5>
+          {{#if $some (isActiveWorkInboxFilter 'My current work items') (isActiveWorkInboxFilter 'Team current work')}}
+            <h5>There is no current work</h5>
           {{/if}}
 
-          {{#if $some (isActiveWorkInboxFilter 'My completed work items') (isActiveWorkInboxFilter 'Team completed work items')}}
-            <h5>There are no completed work items</h5>
+          {{#if $some (isActiveWorkInboxFilter 'My completed work items') (isActiveWorkInboxFilter 'Team completed work')}}
+            <h5>There is no completed work</h5>
           {{/if}}
 
-          {{#if isActiveWorkInboxFilter 'Deleted work items'}}
-            <h5>There are no deleted work items</h5>
+          {{#if isActiveWorkInboxFilter 'Deleted work'}}
+            <h5>There is no deleted work</h5>
           {{/if}}
         </div>
       </div>
