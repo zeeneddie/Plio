@@ -541,15 +541,15 @@ ViewModel.mixin({
       return (userId) => {
         if (status === 3) { // completed
           if (assigneeId === userId) {
-            return { by: 'My completed work items' };
+            return { by: 'My completed work' };
           } else {
-            return { by: 'Team completed work items' };
+            return { by: 'Team completed work' };
           }
         } else {
           if (assigneeId === userId) {
-            return { by: 'My current work items' };
+            return { by: 'My current work' };
           } else {
-            return { by: 'Team current work items' };
+            return { by: 'Team current work' };
           }
         }
       };

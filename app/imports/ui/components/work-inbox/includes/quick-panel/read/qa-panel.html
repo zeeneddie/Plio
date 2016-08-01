@@ -1,24 +1,28 @@
 <template name="WorkInbox_QAPanel_Read">
   {{#with doc}}
     {{#if showQAPanel this}}
-      <div class="alert alert-danger clearfix">
-        <button class="btn btn-link pull-right m-l-1" {{b "click: delete(this)"}}>
-          <i class="fa fa-trash fa-lg alert-danger"></i>
-        </button>
-        {{#if this.isDeleted}}
-          <button class="btn btn-link pull-right" {{b "click: restore(this)"}}>
-            <i class="fa fa-undo fa-lg text-primary"></i>
+      <div class="qa-panel alert alert-danger clearfix">
+        <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
+          <strong>To do</strong>
+          <br>
+          <span {{b "text: getDescription(this)"}}></span>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 text-xs-right qa-buttons">
+          {{#if $not ($some this.isDeleted ($eq this.status 3))}}
+            <button type="button" class="btn btn-success" {{b "click: openQAModal(this)"}}>
+              <i class="fa fa-check margin-right"></i>
+              <span {{b "text: getButtonText(this)"}}></span>
+            </button>
+          {{/if}}
+          {{#if this.isDeleted}}
+            <button class="btn btn-link" {{b "click: restore(this)"}}>
+              <i class="fa fa-undo fa-lg text-default"></i>
+            </button>
+          {{/if}}
+          <button class="btn btn-link m-l-1" {{b "click: delete(this)"}}>
+            <i class="fa fa-trash fa-lg alert-danger"></i>
           </button>
-        {{/if}}
-        {{#if $not ($some this.isDeleted ($eq this.status 3))}}
-          <button type="button" class="btn btn-success pull-right" {{b "click: openQAModal(this)"}}>
-            <i class="fa fa-check margin-right"></i>
-            <span {{b "text: getButtonText(this)"}}></span>
-          </button>
-        {{/if}}
-        <strong>To do</strong>
-        <br>
-        <span {{b "text: getDescription(this)"}}></span>
+        </div>
       </div>
     {{/if}}
   {{/with}}

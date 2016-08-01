@@ -45,22 +45,22 @@ Template.WorkInbox_List.viewmodel({
     const { my = {}, team = {} } = this.items() || {};
 
     switch(this.activeWorkInboxFilter()) {
-      case 'My current work items':
+      case 'My current work':
         return my.current;
         break;
-      case 'Team current work items':
+      case 'Team current work':
         return team.current;
         break;
-      case 'My completed work items':
+      case 'My completed work':
         return my.completed;
         break;
-      case 'Team completed work items':
+      case 'Team completed work':
         return team.completed;
         break;
-      case 'My deleted work items':
+      case 'My deleted work':
         return my.deleted;
         break;
-      case 'Team deleted work items':
+      case 'Team deleted work':
         return team.deleted;
         break;
       default:
@@ -183,25 +183,25 @@ Template.WorkInbox_List.viewmodel({
   focused: false,
   animating: false,
   expandAllFound() {
+    const { my: { current, completed, deleted } = {} } = this.items();
+
+    if (this.isActiveWorkInboxFilter('My current work')) {
+      this.searchResultsNumber(current.length);
+      return;
+    } else if (this.isActiveWorkInboxFilter('My completed work')) {
+      this.searchResultsNumber(completed.length);
+      return;
+    } else if (this.isActiveWorkInboxFilter('My deleted work')) {
+      this.searchResultsNumber(deleted.length);
+      return;
+    }
+
     const sections = ViewModel.find('WorkInbox_SectionItem');
     const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ _id }) => _id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
-
-    const { my: { current, completed, deleted } = {} } = this.items();
-
-    if (this.isActiveWorkInboxFilter('My current work items')) {
-      this.searchResultsNumber(current.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('My completed work items')) {
-      this.searchResultsNumber(completed.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('My deleted work items')) {
-      this.searchResultsNumber(deleted.length);
-      return;
-    }
 
     this.searchResultsNumber(ids.length);
 
@@ -216,8 +216,6 @@ Template.WorkInbox_List.viewmodel({
   },
   expandSelected() {
     const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.workItemId()));
-
-    if (this.isActiveWorkInboxFilter('My current work items') || this.isActiveWorkInboxFilter('My completed work items')) return;
 
     this.animating(true);
 

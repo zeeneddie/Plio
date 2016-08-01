@@ -314,12 +314,12 @@ const NonConformityFilters = [
 ];
 
 const WorkInboxFilters = [
-  'My current work items',
-  'Team current work items',
-  'My completed work items',
-  'Team completed work items',
-  'My deleted work items',
-  'Team deleted work items'
+  'My current work',
+  'Team current work',
+  'My completed work',
+  'Team completed work',
+  'My deleted work',
+  'Team deleted work'
 ];
 
 const DocumentTypes = [

@@ -16,13 +16,13 @@
 
     <div class="list-group list-group-accordion">
 
-      {{#if isActiveWorkInboxFilter "My current work items"}}
+      {{#if isActiveWorkInboxFilter "My current work"}}
         {{#each items.my.current}}
           {{> WorkInbox_Item}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter "Team current work items"}}
+      {{#if isActiveWorkInboxFilter "Team current work"}}
         {{#each assignees.current}}
           {{> ListItem
               template="WorkInbox_SectionItem"
@@ -31,13 +31,13 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter "My completed work items"}}
+      {{#if isActiveWorkInboxFilter "My completed work"}}
         {{#each items.my.completed}}
           {{> WorkInbox_Item}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter "Team completed work items"}}
+      {{#if isActiveWorkInboxFilter "Team completed work"}}
         {{#each assignees.completed}}
           {{> ListItem
               template="WorkInbox_SectionItem"
@@ -46,13 +46,13 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter "My deleted work items"}}
+      {{#if isActiveWorkInboxFilter "My deleted work"}}
         {{#each items.my.deleted}}
           {{> WorkInbox_Item}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter "Team deleted work items"}}
+      {{#if isActiveWorkInboxFilter "Team deleted work"}}
         {{#each assignees.deleted}}
           {{> ListItem
               template="WorkInbox_SectionItem"
