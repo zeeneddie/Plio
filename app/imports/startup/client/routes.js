@@ -134,6 +134,27 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+  name: 'standard',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardDiscussionLayout', {
+      content: 'StandardDiscussionPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion/:messageId', {
+  name: 'standard',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    /*BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });*/
+    console.log('A selected discussion item');
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],

@@ -2,6 +2,7 @@ import './includes';
 import './modals';
 import './useraccounts';
 import './dashboard';
+import './discussions';
 import './standards';
 import './userdirectory';
 import './login-header.html';
