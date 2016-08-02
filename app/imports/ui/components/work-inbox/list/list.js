@@ -140,15 +140,24 @@ Template.WorkInbox_List.viewmodel({
       array.sort(({ _source: { targetDate:d1 } = {} }, { _source: { targetDate:d2 } = {} }) => d2 - d1)
     );
     const getItems = (predicate1) => {
+      // console.log('getPendingItems:');
+      // console.log(this.getPendingItems());
       const items = this.getPendingItems().filter(({ _source: { assigneeId } = {} }) => predicate1(assigneeId));
-
-      return (predicate2) => sortItems(items.filter(({ _source: { status } }) => predicate2(status)));
+      // console.log('getItems:');
+      // console.log(items);
+      // console.log('\n');
+      return (predicate2) => sortItems(items.filter((doc) => predicate2(doc)));
     };
+
+    //console.log('lalaallllala');
 
     const myItems = getItems(assigneeId => assigneeId === Meteor.userId());
     const teamItems = getItems(assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
 
-    const isInProgress = status => this.STATUSES.IN_PROGRESS().includes(status);
+    const isInProgress = doc => {
+      console.log(doc);
+      return this.STATUSES.IN_PROGRESS().includes(doc.status);
+    };
     const isCompleted = status => this.STATUSES.COMPLETED() === status;
 
     const my = {
@@ -162,6 +171,8 @@ Template.WorkInbox_List.viewmodel({
     };
 
     const deleted = this.getPendingItems({ isDeleted: true });
+
+    console.log(my);
 
     return {
       my,

@@ -34,7 +34,9 @@ const WorkItemsSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      allowedValues: _.keys(STATUSES).map(status => parseInt(status, 10))
+      allowedValues: _.keys(STATUSES).map(status => parseInt(status, 10)),
+      defaultValue: 0,
+      optional: true
     },
     assigneeId: {
       type: String,

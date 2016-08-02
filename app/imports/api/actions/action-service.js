@@ -31,19 +31,9 @@ export default {
       toBeCompletedBy, ...args
     });
 
-    this._refreshStatus(actionId);
+    WorkItemService.actionCreated(actionId);
 
-    WorkItemService.insert({
-      organizationId,
-      targetDate: completionTargetDate,
-      assigneeId: toBeCompletedBy,
-      type: WorkItemsStore.TYPES.COMPLETE_ACTION,
-      status: 0, // in progress
-      linkedDoc: {
-        type,
-        _id: actionId
-      }
-    });
+    this._refreshStatus(actionId);
 
     return actionId;
   },
@@ -120,6 +110,8 @@ export default {
       });
     }
 
+    WorkItemService.actionUpdated(_id);
+
     this._refreshLinkedDocStatus(documentId, documentType);
     this._refreshStatus(_id);
 
@@ -142,6 +134,8 @@ export default {
         linkedTo: { documentId, documentType }
       }
     });
+
+    WorkItemService.actionUpdated(_id);
 
     this._refreshLinkedDocStatus(documentId, documentType);
     this._refreshStatus(_id);
@@ -170,6 +164,8 @@ export default {
         completionComments
       }
     });
+
+    WorkItemService.actionCompleted(_id);
 
     this._refreshStatus(_id);
 
@@ -200,6 +196,8 @@ export default {
       }
     });
 
+    WorkItemService.actionCompletionCanceled(_id);
+
     this._refreshStatus(_id);
 
     return ret;
@@ -227,6 +225,8 @@ export default {
         verificationComments
       }
     });
+
+    WorkItemService.actionVerified(_id);
 
     this._refreshStatus(_id);
 
@@ -286,6 +286,8 @@ export default {
       }
     });
 
+    WorkItemService.actionVerificationCanceled(_id);
+
     this._refreshStatus(_id);
 
     return ret;
@@ -306,7 +308,29 @@ export default {
       $set: { completionTargetDate: targetDate }
     });
 
+    WorkItemService.actionUpdated(_id);
+
     this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setCompletionExecutor({ _id, userId }) {
+    const action = this._getAction(_id);
+
+    if (action.completed()) {
+      throw new Meteor.Error(
+        400, 'Cannot set completion executor for completed action'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { toBeCompletedBy: userId }
+    });
+
+    WorkItemService.actionUpdated(_id);
 
     return ret;
   },
@@ -326,7 +350,29 @@ export default {
       $set: { verificationTargetDate: targetDate }
     });
 
+    WorkItemService.actionUpdated(_id);
+
     this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setVerificationExecutor({ _id, userId }) {
+    const action = this._getAction(_id);
+
+    if (action.verified()) {
+      throw new Meteor.Error(
+        400, 'Cannot set verification executor for verified action'
+      );
+    }
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { toBeVerifiedBy: userId }
+    });
+
+    WorkItemService.actionUpdated(_id);
 
     return ret;
   },
@@ -341,11 +387,13 @@ export default {
     this._ensureActionExists(_id);
 
     this._service.remove({ _id, deletedBy });
+
+    this._refreshStatus(_id);
   },
 
   restore({ _id }) {
     const action = this._getAction(_id);
-    
+
     if (!action.deleted()) {
       throw new Meteor.Error(
         400, 'This action is not deleted so can not be restored'
