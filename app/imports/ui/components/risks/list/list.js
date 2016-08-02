@@ -119,7 +119,7 @@ Template.RisksList.viewmodel({
       return;
     }
 
-    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
+    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().map(item => item._id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);

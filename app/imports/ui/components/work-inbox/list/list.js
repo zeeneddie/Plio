@@ -222,14 +222,15 @@ Template.WorkInbox_List.viewmodel({
     if (vms && vms.length > 0) {
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
-        complete: () => this.expandSelectedAction()
+        complete: () => this.expandSelectedWorkItem()
       });
     } else {
-      this.expandSelectedAction();
+      this.expandSelectedWorkItem();
     }
   },
-  expandSelectedAction() {
-    this.expandCollapsed(this.workItemId(), () => {
+  expandSelectedWorkItem() {
+    const { linkedDoc: { _id } = {} } = this._getWorkItemByQuery({ _id: this.workItemId() }) || {};
+    this.expandCollapsed(_id, () => {
       this.onAfterExpand();
     });
   },

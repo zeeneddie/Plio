@@ -10,9 +10,8 @@ Template.WorkInbox_Header.viewmodel({
     return WorkInboxFilters;
   },
   selectFilter(filter) {
-    // XXX - Strange bug when changing filter while something is in the search input
-    this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
+    this.searchText('');
     this.expandCollapsed(this.workItemId());
   }
 });
