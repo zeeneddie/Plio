@@ -181,13 +181,6 @@ ViewModel.mixin({
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
-    },
-    searchOnAfterKeyUp(value) {
-      if (value) {
-        this.expandAllFound();
-      } else {
-        this.expandSelected();
-      }
     }
   },
   numberRegex: {
