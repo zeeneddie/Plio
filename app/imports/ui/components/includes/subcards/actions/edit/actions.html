@@ -1,5 +1,8 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCard_EditWrapper _lText=title _rText=actionsIndicators}}
+  {{#SubCard_EditWrapper
+    _lText=title
+    _rText=actionsIndicators
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block">
       {{#if actions.count}}
         <div id="actions" class="card">

@@ -8,6 +8,9 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   documentType: '',
   linkedTo: '',
   linkedToId: '',
+  renderContentOnInitial() {
+    return !(this.lessons().count() > 10);
+  },
   renderText({ title, serialNumber }) {
     return `<strong>LL${serialNumber}</strong> ${title}`;
   },

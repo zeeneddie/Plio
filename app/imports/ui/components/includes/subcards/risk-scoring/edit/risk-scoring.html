@@ -1,5 +1,8 @@
 <template name="Subcards_RiskScoring_Edit">
-  {{#SubCard_EditWrapper _lText=label _rText=(getScoreLabel scoresSorted.[0])}}
+  {{#SubCard_EditWrapper
+    _lText=label
+    _rText=(getScoreLabel scoresSorted.[0])
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block">
       {{#if scores.length}}
         <div class="card">
