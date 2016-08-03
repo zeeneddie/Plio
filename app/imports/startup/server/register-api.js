@@ -4,6 +4,8 @@ import '../../api/organizations';
 
 import '../../api/departments';
 
+import '../../api/discussions';
+
 import '../../api/standards-types';
 
 import '../../api/standards-book-sections';

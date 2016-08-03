@@ -8,6 +8,9 @@ export const DiscussionSchema = new SimpleSchema([
 	StandardIdSchema,
 	UserIdSchema,
 	{
+		isRead: {
+			type: Boolean
+		},
 		message: {
 			type: String
 		}

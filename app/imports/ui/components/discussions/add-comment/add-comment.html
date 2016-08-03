@@ -1,0 +1,20 @@
+<template name="AddComment">
+	<form class="f1" {{on 'submit: onSubmit'}}>
+		<div class="form-group">
+			<input type="file" {{b 'value: messageFile'}}>
+		</div>
+
+		<div class="form-group">
+			<input
+				type="text"
+				class="form-control"
+				placeholder="Add a comment"
+				{{b 'value: messageText'}}
+			>
+		</div>
+
+		<button type="submit" class="btn btn-default">
+			<i class="fa fa-angle-right fa-lg"></i>
+		</button>
+	</form>
+</template>
