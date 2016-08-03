@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
@@ -6,13 +7,15 @@ Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
   isEditable: true,
   standardsIds: [],
+  isDeleteButtonVisible() {
+    return invoke(this.selected(), 'count') > 1;
+  },
   selected() {
     const standardsIds = Array.from(this.standardsIds() || []);
     return this._getStandardsByQuery({ _id: { $in: standardsIds } });
   },
   value() {
-    const child = this.child('Select_Multi');
-    return !!child && child.value();
+    return invoke(this.child('Select_Multi'), 'value');
   },
   standards() {
     return this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) });

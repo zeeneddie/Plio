@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 Template.Select_Multi.viewmodel({
   mixin: ['organization', 'utils'],
@@ -8,9 +9,9 @@ Template.Select_Multi.viewmodel({
   placeholder: '',
   selectFirstIfNoSelected: false,
   selectedItem: '',
-  value(e) {
-    const child = this.child('Select_Single');
-    return !!child && child.value();
+  isDeleteButtonVisible: true,
+  value() {
+    return invoke(this.child('Select_Single'), 'value');
   },
   selectedArray() {
     return this.toArray(this.selected());
