@@ -8,7 +8,7 @@ Template.Risks_Card_Read.viewmodel({
   isReadOnly: false,
   risks() {
     const list = ViewModel.findOne('RisksList');
-    const query = list && list._getQueryForFilter();
+    const query = list && list._getQueryForFilter(false); // without search query
     return this._getRisksByQuery(query);
   },
   risk() {

@@ -14,7 +14,7 @@ Template.List_Read.viewmodel({
   focused: false,
   animating: false,
   isModalButtonVisible: true,
-  // can be rewritten by passing this function from top level component as prop
+  // can be overwritten by passing this function from top level component as prop
   _transform() {
     return {
       onValue(vms) { return vms },
