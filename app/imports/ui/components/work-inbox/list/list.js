@@ -16,10 +16,10 @@ Template.WorkInbox_List.viewmodel({
     if (!this.focused() && !this.animating() && !this.searchText()) {
       const items = this._getItemsByFilter() || [];
 
-      const contains = items.find(({ _source: { _id } = {} }) => _id === this.workItemId());
+      const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
-        const { _id, _source: { _id:workItemId } = {} } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
+        const { _id:workItemId, linkedDoc: { _id } = {} } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
 
         if (workItemId) {
           Meteor.setTimeout(() => {
@@ -69,65 +69,35 @@ Template.WorkInbox_List.viewmodel({
     };
   },
   _getSearchQuery() {
-     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
-   },
+    return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+  },
   getPendingItems(_query = {}) {
-    const docs = ((() => {
-      const workItems = this._getWorkItemsByQuery({ ..._query }).fetch();
-      const ids = workItems.map(({ linkedDoc: { _id } = {} }) => _id);
-      const query = { _id: { $in: ids }, ...this._getSearchQuery() };
-      const withSource = ({ _id, ...args }) => {
-        const _source = workItems.find(({ linkedDoc: { _id:targetId } = {} }) => _id === targetId);
-        return { _source, _id, ...args };
-      };
+    const linkedDocsQuery = { ...this._getSearchQuery() };
 
-      const _docs = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery'].map(prop => this[prop](query).map(withSource))
-                                                                                .reduce((prev, cur) => [...prev, ...cur]);
-      return _docs;
-    })());
+    const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
+        .map(prop => this[prop](linkedDocsQuery).map(({ _id }) => _id))
+        .reduce((prev, cur) => [...prev, ...cur]);
 
-    const docsWithPreciselyChosenExecutor = ({
-      _source: { type, ...sourceArgs }, analysis = {},
-      updateOfStandards = {}, toBeCompletedBy:e3, toBeVerifiedBy:e4, ...args
-    }) => {
-      const toBeCompletedBy = ((() => {
-        const [{ executor:e1 }, { executor:e2 }] = [analysis, updateOfStandards];
-        switch(type) {
-          case TYPES.COMPLETE_ANALYSIS:
-            return e1;
-            break;
-          case TYPES.COMPLETE_UPDATE_OF_STANDARDS:
-            return e2;
-            break;
-          case TYPES.COMPLETE_ACTION:
-            return e3;
-            break;
-          case TYPES.VERIFY_ACTION:
-            return e4;
-            break;
-          default:
-            return undefined;
-            break;
-        }
-      })());
+    const workItems = this._getWorkItemsByQuery({
+      'linkedDoc._id': { $in: linkedDocsIds },
+      ..._query
+    }).fetch();
 
-      return { toBeCompletedBy, analysis, updateOfStandards, _source: { type, ...sourceArgs }, ...args };
-    };
-
-    const items = docs.map(docsWithPreciselyChosenExecutor);
-
-    return items;
+    return _(workItems).map(item => {
+      const linkedDocument = item.getLinkedDoc();
+      return { linkedDocument, ...item };
+    });
   },
   assignees() {
     const getIds = query => this.getPendingItems(query);
     const byStatus = (array, predicate) => (
-      array.filter(({ _source: { assigneeId, status } }) => assigneeId !== Meteor.userId() && predicate(status))
+      array.filter(({ assigneeId, status }) => assigneeId !== Meteor.userId() && predicate(status))
     );
-    const extractIds = array => array.map(({ _source: { assigneeId } = {} }) => assigneeId);
+    const extractIds = array => array.map(({ assigneeId }) => assigneeId);
     const sortByFirstName = (array) => {
       const query = {
         _id: {
-          $in: [...(() => array.map(({ _source: { assigneeId } = {} }) => assigneeId))()]
+          $in: [...(() => array.map(({ assigneeId }) => assigneeId))()]
         }
       };
       const options = { sort: { 'profile.firstName': 1 } };
@@ -152,11 +122,11 @@ Template.WorkInbox_List.viewmodel({
   },
   items(userId) {
     const getInitialItems = query => this.getPendingItems(query);
-    const byAssignee = (array, predicate) => array.filter(({ _source: { assigneeId } = {} }) => predicate(assigneeId));
-    const byStatus = (array, predicate) => array.filter(({ _source: { status } = {} }) => predicate(status));
-    const byDeleted = (array, predicate) => array.filter(({ _source: { isDeleted } }) => predicate(isDeleted));
+    const byAssignee = (array, predicate) => array.filter(({ assigneeId }) => predicate(assigneeId));
+    const byStatus = (array, predicate) => array.filter(({ status }) => predicate(status));
+    const byDeleted = (array, predicate) => array.filter(({ isDeleted }) => predicate(isDeleted));
     const sortItems = array => (
-      array.sort(({ _source: { targetDate:d1 } = {} }, { _source: { targetDate:d2 } = {} }) => d2 - d1)
+      array.sort(({ targetDate:d1 }, { targetDate:d2 }) => d2 - d1)
     );
 
     const allItems = getInitialItems({}).concat(getInitialItems({ isDeleted: true }));
@@ -197,7 +167,7 @@ Template.WorkInbox_List.viewmodel({
     }
 
     const sections = ViewModel.find('WorkInbox_SectionItem');
-    const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ _id }) => _id)));
+    const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ linkedDoc: { _id } = {} }) => _id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);

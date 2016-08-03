@@ -168,10 +168,15 @@ export default {
 
       if (!existingItem) {
         this.collection.insert(_.extend(query, {
-          'linkedDoc.type': type,
           organizationId,
+          type: WorkItemsStore.TYPES.COMPLETE_ACTION,
           targetDate: completionTargetDate,
-          assigneeId: toBeCompletedBy
+          assigneeId: toBeCompletedBy,
+          isCompleted: false,
+          linkedDoc: {
+            _id: actionId,
+            type
+          }
         }));
       } else {
         const { targetDate:existingDate, assigneeId:existingExecutor } = existingItem;

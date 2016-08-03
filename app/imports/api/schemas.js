@@ -107,6 +107,10 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
+        if (!(this.userId || this.isSet)) {
+          this.unset();
+          return;
+        }
 
         // Workaround for fixtures
         return this.userId || this.isSet && this.value;

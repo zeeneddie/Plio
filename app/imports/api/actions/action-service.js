@@ -31,9 +31,10 @@ export default {
       toBeCompletedBy, ...args
     });
 
-    WorkItemService.actionCreated(actionId);
-
-    this._refreshStatus(actionId);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionCreated(actionId);
+      this._refreshStatus(actionId);
+    });
 
     return actionId;
   },
@@ -110,10 +111,11 @@ export default {
       });
     }
 
-    WorkItemService.actionUpdated(_id);
-
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionUpdated(_id);
+      this._refreshLinkedDocStatus(documentId, documentType);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -135,10 +137,11 @@ export default {
       }
     });
 
-    WorkItemService.actionUpdated(_id);
-
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionUpdated(_id);
+      this._refreshLinkedDocStatus(documentId, documentType);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -165,9 +168,10 @@ export default {
       }
     });
 
-    WorkItemService.actionCompleted(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionCompleted(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -196,9 +200,10 @@ export default {
       }
     });
 
-    WorkItemService.actionCompletionCanceled(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionCompletionCanceled(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -226,9 +231,10 @@ export default {
       }
     });
 
-    WorkItemService.actionVerified(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionVerified(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -286,9 +292,10 @@ export default {
       }
     });
 
-    WorkItemService.actionVerificationCanceled(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionVerificationCanceled(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -308,9 +315,10 @@ export default {
       $set: { completionTargetDate: targetDate }
     });
 
-    WorkItemService.actionUpdated(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionUpdated(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -330,7 +338,7 @@ export default {
       $set: { toBeCompletedBy: userId }
     });
 
-    WorkItemService.actionUpdated(_id);
+    Meteor.isServer && Meteor.defer(() => WorkItemService.actionUpdated(_id));
 
     return ret;
   },
@@ -350,9 +358,10 @@ export default {
       $set: { verificationTargetDate: targetDate }
     });
 
-    WorkItemService.actionUpdated(_id);
-
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => {
+      WorkItemService.actionUpdated(_id);
+      this._refreshStatus(_id);
+    });
 
     return ret;
   },
@@ -372,7 +381,7 @@ export default {
       $set: { toBeVerifiedBy: userId }
     });
 
-    WorkItemService.actionUpdated(_id);
+    Meteor.isServer && Meteor.defer(() => WorkItemService.actionUpdated(_id));
 
     return ret;
   },
@@ -386,9 +395,11 @@ export default {
   remove({ _id, deletedBy }) {
     this._ensureActionExists(_id);
 
-    this._service.remove({ _id, deletedBy });
+    const ret = this._service.remove({ _id, deletedBy });
 
-    this._refreshStatus(_id);
+    Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+
+    return ret;
   },
 
   restore({ _id }) {
@@ -400,9 +411,11 @@ export default {
       );
     }
 
-    this._refreshStatus(_id);
+    const ret = this._service.restore({ _id });
 
-    return this._service.restore({ _id });
+    Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+
+    return ret;
   },
 
   _ensureActionExists(_id) {
@@ -420,21 +433,17 @@ export default {
   },
 
   _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflow = new ActionWorkflow(_id);
-      workflow.refreshStatus();
-    });
+    const workflow = new ActionWorkflow(_id);
+    workflow.refreshStatus();
   },
 
   _refreshLinkedDocStatus(documentId, documentType) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflowConstructors = {
-        [ProblemTypes.NC]: NCWorkflow,
-        [ProblemTypes.RISK]: RiskWorkflow
-      };
+    const workflowConstructors = {
+      [ProblemTypes.NC]: NCWorkflow,
+      [ProblemTypes.RISK]: RiskWorkflow
+    };
 
-      new workflowConstructors[documentType](documentId).refreshStatus();
-    });
+    new workflowConstructors[documentType](documentId).refreshStatus();
   },
 
   _checkLinkedDocs(linkedTo) {
