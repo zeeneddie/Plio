@@ -6,21 +6,21 @@ import { UserRoles } from '/imports/api/constants.js';
 
 Template.DashboardFooter.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
-  onInviteClick(event) {
-    event.preventDefault();
-    let orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'));
-    let organizationId = Organizations.findOne({serialNumber: orgSerialNumber})._id;
+  onInviteClick(e) {
+    e.preventDefault();
+    
     this.modal().open({
+      organizationId: this.organizationId(),
       template: 'UserDirectory_InviteUsers',
       _title: 'Invite users',
       submitCaption: 'Invite',
       submitCaptionOnSave: 'Inviting...',
       closeCaption: 'Cancel',
-      variation: 'save',
-      organizationId
+      variation: 'save'
     });
   },
   openAddNCModal() {
+    this.templateInstance.subscribe('standards', this.organizationId());
     this.modal().open({
       _title: 'Non-conformity',
       template: 'CreateNC',
