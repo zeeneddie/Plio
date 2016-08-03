@@ -8,7 +8,7 @@ Template.Fields_Standards_Edit.viewmodel({
   isEditable: true,
   standardsIds: [],
   isDeleteButtonVisible() {
-    return invoke(this.selected(), 'count') > 1;
+    return !this._id || invoke(this.selected(), 'count') > 1;
   },
   selected() {
     const standardsIds = Array.from(this.standardsIds() || []);

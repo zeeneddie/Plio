@@ -67,7 +67,6 @@ Template.ModalWindow.viewmodel({
       }
 
       if (err) {
-        console.log(err);
         this.errors.push(err);
         this.closeAfterCall(false);
       }
