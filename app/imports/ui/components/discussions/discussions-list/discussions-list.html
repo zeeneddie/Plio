@@ -1,7 +1,21 @@
 <template name="DiscussionsList">
-	<div class="discussions-list">
+	<!--div class="discussions-list">
 		<ul class="discussions-list-holder">
 			<li class="discussions-list-holder-1">This discussion was started by Stephen Ives on February 22nd, 2016</li>
 		</ul>
+	</div-->
+
+	<div class="chat-content scroll ng-scope">
+		<div class="chat-item chat-item-start ng-scope">
+			<p class="chat-item-text">This discussion was started by <strong>Stephen Ives</strong> on <strong>February 22nd, 2016</strong></p>
+		</div>
+
+		<div class="chat-item-date ng-scope">
+			<span>February 24th</span>
+		</div>
+
+		{{#each messages}}
+			{{> DiscussionsItem}}
+		{{/each}}
 	</div>
 </template>
