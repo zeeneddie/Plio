@@ -154,7 +154,7 @@ Template.SubCard_Edit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update({ e = {}, withFocusCheck = false, ...args }) {
+  update({ e = {}, withFocusCheck = false, ...args }, cb) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
@@ -168,7 +168,7 @@ Template.SubCard_Edit.viewmodel({
       this.callUpdate(this.updateFn, {
         _id,
         ...args
-      });
+      }, cb);
     };
 
     if (withFocusCheck) {
