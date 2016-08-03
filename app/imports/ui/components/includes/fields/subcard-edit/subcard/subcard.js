@@ -25,13 +25,14 @@ Template.SubCard_Edit.viewmodel({
     return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
   handleToggleCollapse() {
+    this.clearError('');
     if (this._id) {
       this.toggleCollapse(null, 250);
     }
   },
   callInsert(insertFn, args, cb) {
     const $parentFirstNode = $(this.templateInstance.firstNode).closest('.card-block-collapse');
-    
+
     this.beforeSave();
 
     const afterInsert = (err, res) => {
