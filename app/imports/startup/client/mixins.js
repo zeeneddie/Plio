@@ -31,7 +31,10 @@ ViewModel.mixin({
 
       if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
         const vms = ViewModel.find('ListItem', vm => vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId);
-        vms.forEach(vm => vm.collapse.collapse('hide'));
+        vms.forEach((vm) => {
+          vm.collapse.collapse('hide');
+          vm.collapsed(true);
+        });
       }
 
       if (this.collapsed() && timeout) {
