@@ -191,7 +191,7 @@ Template.WorkInbox_List.viewmodel({
 
       const sections = ViewModel.find('WorkInbox_SectionItem');
       const ids = this.toArray(sections).map(vm => vm.items && vm.items().map(({ _id }) => _id));
-      return ids;
+      return _.flatten(ids);
     };
   },
   onModalOpen() {
