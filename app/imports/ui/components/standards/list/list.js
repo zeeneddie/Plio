@@ -114,6 +114,11 @@ Template.StandardsList.viewmodel({
     return isTypesFirst ? types.concat(sections) : sections.concat(types);
   },
   expandAllFound() {
+    if (this.isActiveStandardFilter('deleted')) {
+      this.searchResultsNumber(this.standardsDeleted().count());
+      return;
+    }
+
     const ids = _.flatten(
       ViewModel.find('StandardSectionItem')
                 .map(vm => vm.standards && vm.standards().fetch().map(({ _id }) => _id))
@@ -141,7 +146,7 @@ Template.StandardsList.viewmodel({
 
     this.animating(true);
 
-    if (vms.length > 0) {
+    if (vms && vms.length > 0) {
       const vmsSorted = this.sortVms(vms);
 
       this.expandCollapseItems(vmsSorted, {

@@ -42,7 +42,7 @@ Template.WorkInbox_List.viewmodel({
     this.expandCollapsed(_id);
   },
   _getItemsByFilter() {
-    const { my = {}, team = {}, deleted = [] } = this.items() || {};
+    const { my = {}, team = {} } = this.items() || {};
 
     switch(this.activeWorkInboxFilter()) {
       case 'My current work':
@@ -57,8 +57,11 @@ Template.WorkInbox_List.viewmodel({
       case 'Team completed work':
         return team.completed;
         break;
-      case 'Deleted work':
-        return deleted;
+      case 'My deleted work':
+        return my.deleted;
+        break;
+      case 'Team deleted work':
+        return team.deleted;
         break;
       default:
         return {};
@@ -116,19 +119,31 @@ Template.WorkInbox_List.viewmodel({
     return items;
   },
   assignees() {
-    const getIds = (predicate) => {
-      const ids = this.getPendingItems()
-                      .filter(({ _source: { assigneeId, status } = {} }) => assigneeId !== Meteor.userId() && predicate(status))
-                      .map(({ _source: { assigneeId } = {} }) => assigneeId);
-      return [...new Set(ids)];
+    const getIds = query => this.getPendingItems(query);
+    const byStatus = (array, predicate) => (
+      array.filter(({ _source: { assigneeId, status } }) => assigneeId !== Meteor.userId() && predicate(status))
+    );
+    const extractIds = array => array.map(({ _source: { assigneeId } = {} }) => assigneeId);
+    const sortByFirstName = (array) => {
+      const query = {
+        _id: {
+          $in: [...(() => array.map(({ _source: { assigneeId } = {} }) => assigneeId))()]
+        }
+      };
+      const options = { sort: { 'profile.firstName': 1 } };
+      const users = Meteor.users.find(query, options);
+      const ids = users.map(({ _id }) => _id);
+      return ids;
     };
 
-    const current = getIds(status => this.STATUSES.IN_PROGRESS().includes(status));
-    const completed = getIds(status => status === this.STATUSES.COMPLETED());
+    const current = sortByFirstName(byStatus(getIds(), status => this.STATUSES.IN_PROGRESS().includes(status)));
+    const completed = sortByFirstName(byStatus(getIds(), status => this.STATUSES.COMPLETED() === status));
+    const deleted = sortByFirstName(byStatus(getIds({ isDeleted: true }), status => true));
 
     return {
       current,
-      completed
+      completed,
+      deleted
     };
   },
   getTeamItems(userId, prop) {
@@ -136,72 +151,57 @@ Template.WorkInbox_List.viewmodel({
     return team[prop];
   },
   items(userId) {
+    const getInitialItems = query => this.getPendingItems(query);
+    const byAssignee = (array, predicate) => array.filter(({ _source: { assigneeId } = {} }) => predicate(assigneeId));
+    const byStatus = (array, predicate) => array.filter(({ _source: { status } = {} }) => predicate(status));
+    const byDeleted = (array, predicate) => array.filter(({ _source: { isDeleted } }) => predicate(isDeleted));
     const sortItems = array => (
       array.sort(({ _source: { targetDate:d1 } = {} }, { _source: { targetDate:d2 } = {} }) => d2 - d1)
     );
-    const getItems = (predicate1) => {
-      // console.log('getPendingItems:');
-      // console.log(this.getPendingItems());
-      const items = this.getPendingItems().filter(({ _source: { assigneeId } = {} }) => predicate1(assigneeId));
-      // console.log('getItems:');
-      // console.log(items);
-      // console.log('\n');
-      return (predicate2) => sortItems(items.filter((doc) => predicate2(doc)));
-    };
 
-    //console.log('lalaallllala');
+    const allItems = getInitialItems({}).concat(getInitialItems({ isDeleted: true }));
+    const myItems = byAssignee(allItems, assigneeId => assigneeId === Meteor.userId());
+    const teamItems = byAssignee(allItems, assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
 
-    const myItems = getItems(assigneeId => assigneeId === Meteor.userId());
-    const teamItems = getItems(assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
-
-    const isInProgress = doc => {
-      console.log(doc);
-      return this.STATUSES.IN_PROGRESS().includes(doc.status);
-    };
+    const isInProgress = status => this.STATUSES.IN_PROGRESS().includes(status);
     const isCompleted = status => this.STATUSES.COMPLETED() === status;
+    const isDel = bool => isDeleted => bool ? isDeleted : !isDeleted;
 
-    const my = {
-      current: myItems(isInProgress),
-      completed: myItems(isCompleted)
+    const getObj = (items) => {
+      return {
+        current: sortItems(byDeleted(byStatus(items, isInProgress), isDel(false))),
+        completed: sortItems(byDeleted(byStatus(items, isCompleted), isDel(false))),
+        deleted: sortItems(byDeleted(items, isDel(true)))
+      };
     };
-
-    const team = {
-      current: teamItems(isInProgress),
-      completed: teamItems(isCompleted)
-    };
-
-    const deleted = this.getPendingItems({ isDeleted: true });
-
-    console.log(my);
 
     return {
-      my,
-      team,
-      deleted
-    }
+      my: getObj(myItems),
+      team: getObj(teamItems)
+    };
   },
   focused: false,
   animating: false,
   expandAllFound() {
+    const { my: { current, completed, deleted } = {} } = this.items();
+
+    if (this.isActiveWorkInboxFilter('My current work')) {
+      this.searchResultsNumber(current.length);
+      return;
+    } else if (this.isActiveWorkInboxFilter('My completed work')) {
+      this.searchResultsNumber(completed.length);
+      return;
+    } else if (this.isActiveWorkInboxFilter('My deleted work')) {
+      this.searchResultsNumber(deleted.length);
+      return;
+    }
+
     const sections = ViewModel.find('WorkInbox_SectionItem');
     const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ _id }) => _id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
     });
-
-    const { deleted, my: { current, completed } = {} } = this.items();
-
-    if (this.isActiveWorkInboxFilter('My current work')) {
-      this.searchResultsNumber(current.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('My completed work items')) {
-      this.searchResultsNumber(completed.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('Deleted work')) {
-      this.searchResultsNumber(deleted.length);
-      return;
-    }
 
     this.searchResultsNumber(ids.length);
 
@@ -217,21 +217,20 @@ Template.WorkInbox_List.viewmodel({
   expandSelected() {
     const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.workItemId()));
 
-    if (this.isActiveWorkInboxFilter('My current work') || this.isActiveWorkInboxFilter('My completed work')) return;
-
     this.animating(true);
 
     if (vms && vms.length > 0) {
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
-        complete: () => this.expandSelectedAction()
+        complete: () => this.expandSelectedWorkItem()
       });
     } else {
-      this.expandSelectedAction();
+      this.expandSelectedWorkItem();
     }
   },
-  expandSelectedAction() {
-    this.expandCollapsed(this.workItemId(), () => {
+  expandSelectedWorkItem() {
+    const { linkedDoc: { _id } = {} } = this._getWorkItemByQuery({ _id: this.workItemId() }) || {};
+    this.expandCollapsed(_id, () => {
       this.onAfterExpand();
     });
   },

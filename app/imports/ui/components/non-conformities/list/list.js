@@ -136,6 +136,11 @@ Template.NCList.viewmodel({
   focused: false,
   animating: false,
   expandAllFound() {
+    if (this.isActiveNCFilter('deleted')) {
+      this.searchResultsNumber(this.NCsDeleted().count());
+      return;
+    }
+
     const ids = _.flatten(ViewModel.find('NCSectionItem').map(vm => vm.NCs && vm.NCs().fetch().map(item => item._id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
@@ -158,7 +163,7 @@ Template.NCList.viewmodel({
 
     this.animating(true);
 
-    if (vms.length > 0) {
+    if (vms && vms.length > 0) {
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
         complete: () => this.expandSelectedNC()

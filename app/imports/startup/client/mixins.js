@@ -183,20 +183,7 @@ ViewModel.mixin({
       return `${this.searchResultsNumber()} matching results`;
     },
     searchOnAfterKeyUp(value) {
-      const checkIsDeletedFilter = (fn, counterName) => {
-        if (this[fn] && this[fn]('deleted')) {
-          this.searchResultsNumber(this[counterName]().count());
-          return true;
-        }
-      };
-
-      if (checkIsDeletedFilter('isActiveStandardFilter', 'standardsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveNCFilter', 'NCsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveRiskFilter', 'risksDeleted')) return;
-
-      if (!!value) {
+      if (value) {
         this.expandAllFound();
       } else {
         this.expandSelected();

@@ -39,7 +39,15 @@ export default {
   },
 
   restore({ _id }) {
-    this._ensureWorkItemIsDeleted(_id);
+    const { type, linkedDoc, isDeleted } = this._getWorkItem(_id);
+
+    if (!isDeleted) {
+      throw new Meteor.Error(400, 'Work item needs to be deleted first');
+    }
+
+    if (this.collection.findOne({ _id: { $ne: _id }, type, linkedDoc })) {
+      throw new Meteor.Error(400, 'This work item cannot be restored because this action was assigned to other user');
+    }
 
     return this._service.restore({ _id });
   },
@@ -341,13 +349,6 @@ export default {
 
   connectedStandardsUpdated(type, docType, { _id, organizationId, updateOfStandards: { targetDate, executor:assigneeId } = {}, ...args }) {
     this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
-  },
-
-  _ensureWorkItemIsDeleted(_id) {
-    const workItem = this._getWorkItem(_id);
-    if (!workItem.isDeleted) {
-      throw new Meteor.Error(400, 'Work item needs to be deleted first');
-    }
   },
 
   _ensureWorkItemExists(_id) {

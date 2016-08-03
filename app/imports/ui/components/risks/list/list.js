@@ -114,7 +114,12 @@ Template.RisksList.viewmodel({
   focused: false,
   animating: false,
   expandAllFound() {
-    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
+    if (this.isActiveRiskFilter('deleted')) {
+      this.searchResultsNumber(this.risksDeleted().count());
+      return;
+    }
+
+    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().map(item => item._id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
@@ -136,7 +141,7 @@ Template.RisksList.viewmodel({
 
     this.animating(true);
 
-    if (vms.length > 0) {
+    if (vms && vms.length > 0) {
       this.expandCollapseItems(vms, {
         expandNotExpandable: true,
         complete: () => this.expandSelectedRisk()

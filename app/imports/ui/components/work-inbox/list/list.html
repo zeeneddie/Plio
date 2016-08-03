@@ -40,15 +40,24 @@
       {{#if isActiveWorkInboxFilter "Team completed work"}}
         {{#each assignees.completed}}
           {{> ListItem
-              template='WorkInbox_SectionItem'
+              template="WorkInbox_SectionItem"
               title=(userFullNameOrEmail this)
               items=(getTeamItems this "completed")}}
         {{/each}}
       {{/if}}
 
-      {{#if isActiveWorkInboxFilter 'Deleted work'}}
-        {{#each items.deleted}}
+      {{#if isActiveWorkInboxFilter "My deleted work"}}
+        {{#each items.my.deleted}}
           {{> WorkInbox_Item}}
+        {{/each}}
+      {{/if}}
+
+      {{#if isActiveWorkInboxFilter "Team deleted work"}}
+        {{#each assignees.deleted}}
+          {{> ListItem
+              template="WorkInbox_SectionItem"
+              title=(userFullNameOrEmail this)
+              items=(getTeamItems this "deleted")}}
         {{/each}}
       {{/if}}
 

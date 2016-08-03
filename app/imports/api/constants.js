@@ -318,7 +318,8 @@ const WorkInboxFilters = [
   'Team current work',
   'My completed work',
   'Team completed work',
-  'Deleted work'
+  'My deleted work',
+  'Team deleted work'
 ];
 
 const DocumentTypes = [

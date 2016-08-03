@@ -10,8 +10,8 @@ Template.WorkInbox_Header.viewmodel({
     return WorkInboxFilters;
   },
   selectFilter(filter) {
-    this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
+    this.searchText('');
     this.expandCollapsed(this.workItemId());
   }
 });
