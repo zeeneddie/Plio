@@ -1,11 +1,15 @@
 import { Template } from 'meteor/templating';
 import { CountryCodes } from '/imports/api/country-codes.js';
-
+import { get } from 'lodash';
 
 Template.UserEdit_ContactDetails.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck', 'userEdit'],
+  address: '',
+  country: '',
+  skype: '',
+  phoneNumbers: [],
   isTextPresent() {
-    return this.address() || this.skype() || this.phoneNumbers().length;
+    return this.address() || this.skype() || get(this.phoneNumbers(), 'length');
   },
   updateAddress(e) {
     this.updateProfileProperty(e, 'address', true);
