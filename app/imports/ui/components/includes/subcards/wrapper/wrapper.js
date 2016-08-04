@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
-Template.SubCard_EditWrapper.viewmodel({
+Template.Subcards_Wrapper.viewmodel({
   mixin: 'collapse',
   _lText: '',
-  _rText: ''
+  _rText: '',
+  loading: false
 });

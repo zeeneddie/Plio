@@ -4,7 +4,8 @@ import { setWorkflowDefaults } from '/imports/api/organizations/methods.js';
 
 
 Template.OrgSettings_WorkflowDefaults.viewmodel({
-  mixin: ['collapse', 'modal'],
+  mixin: 'modal',
+  _lText: 'Workflow defaults',
   onWorkflowTypeChangeCb() {
     return this.onWorkflowTypeChange.bind(this);
   },

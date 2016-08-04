@@ -1,5 +1,8 @@
 <template name="OrgSettings_RisksTypes">
-  {{#SubCard_EditWrapper _lText=_lText _rText=_rText}}
+  {{#Subcards_Wrapper
+    _lText=_lText
+    _rText=_rText
+    loading=($not Template.subscriptionsReady)}}
     <div class="card-block">
       <div class="new-cards" {{b "ref: forms"}}>
         {{#each riskTypes}}
@@ -15,5 +18,5 @@
         Add risks type
       </button>
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

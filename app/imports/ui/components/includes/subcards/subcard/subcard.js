@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-Template.SubCard_Edit.viewmodel({
+Template.Subcard.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   doc: '',
   parentFirstNode: '',
@@ -41,7 +41,7 @@ Template.SubCard_Edit.viewmodel({
       if (!err) {
         this.destroy();
         const newSubcard = ViewModel.findOne(
-          'SubCard_Edit', vm => vm._id && vm._id() === res
+          'Subcard', vm => vm._id && vm._id() === res
         );
 
         if (newSubcard) {

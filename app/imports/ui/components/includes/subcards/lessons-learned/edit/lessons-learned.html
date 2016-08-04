@@ -1,10 +1,10 @@
 <template name="Subcards_LessonsLearned_Edit">
-  {{#SubCard_EditWrapper _lText="Lessons learned" _rText=lessons.count}}
+  {{#Subcards_Wrapper _lText="Lessons learned" _rText=lessons.count}}
     <div class="card-block">
       {{#if lessons.count}}
         <div class="card">
           {{#each lessons}}
-            {{> SubCard_Edit
+            {{> Subcard
                 doc=this
                 _id=this._id
                 title=this.title
@@ -27,5 +27,5 @@
         <button type="button" class="btn btn-link" {{b "click: addLesson"}}>Add a lesson learned</button>
       </div>
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

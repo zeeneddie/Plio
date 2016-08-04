@@ -1,8 +1,5 @@
 <template name="OrgSettings_Reminders">
-  <div class="card-block card-block-collapse-toggle collapsed" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left">Reminders for actions</h4>
-  </div>
-  <div class="card-block-collapse collapse" id="reminders" {{b "ref: collapse"}}>
+  {{#Subcards_Wrapper _lText=_lText}}
     <div class="card-block">
       {{> OrgSettings_Reminder
           title="Minor non-conformities"
@@ -28,5 +25,5 @@
           type="improvementPlan"
           onChange=onChangeCb}}
     </div>
-  </div>
+  {{/Subcards_Wrapper}}
 </template>

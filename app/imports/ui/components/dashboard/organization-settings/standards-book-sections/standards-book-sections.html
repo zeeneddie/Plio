@@ -1,15 +1,10 @@
 <template name="OrgSettings_StandardsBookSections">
-  <div class="card-block card-block-collapse-toggle collapsed"
-    {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left">Standards book sections</h4>
-    <h4 class="card-title pull-xs-right">
-      <span class="text-muted" {{b "if: templateInstance.subscriptionsReady, text: standardsBookSectionsCount"}}></span>
-      <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: !templateInstance.subscriptionsReady"}}></i>
-    </h4>
-  </div>
-  <div class="card-block-collapse collapse" id="standards-book-sections" {{b "ref: collapse"}}>
+  {{#Subcards_Wrapper
+    _lText=_lText
+    _rText=_rText
+    loading=($not Template.subscriptionsReady)}}
     <div class="card-block">
-      <div id="standards-book-sections-forms" {{b "ref: forms"}}>
+      <div class="new-cards" {{b "ref: forms"}}>
         {{#each standardsBookSections}}
           {{> OrgSettings_StandardsBookSection
               _id=this._id
@@ -18,10 +13,9 @@
               onDelete=onDeleteCb}}
         {{/each}}
       </div>
-      <button class="btn btn-primary" type="button"
-          {{b "click: addForm('OrgSettings_StandardsBookSection')"}}>
+      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_StandardsBookSection')"}}>
         Add section
       </button>
     </div>
-  </div>
+  {{/Subcards_Wrapper}}
 </template>

@@ -4,7 +4,7 @@ import { invoke } from 'lodash';
 import { insert, update, remove } from '/imports/api/risk-types/methods.js';
 
 Template.OrgSettings_RisksTypes.viewmodel({
-  mixin: ['modal', 'addForm'],
+  mixin: ['modal', 'addForm', 'utils'],
   onCreated(template) {
     template.autorun(() => {
       template.subscribe('riskTypes', this.organizationId());
@@ -12,10 +12,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
   },
   _lText: 'Risk types',
   _rText() {
-    const ready = this.templateInstance.subscriptionsReady();
-    return ready
-            ? `<span class="text-muted">${invoke(this.riskTypes(), 'count')}</span>`
-            : `<i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>`;
+    return invoke(this.riskTypes(), 'count');
   },
   riskTypes: [],
   onChangeCb() {
