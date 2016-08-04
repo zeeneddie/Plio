@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import {
   StandardsBookSections
 } from '/imports/api/standards-book-sections/standards-book-sections.js';
@@ -22,22 +23,21 @@ Template.OrgSettings.viewmodel({
     }
   },
   departments() {
-    return Departments.find({
-      organizationId: this.organizationId()
-    });
+    const query = { organizationId: this.organizationId() };
+    return Departments.find(query);
   },
   standardsTypes() {
-    return StandardTypes.find({
-      organizationId: this.organizationId()
-    });
+    const query = { organizationId: this.organizationId() };
+    return StandardTypes.find(query);
   },
   standardsBookSections() {
-    const organizationId = this.organization()._id;
-    return StandardsBookSections.find({
-      organizationId: this.organizationId()
-    }, {
-      sort: { title: 1 }
-    });
+    const query = { organizationId: this.organizationId() };
+    const options = { title: 1 };
+    return StandardsBookSections.find(query, options);
+  },
+  riskTypes() {
+    const query = { organizationId: this.organizationId() };
+    return RiskTypes.find(query);
   },
   ownerId() {
     return this.organization().ownerId();

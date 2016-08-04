@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { setRKScoringGuidelines } from '/imports/api/organizations/methods.js';
 
-Template.OrganizationSettings_RKScoringGuidelines.viewmodel({
+Template.OrgSettings_RKScoringGuidelines.viewmodel({
   mixin: 'modal',
   label: 'Risk scoring guidelines',
   guidelines: '',

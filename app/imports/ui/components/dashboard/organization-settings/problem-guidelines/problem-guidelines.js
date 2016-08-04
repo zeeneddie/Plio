@@ -1,4 +1,4 @@
-Template.OrganizationSettings_ProblemGuidelines.viewmodel({
+Template.OrgSettings_ProblemGuidelines.viewmodel({
   mixin: ['collapse', 'modal'],
   minor: '',
   major: '',

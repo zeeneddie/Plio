@@ -1,0 +1,19 @@
+<template name="OrgSettings_RisksTypes">
+  {{#SubCard_EditWrapper _lText=_lText _rText=_rText}}
+    <div class="card-block">
+      <div class="new-cards" {{b "ref: forms"}}>
+        {{#each riskTypes}}
+          {{> OrgSettings_RisksType
+            _id=this._id
+            title=this.title
+            abbreviation=this.abbreviation
+            onChange=onChangeCb
+            onDelete=onDeleteCb}}
+        {{/each}}
+      </div>
+      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_RisksType')"}}>
+        Add risks type
+      </button>
+    </div>
+  {{/SubCard_EditWrapper}}
+</template>
