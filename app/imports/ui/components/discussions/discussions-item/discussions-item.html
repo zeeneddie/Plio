@@ -15,10 +15,10 @@
 					<i class="fa fa-ellipsis-h"></i>
 				</button>
 
-				<div class="dropdown-menu dropdown-menu-right">
+				<div class="dropdown-menu dropdown-menu-right js-message-actions">
 					<a href="#" class="dropdown-item">Copy as link</a>
 					<a href="#" class="dropdown-item">Move to another channel</a>
-					<a href="#" class="dropdown-item">Delete message</a>
+					<a href="#" class="dropdown-item" {{b 'if: isAuthor'}}>Delete message</a>
 				</div>
 			</div>
 

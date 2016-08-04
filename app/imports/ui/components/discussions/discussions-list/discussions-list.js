@@ -44,7 +44,7 @@ Template.DiscussionsList.viewmodel({
 			if(dateStorage !== c.date){
 				dateStorage = c.date;
 			}
-			console.dir(c);
+			
 			return c;
 		});
 	}
