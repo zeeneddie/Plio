@@ -27,18 +27,12 @@ export const removeMessageById = new ValidatedMethod({
 	validate: new SimpleSchema([IdSchema]).validator(),
 
 	run(doc){
-		console.dir(doc);
 		if(!this.userId){
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot remove messages from discussions'
 			);
 		}
-		if(this.userId !== doc.userId){
-			throw new Meteor.Error(
-				403, 'Messages can be removed only by their authors'
-			);
-		}
 		
-		//return DiscussionService.removeMessageById(doc);
+		return DiscussionService.removeMessageById(doc);
 	}
 });
