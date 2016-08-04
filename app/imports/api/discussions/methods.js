@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { DiscussionSchema } from './discussion-schema';
 import DiscussionService from './discussion-service.js';
-import { IdSchema } from '../schemas.js';
+import { IdSchema, UserIdSchema } from '../schemas.js';
 //import { UserRoles } from '../constants';
 
 
@@ -19,6 +19,15 @@ export const addMessage = new ValidatedMethod({
 		}
 		
 		return DiscussionService.addMessage(doc);
+	}
+});
+
+export const markMessageViewedById = new ValidatedMethod({
+	name: 'Discussions.markMessageViewedById',
+	validate: new SimpleSchema([IdSchema, UserIdSchema]).validator(),
+
+	run(doc){
+		return DiscussionService.markMessageViewedById(doc);
 	}
 });
 

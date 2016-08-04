@@ -2,10 +2,19 @@ import {Template} from 'meteor/templating';
 
 import {Discussions} from '/imports/api/discussions/discussion.js';
 import {getFormattedDate} from '/imports/api/helpers.js';
+import {markMessageViewedById} from '/imports/api/discussions/methods.js';
 
 
 Template.DiscussionsList.viewmodel({
 	mixin: ['standard'],
+
+	messagesCount(){
+		const self = this;
+		
+		return Discussions.find({
+			standardId: self.standardId()
+		}).count() > 0;
+	},
 
 	messageFirst(){
 		const self = this;
@@ -25,6 +34,7 @@ Template.DiscussionsList.viewmodel({
 
 	messages(){
 		const self = this;
+		const userId = Meteor.userId();
 		let dateStorage;
 
 		return Discussions.find({
@@ -40,6 +50,14 @@ Template.DiscussionsList.viewmodel({
 			c.dateToShow = dateStorage !== c.date;
 			c.time = getFormattedDate(c.createdAt, 'HH:mm');
 			c.username = user.firstName();
+
+			if(c.viewedBy.indexOf(userId) < 0){
+				markMessageViewedById.call({_id: c._id, userId: userId}, (err, res) => {
+					if(err){
+						throw err;
+					}
+				});
+			}
 
 			if(dateStorage !== c.date){
 				dateStorage = c.date;

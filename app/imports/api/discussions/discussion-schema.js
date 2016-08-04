@@ -8,11 +8,12 @@ export const DiscussionSchema = new SimpleSchema([
 	StandardIdSchema,
 	UserIdSchema,
 	{
-		isRead: {
-			type: Boolean
-		},
 		message: {
 			type: String
+		},
+		viewedBy: {
+			type: [String],
+			regEx: SimpleSchema.RegEx.Id
 		}
 	}
 ]);

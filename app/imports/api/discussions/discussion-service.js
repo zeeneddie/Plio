@@ -5,10 +5,16 @@ export default DiscussionService = {
 	collection: Discussions,
 
 	addMessage({
-		createdAt, isRead, message, standardId, userId
+		createdAt, message, standardId, userId, viewedBy
 	}){
 		return this.collection.insert({
-			createdAt, isRead, message, standardId, userId
+			createdAt, message, standardId, userId, viewedBy
+		});
+	},
+
+	markMessageViewedById({_id, userId}){
+		return this.collection.update({_id}, {
+			$addToSet: {viewedBy: userId}
 		});
 	},
 

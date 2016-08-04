@@ -35,11 +35,11 @@ Template.AddComment.viewmodel({
 		if(msg !== ''){
 			const message = {
 				createdAt: new Date(),
-				isRead: false,
 				message: msg,
 				standardId: standardId,
-				userId: userId
-			};console.log(message);
+				userId: userId,
+				viewedBy: []
+			};
 
 			addMessage.call(message, (err, res) => {
 				if(err){
