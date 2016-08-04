@@ -1,5 +1,5 @@
 <template name="OrgSettings_ProblemGuidelines">
-  {{#SubCard_EditWrapper _lText=label}}
+  {{#Subcards_Wrapper _lText=label}}
     <div class="card-block">
       {{> OrgSettings_ProblemGuideline
           type="minor"
@@ -16,5 +16,5 @@
           text=critical
           onChange=onChangeCb}}
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

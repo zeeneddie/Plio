@@ -61,7 +61,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   },
   add() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
         content: 'Subcards_RiskScore',
         _lText: 'New risk score',

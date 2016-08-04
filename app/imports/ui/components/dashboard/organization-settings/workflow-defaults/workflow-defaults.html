@@ -1,5 +1,5 @@
 <template name="OrgSettings_WorkflowDefaults">
-  {{#SubCard_EditWrapper _lText=_lText}}
+  {{#Subcards_Wrapper _lText=_lText}}
     <div class="card-block">
       {{> OrgSettings_WorkflowDefault
           title="Minor non-conformities / risks"
@@ -25,5 +25,5 @@
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

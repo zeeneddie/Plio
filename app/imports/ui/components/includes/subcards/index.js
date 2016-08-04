@@ -10,3 +10,5 @@ import './risk-scoring';
 import './risk-evaluation';
 import './notes';
 import './review';
+import './wrapper';
+import './subcard';

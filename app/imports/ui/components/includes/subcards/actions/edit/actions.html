@@ -1,10 +1,10 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCard_EditWrapper _lText=title _rText=actionsIndicators}}
+  {{#Subcards_Wrapper _lText=title _rText=actionsIndicators}}
     <div class="card-block">
       {{#if actions.count}}
         <div id="actions" class="card">
           {{#each actions}}
-            {{> SubCard_Edit
+            {{> Subcard
                 _id=this._id
                 doc=this
                 action=this
@@ -35,5 +35,5 @@
         <button type="button" class="btn btn-link" {{b "text: addButtonText, click: addAction"}}></button>
       </div>
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

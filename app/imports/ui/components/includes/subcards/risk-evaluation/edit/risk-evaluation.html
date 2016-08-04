@@ -1,5 +1,5 @@
 <template name="Subcards_RiskEvaluation_Edit">
-  {{#SubCard_EditWrapper _lText="Risk evaluation" _rText=(capitalize decision)}}
+  {{#Subcards_Wrapper _lText="Risk evaluation" _rText=(capitalize decision)}}
     <div class="card-block">
       {{> RiskEvaluation_Comments_Edit comments=comments}}
 
@@ -9,5 +9,5 @@
       
       {{> RiskEvaluation_Priority_Edit priority=priority}}
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>
