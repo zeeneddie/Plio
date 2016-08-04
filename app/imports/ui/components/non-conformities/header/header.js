@@ -8,8 +8,8 @@ Template.NC_Header.viewmodel({
     return NonConformityFilters;
   },
   selectFilter(filter) {
-    this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
+    this.searchText('');
     this.expandCollapsed(this.NCId());
   }
 });

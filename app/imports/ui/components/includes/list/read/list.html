@@ -1,0 +1,27 @@
+<template name="List_Read">
+  <div class="card">
+    <div class="search-form">
+      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
+        {{#ClearableField field="searchText"}}
+          <input type="text" class="form-control" placeholder="Search..."
+            {{b "value: searchText, focus: focused, disable: animating, change: onHandleSearchInput, throttle: 500"}} />
+        {{/ClearableField}}
+        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
+      </div>
+      {{#if isModalButtonVisible}}
+        <button class="btn btn-primary" {{b "click: onModalOpen"}}>
+          <i class="fa fa-plus"></i>
+          <span>Add</span>
+        </button>
+      {{/if}}
+    </div>
+
+    <div class="list-group list-group-accordion">
+      {{> Template.contentBlock}}
+
+      {{#if searchText}}
+        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+      {{/if}}
+    </div>
+  </div>
+</template>

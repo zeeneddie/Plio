@@ -15,8 +15,8 @@ Template.DashboardPage.viewmodel({
         CountSubs.subscribe('standardsNotViewedCount', 'standards-not-viewed-count' + organizationId, organizationId),
         CountSubs.subscribe('nonConformitiesCount', 'non-conformities-count' + organizationId, organizationId),
         CountSubs.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count' + organizationId, organizationId),
-        CountSubs.subscribe('actionsCount', 'actions-count' + organizationId, organizationId),
-        CountSubs.subscribe('actionsNotViewedCount', 'actions-not-viewed-count' + organizationId, organizationId),
+        CountSubs.subscribe('workItemsCount', 'work-items-count' + organizationId, organizationId),
+        CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count' + organizationId, organizationId),
         CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count' + organizationId, organizationId),
         UserSubs.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id))
@@ -55,11 +55,11 @@ Template.DashboardPage.viewmodel({
   NCsNotViewedCount() {
     return this.counter.get('non-conformities-not-viewed-count' + this.organizationId());
   },
-  actionsViewedCount() {
-    return this.counter.get('actions-count' + this.organizationId());
+  workItemsViewedCount() {
+    return this.counter.get('work-items-count' + this.organizationId());
   },
-  actionsNotViewedCount() {
-    return this.counter.get('actions-not-viewed-count' + this.organizationId());
+  workItemsNotViewedCount() {
+    return this.counter.get('work-items-not-viewed-count' + this.organizationId());
   },
   risksViewedCount() {
     return this.counter.get('risks-count' + this.organizationId());
@@ -73,8 +73,8 @@ Template.DashboardPage.viewmodel({
   NCsMetrics() {
     return this._renderMetrics('NC', this.NCsViewedCount(), this.NCsNotViewedCount());
   },
-  actionsMetrics() {
-    return this._renderMetrics('item', this.actionsViewedCount(), this.actionsNotViewedCount());
+  workInboxMetrics() {
+    return this._renderMetrics('item', this.workItemsViewedCount(), this.workItemsNotViewedCount());
   },
   risksMetrics() {
     return this._renderMetrics('risk', this.risksViewedCount(), this.risksNotViewedCount());

@@ -104,7 +104,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
               if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
             };
 
-            const callback = this.combine(showSuccess, cb);
+            const callback = this.chain(showSuccess, cb);
 
             this.onRemove({ score }, callback);
           }

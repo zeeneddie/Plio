@@ -8,7 +8,8 @@ import {
   IdSchema,
   OrganizationIdSchema,
   optionsSchema,
-  UserIdSchema
+  UserIdSchema,
+  CompleteActionSchema
 } from '../schemas.js';
 
 import { checkAnalysis } from '../checkers.js';
@@ -71,6 +72,30 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const setAnalysisExecutor = new ValidatedMethod({
+  name: 'Risks.setAnalysisExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannnot update root cause analysis'
+      );
+    }
+
+    return RisksService.setAnalysisExecutor({ _id, executor });
+  }
+});
+
 export const setAnalysisDate = new ValidatedMethod({
   name: 'Risks.setAnalysisDate',
 
@@ -95,9 +120,9 @@ export const setAnalysisDate = new ValidatedMethod({
 export const completeAnalysis = new ValidatedMethod({
   name: 'Risks.completeAnalysis',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -105,16 +130,16 @@ export const completeAnalysis = new ValidatedMethod({
       );
     }
 
-    return RisksService.completeAnalysis({ _id, userId });
+    return RisksService.completeAnalysis({ _id, completionComments, userId });
   }
 });
 
 export const updateStandards = new ValidatedMethod({
   name: 'Risks.updateStandards',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -122,7 +147,7 @@ export const updateStandards = new ValidatedMethod({
       );
     }
 
-    return RisksService.updateStandards({ _id, userId });
+    return RisksService.updateStandards({ _id, completionComments, userId });
   }
 });
 
@@ -160,6 +185,30 @@ export const undoAnalysis = new ValidatedMethod({
   }
 });
 
+export const setStandardsUpdateExecutor = new ValidatedMethod({
+  name: 'Risks.setStandardsUpdateExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards update'
+      );
+    }
+
+    return RisksService.setStandardsUpdateExecutor({ _id, executor });
+  }
+});
+
 export const setStandardsUpdateDate = new ValidatedMethod({
   name: 'Risks.setStandardsUpdateDate',
 
@@ -187,42 +236,15 @@ export const updateViewedBy = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update a risk'
       );
     }
 
-    if (!Risks.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Risk does not exist'
-      );
-    }
-
-    if (!!Risks.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this risk'
-      );
-    }
-
-    return RisksService.updateViewedBy({ _id, userId: this.userId });
-  }
-});
-
-export const restore = new ValidatedMethod({
-  name: 'Risks.restore',
-
-  validate: IdSchema.validator(),
-
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore risks'
-      );
-    }
-
-    return RisksService.restore({ _id, userId});
+    return RisksService.updateViewedBy({ _id, viewedBy: userId });
   }
 });
 
@@ -240,15 +262,25 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    const risk = Risks.findOne({ _id });
+    return RisksService.remove({ _id, deletedBy: userId });
+  }
+});
 
-    if (!risk) {
+export const restore = new ValidatedMethod({
+  name: 'Risks.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
-        400, 'Risk with the given id does not exist'
+        403, 'Unauthorized user cannot restore risks'
       );
     }
 
-    return RisksService.remove({ _id, deletedBy: userId, isDeleted: risk.isDeleted});
+    return RisksService.restore({ _id });
   }
 });
 
@@ -262,7 +294,7 @@ export const insertScore = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
+        403, 'Unauthorized user cannot score a risk'
       );
     }
 
@@ -292,7 +324,7 @@ export const removeScore = new ValidatedMethod({
 
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
+        403, 'Unauthorized user cannot remove a score'
       );
     }
 

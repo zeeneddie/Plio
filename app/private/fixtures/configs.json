@@ -9,6 +9,7 @@
   "Actions": "actions",
   "RiskTypes": "riskTypes",
   "Risks": "risks",
+  "WorkItems": "workItems",
   "ImprovementPlans": "improvementPlans",
   "LessonsLearned": "lessonsLearned"
 }

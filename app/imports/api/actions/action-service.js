@@ -1,17 +1,24 @@
 import { Actions } from './actions.js';
-import { ActionTypes, ProblemTypes, WorkflowTypes } from '../constants.js';
+import { ActionTypes, ProblemTypes, WorkflowTypes, WorkItemsStore } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import ActionWorkflow from './ActionWorkflow.js';
 import NCWorkflow from '../non-conformities/NCWorkflow.js';
 import RiskWorkflow from '../risks/RiskWorkflow.js';
 import Utils from '/imports/core/utils.js';
+import BaseEntityService from '../base-entity-service.js';
+import WorkItemService from '../work-items/work-item-service.js';
 
 
 export default {
   collection: Actions,
 
-  insert({ organizationId, type, linkedTo, ...args }) {
+  _service: new BaseEntityService(Actions),
+
+  insert({
+    organizationId, type, linkedTo,
+    completionTargetDate, toBeCompletedBy, ...args
+  }) {
     linkedTo && this._checkLinkedDocs(linkedTo);
 
     const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
@@ -19,10 +26,24 @@ export default {
     const sequentialId = `${type}${serialNumber}`;
 
     const actionId = this.collection.insert({
-      organizationId, type, linkedTo, serialNumber, sequentialId, ...args
+      organizationId, type, linkedTo,
+      serialNumber, sequentialId, completionTargetDate,
+      toBeCompletedBy, ...args
     });
 
     this._refreshStatus(actionId);
+
+    WorkItemService.insert({
+      organizationId,
+      targetDate: completionTargetDate,
+      assigneeId: toBeCompletedBy,
+      type: WorkItemsStore.TYPES.COMPLETE_ACTION,
+      status: 0, // in progress
+      linkedDoc: {
+        type,
+        _id: actionId
+      }
+    });
 
     return actionId;
   },
@@ -310,66 +331,30 @@ export default {
     return ret;
   },
 
-  updateViewedBy({ _id, userId }) {
+  updateViewedBy({ _id, userId:viewedBy }) {
     this._ensureActionExists(_id);
 
-    if (!!this.collection.findOne({ _id, viewedBy: userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
-
-    return this.collection.update({ _id }, {
-      $addToSet: {
-        viewedBy: userId
-      }
-    });
+    this._service.updateViewedBy({ _id, viewedBy });
   },
 
-  restore({ _id, userId }) {
-    const action = this._getAction(_id);
+  remove({ _id, deletedBy }) {
+    this._ensureActionExists(_id);
 
+    this._service.remove({ _id, deletedBy });
+  },
+
+  restore({ _id }) {
+    const action = this._getAction(_id);
+    
     if (!action.deleted()) {
       throw new Meteor.Error(
         400, 'This action is not deleted so can not be restored'
       );
     }
 
-    const ret = this.collection.update({ _id }, {
-      $set: { isDeleted: false },
-      $unset: {
-        deletedAt: '',
-        deletedBy: ''
-      }
-    });
-
     this._refreshStatus(_id);
 
-    return ret;
-  },
-
-  remove({ _id, deletedBy, isDeleted }) {
-    this._ensureActionExists(_id);
-
-    const query = { _id };
-
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
-
-      const ret = this.collection.update(query, options);
-
-      this._refreshStatus(_id);
-
-      return ret;
-    }
+    return this._service.restore({ _id });
   },
 
   _ensureActionExists(_id) {
