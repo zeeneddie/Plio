@@ -13,7 +13,7 @@ Template.WorkInbox_List.viewmodel({
     'utils', { STATUSES: 'workItemStatus' }
   ],
   autorun() {
-    if (!this.focused() && !this.animating() && !this.searchText()) {
+    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const items = this._getItemsByFilter() || [];
 
       const contains = items.find(({ _source: { _id } = {} }) => _id === this.workItemId());
@@ -33,13 +33,6 @@ Template.WorkInbox_List.viewmodel({
         }
       }
     }
-  },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    const { linkedDoc: { _id } = {} } = this._getWorkItemByQuery({ _id: this.workItemId() }) || {};
-    this.expandCollapsed(_id);
   },
   _getItemsByFilter() {
     const { my = {}, team = {} } = this.items() || {};
@@ -180,69 +173,33 @@ Template.WorkInbox_List.viewmodel({
       team: getObj(teamItems)
     };
   },
-  focused: false,
-  animating: false,
-  expandAllFound() {
-    const { my: { current, completed, deleted } = {} } = this.items();
-
-    if (this.isActiveWorkInboxFilter('My current work')) {
-      this.searchResultsNumber(current.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('My completed work')) {
-      this.searchResultsNumber(completed.length);
-      return;
-    } else if (this.isActiveWorkInboxFilter('My deleted work')) {
-      this.searchResultsNumber(deleted.length);
-      return;
-    }
-
-    const sections = ViewModel.find('WorkInbox_SectionItem');
-    const ids = _.flatten(!!sections && sections.map(vm => vm.items && vm.items().map(({ _id }) => _id)));
-
-    const vms = ViewModel.find('ListItem', (viewmodel) => {
-      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
-    });
-
-    this.searchResultsNumber(ids.length);
-
-    if (vms.length > 0) {
-      this.animating(true);
-
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.onAfterExpand()
-      });
-    }
-  },
-  expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.workItemId()));
-
-    this.animating(true);
-
-    if (vms && vms.length > 0) {
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.expandSelectedWorkItem()
-      });
-    } else {
-      this.expandSelectedWorkItem();
-    }
-  },
-  expandSelectedWorkItem() {
+  linkedDocId() {
     const { linkedDoc: { _id } = {} } = this._getWorkItemByQuery({ _id: this.workItemId() }) || {};
-    this.expandCollapsed(_id, () => {
-      this.onAfterExpand();
-    });
+    return _id;
   },
-  onAfterExpand() {
-    this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
+  onSearchInputValue() {
+    return (value) => {
+      const { my: { current, completed, deleted } = {} } = this.items() || {};
+
+      if (this.isActiveWorkInboxFilter('My current work')) {
+        return current;
+      } else if (this.isActiveWorkInboxFilter('My completed work')) {
+        return completed;
+      } else if (this.isActiveWorkInboxFilter('My deleted work')) {
+        return deleted;
+      }
+
+      const sections = ViewModel.find('WorkInbox_SectionItem');
+      const ids = this.toArray(sections).map(vm => vm.items && vm.items().map(({ _id }) => _id));
+      return ids;
+    };
   },
-  openModal() {
-    this.modal().open({
-      _title: 'Add',
-      template: 'Actions_ChooseTypeModal',
-      variation: 'simple',
-    });
+  onModalOpen() {
+    return () =>
+      this.modal().open({
+        _title: 'Add',
+        template: 'Actions_ChooseTypeModal',
+        variation: 'simple',
+      });
   }
 });
