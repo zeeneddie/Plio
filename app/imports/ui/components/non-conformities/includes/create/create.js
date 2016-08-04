@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/non-conformities/methods.js';
 
-Template.CreateNC.viewmodel({
+Template.NC_Create.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
   isStandardsEditable: true,
   standardsIds: [],

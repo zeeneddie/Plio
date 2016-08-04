@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
-Template.NC_Item_Read.viewmodel({
+Template.NC_Item.viewmodel({
   share: 'window',
   mixin: ['date', 'nonconformity', 'currency', 'organization'],
   autorun() {

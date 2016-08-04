@@ -1,4 +1,4 @@
-<template name="NCList">
+<template name="NC_List">
   <div class="card">
     <form class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
@@ -19,7 +19,7 @@
       {{#if isActiveNCFilter "magnitude"}}
         {{#each magnitude}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=this.name
               magnitude=this.value
               hideRTextOnExpand=true
@@ -31,7 +31,7 @@
       {{#if isActiveNCFilter "status"}}
         {{#each statuses}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=(getStatusName this)
               _query=(_getStatusQuery this)
               hideRTextOnExpand=true
@@ -42,7 +42,7 @@
       {{#if isActiveNCFilter "department/sector"}}
         {{#each departments}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=this.name
               closeAllOnCollapse=false
               hideRTextOnExpand=true
@@ -53,7 +53,7 @@
 
       {{#if isActiveNCFilter "deleted"}}
         {{#each NCsDeleted}}
-          {{> NC_Item_Read}}
+          {{> NC_Item}}
         {{/each}}
       {{/if}}
 

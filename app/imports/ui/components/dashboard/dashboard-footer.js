@@ -23,7 +23,7 @@ Template.DashboardFooter.viewmodel({
   openAddNCModal() {
     this.modal().open({
       _title: 'Non-conformity',
-      template: 'CreateNC',
+      template: 'NC_Create',
       variation: 'save'
     });
   }

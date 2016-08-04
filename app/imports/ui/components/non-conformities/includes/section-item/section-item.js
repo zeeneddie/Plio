@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCSectionItem.viewmodel({
+Template.NC_SectionItem.viewmodel({
   share: 'search',
   mixin: ['organization', 'search', 'nonconformity'],
   _query: {},

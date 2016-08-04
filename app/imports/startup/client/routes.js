@@ -169,7 +169,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });
@@ -179,7 +179,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });

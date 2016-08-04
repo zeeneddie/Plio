@@ -6,7 +6,7 @@ import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.NCList.viewmodel({
+Template.NC_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
@@ -136,7 +136,7 @@ Template.NCList.viewmodel({
   focused: false,
   animating: false,
   expandAllFound() {
-    const ids = _.flatten(ViewModel.find('NCSectionItem').map(vm => vm.NCs && vm.NCs().fetch().map(item => item._id)));
+    const ids = _.flatten(ViewModel.find('NC_SectionItem').map(vm => vm.NCs && vm.NCs().fetch().map(item => item._id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
@@ -179,7 +179,7 @@ Template.NCList.viewmodel({
   openAddNCModal() {
     this.modal().open({
       _title: 'Non-conformity',
-      template: 'CreateNC',
+      template: 'NC_Create',
       variation: 'save'
     });
   }
