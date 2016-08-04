@@ -17,7 +17,7 @@ import { UserUpdateProfileSchema } from '/imports/api/users/user-schema.js';
 import { UserRoles } from '/imports/api/constants.js';
 
 
-Template.UserEdit.viewmodel({
+Template.UserDirectory_Card_Edit.viewmodel({
   mixin: ['organization', 'modal'],
   firstName: '',
   lastName: '',

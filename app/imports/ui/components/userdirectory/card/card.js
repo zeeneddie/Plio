@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
-import { UserRolesNames } from '../../../api/constants.js';
+import { UserRolesNames } from '/imports/api/constants.js';
 
-Template.UsersDetails.viewmodel({
+Template.UserDirectory_Card_Read.viewmodel({
   share: 'window',
   mixin: ['user', 'organization', 'modal', 'mobile'],
   phoneType(type) {
@@ -47,7 +47,7 @@ Template.UsersDetails.viewmodel({
     e.preventDefault();
 
     this.modal().open({
-      template: 'UserEdit',
+      template: 'UserDirectory_Card_Edit',
       _title: 'Edit User',
       userId: this.user()._id
     });

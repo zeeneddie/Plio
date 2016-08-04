@@ -5,7 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 
 import { UserRoles } from '/imports/api/constants.js';
 
-Template.UsersList.viewmodel({
+Template.UserDirectory_List.viewmodel({
   share: ['search', 'window'],
   mixin: ['user', 'organization', 'modal', 'roles', 'search'],
   autorun() {

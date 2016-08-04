@@ -1,4 +1,4 @@
-<template name="UsersList">
+<template name="UserDirectory_List">
   <div class="content-list scroll col-sm-4" {{b "if: !width || width > 768"}}>
     <div class="card">
       <form class="search-form">
@@ -17,7 +17,7 @@
       </form>
       <div class="list-group" id="usersList">
         {{#each organizationUsers}}
-          {{> UsersListItem}}
+          {{> UserDirectory_List_Item}}
         {{/each}}
 
         {{#if searchText}}

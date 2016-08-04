@@ -10,5 +10,5 @@ import './password.html';
 import './password.js';
 import './roles.html';
 import './roles.js';
-import './user-edit.html';
-import './user-edit.js';
+import './edit.html';
+import './edit.js';

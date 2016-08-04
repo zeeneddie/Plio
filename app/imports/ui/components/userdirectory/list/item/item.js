@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-Template.UsersListItem.viewmodel({
+Template.UserDirectory_List_Item.viewmodel({
   share: 'window',
   mixin: 'user',
   isActiveUser() {

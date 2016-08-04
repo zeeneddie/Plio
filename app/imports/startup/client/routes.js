@@ -148,8 +148,8 @@ FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
@@ -158,8 +158,8 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
