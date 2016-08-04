@@ -1,11 +1,11 @@
 <template name="DiscussionsCard">
-	<article class="discussions">
-		{{> DiscussionsHeader}}
+	<div class="content-cards-inner flexbox-column">
+		<div class="chat card">
+			{{> DiscussionsHeader}}
 
-		{{> DiscussionsList}}
+			{{> DiscussionsList}}
 
-		<footer class="discussions-footer">
 			{{> AddComment}}
-		</footer>
-	</article>
+		</div>
+	</div>
 </template>

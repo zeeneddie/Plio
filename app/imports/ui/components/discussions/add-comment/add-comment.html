@@ -1,5 +1,5 @@
 <template name="AddComment">
-	<form class="f1" {{on 'submit: onSubmit'}}>
+	<!--form class="f1" {{on 'submit: onSubmit'}}>
 		<div class="form-group">
 			<input type="file" {{b 'value: messageFile'}}>
 		</div>
@@ -16,5 +16,31 @@
 		<button type="submit" class="btn btn-default">
 			<i class="fa fa-angle-right fa-lg"></i>
 		</button>
-	</form>
+	</form-->
+	<div class="chat-form">
+		<form class="f1" {{on 'submit: onSubmit'}}>
+			<div class="form-group">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-secondary">
+							<i class="fa fa-paperclip"></i>
+						</button>
+					</span>
+
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Add a comment"
+						{{b 'value: messageText'}}
+					>
+
+					<span class="input-group-btn">
+						<button class="btn btn-secondary">
+							<i class="fa fa-angle-right"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+		</form>
+	</div>
 </template>
