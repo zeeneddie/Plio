@@ -1,4 +1,8 @@
 <template name="DiscussionsItem">
+	<div class="chat-item-date ng-scope" {{b 'if: dateToShow'}}>
+		<span>{{date}}</span>
+	</div>
+
 	<div class="chat-item ng-scope">
 		<img class="chat-item-avatar" {{b 'src: avatar'}}>
 
