@@ -188,8 +188,8 @@ FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });
@@ -198,8 +198,8 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   name: 'risk',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });

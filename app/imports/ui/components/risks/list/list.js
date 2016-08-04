@@ -4,7 +4,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.RisksList.viewmodel({
+Template.Risks_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router'],
   autorun() {
@@ -113,7 +113,7 @@ Template.RisksList.viewmodel({
   focused: false,
   animating: false,
   expandAllFound() {
-    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
+    const ids = _.flatten(ViewModel.find('Risks_SectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
 
     const vms = ViewModel.find('ListItem', (viewmodel) => {
       return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
@@ -156,7 +156,7 @@ Template.RisksList.viewmodel({
   openAddRiskModal() {
     this.modal().open({
       _title: 'Risk',
-      template: 'CreateRisk',
+      template: 'Risks_Create',
       variation: 'save'
     });
   }

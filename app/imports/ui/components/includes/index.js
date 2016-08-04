@@ -15,3 +15,4 @@ import './score-table';
 import './simple-card';
 import './subcards';
 import './time-picker';
+import './quill-editor';

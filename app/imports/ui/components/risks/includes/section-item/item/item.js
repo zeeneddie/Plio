@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { updateViewedBy } from '/imports/api/risks/methods.js';
 
-Template.RiskItem.viewmodel({
+Template.Risks_Item.viewmodel({
   share: 'window',
   mixin: ['risk', 'date', 'riskScore'],
   autorun() {

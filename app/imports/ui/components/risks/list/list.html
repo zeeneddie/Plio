@@ -1,4 +1,4 @@
-<template name="RisksList">
+<template name="Risks_List">
   <div class="card">
     <form class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
@@ -19,7 +19,7 @@
       {{#if isActiveRiskFilter 'type'}}
         {{#each types}}
           {{> ListItem
-              template='RiskSectionItem'
+              template='Risks_SectionItem'
               title=this.title
               _query=(_getTypeQuery this)}}
         {{/each}}
@@ -28,7 +28,7 @@
       {{#if isActiveRiskFilter 'status'}}
         {{#each statuses}}
           {{> ListItem
-              template="RiskSectionItem"
+              template="Risks_SectionItem"
               title=(getStatusName this)
               _query=(_getStatusQuery this)}}
         {{/each}}
@@ -37,7 +37,7 @@
       {{#if isActiveRiskFilter "department/sector"}}
         {{#each departments}}
           {{> ListItem
-              template="RiskSectionItem"
+              template="Risks_SectionItem"
               title=this.name
               closeAllOnCollapse=false
               _query=(_getDepartmentQuery this)}}
@@ -46,7 +46,7 @@
 
       {{#if isActiveRiskFilter 'deleted'}}
         {{#each risksDeleted}}
-          {{> RiskItem}}
+          {{> Risks_Item}}
         {{/each}}
       {{/if}}
 

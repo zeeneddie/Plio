@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RiskSectionItem.viewmodel({
+Template.Risks_SectionItem.viewmodel({
   share: 'search',
   mixin: ['organization', 'risk', 'search'],
   _query: {},

@@ -9,7 +9,6 @@ import './includes';
 import './useraccounts';
 import './standards';
 import './userdirectory';
-import './quill-editor';
 import './risks';
 import './non-conformities';
 import './actions';
