@@ -22,7 +22,11 @@
 				</div>
 			</div>
 
-			<p class="chat-item-text" {{b 'text: message'}}></p>
+			<p class="chat-item-text">
+				{{#autolink}}
+					{{message}}
+				{{/autolink}}
+			</p>
 		</div>
 	</div>
 </template>
