@@ -1,9 +1,5 @@
 <template name="OrganizationSettings_ProblemGuidelines">
-  <div class="card-block card-block-collapse-toggle collapsed"
-      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left" {{b "text: label"}}></h4>
-  </div>
-  <div class="card-block-collapse collapse" {{b "ref: collapse"}}>
+  {{#SubCard_EditWrapper _lText=label}}
     <div class="card-block">
       {{> OrganizationSettings_ProblemGuideline
           type="minor"
@@ -20,5 +16,5 @@
           text=critical
           onChange=onChangeCb}}
     </div>
-  </div>
+  {{/SubCard_EditWrapper}}
 </template>

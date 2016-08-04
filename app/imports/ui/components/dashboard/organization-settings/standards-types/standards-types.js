@@ -1,18 +1,17 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { insert, update, remove } from '/imports/api/standards-types/methods.js';
 
-
 Template.OrgSettings_StandardTypes.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal'],
-  autorun() {
-    this.templateInstance.subscribe('standards-types', this.organizationId());
+  mixin: ['addForm', 'modal', 'utils'],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('standards-types', this.organizationId()));
   },
-  standardsTypesCount() {
-    return StandardTypes.find({
-      organizationId: this.organizationId()
-    }).count();
+  _lText: 'Standards types',
+  _rText() {
+    return invoke(this.standardsTypes(), 'count');
   },
   onChangeCb() {
     return this.onChange.bind(this);

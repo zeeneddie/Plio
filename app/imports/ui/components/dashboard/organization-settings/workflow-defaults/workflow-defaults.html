@@ -1,9 +1,5 @@
 <template name="OrgSettings_WorkflowDefaults">
-  <div class="card-block card-block-collapse-toggle collapsed"
-      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <h4 class="card-title pull-xs-left">Workflow defaults</h4>
-  </div>
-  <div class="card-block-collapse collapse" id="workflow-defaults" {{b "ref: collapse"}}>
+  {{#SubCard_EditWrapper _lText=_lText}}
     <div class="card-block">
       {{> OrgSettings_WorkflowDefault
           title="Minor non-conformities / risks"
@@ -29,5 +25,5 @@
           onWorkflowTypeChange=onWorkflowTypeChangeCb
           onStepTimeChange=onStepTimeChangeCb}}
     </div>
-  </div>
+  {{/SubCard_EditWrapper}}
 </template>

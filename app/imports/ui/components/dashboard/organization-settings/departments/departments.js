@@ -1,18 +1,18 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.OrgSettings_Departments.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal'],
-  autorun() {
-    this.templateInstance.subscribe('departments', this.organizationId());
+  mixin: ['addForm', 'modal', 'utils'],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('departments', this.organizationId()));
   },
-  departmentsCount() {
-    return Departments.find({
-      organizationId: this.organizationId()
-    }).count();
+  _lText: 'Department/sector(s)',
+  _rText() {
+    return invoke(this.departments(), 'count');
   },
   onChangeCb() {
     return this.onChange.bind(this);
