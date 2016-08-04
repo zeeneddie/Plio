@@ -25,13 +25,14 @@ Template.SubCard_Edit.viewmodel({
     return viewedBy && !_.contains(viewedBy, Meteor.userId());
   },
   handleToggleCollapse() {
+    this.clearError('');
     if (this._id) {
       this.toggleCollapse(null, 250);
     }
   },
   callInsert(insertFn, args, cb) {
     const $parentFirstNode = $(this.templateInstance.firstNode).closest('.card-block-collapse');
-    
+
     this.beforeSave();
 
     const afterInsert = (err, res) => {
@@ -153,7 +154,7 @@ Template.SubCard_Edit.viewmodel({
   destroy() {
     Blaze.remove(this.templateInstance.view);
   },
-  update({ e = {}, withFocusCheck = false, ...args }) {
+  update({ e = {}, withFocusCheck = false, ...args }, cb) {
     const _id = this._id && this._id();
     if (!_id) {
       return;
@@ -167,7 +168,7 @@ Template.SubCard_Edit.viewmodel({
       this.callUpdate(this.updateFn, {
         _id,
         ...args
-      });
+      }, cb);
     };
 
     if (withFocusCheck) {

@@ -16,13 +16,14 @@ Template.Subcards_LessonLearned.viewmodel({
   onRendered(templateInstance) {
     const doc = templateInstance.data.document;
     const userId = Meteor.userId();
-    
+
     if(doc && !isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }
   },
   updateTitle(e) {
-    this.parent().update({ title: this.title(), e, withFocusCheck: true });
+    const cb = err => err && this.title(this.templateInstance.data.title);
+    this.parent().update({ title: this.title(), e, withFocusCheck: true }, cb);
   },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);

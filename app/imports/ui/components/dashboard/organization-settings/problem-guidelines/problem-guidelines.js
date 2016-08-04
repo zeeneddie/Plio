@@ -1,15 +1,15 @@
 import { Template } from 'meteor/templating';
-import { invoke } from 'lodash';
 
-Template.OrganizationSettings_ProblemGuidelines.viewmodel({
+Template.OrgSettings_ProblemGuidelines.viewmodel({
   mixin: 'modal',
   minor: '',
   major: '',
   critical: '',
   label: '',
   method: '',
+  guidelines: '',
   autorun() {
-    this.load(invoke(this, 'guidelines'));
+    this.load(this.guidelines());
   },
   onChangeCb() {
     return this.onChange.bind(this);

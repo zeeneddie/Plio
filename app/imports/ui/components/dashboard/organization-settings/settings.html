@@ -28,20 +28,25 @@
         reminders=reminders
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_ProblemGuidelines
+    {{> OrgSettings_ProblemGuidelines
         label="Non-conformity guidelines"
         guidelines=NCGuidelines
         organizationId=organizationId
         method=setNCGuidelineMethod}}
 
-    {{> OrganizationSettings_ProblemGuidelines
+    {{> OrgSettings_RisksTypes
+        organizationId=organizationId
+        riskTypes=riskTypes}}
+
+    {{> OrgSettings_ProblemGuidelines
         label="Risk guidelines"
         guidelines=RKGuidelines
         organizationId=organizationId
         method=setRKGuidelineMethod}}
 
-    {{> OrganizationSettings_RKScoringGuidelines
+    {{> OrgSettings_RKScoringGuidelines
         label="Risk scoring guidelines"
         guidelines=rkScoringGuidelines
         organizationId=organizationId}}
+
 </template>

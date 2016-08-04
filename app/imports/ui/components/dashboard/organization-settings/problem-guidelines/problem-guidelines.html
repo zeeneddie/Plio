@@ -1,17 +1,17 @@
-<template name="OrganizationSettings_ProblemGuidelines">
+<template name="OrgSettings_ProblemGuidelines">
   {{#SubCard_EditWrapper _lText=label}}
     <div class="card-block">
-      {{> OrganizationSettings_ProblemGuideline
+      {{> OrgSettings_ProblemGuideline
           type="minor"
           text=minor
           onChange=onChangeCb}}
 
-      {{> OrganizationSettings_ProblemGuideline
+      {{> OrgSettings_ProblemGuideline
           type="major"
           text=major
           onChange=onChangeCb}}
 
-      {{> OrganizationSettings_ProblemGuideline
+      {{> OrgSettings_ProblemGuideline
           type="critical"
           text=critical
           onChange=onChangeCb}}
