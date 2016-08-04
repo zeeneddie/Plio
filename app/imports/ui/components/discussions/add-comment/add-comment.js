@@ -13,7 +13,7 @@ Template.AddComment.viewmodel({
 	messageFile: null,
 	messageText: '',
 
-	onSubmit(ev){																																																																																																																						
+	onSubmit(ev){
 		ev.preventDefault();
 
 		const self = this;
@@ -39,7 +39,7 @@ Template.AddComment.viewmodel({
 				message: msg,
 				standardId: standardId,
 				userId: userId
-			};
+			};console.log(message);
 
 			addMessage.call(message, (err, res) => {
 				if(err){
