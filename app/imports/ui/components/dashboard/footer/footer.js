@@ -4,7 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 
 import { UserRoles } from '/imports/api/constants.js';
 
-Template.DashboardFooter.viewmodel({
+Template.Dashboard_Footer.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
   onInviteClick(event) {
     event.preventDefault();

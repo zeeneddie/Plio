@@ -1,4 +1,4 @@
-<template name="OrganizationsMenu">
+<template name="Organization_Menu">
   <ul class="nav navbar-nav pull-xs-left">
     <li class="nav-item dropdown dropdown-company hidden-sm-down">
       <a class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -9,7 +9,7 @@
       </a>
       <div class="dropdown-menu">
         {{#each organizations}}
-          {{> OrganizationsMenuItem}}
+          {{> Organization_Menu_Item}}
         {{/each}}
         {{#if canEditOrgSettings organizationId}}
           <div class="dropdown-divider"></div>

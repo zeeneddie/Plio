@@ -5,7 +5,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { insert } from '/imports/api/organizations/methods.js';
 
 
-Template.OrganizationCreate.viewmodel({
+Template.Organizations_Create.viewmodel({
   mixin: ['modal', 'router'],
   name: '',
   save() {

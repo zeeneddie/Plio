@@ -6,7 +6,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { OrgCurrencies } from '/imports/api/constants.js';
 
 
-Template.OrganizationsMenu.viewmodel({
+Template.Organization_Menu.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
@@ -25,7 +25,7 @@ Template.OrganizationsMenu.viewmodel({
   openCreateNewOrgModal(e) {
     e.preventDefault();
     this.modal().open({
-      template: 'OrganizationCreate',
+      template: 'Organizations_Create',
       _title: 'New organization',
       variation: 'save',
       timezone: moment.tz.guess(),

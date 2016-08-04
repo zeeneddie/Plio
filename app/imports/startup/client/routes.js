@@ -138,8 +138,8 @@ FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('DashboardLayout', {
-      content: 'DashboardPage'
+    BlazeLayout.render('Dashboard_Layout', {
+      content: 'Dashboard_Page'
     });
   }
 });

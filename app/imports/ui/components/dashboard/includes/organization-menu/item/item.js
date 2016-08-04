@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { selectOrganization } from '/imports/api/users/methods.js';
 
-Template.OrganizationsMenuItem.viewmodel({
+Template.Organization_Menu_Item.viewmodel({
   mixin: 'router',
   serialNumber: '',
   regex() {

@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
 
-Template.DashboardHeader.viewmodel({
+Template.Dashboard_Header.viewmodel({
   mixin: 'organization'
 });
