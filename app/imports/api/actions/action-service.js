@@ -326,6 +326,28 @@ export default {
     });
   },
 
+  restore({ _id, userId }) {
+    const action = this._getAction(_id);
+
+    if (!action.deleted()) {
+      throw new Meteor.Error(
+        400, 'This action is not deleted so can not be restored'
+      );
+    }
+
+    const ret = this.collection.update({ _id }, {
+      $set: { isDeleted: false },
+      $unset: {
+        deletedAt: '',
+        deletedBy: ''
+      }
+    });
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
   remove({ _id, deletedBy, isDeleted }) {
     this._ensureActionExists(_id);
 

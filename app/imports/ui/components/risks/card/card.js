@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { update, remove } from '/imports/api/risks/methods.js';
+import { update, remove, restore } from '/imports/api/risks/methods.js';
 
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
@@ -46,7 +46,7 @@ Template.Risks_Card_Read.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);
