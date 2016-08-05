@@ -46,7 +46,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       template: 'WorkInbox_QAPanel_Edit'
     });
   },
-  restore({ _id, type, status, assigneeId }) {
+  restore({ _id, type, isCompleted, assigneeId }) {
     swal(
       {
         title: 'Are you sure?',
@@ -63,7 +63,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           } else {
             swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
 
-            const queryParams = this._getQueryParams({ status, assigneeId })(Meteor.userId());
+            const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
             Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
           }
