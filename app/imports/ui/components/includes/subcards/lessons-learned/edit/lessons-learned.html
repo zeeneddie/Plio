@@ -1,5 +1,8 @@
 <template name="Subcards_LessonsLearned_Edit">
-  {{#SubCard_EditWrapper _lText="Lessons learned" _rText=lessons.count}}
+  {{#SubCard_EditWrapper
+    _lText="Lessons learned"
+    _rText=lessons.count
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block">
       {{#if lessons.count}}
         <div class="card">

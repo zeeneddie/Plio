@@ -1,5 +1,8 @@
 <template name="Subcards_Occurrences_Edit">
-  {{#SubCard_EditWrapper _lText="Occurrences" _rText=occurrences.count}}
+  {{#SubCard_EditWrapper
+    _lText="Occurrences"
+    _rText=occurrences.count
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block" id="occurences">
       {{#if occurrences.count}}
         <div class="card">
