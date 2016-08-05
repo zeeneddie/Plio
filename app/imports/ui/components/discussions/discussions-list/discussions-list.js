@@ -51,13 +51,13 @@ Template.DiscussionsList.viewmodel({
 			c.time = getFormattedDate(c.createdAt, 'HH:mm');
 			c.username = user.firstName();
 
-			if(c.viewedBy.indexOf(userId) < 0){
+			/*if(c.viewedBy.indexOf(userId) < 0){
 				markMessageViewedById.call({_id: c._id, userId: userId}, (err, res) => {
 					if(err){
 						throw err;
 					}
 				});
-			}
+			}*/
 
 			if(dateStorage !== c.date){
 				dateStorage = c.date;

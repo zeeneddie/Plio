@@ -27,5 +27,11 @@ Template.DiscussionsItem.viewmodel({
 
 	isAuthor(){
 		return Meteor.userId() === this.userId();
+	},
+
+	linkerOptions(){
+		return {
+			truncate: 7
+		}
 	}
 });
