@@ -1,50 +1,36 @@
 <template name="StandardsList">
-  <div class="card">
-    <form class="search-form">
-      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField field="searchText"}}
-          <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
-        {{/ClearableField}}
-        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
-      </div>
-      {{#if canCreateStandards organizationId}}
-        <a class="btn btn-primary" {{b "click: openAddTypeModal"}}>
-          <i class="fa fa-plus"></i>
-          <span>Add</span>
-        </a>
-      {{/if}}
-    </form>
-    <div class="list-group list-group-accordion" id="standardsAccordion">
+  {{#List_Read
+    ref="list"
+    _id=standardId
+    isModalButtonVisible=(canCreateStandards organizationId)
+    onModalOpen=onModalOpen
+    onSearchInputValue=onSearchInputValue
+    _transform=_transform}}
 
-      {{#if isActiveStandardFilter 'section'}}
-        {{#each sections}}
-          {{> ListItem
-              template="StandardSectionItem"
-              title=this.title
-              _query=(_getQuery this)}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveStandardFilter 'section'}}
+      {{#each sections}}
+        {{> ListItem
+            template="StandardSectionItem"
+            title=this.title
+            _query=(_getQuery this)}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveStandardFilter 'type'}}
-        {{#each types}}
-          {{> ListItem
-              template="StandardTypeItem"
-              title=this.name
-              type="standardType"
-              _id=this._id}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveStandardFilter 'type'}}
+      {{#each types}}
+        {{> ListItem
+            template="StandardTypeItem"
+            title=this.name
+            type="standardType"
+            _id=this._id}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveStandardFilter 'deleted'}}
-        {{#each standardsDeleted}}
-          {{> Standards_Item_Read}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveStandardFilter 'deleted'}}
+      {{#each standardsDeleted}}
+        {{> Standards_Item_Read}}
+      {{/each}}
+    {{/if}}
 
-      {{#if searchText}}
-        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
-      {{/if}}
-    </div>
-  </div>
+  {{/List_Read}}
 </template>

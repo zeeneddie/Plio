@@ -1,69 +1,54 @@
 <template name="WorkInbox_List">
-  <div class="card">
-    <form class="search-form">
-      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField field="searchText"}}
-          <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
-        {{/ClearableField}}
-        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
-      </div>
-      <a class="btn btn-primary" {{b "click: openModal"}}>
-        <i class="fa fa-plus"></i>
-        <span>Add</span>
-      </a>
-    </form>
+  {{#List_Read
+    ref="list"
+    _id=linkedDocId
+    onModalOpen=onModalOpen
+    onSearchInputValue=onSearchInputValue}}
 
-    <div class="list-group list-group-accordion">
+    {{#if isActiveWorkInboxFilter "My current work"}}
+      {{#each items.my.current}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveWorkInboxFilter "My current work"}}
-        {{#each items.my.current}}
-          {{> WorkInbox_Item}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveWorkInboxFilter "Team current work"}}
+      {{#each assignees.current}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "current")}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveWorkInboxFilter "Team current work"}}
-        {{#each assignees.current}}
-          {{> ListItem
-              template="WorkInbox_SectionItem"
-              title=(userFullNameOrEmail this)
-              items=(getTeamItems this "current")}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveWorkInboxFilter "My completed work"}}
+      {{#each items.my.completed}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveWorkInboxFilter "My completed work"}}
-        {{#each items.my.completed}}
-          {{> WorkInbox_Item}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveWorkInboxFilter "Team completed work"}}
+      {{#each assignees.completed}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "completed")}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveWorkInboxFilter "Team completed work"}}
-        {{#each assignees.completed}}
-          {{> ListItem
-              template="WorkInbox_SectionItem"
-              title=(userFullNameOrEmail this)
-              items=(getTeamItems this "completed")}}
-        {{/each}}
-      {{/if}}
+    {{#if isActiveWorkInboxFilter "My deleted work"}}
+      {{#each items.my.deleted}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
 
-      {{#if isActiveWorkInboxFilter "My deleted work"}}
-        {{#each items.my.deleted}}
-          {{> WorkInbox_Item}}
-        {{/each}}
-      {{/if}}
-
-      {{#if isActiveWorkInboxFilter "Team deleted work"}}
-        {{#each assignees.deleted}}
-          {{> ListItem
-              template="WorkInbox_SectionItem"
-              title=(userFullNameOrEmail this)
-              items=(getTeamItems this "deleted")}}
-        {{/each}}
-      {{/if}}
-
-      {{#if searchText}}
-        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
-      {{/if}}
-    </div>
-  </div>
+    {{#if isActiveWorkInboxFilter "Team deleted work"}}
+      {{#each assignees.deleted}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "deleted")}}
+      {{/each}}
+    {{/if}}
+    
+  {{/List_Read}}
 </template>
