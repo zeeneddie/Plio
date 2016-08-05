@@ -17,7 +17,9 @@
     "SQHmBKJ94gJvpLKLt"
   ],
   "analysis" : {
-    "status" : 0
+    "status" : 0,
+    "executor": "SQHmBKJ94gJvpLKLt",
+    "targetDate": {"$date": 1459508400000}
   },
   "updateOfStandards" : {
     "status" : 0

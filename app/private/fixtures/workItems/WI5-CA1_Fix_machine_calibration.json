@@ -1,0 +1,22 @@
+{
+  "_id": "YChXi2z4J3aidK5Po",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "targetDate": {"$date": 1469537283966},
+  "type": "complete action",
+  "status": 0,
+  "assigneeId": "SQHmBKJ94gJvpLKLt",
+  "linkedDoc": {
+    "_id": "hR3QzcjMKfZv9RQLe",
+    "type": "CA"
+  },
+  "createdAt" : {"$date": 1469537283966},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1469537283966},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "viewedBy" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ]
+}

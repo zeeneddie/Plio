@@ -230,8 +230,8 @@ FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
     });
   }
 });
@@ -240,8 +240,8 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
     });
   }
 });

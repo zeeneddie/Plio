@@ -19,7 +19,7 @@ import {
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
+  mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
@@ -58,16 +58,16 @@ Template.Actions_Edit.viewmodel({
     }
   },
   getCompleteFn() {
-    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
+    return (cb) => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
-    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (e) => this.callUpdate(undoVerification);
+    return (cb) => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
@@ -104,22 +104,6 @@ Template.Actions_Edit.viewmodel({
 
       this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
     };
-  },
-  generateCallback(queryParam, cb = () => {}) {
-    const _id = this._id();
-
-    return (err) => {
-      if (!err && FlowRouter.getQueryParam('by') !== queryParam) {
-        FlowRouter.setQueryParams({ by: queryParam });
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-          cb(undefined);
-        }, 100);
-      } else {
-        return cb(err);
-      }
-    }
   },
   remove() {
     const { title } = this.action();

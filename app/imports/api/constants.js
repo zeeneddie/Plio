@@ -60,6 +60,25 @@ const ActionTypes = {
   RISK_CONTROL: 'RC'
 };
 
+const WorkItemsStore = {
+  TYPES: {
+    COMPLETE_ACTION: 'complete action',
+    VERIFY_ACTION: 'verify action',
+    COMPLETE_ANALYSIS: 'complete analysis',
+    COMPLETE_UPDATE_OF_STANDARDS: 'complete update of standards'
+  },
+  LINKED_TYPES: {
+    ...ActionTypes,
+    ...ProblemTypes
+  },
+  STATUSES: {
+    0: 'in progress',
+    1: 'due today',
+    2: 'overdue',
+    3: 'completed'
+  }
+};
+
 const ActionUndoTimeInHours = 1;
 
 const ActionStatuses = {
@@ -294,12 +313,13 @@ const NonConformityFilters = [
   'deleted'
 ];
 
-const ActionFilters = [
-  'My current actions',
-  'Team current actions',
-  'My completed actions',
-  'Team completed actions',
-  'Deleted actions'
+const WorkInboxFilters = [
+  'My current work',
+  'Team current work',
+  'My completed work',
+  'Team completed work',
+  'My deleted work',
+  'Team deleted work'
 ];
 
 const DocumentTypes = [
@@ -375,11 +395,12 @@ export {
   UserRolesNames,
   DocumentTypes,
   AvatarPlaceholders,
-  ActionFilters,
+  WorkInboxFilters,
   ActionDocumentTypes,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
   ReviewStatuses,
+  WorkItemsStore,
   RKTypes,
   TruncatedStringLengths,
   WorkflowTypes

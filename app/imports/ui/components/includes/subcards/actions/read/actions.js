@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ProblemTypes } from '/imports/api/constants.js';
 
 Template.Subcards_Actions_Read.viewmodel({
-  mixin: ['organization', 'action', 'actionStatus', 'nonconformity', 'risk', 'utils'],
+  mixin: ['organization', 'workInbox', 'actionStatus', 'nonconformity', 'risk', 'utils'],
   type: '',
   documentId: '',
   standardId: '',

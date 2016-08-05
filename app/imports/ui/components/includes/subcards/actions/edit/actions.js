@@ -24,7 +24,7 @@ import {
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action', 'utils'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
   title() {
     return pluralize(this._getNameByType(this.type()));

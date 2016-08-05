@@ -7,7 +7,7 @@ import { getTzTargetDate } from '/imports/api/helpers.js';
 
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
+  mixin: ['modal', 'workInbox', 'organization', 'router', 'collapsing'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),
@@ -54,7 +54,7 @@ Template.Actions_Create.viewmodel({
 
           const queryParams = this._getQueryParams(action)(Meteor.userId());
 
-          this.goToAction(_id, queryParams);
+          this.goToWorkItem(_id, queryParams);
 
           this.expandCollapsed(_id);
 

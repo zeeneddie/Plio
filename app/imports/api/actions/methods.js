@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema } from '../schemas.js';
+import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
 
 
@@ -205,12 +205,7 @@ export const unlinkDocument = new ValidatedMethod({
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    {
-      completionComments: { type: String }
-    }
-  ]).validator(),
+  validate: CompleteActionSchema.validator(),
 
   run({ _id, ...args }) {
     const userId = this.userId;
@@ -281,23 +276,6 @@ export const undoVerification = new ValidatedMethod({
   }
 });
 
-export const restore = new ValidatedMethod({
-  name: 'Actions.restore',
-
-  validate: IdSchema.validator(),
-
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore actions'
-      );
-    }
-
-    return ActionService.restore({ _id, userId});
-  }
-});
-
 export const remove = new ValidatedMethod({
   name: 'Actions.remove',
 
@@ -311,6 +289,23 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return ActionService.remove({ _id, deletedBy: userId});
+    return ActionService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'Actions.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore an action'
+      );
+    }
+
+    return ActionService.restore({ _id });
   }
 });

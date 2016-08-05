@@ -297,6 +297,11 @@ export const BaseProblemsOptionalSchema = ((() => {
         defaultValue: 0,
         optional: true
       },
+      [`${key}.completionComments`]: {
+        type: String,
+        optional: true,
+        max: 140
+      },
       [`${key}.completedAt`]: {
         type: Date,
         optional: true
@@ -386,3 +391,14 @@ export const ReviewSchema = ((() => {
     }
   });
 })());
+
+export const CompleteActionSchema = new SimpleSchema([
+  IdSchema,
+  {
+    completionComments: {
+      type: String,
+      optional: true,
+      max: 140
+    }
+  }
+]);
