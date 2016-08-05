@@ -45,6 +45,18 @@ const WorkItemsSchema = new SimpleSchema([
     isCompleted: {
       type: Boolean,
       defaultValue: false
+    },
+    completedAt: {
+      type: Date,
+      optional: true,
+      autoValue() {
+        const isCompleted = this.field('isCompleted');
+        if (this.isUpdate && isCompleted.isSet && !!isCompleted.value) {
+          return new Date();
+        } else {
+          this.unset();
+        }
+      }
     }
   }
 ]);
