@@ -17,7 +17,7 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
 
     this.toBeVerifiedBy(selected);
 
-    this.parent().update && this.parent().update({ toBeVerifiedBy: selected });
+    this.onUpdate({ userId: selected });
   },
   canBeVerified() {
     return !!this.onVerify && (this.toBeVerifiedBy() === Meteor.userId());

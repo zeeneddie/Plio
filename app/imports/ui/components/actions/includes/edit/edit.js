@@ -14,7 +14,9 @@ import {
   linkDocument,
   unlinkDocument,
   setCompletionDate,
-  setVerificationDate
+  setCompletionExecutor,
+  setVerificationDate,
+  setVerificationExecutor
 } from '/imports/api/actions/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
@@ -97,12 +99,22 @@ Template.Actions_Edit.viewmodel({
       this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
     };
   },
+  getUpdateCompletionExecutorFn() {
+    return ({ userId }, cb) => {
+      this.callUpdate(setCompletionExecutor, { userId }, cb);
+    };
+  },
   getUpdateVerificationDateFn() {
     return ({ targetDate }, cb) => {
       const { timezone } = this.organization();
       const tzDate = getTzTargetDate(targetDate, timezone);
 
       this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
+    };
+  },
+  getUpdateVerificationExecutorFn() {
+    return ({ userId }, cb) => {
+      this.callUpdate(setVerificationExecutor, { userId }, cb);
     };
   },
   remove() {

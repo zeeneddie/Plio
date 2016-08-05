@@ -70,8 +70,14 @@ Template.Actions_Card_Edit_Main.viewmodel({
   onUpdateCompletionDate() {
     return this.updateCompletionDateFn;
   },
+  onUpdateCompletionExecutor() {
+    return this.updateCompletionExecutorFn;
+  },
   onUpdateVerificationDate() {
     return this.updateVerificationDateFn;
+  },
+  onUpdateVerificationExecutor() {
+    return this.updateVerificationExecutorFn;
   },
   showVerification() {
     const action = this.action && this.action();

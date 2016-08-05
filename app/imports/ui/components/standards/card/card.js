@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
@@ -19,6 +20,9 @@ Template.Standards_Card_Read.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
+  ActionTypes() {
+    return ActionTypes;
+  },
   toggleScreenMode() {
     const $div = this.templateInstance.$('.content-cards-inner');
     const offset = $div.offset();

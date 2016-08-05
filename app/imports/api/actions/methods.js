@@ -122,6 +122,30 @@ export const setCompletionDate = new ValidatedMethod({
   }
 });
 
+export const setCompletionExecutor = new ValidatedMethod({
+  name: 'Actions.setCompletionExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set executor for action completion'
+      );
+    }
+
+    return ActionService.setCompletionExecutor({ _id, ...args });
+  }
+});
+
 export const setVerificationDate = new ValidatedMethod({
   name: 'Actions.setVerificationDate',
 
@@ -140,6 +164,30 @@ export const setVerificationDate = new ValidatedMethod({
     }
 
     return ActionService.setVerificationDate({ _id, ...args });
+  }
+});
+
+export const setVerificationExecutor = new ValidatedMethod({
+  name: 'Actions.setVerificationExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set executor for action verification'
+      );
+    }
+
+    return ActionService.setVerificationExecutor({ _id, ...args });
   }
 });
 
