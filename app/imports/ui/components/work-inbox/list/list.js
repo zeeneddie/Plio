@@ -19,11 +19,11 @@ Template.WorkInbox_List.viewmodel({
       const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
-        const { _id:workItemId, linkedDoc: { _id } = {} } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
+        const { _id } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
 
-        if (workItemId) {
+        if (_id) {
           Meteor.setTimeout(() => {
-            this.goToWorkItem(workItemId);
+            this.goToWorkItem(_id);
             this.expandCollapsed(_id);
           }, 0);
         } else {
@@ -76,7 +76,7 @@ Template.WorkInbox_List.viewmodel({
       ..._query
     }).fetch();
 
-    return _(workItems).map(item => {
+    return _(workItems).map((item) => {
       const linkedDocument = item.getLinkedDoc();
       return { linkedDocument, ...item };
     });
@@ -161,7 +161,7 @@ Template.WorkInbox_List.viewmodel({
 
       const sections = ViewModel.find('WorkInbox_SectionItem');
       const ids = this.toArray(sections).map(vm => vm.items && vm.items().map(({ _id }) => _id));
-      return ids;
+      return _.flatten(ids);
     };
   },
   onModalOpen() {

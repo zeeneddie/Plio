@@ -13,11 +13,13 @@ Template.Actions_ToBeCompletedBy.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected } = viewmodel.getData();
+    const { selected:userId } = viewmodel.getData();
 
-    this.toBeCompletedBy(selected);
+    this.toBeCompletedBy(userId);
 
-    this.onUpdate({ userId: selected });
+    if (!this._id) return;
+
+    this.onUpdate({ userId });
   },
   canBeCompleted() {
     return !!this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
