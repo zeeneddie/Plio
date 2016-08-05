@@ -1,9 +1,23 @@
 import {Template} from 'meteor/templating';
 
+import {markMessageViewedById} from '/imports/api/discussions/methods.js';
 import {removeMessageById} from '/imports/api/discussions/methods.js';
 
 
 Template.DiscussionsItem.viewmodel({
+	onRendered(tpl){
+		const _id = this._id();
+		const userId = this.userId();
+
+		if(this.viewedBy().indexOf(userId) < 0){
+			markMessageViewedById.call({_id, userId}, (err, res) => {
+				if(err){
+					throw err;
+				}
+			});
+		}
+	},
+
 	events: {
 		'click .js-message-actions > a'(ev, tpl){
 			ev.preventDefault();
