@@ -8,17 +8,14 @@ Template.DiscussionsList.viewmodel({
 	mixin: ['standard'],
 
 	messagesCount(){
-		const self = this;
-		
 		return Discussions.find({
-			standardId: self.standardId()
+			standardId: this.standardId()
 		}).count() > 0;
 	},
 
 	messageFirst(){
-		const self = this;
 		const m = Discussions.findOne({
-			standardId: self.standardId()
+			standardId: this.standardId()
 		}, {
 			fields: {createdAt: 1, userId: 1},
 			limit: 1,
@@ -32,12 +29,11 @@ Template.DiscussionsList.viewmodel({
 	},
 
 	messages(){
-		const self = this;
 		const userId = Meteor.userId();
 		let dateStorage;
 
 		return Discussions.find({
-			standardId: self.standardId()
+			standardId: this.standardId()
 		}, {
 			fields: {standardId: 0},
 			sort: {createdAt: 1}

@@ -1,6 +1,7 @@
 import {Autolinker} from 'meteor/konecty:autolinker';
 import {Template} from 'meteor/templating';
 
+import {handleMethodResult} from '/imports/api/helpers.js';
 import {markMessageViewedById} from '/imports/api/discussions/methods.js';
 import {removeMessageById} from '/imports/api/discussions/methods.js';
 import {TruncatedStringLengths} from '/imports/api/constants.js';
@@ -12,11 +13,9 @@ Template.DiscussionsItem.viewmodel({
 		const userId = this.userId();
 
 		if(this.viewedBy().indexOf(userId) < 0){
-			markMessageViewedById.call({_id, userId}, (err, res) => {
-				if(err){
-					throw err;
-				}
-			});
+			markMessageViewedById.call(
+				{_id, userId}, handleMethodResult((err, res) => {})
+			);
 		}
 	},
 
@@ -30,14 +29,9 @@ Template.DiscussionsItem.viewmodel({
 				return false;
 			}
 
-			removeMessageById.call({_id: this._id()}, (err, res) => {
-				if(err){
-					throw err;
-				}
-				else{
-					// [ToDo] Handle with a modal window?
-				}
-			});
+			removeMessageById.call(
+				{_id: this._id()}, handleMethodResult((err, res) => {})
+			);
 		}
 	},
 

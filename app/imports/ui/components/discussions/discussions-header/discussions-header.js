@@ -10,10 +10,10 @@ Template.DiscussionsHeader.viewmodel({
 		const self = this;
 
 		return Discussions.find({
-			isRead: false,
-			standardId: self.standardId()
+			standardId: self.standardId(),
+			viewedBy: { $ne: Meteor.userId() }
 		}, {
-			fields: {isRead: 1}
+			fields: {viewedBy: 1}
 		}).count();
 	}
 });

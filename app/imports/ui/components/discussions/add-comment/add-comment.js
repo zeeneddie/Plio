@@ -5,6 +5,7 @@ import {Meteor} from 'meteor/meteor';
 import {Template} from 'meteor/templating';
 
 import {addMessage} from '/imports/api/discussions/methods.js';
+import {handleMethodResult} from '/imports/api/helpers.js';
 
 
 Template.AddComment.viewmodel({
@@ -13,44 +14,38 @@ Template.AddComment.viewmodel({
 	messageFile: null,
 	messageText: '',
 
+	addNewMessage(){
+		addMessage.call(
+			this.makeNewMessage(), handleMethodResult( () => {this.reset();} )
+		);
+	},
+
+	makeNewMessage(){
+		return {
+			createdAt: new Date(),
+			message: this.messageText(),
+			standardId: this.standardId(),
+			userId: Meteor.userId(),
+			viewedBy: []
+		};
+	},
+
 	onSubmit(ev){
 		ev.preventDefault();
 
-		const self = this;
-		const msg = this.messageText();
-		const standardId = this.standardId();
-		const userId = Meteor.userId();
-
-		if(!userId){
+		if( !Meteor.userId() ){
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot add messages to discussions'
 			);
 		}
-		if(!standardId){
+		if( !this.standardId() ){
 			throw new Meteor.Error(
 				403, 'Discussion messages may be added to the particular standart only'
 			);
 		}
 
-		if(msg !== ''){
-			const message = {
-				createdAt: new Date(),
-				message: msg,
-				standardId: standardId,
-				userId: userId,
-				viewedBy: []
-			};
-
-			addMessage.call(message, (err, res) => {
-				if(err){
-					// [ToDo][Modal] Show an error in a modal window?
-					throw err;
-				}
-				else{
-					self.messageFile.reset();
-					self.messageText.reset();
-				}
-			});
+		if(this.messageText() !== ''){
+			this.addNewMessage();
 		}
 		else {
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
