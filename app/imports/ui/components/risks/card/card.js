@@ -1,11 +1,15 @@
 import { Template } from 'meteor/templating';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
 
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+  ActionTypes() {
+    return ActionTypes;
+  },
   risks() {
     const list = ViewModel.findOne('RisksList');
     const query = list && list._getQueryForFilter();
