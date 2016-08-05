@@ -4,19 +4,13 @@
     _rText=_rText
     loading=($not Template.subscriptionsReady)}}
     <div class="card-block">
-      <div class="new-cards" {{b "ref: forms"}}>
-        {{#each standardsTypes}}
-          {{> OrgSettings_StandardsType
-              _id=this._id
-              name=this.name
-              abbreviation=this.abbreviation
-              onChange=onChangeCb
-              onDelete=onDeleteCb}}
-        {{/each}}
-      </div>
-      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_StandardsType')"}}>
-        Add standards type
-      </button>
+      {{> SimpleSelection_Edit
+          items=standardsTypesMapped
+          addButtonText="Add standards type"
+          placeholder=placeholder
+          showAbbreviation=true
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

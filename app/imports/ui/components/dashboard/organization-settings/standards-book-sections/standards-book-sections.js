@@ -12,12 +12,13 @@ import {
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
   onCreated(template) {
-    return template.autorun(() => template.subscribe('standards-book-sections', this.organizationId()));
+    template.autorun(() => template.subscribe('standards-book-sections', this.organizationId()));
   },
   _lText: 'Standards book sections',
   _rText() {
     return invoke(this.standardsBookSections(), 'count');
   },
+  placeholder: 'Title',
   onChangeCb() {
     return this.onChange.bind(this);
   },

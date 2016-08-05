@@ -6,14 +6,13 @@ import { insert, update, remove } from '/imports/api/risk-types/methods.js';
 Template.OrgSettings_RisksTypes.viewmodel({
   mixin: ['modal', 'addForm', 'utils'],
   onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('riskTypes', this.organizationId());
-    });
+    template.autorun(() => template.subscribe('riskTypes', this.organizationId()));
   },
   _lText: 'Risk types',
   _rText() {
     return invoke(this.riskTypes(), 'count');
   },
+  placeholder: 'Title',
   riskTypes: [],
   onChangeCb() {
     return this.onChange.bind(this);

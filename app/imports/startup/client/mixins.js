@@ -567,7 +567,7 @@ ViewModel.mixin({
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
-    combine(...fns) {
+    chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
     },
     findParentRecursive(templateName, instance) {

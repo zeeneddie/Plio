@@ -4,18 +4,12 @@
     _rText=_rText
     loading=($not Template.subscriptionsReady)}}
     <div class="card-block">
-      <div class="new-cards" {{b "ref: forms"}}>
-        {{#each standardsBookSections}}
-          {{> OrgSettings_StandardsBookSection
-              _id=this._id
-              title=this.title
-              onChange=onChangeCb
-              onDelete=onDeleteCb}}
-        {{/each}}
-      </div>
-      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_StandardsBookSection')"}}>
-        Add section
-      </button>
+      {{> SimpleSelection_Edit
+          items=standardsBookSections
+          addButtonText="Add section"
+          placeholder=placeholder
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

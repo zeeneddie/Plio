@@ -4,18 +4,12 @@
     _rText=_rText
     loading=($not Template.subscriptionsReady)}}
     <div class="card-block">
-      <div class="new-cards" {{b "ref: forms"}}>
-        {{#each departments}}
-          {{> OrgSettings_Department
-              _id=this._id
-              name=this.name
-              onChange=onChangeCb
-              onDelete=onDeleteCb}}
-        {{/each}}
-      </div>
-      <button class="btn btn-primary" type="button" {{b "click: addForm('OrgSettings_Department')"}}>
-        Add department/sector
-      </button>
+      {{> SimpleSelection_Edit
+          items=departmentsMapped
+          addButtonText="Add department/sector"
+          placeholder=placeholder
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
     </div>
   {{/Subcards_Wrapper}}
 </template>
