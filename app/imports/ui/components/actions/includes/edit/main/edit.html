@@ -27,6 +27,7 @@
     {{#unless isCompleted}}
 
       {{> Actions_ToBeCompletedBy
+          _id=this._id
           toBeCompletedBy=toBeCompletedBy
           onComplete=onComplete
           onUpdate=onUpdateCompletionExecutor}}
