@@ -345,6 +345,10 @@ const RiskEvaluationDecisions = {
   'terminate': 'Terminate'
 };
 
+const TruncatedStringLengths = {
+  c40: 40
+};
+
 export {
   ActionTypes,
   ActionStatuses,
@@ -377,5 +381,6 @@ export {
   RiskEvaluationDecisions,
   ReviewStatuses,
   RKTypes,
+  TruncatedStringLengths,
   WorkflowTypes
 };

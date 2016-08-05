@@ -1,7 +1,9 @@
+import {Autolinker} from 'meteor/konecty:autolinker';
 import {Template} from 'meteor/templating';
 
 import {markMessageViewedById} from '/imports/api/discussions/methods.js';
 import {removeMessageById} from '/imports/api/discussions/methods.js';
+import {TruncatedStringLengths} from '/imports/api/constants.js';
 
 
 Template.DiscussionsItem.viewmodel({
@@ -47,5 +49,11 @@ Template.DiscussionsItem.viewmodel({
 		return {
 			truncate: 7
 		}
+	},
+
+	messageRendered(){
+		return Autolinker.link(
+			this.message(), {truncate: TruncatedStringLengths.c40}
+		);
 	}
 });
