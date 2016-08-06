@@ -71,7 +71,7 @@ export default class NotificationSender {
     return handlebarsCache.render(templateName, templateData, this._options.helpers);
   }
 
-  _getEmailSubject() {
+  _getSubject() {
     return this._options.subject;
   }
 
@@ -92,7 +92,7 @@ export default class NotificationSender {
 
   _sendEmailBasic(receiver, text) {
     let emailOptions = {
-      subject: this._getEmailSubject(),
+      subject: this._getSubject(),
       from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
       to: this._getUserEmail(receiver),
       html: text
@@ -109,6 +109,20 @@ export default class NotificationSender {
   sendEmail(receiver) {
     let html = this._renderTemplateWithData();
     this._sendEmailBasic(receiver, html);
+  }
+
+  _sendOnSiteBasic(receiver, text) {
+    let options = {
+      subject: this._getSubject(),
+      body: text
+    };
+
+    // insert notification here
+  }
+
+  sendOnSite(receiver) {
+    let html = this._renderTemplateWithData();
+    this._sendOnSiteBasic(receiver, html);
   }
 
   static getAbsoluteUrl(path) {
