@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
+import NotificationsService from '/imports/api/notifications/notifications-service.js'
 
 import HandlebarsCompiledCache from './HandlebarsCompiledCache';
 
@@ -84,17 +85,32 @@ export default class NotificationSender {
   _getUserEmail(userId) {
     if (userId && userId.indexOf('@') > -1) {
       return userId;
+    } else {
+      let user = Meteor.users.findOne(userId);
+      return user && user.emails && user.emails.length ? user.emails[0].address : false;
     }
-
-    let user = Meteor.users.findOne(userId);
-    return user && user.emails && user.emails.length ? user.emails[0].address : false;
   }
 
-  _sendEmailBasic(receiver, text) {
+  /**
+   * Returns an array of emails of interested users
+   * @param recipients
+   * @returns {[String]}
+   * @private
+   */
+  _getUserEmails(userIds) {
+    let userEmails = [];
+    userIds.forEach((userId) => {
+      let email = this._getUserEmail(userId);
+      email && userEmails.push(email);
+    });
+    return userEmails;
+  }
+
+  _sendEmailBasic(recipients, text) {
     let emailOptions = {
       subject: this._getSubject(),
       from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
-      to: this._getUserEmail(receiver),
+      to: this._getUserEmails(recipients),
       html: text
     };
 
@@ -102,30 +118,39 @@ export default class NotificationSender {
   }
 
   /**
-   * Sends email to specified receiver
+   * Sends email to specified recipients
    *
-   * @param receiver user ID or email
+   * @param recipients user ID or email. May be an array of ids and/or emails
    */
-  sendEmail(receiver) {
+  sendEmail(recipients) {
     let html = this._renderTemplateWithData();
-    this._sendEmailBasic(receiver, html);
+    if (typeof recipients === 'string') {
+      recipients = [recipients];
+    }
+    this._sendEmailBasic(recipients, html);
   }
 
-  _sendOnSiteBasic(receiver, text) {
-    let options = {
+  _sendOnSiteBasic(recipients) {
+    if (typeof recipients === 'string') {
+      recipients = [recipients];
+    }
+
+    console.log('this._options', this._options);
+
+    NotificationsService.insert({
+      recipientIds: recipients,
       subject: this._getSubject(),
-      body: text
-    };
-
-    // insert notification here
+      body: this._options.body
+    });
   }
 
-  sendOnSite(receiver) {
-    let html = this._renderTemplateWithData();
-    this._sendOnSiteBasic(receiver, html);
+  sendOnSite(recipients) {
+    this._sendOnSiteBasic(recipients);
   }
 
   static getAbsoluteUrl(path) {
     return `${process.env.ROOT_URL}${path}`;
   }
 }
+
+Meteor.NotificationSender = NotificationSender;
