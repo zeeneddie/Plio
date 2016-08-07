@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Random } from 'meteor/random';
 
 import { setNotifications, setNotificationSound } from '/imports/api/users/methods.js';
 import Sounds from '/imports/api/sounds.js';
@@ -60,6 +61,23 @@ Template.UserPreferences.viewmodel({
   },
   sounds() {
     return Sounds;
+  },
+  sendTestNotification() {
+    const notificationSound = document.getElementById('notification-sound');
+    const quotes = [
+      `If you don't like it - change it`,
+      `We spend so much time looking - but never seeing`,
+      `Let all these things just sort of happen`,
+      `Be better than you were yesterday`,
+      `This is your world`,
+      `Now then, let's play`,
+      `Use your imagination`
+    ];
+    notificationSound && notificationSound.play();
+    let notification = new Notification('Test notification', {
+      body: Random.choice(quotes),
+      silent: true
+    });
   },
   events: {
     'change #notification-sounds'(e, tpl) {

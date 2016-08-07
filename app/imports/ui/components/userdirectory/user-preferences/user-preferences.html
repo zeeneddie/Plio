@@ -27,5 +27,12 @@
         {{/if}}
       </div>
     {{/FormField}}
+
+    {{#FormField label="Try it"}}
+      <button type="button" class="btn btn-secondary"
+          {{b "click: sendTestNotification"}}>
+        Send test notification
+      </button>
+    {{/FormField}}
   </div>
 </template>

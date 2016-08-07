@@ -6,7 +6,7 @@ const RequiredSchema = new SimpleSchema({
   recipientIds: {
     type: [String]
   },
-  subject: {
+  title: {
     type: String
   }
 });
@@ -30,7 +30,5 @@ const NotificationsSchema = new SimpleSchema([
     }
   }
 ]);
-
-// db.Notifications.insert({ recipientIds: ['SQHmBKJ94gJvpLKLt'], createdAt: new Date, viewedBy: [], title: 'Hello World!', body: 'Lorem ipsum dolor amet' })
 
 export { NotificationsSchema, RequiredSchema };

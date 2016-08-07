@@ -3,9 +3,8 @@ import { Notifications } from '/imports/api/notifications/notifications.js';
 
 window.Notifications = Notifications;
 
-Template.body.viewmodel({
+Template.Notifications.viewmodel({
   onRendered() {
-    console.log('body rendered');
     if (window.Notification) {
       if (Notification.permission !== 'granted') {
         Notification.requestPermission();
@@ -14,11 +13,18 @@ Template.body.viewmodel({
 
     Notifications.find().observe({
       added(doc) {
-        console.log('notification added', doc);
-        new Notification(doc.subject, {
+        const notificationSound = document.getElementById('notification-sound');
+        notificationSound && notificationSound.play();
+
+        let notification = new Notification(doc.title, {
           body: doc.body,
           silent: true
         });
+        if (doc.url) {
+          notification.onclick = function () {
+            window.open(doc.url);
+          };
+        }
       }
     })
   }

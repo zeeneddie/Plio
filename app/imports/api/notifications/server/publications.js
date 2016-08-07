@@ -7,5 +7,12 @@ Meteor.publish(null, function() {
     return this.ready();
   }
 
-  return Notifications.find({ recipientIds: this.userId });
+  return Notifications.find({
+    recipientIds: this.userId,
+    createdAt: {
+
+      // Subscribe only to notifications that were created >60 seconds ago
+      $gt: new Date(new Date().getTime() - 1000 * 60 * 1)
+    }
+  });
 });
