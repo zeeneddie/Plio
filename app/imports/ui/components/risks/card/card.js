@@ -11,7 +11,7 @@ Template.Risks_Card_Read.viewmodel({
     return ActionTypes;
   },
   risks() {
-    const list = ViewModel.findOne('RisksList');
+    const list = ViewModel.findOne('Risks_List');
     const query = list && list._getQueryForFilter();
     return this._getRisksByQuery(query);
   },
@@ -28,7 +28,7 @@ Template.Risks_Card_Read.viewmodel({
   openEditModal() {
     this.modal().open({
       _title: 'Risk',
-      template: 'EditRisk',
+      template: 'Risks_Card_Edit',
       _id: this.risk() && this.risk()._id
     });
   },
