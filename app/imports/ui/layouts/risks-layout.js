@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { OrgSubs, UserSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.RisksLayout.viewmodel({
+Template.Risks_Layout.viewmodel({
   mixin: ['organization', 'risk'],
   _subHandlers: [],
   isReady: false,

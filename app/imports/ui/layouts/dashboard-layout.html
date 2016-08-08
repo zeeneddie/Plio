@@ -1,5 +1,5 @@
-<template name="DashboardLayout">
-  {{> DashboardHeader}}
+<template name="Dashboard_Layout">
+  {{> Dashboard_Header}}
   <div class="content scroll">
     <div class="container">
       <div class="row">
@@ -7,7 +7,7 @@
           {{#if isReady}}
             {{#with organization}}
               {{> Template.dynamic template=content}}
-              {{> DashboardFooter}}
+              {{> Dashboard_Footer}}
             {{else}}
               {{> NotFoundPage subject="organization" subjectId=organizationSerialNumber}}
             {{/with}}
