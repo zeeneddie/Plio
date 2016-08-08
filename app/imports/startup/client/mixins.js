@@ -520,9 +520,9 @@ ViewModel.mixin({
           break;
       }
     },
-    _getQueryParams({ status, assigneeId = Meteor.userId() }) {
+    _getQueryParams({ isCompleted, assigneeId = Meteor.userId() }) {
       return (userId) => {
-        if (status === 3) { // completed
+        if (isCompleted) { // completed
           if (assigneeId === userId) {
             return { by: 'My completed work' };
           } else {

@@ -1,3 +1,3 @@
-import './problems-helpers.js';
+import './server/ProblemWorkflow.js';
 import './problems-service.js';
 import './ProblemWorkflow.js';

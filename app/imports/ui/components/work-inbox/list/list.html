@@ -1,7 +1,7 @@
 <template name="WorkInbox_List">
   {{#List_Read
     ref="list"
-    _id=linkedDocId
+    _id=workItemId
     onModalOpen=onModalOpen
     onSearchInputValue=onSearchInputValue}}
 
@@ -49,6 +49,6 @@
             items=(getTeamItems this "deleted")}}
       {{/each}}
     {{/if}}
-    
+
   {{/List_Read}}
 </template>
