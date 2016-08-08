@@ -7,11 +7,12 @@ import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
-  OrgCurrencies, ActionStatuses, ActionFilters,
-  ActionTypes, ReviewStatuses
+  OrgCurrencies, ActionStatuses, WorkInboxFilters,
+  ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -180,26 +181,6 @@ ViewModel.mixin({
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
-    },
-    searchOnAfterKeyUp(value) {
-      const checkIsDeletedFilter = (fn, counterName) => {
-        if (this[fn] && this[fn]('deleted')) {
-          this.searchResultsNumber(this[counterName]().count());
-          return true;
-        }
-      };
-
-      if (checkIsDeletedFilter('isActiveStandardFilter', 'standardsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveNCFilter', 'NCsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveRiskFilter', 'risksDeleted')) return;
-
-      if (!!value) {
-        this.expandAllFound();
-      } else {
-        this.expandSelected();
-      }
     }
   },
   numberRegex: {
@@ -260,6 +241,8 @@ ViewModel.mixin({
         } else {
           return user.emails[0].address;
         }
+      } else {
+        return 'Ghost user';
       }
     },
     hasUser() {
@@ -402,17 +385,17 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToAction(workItemId, queryParams = { by: this.activeActionFilter() }) {
+    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
       FlowRouter.go('workInboxItem', params, queryParams);
     },
-    goToActions(withQueryParams = true) {
+    goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
+      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilter() } : {};
       FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
-      const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
+      const params = { riskId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
       FlowRouter.go('risk', params, queryParams);
     },
@@ -488,22 +471,38 @@ ViewModel.mixin({
       return NonConformities.findOne(query, options);
     }
   },
-  action: {
-    actionId() {
+  workInbox: {
+    workItemId() {
       return FlowRouter.getParam('workItemId');
     },
-    isActiveActionFilter(filter) {
-      return this.activeActionFilter() === filter;
+    isActiveWorkInboxFilter(filter) {
+      return this.activeWorkInboxFilter() === filter;
     },
-    activeActionFilter() {
-      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || WorkInboxFilters[0];
     },
-    currentAction() {
-      const _id = this.actionId();
-      return Actions.findOne({ _id });
+    _getWorkItemsByQuery(
+      {
+        isDeleted = { $in: [null, false] },
+        organizationId = this.organizationId(),
+        ...args
+      } = {},
+        options = { sort: { createdAt: -1 } }
+    ) {
+      const query = { isDeleted, organizationId, ...args };
+      return WorkItems.find(query, options);
     },
-    ActionTypes() {
-      return ActionTypes;
+    _getWorkItemByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by };
+      return WorkItems.findOne(query, options);
+    },
+    _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
     },
     _getNameByType(type) {
       switch (type) {
@@ -518,26 +517,20 @@ ViewModel.mixin({
           break;
       }
     },
-    _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { isDeleted, ...args, organizationId: this.organizationId() };
-      return Actions.find(query, options);
-    },
-    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
-      return Actions.findOne(query, options);
-    },
-    _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
+    _getQueryParams({ isCompleted, assigneeId = Meteor.userId() }) {
       return (userId) => {
-        if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
-          return { by: 'My current actions' };
-        } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
-          return { by: 'My completed actions' };
-        } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
-          return { by: 'Team current actions' };
-        } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
-          return { by: 'Team completed actions' };
+        if (isCompleted) { // completed
+          if (assigneeId === userId) {
+            return { by: 'My completed work' };
+          } else {
+            return { by: 'Team completed work' };
+          }
         } else {
-          return { by: 'My current actions' };
+          if (assigneeId === userId) {
+            return { by: 'My current work' };
+          } else {
+            return { by: 'Team current work' };
+          }
         }
       };
     }
@@ -577,8 +570,17 @@ ViewModel.mixin({
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
     },
+    $eq(val1, val2) {
+      return val1 === val2;
+    },
     $not(predicate) {
       return !predicate;
+    },
+    $every(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
+    },
+    $some(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {
@@ -676,6 +678,32 @@ ViewModel.mixin({
           return 'default';
       }
     }
+  },
+  workItemStatus: {
+    getStatusName(status) {
+      return WorkItemsStore.STATUSES[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'default';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'danger';
+          break;
+        case 3:
+          return 'success';
+          break;
+        default:
+          return 'default';
+          break;
+      }
+    },
+    IN_PROGRESS: [0, 1, 2],
+    COMPLETED: 3
   },
   members: {
     _searchString() {

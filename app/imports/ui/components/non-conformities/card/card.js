@@ -1,15 +1,17 @@
 import { Template } from 'meteor/templating';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { update, remove, restore } from '/imports/api/non-conformities/methods.js';
+import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
-  autorun() {
-    this.templateInstance.subscribe('NCImprovementPlan', this.NC() && this.NC()._id);
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
+  ActionTypes() {
+    return ActionTypes;
   },
   NC() {
-    return this._getNCByQuery({ _id: this.NCId() });
+    return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
     const list = ViewModel.findOne('NCList');

@@ -8,10 +8,11 @@ Template.RisksList.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router'],
   autorun() {
-    if (!this.focused() && !this.animating() && !this.searchText()) {
+    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });
+
       if (!contains) {
         const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() });
 
@@ -19,21 +20,15 @@ Template.RisksList.viewmodel({
           const { _id } = risk;
           Meteor.setTimeout(() => {
             this.goToRisk(_id);
-            this.expandCollapsed(this.riskId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
             this.goToRisks();
-          }, 0)
+          }, 0);
         }
       }
     }
-  },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    this.expandCollapsed(this.riskId());
   },
   _getQueryForFilter() {
     switch(this.activeRiskFilter()) {
@@ -110,54 +105,23 @@ Template.RisksList.viewmodel({
     const options = { sort: { deletedAt: -1 } };
     return this._getRisksByQuery(query, options);
   },
-  focused: false,
-  animating: false,
-  expandAllFound() {
-    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
+  onSearchInputValue() {
+    return (value) => {
+      if (this.isActiveRiskFilter('deleted')) {
+        return this.toArray(this.risksDeleted());
+      }
 
-    const vms = ViewModel.find('ListItem', (viewmodel) => {
-      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
-    });
-
-    this.searchResultsNumber(ids.length);
-
-    if (vms.length > 0) {
-      this.animating(true);
-
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.onAfterExpand()
+      const sections = ViewModel.find('RiskSectionItem');
+      const ids = this.toArray(sections).map(vm => vm.risks && vm.risks().map(({ _id }) => _id));
+      return _.flatten(ids);
+    };
+  },
+  onModalOpen() {
+    return () =>
+      this.modal().open({
+        _title: 'Risk',
+        template: 'CreateRisk',
+        variation: 'save'
       });
-    }
-  },
-  expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.riskId()));
-
-    this.animating(true);
-
-    if (vms.length > 0) {
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.expandSelectedRisk()
-      });
-    } else {
-      this.expandSelectedRisk();
-    }
-  },
-  expandSelectedRisk() {
-    this.expandCollapsed(this.riskId(), () => {
-      this.onAfterExpand();
-    });
-  },
-  onAfterExpand() {
-    this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
-  },
-  openAddRiskModal() {
-    this.modal().open({
-      _title: 'Risk',
-      template: 'CreateRisk',
-      variation: 'save'
-    });
   }
 });

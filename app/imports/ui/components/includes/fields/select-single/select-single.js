@@ -16,7 +16,7 @@ Template.Select_Single.viewmodel({
       } else if (!!this.selected() && !this.value() && items.length > 0) {
         const item = this.getSelectedItem();
 
-        this.value(item.title);
+        item && item.title && this.value(item.title);
         computation.stop();
       }
     }

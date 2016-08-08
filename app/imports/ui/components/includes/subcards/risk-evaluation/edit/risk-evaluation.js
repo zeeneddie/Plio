@@ -16,7 +16,7 @@ Template.Subcards_RiskEvaluation_Edit.viewmodel({
       // In case the error was thrown we backup stored data
       if (err) this.load({ ...data });
     };
-    const callback = this.combine(loadArgs, cb);
+    const callback = this.chain(loadArgs, cb);
 
     const _args = _.keys(args)
                     .map(key => ({ [`riskEvaluation.${key}`]: args[key] }) )

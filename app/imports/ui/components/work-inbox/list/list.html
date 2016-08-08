@@ -1,0 +1,54 @@
+<template name="WorkInbox_List">
+  {{#List_Read
+    ref="list"
+    _id=workItemId
+    onModalOpen=onModalOpen
+    onSearchInputValue=onSearchInputValue}}
+
+    {{#if isActiveWorkInboxFilter "My current work"}}
+      {{#each items.my.current}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
+
+    {{#if isActiveWorkInboxFilter "Team current work"}}
+      {{#each assignees.current}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "current")}}
+      {{/each}}
+    {{/if}}
+
+    {{#if isActiveWorkInboxFilter "My completed work"}}
+      {{#each items.my.completed}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
+
+    {{#if isActiveWorkInboxFilter "Team completed work"}}
+      {{#each assignees.completed}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "completed")}}
+      {{/each}}
+    {{/if}}
+
+    {{#if isActiveWorkInboxFilter "My deleted work"}}
+      {{#each items.my.deleted}}
+        {{> WorkInbox_Item}}
+      {{/each}}
+    {{/if}}
+
+    {{#if isActiveWorkInboxFilter "Team deleted work"}}
+      {{#each assignees.deleted}}
+        {{> ListItem
+            template="WorkInbox_SectionItem"
+            title=(userFullNameOrEmail this)
+            items=(getTeamItems this "deleted")}}
+      {{/each}}
+    {{/if}}
+
+  {{/List_Read}}
+</template>
