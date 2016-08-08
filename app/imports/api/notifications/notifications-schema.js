@@ -13,7 +13,6 @@ const RequiredSchema = new SimpleSchema({
 
 const NotificationsSchema = new SimpleSchema([
   CreatedAtSchema,
-  ViewedBySchema,
   RequiredSchema,
   {
     body: {
@@ -26,6 +25,11 @@ const NotificationsSchema = new SimpleSchema([
     },
     url: {
       type: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    viewedBy: {
+      type: [String],
+      regEx: SimpleSchema.RegEx.Id,
       optional: true
     }
   }

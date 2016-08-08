@@ -9,14 +9,15 @@ import { IdSchema } from '../schemas.js';
 export const updateViewedBy = new ValidatedMethod({
   name: 'Notifications.updateViewedBy',
 
-  validate: IdSchema.validator(),
+  validate(_id) { IdSchema.validator() },
 
-  run({ _id }) {
+  run(_id) {
     if (!this.userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update notifications'
       );
     }
+
     if (!Notifications.findOne({ _id, recipientIds: this.userId })) {
       throw new Meteor.Error(
         400, 'Notification does not exist'

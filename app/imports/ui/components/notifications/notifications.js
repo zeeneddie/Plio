@@ -1,9 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Notifications } from '/imports/api/notifications/notifications.js';
+import { updateViewedBy } from '/imports/api/notifications/methods.js';
 
 window.Notifications = Notifications;
 
 Template.Notifications.viewmodel({
+  mixin: ['notifications'],
   onRendered() {
     if (window.Notification) {
       if (Notification.permission !== 'granted') {
@@ -12,19 +14,9 @@ Template.Notifications.viewmodel({
     }
 
     Notifications.find().observe({
-      added(doc) {
-        const notificationSound = document.getElementById('notification-sound');
-        notificationSound && notificationSound.play();
-
-        let notification = new Notification(doc.title, {
-          body: doc.body,
-          silent: true
-        });
-        if (doc.url) {
-          notification.onclick = function () {
-            window.open(doc.url);
-          };
-        }
+      added: (doc) => {
+        this.sendNotification(doc);
+        updateViewedBy.call(doc._id);
       }
     })
   }

@@ -32,12 +32,13 @@ const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
  */
 export default class NotificationSender {
   /**
-   * @param {string} subject notification's subject/title
-   * @param {object} [templateData] data to render on template
-   * @param {object} [options] additional configuration
-   * @param {string} [options.senderId] user that sent notification
-   * @param {object} [options.helpers] define you own formatting helpers
-   * in others too
+   * @param {object} [config] Notification configuration
+   * @param {array | string} [config.recipients] An array of emails and/or _ids or email/_id string
+   * @param {string} [config.emailSubject] Subject of the email
+   * @param {object} [config.templateData] Template data scope
+   * @param {string} [config.templateName] Name of template
+   * @param {object} [config.notificationData] Notification configuration (Check out Notification API)
+   * @param {string} [config.options] Additional options
    * @constructor
    */
   constructor({ recipients, emailSubject, templateData, templateName, notificationData, options = {}}) {
@@ -116,8 +117,6 @@ export default class NotificationSender {
 
   /**
    * Sends email to specified recipients
-   *
-   * @param recipients user ID or email. May be an array of ids and/or emails
    */
   sendEmail() {
     const recipients = this._options.recipients || [];
@@ -126,6 +125,7 @@ export default class NotificationSender {
 
     this._sendEmailBasic(recipients, html);
 
+    // enables method chaining
     return this;
   }
 
@@ -139,22 +139,25 @@ export default class NotificationSender {
     NotificationsService.insert(notificationData);
   }
 
+  /**
+   * Sends browser notification to specified recipients
+   */
   sendOnSite() {
     const recipients = this._options.recipients || [];
 
     this._sendOnSiteBasic(recipients);
 
+    // enables method chaining
     return this;
   }
 
   sendAll() {
     this.sendEmail();
     this.sendOnSite();
+    // we don't need method chaining here
   }
 
   static getAbsoluteUrl(path) {
     return `${process.env.ROOT_URL}${path}`;
   }
 }
-
-Meteor.NotificationSender = NotificationSender;

@@ -65,15 +65,6 @@ Template.CreateStandard.viewmodel({
         return;
       }
 
-      addedToNotifyList.call({
-        standardId: _id,
-        userId: args.owner
-      }, (err, res) => {
-        if (err) {
-          Utils.showError('Failed to send email to standard\'s owner');
-        }
-      });
-
       this.modal().close();
 
       Meteor.setTimeout(() => {

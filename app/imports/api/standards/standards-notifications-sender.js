@@ -25,17 +25,19 @@ export default class StandardsNotificationsSender {
         url: this.getStandardUrl()
       }
     };
-    new NotificationSender({
-      recipients: userId,
-      emailSubject,
-      templateName: 'minimalisticEmail',
-      templateData,
-      notificationData: {
-        title: this._standard.title,
-        body: 'You have been added to the notification list for any changes',
-        url: this.getStandardUrl()
-      }
-    }).sendEmail().sendOnSite();
+    if (userId !== this.userId) {
+      new NotificationSender({
+        recipients: userId,
+        emailSubject,
+        templateName: 'minimalisticEmail',
+        templateData,
+        notificationData: {
+          title: this._standard.title,
+          body: 'You have been added to the notification list for any changes',
+          url: this.getStandardUrl()
+        }
+      }).sendOnSite().sendEmail()
+    }
   }
 
   removedFromNotifyList(userId) {

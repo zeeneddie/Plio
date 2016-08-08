@@ -6,7 +6,7 @@ import Sounds from '/imports/api/sounds.js';
 
 
 Template.UserPreferences.viewmodel({
-  mixin: ['modal'],
+  mixin: ['modal', 'notifications'],
   userId: '',
   areNotificationsEnabled: false,
   notificationSound: '',
@@ -63,7 +63,6 @@ Template.UserPreferences.viewmodel({
     return Sounds;
   },
   sendTestNotification() {
-    const notificationSound = document.getElementById('notification-sound');
     const quotes = [
       `If you don't like it - change it`,
       `We spend so much time looking - but never seeing`,
@@ -73,10 +72,10 @@ Template.UserPreferences.viewmodel({
       `Now then, let's play`,
       `Use your imagination`
     ];
-    notificationSound && notificationSound.play();
-    let notification = new Notification('Test notification', {
+
+    this.sendNotification({
+      title: 'Test notification',
       body: Random.choice(quotes),
-      silent: true
     });
   },
   events: {

@@ -9,6 +9,7 @@ Meteor.publish(null, function() {
 
   return Notifications.find({
     recipientIds: this.userId,
+    viewedBy: { $ne: this.userId },
     createdAt: {
 
       // Subscribe only to notifications that were created >60 seconds ago
