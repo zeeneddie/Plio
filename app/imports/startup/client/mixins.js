@@ -570,6 +570,9 @@ ViewModel.mixin({
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
     },
+    mapByIndex(arr, index, value) {
+      return Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+    },
     $eq(val1, val2) {
       return val1 === val2;
     },
