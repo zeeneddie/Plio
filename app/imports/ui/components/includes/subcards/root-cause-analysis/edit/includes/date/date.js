@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NC_RCA_Date_Edit.viewmodel({
+Template.RCA_TargetDate_Edit.viewmodel({
   key: '',
   date: '',
   startDate: new Date(),
@@ -11,7 +11,7 @@ Template.NC_RCA_Date_Edit.viewmodel({
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { date:date } = viewmodel.getData();
+    const { date } = viewmodel.getData();
 
     if (date === this.templateInstance.data.date) return;
 

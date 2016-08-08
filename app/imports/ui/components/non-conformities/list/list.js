@@ -10,7 +10,7 @@ Template.NC_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
-    if (!this.focused() && !this.animating() && !this.searchText()) {
+    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
@@ -30,12 +30,6 @@ Template.NC_List.viewmodel({
         }
       }
     }
-  },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    this.expandCollapsed(this.NCId());
   },
   _getQueryForFilter() {
     switch(this.activeNCFilter()) {
@@ -119,8 +113,7 @@ Template.NC_List.viewmodel({
       cost: { $exists: true }
     }).fetch();
 
-    const total = ncs.reduce((prev, cur) => {
-      const { _id, cost } = cur;
+    const total = ncs.reduce((prev, { _id, cost }) => {
       const occurrences = ((() => {
         const query = { nonConformityId: _id };
         return Occurrences.find(query);
@@ -129,58 +122,27 @@ Template.NC_List.viewmodel({
       return prev + t;
     }, 0);
 
-    const currency = this.organization() && this.organization().currency;
+    const { currency } = this.organization() || {};
 
-    return total > 0 ? this.getCurrencySymbol(currency) + this.round(total) : '';
+    return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
-  focused: false,
-  animating: false,
-  expandAllFound() {
-    const ids = _.flatten(ViewModel.find('NC_SectionItem').map(vm => vm.NCs && vm.NCs().fetch().map(item => item._id)));
+  onSearchInputValue() {
+    return (value) => {
+      if (this.isActiveNCFilter('deleted')) {
+        return this.toArray(this.NCsDeleted());
+      }
 
-    const vms = ViewModel.find('ListItem', (viewmodel) => {
-      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
-    });
-
-    this.searchResultsNumber(ids.length);
-
-    if (vms.length > 0) {
-      this.animating(true);
-
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.onAfterExpand()
+      const sections = ViewModel.find('NC_SectionItem');
+      const ids = this.toArray(sections).map(vm => vm.NCs && this.toArray(vm.NCs()).map(({ _id }) => _id));
+      return _.flatten(ids);
+    };
+  },
+  onModalOpen() {
+    return () =>
+      this.modal().open({
+        _title: 'Non-conformity',
+        template: 'NC_Create',
+        variation: 'save'
       });
-    }
-  },
-  expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.NCId()));
-
-    this.animating(true);
-
-    if (vms.length > 0) {
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.expandSelectedNC()
-      });
-    } else {
-      this.expandSelectedNC();
-    }
-  },
-  expandSelectedNC() {
-    this.expandCollapsed(this.NCId(), () => {
-      this.onAfterExpand();
-    });
-  },
-  onAfterExpand() {
-    this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
-  },
-  openAddNCModal() {
-    this.modal().open({
-      _title: 'Non-conformity',
-      template: 'NC_Create',
-      variation: 'save'
-    });
   }
 });

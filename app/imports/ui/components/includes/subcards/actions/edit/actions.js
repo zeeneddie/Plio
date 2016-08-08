@@ -19,12 +19,14 @@ import {
   linkDocument,
   unlinkDocument,
   setCompletionDate,
-  setVerificationDate
+  setCompletionExecutor,
+  setVerificationDate,
+  setVerificationExecutor
 } from '/imports/api/actions/methods.js';
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action', 'utils'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
   title() {
     return pluralize(this._getNameByType(this.type()));
@@ -249,6 +251,12 @@ Template.Subcards_Actions_Edit.viewmodel({
       ...args
     }, cb);
   },
+  updateCompletionExecutorFn() {
+    return this.updateCompletionExecutor.bind(this);
+  },
+  updateCompletionExecutor({ ...args }, cb) {
+    this.modal().callMethod(setCompletionExecutor, { ...args }, cb);
+  },
   updateVerificationDateFn() {
     return this.updateVerificationDate.bind(this);
   },
@@ -260,5 +268,11 @@ Template.Subcards_Actions_Edit.viewmodel({
       targetDate: tzDate,
       ...args
     }, cb);
-  }
+  },
+  updateVerificationExecutorFn() {
+    return this.updateVerificationExecutor.bind(this);
+  },
+  updateVerificationExecutor({ ...args }, cb) {
+    this.modal().callMethod(setVerificationExecutor, { ...args }, cb);
+  },
 });

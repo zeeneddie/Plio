@@ -8,15 +8,24 @@ import { ActionDocumentTypes } from '/imports/api/constants.js';
 
 Template.ActionItem.viewmodel({
   share: 'window',
-  mixin: ['date', 'action', 'organization', 'actionStatus'],
+  mixin: ['date', 'workInbox', 'organization', 'actionStatus', 'user'],
   autorun() {
-    if (this._id() === this.actionId() && this.isNew()) {
+    if (this._id() === this.workItemId() && this.isNew()) {
       Tracker.nonreactive(() => this.updateViewedBy());
     }
   },
   _documentType: '',
   onCreated() {
     this.loadStatusMixinByDocType(this._documentType());
+  },
+  getDate({ isDeleted, deletedAt, createdAt }) {
+    const date = isDeleted ? deletedAt : createdAt;
+    return this.renderDate(date);
+  },
+  getUserText({ isDeleted, createdBy, deletedBy }) {
+    return isDeleted
+            ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
+            : '';
   },
   loadStatusMixinByDocType(documentType) {
     switch(documentType) {

@@ -4,15 +4,17 @@
       {{#with risk}}
         {{> Risk_Card_Edit_Main
             risk=this
+            updateAnalysisExecutor=getUpdateAnalysisExecutorFn
             updateAnalysisDate=getUpdateAnalysisDateFn
             completeAnalysis=getCompleteAnalysisFn
             undoAnalysis=getUndoAnalysisFn
+            updateStandardsExecutor=getUpdateStandardsExecutorFn
             updateStandardsDate=getUpdateStandardsDateFn
             updateStandards=getUpdateStandardsFn
             undoStandardsUpdate=getUndoStandardsUpdateFn}}
 
         {{#if showRootCauseAnalysis}}
-          {{> Subcards_RootCauseAnalysis_Edit
+          {{> Subcards_RCA_Edit
               _id=this._id
               analysis=this.analysis
               updateOfStandards=this.updateOfStandards

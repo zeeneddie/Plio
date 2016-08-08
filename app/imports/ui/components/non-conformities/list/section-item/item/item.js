@@ -8,14 +8,15 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 Template.NC_Item.viewmodel({
   share: 'window',
   mixin: ['date', 'nonconformity', 'currency', 'organization'],
-  autorun() {
-    if (this._id() === this.NCId() && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
-    }
-  },
-  onCreated() {
+  onCreated(template) {
     const currency = this.organization() && this.organization().currency;
     this.load({ currency });
+
+    template.autorun((computation) => {
+      if (this._id() === this.NCId() && this.isNew()) {
+        Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
+      }
+    });
   },
   cost: '',
   currency: '',

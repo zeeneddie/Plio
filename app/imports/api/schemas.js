@@ -103,13 +103,12 @@ export const CreatedAtSchema = new SimpleSchema({
 export const CreatedBySchema = new SimpleSchema({
   createdBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/,
     optional: true,
     autoValue() {
       if (this.isInsert) {
-
         // Workaround for fixtures
-        return this.userId || this.isSet && this.value;
+        return this.userId || (this.isSet && this.value) || 'system';
       } else {
         this.unset();
       }
@@ -134,11 +133,11 @@ export const UpdatedAtSchema = new SimpleSchema({
 export const UpdatedBySchema = new SimpleSchema({
   updatedBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/,
     optional: true,
     autoValue() {
       if (this.isUpdate) {
-        return this.userId;
+        return this.userId || (this.isSet && this.value) || 'system';
       } else {
         this.unset();
       }
@@ -297,6 +296,11 @@ export const BaseProblemsOptionalSchema = ((() => {
         defaultValue: 0,
         optional: true
       },
+      [`${key}.completionComments`]: {
+        type: String,
+        optional: true,
+        max: 140
+      },
       [`${key}.completedAt`]: {
         type: Date,
         optional: true
@@ -386,3 +390,14 @@ export const ReviewSchema = ((() => {
     }
   });
 })());
+
+export const CompleteActionSchema = new SimpleSchema([
+  IdSchema,
+  {
+    completionComments: {
+      type: String,
+      optional: true,
+      max: 140
+    }
+  }
+]);

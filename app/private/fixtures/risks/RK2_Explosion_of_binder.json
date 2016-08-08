@@ -20,9 +20,11 @@
     "status" : 0
   },
   "updateOfStandards" : {
-    "status" : 0
+    "status" : 0,
+    "executor": "ABKpuGYiJHKhDwLDk",
+    "targetDate": {"$date": 1469532269427}
   },
-  "status" : 1,
+  "status" : 11,
   "updatedAt" : {"$date": 1459508500000},
   "updatedBy" : "SQHmBKJ94gJvpLKLt",
   "score" : {

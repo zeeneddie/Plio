@@ -4,10 +4,11 @@ import { ActionPlanOptions } from '/imports/api/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
+  mixin: ['modal', 'workInbox', 'organization', 'router', 'collapsing'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),
@@ -51,12 +52,14 @@ Template.Actions_Create.viewmodel({
 
         Meteor.setTimeout(() => {
           const action = this._getActionByQuery({ _id });
+          const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
+          const queryParams = this._getQueryParams(workItem)(Meteor.userId());
 
-          const queryParams = this._getQueryParams(action)(Meteor.userId());
+          if (workItem) {
+            this.goToWorkItem(workItem._id, queryParams);
 
-          this.goToAction(_id, queryParams);
-
-          this.expandCollapsed(_id);
+            this.expandCollapsed(workItem._id);
+          }
 
           this.modal().open({
             _id,

@@ -12,4 +12,5 @@ import './userdirectory';
 import './risks';
 import './non-conformities';
 import './actions';
+import './work-inbox';
 import './standard-subcards';

@@ -7,10 +7,12 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 Template.Risks_Item.viewmodel({
   share: 'window',
   mixin: ['risk', 'date', 'riskScore'],
-  autorun() {
-    if (this._id() === this.riskId() && this.isNew()) {
-      Tracker.nonreactive(() => this.updateViewedBy());
-    }
+  onCreated(template) {
+    template.autorun((computation) => {
+      if (this._id() === this.riskId() && this.isNew()) {
+        Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
+      }
+    });
   },
   identifiedAt: '',
   identifiedBy: '',
@@ -24,10 +26,10 @@ Template.Risks_Item.viewmodel({
   isNew() {
     return !this.viewedBy().find(_id => _id === Meteor.userId());
   },
-  updateViewedBy() {
+  updateViewedBy(cb) {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    updateViewedBy.call({ _id }, cb);
   },
   navigate() {
     if ($(window).width() < 768) {

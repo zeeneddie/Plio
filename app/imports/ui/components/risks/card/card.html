@@ -1,9 +1,10 @@
 <template name="Risks_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasRisks}}
+    {{#if risks.count}}
       {{#Card_Read
+        isReadOnly=isReadOnly
         cardTitle="Risk"
-        document=risk
+        doc=risk
         onRestore=onRestoreCb
         onDelete=onDeleteCb
         onOpenEditModal=onOpenEditModalCb}}

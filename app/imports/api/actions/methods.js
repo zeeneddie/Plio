@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema } from '../schemas.js';
+import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
 
 
@@ -122,6 +122,30 @@ export const setCompletionDate = new ValidatedMethod({
   }
 });
 
+export const setCompletionExecutor = new ValidatedMethod({
+  name: 'Actions.setCompletionExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set executor for action completion'
+      );
+    }
+
+    return ActionService.setCompletionExecutor({ _id, ...args });
+  }
+});
+
 export const setVerificationDate = new ValidatedMethod({
   name: 'Actions.setVerificationDate',
 
@@ -140,6 +164,30 @@ export const setVerificationDate = new ValidatedMethod({
     }
 
     return ActionService.setVerificationDate({ _id, ...args });
+  }
+});
+
+export const setVerificationExecutor = new ValidatedMethod({
+  name: 'Actions.setVerificationExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set executor for action verification'
+      );
+    }
+
+    return ActionService.setVerificationExecutor({ _id, ...args });
   }
 });
 
@@ -205,12 +253,7 @@ export const unlinkDocument = new ValidatedMethod({
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    {
-      completionComments: { type: String }
-    }
-  ]).validator(),
+  validate: CompleteActionSchema.validator(),
 
   run({ _id, ...args }) {
     const userId = this.userId;
@@ -281,23 +324,6 @@ export const undoVerification = new ValidatedMethod({
   }
 });
 
-export const restore = new ValidatedMethod({
-  name: 'Actions.restore',
-
-  validate: IdSchema.validator(),
-
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore actions'
-      );
-    }
-
-    return ActionService.restore({ _id, userId});
-  }
-});
-
 export const remove = new ValidatedMethod({
   name: 'Actions.remove',
 
@@ -311,6 +337,23 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return ActionService.remove({ _id, deletedBy: userId});
+    return ActionService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'Actions.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore an action'
+      );
+    }
+
+    return ActionService.restore({ _id });
   }
 });
