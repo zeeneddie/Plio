@@ -468,7 +468,7 @@ export default {
       console.log('linkedTo', linkedTo);
       throw new Meteor.Error(
         400,
-        `Root cause analysis for ${sequentialId} must be completed first`
+        `Root cause analysis for ${sequentialId} "${title}" must be completed first`
       );
     }
   }
