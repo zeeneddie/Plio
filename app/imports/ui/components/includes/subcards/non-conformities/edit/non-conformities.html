@@ -1,5 +1,8 @@
 <template name="Subcards_NonConformities_Edit">
-  {{#SubCard_EditWrapper _lText="Non-conformities" _rText=NCs.count}}
+  {{#SubCard_EditWrapper
+    _lText="Non-conformities"
+    _rText=NCs.count
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block">
       {{#if NCs.count}}
         <div class="card">

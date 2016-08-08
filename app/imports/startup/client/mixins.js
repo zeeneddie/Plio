@@ -25,24 +25,19 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    collapseTimeout: '',
     toggleCollapse: _.throttle(function(cb, timeout) {
-
       // Callback is always the last argument
       timeout = Match.test(timeout, Number) ? timeout : null;
-      if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
 
-        // Hide other collapses
-        ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
-            vm.collapse.collapse('hide');
-            vm.collapsed(true);
-          }
+      if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
+        const vms = ViewModel.find('ListItem', vm => vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId);
+        vms.forEach((vm) => {
+          vm.collapse.collapse('hide');
+          vm.collapsed(true);
         });
       }
 
       if (this.collapsed() && timeout) {
-
         // We need some time to render the content for collapsible sections with dynamic content
         setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
       } else {

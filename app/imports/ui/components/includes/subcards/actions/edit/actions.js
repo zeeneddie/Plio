@@ -28,6 +28,9 @@ import {
 Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
+  renderContentOnInitial() {
+    return !(this.actions().count() > 5);
+  },
   title() {
     return pluralize(this._getNameByType(this.type()));
   },
