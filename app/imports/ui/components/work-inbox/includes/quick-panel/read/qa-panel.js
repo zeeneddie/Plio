@@ -71,8 +71,8 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
 
             const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
-            Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
           }
+          Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
         };
 
         restore.call({ _id }, callback);
