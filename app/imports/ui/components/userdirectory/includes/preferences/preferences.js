@@ -64,18 +64,32 @@ Template.UserPreferences.viewmodel({
   },
   sendTestNotification() {
     const quotes = [
-      `If you don't like it - change it`,
-      `We spend so much time looking - but never seeing`,
-      `Let all these things just sort of happen`,
-      `Be better than you were yesterday`,
-      `This is your world`,
-      `Now then, let's play`,
-      `Use your imagination`
+      `It is certain`,
+      `It is decidedly so`,
+      `Without a doubt`,
+      `Yes — definitely`,
+      `You may rely on it`,
+      `As I see it, yes`,
+      `Most likely`,
+      `Outlook good`,
+      `Signs point to yes`,
+      `Yes`,
+      `Reply hazy, try again`,
+      `Ask again later`,
+      `Better not tell you now`,
+      `Cannot predict now`,
+      `Concentrate and ask again`,
+      `Don’t count on it`,
+      `My reply is no`,
+      `My sources say no`,
+      `Outlook not so good`,
+      `Very doubtful`
     ];
 
     this.sendNotification({
       title: 'Test notification',
       body: Random.choice(quotes),
+      icon: '/p-logo-magic-8.png'
     });
   },
   events: {
