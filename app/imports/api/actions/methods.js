@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema } from '../schemas.js';
+import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
 
 
@@ -81,11 +81,65 @@ export const updateViewedBy = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update an action'
+        403, 'Unauthorized user cannot update actions'
+      );
+    }
+
+    if (!Actions.findOne({ _id })) {
+      throw new Meteor.Error(
+        400, 'Action does not exist'
+      );
+    }
+
+    if (!!Actions.findOne({ _id, viewedBy: this.userId })) {
+      throw new Meteor.Error(
+        400, 'You have been already added to the viewedBy list of this action'
       );
     }
 
     return ActionService.updateViewedBy({ _id, userId });
+  }
+});
+
+export const setCompletionDate = new ValidatedMethod({
+  name: 'Actions.setCompletionDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set target date for action completion'
+      );
+    }
+
+    return ActionService.setCompletionDate({ _id, ...args });
+  }
+});
+
+export const setVerificationDate = new ValidatedMethod({
+  name: 'Actions.setVerificationDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot set target date for action verification'
+      );
+    }
+
+    return ActionService.setVerificationDate({ _id, ...args });
   }
 });
 
@@ -151,12 +205,7 @@ export const unlinkDocument = new ValidatedMethod({
 export const complete = new ValidatedMethod({
   name: 'Actions.complete',
 
-  validate: new SimpleSchema([
-    IdSchema,
-    {
-      completionComments: { type: String }
-    }
-  ]).validator(),
+  validate: CompleteActionSchema.validator(),
 
   run({ _id, ...args }) {
     const userId = this.userId;
@@ -240,6 +289,23 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    return ActionService.remove({ _id, deletedBy: userId});
+    return ActionService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'Actions.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore an action'
+      );
+    }
+
+    return ActionService.restore({ _id });
   }
 });

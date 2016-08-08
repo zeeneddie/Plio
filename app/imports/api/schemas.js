@@ -1,7 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { TimeUnits, DocumentTypes, AnalysisStatuses } from './constants.js';
-import { Utils } from '/imports/core/utils.js';
+import moment from 'moment-timezone';
 
+import {
+  TimeUnits, DocumentTypes, AnalysisStatuses,
+  ReviewStatuses
+} from './constants.js';
+import { Utils } from '/imports/core/utils.js';
 
 
 export const IdSchema = new SimpleSchema({
@@ -212,7 +216,8 @@ export const ViewedBySchema = new SimpleSchema({
 export const DeletedSchema = new SimpleSchema({
   isDeleted: {
     type: Boolean,
-    optional: true
+    optional: true,
+    defaultValue: false
   },
   deletedBy: {
     type: String,
@@ -281,11 +286,21 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: Date,
         optional: true
       },
+      [`${key}.executor`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
+      },
       [`${key}.status`]: {
         type: Number,
         allowedValues: _.keys(AnalysisStatuses).map(status => parseInt(status, 10)),
         defaultValue: 0,
         optional: true
+      },
+      [`${key}.completionComments`]: {
+        type: String,
+        optional: true,
+        max: 140
       },
       [`${key}.completedAt`]: {
         type: Date,
@@ -302,11 +317,6 @@ export const BaseProblemsOptionalSchema = ((() => {
   const analysis = {
     analysis: {
       type: Object,
-      optional: true
-    },
-    'analysis.executor': {
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     ...getRepeatingFields('analysis')
@@ -330,7 +340,7 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: String,
         optional: true
       },
-      departments: {
+      departmentsIds: {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
         optional: true
@@ -341,3 +351,54 @@ export const BaseProblemsOptionalSchema = ((() => {
   ]);
 
 })());
+
+
+export const TimezoneSchema = new SimpleSchema({
+  timezone: {
+    type: String,
+    allowedValues: moment.tz.names(),
+    optional: true
+  }
+});
+
+export const ReviewSchema = ((() => {
+  const schema = new SimpleSchema({
+    status: {
+      type: Number,
+      allowedValues: _.keys(ReviewStatuses).map(status => parseInt(status, 10)),
+      defaultValue: 2
+    },
+    reviewedAt: {
+      type: Date,
+      optional: true
+    },
+    reviewedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    comments: {
+      type: String,
+      max: 140,
+      optional: true
+    }
+  });
+
+  return new SimpleSchema({
+    review: {
+      type: schema,
+      optional: true
+    }
+  });
+})());
+
+export const CompleteActionSchema = new SimpleSchema([
+  IdSchema,
+  {
+    completionComments: {
+      type: String,
+      optional: true,
+      max: 140
+    }
+  }
+]);

@@ -5,12 +5,14 @@ import { OrgOwnerRoles } from '/imports/api/constants.js';
 
 
 function postSignUpHook(userId, info) {
-  const organizationName = info.profile.organizationName || 'My Organization';
+  const orgName = info.profile.organizationName || 'My Organization';
+  const orgTimezone = info.profile.organizationTimezone || 'Europe/London';
 
   let orgId;
   try {
     orgId = OrganizationService.insert({
-      name: organizationName,
+      name: orgName,
+      timezone: orgTimezone,
       ownerId: userId
     });
   } catch(err) {
@@ -19,6 +21,15 @@ function postSignUpHook(userId, info) {
   }
 
   Roles.addUsersToRoles(userId, OrgOwnerRoles, orgId);
+
+  Meteor.users.update({
+    _id: userId
+  }, {
+    $unset: {
+      'profile.organizationName': '',
+      'profile.organizationTimezone': ''
+    }
+  });
 }
 
 AccountsTemplates.configure({

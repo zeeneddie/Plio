@@ -1,4 +1,10 @@
-const NCTypes = {
+const ProblemGuidelineTypes = {
+  MINOR: 'minor',
+  MAJOR: 'major',
+  CRITICAL: 'critical'
+};
+
+const ProblemMagnitudes = {
   MINOR: 'minor',
   MAJOR: 'major',
   CRITICAL: 'critical'
@@ -6,19 +12,25 @@ const NCTypes = {
 
 const ProblemsStatuses = {
   1: 'Open - just reported',
-  2: 'Open - analysis due today',
-  3: 'Open - analysis overdue',
-  4: 'Open - analysis completed, action needed',
-  5: 'Open - analysis completed, action in place',
-  6: 'Open - action due today',
-  7: 'Open - action overdue',
-  8: 'Open - action completed',
-  9: 'Open - verification due today',
-  10: 'Open - verification overdue',
-  11: 'Open - action verified as effective',
-  12: 'Open - action failed verification',
-  13: 'Closed - action verified, standard updated',
-  14: 'Deleted'
+  2: 'Open - just reported, awaiting analysis',
+  3: 'Open - just reported, awaiting action',
+  4: 'Open - analysis due today',
+  5: 'Open - analysis overdue',
+  6: 'Open - analysis completed, action needed',
+  7: 'Open - analysis completed, action(s) in place',
+  8: 'Open - action(s) due today',
+  9: 'Open - action(s) overdue',
+  10: 'Open - action(s) completed',
+  11: 'Open - action(s) completed, awaiting verification',
+  12: 'Open - verification due today',
+  13: 'Open - verification past due',
+  14: 'Open - action(s) verified as effective, awaiting update of standard(s)',
+  15: 'Open - action(s) verified as effective, update of standard(s) due today',
+  16: 'Open - action(s) verified as effective, update of standard(s) past due',
+  17: 'Open - action(s) failed verification',
+  18: 'Closed - action(s) completed',
+  19: 'Closed - action(s) verified, standard(s) reviewed',
+  20: 'Deleted'
 };
 
 const StandardStatuses = {
@@ -31,25 +43,55 @@ const AnalysisStatuses = {
   1: 'Completed'
 };
 
+const ReviewStatuses = {
+  0: 'Overdue',
+  1: 'Awaiting review',
+  2: 'Up-to-date'
+};
+
+const ProblemTypes = {
+  NC: 'non-conformity',
+  RISK: 'risk'
+};
+
 const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
   RISK_CONTROL: 'RC'
 };
 
+const WorkItemsStore = {
+  TYPES: {
+    COMPLETE_ACTION: 'complete action',
+    VERIFY_ACTION: 'verify action',
+    COMPLETE_ANALYSIS: 'complete analysis',
+    COMPLETE_UPDATE_OF_STANDARDS: 'complete update of standards'
+  },
+  LINKED_TYPES: {
+    ...ActionTypes,
+    ...ProblemTypes
+  },
+  STATUSES: {
+    0: 'in progress',
+    1: 'due today',
+    2: 'overdue',
+    3: 'completed'
+  }
+};
+
 const ActionUndoTimeInHours = 1;
 
 const ActionStatuses = {
-  0: 'In progress',
-  1: 'In progress - due for completion today',
-  2: 'In progress - completion overdue',
-  3: 'In progress - completed, not yet verified',
-  4: 'In progress - completed, verification due today',
-  5: 'In progress - completed, verification overdue',
-  6: 'Completed - failed verification',
-  7: 'Completed - verified as effective',
-  8: 'Completed - verified & standardized',
-  9: 'Deleted'
+  1: 'In progress',
+  2: 'In progress - due for completion today',
+  3: 'In progress - completion overdue',
+  4: 'In progress - completed, not yet verified',
+  5: 'In progress - completed, verification due today',
+  6: 'In progress - completed, verification overdue',
+  7: 'Completed - failed verification',
+  8: 'Completed - verified as effective',
+  9: 'Completed',
+  10: 'Deleted'
 };
 
 const ActionPlanOptions = {
@@ -68,6 +110,11 @@ const OrgCurrencies = {
   EUR: 'EUR',
   GBP: 'GBP',
   USD: 'USD'
+};
+
+const WorkflowTypes = {
+  THREE_STEP: '3-step',
+  SIX_STEP: '6-step'
 };
 
 const UserMembership = {
@@ -113,24 +160,31 @@ const PhoneTypes = {
   MOBILE: 'Mobile'
 };
 
-const getDefaultGuideline = (ncType) => {
-  return `Please go to Org Settings to define what a ${ncType} `
-    + `non-conformity means in your organization.`;
-};
+const getDefaultGuideline = (type, problemType) => (
+  `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
 
 const OrganizationDefaults = {
   workflowDefaults: {
-    minorNc: {
-      timeValue: 1,
-      timeUnit: TimeUnits.DAYS
+    minorProblem: {
+      workflowType: WorkflowTypes.THREE_STEP,
+      stepTime: {
+        timeValue: 1,
+        timeUnit: TimeUnits.DAYS
+      }
     },
-    majorNc: {
-      timeValue: 2,
-      timeUnit: TimeUnits.DAYS
+    majorProblem: {
+      workflowType: WorkflowTypes.SIX_STEP,
+      stepTime: {
+        timeValue: 2,
+        timeUnit: TimeUnits.DAYS
+      }
     },
-    criticalNc: {
-      timeValue: 3,
-      timeUnit: TimeUnits.DAYS
+    criticalProblem: {
+      workflowType: WorkflowTypes.SIX_STEP,
+      stepTime: {
+        timeValue: 3,
+        timeUnit: TimeUnits.DAYS
+      }
     }
   },
   reminders: {
@@ -192,10 +246,16 @@ const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(NCTypes.MINOR),
-    major: getDefaultGuideline(NCTypes.MAJOR),
-    critical: getDefaultGuideline(NCTypes.CRITICAL)
-  }
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NC),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NC),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NC)
+  },
+  rkGuidelines: {
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
+  },
+  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
 };
 
 const DefaultStandardTypes = [
@@ -242,34 +302,36 @@ const StandardFilters = [
 const RiskFilters = [
   'type',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
 const NonConformityFilters = [
   'magnitude',
   'status',
-  'department',
+  'department/sector',
   'deleted'
 ];
 
-const ActionFilters = [
-  'My current actions',
-  'Team current actions',
-  'My completed actions',
-  'Team completed actions'
+const WorkInboxFilters = [
+  'My current work',
+  'Team current work',
+  'My completed work',
+  'Team completed work',
+  'My deleted work',
+  'Team deleted work'
 ];
-
-const ProblemTypes = {
-  NC: 'non-conformity',
-  RISK: 'risk'
-};
 
 const DocumentTypes = [
   'standard',
   'non-conformity',
   'risk'
 ];
+
+const ActionDocumentTypes = {
+  'ACTION': 'action',
+  ...ProblemTypes
+};
 
 const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/1.png',
@@ -290,17 +352,21 @@ const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
 ];
 
-const TreatmentPlanPriorities = {
+const RiskEvaluationPriorities = {
   'low': 'Low',
   'medium': 'Medium',
   'high': 'High'
 };
 
-const TreatmentPlanDecisions = {
+const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
   'treat': 'Treat',
   'transfer': 'Transfer',
   'terminate': 'Terminate'
+};
+
+const TruncatedStringLengths = {
+  c40: 40
 };
 
 export {
@@ -309,7 +375,7 @@ export {
   ActionPlanOptions,
   ActionUndoTimeInHours,
   DefaultStandardTypes,
-  NCTypes,
+  ProblemGuidelineTypes,
   ProblemsStatuses,
   AnalysisStatuses,
   StandardStatuses,
@@ -321,6 +387,7 @@ export {
   StandardFilters,
   RiskFilters,
   NonConformityFilters,
+  ProblemMagnitudes,
   ProblemTypes,
   TimeUnits,
   UserMembership,
@@ -328,7 +395,13 @@ export {
   UserRolesNames,
   DocumentTypes,
   AvatarPlaceholders,
-  ActionFilters,
-  TreatmentPlanPriorities,
-  TreatmentPlanDecisions
+  WorkInboxFilters,
+  ActionDocumentTypes,
+  RiskEvaluationPriorities,
+  RiskEvaluationDecisions,
+  ReviewStatuses,
+  WorkItemsStore,
+  RKTypes,
+  TruncatedStringLengths,
+  WorkflowTypes
 };

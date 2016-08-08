@@ -1,0 +1,8 @@
+<template name="Standards_Subcards">
+  {{! STANDARDS SUBCARDS}}
+  {{#with standard}}
+    {{> Subcards_NonConformities_Edit
+      _id=this._id
+      _query=_getNCsQuery}}
+  {{/with}}
+</template>

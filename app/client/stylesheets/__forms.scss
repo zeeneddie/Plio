@@ -226,7 +226,7 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
-  
+
   &.focused > .clear-field {
     visibility: visible;
   }
@@ -310,6 +310,11 @@ input:focus ~ .clear-field {
     &.impact {
       cursor: pointer;
       position: relative;
+
+      &.disabled {
+        opacity: .65;
+        pointer-events: none;
+      }
 
       &:after {
         content: '';
@@ -450,6 +455,11 @@ fieldset[disabled] {
       height: 100%;
       background-color: #fff;
       opacity: 0.7;
+      transition: width 0.5s ease;
+      
+      &.uploaded {
+        width: 0;
+      }
     }
   }
 }

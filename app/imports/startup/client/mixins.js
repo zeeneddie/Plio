@@ -3,15 +3,16 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { Problems } from '/imports/api/problems/problems.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 import {
   UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, NCTypes, ProblemsStatuses,
-  OrgCurrencies, ActionStatuses, ActionFilters,
-  ActionTypes
+  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
+  OrgCurrencies, ActionStatuses, WorkInboxFilters,
+  ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
 import { Match } from 'meteor/check';
@@ -24,6 +25,7 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
+    collapseTimeout: '',
     toggleCollapse: _.throttle(function(cb, timeout) {
 
       // Callback is always the last argument
@@ -179,26 +181,6 @@ ViewModel.mixin({
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
-    },
-    searchOnAfterKeyUp(value) {
-      const checkIsDeletedFilter = (fn, counterName) => {
-        if (this[fn] && this[fn]('deleted')) {
-          this.searchResultsNumber(this[counterName]().count());
-          return true;
-        }
-      };
-
-      if (checkIsDeletedFilter('isActiveStandardFilter', 'standardsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveNCFilter', 'NCsDeleted')) return;
-
-      if (checkIsDeletedFilter('isActiveRiskFilter', 'risksDeleted')) return;
-
-      if (!!value) {
-        this.expandAllFound();
-      } else {
-        this.expandSelected();
-      }
     }
   },
   numberRegex: {
@@ -259,6 +241,8 @@ ViewModel.mixin({
         } else {
           return user.emails[0].address;
         }
+      } else {
+        return 'Ghost user';
       }
     },
     hasUser() {
@@ -329,16 +313,24 @@ ViewModel.mixin({
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveStandardFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getStandardsByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
     _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Standards.findOne(query, options);
+    }
+  },
+  department: {
+    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+      const query = {
+        ...by,
+        organizationId: this.organizationId()
+      };
+
+      return Departments.find(query, options)
+                .map( ({ name, ...args }) => ({ title: name, name, ...args }) );
     }
   },
   date: {
@@ -393,18 +385,17 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToAction(actionId, withQueryParams = true) {
-      const params = { actionId, orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('action', params, queryParams);
+    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
+      const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
+      FlowRouter.go('workInboxItem', params, queryParams);
     },
-    goToActions(withQueryParams = true) {
+    goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeActionFilter() } : {};
-      FlowRouter.go('actions', params, queryParams);
+      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilter() } : {};
+      FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
-      const params = { orgSerialNumber: this.organizationSerialNumber(), riskId };
+      const params = { riskId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
       FlowRouter.go('risk', params, queryParams);
     },
@@ -448,15 +439,12 @@ ViewModel.mixin({
     _getIsDeletedQuery() {
       return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
     },
-    _getRisksByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveRiskFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getRisksByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Risks.find(query, options);
     },
     _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return Risks.findOne(query, options);
     }
   },
@@ -474,37 +462,47 @@ ViewModel.mixin({
       const _id = this.NCId();
       return NonConformities.findOne({ _id });
     },
-    _getIsDeletedQuery() {
-      return this.isActiveNCFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
-    },
-    _getNCsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
-      if (this.isActiveNCFilter('deleted')) {
-        options = { sort: { deletedAt: -1 } };
-      }
+    _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return NonConformities.find(query, options);
     },
     _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId(), ...this._getIsDeletedQuery() };
+      const query = { ...by, organizationId: this.organizationId() };
       return NonConformities.findOne(query, options);
     }
   },
-  action: {
-    actionId() {
-      return FlowRouter.getParam('actionId');
+  workInbox: {
+    workItemId() {
+      return FlowRouter.getParam('workItemId');
     },
-    isActiveActionFilter(filter) {
-      return this.activeActionFilter() === filter;
+    isActiveWorkInboxFilter(filter) {
+      return this.activeWorkInboxFilter() === filter;
     },
-    activeActionFilter() {
-      return FlowRouter.getQueryParam('by') || ActionFilters[0];
+    activeWorkInboxFilter() {
+      return FlowRouter.getQueryParam('by') || WorkInboxFilters[0];
     },
-    currentAction() {
-      const _id = this.actionId();
-      return Actions.findOne({ _id });
+    _getWorkItemsByQuery(
+      {
+        isDeleted = { $in: [null, false] },
+        organizationId = this.organizationId(),
+        ...args
+      } = {},
+        options = { sort: { createdAt: -1 } }
+    ) {
+      const query = { isDeleted, organizationId, ...args };
+      return WorkItems.find(query, options);
     },
-    ActionTypes() {
-      return ActionTypes;
+    _getWorkItemByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by };
+      return WorkItems.findOne(query, options);
+    },
+    _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
+      return Actions.find(query, options);
+    },
+    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by, organizationId: this.organizationId() };
+      return Actions.findOne(query, options);
     },
     _getNameByType(type) {
       switch (type) {
@@ -519,21 +517,30 @@ ViewModel.mixin({
           break;
       }
     },
-    _getActionsByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
-      return Actions.find(query, options);
-    },
-    _getActionByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
-      return Actions.findOne(query, options);
+    _getQueryParams({ status, assigneeId = Meteor.userId() }) {
+      return (userId) => {
+        if (status === 3) { // completed
+          if (assigneeId === userId) {
+            return { by: 'My completed work' };
+          } else {
+            return { by: 'Team completed work' };
+          }
+        } else {
+          if (assigneeId === userId) {
+            return { by: 'My current work' };
+          } else {
+            return { by: 'Team current work' };
+          }
+        }
+      };
     }
   },
   utils: {
-    capitalize(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
+    capitalize(str) {
+      return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
     },
-    lowercase(string) {
-      return string.charAt(0).toLowerCase() + string.slice(1);
+    lowercase(str) {
+      return str ? str.charAt(0).toLowerCase() + str.slice(1) : '';
     },
     round(num) {
       if (num >= 1000000) {
@@ -553,18 +560,33 @@ ViewModel.mixin({
     compose(...fns) {
       return fns.reduce((f, g) => (...args) => f(g(...args)));
     },
+    chain(...fns) {
+      return (...args) => fns.forEach(fn => fn(...args));
+    },
     findParentRecursive(templateName, instance) {
       return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
+    },
+    $eq(val1, val2) {
+      return val1 === val2;
+    },
+    $not(predicate) {
+      return !predicate;
+    },
+    $every(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
+    },
+    $some(...args) {
+      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {
     _magnitude() {
       this.load({ mixin: 'utils' });
-      return _.values(NCTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+      return _.values(ProblemGuidelineTypes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   },
   currency: {
@@ -592,30 +614,45 @@ ViewModel.mixin({
     getStatusName(status) {
       return ProblemsStatuses[status];
     },
-    getClassByStatus(status) {
+    getShortStatusName(status) {
       switch(status) {
-        case 1:
-        case 13:
-          return 'success';
-          break;
-        case 2:
         case 4:
-        case 5:
-        case 6:
-        case 8:
-        case 9:
-        case 11:
-          return 'warning';
+          return 'awaiting analysis';
           break;
-        case 3:
-        case 7:
-        case 10:
-        case 12:
-          return 'danger';
+        case 11:
+          return 'awaiting update of standard(s)';
           break;
         default:
           return '';
           break;
+      }
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 6:
+        case 7:
+        case 8:
+        case 10:
+        case 11:
+        case 12:
+        case 14:
+        case 15:
+          return 'warning';
+        case 5:
+        case 9:
+        case 13:
+        case 16:
+        case 17:
+          return 'danger';
+        case 18:
+        case 19:
+          return 'success';
+        default:
+          return 'default';
       }
     }
   },
@@ -627,28 +664,50 @@ ViewModel.mixin({
       switch(status) {
         case 1:
         case 4:
-          return 'warning';
-          break;
-        case 0:
-        case 3:
-        case 7:
         case 8:
+        case 9:
           return 'success';
-          break;
         case 2:
         case 5:
+          return 'warning';
+        case 3:
         case 6:
+        case 7:
           return 'danger';
-          break;
         default:
-          return '';
-          break;
+          return 'default';
       }
     }
   },
+  workItemStatus: {
+    getStatusName(status) {
+      return WorkItemsStore.STATUSES[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'default';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'danger';
+          break;
+        case 3:
+          return 'success';
+          break;
+        default:
+          return 'default';
+          break;
+      }
+    },
+    IN_PROGRESS: [0, 1, 2],
+    COMPLETED: 3
+  },
   members: {
     _searchString() {
-      const child = this.child('SelectItem');
+      const child = this.child('Select_Single') || this.child('Select_Multi');
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
@@ -657,7 +716,10 @@ ViewModel.mixin({
         ..._query
       };
 
-      return Meteor.users.find(query, options).map(({ _id, ...args }) => ({ title: this.userFullNameOrEmail(_id), _id, ...args }) );
+      return this._mapMembers(Meteor.users.find(query, options));
+    },
+    _mapMembers(array) {
+      return array.map(doc => ({ title: this.userFullNameOrEmail(doc), ...doc }));
     }
   },
   userEdit: {
@@ -712,6 +774,27 @@ ViewModel.mixin({
         return 'medium';
       } else {
         return 'high';
+      }
+    }
+  },
+  reviewStatus: {
+    getStatusName(status) {
+      return ReviewStatuses[status];
+    },
+    getClassByStatus(status) {
+      switch(status) {
+        case 0:
+          return 'danger';
+          break;
+        case 1:
+          return 'warning';
+          break;
+        case 2:
+          return 'success';
+          break;
+        default:
+          return '';
+          break;
       }
     }
   }

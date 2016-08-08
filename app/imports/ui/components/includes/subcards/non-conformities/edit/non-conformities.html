@@ -6,13 +6,19 @@
           {{#each NCs}}
             {{> SubCard_Edit
                 NC=this
-                document=this
+                doc=this
                 _id=this._id
                 _lText=(renderText this)
-                content="NC_Card_Edit_Main"
+                content="NC_Subcard_Edit"
                 insertFn=insertFn
                 updateFn=updateFn
-                removeFn=removeFn}}
+                removeFn=removeFn
+                updateAnalysisDateFn=updateAnalysisDateFn
+                completeAnalysisFn=completeAnalysisFn
+                undoAnalysisFn=undoAnalysisFn
+                updateStandardsDateFn=updateStandardsDateFn
+                updateStandardsFn=updateStandardsFn
+                undoStandardsUpdateFn=undoStandardsUpdateFn}}
           {{/each}}
         </div>
       {{/if}}

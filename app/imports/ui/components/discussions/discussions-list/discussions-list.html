@@ -1,0 +1,15 @@
+<template name="DiscussionsList">
+	<div class="chat-content scroll ng-scope">
+		{{#if messagesCount}}
+			{{#with messageFirst}}
+				<div class="chat-item chat-item-start ng-scope">
+					<p class="chat-item-text">This discussion was started by <strong>{{name}}</strong> on <strong>{{date}}</strong></p>
+				</div>
+			{{/with}}
+
+			{{#each messages}}
+				{{> DiscussionsItem}}
+			{{/each}}
+		{{/if}}
+	</div>
+</template>

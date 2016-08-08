@@ -83,23 +83,18 @@ export const updateViewedBy = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a standard'
+        403, 'Unauthorized user cannot update standards'
       );
     }
 
-    const standard = getStandardOrThrow(_id);
+    const { organizationId } = getStandardOrThrow(_id);
+    ensureCanChangeStandards(userId, organizationId);
 
-    const { viewedBy } = standard;
-
-    if (viewedBy && viewedBy === this.userId) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
-
-    return StandardsService.updateViewedBy({ _id, userId: this.userId });
+    return StandardsService.updateViewedBy({ _id, userId });
   }
 });
 
@@ -110,19 +105,38 @@ export const remove = new ValidatedMethod({
 
   run({ _id }) {
     const userId = this.userId;
+
     if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot delete a standard'
       );
     }
 
-    const standard = getStandardOrThrow(_id);
-
-    const { organizationId, isDeleted } = standard;
-
+    const { organizationId } = getStandardOrThrow(_id);
     ensureCanChangeStandards(userId, organizationId);
 
-    return StandardsService.remove({ _id, isDeleted, deletedBy: userId });
+    return StandardsService.remove({ _id, deletedBy: userId });
+  }
+});
+
+export const restore = new ValidatedMethod({
+  name: 'Standards.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot restore a standard'
+      );
+    }
+
+    const { organizationId } = getStandardOrThrow(_id);
+    ensureCanChangeStandards(userId, organizationId);
+
+    return StandardsService.restore({ _id });
   }
 });
 

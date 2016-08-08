@@ -8,3 +8,4 @@ import './moment.js';
 import './bindings.js';
 import './share.js';
 import './swal.js';
+import './subsmanagers.js';

@@ -4,6 +4,9 @@ import { insert } from '/imports/api/risks/methods.js';
 
 Template.CreateRisk.viewmodel({
   mixin: ['modal', 'organization', 'router', 'collapsing'],
+  RKGuidelines() {
+    return this.organization() && this.organization().rkGuidelines;
+  },
   save() {
     const data = this.getData();
 

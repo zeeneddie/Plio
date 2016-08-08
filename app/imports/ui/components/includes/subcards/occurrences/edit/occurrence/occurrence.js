@@ -1,8 +1,18 @@
 import { Template } from 'meteor/templating';
+import { updateViewedBy } from '/imports/api/occurrences/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.Subcards_Occurrence.viewmodel({
   date: new Date(),
   description: '',
+  onRendered(templateInstance) {
+    const doc = templateInstance.data.doc;
+    const userId = Meteor.userId();
+    
+    if(doc && !isViewed(doc, userId)) {
+      updateViewedBy.call({ _id: doc._id });
+    }
+  },
   onDateChangedCb() {
     return this.onDateChanged.bind(this);
   },

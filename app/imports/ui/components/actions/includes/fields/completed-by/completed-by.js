@@ -56,6 +56,9 @@ Template.Actions_CompletedBy.viewmodel({
   leftToUndo() {
     return moment(this.undoDeadline()).to(this.currentTime(), true);
   },
+  isDisabled() {
+    return !this.enabled();
+  },
   getData() {
     return { completedBy: this.completedBy() };
   }

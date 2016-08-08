@@ -1,34 +1,47 @@
-<template name="OrganizationSettings">
+<template name="OrgSettings">
 
-    {{> OrganizationSettings_MainSettings
+    {{> OrgSettings_MainSettings
         name=name
         ownerId=ownerId
         currency=currency
+        timezone=timezone
         organizationId=organizationId
         isEditable=true}}
 
-    {{> OrganizationSettings_Departments
+    {{> OrgSettings_Departments
         departments=departments
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_StandardTypes
+    {{> OrgSettings_StandardTypes
         standardsTypes=standardsTypes
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_StandardsBookSections
+    {{> OrgSettings_StandardsBookSections
         standardsBookSections=standardsBookSections
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_WorkflowDefaults
+    {{> OrgSettings_WorkflowDefaults
         workflowDefaults=workflowDefaults
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_Reminders
+    {{> OrgSettings_Reminders
         reminders=reminders
         organizationId=organizationId}}
 
-    {{> OrganizationSettings_NcGuidelines
-        guidelines=guidelines
-        organizationId=organizationId}}
+    {{> OrganizationSettings_ProblemGuidelines
+        label="Non-conformity guidelines"
+        guidelines=NCGuidelines
+        organizationId=organizationId
+        method=setNCGuidelineMethod}}
 
+    {{> OrganizationSettings_ProblemGuidelines
+        label="Risk guidelines"
+        guidelines=RKGuidelines
+        organizationId=organizationId
+        method=setRKGuidelineMethod}}
+
+    {{> OrganizationSettings_RKScoringGuidelines
+        label="Risk scoring guidelines"
+        guidelines=rkScoringGuidelines
+        organizationId=organizationId}}
 </template>

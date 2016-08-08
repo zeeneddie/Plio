@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Actions_ChooseTypeModal.viewmodel({
-  mixin: ['modal', 'action'],
+  mixin: ['modal', 'workInbox'],
   openCreateModal(type) {
     this.modal().close();
 

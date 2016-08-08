@@ -1,0 +1,22 @@
+{
+  "_id": "BrkHGqhdSHzS3ia5D",
+  "organizationId" : "KwKXz5RefrE5hjWJ2",
+  "targetDate": {"$date": 1469532269427},
+  "type": "complete update of standards",
+  "status": 0,
+  "assigneeId": "kLwSLeYKSxApPFErZ",
+  "linkedDoc": {
+    "_id": "aqtqWNPrc9fNi6wyp",
+    "type": "risk"
+  },
+  "createdAt" : {"$date": 1469532269427},
+  "createdBy" : "SQHmBKJ94gJvpLKLt",
+  "updatedAt" : {"$date": 1469532269427},
+  "updatedBy" : "SQHmBKJ94gJvpLKLt",
+  "viewedBy" : [
+    "SQHmBKJ94gJvpLKLt"
+  ],
+  "notify" : [
+    "SQHmBKJ94gJvpLKLt"
+  ]
+}

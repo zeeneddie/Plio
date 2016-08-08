@@ -1,0 +1,35 @@
+<template name="DiscussionsItem">
+	<div class="chat-item-date ng-scope" {{b 'if: dateToShow'}}>
+		<span>{{date}}</span>
+	</div>
+
+	<div class="chat-item ng-scope">
+		<img class="chat-item-avatar" {{b 'src: avatar'}}>
+
+		<div class="chat-item-card">
+			<span class="chat-item-time" {{b 'text: time'}}></span>
+			<span class="chat-item-author" {{b 'text: username'}}></span>
+
+			<div class="chat-item-dropdown dropup">
+				<button type="button" class="btn btn-link" data-toggle="dropdown">
+					<i class="fa fa-ellipsis-h"></i>
+				</button>
+
+				<div class="dropdown-menu dropdown-menu-right js-message-actions">
+					<a href="#" class="dropdown-item">Copy as link</a>
+					<a href="#" class="dropdown-item">Move to another channel</a>
+					<a
+						href="#"
+						class="dropdown-item js-message-remove"
+						{{b 'if: isAuthor'}}
+					>Delete message
+					</a>
+				</div>
+			</div>
+
+			<p class="chat-item-text">
+				{{{messageRendered}}}
+			</p>
+		</div>
+	</div>
+</template>

@@ -9,7 +9,7 @@
     }
   ],
   "type": "PA",
-  "status": 7,
+  "status": 8,
   "ownerId": "SQHmBKJ94gJvpLKLt",
   "planInPlace": "Yes",
   "serialNumber": 3,
@@ -21,6 +21,7 @@
   "completedBy": "SQHmBKJ94gJvpLKLt",
   "completionComments": "",
   "isVerified": true,
+  "isVerifiedAsEffective": true,
   "verificationTargetDate": {"$date": 1459508400000},
   "toBeVerifiedBy": "SQHmBKJ94gJvpLKLt",
   "verifiedAt": {"$date": 1459508400000},

@@ -1,15 +1,18 @@
 <template name="Select_Multi">
-  {{#each selected}}
-    <div class="btn-group">
-      <button class="btn btn-secondary" type="button" disabled=""
-          {{b "text: this.title, attr: { title: this.title }"}}></button>
-      {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
-    </div>
-  {{/each}}
-  {{> SelectItem
-      placeholder=placeholder
-      items=items
-      excludedItems=selectedIds
-      selectFirstIfNoSelected=selectFirstIfNoSelected
-      onUpdate=onSelectCb}}
+  <div class="form-group form-group-buttons">
+    {{#each selected}}
+      <div class="btn-group">
+        <button class="btn btn-secondary" type="button" disabled=""
+            {{b "text: this.title, attr: { title: this.title }"}}></button>
+        {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
+      </div>
+    {{/each}}
+    {{> Select_Single
+        placeholder=placeholder
+        items=items
+        excludedItems=selectedIds
+        selectFirstIfNoSelected=selectFirstIfNoSelected
+        onUpdate=onSelectCb
+        content=content}}
+  </div>
 </template>

@@ -4,18 +4,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { update, remove } from '/imports/api/standards/methods.js';
+import { restore, remove } from '/imports/api/standards/methods.js';
 
-Template.StandardsCard.viewmodel({
+Template.Standards_Card_Read.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
-  onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('standardImprovementPlan', this.standardId());
-      template.subscribe('departments', this.organizationId());
-      template.subscribe('nonConformitiesByStandardId', this.standardId());
-    });
-  },
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   onRendered(template) {
     template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
@@ -47,14 +40,12 @@ Template.StandardsCard.viewmodel({
     }
 
   },
-  hasStandards() {
-    return this.standards().count() > 0;
-  },
   standards() {
-    return this._getStandardsByQuery({});
+    const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
+    return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this._id() });
   },
   hasDocxAttachment() {
     const standard = this.standard();
@@ -69,13 +60,13 @@ Template.StandardsCard.viewmodel({
     return StandardTypes.findOne({ _id });
   },
   _getNCsQuery() {
-    return { standardsIds: this.standardId() };
+    return { standardsIds: this.standard() && this.standard()._id };
   },
   openEditStandardModal() {
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standardId()
+      _id: this.standard() && this.standard()._id
     });
   },
   restore({ _id, title, isDeleted }) {
@@ -91,7 +82,7 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, isDeleted: false }, (err) => {
+        restore.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {

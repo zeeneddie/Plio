@@ -134,6 +134,28 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
+  name: 'standard',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardDiscussionLayout', {
+      content: 'StandardDiscussionPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion/:messageId', {
+  name: 'standard',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    /*BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });*/
+    console.log('A selected discussion item');
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -204,22 +226,32 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions', {
-  name: 'actions',
+FlowRouter.route('/:orgSerialNumber/work-inbox', {
+  name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
     });
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions/:actionId', {
-  name: 'action',
+FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
+  name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standard-subcards', {
+  name: 'standardSubcardsPage',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardSubcardsLayout', {
+      content: 'StandardSubcardsPage'
     });
   }
 });

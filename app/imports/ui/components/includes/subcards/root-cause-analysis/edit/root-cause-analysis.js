@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
+Template.Subcards_RCA_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'date'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
@@ -16,6 +16,8 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
       return date.toDate();
     }
   },
+  RCALabel: 'Root cause analysis',
+  UOSLabel: 'Update of standard(s)',
   magnitude: '',
   analysis: '',
   updateOfStandards: '',
@@ -27,5 +29,29 @@ Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
     const allArgs = { ...args, options, query };
 
     this.parent().update(allArgs, cb);
+  },
+  updateAnalysisExecutor(...args) {
+    this.parent().updateAnalysisExecutor(...args);
+  },
+  updateAnalysisDate(...args) {
+    this.parent().updateAnalysisDate(...args);
+  },
+  completeAnalysis(...args) {
+    this.parent().completeAnalysis(...args);
+  },
+  undoAnalysis(cb) {
+    this.parent().undoAnalysis(cb);
+  },
+  updateStandardsExecutor(...args) {
+    this.parent().updateStandardsExecutor(...args);
+  },
+  updateStandardsDate(...args) {
+    this.parent().updateStandardsDate(...args);
+  },
+  updateStandards(...args) {
+    this.parent().updateStandards(...args);
+  },
+  undoStandardsUpdate(cb) {
+    this.parent().undoStandardsUpdate(cb);
   }
 });
