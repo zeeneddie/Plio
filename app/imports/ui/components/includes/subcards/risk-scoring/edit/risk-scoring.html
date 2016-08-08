@@ -5,7 +5,6 @@
         <div class="card">
           {{#each scoresSorted}}
             {{> SubCard_Edit
-                document=this
                 _id=this._id
                 score=this
                 _lText=(renderDate this.scoredAt)
