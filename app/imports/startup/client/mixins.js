@@ -15,7 +15,7 @@ import {
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
-import { Match } from 'meteor/check';
+import { Match, check } from 'meteor/check';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -796,6 +796,33 @@ ViewModel.mixin({
           return '';
           break;
       }
+    }
+  },
+  notifications: {
+
+    // Notifications document can be passed as an argument
+    // _id is used as notification tag if there's no tag argument passed
+    // Only title is required
+    sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
+      const notificationSound = document.getElementById('notification-sound');
+      notificationSound && notificationSound.play();
+
+      let notification = new Notification(title, {
+        body,
+        tag: tag || _id,
+        icon: icon || '/p-logo-square.png',
+        silent
+      });
+
+      if (url) {
+        notification.onclick = function () {
+          window.open(url);
+        };
+      }
+
+      Meteor.setTimeout(() => {
+        notification.close();
+      }, timeout);
     }
   }
 });

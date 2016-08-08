@@ -45,7 +45,7 @@ Template.Subcards_Notify_Edit.viewmodel({
       if (err) return;
 
       // TODO need one for Non-conformities, risks, actions
-      if (this.documentType() === 'standard') {
+      if (this.documentType() === 'standard' && userId !== this.userId) {
         addedToNotifyList.call({
           standardId: this.doc()._id,
           userId
