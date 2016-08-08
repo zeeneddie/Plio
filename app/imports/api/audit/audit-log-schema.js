@@ -17,7 +17,7 @@ export const AuditLogSchema = new SimpleSchema({
   },
   changedBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/
   },
   field: {
     type: String,

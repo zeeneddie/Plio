@@ -1,4 +1,5 @@
 import deepDiff from 'deep-diff';
+import moment from 'moment-timezone';
 
 
 export default class UpdateAudit {
@@ -20,6 +21,7 @@ export default class UpdateAudit {
     this._cleanDiff();
     this._buildLogs();
     this._buildDefaultLogs();
+    this._resetDiff();
 
     return this._logs;
   }
@@ -92,16 +94,16 @@ export default class UpdateAudit {
   }
 
   _buildDefaultLogs() {
-    const diff = this._diff;
-    let i = diff.length;
+    _(this._diff).each(diff => {
+      if (diff.isProcessed) {
+        return;
+      }
 
-    while (i--) {
-      const currDiff = diff[i];
-      const { isFromArray, kind, field, oldValue, newValue } = currDiff;
+      const { isFromArray, kind, field, oldValue, newValue } = diff;
 
       let msgData;
       if (isFromArray) {
-        const { addedItem, removedItem } = currDiff;
+        const { addedItem, removedItem } = diff;
         msgData = { addedItem, removedItem };
       } else {
         msgData = { oldValue, newValue };
@@ -109,18 +111,18 @@ export default class UpdateAudit {
 
       const logMessage = this._buildLogMessage(kind, field, msgData);
 
-      this._logs.push({
-        collection: this.constructor._collection,
-        documentId: this._documentId,
+      this._createLog({
         message: logMessage,
-        changedAt: this._updatedAt,
-        changedBy: this._updatedBy,
         oldValue,
         newValue
       });
 
-      diff.splice(i, 1);
-    }
+      diff.isProcessed = true;
+    });
+  }
+
+  _resetDiff() {
+    this._diff = [];
   }
 
   _buildLogMessage(changeKind, field, msgData) {
@@ -134,7 +136,7 @@ export default class UpdateAudit {
     message = message.replace('[field]', fieldLabel);
 
     _(msgData).each((val, key) => {
-      message = message.replace(`[${key}]`, val);
+      message = message.replace(`[${key}]`, this._getFieldValue(val));
     });
 
     return message;
@@ -143,6 +145,32 @@ export default class UpdateAudit {
   _getFieldLabel(fieldName) {
     const fieldLabels = this.constructor._fieldLabels;
     return _(fieldLabels).isObject() ? fieldLabels[fieldName] : null;
+  }
+
+  _getFieldValue(obj) {
+    if (_(obj).isDate()) {
+      return moment(obj).tz('UTC').toString();
+    } else if (_(obj).isObject()) {
+      return JSON.stringify(obj);
+    } else {
+      return obj;
+    }
+  }
+
+  _createLog({ message, oldValue, newValue, ...rest }) {
+    const log = _.extend({
+      collection: this.constructor._collection,
+      documentId: this._documentId,
+      changedAt: this._updatedAt,
+      changedBy: this._updatedBy,
+    }, {
+      message,
+      oldValue,
+      newValue,
+      ...rest
+    });
+
+    this._logs.push(log);
   }
 
   static get _changesTypes() {
@@ -188,6 +216,7 @@ export default class UpdateAudit {
 
   static get _collection() {
     // implement in child class
+    return 'Actions';
   }
 
 };

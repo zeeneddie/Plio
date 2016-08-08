@@ -8,10 +8,14 @@ import {
   ProblemTypes, WorkflowTypes
 } from '../constants.js';
 import { compareDates } from '../helpers.js';
+import ActionAuditService from './action-audit-service.js';
 
 
 const Actions = new Mongo.Collection('Actions');
 Actions.attachSchema(ActionSchema);
+
+
+// helpers
 
 const getLinkedDocsIds = (linkedDocs, docType) => {
   return _.pluck(
@@ -126,5 +130,21 @@ Actions.helpers({
     return sixStepDoc ? WorkflowTypes.SIX_STEP : WorkflowTypes.THREE_STEP;
   }
 });
+
+
+// hooks
+
+Actions.after.insert(function(userId, doc) {
+  ActionAuditService.documentCreated(doc);
+});
+
+Actions.after.update(function(userId, doc, fieldNames, modifier, options) {
+  ActionAuditService.documentUpdated(doc, this.previous);
+});
+
+Actions.after.remove(function(userId, doc) {
+  ActionAuditService.documentRemoved(doc, userId);
+});
+
 
 export { Actions };
