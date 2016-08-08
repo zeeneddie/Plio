@@ -1,19 +1,20 @@
 <template name="Actions_CompletedBy">
   {{#FormField label="Completed by"}}
-    <div class="form-group-flex">
+    {{#Completion_Edit
+      isButtonVisible=false
+      canButtonBeShown=canBeUndone
+      text=completionComments
+      onUndo=onUndo}}
+
       {{> Select_Single
           items=_members
-          selected=completedBy
+          selected=toBeCompletedBy
           placeholder=placeholder
           selectFirstIfNoSelected=selectFirstIfNoSelected
-          disabled=isDisabled
           onUpdate=onUpdateCb}}
-      {{#if canBeUndone}}
-        <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
-          Undo
-        </button>
-      {{/if}}
-    </div>
+
+    {{/Completion_Edit}}
+
     {{#if canBeUndone}}
       <p class="text-muted">
         Completed {{passedFromCompleted}}, {{leftToUndo}} left to undo
