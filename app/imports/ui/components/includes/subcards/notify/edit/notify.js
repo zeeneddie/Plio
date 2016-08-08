@@ -42,10 +42,12 @@ Template.Subcards_Notify_Edit.viewmodel({
   },
   addToNotifyList(userId, viewmodel) {
     const callback = (err, res) => {
-      if (err) return;
+      if (err) {
+        return;
+      }
 
       // TODO need one for Non-conformities, risks, actions
-      if (this.documentType() === 'standard' && userId !== this.userId) {
+      if (this.documentType() === 'standard') {
         addedToNotifyList.call({
           standardId: this.doc()._id,
           userId
