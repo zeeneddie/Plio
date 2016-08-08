@@ -1,6 +1,16 @@
 <template name="RCA_Status_Edit">
   {{#FormField label=label}}
     {{#if isSelectedExecutor}}
+      {{#Completion_Edit}}
+        {{> Select_Single_Radio
+            items=statuses
+            value=getStatusValue
+            onSelect=onSelectCb}}
+      {{/Completion_Edit}}
+    {{/if}}
+    <!-- 
+
+    {{#if isSelectedExecutor}}
       {{> Select_Single_Radio
           items=statuses
           value=getStatusValue
@@ -22,6 +32,6 @@
         <i class="fa fa-circle margin-right" {{b "class: getClassByStatus"}}></i>
         <span {{b "text: getStatus"}}></span>
       </span>
-    {{/if}}
+    {{/if}} -->
   {{/FormField}}
 </template>

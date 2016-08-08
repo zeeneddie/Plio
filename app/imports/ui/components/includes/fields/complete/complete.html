@@ -1,0 +1,26 @@
+<template name="Completion_Edit">
+  <div class="form-group form-group-flex">
+    {{> Template.contentBlock}}
+
+    {{#if canButtonBeShown}}
+      {{#if isButtonVisible}}
+        <button type="button" class="btn margin-left"
+          {{b "text: getButtonText, toggle: isFormVisible, class: { btn-success: !isFormVisible, btn-link: isFormVisible }"}}>
+        </button>
+      {{else}}
+        <button type="button" class="btn margin-left btn-link" {{b "click: undo"}}>Undo</button>
+      {{/if}}
+    {{/if}}
+  </div>
+
+  {{#if isFormVisible}}
+    <div class="form-group">
+      <textarea class="form-control" rows="3"
+          {{b "value: text, attr: { placeholder: placeholder }"}}></textarea>
+    </div>
+    <button type="button" class="btn btn-success pull-left" {{b "click: complete"}}>
+      <i class="fa fa-check margin-right"></i>
+      <span {{b "text: buttonText"}}></span>
+    </button>
+  {{/if}}
+</template>
