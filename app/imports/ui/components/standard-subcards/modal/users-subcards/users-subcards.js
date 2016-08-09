@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
+import { invoke } from 'lodash';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 
@@ -194,7 +195,7 @@ Template.Users_Subcards.viewmodel({
     const organization = this.organization();
     const userId = this.UserId();
 
-    if (userId === organization.ownerId()) {
+    if (userId === invoke(organization, 'ownerId')) {
       return false;
     }
 

@@ -1,18 +1,21 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { insert, update, remove } from '/imports/api/standards-types/methods.js';
 
-
 Template.OrgSettings_StandardTypes.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal'],
-  autorun() {
-    this.templateInstance.subscribe('standards-types', this.organizationId());
+  mixin: ['addForm', 'modal', 'utils'],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('standards-types', this.organizationId()));
   },
-  standardsTypesCount() {
-    return StandardTypes.find({
-      organizationId: this.organizationId()
-    }).count();
+  _lText: 'Standards types',
+  _rText() {
+    return invoke(this.standardsTypes(), 'count');
+  },
+  placeholder: 'Standard type',
+  standardsTypesMapped() {
+    return this.standardsTypes() && this.standardsTypes().map(({ name, ...args }) => ({ ...args, title: name }));
   },
   onChangeCb() {
     return this.onChange.bind(this);
@@ -21,7 +24,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { name, abbreviation } = viewModel.getData();
+    const { title:name, abbreviation } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
@@ -42,11 +45,11 @@ Template.OrgSettings_StandardTypes.viewmodel({
       return;
     }
 
-    const { name } = viewModel.getData();
+    const { title } = viewModel.getData();
 
     swal({
       title: 'Are you sure?',
-      text: `Standard type "${name}" will be removed.`,
+      text: `Standard type "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -61,7 +64,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Standard type "${name}" was removed successfully.`,
+            `Standard type "${title}" was removed successfully.`,
             'success'
           );
         }

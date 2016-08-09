@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
+import { invoke } from 'lodash';
 
 import {
   updateProfile,
@@ -189,7 +190,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
     const organization = this.organization();
     const userId = this.userId();
 
-    if (userId === organization.ownerId()) {
+    if (userId === invoke(organization, 'ownerId')) {
       return false;
     }
 

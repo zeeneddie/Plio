@@ -1,15 +1,15 @@
-Template.OrganizationSettings_ProblemGuidelines.viewmodel({
-  mixin: ['collapse', 'modal'],
+import { Template } from 'meteor/templating';
+
+Template.OrgSettings_ProblemGuidelines.viewmodel({
+  mixin: 'modal',
   minor: '',
   major: '',
   critical: '',
   label: '',
   method: '',
+  guidelines: '',
   autorun() {
-    const guidelines = this.guidelines && this.guidelines();
-    if (guidelines) {
-      this.load(guidelines);
-    }
+    this.load(this.guidelines());
   },
   onChangeCb() {
     return this.onChange.bind(this);

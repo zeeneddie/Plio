@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { get, invoke } from 'lodash';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
@@ -12,9 +13,11 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   isEditable: false,
   placeholder: 'Linked to',
   type: '',
+  isDeleteButtonVisible() {
+    return get(this.linkedDocs(), 'length') > 1;
+  },
   value() {
-    const child = this.child('Select_Multi');
-    return !!child && child.value();
+    return invoke(this.child('Select_Multi'), 'value');
   },
   linkedDocs() {
     const { linkedTo } = this.getData();
@@ -106,7 +109,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     // if we are viewing subcard show error in subcard, otherwise in modal
     if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
+      const subcard = this.findParentRecursive('Subcard', this.parent());
 
       if (!subcard) {
         ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');

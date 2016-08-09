@@ -20,8 +20,8 @@ const getRiskType = (_id) => {
   return riskType;
 };
 
-const checkUserRights = ({ organizationId }) => {
-  const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
+const checkUserRights = (userId, { organizationId }) => {
+  const canEditOrgSettings = Roles.userIsInRole(userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
 
   if (!canEditOrgSettings) {
     throw new Meteor.Error(
@@ -43,7 +43,7 @@ export const insert = new ValidatedMethod({
       );
     }
 
-    checkUserRights({ organizationId });
+    checkUserRights(this.userId, { organizationId });
 
     return RiskTypesService.insert({ organizationId, ...args });
   }
@@ -63,7 +63,7 @@ export const update = new ValidatedMethod({
 
     const riskType = getRiskType(_id);
 
-    checkUserRights(riskType);
+    checkUserRights(this.userId, riskType);
 
     return RiskTypesService.update({ _id, ...args });
   }
@@ -83,8 +83,8 @@ export const remove = new ValidatedMethod({
 
     const riskType = getRiskType(_id);
 
-    checkUserRights(riskType);
+    checkUserRights(this.userId, riskType);
 
-    return RiskTypesService.remove(doc);
+    return RiskTypesService.remove({ _id });
   }
 });

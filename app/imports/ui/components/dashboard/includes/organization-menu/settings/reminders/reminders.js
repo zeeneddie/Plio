@@ -4,7 +4,8 @@ import { setReminder } from '/imports/api/organizations/methods.js';
 
 
 Template.OrgSettings_Reminders.viewmodel({
-  mixin: ['collapse', 'modal'],
+  mixin: 'modal',
+  _lText: 'Reminders for actions',
   onChangeCb() {
     return this.onChange.bind(this);
   },

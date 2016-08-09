@@ -1,4 +1,4 @@
-Template.OrganizationSettings_ProblemGuideline.viewmodel({
+Template.OrgSettings_ProblemGuideline.viewmodel({
   mixin: 'callWithFocusCheck',
   text: '',
   type: '',

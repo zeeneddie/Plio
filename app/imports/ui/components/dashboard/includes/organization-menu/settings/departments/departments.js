@@ -1,18 +1,23 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.OrgSettings_Departments.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal'],
-  autorun() {
-    this.templateInstance.subscribe('departments', this.organizationId());
+  mixin: ['addForm', 'modal', 'utils'],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('departments', this.organizationId()));
   },
-  departmentsCount() {
-    return Departments.find({
-      organizationId: this.organizationId()
-    }).count();
+  _lText: 'Department/sector(s)',
+  _rText() {
+    return invoke(this.departments(), 'count');
+  },
+  placeholder: 'Department/sector',
+  departments: '',
+  departmentsMapped() {
+    return this.departments() && this.departments().map(({ name, ...args }) => ({ ...args, title: name }));
   },
   onChangeCb() {
     return this.onChange.bind(this);
@@ -21,12 +26,12 @@ Template.OrgSettings_Departments.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { name } = viewModel.getData();
+    const { title:name } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
-
+      
       this.modal().callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
@@ -40,11 +45,11 @@ Template.OrgSettings_Departments.viewmodel({
       return;
     }
 
-    const { name } = viewModel.getData();
+    const { title } = viewModel.getData();
 
     swal({
       title: 'Are you sure?',
-      text: `Department "${name}" will be removed.`,
+      text: `Department "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -59,7 +64,7 @@ Template.OrgSettings_Departments.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Department "${name}" was removed successfully.`,
+            `Department "${title}" was removed successfully.`,
             'success'
           );
         }

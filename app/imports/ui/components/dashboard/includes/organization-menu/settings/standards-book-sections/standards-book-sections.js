@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { invoke } from 'lodash';
 
 import {
   StandardsBookSections
@@ -9,15 +10,15 @@ import {
 
 
 Template.OrgSettings_StandardsBookSections.viewmodel({
-  mixin: ['collapse', 'addForm', 'modal'],
-  autorun() {
-    this.templateInstance.subscribe('standards-book-sections', this.organizationId());
+  mixin: ['addForm', 'modal', 'utils'],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('standards-book-sections', this.organizationId()));
   },
-  standardsBookSectionsCount() {
-    return StandardsBookSections.find({
-      organizationId: this.organizationId()
-    }).count();
+  _lText: 'Standards book sections',
+  _rText() {
+    return invoke(this.standardsBookSections(), 'count');
   },
+  placeholder: 'Title',
   onChangeCb() {
     return this.onChange.bind(this);
   },

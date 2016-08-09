@@ -8,7 +8,7 @@ Template.Subcards_Occurrence.viewmodel({
   onRendered(templateInstance) {
     const doc = templateInstance.data.doc;
     const userId = Meteor.userId();
-    
+
     if(doc && !isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }
@@ -23,7 +23,10 @@ Template.Subcards_Occurrence.viewmodel({
   },
   updateDescription(e) {
     const { description } = this.getData();
-    this.parent().update({ description, e, withFocusCheck: true });
+    const storedDescription = this.templateInstance.data.description;
+    const cb = err => err && this.description(storedDescription);
+
+    this.parent().update({ description, e, withFocusCheck: true }, cb);
   },
   getData() {
     const { description, date } = this.data();
