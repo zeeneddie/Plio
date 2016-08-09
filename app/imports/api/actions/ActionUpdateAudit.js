@@ -2,10 +2,10 @@ import { ActionStatuses, ProblemTypes } from '../constants.js';
 import { Actions } from './actions.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import UpdateAudit from '../audit-base/UpdateAudit.js';
+import DocumentUpdateAudit from '../audit-base/DocumentUpdateAudit.js';
 
 
-export default class ActionUpdateAudit extends UpdateAudit {
+export default class ActionUpdateAudit extends DocumentUpdateAudit {
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -13,34 +13,34 @@ export default class ActionUpdateAudit extends UpdateAudit {
         return;
       }
 
-      const { field } = diff;
-
-      if (field === 'linkedTo') {
-        this._linkedDocChanged(diff);
-      } else if (field === 'isCompleted') {
-        this._completionChanged(diff);
-      } else if (field === 'isVerified') {
-        this._verificationChanged(diff);
-      } else if (field === 'status') {
-        this._statusChanged(diff);
+      switch (diff.field) {
+        case 'linkedTo':
+          this._linkedDocChanged(diff);
+          break;
+        case 'isCompleted':
+          this._completionChanged(diff);
+          break;
+        case 'isVerified':
+          this._verificationChanged(diff);
+          break;
+        case 'status':
+          this._statusChanged(diff);
+          break;
       }
     });
+
+    super._buildLogs();
   }
 
   _linkedDocChanged(diff) {
-    const { kind } = diff;
-    const { sequentialId, title } = this._newDoc;
-    const actionName = `${sequentialId} "${title}"`;
     const changesTypes = this.constructor._changesTypes;
 
-    let linkedDoc;
-    if (kind === changesTypes.ITEM_ADDED) {
-      linkedDoc = diff.addedItem;
-    } else if (kind === changesTypes.ITEM_REMOVED) {
-      linkedDoc = diff.removedItem;
-    }
+    const { sequentialId, title } = this._newDoc;
+    const actionName = `${sequentialId} "${title}"`;
 
+    const linkedDoc = diff.removedItem || diff.addedItem;
     const { documentId, documentType } = linkedDoc;
+
     const docCollections = {
       [ProblemTypes.NC]: NonConformities,
       [ProblemTypes.RISK]: Risks
@@ -49,13 +49,12 @@ export default class ActionUpdateAudit extends UpdateAudit {
     const doc = docCollection.findOne({ _id: documentId });
     const docName = `${doc.sequentialId} "${doc.title}"`;
 
+    const { kind } = diff;
     let message, linkedDocMessage;
     if (kind === changesTypes.ITEM_ADDED) {
-      linkedDoc = diff.addedItem;
       message = `Linked to ${docName}`;
       linkedDocMessage = `Action ${actionName} linked`;
     } else if (kind === changesTypes.ITEM_REMOVED) {
-      linkedDoc = diff.removedItem;
       message = `Unlinked from ${docName}`;
       linkedDocMessage = `Action ${actionName} unlinked`;
     }
@@ -87,9 +86,9 @@ export default class ActionUpdateAudit extends UpdateAudit {
     const { newValue } = diff;
     let message;
     if (newValue === true) {
-      message = 'Action completed';
+      message = 'Completed';
     } else if (newValue === false) {
-      message = 'Action completion canceled';
+      message = 'Completion canceled';
     }
 
     if (!message) {
@@ -116,12 +115,12 @@ export default class ActionUpdateAudit extends UpdateAudit {
     let message;
     if (newValue === true) {
       if (isVerifiedAsEffective === true) {
-        message = 'Action verified as effective';
+        message = 'Verified as effective';
       } else {
-        message = 'Action failed verification';
+        message = 'Failed verification';
       }
     } else if (newValue === false) {
-      message = 'Action verification canceled';
+      message = 'Verification canceled';
     }
 
     if (!message) {
@@ -144,10 +143,12 @@ export default class ActionUpdateAudit extends UpdateAudit {
     this._createLog({
       message: `Status changed from "${oldStatus}" to "${newStatus}"`
     });
+
+    diff.isProcessed = true;
   }
 
   static get _fieldLabels() {
-    return {
+    const fieldLabels = {
       organizationId: 'Organization ID',
       type: 'Type',
       linkedTo: 'Linked to',
@@ -169,14 +170,8 @@ export default class ActionUpdateAudit extends UpdateAudit {
       verifiedAt: 'Verified at',
       verifiedBy: 'Verified by'
     };
-  }
 
-  static get _ignoredFields() {
-
-  }
-
-  static get _messages() {
-
+    return _(fieldLabels).extend(super._fieldLabels);
   }
 
   static get _collection() {

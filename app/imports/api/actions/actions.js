@@ -135,15 +135,21 @@ Actions.helpers({
 // hooks
 
 Actions.after.insert(function(userId, doc) {
-  ActionAuditService.documentCreated(doc);
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentCreated(doc));
+  }
 });
 
 Actions.after.update(function(userId, doc, fieldNames, modifier, options) {
-  ActionAuditService.documentUpdated(doc, this.previous);
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentUpdated(doc, this.previous));
+  }
 });
 
 Actions.after.remove(function(userId, doc) {
-  ActionAuditService.documentRemoved(doc, userId);
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentRemoved(doc, userId));
+  }
 });
 
 

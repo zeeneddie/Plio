@@ -20,7 +20,6 @@ export default class UpdateAudit {
     this._buildDiff();
     this._cleanDiff();
     this._buildLogs();
-    this._buildDefaultLogs();
     this._resetDiff();
 
     return this._logs;
@@ -74,11 +73,8 @@ export default class UpdateAudit {
 
   _cleanDiff() {
     const diff = this._diff;
+    const ignoredFields = this.constructor._ignoredFields;
     let i = diff.length;
-
-    const ignoredFields = _(this.constructor._defaultIgnoredFields).union(
-      this.constructor._ignoredFields
-    );
 
     while (i--) {
       const { field } = diff[i];
@@ -90,10 +86,6 @@ export default class UpdateAudit {
   }
 
   _buildLogs() {
-    // implement in child class
-  }
-
-  _buildDefaultLogs() {
     _(this._diff).each(diff => {
       if (diff.isProcessed) {
         return;
@@ -187,13 +179,6 @@ export default class UpdateAudit {
     // implement in child class
   }
 
-  static get _defaultIgnoredFields() {
-    return [
-      'updatedAt',
-      'updatedBy'
-    ];
-  }
-
   static get _ignoredFields() {
     // implement in child class
   }
@@ -216,7 +201,6 @@ export default class UpdateAudit {
 
   static get _collection() {
     // implement in child class
-    return 'Actions';
   }
 
 };
