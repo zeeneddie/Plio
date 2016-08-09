@@ -5,13 +5,13 @@ import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import {
   ActionUndoTimeInHours, ProblemMagnitudes,
-  ProblemTypes, WorkflowTypes
+  ProblemTypes, WorkflowTypes, CollectionNames
 } from '../constants.js';
 import { compareDates } from '../helpers.js';
 import ActionAuditService from './action-audit-service.js';
 
 
-const Actions = new Mongo.Collection('Actions');
+const Actions = new Mongo.Collection(CollectionNames.ACTIONS);
 Actions.attachSchema(ActionSchema);
 
 

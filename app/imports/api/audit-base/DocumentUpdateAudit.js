@@ -26,21 +26,24 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   }
 
   _notifyChanged(diff) {
-    const { addedItem, removedItem } = diff;
-    const userId = addedItem || removedItem;
-    const user = Meteor.users.findOne({ _id: userId });
-    const userName = (user && user.fullName()) || userId;
+    const diffValues = _(diff).pick(['addedItem', 'removedItem']);
 
-    this._createLog({
-      message: `${userName} added to notify list`
+    _(diffValues).each((val, key) => {
+      if (val !== undefined) {
+        const user = Meteor.users.findOne({ _id: val });
+        const userName = user && user.fullName();
+        userName && (diff[key] = userName);
+      }
     });
-
-    diff.isProcessed = true;
   }
 
   _viewedByChanged(diff) {
-    const { addedItem, removedItem } = diff;
-    const userId = addedItem || removedItem;
+    const { kind, addedItem:userId } = diff;
+
+    if (kind !== this.constructor._changesTypes.ITEM_ADDED) {
+      return;
+    }
+
     const user = Meteor.users.findOne({ _id: userId });
     const userName = (user && user.fullName()) || userId;
 

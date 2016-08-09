@@ -203,4 +203,4 @@ export default class UpdateAudit {
     // implement in child class
   }
 
-};
+}

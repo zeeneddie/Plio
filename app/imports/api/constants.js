@@ -345,11 +345,19 @@ const RiskEvaluationDecisions = {
   'terminate': 'Terminate'
 };
 
+const CollectionNames = {
+  STANDARDS: 'Standards',
+  NCS: 'NonConformities',
+  RISKS: 'Risks',
+  ACTIONS: 'Actions'
+};
+
 export {
   ActionTypes,
   ActionStatuses,
   ActionPlanOptions,
   ActionUndoTimeInHours,
+  CollectionNames,
   DefaultStandardTypes,
   ProblemGuidelineTypes,
   ProblemsStatuses,

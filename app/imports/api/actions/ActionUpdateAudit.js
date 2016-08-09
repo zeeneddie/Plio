@@ -1,4 +1,4 @@
-import { ActionStatuses, ProblemTypes } from '../constants.js';
+import { ActionStatuses, ProblemTypes, CollectionNames } from '../constants.js';
 import { Actions } from './actions.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
@@ -25,6 +25,10 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
           break;
         case 'status':
           this._statusChanged(diff);
+          break;
+        case 'toBeCompletedBy':
+        case 'toBeVerifiedBy':
+          this._executorChanged(diff);
           break;
       }
     });
@@ -62,8 +66,8 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     this._createLog({ message });
 
     const collectionNames = {
-      [ProblemTypes.NC]: 'NonConformities',
-      [ProblemTypes.RISK]: 'Risks'
+      [ProblemTypes.NC]: CollectionNames.NCS,
+      [ProblemTypes.RISK]: CollectionNames.RISKS
     };
 
     this._createLog({
@@ -135,16 +139,26 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   }
 
   _statusChanged(diff) {
-    const { oldValue, newValue } = diff;
+    const diffValues = _(diff).pick(['oldValue', 'newValue']);
 
-    const oldStatus = ActionStatuses[oldValue];
-    const newStatus = ActionStatuses[newValue];
-
-    this._createLog({
-      message: `Status changed from "${oldStatus}" to "${newStatus}"`
+    _(diffValues).each((val, key) => {
+      if (val !== undefined) {
+        const status = ActionStatuses[val];
+        status && (diff[key] = status);
+      }
     });
+  }
 
-    diff.isProcessed = true;
+  _executorChanged(diff) {
+    const diffValues = _(diff).pick(['oldValue', 'newValue']);
+
+    _(diffValues).each((val, key) => {
+      if (val !== undefined) {
+        const user = Meteor.users.findOne({ _id: val });
+        const userName = user && user.fullName();
+        userName && (diff[key] = userName);
+      }
+    });
   }
 
   static get _fieldLabels() {
@@ -158,12 +172,12 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       ownerId: 'Owner ID',
       planInPlace: 'Plan in place',
       status: 'Status',
-      toBeCompletedBy: 'To be completed by',
+      toBeCompletedBy: 'Completion executor',
       completionTargetDate: 'Completion target date',
       isCompleted: 'Is completed',
       completedAt: 'Completed at',
       completedBy: 'Completed by',
-      toBeVerifiedBy: 'To be verified by',
+      toBeVerifiedBy: 'Verification executor',
       verificationTargetDate: 'Verification target date',
       isVerified: 'Is verified',
       isVerifiedAsEffective: 'Is verified as effective',
@@ -175,7 +189,7 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   }
 
   static get _collection() {
-    return 'Actions';
+    return CollectionNames.ACTIONS;
   }
 
-};
+}
