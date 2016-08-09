@@ -6,7 +6,7 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 
 Template.Risks_Item.viewmodel({
   share: 'window',
-  mixin: ['risk', 'date', 'riskScore'],
+  mixin: ['risk', 'date', 'riskScore', 'organization'],
   onCreated(template) {
     template.autorun((computation) => {
       if (this._id() === this.riskId() && this.isNew()) {
@@ -14,6 +14,7 @@ Template.Risks_Item.viewmodel({
       }
     });
   },
+  _id: '',
   identifiedAt: '',
   identifiedBy: '',
   magnitude: '',
@@ -23,8 +24,13 @@ Template.Risks_Item.viewmodel({
   title: '',
   score: '',
   viewedBy: [],
+  getHref() {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), riskId: this._id() };
+    const queryParams = { by: this.activeRiskFilter() };
+    return FlowRouter.path('risk', params, queryParams);
+  },
   isNew() {
-    return !this.viewedBy().find(_id => _id === Meteor.userId());
+    return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
   },
   updateViewedBy(cb) {
     const _id = this._id();

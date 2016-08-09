@@ -161,10 +161,10 @@ export default {
       _id
     }, {
       $set: {
+        completionComments,
         isCompleted: true,
         completedBy: userId,
-        completedAt: new Date(),
-        completionComments
+        completedAt: new Date()
       }
     });
 
@@ -223,11 +223,11 @@ export default {
       _id
     }, {
       $set: {
+        verificationComments,
         isVerified: true,
         isVerifiedAsEffective: success,
         verifiedBy: userId,
-        verifiedAt: new Date,
-        verificationComments
+        verifiedAt: new Date
       }
     });
 

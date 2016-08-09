@@ -5,3 +5,4 @@ import './form-field';
 import './standards';
 import './select-multi';
 import './simple-selection';
+import './complete';

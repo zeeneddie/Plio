@@ -18,6 +18,7 @@ Template.NC_Item.viewmodel({
       }
     });
   },
+  _id: '',
   cost: '',
   currency: '',
   identifiedAt: '',
@@ -27,6 +28,11 @@ Template.NC_Item.viewmodel({
   status: '',
   title: '',
   viewedBy: [],
+  getHref() {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId: this._id() };
+    const queryParams = { by: this.activeNCFilter() };
+    return FlowRouter.path('nonconformity', params, queryParams);
+  },
   isNew() {
     return !this.viewedBy().find(_id => _id === Meteor.userId());
   },

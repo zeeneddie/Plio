@@ -122,7 +122,7 @@ Template.WorkInbox_List.viewmodel({
       array.sort(({ targetDate:d1 }, { targetDate:d2 }) => d2 - d1)
     );
 
-    const allItems = getInitialItems({}).concat(getInitialItems({ isDeleted: true }));
+    const allItems = [...new Set(getInitialItems({}))];
     const myItems = byAssignee(allItems, assigneeId => assigneeId === Meteor.userId());
     const teamItems = byAssignee(allItems, assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
 
