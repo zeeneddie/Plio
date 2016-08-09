@@ -49,6 +49,10 @@ Template.Actions_VerifiedBy.viewmodel({
 
     return isTimeLeftToUndo && (this.verifiedBy() === Meteor.userId());
   },
+  onUndo() {},
+  undo() {
+    return (...args) => this.onUndo(...args);
+  },
   passedFromVerified() {
     return moment(this.verifiedAt()).from(this.currentTime());
   },

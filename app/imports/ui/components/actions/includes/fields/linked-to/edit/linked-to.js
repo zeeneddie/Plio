@@ -68,18 +68,26 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.concat([{ documentId, documentType }]);
-    const newDocs = Array.from(this.linkedDocs() || []).concat([selectedItem]);
+    const newDocs = Array.from(linkedDocs || []).concat([selectedItem]);
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.onLink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onLink({ documentId, documentType }, cb);
   },
   onUnlink() {},
   onRemoveFn() {
@@ -89,11 +97,12 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (!linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
-    const newDocs = Array.from(this.linkedDocs() || []).filter(({ _id }) => _id !== documentId);
+    const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
 
     // if we are viewing subcard show error in subcard, otherwise in modal
     if (this._id && newLinkedTo.length === 0) {
@@ -112,7 +121,14 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.onUnlink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onUnlink({ documentId, documentType }, cb);
   },
   getData() {
     const { linkedTo } = this.data();

@@ -54,7 +54,7 @@ a:focus {
 
 .vertical-center {
   /* Remove the default bottom margin of .jumbotron */
-  margin-bottom: 0; 
+  margin-bottom: 0;
 }
 
 .vertical-center {
@@ -160,6 +160,10 @@ strong {
 
 .no-padding {
   padding: 0 !important;
+}
+
+.no-margin {
+	margin: 0 !important;
 }
 
 .hidden {

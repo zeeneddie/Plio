@@ -6,25 +6,6 @@ import { isViewed } from '/imports/api/checkers.js';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({
-  _id: '',
-  title: '',
-  status: 0,
-  ownerId: Meteor.userId(),
-  planInPlace: ActionPlanOptions.NO,
-  isCompleted: false,
-  completionTargetDate: '',
-  toBeCompletedBy: '',
-  completedAt: '',
-  completedBy: '',
-  completionComments: '',
-  isVerified: false,
-  verificationTargetDate: '',
-  toBeVerifiedBy: '',
-  verifiedAt: '',
-  verifiedBy: '',
-  verificationComments: '',
-  linkedStandardsIds: [],
-  linkedTo: [],
   onRendered(templateInstance) {
     const action = templateInstance.data.action;
     const userId = Meteor.userId();
@@ -37,8 +18,8 @@ Template.Actions_Card_Edit_Main.viewmodel({
     const action = this.action && this.action();
     action && this.load(action);
   },
-  isCompletionEditable() {
-    return !this.isVerified();
+  isCompletionEditable({ isVerified }) {
+    return !isVerified;
   },
   update({ ...args }) {
     this.parent().update({ ...args });
