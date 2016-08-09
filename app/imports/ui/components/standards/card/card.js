@@ -66,13 +66,15 @@ Template.Standards_Card_Read.viewmodel({
   _getNCsQuery() {
     return { standardsIds: this.standard() && this.standard()._id };
   },
-  openEditStandardModal() {
+  openEditStandardModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) return;
+    
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
       _id: this.standard() && this.standard()._id
     });
-  },
+  }, 1000),
   restore({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
