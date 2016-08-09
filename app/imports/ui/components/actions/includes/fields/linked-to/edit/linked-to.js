@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
-import { get, invoke } from 'lodash';
+import get from 'lodash.get';
+import invoke from 'lodash.invoke';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';

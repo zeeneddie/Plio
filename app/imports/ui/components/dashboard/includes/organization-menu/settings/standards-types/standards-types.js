@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { invoke } from 'lodash';
+import invoke from 'lodash.invoke';
 
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { insert, update, remove } from '/imports/api/standards-types/methods.js';
