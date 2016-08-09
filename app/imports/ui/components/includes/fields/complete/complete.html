@@ -1,5 +1,5 @@
 <template name="Completion_Edit">
-  <div class="form-group form-group-flex">
+  <div class="form-group form-group-flex no-margin">
     {{> Template.contentBlock}}
 
     {{#if canButtonBeShown}}
@@ -14,7 +14,7 @@
   </div>
 
   {{#if isFormVisible}}
-    <div class="form-group">
+    <div class="form-group margin-top">
       <textarea class="form-control" rows="3"
           {{b "value: text, attr: { placeholder: placeholder }"}}></textarea>
     </div>
