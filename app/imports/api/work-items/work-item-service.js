@@ -108,7 +108,7 @@ export default {
   },
 
   actionCompletionCanceled(actionId) {
-    return this._undo(actionId);
+    return this._undo(actionId, WorkItemsStore.TYPES.VERIFY_ACTION);
   },
 
   actionVerified(actionId) {
@@ -246,7 +246,7 @@ export default {
   },
 
   analysisCanceled(docId, docType) {
-    return this._undo(docId);
+    return this._undo(docId, WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS);
   },
 
   standardsUpdated(docId, docType) {
@@ -311,7 +311,7 @@ export default {
     workflow.refreshStatus();
   },
 
-  _undo(linkedDocId) {
+  _undo(linkedDocId, type) {
     const query = { 'linkedDoc._id': linkedDocId };
     const options = {
       $set: {
@@ -319,11 +319,20 @@ export default {
       }
     };
 
+    (() => {
+      // if document is completed and "to be verified by" is chosen then completion is undone we need to remove the "verify" item
+      const { _id } = Object.assign({}, this.collection.findOne({ ...query, type }));
+
+      _id && this.collection.remove({ _id });
+    })();
+
     const ret = this.collection.update(query, options);
 
-    const _id = Object.assign({}, this.collection.findOne(query))._id;
+    (() => {
+      const { _id } = Object.assign({}, this.collection.findOne(query));
 
-    Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+      Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+    })();
 
     return ret;
   },
