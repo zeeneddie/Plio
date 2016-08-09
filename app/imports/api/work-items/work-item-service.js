@@ -4,7 +4,7 @@ import { Risks } from '../risks/risks.js';
 import { WorkItems } from './work-items.js';
 import BaseEntityService from '../base-entity-service.js';
 import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '../constants.js';
-
+import WorkItemWorkflow from './WorkItemWorkflow.js';
 
 export default {
   collection: WorkItems,
@@ -108,19 +108,7 @@ export default {
   },
 
   actionCompletionCanceled(actionId) {
-    const action = Actions.findOne({ _id: actionId });
-    const { organizationId, type, completionTargetDate, toBeCompletedBy } = action;
-
-    this.collection.insert({
-      organizationId,
-      targetDate: completionTargetDate,
-      assigneeId: toBeCompletedBy,
-      type: WorkItemsStore.TYPES.COMPLETE_ACTION,
-      linkedDoc: {
-        _id: actionId,
-        type
-      }
-    });
+    return this._undo(actionId);
   },
 
   actionVerified(actionId) {
@@ -134,19 +122,7 @@ export default {
   },
 
   actionVerificationCanceled(actionId) {
-    const action = Actions.findOne({ _id: actionId });
-    const { organizationId, type, verificationTargetDate, toBeVerifiedBy } = action;
-
-    this.collection.insert({
-      organizationId,
-      targetDate: verificationTargetDate,
-      assigneeId: toBeVerifiedBy,
-      type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      linkedDoc: {
-        _id: actionId,
-        type
-      }
-    });
+    return this._undo(actionId);
   },
 
   actionUpdated(actionId) {
@@ -270,20 +246,7 @@ export default {
   },
 
   analysisCanceled(docId, docType) {
-    const doc = this._getProblemDoc(docId, docType);
-    const { organizationId, analysis: { targetDate, executor } } = doc;
-
-    this.collection.insert({
-      organizationId,
-      targetDate,
-      assigneeId: executor,
-      type: WorkItemsStore.TYPES.COMPLETE_ANALYSIS,
-      isCompleted: false,
-      linkedDoc: {
-        _id: docId,
-        type: docType
-      }
-    });
+    return this._undo(docId);
   },
 
   standardsUpdated(docId, docType) {
@@ -297,29 +260,16 @@ export default {
   },
 
   standardsUpdateCanceled(docId, docType) {
-    const doc = this._getProblemDoc(docId, docType);
-    const { organizationId, updateOfStandards: { targetDate, executor } } = doc;
-
-    this.collection.insert({
-      organizationId,
-      targetDate,
-      assigneeId: executor,
-      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
-      isCompleted: false,
-      linkedDoc: {
-        _id: docId,
-        type: docType
-      }
-    });
+    return this._undo(docId);
   },
 
   onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId }) {
     if (!targetDate || !assigneeId) return;
 
     const query = {
+      type,
       'linkedDoc._id': _id,
-      isCompleted: false,
-      type
+      isCompleted: false
     };
 
     const update = () => {
@@ -354,6 +304,28 @@ export default {
 
   connectedStandardsUpdated(type, docType, { _id, organizationId, updateOfStandards: { targetDate, executor:assigneeId } = {}, ...args }) {
     this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
+  },
+
+  _refreshStatus(_id) {
+    const workflow = new WorkItemWorkflow(_id);
+    workflow.refreshStatus();
+  },
+
+  _undo(linkedDocId) {
+    const query = { 'linkedDoc._id': linkedDocId };
+    const options = {
+      $set: {
+        isCompleted: false
+      }
+    };
+
+    const ret = this.collection.update(query, options);
+
+    const _id = Object.assign({}, this.collection.findOne(query))._id;
+
+    Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+
+    return ret;
   },
 
   _ensureWorkItemExists(_id) {
