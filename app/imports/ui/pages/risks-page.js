@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RisksPage.viewmodel({
+Template.Risks_Page.viewmodel({
   share: 'window',
   mixin: ['mobile', 'risk', 'organization'],
   autorun() {

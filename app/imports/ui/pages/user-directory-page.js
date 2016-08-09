@@ -5,7 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UserSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.UserDirectoryPage.viewmodel({
+Template.UserDirectory_Page.viewmodel({
   share: 'search',
   mixin: ['search', 'organization'],
   onCreated() {

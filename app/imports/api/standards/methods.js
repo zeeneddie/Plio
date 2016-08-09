@@ -163,6 +163,8 @@ export const addedToNotifyList = new ValidatedMethod({
     const standard = getStandardOrThrow(standardId);
     ensureCanChangeStandards(currUserId, standard.organizationId);
 
-    return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
+    if (userId !== this.userId) {
+      return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
+    }
   }
 });

@@ -1,0 +1,19 @@
+<template name="Dashboard_Footer">
+  <div class="dashboard-footer">
+    <div class="dashboard-footer-buttons">
+      {{#if canInviteUsers organizationId}}
+        <button type="button" class="btn btn-secondary" {{b "click: onInviteClick"}}>
+          <i class="fa fa-user-plus margin-right"></i>
+          Invite users
+        </button>
+      {{/if}}
+      <button type="button" class="btn btn-secondary" {{b "click: openAddNCModal"}}>
+        <i class="fa fa-plus margin-right"></i>
+        Report a non-conformity
+      </button>
+    </div>
+    <div class="dashboard-footer-logo">
+      <img src="/plio-logo.png"/>
+    </div>
+  </div>
+</template>

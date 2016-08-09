@@ -15,12 +15,12 @@ export default class OrgNotificationsSender {
   sendOwnershipInvite(newOwnerId, transferId) {
     const orgName = this._organization.name;
 
-    const subject = `You have been invited to become an owner of the ${orgName} organization`;
+    const emailSubject = `You have been invited to become an owner of the ${orgName} organization`;
     const secondaryText = `If you agree to be an organization owner, click on "Confirm" button`;
 
     const url = Meteor.absoluteUrl(`transfer-organization/${transferId}`);
 
-    const options = {
+    const templateData = {
       organizationName: orgName,
       title: subject,
       secondaryText,
@@ -30,6 +30,6 @@ export default class OrgNotificationsSender {
       }
     };
 
-    new NotificationSender(subject, 'minimalisticEmail', options).sendEmail(newOwnerId);
+    new NotificationSender({ recipients: newOwnerId, emailSubject, templateData, templateName: 'minimalisticEmail' }).sendEmail();
   }
 }

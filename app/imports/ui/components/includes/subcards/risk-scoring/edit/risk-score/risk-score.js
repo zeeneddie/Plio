@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.Subcards_RiskScore.viewmodel({
+  mixin: 'utils',
   disabled: false,
   tableData: '',
   score: '',
@@ -9,12 +10,8 @@ Template.Subcards_RiskScore.viewmodel({
   tableDataWithGuidelines() {
     const { tableData = {} } = this.data();
     const { data = [] } = tableData;
-    const withoutLast = data.slice(0, data.length - 1);
-    const last = _.last(data);
-    last.label = this.guidelinesText();
-    const newData = withoutLast.concat([last]);
-    tableData.data = newData;
-    return tableData;
+    const newData = this.mapByIndex(data, data.length - 1, { label: this.guidelinesText() });
+    return { ...tableData, data: newData };
   },
   guidelinesText() {
     const text = this.guidePanelCollapsed() ? 'Guidelines' : 'Hide guidelines';
@@ -25,13 +22,13 @@ Template.Subcards_RiskScore.viewmodel({
   },
   onGuidePanelToggle() {
     return (viewmodel) => {
-      const child = this.child('RiskScoring_Guidelines');
+      const ref = this.guidelinesRef;
 
-      if (!child) return;
+      if (ref) {
+        this.guidePanelCollapsed(!ref.collapsed());
 
-      this.guidePanelCollapsed(!child.collapsed());
-
-      return child.toggleCollapse();
+        return ref.toggleCollapse();
+      }
     };
   },
   onScoreUpdate() {
