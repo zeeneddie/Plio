@@ -20,7 +20,14 @@
     </div>
     <button type="button" class="btn btn-success pull-left" {{b "click: complete"}}>
       <i class="fa fa-check margin-right"></i>
-      <span {{b "text: buttonText"}}></span>
+      <span {{b "text: buttonSuccessText"}}></span>
     </button>
+    {{#if hasFailFn}}
+      <button type="button" class="btn btn-danger pull-left"
+          {{b "click: fail"}}>
+        <i class="fa fa-times margin-right"></i>
+        <span {{b "text: buttonFailText"}}></span>
+      </button>
+    {{/if}}
   {{/if}}
 </template>

@@ -24,10 +24,11 @@ Template.Actions_ToBeCompletedBy.viewmodel({
     return !!this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
   },
   complete() {
-    return viewmodel =>
-      this.onComplete && this.onComplete({
-        completionComments: this.completionComments()
-      });
+    return (viewmodel) => {
+      const { text:completionComments } = viewmodel.getData();
+      
+      this.onComplete && this.onComplete({ completionComments });
+    };
   },
   getData() {
     return { toBeCompletedBy: this.toBeCompletedBy() };

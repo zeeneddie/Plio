@@ -5,16 +5,24 @@ Template.Completion_Edit.viewmodel({
   isFormVisible: false,
   text: '',
   placeholder: 'Comments',
-  buttonText: 'Complete',
+  buttonDefaultText: 'Complete',
+  buttonSuccessText: 'Complete',
+  buttonFailText: 'Assessed as ineffective',
   canButtonBeShown: false,
   getButtonText() {
     return this.isFormVisible()
             ? 'Cancel'
-            : this.buttonText();
+            : this.buttonDefaultText();
   },
   onComplete(vm) {},
   complete() {
     this.onComplete(this);
+  },
+  hasFailFn() {
+    return !!this.onFail;
+  },
+  fail() {
+    this.onFail && this.onFail(this);
   },
   onUndo(vm) {},
   undo() {

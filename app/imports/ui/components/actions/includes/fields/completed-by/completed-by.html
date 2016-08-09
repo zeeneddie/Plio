@@ -3,14 +3,14 @@
     {{#Completion_Edit
       isButtonVisible=false
       canButtonBeShown=canBeUndone
-      text=completionComments
-      onUndo=onUndo}}
+      onUndo=undo}}
 
       {{> Select_Single
           items=_members
-          selected=toBeCompletedBy
+          selected=completedBy
           placeholder=placeholder
           selectFirstIfNoSelected=selectFirstIfNoSelected
+          disabled=isDisabled
           onUpdate=onUpdateCb}}
 
     {{/Completion_Edit}}
