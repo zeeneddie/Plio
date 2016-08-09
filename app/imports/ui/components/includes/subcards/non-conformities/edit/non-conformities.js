@@ -21,7 +21,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
     this.addForm(
       'Subcard',
       {
-        content: 'CreateNC',
+        content: 'NC_Create',
         isStandardsEditable: this.isStandardsEditable(),
         standardsIds: [this._id && this._id()],
         _lText: 'New non-conformity',

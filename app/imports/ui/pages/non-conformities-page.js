@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.NCPage.viewmodel({
+Template.NC_Page.viewmodel({
   share: 'window',
   mixin: ['mobile', 'nonconformity', 'organization'],
   autorun() {

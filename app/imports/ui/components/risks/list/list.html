@@ -1,43 +1,43 @@
-<template name="RisksList">
+<template name="Risks_List">
   {{#List_Read
     ref="list"
     _id=riskId
     onModalOpen=onModalOpen
     onSearchInputValue=onSearchInputValue}}
 
-    {{#if isActiveRiskFilter 'type'}}
-      {{#each types}}
-        {{> ListItem
-            template='RiskSectionItem'
-            title=this.title
-            _query=(_getTypeQuery this)}}
-      {{/each}}
-    {{/if}}
+      {{#if isActiveRiskFilter 'type'}}
+        {{#each types}}
+          {{> ListItem
+              template='Risks_SectionItem'
+              title=this.title
+              _query=(_getTypeQuery this)}}
+        {{/each}}
+      {{/if}}
 
-    {{#if isActiveRiskFilter 'status'}}
-      {{#each statuses}}
-        {{> ListItem
-            template="RiskSectionItem"
-            title=(getStatusName this)
-            _query=(_getStatusQuery this)}}
-      {{/each}}
-    {{/if}}
+      {{#if isActiveRiskFilter 'status'}}
+        {{#each statuses}}
+          {{> ListItem
+              template="Risks_SectionItem"
+              title=(getStatusName this)
+              _query=(_getStatusQuery this)}}
+        {{/each}}
+      {{/if}}
 
-    {{#if isActiveRiskFilter "department/sector"}}
-      {{#each departments}}
-        {{> ListItem
-            template="RiskSectionItem"
-            title=this.name
-            closeAllOnCollapse=false
-            _query=(_getDepartmentQuery this)}}
-      {{/each}}
-    {{/if}}
+      {{#if isActiveRiskFilter "department/sector"}}
+        {{#each departments}}
+          {{> ListItem
+              template="Risks_SectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              _query=(_getDepartmentQuery this)}}
+        {{/each}}
+      {{/if}}
 
-    {{#if isActiveRiskFilter 'deleted'}}
-      {{#each risksDeleted}}
-        {{> RiskItem}}
-      {{/each}}
-    {{/if}}
-    
+      {{#if isActiveRiskFilter 'deleted'}}
+        {{#each risksDeleted}}
+          {{> Risks_Item}}
+        {{/each}}
+      {{/if}}
+
   {{/List_Read}}
 </template>

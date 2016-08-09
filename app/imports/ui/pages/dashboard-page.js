@@ -3,7 +3,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import pluralize from 'pluralize';
 import { UserSubs, CountSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.DashboardPage.viewmodel({
+Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
   autorun: [
     function() {
