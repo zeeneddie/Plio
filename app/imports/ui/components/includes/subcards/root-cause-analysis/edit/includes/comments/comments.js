@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.RCA_Comments_Edit.viewmodel({
   comments: '',
-  placeholder: 'Comments',
+  placeholder: 'Completion comments',
   onUpdate() {},
   update() {
     const { comments:completionComments } = this.getData();
