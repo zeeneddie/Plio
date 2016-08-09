@@ -1,5 +1,5 @@
 <template name="Risks_Item">
-  <a class="list-group-item" {{b "click: navigate, class: { active: this._id === riskId }"}}>
+  <a class="list-group-item" {{b "click: navigate, href: getHref, class: { active: this._id === riskId }"}}>
     {{#if score}}
       <span class="label risk-square" {{b "text: score.value, class: 'impact-'+getClassByScore(score.value)"}}></span>
     {{/if}}

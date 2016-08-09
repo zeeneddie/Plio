@@ -1,5 +1,5 @@
 <template name="NC_Item">
-  <a class="list-group-item" {{b "click: navigate, class: { active: this._id === NCId }"}}>
+  <a class="list-group-item" {{b "click: navigate, href: getHref, class: { active: this._id === NCId }"}}>
 	  <span class="label label-status-indicator"
       {{b "class: { label-success: this.magnitude === 'minor', label-warning: this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span>
     <div class="list-group-item-content">
