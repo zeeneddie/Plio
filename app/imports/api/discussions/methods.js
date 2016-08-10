@@ -8,7 +8,7 @@ import { IdSchema, UserIdSchema } from '../schemas.js';
 
 
 export const addDiscussion = new ValidatedMethod({
-	name: 'Discussions.addMessage',
+	name: 'Discussions.addDiscussion',
 	validate: DiscussionsSchema.validator(),
 
 	run(doc){
@@ -19,5 +19,20 @@ export const addDiscussion = new ValidatedMethod({
 		}
 
 		return DiscussionsService.addDiscussion(doc);
+	}
+});
+
+export const removeDiscussionById = new ValidatedMethod({
+	name: 'Discussions.removeDiscussionById',
+	validate: IdSchema.validator(),
+
+	run(doc){
+		if(!this.userId){
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot remove discussions'
+			);
+		}
+
+		return DiscussionsService.removeDiscussionById(doc);
 	}
 });

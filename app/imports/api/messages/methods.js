@@ -32,7 +32,7 @@ export const markMessageViewedById = new ValidatedMethod({
 });
 
 export const removeMessageById = new ValidatedMethod({
-	name: 'Discussions.removeMessageById',
+	name: 'Messages.removeMessageById',
 	validate: new SimpleSchema([IdSchema]).validator(),
 
 	run(doc){
@@ -42,6 +42,6 @@ export const removeMessageById = new ValidatedMethod({
 			);
 		}
 
-		return DiscussionService.removeMessageById(doc);
+		return MessagesService.removeMessageById(doc);
 	}
 });

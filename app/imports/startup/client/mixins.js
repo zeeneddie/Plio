@@ -56,6 +56,9 @@ ViewModel.mixin({
     }, 500)
   },
   discussions: {
+    discussionHasMessages(discussionId){
+      return Messages.find({discussionId}).count();
+    },
     getDiscussionIdByStandardId(standardId){
   		const discussion = Discussions.findOne(
   			{documentType: DocumentTypes[0], linkedTo: standardId},
@@ -63,7 +66,7 @@ ViewModel.mixin({
   		);
 
   		return discussion ? discussion._id : null;
-  	},
+  	}
   },
   iframe: {
     isIframeReady: false,

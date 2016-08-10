@@ -7,10 +7,6 @@ import {getFormattedDate} from '/imports/api/helpers.js';
 Template.MessagesList.viewmodel({
 	mixin: ['discussions', 'messages', 'standard'],
 
-  onCreated(){
-    //console.dir(this);
-  },
-
   /* The _id of the first discussion from the sorted list of discussions
    * for this standardId
   */
@@ -23,25 +19,25 @@ Template.MessagesList.viewmodel({
   /* First message document with the discussionId
   */
   messageOne1(protection){
-    const discussionId = this.discussionId();
-
-    return discussionId ? this.messageByDiscussionId(
-      discussionId, protection && {}
-    ) : null;
+    return this.messageByDiscussionId(
+      this.discussionId(), protection && {}
+    );
   },
 
   /* Cursor of messages documents with the discussionId
   */
   messagesCursor1(protection){
-    const discussionId = this.discussionId();
+		const di = this.discussionId();console.log(di);
 
-    return discussionId ? this.messagesCursorByDiscussionId(
-      discussionId, protection && {}
-    ) : null;
+    return this.messagesCursorByDiscussionId(
+      di, protection && {}
+    );
   },
 
 	messagesCount(){
-    return this.messagesCursor1({ fields: {_id: 1} }).count();
+		const c = this.messagesCursor1({ fields: {_id: 1} }).count();
+		console.log(c);
+		return c;
 	},
 
 	messageFirst(){
@@ -50,10 +46,11 @@ Template.MessagesList.viewmodel({
 			limit: 1,
 			sort: {createdAt: 1}
 		});
+		const user = Meteor.users.findOne({_id: m.userId});
 
 		return {
-			date: getFormattedDate(m.createdAt, 'MMMM Do, YYYY'),
-			name: Meteor.users.findOne({_id: m.userId}).fullName()
+			date: m && getFormattedDate(m.createdAt, 'MMMM Do, YYYY'),
+			name: m && user && user.fullName()
 		};
 	},
 
@@ -67,11 +64,11 @@ Template.MessagesList.viewmodel({
   		}).map((c, i, cr) => {
 			const user = Meteor.users.findOne({_id: c.userId}, {fields: {profile:1}});
 
-			c.avatar = user.avatar();
+			c.avatar = user && user.avatar();
 			c.date = getFormattedDate(c.createdAt, 'MMMM Do, YYYY');
 			c.dateToShow = dateStorage !== c.date;
 			c.time = getFormattedDate(c.createdAt, 'HH:mm');
-			c.username = user.firstName();
+			c.username = user && user.firstName();
 
 			if(dateStorage !== c.date){
 				dateStorage = c.date;
