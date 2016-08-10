@@ -1,10 +1,19 @@
 <template name="RCA_ToBeCompletedBy_Edit">
   {{#FormField label=label}}
-    {{> Select_Single
-        placeholder=placeholder
-        selectFirstIfNoSelected=selectFirstIfNoSelected
-        items=_members
-        selected=getBy
-        onUpdate=onUpdateCb}}
+    {{#Completion_Edit
+      isButtonVisible=isButtonVisible
+      canButtonBeShown=canButtonBeShown
+      text=comments
+      onComplete=complete
+      onUndo=undo}}
+
+      {{> Select_Single
+          placeholder=placeholder
+          selectFirstIfNoSelected=selectFirstIfNoSelected
+          items=_members
+          selected=getBy
+          onUpdate=update}}
+
+    {{/Completion_Edit}}
   {{/FormField}}
 </template>

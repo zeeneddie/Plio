@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 
-Template.NC_Subcard_Edit.viewmodel({
+Template.NC_Subcard.viewmodel({
   NCId() {
     const { _id } = (this.NC && this.NC()) || {};
     return _id;

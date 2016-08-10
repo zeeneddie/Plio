@@ -19,7 +19,6 @@ Template.WorkInbox_Item.viewmodel({
       }
     });
   },
-  _source: {},
   getTypeText({ type }) {
     return this.capitalize(type);
   },
@@ -31,6 +30,11 @@ Template.WorkInbox_Item.viewmodel({
     return isDeleted
             ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
             : '';
+  },
+  getHref() {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: this._id() };
+    const queryParams = { by: this.activeWorkInboxFilter() };
+    return FlowRouter.path('workInboxItem', params, queryParams);
   },
   isNew() {
     const { viewedBy = [] } = this.data();

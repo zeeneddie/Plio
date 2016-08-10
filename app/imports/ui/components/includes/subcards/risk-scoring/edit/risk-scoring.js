@@ -64,8 +64,12 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   },
   add() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
+        score: {
+          scoredAt: new Date(),
+          scoredBy: Meteor.userId()
+        },
         content: 'Subcards_RiskScore',
         _lText: 'New risk score',
         guideHtml: this.guideHtml(),

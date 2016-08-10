@@ -7,7 +7,7 @@ import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.NCList.viewmodel({
+Template.NC_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
@@ -133,7 +133,7 @@ Template.NCList.viewmodel({
         return this.toArray(this.NCsDeleted());
       }
 
-      const sections = ViewModel.find('NCSectionItem');
+      const sections = ViewModel.find('NC_SectionItem');
       const ids = this.toArray(sections).map(vm => vm.NCs && this.toArray(vm.NCs()).map(({ _id }) => _id));
       return _.flatten(ids);
     };
@@ -142,7 +142,7 @@ Template.NCList.viewmodel({
     return () =>
       this.modal().open({
         _title: 'Non-conformity',
-        template: 'CreateNC',
+        template: 'NC_Create',
         variation: 'save'
       });
   }

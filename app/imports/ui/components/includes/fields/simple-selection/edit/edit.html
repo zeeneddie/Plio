@@ -1,0 +1,8 @@
+<template name="SimpleSelection_Edit">
+  <div class="new-cards" {{b "ref: forms"}}>
+    {{#each items}}
+      {{> SimpleSelection_Edit_Item (getArgs this)}}
+    {{/each}}
+  </div>
+  <button class="btn btn-primary" type="button" {{b "text: addButtonText, click: onAddButtonClick(this)"}}></button>
+</template>

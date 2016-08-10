@@ -26,7 +26,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
   addOccurrence() {
     const seqId = this.nonConformity() ? this.nonConformity().sequentialId : '';
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
         _lText: `${seqId}-new occurrence`,
         _rText: '',

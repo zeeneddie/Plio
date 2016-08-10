@@ -3,26 +3,20 @@
     {{#with analysis}}
       {{#FormField label=label}}{{/FormField}}
 
-      {{> RCA_ToBeCompletedBy_Edit
-          by=this.executor
-          placeholder="Who will do it?"
-          label="Who will do it?"
-          onUpdate=onUpdateAnalysisExecutor}}
-
       {{> RCA_TargetDate_Edit
           date=this.targetDate
           onUpdate=onTargetDateUpdate}}
 
-      {{> RCA_Status_Edit
-          status=this.status
-          executor=this.executor
-          completionComments=this.completionComments
-          isCompleteButtonShown=($not this.status)
-          onComplete=onAnalysisCompleted
-          onUndo=onAnalysisUndone
-          onCommentsUpdate=onCommentsUpdate}}
-
-      {{#if isAnalysisCompleted}}
+      {{#unless isAnalysisCompleted}}
+        {{> RCA_ToBeCompletedBy_Edit
+            by=this.executor
+            comments=this.completionComments
+            isButtonVisible=true
+            placeholder="Who will do it?"
+            label="Who will do it?"
+            onUpdate=onUpdateAnalysisExecutor
+            onComplete=onAnalysisCompleted}}
+      {{else}}
         {{> RCA_TargetDate_Edit
             date=this.completedAt
             key="analysis.completedAt"
@@ -31,10 +25,16 @@
 
         {{> RCA_ToBeCompletedBy_Edit
             by=this.completedBy
+            isButtonVisible=false
             key="analysis.completedBy"
             placeholder="Completed by"
-            label="Completed by"}}
-      {{/if}}
+            label="Completed by"
+            onUndo=onAnalysisUndone}}
+
+        {{> RCA_Comments_Edit
+            comments=this.completionComments
+            onUpdate=onCommentsUpdate}}
+      {{/unless}}
     {{/with}}
   </div>
 </template>

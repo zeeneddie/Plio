@@ -1,0 +1,11 @@
+<template name="UserDirectory_List_Item">
+  <a class="list-group-item pointer" {{b "click: goToUser, href: getHref, class: { active: isActiveUser }"}}>
+    <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
+      <img {{b "src: this.avatar()"}}>
+    </div>
+    <div class="list-group-item-content">
+      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+      <p class="list-group-item-text" {{b "text: this.description()"}}></p>
+    </div>
+  </a>
+</template>

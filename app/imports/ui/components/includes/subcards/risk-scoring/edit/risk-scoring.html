@@ -1,5 +1,5 @@
 <template name="Subcards_RiskScoring_Edit">
-  {{#SubCard_EditWrapper
+  {{#Subcards_Wrapper
     _lText=label
     _rText=(getScoreLabel scoresSorted.[0])
     renderContentOnInitial=renderContentOnInitial}}
@@ -7,8 +7,7 @@
       {{#if scores.length}}
         <div class="card">
           {{#each scoresSorted}}
-            {{> SubCard_Edit
-                document=this
+            {{> Subcard
                 _id=this._id
                 score=this
                 _lText=(renderDate this.scoredAt)
@@ -28,5 +27,5 @@
         <button type="button" class="btn btn-link" {{b "click: add"}}>Add a risk score</button>
       </div>
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

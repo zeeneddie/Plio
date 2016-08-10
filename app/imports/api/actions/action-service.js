@@ -161,10 +161,10 @@ export default {
       _id
     }, {
       $set: {
+        completionComments,
         isCompleted: true,
         completedBy: userId,
-        completedAt: new Date(),
-        completionComments
+        completedAt: new Date()
       }
     });
 
@@ -223,11 +223,11 @@ export default {
       _id
     }, {
       $set: {
+        verificationComments,
         isVerified: true,
         isVerifiedAsEffective: success,
         verifiedBy: userId,
-        verifiedAt: new Date,
-        verificationComments
+        verifiedAt: new Date
       }
     });
 
@@ -465,10 +465,10 @@ export default {
     if (docWithUncompletedAnalysis) {
       const { sequentialId, title } = docWithUncompletedAnalysis;
       const docName = `${sequentialId} ${title}`;
-
+      console.log('linkedTo', linkedTo);
       throw new Meteor.Error(
         400,
-        `Action can not be linked to "${docName}" while its root cause analysis is uncompleted`
+        `Root cause analysis for ${sequentialId} "${title}" must be completed first`
       );
     }
   }

@@ -5,7 +5,7 @@ import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.RisksList.viewmodel({
+Template.Risks_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router', 'utils'],
   autorun() {
@@ -112,7 +112,7 @@ Template.RisksList.viewmodel({
         return this.toArray(this.risksDeleted());
       }
 
-      const sections = ViewModel.find('RiskSectionItem');
+      const sections = ViewModel.find('Risks_SectionItem');
       const ids = this.toArray(sections).map(vm => vm.risks && vm.risks().map(({ _id }) => _id));
       return _.flatten(ids);
     };
@@ -121,7 +121,7 @@ Template.RisksList.viewmodel({
     return () =>
       this.modal().open({
         _title: 'Risk',
-        template: 'CreateRisk',
+        template: 'Risks_Create',
         variation: 'save'
       });
   }

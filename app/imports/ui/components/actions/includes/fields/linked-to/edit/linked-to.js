@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { get, invoke } from 'lodash';
 
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
@@ -12,9 +13,11 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   isEditable: false,
   placeholder: 'Linked to',
   type: '',
+  isDeleteButtonVisible() {
+    return !this._id || get(this.linkedDocs(), 'length') > 1;
+  },
   value() {
-    const child = this.child('Select_Multi');
-    return !!child && child.value();
+    return invoke(this.child('Select_Multi'), 'value');
   },
   linkedDocs() {
     const { linkedTo } = this.getData();
@@ -68,18 +71,26 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.concat([{ documentId, documentType }]);
-    const newDocs = Array.from(this.linkedDocs() || []).concat([selectedItem]);
+    const newDocs = Array.from(linkedDocs || []).concat([selectedItem]);
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.onLink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onLink({ documentId, documentType }, cb);
   },
   onUnlink() {},
   onRemoveFn() {
@@ -89,15 +100,16 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (!linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
-    const newDocs = Array.from(this.linkedDocs() || []).filter(({ _id }) => _id !== documentId);
+    const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
 
     // if we are viewing subcard show error in subcard, otherwise in modal
     if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
+      const subcard = this.findParentRecursive('Subcard', this.parent());
 
       if (!subcard) {
         ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
@@ -112,7 +124,14 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.onUnlink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onUnlink({ documentId, documentType }, cb);
   },
   getData() {
     const { linkedTo } = this.data();

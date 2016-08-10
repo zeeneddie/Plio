@@ -6,7 +6,13 @@ import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 const EditableFields = new SimpleSchema({
   title: {
     type: String,
-    min: 1
+    min: 1,
+    max: 40
+  },
+  abbreviation: {
+    type: String,
+    min: 1,
+    max: 40
   }
 });
 

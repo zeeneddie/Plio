@@ -22,7 +22,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
   },
   addLesson() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
         content: 'Subcards_LessonLearned',
         _lText: 'New lessons learned',

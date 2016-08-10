@@ -1,0 +1,15 @@
+<template name="OrgSettings_StandardsBookSections">
+  {{#Subcards_Wrapper
+    _lText=_lText
+    _rText=_rText
+    loading=($not Template.subscriptionsReady)}}
+    <div class="card-block">
+      {{> SimpleSelection_Edit
+          items=standardsBookSections
+          addButtonText="Add section"
+          placeholder=placeholder
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
+    </div>
+  {{/Subcards_Wrapper}}
+</template>

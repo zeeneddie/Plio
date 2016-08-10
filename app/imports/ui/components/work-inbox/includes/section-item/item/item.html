@@ -1,5 +1,5 @@
 <template name="WorkInbox_Item">
-  <a class="list-group-item" {{b "click: navigate, class: { active: _id === workItemId }"}}>
+  <a class="list-group-item" {{b "click: navigate, href: getHref, class: { active: _id === workItemId }"}}>
 	  <span class="label label-status-indicator"
       {{b "class: 'label-'+getClassByStatus(status)"}}></span>
     <div class="list-group-item-content">

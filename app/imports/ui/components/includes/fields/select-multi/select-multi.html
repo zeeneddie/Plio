@@ -1,10 +1,15 @@
 <template name="Select_Multi">
-  <div class="form-group form-group-buttons">
+  <div class="form-group form-group-buttons no-margin">
     {{#each selected}}
       <div class="btn-group">
         <button class="btn btn-secondary" type="button" disabled=""
             {{b "text: this.title, attr: { title: this.title }"}}></button>
-        {{> DeleteButton _id=this._id smallIcon=true onClick=onRemoveCb}}
+        {{#if isDeleteButtonVisible}}
+          {{> DeleteButton
+              _id=this._id
+              smallIcon=true
+              onClick=onRemoveCb}}
+        {{/if}}
       </div>
     {{/each}}
     {{> Select_Single
