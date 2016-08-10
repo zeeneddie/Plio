@@ -1,35 +1,17 @@
 <template name="Actions_ToBeCompletedBy">
   {{#FormField label="To be completed by"}}
-    <div class="form-group form-group-flex">
+    {{#Completion_Edit
+      isButtonVisible=true
+      canButtonBeShown=canBeCompleted
+      onComplete=complete}}
+
       {{> Select_Single
           items=_members
           selected=toBeCompletedBy
           placeholder=placeholder
           selectFirstIfNoSelected=selectFirstIfNoSelected
           onUpdate=onUpdateCb}}
-      {{#if isCompleteButtonVisible}}
-        {{#unless isCompletionFormVisible}}
-          <button type="button" class="btn btn-success margin-left"
-              {{b "click: showCompletionForm"}}>
-            Complete
-          </button>
-        {{else}}
-          <button type="button" class="btn btn-link margin-left"
-              {{b "click: hideCompletionForm"}}>
-            Cancel
-          </button>
-        {{/unless}}
-      {{/if}}
-    </div>
-    {{#if isCompletionFormVisible}}
-      <div class="form-group">
-        <textarea class="form-control" rows="3" placeholder="Comments"
-            {{b "value: completionComments"}}></textarea>
-      </div>
-      <button type="button" class="btn btn-success pull-left" {{b "click: complete"}}>
-        <i class="fa fa-check margin-right"></i>
-        Complete
-      </button>
-    {{/if}}
+          
+    {{/Completion_Edit}}
   {{/FormField}}
 </template>

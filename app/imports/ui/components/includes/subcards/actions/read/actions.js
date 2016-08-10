@@ -30,13 +30,14 @@ Template.Subcards_Actions_Read.viewmodel({
       };
     }
 
-    return this._getActionsByQuery(query, options).map(({ _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, ...args }) => {
-      const href = ((() => {
-        const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: _id };
-        const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified })(Meteor.userId());
+    return this._getActionsByQuery(query, options).map((action) => {
+      const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': action._id });
+      const href = !workItem ? '#' : ((() => {
+        const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: workItem._id };
+        const queryParams = this._getQueryParams(workItem)(Meteor.userId());
         return FlowRouter.path('workInboxItem', params, queryParams);
       })());
-      return { _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, href, ...args };
+      return { ...action, href };
     });
   }
 });

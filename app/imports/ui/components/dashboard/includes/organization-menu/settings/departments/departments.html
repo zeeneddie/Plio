@@ -1,0 +1,15 @@
+<template name="OrgSettings_Departments">
+  {{#Subcards_Wrapper
+    _lText=_lText
+    _rText=_rText
+    loading=($not Template.subscriptionsReady)}}
+    <div class="card-block">
+      {{> SimpleSelection_Edit
+          items=departmentsMapped
+          addButtonText="Add department/sector"
+          placeholder=placeholder
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
+    </div>
+  {{/Subcards_Wrapper}}
+</template>

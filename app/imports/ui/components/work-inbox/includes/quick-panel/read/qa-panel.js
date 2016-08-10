@@ -20,19 +20,26 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       return 'Complete';
     }
   },
-  getDescription({ type, assigneeId, targetDate }) {
+  getDescription({ type, assigneeId, targetDate, isCompleted, completedAt }) {
+    const chooseOne = this.chooseOne(isCompleted);
     const typeText = this.getTypeText({ type });
     const operation = this.getOperationText({ type });
     const assignee = this.userFullNameOrEmail(assigneeId);
-    const date = this.renderDate(targetDate);
+    const date = this.renderDate(chooseOne(completedAt, targetDate));
 
-    return `${typeText} to be ${operation} by ${assignee} by ${date}`;
+    return `${typeText} ${chooseOne('', 'to be')} ${operation} by ${assignee} ${chooseOne('on', 'by')} ${date}`;
   },
   getTypeText({ type }) {
     return this.capitalize(type.substr(type.indexOf(' ') + 1));
   },
   getOperationText({ type }) {
-    return `${this.lowercase(this.getButtonText({ type }))}d`;
+    switch(type) {
+      case TYPES.VERIFY_ACTION:
+        return 'verified';
+        break;
+      default:
+        return `${this.lowercase(this.getButtonText({ type }))}d`;
+    }
   },
   openQAModal({ type, ...args }) {
     const _title = this.capitalize(type);
@@ -45,7 +52,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       template: 'WorkInbox_QAPanel_Edit'
     });
   },
-  restore({ _id, type, status, assigneeId }) {
+  restore({ _id, type, isCompleted, assigneeId }) {
     swal(
       {
         title: 'Are you sure?',
@@ -62,10 +69,10 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           } else {
             swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
 
-            const queryParams = this._getQueryParams({ status, assigneeId })(Meteor.userId());
+            const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
-            Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
           }
+          Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
         };
 
         restore.call({ _id }, callback);

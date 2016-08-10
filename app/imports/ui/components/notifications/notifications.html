@@ -1,0 +1,8 @@
+<template name="Notifications">
+  {{#with currentUser.preferences}}
+    {{#if this.notificationSound}}
+      <audio id="notification-sound" src="{{this.notificationSound}}.mp3">
+      </audio>
+    {{/if}}
+  {{/with}}
+</template>

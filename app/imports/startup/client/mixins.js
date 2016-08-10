@@ -17,7 +17,7 @@ import {
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
 import Counter from '/imports/api/counter/client.js';
-import { Match } from 'meteor/check';
+import { Match, check } from 'meteor/check';
 
 const youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
 const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|)(\d+)(?:|\/\?)/;
@@ -27,24 +27,19 @@ ViewModel.persist = false;
 ViewModel.mixin({
   collapse: {
     collapsed: true,
-    collapseTimeout: '',
     toggleCollapse: _.throttle(function(cb, timeout) {
-
       // Callback is always the last argument
       timeout = Match.test(timeout, Number) ? timeout : null;
-      if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
 
-        // Hide other collapses
-        ViewModel.find('ListItem').forEach((vm) => {
-          if (!!vm && vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId) {
-            vm.collapse.collapse('hide');
-            vm.collapsed(true);
-          }
+      if (this.closeAllOnCollapse && this.closeAllOnCollapse()) {
+        const vms = ViewModel.find('ListItem', vm => vm.collapse && !vm.collapsed() && vm.vmId !== this.vmId);
+        vms.forEach((vm) => {
+          vm.collapse.collapse('hide');
+          vm.collapsed(true);
         });
       }
 
       if (this.collapsed() && timeout) {
-
         // We need some time to render the content for collapsible sections with dynamic content
         setTimeout(() => { this.collapse.collapse('toggle') }, timeout);
       } else {
@@ -186,7 +181,10 @@ ViewModel.mixin({
 
       if (this[prop]()) {
         const words = this[prop]().trim().split(' ');
-        const r = new RegExp(`.*(${words.join('|')}).*`, 'i');
+        let r;
+        try {
+          r = new RegExp(`.*(${words.join('|')}).*`, 'i')
+        } catch(err) {} // ignore errors
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
             const obj = {};
@@ -519,6 +517,10 @@ ViewModel.mixin({
       const query = { ...by };
       return WorkItems.findOne(query, options);
     },
+    _getWorkItemsByQuery(by, options = { sort: { createdAt: -1 } }) {
+      const query = { ...by };
+      return WorkItems.find(query, options);
+    },
     _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);
@@ -540,9 +542,9 @@ ViewModel.mixin({
           break;
       }
     },
-    _getQueryParams({ status, assigneeId = Meteor.userId() }) {
+    _getQueryParams({ isCompleted, assigneeId = Meteor.userId() }) {
       return (userId) => {
-        if (status === 3) { // completed
+        if (isCompleted) { // completed
           if (assigneeId === userId) {
             return { by: 'My completed work' };
           } else {
@@ -592,6 +594,9 @@ ViewModel.mixin({
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
+    },
+    mapByIndex(arr, index, value) {
+      return Object.assign([], arr, { [index]: { ...arr[index], ...value } });
     },
     $eq(val1, val2) {
       return val1 === val2;
@@ -819,6 +824,33 @@ ViewModel.mixin({
           return '';
           break;
       }
+    }
+  },
+  notifications: {
+
+    // Notifications document can be passed as an argument
+    // _id is used as notification tag if there's no tag argument passed
+    // Only title is required
+    sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
+      const notificationSound = document.getElementById('notification-sound');
+      notificationSound && notificationSound.play();
+
+      let notification = new Notification(title, {
+        body,
+        tag: tag || _id,
+        icon: icon || '/p-logo-square.png',
+        silent
+      });
+
+      if (url) {
+        notification.onclick = function () {
+          window.open(url);
+        };
+      }
+
+      Meteor.setTimeout(() => {
+        notification.close();
+      }, timeout);
     }
   }
 });

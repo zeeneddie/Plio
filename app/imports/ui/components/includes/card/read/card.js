@@ -9,8 +9,12 @@ Template.Card_Read.viewmodel({
   onDelete() {},
   onOpenEditModal() {},
   openModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) {
+      return;
+    }
+
     this.onOpenEditModal();
-  }, 3000),
+  }, 1000),
   handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
       swal('Oops... Something went wrong!', err.reason, 'error');

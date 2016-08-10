@@ -90,11 +90,27 @@ Template.Actions_EditSubcard.viewmodel({
       }, cb);
     };
   },
+  getUpdateCompletionExecutorFn() {
+    return ({ userId }, cb) => {
+      this.parent().callUpdate(this.updateCompletionExecutorFn, {
+        _id: this._id(),
+        userId
+      }, cb);
+    };
+  },
   getUpdateVerificationDateFn() {
     return ({ targetDate }, cb) => {
       this.parent().callUpdate(this.updateVerificationDateFn, {
         _id: this._id(),
         targetDate
+      }, cb);
+    };
+  },
+  getUpdateVerificationExecutorFn() {
+    return ({ userId }, cb) => {
+      this.parent().callUpdate(this.updateVerificationExecutorFn, {
+        _id: this._id(),
+        userId
       }, cb);
     };
   },

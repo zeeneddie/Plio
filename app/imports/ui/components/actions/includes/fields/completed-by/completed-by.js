@@ -39,6 +39,10 @@ Template.Actions_CompletedBy.viewmodel({
 
     this.parent().update && this.parent().update({ completedBy });
   },
+  onUndo() {},
+  undo() {
+    return (...args) => this.onUndo(...args);
+  },
   canBeUndone() {
     const currentTime = this.currentTime();
     const undoDeadline = this.undoDeadline();

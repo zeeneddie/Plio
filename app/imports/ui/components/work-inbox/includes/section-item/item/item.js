@@ -13,31 +13,35 @@ Template.WorkInbox_Item.viewmodel({
   mixin: ['date', 'workInbox', 'organization', 'user', 'utils', 'workItemStatus'],
   onCreated(template) {
     template.autorun((computation) => {
-      const { _source: { _id } = {} } = this.data();
+      const { _id } = this.data();
       if (_id === this.workItemId() && this.isNew()) {
         Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
       }
     });
   },
-  _source: {},
-  getTypeText({ _source: { type } = {} }) {
+  getTypeText({ type }) {
     return this.capitalize(type);
   },
-  getDate({ _source: { isDeleted, deletedAt, targetDate } = {} }) {
+  getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
     return this.renderDate(date);
   },
-  getUserText({ _source: { isDeleted, createdBy, deletedBy } }) {
+  getUserText({ isDeleted, createdBy, deletedBy }) {
     return isDeleted
             ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
             : '';
   },
+  getHref() {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: this._id() };
+    const queryParams = { by: this.activeWorkInboxFilter() };
+    return FlowRouter.path('workInboxItem', params, queryParams);
+  },
   isNew() {
-    const { _source: { viewedBy = [] } = {} } = this.data();
+    const { viewedBy = [] } = this.data();
     return !viewedBy.find(_id => _id === Meteor.userId());
   },
   updateViewedBy() {
-    const { _source: { _id } = {} } = this.data();
+    const { _id } = this.data();
 
     updateViewedBy.call({ _id });
   },
@@ -46,7 +50,7 @@ Template.WorkInbox_Item.viewmodel({
       this.width($(window).width());
     }
 
-    const { _source: { _id:workItemId } = {} } = this.data();
+    const { _id:workItemId } = this.data();
 
     FlowRouter.setParams({ workItemId });
   }

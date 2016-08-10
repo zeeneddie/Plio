@@ -4,8 +4,10 @@ Template.StandardsPage.viewmodel({
   share: 'window',
   mixin: ['mobile', 'organization', 'standard'],
   autorun() {
-    this.templateInstance.subscribe('departments', this.organizationId());
-    this.templateInstance.subscribe('standardImprovementPlan', this.standardId());
-    this.templateInstance.subscribe('nonConformitiesByStandardId', this.standardId());
+    const template = this.templateInstance;
+    template.subscribe('departments', this.organizationId());
+    template.subscribe('standardImprovementPlan', this.standardId());
+    template.subscribe('nonConformitiesByStandardId', this.standardId());
+    template.subscribe('workItems', this.organizationId());
   }
 });

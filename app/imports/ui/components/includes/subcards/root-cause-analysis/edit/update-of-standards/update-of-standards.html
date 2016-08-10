@@ -3,27 +3,21 @@
     {{#with updateOfStandards}}
       {{#FormField label=label}}{{/FormField}}
 
-      {{> RCA_ToBeCompletedBy_Edit
-          by=this.executor
-          placeholder="Who will do it?"
-          label="Who will do it?"
-          onUpdate=onStandardsExecutorUpdated}}
-
       {{> RCA_TargetDate_Edit
           startDate=defaultTargetDate
           date=this.targetDate
           onUpdate=onStandardsDateUpdated}}
 
-      {{> RCA_Status_Edit
-          status=this.status
-          executor=this.executor
-          completionComments=this.completionComments
-          isCompleteButtonShown=($not this.status)
-          onComplete=onStandardsUpdated
-          onUndo=onStandardsUpdateUndone
-          onCommentsUpdate=onCommentsUpdate}}
-
-      {{#if updateOfStandards.status}}
+      {{#unless this.status}}
+        {{> RCA_ToBeCompletedBy_Edit
+            by=this.executor
+            comments=this.completionComments
+            isButtonVisible=true
+            placeholder="Who will do it?"
+            label="Who will do it?"
+            onUpdate=onStandardsExecutorUpdated
+            onComplete=onStandardsUpdated}}
+      {{else}}
         {{> RCA_TargetDate_Edit
             date=this.completedAt
             key="updateOfStandards.completedAt"
@@ -31,11 +25,17 @@
             label="Completed date"}}
 
         {{> RCA_ToBeCompletedBy_Edit
-          by=this.completedBy
-          key="updateOfStandards.completedBy"
-          placeholder="Completed by"
-          label="Completed by"}}
-      {{/if}}
+            by=this.completedBy
+            isButtonVisible=false
+            key="updateOfStandards.completedBy"
+            placeholder="Completed by"
+            label="Completed by"
+            onUndo=onStandardsUpdateUndone}}
+
+        {{> RCA_Comments_Edit
+            comments=this.completionComments
+            onUpdate=onCommentsUpdate}}
+      {{/unless}}
     {{/with}}
   </div>
 </template>

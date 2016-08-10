@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { isEqual, isEmpty } from 'lodash';
 
 import OccurrencesService from './occurrences-service.js';
 import { RequiredSchema } from './occurrences-schema.js';
@@ -66,6 +67,10 @@ export const update = new ValidatedMethod({
     }]).newContext();
 
     for (let key in doc) {
+      if (isEqual(key, 'description') && isEmpty(doc[key])) {
+        doc[key] = undefined;
+      }
+
       if (!validationContext.validateOne(doc, key)) {
         const errors = validationContext.invalidKeys();
         const message = validationContext.keyErrorMessage(errors[0].name);

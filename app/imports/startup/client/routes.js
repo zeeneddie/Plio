@@ -160,8 +160,8 @@ FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('DashboardLayout', {
-      content: 'DashboardPage'
+    BlazeLayout.render('Dashboard_Layout', {
+      content: 'Dashboard_Page'
     });
   }
 });
@@ -170,8 +170,8 @@ FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
@@ -180,8 +180,8 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
@@ -191,7 +191,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });
@@ -201,7 +201,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });
@@ -210,8 +210,8 @@ FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });
@@ -220,8 +220,8 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   name: 'risk',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });

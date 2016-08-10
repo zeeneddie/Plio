@@ -81,6 +81,10 @@ $variable-padding: .75rem;
       .label-status-indicator {
         float: left;
         margin-right: 10px;
+
+        &.label-default {
+          visibility: hidden;
+        }
       }
 
       &-content {

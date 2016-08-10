@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { get, head } from 'lodash';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.NCList.viewmodel({
+Template.NC_List.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
   autorun() {
@@ -31,16 +32,16 @@ Template.NCList.viewmodel({
       }
     }
   },
-  _getQueryForFilter() {
+  _getQueryForFilter(withSearchQuery) {
     switch(this.activeNCFilter()) {
       case 'magnitude':
-        return { magnitude: { $in: this.magnitude().map(({ value }) => value) } };
+        return { magnitude: { $in: this.magnitude(withSearchQuery).map(({ value }) => value) } };
         break;
       case 'status':
-        return { status: { $in: this.statuses() } };
+        return { status: { $in: this.statuses(withSearchQuery) } };
         break;
       case 'department/sector':
-        return { departmentsIds: { $in: this.departments().map(({ _id }) => _id) } };
+        return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
         break;
       case 'deleted':
         return { isDeleted: true };
@@ -53,55 +54,55 @@ Template.NCList.viewmodel({
   _getFirstNCQueryForFilter() {
     switch(this.activeNCFilter()) {
       case 'magnitude':
-        return { magnitude: this.magnitude().length > 0 && this.magnitude()[0].value };
+        return { magnitude: get(head(this.magnitude()), 'value') };
         break;
       case 'status':
-        return { status: this.statuses().length > 0 && this.statuses()[0] };
+        return { status: head(this.statuses()) };
         break;
       case 'department/sector':
-        return { departmentsIds: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
+        return { departmentsIds: get(head(this.departments()), '_id') };
         break;
       case 'deleted':
-        return { _id: this.NCsDeleted().count() > 0 && this.NCsDeleted().fetch()[0]._id };
+        return { _id: get(head(this.NCsDeleted()), '_id') };
         break;
       default:
         return {};
         break;
     };
   },
-  _getSearchQuery() {
-     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+  _getSearchQuery(bool = true) {
+     return bool ? this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]) : {};
    },
   _getMagnitudeQuery({ value:magnitude }) {
     return { magnitude };
   },
-  magnitude() {
+  magnitude(withSearchQuery) {
     return this._magnitude().filter(({ value:magnitude }) => {
-      return this._getNCsByQuery({ magnitude, ...this._getSearchQuery() }).count() > 0;
+      return this._getNCsByQuery({ magnitude, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
   _getStatusQuery(status) {
     return { status };
   },
-  statuses() {
+  statuses(withSearchQuery) {
     return _.keys(ProblemsStatuses)
             .map(status => parseInt(status, 10))
-            .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery() }).count() > 0);
+            .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery(withSearchQuery) }).count() > 0);
   },
   _getDepartmentQuery({ _id:departmentsIds }) {
     return { departmentsIds };
   },
-  departments() {
+  departments(withSearchQuery) {
     const query = { organizationId: this.organizationId() };
     const options = { sort: { name: 1 } };
     return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
-      return this._getNCsByQuery({ departmentsIds, ...this._getSearchQuery() }).count() > 0;
+      return this._getNCsByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
-  NCsDeleted() {
-    const query = { ...this._getSearchQuery(), isDeleted: true };
+  NCsDeleted(withSearchQuery) {
+    const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
-    return this._getNCsByQuery(query, options);
+    return this._getNCsByQuery(query, options).fetch();
   },
   calculateTotalCost(value) {
     const ncs = this._getNCsByQuery({
@@ -132,7 +133,7 @@ Template.NCList.viewmodel({
         return this.toArray(this.NCsDeleted());
       }
 
-      const sections = ViewModel.find('NCSectionItem');
+      const sections = ViewModel.find('NC_SectionItem');
       const ids = this.toArray(sections).map(vm => vm.NCs && this.toArray(vm.NCs()).map(({ _id }) => _id));
       return _.flatten(ids);
     };
@@ -141,7 +142,7 @@ Template.NCList.viewmodel({
     return () =>
       this.modal().open({
         _title: 'Non-conformity',
-        template: 'CreateNC',
+        template: 'NC_Create',
         variation: 'save'
       });
   }
