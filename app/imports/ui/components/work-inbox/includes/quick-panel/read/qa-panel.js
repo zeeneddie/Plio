@@ -33,7 +33,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     return this.capitalize(type.substr(type.indexOf(' ') + 1));
   },
   getOperationText({ type }) {
-    return `${this.lowercase(this.getButtonText({ type }))}d`;
+    switch(type) {
+      case TYPES.VERIFY_ACTION:
+        return 'verified';
+        break;
+      default:
+        return `${this.lowercase(this.getButtonText({ type }))}d`;
+    }
   },
   openQAModal({ type, ...args }) {
     const _title = this.capitalize(type);
@@ -65,8 +71,8 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
 
             const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
-            Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
           }
+          Meteor.setTimeout(() => this.goToWorkItem(_id), 0);
         };
 
         restore.call({ _id }, callback);

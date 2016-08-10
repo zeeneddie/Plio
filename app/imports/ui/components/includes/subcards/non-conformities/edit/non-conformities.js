@@ -11,6 +11,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
   _query: {},
   isStandardsEditable: false,
+  renderContentOnInitial() {
+    return !(this.NCs().count() > 5);
+  },
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
   },

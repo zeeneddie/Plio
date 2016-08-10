@@ -61,25 +61,31 @@ Template.WorkInbox_List.viewmodel({
         break;
     };
   },
-  _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
-  },
   getPendingItems(_query = {}) {
-    const linkedDocsQuery = { ...this._getSearchQuery() };
-
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
-        .map(prop => this[prop](linkedDocsQuery).map(({ _id }) => _id))
+        .map(prop => this[prop]().map(({ _id }) => _id))
         .reduce((prev, cur) => [...prev, ...cur]);
 
     const workItems = this._getWorkItemsByQuery({
-      'linkedDoc._id': { $in: linkedDocsIds },
-      ..._query
+      ..._query,
+      'linkedDoc._id': { $in: linkedDocsIds }
     }).fetch();
 
-    return _(workItems).map((item) => {
-      const linkedDocument = item.getLinkedDoc();
-      return { linkedDocument, ...item };
-    });
+    return _(workItems)
+      .map(item => ({ linkedDocument: item.getLinkedDoc(), ...item }))
+      .filter((item) => {
+        const searchQuery = this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }, { name: 'type' }]);
+
+        if (_.keys(searchQuery).length) {
+          const [{ title }, { sequentialId }, { type }] = searchQuery.$or;
+
+          return type.test(item.type) ||
+                 title.test(item.linkedDocument.title) ||
+                 sequentialId.test(item.linkedDocument.sequentialId);
+        }
+
+        return true;
+      });
   },
   assignees() {
     const getIds = query => this.getPendingItems(query);

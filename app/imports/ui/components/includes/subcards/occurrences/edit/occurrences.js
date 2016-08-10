@@ -6,6 +6,9 @@ import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 
 Template.Subcards_Occurrences_Edit.viewmodel({
   mixin: ['collapse', 'addForm', 'modal', 'date', 'organization', 'nonconformity'],
+  renderContentOnInitial() {
+    return !(this.occurrences().count() > 15);
+  },
   renderText({ sequentialId }) {
     return `<strong>${sequentialId}</strong>`;
   },

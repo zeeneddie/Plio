@@ -6,6 +6,9 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   mixin: ['riskScore', 'date', 'addForm', 'utils', 'organization'],
   label: 'Risk scoring',
   scores: '',
+  renderContentOnInitial() {
+    return !(this.scoresSorted().length > 5);
+  },
   scoresSorted() {
     return Array.from(this.scores() || []).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
   },
