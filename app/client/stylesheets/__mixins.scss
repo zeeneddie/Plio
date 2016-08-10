@@ -14,8 +14,8 @@
 	-moz-flex-wrap: $value;
 	@if $value == nowrap {
 		-ms-flex-wrap: none;
-	} @else { 
-		-ms-flex-wrap: $value; 
+	} @else {
+		-ms-flex-wrap: $value;
 	}
 	flex-wrap: $value;
 }
@@ -56,11 +56,11 @@
 @mixin rotate ($deg) {
   @include transform(rotate(#{$deg}deg));
 }
- 
+
 // scale
 @mixin scale($scale) {
 	 @include transform(scale($scale));
-} 
+}
 
 // translate
 @mixin translate ($x, $y) {
@@ -166,8 +166,8 @@
 }
 
 @mixin scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
 }
 
@@ -179,7 +179,7 @@
   &::-webkit-input-placeholder {@content}
   &:-moz-placeholder           {@content}
   &::-moz-placeholder          {@content}
-  &:-ms-input-placeholder      {@content}  
+  &:-ms-input-placeholder      {@content}
 }
 
 @mixin gradient-horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
