@@ -151,13 +151,6 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     this._prettifyValues(diff, val => ActionStatuses[val]);
   }
 
-  _userChanged(diff) {
-    this._prettifyValues(diff, (val) => {
-      const user = Meteor.users.findOne({ _id: val });
-      return user && user.fullNameOrEmail();
-    });
-  }
-
   static get _fieldLabels() {
     const fieldLabels = {
       type: 'Type',

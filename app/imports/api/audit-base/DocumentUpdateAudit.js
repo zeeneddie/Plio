@@ -82,6 +82,13 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     deletedByDiff.isProcessed = true;
   }
 
+  _userChanged(diff) {
+    this._prettifyValues(diff, (val) => {
+      const user = Meteor.users.findOne({ _id: val });
+      return user && user.fullNameOrEmail();
+    });
+  }
+
   static get _fieldLabels() {
     return {
       createdAt: 'Created at',

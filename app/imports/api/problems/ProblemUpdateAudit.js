@@ -122,13 +122,6 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     diff.isProcessed = true;
   }
 
-  _userChanged(diff) {
-    this._prettifyValues(diff, (val) => {
-      const user = Meteor.users.findOne({ _id: val });
-      return user && user.fullNameOrEmail();
-    });
-  }
-
   _analysisStatusChanged(diff) {
     const completedAtDiff = _(this._diff).find(
       ({ field }) => field === 'analysis.completedAt'

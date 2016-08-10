@@ -31,7 +31,7 @@ export default class UpdateAudit {
 
     _(rawDiffs).each(rawDiff => {
       const { kind, path } = rawDiff;
-      const field = path.join('.');
+      const field = _(path).map(field => _(field).isNumber() ? '$': field).join('.');
       let diff;
 
       if (kind === 'A') {
@@ -48,6 +48,7 @@ export default class UpdateAudit {
           field,
           removedItem,
           addedItem,
+          path
         };
       } else {
         const { lhs:oldValue, rhs:newValue } = rawDiff;
@@ -63,7 +64,8 @@ export default class UpdateAudit {
           isFromArray: false,
           field,
           oldValue,
-          newValue
+          newValue,
+          path
         };
       }
 
