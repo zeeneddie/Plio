@@ -6,7 +6,11 @@ import { restore, remove } from '/imports/api/work-items/methods.js';
 const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
+  isRendered: false,
   mixin: ['workInbox', 'organization', 'utils'],
+  onRendered() {
+    this.isRendered(true);
+  },
   isDocType(...args) {
     const { linkedDoc: { type } = {} } = this.workItem() || {};
     return args.some(arg => arg === type);
