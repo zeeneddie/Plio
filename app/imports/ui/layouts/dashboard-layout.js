@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.DashboardLayout.viewmodel({
+Template.Dashboard_Layout.viewmodel({
   mixin: 'organization',
   isReady: false,
   _subHandlers: [],

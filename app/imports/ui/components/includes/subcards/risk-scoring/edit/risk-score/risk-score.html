@@ -5,16 +5,18 @@
       onUpdate=onScoreUpdate
       onGuidePanelToggle=onGuidePanelToggle
       score=score}}
-  {{> RiskScoring_Guidelines guideHtml=guideHtml}}
+  {{> RiskScoring_Guidelines ref="guidelinesRef" guideHtml=guideHtml}}
   {{#with score}}
-    <div class="card-block">
-      {{> RiskScoring_ScoredBy_Edit
-          disabled=disabled
-          scoredBy=this.scoredBy}}
+    {{#if $every this.value this.rowId}}
+      <div class="card-block">
+        {{> RiskScoring_ScoredBy_Edit
+            disabled=disabled
+            scoredBy=this.scoredBy}}
 
-      {{> RiskScoring_ScoredAt_Edit
-          disabled=disabled
-          scoredAt=this.scoredAt}}
-    </div>
+        {{> RiskScoring_ScoredAt_Edit
+            disabled=disabled
+            scoredAt=this.scoredAt}}
+      </div>
+    {{/if}}
   {{/with}}
 </template>

@@ -1,21 +1,27 @@
 import { Template } from 'meteor/templating';
 
 Template.Card_Read.viewmodel({
+  mixin: 'utils',
   cardTitle: 'Title',
-  document: '',
+  doc: '',
+  isReadOnly: false,
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
   openModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) {
+      return;
+    }
+
     this.onOpenEditModal();
-  }, 3000),
-  handleMethodCall(err = '', title = '', action = 'updated', cb = () => {}) {
+  }, 1000),
+  handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
       swal('Oops... Something went wrong!', err.reason, 'error');
     } else {
-      swal('Removed!', `The document "${title}" was ${action} successfully.`, 'success');
+      swal(this.capitalize(action), `The document "${title}" was ${action} successfully.`, 'success');
 
-      cb();
+      return _.isFunction(cb) && cb();
     }
   },
   restore({ _id, title, isDeleted, ...args }) {

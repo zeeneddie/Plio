@@ -1,25 +1,14 @@
-<template name="NCList">
-  <div class="card">
-    <form class="search-form">
-      <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField field="searchText"}}
-          <input type="text" class="form-control" placeholder="Search..."
-              disabled={{animating}} {{b "value: searchText, focus: focused, change: searchOnAfterKeyUp, throttle: 500"}} />
-        {{/ClearableField}}
-        <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
-      </div>
-      <a class="btn btn-primary" {{b "click: openAddNCModal"}}>
-        <i class="fa fa-plus"></i>
-        <span>Add</span>
-      </a>
-    </form>
-
-    <div class="list-group list-group-accordion">
+<template name="NC_List">
+  {{#List_Read
+    ref="list"
+    _id=NCId
+    onModalOpen=onModalOpen
+    onSearchInputValue=onSearchInputValue}}
 
       {{#if isActiveNCFilter "magnitude"}}
         {{#each magnitude}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=this.name
               magnitude=this.value
               hideRTextOnExpand=true
@@ -31,7 +20,7 @@
       {{#if isActiveNCFilter "status"}}
         {{#each statuses}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=(getStatusName this)
               _query=(_getStatusQuery this)
               hideRTextOnExpand=true
@@ -42,7 +31,7 @@
       {{#if isActiveNCFilter "department/sector"}}
         {{#each departments}}
           {{> ListItem
-              template="NCSectionItem"
+              template="NC_SectionItem"
               title=this.name
               closeAllOnCollapse=false
               hideRTextOnExpand=true
@@ -53,13 +42,9 @@
 
       {{#if isActiveNCFilter "deleted"}}
         {{#each NCsDeleted}}
-          {{> NC_Item_Read}}
+          {{> NC_Item}}
         {{/each}}
       {{/if}}
 
-      {{#if searchText}}
-        <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
-      {{/if}}
-    </div>
-  </div>
+  {{/List_Read}}
 </template>

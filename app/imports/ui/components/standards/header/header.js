@@ -11,8 +11,8 @@ Template.StandardsHeader.viewmodel({
     return StandardFilters;
   },
   selectFilter(filter) {
-    this.searchText('');
     FlowRouter.setQueryParams({ by: filter });
+    this.searchText('');
     this.expandCollapsed(this.standardId());
   }
 });

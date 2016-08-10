@@ -1,79 +1,84 @@
 <template name="Actions_Card_Edit_Main">
   <div class="card-block">
-    {{> Actions_Title title=title}}
+    {{#with action}}
+      {{> Actions_Title title=this.title}}
 
-    {{> Actions_LinkedTo_Edit
-        _id=_id
-        isEditable=isLinkedToEditable
-        linkedTo=linkedTo
-        type=type
-        standardId=standardId
-        onLink=onLinkDocument
-        onUnlink=onUnlinkDocument}}
+      {{> Actions_LinkedTo_Edit
+          _id=this._id
+          isEditable=isLinkedToEditable
+          linkedTo=this.linkedTo
+          type=this.type
+          standardId=standardId
+          onLink=onLinkDocument
+          onUnlink=onUnlinkDocument}}
 
-    {{> Actions_Status status=status}}
+      {{> Actions_Status status=this.status}}
 
-    {{> Actions_Owner ownerId=ownerId}}
+      {{> Actions_Owner ownerId=this.ownerId}}
 
-    {{> Actions_PlanInPlace planInPlace=planInPlace}}
+      {{> Actions_PlanInPlace planInPlace=this.planInPlace}}
 
-    <hr />
+      <hr />
 
-    {{> Actions_CompletionTargetDate
-        completionTargetDate=completionTargetDate
-        enabled=isCompletionEditable
-        onUpdate=onUpdateCompletionDate}}
+      {{> Actions_CompletionTargetDate
+          completionTargetDate=this.completionTargetDate
+          enabled=(isCompletionEditable this)
+          onUpdate=onUpdateCompletionDate}}
 
-    {{#unless isCompleted}}
+      {{#unless this.isCompleted}}
 
-      {{> Actions_ToBeCompletedBy
-          toBeCompletedBy=toBeCompletedBy
-          onComplete=onComplete}}
+        {{> Actions_ToBeCompletedBy
+            _id=this._id
+            toBeCompletedBy=this.toBeCompletedBy
+            onComplete=onComplete
+            onUpdate=onUpdateCompletionExecutor}}
 
-    {{else}}
+      {{else}}
 
-      {{> Actions_CompletedOn
-          completedAt=completedAt
-          enabled=isCompletionEditable}}
+        {{> Actions_CompletedOn
+            completedAt=this.completedAt
+            enabled=(isCompletionEditable this)}}
 
-      {{> Actions_CompletedBy
-          completedBy=completedBy
-          completedAt=completedAt
-          enabled=isCompletionEditable
-          onUndo=onUndoCompletion}}
+        {{> Actions_CompletedBy
+            completedBy=this.completedBy
+            completedAt=this.completedAt
+            enabled=(isCompletionEditable this)
+            onUndo=onUndoCompletion}}
 
-      {{> Actions_CompletionComments
-          completionComments=completionComments
-          enabled=isCompletionEditable}}
+        {{> Actions_CompletionComments
+            completionComments=this.completionComments
+            enabled=(isCompletionEditable this)}}
 
-      {{#if showVerification}}
-        <hr />
+        {{#if showVerification}}
+          <hr />
 
-        {{> Actions_VerificationTargetDate
-            verificationTargetDate=verificationTargetDate
-            onUpdate=onUpdateVerificationDate}}
+          {{> Actions_VerificationTargetDate
+              verificationTargetDate=this.verificationTargetDate
+              onUpdate=onUpdateVerificationDate}}
 
-        {{#unless isVerified}}
+          {{#unless isVerified}}
 
-          {{> Actions_ToBeVerifiedBy
-              toBeVerifiedBy=toBeVerifiedBy
-              onVerify=onVerify}}
+            {{> Actions_ToBeVerifiedBy
+                toBeVerifiedBy=this.toBeVerifiedBy
+                onUpdate=onUpdateVerificationExecutor
+                onVerify=onVerify}}
 
-        {{else}}
+          {{else}}
 
-          {{> Actions_VerifiedOn verifiedAt=verifiedAt}}
+            {{> Actions_VerifiedOn verifiedAt=this.verifiedAt}}
 
-          {{> Actions_VerifiedBy
-              verifiedBy=verifiedBy
-              verifiedAt=verifiedAt
-              onUndo=onUndoVerification}}
+            {{> Actions_VerifiedBy
+                verifiedBy=this.verifiedBy
+                verifiedAt=this.verifiedAt
+                onUndo=onUndoVerification}}
 
-          {{> Actions_VerificationComments
-              verificationComments=verificationComments}}
+            {{> Actions_VerificationComments
+                verificationComments=this.verificationComments}}
 
-        {{/unless}}
-      {{/if}}
+          {{/unless}}
+        {{/if}}
 
-    {{/unless}}
+      {{/unless}}
+    {{/with}}
   </div>
 </template>

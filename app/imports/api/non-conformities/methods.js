@@ -8,7 +8,8 @@ import {
   IdSchema,
   OrganizationIdSchema,
   optionsSchema,
-  UserIdSchema
+  UserIdSchema,
+  CompleteActionSchema
 } from '../schemas.js';
 
 import { checkAnalysis } from '../checkers.js';
@@ -59,6 +60,30 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const setAnalysisExecutor = new ValidatedMethod({
+  name: 'NonConformities.setAnalysisExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannnot update root cause analysis'
+      );
+    }
+
+    return NonConformitiesService.setAnalysisExecutor({ _id, executor });
+  }
+});
+
 export const setAnalysisDate = new ValidatedMethod({
   name: 'NonConformities.setAnalysisDate',
 
@@ -83,9 +108,9 @@ export const setAnalysisDate = new ValidatedMethod({
 export const completeAnalysis = new ValidatedMethod({
   name: 'NonConformities.completeAnalysis',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -93,16 +118,16 @@ export const completeAnalysis = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.completeAnalysis({ _id, userId });
+    return NonConformitiesService.completeAnalysis({ _id, completionComments, userId });
   }
 });
 
 export const updateStandards = new ValidatedMethod({
   name: 'NonConformities.updateStandards',
 
-  validate: IdSchema.validator(),
+  validate: CompleteActionSchema.validator(),
 
-  run({ _id }) {
+  run({ _id, completionComments }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
@@ -110,7 +135,7 @@ export const updateStandards = new ValidatedMethod({
       );
     }
 
-    return NonConformitiesService.updateStandards({ _id, userId });
+    return NonConformitiesService.updateStandards({ _id, completionComments, userId });
   }
 });
 
@@ -148,6 +173,30 @@ export const undoAnalysis = new ValidatedMethod({
   }
 });
 
+export const setStandardsUpdateExecutor = new ValidatedMethod({
+  name: 'NonConformities.setStandardsUpdateExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  run({ _id, executor }) {
+    if (!this.userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update standards update'
+      );
+    }
+
+    return NonConformitiesService.setStandardsUpdateExecutor({ _id, executor });
+  }
+});
+
 export const setStandardsUpdateDate = new ValidatedMethod({
   name: 'NonConformities.setStandardsUpdateDate',
 
@@ -175,42 +224,15 @@ export const updateViewedBy = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update non-conformities'
       );
     }
 
-    if (!NonConformities.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Non-conformity does not exist'
-      );
-    }
-
-    if (!!NonConformities.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this non-conformity'
-      );
-    }
-
-    return NonConformitiesService.updateViewedBy({ _id, userId: this.userId });
-  }
-});
-
-export const restore = new ValidatedMethod({
-  name: 'NonConformities.restore',
-
-  validate: IdSchema.validator(),
-
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore non conformities'
-      );
-    }
-
-    return NonConformitiesService.restore({ _id, userId});
+    return NonConformitiesService.updateViewedBy({ _id, viewedBy: userId });
   }
 });
 
@@ -228,14 +250,23 @@ export const remove = new ValidatedMethod({
       );
     }
 
-    const NC = NonConformities.findOne({ _id });
+    return NonConformitiesService.remove({ _id, deletedBy: userId });
+  }
+});
 
-    if (!NC) {
+export const restore = new ValidatedMethod({
+  name: 'NonConformities.restore',
+
+  validate: IdSchema.validator(),
+
+  run({ _id }) {
+    const userId = this.userId;
+    if (!userId) {
       throw new Meteor.Error(
-        400, 'Non-conformity with the given id does not exists'
+        403, 'Unauthorized user cannot restore non-conformities'
       );
     }
 
-    return NonConformitiesService.remove({ _id, deletedBy: userId, isDeleted: NC.isDeleted});
+    return NonConformitiesService.restore({ _id });
   }
 });

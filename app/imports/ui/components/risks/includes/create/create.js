@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/risks/methods.js';
 
-Template.CreateRisk.viewmodel({
+Template.Risks_Create.viewmodel({
   mixin: ['modal', 'organization', 'router', 'collapsing'],
   RKGuidelines() {
     return this.organization() && this.organization().rkGuidelines;
@@ -43,7 +43,7 @@ Template.CreateRisk.viewmodel({
         this.modal().open({
           _id,
           _title: 'Risk',
-          template: 'EditRisk'
+          template: 'Risks_Card_Edit'
         });
         }, 400);
     });

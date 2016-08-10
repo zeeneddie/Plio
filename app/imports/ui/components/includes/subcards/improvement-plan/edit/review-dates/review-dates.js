@@ -36,7 +36,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
       'reviewDates': { _id, date }
     };
 
-    if (this.parent().document()) {
+    if (this.parent().doc()) {
       this.parent().update({ options }, cb)
     } else {
       this.parent().insert({ reviewDates: [{ _id, date }] }, cb);
@@ -45,9 +45,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
   set({ _id, date }, cb) {
     const query = {
       'reviewDates': {
-        $elemMatch: {
-          _id: _id
-        }
+        $elemMatch: { _id }
       }
     };
 

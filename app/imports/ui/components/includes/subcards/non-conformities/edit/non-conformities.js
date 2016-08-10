@@ -11,6 +11,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
   _query: {},
   isStandardsEditable: false,
+  renderContentOnInitial() {
+    return !(this.NCs().count() > 5);
+  },
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
   },
@@ -19,9 +22,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   addNC() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
-        content: 'CreateNC',
+        content: 'NC_Create',
         isStandardsEditable: this.isStandardsEditable(),
         standardsIds: [this._id && this._id()],
         _lText: 'New non-conformity',

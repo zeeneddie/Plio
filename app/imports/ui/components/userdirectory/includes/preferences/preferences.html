@@ -1,0 +1,40 @@
+<template name="UserPreferences">
+  <div class="card-block">
+    {{#FormField label="Notifications"}}
+      <button type="button" class="btn btn-checkbox btn-secondary"
+          id="notifications-checkbox" data-toggle="button" autocomplete="off"
+          {{b "click: updateNotifications, class: {active: areNotificationsEnabled}"}}>
+        <i class="ms-Icon ms-Icon--check"></i>
+      </button>
+    {{/FormField}}
+
+    {{#FormField label="Notification sound"}}
+      <div class="form-group-flex">
+        <div class="form-group-flex-flex margin-right">
+          <select class="c-select" id="notification-sounds"
+              {{b "options: sounds, optionsValue: file, optionsText: name, value: notificationSound, defaultText: 'No sound', enable: areNotificationsEnabled"}}>
+          </select>
+        </div>
+        <button type="button" class="btn btn-secondary" {{b "click: playSound, enable: isPlayEnabled &&areNotificationsEnabled && notificationSound"}}>
+          <i class="fa fa-volume-up fa-lg" aria-hidden="true"></i>
+        </button>
+        {{#if notificationSound}}
+          <audio id="audio">
+            <source src="{{notificationSound}}.mp3" type="audio/mpeg" />
+            <source src="{{notificationSound}}.ogg" type="audio/ogg" />
+            <source src="{{notificationSound}}.m4r" type="audio/mpeg" />
+          </audio>
+        {{/if}}
+      </div>
+    {{/FormField}}
+
+    {{#if areNotificationsEnabled}}
+      {{#FormField label="Try it"}}
+        <button type="button" class="btn btn-secondary"
+            {{b "click: sendTestNotification"}}>
+          Send test notification
+        </button>
+      {{/FormField}}
+    {{/if}}
+  </div>
+</template>

@@ -2,20 +2,14 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { update, remove } from '/imports/api/standards/methods.js';
+import { restore, remove } from '/imports/api/standards/methods.js';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
-  onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('departments', this.organizationId());
-      template.subscribe('standardImprovementPlan', this.standard() && this.standard()._id);
-      template.subscribe('nonConformitiesByStandardId', this.standard() && this.standard()._id);
-    });
-  },
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   onRendered(template) {
     template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
@@ -26,6 +20,9 @@ Template.Standards_Card_Read.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
+  ActionTypes() {
+    return ActionTypes;
+  },
   toggleScreenMode() {
     const $div = this.templateInstance.$('.content-cards-inner');
     const offset = $div.offset();
@@ -52,7 +49,7 @@ Template.Standards_Card_Read.viewmodel({
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this._id() });
   },
   hasDocxAttachment() {
     const standard = this.standard();
@@ -69,13 +66,15 @@ Template.Standards_Card_Read.viewmodel({
   _getNCsQuery() {
     return { standardsIds: this.standard() && this.standard()._id };
   },
-  openEditStandardModal() {
+  openEditStandardModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) return;
+    
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
       _id: this.standard() && this.standard()._id
     });
-  },
+  }, 1000),
   restore({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
@@ -89,7 +88,7 @@ Template.Standards_Card_Read.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, isDeleted: false }, (err) => {
+        restore.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {

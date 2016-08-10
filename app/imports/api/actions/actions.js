@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 import { ActionSchema } from './action-schema.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
+import { WorkItems } from '../work-items/work-items.js';
 import {
   ActionUndoTimeInHours, ProblemMagnitudes,
   ProblemTypes, WorkflowTypes, CollectionNames
@@ -128,6 +129,9 @@ Actions.helpers({
     const sixStepDoc = NonConformities.findOne(ncQuery) || Risks.findOne(riskQuery);
 
     return sixStepDoc ? WorkflowTypes.SIX_STEP : WorkflowTypes.THREE_STEP;
+  },
+  getWorkItems() {
+    return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
   }
 });
 

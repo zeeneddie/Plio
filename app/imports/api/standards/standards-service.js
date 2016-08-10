@@ -1,10 +1,14 @@
 import { Standards } from './standards.js';
 import { ImprovementPlans } from '../improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '../lessons/lessons.js';
+import { canChangeStandards } from '../checkers.js';
+import BaseEntityService from '../base-entity-service.js';
 
 
 export default {
   collection: Standards,
+
+  _service: new BaseEntityService(Standards),
 
   insert({ ...args }) {
     return this.collection.insert(args);
@@ -17,39 +21,38 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
-    
-    return this.collection.update(query, options);
-  },
-
-  updateViewedBy({ _id, userId }) {
-    const query = { _id };
-    const options = {
-      $addToSet: {
-        viewedBy: userId
-      }
-    };
 
     return this.collection.update(query, options);
   },
 
-  remove({ _id, deletedBy, isDeleted }) {
-    const query = { _id };
+  updateViewedBy({ _id, userId:viewedBy }) {
+    this._ensureUserHasNotViewed({ _id, viewedBy });
 
-    if (isDeleted) {
-      ImprovementPlans.remove({ standardId: _id });
-      LessonsLearned.remove({ standardId: _id });
+    this._service.updateViewedBy({ _id, viewedBy });
+  },
 
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
+  remove({ _id, deletedBy }) {
+    this._service.remove({ _id, deletedBy });
+  },
 
-      return this.collection.update(query, options);
+  restore({ _id }) {
+    this._ensureStandardIsDeleted(_id);
+
+    this._service.restore({ _id });
+  },
+
+  _ensureStandardIsDeleted(_id) {
+    const { isDeleted } = this.collection.findOne({ _id });
+    if (!isDeleted) {
+      throw new Meteor.Error(400, 'Standard needs to be deleted first');
+    }
+  },
+
+  _ensureUserHasNotViewed({ _id, viewedBy }) {
+    if (!!this.collection.findOne({ _id, viewedBy })) {
+      throw new Meteor.Error(
+        400, 'You have been already added to this list'
+      );
     }
   }
 };

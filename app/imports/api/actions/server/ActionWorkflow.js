@@ -5,6 +5,8 @@ import { isDueToday, isOverdue } from '../../checkers.js';
 import Workflow from '../../workflow-base/Workflow.js';
 import NCWorkflow from '../../non-conformities/NCWorkflow.js';
 import RiskWorkflow from '../../risks/RiskWorkflow.js';
+import WorkItemWorkflow from '../../work-items/WorkItemWorkflow.js';
+
 
 export default class ActionWorkflow extends Workflow {
 
@@ -28,11 +30,15 @@ export default class ActionWorkflow extends Workflow {
 
   _onUpdateStatus(status) {
     const action = this._doc;
+
+    const workItems = action.getWorkItems();
+    _(workItems).each(doc => new WorkItemWorkflow(doc).refreshStatus());
+
     const NCs = action.getLinkedNCs();
     const risks = action.getLinkedRisks();
 
-    _.each(NCs, doc => new NCWorkflow(doc).refreshStatus());
-    _.each(risks, doc => new RiskWorkflow(doc).refreshStatus());
+    _(NCs).each(doc => new NCWorkflow(doc).refreshStatus());
+    _(risks).each(doc => new RiskWorkflow(doc).refreshStatus());
   }
 
   _getDeletedStatus() {

@@ -42,7 +42,7 @@ Template.HelloPage.viewmodel({
     e.preventDefault();
 
     this.modal().open({
-      template: 'OrganizationCreate',
+      template: 'Organizations_Create',
       _title: 'New organization',
       variation: 'save',
       timezone: moment.tz.guess(),

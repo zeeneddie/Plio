@@ -1,35 +1,40 @@
-<template name="NC_Analysis_Edit">
+<template name="RCA_Analysis_Edit">
   <div class="card-block">
-    {{#FormField label=label}}{{/FormField}}
+    {{#with analysis}}
+      {{#FormField label=label}}{{/FormField}}
 
-    {{> NC_RCA_By_Edit
-        by=executor
-        key="analysis.executor"
-        placeholder="Who will do it?"
-        label="Who will do it?"}}
+      {{> RCA_TargetDate_Edit
+          date=this.targetDate
+          onUpdate=onTargetDateUpdate}}
 
-    {{> NC_RCA_Date_Edit
-        date=targetDate
-        onUpdate=onTargetDateUpdate}}
+      {{#unless isAnalysisCompleted}}
+        {{> RCA_ToBeCompletedBy_Edit
+            by=this.executor
+            comments=this.completionComments
+            isButtonVisible=true
+            placeholder="Who will do it?"
+            label="Who will do it?"
+            onUpdate=onUpdateAnalysisExecutor
+            onComplete=onAnalysisCompleted}}
+      {{else}}
+        {{> RCA_TargetDate_Edit
+            date=this.completedAt
+            key="analysis.completedAt"
+            placeholder="Completed date"
+            label="Completed date"}}
 
-    {{> NC_RCA_Status_Edit
-        status=status
-        executor=executor
-        onComplete=onAnalysisCompleted
-        onUndo=onAnalysisUndone}}
+        {{> RCA_ToBeCompletedBy_Edit
+            by=this.completedBy
+            isButtonVisible=false
+            key="analysis.completedBy"
+            placeholder="Completed by"
+            label="Completed by"
+            onUndo=onAnalysisUndone}}
 
-    {{#if isAnalysisCompleted}}
-      {{> NC_RCA_Date_Edit
-          date=completedAt
-          key="analysis.completedAt"
-          placeholder="Completed date"
-          label="Completed date"}}
-
-      {{> NC_RCA_By_Edit
-        by=completedBy
-        key="analysis.completedBy"
-        placeholder="Completed by"
-        label="Completed by"}}
-    {{/if}}
+        {{> RCA_Comments_Edit
+            comments=this.completionComments
+            onUpdate=onCommentsUpdate}}
+      {{/unless}}
+    {{/with}}
   </div>
 </template>

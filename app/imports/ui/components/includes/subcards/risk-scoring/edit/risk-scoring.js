@@ -6,6 +6,9 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   mixin: ['riskScore', 'date', 'addForm', 'utils', 'organization'],
   label: 'Risk scoring',
   scores: '',
+  renderContentOnInitial() {
+    return !(this.scoresSorted().length > 5);
+  },
   scoresSorted() {
     return Array.from(this.scores() || []).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
   },
@@ -61,8 +64,12 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   },
   add() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
+        score: {
+          scoredAt: new Date(),
+          scoredBy: Meteor.userId()
+        },
         content: 'Subcards_RiskScore',
         _lText: 'New risk score',
         guideHtml: this.guideHtml(),
@@ -104,7 +111,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
               if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
             };
 
-            const callback = this.combine(showSuccess, cb);
+            const callback = this.chain(showSuccess, cb);
 
             this.onRemove({ score }, callback);
           }

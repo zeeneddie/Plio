@@ -3,10 +3,13 @@ import { Meteor } from 'meteor/meteor';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.NC_RCA_Status_Edit.viewmodel({
+Template.RCA_Status_Edit.viewmodel({
   status: 0,
   executor: '',
+  completionComments: '',
   label: 'Status',
+  placeholder: 'Comments',
+  isCompleteButtonShown: false,
   isSelectedExecutor() {
     return this.executor() === Meteor.userId();
   },
@@ -22,27 +25,39 @@ Template.NC_RCA_Status_Edit.viewmodel({
   statuses() {
     return _.keys(AnalysisStatuses).map(status => ({ value: parseInt(status, 10), text: AnalysisStatuses[status] }) );
   },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { value:statusValue } = viewmodel.getData();
-
-    const status = parseInt(statusValue, 10);
+  onComplete() {},
+  complete() {
+    const { completionComments, status } = this.data();
     const savedStatus = this.templateInstance.data.status;
 
-    if (status === savedStatus) {
-      return;
-    }
-
-    this.status(status);
+    if (status === savedStatus) return;
 
     const cb = err => err && this.status(savedStatus);
 
-    if (status === 1) {
-      this.onComplete(cb);
-    } else if (status === 0) {
-      this.onUndo(cb);
+    this.onComplete({ completionComments }, cb);
+  },
+  onUndo() {},
+  onSelectCb() {
+    return this.select.bind(this);
+  },
+  select(viewmodel) {
+    const { value:statusValue } = viewmodel.getData();
+    const savedStatus = this.templateInstance.data.status;
+    const status = parseInt(statusValue, 10);
+
+    this.status(status);
+
+    if (status === 0 && status !== savedStatus) {
+      const cb = err => err && this.status(savedStatus);
+      return this.onUndo(cb);
     }
+  },
+  onCommentsUpdate() {},
+  updateComments() {
+    const { completionComments } = this.data();
+
+    if (this.isCompleteButtonShown() || completionComments === this.templateInstance.data.completionComments) return;
+
+    this.onCommentsUpdate({ completionComments });
   }
 });

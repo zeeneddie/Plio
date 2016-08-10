@@ -1,15 +1,37 @@
-<template name="NC_RCA_Status_Edit">
+<template name="RCA_Status_Edit">
   {{#FormField label=label}}
+    {{#if isSelectedExecutor}}
+      {{#Completion_Edit}}
+        {{> Select_Single_Radio
+            items=statuses
+            value=getStatusValue
+            onSelect=onSelectCb}}
+      {{/Completion_Edit}}
+    {{/if}}
+    <!-- 
+
     {{#if isSelectedExecutor}}
       {{> Select_Single_Radio
           items=statuses
           value=getStatusValue
-          onSelect=onUpdateCb}}
+          onSelect=onSelectCb}}
+      {{#if status}}
+        <div class="form-group m-t-1">
+          <textarea class="form-control" rows="3"
+            {{b "value: completionComments, attr: { placeholder: placeholder }, focusout: updateComments"}}></textarea>
+        </div>
+        {{#if isCompleteButtonShown}}
+          <button type="button" class="btn btn-success pull-left" {{b "click: complete"}}>
+            <i class="fa fa-check margin-right"></i>
+            Complete
+          </button>
+        {{/if}}
+      {{/if}}
     {{else}}
       <span class="label text-default">
         <i class="fa fa-circle margin-right" {{b "class: getClassByStatus"}}></i>
         <span {{b "text: getStatus"}}></span>
       </span>
-    {{/if}}
+    {{/if}} -->
   {{/FormField}}
 </template>

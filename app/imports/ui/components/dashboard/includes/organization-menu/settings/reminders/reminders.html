@@ -1,0 +1,29 @@
+<template name="OrgSettings_Reminders">
+  {{#Subcards_Wrapper _lText=_lText}}
+    <div class="card-block">
+      {{> OrgSettings_Reminder
+          title="Minor non-conformities"
+          timeData=reminders.minorNc
+          type="minorNc"
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_Reminder
+          title="Major non-conformities"
+          timeData=reminders.majorNc
+          type="majorNc"
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_Reminder
+          title="Critical non-conformities"
+          timeData=reminders.criticalNc
+          type="criticalNc"
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_Reminder
+          title="Improvement plans"
+          timeData=reminders.improvementPlan
+          type="improvementPlan"
+          onChange=onChangeCb}}
+    </div>
+  {{/Subcards_Wrapper}}
+</template>
