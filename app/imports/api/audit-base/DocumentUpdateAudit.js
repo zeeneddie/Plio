@@ -45,10 +45,11 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     }
 
     const user = Meteor.users.findOne({ _id: userId });
-    const userName = (user && user.fullName()) || userId;
+    const userName = (user && user.fullNameOrEmail()) || userId;
 
     this._createLog({
-      message: `${userName} viewed document`
+      message: `${userName} viewed document`,
+      field: 'viewedBy'
     });
 
     diff.isProcessed = true;
@@ -91,7 +92,8 @@ export default class DocumentUpdateAudit extends UpdateAudit {
       deletedAt: 'Deleted at',
       deletedBy: 'Deleted by',
       notify: 'Notify',
-      viewedBy: 'Viewed by'
+      viewedBy: 'Viewed by',
+      organizationId: 'Organization ID'
     };
   }
 

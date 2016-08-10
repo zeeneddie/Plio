@@ -1,3 +1,6 @@
+import Utils from '/imports/core/utils';
+
+
 SyncedCron.config({
 
   // Log job run details to console
@@ -26,4 +29,6 @@ SyncedCron.config({
   collectionTTL: 172800
 });
 
-SyncedCron.start();
+if (Utils.isProduction()) {
+  SyncedCron.start();
+}

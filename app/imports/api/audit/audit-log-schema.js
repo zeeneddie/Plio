@@ -12,10 +12,10 @@ export const AuditLogSchema = new SimpleSchema({
   message: {
     type: String
   },
-  changedAt: {
+  date: {
     type: Date
   },
-  changedBy: {
+  executor: {
     type: String,
     regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/
   },

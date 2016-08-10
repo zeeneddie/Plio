@@ -20,8 +20,8 @@ export default {
       collection: this._collection,
       message: this._documentCreatedMessage,
       documentId: _id,
-      changedAt: createdAt,
-      changedBy: createdBy
+      date: createdAt,
+      executor: createdBy
     }]);
   },
 
@@ -38,8 +38,8 @@ export default {
       collection: this._collection,
       message: this._documentRemovedMessage,
       documentId: _id,
-      changedAt: new Date(),
-      changedBy: userId
+      date: new Date(),
+      executor: userId
     }]);
   },
 

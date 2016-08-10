@@ -336,6 +336,7 @@ export const BaseProblemsOptionalSchema = ((() => {
       departmentsIds: {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
+        defaultValue: [],
         optional: true
       },
       ...analysis,

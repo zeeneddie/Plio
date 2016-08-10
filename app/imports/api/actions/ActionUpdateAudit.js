@@ -26,9 +26,10 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
         case 'status':
           this._statusChanged(diff);
           break;
+        case 'ownerId':
         case 'toBeCompletedBy':
         case 'toBeVerifiedBy':
-          this._executorChanged(diff);
+          this._userChanged(diff);
           break;
       }
     });
@@ -37,39 +38,47 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   }
 
   _linkedDocChanged(diff) {
-    const changesTypes = this.constructor._changesTypes;
+    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
 
     const { sequentialId, title } = this._newDoc;
     const actionName = `${sequentialId} "${title}"`;
 
-    const linkedDoc = diff.removedItem || diff.addedItem;
-    const { documentId, documentType } = linkedDoc;
+    const { kind, addedItem, removedItem } = diff;
+    let linkedDoc, message, linkedDocMessage;
+    if (kind === ITEM_ADDED) {
+      linkedDoc = addedItem;
+      message = 'Linked to [docName]';
+      linkedDocMessage = `${actionName} linked`;
+    } else if (kind === ITEM_REMOVED) {
+      linkedDoc = removedItem;
+      message = 'Unlinked from [docName]';
+      linkedDocMessage = `${actionName} unlinked`;
+    }
 
+    if (!(linkedDoc && message && linkedDocMessage)) {
+      return;
+    }
+
+    const { documentId, documentType } = linkedDoc;
     const docCollections = {
       [ProblemTypes.NC]: NonConformities,
       [ProblemTypes.RISK]: Risks
     };
     const docCollection = docCollections[documentType];
     const doc = docCollection.findOne({ _id: documentId });
-    const docName = `${doc.sequentialId} "${doc.title}"`;
 
-    const { kind } = diff;
-    let message, linkedDocMessage;
-    if (kind === changesTypes.ITEM_ADDED) {
-      message = `Linked to ${docName}`;
-      linkedDocMessage = `Action ${actionName} linked`;
-    } else if (kind === changesTypes.ITEM_REMOVED) {
-      message = `Unlinked from ${docName}`;
-      linkedDocMessage = `Action ${actionName} unlinked`;
-    }
+    const docName = (doc && `${doc.sequentialId} "${doc.title}"`) || documentId;
+    message = message.replace('[docName]', docName);
 
-    this._createLog({ message });
+    this._createLog({
+      message,
+      field: 'linkedTo'
+    });
 
     const collectionNames = {
       [ProblemTypes.NC]: CollectionNames.NCS,
       [ProblemTypes.RISK]: CollectionNames.RISKS
     };
-
     this._createLog({
       collection: collectionNames[documentType],
       message: linkedDocMessage,
@@ -139,37 +148,24 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   }
 
   _statusChanged(diff) {
-    const diffValues = _(diff).pick(['oldValue', 'newValue']);
-
-    _(diffValues).each((val, key) => {
-      if (val !== undefined) {
-        const status = ActionStatuses[val];
-        status && (diff[key] = status);
-      }
-    });
+    this._prettifyValues(diff, val => ActionStatuses[val]);
   }
 
-  _executorChanged(diff) {
-    const diffValues = _(diff).pick(['oldValue', 'newValue']);
-
-    _(diffValues).each((val, key) => {
-      if (val !== undefined) {
-        const user = Meteor.users.findOne({ _id: val });
-        const userName = user && user.fullName();
-        userName && (diff[key] = userName);
-      }
+  _userChanged(diff) {
+    this._prettifyValues(diff, (val) => {
+      const user = Meteor.users.findOne({ _id: val });
+      return user && user.fullNameOrEmail();
     });
   }
 
   static get _fieldLabels() {
     const fieldLabels = {
-      organizationId: 'Organization ID',
       type: 'Type',
       linkedTo: 'Linked to',
       serialNumber: 'Serial number',
       sequentialId: 'Sequential ID',
       title: 'Title',
-      ownerId: 'Owner ID',
+      ownerId: 'Owner',
       planInPlace: 'Plan in place',
       status: 'Status',
       toBeCompletedBy: 'Completion executor',
@@ -190,6 +186,18 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
 
   static get _collection() {
     return CollectionNames.ACTIONS;
+  }
+
+  static get _messages() {
+    const changesTypes = this._changesTypes;
+
+    return {
+      notes: {
+        [changesTypes.FIELD_ADDED]: 'Notes set',
+        [changesTypes.FIELD_CHANGED]: 'Notes changed',
+        [changesTypes.FIELD_REMOVED]: 'Notes removed',
+      }
+    };
   }
 
 }

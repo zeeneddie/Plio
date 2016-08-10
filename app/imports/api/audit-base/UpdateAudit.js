@@ -95,16 +95,24 @@ export default class UpdateAudit {
 
       let msgData;
       if (isFromArray) {
-        const { addedItem, removedItem } = diff;
-        msgData = { addedItem, removedItem };
+        const { addedItem, removedItem, prettyAddedItem, prettyRemovedItem } = diff;
+        msgData = {
+          addedItem: prettyAddedItem || addedItem,
+          removedItem: prettyRemovedItem || removedItem
+        };
       } else {
-        msgData = { oldValue, newValue };
+        const { prettyOldValue, prettyNewValue } = diff;
+        msgData = {
+          oldValue: prettyOldValue || oldValue,
+          newValue: prettyNewValue || newValue
+        };
       }
 
       const logMessage = this._buildLogMessage(kind, field, msgData);
 
       this._createLog({
         message: logMessage,
+        field,
         oldValue,
         newValue
       });
@@ -149,14 +157,49 @@ export default class UpdateAudit {
     }
   }
 
-  _createLog({ message, oldValue, newValue, ...rest }) {
+  _prettifyValues(diff, fn) {
+    const keys = {
+      oldValue: 'prettyOldValue',
+      newValue: 'prettyNewValue'
+    };
+
+    const diffValues = _(diff).pick(['oldValue', 'newValue']);
+
+    _(diffValues).each((val, key) => {
+      if (val === undefined) {
+        return;
+      }
+      const prettyVal = fn(val);
+      prettyVal && (diff[keys[key]] = prettyVal);
+    });
+  }
+
+  _prettifyArrayItems(diff, fn) {
+    const keys = {
+      addedItem: prettyAddedItem,
+      removedItem: prettyRemovedItem
+    };
+
+    const diffValues = _(diff).pick(['addedItem', 'removedItem']);
+
+    _(diffValues).each((val, key) => {
+      if (val === undefined) {
+        return;
+      }
+      const prettyVal = fn(val);
+      prettyVal && (diff[keys[key]] = prettyVal);
+    });
+  }
+
+  _createLog({ message, field, oldValue, newValue, ...rest }) {
     const log = _.extend({
       collection: this.constructor._collection,
       documentId: this._documentId,
-      changedAt: this._updatedAt,
-      changedBy: this._updatedBy,
+      date: this._updatedAt,
+      executor: this._updatedBy,
     }, {
       message,
+      field,
       oldValue,
       newValue,
       ...rest
@@ -187,11 +230,11 @@ export default class UpdateAudit {
     const changesTypes = this._changesTypes;
 
     return {
-      [changesTypes.FIELD_ADDED]: '[field] set to [newValue]',
-      [changesTypes.FIELD_CHANGED]: '[field] changed from [oldValue] to [newValue]',
+      [changesTypes.FIELD_ADDED]: '[field] set to "[newValue]"',
+      [changesTypes.FIELD_CHANGED]: '[field] changed from "[oldValue]" to "[newValue]"',
       [changesTypes.FIELD_REMOVED]: '[field] removed',
-      [changesTypes.ITEM_ADDED]: '[addedItem] added to [field] list',
-      [changesTypes.ITEM_REMOVED]: '[removedItem] removed from [field] list'
+      [changesTypes.ITEM_ADDED]: '"[addedItem]" added to [field] list',
+      [changesTypes.ITEM_REMOVED]: '"[removedItem]" removed from [field] list'
     };
   }
 
