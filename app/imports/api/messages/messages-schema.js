@@ -1,11 +1,14 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { CreatedAtSchema, StandardIdSchema, UserIdSchema } from '../schemas.js';
+import {
+	CreatedAtSchema, DiscussionIdSchema, FilesSchema,	UserIdSchema
+} from '../schemas.js';
 
 
-export const DiscussionSchema = new SimpleSchema([
+export const MessagesSchema = new SimpleSchema([
 	CreatedAtSchema,
-	StandardIdSchema,
+	DiscussionIdSchema,
+	FilesSchema,
 	UserIdSchema,
 	{
 		message: {

@@ -1,4 +1,4 @@
 import {Template} from 'meteor/templating';
 
 
-Template.DiscussionsCard.viewmodel({});
+Template.MessagesCard.viewmodel({});

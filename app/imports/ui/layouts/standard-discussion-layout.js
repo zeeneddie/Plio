@@ -12,7 +12,12 @@ Template.StandardDiscussionLayout.viewmodel({
 	autorun: [
 		function(){
 			const _subsHandlers = [
-				this.templateInstance.subscribe('discussionsByStandart', this.standardId() )
+				this.templateInstance.subscribe(
+					'discussionsByStandardId', this.standardId()
+				),
+				this.templateInstance.subscribe(
+					'messagesByStandartId', this.standardId()
+				)
 			];
 
 			this._subsHandlers(_subsHandlers);

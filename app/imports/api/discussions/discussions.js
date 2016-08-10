@@ -1,9 +1,9 @@
 import { Mongo } from 'meteor/mongo';
 
-import { DiscussionSchema } from './discussion-schema.js';
+import { DiscussionsSchema } from './discussions-schema.js';
 
 
 const Discussions = new Mongo.Collection('Discussions');
-Discussions.attachSchema(DiscussionSchema);
+Discussions.attachSchema(DiscussionsSchema);
 
 export { Discussions };

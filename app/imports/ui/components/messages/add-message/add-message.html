@@ -1,13 +1,19 @@
-<template name="AddComment">
+<template name="AddMessage">
 	<div class="chat-form">
 		<form class="f1" {{on 'submit: onSubmit'}}>
 			<div class="form-group">
 				<div class="input-group">
-					<span class="input-group-btn">
+					<!--span class="input-group-btn">
 						<button class="btn btn-secondary">
 							<i class="fa fa-paperclip"></i>
 						</button>
-					</span>
+					</span-->
+					{{> FileUploader2
+						insertFile=insertFileFn
+						onUpload=onUploadCb
+						metaContext=uploaderMetaContext
+						slingshotDirective=slingshotDirective
+					}}
 
 					<input
 						type="text"

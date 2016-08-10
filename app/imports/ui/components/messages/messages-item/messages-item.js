@@ -2,12 +2,13 @@ import {Autolinker} from 'meteor/konecty:autolinker';
 import {Template} from 'meteor/templating';
 
 import {handleMethodResult} from '/imports/api/helpers.js';
-import {markMessageViewedById} from '/imports/api/discussions/methods.js';
-import {removeMessageById} from '/imports/api/discussions/methods.js';
+import {
+	markMessageViewedById, removeMessageById
+} from '/imports/api/messages/methods.js';
 import {TruncatedStringLengths} from '/imports/api/constants.js';
 
 
-Template.DiscussionsItem.viewmodel({
+Template.MessagesItem.viewmodel({
 	onRendered(tpl){
 		const _id = this._id();
 		const userId = this.userId();

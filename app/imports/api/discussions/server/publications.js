@@ -1,20 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Discussions } from '../discussion.js';
+import { Discussions } from '../discussions.js';
 
 
-Meteor.publish('discussionsByStandart', function(standardId){
-	const userIds = [];
-	const discussions = Discussions.find({standardId});
-
-	discussions.forEach((c, i, cr) => {
-		if(userIds.indexOf(c.userId) < 0){
-			userIds.push(c.userId);
-		}
-	});
-
-	return [
-		discussions,
-		Meteor.users.find({ _id: {$in: userIds} }, { fields: {profile: 1} })
-	];
+Meteor.publish('discussionsByStandardId', function(standardId){
+  return Discussions.find(
+    {documentType: 'standard', linkedTo: standardId},
+    { fields: {_id: 1, documentType: 1, linkedTo: 1} }
+  );
 });

@@ -1,15 +1,15 @@
 import {Template} from 'meteor/templating';
 
-import {Discussions} from '/imports/api/discussions/discussion.js';
+import {Messages} from '/imports/api/messages/messages.js';
 
 
-Template.DiscussionsHeader.viewmodel({
+Template.MessagesHeader.viewmodel({
 	mixin: ['standard'],
 
 	unreadMessages(){
 		const self = this;
 
-		return Discussions.find({
+		return Messages.find({
 			standardId: self.standardId(),
 			viewedBy: { $ne: Meteor.userId() }
 		}, {

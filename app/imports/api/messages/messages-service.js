@@ -1,14 +1,14 @@
-import { Discussions } from './discussion.js';
+import { Messages } from './messages.js';
 
 
-export default DiscussionService = {
-	collection: Discussions,
+export default MessagesService = {
+	collection: Messages,
 
 	addMessage({
-		createdAt, message, standardId, userId, viewedBy
+		createdAt, discussionId, message, userId, viewedBy
 	}){
 		return this.collection.insert({
-			createdAt, message, standardId, userId, viewedBy
+			createdAt, discussionId, message, userId, viewedBy
 		});
 	},
 
