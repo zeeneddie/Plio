@@ -204,16 +204,18 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
       standardsIds: 'Standards',
       description: 'Description',
       departmentsIds: 'Departments',
-      'analysis.targetDate': 'Analysis target date',
-      'analysis.executor': 'Analysis executor',
-      'analysis.status': 'Analysis status',
-      'analysis.completedAt': 'Analysis completion date',
-      'analysis.completedBy': 'Analysis completion executor',
+      'analysis.targetDate': 'Root cause analysis target date',
+      'analysis.executor': 'Root cause analysis executor',
+      'analysis.status': 'Root cause analysis status',
+      'analysis.completedAt': 'Root cause analysis completion date',
+      'analysis.completedBy': 'Root cause analysis completion executor',
+      'analysis.completionComments': 'Root cause analysis completion comments',
       'updateOfStandards.targetDate': 'Target date for update of standards',
       'updateOfStandards.executor': 'Executor of update of standards',
       'updateOfStandards.status': 'Status of update of standards',
       'updateOfStandards.completedAt': 'Update of standards completion date',
-      'updateOfStandards.completedBy': 'Update of standards completion executor'
+      'updateOfStandards.completedBy': 'Update of standards completion executor',
+      'updateOfStandards.completionComments': 'Update of standards completion comments'
     };
 
     return _(fieldLabels).extend(super._fieldLabels);
