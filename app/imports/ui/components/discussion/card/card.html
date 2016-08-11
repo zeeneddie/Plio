@@ -3,9 +3,12 @@
 		<div class="chat card">
 			{{> Discussion_Header}}
 
-			{{> Discussion_Messages}}
-
-			{{> Discussion_AddMessage_Form}}
+			{{#if isReady}}
+				{{> Discussion_Messages}}
+				{{> Discussion_AddMessage_Form}}
+			{{else}}
+				{{> PreloaderPage}}
+			{{/if}}
 		</div>
 	</div>
 </template>
