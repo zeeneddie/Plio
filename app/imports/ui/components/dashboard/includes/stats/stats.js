@@ -56,7 +56,7 @@ Template.Dashboard_Stats.viewmodel({
   },
   countText() {
     const count = this.overdueCount() || Object.assign([], this.items()).length;
-    return pluralize('work item', count, true);
+    return pluralize('overdue work item', count, true);
   },
   items() {
     const query = { status: 2 }; // overdue
