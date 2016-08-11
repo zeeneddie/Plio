@@ -90,7 +90,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
 
     return docs;
   },
-  loadMore() {
+  loadAll() {
     this.enableLimit(false);
   }
 });
