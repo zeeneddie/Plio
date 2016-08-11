@@ -1,18 +1,18 @@
 /* @param {String} standardId // the ID of the current standart
 */
 
-import {FlowRouter} from 'meteor/kadira:flow-router';
-import {Meteor} from 'meteor/meteor';
-import {Template} from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
 
-import {addDiscussion} from '/imports/api/discussions/methods.js';
-import {addMessage} from '/imports/api/messages/methods.js';
-import {Discussions} from '/imports/api/discussions/discussions.js';
-import {DocumentTypes} from '/imports/api/constants.js';
-import {handleMethodResult} from '/imports/api/helpers.js';
+import { addDiscussion } from '/imports/api/discussions/methods.js';
+import { addMessage } from '/imports/api/messages/methods.js';
+import { Discussions } from '/imports/api/discussions/discussions.js';
+import { DocumentTypes } from '/imports/api/constants.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
 
 
-Template.AddMessage.viewmodel({
+Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
 	files: [],
@@ -20,7 +20,7 @@ Template.AddMessage.viewmodel({
 	messageText: '',
 	slingshotDirective: '',
 
-	addNewMessage(){
+	addNewMessage() {
 		addMessage.call(
 			this.makeNewMessage(), handleMethodResult( () => {this.reset();} )
 		);
@@ -50,7 +50,7 @@ Template.AddMessage.viewmodel({
 		console.log(cb);
   },
 
-	makeNewMessage(files){
+	makeNewMessage(files) {
 		let discussionId = this.getDiscussionIdByStandardId(
 			this.standardId()
 		);

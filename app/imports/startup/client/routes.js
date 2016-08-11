@@ -136,7 +136,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
 
 FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
-  name: 'standard',
+  name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('StandardDiscussionLayout', {
@@ -146,7 +146,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion/:messageId', {
-  name: 'standard',
+  name: 'standardDiscussionMessage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     /*BlazeLayout.render('StandardsLayout', {

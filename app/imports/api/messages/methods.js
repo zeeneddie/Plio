@@ -11,8 +11,8 @@ export const addMessage = new ValidatedMethod({
 	name: 'Mesages.addMessage',
 	validate: MessagesSchema.validator(),
 
-	run(doc){
-		if(!this.userId){
+	run(doc) {
+		if(!this.userId) {
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot add messages to discussions'
 			);
@@ -26,7 +26,7 @@ export const markMessageViewedById = new ValidatedMethod({
 	name: 'Messages.markMessageViewedById',
 	validate: new SimpleSchema([IdSchema, UserIdSchema]).validator(),
 
-	run(doc){
+	run(doc) {
 		return MessagesService.markMessageViewedById(doc);
 	}
 });
@@ -35,7 +35,7 @@ export const removeMessageById = new ValidatedMethod({
 	name: 'Messages.removeMessageById',
 	validate: new SimpleSchema([IdSchema]).validator(),
 
-	run(doc){
+	run(doc) {
 		if(!this.userId){
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot remove messages from discussions'

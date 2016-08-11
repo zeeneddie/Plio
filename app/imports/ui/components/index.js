@@ -14,5 +14,5 @@ import './non-conformities';
 import './actions';
 import './work-inbox';
 import './standard-subcards';
-import './messages';
+import './discussion';
 import './notifications';

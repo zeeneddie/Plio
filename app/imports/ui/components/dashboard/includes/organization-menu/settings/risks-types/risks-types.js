@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { invoke } from 'lodash';
+import invoke from 'lodash.invoke';
 
 import { insert, update, remove } from '/imports/api/risk-types/methods.js';
 

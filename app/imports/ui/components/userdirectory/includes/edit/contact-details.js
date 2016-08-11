@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { CountryCodes } from '/imports/api/country-codes.js';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 Template.UserEdit_ContactDetails.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck', 'userEdit'],
