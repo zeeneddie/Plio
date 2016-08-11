@@ -139,14 +139,12 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
   _scoringChanged(diff) {
     const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
 
-    const { kind, addedItem, removedItem } = diff;
-    let score, message;
+    const { kind, item:score } = diff;
+    let message;
 
     if (kind === ITEM_ADDED) {
-      score = addedItem;
       message = 'Risk score added: [scoreDesc]';
     } else if (kind === ITEM_REMOVED) {
-      score = removedItem;
       message = 'Risk score removed: [scoreDesc]';
     }
 

@@ -102,19 +102,18 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     const { sequentialId, title } = this._newDoc;
     const actionName = `${sequentialId} "${title}"`;
 
-    const { kind, addedItem, removedItem } = diff;
-    let linkedDoc, message, linkedDocMessage;
+    const { kind, item:linkedDoc } = diff;
+    let message, linkedDocMessage;
+
     if (kind === ITEM_ADDED) {
-      linkedDoc = addedItem;
       message = 'Linked to [docName]';
       linkedDocMessage = `${actionName} linked`;
     } else if (kind === ITEM_REMOVED) {
-      linkedDoc = removedItem;
       message = 'Unlinked from [docName]';
       linkedDocMessage = `${actionName} unlinked`;
     }
 
-    if (!(linkedDoc && message && linkedDocMessage)) {
+    if (!(_(linkedDoc).isObject() && message && linkedDocMessage)) {
       return;
     }
 

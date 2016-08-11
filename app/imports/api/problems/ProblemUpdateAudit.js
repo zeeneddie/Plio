@@ -89,13 +89,12 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
   _departmentsChanged(diff) {
     const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
 
-    const { kind, addedItem, removedItem } = diff;
-    let departmentId, message;
+    const { kind, item:departmentId } = diff;
+    let message;
+
     if (kind === ITEM_ADDED) {
-      departmentId = addedItem;
       message = 'Linked to [departmentName] department';
     } else if (kind === ITEM_REMOVED) {
-      departmentId = removedItem;
       message = 'Unlinked from [departmentName] department';
     }
 
@@ -125,14 +124,13 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     const { sequentialId, title } = this._newDoc;
     const docName = `${sequentialId} "${title}"`;
 
-    const { kind, addedItem, removedItem } = diff;
-    let standardId, message, standardMessage;
+    const { kind, item:standardId } = diff;
+    let message, standardMessage;
+
     if (kind === ITEM_ADDED) {
-      standardId = addedItem;
       message = 'Linked to "[standardName]"';
       standardMessage = `${docName} linked`;
     } else if (kind === ITEM_REMOVED) {
-      standardId = removedItem;
       message = 'Unlinked from "[standardName]"';
       standardMessage = `${docName} unlinked`;
     }

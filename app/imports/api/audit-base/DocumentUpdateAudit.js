@@ -53,19 +53,14 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   }
 
   _notifyChanged(diff) {
-    const diffValues = _(diff).pick(['addedItem', 'removedItem']);
-
-    _(diffValues).each((val, key) => {
-      if (val !== undefined) {
-        const user = Meteor.users.findOne({ _id: val });
-        const userName = user && user.fullName();
-        userName && (diff[key] = userName);
-      }
+    this._prettifyArrayItem(diff, (val) => {
+      const user = Meteor.users.findOne({ _id: val });
+      return user && user.fullName();
     });
   }
 
   _viewedByChanged(diff) {
-    const { kind, addedItem:userId } = diff;
+    const { kind, item:userId } = diff;
 
     if (kind !== this.constructor._changesTypes.ITEM_ADDED) {
       return;

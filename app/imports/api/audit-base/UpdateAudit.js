@@ -27,7 +27,6 @@ export default class UpdateAudit {
 
   _buildDiff() {
     const rawDiffs = deepDiff.diff(this._oldDoc, this._newDoc);
-    const changesTypes = this.constructor._changesTypes;
 
     _(rawDiffs).each(rawDiff => {
       const { kind, path } = rawDiff;
@@ -35,19 +34,26 @@ export default class UpdateAudit {
       let diff;
 
       if (kind === 'A') {
-        const { item: { kind, lhs:removedItem, rhs:addedItem } } = rawDiff;
+        const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
+        const { item: { kind, lhs, rhs } } = rawDiff;
+
+        let item;
+        if (kind === 'N') {
+          item = rhs;
+        } else if (kind === 'D') {
+          item = lhs;
+        }
 
         const changesKinds = {
-          N: changesTypes.ITEM_ADDED,
-          D: changesTypes.ITEM_REMOVED
+          N: ITEM_ADDED,
+          D: ITEM_REMOVED
         };
 
         diff = {
           kind: changesKinds[kind],
           isFromArray: true,
           field,
-          removedItem,
-          addedItem,
+          item,
           path
         };
       } else {
@@ -97,11 +103,8 @@ export default class UpdateAudit {
 
       let msgData;
       if (isFromArray) {
-        const { addedItem, removedItem, prettyAddedItem, prettyRemovedItem } = diff;
-        msgData = {
-          addedItem: prettyAddedItem || addedItem,
-          removedItem: prettyRemovedItem || removedItem
-        };
+        const { item, prettyItem } = diff;
+        msgData = { item: prettyItem || item };
       } else {
         const { prettyOldValue, prettyNewValue } = diff;
         msgData = {
@@ -176,21 +179,13 @@ export default class UpdateAudit {
     });
   }
 
-  _prettifyArrayItems(diff, fn) {
-    const keys = {
-      addedItem: prettyAddedItem,
-      removedItem: prettyRemovedItem
-    };
+  _prettifyArrayItem(diff, fn) {
+    const { item } = diff;
 
-    const diffValues = _(diff).pick(['addedItem', 'removedItem']);
-
-    _(diffValues).each((val, key) => {
-      if (val === undefined) {
-        return;
-      }
-      const prettyVal = fn(val);
-      prettyVal && (diff[keys[key]] = prettyVal);
-    });
+    if (item !== undefined) {
+      const prettyItem = fn(item);
+      prettyItem && (diff.item = prettyItem);
+    }
   }
 
   _createLog({ message, field, oldValue, newValue, ...rest }) {
@@ -235,8 +230,8 @@ export default class UpdateAudit {
       [changesTypes.FIELD_ADDED]: '[field] set to "[newValue]"',
       [changesTypes.FIELD_CHANGED]: '[field] changed from "[oldValue]" to "[newValue]"',
       [changesTypes.FIELD_REMOVED]: '[field] removed',
-      [changesTypes.ITEM_ADDED]: '"[addedItem]" added to [field] list',
-      [changesTypes.ITEM_REMOVED]: '"[removedItem]" removed from [field] list'
+      [changesTypes.ITEM_ADDED]: '"[item]" added to [field] list',
+      [changesTypes.ITEM_REMOVED]: '"[item]" removed from [field] list'
     };
   }
 
