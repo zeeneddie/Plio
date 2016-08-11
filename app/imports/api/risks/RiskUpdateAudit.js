@@ -50,6 +50,7 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
 
     const { kind, oldValue, newValue } = diff;
     let review, message;
+
     if (kind === FIELD_ADDED) {
       review = newValue;
       message = 'Review added: [reviewDesc]';
@@ -92,6 +93,7 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
 
     const { kind, oldValue, newValue } = diff;
     let riskEval, message;
+
     if (kind === FIELD_ADDED) {
       riskEval = newValue;
       message = 'Risk evaluation added: [riskEvalDesc]';
@@ -139,6 +141,7 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
 
     const { kind, addedItem, removedItem } = diff;
     let score, message;
+
     if (kind === ITEM_ADDED) {
       score = addedItem;
       message = 'Risk score added: [scoreDesc]';

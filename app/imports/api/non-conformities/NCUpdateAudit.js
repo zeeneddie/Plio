@@ -12,7 +12,7 @@ export default class NCUpdateAudit extends ProblemUpdateAudit {
 
       switch (diff.field) {
         case 'ref':
-          this._refSet(diff);
+          this._refChanged(diff);
           break;
       }
     });
@@ -20,16 +20,40 @@ export default class NCUpdateAudit extends ProblemUpdateAudit {
     super._buildLogs();
   }
 
-  _refSet(diff) {
-    const { FIELD_ADDED } = this.constructor._changesTypes;
+  _refChanged(diff) {
+    const { FIELD_ADDED, FIELD_REMOVED } = this.constructor._changesTypes;
 
-    const { kind } = diff;
-    if (kind !== FIELD_ADDED) {
+    const { kind, newValue, oldValue } = diff;
+    let ref, message;
+
+    if (kind === FIELD_ADDED) {
+      ref = newValue;
+      message = 'Help desk reference added: [refDesc]';
+    } else if (kind === FIELD_REMOVED) {
+      ref = oldValue;
+      message = 'Help desk reference removed: [refDesc]';
+    }
+
+    if (!(message && _(ref).isObject())) {
       return;
     }
 
-    const { newValue: { text='', url='' } = {} } = diff;
-    const message = `Help desk reference created: ID="${text}, url="${url}"`;
+    const { text, url } = ref;
+    const refDesc = [];
+
+    if (text !== undefined) {
+      refDesc.push(`ID - ${text}`);
+    }
+
+    if (url !== undefined) {
+      refDesc.push(`URL - ${url}`);
+    }
+
+    if (refDesc.length) {
+      message = message.replace('[refDesc]', refDesc.join(', '));
+    } else {
+      message = /^(Help desk reference (?:added|removed))/.exec(message)[1];
+    }
 
     this._createLog({ message });
 
@@ -43,6 +67,7 @@ export default class NCUpdateAudit extends ProblemUpdateAudit {
   static get _fieldLabels() {
     const fieldLabels = {
       cost: 'Approx cost per occurrence',
+      ref: 'Help desk reference',
       'ref.text': 'Help desk reference ID',
       'ref.url': 'Help desk reference url'
     };
