@@ -1,4 +1,4 @@
-<template name="MessagesList">
+<template name="Discussion_Messages">
 	<div class="chat-content scroll ng-scope">
 		{{#if messagesCount}}
 			{{#with messageFirst}}
@@ -10,7 +10,7 @@
 			{{/with}}
 
 			{{#each messages}}
-				{{> MessagesItem}}
+				{{> Discussion_Message}}
 			{{/each}}
 		{{/if}}
 	</div>

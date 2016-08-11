@@ -1,5 +1,5 @@
 <template name="Standards_Card_Read">
-  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
+  <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode }"}}>
     {{#if standards.count}}
       {{#with standard}}
         <div class="card standard-details">

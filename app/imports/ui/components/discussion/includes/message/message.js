@@ -1,18 +1,18 @@
-import {Autolinker} from 'meteor/konecty:autolinker';
-import {Template} from 'meteor/templating';
+import { Autolinker } from 'meteor/konecty:autolinker';
+import { Template } from 'meteor/templating';
 
-import {handleMethodResult} from '/imports/api/helpers.js';
-import {removeDiscussionById} from '/imports/api/discussions/methods.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
+import { removeDiscussionById } from '/imports/api/discussions/methods.js';
 import {
 	markMessageViewedById, removeMessageById
 } from '/imports/api/messages/methods.js';
-import {TruncatedStringLengths} from '/imports/api/constants.js';
+import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 
-Template.MessagesItem.viewmodel({
+Template.Discussion_Message.viewmodel({
 	mixin: ['discussions'],
 
-	onRendered(tpl){
+	onRendered(tpl) {
 		const _id = this._id();
 		const userId = this.userId();
 
@@ -24,14 +24,14 @@ Template.MessagesItem.viewmodel({
 	},
 
 	events: {
-		'click .js-message-actions > a'(ev, tpl){
+		'click .js-message-actions > a'(ev, tpl) {
 			ev.preventDefault();
 		},
 
-		'click .js-message-remove'(ev, tpl){
+		'click .js-message-remove'(ev, tpl) {
 			const self = this;
 
-			if(Meteor.userId() !== this.userId() ){
+			if(Meteor.userId() !== this.userId()) {
 				return false;
 			}
 
@@ -39,7 +39,7 @@ Template.MessagesItem.viewmodel({
 				{_id: this._id()}, handleMethodResult((err, res) => {
 
 					// Delete the Discussion itself if it has no messages any more
-					if(res && self.isDiscussionEmpty() ){
+					if(res && self.isDiscussionEmpty()) {
 						console.log('Remove the discussion');
 						removeDiscussionById.call(
 							{_id: self.discussionId()}, handleMethodResult(
@@ -52,22 +52,22 @@ Template.MessagesItem.viewmodel({
 		}
 	},
 
-	isAuthor(){
+	isAuthor() {
 		return Meteor.userId() === this.userId();
 	},
-	isDiscussionEmpty(){
-		return !this.discussionHasMessages( this.discussionId() );
+	isDiscussionEmpty() {
+		return !this.discussionHasMessages(this.discussionId());
 	},
 
-	linkerOptions(){
+	linkerOptions() {
 		return {
 			truncate: 7
 		}
 	},
 
-	messageRendered(){
+	messageRendered() {
 		return Autolinker.link(
-			this.message(), {truncate: TruncatedStringLengths.c40}
+			this.message(), { truncate: TruncatedStringLengths.c40 }
 		);
 	}
 });
