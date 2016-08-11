@@ -10,8 +10,8 @@ import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 
 Template.Discussion_Message.viewmodel({
-	mixin: ['discussions'],
-
+	mixin: 'discussions',
+	
 	onRendered(tpl) {
 		const _id = this._id();
 		const userId = this.userId();
@@ -21,6 +21,9 @@ Template.Discussion_Message.viewmodel({
 				{_id, userId}, handleMethodResult((err, res) => {})
 			);
 		}
+
+		const $chat = $(tpl.firstNode).closest('.chat-content');
+		$chat.scrollTop($chat.find('.chat-messages').height());
 	},
 
 	events: {

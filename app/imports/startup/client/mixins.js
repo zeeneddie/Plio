@@ -50,19 +50,6 @@ ViewModel.mixin({
       if (_.isFunction(cb)) cb();
     }, 500)
   },
-  discussions: {
-    discussionHasMessages(discussionId){
-      return Messages.find({discussionId}).count();
-    },
-    getDiscussionIdByStandardId(standardId){
-  		const discussion = Discussions.findOne(
-  			{documentType: DocumentTypes[0], linkedTo: standardId},
-  			{ fields: {_id: 1} }
-  		);
-
-  		return discussion ? discussion._id : null;
-  	}
-  },
   iframe: {
     isIframeReady: false,
     onRendered() {
@@ -116,14 +103,6 @@ ViewModel.mixin({
       };
 
       return item.toggleCollapse(cb);
-    }
-  },
-  messages: {
-    messageByDiscussionId(discussionId, protection){
-      return Messages.findOne({discussionId}, protection && {});
-    },
-    messagesCursorByDiscussionId(discussionId, protection){
-      return Messages.find({discussionId}, protection && {});
     }
   },
   modal: {
@@ -355,8 +334,8 @@ ViewModel.mixin({
     }
   },
   date: {
-    renderDate(date) {
-      return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
+    renderDate(date, format = 'DD MMM YYYY') {
+      return moment.isDate(date) ? moment(date).format(format) : 'Invalid date';
     }
   },
   callWithFocusCheck: {
@@ -852,5 +831,25 @@ ViewModel.mixin({
         notification.close();
       }, timeout);
     }
-  }
+  },
+  discussions: {
+    discussionHasMessages(discussionId) {
+      return Messages.find({ discussionId }).count();
+    },
+    getDiscussionIdByStandardId(standardId) {
+      const query = { documentType: DocumentTypes[0], linkedTo: standardId };
+      const options = { fields: { _id: 1 } };
+  		const discussion = Discussions.findOne(query, options);
+
+  		return discussion ? discussion._id : null;
+  	}
+  },
+  messages: {
+    _getMessageByDiscussionId(discussionId, protection = {}) {
+      return Messages.findOne({ discussionId }, protection);
+    },
+    _getMessagesByDiscussionId(discussionId, protection = {}) {
+      return Messages.find({ discussionId }, protection);
+    }
+  },
 });

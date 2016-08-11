@@ -1,15 +1,21 @@
 <template name="StandardsHeader">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Compliance standards by - ' + activeStandardFilter"}}>
-      </a>
-      <div class="dropdown-menu">
-        {{#each standardFilters}}
-          <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveStandardFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
-          </a>
-        {{/each}}
-      </div>
+      {{#if isDiscussionOpened}}
+        {{#with standard}}
+          <div class="nav-item" {{b "text: this.title"}}></div>
+        {{/with}}
+      {{else}}
+        <a class="dropdown-toggle pointer" data-toggle="dropdown"
+          {{b "text: 'Compliance standards by - ' + activeStandardFilter"}}></a>
+        <div class="dropdown-menu">
+          {{#each standardFilters}}
+            <a class="dropdown-item pointer"
+              {{b "class: { active: isActiveStandardFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
+            </a>
+          {{/each}}
+        </div>
+      {{/if}}
     </span>
     <ul class="nav navbar-nav pull-xs-left">
       <li class="nav-item">

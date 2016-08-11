@@ -12,8 +12,6 @@ import './non-conformities-layout.html';
 import './non-conformities-layout.js';
 import './actions-layout.html';
 import './actions-layout.js';
-import './standard-discussion-layout.html';
-import './standard-discussion-layout.js';
 import './work-inbox-layout.html';
 import './work-inbox-layout.js';
 import './standard-subcards-layout.html';
