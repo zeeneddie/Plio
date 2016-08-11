@@ -20,14 +20,16 @@
             {{/if}}
           </button>
         {{else}}
-          <button type="button" class="btn btn-secondary" {{b "click: enableLimit(true)"}}>
-            <span>Hide</span>
-            {{#if isReady}}
-              <span>({{hiddenOverdueItemsNumber}} items)</span>
-            {{else}}
-              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
-            {{/if}}
-          </button>
+          {{#unless enableLimit}}
+            <button type="button" class="btn btn-secondary" {{b "click: enableLimit(true)"}}>
+              <span>Hide</span>
+              {{#if isReady}}
+                <span>({{hiddenOverdueItemsNumber}} items)</span>
+              {{else}}
+                <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+              {{/if}}
+            </button>
+          {{/unless}}
         {{/if}}
       </div>
     {{/if}}
