@@ -43,7 +43,6 @@ Template.Dashboard_Stats.viewmodel({
   currentDate: new Date(),
   items() {
     const query = { status: 2 }; // overdue
-    return [];
     return this._getWorkItemsByQuery(query).fetch();
   },
   overdue() {
