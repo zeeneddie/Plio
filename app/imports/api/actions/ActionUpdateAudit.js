@@ -45,10 +45,16 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       return;
     }
 
+    const commentsDiff = _(this._diff).find(
+      ({ field }) => field === 'completionComments'
+    );
+
     const { newValue } = diff;
     let message;
+
     if (newValue === true) {
-      message = 'Completed';
+      const { newValue:comments } = commentsDiff || {};
+      message = comments ? `Completed: ${comments}` : 'Completed';
     } else if (newValue === false) {
       message = 'Completion canceled';
     }
@@ -57,11 +63,19 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       return;
     }
 
-    this._createLog({ message });
+    const logData = { message };
+    if (newValue === true) {
+      const { newValue:executor } = completedByDiff;
+      const { newValue:date } = completedAtDiff;
+      _(logData).extend({ date, executor });
+    }
+
+    this._createLog(logData);
 
     diff.isProcessed = true;
     completedAtDiff.isProcessed = true;
     completedByDiff.isProcessed = true;
+    commentsDiff && (commentsDiff.isProcessed = true);
   }
 
   _verificationChanged(diff) {
@@ -72,15 +86,28 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       return;
     }
 
+    const commentsDiff = _(this._diff).find(
+      ({ field }) => field === 'verificationComments'
+    );
+
+    const effectiveDiff = _(this._diff).find(
+      ({ field }) => field === 'isVerifiedAsEffective'
+    );
+
     const { newValue } = diff;
-    const { isVerifiedAsEffective } = this._newDoc;
     let message;
+
     if (newValue === true) {
+      const { newValue:isVerifiedAsEffective } = effectiveDiff || {};
+      const { newValue:comments } = commentsDiff || {};
+
       if (isVerifiedAsEffective === true) {
         message = 'Verified as effective';
       } else {
         message = 'Failed verification';
       }
+
+      message = comments ? `${message}: ${comments}` : message;
     } else if (newValue === false) {
       message = 'Verification canceled';
     }
@@ -89,11 +116,20 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       return;
     }
 
-    this._createLog({ message });
+    const logData = { message };
+    if (newValue === true) {
+      const { newValue:executor } = verifiedByDiff;
+      const { newValue:date } = verifiedAtDiff;
+      _(logData).extend({ date, executor });
+    }
+
+    this._createLog(logData);
 
     diff.isProcessed = true;
     verifiedAtDiff.isProcessed = true;
     verifiedByDiff.isProcessed = true;
+    commentsDiff && (commentsDiff.isProcessed = true);
+    effectiveDiff && (effectiveDiff.isProcessed = true);
   }
 
   _linkedDocChanged(diff) {

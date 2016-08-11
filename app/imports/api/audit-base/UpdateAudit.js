@@ -57,12 +57,13 @@ export default class UpdateAudit {
           path
         };
       } else {
+        const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this.constructor._changesTypes;
         const { lhs:oldValue, rhs:newValue } = rawDiff;
 
         const changesKinds = {
-          N: changesTypes.FIELD_ADDED,
-          E: changesTypes.FIELD_CHANGED,
-          D: changesTypes.FIELD_REMOVED
+          N: FIELD_ADDED,
+          E: FIELD_CHANGED,
+          D: FIELD_REMOVED
         };
 
         diff = {
