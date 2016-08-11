@@ -4,18 +4,9 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
 
 
-Meteor.publish('messagesByStandartId', function(standardId){
+Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds){
 	const userIds = [];
-	const discussion = Discussions.findOne({linkedTo: standardId}, {
-		fields: {_id: 1}
-	});
-
-	if(!discussion){
-		return this.ready();
-	}
-
-	const discussionId = discussion._id;
-	const messages = Messages.find({discussionId});
+	const messages = Messages.find({ discussionId: {$in: arrDiscussionIds} });
 
 	messages.forEach((c, i, cr) => {
 		if(userIds.indexOf(c.userId) < 0){

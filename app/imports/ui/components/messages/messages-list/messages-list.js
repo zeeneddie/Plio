@@ -27,7 +27,7 @@ Template.MessagesList.viewmodel({
   /* Cursor of messages documents with the discussionId
   */
   messagesCursor1(protection){
-		const di = this.discussionId();console.log(di);
+		const di = this.discussionId();
 
     return this.messagesCursorByDiscussionId(
       di, protection && {}
@@ -35,9 +35,7 @@ Template.MessagesList.viewmodel({
   },
 
 	messagesCount(){
-		const c = this.messagesCursor1({ fields: {_id: 1} }).count();
-		console.log(c);
-		return c;
+		return this.messagesCursor1({ fields: {_id: 1} }).count();
 	},
 
 	messageFirst(){

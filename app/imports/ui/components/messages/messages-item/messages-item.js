@@ -40,7 +40,6 @@ Template.MessagesItem.viewmodel({
 
 					// Delete the Discussion itself if it has no messages any more
 					if(res && self.isDiscussionEmpty() ){
-						console.log('Remove the discussion');
 						removeDiscussionById.call(
 							{_id: self.discussionId()}, handleMethodResult(
 								(err, res) => {}
