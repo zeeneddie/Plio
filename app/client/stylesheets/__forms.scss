@@ -119,6 +119,14 @@
   border-radius: .25rem;
 }
 
+select {
+  &.disabled, &:disabled {
+    background-color: #eceeef;
+    opacity: 1;
+    cursor: not-allowed;
+  }
+}
+
 /*
   Dropdowns
 */

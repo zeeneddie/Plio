@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { invoke } from 'lodash';
+import invoke from 'lodash.invoke';
 
 import { Standards } from '/imports/api/standards/standards.js';
 
