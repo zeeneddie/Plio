@@ -184,13 +184,15 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   static get _messages() {
     const changesTypes = this._changesTypes;
 
-    return {
+    const messages = {
       notes: {
         [changesTypes.FIELD_ADDED]: 'Notes set',
         [changesTypes.FIELD_CHANGED]: 'Notes changed',
         [changesTypes.FIELD_REMOVED]: 'Notes removed',
       }
     };
+
+    return _(messages).extend(super._messages);
   }
 
 }

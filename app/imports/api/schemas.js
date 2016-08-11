@@ -154,6 +154,7 @@ export const BaseEntitySchema = new SimpleSchema([
 export const FilesSchema = new SimpleSchema({
   'files': {
     type: [Object],
+    defaultValue: [],
     optional: true
   },
   'files.$._id': {

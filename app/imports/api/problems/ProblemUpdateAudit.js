@@ -217,13 +217,15 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
   static get _messages() {
     const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this._changesTypes;
 
-    return {
+    const messages = {
       description: {
         [FIELD_ADDED]: 'Description set',
         [FIELD_CHANGED]: 'Description changed',
         [FIELD_REMOVED]: 'Description removed',
       }
     };
+
+    return _(messages).extend(super._messages);
   }
 
 }
