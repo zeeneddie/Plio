@@ -139,8 +139,9 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('StandardDiscussionLayout', {
-      content: 'StandardDiscussionPage'
+    BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage',
+      isDiscussionOpened: true
     });
   }
 });

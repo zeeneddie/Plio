@@ -36,7 +36,6 @@ Template.Discussion_Messages.viewmodel({
 
 	messagesCount() {
 		const c = this.messagesCursor1({ fields: {_id: 1} }).count();
-		console.log(c);
 		return c;
 	},
 
