@@ -4,5 +4,8 @@ import {Messages} from '/imports/api/messages/messages.js';
 
 
 Template.MessagesHeader.viewmodel({
-	mixin: ['organization', 'standard']
+	mixin: ['organization', 'standard'],
+	getStandardFilter() {
+		return 'by=' + this.activeStandardFilter();
+	}
 });
