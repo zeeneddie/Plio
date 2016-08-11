@@ -2,8 +2,8 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import pluralize from 'pluralize';
 
-Template.Dashboard_Stats.viewmodel({
-  mixin: ['organization', 'workInbox', {
+Template.Dashboard_WorkItemStats.viewmodel({
+  mixin: ['utils', 'organization', 'workInbox', {
     counter: 'counter'
   }],
   autorun() {
@@ -54,19 +54,25 @@ Template.Dashboard_Stats.viewmodel({
   overdueCount() {
     return this.counter.get('work-items-overdue-count-' + this.organizationId());
   },
+  hiddenOverdueItemsNumber() {
+    const count = this.overdueCount() || Object.assign([], this.items()).length;
+    return count - this.limit();
+  },
   countText() {
     const count = this.overdueCount() || Object.assign([], this.items()).length;
     return pluralize('overdue work item', count, true);
   },
   items() {
-    const query = { status: 2 }; // overdue
-    return this._getWorkItemsByQuery(query).fetch();
+    const query = { status: 2 }; // Overdue
+    const options = { sort: { targetDate: -1 } }; // New overdue items first
+    return this._getWorkItemsByQuery(query, options).fetch();
   },
-  overdue() {
+  overdueItems() {
     const items = Object.assign([], this.items());
     const docs = items.map((item) => {
       const time = `${moment(item.targetDate).from(this.currentDate(), true)} past due`;
       const { title, sequentialId } = Object.assign({}, item.getLinkedDoc());
+      const type = this.capitalize(item.type);
       const href = (() => {
         const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: item._id };
         const queryParams = this._getQueryParams(item)(Meteor.userId());
@@ -74,8 +80,8 @@ Template.Dashboard_Stats.viewmodel({
       })();
 
       return {
-        title,
         sequentialId,
+        type,
         time,
         href
       };
