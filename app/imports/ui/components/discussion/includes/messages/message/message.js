@@ -10,8 +10,8 @@ import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 
 Template.Discussion_Message.viewmodel({
-	mixin: ['discussions'],
-
+	mixin: 'discussions',
+	
 	onRendered(tpl) {
 		const _id = this._id();
 		const userId = this.userId();

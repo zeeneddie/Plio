@@ -1,79 +1,69 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
+import get from 'lodash.get';
+import curry from 'lodash.curry';
 
 import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 
 
 Template.Discussion_Messages.viewmodel({
-	mixin: ['discussions', 'messages', 'standard'],
-
+	mixin: ['discussions', 'messages', 'standard', 'user'],
   /* The _id of the first discussion from the sorted list of discussions
    * for this standardId
   */
-  discussionId(){
-    return this.getDiscussionIdByStandardId(
-      this.standardId()
-    );
+  discussionId() {
+    return this.getDiscussionIdByStandardId(this.standardId());
   },
 
-  /* First message document with the discussionId
-  */
-  messageOne1(protection) {
-    return this.messageByDiscussionId(
-      this.discussionId(), protection && {}
-    );
-  },
-
-  /* Cursor of messages documents with the discussionId
-  */
-  messagesCursor1(protection) {
-		const di = this.discussionId();console.log(di);
-
-    return this.messagesCursorByDiscussionId(
-      di, protection && {}
-    );
-  },
-
-	messagesCount() {
-		const c = this.messagesCursor1({ fields: {_id: 1} }).count();
-		return c;
-	},
-
-	messageFirst() {
-    const m = this.messageOne1({
-			fields: { createdAt: 1, userId: 1 },
-			limit: 1,
-			sort: { createdAt: 1 }
-		});
-		const user = Meteor.users.findOne({ _id: m.userId });
-
-		return {
-			date: m && getFormattedDate(m.createdAt, 'MMMM Do, YYYY'),
-			name: m && user && user.fullName()
-		};
-	},
-
-	messages(){
-		const userId = Meteor.userId();
-		let dateStorage;
-
-    return this.messagesCursor1({
+	messages() {
+		const messages = (() => {
+			const protection = {
   			fields: { standardId: 0 },
-  			sort: { createdAt: 1}
-  		}).map((c, i, cr) => {
-			const user = Meteor.users.findOne({ _id: c.userId }, { fields: { profile:1 } });
+  			sort: { createdAt: 1 }
+  		};
 
-			c.avatar = user && user.avatar();
-			c.date = getFormattedDate(c.createdAt, 'MMMM Do, YYYY');
-			c.dateToShow = dateStorage !== c.date;
-			c.time = getFormattedDate(c.createdAt, 'HH:mm');
-			c.username = user && user.firstName();
+			return this._getMessagesByDiscussionId(this.discussionId(), protection).fetch();
+		})();
 
-			if(dateStorage !== c.date){
-				dateStorage = c.date;
-			}
+		const messagesMapped = messages.map((message, i, arr) => {
+			const { userId, createdAt } = message;
 
-			return c;
+			const user = (() => {
+				const query = { _id: userId };
+				const options = {
+					fields: {
+						profile: 1
+					}
+				};
+
+				return Meteor.users.findOne(query, options);
+			})();
+
+			const obj = (() => {
+				const getDate = curry(getFormattedDate)(createdAt);
+
+				const dateFormat = 'MMMM Do, YYYY';
+				const timeFormat = 'HH:mm';
+				const date = getDate(dateFormat);
+
+				return {
+					date,
+					time: getDate(timeFormat),
+					avatar: invoke(user, 'avatar'),
+					username: invoke(user, 'firstName'),
+					dateToShow: (() => {
+						const prevCreatedAt = get(messages[i - 1], 'createdAt');
+						// we need to check for undefined because moment translates undefined to today's date
+						const prevDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
+						return !Object.is(date, prevDate);
+					})()
+				};
+			})();
+
+			return Object.assign({}, message, obj);
 		});
+
+		return messagesMapped;
 	}
 });

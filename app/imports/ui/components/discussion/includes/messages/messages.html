@@ -1,7 +1,7 @@
 <template name="Discussion_Messages">
 	<div class="chat-content scroll ng-scope">
-		{{#if messagesCount}}
-			{{#with messageFirst}}
+		{{#if messages.length}}
+			{{#with messages.[0]}}
 				<div class="chat-item chat-item-start ng-scope">
 					<p class="chat-item-text">
 						This discussion was started by <strong>{{name}}</strong> on <strong>{{date}}</strong>
