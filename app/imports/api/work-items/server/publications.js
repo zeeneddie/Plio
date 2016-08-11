@@ -27,8 +27,6 @@ Meteor.publish('workItemsOverdue', function(organizationId, limit = 5) {
     sort: { targetDate: -1 }
   };
 
-  Meteor._sleepForMs(500);
-
   return WorkItems.find(query, options);
 });
 
