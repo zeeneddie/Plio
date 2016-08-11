@@ -11,7 +11,7 @@ Meteor.publish('workItems', function(organizationId, isDeleted = { $in: [null, f
   return WorkItems.find({ organizationId, isDeleted });
 });
 
-Meteor.publish('workItemsOverdue', function(organizationId, limit = 5) {
+Meteor.publish('workItemsOverdue', function(organizationId, limit) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -23,9 +23,13 @@ Meteor.publish('workItemsOverdue', function(organizationId, limit = 5) {
     status: 2 // overdue
   };
   const options = {
-    limit,
     sort: { targetDate: -1 }
   };
+
+  // Check if limit is an integer number
+  if (Number(limit) === limit && limit % 1 === 0) {
+    options.limit = limit;
+  }
 
   return WorkItems.find(query, options);
 });

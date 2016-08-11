@@ -17,7 +17,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
   },
   onCreated(template) {
     template.autorun(() => {
-      const limit = this.limit() || 5;
+      const limit = this.enableLimit() ? this.limit() : false;
       const items = Object.assign([], this.items());
       const ids = items.map(({ linkedDoc: { _id } = {} }) => _id);
       const organizationId = this.organizationId();
@@ -44,6 +44,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
   _subHandlers: [],
   isInitialDataReady: false,
   isReady: true,
+  enableLimit: true,
   limit: 5,
   currentDate: new Date(),
   hasItemsToLoad() {
@@ -90,6 +91,6 @@ Template.Dashboard_WorkItemStats.viewmodel({
     return docs;
   },
   loadMore() {
-    this.limit((this.limit() || 5) + 5);
+    this.enableLimit(false);
   }
 });
