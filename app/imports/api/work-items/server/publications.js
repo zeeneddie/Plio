@@ -54,3 +54,16 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
     isDeleted: { $in: [false, null] }
   }));
 });
+
+Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {
+  const userId = this.userId;
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  return new Counter(counterName, WorkItems.find({
+    organizationId,
+    status: 2,
+    isDeleted: { $in: [false, null] }
+  }));
+});

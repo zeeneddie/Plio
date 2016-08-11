@@ -1,9 +1,12 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import pluralize from 'pluralize';
 
 Template.Dashboard_Stats.viewmodel({
-  mixin: ['organization', 'workInbox'],
-  autorun(computation) {
+  mixin: ['organization', 'workInbox', {
+    counter: 'counter'
+  }],
+  autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
     if (!this.isInitialDataReady()) {
@@ -17,9 +20,11 @@ Template.Dashboard_Stats.viewmodel({
       const limit = this.limit() || 5;
       const items = Object.assign([], this.items());
       const ids = items.map(({ linkedDoc: { _id } = {} }) => _id);
+      const organizationId = this.organizationId();
 
       this._subHandlers([
         template.subscribe('workItemsOverdue', this.organizationId(), limit),
+        template.subscribe('workItemsOverdueCount', 'work-items-overdue-count-' + organizationId, organizationId),
         template.subscribe('nonConformitiesByIds', ids),
         template.subscribe('risksByIds', ids),
         template.subscribe('actionsByIds', ids)
@@ -41,6 +46,18 @@ Template.Dashboard_Stats.viewmodel({
   isReady: true,
   limit: 5,
   currentDate: new Date(),
+  hasItemsToLoad() {
+    const total = this.overdueCount();
+    const current = Object.assign([], this.items()).length;
+    return total > current;
+  },
+  overdueCount() {
+    return this.counter.get('work-items-overdue-count-' + this.organizationId());
+  },
+  countText() {
+    const count = this.overdueCount() || Object.assign([], this.items()).length;
+    return pluralize('work item', count, true);
+  },
   items() {
     const query = { status: 2 }; // overdue
     return this._getWorkItemsByQuery(query).fetch();
