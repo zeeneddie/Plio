@@ -14,14 +14,14 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       }
 
       switch (diff.field) {
-        case 'linkedTo':
-          this._linkedDocChanged(diff);
-          break;
         case 'isCompleted':
           this._completionChanged(diff);
           break;
         case 'isVerified':
           this._verificationChanged(diff);
+          break;
+        case 'linkedTo':
+          this._linkedDocChanged(diff);
           break;
         case 'status':
           this._statusChanged(diff);
@@ -35,57 +35,6 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     });
 
     super._buildLogs();
-  }
-
-  _linkedDocChanged(diff) {
-    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-
-    const { sequentialId, title } = this._newDoc;
-    const actionName = `${sequentialId} "${title}"`;
-
-    const { kind, addedItem, removedItem } = diff;
-    let linkedDoc, message, linkedDocMessage;
-    if (kind === ITEM_ADDED) {
-      linkedDoc = addedItem;
-      message = 'Linked to [docName]';
-      linkedDocMessage = `${actionName} linked`;
-    } else if (kind === ITEM_REMOVED) {
-      linkedDoc = removedItem;
-      message = 'Unlinked from [docName]';
-      linkedDocMessage = `${actionName} unlinked`;
-    }
-
-    if (!(linkedDoc && message && linkedDocMessage)) {
-      return;
-    }
-
-    const { documentId, documentType } = linkedDoc;
-    const docCollections = {
-      [ProblemTypes.NC]: NonConformities,
-      [ProblemTypes.RISK]: Risks
-    };
-    const docCollection = docCollections[documentType];
-    const doc = docCollection.findOne({ _id: documentId });
-
-    const docName = (doc && `${doc.sequentialId} "${doc.title}"`) || documentId;
-    message = message.replace('[docName]', docName);
-
-    this._createLog({
-      message,
-      field: 'linkedTo'
-    });
-
-    const collectionNames = {
-      [ProblemTypes.NC]: CollectionNames.NCS,
-      [ProblemTypes.RISK]: CollectionNames.RISKS
-    };
-    this._createLog({
-      collection: collectionNames[documentType],
-      message: linkedDocMessage,
-      documentId
-    });
-
-    diff.isProcessed = true;
   }
 
   _completionChanged(diff) {
@@ -147,29 +96,80 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     verifiedByDiff.isProcessed = true;
   }
 
+  _linkedDocChanged(diff) {
+    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
+
+    const { sequentialId, title } = this._newDoc;
+    const actionName = `${sequentialId} "${title}"`;
+
+    const { kind, addedItem, removedItem } = diff;
+    let linkedDoc, message, linkedDocMessage;
+    if (kind === ITEM_ADDED) {
+      linkedDoc = addedItem;
+      message = 'Linked to [docName]';
+      linkedDocMessage = `${actionName} linked`;
+    } else if (kind === ITEM_REMOVED) {
+      linkedDoc = removedItem;
+      message = 'Unlinked from [docName]';
+      linkedDocMessage = `${actionName} unlinked`;
+    }
+
+    if (!(linkedDoc && message && linkedDocMessage)) {
+      return;
+    }
+
+    const { documentId, documentType } = linkedDoc;
+    const docCollections = {
+      [ProblemTypes.NC]: NonConformities,
+      [ProblemTypes.RISK]: Risks
+    };
+    const docCollection = docCollections[documentType];
+    const doc = docCollection.findOne({ _id: documentId });
+
+    const docName = (doc && `${doc.sequentialId} "${doc.title}"`) || documentId;
+    message = message.replace('[docName]', docName);
+
+    this._createLog({
+      message,
+      field: 'linkedTo'
+    });
+
+    const collectionNames = {
+      [ProblemTypes.NC]: CollectionNames.NCS,
+      [ProblemTypes.RISK]: CollectionNames.RISKS
+    };
+    this._createLog({
+      collection: collectionNames[documentType],
+      message: linkedDocMessage,
+      documentId
+    });
+
+    diff.isProcessed = true;
+  }
+
   _statusChanged(diff) {
     this._prettifyValues(diff, val => ActionStatuses[val]);
   }
 
   static get _fieldLabels() {
     const fieldLabels = {
-      type: 'Type',
-      linkedTo: 'Linked to',
-      serialNumber: 'Serial number',
-      sequentialId: 'Sequential ID',
-      title: 'Title',
-      ownerId: 'Owner',
-      planInPlace: 'Plan in place',
-      status: 'Status',
-      toBeCompletedBy: 'Completion executor',
-      completionTargetDate: 'Completion target date',
-      isCompleted: 'Is completed',
       completedAt: 'Completed at',
       completedBy: 'Completed by',
+      completionTargetDate: 'Completion target date',
+      isCompleted: 'Completed',
+      isVerified: 'Verified',
+      isVerifiedAsEffective: 'Verified as effective',
+      linkedTo: 'Linked to',
+      ownerId: 'Owner',
+      planInPlace: 'Plan in place',
+      sequentialId: 'Sequential ID',
+      serialNumber: 'Serial number',
+      status: 'Status',
+      title: 'Title',
+      toBeCompletedBy: 'Completion executor',
       toBeVerifiedBy: 'Verification executor',
+      type: 'Type',
       verificationTargetDate: 'Verification target date',
-      isVerified: 'Is verified',
-      isVerifiedAsEffective: 'Is verified as effective',
       verifiedAt: 'Verified at',
       verifiedBy: 'Verified by'
     };

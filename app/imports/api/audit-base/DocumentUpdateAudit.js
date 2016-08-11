@@ -10,19 +10,46 @@ export default class DocumentUpdateAudit extends UpdateAudit {
       }
 
       switch (diff.field) {
+        case 'isDeleted':
+          this._deleteStateChanged(diff);
+          break;
         case 'notify':
           this._notifyChanged(diff);
           break;
         case 'viewedBy':
           this._viewedByChanged(diff);
           break;
-        case 'isDeleted':
-          this._deleteStateChanged(diff);
-          break;
       }
     });
 
     super._buildLogs();
+  }
+
+  _deleteStateChanged(diff) {
+    const deletedAtDiff = _(this._diff).find(({ field }) => field === 'deletedAt');
+    const deletedByDiff = _(this._diff).find(({ field }) => field === 'deletedBy');
+
+    if (!(deletedAtDiff && deletedByDiff)) {
+      return;
+    }
+
+    const { newValue } = diff;
+    let message;
+    if (newValue === true) {
+      message = 'Deleted';
+    } else if (newValue === false) {
+      message = 'Restored';
+    }
+
+    if (!message) {
+      return;
+    }
+
+    this._createLog({ message });
+
+    diff.isProcessed = true;
+    deletedAtDiff.isProcessed = true;
+    deletedByDiff.isProcessed = true;
   }
 
   _notifyChanged(diff) {
@@ -55,33 +82,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     diff.isProcessed = true;
   }
 
-  _deleteStateChanged(diff) {
-    const deletedAtDiff = _(this._diff).find(({ field }) => field === 'deletedAt');
-    const deletedByDiff = _(this._diff).find(({ field }) => field === 'deletedBy');
-
-    if (!(deletedAtDiff && deletedByDiff)) {
-      return;
-    }
-
-    const { newValue } = diff;
-    let message;
-    if (newValue === true) {
-      message = 'Deleted';
-    } else if (newValue === false) {
-      message = 'Restored';
-    }
-
-    if (!message) {
-      return;
-    }
-
-    this._createLog({ message });
-
-    diff.isProcessed = true;
-    deletedAtDiff.isProcessed = true;
-    deletedByDiff.isProcessed = true;
-  }
-
   _userChanged(diff) {
     this._prettifyValues(diff, (val) => {
       const user = Meteor.users.findOne({ _id: val });
@@ -93,14 +93,14 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     return {
       createdAt: 'Created at',
       createdBy: 'Created by',
-      updatedAt: 'Updated at',
-      updatedBy: 'Updated by',
-      isDeleted: 'Is deleted',
       deletedAt: 'Deleted at',
       deletedBy: 'Deleted by',
+      isDeleted: 'Deleted',
       notify: 'Notify',
-      viewedBy: 'Viewed by',
-      organizationId: 'Organization ID'
+      organizationId: 'Organization ID',
+      updatedAt: 'Updated at',
+      updatedBy: 'Updated by',
+      viewedBy: 'Viewed by'
     };
   }
 
