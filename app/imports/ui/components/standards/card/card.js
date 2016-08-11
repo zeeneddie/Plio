@@ -33,7 +33,7 @@ Template.Standards_Card_Read.viewmodel({
         $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
       }, 150);
     } else {
-      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': offset.right, 'bottom': '0', 'left': offset.left });
 
       setTimeout(() => {
 
@@ -46,6 +46,7 @@ Template.Standards_Card_Read.viewmodel({
   },
   standards() {
     const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
+    console.log('this._getStandardsByQuery({ isDeleted })', this._getStandardsByQuery({ isDeleted }))
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
@@ -68,7 +69,7 @@ Template.Standards_Card_Read.viewmodel({
   },
   openEditStandardModal: _.throttle(function() {
     if (ViewModel.findOne('ModalWindow')) return;
-    
+
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',

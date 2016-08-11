@@ -4,7 +4,7 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
 
 
-Meteor.publish('messagesByStandartId', function(standardId){
+Meteor.publish('messagesByStandardId', function(standardId){
 	const userIds = [];
 	const discussion = Discussions.findOne({linkedTo: standardId}, {
 		fields: {_id: 1}

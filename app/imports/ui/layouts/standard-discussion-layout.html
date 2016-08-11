@@ -10,12 +10,10 @@
 					{{else}}
 						{{#unless isOrganisation}}
 							{{ > NotFoundPage subject="organization" subjectId="organizationSerialNumber"}}
-							Bad organisation
 						{{/unless}}
 
 						{{#unless isStandart}}
 							{{ > NotFoundPage subject="standart" subjectId="Standart ID"}}
-							Bad standart
 						{{/unless}}
 					{{/if}}
 				{{else}}
