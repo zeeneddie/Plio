@@ -1,0 +1,26 @@
+<template name="Dashboard_Stats">
+  <div class="dashboard-stats">
+		{{#if isInitialDataReady}}
+      <h4 class="dashboard-stats-title">
+        {{overdue.length}} overdue actions
+      </h4>
+      {{#each overdue}}
+        <a class="dashboard-stats-action" {{b "href: this.href"}}>
+          <span class="label label-danger" {{b "text: this.sequentialId"}}></span>
+          <span {{b "text: this.title"}}></span>
+          <label class="text-danger" {{b "text: this.time"}}></label>
+        </a>
+      {{/each}}
+      <button type="button" class="btn btn-primary" {{b "click: loadMore"}}>
+        More
+        {{#unless isReady}}
+          <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+        {{/unless}}
+      </button>
+    {{else}}
+      <div class="text-xs-center">
+        {{> Preloader size=3}}
+      </div>
+    {{/if}}
+	</div>
+</template>

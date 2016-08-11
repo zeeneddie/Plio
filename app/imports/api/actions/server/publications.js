@@ -16,6 +16,24 @@ Meteor.publish('actions', function(organizationId, isDeleted = { $in: [null, fal
   });
 });
 
+Meteor.publish('actionsByIds', function(ids = []) {
+  let query = {
+    _id: { $in: ids },
+    isDeleted: { $in: [null, false] }
+  };
+
+  const { organizationId } = Object.assign({}, Actions.findOne(query));
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  query = { ...query, organizationId };
+
+  return Actions.find(query);
+});
+
 Meteor.publish('actionsCount', function(counterName, organizationId) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
