@@ -179,4 +179,4 @@ password: password
 
 #License
 
-The source code for Plio is made available under the GNU General Public License v3.0 (commercial license also available).
+The source code for Plio is made available under the [AGPL v3.0](http://www.gnu.org/licenses/agpl-3.0.html) General Public License (a commercial license is also available from [Plio Ltd](http://pliohub.com)).

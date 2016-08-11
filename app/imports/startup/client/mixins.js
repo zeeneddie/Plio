@@ -1,6 +1,8 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
@@ -9,7 +11,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 import {
-  UserRoles, StandardFilters, RiskFilters,
+  DocumentTypes, UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses, WorkItemsStore
@@ -47,6 +49,19 @@ ViewModel.mixin({
       this.collapsed(!this.collapsed());
       if (_.isFunction(cb)) cb();
     }, 500)
+  },
+  discussions: {
+    discussionHasMessages(discussionId){
+      return Messages.find({discussionId}).count();
+    },
+    getDiscussionIdByStandardId(standardId){
+  		const discussion = Discussions.findOne(
+  			{documentType: DocumentTypes[0], linkedTo: standardId},
+  			{ fields: {_id: 1} }
+  		);
+
+  		return discussion ? discussion._id : null;
+  	}
   },
   iframe: {
     isIframeReady: false,
@@ -101,6 +116,14 @@ ViewModel.mixin({
       };
 
       return item.toggleCollapse(cb);
+    }
+  },
+  messages: {
+    messageByDiscussionId(discussionId, protection){
+      return Messages.findOne({discussionId}, protection && {});
+    },
+    messagesCursorByDiscussionId(discussionId, protection){
+      return Messages.find({discussionId}, protection && {});
     }
   },
   modal: {

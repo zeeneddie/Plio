@@ -123,6 +123,7 @@
   &-content {
     @include scroll;
     @include hide-scrollbar;
+    margin-bottom: 70px;
   }
   
   &-form {

@@ -6,7 +6,7 @@ import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
   const {
-    bucketName, acl, usersAvatarsDir,
+    bucketName, acl, discussionsFilesDir, usersAvatarsDir,
     standardsFilesDir, improvementPlansFilesDir,
     nonConformitiesFilesDir, risksFilesDir,
     actionsFilesDir
@@ -17,6 +17,25 @@ const configureSlignshot = () => {
     const disposition = 'attachment';
     return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
+
+  Slingshot.createDirective('discussionsFiles', Slingshot.S3Storage, {
+    bucket: bucketName,
+
+    acl: acl,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { discussionId } = metaContext;
+      return `${discussionsFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
+    }
+  });
 
   Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
     bucket: bucketName,

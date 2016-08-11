@@ -134,6 +134,28 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
+  name: 'standardDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardDiscussionLayout', {
+      content: 'StandardDiscussionPage'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion/:messageId', {
+  name: 'standardDiscussionMessage',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    /*BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });*/
+    console.log('A selected discussion item');
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],

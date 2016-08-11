@@ -22,6 +22,8 @@ import './non-conformities-page.html';
 import './non-conformities-page.js';
 import './actions-page.html';
 import './actions-page.js';
+import './standard-discussion-page.html';
+import './standard-discussion-page.js';
 import './work-inbox-page.html';
 import './work-inbox-page.js';
 import './standard-subcards-page.html';
