@@ -46,7 +46,6 @@ Template.Standards_Card_Read.viewmodel({
   },
   standards() {
     const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
-    console.log('this._getStandardsByQuery({ isDeleted })', this._getStandardsByQuery({ isDeleted }))
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
