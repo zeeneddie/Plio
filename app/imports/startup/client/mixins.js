@@ -162,7 +162,7 @@ ViewModel.mixin({
         const words = this[prop]().trim().split(' ');
         let r;
         try {
-          r = new RegExp(`.*(${words.join('|')}).*`, 'i')
+          r = new RegExp(`.*(${words.join(' ')}).*`, 'i')
         } catch(err) {} // ignore errors
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
