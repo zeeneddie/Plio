@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { get } from 'lodash';
+import get from 'lodash.get';
 
 Template.SimpleSelection_Edit_Item.viewmodel({
   mixin: 'callWithFocusCheck',

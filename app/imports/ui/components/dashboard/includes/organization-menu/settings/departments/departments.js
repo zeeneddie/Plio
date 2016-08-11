@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { invoke } from 'lodash';
+import invoke from 'lodash.invoke';
 
 import { Departments } from '/imports/api/departments/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
@@ -31,7 +31,7 @@ Template.OrgSettings_Departments.viewmodel({
 
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
-      
+
       this.modal().callMethod(insert, { name, organizationId });
     } else {
       const _id = viewModel._id();
