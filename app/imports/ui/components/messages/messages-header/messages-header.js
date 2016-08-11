@@ -1,6 +1,6 @@
-import {Template} from 'meteor/templating';
+import { Template } from 'meteor/templating';
 
-import {Messages} from '/imports/api/messages/messages.js';
+import { Messages } from '/imports/api/messages/messages.js';
 
 
 Template.MessagesHeader.viewmodel({

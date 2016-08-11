@@ -6,11 +6,11 @@ import { Messages } from '../messages.js';
 
 Meteor.publish('messagesByStandardId', function(standardId){
 	const userIds = [];
-	const discussion = Discussions.findOne({linkedTo: standardId}, {
-		fields: {_id: 1}
+	const discussion = Discussions.findOne({ linkedTo: standardId }, {
+		fields: { _id: 1 }
 	});
 
-	if(!discussion){
+	if(!discussion) {
 		return this.ready();
 	}
 
@@ -18,13 +18,13 @@ Meteor.publish('messagesByStandardId', function(standardId){
 	const messages = Messages.find({discussionId});
 
 	messages.forEach((c, i, cr) => {
-		if(userIds.indexOf(c.userId) < 0){
+		if(userIds.indexOf(c.userId) < 0) {
 			userIds.push(c.userId);
 		}
 	});
 
 	return [
 		messages,
-		Meteor.users.find({ _id: {$in: userIds} }, { fields: {profile: 1} })
+		Meteor.users.find({ _id: { $in: userIds } }, { fields: { profile: 1 } })
 	];
 });
