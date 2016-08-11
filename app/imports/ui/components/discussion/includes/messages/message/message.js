@@ -21,6 +21,9 @@ Template.Discussion_Message.viewmodel({
 				{_id, userId}, handleMethodResult((err, res) => {})
 			);
 		}
+
+		const $chat = $(tpl.firstNode).closest('.chat-content');
+		$chat.scrollTop($chat.find('.chat-messages').height());
 	},
 
 	events: {

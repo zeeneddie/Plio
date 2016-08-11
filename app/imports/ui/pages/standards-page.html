@@ -9,11 +9,7 @@
   </div>
   {{#if isDiscussionOpened}}
     <div class="content-cards content-cards-flush hidden-sm-down scroll">
-      {{#if isReady}}
-        {{> Discussion_Card _id=standardId}}
-      {{else}}
-        {{> PreloaderPage}}
-      {{/if}}
+      {{> Discussion_Card _id=standardId isReady=isReady}}
     </div>
   {{/if}}
 </template>
