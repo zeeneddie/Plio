@@ -18,5 +18,12 @@ Template.StandardsHeader.viewmodel({
     FlowRouter.setQueryParams({ by: filter });
     this.searchText('');
     this.expandCollapsed(this.standardId());
+  },
+  onNavigate(e) {
+    if (this.isDiscussionOpened()) {
+      return FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
+    }
+
+    return this.navigate(e);
   }
 });
