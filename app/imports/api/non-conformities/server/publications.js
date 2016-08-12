@@ -25,6 +25,24 @@ Meteor.publish('nonConformitiesByStandardId', function(standardId, isDeleted = {
   return NonConformities.find({ standardsIds: standardId, isDeleted });
 });
 
+Meteor.publish('nonConformitiesByIds', function(ids = []) {
+  let query = {
+    _id: { $in: ids },
+    isDeleted: { $in: [null, false] }
+  };
+
+  const userId = this.userId;
+  const { organizationId } = Object.assign({}, NonConformities.findOne(query));
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  query = { ...query, organizationId };
+
+  return NonConformities.find(query);
+});
+
 Meteor.publish('nonConformitiesCount', function(counterName, organizationId) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {

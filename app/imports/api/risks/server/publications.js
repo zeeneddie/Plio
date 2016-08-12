@@ -25,6 +25,24 @@ Meteor.publish('risksByStandardId', function(standardId, isDeleted = { $in: [nul
   return Risks.find({ standardId, isDeleted });
 });
 
+Meteor.publish('risksByIds', function(ids = []) {
+  let query = {
+    _id: { $in: ids },
+    isDeleted: { $in: [null, false] }
+  };
+
+  const userId = this.userId;
+  const { organizationId } = Object.assign({}, Risks.findOne({ ...query }));
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  query = { ...query, organizationId };
+
+  return Risks.find(query);
+});
+
 Meteor.publish('risksCount', function(counterName, organizationId) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {

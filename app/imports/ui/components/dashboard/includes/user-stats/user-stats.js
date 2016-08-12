@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 
-Template.UserStats.viewmodel({
+Template.Dashboard_UserStats.viewmodel({
   mixin: ['user'],
   usersOnline() {
     return Meteor.users.find({status: 'online'});
