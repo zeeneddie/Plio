@@ -80,6 +80,8 @@ This approach allows to avoid old code appearing in merged version.
 
 ## Style Guide
 
+* [Javascript Style Guide by Airbnb](https://github.com/airbnb/javascript) - *this style guide if ought to be complied with.* Style guide violators will be punished.
+
 ### General recomendations:
 * Use variable's names that makes sense.
 * Use `let` and `const` instead of `var`.
