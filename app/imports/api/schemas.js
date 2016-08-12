@@ -45,7 +45,7 @@ export const NewUserDataSchema = new SimpleSchema({
   }
 });
 
-const idSchemaDoc = {
+export const idSchemaDoc = {
   type: String,
   regEx: SimpleSchema.RegEx.Id
 };
@@ -60,6 +60,10 @@ export const StandardIdSchema = new SimpleSchema({
 
 export const UserIdSchema = new SimpleSchema({
   userId: idSchemaDoc
+});
+
+export const DiscussionIdSchema = new SimpleSchema({
+  discussionId: idSchemaDoc
 });
 
 export const DocumentIdSchema = new SimpleSchema({

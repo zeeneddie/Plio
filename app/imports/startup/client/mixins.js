@@ -1,6 +1,8 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
@@ -9,7 +11,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 import {
-  UserRoles, StandardFilters, RiskFilters,
+  DocumentTypes, UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses, WorkItemsStore
@@ -160,7 +162,7 @@ ViewModel.mixin({
         const words = this[prop]().trim().split(' ');
         let r;
         try {
-          r = new RegExp(`.*(${words.join('|')}).*`, 'i')
+          r = new RegExp(`.*(${words.join(' ')}).*`, 'i')
         } catch(err) {} // ignore errors
         if (_.isArray(fields)) {
           fields = _.map(fields, (field) => {
@@ -332,8 +334,8 @@ ViewModel.mixin({
     }
   },
   date: {
-    renderDate(date) {
-      return moment.isDate(date) ? moment(date).format('DD MMM YYYY') : 'Invalid date';
+    renderDate(date, format = 'DD MMM YYYY') {
+      return moment.isDate(date) ? moment(date).format(format) : 'Invalid date';
     }
   },
   callWithFocusCheck: {
@@ -829,5 +831,25 @@ ViewModel.mixin({
         notification.close();
       }, timeout);
     }
-  }
+  },
+  discussions: {
+    discussionHasMessages(discussionId) {
+      return Messages.find({ discussionId }).count();
+    },
+    getDiscussionIdByStandardId(standardId) {
+      const query = { documentType: DocumentTypes[0], linkedTo: standardId };
+      const options = { fields: { _id: 1 } };
+  		const discussion = Discussions.findOne(query, options);
+
+  		return discussion ? discussion._id : null;
+  	}
+  },
+  messages: {
+    _getMessageByDiscussionId(discussionId, protection = {}) {
+      return Messages.findOne({ discussionId }, protection);
+    },
+    _getMessagesByDiscussionId(discussionId, protection = {}) {
+      return Messages.find({ discussionId }, protection);
+    }
+  },
 });

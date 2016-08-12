@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
-import { invoke } from 'lodash';
+import invoke from 'lodash.invoke';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 

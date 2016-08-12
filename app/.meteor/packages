@@ -55,3 +55,4 @@ force-ssl@1.0.12
 peerlibrary:aws-sdk
 plio:bootstrap-sweetalert
 meteorhacks:subs-manager
+konecty:autolinker
