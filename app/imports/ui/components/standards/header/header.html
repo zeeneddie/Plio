@@ -3,7 +3,7 @@
     <span class="navbar-title dropdown">
       {{#if isDiscussionOpened}}
         {{#with standard}}
-          <div class="nav-item" {{b "text: this.title"}}></div>
+          <div class="nav-item">{{this.title}} - discussion</div>
         {{/with}}
       {{else}}
         <a class="dropdown-toggle pointer" data-toggle="dropdown"

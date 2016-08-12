@@ -6,7 +6,7 @@
         {{#each overdueItems}}
           <a class="dashboard-stats-action" {{b "href: this.href"}} target="_blank">
             <span class="label label-danger" {{b "text: this.sequentialId"}}></span>
-            <span {{b "text: this.type"}}></span>
+            <span>{{this.title}}. To do: {{this.type}}</span>
             <label class="text-danger" {{b "text: this.time"}}></label>
           </a>
         {{/each}}
@@ -33,9 +33,5 @@
         {{/if}}
       </div>
     {{/if}}
-  {{else}}
-    <div class="text-xs-center">
-      {{> Preloader size=3}}
-    </div>
   {{/if}}
 </template>
