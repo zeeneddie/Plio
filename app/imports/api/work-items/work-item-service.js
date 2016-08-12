@@ -279,7 +279,7 @@ export default {
     };
 
     const insert = () => {
-      this.collection.insert({
+      const workItemId = this.collection.insert({
         organizationId,
         targetDate,
         assigneeId,
@@ -289,6 +289,8 @@ export default {
           type: docType
         }
       });
+
+      this._refreshStatus(workItemId);
     };
 
     if (this.collection.findOne(query)) {
@@ -307,8 +309,10 @@ export default {
   },
 
   _refreshStatus(_id) {
-    const workflow = new WorkItemWorkflow(_id);
-    workflow.refreshStatus();
+    Meteor.isServer && Meteor.defer(() => {
+      const workflow = new WorkItemWorkflow(_id);
+      workflow.refreshStatus();
+    });
   },
 
   _undo(linkedDocId, type) {
@@ -331,7 +335,7 @@ export default {
     (() => {
       const { _id } = Object.assign({}, this.collection.findOne(query));
 
-      Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
+      this._refreshStatus(_id);
     })();
 
     return ret;
