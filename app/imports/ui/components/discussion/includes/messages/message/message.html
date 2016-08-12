@@ -18,12 +18,13 @@
 				</button>
 
 				<div class="dropdown-menu dropdown-menu-right js-message-actions">
-					<a href="#" class="dropdown-item">Copy as link</a>
+					<a href="#" class="dropdown-item" {{b "click: copyAsLink"}}>Copy as link</a>
 					<!--a href="#" class="dropdown-item">Move to another channel</a-->
 					{{#if isAuthor}}
 						<a
 							href="#"
-							class="dropdown-item js-message-remove">
+							class="dropdown-item js-message-remove"
+							{{b "click: remove"}}>
 							Delete message
 						</a>
 					{{/if}}

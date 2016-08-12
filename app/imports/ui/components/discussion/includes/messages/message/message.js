@@ -26,6 +26,7 @@ Template.Discussion_Message.viewmodel({
 	isAuthor() {
 		return Meteor.userId() === this.userId();
 	},
+
 	isDiscussionEmpty() {
 		return !this.discussionHasMessages(this.discussionId());
 	},
@@ -42,32 +43,23 @@ Template.Discussion_Message.viewmodel({
 		);
 	},
 
-	events: {
-		'click .js-message-actions > a'(ev, tpl) {
-			ev.preventDefault();
-		},
+	copyAsLink(e) {
+		e.preventDefault();
+	},
 
-		'click .js-message-remove'(ev, tpl) {
-			const self = this;
+	remove(e) {
+		if (!this.isAuthor()) return;
 
-			if(Meteor.userId() !== this.userId()) {
-				return false;
+		const callback = (err, res) => {
+			if (err) return;
+			// Delete the Discussion itself if it has no messages any more
+			if (this.isDiscussionEmpty()) {
+				removeDiscussionById.call(
+					{ _id: self.discussionId() }, handleMethodResult((err, res) => {})
+				);
 			}
+		};
 
-			removeMessageById.call(
-				{_id: this._id()}, handleMethodResult((err, res) => {
-
-					// Delete the Discussion itself if it has no messages any more
-					if(res && self.isDiscussionEmpty()) {
-						console.log('Remove the discussion');
-						removeDiscussionById.call(
-							{_id: self.discussionId()}, handleMethodResult(
-								(err, res) => {}
-							)
-						);
-					}
-				})
-			);
-		}
+		removeMessageById.call({ _id: this._id() }, handleMethodResult(callback));
 	}
 });
