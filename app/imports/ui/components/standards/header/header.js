@@ -7,6 +7,10 @@ import { StandardFilters } from '/imports/api/constants.js';
 Template.StandardsHeader.viewmodel({
   share: ['standard', 'window', 'search'],
   mixin: ['standard', 'collapsing', 'organization', 'mobile'],
+  isDiscussionOpened: false,
+  standard() {
+    return this._getStandardByQuery({ _id: this.standardId() });
+  },
   standardFilters() {
     return StandardFilters;
   },
