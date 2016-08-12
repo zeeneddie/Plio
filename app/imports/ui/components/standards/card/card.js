@@ -20,6 +20,7 @@ Template.Standards_Card_Read.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
+  isDiscussionOpened: false,
   ActionTypes() {
     return ActionTypes;
   },
