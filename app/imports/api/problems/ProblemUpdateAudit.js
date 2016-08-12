@@ -112,6 +112,10 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     });
 
     diff.isProcessed = true;
+
+    if (kind === ITEM_REMOVED) {
+      this._processRedudantDiffs('departmentsIds', diff.index);
+    }
   }
 
   _magnitudeChanged(diff) {
@@ -155,6 +159,10 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     });
 
     diff.isProcessed = true;
+
+    if (kind === ITEM_REMOVED) {
+      this._processRedudantDiffs('standardsIds', diff.index);
+    }
   }
 
   _statusChanged(diff) {

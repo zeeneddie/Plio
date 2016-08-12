@@ -35,7 +35,7 @@ export default class UpdateAudit {
 
       if (kind === 'A') {
         const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-        const { item: { kind, lhs, rhs } } = rawDiff;
+        const { index, item: { kind, lhs, rhs } } = rawDiff;
 
         let item;
         if (kind === 'N') {
@@ -51,10 +51,10 @@ export default class UpdateAudit {
 
         diff = {
           kind: changesKinds[kind],
-          isFromArray: true,
           field,
           item,
-          path
+          path,
+          index
         };
       } else {
         const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this.constructor._changesTypes;
@@ -68,7 +68,6 @@ export default class UpdateAudit {
 
         diff = {
           kind: changesKinds[kind],
-          isFromArray: false,
           field,
           oldValue,
           newValue,
@@ -100,10 +99,12 @@ export default class UpdateAudit {
         return;
       }
 
-      const { isFromArray, kind, field, oldValue, newValue } = diff;
+      const { kind, field, oldValue, newValue } = diff;
+      const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
 
       let msgData;
-      if (isFromArray) {
+
+      if ((kind === ITEM_ADDED) || (kind === ITEM_REMOVED)) {
         const { item, prettyItem } = diff;
         msgData = { item: prettyItem || item };
       } else {

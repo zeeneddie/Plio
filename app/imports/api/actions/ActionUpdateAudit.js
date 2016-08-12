@@ -180,6 +180,10 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     });
 
     diff.isProcessed = true;
+
+    if (kind === ITEM_REMOVED) {
+      this._processRedudantDiffs('linkedTo', diff.index);
+    }
   }
 
   _statusChanged(diff) {
