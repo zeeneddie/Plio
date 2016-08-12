@@ -30,5 +30,8 @@ Template.StandardsPage.viewmodel({
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
-  ]
+  ],
+  styles() {
+    return this.isDiscussionOpened() ? '' : this.display();
+  }
 });

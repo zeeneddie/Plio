@@ -8,7 +8,7 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
 
 Template.Standards_Card_Read.viewmodel({
-  share: 'standard',
+  share: 'window',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   onRendered(template) {
     template.autorun(() => {
@@ -65,6 +65,16 @@ Template.Standards_Card_Read.viewmodel({
   },
   _getNCsQuery() {
     return { standardsIds: this.standard() && this.standard()._id };
+  },
+  onDiscussionOpen(e) {
+    e.preventDefault();
+
+    if ($(window).width() < 768) {
+      this.width($(window).width());
+    }
+
+    const params = { orgSerialNumber: this.organizationSerialNumber(), standardId: this._id() };
+    FlowRouter.go('standardDiscussion', params);
   },
   openEditStandardModal: _.throttle(function() {
     if (ViewModel.findOne('ModalWindow')) return;
