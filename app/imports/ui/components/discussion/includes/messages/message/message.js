@@ -11,19 +11,35 @@ import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: 'discussions',
-	
+
 	onRendered(tpl) {
 		const _id = this._id();
-		const userId = this.userId();
 
-		if(this.viewedBy().indexOf(userId) < 0){
-			markMessageViewedById.call(
-				{_id, userId}, handleMethodResult((err, res) => {})
-			);
+		if (!Object.assign([], this.viewedBy()).find(val => val === Meteor.userId())) {
+			markMessageViewedById.call({ _id }, handleMethodResult((err, res) => {}));
 		}
 
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
+	},
+
+	isAuthor() {
+		return Meteor.userId() === this.userId();
+	},
+	isDiscussionEmpty() {
+		return !this.discussionHasMessages(this.discussionId());
+	},
+
+	linkerOptions() {
+		return {
+			truncate: 7
+		}
+	},
+
+	messageRendered() {
+		return Autolinker.link(
+			this.message(), { truncate: TruncatedStringLengths.c40 }
+		);
 	},
 
 	events: {
@@ -53,24 +69,5 @@ Template.Discussion_Message.viewmodel({
 				})
 			);
 		}
-	},
-
-	isAuthor() {
-		return Meteor.userId() === this.userId();
-	},
-	isDiscussionEmpty() {
-		return !this.discussionHasMessages(this.discussionId());
-	},
-
-	linkerOptions() {
-		return {
-			truncate: 7
-		}
-	},
-
-	messageRendered() {
-		return Autolinker.link(
-			this.message(), { truncate: TruncatedStringLengths.c40 }
-		);
 	}
 });
