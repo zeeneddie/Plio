@@ -837,7 +837,7 @@ ViewModel.mixin({
       return Messages.find({ discussionId }).count();
     },
     getDiscussionIdByStandardId(standardId) {
-      const query = { documentType: DocumentTypes[0], linkedTo: standardId };
+      const query = { documentType: DocumentTypes.STANDARD, linkedTo: standardId };
       const options = { fields: { _id: 1 } };
   		const discussion = Discussions.findOne(query, options);
 

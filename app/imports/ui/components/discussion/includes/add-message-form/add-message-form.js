@@ -15,12 +15,15 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
+	disabled: false,
 	files: [],
 	messageFile: null,
 	messageText: '',
 	slingshotDirective: '',
 
 	addNewMessage() {
+		if (this.disabled()) return;
+
 		addMessage.call(
 			this.makeNewMessage(), handleMethodResult( () => {this.reset();} )
 		);
@@ -57,7 +60,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		if(!discussionId){
 			discussionId = addDiscussion.call(
-				{ documentType: DocumentTypes[0], linkedTo: this.standardId() },
+				{ documentType: DocumentTypes.STANDARD, linkedTo: this.standardId() },
 				handleMethodResult( () => {this.reset();} )
 			);
 		}
