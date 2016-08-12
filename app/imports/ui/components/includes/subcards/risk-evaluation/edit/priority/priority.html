@@ -1,0 +1,8 @@
+<template name="RiskEvaluation_Priority_Edit">
+  {{#FormField label="Treatment priority"}}
+    {{> Select_Single_Radio
+        items=priorityList
+        value=priority
+        onSelect=onUpdateCb}}
+  {{/FormField}}
+</template>

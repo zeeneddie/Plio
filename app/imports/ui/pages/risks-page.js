@@ -1,6 +1,10 @@
 import { Template } from 'meteor/templating';
 
-Template.RisksPage.viewmodel({
+Template.Risks_Page.viewmodel({
   share: 'window',
-  mixin: 'mobile'
+  mixin: ['mobile', 'risk', 'organization'],
+  autorun() {
+    this.templateInstance.subscribe('riskImprovementPlan', this.riskId());
+    this.templateInstance.subscribe('workItems', this.organizationId());
+  }
 });

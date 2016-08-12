@@ -1,4 +1,4 @@
-<template name="CreateRisk">
+<template name="Risks_Create">
   <div>
     <div class="card-block">
       {{> NC_Title_Edit label="Risk name"}}
@@ -9,9 +9,9 @@
 
       {{> NC_IdentifiedDate_Edit}}
 
-      {{> NC_Magnitude_Edit}}
+      {{> Problems_Magnitude_Edit guidelines=RKGuidelines}}
 
-      {{> RKType}}
+      {{> Risks_Type_Edit}}
     </div>
   </div>
 </template>

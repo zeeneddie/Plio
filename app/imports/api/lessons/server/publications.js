@@ -11,3 +11,13 @@ Meteor.publish('lessons', function(organizationId) {
 
   return LessonsLearned.find({ organizationId });
 });
+
+Meteor.publish('standardLessons', function(standardId) {
+  const userId = this.userId;
+  const standard = Standards.findOne({ _id: standardId });
+  if (standard && !userId || !isOrgMember(userId, standard.organizationId)) {
+    return this.ready();
+  }
+
+  return LessonsLearned.find({ documentId: standard._id });
+});

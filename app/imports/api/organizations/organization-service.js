@@ -28,7 +28,7 @@ export default OrganizationService = {
     }
   },
 
-  insert({name, ownerId, currency}) {
+  insert({ name, timezone, currency, ownerId }) {
     this._ensureNameIsUnique(name);
 
     const lastOrg = this.collection.findOne({
@@ -43,10 +43,11 @@ export default OrganizationService = {
 
     const serialNumber = lastOrg ? lastOrg.serialNumber + 1 : 100;
 
-    const { workflowDefaults, reminders, ncGuidelines } = OrganizationDefaults;
+    const { workflowDefaults, reminders, ncGuidelines, rkGuidelines, rkScoringGuidelines } = OrganizationDefaults;
 
     const organizationId = this.collection.insert({
       name,
+      timezone,
       currency,
       serialNumber,
       users: [{
@@ -56,6 +57,8 @@ export default OrganizationService = {
       workflowDefaults,
       reminders,
       ncGuidelines,
+      rkGuidelines,
+      rkScoringGuidelines,
       createdBy: ownerId
     });
 
@@ -87,7 +90,7 @@ export default OrganizationService = {
 
   },
 
-  setName({_id, name}) {
+  setName({ _id, name }) {
     this._ensureNameIsUnique(name);
 
     return this.collection.update({ _id }, {
@@ -95,21 +98,28 @@ export default OrganizationService = {
     });
   },
 
-  setDefaultCurrency({_id, currency}) {
+  setTimezone({ _id, timezone }) {
+    return this.collection.update({ _id }, {
+      $set: { timezone }
+    });
+  },
+
+  setDefaultCurrency({ _id, currency }) {
     return this.collection.update({ _id }, {
       $set: { currency }
     });
   },
 
-  setWorkflowDefaults({_id, type, timeValue, timeUnit}) {
-    return this.collection.update({ _id }, {
-      $set: {
-        [`workflowDefaults.${type}`]: {timeValue, timeUnit}
-      }
-    });
+  setWorkflowDefaults({ _id, type, ...args }) {
+    const $set = {};
+    for (let key in args) {
+      $set[`workflowDefaults.${type}.${key}`] = args[key];
+    }
+
+    return this.collection.update({ _id }, { $set });
   },
 
-  setReminder({_id, type, reminderType, timeValue, timeUnit}) {
+  setReminder({ _id, type, reminderType, timeValue, timeUnit }) {
     return this.collection.update({ _id }, {
       $set: {
         [`reminders.${type}.${reminderType}`]: {timeValue, timeUnit}
@@ -117,15 +127,45 @@ export default OrganizationService = {
     });
   },
 
-  setGuideline({_id, ncType, text}) {
+  setNCGuideline({_id, type, text}) {
     return this.collection.update({ _id }, {
       $set: {
-        [`ncGuidelines.${ncType}`]: text
+        [`ncGuidelines.${type}`]: text
       }
     });
   },
 
+  setRKGuideline({ _id, type, text }) {
+    const query = { _id };
+    const options = {
+      $set: {
+        [`rkGuidelines.${type}`]: text
+      }
+    };
+    return this.collection.update(query, options);
+  },
+
+  setRKScoringGuidelines({ _id, rkScoringGuidelines }) {
+    const query = { _id };
+    const options = { $set: { rkScoringGuidelines } };
+    return this.collection.update(query, options);
+  },
+
   removeUser({ userId, organizationId, removedBy }) {
+    const isOrgOwner = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (isOrgOwner) {
+      throw new Meteor.Error(400, 'Organization owner can\'t be removed');
+    }
+
     const isAlreadyRemoved = !!this.collection.findOne({
       _id: organizationId,
       users: {
@@ -203,6 +243,22 @@ export default OrganizationService = {
   },
 
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
+    const isOrgOwner = !!this.collection.findOne({
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId: currOwnerId,
+          role: UserMembership.ORG_OWNER
+        }
+      }
+    });
+
+    if (!isOrgOwner) {
+      throw new Meteor.Error(
+        400, 'User is not authorized for transfering organizations'
+      );
+    }
+
     const isOnTransfer = !!this.collection.findOne({
       _id: organizationId,
       transfer: { $exists: true }

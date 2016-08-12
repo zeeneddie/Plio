@@ -134,12 +134,35 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
+  name: 'standardDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage',
+      isDiscussionOpened: true
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion/:messageId', {
+  name: 'standardDiscussionMessage',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    /*BlazeLayout.render('StandardsLayout', {
+      content: 'StandardsPage'
+    });*/
+    console.log('A selected discussion item');
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('DashboardLayout', {
-      content: 'DashboardPage'
+    BlazeLayout.render('Dashboard_Layout', {
+      content: 'Dashboard_Page'
     });
   }
 });
@@ -148,8 +171,8 @@ FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
@@ -158,8 +181,8 @@ FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('UserDirectoryLayout', {
-      content: 'UserDirectoryPage'
+    BlazeLayout.render('UserDirectory_Layout', {
+      content: 'UserDirectory_Page'
     });
   }
 });
@@ -169,7 +192,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });
@@ -179,7 +202,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     BlazeLayout.render('NC_Layout', {
-      content: 'NCPage'
+      content: 'NC_Page'
     });
   }
 });
@@ -188,8 +211,8 @@ FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });
@@ -198,28 +221,38 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   name: 'risk',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('RisksLayout', {
-      content: 'RisksPage'
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page'
     });
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions', {
-  name: 'actions',
+FlowRouter.route('/:orgSerialNumber/work-inbox', {
+  name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
     });
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/actions/:actionId', {
-  name: 'action',
+FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
+  name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('ActionsLayout', {
-      content: 'ActionsPage'
+    BlazeLayout.render('WorkInbox_Layout', {
+      content: 'WorkInbox_Page'
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/standard-subcards', {
+  name: 'standardSubcardsPage',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('StandardSubcardsLayout', {
+      content: 'StandardSubcardsPage'
     });
   }
 });

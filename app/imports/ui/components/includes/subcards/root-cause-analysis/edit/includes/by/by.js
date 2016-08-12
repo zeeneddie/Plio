@@ -1,25 +1,42 @@
 import { Template } from 'meteor/templating';
 
-Template.NC_RCA_By_Edit.viewmodel({
+Template.RCA_ToBeCompletedBy_Edit.viewmodel({
   mixin: ['user', 'search', 'members'],
   key: '',
   by: '',
+  comments: '',
   selectFirstIfNoSelected: false,
   placeholder: '',
   label: '',
+  isButtonVisible: false,
+  canButtonBeShown() {
+    return this.getBy() === Meteor.userId();
+  },
   getBy() {
     return this.by() || '';
   },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
+  onUpdate() {},
   update(viewmodel) {
-    const { selected:by } = viewmodel.getData();
+    return (viewmodel) => {
+      const { selected:executor } = viewmodel.getData();
 
-    if (by === this.templateInstance.data.by) return;
+      if (executor === this.templateInstance.data.by) return;
 
-    this.by(by);
+      this.by(executor);
 
-    this.parent().update({ [this.key()]: by });
+      this.onUpdate({ executor });
+    };
+  },
+  onComplete() {},
+  complete() {
+    return (viewmodel) => {
+      const { text:completionComments } = viewmodel.getData();
+
+      this.onComplete({ completionComments });
+    };
+  },
+  onUndo() {},
+  undo() {
+    return viewmodel => this.onUndo();
   }
 });

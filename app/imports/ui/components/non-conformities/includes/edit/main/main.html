@@ -1,31 +1,59 @@
 <template name="NC_Card_Edit_Main">
   {{#with NC}}
     <div class="card-block">
-      {{> NC_Title_Edit _id=this._id titleText=this.title sequentialId=this.sequentialId}}
+      {{> NC_Title_Edit
+          _id=this._id titleText=this.title
+          sequentialId=this.sequentialId}}
 
-      {{> ES_Description_Edit _id=this._id description=this.description}}
+      {{> ES_Description_Edit
+          _id=this._id
+          description=this.description}}
 
-      {{> NC_Status_Edit _id=this._id status=this.status}}
+      {{> NC_WorkflowType
+          workflowType=this.workflowType}}
 
-      {{> Fields_Standards_Edit _id=this._id isEditable=isStandardsEditable standardsIds=this.standardsIds}}
+      {{> NC_Status_Edit
+          _id=this._id
+          status=this.status}}
 
-      {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
+      {{> Fields_Standards_Edit
+          _id=this._id
+          isEditable=isStandardsEditable
+          standardsIds=this.standardsIds}}
 
-      {{> NC_IdentifiedBy_Edit _id=this._id identifiedBy=this.identifiedBy}}
+      {{> Departments_Edit
+          _id=this._id
+          departmentsIds=this.departmentsIds}}
 
-      {{> NC_IdentifiedDate_Edit _id=this._id identifiedAt=this.identifiedAt}}
+      {{> NC_IdentifiedBy_Edit
+          _id=this._id
+          identifiedBy=this.identifiedBy}}
 
-      {{> NC_Magnitude_Edit _id=this._id magnitude=this.magnitude}}
+      {{> NC_IdentifiedDate_Edit
+          _id=this._id
+          identifiedAt=this.identifiedAt}}
 
-      {{> NC_Cost_Edit _id=this._id cost=this.cost}}
+      {{> Problems_Magnitude_Edit
+          _id=this._id
+          magnitude=this.magnitude
+          guidelines=NCGuidelines}}
 
-      {{> NC_Ref_Edit _id=this._id text=this.ref.text url=this.ref.url}}
+      {{> NC_Cost_Edit
+          _id=this._id
+          cost=this.cost}}
+
+      {{> NC_Ref_Edit
+          _id=this._id
+          text=this.ref.text
+          url=this.ref.url}}
     </div>
 
-    {{> Subcards_RootCauseAnalysis_Edit
-        _id=this._id
-        analysis=this.analysis
-        updateOfStandards=this.updateOfStandards
-        magnitude=this.magnitude}}
+    {{#if showRootCauseAnalysis}}
+      {{> Subcards_RCA_Edit
+          _id=this._id
+          analysis=this.analysis
+          updateOfStandards=this.updateOfStandards
+          magnitude=this.magnitude}}
+    {{/if}}
   {{/with}}
 </template>

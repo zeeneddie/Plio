@@ -1,0 +1,29 @@
+<template name="OrgSettings_WorkflowDefault">
+  <legend>{{title}}</legend>
+  <div class="form-group row">
+    <label class="form-control-label col-sm-4 col-xs-12">
+      Type
+    </label>
+    <div class="col-sm-4 col-xs-12">
+      {{> Select_Single
+          variation='caret'
+          items=workflows
+          selected=workflowType
+          selectFirstIfNoSelected=false
+          onUpdate=onWorkflowTypeChangeCb
+          type=type}}
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="form-control-label col-sm-4 col-xs-12">
+      Default step time
+    </label>
+    <div class="col-sm-4 col-xs-12">
+      {{> TimePicker
+          timeValue=stepTime.timeValue
+          timeUnit=stepTime.timeUnit
+          onChange=onStepTimeChangeCb
+          type=type}}
+    </div>
+  </div>
+</template>

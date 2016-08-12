@@ -1,6 +1,6 @@
-<template name="StandardsCard">
-  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
-    {{#if hasStandards}}
+<template name="Standards_Card_Read">
+  <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode }"}}>
+    {{#if standards.count}}
       {{#with standard}}
         <div class="card standard-details">
           <div class="card-block card-heading">
@@ -10,6 +10,10 @@
                   <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
                   </a>
                 {{/if}}
+                <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}">
+  								<i class="fa fa-comments"></i>
+  								<span class="label label-danger label-chat-count"></span>
+  							</a>
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore
@@ -84,7 +88,7 @@
 
                 </div>
 
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
 

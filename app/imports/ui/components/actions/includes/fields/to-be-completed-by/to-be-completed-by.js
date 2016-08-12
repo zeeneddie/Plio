@@ -7,37 +7,28 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   toBeCompletedBy: '',
   placeholder: 'To be completed by',
   selectFirstIfNoSelected: false,
-  canCompletionFormBeShown: false,
   completionComments: '',
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected } = viewmodel.getData();
+    const { selected:userId } = viewmodel.getData();
 
-    this.toBeCompletedBy(selected);
+    this.toBeCompletedBy(userId);
 
-    this.parent().update && this.parent().update({ toBeCompletedBy: selected });
+    if (!this._id) return;
+
+    this.onUpdate({ userId });
   },
   canBeCompleted() {
     return !!this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
   },
-  isCompleteButtonVisible() {
-    return this.canBeCompleted();
-  },
-  isCompletionFormVisible() {
-    return this.canBeCompleted() && this.canCompletionFormBeShown();
-  },
-  showCompletionForm() {
-    this.canCompletionFormBeShown(true);
-  },
-  hideCompletionForm() {
-    this.canCompletionFormBeShown(false);
-  },
   complete() {
-    this.onComplete && this.onComplete({
-      completionComments: this.completionComments()
-    });
+    return (viewmodel) => {
+      const { text:completionComments } = viewmodel.getData();
+      
+      this.onComplete && this.onComplete({ completionComments });
+    };
   },
   getData() {
     return { toBeCompletedBy: this.toBeCompletedBy() };

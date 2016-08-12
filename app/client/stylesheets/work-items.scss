@@ -1,0 +1,11 @@
+.qa-panel {
+  .qa-buttons {
+    button {
+      line-height: 29px;
+    }
+
+    @media (max-width: 543px) {
+      margin-top: 10px;
+    }
+  }
+}

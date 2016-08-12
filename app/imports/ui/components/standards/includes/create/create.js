@@ -13,13 +13,19 @@ Template.CreateStandard.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         let errorMessage;
-        if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new type in Org settings`;
+        if (key === 'title') {
+          errorMessage = `The new standard cannot be created without a title. Please enter a title for your standard`;
+          this.modal().setError(errorMessage);
+          return;
         } else if (key === 'sectionId') {
           errorMessage = `The new standard cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          this.modal().setError(errorMessage);
+          return;
+        } else if (key === 'typeId') {
+          errorMessage = `The new standard cannot be created without a type. You can create a new type in Org settings`;
+          this.modal().setError(errorMessage);
+          return;
         }
-        this.modal().setError(errorMessage);
-        return;
       }
     }
 
@@ -58,15 +64,6 @@ Template.CreateStandard.viewmodel({
       if (err) {
         return;
       }
-
-      addedToNotifyList.call({
-        standardId: _id,
-        userId: args.owner
-      }, (err, res) => {
-        if (err) {
-          Utils.showError('Failed to send email to standard\'s owner');
-        }
-      });
 
       this.modal().close();
 

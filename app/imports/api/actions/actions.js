@@ -3,7 +3,11 @@ import { Mongo } from 'meteor/mongo';
 import { ActionSchema } from './action-schema.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import { ActionUndoTimeInHours, ProblemTypes } from '../constants.js';
+import { WorkItems } from '../work-items/work-items.js';
+import {
+  ActionUndoTimeInHours, ProblemMagnitudes,
+  ProblemTypes, WorkflowTypes
+} from '../constants.js';
 import { compareDates } from '../helpers.js';
 
 
@@ -32,7 +36,7 @@ Actions.helpers({
     }).fetch();
   },
   getLinkedRisksIds() {
-    return getProbemDocsIds(this.linkedTo, ProblemTypes.RISK);
+    return getLinkedDocsIds(this.linkedTo, ProblemTypes.RISK);
   },
   getLinkedRisks() {
     return Risks.find({
@@ -41,18 +45,19 @@ Actions.helpers({
       }
     }).fetch();
   },
+  getLinkedDocuments() {
+    return this.getLinkedNCs().concat(this.getLinkedRisks());
+  },
   canBeCompleted() {
-    return _.every([
-      this.isCompleted === false,
-      this.isVerified === false
-    ]);
+    const { isCompleted, isVerified } = this;
+    return (isCompleted === false) && (isVerified === false);
   },
   canCompletionBeUndone() {
-    const completedAt = this.completedAt;
+    const { isCompleted, isVerified, completedAt } = this;
 
     if (!_.every([
-          this.isCompleted === true,
-          this.isVerified === false,
+          isCompleted === true,
+          isVerified === false,
           _.isDate(completedAt)
         ])) {
       return false;
@@ -64,15 +69,13 @@ Actions.helpers({
     return compareDates(undoDeadline, new Date()) === 1;
   },
   canBeVerified() {
-    return _.every([
-      this.isCompleted === true,
-      this.isVerified === false
-    ]);
+    const { isCompleted, isVerified } = this;
+    return (isCompleted === true) && (isVerified === false);
   },
   canVerificationBeUndone() {
-    const verifiedAt = this.verifiedAt;
+    const { isVerified, verifiedAt } = this;
 
-    if (!(this.isVerified === true && _.isDate(verifiedAt))) {
+    if (!(isVerified === true && _.isDate(verifiedAt))) {
       return false;
     }
 
@@ -85,6 +88,46 @@ Actions.helpers({
     return !!_.find(this.linkedTo, ({ documentId, documentType }) => {
       return (documentId === docId) && (documentType === docType);
     });
+  },
+  completed() {
+    const { isCompleted, completedAt, completedBy } = this;
+    return (isCompleted === true) && completedAt && completedBy;
+  },
+  verified() {
+    const { isVerified, verifiedAt, verifiedBy } = this;
+    return (isVerified === true) && verifiedAt && verifiedBy;
+  },
+  verifiedAsEffective() {
+    return this.verified() && (this.isVerifiedAsEffective === true);
+  },
+  deleted() {
+    const { isDeleted, deletedAt, deletedBy } = this;
+    return (isDeleted === true) && deletedAt && deletedBy;
+  },
+  getWorkflowType() {
+    // Action has 6-step workflow if at least one linked document has 6-step workflow
+    const { linkedTo } = this;
+
+    if (!linkedTo || !linkedTo.length) {
+      return WorkflowTypes.THREE_STEP;
+    }
+
+    const query = {
+      isDeleted: false,
+      deletedAt: { $exists: false },
+      deletedBy: { $exists: false },
+      workflowType: WorkflowTypes.SIX_STEP
+    };
+
+    const ncQuery = _.extend({ _id: { $in: this.getLinkedNCsIds() } }, query);
+    const riskQuery = _.extend({ _id: { $in: this.getLinkedRisksIds() } }, query);
+
+    const sixStepDoc = NonConformities.findOne(ncQuery) || Risks.findOne(riskQuery);
+
+    return sixStepDoc ? WorkflowTypes.SIX_STEP : WorkflowTypes.THREE_STEP;
+  },
+  getWorkItems() {
+    return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
   }
 });
 

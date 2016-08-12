@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
+import moment from 'moment-timezone';
 
 import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import {
@@ -15,13 +17,20 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setCompletionExecutor,
+  setVerificationDate,
+  setVerificationExecutor
 } from '/imports/api/actions/methods.js';
 
 
 Template.Subcards_Actions_Edit.viewmodel({
-  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'action', 'utils'],
+  mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
+  renderContentOnInitial() {
+    return !(this.actions().count() > 5);
+  },
   title() {
     return pluralize(this._getNameByType(this.type()));
   },
@@ -31,8 +40,8 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   actionsIndicators() {
     const actions = this.actions().fetch();
-    const amber = actions.filter(({ status }) => [1, 4].includes(status));
-    const red = actions.filter(({ status }) => [2, 5, 6].includes(status));
+    const amber = actions.filter(({ status }) => [2, 5].includes(status));
+    const red = actions.filter(({ status }) => [3, 6, 7].includes(status));
     const count = array => array.length > 0 ? array.length : '';
     const generateHtml = (array, color) => count(array) ? `<span class="hidden-xs-down">${count(array)}</span>
                                                            <i class="fa fa-circle text-${color} margin-left"></i> `
@@ -123,12 +132,12 @@ Template.Subcards_Actions_Edit.viewmodel({
       _.extend(newSubcardData, { standardId });
     }
 
-    this.addForm('SubCard_Edit', newSubcardData);
+    this.addForm('Subcard', newSubcardData);
   },
   insertFn() {
     return this.insert.bind(this);
   },
-  insert({ _id, linkTo, ...args }, cb) {
+  insert({ _id, linkTo, completionTargetDate, ...args }, cb) {
     if (_id) {
       let documentId, documentType;
 
@@ -146,9 +155,13 @@ Template.Subcards_Actions_Edit.viewmodel({
     } else {
       const organizationId = this.organizationId();
 
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(completionTargetDate, timezone);
+
       this.modal().callMethod(insert, {
         organizationId,
         type: this.type(),
+        completionTargetDate: tzDate,
         ...args
       }, cb);
     }
@@ -193,25 +206,11 @@ Template.Subcards_Actions_Edit.viewmodel({
   removeFn() {
     return this.remove.bind(this);
   },
-  onComplete() {
-    return () => {
-      this.child('SubCard_Edit').callUpdate(this.completeFn, {
-        _id: this._id()
-      });
-    };
-  },
   completeFn() {
     return this.complete.bind(this);
   },
   complete({ ...args }, cb) {
     this.modal().callMethod(complete, { ...args }, cb);
-  },
-  onUndoCompletion() {
-    return () => {
-      this.child('SubCard_Edit').callUpdate(this.undoCompletionFn, {
-        _id: this._id()
-      });
-    };
   },
   undoCompletionFn() {
     return this.undoCompletion.bind(this);
@@ -219,25 +218,11 @@ Template.Subcards_Actions_Edit.viewmodel({
   undoCompletion({ ...args }, cb) {
     this.modal().callMethod(undoCompletion, { ...args }, cb);
   },
-  onVerify() {
-    return () => {
-      this.child('SubCard_Edit').callUpdate(this.verifyFn, {
-        _id: this._id()
-      });
-    };
-  },
   verifyFn() {
     return this.verify.bind(this);
   },
   verify({ ...args }, cb) {
     this.modal().callMethod(verify, { ...args }, cb);
-  },
-  onUndoVerification() {
-    return () => {
-      this.child('SubCard_Edit').callUpdate(this.undoVerificationFn, {
-        _id: this._id()
-      });
-    };
   },
   undoVerificationFn() {
     return this.undoVerification.bind(this);
@@ -256,5 +241,41 @@ Template.Subcards_Actions_Edit.viewmodel({
   },
   unlinkDocument({ ...args }, cb) {
     this.modal().callMethod(unlinkDocument, { ...args }, cb);
-  }
+  },
+  updateCompletionDateFn() {
+    return this.updateCompletionDate.bind(this);
+  },
+  updateCompletionDate({ targetDate, ...args }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(targetDate, timezone);
+
+    this.modal().callMethod(setCompletionDate, {
+      targetDate: tzDate,
+      ...args
+    }, cb);
+  },
+  updateCompletionExecutorFn() {
+    return this.updateCompletionExecutor.bind(this);
+  },
+  updateCompletionExecutor({ ...args }, cb) {
+    this.modal().callMethod(setCompletionExecutor, { ...args }, cb);
+  },
+  updateVerificationDateFn() {
+    return this.updateVerificationDate.bind(this);
+  },
+  updateVerificationDate({ targetDate, ...args }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(targetDate, timezone);
+
+    this.modal().callMethod(setVerificationDate, {
+      targetDate: tzDate,
+      ...args
+    }, cb);
+  },
+  updateVerificationExecutorFn() {
+    return this.updateVerificationExecutor.bind(this);
+  },
+  updateVerificationExecutor({ ...args }, cb) {
+    this.modal().callMethod(setVerificationExecutor, { ...args }, cb);
+  },
 });

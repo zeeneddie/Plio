@@ -39,6 +39,10 @@ Template.Actions_CompletedBy.viewmodel({
 
     this.parent().update && this.parent().update({ completedBy });
   },
+  onUndo() {},
+  undo() {
+    return (...args) => this.onUndo(...args);
+  },
   canBeUndone() {
     const currentTime = this.currentTime();
     const undoDeadline = this.undoDeadline();
@@ -55,6 +59,9 @@ Template.Actions_CompletedBy.viewmodel({
   },
   leftToUndo() {
     return moment(this.undoDeadline()).to(this.currentTime(), true);
+  },
+  isDisabled() {
+    return !this.enabled();
   },
   getData() {
     return { completedBy: this.completedBy() };

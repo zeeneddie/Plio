@@ -1,45 +1,45 @@
-<template name="EditRisk">
+<template name="Risks_Card_Edit">
   <div>
     <div class="relative">
       {{#with risk}}
-        <div class="card-block">
-          {{> NC_Title_Edit _id=this._id titleText=this.title sequentialId=this.sequentialId label="Risk name"}}
+        {{> Risk_Card_Edit_Main
+            risk=this
+            updateAnalysisExecutor=getUpdateAnalysisExecutorFn
+            updateAnalysisDate=getUpdateAnalysisDateFn
+            completeAnalysis=getCompleteAnalysisFn
+            undoAnalysis=getUndoAnalysisFn
+            updateStandardsExecutor=getUpdateStandardsExecutorFn
+            updateStandardsDate=getUpdateStandardsDateFn
+            updateStandards=getUpdateStandardsFn
+            undoStandardsUpdate=getUndoStandardsUpdateFn}}
 
-          {{> ES_Description_Edit _id=this._id description=this.description}}
-
-          {{> NC_Status_Edit _id=this._id status=this.status}}
-
-          {{> Fields_Standards_Edit _id=this._id standardsIds=this.standardsIds}}
-
-          {{> Departments_Edit _id=this._id departmentsIds=this.departments}}
-
-          {{> NC_IdentifiedBy_Edit _id=this._id identifiedBy=this.identifiedBy}}
-
-          {{> NC_IdentifiedDate_Edit _id=this._id identifiedAt=this.identifiedAt}}
-
-          {{> NC_Magnitude_Edit _id=this._id magnitude=this.magnitude}}
-
-          {{> RKType _id=this._id typeId=this.typeId}}
-        </div>
-
-        {{> Subcards_RootCauseAnalysis_Edit
-            _id=this._id
-            analysis=this.analysis
-            updateOfStandards=this.updateOfStandards
-            magnitude=this.magnitude}}
+        {{#if showRootCauseAnalysis}}
+          {{> Subcards_RCA_Edit
+              _id=this._id
+              analysis=this.analysis
+              updateOfStandards=this.updateOfStandards
+              magnitude=this.magnitude}}
+        {{/if}}
 
         {{> Subcards_Notify_Edit
-            document=this
+            doc=this
             documentType="risk"
             onUpdate=onUpdateNotifyUserCb}}
 
-        {{> Subcards_RiskAnalysis_Edit
+        {{> Subcards_RiskScoring_Edit
             _id=this._id
-            score=this.score}}
+            scores=this.scores
+            onInsert=onInsertScoreCb
+            onRemove=onRemoveScoreCb}}
 
-        {{> Subcards_TreatmentPlan_Edit
+        {{> Subcards_RiskEvaluation_Edit
             _id=this._id
-            treatmentPlan=this.treatmentPlan}}
+            riskEvaluation=this.riskEvaluation}}
+
+        {{> Subcards_ImprovementPlan_Edit
+            label="Treatment plan"
+            documentId=this._id
+            documentType="risk"}}
 
         {{> Subcards_Actions_Edit
             type="CA"
@@ -62,6 +62,11 @@
             files=this.files
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
+
+        {{> Subcards_Review_Edit
+            _id=this._id
+            review=this.review
+            onUpdate=onUpdateCb}}
       {{/with}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>

@@ -1,20 +1,22 @@
 import { Template } from 'meteor/templating';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { update, remove } from '/imports/api/risks/methods.js';
+import { restore, remove } from '/imports/api/risks/methods.js';
 
-Template.RisksCard.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
-  hasRisks() {
-    return this.risks().count() > 0;
+Template.Risks_Card_Read.viewmodel({
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
+  ActionTypes() {
+    return ActionTypes;
   },
   risks() {
-    const list = ViewModel.findOne('RisksList');
+    const list = ViewModel.findOne('Risks_List');
     const query = list && list._getQueryForFilter();
     return this._getRisksByQuery(query);
   },
   risk() {
-    return this._getRiskByQuery({ _id: this.riskId() });
+    return this._getRiskByQuery({ _id: this._id() });
   },
   renderType(_id) {
     const type = RiskTypes.findOne({ _id });
@@ -26,8 +28,8 @@ Template.RisksCard.viewmodel({
   openEditModal() {
     this.modal().open({
       _title: 'Risk',
-      template: 'EditRisk',
-      _id: this.riskId()
+      template: 'Risks_Card_Edit',
+      _id: this.risk() && this.risk()._id
     });
   },
   onRestoreCb() {
@@ -46,7 +48,7 @@ Template.RisksCard.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);

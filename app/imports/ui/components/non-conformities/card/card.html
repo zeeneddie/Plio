@@ -2,8 +2,9 @@
   <div class="content-cards-inner flex scroll">
     {{#if hasNCs}}
       {{#Card_Read
+        isReadOnly=isReadOnly
         cardTitle="Non-conformity"
-        document=NC
+        doc=NC
         onRestore=onRestoreCb
         onDelete=onDeleteCb
         onOpenEditModal=onOpenEditModalCb}}
@@ -70,7 +71,7 @@
 
             <div class="row">
               <div class="col-sm-12">
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
               </div>
@@ -109,7 +110,7 @@
           {{#if isActiveNCFilter 'deleted'}}
             <h5>There are no deleted non-conformities yet.</h5>
           {{else}}
-            {{#if isActiveNCFilter 'department'}}
+            {{#if isActiveNCFilter 'department/sector'}}
               <h5>There are no non-conformities with departments yet.</h5>
             {{else}}
               <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>

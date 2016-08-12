@@ -1,10 +1,19 @@
 import { Template } from 'meteor/templating';
-import { insert, update, remove } from '/imports/api/non-conformities/methods.js';
+import {
+  insert, update, remove,
+  setAnalysisDate, completeAnalysis, undoAnalysis,
+  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
+} from '/imports/api/non-conformities/methods.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
 
 Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
   _query: {},
   isStandardsEditable: false,
+  renderContentOnInitial() {
+    return !(this.NCs().count() > 5);
+  },
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
   },
@@ -13,9 +22,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   },
   addNC() {
     this.addForm(
-      'SubCard_Edit',
+      'Subcard',
       {
-        content: 'CreateNC',
+        content: 'NC_Create',
         isStandardsEditable: this.isStandardsEditable(),
         standardsIds: [this._id && this._id()],
         _lText: 'New non-conformity',
@@ -74,5 +83,47 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         }
       );
     }
+  },
+  updateAnalysisDateFn() {
+    return this.updateAnalysisDate.bind(this);
+  },
+  updateAnalysisDate({ _id, date }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
+  },
+  completeAnalysisFn() {
+    return this.completeAnalysis.bind(this);
+  },
+  completeAnalysis({ _id }, cb) {
+    this.modal().callMethod(completeAnalysis, { _id }, cb);
+  },
+  undoAnalysisFn() {
+    return this.undoAnalysis.bind(this);
+  },
+  undoAnalysis({ _id }, cb) {
+    this.modal().callMethod(undoAnalysis, { _id }, cb);
+  },
+  updateStandardsDateFn() {
+    return this.updateStandardsDate.bind(this);
+  },
+  updateStandardsDate({ _id, date }, cb) {
+    const { timezone } = this.organization();
+    const tzDate = getTzTargetDate(date, timezone);
+
+    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
+  },
+  updateStandardsFn() {
+    return this.updateStandards.bind(this);
+  },
+  updateStandards({ _id }, cb) {
+    this.modal().callMethod(updateStandards, { _id }, cb);
+  },
+  undoStandardsUpdateFn() {
+    return this.undoStandardsUpdate.bind(this);
+  },
+  undoStandardsUpdate({ _id }, cb) {
+    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
   },
 });

@@ -9,7 +9,7 @@ Template.Actions_SelectExisting.viewmodel({
   actionId: '',
   linkTo: '',
   actionSearchText() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   actions() {

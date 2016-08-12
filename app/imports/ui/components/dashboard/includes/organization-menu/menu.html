@@ -1,0 +1,26 @@
+<template name="Organization_Menu">
+  <ul class="nav navbar-nav pull-xs-left">
+    <li class="nav-item dropdown dropdown-company hidden-sm-down">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+        {{#with organization}}
+          <span class="hidden-xs-down org-name" {{b "text: this.name"}}></span>
+        {{/with}}
+        <i class="fa fa-building hidden-sm-up"></i>
+      </a>
+      <div class="dropdown-menu">
+        {{#each organizations}}
+          {{> Organization_Menu_Item}}
+        {{/each}}
+        {{#if canEditOrgSettings organizationId}}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item org-settings-modal-link"
+            {{b "click: openOrgSettings"}}>
+            Org settings
+          </a>
+        {{/if}}
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item pointer" {{b "click: openCreateNewOrgModal"}}>Create new Plio organization</a>
+      </div>
+    </li>
+  </ul>
+</template>

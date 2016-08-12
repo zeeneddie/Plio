@@ -1,0 +1,18 @@
+<template name="Discussion_Messages">
+	<div class="chat-content scroll">
+		<div class="chat-messages">
+			{{#if messages.length}}
+				{{#with messages.[0]}}
+					<div class="chat-item chat-item-start">
+						<p class="chat-item-text">
+							This discussion was started by <strong>{{name}}</strong> on <strong>{{date}}</strong>
+						</p>
+					</div>
+				{{/with}}
+				{{#each messages}}
+					{{> Discussion_Message}}
+				{{/each}}
+			{{/if}}
+		</div>
+	</div>
+</template>

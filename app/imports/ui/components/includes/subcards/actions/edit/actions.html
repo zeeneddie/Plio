@@ -1,11 +1,15 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCard_EditWrapper _lText=title _rText=actionsIndicators}}
+  {{#Subcards_Wrapper
+    _lText=title
+    _rText=actionsIndicators
+    renderContentOnInitial=renderContentOnInitial}}
     <div class="card-block">
       {{#if actions.count}}
         <div id="actions" class="card">
           {{#each actions}}
-            {{> SubCard_Edit
+            {{> Subcard
                 _id=this._id
+                doc=this
                 action=this
                 type=type
                 isLinkedToEditable=true
@@ -16,13 +20,17 @@
                 removeFn=removeFn
                 updateFn=updateFn
                 completeFn=completeFn
-                undoCompletionFn=undoCompletionFn
                 verifyFn=verifyFn
+                undoCompletionFn=undoCompletionFn
                 undoVerificationFn=undoVerificationFn
                 linkStandardFn=linkStandardFn
                 unlinkStandardFn=unlinkStandardFn
                 linkDocumentFn=linkDocumentFn
                 unlinkDocumentFn=unlinkDocumentFn
+                updateCompletionDateFn=updateCompletionDateFn
+                updateCompletionExecutorFn=updateCompletionExecutorFn
+                updateVerificationDateFn=updateVerificationDateFn
+                updateVerificationExecutorFn=updateVerificationExecutorFn
                 standardId=standardId}}
           {{/each}}
         </div>
@@ -32,5 +40,5 @@
         <button type="button" class="btn btn-link" {{b "text: addButtonText, click: addAction"}}></button>
       </div>
     </div>
-  {{/SubCard_EditWrapper}}
+  {{/Subcards_Wrapper}}
 </template>

@@ -5,16 +5,17 @@ import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-pla
 Template.Subcards_ImprovementPlan_Read.viewmodel({
   mixin: ['user', 'date'],
   autorun() {
-    this.load(this.document());
+    this.load(this.doc());
   },
   documentId: '',
   documentType: '',
+  label: 'Improvement plan',
   desiredOutcome: '',
   targetDate: '',
   owner: '',
   reviewDates: [],
   files: [],
-  document() {
+  doc() {
     return ImprovementPlans.findOne({ documentId: this.documentId() });
   },
   IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {

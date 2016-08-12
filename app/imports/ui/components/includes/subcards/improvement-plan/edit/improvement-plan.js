@@ -7,10 +7,12 @@ import { insert, update } from '/imports/api/improvement-plans/methods.js';
 Template.Subcards_ImprovementPlan_Edit.viewmodel({
   mixin: ['collapse', 'modal'],
   autorun() {
-    this.load(this.document());
+    this.load(this.doc());
   },
   documentId: '',
   documentType: '',
+  label: 'Improvement plan',
+  _id: '',
   desiredOutcome: '',
   targetDate: '',
   owner: '',
@@ -22,7 +24,7 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   getTextIndicator() {
     return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';
   },
-  document() {
+  doc() {
     return ImprovementPlans.findOne({ documentId: this.documentId() });
   },
   insert({ ...args }, cb) {
@@ -32,12 +34,11 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
     this.modal().callMethod(insert, { documentId, documentType, ...args }, cb);
   },
   update({ query = {}, options = {}, ...args }, cb) {
-
-    if (!this.document()) {
+    if (!this.doc()) {
       return this.insert({ ...args }, cb);
     }
 
-    const _id = this.document() && this.document()._id;
+    const _id = this.doc() && this.doc()._id;
 
     const allArgs = { ...args, _id, options, query };
 

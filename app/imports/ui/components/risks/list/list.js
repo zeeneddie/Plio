@@ -1,17 +1,19 @@
 import { Template } from 'meteor/templating';
+import { get, head } from 'lodash';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemsStatuses } from '/imports/api/constants.js';
 
-Template.RisksList.viewmodel({
+Template.Risks_List.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router'],
+  mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router', 'utils'],
   autorun() {
-    if (!this.focused() && !this.animating() && !this.searchText()) {
+    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });
+
       if (!contains) {
         const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() });
 
@@ -19,32 +21,29 @@ Template.RisksList.viewmodel({
           const { _id } = risk;
           Meteor.setTimeout(() => {
             this.goToRisk(_id);
-            this.expandCollapsed(this.riskId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
             this.goToRisks();
-          }, 0)
+          }, 0);
         }
       }
     }
   },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    this.expandCollapsed(this.riskId());
-  },
-  _getQueryForFilter() {
+  _getQueryForFilter(withSearchQuery) {
     switch(this.activeRiskFilter()) {
       case 'type':
-        return { typeId: { $in: this.types().map(({ _id }) => _id) } };
+        return { typeId: { $in: this.types(withSearchQuery).map(({ _id }) => _id) } };
         break;
       case 'status':
-        return { status: { $in: this.statuses() } };
+        return { status: { $in: this.statuses(withSearchQuery) } };
         break;
-      case 'department':
-        return { departments: { $in: this.departments().map(({ _id }) => _id) } };
+      case 'department/sector':
+        return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
+        break;
+      case 'deleted':
+        return { isDeleted: true };
         break;
       default:
         return {};
@@ -54,107 +53,76 @@ Template.RisksList.viewmodel({
   _getFirstRiskQueryForFilter() {
     switch(this.activeRiskFilter()) {
       case 'type':
-        return { typeId: this.types().length > 0 && this.types()[0]._id };
+        return { typeId: get(head(this.types()), '_id') };
         break;
       case 'status':
-        return { status: this.statuses().length > 0 && this.statuses()[0] };
+        return { status: head(this.statuses()) };
         break;
-      case 'department':
-        return { departments: this.departments().length > 0 && this.departments().map(({ _id }) => _id)[0] };
+      case 'department/sector':
+        return { departmentsIds: get(head(this.departments()), '_id') };
         break;
       case 'deleted':
-        return { _id: this.risksDeleted().count() > 0 && this.risksDeleted().fetch()[0]._id };
+        return { _id: get(head(this.risksDeleted()), '_id') };
         break;
       default:
         return {};
         break;
     };
   },
-  _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
+  _getSearchQuery(bool = true) {
+    return bool ? this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]) : {};
   },
   _getTypeQuery({ _id:typeId }) {
     return { typeId };
   },
-  types() {
+  types(withSearchQuery) {
     const organizationId = this.organizationId();
     const query = { organizationId };
     const options = { sort: { title: 1 } };
     return RiskTypes.find(query, options).fetch().filter(({ _id:typeId }) => {
-      return this._getRisksByQuery({ typeId, ...this._getSearchQuery() }).count() > 0;
+      return this._getRisksByQuery({ typeId, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
   _getStatusQuery(status) {
     return { status };
   },
-  statuses() {
+  statuses(withSearchQuery) {
     return _.keys(ProblemsStatuses)
             .map(status => parseInt(status, 10))
-            .filter(status => this._getRisksByQuery({ status, ...this._getSearchQuery() }).count() > 0);
+            .filter(status => this._getRisksByQuery({ status, ...this._getSearchQuery(withSearchQuery) }).count() > 0);
   },
-  _getDepartmentQuery({ _id:departments }) {
-    return { departments };
+  _getDepartmentQuery({ _id:departmentsIds }) {
+    return { departmentsIds };
   },
-  departments() {
+  departments(withSearchQuery) {
     const query = { organizationId: this.organizationId() };
     const options = { sort: { name: 1 } };
-    return Departments.find(query, options).fetch().filter(({ _id:departments }) => {
-      return this._getRisksByQuery({ departments, ...this._getSearchQuery() }).count() > 0;
+    return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
+      return this._getRisksByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
-  risksDeleted() {
-    const query = { ...this._getSearchQuery() };
+  risksDeleted(withSearchQuery) {
+    const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
-    return this._getRisksByQuery(query, options);
+    return this._getRisksByQuery(query, options).fetch();
   },
-  focused: false,
-  animating: false,
-  expandAllFound() {
-    const ids = _.flatten(ViewModel.find('RiskSectionItem').map(vm => vm.risks && vm.risks().fetch().map(item => item._id)));
+  onSearchInputValue() {
+    return (value) => {
+      if (this.isActiveRiskFilter('deleted')) {
+        return this.toArray(this.risksDeleted());
+      }
 
-    const vms = ViewModel.find('ListItem', (viewmodel) => {
-      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
-    });
-
-    this.searchResultsNumber(ids.length);
-
-    if (vms.length > 0) {
-      this.animating(true);
-
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.onAfterExpand()
+      const sections = ViewModel.find('Risks_SectionItem');
+      const ids = this.toArray(sections).map(vm => vm.risks && vm.risks().map(({ _id }) => _id));
+      return _.flatten(ids);
+    };
+  },
+  onModalOpen() {
+    return () =>
+      this.modal().open({
+        _title: 'Risk',
+        template: 'Risks_Create',
+        variation: 'save'
       });
-    }
-  },
-  expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.riskId()));
-
-    this.animating(true);
-
-    if (vms.length > 0) {
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => this.expandSelectedRisk()
-      });
-    } else {
-      this.expandSelectedRisk();
-    }
-  },
-  expandSelectedRisk() {
-    this.expandCollapsed(this.riskId(), () => {
-      this.onAfterExpand();
-    });
-  },
-  onAfterExpand() {
-    this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
-  },
-  openAddRiskModal() {
-    this.modal().open({
-      _title: 'Risk',
-      template: 'CreateRisk',
-      variation: 'save'
-    });
   }
 });

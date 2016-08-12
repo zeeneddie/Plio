@@ -1,0 +1,29 @@
+<template name="UserDirectory_List">
+  <div class="content-list scroll col-sm-4" {{b "if: !width || width > 768"}}>
+    <div class="card">
+      <form class="search-form">
+        <div class="form-group row">
+          {{#ClearableField field="searchText"}}
+            <input type="text" class="form-control" placeholder="Search..."
+                {{b "value: searchText, throttle: 400"}} />
+          {{/ClearableField}}
+        </div>
+        {{#if canInviteUsers organizationId}}
+          <a class="btn btn-primary pointer" {{b "click: onInviteClick"}}>
+            <i class="fa fa-plus"></i>
+            <span>Invite</span>
+          </a>
+        {{/if}}
+      </form>
+      <div class="list-group" id="usersList">
+        {{#each organizationUsers}}
+          {{> UserDirectory_List_Item}}
+        {{/each}}
+
+        {{#if searchText}}
+          <div class="list-group-item list-group-subheading search-results-meta text-muted" {{b "text: searchResultsText"}}></div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>

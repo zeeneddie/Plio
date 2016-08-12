@@ -2,10 +2,13 @@ import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/non-conformities/methods.js';
 
-Template.CreateNC.viewmodel({
+Template.NC_Create.viewmodel({
   mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
   isStandardsEditable: true,
   standardsIds: [],
+  NCGuidelines() {
+    return this.organization().ncGuidelines;
+  },
   save() {
     const data = this.getData();
 
@@ -40,7 +43,7 @@ Template.CreateNC.viewmodel({
 
           this.modal().open({
             _id,
-            title: 'Non-conformity',
+            _title: 'Non-conformity',
             template: 'NC_Card_Edit'
           });
         }, 400);

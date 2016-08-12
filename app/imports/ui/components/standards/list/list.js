@@ -4,10 +4,10 @@ import { StandardsBookSections } from '/imports/api/standards-book-sections/stan
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 
 Template.StandardsList.viewmodel({
-  share: ['search', 'standard'],
-  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router'],
+  share: 'search',
+  mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router', 'utils'],
   autorun() {
-    if (!this.focused() && !this.animating() && !this.searchText()) {
+    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
 
       const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
@@ -29,12 +29,6 @@ Template.StandardsList.viewmodel({
         }
       }
     }
-  },
-  onCreated() {
-    this.searchText('');
-  },
-  onRendered() {
-    this.expandCollapsed(this.standardId());
   },
   _getQueryForFilter() {
     switch(this.activeStandardFilter()) {
@@ -100,12 +94,10 @@ Template.StandardsList.viewmodel({
     });
   },
   standardsDeleted() {
-    const query = { ...this._getSearchQuery() };
+    const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getStandardsByQuery(query, options);
   },
-  focused: false,
-  animating: false,
   sortVms(vms, isTypesFirst = false) {
     const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
 
@@ -113,59 +105,29 @@ Template.StandardsList.viewmodel({
 
     return isTypesFirst ? types.concat(sections) : sections.concat(types);
   },
-  expandAllFound() {
-    const ids = _.flatten(
-      ViewModel.find('StandardSectionItem')
-                .map(vm => vm.standards && vm.standards().fetch().map(({ _id }) => _id))
-    );
-
-    const vms = ViewModel.find('ListItem', (viewmodel) => {
-      return !!viewmodel.collapsed() && this.findRecursive(viewmodel, ids);
+  _transform() {
+    return () => ({
+      onValue: vms => this.sortVms(vms, true),
+      onEmpty: vms => this.sortVms(vms, false)
     });
+  },
+  onSearchInputValue() {
+    return (value) => {
+      if (this.isActiveStandardFilter('deleted')) {
+        return this.toArray(this.standardsDeleted());
+      }
 
-    const vmsSorted = this.sortVms(vms, true); // to expand top level items first
-
-    this.searchResultsNumber(ids.length);
-
-    if (vmsSorted.length > 0) {
-      this.animating(true);
-
-      this.expandCollapseItems(vmsSorted, {
-        expandNotExpandable: true,
-        complete: () => this.onAfterExpand()
+      const sections = ViewModel.find('StandardSectionItem');
+      const ids = this.toArray(sections).map(vm => vm.standards && vm.standards().map(({ _id }) => _id));
+      return _.flatten(ids);
+    };
+  },
+  onModalOpen() {
+    return () =>
+      this.modal().open({
+        _title: 'Compliance standard',
+        template: 'CreateStandard',
+        variation: 'save'
       });
-    }
-  },
-  expandSelected() {
-    const vms = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, this.standardId()));
-
-    this.animating(true);
-
-    if (vms.length > 0) {
-      const vmsSorted = this.sortVms(vms);
-
-      this.expandCollapseItems(vmsSorted, {
-        expandNotExpandable: true,
-        complete: () => this.expandSelectedStandard()
-      });
-    } else {
-      this.expandSelectedStandard();
-    }
-  },
-  expandSelectedStandard() {
-    this.expandCollapsed(this.standardId(), () => {
-      this.onAfterExpand();
-    });
-  },
-  onAfterExpand() {
-    this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
-  },
-  openAddTypeModal(e) {
-    this.modal().open({
-      _title: 'Compliance standard',
-      template: 'CreateStandard',
-      variation: 'save'
-    });
   }
 });

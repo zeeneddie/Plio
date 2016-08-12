@@ -6,11 +6,9 @@ Template.FileItem.viewmodel({
   name: '',
   url: '',
   autorun() {
-    if (this.isNotUploaded()) {
+    if (!this.isUploaded()) {
       const progressWidth = 100 - this.progress();
-      this.templateInstance.$('.uploading-file').animate({
-        width: `${progressWidth}%`
-      });
+      this.templateInstance.$('.uploading-file').css({ 'width':  progressWidth + '%'})
     }
   },
   removeClickFn() {
@@ -19,8 +17,8 @@ Template.FileItem.viewmodel({
   onRemoveClick() {
     this.removeFile(this);
   },
-  isNotUploaded() {
-    return !this.url();
+  isUploaded() {
+    return this.url();
   },
   progress() {
     const uploader = this.uploader && this.uploader();

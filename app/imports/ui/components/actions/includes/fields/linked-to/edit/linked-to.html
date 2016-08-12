@@ -5,13 +5,14 @@
           selected=linkedDocs
           items=items
           placeholder=placeholder
+          isDeleteButtonVisible=isDeleteButtonVisible
           onUpdate=onUpdateFn
           onRemove=onRemoveFn}}
     {{else}}
       {{#each linkedDocs}}
         <div class="input-group">
           <span class="input-group-addon" {{b "text: this.sequentialId"}}></span>
-          <input type="text" class="form-control" {{b "value: this.title"}} disabled="" />
+          <input type="text" class="form-control" {{b "value: this.docTitle"}} disabled="" />
         </div>
       {{/each}}
     {{/if}}

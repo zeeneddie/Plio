@@ -4,6 +4,10 @@ import '../../api/organizations';
 
 import '../../api/departments';
 
+import '../../api/discussions';
+
+import '../../api/messages';
+
 import '../../api/standards-types';
 
 import '../../api/standards-book-sections';
@@ -26,6 +30,8 @@ import '../../api/problems';
 
 import '../../api/occurrences';
 
-import '../../api/analysis';
+import '../../api/notifications';
 
 import '../../api/mammoth';
+
+import '../../api/work-items';

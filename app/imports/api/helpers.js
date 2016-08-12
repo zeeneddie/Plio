@@ -1,13 +1,5 @@
-const handleMethodResult = (cb) => {
-  return (err, res) => {
-    if (err) {
-      toastr.error(err.reason);
-    }
-    if (_.isFunction(cb)) {
-      cb(err, res);
-    }
-  };
-};
+import moment from 'moment-timezone';
+
 
 const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
@@ -39,4 +31,30 @@ const compareDates = (date1, date2) => {
   }
 };
 
-export { handleMethodResult, compareDates };
+const getFormattedDate = (date, stringFormat) => {
+  return moment(date).format(stringFormat);
+};
+
+const getTzTargetDate = (targetDate, timezone) => {
+  return moment.tz([
+    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
+  ], timezone).toDate();
+};
+
+const handleMethodResult = (cb) => {
+  return (err, res) => {
+    if (err) {
+      toastr.error(err.reason);
+    }
+    if (_.isFunction(cb)) {
+      cb(err, res);
+    }
+  };
+};
+
+export {
+  compareDates,
+  getFormattedDate,
+  getTzTargetDate,
+  handleMethodResult
+};

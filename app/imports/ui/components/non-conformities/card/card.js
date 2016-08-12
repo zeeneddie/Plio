@@ -1,18 +1,20 @@
 import { Template } from 'meteor/templating';
 
+import { ActionTypes } from '/imports/api/constants.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
-  autorun() {
-    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
+  ActionTypes() {
+    return ActionTypes;
   },
   NC() {
-    return this._getNCByQuery({ _id: this.NCId() });
+    return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
-    const list = ViewModel.findOne('NCList');
+    const list = ViewModel.findOne('NC_List');
     const query = list && list._getQueryForFilter();
     return this._getNCsByQuery(query);
   },
@@ -33,7 +35,7 @@ Template.NC_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
-      _id: this.NCId()
+      _id: this.NC() && this.NC()._id
     });
   },
   onRestoreCb() {
@@ -52,7 +54,7 @@ Template.NC_Card_Read.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
+    restore.call({ _id }, callback);
   },
   onDeleteCb() {
     return this.delete.bind(this);
