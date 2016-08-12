@@ -9,6 +9,7 @@ import { getFormattedDate } from '/imports/api/helpers.js';
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
+
   /* The _id of the first discussion from the sorted list of discussions
    * for this standardId
   */
@@ -18,12 +19,11 @@ Template.Discussion_Messages.viewmodel({
 
 	messages() {
 		const messages = (() => {
-			const protection = {
-  			fields: { standardId: 0 },
+			const options = {
   			sort: { createdAt: 1 }
   		};
 
-			return this._getMessagesByDiscussionId(this.discussionId(), protection).fetch();
+			return this._getMessagesByDiscussionId(this.discussionId(), options).fetch();
 		})();
 
 		const messagesMapped = messages.map((message, i, arr) => {

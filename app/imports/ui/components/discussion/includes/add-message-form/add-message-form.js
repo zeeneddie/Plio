@@ -8,7 +8,9 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 
-
+/*
+ * @param {String} standardId // the ID of the current standard
+*/
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
@@ -19,7 +21,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 	addNewMessage() {
 		addMessage.call(
-			this.makeNewMessage(), handleMethodResult( () => {this.reset();} )
+			this.makeNewMessage(), handleMethodResult(() => this.reset())
 		);
 	},
 
@@ -48,45 +50,42 @@ Template.Discussion_AddMessage_Form.viewmodel({
   },
 
 	makeNewMessage(files) {
-		let discussionId = this.getDiscussionIdByStandardId(
-			this.standardId()
-		);
+		const discussionId = (() => {
+			const existingId = this.getDiscussionIdByStandardId(this.standardId());
 
-		if(!discussionId){
-			discussionId = addDiscussion.call(
-				{ documentType: DocumentTypes[0], linkedTo: this.standardId() },
-				handleMethodResult( () => {this.reset();} )
-			);
-		}
+			if (existingId) return existingId;
+
+			return (() => {
+				const args = {
+					documentType: DocumentTypes[0],
+					linkedTo: this.standardId()
+				};
+				return addDiscussion.call({ ...args }, handleMethodResult(() => this.reset()));
+			})();
+		})();
 
 		return {
-			createdAt: new Date(),
 			discussionId,
-			files: [],
-			message: this.messageText(),
-			userId: Meteor.userId(),
-			viewedBy: []
+			message: this.messageText()
 		};
 	},
 
-	onSubmit(ev){
-		ev.preventDefault();
+	onSubmit(e) {
+		e.preventDefault();
 
-		if( !Meteor.userId() ){
-			throw new Meteor.Error(
-				403, 'Unauthorized user cannot add messages to discussions'
+		if (!Meteor.userId()) return;
+
+		if (!this.standardId()) {
+			swal(
+				'Oops... Something went wrong',
+				'Discussion messages may be added to the particular standard only',
+				'error'
 			);
 		}
-		if( !this.standardId() ){
-			throw new Meteor.Error(
-				403, 'Discussion messages may be added to the particular standart only'
-			);
-		}
 
-		if(this.messageText() !== ''){
+		if (!!this.messageText()) {
 			this.addNewMessage();
-		}
-		else {
+		} else {
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},

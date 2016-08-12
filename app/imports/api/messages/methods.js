@@ -8,25 +8,34 @@ import { IdSchema, UserIdSchema } from '../schemas.js';
 
 export const addMessage = new ValidatedMethod({
 	name: 'Mesages.addMessage',
-	validate: MessagesSchema.validator(),
+	validate: MessagesSchema.pick(['message', 'discussionId']).validator(),
 
 	run(doc) {
-		if(!this.userId) {
+		const userId = this.userId;
+
+		if (!userId) {
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot add messages to discussions'
 			);
 		}
-
-		return MessagesService.addMessage(doc);
+		return MessagesService.addMessage({ ...doc, userId });
 	}
 });
 
 export const markMessageViewedById = new ValidatedMethod({
 	name: 'Messages.markMessageViewedById',
-	validate: new SimpleSchema([IdSchema, UserIdSchema]).validator(),
+	validate: new SimpleSchema([IdSchema]).validator(),
 
-	run(doc) {
-		return MessagesService.markMessageViewedById(doc);
+	run({ _id }) {
+		const userId = this.userId;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot update the discussions'
+			);
+		}
+
+		return MessagesService.markMessageViewedById({ _id, userId });
 	}
 });
 
@@ -34,13 +43,13 @@ export const removeMessageById = new ValidatedMethod({
 	name: 'Messages.removeMessageById',
 	validate: new SimpleSchema([IdSchema]).validator(),
 
-	run(doc) {
-		if(!this.userId){
+	run({ _id }) {
+		if (!this.userId) {
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot remove messages from discussions'
 			);
 		}
 
-		return MessagesService.removeMessageById(doc);
+		return MessagesService.removeMessageById({ _id });
 	}
 });

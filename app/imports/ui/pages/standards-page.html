@@ -4,8 +4,8 @@
       {{> StandardsList}}
     </div>
   {{/unless}}
-  <div class="content-cards hidden-sm-down scroll">
-    {{> Standards_Card_Read _id=standardId isDiscussionOpened=isDiscussionOpened}}
+  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
+    {{> Standards_Card_Read _id=standardId isDiscussionOpened=isDiscussionOpened}}}
   </div>
   {{#if isDiscussionOpened}}
     <div class="content-cards content-cards-flush scroll">
