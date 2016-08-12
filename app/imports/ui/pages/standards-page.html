@@ -4,11 +4,11 @@
       {{> StandardsList}}
     </div>
   {{/unless}}
-  <div class="content-cards hidden-sm-down scroll">
+  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
     {{> Standards_Card_Read _id=standardId}}
   </div>
   {{#if isDiscussionOpened}}
-    <div class="content-cards content-cards-flush hidden-sm-down scroll">
+    <div class="content-cards content-cards-flush scroll">
       {{> Discussion_Card _id=standardId isReady=isReady}}
     </div>
   {{/if}}

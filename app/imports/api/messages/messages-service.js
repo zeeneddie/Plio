@@ -3,9 +3,9 @@ import { Messages } from './messages.js';
 export default {
 	collection: Messages,
 
-	addMessage({ createdAt, discussionId, message, userId, viewedBy }) {
+	addMessage({ discussionId, message, userId }) {
 		return this.collection.insert({
-			createdAt, discussionId, message, userId, viewedBy
+			discussionId, message, userId
 		});
 	},
 

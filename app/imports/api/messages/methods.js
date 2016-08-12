@@ -9,16 +9,17 @@ import { IdSchema, UserIdSchema } from '../schemas.js';
 
 export const addMessage = new ValidatedMethod({
 	name: 'Mesages.addMessage',
-	validate: MessagesSchema.validator(),
+	validate: MessagesSchema.pick(['message', 'discussionId']).validator(),
 
 	run(doc) {
-		if (!this.userId) {
+		const userId = this.userId;
+
+		if (!userId) {
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot add messages to discussions'
 			);
 		}
-
-		return MessagesService.addMessage(doc);
+		return MessagesService.addMessage({ ...doc, userId });
 	}
 });
 
