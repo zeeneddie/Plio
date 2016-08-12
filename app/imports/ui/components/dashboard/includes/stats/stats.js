@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { CountSubs, WorkItemSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
 
 Template.Dashboard_WorkItemStats.viewmodel({
@@ -23,8 +24,8 @@ Template.Dashboard_WorkItemStats.viewmodel({
       const organizationId = this.organizationId();
 
       this._subHandlers([
-        template.subscribe('workItemsOverdue', this.organizationId(), limit),
-        template.subscribe('workItemsOverdueCount', 'work-items-overdue-count-' + organizationId, organizationId),
+        WorkItemSubs.subscribe('workItemsOverdue', this.organizationId(), limit),
+        CountSubs.subscribe('workItemsOverdueCount', 'work-items-overdue-count-' + organizationId, organizationId),
         template.subscribe('nonConformitiesByIds', ids),
         template.subscribe('risksByIds', ids),
         template.subscribe('actionsByIds', ids)
@@ -65,7 +66,14 @@ Template.Dashboard_WorkItemStats.viewmodel({
   },
   items() {
     const query = { status: 2 }; // Overdue
-    const options = { sort: { targetDate: -1 } }; // New overdue items first
+    const options = {
+      sort: {
+        targetDate: -1 // New overdue items first
+      }
+    };
+    if (this.enableLimit()) {
+      options.limit = this.limit();
+    }
     return this._getWorkItemsByQuery(query, options).fetch();
   },
   overdueItems() {
@@ -73,7 +81,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
     const docs = items.map((item) => {
       const time = `${moment(item.targetDate).from(this.currentDate(), true)} past due`;
       const { title, sequentialId } = Object.assign({}, item.getLinkedDoc());
-      const type = this.capitalize(item.type);
+      const type = item.type;
       const href = (() => {
         const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: item._id };
         const queryParams = this._getQueryParams(item)(Meteor.userId());
@@ -82,6 +90,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
 
       return {
         sequentialId,
+        title,
         type,
         time,
         href

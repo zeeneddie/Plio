@@ -72,6 +72,7 @@ const UserPreferencesSchema = new SimpleSchema({
   },
   notificationSound: {
     type: String,
+    defaultValue: '/sounds/graceful',
     optional: true
   }
 });

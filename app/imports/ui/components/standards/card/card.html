@@ -10,11 +10,12 @@
                   <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
                   </a>
                 {{/if}}
-                <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}"
-                  {{b "click: onDiscussionOpen"}}>
-  								<i class="fa fa-comments"></i>
-  								<span class="label label-danger label-chat-count"></span>
-  							</a>
+                {{#unless isDiscussionOpened}}
+                  <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}" {{b "click: onDiscussionOpen"}}>
+    								<i class="fa fa-comments"></i>
+    								<span class="label label-danger label-chat-count"></span>
+    							</a>
+                {{/unless}}
                 {{#if isDeleted}}
                   <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                     Restore

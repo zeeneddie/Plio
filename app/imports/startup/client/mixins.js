@@ -496,10 +496,6 @@ ViewModel.mixin({
       const query = { ...by };
       return WorkItems.findOne(query, options);
     },
-    _getWorkItemsByQuery(by, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by };
-      return WorkItems.find(query, options);
-    },
     _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);

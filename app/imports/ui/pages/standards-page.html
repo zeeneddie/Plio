@@ -5,7 +5,7 @@
     </div>
   {{/unless}}
   <div class="content-cards hidden-sm-down scroll" style={{styles}}>
-    {{> Standards_Card_Read _id=standardId}}
+    {{> Standards_Card_Read _id=standardId isDiscussionOpened=isDiscussionOpened}}
   </div>
   {{#if isDiscussionOpened}}
     <div class="content-cards content-cards-flush scroll">
