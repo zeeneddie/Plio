@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 Template.StandardsPage.viewmodel({
   share: 'window',
-  mixin: ['mobile', 'organization', 'standard'],
+  mixin: ['discussions', 'mobile', 'organization', 'standard'],
   _subHandlers: [],
   isReady: false,
   isDiscussionOpened: false,
@@ -11,6 +11,7 @@ Template.StandardsPage.viewmodel({
       const template = this.templateInstance;
       const organizationId = this.organizationId();
       const standardId = this.standardId();
+      const arrDiscussionIds = this.getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
         template.subscribe('standardImprovementPlan', standardId),
@@ -21,7 +22,7 @@ Template.StandardsPage.viewmodel({
       if (this.isDiscussionOpened()) {
         _subHandlers = _subHandlers.concat([
           template.subscribe('discussionsByStandardId', standardId),
-  				template.subscribe('messagesByStandardId', standardId)
+          template.subscribe('messagesByDiscussionIds', arrDiscussionIds)
         ]);
       }
 
@@ -29,6 +30,13 @@ Template.StandardsPage.viewmodel({
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
+    }/*,
+    function(){
+      console.log('_subHandlers:');
+      let sh = this._subHandlers().map(
+        c => c.ready()
+      );
+      console.dir(sh);
+    }*/
   ]
 });

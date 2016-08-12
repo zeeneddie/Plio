@@ -11,7 +11,7 @@ import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: 'discussions',
-	
+
 	onRendered(tpl) {
 		const _id = this._id();
 		const userId = this.userId();
@@ -40,14 +40,7 @@ Template.Discussion_Message.viewmodel({
 
 			removeMessageById.call(
 				{_id: this._id()}, handleMethodResult((err, res) => {
-
-					// Delete the Discussion itself if it has no messages any more
-//<<<<<<< HEAD:app/imports/ui/components/messages/messages-item/messages-item.js
 					if(res && self.isDiscussionEmpty() ){
-/*=======
-					if(res && self.isDiscussionEmpty()) {
-						console.log('Remove the discussion');
->>>>>>> origin/devel:app/imports/ui/components/discussion/includes/message/message.js*/
 						removeDiscussionById.call(
 							{_id: self.discussionId()}, handleMethodResult(
 								(err, res) => {}
@@ -64,12 +57,6 @@ Template.Discussion_Message.viewmodel({
 	},
 	isDiscussionEmpty() {
 		return !this.discussionHasMessages(this.discussionId());
-	},
-
-	linkerOptions() {
-		return {
-			truncate: 7
-		}
 	},
 
 	messageRendered() {

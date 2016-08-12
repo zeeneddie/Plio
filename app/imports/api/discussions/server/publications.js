@@ -12,7 +12,7 @@ Meteor.publish('discussionsByStandardId', function(standardId) {
   if (standard && !userId || !isOrgMember(userId, standard.organizationId)) {
     return this.ready();
   }
-  
+
   const query = { documentType: 'standard', linkedTo: standardId };
   const options = { fields: { _id: 1, documentType: 1, linkedTo: 1 } };
 

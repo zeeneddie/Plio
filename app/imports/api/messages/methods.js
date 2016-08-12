@@ -4,7 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { MessagesSchema } from './messages-schema';
 import MessagesService from './messages-service.js';
 import { IdSchema, UserIdSchema } from '../schemas.js';
-//import { UserRoles } from '../constants';
 
 
 export const addMessage = new ValidatedMethod({

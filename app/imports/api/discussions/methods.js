@@ -4,7 +4,6 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { DiscussionsSchema } from './discussions-schema';
 import DiscussionsService from './discussions-service.js';
 import { IdSchema, UserIdSchema } from '../schemas.js';
-//import { UserRoles } from '../constants';
 
 
 export const addDiscussion = new ValidatedMethod({
