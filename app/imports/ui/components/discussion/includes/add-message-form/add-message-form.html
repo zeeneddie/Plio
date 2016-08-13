@@ -1,6 +1,6 @@
 <template name="Discussion_AddMessage_Form">
 	<div class="chat-form">
-		<form class="f1" {{on 'submit: onSubmit'}}>
+		<form class="f1" {{on "submit: onSubmit"}}>
 			<div class="form-group">
 				<div class="input-group">
 					<!--span class="input-group-btn">
@@ -12,15 +12,13 @@
 						insertFile=insertFileFn
 						onUpload=onUploadCb
 						metaContext=uploaderMetaContext
-						slingshotDirective=slingshotDirective
-					}}
+						slingshotDirective=slingshotDirective}}
 
 					<input
 						type="text"
 						class="form-control"
 						placeholder="Add a comment"
-						{{b 'value: messageText'}}
-					>
+						{{b "value: messageText"}}>
 
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-secondary">
