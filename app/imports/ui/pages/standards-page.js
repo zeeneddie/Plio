@@ -30,13 +30,9 @@ Template.StandardsPage.viewmodel({
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }/*,
-    function(){
-      console.log('_subHandlers:');
-      let sh = this._subHandlers().map(
-        c => c.ready()
-      );
-      console.dir(sh);
-    }*/
-  ]
+    }
+  ],
+  styles() {
+    return this.isDiscussionOpened() ? '' : this.display();
+  }
 });

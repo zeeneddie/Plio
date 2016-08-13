@@ -11,7 +11,7 @@
                   </a>
                 {{/if}}
                 {{#unless isDiscussionOpened}}
-                  <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}">
+                  <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}" {{b "click: onDiscussionOpen"}}>
     								<i class="fa fa-comments"></i>
     								<span class="label label-danger label-chat-count"></span>
     							</a>
