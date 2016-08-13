@@ -46,6 +46,7 @@ export const update = new ValidatedMethod({
         403, 'Unauthorized user cannot update a message'
       );
     }
+		// [TODO] only message owner can make an update
 
     return MessagesService.update({ _id, ...args });
   }
