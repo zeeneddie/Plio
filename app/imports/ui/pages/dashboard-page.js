@@ -11,14 +11,14 @@ Template.Dashboard_Page.viewmodel({
       const organizationId = this.organizationId();
 
       this._subHandlers([
-        CountSubs.subscribe('standardsCount', 'standards-count' + organizationId, organizationId),
-        CountSubs.subscribe('standardsNotViewedCount', 'standards-not-viewed-count' + organizationId, organizationId),
-        CountSubs.subscribe('nonConformitiesCount', 'non-conformities-count' + organizationId, organizationId),
-        CountSubs.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count' + organizationId, organizationId),
-        CountSubs.subscribe('workItemsCount', 'work-items-count' + organizationId, organizationId),
-        CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count' + organizationId, organizationId),
+        CountSubs.subscribe('standardsCount', 'standards-count-' + organizationId, organizationId),
+        CountSubs.subscribe('standardsNotViewedCount', 'standards-not-viewed-count-' + organizationId, organizationId),
+        CountSubs.subscribe('nonConformitiesCount', 'non-conformities-count-' + organizationId, organizationId),
+        CountSubs.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count-' + organizationId, organizationId),
+        CountSubs.subscribe('workItemsCount', 'work-items-count-' + organizationId, organizationId),
+        CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count' + organizationId, organizationId),
-        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count' + organizationId, organizationId),
+        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId),
         UserSubs.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id))
       ]);
     },
@@ -44,28 +44,28 @@ Template.Dashboard_Page.viewmodel({
     return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, totalCount, true)) + notViewedText : '';
   },
   standardsViewedCount() {
-    return this.counter.get('standards-count' + this.organizationId());
+    return this.counter.get('standards-count-' + this.organizationId());
   },
   standardsNotViewedCount() {
-    return this.counter.get('standards-not-viewed-count' + this.organizationId());
+    return this.counter.get('standards-not-viewed-count-' + this.organizationId());
   },
   NCsViewedCount() {
-    return this.counter.get('non-conformities-count' + this.organizationId());
+    return this.counter.get('non-conformities-count-' + this.organizationId());
   },
   NCsNotViewedCount() {
-    return this.counter.get('non-conformities-not-viewed-count' + this.organizationId());
+    return this.counter.get('non-conformities-not-viewed-count-' + this.organizationId());
   },
   workItemsViewedCount() {
-    return this.counter.get('work-items-count' + this.organizationId());
+    return this.counter.get('work-items-count-' + this.organizationId());
   },
   workItemsNotViewedCount() {
-    return this.counter.get('work-items-not-viewed-count' + this.organizationId());
+    return this.counter.get('work-items-not-viewed-count-' + this.organizationId());
   },
   risksViewedCount() {
-    return this.counter.get('risks-count' + this.organizationId());
+    return this.counter.get('risks-count-' + this.organizationId());
   },
   risksNotViewedCount() {
-    return this.counter.get('risks-not-viewed-count' + this.organizationId());
+    return this.counter.get('risks-not-viewed-count-' + this.organizationId());
   },
   standardsMetrics() {
     return this._renderMetrics('standard', this.standardsViewedCount(), this.standardsNotViewedCount());

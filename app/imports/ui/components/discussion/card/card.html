@@ -4,8 +4,8 @@
 			{{> Discussion_Header ""}}
 
 			{{#if isReady}}
-				{{> Discussion_Messages ""}}
-				{{> Discussion_AddMessage_Form ""}}
+				{{> Discussion_Messages discussionId=discussionId}}
+				{{> Discussion_AddMessage_Form discussionId=discussionId}}
 			{{else}}
 				{{> PreloaderPage}}
 			{{/if}}

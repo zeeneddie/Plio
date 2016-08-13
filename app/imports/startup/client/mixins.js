@@ -227,7 +227,7 @@ ViewModel.mixin({
     }
   },
   user: {
-    userFullNameOrEmail(userOrUserId) {
+    userNameOrEmail(userOrUserId, { disableLastName = false } = {}) {
       let user = userOrUserId;
       if (typeof userOrUserId === 'string') {
         user = Meteor.users.findOne(userOrUserId);
@@ -237,12 +237,14 @@ ViewModel.mixin({
         const {firstName='', lastName=''} = user.profile;
 
         if (firstName && lastName) {
-          return `${firstName} ${lastName}`;
+
+          // Last name is requires, so it's OK to check both firstName and lastName vars here
+          return disableLastName ? firstName : `${firstName} ${lastName}`;
         } else {
           return user.emails[0].address;
         }
       } else {
-        return 'Ghost user';
+        return 'Ghost';
       }
     },
     hasUser() {
@@ -722,7 +724,7 @@ ViewModel.mixin({
       return this._mapMembers(Meteor.users.find(query, options));
     },
     _mapMembers(array) {
-      return array.map(doc => ({ title: this.userFullNameOrEmail(doc), ...doc }));
+      return array.map(doc => ({ title: this.userNameOrEmail(doc), ...doc }));
     }
   },
   userEdit: {

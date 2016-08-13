@@ -2,7 +2,6 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { addDiscussion } from '/imports/api/discussions/methods.js';
 import { addMessage } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
@@ -20,9 +19,14 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	slingshotDirective: '',
 
 	addNewMessage() {
-		addMessage.call(
-			this.makeNewMessage(), handleMethodResult(() => this.reset())
-		);
+		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		addMessage.call({
+			discussionId,
+			message: this.messageText()
+		}, (err) => {
+			console.log(err);
+			 this.reset();
+		 });
 	},
 
 	insertFileFn() {
@@ -54,14 +58,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			const existingId = this.getDiscussionIdByStandardId(this.standardId());
 
 			if (existingId) return existingId;
-
-			return (() => {
-				const args = {
-					documentType: DocumentTypes[0],
-					linkedTo: this.standardId()
-				};
-				return addDiscussion.call({ ...args }, handleMethodResult(() => this.reset()));
-			})();
 		})();
 
 		return {

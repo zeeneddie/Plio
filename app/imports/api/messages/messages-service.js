@@ -3,19 +3,25 @@ import { Messages } from './messages.js';
 export default {
 	collection: Messages,
 
-	addMessage({ discussionId, message, userId }) {
+	insert({ discussionId, message, userId }) {
 		return this.collection.insert({
 			discussionId, message, userId
 		});
 	},
 
-	markMessageViewedById({ _id, userId }) {
+	updateViewedBy({ _id, userId }) {
 		return this.collection.update({ _id }, {
 			$addToSet: { viewedBy: userId }
 		});
 	},
 
-	removeMessageById({ _id }) {
+	bulkUpdateViewedBy({ discussionId, userId }) {
+		return this.collection.update({ discussionId }, {
+			$addToSet: { viewedBy: userId }
+		}, { multi: true });
+	},
+
+	remove({ _id }) {
 		return this.collection.remove({ _id });
 	},
 }

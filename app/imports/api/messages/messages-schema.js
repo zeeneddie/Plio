@@ -10,7 +10,6 @@ export const MessagesSchema = new SimpleSchema([
 	BaseEntitySchema,
 	DiscussionIdSchema,
 	FilesSchema,
-	UserIdSchema,
 	ViewedBySchema,
 	{
 		message: {

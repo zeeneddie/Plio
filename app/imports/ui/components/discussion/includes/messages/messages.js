@@ -3,20 +3,31 @@ import invoke from 'lodash.invoke';
 import get from 'lodash.get';
 import curry from 'lodash.curry';
 
+import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
+import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
 
-  /* The _id of the first discussion from the sorted list of discussions
-   * for this standardId
-  */
-  discussionId() {
-    return this.getDiscussionIdByStandardId(this.standardId());
-  },
+	onRendered(tmp) {
+		const discussionId = this.discussionId();
+		bulkUpdateViewedBy.call({ discussionId });
+	},
 
+  // The _id of the primary discussion for this standardId
+	discussion() {
+		return Discussions.findOne({ _id: this.discussionId() });
+	},
+	getStartedByText() {
+		const creator = Meteor.users.findOne({ _id: this.discussion().startedBy });
+		return this.userNameOrEmail(creator && creator._id);
+	},
+	getStartedAtText() {
+		return getFormattedDate(this.discussion().startedAt, 'MMMM Do, YYYY');
+	},
 	messages() {
 		const messages = (() => {
 			const options = {
@@ -27,10 +38,10 @@ Template.Discussion_Messages.viewmodel({
 		})();
 
 		const messagesMapped = messages.map((message, i, arr) => {
-			const { userId, createdAt } = message;
+			const { createdBy, createdAt } = message;
 
 			const user = (() => {
-				const query = { _id: userId };
+				const query = { _id: createdBy };
 				const options = {
 					fields: {
 						profile: 1
@@ -54,6 +65,7 @@ Template.Discussion_Messages.viewmodel({
 					username: invoke(user, 'firstName'),
 					dateToShow: (() => {
 						const prevCreatedAt = get(messages[i - 1], 'createdAt');
+
 						// we need to check for undefined because moment translates undefined to today's date
 						const prevDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
 						return !Object.is(date, prevDate);

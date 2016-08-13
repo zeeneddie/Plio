@@ -24,7 +24,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     const chooseOne = this.chooseOne(isCompleted);
     const typeText = this.getTypeText({ type });
     const operation = this.getOperationText({ type });
-    const assignee = this.userFullNameOrEmail(assigneeId);
+    const assignee = this.userNameOrEmail(assigneeId);
     const date = this.renderDate(chooseOne(completedAt, targetDate));
 
     return `${typeText} ${chooseOne('', 'to be')} ${operation} by ${assignee} ${chooseOne('on', 'by')} ${date}`;

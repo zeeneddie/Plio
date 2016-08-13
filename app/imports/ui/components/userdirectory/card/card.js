@@ -16,7 +16,7 @@ Template.UserDirectory_Card_Read.viewmodel({
   },
   superpowersTitle(user) {
     if (this.organization()) {
-      return `${this.userFullNameOrEmail(user)}'s superpowers for ${this.organization().name}`
+      return `${this.userNameOrEmail(user)}'s superpowers for ${this.organization().name}`
     }
   },
   orgOwnerLabel() {

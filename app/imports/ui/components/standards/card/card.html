@@ -13,7 +13,9 @@
                 {{#unless isDiscussionOpened}}
                   <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}" {{b "click: onDiscussionOpen"}}>
     								<i class="fa fa-comments"></i>
-    								<span class="label label-danger label-chat-count"></span>
+                    {{#if messagesNotViewedCount}}
+    								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+                    {{/if}}
     							</a>
                 {{/unless}}
                 {{#if isDeleted}}
@@ -84,7 +86,7 @@
                   <div class="col-sm-6">
                     <div class="list-group-item">
                       <p class="list-group-item-text">Owner</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.owner)"}}></h4>
                     </div>
                   </div>
 

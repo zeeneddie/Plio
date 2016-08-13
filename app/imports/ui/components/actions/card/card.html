@@ -31,7 +31,7 @@
               <div class="col-sm-6">
                 <div class="list-group-item">
                   <p class="list-group-item-text">Owner</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.ownerId)"}}></h4>
+                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.ownerId)"}}></h4>
                 </div>
               </div>
             </div>
@@ -61,10 +61,10 @@
                 <div class="list-group-item">
                   {{#if this.isCompleted}}
                     <p class="list-group-item-text">Completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.completedBy)"}}></h4>
+                    <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.completedBy)"}}></h4>
                   {{else}}
                     <p class="list-group-item-text">To be completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeCompletedBy)"}}></h4>
+                    <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.toBeCompletedBy)"}}></h4>
                   {{/if}}
                 </div>
               </div>
@@ -95,10 +95,10 @@
                   <div class="list-group-item">
                     {{#if this.isVerified}}
                       <p class="list-group-item-text">Verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.verifiedBy)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.verifiedBy)"}}></h4>
                     {{else}}
                       <p class="list-group-item-text">To be verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeVerifiedBy)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.toBeVerifiedBy)"}}></h4>
                     {{/if}}
                   </div>
                 </div>
