@@ -13,25 +13,31 @@ Template.Discussion_Message.viewmodel({
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
 	},
-
+	uploader() {
+	  return this.child('FileUploader');
+	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
+	},
+	isTextMessage() {
+		return this.type() === 'text';
+	},
+
+	isFileMessage() {
+		return this.type() === 'file';
 	},
 
 	isDiscussionEmpty() {
 		return !this.discussionHasMessages(this.discussionId());
 	},
-
-	messageRendered() {
+	formattedMessageText() {
 		return Autolinker.link(
 			this.message(), { truncate: TruncatedStringLengths.c40 }
 		);
 	},
-
 	copyAsLink(e) {
 		e.preventDefault();
 	},
-
 	remove(e) {
 		if (!this.isAuthor()) return;
 

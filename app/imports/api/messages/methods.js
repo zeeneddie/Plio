@@ -5,7 +5,7 @@ import { MessagesSchema } from './messages-schema';
 import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
-import { IdSchema, UserIdSchema, DiscussionIdSchema } from '../schemas.js';
+import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema } from '../schemas.js';
 
 
 export const addMessage = new ValidatedMethod({
@@ -30,6 +30,25 @@ export const addMessage = new ValidatedMethod({
 
 		return MessagesService.insert({ ...args });
 	}
+});
+
+export const update = new ValidatedMethod({
+  name: 'Messages.update',
+
+  validate: new SimpleSchema([
+    IdSchema, optionsSchema //, MessageUpdateSchema
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update a message'
+      );
+    }
+
+    return MessagesService.update({ _id, ...args });
+  }
 });
 
 export const updateViewedBy = new ValidatedMethod({

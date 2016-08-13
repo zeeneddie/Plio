@@ -11,6 +11,8 @@
       <div class="uploading-file {{#if isUploaded}}uploaded{{/if}}">
       </div>
     </div>
-    {{> DeleteButton smallIcon=true onClick=removeClickFn}}
+    {{#if removeFile}}
+      {{> DeleteButton smallIcon=true onClick=removeClickFn}}
+    {{/if}}
   </div>
 </template>

@@ -9,12 +9,16 @@ import {
 export const MessagesSchema = new SimpleSchema([
 	BaseEntitySchema,
 	DiscussionIdSchema,
-	FilesSchema,
 	ViewedBySchema,
+  FilesSchema,
 	{
 		message: {
 			type: String,
-			max: 140
+			max: 140,
+			optional: true
+		},
+		type: {
+			type: String
 		}
 	}
 ]);
