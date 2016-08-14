@@ -42,11 +42,11 @@
         <div class="list-group-item">
           <p class="list-group-item-text">Means statement</p>
           {{#each this}}
-            <a class="btn btn-secondary btn-inline" {{b "href: this.url"}}>
-              <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
-              </i>
-              <span>{{this.name}}</span>
-            </a>
+            {{> FileItem
+                name=this.name
+                url=this.url
+                isReadOnly=true
+                extension=this.extension}}
           {{/each}}
         </div>
       {{/with}}

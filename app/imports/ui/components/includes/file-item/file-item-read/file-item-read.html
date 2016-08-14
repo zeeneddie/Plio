@@ -1,0 +1,11 @@
+<template name="FileItem_Read">
+  <a class="btn btn-secondary text-xs-left"
+    {{b "class: {no-pointer-events: !isUploaded}, href: this.url || '#'"}}>
+    {{#if extension}}
+      <i class="fa fa-lg fa-file-{{extension}}-o margin-right"></i>
+    {{/if}}
+    <span>{{name}}</span>
+  </a>
+  <div class="uploading-file {{#if isUploaded}}uploaded{{/if}}">
+  </div>
+</template>

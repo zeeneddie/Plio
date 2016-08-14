@@ -1,18 +1,14 @@
 <template name="FileItem">
-  <div class="btn-group file-item">
-    <div class="button-wrapper">
-      <button type="button" class="btn btn-secondary text-xs-left"
-          {{b "class: {no-pointer-events: !isUploaded}"}}>
-          {{#if extension}}
-            <i class="fa fa-lg fa-file-{{extension}}-o margin-right"></i>
-          {{/if}}
-          <span>{{name}}</span>
-      </button>
-      <div class="uploading-file {{#if isUploaded}}uploaded{{/if}}">
-      </div>
+  {{#if isReadOnly}}
+    <div class="file-item">
+      {{> FileItem_Read getData}}
     </div>
-    {{#if removeFile}}
+  {{else}}
+    <div class="btn-group file-item">
+      <div class="button-wrapper">
+        {{> FileItem_Read getData}}
+      </div>
       {{> DeleteButton smallIcon=true onClick=removeClickFn}}
-    {{/if}}
-  </div>
+    </div>
+  {{/if}}
 </template>
