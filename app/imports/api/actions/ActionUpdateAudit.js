@@ -2,10 +2,19 @@ import { ActionStatuses, ProblemTypes, CollectionNames } from '../constants.js';
 import { Actions } from './actions.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import DocumentUpdateAudit from '../audit-base/DocumentUpdateAudit.js';
+import { filesUpdateAudit } from '/imports/core/audit/mixins.js';
+import { usersUpdateAudit } from '/imports/core/audit/mixins.js';
+import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
 
 
 export default class ActionUpdateAudit extends DocumentUpdateAudit {
+
+  constructor(newDocument, oldDocument) {
+    super(newDocument, oldDocument);
+
+    _(this.constructor.prototype).extend(filesUpdateAudit);
+    _(this.constructor.prototype).extend(usersUpdateAudit);
+  }
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -14,6 +23,10 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       }
 
       switch (diff.field) {
+        case 'files':
+          this._filesChanged(diff);
+        case 'files.$.url':
+          this._fileUrlChanged(diff);
         case 'isCompleted':
           this._completionChanged(diff);
           break;
@@ -195,6 +208,10 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       completedAt: 'Completed at',
       completedBy: 'Completed by',
       completionTargetDate: 'Completion target date',
+      files: 'Files',
+      'files.$.extension': 'File extension',
+      'files.$.name': 'File name',
+      'files.$.url': 'File url',
       isCompleted: 'Completed',
       isVerified: 'Verified',
       isVerifiedAsEffective: 'Verified as effective',

@@ -1,5 +1,5 @@
 import { CollectionNames } from '../constants.js';
-import AuditService from '../audit-base/audit-service.js';
+import AuditService from '/imports/core/audit/audit-service.js';
 import RiskUpdateAudit from './RiskUpdateAudit.js';
 
 

@@ -1,4 +1,4 @@
-import AuditService from '../audit-base/audit-service.js';
+import AuditService from '/imports/core/audit/audit-service.js';
 import ActionUpdateAudit from './ActionUpdateAudit.js';
 
 

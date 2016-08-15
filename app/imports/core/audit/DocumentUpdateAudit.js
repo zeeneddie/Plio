@@ -10,10 +10,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
       }
 
       switch (diff.field) {
-        case 'files':
-          this._filesChanged(diff);
-        case 'files.$.url':
-          this._fileUrlChanged(diff);
         case 'isDeleted':
           this._deleteStateChanged(diff);
           break;
@@ -27,47 +23,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     });
 
     super._buildLogs();
-  }
-
-  _filesChanged(diff) {
-    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-
-    const { kind, item:file } = diff;
-    const { name, url } = file;
-
-    if ((kind === ITEM_ADDED) && !url) {
-      diff.isProcessed = true;
-      return;
-    }
-
-    let message;
-    if (kind === ITEM_ADDED) {
-      message = name ? `File ${name} uploaded` : 'File uploaded';
-    } else if (kind === ITEM_REMOVED) {
-      message = name ? `File ${name} removed` : 'File removed';
-    }
-
-    this._createLog({ message });
-
-    diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('files', diff.index);
-    }
-  }
-
-  _fileUrlChanged(diff) {
-    const { oldValue, newValue } = diff;
-
-    if (!oldValue && newValue) {
-      const { name } = _(this._newDoc.files).find(({ url }) => url === newValue) || {};
-
-      this._createLog({
-        message: `File ${name} uploaded`
-      });
-
-      diff.isProcessed = true;
-    }
   }
 
   _deleteStateChanged(diff) {
@@ -126,13 +81,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     diff.isProcessed = true;
   }
 
-  _userChanged(diff) {
-    this._prettifyValues(diff, (val) => {
-      const user = Meteor.users.findOne({ _id: val });
-      return user && user.fullNameOrEmail();
-    });
-  }
-
   _processRedudantDiffs(field, index) {
     const redudantFieldRe = new RegExp(`^${field}\.${index-1}`);
 
@@ -149,10 +97,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
       createdBy: 'Created by',
       deletedAt: 'Deleted at',
       deletedBy: 'Deleted by',
-      files: 'Files',
-      'files.$.extension': 'File extension',
-      'files.$.name': 'File name',
-      'files.$.url': 'File url',
       isDeleted: 'Deleted',
       notify: 'Notify',
       organizationId: 'Organization ID',

@@ -1,4 +1,4 @@
-import { AuditLogs } from '../audit/audit-logs.js';
+import { AuditLogs } from '/imports/api/audit/audit-logs.js';
 
 import UpdateAudit from './UpdateAudit.js';
 

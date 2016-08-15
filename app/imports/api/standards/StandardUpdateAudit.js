@@ -1,10 +1,19 @@
 import { CollectionNames, StandardStatuses } from '../constants.js';
 import { Departments } from '../departments/departments.js';
 import { StandardsBookSections } from '../standards-book-sections/standards-book-sections.js';
-import DocumentUpdateAudit from '../audit-base/DocumentUpdateAudit.js';
+import { departmentsUpdateAudit } from '/imports/core/audit/mixins.js';
+import { usersUpdateAudit } from '/imports/core/audit/mixins.js';
+import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
 
 
 export default class StandardUpdateAudit extends DocumentUpdateAudit {
+
+  constructor(newDocument, oldDocument) {
+    super(newDocument, oldDocument);
+    
+    _(this.constructor.prototype).extend(departmentsUpdateAudit);
+    _(this.constructor.prototype).extend(usersUpdateAudit);
+  }
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -50,38 +59,6 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
 
   _statusChanged(diff) {
     this._prettifyValues(diff, val => StandardStatuses[val]);
-  }
-
-  _departmentsChanged(diff) {
-    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-
-    const { kind, item:departmentId } = diff;
-    let message;
-
-    if (kind === ITEM_ADDED) {
-      message = 'Linked to [departmentName] department';
-    } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from [departmentName] department';
-    }
-
-    if (!(departmentId && message)) {
-      return;
-    }
-
-    const department = Departments.findOne({ _id: departmentId });
-    const departmentName = (department && department.name) || departmentId;
-    message = message.replace('[departmentName]', departmentName);
-
-    this._createLog({
-      message,
-      field: 'departmentsIds'
-    });
-
-    diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('departmentsIds', diff.index);
-    }
   }
 
   static get _fieldLabels() {

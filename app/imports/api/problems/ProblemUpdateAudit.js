@@ -4,10 +4,21 @@ import {
 } from '../constants.js';
 import { Departments } from '../departments/departments.js';
 import { Standards } from '../standards/standards.js';
-import DocumentUpdateAudit from '../audit-base/DocumentUpdateAudit.js';
+import { departmentsUpdateAudit } from '/imports/core/audit/mixins.js';
+import { filesUpdateAudit } from '/imports/core/audit/mixins.js';
+import { usersUpdateAudit } from '/imports/core/audit/mixins.js';
+import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
 
 
 export default class ProblemUpdateAudit extends DocumentUpdateAudit {
+
+  constructor(newDocument, oldDocument) {
+    super(newDocument, oldDocument);
+
+    _(this.constructor.prototype).extend(departmentsUpdateAudit);
+    _(this.constructor.prototype).extend(filesUpdateAudit);
+    _(this.constructor.prototype).extend(usersUpdateAudit);
+  }
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -30,6 +41,10 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
         case 'departmentsIds':
           this._departmentsChanged(diff);
           break;
+        case 'files':
+          this._filesChanged(diff);
+        case 'files.$.url':
+          this._fileUrlChanged(diff);
         case 'magnitude':
           this._magnitudeChanged(diff);
           break;
@@ -84,38 +99,6 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     diff.isProcessed = true;
     completedAtDiff.isProcessed = true;
     completedByDiff.isProcessed = true;
-  }
-
-  _departmentsChanged(diff) {
-    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-
-    const { kind, item:departmentId } = diff;
-    let message;
-
-    if (kind === ITEM_ADDED) {
-      message = 'Linked to [departmentName] department';
-    } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from [departmentName] department';
-    }
-
-    if (!(departmentId && message)) {
-      return;
-    }
-
-    const department = Departments.findOne({ _id: departmentId });
-    const departmentName = (department && department.name) || departmentId;
-    message = message.replace('[departmentName]', departmentName);
-
-    this._createLog({
-      message,
-      field: 'departmentsIds'
-    });
-
-    diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('departmentsIds', diff.index);
-    }
   }
 
   _magnitudeChanged(diff) {
@@ -273,6 +256,10 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
       'analysis.targetDate': 'Root cause analysis target date',
       departmentsIds: 'Departments',
       description: 'Description',
+      files: 'Files',
+      'files.$.extension': 'File extension',
+      'files.$.name': 'File name',
+      'files.$.url': 'File url',
       identifiedAt: 'Identified at',
       identifiedBy: 'Identified by',
       magnitude: 'Magnitude',
