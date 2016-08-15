@@ -16,11 +16,11 @@
   "notify" : [
     "SQHmBKJ94gJvpLKLt"
   ],
-  "status" : 4,
+  "status" : 5,
   "analysis": {
     "executor": "SQHmBKJ94gJvpLKLt",
     "targetDate": {"$date": 1459508400000},
-    "status": 1
+    "status": 0
   },
   "description" : "Deal valuations not carried out with new client resulting in problems agreeing valuations later",
   "updatedAt" : {"$date": 1459515600000},
