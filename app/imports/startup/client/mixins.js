@@ -387,13 +387,13 @@ ViewModel.mixin({
       const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilter() }) {
+    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilterId() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
       FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilter() } : {};
+      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilterId() } : {};
       FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
@@ -477,11 +477,21 @@ ViewModel.mixin({
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
-    isActiveWorkInboxFilter(filter) {
-      return this.activeWorkInboxFilter() === filter;
+    isActiveWorkInboxFilter(filterId) {
+      return this.activeWorkInboxFilterId() === filterId;
     },
-    activeWorkInboxFilter() {
-      return FlowRouter.getQueryParam('by') || WorkInboxFilters[0];
+    activeWorkInboxFilterId() {
+      let id = parseInt(FlowRouter.getQueryParam('by'));
+      if (!WorkInboxFilters[id]) {
+        let id = 1;
+      }
+      return id;
+    },
+    getWorkInboxFilterLabel(id) {
+      if (!WorkInboxFilters[id]) {
+        let id = 1;
+      }
+      return WorkInboxFilters[id];
     },
     _getWorkItemsByQuery(
       {

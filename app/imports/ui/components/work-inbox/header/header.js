@@ -7,7 +7,15 @@ Template.WorkInbox_Header.viewmodel({
   share: ['window', 'search'],
   mixin: ['workInbox', 'mobile', 'organization', 'collapsing'],
   filters() {
-    return WorkInboxFilters;
+    return _.map(WorkInboxFilters, (label, id) => {
+      return {
+        label: label,
+        id: id
+      }
+    });
+  },
+  currentFilterLabel() {
+    return this.getWorkInboxFilterLabel(this.activeWorkInboxFilterId());
   },
   selectFilter(filter) {
     FlowRouter.setQueryParams({ by: filter });

@@ -313,14 +313,14 @@ const NonConformityFilters = [
   'deleted'
 ];
 
-const WorkInboxFilters = [
-  'My current work',
-  'Team current work',
-  'My completed work',
-  'Team completed work',
-  'My deleted work',
-  'Team deleted work'
-];
+const WorkInboxFilters = {
+  1: 'My current work',
+  2: 'Team current work',
+  3: 'My completed work',
+  4: 'Team completed work',
+  5: 'My deleted work',
+  6: 'Team deleted work'
+};
 
 const DocumentTypes = [
   'standard',

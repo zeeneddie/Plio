@@ -37,23 +37,23 @@ Template.WorkInbox_List.viewmodel({
   _getItemsByFilter() {
     const { my = {}, team = {} } = this.items() || {};
 
-    switch(this.activeWorkInboxFilter()) {
-      case 'My current work':
+    switch(this.activeWorkInboxFilterId()) {
+      case 1:
         return my.current;
         break;
-      case 'Team current work':
+      case 2:
         return team.current;
         break;
-      case 'My completed work':
+      case 3:
         return my.completed;
         break;
-      case 'Team completed work':
+      case 4:
         return team.completed;
         break;
-      case 'My deleted work':
+      case 5:
         return my.deleted;
         break;
-      case 'Team deleted work':
+      case 6:
         return team.deleted;
         break;
       default:
@@ -157,11 +157,11 @@ Template.WorkInbox_List.viewmodel({
     return (value) => {
       const { my: { current, completed, deleted } = {} } = this.items() || {};
 
-      if (this.isActiveWorkInboxFilter('My current work')) {
+      if (this.isActiveWorkInboxFilter(1)) {
         return current;
-      } else if (this.isActiveWorkInboxFilter('My completed work')) {
+      } else if (this.isActiveWorkInboxFilter(3)) {
         return completed;
-      } else if (this.isActiveWorkInboxFilter('My deleted work')) {
+      } else if (this.isActiveWorkInboxFilter(5)) {
         return deleted;
       }
 
