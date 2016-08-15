@@ -23,9 +23,6 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
 
     this.parent().update(method, args);
   },
-  getPositiveButtonText({ type }) {
-    return type && type === TYPES.VERIFY_ACTION ? 'Verified as effective' : 'Complete';
-  },
   isType(type) {
     return this.type() === TYPES[type];
   },
@@ -61,6 +58,9 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
         return null;
         break;
     }
+  },
+  getCommentsPlaceholder() {
+    return this.type() === TYPES.VERIFY_ACTION ? 'Enter any verification comments' : 'Enter any completion comments';
   },
   getData() {
     const { comments } = this.data();

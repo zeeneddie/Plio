@@ -17,7 +17,7 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('nonConformitiesNotViewedCount', 'non-conformities-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('workItemsCount', 'work-items-count-' + organizationId, organizationId),
         CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
-        CountSubs.subscribe('risksCount', 'risks-count' + organizationId, organizationId),
+        CountSubs.subscribe('risksCount', 'risks-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId),
         UserSubs.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id))
       ]);
