@@ -17,6 +17,8 @@ export const MessagesSchema = new SimpleSchema([
 			max: 140,
 			optional: true
 		},
+
+		// 'text' or 'file'
 		type: {
 			type: String
 		}

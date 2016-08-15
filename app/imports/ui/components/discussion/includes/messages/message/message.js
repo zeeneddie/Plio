@@ -22,11 +22,9 @@ Template.Discussion_Message.viewmodel({
 	isTextMessage() {
 		return this.type() === 'text';
 	},
-
 	isFileMessage() {
 		return this.type() === 'file';
 	},
-
 	isDiscussionEmpty() {
 		return !this.discussionHasMessages(this.discussionId());
 	},
