@@ -4,11 +4,19 @@ import { Discussions } from './discussions.js';
 export default {
 	collection: Discussions,
 
-	addDiscussion({ documentType, linkedTo }) {
-		return this.collection.insert({ documentType, linkedTo });
+	insert({ ...args }) {
+		return this.collection.insert({ ...args });
 	},
 
-	removeDiscussionById({ _id }) {
+	start(_id, startedBy) {
+		this.collection.update({ _id }, { $set: {
+			startedBy,
+			startedAt: new Date,
+			isStarted: true
+		}});
+	},
+
+	remove({ _id }) {
 		return this.collection.remove({ _id });
 	}
 };

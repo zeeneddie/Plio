@@ -24,7 +24,7 @@ Template.ActionItem.viewmodel({
   },
   getUserText({ isDeleted, createdBy, deletedBy }) {
     return isDeleted
-            ? `Deleted by: ${this.userFullNameOrEmail(deletedBy)}`
+            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
             : '';
   },
   loadStatusMixinByDocType(documentType) {

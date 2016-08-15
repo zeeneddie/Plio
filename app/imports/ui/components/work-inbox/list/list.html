@@ -15,7 +15,7 @@
       {{#each assignees.current}}
         {{> ListItem
             template="WorkInbox_SectionItem"
-            title=(userFullNameOrEmail this)
+            title=(userNameOrEmail this)
             items=(getTeamItems this "current")}}
       {{/each}}
     {{/if}}
@@ -30,7 +30,7 @@
       {{#each assignees.completed}}
         {{> ListItem
             template="WorkInbox_SectionItem"
-            title=(userFullNameOrEmail this)
+            title=(userNameOrEmail this)
             items=(getTeamItems this "completed")}}
       {{/each}}
     {{/if}}
@@ -45,7 +45,7 @@
       {{#each assignees.deleted}}
         {{> ListItem
             template="WorkInbox_SectionItem"
-            title=(userFullNameOrEmail this)
+            title=(userNameOrEmail this)
             items=(getTeamItems this "deleted")}}
       {{/each}}
     {{/if}}

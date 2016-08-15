@@ -137,8 +137,8 @@ export const checkOrgMembership = (_id, userId, collection) => {
   return doc;
 };
 
-export const checkDocExistance = (_id, collection) => {
-  const doc = collection.findOne({ _id });
-  if (!doc) throw DOC_NOT_FOUND;
+export const checkDocExistance = (query, collection, err = DOC_NOT_FOUND) => {
+  const doc = collection.findOne(query);
+  if (!doc) throw err;
   return doc;
 };

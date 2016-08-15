@@ -4,7 +4,7 @@ Template.Completion_Edit.viewmodel({
   isButtonVisible: true,
   isFormVisible: false,
   text: '',
-  placeholder: 'Completion comments',
+  placeholder: 'Enter any verification comments',
   buttonDefaultText: 'Complete',
   buttonSuccessText: 'Complete',
   buttonFailText: 'Assessed as ineffective',

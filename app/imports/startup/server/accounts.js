@@ -7,7 +7,6 @@ function onCreateUser(options, user) {
     user.profile.avatar = Utils.getRandomAvatarUrl();
     user.profile.initials = Utils.generateUserInitials(options.profile);
   }
-  user.isNotificationsEnabled = true;
 
   return user;
 }

@@ -9,7 +9,7 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
 
 Template.Standards_Card_Read.viewmodel({
-  share: 'standard',
+  share: 'window',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   onRendered(template) {
     template.autorun(() => {
@@ -21,6 +21,7 @@ Template.Standards_Card_Read.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
+  isDiscussionOpened: false,
   ActionTypes() {
     return ActionTypes;
   },
@@ -74,6 +75,15 @@ Template.Standards_Card_Read.viewmodel({
     };
     const queryParams = { by: this.activeStandardFilter() };
     return FlowRouter.path('standardDiscussion', params, queryParams);
+  },
+  onDiscussionOpen(e) {
+    e.preventDefault();
+
+    if ($(window).width() < 768) {
+      this.width($(window).width());
+    }
+
+    return FlowRouter.go(this.pathToDiscussion());
   },
   openEditStandardModal: _.throttle(function() {
     if (ViewModel.findOne('ModalWindow')) return;

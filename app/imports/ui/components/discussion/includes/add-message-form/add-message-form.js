@@ -1,17 +1,15 @@
-/* @param {String} standardId // the ID of the current standart
-*/
-
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { addDiscussion } from '/imports/api/discussions/methods.js';
-import { addMessage } from '/imports/api/messages/methods.js';
+import { addMessage, update } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 
-
+/*
+ * @param {String} standardId // the ID of the current standard
+*/
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
@@ -21,19 +19,31 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	messageText: '',
 	slingshotDirective: '',
 
-	addNewMessage() {
+	sendTextMessage() {
 		if (this.disabled()) return;
 
-		addMessage.call(
-			this.makeNewMessage(), handleMethodResult( () => {this.reset();} )
-		);
+		const discussionId = this._getDiscussionIdByStandardId(this.standardId());
+		addMessage.call({
+			discussionId,
+			message: this.messageText(),
+			type: 'text'
+		}, handleMethodResult(() => {
+			this.reset();
+		}));
 	},
-
 	insertFileFn() {
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
+		if (this.disabled()) return;
+
     const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
+		const discussionId = this._getDiscussionIdByStandardId(this.standardId());
+		addMessage.call({
+			discussionId,
+			files: [fileDoc],
+			type: 'file'
+		}, handleMethodResult);
 
     if (this.files() && this.files().length) {
       /*const options = {
@@ -48,51 +58,50 @@ Template.Discussion_AddMessage_Form.viewmodel({
         files: [fileDoc]
       }, cb);*/
     }
-		console.log( this.files() );
-		console.log(fileDoc);
-		console.log(cb);
+		console.log('this.files()', this.files());
+		console.log('fileDoc', fileDoc);
+		console.log('cb', cb);
   },
+	onUploadCb() {
+    return this.onUpload.bind(this);
+  },
+  onUpload(err, { _id, url }) {
+		console.log('started updating message');
+    if (err && err.error !== 'Aborted') {
 
-	makeNewMessage(files) {
-		let discussionId = this.getDiscussionIdByStandardId(
-			this.standardId()
-		);
+			// [TODO] Handle error
+      return;
+    }
 
-		if(!discussionId){
-			discussionId = addDiscussion.call(
-				{ documentType: DocumentTypes.STANDARD, linkedTo: this.standardId() },
-				handleMethodResult( () => {this.reset();} )
+    const query = {
+      files: {
+        $elemMatch: { _id }
+      }
+    };
+    const options = {
+      $set: {
+        'files.$.url': url
+      }
+    };
+		console.log('finishing updating message');
+    update({ query, options });
+  },
+	onSubmit(e) {
+		e.preventDefault();
+
+		if (!Meteor.userId()) return;
+
+		if (!this.standardId()) {
+			swal(
+				'Oops... Something went wrong',
+				'Discussion messages may be added to the particular standard only',
+				'error'
 			);
 		}
 
-		return {
-			createdAt: new Date(),
-			discussionId,
-			files: [],
-			message: this.messageText(),
-			userId: Meteor.userId(),
-			viewedBy: []
-		};
-	},
-
-	onSubmit(ev){
-		ev.preventDefault();
-
-		if( !Meteor.userId() ){
-			throw new Meteor.Error(
-				403, 'Unauthorized user cannot add messages to discussions'
-			);
-		}
-		if( !this.standardId() ){
-			throw new Meteor.Error(
-				403, 'Discussion messages may be added to the particular standart only'
-			);
-		}
-
-		if(this.messageText() !== ''){
-			this.addNewMessage();
-		}
-		else {
+		if (!!this.messageText()) {
+			this.sendTextMessage();
+		} else {
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},
