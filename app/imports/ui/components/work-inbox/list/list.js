@@ -15,7 +15,6 @@ Template.WorkInbox_List.viewmodel({
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const items = this._getItemsByFilter() || [];
-
       const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
@@ -36,7 +35,6 @@ Template.WorkInbox_List.viewmodel({
   },
   _getItemsByFilter() {
     const { my = {}, team = {} } = this.items() || {};
-
     switch(this.activeWorkInboxFilterId()) {
       case 1:
         return my.current;

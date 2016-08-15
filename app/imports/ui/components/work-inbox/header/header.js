@@ -5,20 +5,15 @@ import { WorkInboxFilters } from '/imports/api/constants.js';
 
 Template.WorkInbox_Header.viewmodel({
   share: ['window', 'search'],
-  mixin: ['workInbox', 'mobile', 'organization', 'collapsing'],
+  mixin: ['workInbox', 'mobile', 'filters', 'organization', 'collapsing'],
   filters() {
-    return _.map(WorkInboxFilters, (label, id) => {
-      return {
-        label: label,
-        id: id
-      }
-    });
+    return this.mapFilters(WorkInboxFilters);
   },
   currentFilterLabel() {
     return this.getWorkInboxFilterLabel(this.activeWorkInboxFilterId());
   },
   selectFilter(filter) {
-    FlowRouter.setQueryParams({ by: filter });
+    FlowRouter.setQueryParams({ filter });
     this.searchText('');
     this.expandCollapsed(this.workItemId());
   }

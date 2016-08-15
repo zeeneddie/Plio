@@ -19,6 +19,7 @@ Template.WorkInbox_Layout.viewmodel({
         this.templateInstance.subscribe('actions', _id)
       ];
 
+      // My deleted or Team deleated work items
       if (this.isActiveWorkInboxFilter(5) ||
           this.isActiveWorkInboxFilter(6)) {
         _subHandlers.push(this.templateInstance.subscribe('workItems', _id, true));

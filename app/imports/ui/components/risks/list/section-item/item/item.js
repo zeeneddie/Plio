@@ -26,7 +26,7 @@ Template.Risks_Item.viewmodel({
   viewedBy: [],
   getHref() {
     const params = { orgSerialNumber: this.organizationSerialNumber(), riskId: this._id() };
-    const queryParams = { by: this.activeRiskFilter() };
+    const queryParams = { filter: this.activeRiskFilterId() };
     return FlowRouter.path('risk', params, queryParams);
   },
   isNew() {

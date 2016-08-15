@@ -5,7 +5,7 @@
     onModalOpen=onModalOpen
     onSearchInputValue=onSearchInputValue}}
 
-      {{#if isActiveNCFilter "magnitude"}}
+      {{#if isActiveNCFilter 1}}
         {{#each magnitude}}
           {{> ListItem
               template="NC_SectionItem"
@@ -17,7 +17,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter "status"}}
+      {{#if isActiveNCFilter 2}}
         {{#each statuses}}
           {{> ListItem
               template="NC_SectionItem"
@@ -28,7 +28,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter "department/sector"}}
+      {{#if isActiveNCFilter 3}}
         {{#each departments}}
           {{> ListItem
               template="NC_SectionItem"
@@ -40,7 +40,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveNCFilter "deleted"}}
+      {{#if isActiveNCFilter 4}}
         {{#each NCsDeleted}}
           {{> NC_Item}}
         {{/each}}

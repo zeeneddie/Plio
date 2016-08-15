@@ -33,17 +33,17 @@ Template.NC_List.viewmodel({
     }
   },
   _getQueryForFilter(withSearchQuery) {
-    switch(this.activeNCFilter()) {
-      case 'magnitude':
+    switch(this.activeNCFilterId()) {
+      case 1:
         return { magnitude: { $in: this.magnitude(withSearchQuery).map(({ value }) => value) } };
         break;
-      case 'status':
+      case 2:
         return { status: { $in: this.statuses(withSearchQuery) } };
         break;
-      case 'department/sector':
+      case 3:
         return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
         break;
-      case 'deleted':
+      case 4:
         return { isDeleted: true };
         break;
       default:
@@ -52,17 +52,17 @@ Template.NC_List.viewmodel({
     };
   },
   _getFirstNCQueryForFilter() {
-    switch(this.activeNCFilter()) {
-      case 'magnitude':
+    switch(this.activeNCFilterId()) {
+      case 1:
         return { magnitude: get(head(this.magnitude()), 'value') };
         break;
-      case 'status':
+      case 2:
         return { status: head(this.statuses()) };
         break;
-      case 'department/sector':
+      case 3:
         return { departmentsIds: get(head(this.departments()), '_id') };
         break;
-      case 'deleted':
+      case 4:
         return { _id: get(head(this.NCsDeleted()), '_id') };
         break;
       default:
@@ -129,7 +129,7 @@ Template.NC_List.viewmodel({
   },
   onSearchInputValue() {
     return (value) => {
-      if (this.isActiveNCFilter('deleted')) {
+      if (this.isActiveNCFilter(4)) {
         return this.toArray(this.NCsDeleted());
       }
 

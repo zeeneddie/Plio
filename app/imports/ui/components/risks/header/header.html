@@ -1,12 +1,13 @@
 <template name="Risks_Header">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Risks by - ' + activeRiskFilter"}}>
+      <a class="dropdown-toggle pointer" data-toggle="dropdown">
+        Risks by - {{currentFilterLabel}}
       </a>
       <div class="dropdown-menu">
-        {{#each riskFilters}}
+        {{#each filters}}
           <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveRiskFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
+            {{b "class: { active: isActiveRiskFilter(this.id) }, text: 'By ' + this.label, click: selectFilter(this.id)"}}>
           </a>
         {{/each}}
       </div>

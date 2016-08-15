@@ -47,7 +47,7 @@ Template.Standards_Card_Read.viewmodel({
 
   },
   standards() {
-    const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
+    const isDeleted = this.isActiveStandardFilter(3) ? true : { $in: [null, false] };
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
@@ -73,7 +73,7 @@ Template.Standards_Card_Read.viewmodel({
       orgSerialNumber: this.organizationSerialNumber(),
       standardId: get(this.standard(), '_id')
     };
-    const queryParams = { by: this.activeStandardFilter() };
+    const queryParams = { filter: this.activeStandardFilterId() };
     return FlowRouter.path('standardDiscussion', params, queryParams);
   },
   onDiscussionOpen(e) {
@@ -113,7 +113,7 @@ Template.Standards_Card_Read.viewmodel({
           } else {
             swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
 
-            FlowRouter.setQueryParams({ by: 'section' });
+            FlowRouter.setQueryParams({ filter: 1 });
             Meteor.setTimeout(() => {
               this.goToStandard(_id);
               this.expandCollapsed(_id);

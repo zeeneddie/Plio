@@ -293,25 +293,25 @@ const DefaultStandardTypes = [
   }
 ];
 
-const StandardFilters = [
-  'section',
-  'type',
-  'deleted'
-];
+const StandardFilters = {
+  1: 'section',
+  2: 'type',
+  3: 'deleted'
+};
 
-const RiskFilters = [
-  'type',
-  'status',
-  'department/sector',
-  'deleted'
-];
+const RiskFilters = {
+  1: 'type',
+  2: 'status',
+  3: 'department/sector',
+  4: 'deleted'
+};
 
-const NonConformityFilters = [
-  'magnitude',
-  'status',
-  'department/sector',
-  'deleted'
-];
+const NonConformityFilters = {
+  1: 'magnitude',
+  2: 'status',
+  3: 'department/sector',
+  4: 'deleted'
+};
 
 const WorkInboxFilters = {
   1: 'My current work',

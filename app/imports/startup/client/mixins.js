@@ -305,11 +305,23 @@ ViewModel.mixin({
     standardId() {
       return FlowRouter.getParam('standardId');
     },
-    isActiveStandardFilter(filter) {
-      return this.activeStandardFilter() === filter;
+    isActiveStandardFilter(filterId) {
+      return this.activeStandardFilterId() === filterId;
     },
-    activeStandardFilter() {
-      return FlowRouter.getQueryParam('by') || StandardFilters[0];
+    activeStandardFilterId() {
+      let id = parseInt(FlowRouter.getQueryParam('filter'));
+      if (!StandardFilters[id]) {
+        id = 1;
+      }
+
+      return id;
+    },
+    getStandardFilterLabel(id) {
+      if (!StandardFilters[id]) {
+        id = 1;
+      }
+
+      return StandardFilters[id];
     },
     currentStandard() {
       const _id =  FlowRouter.getParam('standardId');
@@ -319,15 +331,15 @@ ViewModel.mixin({
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
-    _getStandardByQuery(by = {}, options = { sort: { title: 1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getStandardByQuery(filter = {}, options = { sort: { title: 1 } }) {
+      const query = { ...filter, organizationId: this.organizationId() };
       return Standards.findOne(query, options);
     }
   },
   department: {
-    _getDepartmentsByQuery(by = {}, options = { sort: { name: 1 } }) {
+    _getDepartmentsByQuery(filter = {}, options = { sort: { name: 1 } }) {
       const query = {
-        ...by,
+        ...filter,
         organizationId: this.organizationId()
       };
 
@@ -374,36 +386,36 @@ ViewModel.mixin({
     },
     goToStandard(standardId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
-      const queryParams = !!withQueryParams ? { by: this.activeStandardFilter() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeStandardFilterId() } : {};
       FlowRouter.go('standard', params, queryParams);
     },
     goToNC(nonconformityId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
-      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
       FlowRouter.go('nonconformity', params, queryParams);
     },
     goToNCs(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeNCFilter() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
       FlowRouter.go('nonconformities', params, queryParams);
     },
-    goToWorkItem(workItemId, queryParams = { by: this.activeWorkInboxFilterId() }) {
+    goToWorkItem(workItemId, queryParams = { filter: this.activeWorkInboxFilterId() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
       FlowRouter.go('workInboxItem', params, queryParams);
     },
     goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeWorkInboxFilterId() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeWorkInboxFilterId() } : {};
       FlowRouter.go('workInbox', params, queryParams);
     },
     goToRisk(riskId, withQueryParams = true) {
       const params = { riskId, orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
       FlowRouter.go('risk', params, queryParams);
     },
     goToRisks(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
-      const queryParams = !!withQueryParams ? { by: this.activeRiskFilter() } : {};
+      const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
       FlowRouter.go('risks', params, queryParams);
     }
   },
@@ -424,15 +436,37 @@ ViewModel.mixin({
       }
     }
   },
+  filters: {
+    mapFilters(filters) {
+      return _.map(filters, (label, id) => {
+        return {
+          label: label,
+          id: id
+        }
+      });
+    }
+  },
   risk: {
     riskId() {
       return FlowRouter.getParam('riskId');
     },
-    isActiveRiskFilter(filter) {
-      return this.activeRiskFilter() === filter;
+    isActiveRiskFilter(filterId) {
+      return this.activeRiskFilterId() === filterId;
     },
-    activeRiskFilter() {
-      return FlowRouter.getQueryParam('by') || RiskFilters[0];
+    activeRiskFilterId() {
+      let id = parseInt(FlowRouter.getQueryParam('filter'));
+      if (!RiskFilters[id]) {
+        id = 1;
+      }
+
+      return id;
+    },
+    getRiskFilterLabel(id) {
+      if (!RiskFilters[id]) {
+        id = 1;
+      }
+
+      return RiskFilters[id];
     },
     currentRisk() {
       const _id = this.riskId();
@@ -445,8 +479,8 @@ ViewModel.mixin({
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Risks.find(query, options);
     },
-    _getRiskByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getRiskByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...filter, organizationId: this.organizationId() };
       return Risks.findOne(query, options);
     }
   },
@@ -454,11 +488,23 @@ ViewModel.mixin({
     NCId() {
       return FlowRouter.getParam('nonconformityId');
     },
-    isActiveNCFilter(filter) {
-      return this.activeNCFilter() === filter;
+    isActiveNCFilter(filterId) {
+      return this.activeNCFilterId() === filterId;
     },
-    activeNCFilter() {
-      return FlowRouter.getQueryParam('by') || NonConformityFilters[0];
+    activeNCFilterId() {
+      let id = parseInt(FlowRouter.getQueryParam('filter'));
+      if (!NonConformityFilters[id]) {
+        id = 1;
+      }
+
+      return id;
+    },
+    getNCFilterLabel(id) {
+      if (!NonConformityFilters[id]) {
+        id = 1;
+      }
+
+      return NonConformityFilters[id];
     },
     currentNC() {
       const _id = this.NCId();
@@ -468,8 +514,8 @@ ViewModel.mixin({
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return NonConformities.find(query, options);
     },
-    _getNCByQuery(by = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getNCByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
+      const query = { ...filter, organizationId: this.organizationId() };
       return NonConformities.findOne(query, options);
     }
   },
@@ -481,16 +527,18 @@ ViewModel.mixin({
       return this.activeWorkInboxFilterId() === filterId;
     },
     activeWorkInboxFilterId() {
-      let id = parseInt(FlowRouter.getQueryParam('by'));
+      let id = parseInt(FlowRouter.getQueryParam('filter'));
       if (!WorkInboxFilters[id]) {
-        let id = 1;
+        id = 1;
       }
+
       return id;
     },
     getWorkInboxFilterLabel(id) {
       if (!WorkInboxFilters[id]) {
-        let id = 1;
+        id = 1;
       }
+
       return WorkInboxFilters[id];
     },
     _getWorkItemsByQuery(
@@ -504,16 +552,16 @@ ViewModel.mixin({
       const query = { isDeleted, organizationId, ...args };
       return WorkItems.find(query, options);
     },
-    _getWorkItemByQuery(by, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by };
+    _getWorkItemByQuery(filter, options = { sort: { createdAt: -1 } }) {
+      const query = { ...filter };
       return WorkItems.findOne(query, options);
     },
     _getActionsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Actions.find(query, options);
     },
-    _getActionByQuery(by, options = { sort: { createdAt: -1 } }) {
-      const query = { ...by, organizationId: this.organizationId() };
+    _getActionByQuery(filter, options = { sort: { createdAt: -1 } }) {
+      const query = { ...filter, organizationId: this.organizationId() };
       return Actions.findOne(query, options);
     },
     _getNameByType(type) {
@@ -533,15 +581,15 @@ ViewModel.mixin({
       return (userId) => {
         if (isCompleted) { // completed
           if (assigneeId === userId) {
-            return { by: 'My completed work' };
+            return { filter: 3 }; // My completed work
           } else {
-            return { by: 'Team completed work' };
+            return { filter: 4 }; // Team completed work
           }
         } else {
           if (assigneeId === userId) {
-            return { by: 'My current work' };
+            return { filter: 1 }; // My current work
           } else {
-            return { by: 'Team current work' };
+            return { filter: 2 }; // Team current work
           }
         }
       };
