@@ -13,20 +13,28 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
       }
 
       switch (diff.field) {
-        case 'sectionId':
-          this._sectionChanged(diff);
-          break;
-        case 'typeId':
-          this._typeChanged(diff);
+        case 'departmentsIds':
+          this._departmentsChanged(diff);
           break;
         case 'owner':
           this._userChanged(diff);
           break;
+        case 'sectionId':
+          this._sectionChanged(diff);
+          break;
+        case 'source1':
+        case 'source2':
+          this._sourceFileChanged(diff);
+          break;
+        case 'source1.url':
+        case 'source2.url':
+          this._sourceFileUrlChanged(diff);
+          break;
         case 'status':
           this._statusChanged(diff);
           break;
-        case 'departmentsIds':
-          this._departmentsChanged(diff);
+        case 'typeId':
+          this._typeChanged(diff);
           break;
       }
     });
@@ -41,8 +49,75 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
     });
   }
 
+  _sourceFileChanged(diff) {
+    const { FIELD_ADDED, FIELD_REMOVED } = this.constructor._changesTypes;
+    const { kind, field } = diff;
+
+    let source;
+    if (kind === FIELD_ADDED) {
+      source = diff.newValue;
+
+      if (!source.url) {
+        diff.isProcessed = true;
+        return;
+      }
+    } else if (kind === FIELD_REMOVED) {
+      source = diff.oldValue;
+
+      // ignore situation when 'source2' renamed to 'source1' after 'source1' was removed
+      if (field === 'source2') {
+        const source1Diff = _(this._diff).find(
+          ({ field, kind }) => (field === 'source1') && (kind === FIELD_ADDED)
+        );
+
+        if (source1Diff) {
+          diff.isProcessed = true;
+          source1Diff.isProcessed = true;
+          return;
+        }
+      }
+    }
+
+    const { type, name, url } = source;
+
+    const messages = {
+      attachment: {
+        [FIELD_ADDED]: name ? `Source attachment ${name} uploaded` : 'Source attachment uploaded',
+        [FIELD_REMOVED]: name ? `Source attachment ${name} removed` : 'Source attachment removed'
+      },
+      url: {
+        [FIELD_ADDED]: `Source URL added ${url}`,
+        [FIELD_REMOVED]: `Source URL removed ${url}`
+      },
+      video: {
+        [FIELD_ADDED]: `Source video added ${url}`,
+        [FIELD_REMOVED]: `Source video removed ${url}`
+      }
+    };
+
+    this._createLog({ message: messages[type][kind] });
+
+    diff.isProcessed = true;
+  }
+
+  _sourceFileUrlChanged(diff) {
+    const { oldValue, newValue, path } = diff;
+    const sourceField = path[0];
+    const sourceType = this._newDoc[sourceField]['type'];
+
+    if (!oldValue && newValue && (sourceType === 'attachment')) {
+      const fileName = this._newDoc[sourceField]['name'];
+
+      this._createLog({
+        message: `Source attachment ${fileName} uploaded`
+      });
+
+      diff.isProcessed = true;
+    }
+  }
+
   _typeChanged(diff) {
-    this._prettifyValues(diff, (val) => {
+     this._prettifyValues(diff, (val) => {
       const standardType = StandardTypes.findOne({ _id: val });
       return standardType && standardType.name;
     });
@@ -54,30 +129,30 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
 
   static get _fieldLabels() {
     const fieldLabels = {
-      title: 'Title',
-      typeId: 'Type',
-      sectionId: 'Book section',
-      nestingLevel: 'Nesting level',
-      owner: 'Owner',
-      issueNumber: 'Issue number',
-      status: 'Status',
-      description: 'Description',
       approved: 'Approved',
       approvedAt: 'Approved at',
-      notes: 'Notes',
       departmentsIds: 'Departments',
-      source1: 'Source file 1',
-      'source1.extension': 'Source file 1 extension',
-      'source1.type': 'Source file 1 type',
-      'source1.url': 'Source file 1 url',
-      'source1.htmlUrl': 'Source file 1 html url',
-      'source1.name': 'Source file 1 name',
-      source2: 'Source file 2',
-      'source2.extension': 'Source file 2 extension',
-      'source2.type': 'Source file 2 type',
-      'source2.url': 'Source file 2 url',
-      'source2.htmlUrl': 'Source file 2 html url',
-      'source2.name': 'Source file 2 name'
+      description: 'Description',
+      issueNumber: 'Issue number',
+      nestingLevel: 'Nesting level',
+      notes: 'Notes',
+      owner: 'Owner',
+      sectionId: 'Book section',
+      source1: 'Source file',
+      'source1.extension': 'Source file extension',
+      'source1.type': 'Source file type',
+      'source1.url': 'Source file url',
+      'source1.htmlUrl': 'Source file html url',
+      'source1.name': 'Source file name',
+      source2: 'Source file',
+      'source2.extension': 'Source file extension',
+      'source2.type': 'Source file type',
+      'source2.url': 'Source file url',
+      'source2.htmlUrl': 'Source file html url',
+      'source2.name': 'Source file name',
+      status: 'Status',
+      title: 'Title',
+      typeId: 'Type'
     };
 
     return _(fieldLabels).extend(super._fieldLabels);
@@ -90,11 +165,22 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
       description: {
         [FIELD_ADDED]: 'Description set',
         [FIELD_CHANGED]: 'Description changed',
-        [FIELD_REMOVED]: 'Description removed',
+        [FIELD_REMOVED]: 'Description removed'
       }
     };
 
     return _(messages).extend(super._messages);
+  }
+
+  static get _ignoredFields() {
+    const ignoredFields = [
+      'source1.extension',
+      'source2.extension',
+      'source1.htmlUrl',
+      'source2.htmlUrl'
+    ];
+
+    return ignoredFields.concat(super._ignoredFields);
   }
 
   static get _collection() {
