@@ -9,7 +9,7 @@
         {{#with executor}}
           <div class="list-group-item">
             <p class="list-group-item-text">Who will do it?</p>
-            <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
           </div>
         {{/with}}
 
@@ -37,7 +37,7 @@
         {{#with completedBy}}
           <div class="list-group-item">
             <p class="list-group-item-text">Completed by</p>
-            <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
           </div>
         {{/with}}
 
@@ -77,7 +77,7 @@
         {{#with completedBy}}
           <div class="list-group-item">
             <p class="list-group-item-text">Completed by</p>
-            <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this)"}}></h4>
+            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
           </div>
         {{/with}}
 

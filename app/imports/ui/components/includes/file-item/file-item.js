@@ -5,12 +5,6 @@ Template.FileItem.viewmodel({
   _id: '',
   name: '',
   url: '',
-  autorun() {
-    if (!this.isUploaded()) {
-      const progressWidth = 100 - this.progress();
-      this.templateInstance.$('.uploading-file').css({ 'width':  progressWidth + '%'})
-    }
-  },
   removeClickFn() {
     return this.onRemoveClick.bind(this);
   },
@@ -28,7 +22,10 @@ Template.FileItem.viewmodel({
     return {
       _id: this._id(),
       name: this.name(),
-      url: this.url()
+      url: this.url(),
+      progress: this.progress(),
+      extension: this.extension(),
+      isUploaded: this.isUploaded()
     };
   }
 })

@@ -2,8 +2,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-import { addDiscussion } from '/imports/api/discussions/methods.js';
-import { addMessage } from '/imports/api/messages/methods.js';
+import { addMessage, update } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -19,17 +18,27 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	messageText: '',
 	slingshotDirective: '',
 
-	addNewMessage() {
-		addMessage.call(
-			this.makeNewMessage(), handleMethodResult(() => this.reset())
-		);
+	sendTextMessage() {
+		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		addMessage.call({
+			discussionId,
+			message: this.messageText(),
+			type: 'text'
+		}, handleMethodResult(() => {
+			this.reset();
+		}));
 	},
-
 	insertFileFn() {
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
     const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
+		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		addMessage.call({
+			discussionId,
+			files: [fileDoc],
+			type: 'file'
+		}, handleMethodResult);
 
     if (this.files() && this.files().length) {
       /*const options = {
@@ -44,32 +53,34 @@ Template.Discussion_AddMessage_Form.viewmodel({
         files: [fileDoc]
       }, cb);*/
     }
-		console.log( this.files() );
-		console.log(fileDoc);
-		console.log(cb);
+		console.log('this.files()', this.files());
+		console.log('fileDoc', fileDoc);
+		console.log('cb', cb);
   },
+	onUploadCb() {
+    return this.onUpload.bind(this);
+  },
+  onUpload(err, { _id, url }) {
+		console.log('started updating message');
+    if (err && err.error !== 'Aborted') {
 
-	makeNewMessage(files) {
-		const discussionId = (() => {
-			const existingId = this.getDiscussionIdByStandardId(this.standardId());
+			// [TODO] Handle error
+      return;
+    }
 
-			if (existingId) return existingId;
-
-			return (() => {
-				const args = {
-					documentType: DocumentTypes[0],
-					linkedTo: this.standardId()
-				};
-				return addDiscussion.call({ ...args }, handleMethodResult(() => this.reset()));
-			})();
-		})();
-
-		return {
-			discussionId,
-			message: this.messageText()
-		};
-	},
-
+    const query = {
+      files: {
+        $elemMatch: { _id }
+      }
+    };
+    const options = {
+      $set: {
+        'files.$.url': url
+      }
+    };
+		console.log('finishing updating message');
+    update({ query, options });
+  },
 	onSubmit(e) {
 		e.preventDefault();
 
@@ -84,7 +95,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		}
 
 		if (!!this.messageText()) {
-			this.addNewMessage();
+			this.sendTextMessage();
 		} else {
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}

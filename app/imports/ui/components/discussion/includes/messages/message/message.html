@@ -31,7 +31,22 @@
 				</div>
 			</div>
 
-			<p class="chat-item-text" {{b "text: messageRendered"}}></p>
+			<p class="chat-item-text">
+				{{#if isTextMessage}}
+					{{{formattedMessageText}}}
+				{{/if}}
+				{{#if isFileMessage}}
+					{{#each files}}
+						{{> FileItem
+				        _id=_id
+				        name=name
+				        url=url
+				        extension=extension
+								isReadOnly=true
+				        uploader=uploader}}
+					{{/each}}
+				{{/if}}
+			</p>
 		</div>
 	</div>
 </template>

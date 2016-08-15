@@ -9,7 +9,7 @@
           <span>Draft</span>
         </span>
       </h4>
-      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: 'Deleted by: ' + userFullNameOrEmail(this.deletedBy)"}}></p>
+      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
       <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: renderDate(this.deletedAt)"}}></p>
     </div>
