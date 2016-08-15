@@ -3,7 +3,7 @@
     <span class="navbar-title dropdown">
       {{#if isDiscussionOpened}}
         {{#with standard}}
-          <div class="nav-item" {{b "text: this.title"}}></div>
+          <div class="nav-item">{{this.title}} - discussion</div>
         {{/with}}
       {{else}}
         <a class="dropdown-toggle pointer" data-toggle="dropdown"
@@ -19,7 +19,7 @@
     </span>
     <ul class="nav navbar-nav pull-xs-left">
       <li class="nav-item">
-        <a class="nav-link pointer" {{b "click: navigate"}}>
+        <a class="nav-link pointer" {{b "click: onNavigate"}}>
         	<i class="fa fa-angle-left"></i>
         </a>
       </li>

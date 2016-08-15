@@ -4,12 +4,12 @@
       {{> StandardsList}}
     </div>
   {{/unless}}
-  <div class="content-cards hidden-sm-down scroll">
-    {{> Standards_Card_Read _id=standardId}}
+  <div class="content-cards hidden-sm-down scroll" style={{styles}}>
+    {{> Standards_Card_Read _id=standardId isDiscussionOpened=isDiscussionOpened messagesNotViewedCount=messagesNotViewedCount}}
   </div>
   {{#if isDiscussionOpened}}
     <div class="content-cards content-cards-flush scroll">
-      {{> Discussion_Card _id=standardId isReady=isReady}}
+      {{> Discussion_Card linkedTo=standardId isReady=isReady}}
     </div>
   {{/if}}
 </template>

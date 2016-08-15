@@ -466,7 +466,6 @@ export default {
     if (docWithUncompletedAnalysis) {
       const { sequentialId, title } = docWithUncompletedAnalysis;
       const docName = `${sequentialId} ${title}`;
-      console.log('linkedTo', linkedTo);
       throw new Meteor.Error(
         400,
         `Root cause analysis for ${sequentialId} "${title}" must be completed first`

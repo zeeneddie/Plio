@@ -1,11 +1,11 @@
 <template name="Discussion_Card">
 	<div class="content-cards-inner flexbox-column">
 		<div class="chat card">
-			{{> Discussion_Header}}
+			{{> Discussion_Header ""}}
 
 			{{#if isReady}}
-				{{> Discussion_Messages}}
-				{{> Discussion_AddMessage_Form}}
+				{{> Discussion_Messages discussionId=discussionId}}
+				{{> Discussion_AddMessage_Form discussionId=discussionId}}
 			{{else}}
 				{{> PreloaderPage}}
 			{{/if}}

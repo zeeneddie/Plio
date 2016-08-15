@@ -1,13 +1,32 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { idSchemaDoc } from '../schemas.js';
+import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 
 
 export const DiscussionsSchema = new SimpleSchema([
+  BaseEntitySchema,
+  OrganizationIdSchema,
   {
     documentType: {
       type: String
     },
-    linkedTo: idSchemaDoc
+    linkedTo: idSchemaDoc,
+    startedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    startedAt: {
+      type: Date,
+      optional: true
+    },
+    isPrimary: {
+      type: Boolean,
+      defaultValue: false
+    },
+    isStarted: {
+      type: Boolean,
+      defaultValue: false
+    }
   }
 ]);
