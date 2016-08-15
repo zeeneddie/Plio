@@ -322,11 +322,11 @@ const WorkInboxFilters = {
   6: 'Team deleted work'
 };
 
-const DocumentTypes = [
-  'standard',
-  'non-conformity',
-  'risk'
-];
+const DocumentTypes = {
+  STANDARD: 'standard',
+  NON_CONFORMITY: 'non-conformity',
+  RISK: 'risk'
+};
 
 const ActionDocumentTypes = {
   'ACTION': 'action',

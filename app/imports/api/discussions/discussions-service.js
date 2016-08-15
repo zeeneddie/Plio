@@ -19,4 +19,4 @@ export default {
 	remove({ _id }) {
 		return this.collection.remove({ _id });
 	}
-}
+};

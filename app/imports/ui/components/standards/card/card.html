@@ -11,7 +11,8 @@
                   </a>
                 {{/if}}
                 {{#unless isDiscussionOpened}}
-                  <a class="btn btn-secondary" href="{{pathFor 'standardDiscussion' orgSerialNumber=organizationSerialNumber standardId=this._id}}" {{b "click: onDiscussionOpen"}}>
+                  <a class="btn btn-secondary"
+                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
     								<i class="fa fa-comments"></i>
                     {{#if messagesNotViewedCount}}
     								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>

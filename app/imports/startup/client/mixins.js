@@ -844,15 +844,15 @@ ViewModel.mixin({
     discussionHasMessages(discussionId) {
       return Messages.find({ discussionId }).count();
     },
-    getDiscussionIdByStandardId(standardId) {
-      const query = { documentType: DocumentTypes[0], linkedTo: standardId };
+    _getDiscussionIdByStandardId(standardId) {
+      const query = { documentType: DocumentTypes.STANDARD, linkedTo: standardId };
       const options = { fields: { _id: 1 } };
   		const discussion = Discussions.findOne(query, options);
 
   		return discussion ? discussion._id : null;
   	},
-    getDiscussionIdsByStandardId(standardId) {
-      const query = { documentType: DocumentTypes[0], linkedTo: standardId };
+    _getDiscussionIdsByStandardId(standardId) {
+      const query = { documentType: DocumentTypes.STANDARD, linkedTo: standardId };
       const options = { fields: { _id: 1 } };
   		const discussionIds = Discussions.find(query, options).map(
         c => c._id
