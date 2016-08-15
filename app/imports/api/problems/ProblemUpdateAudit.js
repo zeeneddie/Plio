@@ -4,21 +4,10 @@ import {
 } from '../constants.js';
 import { Departments } from '../departments/departments.js';
 import { Standards } from '../standards/standards.js';
-import { departmentsUpdateAudit } from '/imports/core/audit/mixins.js';
-import { filesUpdateAudit } from '/imports/core/audit/mixins.js';
-import { usersUpdateAudit } from '/imports/core/audit/mixins.js';
 import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
 
 
 export default class ProblemUpdateAudit extends DocumentUpdateAudit {
-
-  constructor(newDocument, oldDocument) {
-    super(newDocument, oldDocument);
-
-    _(this.constructor.prototype).extend(departmentsUpdateAudit);
-    _(this.constructor.prototype).extend(filesUpdateAudit);
-    _(this.constructor.prototype).extend(usersUpdateAudit);
-  }
 
   _buildLogs() {
     _(this._diff).each(diff => {

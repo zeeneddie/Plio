@@ -1,19 +1,10 @@
 import { CollectionNames, StandardStatuses } from '../constants.js';
 import { Departments } from '../departments/departments.js';
 import { StandardsBookSections } from '../standards-book-sections/standards-book-sections.js';
-import { departmentsUpdateAudit } from '/imports/core/audit/mixins.js';
-import { usersUpdateAudit } from '/imports/core/audit/mixins.js';
 import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
 
 
 export default class StandardUpdateAudit extends DocumentUpdateAudit {
-
-  constructor(newDocument, oldDocument) {
-    super(newDocument, oldDocument);
-    
-    _(this.constructor.prototype).extend(departmentsUpdateAudit);
-    _(this.constructor.prototype).extend(usersUpdateAudit);
-  }
 
   _buildLogs() {
     _(this._diff).each(diff => {
