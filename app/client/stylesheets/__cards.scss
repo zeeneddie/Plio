@@ -311,6 +311,11 @@
       @include rotate(180);
     }
 
+    &.waiting:after {
+      content: "\f110";
+      animation: fa-spin 1s infinite steps(8);
+    }
+
     .row {
       @include flex(1);
     }

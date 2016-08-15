@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { CountSubs } from '/imports/startup/client/subsmanagers.js';
 
+
 Template.StandardsPage.viewmodel({
   share: 'window',
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],

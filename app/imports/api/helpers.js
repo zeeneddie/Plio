@@ -1,5 +1,11 @@
 import moment from 'moment-timezone';
 
+import { CollectionNames } from './constants.js';
+import { Actions } from './actions/actions.js';
+import { NonConformities } from './non-conformities/non-conformities.js';
+import { Risks } from './risks/risks.js';
+import { Standards } from './standards/standards.js';
+
 
 const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
@@ -52,8 +58,20 @@ const handleMethodResult = (cb) => {
   };
 };
 
+const getCollectionByName = (colName) => {
+  const collections = {
+    [CollectionNames.ACTIONS]: Actions,
+    [CollectionNames.NCS]: NonConformities,
+    [CollectionNames.RISKS]: Risks,
+    [CollectionNames.STANDARDS]: Standards
+  };
+
+  return collections[colName];
+};
+
 export {
   compareDates,
+  getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
   handleMethodResult
