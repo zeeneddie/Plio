@@ -14,7 +14,10 @@ Template.Discussion_Messages.viewmodel({
 
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
-		bulkUpdateViewedBy.call({ discussionId });
+
+		if(discussionId){
+			bulkUpdateViewedBy.call({ discussionId });
+		}
 	},
 
   // The _id of the primary discussion for this standardId
