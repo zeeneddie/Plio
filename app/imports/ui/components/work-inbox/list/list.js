@@ -2,8 +2,9 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 const { TYPES } = WorkItemsStore;
-
+window.WorkItems = WorkItems;
 Template.WorkInbox_List.viewmodel({
   share: 'search',
   mixin: [
@@ -155,10 +156,15 @@ Template.WorkInbox_List.viewmodel({
     return (value) => {
       const { my: { current, completed, deleted } = {} } = this.items() || {};
 
+      // My current work items
       if (this.isActiveWorkInboxFilter(1)) {
         return current;
+
+      // My completed work items
       } else if (this.isActiveWorkInboxFilter(3)) {
         return completed;
+
+      // My deleted work items
       } else if (this.isActiveWorkInboxFilter(5)) {
         return deleted;
       }
