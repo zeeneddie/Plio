@@ -1,87 +1,13 @@
 <template name="Subcards_RootCauseAnalysis_Read">
   {{#with analysis}}
-    {{#if has this 'executor' 'targetDate'}}
-      <div class="card-block card-subheading">
-        <h4 class="card-title">Root cause analysis</h4>
-      </div>
-      <div class="list-group">
-
-        {{#with executor}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Who will do it?</p>
-            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with targetDate}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Target date</p>
-            <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with status}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Status</p>
-            <h4 class="list-group-item-heading" {{b "text: getAnalysisStatusName(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with completedAt}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Completed date</p>
-            <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with completedBy}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Completed by</p>
-            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
-          </div>
-        {{/with}}
-
-      </div>
-    {{/if}}
+    {{> Subcards_RootCauseAnalysis_Read_Item
+        doc=this
+        heading="Root cause analysis"}}
   {{/with}}
 
   {{#with updateOfStandards}}
-    {{#if has this 'targetDate'}}
-      <div class="card-block card-subheading"
-        {{b "if: this.targetDate"}}>
-        <h4 class="card-title">Update of standards</h4>
-      </div>
-      <div class="list-group">
-
-        {{#with targetDate}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Target date</p>
-            <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with status}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Status</p>
-            <h4 class="list-group-item-heading" {{b "text: getAnalysisStatusName(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with completedAt}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Completed date</p>
-            <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
-          </div>
-        {{/with}}
-
-        {{#with completedBy}}
-          <div class="list-group-item">
-            <p class="list-group-item-text">Completed by</p>
-            <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
-          </div>
-        {{/with}}
-
-      </div>
-    {{/if}}
+    {{> Subcards_RootCauseAnalysis_Read_Item
+        doc=this
+        heading="Update of standards"}}
   {{/with}}
 </template>

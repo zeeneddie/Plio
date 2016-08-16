@@ -30,12 +30,12 @@
 
     &:hover {
       .chat-item-dropdown .btn, .chat-item-gutter {
-        display: block !important;
+        visibility: visible !important;
       }
     }
     &-gutter {
       position: absolute;
-      display: none;
+      visibility: hidden;
       width: 40px;
       top: 0;
       text-align: center;
@@ -96,10 +96,14 @@
       color: #777;
       font-size: 13px;
     }
-    &-text {
+    &-content {
       margin: 0;
       font-size: 16px;
       margin-left: 4rem;
+
+      .file-item {
+        max-width: calc(100% - 40px);
+      }
 
       .chat-item-start & {
         color: #777;
@@ -113,10 +117,12 @@
       .btn {
         padding: 0 5px;
         outline: none !important;
-        display: none;
+        visibility: hidden;
         color: #aaa;
         font-size: 18px;
-        line-height: 18px;
+        height: 25px;
+        line-height: 25px;
+        transition: none;
 
         &[aria-expanded="true"] {
           display: block !important;
