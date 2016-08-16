@@ -21,7 +21,7 @@ Template.NC_Layout.viewmodel({
         this.templateInstance.subscribe('risks', _id)
       ];
 
-      if (this.isActiveNCFilter('deleted')) {
+      if (this.isActiveNCFilter(4)) {
         _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id, true));
       } else {
         _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id));

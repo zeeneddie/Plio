@@ -8,7 +8,7 @@ import { DocumentTypes } from '/imports/api/constants.js';
 Standards.after.insert((userId, { _id, organizationId }) => {
   DiscussionsService.insert({
     organizationId,
-    documentType: DocumentTypes[0],
+    documentType: DocumentTypes.STANDARD,
     linkedTo: _id,
     isPrimary: true
   });

@@ -5,14 +5,18 @@
 		</div>
 	{{/if}}
 
-	<div class="chat-item">
-		<img class="chat-item-avatar" {{b "src: avatar"}}>
+	<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
+		{{#unless isMergedWithPreviousMessage}}
+			<img class="chat-item-avatar" {{b "src: avatar"}}>
+		{{/unless}}
 
 		<div class="chat-item-card">
-			<span class="chat-item-time" {{b "text: time"}}></span>
-			<span class="chat-item-author" {{b "text: username"}}></span>
+			{{#unless isMergedWithPreviousMessage}}
+				<span class="chat-item-author" {{b "text: username"}}></span>
+				<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm A')"}}></a>
+			{{/unless}}
 
-			<div class="chat-item-dropdown dropup">
+			<div class="chat-item-dropdown dropdown">
 				<button type="button" class="btn btn-link" data-toggle="dropdown">
 					<i class="fa fa-ellipsis-h"></i>
 				</button>
@@ -26,7 +30,6 @@
 					<!--a href="#" class="dropdown-item">Move to another channel</a-->
 					{{#if isAuthor}}
 						<a
-							href="#"
 							class="dropdown-item js-message-remove"
 							{{b "click: remove"}}>
 							Delete message
@@ -34,6 +37,12 @@
 					{{/if}}
 				</div>
 			</div>
+
+			{{#if isMergedWithPreviousMessage}}
+				<div class="chat-item-gutter">
+					<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm')"}}></a>
+				</div>
+			{{/if}}
 
 			<p class="chat-item-text">
 				{{#if isTextMessage}}

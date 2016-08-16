@@ -1,22 +1,50 @@
-.chat {  
+.chat {
   background: white;
   position: relative;
-  
+
   @include flex(1);
   @include flexbox;
   @include flex-direction(column);
-  
+
   &-heading {
     min-height: 55px;
   }
-  
+
   &-item {
-    padding: .5rem 1.25rem;
-    
+    padding: .3rem 1.25rem;
+
+    &.message:last-of-type .dropdown-menu{
+      top: auto !important;
+      bottom: 100% !important;
+    }
+
+    &.first {
+      .file-item {
+        margin-top: 6px;
+      }
+    }
+
+    &.selected {
+      background-color: #f5f5f5;
+    }
+
+    &:hover {
+      .chat-item-dropdown .btn, .chat-item-gutter {
+        display: block !important;
+      }
+    }
+    &-gutter {
+      position: absolute;
+      display: none;
+      width: 40px;
+      top: 0;
+      text-align: center;
+      padding: 2px 0;
+    }
     &-date {
       text-align: center;
       position: relative;
-      
+
       &:after {
         content: '';
         position: absolute;
@@ -27,7 +55,7 @@
         background: #ddd;
         z-index: 1;
       }
-      
+
       span {
         display: inline-block;
         padding: 0 10px;
@@ -53,6 +81,7 @@
     }
     &-card {
       @include clearfix;
+      position: relative;
     }
     &-author {
       font-size: 15px;
@@ -62,7 +91,6 @@
     &-time {
       font-size: 13px;
       color: #999;
-      float: right;
     }
     &-channel {
       color: #777;
@@ -71,22 +99,29 @@
     &-text {
       margin: 0;
       font-size: 16px;
-  
+      margin-left: 4rem;
+
       .chat-item-start & {
         color: #777;
-        
+
       }
     }
     &-dropdown {
       float: right;
       clear: right;
-      
+
       .btn {
         padding: 0 5px;
         outline: none !important;
+        display: none;
         color: #aaa;
         font-size: 18px;
-        
+        line-height: 18px;
+
+        &[aria-expanded="true"] {
+          display: block !important;
+        }
+
         &:hover {
           color: $blue-color;
         }
@@ -94,7 +129,7 @@
       &.open .btn {
         color: $blue-color;
       }
-      
+
       .dropdown-menu {
         margin: 0;
       }
@@ -109,8 +144,8 @@
       .form-control {
         font-size: 16px;
         //line-height: 22px;
-        background: transparent;  
-        //height: 38px;      
+        background: transparent;
+        //height: 38px;
       }
       .btn {
         line-height: 22px;
@@ -119,13 +154,13 @@
       }
     }
   }
-  
+
   &-content {
     @include scroll;
     @include hide-scrollbar;
     margin-bottom: 70px;
   }
-  
+
   &-form {
     padding: 0 1.25rem 1.25rem ;
     position: absolute;
@@ -134,24 +169,24 @@
     bottom: 0;
     background: white;
     z-index: 2;
-  
+
     .form-group {
       margin: 0;
       position: relative;
       padding-left: 55px;
     }
-    
+
     .input-group {
       position: relative;
       z-index: 2;
-    }    
-  
+    }
+
     .form-control {
       font-size: 16px;
       //padding: 24px 14px 8px;
       //padding-top: 1.75rem;
       background: transparent;
-      
+
     }
     .btn {
       //padding: 16px 12px;
@@ -159,5 +194,5 @@
       font-size: 22px;
       margin-bottom: 0;
     }
-  } 
+  }
 }

@@ -6,7 +6,31 @@ import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
 import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema } from '../schemas.js';
+import { checkDocExistance, checkOrgMembership } from '../checkers.js';
+import { getCollectionByDocType } from '../helpers.js';
+import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from './errors.js';
 
+const onInsertCheck = ({ discussionId }) => {
+	const { linkedTo, documentType } = checkDocExistance({ _id: discussionId }, Discussions);
+
+	const { isDeleted, organizationId } = checkDocExistance({ _id: linkedTo }, getCollectionByDocType(documentType));
+
+	if (isDeleted) {
+		throw CANNOT_CREATE_MESSAGE_FOR_DELETED;
+	};
+
+	return true;
+};
+
+onUpdateCheck = ({ _id, userId }) => {
+	const { createdBy } = checkDocExistance({ _id }, Messages);
+
+	if (userId !== createdBy) {
+		throw ONLY_OWNER_CAN_UPDATE;
+	}
+
+	return true;
+};
 
 export const addMessage = new ValidatedMethod({
 	name: 'Mesages.addMessage',
@@ -14,7 +38,6 @@ export const addMessage = new ValidatedMethod({
 
 	run({ ...args }) {
 		const userId = this.userId;
-		const discussion = Discussions.findOne({ _id: args.discussionId });
 
 		if (!userId) {
 			throw new Meteor.Error(
@@ -22,11 +45,7 @@ export const addMessage = new ValidatedMethod({
 			);
 		}
 
-		if (!discussion) {
-			throw new Meteor.Error(
-				404, 'Discussion not found'
-			);
-		}
+		onInsertCheck({ ...args });
 
 		return MessagesService.insert({ ...args });
 	}
@@ -39,16 +58,17 @@ export const update = new ValidatedMethod({
     IdSchema, optionsSchema //, MessageUpdateSchema
   ]).validator(),
 
-  run({ _id, ...args }) {
+  run({ ...args }) {
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
         403, 'Unauthorized user cannot update a message'
       );
     }
-		// [TODO] only message owner can make an update
 
-    return MessagesService.update({ _id, ...args });
+		onUpdateCheck({ ...args, userId });
+
+    return MessagesService.update({ ...args });
   }
 });
 
@@ -88,7 +108,7 @@ export const updateViewedBy = new ValidatedMethod({
 
 		if (!userId) {
 			throw new Meteor.Error(
-				403, 'Unauthorized user cannot update the discussions'
+				403, 'Unauthorized user cannot update a message'
 			);
 		}
 
@@ -105,7 +125,7 @@ export const bulkUpdateViewedBy = new ValidatedMethod({
 
 		if (!userId) {
 			throw new Meteor.Error(
-				403, 'Unauthorized user cannot update the discussions'
+				403, 'Unauthorized user cannot update a message'
 			);
 		}
 
@@ -123,6 +143,8 @@ export const removeMessageById = new ValidatedMethod({
 				403, 'Unauthorized user cannot remove messages from discussions'
 			);
 		}
+
+		onUpdateCheck({ _id });
 
 		return MessagesService.remove({ _id });
 	}

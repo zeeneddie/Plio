@@ -5,13 +5,13 @@
     onModalOpen=onModalOpen
     onSearchInputValue=onSearchInputValue}}
 
-    {{#if isActiveWorkInboxFilter "My current work"}}
+    {{#if isActiveWorkInboxFilter 1}}
       {{#each items.my.current}}
         {{> WorkInbox_Item}}
       {{/each}}
     {{/if}}
 
-    {{#if isActiveWorkInboxFilter "Team current work"}}
+    {{#if isActiveWorkInboxFilter 2}}
       {{#each assignees.current}}
         {{> ListItem
             template="WorkInbox_SectionItem"
@@ -20,13 +20,13 @@
       {{/each}}
     {{/if}}
 
-    {{#if isActiveWorkInboxFilter "My completed work"}}
+    {{#if isActiveWorkInboxFilter 3}}
       {{#each items.my.completed}}
         {{> WorkInbox_Item}}
       {{/each}}
     {{/if}}
 
-    {{#if isActiveWorkInboxFilter "Team completed work"}}
+    {{#if isActiveWorkInboxFilter 4}}
       {{#each assignees.completed}}
         {{> ListItem
             template="WorkInbox_SectionItem"
@@ -35,13 +35,13 @@
       {{/each}}
     {{/if}}
 
-    {{#if isActiveWorkInboxFilter "My deleted work"}}
+    {{#if isActiveWorkInboxFilter 5}}
       {{#each items.my.deleted}}
         {{> WorkInbox_Item}}
       {{/each}}
     {{/if}}
 
-    {{#if isActiveWorkInboxFilter "Team deleted work"}}
+    {{#if isActiveWorkInboxFilter 6}}
       {{#each assignees.deleted}}
         {{> ListItem
             template="WorkInbox_SectionItem"

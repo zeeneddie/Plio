@@ -1,12 +1,12 @@
 <template name="NC_Header">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Non-conformities by - ' + activeNCFilter"}}>
+      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Non-conformities by - ' + currentFilterLabel"}}>
       </a>
       <div class="dropdown-menu">
         {{#each filters}}
           <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveNCFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
+            {{b "class: { active: isActiveNCFilter(this.id) }, text: 'By ' + this.label, click: selectFilter(this.id)"}}>
           </a>
         {{/each}}
       </div>

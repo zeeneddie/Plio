@@ -40,7 +40,7 @@ Template.Risks_Card_Read.viewmodel({
 
     const callback = (err) => {
       cb(err, () => {
-        FlowRouter.setQueryParams({ by: 'type' });
+        FlowRouter.setQueryParams({ filter: 1 });
         Meteor.setTimeout(() => {
           this.goToRisk(_id);
           this.expandCollapsed(_id);

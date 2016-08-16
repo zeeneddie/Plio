@@ -5,8 +5,8 @@ import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditStandard.viewmodel({
   mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck'],
-  autorun() {
-    const doc = this._getStandardByQuery( {_id: this.standardId()} );
+  onRendered() {
+    const doc = this._getStandardByQuery({ _id: this.standardId() });
     const userId = Meteor.userId();
 
     if (!isViewed(doc, userId)) {
