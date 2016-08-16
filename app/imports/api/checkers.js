@@ -4,7 +4,7 @@ import moment from 'moment-timezone';
 
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
-import { AnalysisStatuses } from './constants.js';
+import { AnalysisStatuses, OrgOwnerRoles } from './constants.js';
 import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
 
 
@@ -36,6 +36,14 @@ export const canDeleteUsers = (userId, organizationId) => {
   return Roles.userIsInRole(
     userId,
     UserRoles.DELETE_USERS,
+    organizationId
+  );
+};
+
+export const isOrgOwner = (userId, organizationId) => {
+  return Roles.userIsInRole(
+    userId,
+    OrgOwnerRoles,
     organizationId
   );
 };
@@ -128,7 +136,7 @@ export const isViewed = (doc, userId) => {
   return !!viewedBy.length && _.contains(viewedBy, userId);
 };
 
-export const checkOrgMembership = (_id, userId, collection) => {
+export const checkOrgMembership = (collection, _id, userId) => {
   const doc = collection.findOne({ _id });
 	const { organizationId } = Object.assign({}, doc);
 	if (!isOrgMember(userId, organizationId)) {
@@ -137,8 +145,12 @@ export const checkOrgMembership = (_id, userId, collection) => {
   return doc;
 };
 
-export const checkDocExistance = (query, collection, err = DOC_NOT_FOUND) => {
-  const doc = collection.findOne(query);
+export const checkDocExistance = (collOrObj, query, err = DOC_NOT_FOUND) => {
+  const doc = collOrObj instanceof Mongo.Collection
+                ? collOrObj.findOne(query)
+                : _.has(collOrObj, query);
+
   if (!doc) throw err;
+
   return doc;
 };

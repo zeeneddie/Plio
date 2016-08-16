@@ -74,10 +74,13 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
+
 export {
   compareDates,
   getFormattedDate,
   getTzTargetDate,
   handleMethodResult,
-  getCollectionByDocType
+  getCollectionByDocType,
+  chain
 };
