@@ -29,8 +29,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		addMessage.call({
 			discussionId,
-			//message: sanitizeHtml(this.messageText()),
-			message: this.messageText(),
+			message: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult(() => {
 			this.reset();
