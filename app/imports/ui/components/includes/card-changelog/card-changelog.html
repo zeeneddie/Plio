@@ -1,6 +1,6 @@
 <template name="CardChangelog">
   {{#with document}}
-    <div class="card-footer card-changelog-toggle" {{b "click: toggleLogs, class: { collapsed: collapsed, waiting: showSpinner }"}}>
+    <div class="card-footer card-changelog-toggle" {{b "click: toggleLogs, class: { collapsed: collapsed, waiting: loadingLogs }"}}>
       <div class="row">
         <div class="col-xs-6">
           Created by: <span {{b "text: userNameOrEmail(this.createdBy)"}}></span>
@@ -25,15 +25,26 @@
         <tbody>
           {{#each logs}}
             <tr>
-              <td>{{getUser executor}}</td>
+              <td class="log-user">{{getUser executor}}</td>
               <td>{{message}}</td>
-              <td class="text-right">{{getPrettyDate date}}</td>
+              <td class="log-date text-right">{{getPrettyDate date}}</td>
             </tr>
           {{/each}}
         </tbody>
       </table>
       <div class="card-footer">
-        <a class="btn btn-secondary pointer">View all changes ({{total}} total)</a>
+        {{#unless showAllLogs}}
+          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, enable: viewButtonEnabled"}}>
+            View all changes ({{logsLength}} total)
+            {{#if loadingAllLogs}}
+              <i class="fa fa-spinner fa-pulse"></i>
+            {{/if}}
+          </a>
+        {{else}}
+          <a class="btn btn-secondary pointer" {{b "click: viewRecentLogs"}}>
+            View {{limit}} recent changes
+          </a>
+        {{/unless}}
       </div>
     </div>
   {{/with}}

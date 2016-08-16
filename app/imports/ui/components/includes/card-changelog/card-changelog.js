@@ -7,42 +7,26 @@ import { CollectionNames } from '/imports/api/constants.js';
 
 Template.CardChangelog.viewmodel({
   mixin: ['collapse', 'counter', 'date', 'user'],
-  isReady: false,
-  showSpinner: false,
+  limit: 10,
+  areLogsLoaded: false,
+  loadingLogs: false,
+  areAllLogsLoaded: false,
+  loadingAllLogs: false,
+  showAllLogs: false,
   autorun() {
     this.document.depend();
-    this.collapsed(true);
-    this.isReady(false);
+    this.resetProps();
   },
-  toggleLogs() {
-    if (this.isReady()) {
-      this.toggleCollapse();
-    } else {
-      this.showSpinner(true);
-
-      const documentId = this.document()._id;
-      const collectionName = this.docCollection();
-
-      this.templateInstance.subscribe(
-        'auditLogs',
-        documentId,
-        collectionName,
-        {
-          onReady: () => {
-            this.showSpinner(false);
-            this.isReady(true);
-            this.toggleCollapse();
-          }
-        }
-      );
-
-      this.templateInstance.subscribe(
-        'documentLogsCount',
-        `document-logs-count-${documentId}`,
-        documentId,
-        collectionName
-      );
-    }
+  resetProps() {
+    this.collapsed(true);
+    this.areLogsLoaded(false);
+    this.loadingLogs(false);
+    this.areAllLogsLoaded(false);
+    this.loadingAllLogs(false);
+    this.showAllLogs(false);
+  },
+  documentId() {
+    return this.document()._id;
   },
   docCollection() {
     const collections = {
@@ -54,12 +38,44 @@ Template.CardChangelog.viewmodel({
 
     return collections[this.documentType()];
   },
+  toggleLogs() {
+    if (this.areLogsLoaded()) {
+      this.toggleCollapse();
+    } else {
+      this.loadingLogs(true);
+
+      const documentId = this.documentId();
+      const collectionName = this.docCollection();
+
+      this.templateInstance.subscribe(
+        'documentLogsCount',
+        `document-logs-count-${documentId}`,
+        documentId,
+        collectionName
+      );
+
+      this.templateInstance.subscribe(
+        'auditLogs',
+        documentId,
+        collectionName,
+        {
+          onReady: () => {
+            this.loadingLogs(false);
+            this.areLogsLoaded(true);
+            this.toggleCollapse();
+          }
+        }
+      );
+    }
+  },
   logs() {
-    return AuditLogs.find({
-      documentId: this.document()._id
-    }, {
-      sort: { date: -1 }
-    });
+    const options = { sort: { date: -1 } };
+
+    if (!this.showAllLogs()) {
+      _(options).extend({ limit: this.limit() });
+    }
+
+    return AuditLogs.find({ documentId: this.documentId() }, options);
   },
   getUser(userId) {
     if (userId === 'system') {
@@ -72,7 +88,35 @@ Template.CardChangelog.viewmodel({
   getPrettyDate(dateObj) {
     return this.renderDate(dateObj);
   },
-  total() {
-    return this.get(`document-logs-count-${this.document()._id}`);
+  logsLength() {
+    return this.get(`document-logs-count-${this.documentId()}`);
+  },
+  loadAllLogs() {
+    if (this.areAllLogsLoaded()) {
+      this.showAllLogs(true);
+    } else {
+      this.loadingAllLogs(true);
+
+      this.templateInstance.subscribe(
+        'auditLogs',
+        this.documentId(),
+        this.docCollection(),
+        this.limit(),
+        0,
+        {
+          onReady: () => {
+            this.loadingAllLogs(false);
+            this.areAllLogsLoaded(true);
+            this.showAllLogs(true);
+          }
+        }
+      );
+    }
+  },
+  viewRecentLogs() {
+    this.showAllLogs(false);
+  },
+  viewButtonEnabled() {
+    return this.logsLength() > this.limit();
   }
 });

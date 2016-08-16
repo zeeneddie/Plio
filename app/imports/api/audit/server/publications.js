@@ -31,7 +31,8 @@ Meteor.publish('auditLogs', function(documentId, collectionName, skip=0, limit=1
     collection: collectionName
   }, {
     skip,
-    limit
+    limit,
+    sort: { date: -1 }
   });
 });
 
