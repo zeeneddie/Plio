@@ -306,7 +306,7 @@ ViewModel.mixin({
       return FlowRouter.getParam('standardId');
     },
     isActiveStandardFilter(filterId) {
-      return this.activeStandardFilterId() === filterId;
+      return this.activeStandardFilterId() === parseInt(filterId, 10);
     },
     activeStandardFilterId() {
       let id = parseInt(FlowRouter.getQueryParam('filter'));
@@ -451,7 +451,7 @@ ViewModel.mixin({
       return FlowRouter.getParam('riskId');
     },
     isActiveRiskFilter(filterId) {
-      return this.activeRiskFilterId() === filterId;
+      return this.activeRiskFilterId() === parseInt(filterId, 10);
     },
     activeRiskFilterId() {
       let id = parseInt(FlowRouter.getQueryParam('filter'));
@@ -489,7 +489,7 @@ ViewModel.mixin({
       return FlowRouter.getParam('nonconformityId');
     },
     isActiveNCFilter(filterId) {
-      return this.activeNCFilterId() === filterId;
+      return this.activeNCFilterId() === parseInt(filterId, 10);
     },
     activeNCFilterId() {
       let id = parseInt(FlowRouter.getQueryParam('filter'));
@@ -524,10 +524,10 @@ ViewModel.mixin({
       return FlowRouter.getParam('workItemId');
     },
     isActiveWorkInboxFilter(filterId) {
-      return this.activeWorkInboxFilterId() === filterId;
+      return this.activeWorkInboxFilterId() === parseInt(filterId, 10);
     },
     activeWorkInboxFilterId() {
-      let id = parseInt(FlowRouter.getQueryParam('filter'));
+      let id = parseInt(FlowRouter.getQueryParam('filter'), 10);
       if (!WorkInboxFilters[id]) {
         id = 1;
       }
