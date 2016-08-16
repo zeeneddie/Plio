@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
 import { addMessage, updateFilesUrls } from '/imports/api/messages/methods.js';
@@ -25,7 +26,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 		addMessage.call({
 			discussionId,
-			message: this.messageText(),
+			message: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult(() => {
 			this.reset();

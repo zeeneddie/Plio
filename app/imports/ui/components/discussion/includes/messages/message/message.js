@@ -1,4 +1,6 @@
 import { Autolinker } from 'meteor/konecty:autolinker';
+//import { Clipboard } from 'meteor/xvendo:clipboardjs';
+import Clipboard from 'clipboard';
 import { Template } from 'meteor/templating';
 
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -12,6 +14,8 @@ Template.Discussion_Message.viewmodel({
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
+
+		const clipboard = new Clipboard('.js-message-copy-link');
 	},
 	uploader() {
 	  //return this.child('FileUploader');
