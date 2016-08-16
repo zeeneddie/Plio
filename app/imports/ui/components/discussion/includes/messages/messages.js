@@ -82,7 +82,7 @@ Template.Discussion_Messages.viewmodel({
 						const prevCreatedAt = get(prevMessage, 'createdAt');
 						const prevCreatedBy = get(prevMessage, 'createdBy');
 
-						if (message.createdBy === prevCreatedBy && message.createdAt - prevCreatedAt < 3 * 60 * 1000) {
+						if (message.createdBy === prevCreatedBy && message.createdAt - prevCreatedAt < 5 * 60 * 1000) {
 							return true;
 						}
 
