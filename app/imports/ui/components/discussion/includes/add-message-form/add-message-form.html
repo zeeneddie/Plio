@@ -1,32 +1,34 @@
 <template name="Discussion_AddMessage_Form">
 	<div class="chat-form">
-		<form class="f1" {{on "submit: onSubmit"}}>
-			<div class="form-group">
-				<div class="input-group">
-					<!--span class="input-group-btn">
-						<button class="btn btn-secondary">
-							<i class="fa fa-paperclip"></i>
-						</button>
-					</span-->
-					{{> FileUploader2
-						insertFile=insertFileFn
-						onUpload=onUploadCb
-						metaContext=uploaderMetaContext
-						slingshotDirective=slingshotDirective}}
+		<form class="f1" {{b "submit: onSubmit"}}>
+			<fieldset disabled={{disabled}}>
+				<div class="form-group">
+					<div class="input-group">
+						<!--span class="input-group-btn">
+							<button class="btn btn-secondary">
+								<i class="fa fa-paperclip"></i>
+							</button>
+						</span-->
+						{{> FileUploader2
+							insertFile=insertFileFn
+							onUpload=onUploadCb
+							metaContext=uploaderMetaContext
+							slingshotDirective=slingshotDirective}}
 
-					<input
-						type="text"
-						class="form-control"
-						placeholder="Add a comment"
-						{{b "value: messageText"}}>
+						<input
+							type="text"
+							class="form-control"
+							placeholder="Add a comment"
+							{{b "value: messageText"}}>
 
-					<span class="input-group-btn">
-						<button type="submit" class="btn btn-secondary">
-							<i class="fa fa-angle-right"></i>
-						</button>
-					</span>
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-secondary">
+								<i class="fa fa-angle-right"></i>
+							</button>
+						</span>
+					</div>
 				</div>
-			</div>
+			</fieldset>
 		</form>
 	</div>
 </template>

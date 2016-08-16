@@ -33,7 +33,7 @@ Template.WorkInbox_Item.viewmodel({
   },
   getHref() {
     const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: this._id() };
-    const queryParams = { by: this.activeWorkInboxFilter() };
+    const queryParams = { filter: this.activeWorkInboxFilterId() };
     return FlowRouter.path('workInboxItem', params, queryParams);
   },
   isNew() {

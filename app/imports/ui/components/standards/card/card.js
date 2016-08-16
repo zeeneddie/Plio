@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import get from 'lodash.get';
 
 import { ActionTypes } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
@@ -46,7 +47,7 @@ Template.Standards_Card_Read.viewmodel({
 
   },
   standards() {
-    const isDeleted = this.isActiveStandardFilter('deleted') ? true : { $in: [null, false] };
+    const isDeleted = this.isActiveStandardFilter(3) ? true : { $in: [null, false] };
     return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
@@ -65,7 +66,15 @@ Template.Standards_Card_Read.viewmodel({
     return StandardTypes.findOne({ _id });
   },
   _getNCsQuery() {
-    return { standardsIds: this.standard() && this.standard()._id };
+    return { standardsIds: get(this.standard(), '_id') };
+  },
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      standardId: get(this.standard(), '_id')
+    };
+    const queryParams = { filter: this.activeStandardFilterId() };
+    return FlowRouter.path('standardDiscussion', params, queryParams);
   },
   onDiscussionOpen(e) {
     e.preventDefault();
@@ -74,8 +83,7 @@ Template.Standards_Card_Read.viewmodel({
       this.width($(window).width());
     }
 
-    const params = { orgSerialNumber: this.organizationSerialNumber(), standardId: this._id() };
-    FlowRouter.go('standardDiscussion', params);
+    return FlowRouter.go(this.pathToDiscussion());
   },
   openEditStandardModal: _.throttle(function() {
     if (ViewModel.findOne('ModalWindow')) return;
@@ -83,7 +91,7 @@ Template.Standards_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standard() && this.standard()._id
+      _id: get(this.standard(), '_id')
     });
   }, 1000),
   restore({ _id, title, isDeleted }) {
@@ -105,7 +113,7 @@ Template.Standards_Card_Read.viewmodel({
           } else {
             swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
 
-            FlowRouter.setQueryParams({ by: 'section' });
+            FlowRouter.setQueryParams({ filter: 1 });
             Meteor.setTimeout(() => {
               this.goToStandard(_id);
               this.expandCollapsed(_id);

@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
 import { AnalysisStatuses } from './constants.js';
+import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
 
 
 export const canChangeStandards = (userId, organizationId) => {
@@ -125,4 +126,19 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
 export const isViewed = (doc, userId) => {
   const viewedBy = doc && doc.viewedBy || [];
   return !!viewedBy.length && _.contains(viewedBy, userId);
+};
+
+export const checkOrgMembership = (_id, userId, collection) => {
+  const doc = collection.findOne({ _id });
+	const { organizationId } = Object.assign({}, doc);
+	if (!isOrgMember(userId, organizationId)) {
+		throw NOT_AN_ORG_MEMBER;
+	}
+  return doc;
+};
+
+export const checkDocExistance = (query, collection, err = DOC_NOT_FOUND) => {
+  const doc = collection.findOne(query);
+  if (!doc) throw err;
+  return doc;
 };

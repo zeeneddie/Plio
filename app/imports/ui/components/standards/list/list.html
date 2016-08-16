@@ -7,7 +7,7 @@
     onSearchInputValue=onSearchInputValue
     _transform=_transform}}
 
-    {{#if isActiveStandardFilter 'section'}}
+    {{#if isActiveStandardFilter 1}}
       {{#each sections}}
         {{> ListItem
             template="StandardSectionItem"
@@ -16,7 +16,7 @@
       {{/each}}
     {{/if}}
 
-    {{#if isActiveStandardFilter 'type'}}
+    {{#if isActiveStandardFilter 2}}
       {{#each types}}
         {{> ListItem
             template="StandardTypeItem"
@@ -26,7 +26,7 @@
       {{/each}}
     {{/if}}
 
-    {{#if isActiveStandardFilter 'deleted'}}
+    {{#if isActiveStandardFilter 3}}
       {{#each standardsDeleted}}
         {{> Standards_Item_Read}}
       {{/each}}

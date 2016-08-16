@@ -5,7 +5,7 @@
     onModalOpen=onModalOpen
     onSearchInputValue=onSearchInputValue}}
 
-      {{#if isActiveRiskFilter 'type'}}
+      {{#if isActiveRiskFilter 1}}
         {{#each types}}
           {{> ListItem
               template='Risks_SectionItem'
@@ -14,7 +14,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveRiskFilter 'status'}}
+      {{#if isActiveRiskFilter 2}}
         {{#each statuses}}
           {{> ListItem
               template="Risks_SectionItem"
@@ -23,7 +23,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveRiskFilter "department/sector"}}
+      {{#if isActiveRiskFilter 3}}
         {{#each departments}}
           {{> ListItem
               template="Risks_SectionItem"
@@ -33,7 +33,7 @@
         {{/each}}
       {{/if}}
 
-      {{#if isActiveRiskFilter 'deleted'}}
+      {{#if isActiveRiskFilter 4}}
         {{#each risksDeleted}}
           {{> Risks_Item}}
         {{/each}}
