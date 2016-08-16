@@ -8,7 +8,6 @@ import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: 'discussions',
-	share: 'files',
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
@@ -16,8 +15,7 @@ Template.Discussion_Message.viewmodel({
 	},
 	uploader() {
 	  //return this.child('FileUploader');
-		const uploader = this.uploaderLink();console.dir(uploader);
-		return uploader;
+		return ViewModel.findOne('FileUploader2');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();

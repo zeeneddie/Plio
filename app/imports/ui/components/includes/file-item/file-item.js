@@ -12,7 +12,8 @@ Template.FileItem.viewmodel({
     this.removeFile(this);
   },
   isUploaded() {
-    return this.url();
+    const url = this.url();
+    return url;
   },
   progress() {
     const uploader = this.uploader && this.uploader();
