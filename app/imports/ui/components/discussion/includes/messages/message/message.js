@@ -41,8 +41,10 @@ Template.Discussion_Message.viewmodel({
 		return FlowRouter.getQueryParam('at') === this._id();
 	},
 	formattedMessageText() {
+		const message = this.message();console.log(message);
+
 		return Autolinker.link(
-			this.message(), { truncate: TruncatedStringLengths.c40 }
+			message, { truncate: TruncatedStringLengths.c40 }
 		);
 	},
 	copyAsLink(e) {

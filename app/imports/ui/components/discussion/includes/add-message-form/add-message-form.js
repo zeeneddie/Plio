@@ -26,10 +26,11 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	sendTextMessage() {
 		if (this.disabled()) return;
 		const discussionId = this.discussionId();
-		
+
 		addMessage.call({
 			discussionId,
-			message: sanitizeHtml(this.messageText()),
+			//message: sanitizeHtml(this.messageText()),
+			message: this.messageText(),
 			type: 'text'
 		}, handleMethodResult(() => {
 			this.reset();
