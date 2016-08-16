@@ -5,6 +5,7 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 Template.FileUploader2.viewmodel({
   mixin: 'modal',
+  share: 'files',
   attachmentFile: null,
   uploads: new ReactiveArray(),
   uploadData(fileId) {
@@ -45,6 +46,7 @@ Template.FileUploader2.viewmodel({
       const uploader = new Slingshot.Upload(
         this.slingshotDirective(), this.metaContext()
       );
+      //this.uploaderLink(uploader);
 
       this.uploads().push({ fileId: _id, uploader });
 

@@ -4,6 +4,9 @@ ViewModel.share({
   window: {
     width: null
   },
+  files: {
+    uploaderLink: null
+  },
   search: {
     searchText: ''
   }
