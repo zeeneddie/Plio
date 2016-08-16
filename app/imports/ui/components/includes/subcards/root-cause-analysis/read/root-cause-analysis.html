@@ -1,6 +1,6 @@
 <template name="Subcards_RootCauseAnalysis_Read">
   {{#with analysis}}
-    {{#if has this 'executor' 'targetDate'}}
+    {{#if $every this.executor this.targetDate}}
       <div class="card-block card-subheading">
         <h4 class="card-title">Root cause analysis</h4>
       </div>
@@ -46,7 +46,7 @@
   {{/with}}
 
   {{#with updateOfStandards}}
-    {{#if has this 'targetDate'}}
+    {{#if $every this.executor this.targetDate}}
       <div class="card-block card-subheading"
         {{b "if: this.targetDate"}}>
         <h4 class="card-title">Update of standards</h4>
