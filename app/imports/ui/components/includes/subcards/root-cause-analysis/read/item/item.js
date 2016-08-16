@@ -2,13 +2,9 @@ import { Template } from 'meteor/templating';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 
-Template.Subcards_RootCauseAnalysis_Read.viewmodel({
+Template.Subcards_RootCauseAnalysis_Read_Item.viewmodel({
   mixin: ['user', 'date', 'utils'],
-  analysis: '',
-  getAnalysisStatusName(status) {
+  getAnalysisStatusName(status = 0) {
     return AnalysisStatuses[status];
-  },
-  has(obj, ...args) {
-    return _.has(obj, ...args.splice(0, args.length - 1));
   }
 });
