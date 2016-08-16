@@ -33,7 +33,7 @@ Template.Standards_Item_Read.viewmodel({
   },
   getHref() {
     const params = { orgSerialNumber: this.organizationSerialNumber(), standardId: this._id() };
-    const queryParams = { by: this.activeStandardFilter() };
+    const queryParams = { filter: this.activeStandardFilterId() };
     return FlowRouter.path('standard', params, queryParams);
   },
   isNew() {

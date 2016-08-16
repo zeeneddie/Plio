@@ -22,7 +22,7 @@ Template.Risks_Layout.viewmodel({
         this.templateInstance.subscribe('nonConformities', _id)
       ];
 
-      if (this.isActiveRiskFilter('deleted')) {
+      if (this.isActiveRiskFilter(4)) {
         _subHandlers.push(this.templateInstance.subscribe('risks', _id, true));
       } else {
         _subHandlers.push(this.templateInstance.subscribe('risks', _id));

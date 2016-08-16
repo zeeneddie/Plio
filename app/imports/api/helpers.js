@@ -1,5 +1,9 @@
 import moment from 'moment-timezone';
 
+import { DocumentTypes } from './constants.js';
+import { Standards } from './standards/standards.js';
+import { NonConformities } from './non-conformities/non-conformities.js';
+import { Risks } from './risks/risks.js';
 
 const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
@@ -52,9 +56,28 @@ const handleMethodResult = (cb) => {
   };
 };
 
+const getCollectionByDocType = (docType) => {
+  const { STANDARD, NON_CONFORMITY, RISK } = DocumentTypes;
+  switch(docType) {
+    case STANDARD:
+      return Standards;
+      break;
+    case NON_CONFORMITY:
+      return NonConformities;
+      break;
+    case RISK:
+      return Risks;
+      break;
+    default:
+      return undefined;
+      break;
+  }
+};
+
 export {
   compareDates,
   getFormattedDate,
   getTzTargetDate,
-  handleMethodResult
+  handleMethodResult,
+  getCollectionByDocType
 };

@@ -13,13 +13,16 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
+	disabled: false,
 	files: [],
 	messageFile: null,
 	messageText: '',
 	slingshotDirective: '',
 
 	sendTextMessage() {
-		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		if (this.disabled()) return;
+
+		const discussionId = this._getDiscussionIdByStandardId(this.standardId());
 		addMessage.call({
 			discussionId,
 			message: this.messageText(),
@@ -32,8 +35,10 @@ Template.Discussion_AddMessage_Form.viewmodel({
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
+		if (this.disabled()) return;
+
     const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
-		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		const discussionId = this._getDiscussionIdByStandardId(this.standardId());
 		addMessage.call({
 			discussionId,
 			files: [fileDoc],

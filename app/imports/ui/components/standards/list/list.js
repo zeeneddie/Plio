@@ -23,7 +23,7 @@ Template.StandardsList.viewmodel({
         } else {
           Meteor.setTimeout(() => {
             const params = { orgSerialNumber: this.organizationSerialNumber() };
-            const queryParams = { by: FlowRouter.getQueryParam('by') };
+            const queryParams = { filter: FlowRouter.getQueryParam('filter') };
             FlowRouter.go('standards', params, queryParams);
           }, 0);
         }
@@ -31,14 +31,14 @@ Template.StandardsList.viewmodel({
     }
   },
   _getQueryForFilter() {
-    switch(this.activeStandardFilter()) {
-      case 'section':
+    switch(this.activeStandardFilterId()) {
+      case 1:
         return { sectionId: { $in: this.sections().map(({ _id }) => _id) } };
         break;
-      case 'type':
+      case 2:
         return { typeId: { $in: this.types().map(({ _id }) => _id) } };
         break;
-      case 'deleted':
+      case 3:
         return { _id: this.standardsDeleted().count() > 0 && this.standardsDeleted().fetch()[0]._id };
         break;
       default:
@@ -47,11 +47,11 @@ Template.StandardsList.viewmodel({
     };
   },
   _getFirstStandardQueryForFilter() {
-    switch(this.activeStandardFilter()) {
-      case 'section':
+    switch(this.activeStandardFilterId()) {
+      case 1:
         return { sectionId: this.sections().length > 0 && this.sections().map(({ _id }) => _id)[0] };
         break;
-      case 'type':
+      case 2:
         const typeId = this.types().length > 0 && this.types().map(({ _id }) => _id)[0];
         const sectionIds =
                 this.sections()
@@ -113,7 +113,7 @@ Template.StandardsList.viewmodel({
   },
   onSearchInputValue() {
     return (value) => {
-      if (this.isActiveStandardFilter('deleted')) {
+      if (this.isActiveStandardFilter(3)) {
         return this.toArray(this.standardsDeleted());
       }
 

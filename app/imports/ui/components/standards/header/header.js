@@ -6,16 +6,19 @@ import { StandardFilters } from '/imports/api/constants.js';
 
 Template.StandardsHeader.viewmodel({
   share: ['window', 'search'],
-  mixin: ['standard', 'collapsing', 'organization', 'mobile'],
+  mixin: ['standard', 'collapsing', 'filters', 'organization', 'mobile'],
   isDiscussionOpened: false,
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
   },
-  standardFilters() {
-    return StandardFilters;
+  filters() {
+    return this.mapFilters(StandardFilters);
   },
-  selectFilter(filter) {
-    FlowRouter.setQueryParams({ by: filter });
+  currentFilterLabel() {
+    return this.getStandardFilterLabel(this.activeStandardFilterId());
+  },
+  selectFilter(filterId) {
+    FlowRouter.setQueryParams({ filter: filterId });
     this.searchText('');
     this.expandCollapsed(this.standardId());
   },
@@ -25,7 +28,7 @@ Template.StandardsHeader.viewmodel({
         orgSerialNumber: this.organizationSerialNumber(),
         standardId: this.standardId()
       };
-      const queryParams = { by: this.activeStandardFilter() };
+      const queryParams = { filter: this.activeStandardFilterId() };
 
       this.width(null);
       return FlowRouter.go('standard', params, queryParams);

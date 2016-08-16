@@ -1,10 +1,11 @@
 import { Template } from 'meteor/templating';
+
 import { Discussions } from '/imports/api/discussions/discussions.js'
 
-window.Discussions = Discussions;
 Template.Discussion_Card.viewmodel({
+  standard: '',
   discussionId() {
-    const discussion = Discussions.findOne({ linkedTo: this.linkedTo(), isPrimary: true });
-    return discussion && discussion._id;
+    const { _id } = Object.assign({}, Discussions.findOne({ linkedTo: this.linkedTo(), isPrimary: true }));
+    return _id;
   }
 });

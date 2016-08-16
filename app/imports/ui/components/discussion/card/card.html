@@ -5,7 +5,9 @@
 
 			{{#if isReady}}
 				{{> Discussion_Messages discussionId=discussionId}}
-				{{> Discussion_AddMessage_Form discussionId=discussionId}}
+				{{> Discussion_AddMessage_Form
+						disabled=standard.isDeleted
+						discussionId=discussionId}}
 			{{else}}
 				{{> PreloaderPage}}
 			{{/if}}

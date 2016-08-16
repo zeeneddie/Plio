@@ -1,6 +1,9 @@
 import { Template } from 'meteor/templating';
 import { CountSubs } from '/imports/startup/client/subsmanagers.js';
 
+import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Messages } from '/imports/api/messages/messages.js';
+
 Template.StandardsPage.viewmodel({
   share: 'window',
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
@@ -12,7 +15,7 @@ Template.StandardsPage.viewmodel({
       const template = this.templateInstance;
       const organizationId = this.organizationId();
       const standardId = this.standardId();
-      const arrDiscussionIds = this.getDiscussionIdsByStandardId(standardId);
+      const arrDiscussionIds = this._getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
         template.subscribe('standardImprovementPlan', standardId),
@@ -34,6 +37,9 @@ Template.StandardsPage.viewmodel({
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],
+  standard() {
+    return this._getStandardByQuery({ _id: this.standardId() });
+  },
   messagesNotViewedCount() {
     const count = this.counter.get('standard-messages-not-viewed-count-' + this.standardId());
     return count;
