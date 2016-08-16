@@ -39,10 +39,24 @@ Template.Discussion_Message.viewmodel({
 	remove(e) {
 		if (!this.isAuthor()) return;
 
+		const _id = this._id();
 		const callback = (err, res) => {
 			if (err) return;
+
+			swal("Deleted!", "Your message has been deleted.", "success");
 		};
 
-		removeMessageById.call({ _id: this._id() }, handleMethodResult(callback));
+		swal({
+			title: "Are you sure you want to delete this message?",
+			text: "This cannot be undone.",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Remove",
+			closeOnConfirm: false
+		},
+		function(){
+			removeMessageById.call({ _id }, handleMethodResult(callback));
+		});
 	}
 });
