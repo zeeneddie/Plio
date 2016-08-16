@@ -1,14 +1,13 @@
 import { Autolinker } from 'meteor/konecty:autolinker';
-//import { Clipboard } from 'meteor/xvendo:clipboardjs';
 import Clipboard from 'clipboard';
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import get from 'lodash.get';
 
+import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
-import { getFormattedDate } from '/imports/api/helpers.js';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import get from 'lodash.get';
 
 
 Template.Discussion_Message.viewmodel({
@@ -22,7 +21,6 @@ Template.Discussion_Message.viewmodel({
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-	  //return this.child('FileUploader');
 		return ViewModel.findOne('FileUploader2');
 	},
 	isAuthor() {
@@ -57,6 +55,12 @@ Template.Discussion_Message.viewmodel({
 
     return FlowRouter.path(currentRouteName, params, queryParams);
   },
+	pathToMessageToCopy() {
+		const ptm = this.pathToMessage();
+		const url = `${location.protocol}//${location.hostname}:${location.port}`;
+
+		return `${url}${ptm}`;
+  },
 	remove(e) {
 		if (!this.isAuthor()) return;
 
@@ -72,7 +76,6 @@ Template.Discussion_Message.viewmodel({
 			text: "This cannot be undone.",
 			type: "warning",
 			showCancelButton: true,
-			//confirmButtonColor: "#DD6B55",
 			confirmButtonText: "Remove",
 			closeOnConfirm: false
 		},
