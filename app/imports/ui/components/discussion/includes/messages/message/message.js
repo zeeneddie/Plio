@@ -56,7 +56,6 @@ Template.Discussion_Message.viewmodel({
 		const callback = (err, res) => {
 			if (err) return;
 		};
-
 		removeMessageById.call({ _id: this._id() }, handleMethodResult(callback));
 	}
 });

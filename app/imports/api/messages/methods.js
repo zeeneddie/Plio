@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { MessagesSchema } from './messages-schema';
+import { MessagesSchema } from './messages-schema.js';
+import { Messages } from './messages.js';
 import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
@@ -22,7 +23,7 @@ const onInsertCheck = ({ discussionId }) => {
 	return true;
 };
 
-onUpdateCheck = ({ _id, userId }) => {
+const onUpdateCheck = ({ _id, userId }) => {
 	const { createdBy } = checkDocExistance({ _id }, Messages);
 
 	if (userId !== createdBy) {
@@ -138,13 +139,15 @@ export const removeMessageById = new ValidatedMethod({
 	validate: new SimpleSchema([IdSchema]).validator(),
 
 	run({ _id }) {
-		if (!this.userId) {
+		const userId = this.userId;
+
+		if (!userId) {
 			throw new Meteor.Error(
 				403, 'Unauthorized user cannot remove messages from discussions'
 			);
 		}
 
-		onUpdateCheck({ _id });
+		onUpdateCheck({ _id, userId });
 
 		return MessagesService.remove({ _id });
 	}
