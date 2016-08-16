@@ -39,6 +39,8 @@ export default {
     }, 200);
   },
   'keyup input'(e, tpl) {
+    e.preventDefault();
+    
     var parentData = Template.parentData();
 
     if (e.keyCode === 13) {
