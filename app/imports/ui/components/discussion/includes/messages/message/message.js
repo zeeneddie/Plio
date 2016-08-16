@@ -72,7 +72,7 @@ Template.Discussion_Message.viewmodel({
 			text: "This cannot be undone.",
 			type: "warning",
 			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
+			//confirmButtonColor: "#DD6B55",
 			confirmButtonText: "Remove",
 			closeOnConfirm: false
 		},
