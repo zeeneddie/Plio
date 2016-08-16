@@ -14,7 +14,10 @@ Template.Discussion_Messages.viewmodel({
 
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
-		bulkUpdateViewedBy.call({ discussionId });
+
+		if(discussionId){
+			bulkUpdateViewedBy.call({ discussionId });
+		}
 	},
 
   // The _id of the primary discussion for this standardId
@@ -53,14 +56,18 @@ Template.Discussion_Messages.viewmodel({
 
 			const obj = (() => {
 				const getDate = curry(getFormattedDate)(createdAt);
-
 				const dateFormat = 'MMMM Do, YYYY';
-				const timeFormat = 'HH:mm';
+				const timeFormat = 'h:mm A';
 				const date = getDate(dateFormat);
+				const _id = message._id;
+				const createdAt = message.createdAt;
+				const documentId = get(this.discussion(), 'linkedTo');
 
 				return {
+					_id,
 					date,
-					time: getDate(timeFormat),
+					documentId,
+					createdAt,
 					avatar: invoke(user, 'avatar'),
 					username: invoke(user, 'firstName'),
 					dateToShow: (() => {
@@ -69,6 +76,17 @@ Template.Discussion_Messages.viewmodel({
 						// we need to check for undefined because moment translates undefined to today's date
 						const prevDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
 						return !Object.is(date, prevDate);
+					})(),
+					isMergedWithPreviousMessage: (() => {
+						const prevMessage = messages[i - 1];
+						const prevCreatedAt = get(prevMessage, 'createdAt');
+						const prevCreatedBy = get(prevMessage, 'createdBy');
+
+						if (message.createdBy === prevCreatedBy && message.createdAt - prevCreatedAt < 3 * 60 * 1000) {
+							return true;
+						}
+
+						return false;
 					})()
 				};
 			})();

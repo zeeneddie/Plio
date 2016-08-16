@@ -38,11 +38,8 @@ Template.FileUploader2.viewmodel({
     this.fileInput.val(null);
 
     this.insertFile({ _id, name }, (err) => {
-      const modal = this.modal();
-
       if (err) {
-        modal.setError(err.reason);
-        return;
+        throw err;
       }
 
       const uploader = new Slingshot.Upload(
@@ -51,27 +48,19 @@ Template.FileUploader2.viewmodel({
 
       this.uploads().push({ fileId: _id, uploader });
 
-      modal.clearError();
-      modal.isSaving(false);
-      modal.incUploadsCount();
-
       uploader.send(file, (err, url) => {
-        modal.decUploadsCount();
+        if(err){
+          // [TODO] Handle error
+          throw err;
+        }
 
         if (url) {
           url = encodeURI(url);
         }
 
-        if (err && err.error !== 'Aborted') {
-          modal.setError(err.reason);
-        }
-
         this.onUpload(err, { _id, url });
         this.removeUploadData(_id);
       });
-
-      // prevent modal's default method result handling
-      return true;
     });
   },
   cancelUpload(fileId) {

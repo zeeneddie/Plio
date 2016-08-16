@@ -72,6 +72,33 @@ export const update = new ValidatedMethod({
   }
 });
 
+export const updateFilesUrls = new ValidatedMethod({
+  name: 'Messages.updateFilesUrls',
+
+  validate: new SimpleSchema([
+    IdSchema, optionsSchema //, MessageUpdateSchema
+  ]).validator(),
+
+  run({ _id, ...args }) {
+    const userId = this.userId;
+    if (!userId) {
+      throw new Meteor.Error(
+        403, 'Unauthorized user cannot update a message'
+      );
+    }
+		// [TODO] only message owner can make an update
+
+		const query = {
+      files: {
+        $elemMatch: { _id }
+      }
+    };
+		const { options } = args;
+
+    return MessagesService.update({ query, options });
+  }
+});
+
 export const updateViewedBy = new ValidatedMethod({
 	name: 'Messages.updateViewedBy',
 	validate: IdSchema.validator(),
