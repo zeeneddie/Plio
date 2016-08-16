@@ -23,6 +23,8 @@ const configureSlignshot = () => {
 
     acl: acl,
 
+    contentDisposition: attachmentDisposition,
+
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
