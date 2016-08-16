@@ -41,6 +41,10 @@ export default {
   'keyup input'(e, tpl) {
     var parentData = Template.parentData();
 
+    if (e.keyCode === 13) {
+      $("#at-pwd-form").trigger("submit");
+    }
+
     Meteor.setTimeout(() => {
       if (tpl.view.isDestroyed) {
         return;
