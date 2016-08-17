@@ -7,7 +7,9 @@
 
 	<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
 		{{#unless isMergedWithPreviousMessage}}
-			<img class="chat-item-avatar" {{b "src: avatar"}}>
+		<a class="js-chat-item-avatar" role="button">
+			<img tabindex="0" class="chat-item-avatar" {{b "src: avatar"}} alt="">
+		</a>
 		{{/unless}}
 
 		<div class="chat-item-card">

@@ -18,6 +18,13 @@ Template.Discussion_Message.viewmodel({
 		$chat.scrollTop($chat.find('.chat-messages').height());
 
 		const clipboard = new Clipboard('.js-message-copy-link');
+
+		tpl.$('.js-chat-item-avatar').popover({
+			content: `<img class="chat-item-avatar-in-popover" src="${this.avatar()}" alt="">`,
+			html: true,
+			title: this.username(),
+			trigger: 'focus'
+		});
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {

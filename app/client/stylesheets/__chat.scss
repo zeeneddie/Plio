@@ -70,7 +70,7 @@
       border-top: 0;
       padding-top: 1rem;
     }
-    &-avatar {
+    &-avatar, &-avatar-in-popover {
       $avatar-size: 40px;
       border-radius: 50%;
       width: $avatar-size;
@@ -79,8 +79,13 @@
       margin-right: 15px;
       margin-top: 4px;
     }
+    &-avatar-in-popover {
+      float: none;
+      margin: 0;
+    }
     &-card {
       @include clearfix;
+      margin-left: 4rem;
       position: relative;
     }
     &-author {
@@ -99,7 +104,6 @@
     &-content {
       margin: 0;
       font-size: 16px;
-      margin-left: 4rem;
 
       .file-item {
         max-width: calc(100% - 40px);
