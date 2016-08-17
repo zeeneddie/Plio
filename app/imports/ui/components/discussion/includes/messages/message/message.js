@@ -20,6 +20,7 @@ Template.Discussion_Message.viewmodel({
 		const clipboard = new Clipboard('.js-message-copy-link');
 
 		tpl.$('.js-chat-item-avatar').popover({
+			//container: '.chat-item.message',
 			content: `<img class="chat-item-avatar-in-popover" src="${this.avatar()}" alt="">`,
 			html: true,
 			offset: '-29px 12px',
@@ -29,7 +30,11 @@ Template.Discussion_Message.viewmodel({
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-		return ViewModel.findOne('FileUploader2');
+		//return ViewModel.findOne('FileUploader2');
+		const upl = ViewModel.findOne('FileUploader2');//console.log(this._id());
+		// upl.itemId(this._id());
+		//console.log(upl.itemId.value);
+		return upl;
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
