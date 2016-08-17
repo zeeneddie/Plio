@@ -22,7 +22,7 @@
 
       {{> Actions_CompletionTargetDate
           completionTargetDate=this.completionTargetDate
-          enabled=(isCompletionEditable this)
+          enabled=($not ($some this.isCompleted this.isVerified))
           onUpdate=onUpdateCompletionDate}}
 
       {{#unless this.isCompleted}}

@@ -7,11 +7,11 @@ import { WorkItemsSchema } from './work-item-schema.js';
 import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
 import { UNAUTHORIZED, CANNOT_RESTORE_NOT_DELETED, WI_CANNOT_RESTORE_ASSIGNED_TO_OTHER } from '../errors.js';
-import { checkOrgMembership, checkDocExistance, isOrgOwner } from '../checkers.js';
+import { checkOrgMembershipByDoc, checkDocExistance, isOrgOwner } from '../checkers.js';
 import { chain } from '../helpers.js';
 
 const checkers = function checkers(_id) {
-  return chain(checkDocExistance, checkOrgMembership)(WorkItems, _id, this.userId);
+  return chain(checkDocExistance, checkOrgMembershipByDoc)(WorkItems, _id, this.userId);
 };
 
 export const updateViewedBy = new Method({

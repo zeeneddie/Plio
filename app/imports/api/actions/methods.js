@@ -6,9 +6,27 @@ import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
 import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
+import Method from '../method.js';
+import {
+  checkDocExistance,
+  checkOrgMembership,
+  checkOrgMembershipByDoc,
+  ACT_OnLinkChecker
+} from '../checkers.js';
+import { chain, checkAndThrow } from '../helpers.js';
+import {
+  ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
+  ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
+  ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED,
+  ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED
+} from '../errors.js';
+
+const checkers = function checkers(_id) {
+  return chain(checkDocExistance, checkOrgMembershipByDoc)(Actions, _id, this.userId);
+};
 
 
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'Actions.insert',
 
   validate(doc) {
@@ -19,19 +37,14 @@ export const insert = new ValidatedMethod({
     return RequiredSchema.validator()(doc);
   },
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create an action'
-      );
-    }
+  run({ organizationId, ...args }) {
+    checkOrgMembership(this.userId, organizationId);
 
-    return ActionService.insert({ ...args });
+    return ActionService.insert({ organizationId, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new Method({
   name: 'Actions.update',
 
   validate(doc) {
@@ -60,48 +73,26 @@ export const update = new ValidatedMethod({
     }
   },
 
-  run({ _id, options, query, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update an action'
-      );
-    }
+  run({ _id, ...args }) {
+    checkers.call(this, _id);
 
-    return ActionService.update({ _id, options, query, ...args });
+    return ActionService.update({ _id, ...args });
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new Method({
   name: 'Actions.updateViewedBy',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update actions'
-      );
-    }
+    checkers.call(this, _id);
 
-    if (!Actions.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Action does not exist'
-      );
-    }
-
-    if (!!Actions.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this action'
-      );
-    }
-
-    return ActionService.updateViewedBy({ _id, userId });
+    return ActionService.updateViewedBy({ _id, userId: this.userId });
   }
 });
 
-export const setCompletionDate = new ValidatedMethod({
+export const setCompletionDate = new Method({
   name: 'Actions.setCompletionDate',
 
   validate: new SimpleSchema([
@@ -112,17 +103,15 @@ export const setCompletionDate = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set target date for action completion'
-      );
-    }
+    const [doc] = checkers.call(this, _id);
+
+    checkAndThrow(doc.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
 
     return ActionService.setCompletionDate({ _id, ...args });
   }
 });
 
-export const setCompletionExecutor = new ValidatedMethod({
+export const setCompletionExecutor = new Method({
   name: 'Actions.setCompletionExecutor',
 
   validate: new SimpleSchema([
@@ -136,17 +125,15 @@ export const setCompletionExecutor = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set executor for action completion'
-      );
-    }
+    const [doc] = checkers.call(this, _id);
+
+    checkAndThrow(doc.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
 
     return ActionService.setCompletionExecutor({ _id, ...args });
   }
 });
 
-export const setVerificationDate = new ValidatedMethod({
+export const setVerificationDate = new Method({
   name: 'Actions.setVerificationDate',
 
   validate: new SimpleSchema([
@@ -157,17 +144,15 @@ export const setVerificationDate = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set target date for action verification'
-      );
-    }
+    const [doc] = checkers.call(this, _id);
+
+    checkAndThrow(doc.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
 
     return ActionService.setVerificationDate({ _id, ...args });
   }
 });
 
-export const setVerificationExecutor = new ValidatedMethod({
+export const setVerificationExecutor = new Method({
   name: 'Actions.setVerificationExecutor',
 
   validate: new SimpleSchema([
@@ -181,17 +166,15 @@ export const setVerificationExecutor = new ValidatedMethod({
   ]).validator(),
 
   run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set executor for action verification'
-      );
-    }
+    const [doc] = checkers.call(this, _id);
+
+    checkAndThrow(doc.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED);
 
     return ActionService.setVerificationExecutor({ _id, ...args });
   }
 });
 
-export const linkDocument = new ValidatedMethod({
+export const linkDocument = new Method({
   name: 'Actions.linkDocument',
 
   validate: new SimpleSchema([
@@ -208,15 +191,12 @@ export const linkDocument = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot link actions to documents'
-      );
-    }
+  run({ _id, ...args }) {
+    const [action] = checkers.call(this, _id);
 
-    return ActionService.linkDocument({ ...args });
+    const { doc } = ACT_OnLinkChecker(action, { ...args });
+
+    return ActionService.linkDocument({ _id, ...args }, { doc, action });
   }
 });
 

@@ -40,8 +40,6 @@ export default {
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
-    this._ensureActionExists(_id);
-
     if (!_.keys(query).length > 0) {
       query = { _id };
     }
@@ -52,45 +50,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  linkDocument({ _id, documentId, documentType }) {
-    const action = this._getAction(_id);
-
-    let docCollection;
-    if (documentType === ProblemTypes.NC) {
-      if (action.type === ActionTypes.RISK_CONTROL) {
-        throw new Meteor.Error(
-          400, 'Risk control cannot be linked to a non-conformity'
-        );
-      }
-
-      docCollection = NonConformities;
-    } else if (documentType === ProblemTypes.RISK) {
-      if (action.type === ActionTypes.PREVENTATIVE_ACTION) {
-        throw new Meteor.Error(
-          400, 'Preventative action cannot be linked to a risk'
-        );
-      }
-
-      docCollection = Risks;
-    }
-
-    if (!docCollection) {
-      throw new Meteor.Error(400, 'Invalid document type');
-    }
-
-    const doc = docCollection.findOne({ _id: documentId });
-    if (!doc) {
-      throw new Meteor.Error(400, 'Document does not exist');
-    }
-
-    if (action.isLinkedToDocument(documentId, documentType)) {
-      throw new Meteor.Error(
-        400, 'This action is already linked to specified document'
-      );
-    }
-
-    this._checkLinkedDocs([{ documentId, documentType }]);
-
+  linkDocument({ _id, documentId, documentType }, { doc, action }) {
     const ret = this.collection.update({
       _id
     }, {
@@ -301,14 +261,6 @@ export default {
   },
 
   setCompletionDate({ _id, targetDate }) {
-    const action = this._getAction(_id);
-
-    if (action.completed()) {
-      throw new Meteor.Error(
-        400, 'Cannot set completion date for completed action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -324,14 +276,6 @@ export default {
   },
 
   setCompletionExecutor({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (action.completed()) {
-      throw new Meteor.Error(
-        400, 'Cannot set completion executor for completed action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -344,14 +288,6 @@ export default {
   },
 
   setVerificationDate({ _id, targetDate }) {
-    const action = this._getAction(_id);
-
-    if (action.verified()) {
-      throw new Meteor.Error(
-        400, 'Cannot set verification date for verified action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -367,14 +303,6 @@ export default {
   },
 
   setVerificationExecutor({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (action.verified()) {
-      throw new Meteor.Error(
-        400, 'Cannot set verification executor for verified action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -387,8 +315,6 @@ export default {
   },
 
   updateViewedBy({ _id, userId:viewedBy }) {
-    this._ensureActionExists(_id);
-
     this._service.updateViewedBy({ _id, viewedBy });
   },
 

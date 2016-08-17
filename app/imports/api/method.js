@@ -7,7 +7,7 @@ export default class Method extends ValidatedMethod {
   constructor(props) {
     props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
     props.checkLoggedInError = {
-      error: 'notLogged',
+      error: '403',
       reason: UNAUTHORIZED.reason
     };
 

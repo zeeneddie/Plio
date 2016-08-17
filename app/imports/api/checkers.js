@@ -6,7 +6,10 @@ import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
 import { AnalysisStatuses, OrgOwnerRoles } from './constants.js';
 import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
+import { checkAndThrow } from './helpers.js';
 
+
+export * from './actions/checkers.js';
 
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
@@ -102,7 +105,7 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
   const isCompleted = ({ status = '' }) => status.toString() === _.invert(AnalysisStatuses)['Completed'];
   const findArg = _args => _find => _.keys(_args).find(key => key.includes(_find));
   const findSubstring = (str = '', ...toFind) => toFind.find(s => str.includes(s));
-  const checkAndThrow = (predicate) => {
+  const checkAnalysisAndThrow = (predicate) => {
     if (!predicate) {
       throw new Meteor.Error(403, 'Access denied');
     }
@@ -117,40 +120,41 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
   const isUpdateOfStandards = find('updateOfStandards');
 
   if (find('analysis.status') || find('updateOfStandards.status')) {
-    checkAndThrow(analysis || analysis.executor || analysis.executor === this.userId);
+    checkAnalysisAndThrow(analysis || analysis.executor || analysis.executor === this.userId);
   }
 
   if ( find('updateOfStandards') || (isAnalysis && findSubstring(isAnalysis, 'completedAt', 'completedBy')) ) {
-    checkAndThrow(isAnalysisCompleted);
+    checkAnalysisAndThrow(isAnalysisCompleted);
   }
 
   if (findSubstring(isUpdateOfStandards, 'completedAt', 'completedBy')) {
-    checkAndThrow(isUpdateOfStandardsCompleted);
+    checkAnalysisAndThrow(isUpdateOfStandardsCompleted);
   }
 
   return true;
 };
 
 export const isViewed = (doc, userId) => {
-  const viewedBy = doc && doc.viewedBy || [];
-  return !!viewedBy.length && _.contains(viewedBy, userId);
+  const { viewedBy = [] } = Object.assign({}, doc);
+  return !!viewedBy.length && viewedBy.includes(userId);
 };
 
-export const checkOrgMembership = (collection, _id, userId) => {
-  const doc = collection.findOne({ _id });
-	const { organizationId } = Object.assign({}, doc);
-	if (!isOrgMember(userId, organizationId)) {
-		throw NOT_AN_ORG_MEMBER;
-	}
+export const checkOrgMembership = (userId, organizationId) => {
+  return checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER);
+};
+
+export const checkOrgMembershipByDoc = (collection, query, userId) => {
+  const doc = Object.assign({}, collection.findOne(query));
+
+  checkOrgMembership(userId, doc.organizationId);
+
   return doc;
 };
 
-export const checkDocExistance = (collOrObj, query, err = DOC_NOT_FOUND) => {
-  const doc = collOrObj instanceof Mongo.Collection
-                ? collOrObj.findOne(query)
-                : _.has(collOrObj, query);
+export const checkDocExistance = (collection, query) => {
+  const doc = collection.findOne(query);
 
-  if (!doc) throw err;
+  checkAndThrow(!doc, DOC_NOT_FOUND);
 
   return doc;
 };
