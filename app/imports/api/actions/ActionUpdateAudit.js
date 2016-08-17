@@ -187,7 +187,7 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
   }
 
   _statusChanged(diff) {
-    this._prettifyValues(diff, val => ActionStatuses[val]);
+    this._prettifyValues(diff, val => `"${ActionStatuses[val]}"`);
   }
 
   static get _fieldLabels() {

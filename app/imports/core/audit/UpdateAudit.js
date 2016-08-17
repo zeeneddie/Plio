@@ -269,11 +269,11 @@ export default class UpdateAudit {
     const changesTypes = this._changesTypes;
 
     return {
-      [changesTypes.FIELD_ADDED]: '[field] set to "[newValue]"',
-      [changesTypes.FIELD_CHANGED]: '[field] changed from "[oldValue]" to "[newValue]"',
+      [changesTypes.FIELD_ADDED]: '[field] set to [newValue]',
+      [changesTypes.FIELD_CHANGED]: '[field] changed from [oldValue] to [newValue]',
       [changesTypes.FIELD_REMOVED]: '[field] removed',
-      [changesTypes.ITEM_ADDED]: '"[item]" added to [field] list',
-      [changesTypes.ITEM_REMOVED]: '"[item]" removed from [field] list'
+      [changesTypes.ITEM_ADDED]: '[item] added to [field] list',
+      [changesTypes.ITEM_REMOVED]: '[item] removed from [field] list'
     };
   }
 

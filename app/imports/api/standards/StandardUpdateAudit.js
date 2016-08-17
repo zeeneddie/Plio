@@ -124,7 +124,7 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
   }
 
   _statusChanged(diff) {
-    this._prettifyValues(diff, val => StandardStatuses[val]);
+    this._prettifyValues(diff, val => `"${StandardStatuses[val]}"`);
   }
 
   static get _fieldLabels() {

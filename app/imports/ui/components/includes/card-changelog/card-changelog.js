@@ -7,16 +7,25 @@ import { CollectionNames } from '/imports/api/constants.js';
 
 Template.CardChangelog.viewmodel({
   mixin: ['collapse', 'counter', 'date', 'user'],
+  documentId: null,
   limit: 10,
   areLogsLoaded: false,
   loadingLogs: false,
   areAllLogsLoaded: false,
   loadingAllLogs: false,
   showAllLogs: false,
-  autorun() {
-    this.document.depend();
-    this.resetProps();
-  },
+  autorun: [
+    function() {
+      this.documentId.depend();
+      this.resetProps();
+    },
+    function() {
+      const { _id } = this.document() || {};
+      if (this.documentId.value !== _id) {
+        this.documentId(_id);
+      }
+    }
+  ],
   resetProps() {
     this.collapsed(true);
     this.areLogsLoaded(false);
@@ -24,9 +33,6 @@ Template.CardChangelog.viewmodel({
     this.areAllLogsLoaded(false);
     this.loadingAllLogs(false);
     this.showAllLogs(false);
-  },
-  documentId() {
-    return this.document()._id;
   },
   docCollection() {
     const collections = {

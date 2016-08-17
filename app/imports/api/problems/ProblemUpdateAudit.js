@@ -134,7 +134,7 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
   }
 
   _statusChanged(diff) {
-    this._prettifyValues(diff, val => ProblemsStatuses[val]);
+    this._prettifyValues(diff, val => `"${ProblemsStatuses[val]}"`);
   }
 
   _updateOfStandardsChanged(diff) {
