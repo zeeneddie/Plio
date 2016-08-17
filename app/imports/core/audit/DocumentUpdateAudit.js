@@ -54,12 +54,25 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   }
 
   _notifyChanged(diff) {
-    this._prettifyArrayItem(diff, (val) => {
-      const user = Meteor.users.findOne({ _id: val });
-      return user && user.fullName();
+    const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
+    const { kind, item:userId } = diff;
+
+    const user = Meteor.users.findOne({ _id: userId });
+    const userName = (user && user.fullNameOrEmail()) || userId;
+
+    const messages = {
+      [ITEM_ADDED]: `${userName} added to notification list`,
+      [ITEM_REMOVED]: `${userName} removed from notification list`
+    };
+
+    this._createLog({
+      field: 'notify',
+      message: messages[kind]
     });
 
-    if (diff.kind === this.constructor._changesTypes.ITEM_REMOVED) {
+    diff.isProcessed = true;
+
+    if (kind === ITEM_REMOVED) {
       this._processRedudantDiffs('notify', diff.index);
     }
   }
