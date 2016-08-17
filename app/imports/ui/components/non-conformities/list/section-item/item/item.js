@@ -30,7 +30,7 @@ Template.NC_Item.viewmodel({
   viewedBy: [],
   getHref() {
     const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId: this._id() };
-    const queryParams = { by: this.activeNCFilter() };
+    const queryParams = { filter: this.activeNCFilterId() };
     return FlowRouter.path('nonconformity', params, queryParams);
   },
   isNew() {

@@ -6,6 +6,6 @@ import { Messages } from '/imports/api/messages/messages.js';
 Template.Discussion_Header.viewmodel({
 	mixin: ['organization', 'standard'],
 	getStandardFilter() {
-		return 'by=' + this.activeStandardFilter();
+		return 'filter=' + this.activeStandardFilterId();
 	}
 });

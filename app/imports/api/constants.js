@@ -293,40 +293,40 @@ const DefaultStandardTypes = [
   }
 ];
 
-const StandardFilters = [
-  'section',
-  'type',
-  'deleted'
-];
+const StandardFilters = {
+  1: 'section',
+  2: 'type',
+  3: 'deleted'
+};
 
-const RiskFilters = [
-  'type',
-  'status',
-  'department/sector',
-  'deleted'
-];
+const RiskFilters = {
+  1: 'type',
+  2: 'status',
+  3: 'department/sector',
+  4: 'deleted'
+};
 
-const NonConformityFilters = [
-  'magnitude',
-  'status',
-  'department/sector',
-  'deleted'
-];
+const NonConformityFilters = {
+  1: 'magnitude',
+  2: 'status',
+  3: 'department/sector',
+  4: 'deleted'
+};
 
-const WorkInboxFilters = [
-  'My current work',
-  'Team current work',
-  'My completed work',
-  'Team completed work',
-  'My deleted work',
-  'Team deleted work'
-];
+const WorkInboxFilters = {
+  1: 'My current work',
+  2: 'Team current work',
+  3: 'My completed work',
+  4: 'Team completed work',
+  5: 'My deleted work',
+  6: 'Team deleted work'
+};
 
-const DocumentTypes = [
-  'standard',
-  'non-conformity',
-  'risk'
-];
+const DocumentTypes = {
+  STANDARD: 'standard',
+  NON_CONFORMITY: 'non-conformity',
+  RISK: 'risk'
+};
 
 const ActionDocumentTypes = {
   'ACTION': 'action',

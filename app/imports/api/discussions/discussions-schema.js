@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { DocumentTypes } from '../constants.js';
 
 
 export const DiscussionsSchema = new SimpleSchema([
@@ -8,7 +9,8 @@ export const DiscussionsSchema = new SimpleSchema([
   OrganizationIdSchema,
   {
     documentType: {
-      type: String
+      type: String,
+      allowedValues: _.values(DocumentTypes)
     },
     linkedTo: idSchemaDoc,
     startedBy: {

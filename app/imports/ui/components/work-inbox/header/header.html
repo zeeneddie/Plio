@@ -1,11 +1,11 @@
 <template name="WorkInbox_Header">
   <div class="navbar">
     <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Work inbox - ' + activeWorkInboxFilter"}}></a>
+      <a class="dropdown-toggle pointer" data-toggle="dropdown">Work inbox - {{currentFilterLabel}}</a>
       <div class="dropdown-menu">
         {{#each filters}}
           <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveWorkInboxFilter(this) }, text: this, click: selectFilter(this)"}}>
+            {{b "class: { active: isActiveWorkInboxFilter(this.id) }, text: this.label, click: selectFilter(this.id)"}}>
           </a>
         {{/each}}
       </div>

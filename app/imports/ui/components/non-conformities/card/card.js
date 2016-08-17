@@ -46,7 +46,7 @@ Template.NC_Card_Read.viewmodel({
 
     const callback = (err) => {
       cb(err, () => {
-        FlowRouter.setQueryParams({ by: 'magnitude' });
+        FlowRouter.setQueryParams({ filter: 1 });
         Meteor.setTimeout(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);

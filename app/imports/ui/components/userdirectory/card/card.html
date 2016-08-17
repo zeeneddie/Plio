@@ -1,7 +1,7 @@
 <template name="UserDirectory_Card_Read">
   <div class="content-cards scroll flexbox-column col-sm-8 hidden-sm-down" {{b "attr: { style: display }"}}>
     <div class="content-cards-inner flex scroll">
-      {{#with user}}
+      {{#if user}}
         <div class="card">
           <div class="card-block card-heading clearfix">
             <div class="card-heading-buttons pull-xs-right">
@@ -13,93 +13,9 @@
             </div>
             <h3 class="card-title">User details</h3>
           </div>
-          <div class="list-group">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
-                    <img {{b "src: this.avatar"}}>
-                  </div>
-                  <p class="list-group-item-text" {{b "if: this.fullName"}}>Name</p>
-                  <h4 class="list-group-item-heading" {{b "if: this.fullName, text: this.fullName"}}></h4>
-                </div>
-              </div>
-              <div class="col-sm-6" {{b "if: this.initials"}}>
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Initials</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.initials" }}>=</h4>
-                </div>
-              </div>
-            </div>
-            <div class="row" {{b "if: this.description"}}>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Description</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.description" }}></h4>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-block card-subheading">
-            <h4 class="card-title">Contact details</h4>
-          </div>
-          <div>
-            <div class="list-group">
-              <div class="list-group-item">
-                <p class="list-group-item-text">Email</p>
-                <h4 class="list-group-item-heading"><a href="mailto:{{email}}" {{b "text: this.email" }}></a></h4>
-              </div>
-              <div class="list-group-item" {{b "if: this.address"}}>
-                  <p class="list-group-item-text">Address</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.formattedAddress"}}></h4>
-              </div>
-              <div class="row">
-                {{#each phoneNumbers}}
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
-                      <h4 class="list-group-item-heading"><a {{b "text: this.number, href: 'tel:' + this.number" }}></a></h4>
-                    </div>
-                  </div>
-                {{/each}}
-              </div>
-              <div class="list-group-item" {{b "if: this.skype"}}>
-                <p class="list-group-item-text">Skype name</p>
-                <h4 class="list-group-item-heading"><a href="skype:{{skype}}?call" {{b "text: this.skype"}}></a></h4>
-              </div>
-            </div>
-          </div>
-          <div class="card-block card-subheading">
-            <h4 class="card-title" {{b "text: superpowersTitle(this)"}}></h4>
-          </div>
-          <div>
-            <div class="list-group">
-              <div class="list-group-item">
-                {{#each superpowers this}}
-                  <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
-                    <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
-                    </i>
-                    {{value}}
-                  </h4>
-                {{/each}}
-              </div>
-              {{#if orgOwnerLabel}}
-                <div class="list-group-item">
-                  <p class="list-group-item-text text-xs-left">{{orgOwnerLabel}}</p>
-                </div>
-              {{/if}}
-              <div class="list-group-item" {{b "if: !isInvitationAccepted(this) || !isEmailVerified(this)"}}>
-                {{#unless (isInvitationAccepted this)}}
-                  <h4 class="list-group-item-text">Invitation not yet accepted</h4>
-                {{/unless}}
-                {{#unless (isEmailVerified this)}}
-                  <h4 class="list-group-item-text">Email address not yet verified</h4>
-                {{/unless}}
-              </div>
-            </div>
-          </div>
+          {{> UserDirectory_Card_Read_Inner user=user}}
         </div>
-      {{/with}}
+      {{/if}}
     </div>
   </div>
 </template>

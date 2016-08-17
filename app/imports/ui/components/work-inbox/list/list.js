@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 const { TYPES } = WorkItemsStore;
 
 Template.WorkInbox_List.viewmodel({
@@ -14,12 +15,11 @@ Template.WorkInbox_List.viewmodel({
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const items = this._getItemsByFilter() || [];
-
+      const items = Object.assign([], this._getItemsByFilter());
       const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
-        const { _id } = items.find((el, i, arr) => arr.length) || {}; // get _id of the first element if it exists
+        const { _id } = Object.assign({}, items.find((el, i, arr) => arr.length)); // get _id of the first element if it exists
 
         if (_id) {
           Meteor.setTimeout(() => {
@@ -29,31 +29,30 @@ Template.WorkInbox_List.viewmodel({
         } else {
           Meteor.setTimeout(() => {
             this.goToWorkInbox();
-          }, 0)
+          }, 0);
         }
       }
     }
   },
   _getItemsByFilter() {
-    const { my = {}, team = {} } = this.items() || {};
-
-    switch(this.activeWorkInboxFilter()) {
-      case 'My current work':
+    const { my = {}, team = {} } = Object.assign({}, this.items());
+    switch(this.activeWorkInboxFilterId()) {
+      case 1:
         return my.current;
         break;
-      case 'Team current work':
+      case 2:
         return team.current;
         break;
-      case 'My completed work':
+      case 3:
         return my.completed;
         break;
-      case 'Team completed work':
+      case 4:
         return team.completed;
         break;
-      case 'My deleted work':
+      case 5:
         return my.deleted;
         break;
-      case 'Team deleted work':
+      case 6:
         return team.deleted;
         break;
       default:
@@ -116,7 +115,7 @@ Template.WorkInbox_List.viewmodel({
     };
   },
   getTeamItems(userId, prop) {
-    const { team = {} } = this.items(userId) || {};
+    const { team = {} } = Object.assign({}, this.items(userId));
     return team[prop];
   },
   items(userId) {
@@ -128,7 +127,7 @@ Template.WorkInbox_List.viewmodel({
       array.sort(({ targetDate:d1 }, { targetDate:d2 }) => d2 - d1)
     );
 
-    const allItems = [...new Set(getInitialItems({}))];
+    const allItems = [...new Set(getInitialItems({}).concat(getInitialItems({ isDeleted: true })))];
     const myItems = byAssignee(allItems, assigneeId => assigneeId === Meteor.userId());
     const teamItems = byAssignee(allItems, assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
 
@@ -150,18 +149,23 @@ Template.WorkInbox_List.viewmodel({
     };
   },
   linkedDocId() {
-    const { linkedDoc: { _id } = {} } = this._getWorkItemByQuery({ _id: this.workItemId() }) || {};
+    const { linkedDoc: { _id } = {} } = Object.assign({}, this._getWorkItemByQuery({ _id: this.workItemId() }));
     return _id;
   },
   onSearchInputValue() {
     return (value) => {
-      const { my: { current, completed, deleted } = {} } = this.items() || {};
+      const { my: { current, completed, deleted } = {} } = Object.assign({}, this.items());
 
-      if (this.isActiveWorkInboxFilter('My current work')) {
+      // My current work items
+      if (this.isActiveWorkInboxFilter(1)) {
         return current;
-      } else if (this.isActiveWorkInboxFilter('My completed work')) {
+
+      // My completed work items
+      } else if (this.isActiveWorkInboxFilter(3)) {
         return completed;
-      } else if (this.isActiveWorkInboxFilter('My deleted work')) {
+
+      // My deleted work items
+      } else if (this.isActiveWorkInboxFilter(5)) {
         return deleted;
       }
 

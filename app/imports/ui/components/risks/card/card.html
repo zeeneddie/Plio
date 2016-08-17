@@ -103,11 +103,11 @@
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
-          {{#if isActiveRiskFilter 'deleted'}}
+          {{#if isActiveRiskFilter 4}}
             <h5>There are no deleted risks yet.</h5>
           {{else}}
-            {{#if isActiveRiskFilter 'department'}}
-              <h5>There are no risks with departments yet.</h5>
+            {{#if isActiveRiskFilter 3}}
+              <h5>There are no risks with departments/sectors yet.</h5>
             {{else}}
               <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
             {{/if}}

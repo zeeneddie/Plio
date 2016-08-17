@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-import { CollectionNames } from './constants.js';
+import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
 import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
@@ -69,10 +69,29 @@ const getCollectionByName = (colName) => {
   return collections[colName];
 };
 
+const getCollectionByDocType = (docType) => {
+  const { STANDARD, NON_CONFORMITY, RISK } = DocumentTypes;
+  switch(docType) {
+    case STANDARD:
+      return Standards;
+      break;
+    case NON_CONFORMITY:
+      return NonConformities;
+      break;
+    case RISK:
+      return Risks;
+      break;
+    default:
+      return undefined;
+      break;
+  }
+};
+
 export {
   compareDates,
   getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
-  handleMethodResult
+  handleMethodResult,
+  getCollectionByDocType
 };

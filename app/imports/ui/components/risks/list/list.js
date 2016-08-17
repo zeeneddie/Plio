@@ -32,17 +32,17 @@ Template.Risks_List.viewmodel({
     }
   },
   _getQueryForFilter(withSearchQuery) {
-    switch(this.activeRiskFilter()) {
-      case 'type':
+    switch(this.activeRiskFilterId()) {
+      case 1:
         return { typeId: { $in: this.types(withSearchQuery).map(({ _id }) => _id) } };
         break;
-      case 'status':
+      case 2:
         return { status: { $in: this.statuses(withSearchQuery) } };
         break;
-      case 'department/sector':
+      case 3:
         return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
         break;
-      case 'deleted':
+      case 4:
         return { isDeleted: true };
         break;
       default:
@@ -51,17 +51,17 @@ Template.Risks_List.viewmodel({
     };
   },
   _getFirstRiskQueryForFilter() {
-    switch(this.activeRiskFilter()) {
-      case 'type':
+    switch(this.activeRiskFilterId()) {
+      case 1:
         return { typeId: get(head(this.types()), '_id') };
         break;
-      case 'status':
+      case 2:
         return { status: head(this.statuses()) };
         break;
-      case 'department/sector':
+      case 3:
         return { departmentsIds: get(head(this.departments()), '_id') };
         break;
-      case 'deleted':
+      case 4:
         return { _id: get(head(this.risksDeleted()), '_id') };
         break;
       default:
@@ -108,7 +108,7 @@ Template.Risks_List.viewmodel({
   },
   onSearchInputValue() {
     return (value) => {
-      if (this.isActiveRiskFilter('deleted')) {
+      if (this.isActiveRiskFilter(4)) {
         return this.toArray(this.risksDeleted());
       }
 

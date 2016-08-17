@@ -70,9 +70,9 @@
                 </div>
               </div>
             </div>
-            {{#with this.completionResult}}
+            {{#with this.completionComments}}
               <div class="list-group-item">
-                <p class="list-group-item-text">Result</p>
+                <p class="list-group-item-text">Comments</p>
                 <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
               </div>
             {{/with}}
@@ -84,7 +84,13 @@
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     {{#if this.isVerified}}
-                      <p class="list-group-item-text">Verified as effective date</p>
+                      <p class="list-group-item-text">
+                        {{#if this.isVerifiedAsEffective}}
+                          Verified as effective date
+                        {{else}}
+                          Assessed as ineffective date
+                        {{/if}}
+                      </p>
                       <h4 class="list-group-item-heading" {{b "text: renderDate(this.verifiedAt)"}}></h4>
                     {{else}}
                       <p class="list-group-item-text">Verification target date</p>
@@ -104,9 +110,9 @@
                   </div>
                 </div>
               </div>
-              {{#with this.verificationResult}}
+              {{#with this.verificationComments}}
                 <div class="list-group-item">
-                  <p class="list-group-item-text">Result</p>
+                  <p class="list-group-item-text">Comments</p>
                   <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
                 </div>
               {{/with}}

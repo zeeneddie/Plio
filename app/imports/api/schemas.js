@@ -73,7 +73,7 @@ export const DocumentIdSchema = new SimpleSchema({
 export const DocumentTypeSchema = new SimpleSchema({
   documentType: {
     type: String,
-    allowedValues: DocumentTypes
+    allowedValues: _.values(DocumentTypes)
   }
 });
 

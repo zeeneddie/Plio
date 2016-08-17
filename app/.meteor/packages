@@ -56,3 +56,4 @@ peerlibrary:aws-sdk
 plio:bootstrap-sweetalert
 meteorhacks:subs-manager
 konecty:autolinker
+djedi:sanitize-html-client

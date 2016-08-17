@@ -23,7 +23,7 @@ Template.StandardsLayout.viewmodel({
         this.templateInstance.subscribe('risks', _id)
       ];
 
-      if (this.isActiveStandardFilter('deleted')) {
+      if (this.isActiveStandardFilter(3)) {
         _subHandlers.push(this.templateInstance.subscribe('standardsDeleted', _id));
       } else {
         _subHandlers.push(this.templateInstance.subscribe('standards', _id));

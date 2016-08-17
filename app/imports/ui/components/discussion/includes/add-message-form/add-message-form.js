@@ -1,8 +1,9 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
-import { addMessage, update } from '/imports/api/messages/methods.js';
+import { addMessage, updateFilesUrls } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -13,16 +14,22 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
+	disabled: false,
 	files: [],
 	messageFile: null,
 	messageText: '',
-	slingshotDirective: '',
+	slingshotDirective: 'discussionsFiles',
 
+	discussionId(){
+		return this.getDiscussionIdByStandardId(this.standardId());
+	},
 	sendTextMessage() {
-		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		if (this.disabled()) return;
+		const discussionId = this.discussionId();
+
 		addMessage.call({
 			discussionId,
-			message: this.messageText(),
+			message: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult(() => {
 			this.reset();
@@ -32,54 +39,47 @@ Template.Discussion_AddMessage_Form.viewmodel({
     return this.insertFile.bind(this);
   },
   insertFile({ _id, name }, cb) {
+		if (this.disabled()) return;
+
     const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
-		const discussionId = this.getDiscussionIdByStandardId(this.standardId());
+		const discussionId = this.discussionId();
+
 		addMessage.call({
 			discussionId,
 			files: [fileDoc],
 			type: 'file'
-		}, handleMethodResult);
+		}, handleMethodResult(cb));
 
-    if (this.files() && this.files().length) {
-      /*const options = {
+    /*if (this.files() && this.files().length) {
+      const options = {
         $push: {
           files: fileDoc
         }
       };
 
-      this.parent().update({ options }, cb);*/
+      this.parent().update({ options }, cb);
     } else {
-      /*this.parent().update({
+      this.parent().update({
         files: [fileDoc]
-      }, cb);*/
-    }
-		console.log('this.files()', this.files());
-		console.log('fileDoc', fileDoc);
-		console.log('cb', cb);
+      }, cb);
+    }*/
   },
 	onUploadCb() {
     return this.onUpload.bind(this);
   },
   onUpload(err, { _id, url }) {
-		console.log('started updating message');
     if (err && err.error !== 'Aborted') {
-
 			// [TODO] Handle error
       return;
     }
 
-    const query = {
-      files: {
-        $elemMatch: { _id }
-      }
-    };
     const options = {
       $set: {
         'files.$.url': url
       }
     };
-		console.log('finishing updating message');
-    update({ query, options });
+
+    updateFilesUrls.call({ _id, options });
   },
 	onSubmit(e) {
 		e.preventDefault();
@@ -100,32 +100,9 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},
+	uploaderMetaContext() {
+		const discussionId = this.discussionId();
 
-	onUploadCb() {
-    return this.onUpload.bind(this);
-  },
-  onUpload(err, { _id, url }) {
-    if (err && err.error !== 'Aborted') {
-      ViewModel.findOne('ModalWindow').setError(err.reason);
-      return;
-    }
-
-    /*const query = {
-      files: {
-        $elemMatch: { _id }
-      }
-    };*/
-    /*const options = {
-      $set: {
-        'files.$.url': url
-      }
-    };*/
-
-    //this.parent().update({ query, options });
-		console.log('onUpload');
-  },
-
-	uploaderMetaContext: {
-		discussionId: ''
-	}
+		return { discussionId };
+	},
 });
