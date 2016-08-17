@@ -47,10 +47,10 @@
 			{{/if}}
 
 			<p class="chat-item-content" {{b "click: deselect"}}>
-				{{#if isTextMessage}}
+				{{#if isType 'text'}}
 					{{{formattedMessageText}}}
 				{{/if}}
-				{{#if isFileMessage}}
+				{{#if isType 'file'}}
 					{{#each files}}
 						{{> FileItem
 				        _id=this._id

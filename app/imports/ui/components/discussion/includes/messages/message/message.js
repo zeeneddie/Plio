@@ -39,11 +39,8 @@ Template.Discussion_Message.viewmodel({
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
 	},
-	isTextMessage() {
-		return this.type() === 'text';
-	},
-	isFileMessage() {
-		return this.type() === 'file';
+	isType(type) {
+		return this.type() === type;
 	},
 	isDiscussionEmpty() {
 		return !this.discussionHasMessages(this.discussionId());
