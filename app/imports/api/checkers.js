@@ -6,7 +6,7 @@ import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
 import { AnalysisStatuses, OrgOwnerRoles } from './constants.js';
 import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
-import { checkAndThrow } from './helpers.js';
+import { chain, checkAndThrow } from './helpers.js';
 
 
 export * from './actions/checkers.js';
@@ -157,4 +157,17 @@ export const checkDocExistance = (collection, query) => {
   checkAndThrow(!doc, DOC_NOT_FOUND);
 
   return doc;
+};
+
+export const checkDocAndMembership = (collection, _id, userId) => {
+  return chain(checkDocExistance, checkOrgMembershipByDoc)(collection, _id, userId);
+};
+
+export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
+  const [doc] = checkDocAndMembership(collection, _id, userId);
+  return (predicate, err) => {
+    if (!err) return predicate(doc);
+
+    return checkAndThrow(predicate(doc), err)
+  };
 };

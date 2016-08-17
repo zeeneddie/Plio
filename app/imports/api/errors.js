@@ -18,4 +18,10 @@ export const CANNOT_RESTORE_NOT_DELETED = new E(400, 'The document you are tryin
 
 export const ONLY_OWNER_CAN_DELETE = new E(403, 'Only document owner or organization owner can delete it');
 
+export const ONLY_ORG_OWNER_CAN_DELETE = new E(403, 'Only organization owner can delete this document');
+
+export const ONLY_OWNER_CAN_RESTORE = new E(403, 'Only document owner or organization owner can restore it');
+
+export const ONLY_ORG_OWNER_CAN_RESTORE = new E(403, 'Only organization owner can restore this document');
+
 export const INVALID_DOC_TYPE = new E(400, 'Invalid document type');

@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import curry from 'lodash.curry';
 
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
@@ -8,22 +9,26 @@ import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from 
 import { ProblemTypes } from '../constants.js';
 import Method from '../method.js';
 import {
-  checkDocExistance,
   checkOrgMembership,
-  checkOrgMembershipByDoc,
-  ACT_OnLinkChecker
+  ACT_Check,
+  ACT_CheckEverything,
+  ACT_OnLinkChecker,
+  ACT_OnCompleteChecker,
+  ACT_OnUndoCompletionChecker,
+  ACT_OnVerifyChecker,
+  ACT_OnUndoVerificationChecker,
+  ACT_OnRemoveChecker,
+  ACT_OnRestoreChecker,
+  ACT_LinkedDocsChecker
 } from '../checkers.js';
 import { chain, checkAndThrow } from '../helpers.js';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
   ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED,
-  ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED
+  ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED,
+  ACT_NOT_LINKED
 } from '../errors.js';
-
-const checkers = function checkers(_id) {
-  return chain(checkDocExistance, checkOrgMembershipByDoc)(Actions, _id, this.userId);
-};
 
 
 export const insert = new Method({
@@ -37,10 +42,12 @@ export const insert = new Method({
     return RequiredSchema.validator()(doc);
   },
 
-  run({ organizationId, ...args }) {
+  run({ organizationId, linkedTo, ...args }) {
     checkOrgMembership(this.userId, organizationId);
 
-    return ActionService.insert({ organizationId, ...args });
+    ACT_LinkedDocsChecker(linkedTo);
+
+    return ActionService.insert({ organizationId, linkedTo, ...args });
   }
 });
 
@@ -74,7 +81,7 @@ export const update = new Method({
   },
 
   run({ _id, ...args }) {
-    checkers.call(this, _id);
+    ACT_Check.call(this, _id);
 
     return ActionService.update({ _id, ...args });
   }
@@ -86,7 +93,7 @@ export const updateViewedBy = new Method({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    checkers.call(this, _id);
+    ACT_Check.call(this, _id);
 
     return ActionService.updateViewedBy({ _id, userId: this.userId });
   }
@@ -103,9 +110,8 @@ export const setCompletionDate = new Method({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const [doc] = checkers.call(this, _id);
-
-    checkAndThrow(doc.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+    // receives _id and returns a function that receives predicate and error to be thrown if predicate is passed
+    ACT_CheckEverything.call(this, _id)(action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
 
     return ActionService.setCompletionDate({ _id, ...args });
   }
@@ -125,9 +131,7 @@ export const setCompletionExecutor = new Method({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const [doc] = checkers.call(this, _id);
-
-    checkAndThrow(doc.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+    ACT_CheckEverything.call(this, _id)(action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
 
     return ActionService.setCompletionExecutor({ _id, ...args });
   }
@@ -144,9 +148,7 @@ export const setVerificationDate = new Method({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const [doc] = checkers.call(this, _id);
-
-    checkAndThrow(doc.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+    ACT_CheckEverything.call(this, _id)(action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
 
     return ActionService.setVerificationDate({ _id, ...args });
   }
@@ -166,9 +168,7 @@ export const setVerificationExecutor = new Method({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const [doc] = checkers.call(this, _id);
-
-    checkAndThrow(doc.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED);
+    ACT_CheckEverything.call(this, _id)(action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED);
 
     return ActionService.setVerificationExecutor({ _id, ...args });
   }
@@ -192,15 +192,16 @@ export const linkDocument = new Method({
   ]).validator(),
 
   run({ _id, ...args }) {
-    const [action] = checkers.call(this, _id);
-
-    const { doc } = ACT_OnLinkChecker(action, { ...args });
+    const checker = curry(ACT_OnLinkChecker)({ ...args });
+    // if error is not passed as argument then it simply runs predicate
+    // (checker) is equivalent to (action => ACT_OnLinkChecker({ ...args }, action)) but more functional
+    const { doc, action } = ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.linkDocument({ _id, ...args }, { doc, action });
   }
 });
 
-export const unlinkDocument = new ValidatedMethod({
+export const unlinkDocument = new Method({
   name: 'Actions.unlinkDocument',
 
   validate: new SimpleSchema([
@@ -217,54 +218,44 @@ export const unlinkDocument = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403,
-        'Unauthorized user cannot link remove action\'s links to documents'
-      );
-    }
+  run({ _id, documentId, documentType }) {
+    ACT_CheckEverything.call(this, _id)(action => !action.isLinkedToDocument(documentId, documentType), ACT_NOT_LINKED);
 
-    return ActionService.unlinkDocument({ ...args });
+    return ActionService.unlinkDocument({ _id, documentId, documentType });
   }
 });
 
-export const complete = new ValidatedMethod({
+export const complete = new Method({
   name: 'Actions.complete',
 
   validate: CompleteActionSchema.validator(),
 
   run({ _id, ...args }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot complete an action'
-      );
-    }
+    const checker = curry(ACT_OnCompleteChecker)({ userId });
+
+    ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.complete({ _id, userId, ...args });
   }
 });
 
-export const undoCompletion = new ValidatedMethod({
+export const undoCompletion = new Method({
   name: 'Actions.undoCompletion',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo an action'
-      );
-    }
+    const checker = curry(ACT_OnUndoCompletionChecker)({ userId });
+
+    ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.undoCompletion({ _id, userId });
   }
 });
 
-export const verify = new ValidatedMethod({
+export const verify = new Method({
   name: 'Actions.verify',
 
   validate: new SimpleSchema([
@@ -277,62 +268,53 @@ export const verify = new ValidatedMethod({
 
   run({ _id, ...args }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot verify an action'
-      );
-    }
+    const checker = curry(ACT_OnVerifyChecker)({ userId });
+
+    ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.verify({ _id, userId, ...args });
   }
 });
 
-export const undoVerification = new ValidatedMethod({
+export const undoVerification = new Method({
   name: 'Actions.undoVerification',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo an action'
-      );
-    }
+    const checker = curry(ACT_OnUndoVerificationChecker)({ userId });
 
-    return ActionService.undoVerification({ _id, userId });
+    const { action } = ACT_CheckEverything.call(this, _id)(checker);
+
+    return ActionService.undoVerification({ _id, userId }, { action });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new Method({
   name: 'Actions.remove',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
     const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove an action'
-      );
-    }
+    const checker = curry(ACT_OnRemoveChecker)({ userId });
+
+    ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.remove({ _id, deletedBy: userId });
   }
 });
 
-export const restore = new ValidatedMethod({
+export const restore = new Method({
   name: 'Actions.restore',
 
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore an action'
-      );
-    }
+    const checker = curry(ACT_OnRestoreChecker)({ userId });
+
+    ACT_CheckEverything.call(this, _id)(checker);
 
     return ActionService.restore({ _id });
   }

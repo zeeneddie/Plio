@@ -76,7 +76,7 @@ const getCollectionByDocType = (docType) => {
 
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
-const checkAndThrow = (predicate, error) => {
+const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 };
 
