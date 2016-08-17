@@ -158,12 +158,12 @@
       }
       .form-control {
         font-size: 16px;
-        //line-height: 22px;
         background: transparent;
-        //height: 38px;
+        height: 36px;
       }
       .btn {
         line-height: 22px;
+        height: 36px;
         font-size: 22px;
         margin: 0;
       }
@@ -174,6 +174,7 @@
     @include scroll;
     @include hide-scrollbar;
     margin-bottom: 70px;
+    height: 100%;
   }
 
   &-form {
@@ -197,14 +198,18 @@
     }
 
     .form-control {
+      height: 36px;
       font-size: 16px;
-      //padding: 24px 14px 8px;
-      //padding-top: 1.75rem;
       background: transparent;
 
     }
+    .btn-file {
+      .btn {
+        border-right: none;
+      }
+    }
     .btn {
-      //padding: 16px 12px;
+      height: 36px;
       line-height: 22px;
       font-size: 22px;
       margin-bottom: 0;
