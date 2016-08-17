@@ -9,14 +9,12 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 
-
 Template.Discussion_Message.viewmodel({
-	mixin: ['discussions', 'organization', 'standard'],
+	mixin: ['discussions', 'organization', 'standard', 'modal'],
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
-
 		const clipboard = new Clipboard('.js-message-copy-link');
 
 		tpl.$('.js-chat-item-avatar').popover({
@@ -98,5 +96,12 @@ Template.Discussion_Message.viewmodel({
 		function(){
 			removeMessageById.call({ _id }, handleMethodResult(callback));
 		});
+	},
+	openUserDetails() {
+		this.modal().open({
+      template: 'UserDirectory_Card_Read_Inner',
+      _title: 'User details',
+      user: this.user()
+    });
 	}
 });
