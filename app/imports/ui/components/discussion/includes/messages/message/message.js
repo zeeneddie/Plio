@@ -22,7 +22,8 @@ Template.Discussion_Message.viewmodel({
 		tpl.$('.js-chat-item-avatar').popover({
 			content: `<img class="chat-item-avatar-in-popover" src="${this.avatar()}" alt="">`,
 			html: true,
-			title: this.username(),
+			offset: '-29px 12px',
+			template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
 			trigger: 'focus'
 		});
 	},
