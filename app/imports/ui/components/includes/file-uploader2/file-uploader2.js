@@ -7,41 +7,29 @@ Template.FileUploader2.viewmodel({
   mixin: 'modal',
 
   attachmentFile: null,
-  fileUrls: [], // [{itemId: string, fileUrls: Array<string>}] - file URLs for particular items (e.g.: messages).
-  itemId: null, // ID of the item (e. g.: message) which may have files attatched to it.
   uploads: new ReactiveArray(), // temporarily stores the files being uploaded
 
-  /* Get file URLs for a particular item:
-   * @param {String} itemId - ID of the item being analyzed.
-  */
-  getFileUrlsByItemId(itemId){
-    return _.find(this.fileUrls(), (fileUrlsObj) => {
-      return fileUrlsObj.itemId === itemId;
-    });
-  },
   uploadData(fileId) { // find the file with fileId is being uploaded
     return _.find(this.uploads().array(), (data) => {
       return data.fileId === fileId;
     });
   },
   progress(fileId) {
-    const uploadData = this.uploadData(fileId);//console.log(uploadData);
+    const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
-    let progress = uploader && uploader.progress(); // can be NaN
+    let progress = uploader && uploader.progress();
 
-    // if !this.getFileUrlsByMessageId(itemId) -> progress = 0
-    // if this.getFileUrlsByMessageId(itemId) && uploadData -> progress = (0...1)
-    // if this.getFileUrlsByMessageId(itemId) && !uploadData -> progress = 1
     if (!uploader) {
       progress = 1;
     }
 
-    return _.isFinite(progress) ? Math.round(progress * 100) : 0; // 100 -> 0
+    return _.isFinite(progress) ? Math.round(progress * 100) : 0;
   },
   fileName() {
     return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
+    const self = this;
     const file = this.attachmentFile();
     if (!file) {
       return;

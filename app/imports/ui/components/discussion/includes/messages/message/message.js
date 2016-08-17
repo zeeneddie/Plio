@@ -16,23 +16,10 @@ Template.Discussion_Message.viewmodel({
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
 		const clipboard = new Clipboard('.js-message-copy-link');
-
-		tpl.$('.js-chat-item-avatar').popover({
-			//container: '.chat-item.message',
-			content: `<img class="chat-item-avatar-in-popover" src="${this.avatar()}" alt="">`,
-			html: true,
-			offset: '-29px 12px',
-			template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
-			trigger: 'focus'
-		});
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-		//return ViewModel.findOne('FileUploader2');
-		const upl = ViewModel.findOne('FileUploader2');//console.log(this._id());
-		// upl.itemId(this._id());
-		//console.log(upl.itemId.value);
-		return upl;
+		return ViewModel.findOne('FileUploader2');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
