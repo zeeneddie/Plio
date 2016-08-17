@@ -71,10 +71,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     });
 
     diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('notify', diff.index);
-    }
   }
 
   _viewedByChanged(diff) {
@@ -121,10 +117,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     });
 
     diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('departmentsIds', diff.index);
-    }
   }
 
   _filesChanged(diff) {
@@ -148,10 +140,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     this._createLog({ message });
 
     diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('files', diff.index);
-    }
   }
 
   _fileUrlChanged(diff) {
@@ -172,16 +160,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     this._prettifyValues(diff, (val) => {
       const user = Meteor.users.findOne({ _id: val });
       return user && user.fullNameOrEmail();
-    });
-  }
-
-  _processRedudantDiffs(field, index) {
-    const redudantFieldRe = new RegExp(`^${field}\.${index-1}`);
-
-    _(this._diff).each((diff) => {
-      if (redudantFieldRe.test(diff.path.join('.'))) {
-        diff.isProcessed = true;
-      }
     });
   }
 

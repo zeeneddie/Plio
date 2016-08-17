@@ -179,10 +179,6 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
     this._createLog({ message });
 
     diff.isProcessed = true;
-
-    if (kind === ITEM_REMOVED) {
-      this._processRedudantDiffs('scores', diff.index);
-    }
   }
 
   _typeChanged(diff) {
