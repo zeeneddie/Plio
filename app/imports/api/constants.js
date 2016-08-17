@@ -369,7 +369,8 @@ const CollectionNames = {
   STANDARDS: 'Standards',
   NCS: 'NonConformities',
   RISKS: 'Risks',
-  ACTIONS: 'Actions'
+  ACTIONS: 'Actions',
+  LESSONS: 'LessonsLearned'
 };
 
 const TruncatedStringLengths = {

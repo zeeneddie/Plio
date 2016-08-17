@@ -196,7 +196,7 @@ export default class UpdateAudit {
 
   _getFieldValue(obj) {
     if (_(obj).isDate()) {
-      return moment(obj).tz('UTC').toString();
+      return `${moment(obj).tz('UTC').format('DD MMM YYYY hh:mm:ss')} (UTC)`;
     } else if (_(obj).isObject()) {
       return JSON.stringify(obj);
     } else {
@@ -269,11 +269,11 @@ export default class UpdateAudit {
     const changesTypes = this._changesTypes;
 
     return {
-      [changesTypes.FIELD_ADDED]: '[field] set to [newValue]',
-      [changesTypes.FIELD_CHANGED]: '[field] changed from [oldValue] to [newValue]',
+      [changesTypes.FIELD_ADDED]: '[field] set to "[newValue]"',
+      [changesTypes.FIELD_CHANGED]: '[field] changed from "[oldValue]" to "[newValue]"',
       [changesTypes.FIELD_REMOVED]: '[field] removed',
-      [changesTypes.ITEM_ADDED]: '[item] added to [field] list',
-      [changesTypes.ITEM_REMOVED]: '[item] removed from [field] list'
+      [changesTypes.ITEM_ADDED]: '"[item]" added to [field] list',
+      [changesTypes.ITEM_REMOVED]: '"[item]" removed from [field] list'
     };
   }
 
