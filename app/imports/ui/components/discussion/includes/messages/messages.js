@@ -55,12 +55,11 @@ Template.Discussion_Messages.viewmodel({
 			})();
 
 			const obj = (() => {
-				const getDate = curry(getFormattedDate)(createdAt);
 				const dateFormat = 'MMMM Do, YYYY';
 				const timeFormat = 'h:mm A';
-				const date = getDate(dateFormat);
 				const _id = message._id;
 				const createdAt = message.createdAt;
+				const date = createdAt ? getFormattedDate(createdAt, dateFormat) : null;
 				const documentId = get(this.discussion(), 'linkedTo');
 
 				return {
@@ -72,10 +71,9 @@ Template.Discussion_Messages.viewmodel({
 					username: invoke(user, 'firstName'),
 					dateToShow: (() => {
 						const prevCreatedAt = get(messages[i - 1], 'createdAt');
+						const prevMessageDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
 
-						// we need to check for undefined because moment translates undefined to today's date
-						const prevDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
-						return !Object.is(date, prevDate);
+						return date !== prevMessageDate;
 					})(),
 					isMergedWithPreviousMessage: (() => {
 						const prevMessage = messages[i - 1];

@@ -50,6 +50,12 @@ Template.Discussion_Message.viewmodel({
 
     return FlowRouter.path(currentRouteName, params, queryParams);
   },
+	deselect(e) {
+		const at = FlowRouter.getQueryParam('at');
+		if (at === this._id()) {
+			FlowRouter.setQueryParams({ at: null });
+		}
+	},
 	remove(e) {
 		if (!this.isAuthor()) return;
 
