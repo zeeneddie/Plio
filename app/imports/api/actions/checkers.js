@@ -53,6 +53,7 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   }
 };
 
+
 export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   const collection = ((() => {
     if (Object.is(documentType, ProblemTypes.NC)) {

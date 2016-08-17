@@ -7,7 +7,7 @@ import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
 import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
-import Method from '../method.js';
+import Method, { CheckedMethod } from '../method.js';
 import {
   checkOrgMembership,
   ACT_Check,
@@ -30,6 +30,8 @@ import {
   ACT_NOT_LINKED
 } from '../errors.js';
 
+
+const act = fn => fn(Actions);
 
 export const insert = new Method({
   name: 'Actions.insert',
@@ -99,7 +101,7 @@ export const updateViewedBy = new Method({
   }
 });
 
-export const setCompletionDate = new Method({
+export const setCompletionDate = new CheckedMethod({
   name: 'Actions.setCompletionDate',
 
   validate: new SimpleSchema([
@@ -109,10 +111,11 @@ export const setCompletionDate = new Method({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    // receives _id and returns a function that receives predicate and error to be thrown if predicate is passed
-    ACT_CheckEverything.call(this, _id)(action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+  checker(checker) {
+    return act(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setCompletionDate({ _id, ...args });
   }
 });
@@ -174,7 +177,7 @@ export const setVerificationExecutor = new Method({
   }
 });
 
-export const linkDocument = new Method({
+export const linkDocument = new CheckedMethod({
   name: 'Actions.linkDocument',
 
   validate: new SimpleSchema([
@@ -191,13 +194,10 @@ export const linkDocument = new Method({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    const checker = curry(ACT_OnLinkChecker)({ ...args });
-    // if error is not passed as argument then it simply runs predicate
-    // (checker) is equivalent to (action => ACT_OnLinkChecker({ ...args }, action)) but more functional
-    const { doc, action } = ACT_CheckEverything.call(this, _id)(checker);
+  checker: checker => act(checker)(ACT_OnLinkChecker),
 
-    return ActionService.linkDocument({ _id, ...args }, { doc, action });
+  run(...args) {
+    return ActionService.linkDocument(...args);
   }
 });
 

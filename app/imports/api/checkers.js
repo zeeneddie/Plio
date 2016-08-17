@@ -168,6 +168,8 @@ export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
   return (predicate, err) => {
     if (!err) return predicate(doc);
 
-    return checkAndThrow(predicate(doc), err)
+    checkAndThrow(predicate(doc), err);
+
+    return doc;
   };
 };
