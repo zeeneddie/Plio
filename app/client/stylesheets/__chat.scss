@@ -78,6 +78,8 @@
       float: left;
       margin-right: 15px;
       margin-top: 4px;
+      position: relative;
+      z-index: 1;
     }
     &-avatar-in-popover {
       $popover-height: 100px;
@@ -89,7 +91,6 @@
     }
     &-card {
       @include clearfix;
-      margin-left: 4rem;
       position: relative;
     }
     &-author {
@@ -106,7 +107,7 @@
       font-size: 13px;
     }
     &-content {
-      margin: 0;
+      margin: 0 0 0 4rem;
       font-size: 16px;
 
       .file-item {

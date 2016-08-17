@@ -9,23 +9,13 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 
-
 Template.Discussion_Message.viewmodel({
-	mixin: ['discussions', 'organization', 'standard'],
+	mixin: ['discussions', 'organization', 'standard', 'modal'],
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
-
 		const clipboard = new Clipboard('.js-message-copy-link');
-
-		tpl.$('.js-chat-item-avatar').popover({
-			content: `<img class="chat-item-avatar-in-popover" src="${this.avatar()}" alt="">`,
-			html: true,
-			offset: '-29px 12px',
-			template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>',
-			trigger: 'focus'
-		});
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
@@ -93,5 +83,12 @@ Template.Discussion_Message.viewmodel({
 		function(){
 			removeMessageById.call({ _id }, handleMethodResult(callback));
 		});
+	},
+	openUserDetails() {
+		this.modal().open({
+      template: 'UserDirectory_Card_Read_Inner',
+      _title: 'User details',
+      user: this.user()
+    });
 	}
 });

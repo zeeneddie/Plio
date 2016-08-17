@@ -47,7 +47,9 @@ Template.Discussion_Messages.viewmodel({
 				const query = { _id: createdBy };
 				const options = {
 					fields: {
-						profile: 1
+						profile: 1,
+						emails: 1,
+						roles: 1
 					}
 				};
 
@@ -67,8 +69,7 @@ Template.Discussion_Messages.viewmodel({
 					date,
 					documentId,
 					createdAt,
-					avatar: invoke(user, 'avatar'),
-					username: invoke(user, 'firstName'),
+					user,
 					dateToShow: (() => {
 						const prevCreatedAt = get(messages[i - 1], 'createdAt');
 						const prevMessageDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
