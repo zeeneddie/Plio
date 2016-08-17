@@ -5,9 +5,11 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 Template.FileUploader2.viewmodel({
   mixin: 'modal',
+
   attachmentFile: null,
-  uploads: new ReactiveArray(),
-  uploadData(fileId) {
+  uploads: new ReactiveArray(), // temporarily stores the files being uploaded
+
+  uploadData(fileId) { // find the file with fileId is being uploaded
     return _.find(this.uploads().array(), (data) => {
       return data.fileId === fileId;
     });
@@ -16,6 +18,7 @@ Template.FileUploader2.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
+
     if (!uploader) {
       progress = 1;
     }
@@ -26,6 +29,7 @@ Template.FileUploader2.viewmodel({
     return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
+    const self = this;
     const file = this.attachmentFile();
     if (!file) {
       return;
