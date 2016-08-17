@@ -1,10 +1,10 @@
 import {
   ProblemMagnitudes, ProblemsStatuses,
   AnalysisStatuses, CollectionNames
-} from '../constants.js';
-import { Departments } from '../departments/departments.js';
-import { Standards } from '../standards/standards.js';
-import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
+} from '../../constants.js';
+import { Departments } from '../../departments/departments.js';
+import { Standards } from '../../standards/standards.js';
+import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
 
 
 export default class ProblemUpdateAudit extends DocumentUpdateAudit {

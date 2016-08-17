@@ -1,7 +1,7 @@
-import { CollectionNames, StandardStatuses } from '../constants.js';
-import { Departments } from '../departments/departments.js';
-import { StandardsBookSections } from '../standards-book-sections/standards-book-sections.js';
-import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
+import { CollectionNames, StandardStatuses } from '../../constants.js';
+import { Departments } from '../../departments/departments.js';
+import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections.js';
+import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
 
 
 export default class StandardUpdateAudit extends DocumentUpdateAudit {

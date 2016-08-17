@@ -1,8 +1,8 @@
-import { ActionStatuses, ProblemTypes, CollectionNames } from '../constants.js';
-import { Actions } from './actions.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
+import { ActionStatuses, ProblemTypes, CollectionNames } from '../../constants.js';
+import { Actions } from '../actions.js';
+import { NonConformities } from '../../non-conformities/non-conformities.js';
+import { Risks } from '../../risks/risks.js';
+import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
 
 
 export default class ActionUpdateAudit extends DocumentUpdateAudit {

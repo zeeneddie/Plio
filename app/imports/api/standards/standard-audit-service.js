@@ -1,14 +1,6 @@
-import { CollectionNames } from '../constants.js';
-import AuditService from '/imports/core/audit/audit-service.js';
-import StandardUpdateAudit from './StandardUpdateAudit.js';
-
-
-export default _.extend({}, AuditService, {
-  _collection: CollectionNames.STANDARDS,
-
-  _updateAuditConstructor: StandardUpdateAudit,
-
-  _documentCreatedMessage: 'Standard created',
-
-  _documentRemovedMessage: 'Standard removed'
-});
+if (Meteor.isServer) {
+  import StandardAuditService from './server/standard-audit-service.js';
+  export default StandardAuditService;
+} else {
+  export default {};
+}

@@ -4,9 +4,9 @@ import {
   CollectionNames,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions
-} from '../constants.js';
-import { RiskTypes } from '../risk-types/risk-types.js';
-import ProblemUpdateAudit from '../problems/ProblemUpdateAudit.js';
+} from '../../constants.js';
+import { RiskTypes } from '../../risk-types/risk-types.js';
+import ProblemUpdateAudit from '../../problems/server/ProblemUpdateAudit.js';
 
 
 export default class RiskUpdateAudit extends ProblemUpdateAudit {

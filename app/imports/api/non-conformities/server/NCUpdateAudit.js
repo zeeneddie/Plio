@@ -1,5 +1,5 @@
-import { CollectionNames } from '../constants.js';
-import ProblemUpdateAudit from '../problems/ProblemUpdateAudit.js';
+import { CollectionNames } from '../../constants.js';
+import ProblemUpdateAudit from '../../problems/server/ProblemUpdateAudit.js';
 
 
 export default class NCUpdateAudit extends ProblemUpdateAudit {

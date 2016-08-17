@@ -1,5 +1,5 @@
-import { CollectionNames } from '../constants.js';
-import DocumentUpdateAudit from '/imports/core/audit/DocumentUpdateAudit.js';
+import { CollectionNames } from '../../constants.js';
+import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
 
 
 export default class LessonUpdateAudit extends DocumentUpdateAudit {

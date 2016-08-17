@@ -1,14 +1,6 @@
-import { CollectionNames } from '../constants.js';
-import AuditService from '/imports/core/audit/audit-service.js';
-import NCUpdateAudit from './NCUpdateAudit.js';
-
-
-export default _.extend({}, AuditService, {
-  _collection: CollectionNames.NCS,
-
-  _updateAuditConstructor: NCUpdateAudit,
-
-  _documentCreatedMessage: 'Non conformity created',
-
-  _documentRemovedMessage: 'Non conformity removed'
-});
+if (Meteor.isServer) {
+  import NCAuditService from './server/nc-audit-service.js';
+  export default NCAuditService;
+} else {
+  export default {};
+}

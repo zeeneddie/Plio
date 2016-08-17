@@ -1,14 +1,6 @@
-import { CollectionNames } from '../constants.js';
-import AuditService from '/imports/core/audit/audit-service.js';
-import LessonUpdateAudit from './LessonUpdateAudit.js';
-
-
-export default _.extend({}, AuditService, {
-  _collection: CollectionNames.LESSONS,
-
-  _updateAuditConstructor: LessonUpdateAudit,
-
-  _documentCreatedMessage: 'Lesson learned created',
-
-  _documentRemovedMessage: 'Lesson learned removed'
-});
+if (Meteor.isServer) {
+  import LessonAuditService from './server/lesson-audit-service.js';
+  export default LessonAuditService;
+} else {
+  export default {};
+}
