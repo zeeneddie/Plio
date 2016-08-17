@@ -14,24 +14,26 @@
     </div>
 
     <div class="card-changelog collapse" {{b "ref: collapse, class: { in: !collapsed}"}}>
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Change summary</th>
-            <th class="text-right">Date &amp; time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each logs}}
+      {{#if logs.count}}
+        <table class="table table-sm">
+          <thead>
             <tr>
-              <td class="log-user">{{getUser executor}}</td>
-              <td>{{message}}</td>
-              <td class="log-date text-right">{{getPrettyDate date}}</td>
+              <th>Name</th>
+              <th>Change summary</th>
+              <th class="text-right">Date &amp; time</th>
             </tr>
-          {{/each}}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {{#each logs}}
+              <tr>
+                <td class="log-user">{{getUser executor}}</td>
+                <td>{{message}}</td>
+                <td class="log-date text-right">{{getPrettyDate date}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
       <div class="card-footer">
         {{#unless showAllLogs}}
           <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, enable: viewButtonEnabled"}}>
