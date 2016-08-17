@@ -370,7 +370,8 @@ const CollectionNames = {
   NCS: 'NonConformities',
   RISKS: 'Risks',
   ACTIONS: 'Actions',
-  LESSONS: 'LessonsLearned'
+  LESSONS: 'LessonsLearned',
+  OCCURRENCES: 'Occurrences'
 };
 
 const TruncatedStringLengths = {

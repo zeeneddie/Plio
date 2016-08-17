@@ -22,7 +22,7 @@ export default class LessonUpdateAudit extends DocumentUpdateAudit {
 
   static get _fieldLabels() {
     const fieldLabels = {
-      date: 'Date',
+      date: 'Creation date',
       documentId: 'Document ID',
       documentType: 'Document type',
       notes: 'Notes',
