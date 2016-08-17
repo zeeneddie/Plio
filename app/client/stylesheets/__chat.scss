@@ -28,7 +28,7 @@
       background-color: #f5f5f5;
     }
 
-    &:hover {
+    &.selected, &:hover {
       .chat-item-dropdown .btn, .chat-item-gutter {
         visibility: visible !important;
       }

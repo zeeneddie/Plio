@@ -63,12 +63,21 @@ Template.Discussion_Message.viewmodel({
 
     return FlowRouter.path(currentRouteName, params, queryParams);
   },
+//<<<<<<< HEAD
 	pathToMessageToCopy() {
 		const ptm = this.pathToMessage();
 		const url = `${location.protocol}//${location.hostname}:${location.port}`;
 
 		return `${url}${ptm}`;
   },
+//=======
+	deselect(e) {
+		const at = FlowRouter.getQueryParam('at');
+		if (at === this._id()) {
+			FlowRouter.setQueryParams({ at: null });
+		}
+	},
+//>>>>>>> origin/devel
 	remove(e) {
 		if (!this.isAuthor()) return;
 

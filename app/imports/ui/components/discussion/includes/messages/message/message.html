@@ -46,7 +46,7 @@
 				</div>
 			{{/if}}
 
-			<p class="chat-item-content">
+			<p class="chat-item-content" {{b "click: deselect"}}>
 				{{#if isTextMessage}}
 					{{{formattedMessageText}}}
 				{{/if}}
