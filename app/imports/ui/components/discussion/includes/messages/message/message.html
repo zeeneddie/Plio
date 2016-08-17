@@ -7,12 +7,14 @@
 
 	<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
 		{{#unless isMergedWithPreviousMessage}}
-			<img class="chat-item-avatar" {{b "src: avatar"}}>
+		<a class="chat-item-avatar img-wrapper sm" role="button" {{b "click: openUserDetails"}}>
+			<img tabindex="0" {{b "src: user.avatar()"}} alt="">
+		</a>
 		{{/unless}}
 
 		<div class="chat-item-card">
 			{{#unless isMergedWithPreviousMessage}}
-				<span class="chat-item-author" {{b "text: username"}}></span>
+				<span class="chat-item-author" {{b "text: user.firstName()"}}></span>
 				<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm A')"}}></a>
 			{{/unless}}
 
@@ -22,7 +24,10 @@
 				</button>
 
 				<div class="dropdown-menu dropdown-menu-right js-message-actions">
-					<a class="dropdown-item" {{b "click: copyAsLink"}}>Copy as link</a>
+					<a href="#" class="dropdown-item js-message-copy-link"
+						data-clipboard-text="{{pathToMessageToCopy}}" {{b "click: copyAsLink"}}>
+						Copy as link
+					</a>
 					{{#if isAuthor}}
 						<a
 							class="dropdown-item js-message-remove"
@@ -46,7 +51,7 @@
 				{{#if isType 'file'}}
 					{{#each files}}
 						{{> FileItem
-				        _id=_id
+				        _id=this._id
 				        name=name
 				        url=url
 				        extension=extension

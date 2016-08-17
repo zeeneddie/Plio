@@ -70,7 +70,7 @@
       border-top: 0;
       padding-top: 1rem;
     }
-    &-avatar {
+    &-avatar, &-avatar-in-popover {
       $avatar-size: 40px;
       border-radius: 50%;
       width: $avatar-size;
@@ -78,6 +78,16 @@
       float: left;
       margin-right: 15px;
       margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    &-avatar-in-popover {
+      $popover-height: 100px;
+      $popover-width: 100px;
+      float: none;
+      margin: 0;
+      height: $popover-height;
+      width: $popover-width;
     }
     &-card {
       @include clearfix;
@@ -97,9 +107,8 @@
       font-size: 13px;
     }
     &-content {
-      margin: 0;
+      margin: 0 0 0 4rem;
       font-size: 16px;
-      margin-left: 4rem;
 
       .file-item {
         max-width: calc(100% - 40px);
@@ -149,12 +158,12 @@
       }
       .form-control {
         font-size: 16px;
-        //line-height: 22px;
         background: transparent;
-        //height: 38px;
+        height: 36px;
       }
       .btn {
         line-height: 22px;
+        height: 36px;
         font-size: 22px;
         margin: 0;
       }
@@ -165,6 +174,7 @@
     @include scroll;
     @include hide-scrollbar;
     margin-bottom: 70px;
+    height: 100%;
   }
 
   &-form {
@@ -188,14 +198,18 @@
     }
 
     .form-control {
+      height: 36px;
       font-size: 16px;
-      //padding: 24px 14px 8px;
-      //padding-top: 1.75rem;
       background: transparent;
 
     }
+    .btn-file {
+      .btn {
+        border-right: none;
+      }
+    }
     .btn {
-      //padding: 16px 12px;
+      height: 36px;
       line-height: 22px;
       font-size: 22px;
       margin-bottom: 0;

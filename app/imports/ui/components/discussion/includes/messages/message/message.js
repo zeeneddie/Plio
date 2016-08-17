@@ -1,24 +1,25 @@
 import { Autolinker } from 'meteor/konecty:autolinker';
+import Clipboard from 'clipboard';
 import { Template } from 'meteor/templating';
-
-import { handleMethodResult } from '/imports/api/helpers.js';
-import { removeMessageById } from '/imports/api/messages/methods.js';
-import { TruncatedStringLengths } from '/imports/api/constants.js';
-import { getFormattedDate } from '/imports/api/helpers.js';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
+import { getFormattedDate } from '/imports/api/helpers.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
+import { removeMessageById } from '/imports/api/messages/methods.js';
+import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 Template.Discussion_Message.viewmodel({
-	mixin: ['discussions', 'organization', 'standard'],
+	mixin: ['discussions', 'organization', 'standard', 'modal'],
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
 		$chat.scrollTop($chat.find('.chat-messages').height());
+		const clipboard = new Clipboard('.js-message-copy-link');
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-	  return this.child('FileUploader');
+		return ViewModel.findOne('FileUploader2');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
@@ -33,8 +34,10 @@ Template.Discussion_Message.viewmodel({
 		return FlowRouter.getQueryParam('at') === this._id();
 	},
 	formattedMessageText() {
-		return Autolinker.link(
-			this.message(), { truncate: TruncatedStringLengths.c40 }
+		const message = this.message && this.message();
+
+		return message && Autolinker.link(
+			message, { truncate: TruncatedStringLengths.c40 }
 		);
 	},
 	copyAsLink(e) {
@@ -47,6 +50,12 @@ Template.Discussion_Message.viewmodel({
 
     return FlowRouter.path(currentRouteName, params, queryParams);
   },
+	pathToMessageToCopy() {
+		const ptm = this.pathToMessage();
+		const url = `${location.protocol}//${location.hostname}:${location.port}`;
+
+		return `${url}${ptm}`;
+  },
 	deselect(e) {
 		const at = FlowRouter.getQueryParam('at');
 		if (at === this._id()) {
@@ -56,9 +65,30 @@ Template.Discussion_Message.viewmodel({
 	remove(e) {
 		if (!this.isAuthor()) return;
 
+		const _id = this._id();
 		const callback = (err, res) => {
 			if (err) return;
+
+			swal("Deleted!", "Your message has been deleted.", "success");
 		};
-		removeMessageById.call({ _id: this._id() }, handleMethodResult(callback));
+
+		swal({
+			title: "Are you sure you want to delete this message?",
+			text: "This cannot be undone.",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonText: "Remove",
+			closeOnConfirm: false
+		},
+		function(){
+			removeMessageById.call({ _id }, handleMethodResult(callback));
+		});
+	},
+	openUserDetails() {
+		this.modal().open({
+      template: 'UserDirectory_Card_Read_Inner',
+      _title: 'User details',
+      user: this.user()
+    });
 	}
 });
