@@ -54,8 +54,23 @@ Template.FileUploader2.viewmodel({
 
       uploader.send(file, (err, url) => {
         if(err){
-          // [TODO] Handle error
-          throw err;
+          let swalText = 'File has wrong format or too large size';
+
+          if( err.reason.indexOf('File exceeds allowed size') >=0 ){
+            swalText = 'File exceeds allowed size of 10 MB';
+          }
+
+          swal({
+            showConfirmButton: false,
+            text: swalText,
+            timer: 2000,
+            title: "Upload denied",
+            type: 'error'
+          });
+          this.removeFileMessage(_id);
+
+          //throw err;
+          return;
         }
 
         if (url) {

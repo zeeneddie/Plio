@@ -134,6 +134,24 @@ export const bulkUpdateViewedBy = new ValidatedMethod({
 	}
 });
 
+export const getMessages = new ValidatedMethod({
+	name: 'Messages.getMessages',
+	validate: new SimpleSchema([optionsSchema]).validator(),
+
+	run({ query, options }) {
+		const userId = this.userId;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot messages'
+			);
+		}
+		query.createdBy = userId;
+
+		return Messages.find(query, options);
+	}
+});
+
 export const removeMessageById = new ValidatedMethod({
 	name: 'Messages.removeMessageById',
 	validate: new SimpleSchema([IdSchema]).validator(),

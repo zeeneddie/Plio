@@ -3,7 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
-import { addMessage, updateFilesUrls } from '/imports/api/messages/methods.js';
+import {
+	addMessage, getMessages, removeMessageById,	updateFilesUrls
+} from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -99,6 +101,26 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		} else {
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
+	},
+	/* Remove the file message document form Messages collection,
+	 * but not the file itself.
+	 * @param {String} fileId - the file ID in the "files" array;
+	*/
+	removeFileMessage(fileId){
+		const query = { 'files._id': fileId};
+		const options = { fields: {_id: 1} };
+		const messagesWithFileId = getMessages.call({query, options});
+
+		if(!messagesWithFileId.count()){
+			return;
+		}
+
+		messagesWithFileId.forEach((c, i, cr) => {
+			removeMessageById.call({_id: c._id});
+		});
+	},
+	removeFileMessageCb(){
+		return this.removeFileMessage.bind(this);
 	},
 	uploaderMetaContext() {
 		const discussionId = this.discussionId();
