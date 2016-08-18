@@ -18,6 +18,8 @@ export * from './actions/checkers.js';
 
 export * from './work-items/checkers.js';
 
+export * from './problems/checkers.js';
+
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
     userId,
@@ -184,11 +186,11 @@ export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
 export const onRemoveChecker = ({ userId }, doc) => {
   checkAndThrow(doc.isDeleted && !isOrgOwner(userId, doc.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
 
-  return { doc };
+  return doc;
 };
 
 export const onRestoreChecker = ({ userId }, doc) => {
   checkAndThrow(!doc.isDeleted, CANNOT_RESTORE_NOT_DELETED);
 
-  return { doc };
+  return doc;
 };

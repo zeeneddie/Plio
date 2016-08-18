@@ -298,7 +298,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker)(OnRemoveChecker),
+  check: checker => act(checker)(onRemoveChecker),
 
   run({ _id }) {
     return ActionService.remove({ _id, deletedBy: this.userId });

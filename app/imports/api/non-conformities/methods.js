@@ -11,10 +11,26 @@ import {
   UserIdSchema,
   CompleteActionSchema
 } from '../schemas.js';
+import Method, { CheckedMethod } from '../method.js';
 
-import { checkAnalysis } from '../checkers.js';
+import {
+  checkOrgMembership,
+  checkAnalysis,
+  onRemoveChecker,
+  onRestoreChecker,
+  P_OnSetAnalysisExecutorChecker,
+  P_OnSetAnalysisDateChecker,
+  P_OnCompleteAnalysisChecker,
+  P_OnStandardsUpdateChecker,
+  P_OnUndoStandardsUpdateChecker,
+  P_OnUndoAnalysisChecker,
+  P_OnSetStandardsUpdateExecutorChecker,
+  P_OnSetStandardsUpdateDateChecker
+} from '../checkers.js';
 
-export const insert = new ValidatedMethod({
+const inject = fn => fn(NonConformities);
+
+export const insert = new Method({
   name: 'NonConformities.insert',
 
   validate: new SimpleSchema([RequiredSchema, {
@@ -25,42 +41,36 @@ export const insert = new ValidatedMethod({
     }
   }]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a non-conformity'
-      );
-    }
+  run({ organizationId, ...args }) {
+    checkOrgMembership(this.userId, organizationId);
 
-    return NonConformitiesService.insert({ ...args });
+    return NonConformitiesService.insert({ organizationId, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'NonConformities.update',
 
   validate: new SimpleSchema([
     IdSchema, NonConformitiesUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({_id, options, query, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a non-conformity'
-      );
-    }
+  check(checker) {
+    const _checker = (...args) => {
+      return (nc) => {
+        return checkAnalysis(nc, args);
+      };
+    };
 
-    const NC = NonConformities.findOne({ _id });
+    inject(checker)(_checker);
+  },
 
-    checkAnalysis(NC, args);
-
-    return NonConformitiesService.update({ _id, options, query, ...args });
+  run({ ...args }) {
+    return NonConformitiesService.update({ ...args });
   }
 });
 
-export const setAnalysisExecutor = new ValidatedMethod({
+export const setAnalysisExecutor = new CheckedMethod({
   name: 'NonConformities.setAnalysisExecutor',
 
   validate: new SimpleSchema([
@@ -73,18 +83,14 @@ export const setAnalysisExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, executor }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannnot update root cause analysis'
-      );
-    }
+  check: checker => inject(checker)(P_OnSetAnalysisExecutorChecker),
 
-    return NonConformitiesService.setAnalysisExecutor({ _id, executor });
+  run({ _id, executor }, doc) {
+    return NonConformitiesService.setAnalysisExecutor({ _id, executor }, doc);
   }
 });
 
-export const setAnalysisDate = new ValidatedMethod({
+export const setAnalysisDate = new CheckedMethod({
   name: 'NonConformities.setAnalysisDate',
 
   validate: new SimpleSchema([
@@ -94,86 +100,62 @@ export const setAnalysisDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update root cause analysis'
-      );
-    }
+  check: checker => inject(checker)(P_OnSetAnalysisDateChecker),
 
-    return NonConformitiesService.setAnalysisDate({ _id, ...args });
+  run({ ...args }, doc) {
+    return NonConformitiesService.setAnalysisDate({ ...args }, doc);
   }
 });
 
-export const completeAnalysis = new ValidatedMethod({
+export const completeAnalysis = new CheckedMethod({
   name: 'NonConformities.completeAnalysis',
 
   validate: CompleteActionSchema.validator(),
 
-  run({ _id, completionComments }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot complete root cause analysis'
-      );
-    }
+  check: checker => inject(checker)(P_OnCompleteAnalysisChecker),
 
-    return NonConformitiesService.completeAnalysis({ _id, completionComments, userId });
+  run({ _id, completionComments }) {
+    return NonConformitiesService.completeAnalysis({ _id, completionComments, userId: this.userId });
   }
 });
 
-export const updateStandards = new ValidatedMethod({
+export const updateStandards = new CheckedMethod({
   name: 'NonConformities.updateStandards',
 
   validate: CompleteActionSchema.validator(),
 
-  run({ _id, completionComments }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update standards'
-      );
-    }
+  check: checker => inject(checker)(P_OnStandardsUpdateChecker),
 
-    return NonConformitiesService.updateStandards({ _id, completionComments, userId });
+  run({ _id, completionComments }) {
+    return NonConformitiesService.updateStandards({ _id, completionComments, userId: this.userId });
   }
 });
 
-export const undoStandardsUpdate = new ValidatedMethod({
+export const undoStandardsUpdate = new CheckedMethod({
   name: 'NonConformities.undoStandardsUpdate',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo standards update'
-      );
-    }
+  check: checker => inject(checker)(P_OnUndoStandardsUpdateChecker),
 
-    return NonConformitiesService.undoStandardsUpdate({ _id, userId });
+  run({ _id }) {
+    return NonConformitiesService.undoStandardsUpdate({ _id, userId: this.userId });
   }
 });
 
-export const undoAnalysis = new ValidatedMethod({
+export const undoAnalysis = new CheckedMethod({
   name: 'NonConformities.undoAnalysis',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo root cause analysis'
-      );
-    }
+  check: checker => inject(checker)(P_OnUndoAnalysisChecker),
 
-    return NonConformitiesService.undoAnalysis({ _id, userId });
+  run({ _id }) {
+    return NonConformitiesService.undoAnalysis({ _id, userId: this.userId });
   }
 });
 
-export const setStandardsUpdateExecutor = new ValidatedMethod({
+export const setStandardsUpdateExecutor = new CheckedMethod({
   name: 'NonConformities.setStandardsUpdateExecutor',
 
   validate: new SimpleSchema([
@@ -186,18 +168,14 @@ export const setStandardsUpdateExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, executor }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update standards update'
-      );
-    }
+  check: checker => inject(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
-    return NonConformitiesService.setStandardsUpdateExecutor({ _id, executor });
+  run({ _id, executor }, doc) {
+    return NonConformitiesService.setStandardsUpdateExecutor({ _id, executor }, doc);
   }
 });
 
-export const setStandardsUpdateDate = new ValidatedMethod({
+export const setStandardsUpdateDate = new CheckedMethod({
   name: 'NonConformities.setStandardsUpdateDate',
 
   validate: new SimpleSchema([
@@ -207,66 +185,45 @@ export const setStandardsUpdateDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set date for standards update'
-      );
-    }
+  check: checker => inject(checker)(P_OnSetStandardsUpdateDateChecker),
 
-    return NonConformitiesService.setStandardsUpdateDate({ _id, ...args });
+  run({ _id, ...args }, doc) {
+    return NonConformitiesService.setStandardsUpdateDate({ _id, ...args }, doc);
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new CheckedMethod({
   name: 'NonConformities.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => inject(checker),
+
   run({ _id }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update non-conformities'
-      );
-    }
-
-    return NonConformitiesService.updateViewedBy({ _id, viewedBy: userId });
+    return NonConformitiesService.updateViewedBy({ _id, viewedBy: this.userId });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'NonConformities.remove',
 
   validate: IdSchema.validator(),
 
+  check: checker => inject(checker)(onRemoveChecker),
+
   run({ _id }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove non-conformities'
-      );
-    }
-
-    return NonConformitiesService.remove({ _id, deletedBy: userId });
+    return NonConformitiesService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const restore = new ValidatedMethod({
+export const restore = new CheckedMethod({
   name: 'NonConformities.restore',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore non-conformities'
-      );
-    }
+  check: checker => inject(checker)(onRestoreChecker),
 
+  run({ _id }) {
     return NonConformitiesService.restore({ _id });
   }
 });

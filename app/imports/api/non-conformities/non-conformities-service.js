@@ -4,10 +4,13 @@ import { NonConformities } from './non-conformities.js';
 import NCWorkflow from './NCWorkflow.js';
 import ProblemsService from '../problems/problems-service.js';
 import { ProblemTypes } from '../constants.js';
+import BaseEntityService from '../base-entity-service.js';
 
 
 export default _.extend({}, ProblemsService, {
   collection: NonConformities,
+
+  _service: new BaseEntityService(NonConformities),
 
   _abbr: 'NC',
 
