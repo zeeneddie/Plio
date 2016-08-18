@@ -1,27 +1,28 @@
 import { Meteor } from 'meteor/meteor';
 
 // Import all collections that should be filled with fixture data here
-import { Organizations } from '../../api/organizations/organizations.js';
-import { Occurrences } from '../../api/occurrences/occurrences.js';
-import { Standards } from '../../api/standards/standards.js';
-import { StandardTypes } from '../../api/standards-types/standards-types.js';
-import { StandardsBookSections } from '../../api/standards-book-sections/standards-book-sections.js';
-import { NonConformities } from '../../api/non-conformities/non-conformities.js';
-import { Actions } from '../../api/actions/actions.js';
-import { RiskTypes } from '../../api/risk-types/risk-types.js';
-import { Risks } from '../../api/risks/risks.js';
-import { WorkItems } from '../../api/work-items/work-items.js';
-import { ImprovementPlans } from '../../api/improvement-plans/improvement-plans.js';
-import { LessonsLearned } from '../../api/lessons/lessons.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Standards } from '/imports/api/standards/standards.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Actions } from '/imports/api/actions/actions.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { Risks } from '/imports/api/risks/risks.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
+import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import { Discussions } from '/imports/api/discussions/discussions.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, ImprovementPlans, LessonsLearned });
+_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, ImprovementPlans, LessonsLearned, Discussions });
 
 import path from 'path';
 import fs from 'fs';
 import { EJSON } from 'meteor/ejson';
 
-import { UserRoles } from '../../api/constants.js';
+import { UserRoles } from '/imports/api/constants.js';
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users

@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
-import { CountSubs } from '/imports/startup/client/subsmanagers.js';
+import { CountSubs, DiscussionSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
@@ -25,10 +26,17 @@ Template.StandardsPage.viewmodel({
       ];
 
       if (this.isDiscussionOpened()) {
-        _subHandlers = _subHandlers.concat([
-          template.subscribe('discussionsByStandardId', standardId),
-          template.subscribe('messagesByDiscussionIds', arrDiscussionIds)
-        ]);
+        Tracker.nonreactive(() => {
+          const params = {
+            limit: 100,
+            at: FlowRouter.getQueryParam('at') || null
+          };
+
+          _subHandlers = _subHandlers.concat([
+            DiscussionSubs.subscribe('discussionsByStandardId', standardId),
+            MessageSubs.subscribe('messagesByDiscussionIds', arrDiscussionIds, params)
+          ]);
+        });
       }
 
       this._subHandlers(_subHandlers);

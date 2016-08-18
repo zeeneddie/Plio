@@ -7,14 +7,23 @@ import get from 'lodash.get';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
+import { Messages } from '/imports/api/messages/messages.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 
 	onRendered(tpl) {
-		const $chat = $(tpl.firstNode).closest('.chat-content');
-		$chat.scrollTop($chat.find('.chat-messages').height());
+		// if (Messages.findOne({ _id: this._id(), viewedBy: { $ne: Meteor.userId() } })) {
+			const $chat = $(tpl.firstNode).closest('.chat-content');
+			const scrollTo = tpl.$('.chat-message-container');
+
+			$chat.scrollTop(
+			    scrollTo.offset().top - $chat.offset().top + $chat.scrollTop()
+			);
+			// $chat.scrollTop(tpl.$('.chat-message-container').position().top);
+		// }
+
 		const clipboard = new Clipboard('.js-message-copy-link');
 	},
 	getFormattedDate: getFormattedDate,

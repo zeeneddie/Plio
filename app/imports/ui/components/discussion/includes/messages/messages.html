@@ -1,6 +1,6 @@
 <template name="Discussion_Messages">
 	{{#if discussion}}
-		<div class="chat-content scroll">
+		<div class="chat-content scroll" {{b "scroll: triggerLoadMore, resize: triggerLoadMore, throttle: 500"}}>
 			<div class="chat-messages">
 				{{#if discussion.isStarted}}
 					<div class="chat-item chat-item-start">
@@ -9,9 +9,15 @@
 						</p>
 					</div>
 				{{/if}}
+				<div class="infinite-load-older text-xs-center">
+					<button class="btn btn-secondary" {{b "click: loadOlder"}}>Load more</button>
+				</div>
 				{{#each messages}}
 					{{> Discussion_Message}}
 				{{/each}}
+				<div class="infinite-load-newer text-xs-center">
+					<button class="btn btn-secondary" {{b "click: loadNewer"}}>Load more</button>
+				</div>
 			</div>
 		</div>
 	{{/if}}

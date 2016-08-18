@@ -94,5 +94,41 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		return messagesMapped;
+	},
+	triggerLoadMore() {
+		const tpl = this.templateInstance;
+
+		if (tpl.$('.infinite-load-older').isAlmostVisible()) {
+	    this.loadOlder();
+	  }
+		// if (tpl.$('.infinite-load-newer').isAlmostVisible()) {
+	  //   this.loadNewer();
+	  // }
+	},
+	loadOlder() {
+		const firsMessage = Messages.find({ discussionId: this.discussionId() }, { sort: { createdAt: 1 } }).fetch()[0] || null;
+		this.templateInstance.subscribe('messagesByDiscussionIds',
+			[this.discussionId()],
+			{
+				at: firsMessage && firsMessage._id,
+				limit: 50
+			}
+		);
+	},
+	loadNewer() {
+		const lastMessage = Messages.find({ discussionId: this.discussionId() }, { sort: { createdAt: -1 } }).fetch()[0] || null;
+
+		this.templateInstance.subscribe('messagesByDiscussionIds',
+			[this.discussionId()],
+			{
+				at: lastMessage && lastMessage._id,
+				limit: 50
+			}
+		);
+	},
+	events: {
+		'scroll .chat-content, resize .chat-content': _.throttle(function () {
+			this.triggerLoadMore()
+		}, 500)
 	}
 });
