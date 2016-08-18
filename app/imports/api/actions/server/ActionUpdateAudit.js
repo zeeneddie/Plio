@@ -142,7 +142,7 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     const { sequentialId, title } = this._newDoc;
     const actionName = `${sequentialId} "${title}"`;
 
-    const { kind, item:linkedDoc } = diff;
+    const { field, kind, item:linkedDoc } = diff;
     let message, linkedDocMessage;
 
     if (kind === ITEM_ADDED) {
@@ -168,10 +168,7 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     const docName = (doc && `${doc.sequentialId} "${doc.title}"`) || documentId;
     message = message.replace('[docName]', docName);
 
-    this._createLog({
-      message,
-      field: 'linkedTo'
-    });
+    this._createLog({ message, field });
 
     const collectionNames = {
       [ProblemTypes.NC]: CollectionNames.NCS,

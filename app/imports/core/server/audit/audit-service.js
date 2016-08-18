@@ -9,20 +9,18 @@ export default {
 
   _updateAuditConstructor: UpdateAudit,
 
-  _documentCreatedMessage: 'Document created',
-
-  _documentRemovedMessage: 'Document removed',
-
   documentCreated(newDocument, userId) {
     const { _id, createdAt=new Date(), createdBy=userId } = newDocument;
 
     this._saveLogs([{
       collection: this._collection,
-      message: this._documentCreatedMessage,
+      message: 'Document created',
       documentId: _id,
       date: createdAt,
       executor: createdBy
     }]);
+
+    this._onDocumentCreated(newDocument, userId);
   },
 
   documentUpdated(newDocument, oldDocument) {
@@ -36,15 +34,24 @@ export default {
 
     this._saveLogs([{
       collection: this._collection,
-      message: this._documentRemovedMessage,
+      message: 'Document removed',
       documentId: _id,
       date: new Date(),
       executor: userId
     }]);
+
+    this._onDocumentRemoved(oldDocument, userId);
+  },
+
+  _onDocumentCreated(newDocument, userId) {
+
+  },
+
+  _onDocumentRemoved(oldDocument, userId) {
+
   },
 
   _saveLogs(logs) {
-    console.log(logs);
     _(logs).each(log => {
       AuditLogs.insert(log);
     });

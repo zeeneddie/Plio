@@ -8,7 +8,22 @@ export default _.extend({}, AuditService, {
 
   _updateAuditConstructor: NCUpdateAudit,
 
-  _documentCreatedMessage: 'Non conformity created',
+  _onDocumentCreated(newDocument, userId) {
+    const { standardsIds, createdAt, createdBy, sequentialId, title } = newDocument;
 
-  _documentRemovedMessage: 'Non conformity removed'
+    const logs = [];
+    const logMessage = `${sequentialId} "${title}" linked`;
+
+    _(standardsIds).forEach((standardId) => {
+      logs.push({
+        collection: CollectionNames.STANDARDS,
+        message: logMessage,
+        documentId: standardId,
+        date: createdAt,
+        executor: createdBy
+      });
+    });
+
+    this._saveLogs(logs);
+  }
 });

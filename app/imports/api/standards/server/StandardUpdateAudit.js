@@ -26,6 +26,10 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
         case 'source2':
           this._sourceFileChanged(diff);
           break;
+        case 'source1.type':
+        case 'source2.type':
+          this._sourceFileTypeChanged(diff);
+          break;
         case 'source1.url':
         case 'source2.url':
           this._sourceFileUrlChanged(diff);
@@ -100,6 +104,27 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
     diff.isProcessed = true;
   }
 
+  _sourceFileTypeChanged(diff) {
+    const { oldValue, newValue, path } = diff;
+
+    let ignoredFields;
+    if (oldValue === 'attachment') {
+      ignoredFields = ['name'];
+    } else if (newValue === 'attachment') {
+      ignoredFields = ['name', 'url'];
+    }
+
+    const sourceField = path[0];
+
+    _(ignoredFields).each((ignField) => {
+      const ignoredDiff = _(this._diff).find(
+        ({ field:diffField }) => diffField === `${sourceField}.${ignField}`
+      );
+
+      ignoredDiff && (ignoredDiff.isProcessed = true);
+    });
+  }
+
   _sourceFileUrlChanged(diff) {
     const { oldValue, newValue, path } = diff;
     const sourceField = path[0];
@@ -138,18 +163,18 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
       notes: 'Notes',
       owner: 'Owner',
       sectionId: 'Book section',
-      source1: 'Source file',
-      'source1.extension': 'Source file extension',
-      'source1.type': 'Source file type',
-      'source1.url': 'Source file url',
-      'source1.htmlUrl': 'Source file html url',
-      'source1.name': 'Source file name',
-      source2: 'Source file',
-      'source2.extension': 'Source file extension',
-      'source2.type': 'Source file type',
-      'source2.url': 'Source file url',
-      'source2.htmlUrl': 'Source file html url',
-      'source2.name': 'Source file name',
+      source1: 'Source',
+      'source1.extension': 'Source extension',
+      'source1.type': 'Source type',
+      'source1.url': 'Source url',
+      'source1.htmlUrl': 'Source html url',
+      'source1.name': 'Source name',
+      source2: 'Source',
+      'source2.extension': 'Source extension',
+      'source2.type': 'Source type',
+      'source2.url': 'Source url',
+      'source2.htmlUrl': 'Source html url',
+      'source2.name': 'Source name',
       status: 'Status',
       title: 'Title',
       typeId: 'Type'

@@ -6,9 +6,5 @@ import OccurrenceUpdateAudit from './OccurrenceUpdateAudit.js';
 export default _.extend({}, AuditService, {
   _collection: CollectionNames.OCCURRENCES,
 
-  _updateAuditConstructor: OccurrenceUpdateAudit,
-
-  _documentCreatedMessage: 'Occurrence created',
-
-  _documentRemovedMessage: 'Occurrence removed'
+  _updateAuditConstructor: OccurrenceUpdateAudit
 });

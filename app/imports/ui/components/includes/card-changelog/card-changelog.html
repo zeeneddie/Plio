@@ -3,11 +3,11 @@
     <div class="card-footer card-changelog-toggle" {{b "click: toggleLogs, class: { collapsed: collapsed, waiting: loadingLogs }"}}>
       <div class="row">
         <div class="col-xs-6">
-          Created by: <span {{b "text: userNameOrEmail(this.createdBy)"}}></span>
+          Created by: <span {{b "text: getUser(this.createdBy)"}}></span>
           <br>Date: <span {{b "text: renderDate(this.createdAt)"}}></span>
         </div>
         <div class="col-xs-6" {{b "if: this.updatedBy && this.updatedAt"}}>
-          Last edited by: <span {{b "text: userNameOrEmail(this.updatedBy)"}}></span>
+          Last edited by: <span {{b "text: getUser(this.updatedBy)"}}></span>
           <br>Date: <span {{b "text: renderDate(this.updatedAt)"}}></span>
         </div>
       </div>

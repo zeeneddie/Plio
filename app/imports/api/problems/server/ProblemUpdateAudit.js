@@ -56,38 +56,11 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
   }
 
   _analysisChanged(diff) {
-    this._workflowActionChanged(diff, 'Root cause analysis');
+    this._problemActionChanged(diff, 'Root cause analysis');
   }
 
   _analysisStatusChanged(diff) {
-    const completedAtDiff = _(this._diff).find(
-      ({ field }) => field === 'analysis.completedAt'
-    );
-    const completedByDiff = _(this._diff).find(
-      ({ field }) => field === 'analysis.completedBy'
-    );
-
-    if (!(completedAtDiff && completedByDiff)) {
-      return;
-    }
-
-    const { newValue } = diff;
-    let message;
-    if (newValue === 1 /* Completed */) {
-      message = 'Root cause analysis completed';
-    } else if (newValue === 0 /* Not completed */) {
-      message = 'Completion of root cause analysis cancelled';
-    }
-
-    if (!message) {
-      return;
-    }
-
-    this._createLog({ message });
-
-    diff.isProcessed = true;
-    completedAtDiff.isProcessed = true;
-    completedByDiff.isProcessed = true;
+    this._problemActionStatusChanged(diff, 'Root cause analysis', 'analysis');
   }
 
   _magnitudeChanged(diff) {
@@ -100,14 +73,14 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     const { sequentialId, title } = this._newDoc;
     const docName = `${sequentialId} "${title}"`;
 
-    const { kind, item:standardId } = diff;
+    const { field, kind, item:standardId } = diff;
     let message, standardMessage;
 
     if (kind === ITEM_ADDED) {
-      message = 'Linked to "[standardName]"';
+      message = 'Linked to "[standardName]" standard';
       standardMessage = `${docName} linked`;
     } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from "[standardName]"';
+      message = 'Unlinked from "[standardName]" standard';
       standardMessage = `${docName} unlinked`;
     }
 
@@ -119,10 +92,7 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     const standardName = (standard && standard.title) || standardId;
     message = message.replace('[standardName]', standardName);
 
-    this._createLog({
-      message,
-      field: 'standardsIds'
-    });
+    this._createLog({ message, field });
 
     this._createLog({
       collection: CollectionNames.STANDARDS,
@@ -138,41 +108,14 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
   }
 
   _updateOfStandardsChanged(diff) {
-    this._workflowActionChanged(diff, 'Update of standards');
+    this._problemActionChanged(diff, 'Update of standards');
   }
 
   _updateOfStandardsStatusChanged(diff) {
-    const completedAtDiff = _(this._diff).find(
-      ({ field }) => field === 'updateOfStandards.completedAt'
-    );
-    const completedByDiff = _(this._diff).find(
-      ({ field }) => field === 'updateOfStandards.completedBy'
-    );
-
-    if (!(completedAtDiff && completedByDiff)) {
-      return;
-    }
-
-    const { newValue } = diff;
-    let message;
-    if (newValue === 1 /* Completed */) {
-      message = 'Update of standards completed';
-    } else if (newValue === 0 /* Not completed */) {
-      message = 'Update of standards cancelled';
-    }
-
-    if (!message) {
-      return;
-    }
-
-    this._createLog({ message });
-
-    diff.isProcessed = true;
-    completedAtDiff.isProcessed = true;
-    completedByDiff.isProcessed = true;
+    this._problemActionStatusChanged(diff, 'Update of standards', 'updateOfStandards');
   }
 
-  _workflowActionChanged(diff, title) {
+  _problemActionChanged(diff, title) {
     const { FIELD_ADDED, FIELD_REMOVED } = this.constructor._changesTypes;
 
     const { kind, newValue, oldValue } = diff;
@@ -230,6 +173,51 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     diff.isProcessed = true;
   }
 
+  _problemActionStatusChanged(diff, title, docField) {
+    const completedAtDiff = _(this._diff).find(
+      ({ field }) => field === `${docField}.completedAt`
+    );
+    const completedByDiff = _(this._diff).find(
+      ({ field }) => field === `${docField}.completedBy`
+    );
+
+    if (!(completedAtDiff && completedByDiff)) {
+      return;
+    }
+
+    const commentsDiff = _(this._diff).find(
+      ({ field }) => field === `${docField}.completionComments`
+    );
+
+    const { newValue } = diff;
+    let message;
+    if (newValue === 1 /* Completed */) {
+      const { newValue:comments } = commentsDiff || {};
+      message = `${title} completed`;
+      message = comments ? `${message}: ${comments}` : message;
+    } else if (newValue === 0 /* Not completed */) {
+      message = `${title} cancelled`;
+    }
+
+    if (!message) {
+      return;
+    }
+
+    const logData = { message };
+    if (newValue === 1) {
+      const { newValue:executor } = completedByDiff;
+      const { newValue:date } = completedAtDiff;
+      _(logData).extend({ date, executor });
+    }
+
+    this._createLog(logData);
+
+    diff.isProcessed = true;
+    completedAtDiff.isProcessed = true;
+    completedByDiff.isProcessed = true;
+    commentsDiff && (commentsDiff.isProcessed = true);
+  }
+
   static get _fieldLabels() {
     const fieldLabels = {
       analysis: 'Root cause analysis',
@@ -245,7 +233,7 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
       'files.$.extension': 'File extension',
       'files.$.name': 'File name',
       'files.$.url': 'File url',
-      identifiedAt: 'Identified at',
+      identifiedAt: 'Identified date',
       identifiedBy: 'Identified by',
       magnitude: 'Magnitude',
       sequentialId: 'Sequential ID',

@@ -17,9 +17,6 @@ export default class DocumentUpdateAudit extends UpdateAudit {
         case 'notify':
           this._notifyChanged(diff);
           break;
-        case 'viewedBy':
-          this._viewedByChanged(diff);
-          break;
       }
     });
 
@@ -55,7 +52,7 @@ export default class DocumentUpdateAudit extends UpdateAudit {
 
   _notifyChanged(diff) {
     const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
-    const { kind, item:userId } = diff;
+    const { field, kind, item:userId } = diff;
 
     const user = Meteor.users.findOne({ _id: userId });
     const userName = (user && user.fullNameOrEmail()) || userId;
@@ -66,26 +63,8 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     };
 
     this._createLog({
-      field: 'notify',
-      message: messages[kind]
-    });
-
-    diff.isProcessed = true;
-  }
-
-  _viewedByChanged(diff) {
-    const { kind, item:userId } = diff;
-
-    if (kind !== this.constructor._changesTypes.ITEM_ADDED) {
-      return;
-    }
-
-    const user = Meteor.users.findOne({ _id: userId });
-    const userName = (user && user.fullNameOrEmail()) || userId;
-
-    this._createLog({
-      message: `${userName} viewed document`,
-      field: 'viewedBy'
+      message: messages[kind],
+      field
     });
 
     diff.isProcessed = true;
@@ -94,7 +73,7 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   _departmentsChanged(diff) {
     const { ITEM_ADDED, ITEM_REMOVED } = this.constructor._changesTypes;
 
-    const { kind, item:departmentId } = diff;
+    const { field, kind, item:departmentId } = diff;
     let message;
 
     if (kind === ITEM_ADDED) {
@@ -111,10 +90,7 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     const departmentName = (department && department.name) || departmentId;
     message = message.replace('[departmentName]', departmentName);
 
-    this._createLog({
-      message,
-      field: 'departmentsIds'
-    });
+    this._createLog({ message, field });
 
     diff.isProcessed = true;
   }
@@ -143,13 +119,14 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   }
 
   _fileUrlChanged(diff) {
-    const { oldValue, newValue } = diff;
+    const { field, oldValue, newValue } = diff;
 
     if (!oldValue && newValue) {
       const { name } = _(this._newDoc.files).find(({ url }) => url === newValue) || {};
 
       this._createLog({
-        message: `File ${name} uploaded`
+        message: `File ${name} uploaded`,
+        field
       });
 
       diff.isProcessed = true;
@@ -175,6 +152,16 @@ export default class DocumentUpdateAudit extends UpdateAudit {
       updatedAt: 'Updated at',
       updatedBy: 'Updated by',
       viewedBy: 'Viewed by'
+    };
+  }
+
+  static get _messages() {
+    const { ITEM_ADDED } = this._changesTypes;
+
+    return {
+      viewedBy: {
+        [ITEM_ADDED]: 'Document viewed',
+      }
     };
   }
 

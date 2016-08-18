@@ -6,9 +6,5 @@ import StandardUpdateAudit from './StandardUpdateAudit.js';
 export default _.extend({}, AuditService, {
   _collection: CollectionNames.STANDARDS,
 
-  _updateAuditConstructor: StandardUpdateAudit,
-
-  _documentCreatedMessage: 'Standard created',
-
-  _documentRemovedMessage: 'Standard removed'
+  _updateAuditConstructor: StandardUpdateAudit
 });

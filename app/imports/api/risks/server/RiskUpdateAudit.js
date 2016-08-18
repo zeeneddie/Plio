@@ -1,5 +1,3 @@
-import moment from 'moment-timezone';
-
 import {
   CollectionNames,
   RiskEvaluationPriorities,
@@ -73,7 +71,7 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
     }
 
     if (reviewedAt !== undefined) {
-      const date = moment(reviewedAt).tz('UTC').toString();
+      const date = this._getPrettyDate(reviewedAt);
       reviewDesc.push(`reviewed on ${date}`);
     }
 
@@ -166,7 +164,7 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
     }
 
     if (scoredAt !== undefined) {
-      const date = moment(scoredAt).tz('UTC').toString();
+      const date = this._getPrettyDate(scoredAt);;
       scoreDesc.push(`scored on ${date}`);
     }
 

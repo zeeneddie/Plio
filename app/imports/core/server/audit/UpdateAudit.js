@@ -196,12 +196,16 @@ export default class UpdateAudit {
 
   _getFieldValue(obj) {
     if (_(obj).isDate()) {
-      return `${moment(obj).tz('UTC').format('DD MMM YYYY hh:mm:ss')} (UTC)`;
+      return this._getPrettyDate(obj);
     } else if (_(obj).isObject()) {
       return JSON.stringify(obj);
     } else {
       return obj;
     }
+  }
+
+  _getPrettyDate(date) {
+    return `${moment(date).tz('UTC').format('DD MMM YYYY hh:mm:ss')} (UTC)`;
   }
 
   _prettifyValues(diff, fn) {
