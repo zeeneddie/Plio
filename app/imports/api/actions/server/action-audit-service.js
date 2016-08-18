@@ -11,33 +11,19 @@ export default _.extend({}, AuditService, {
   _onDocumentCreated(newDocument, userId) {
     const { linkedTo, createdAt, createdBy, sequentialId, title } = newDocument;
 
-    const getLinkedDocsIds = (docType) => {
-      return _(
-        _(linkedTo).filter(({ documentType }) => documentType === docType)
-      ).pluck('documentId');
-    };
-
-    const NCsIds = getLinkedDocsIds(ProblemTypes.NC);
-    const risksIds = getLinkedDocsIds(ProblemTypes.RISK);
-
     const logs = [];
     const logMessage = `${sequentialId} "${title}" linked`;
 
-    _(NCsIds).each((NCId) => {
-      logs.push({
-        collection: CollectionNames.NCS,
-        message: logMessage,
-        documentId: NCId,
-        date: createdAt,
-        executor: createdBy
-      });
-    });
+    _(linkedTo).each(({ documentId, documentType }) => {
+      const collections = {
+        [ProblemTypes.NC]: CollectionNames.NCS,
+        [ProblemTypes.RISK]: CollectionNames.RISKS
+      };
 
-    _(risksIds).each((riskId) => {
       logs.push({
-        collection: CollectionNames.RISKS,
+        documentId,
+        collection: collections[documentType],
         message: logMessage,
-        documentId: riskId,
         date: createdAt,
         executor: createdBy
       });
