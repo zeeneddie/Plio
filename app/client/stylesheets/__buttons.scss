@@ -5,15 +5,15 @@
   text-overflow: ellipsis;
   overflow: hidden;
   @include transition(all .3s ease);
-  
 
-  
+
+
   &-primary {
     background: $blue-color;
     border-color: $blue-color;
     &:hover {
       background: darken($blue-color,5%);
-      border-color: darken($blue-color,5%);    
+      border-color: darken($blue-color,5%);
     }
   }
   &-info {
@@ -21,11 +21,11 @@
     border-color: $light-blue-color;
     &:hover {
       background: darken($light-blue-color,5%);
-      border-color: darken($light-blue-color,5%);    
+      border-color: darken($light-blue-color,5%);
     }
     &:hover {
       background: $light-blue-color;
-      border-color: $light-blue-color;      
+      border-color: $light-blue-color;
     }
   }
   &-success {
@@ -33,7 +33,7 @@
     border-color: $green-color;
     &:hover {
       background: darken($green-color,5%);
-      border-color: darken($green-color,5%);    
+      border-color: darken($green-color,5%);
     }
   }
   &-warning {
@@ -41,7 +41,7 @@
     border-color: $amber-color;
     &:hover {
       background: darken($amber-color,5%);
-      border-color: darken($amber-color,5%);    
+      border-color: darken($amber-color,5%);
     }
   }
   &-danger {
@@ -49,10 +49,10 @@
     border-color: $red-color;
     &:hover {
       background: darken($red-color,5%);
-      border-color: darken($red-color,5%);    
+      border-color: darken($red-color,5%);
     }
   }
-  
+
   &-link {
     color: $blue-color;
   }
@@ -63,7 +63,7 @@
   padding-left: 0;
   padding-right: 0;
   text-align: center;
-  
+
   i {
     font-size: 20px;
     line-height: 18px;
@@ -77,12 +77,12 @@
 .btn-group {
   &-nomargin {
     margin-bottom: 0 !important;
-    
+
     .btn {
       margin-bottom: 0 !important;
     }
   }
-  
+
   &[data-toggle="buttons"] {
     .btn.active {
       background: $light-blue-color;
@@ -105,11 +105,11 @@
     &.margin-right {
       margin-right: 5px;
     }
-    
+
     &.ms-Icon {
       font-size: 19px;
       position: relative;
-      top: 1px;      
+      top: 1px;
 
       &--caretDown {
         font-size: 18px;
@@ -127,7 +127,7 @@
 .btn-file {
   position: relative;
   overflow: hidden;
-  
+
   input[type=file] {
     position: absolute;
     top: 0;
@@ -142,6 +142,7 @@
     background: white;
     cursor: inherit;
     display: block;
+    cursor: pointer;
   }
 }
 
@@ -153,14 +154,14 @@
   &-label {
     &-show {
       display: none;
-      
+
       .collapsed & {
         display: inline
       }
     }
     &-hide {
       display: inline;
-      
+
       .collapsed & {
         display: none;
       }
