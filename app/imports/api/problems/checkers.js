@@ -86,7 +86,7 @@ export const P_OnStandardsUpdateChecker = ({ userId }, doc) => {
 export const P_OnUndoStandardsUpdateChecker = ({ userId }, doc) => {
   checkAndThrow(!P_IsExecutor({ userId }, doc.updateOfStandards), P_STANDARDS_CANNOT_BE_UNDONE);
 
-  checkAndThrow(doc.areStandardsUpdated(), P_STANDARDS_NOT_UPDATED);
+  checkAndThrow(!doc.areStandardsUpdated(), P_STANDARDS_NOT_UPDATED);
 
   return doc;
 };

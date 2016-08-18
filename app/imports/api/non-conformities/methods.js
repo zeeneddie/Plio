@@ -12,7 +12,6 @@ import {
   CompleteActionSchema
 } from '../schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-
 import {
   checkOrgMembership,
   checkAnalysis,
@@ -57,8 +56,8 @@ export const update = new CheckedMethod({
 
   check(checker) {
     const _checker = (...args) => {
-      return (nc) => {
-        return checkAnalysis(nc, args);
+      return (doc) => {
+        return checkAnalysis(doc, args);
       };
     };
 

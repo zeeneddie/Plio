@@ -27,3 +27,5 @@ export const ONLY_OWNER_CAN_RESTORE = new E(403, 'Only document owner or organiz
 export const ONLY_ORG_OWNER_CAN_RESTORE = new E(403, 'Only organization owner can restore this document');
 
 export const INVALID_DOC_TYPE = new E(400, 'Invalid document type');
+
+export const ACCESS_DENIED = new E(403, 'Access denied');

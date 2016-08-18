@@ -110,7 +110,7 @@ export const isOverdue = (targetDate, timezone) => {
   return checkTargetDate(targetDate, timezone) === 1;
 };
 
-export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = {}) => {
+export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }, args = {}) => {
   const isCompleted = ({ status = '' }) => status.toString() === _.invert(AnalysisStatuses)['Completed'];
   const findArg = _args => _find => _.keys(_args).find(key => key.includes(_find));
   const findSubstring = (str = '', ...toFind) => toFind.find(s => str.includes(s));
@@ -140,7 +140,7 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {} }, args = 
     checkAnalysisAndThrow(isUpdateOfStandardsCompleted);
   }
 
-  return true;
+  return { analysis, updateOfStandards, ...rest };
 };
 
 export const isViewed = (doc, userId) => {
