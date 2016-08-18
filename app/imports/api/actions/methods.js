@@ -31,7 +31,7 @@ import {
 } from '../errors.js';
 
 
-const act = fn => fn(Actions);
+const inject = fn => fn(Actions);
 
 export const insert = new Method({
   name: 'Actions.insert',
@@ -82,7 +82,7 @@ export const update = new CheckedMethod({
     }
   },
 
-  check: checker => act(checker),
+  check: checker => inject(checker),
 
   run({ _id, ...args }) {
     return ActionService.update({ _id, ...args });
@@ -94,7 +94,7 @@ export const updateViewedBy = new Method({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker),
+  check: checker => inject(checker),
 
   run({ _id }) {
     return ActionService.updateViewedBy({ _id, userId: this.userId });
@@ -112,7 +112,7 @@ export const setCompletionDate = new CheckedMethod({
   ]).validator(),
 
   check(checker) {
-    return act(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+    return inject(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
   },
 
   run({ _id, ...args }) {
@@ -134,7 +134,7 @@ export const setCompletionExecutor = new CheckedMethod({
   ]).validator(),
 
   check(checker) {
-    return act(checker)(() => action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+    return inject(checker)(() => action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
   },
 
   run({ _id, ...args }) {
@@ -153,7 +153,7 @@ export const setVerificationDate = new CheckedMethod({
   ]).validator(),
 
   check(checker) {
-    return act(checker)(() => action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+    return inject(checker)(() => action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
   },
 
   run({ _id, ...args }) {
@@ -175,7 +175,7 @@ export const setVerificationExecutor = new CheckedMethod({
   ]).validator(),
 
   check(checker) {
-    return act(checker)(() => action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED)
+    return inject(checker)(() => action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED)
   },
 
   run({ _id, ...args }) {
@@ -200,7 +200,7 @@ export const linkDocument = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => act(checker)(ACT_OnLinkChecker),
+  check: checker => inject(checker)(ACT_OnLinkChecker),
 
   run(...args) {
     return ActionService.linkDocument(...args);
@@ -231,7 +231,7 @@ export const unlinkDocument = new CheckedMethod({
        };
     };
 
-    return act(checker)(_checker, ACT_NOT_LINKED);
+    return inject(checker)(_checker, ACT_NOT_LINKED);
   },
 
   run({ _id, documentId, documentType }) {
@@ -244,7 +244,7 @@ export const complete = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check: checker => act(checker)(ACT_OnCompleteChecker),
+  check: checker => inject(checker)(ACT_OnCompleteChecker),
 
   run({ _id, ...args }) {
     return ActionService.complete({ _id, ...args, userId: this.userId });
@@ -256,7 +256,7 @@ export const undoCompletion = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker)(ACT_OnUndoCompletionChecker),
+  check: checker => inject(checker)(ACT_OnUndoCompletionChecker),
 
   run({ _id }) {
     return ActionService.undoCompletion({ _id, userId: this.userId });
@@ -274,7 +274,7 @@ export const verify = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => act(checker)(ACT_OnVerifyChecker),
+  check: checker => inject(checker)(ACT_OnVerifyChecker),
 
   run({ _id, ...args }) {
     return ActionService.verify({ _id, userId: this.userId, ...args });
@@ -286,7 +286,7 @@ export const undoVerification = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker)(ACT_OnUndoVerificationChecker),
+  check: checker => inject(checker)(ACT_OnUndoVerificationChecker),
 
   run({ _id }, { action }) {
     return ActionService.undoVerification({ _id, userId: this.userId }, { action });
@@ -298,7 +298,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker)(onRemoveChecker),
+  check: checker => inject(checker)(onRemoveChecker),
 
   run({ _id }) {
     return ActionService.remove({ _id, deletedBy: this.userId });
@@ -310,7 +310,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => act(checker)(onRestoreChecker),
+  check: checker => inject(checker)(onRestoreChecker),
 
   run({ _id }) {
     return ActionService.restore({ _id });

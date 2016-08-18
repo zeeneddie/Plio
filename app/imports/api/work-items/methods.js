@@ -6,16 +6,16 @@ import WorkItemService from './work-item-service.js';
 import { WorkItemsSchema } from './work-item-schema.js';
 import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
-import { WI_OnRestoreChecker } from '../checkers.js';
+import { onRemoveChecker, WI_OnRestoreChecker } from '../checkers.js';
 
-const wi = fn => fn(WorkItems);
+const inject = fn => fn(WorkItems);
 
 export const updateViewedBy = new CheckedMethod({
   name: 'WorkItems.updateViewedBy',
 
   validate: IdSchema.validator(),
 
-  check: checker => wi(checker),
+  check: checker => inject(checker),
 
   run({ _id }) {
     return WorkItemService.updateViewedBy({ _id, viewedBy: this.userId });
@@ -27,7 +27,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => wi(checker),
+  check: checker => inject(checker)(onRemoveChecker),
 
   run({ _id }) {
     return WorkItemService.remove({ _id, deletedBy: this.userId });
@@ -39,7 +39,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => wi(checker)(WI_OnRestoreChecker),
+  check: checker => inject(checker)(WI_OnRestoreChecker),
 
   run({ _id }) {
     return WorkItemService.restore({ _id });
