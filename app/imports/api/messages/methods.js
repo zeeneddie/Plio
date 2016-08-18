@@ -52,6 +52,25 @@ export const addMessage = new ValidatedMethod({
 	}
 });
 
+export const addFilesToMessage = new ValidatedMethod({
+	name: 'Mesages.addFilesToMessage',
+	validate: new SimpleSchema([IdSchema, optionsSchema]).validator(),
+
+	run({ ...args }) {
+		const userId = this.userId;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot add files to discussion messages'
+			);
+		}
+
+		onUpdateCheck({ ...args, userId });
+
+		return MessagesService.update({ ...args });
+	}
+});
+
 export const update = new ValidatedMethod({
   name: 'Messages.update',
 
@@ -84,7 +103,7 @@ export const updateFilesUrls = new ValidatedMethod({
     const userId = this.userId;
     if (!userId) {
       throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a message'
+        403, 'Unauthorized user cannot update file urls'
       );
     }
 		// [TODO] only message owner can make an update

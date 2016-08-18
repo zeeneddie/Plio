@@ -4,7 +4,8 @@ import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
 import {
-	addMessage, getMessages, removeMessageById,	updateFilesUrls
+	addFilesToMessage, addMessage, getMessages, removeMessageById,
+	updateFilesUrls
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
@@ -40,31 +41,73 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
+
+	/* Insert file info as documents into Messages collection:
+	 * @param {Array} fileDocs - file documents to save;
+	 * @param {Function} cb - callback function.
+	*/
+  insertFile(fileDocs, cb) {
 		if (this.disabled()) return;
 
-    const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
 		const discussionId = this.discussionId();
+		let fileDoc;
+		let fileDocId;
 
-		addMessage.call({
-			discussionId,
-			files: [fileDoc],
-			type: 'file'
-		}, handleMethodResult(cb));
 
-    /*if (this.files() && this.files().length) {
-      const options = {
-        $push: {
-          files: fileDoc
-        }
-      };
+		if(!(fileDocs instanceof Array)){
+			fileDoc = {
+				_id: fileDocs._id,
+				name: fileDocs.name,
+				extension: fileDocs.name.split('.').pop().toLowerCase()
+			};
 
-      this.parent().update({ options }, cb);
-    } else {
-      this.parent().update({
-        files: [fileDoc]
-      }, cb);
-    }*/
+			fileDocId = addMessage.call({
+				discussionId,
+				files: [fileDoc],
+				type: 'file'
+			}, handleMethodResult(cb));
+
+			return;
+		}
+
+		fileDocs.forEach((fileDocArg, i) => {
+			// File document to save with a messaghe doc in Messages collection
+			fileDoc = {
+				_id: fileDocArg._id,
+				name: fileDocArg.name,
+				extension: fileDocArg.name.split('.').pop().toLowerCase()
+			};
+			const cbf = function(id){
+				// Pass each file's ID into callback, so that right file was inserted in S3
+				return function(err, res){
+					cb(err, res, fileId = id);
+				}
+			}(fileDoc._id);
+
+			if(i === 0){
+				// Add a new message in Messages collection with 1st file doc
+				fileDocId = addMessage.call({
+					discussionId,
+					files: [fileDoc],
+					type: 'file'
+				}, handleMethodResult(
+					/*Upload the appropriate file to S3*/
+					cbf
+				));
+			}
+			else{
+				// Other file docs add to just inserted new message above
+				const options = {
+	        $push: {
+	          files: fileDoc
+	        }
+	      };
+
+				return addFilesToMessage.call({
+					_id: fileDocId, options
+				}, handleMethodResult(/*Upload the appropriate file to S3*/cbf));
+			}
+		});
   },
 	onUploadCb() {
     return this.onUpload.bind(this);
@@ -102,6 +145,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},
+
 	/* Remove the file message document form Messages collection,
 	 * but not the file itself.
 	 * @param {String} fileId - the file ID in the "files" array;

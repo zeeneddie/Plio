@@ -6,7 +6,8 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 Template.FileUploader2.viewmodel({
   mixin: 'modal',
 
-  attachmentFile: null,
+  //attachmentFile: null,
+  attachmentFiles: [],
   uploads: new ReactiveArray(), // temporarily stores the files being uploaded
 
   uploadData(fileId) { // find the file with fileId is being uploaded
@@ -26,16 +27,78 @@ Template.FileUploader2.viewmodel({
     return _.isFinite(progress) ? Math.round(progress * 100) : 0;
   },
   fileName() {
-    return this.attachmentFile() && this.attachmentFile().name;
+    //return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
     const self = this;
-    const file = this.attachmentFile();
+    /*const file = this.attachmentFile();console.dir(file);
     if (!file) {
+      return;
+    }*/
+    const files = this.attachmentFiles();//console.dir(files);
+    if (!files.length) {
       return;
     }
 
-    const _id = Random.id();
+    const fileDocs = Array.prototype.map.call(files, (file) => {
+      return {
+        _id: Random.id(), name: file.name
+      };
+    });
+
+    self.attachmentFiles([]);
+    self.fileInput.val(null);
+
+    self.insertFile(fileDocs, (err, res, fileId = null) => {
+      //console.log('cb');console.log(fileDocs);console.log(`fileId: ${fileId}`);
+      if (err) {
+        throw err;
+      }
+
+      const uploader = new Slingshot.Upload(
+        self.slingshotDirective(), self.metaContext()
+      );
+      const fileDoc = _.find(fileDocs, (file) => {
+        return file._id === fileId;
+      });console.log(fileDoc);
+
+      self.uploads().push({ fileId, uploader });
+
+      /* GET THE ORIGINAL DOWNLOADED FILE DOCUMENT, NOT FROM FILEDOCS!!!
+       * Try to get by its number, not by id
+      uploader.send(file, (err, url) => {
+        if(err){
+          let swalText = 'File has wrong format or too large size';
+
+          if( err.reason.indexOf('File exceeds allowed size') >=0 ){
+            swalText = 'File exceeds allowed size of 10 MB';
+          }
+
+          swal({
+            showConfirmButton: false,
+            text: swalText,
+            timer: 2000,
+            title: "Upload denied",
+            type: 'error'
+          });
+          self.removeFileMessage(_id);
+
+          //throw err;
+          return;
+        }
+
+        if (url) {
+          url = encodeURI(url);
+        }
+
+        self.onUpload(err, { _id, url });
+        self.removeUploadData(_id);
+      });
+      */
+    });
+
+    /*
+    const _id = Random.id(); //
     const name = file.name;
 
     this.attachmentFile(null);
@@ -80,7 +143,7 @@ Template.FileUploader2.viewmodel({
         this.onUpload(err, { _id, url });
         this.removeUploadData(_id);
       });
-    });
+    });*/
   },
   cancelUpload(fileId) {
     const uploadData = this.uploadData(fileId);

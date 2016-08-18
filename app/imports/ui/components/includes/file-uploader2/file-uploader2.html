@@ -3,6 +3,10 @@
     <button class="btn btn-secondary">
       <i class="fa fa-paperclip"></i>
     </button>
-    <input type="file" {{b "value: attachmentFile, change: upload, ref: fileInput"}}>
+    <input
+      type="file"
+      multiple="multiple"
+      {{b "value: attachmentFiles, change: upload, ref: fileInput"}}
+    >
   </span>
 </template>
