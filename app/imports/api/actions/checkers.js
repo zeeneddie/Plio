@@ -3,12 +3,11 @@ import { Risks } from '../risks/risks.js';
 import { Actions } from './actions.js';
 import { ProblemTypes, ActionTypes, WorkflowTypes } from '../constants.js';
 import { checkAndThrow } from '../helpers.js';
-import { isOrgOwner, checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
+import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
 import {
   INVALID_DOC_TYPE,
   DOC_NOT_FOUND,
   ONLY_OWNER_CAN_DELETE,
-  ONLY_ORG_OWNER_CAN_DELETE,
   ONLY_OWNER_CAN_RESTORE,
   ONLY_ORG_OWNER_CAN_RESTORE,
   ACT_RK_CANNOT_BE_LINKED_TO_NC,
@@ -116,18 +115,6 @@ export const ACT_OnUndoVerificationChecker = ({ userId }, action) => {
   checkAndThrow(!Object.is(userId, action.verifiedBy), ACT_VERIFICATION_CANNOT_BE_UNDONE);
 
   checkAndThrow(!action.canVerificationBeUndone(), ACT_VERIFICATION_CANNOT_BE_UNDONE);
-
-  return { action };
-};
-
-export const ACT_OnRemoveChecker = ({ userId }, action) => {
-  checkAndThrow(action.isDeleted && !isOrgOwner(userId, action.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
-
-  return { action };
-};
-
-export const ACT_OnRestoreChecker = ({ userId }, action) => {
-  checkAndThrow(!action.isDeleted, CANNOT_RESTORE_NOT_DELETED);
 
   return { action };
 };

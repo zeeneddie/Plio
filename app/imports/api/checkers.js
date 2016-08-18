@@ -5,11 +5,18 @@ import moment from 'moment-timezone';
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
 import { AnalysisStatuses, OrgOwnerRoles } from './constants.js';
-import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
+import {
+  NOT_AN_ORG_MEMBER,
+  DOC_NOT_FOUND,
+  ONLY_ORG_OWNER_CAN_DELETE,
+  CANNOT_RESTORE_NOT_DELETED
+} from './errors.js';
 import { chain, checkAndThrow } from './helpers.js';
 
 
 export * from './actions/checkers.js';
+
+export * from './work-items/checkers.js';
 
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
@@ -172,4 +179,16 @@ export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
 
     return doc;
   };
+};
+
+export const onRemoveChecker = ({ userId }, doc) => {
+  checkAndThrow(doc.isDeleted && !isOrgOwner(userId, doc.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
+
+  return { doc };
+};
+
+export const onRestoreChecker = ({ userId }, doc) => {
+  checkAndThrow(!doc.isDeleted, CANNOT_RESTORE_NOT_DELETED);
+
+  return { doc };
 };

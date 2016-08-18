@@ -10,6 +10,8 @@ import { ProblemTypes } from '../constants.js';
 import Method, { CheckedMethod } from '../method.js';
 import {
   checkOrgMembership,
+  onRemoveChecker,
+  onRestoreChecker,
   ACT_Check,
   ACT_CheckEverything,
   ACT_OnLinkChecker,
@@ -17,8 +19,6 @@ import {
   ACT_OnUndoCompletionChecker,
   ACT_OnVerifyChecker,
   ACT_OnUndoVerificationChecker,
-  ACT_OnRemoveChecker,
-  ACT_OnRestoreChecker,
   ACT_LinkedDocsChecker
 } from '../checkers.js';
 import { chain, checkAndThrow } from '../helpers.js';
@@ -244,9 +244,7 @@ export const complete = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnCompleteChecker);
-  },
+  check: checker => act(checker)(ACT_OnCompleteChecker),
 
   run({ _id, ...args }) {
     return ActionService.complete({ _id, ...args, userId: this.userId });
@@ -258,9 +256,7 @@ export const undoCompletion = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnUndoCompletionChecker);
-  },
+  check: checker => act(checker)(ACT_OnUndoCompletionChecker),
 
   run({ _id }) {
     return ActionService.undoCompletion({ _id, userId: this.userId });
@@ -278,9 +274,7 @@ export const verify = new CheckedMethod({
     }
   ]).validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnVerifyChecker);
-  },
+  check: checker => act(checker)(ACT_OnVerifyChecker),
 
   run({ _id, ...args }) {
     return ActionService.verify({ _id, userId: this.userId, ...args });
@@ -292,9 +286,7 @@ export const undoVerification = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnUndoVerificationChecker);
-  },
+  check: checker => act(checker)(ACT_OnUndoVerificationChecker),
 
   run({ _id }, { action }) {
     return ActionService.undoVerification({ _id, userId: this.userId }, { action });
@@ -306,9 +298,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnRemoveChecker);
-  },
+  check: checker => act(checker)(OnRemoveChecker),
 
   run({ _id }) {
     return ActionService.remove({ _id, deletedBy: this.userId });
@@ -320,9 +310,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check(checker) {
-    return act(checker)(ACT_OnRestoreChecker);
-  },
+  check: checker => act(checker)(onRestoreChecker),
 
   run({ _id }) {
     return ActionService.restore({ _id });
