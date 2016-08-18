@@ -121,19 +121,13 @@ export const ACT_OnUndoVerificationChecker = ({ userId }, action) => {
 };
 
 export const ACT_OnRemoveChecker = ({ userId }, action) => {
-  const currentAssignee = action.verified() ? action.toBeVerifiedBy : action.toBeCompletedBy;
-  const isUserOrgOwner = isOrgOwner(userId, action.organizationId);
-  const predicate = !isUserOrgOwner || !Object.is(userId, currentAssignee);
-
-  checkAndThrow(predicate, ONLY_OWNER_CAN_DELETE);
-
-  checkAndThrow(action.isDeleted && !isUserOrgOwner, ONLY_ORG_OWNER_CAN_DELETE);
+  checkAndThrow(action.isDeleted && !isOrgOwner(userId, action.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
 
   return { action };
 };
 
 export const ACT_OnRestoreChecker = ({ userId }, action) => {
-  ACT_OnRemoveChecker({ userId }, action);
-
   checkAndThrow(!action.isDeleted, CANNOT_RESTORE_NOT_DELETED);
+
+  return { action };
 };

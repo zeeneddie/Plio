@@ -53,7 +53,7 @@ export const insert = new Method({
   }
 });
 
-export const update = new Method({
+export const update = new CheckedMethod({
   name: 'Actions.update',
 
   validate(doc) {
@@ -82,9 +82,9 @@ export const update = new Method({
     }
   },
 
-  run({ _id, ...args }) {
-    ACT_Check.call(this, _id);
+  check: checker => act(checker),
 
+  run({ _id, ...args }) {
     return ActionService.update({ _id, ...args });
   }
 });
@@ -94,9 +94,9 @@ export const updateViewedBy = new Method({
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    ACT_Check.call(this, _id);
+  check: checker => act(checker),
 
+  run({ _id }) {
     return ActionService.updateViewedBy({ _id, userId: this.userId });
   }
 });
@@ -111,7 +111,7 @@ export const setCompletionDate = new CheckedMethod({
     }
   ]).validator(),
 
-  checker(checker) {
+  check(checker) {
     return act(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
   },
 
@@ -120,7 +120,7 @@ export const setCompletionDate = new CheckedMethod({
   }
 });
 
-export const setCompletionExecutor = new Method({
+export const setCompletionExecutor = new CheckedMethod({
   name: 'Actions.setCompletionExecutor',
 
   validate: new SimpleSchema([
@@ -133,14 +133,16 @@ export const setCompletionExecutor = new Method({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    ACT_CheckEverything.call(this, _id)(action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+  check(checker) {
+    return act(checker)(() => action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setCompletionExecutor({ _id, ...args });
   }
 });
 
-export const setVerificationDate = new Method({
+export const setVerificationDate = new CheckedMethod({
   name: 'Actions.setVerificationDate',
 
   validate: new SimpleSchema([
@@ -150,14 +152,16 @@ export const setVerificationDate = new Method({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    ACT_CheckEverything.call(this, _id)(action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+  check(checker) {
+    return act(checker)(() => action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setVerificationDate({ _id, ...args });
   }
 });
 
-export const setVerificationExecutor = new Method({
+export const setVerificationExecutor = new CheckedMethod({
   name: 'Actions.setVerificationExecutor',
 
   validate: new SimpleSchema([
@@ -170,9 +174,11 @@ export const setVerificationExecutor = new Method({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    ACT_CheckEverything.call(this, _id)(action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED);
+  check(checker) {
+    return act(checker)(() => action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED)
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setVerificationExecutor({ _id, ...args });
   }
 });
@@ -194,14 +200,14 @@ export const linkDocument = new CheckedMethod({
     }
   ]).validator(),
 
-  checker: checker => act(checker)(ACT_OnLinkChecker),
+  check: checker => act(checker)(ACT_OnLinkChecker),
 
   run(...args) {
     return ActionService.linkDocument(...args);
   }
 });
 
-export const unlinkDocument = new Method({
+export const unlinkDocument = new CheckedMethod({
   name: 'Actions.unlinkDocument',
 
   validate: new SimpleSchema([
@@ -218,44 +224,50 @@ export const unlinkDocument = new Method({
     }
   ]).validator(),
 
-  run({ _id, documentId, documentType }) {
-    ACT_CheckEverything.call(this, _id)(action => !action.isLinkedToDocument(documentId, documentType), ACT_NOT_LINKED);
+  check(checker) {
+    const _checker = ({ documentId, documentType }) => {
+       return (action) => {
+         return !action.isLinkedToDocument(documentId, documentType);
+       };
+    };
 
+    return act(checker)(_checker, ACT_NOT_LINKED);
+  },
+
+  run({ _id, documentId, documentType }) {
     return ActionService.unlinkDocument({ _id, documentId, documentType });
   }
 });
 
-export const complete = new Method({
+export const complete = new CheckedMethod({
   name: 'Actions.complete',
 
   validate: CompleteActionSchema.validator(),
 
+  check(checker) {
+    return act(checker)(ACT_OnCompleteChecker);
+  },
+
   run({ _id, ...args }) {
-    const userId = this.userId;
-    const checker = curry(ACT_OnCompleteChecker)({ userId });
-
-    ACT_CheckEverything.call(this, _id)(checker);
-
-    return ActionService.complete({ _id, userId, ...args });
+    return ActionService.complete({ _id, ...args, userId: this.userId });
   }
 });
 
-export const undoCompletion = new Method({
+export const undoCompletion = new CheckedMethod({
   name: 'Actions.undoCompletion',
 
   validate: IdSchema.validator(),
 
+  check(checker) {
+    return act(checker)(ACT_OnUndoCompletionChecker);
+  },
+
   run({ _id }) {
-    const userId = this.userId;
-    const checker = curry(ACT_OnUndoCompletionChecker)({ userId });
-
-    ACT_CheckEverything.call(this, _id)(checker);
-
-    return ActionService.undoCompletion({ _id, userId });
+    return ActionService.undoCompletion({ _id, userId: this.userId });
   }
 });
 
-export const verify = new Method({
+export const verify = new CheckedMethod({
   name: 'Actions.verify',
 
   validate: new SimpleSchema([
@@ -266,56 +278,53 @@ export const verify = new Method({
     }
   ]).validator(),
 
+  check(checker) {
+    return act(checker)(ACT_OnVerifyChecker);
+  },
+
   run({ _id, ...args }) {
-    const userId = this.userId;
-    const checker = curry(ACT_OnVerifyChecker)({ userId });
-
-    ACT_CheckEverything.call(this, _id)(checker);
-
-    return ActionService.verify({ _id, userId, ...args });
+    return ActionService.verify({ _id, userId: this.userId, ...args });
   }
 });
 
-export const undoVerification = new Method({
+export const undoVerification = new CheckedMethod({
   name: 'Actions.undoVerification',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    const checker = curry(ACT_OnUndoVerificationChecker)({ userId });
+  check(checker) {
+    return act(checker)(ACT_OnUndoVerificationChecker);
+  },
 
-    const { action } = ACT_CheckEverything.call(this, _id)(checker);
-
-    return ActionService.undoVerification({ _id, userId }, { action });
+  run({ _id }, { action }) {
+    return ActionService.undoVerification({ _id, userId: this.userId }, { action });
   }
 });
 
-export const remove = new Method({
+export const remove = new CheckedMethod({
   name: 'Actions.remove',
 
   validate: IdSchema.validator(),
 
+  check(checker) {
+    return act(checker)(ACT_OnRemoveChecker);
+  },
+
   run({ _id }) {
-    const userId = this.userId;
-    const checker = curry(ACT_OnRemoveChecker)({ userId });
-
-    ACT_CheckEverything.call(this, _id)(checker);
-
-    return ActionService.remove({ _id, deletedBy: userId });
+    return ActionService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const restore = new Method({
+export const restore = new CheckedMethod({
   name: 'Actions.restore',
 
   validate: IdSchema.validator(),
 
+  check(checker) {
+    return act(checker)(ACT_OnRestoreChecker);
+  },
+
   run({ _id }) {
-    const checker = curry(ACT_OnRestoreChecker)({ userId });
-
-    ACT_CheckEverything.call(this, _id)(checker);
-
     return ActionService.restore({ _id });
   }
 });

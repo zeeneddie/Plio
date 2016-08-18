@@ -19,16 +19,20 @@ export default class Method extends ValidatedMethod {
 
 export class CheckedMethod extends Method {
   constructor(props) {
+    if (!props.check) throw new Error('checker method is required');
+
     const { run } = props;
 
     props.run = function({ ...args }) {
-      const res = props.checker((collection) => {
+      const userId = this.userId;
+
+      const res = props.check((collection) => {
         return (checker, err) => {
-          return checkDocAndMembershipAndMore(collection, args._id, this.userId)(curry(checker)({ ...args }), err);
+          return checkDocAndMembershipAndMore(collection, args._id, userId)(curry(checker)({ ...args, userId }), err);
         };
       });
 
-      return run({ ...args }, res);
+      return run.call(this, { ...args }, res);
     }
 
     super(props);
