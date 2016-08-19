@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
-import flowRight from 'lodash.flowright';
 
 import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
@@ -66,7 +65,7 @@ Template.WorkInbox_List.viewmodel({
     const [current, completed, deleted] = [2, 4, 6];
 
     const assignees = Object.assign({}, this.assignees());
-    const getFirst = flowRight(_.first, this.getTeamItems).bind(this);
+    const getFirst = _.compose(_.first, this.getTeamItems).bind(this);
 
     switch(this.activeWorkInboxFilterId()) {
       case current:
