@@ -49,9 +49,10 @@ const RiskScoreSchema = new SimpleSchema({
   }
 });
 
- const RiskScoresSchema = new SimpleSchema({
+const RiskScoresSchema = new SimpleSchema({
   scores: {
     type: [RiskScoreSchema],
+    defaultValue: [],
     optional: true
   }
 });
