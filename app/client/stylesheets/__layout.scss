@@ -55,10 +55,7 @@ a:focus {
 .vertical-center {
   /* Remove the default bottom margin of .jumbotron */
   margin-bottom: 0;
-}
-
-.vertical-center {
-  min-height: 100%;
+	height: 100%;
 }
 
 .jumbotron {

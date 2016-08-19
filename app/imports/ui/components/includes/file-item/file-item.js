@@ -12,11 +12,12 @@ Template.FileItem.viewmodel({
     this.removeFile(this);
   },
   isUploaded() {
-    return this.url();
+    const url = this.url();
+    return url;
   },
   progress() {
     const uploader = this.uploader && this.uploader();
-    return uploader && uploader.progress(this._id());
+    return uploader && uploader.progress(this._id()); // 100 -> 0
   },
   getData() {
     return {

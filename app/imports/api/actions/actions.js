@@ -6,13 +6,17 @@ import { Risks } from '../risks/risks.js';
 import { WorkItems } from '../work-items/work-items.js';
 import {
   ActionUndoTimeInHours, ProblemMagnitudes,
-  ProblemTypes, WorkflowTypes
+  ProblemTypes, WorkflowTypes, CollectionNames
 } from '../constants.js';
 import { compareDates } from '../helpers.js';
+import ActionAuditService from './action-audit-service.js';
 
 
-const Actions = new Mongo.Collection('Actions');
+const Actions = new Mongo.Collection(CollectionNames.ACTIONS);
 Actions.attachSchema(ActionSchema);
+
+
+// helpers
 
 const getLinkedDocsIds = (linkedDocs, docType) => {
   return _.pluck(
@@ -130,5 +134,27 @@ Actions.helpers({
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
   }
 });
+
+
+// hooks
+
+Actions.after.insert(function(userId, doc) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentCreated(doc));
+  }
+});
+
+Actions.after.update(function(userId, doc, fieldNames, modifier, options) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentUpdated(doc, this.previous));
+  }
+});
+
+Actions.after.remove(function(userId, doc) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => ActionAuditService.documentRemoved(doc, userId));
+  }
+});
+
 
 export { Actions };

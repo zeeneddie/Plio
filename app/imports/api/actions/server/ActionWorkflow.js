@@ -2,7 +2,7 @@ import { Actions } from '../actions.js';
 import { WorkflowTypes } from '../../constants.js';
 import { isDueToday, isOverdue } from '../../checkers.js';
 
-import Workflow from '../../workflow-base/Workflow.js';
+import Workflow from '/imports/core/server/Workflow.js';
 import NCWorkflow from '../../non-conformities/NCWorkflow.js';
 import RiskWorkflow from '../../risks/RiskWorkflow.js';
 import WorkItemWorkflow from '../../work-items/WorkItemWorkflow.js';

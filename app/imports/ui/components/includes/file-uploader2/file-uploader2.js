@@ -5,9 +5,11 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 Template.FileUploader2.viewmodel({
   mixin: 'modal',
+
   attachmentFile: null,
-  uploads: new ReactiveArray(),
-  uploadData(fileId) {
+  uploads: new ReactiveArray(), // temporarily stores the files being uploaded
+
+  uploadData(fileId) { // find the file with fileId is being uploaded
     return _.find(this.uploads().array(), (data) => {
       return data.fileId === fileId;
     });
@@ -16,6 +18,7 @@ Template.FileUploader2.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
+
     if (!uploader) {
       progress = 1;
     }
@@ -26,6 +29,7 @@ Template.FileUploader2.viewmodel({
     return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
+    const self = this;
     const file = this.attachmentFile();
     if (!file) {
       return;
@@ -38,11 +42,8 @@ Template.FileUploader2.viewmodel({
     this.fileInput.val(null);
 
     this.insertFile({ _id, name }, (err) => {
-      const modal = this.modal();
-
       if (err) {
-        modal.setError(err.reason);
-        return;
+        throw err;
       }
 
       const uploader = new Slingshot.Upload(
@@ -51,27 +52,19 @@ Template.FileUploader2.viewmodel({
 
       this.uploads().push({ fileId: _id, uploader });
 
-      modal.clearError();
-      modal.isSaving(false);
-      modal.incUploadsCount();
-
       uploader.send(file, (err, url) => {
-        modal.decUploadsCount();
+        if(err){
+          // [TODO] Handle error
+          throw err;
+        }
 
         if (url) {
           url = encodeURI(url);
         }
 
-        if (err && err.error !== 'Aborted') {
-          modal.setError(err.reason);
-        }
-
         this.onUpload(err, { _id, url });
         this.removeUploadData(_id);
       });
-
-      // prevent modal's default method result handling
-      return true;
     });
   },
   cancelUpload(fileId) {

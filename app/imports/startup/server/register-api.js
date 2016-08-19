@@ -1,5 +1,7 @@
 import '../../api/actions';
 
+import '../../api/audit';
+
 import '../../api/organizations';
 
 import '../../api/departments';
