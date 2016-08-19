@@ -3,6 +3,10 @@ import { Messages } from './messages.js';
 export default {
 	collection: Messages,
 
+	getMessagesByFileId({ fileId, options }){
+		return this.collection.find({'files._id': fileId }, options);
+	},
+
 	insert({ ...args }) {
 		return this.collection.insert({ ...args });
 	},
@@ -14,7 +18,7 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
-		
+
     return this.collection.update(query, options);
   },
 
@@ -32,5 +36,5 @@ export default {
 
 	remove({ _id }) {
 		return this.collection.remove({ _id });
-	},
+	}
 }

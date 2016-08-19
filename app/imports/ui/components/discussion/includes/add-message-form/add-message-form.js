@@ -4,7 +4,7 @@ import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
 import {
-	addFilesToMessage, addMessage, getMessages, removeMessageById,
+	addFilesToMessage, addMessage, getMessages, removeFileFromMessage, removeMessageById,
 	updateFilesUrls
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
@@ -77,12 +77,12 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				name: fileDocArg.name,
 				extension: fileDocArg.name.split('.').pop().toLowerCase()
 			};
-			const cbf = function(id){
+			const cbf = function(_id, i){
 				// Pass each file's ID into callback, so that right file was inserted in S3
 				return function(err, res){
-					cb(err, res, fileId = id);
+					cb(err, res, fileDocObj = {_id, i});
 				}
-			}(fileDoc._id);
+			}(fileDoc._id, i);
 
 			if(i === 0){
 				// Add a new message in Messages collection with 1st file doc
@@ -146,8 +146,31 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		}
 	},
 
-	/* Remove the file message document form Messages collection,
-	 * but not the file itself.
+	/* Removes a file document from a message document,
+   * but not the file itself from S3:
+   * @param {string} fileId - an identifier of the file which is to remove.
+  */
+	removeFileFromMessage(fileId){
+    const self = this;
+    const query = { 'files._id': fileId};
+		const options = { fields: {files: 1} };
+		const messagesWithFileId = getMessages.call({query, options});
+
+    messagesWithFileId.forEach((message) => {
+      if(message.files.length > 1){
+        removeFileFromMessage.call({ _id: fileId });
+      }
+      else{
+        self.removeFileMessage(fileId);
+      }
+    });
+	},
+	removeFileFromMessageCb(){
+		return this.removeFileFromMessage.bind(this);
+	},
+
+	/* Removes the message document with files from the Messages collection,
+	 * but not the file itself from S3:
 	 * @param {String} fileId - the file ID in the "files" array;
 	*/
 	removeFileMessage(fileId){

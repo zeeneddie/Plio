@@ -171,6 +171,49 @@ export const getMessages = new ValidatedMethod({
 	}
 });
 
+/* Remove a file from the message
+ * @param {string} _id - a file identifier
+*/
+export const removeFileFromMessage = new ValidatedMethod({
+	name: 'Messages.removeFileFromMessage',
+	validate: new SimpleSchema([IdSchema]).validator(),
+
+	run({ _id }){
+		const userId = this.userId;
+		let success = false;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot remove files from messages'
+			);
+		}
+
+		const options = { fields: { createdBy: 1} };
+
+		MessagesService.getMessagesByFileId({ fileId: _id, options }).forEach((msg) => {
+			if (msg.createdBy !== userId) {
+				success = false;
+
+				throw new Meteor.Error(
+					403, 'You can remove files only from messages created by you'
+				);
+			}
+
+			onUpdateCheck({ _id: msg._id, userId });
+
+			const options = {
+				$pull: {
+					files: { _id }
+				}
+			};
+
+			success = MessagesService.update({ _id: msg._id, options });
+		});
+
+		return success;
+	}
+});
+
 export const removeMessageById = new ValidatedMethod({
 	name: 'Messages.removeMessageById',
 	validate: new SimpleSchema([IdSchema]).validator(),

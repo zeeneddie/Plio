@@ -31,15 +31,12 @@ Template.FileUploader2.viewmodel({
   },
   upload() {
     const self = this;
-    /*const file = this.attachmentFile();console.dir(file);
-    if (!file) {
-      return;
-    }*/
-    const files = this.attachmentFiles();//console.dir(files);
+    const files = this.attachmentFiles();
     if (!files.length) {
       return;
     }
 
+    // File documents to insert in Messages collection with messages docs
     const fileDocs = Array.prototype.map.call(files, (file) => {
       return {
         _id: Random.id(), name: file.name
@@ -49,39 +46,35 @@ Template.FileUploader2.viewmodel({
     self.attachmentFiles([]);
     self.fileInput.val(null);
 
-    self.insertFile(fileDocs, (err, res, fileId = null) => {
-      //console.log('cb');console.log(fileDocs);console.log(`fileId: ${fileId}`);
+    self.insertFile(fileDocs, (err, res, fileDocObj = null) => {
       if (err) {
         throw err;
       }
 
+      const { _id, i } = fileDocObj;
+      const file = files[i]; // original file to upload
       const uploader = new Slingshot.Upload(
         self.slingshotDirective(), self.metaContext()
       );
-      const fileDoc = _.find(fileDocs, (file) => {
-        return file._id === fileId;
-      });console.log(fileDoc);
 
-      self.uploads().push({ fileId, uploader });
+      this.uploads().push({ fileId: _id, uploader });
 
-      /* GET THE ORIGINAL DOWNLOADED FILE DOCUMENT, NOT FROM FILEDOCS!!!
-       * Try to get by its number, not by id
       uploader.send(file, (err, url) => {
         if(err){
           let swalText = 'File has wrong format or too large size';
 
           if( err.reason.indexOf('File exceeds allowed size') >=0 ){
-            swalText = 'File exceeds allowed size of 10 MB';
+            swalText = 'One of files exceeds allowed size of 10 MB';
           }
 
           swal({
             showConfirmButton: false,
             text: swalText,
-            timer: 2000,
+            timer: 5000,
             title: "Upload denied",
             type: 'error'
           });
-          self.removeFileMessage(_id);
+          self.removeFileFromMessage(_id);
 
           //throw err;
           return;
@@ -94,56 +87,7 @@ Template.FileUploader2.viewmodel({
         self.onUpload(err, { _id, url });
         self.removeUploadData(_id);
       });
-      */
     });
-
-    /*
-    const _id = Random.id(); //
-    const name = file.name;
-
-    this.attachmentFile(null);
-    this.fileInput.val(null);
-
-    this.insertFile({ _id, name }, (err) => {
-      if (err) {
-        throw err;
-      }
-
-      const uploader = new Slingshot.Upload(
-        this.slingshotDirective(), this.metaContext()
-      );
-
-      this.uploads().push({ fileId: _id, uploader });
-
-      uploader.send(file, (err, url) => {
-        if(err){
-          let swalText = 'File has wrong format or too large size';
-
-          if( err.reason.indexOf('File exceeds allowed size') >=0 ){
-            swalText = 'File exceeds allowed size of 10 MB';
-          }
-
-          swal({
-            showConfirmButton: false,
-            text: swalText,
-            timer: 2000,
-            title: "Upload denied",
-            type: 'error'
-          });
-          this.removeFileMessage(_id);
-
-          //throw err;
-          return;
-        }
-
-        if (url) {
-          url = encodeURI(url);
-        }
-
-        this.onUpload(err, { _id, url });
-        this.removeUploadData(_id);
-      });
-    });*/
   },
   cancelUpload(fileId) {
     const uploadData = this.uploadData(fileId);
