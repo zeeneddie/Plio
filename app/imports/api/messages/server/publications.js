@@ -6,7 +6,7 @@ import { isOrgMember } from '../../checkers.js';
 import { Match } from 'meteor/check';
 import Counter from '../../counter/server.js';
 
-Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds, params = { limit: 50 }){
+Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds, params = { limit: 50 }) {
 	const extractUserIds = (cursors, arrayOfIds = []) => {
 		if (!!cursors && !Match.test(cursors, Array)) {
 			cursors = [cursors];

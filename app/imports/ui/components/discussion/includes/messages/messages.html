@@ -1,6 +1,6 @@
 <template name="Discussion_Messages">
 	{{#if discussion}}
-		<div class="chat-content scroll" {{b "scroll: triggerLoadMore, resize: triggerLoadMore, throttle: 500"}}>
+		<div class="chat-content scroll" {{b "scroll: triggerLoadMore, resize: triggerLoadMore"}}>
 			<div class="chat-messages">
 				{{#if discussion.isStarted}}
 					<div class="chat-item chat-item-start">

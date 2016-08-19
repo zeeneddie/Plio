@@ -1,7 +1,5 @@
 import { Template } from 'meteor/templating';
-import invoke from 'lodash.invoke';
 import get from 'lodash.get';
-import curry from 'lodash.curry';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
@@ -12,21 +10,36 @@ import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
 
-	onRendered(tmp) {
+	autorun() {
+		const firstMessage = Object.assign([], this.messages()).find((m, i, arr) => !!arr.length);
+
+		this.templateInstance.subscribe(
+			'messagesByDiscussionIds',
+			[this.discussionId()],
+			{
+				at: get(firstMessage, '_id'),
+				limit: this.limit()
+			}
+		);
+	},
+
+	onRendered() {
 		const discussionId = this.discussionId();
 
-		if(discussionId){
+		if (discussionId) {
 			bulkUpdateViewedBy.call({ discussionId });
 		}
 	},
+
+	limit: 50,
 
   // The _id of the primary discussion for this standardId
 	discussion() {
 		return Discussions.findOne({ _id: this.discussionId() });
 	},
 	getStartedByText() {
-		const creator = Meteor.users.findOne({ _id: this.discussion().startedBy });
-		return this.userNameOrEmail(creator && creator._id);
+		const creator = Meteor.users.findOne({ _id: get(this.discussion(), 'startedBy') });
+		return this.userNameOrEmail(get(creator, '_id'));
 	},
 	getStartedAtText() {
 		return getFormattedDate(this.discussion().startedAt, 'MMMM Do, YYYY');
@@ -95,40 +108,16 @@ Template.Discussion_Messages.viewmodel({
 
 		return messagesMapped;
 	},
-	triggerLoadMore() {
+	triggerLoadMore: _.throttle(function() {
 		const tpl = this.templateInstance;
 
 		if (tpl.$('.infinite-load-older').isAlmostVisible()) {
-	    this.loadOlder();
+			console.log('triggered');
+			console.log(this.limit());
+			this.limit(this.limit() + 50);
 	  }
 		// if (tpl.$('.infinite-load-newer').isAlmostVisible()) {
 	  //   this.loadNewer();
 	  // }
-	},
-	loadOlder() {
-		const firsMessage = Messages.find({ discussionId: this.discussionId() }, { sort: { createdAt: 1 } }).fetch()[0] || null;
-		this.templateInstance.subscribe('messagesByDiscussionIds',
-			[this.discussionId()],
-			{
-				at: firsMessage && firsMessage._id,
-				limit: 50
-			}
-		);
-	},
-	loadNewer() {
-		const lastMessage = Messages.find({ discussionId: this.discussionId() }, { sort: { createdAt: -1 } }).fetch()[0] || null;
-
-		this.templateInstance.subscribe('messagesByDiscussionIds',
-			[this.discussionId()],
-			{
-				at: lastMessage && lastMessage._id,
-				limit: 50
-			}
-		);
-	},
-	events: {
-		'scroll .chat-content, resize .chat-content': _.throttle(function () {
-			this.triggerLoadMore()
-		}, 500)
-	}
+	}, 500)
 });
