@@ -60,7 +60,6 @@ export const updateViewedBy = new CheckedMethod({
   check: checker => inject(checker)(S_EnsureCanChangeChecker),
 
   run({ _id }) {
-    console.log('triggered')
     return StandardsService.updateViewedBy({ _id, userId: this.userId });
   }
 });
