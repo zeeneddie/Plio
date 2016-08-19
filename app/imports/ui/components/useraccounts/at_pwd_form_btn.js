@@ -15,3 +15,11 @@ atPwdFormBtnHelpers.submitDisabled = () => {
 };
 
 Template.atPwdFormBtn.helpers(atPwdFormBtnHelpers);
+
+// bugfix for Edge/IE
+Template.atPwdFormBtn.events({
+  "click #at-btn": function(event, t) {
+    event.preventDefault();
+    $("#at-pwd-form").trigger("submit");
+  }
+});

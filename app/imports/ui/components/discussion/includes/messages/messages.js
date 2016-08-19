@@ -14,7 +14,10 @@ Template.Discussion_Messages.viewmodel({
 
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
-		bulkUpdateViewedBy.call({ discussionId });
+
+		if(discussionId){
+			bulkUpdateViewedBy.call({ discussionId });
+		}
 	},
 
   // The _id of the primary discussion for this standardId
@@ -44,7 +47,9 @@ Template.Discussion_Messages.viewmodel({
 				const query = { _id: createdBy };
 				const options = {
 					fields: {
-						profile: 1
+						profile: 1,
+						emails: 1,
+						roles: 1
 					}
 				};
 
@@ -52,23 +57,35 @@ Template.Discussion_Messages.viewmodel({
 			})();
 
 			const obj = (() => {
-				const getDate = curry(getFormattedDate)(createdAt);
-
 				const dateFormat = 'MMMM Do, YYYY';
-				const timeFormat = 'HH:mm';
-				const date = getDate(dateFormat);
+				const timeFormat = 'h:mm A';
+				const _id = message._id;
+				const createdAt = message.createdAt;
+				const date = createdAt ? getFormattedDate(createdAt, dateFormat) : null;
+				const documentId = get(this.discussion(), 'linkedTo');
 
 				return {
+					_id,
 					date,
-					time: getDate(timeFormat),
-					avatar: invoke(user, 'avatar'),
-					username: invoke(user, 'firstName'),
+					documentId,
+					createdAt,
+					user,
 					dateToShow: (() => {
 						const prevCreatedAt = get(messages[i - 1], 'createdAt');
+						const prevMessageDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
 
-						// we need to check for undefined because moment translates undefined to today's date
-						const prevDate = prevCreatedAt ? getFormattedDate(prevCreatedAt, dateFormat) : null;
-						return !Object.is(date, prevDate);
+						return date !== prevMessageDate;
+					})(),
+					isMergedWithPreviousMessage: (() => {
+						const prevMessage = messages[i - 1];
+						const prevCreatedAt = get(prevMessage, 'createdAt');
+						const prevCreatedBy = get(prevMessage, 'createdBy');
+
+						if (message.createdBy === prevCreatedBy && message.createdAt - prevCreatedAt < 5 * 60 * 1000) {
+							return true;
+						}
+
+						return false;
 					})()
 				};
 			})();

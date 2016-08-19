@@ -3,7 +3,13 @@
     {{#if showQAPanel this}}
       <div class="qa-panel alert clearfix" {{b "class: { alert-success: this.isCompleted, alert-danger: !this.isCompleted }"}}>
         <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
-          <strong>To do</strong>
+          <strong>
+            {{#if this.isCompleted}}
+              Done
+            {{else}}
+              To do
+            {{/if}}
+          </strong>
           <br>
           <span {{b "text: getDescription(this)"}}></span>
         </div>
