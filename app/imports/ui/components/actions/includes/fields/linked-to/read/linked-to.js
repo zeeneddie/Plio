@@ -4,7 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ProblemTypes } from '/imports/api/constants.js';
 
 Template.Actions_LinkedTo_Read.viewmodel({
-  mixin: ['organization', 'nonconformity', 'risk', 'utils'],
+  mixin: ['organization', 'nonconformity', 'risk', 'utils', 'problemsStatus'],
   linkedTo: '',
   linkedDocs() {
     const ids = Array.from(this.linkedTo() || []).map(({ documentId }) => documentId);
