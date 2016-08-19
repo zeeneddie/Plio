@@ -1,6 +1,8 @@
 <template name="Discussion_Messages">
 	{{#if discussion}}
 		<div class="chat-content scroll">
+			{{> Notifications}}
+
 			<div class="chat-messages">
 				{{#if discussion.isStarted}}
 					<div class="chat-item chat-item-start">

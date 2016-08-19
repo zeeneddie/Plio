@@ -14,10 +14,14 @@ Template.Discussion_Messages.viewmodel({
 
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
+		const notifications = this.child('Notifications');//console.log(notifications);
 
 		if(discussionId){
 			bulkUpdateViewedBy.call({ discussionId });
 		}
+
+		// Subscribe notifications to messages
+		this.notifyOnIncomeMessages();
 	},
 
   // The _id of the primary discussion for this standardId
@@ -36,8 +40,9 @@ Template.Discussion_Messages.viewmodel({
 			const options = {
   			sort: { createdAt: 1 }
   		};
+			const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
-			return this._getMessagesByDiscussionId(this.discussionId(), options).fetch();
+			return msg.fetch();
 		})();
 
 		const messagesMapped = messages.map((message, i, arr) => {
@@ -94,5 +99,49 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		return messagesMapped;
+	},
+	notifyOnIncomeMessages(){
+		const init = false;
+		const options = {
+			sort: { createdAt: 1 }
+		};
+		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
+
+		msg.observeChanges({
+			added(id, { files }){
+				console.log('Added doc');
+				console.log(id);
+				console.log(files);
+				/*const dummyFile = _.find(doc.files, (file) => {
+					return !file.url;
+				});
+
+				if(!dummyFile){
+					console.log('Not dummyFile');
+				}//else{console.log('dummyFile');}*/
+				if(!files || !files.length){
+					console.log('simple message');
+					// send a signal on a successful
+				}
+				else{
+					console.log('file message - do nothing');
+				}
+			},
+			changed(id, { files }){
+				console.log('Changed');console.log(id);console.log(files);
+				// For file containing messages
+				if(files && files.length){
+					console.log('file message');
+					// send a signal on a successful
+				}
+				else{
+					console.log('simple message - do nothing');
+				}
+				//const hasCorrectImages
+			},
+			removed(doc){
+				console.log('Removed doc');
+			}
+		});
 	}
 });

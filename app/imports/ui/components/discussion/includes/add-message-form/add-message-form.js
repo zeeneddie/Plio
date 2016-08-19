@@ -32,8 +32,12 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			discussionId,
 			message: sanitizeHtml(this.messageText()),
 			type: 'text'
-		}, handleMethodResult(() => {
-			this.reset();
+		}, handleMethodResult((err, res) => {
+      if(res){
+        this.reset();
+
+        // [ToDo] Call a ringtone on a successful message addition
+      }
 		}));
 	},
 	insertFileFn() {
@@ -119,7 +123,13 @@ Template.Discussion_AddMessage_Form.viewmodel({
       }
     };
 
-    updateFilesUrls.call({ _id, options });
+    updateFilesUrls.call(
+      { _id, options }, handleMethodResult((err, res) => {
+        if(res){
+          // [ToDo] call a ringtone on a success file addition
+        }
+      })
+    );
   },
 	onSubmit(e) {
 		e.preventDefault();
