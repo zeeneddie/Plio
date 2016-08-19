@@ -365,6 +365,15 @@ const RiskEvaluationDecisions = {
   'terminate': 'Terminate'
 };
 
+const CollectionNames = {
+  STANDARDS: 'Standards',
+  NCS: 'NonConformities',
+  RISKS: 'Risks',
+  ACTIONS: 'Actions',
+  LESSONS: 'LessonsLearned',
+  OCCURRENCES: 'Occurrences'
+};
+
 const TruncatedStringLengths = {
   c40: 40
 };
@@ -374,6 +383,7 @@ export {
   ActionStatuses,
   ActionPlanOptions,
   ActionUndoTimeInHours,
+  CollectionNames,
   DefaultStandardTypes,
   ProblemGuidelineTypes,
   ProblemsStatuses,

@@ -193,7 +193,8 @@ export default {
       _id
     }, {
       $set: {
-        isVerified: false
+        isVerified: false,
+        isVerifiedAsEffective: false
       },
       $unset: {
         verifiedBy: '',

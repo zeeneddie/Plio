@@ -1,10 +1,15 @@
 import { Mongo } from 'meteor/mongo';
 
 import { NonConformitiesSchema } from './non-conformities-schema.js';
+import { CollectionNames } from '../constants.js';
+import NCAuditService from './nc-audit-service.js';
 
 
-const NonConformities = new Mongo.Collection('NonConformities');
+const NonConformities = new Mongo.Collection(CollectionNames.NCS);
 NonConformities.attachSchema(NonConformitiesSchema);
+
+
+// helpers
 
 NonConformities.helpers({
   isAnalysisCompleted() {
@@ -26,5 +31,27 @@ NonConformities.helpers({
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
   }
 });
+
+
+// hooks
+
+NonConformities.after.insert(function(userId, doc) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => NCAuditService.documentCreated(doc));
+  }
+});
+
+NonConformities.after.update(function(userId, doc, fieldNames, modifier, options) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => NCAuditService.documentUpdated(doc, this.previous));
+  }
+});
+
+NonConformities.after.remove(function(userId, doc) {
+  if (Meteor.isServer) {
+    Meteor.defer(() => NCAuditService.documentRemoved(doc, userId));
+  }
+});
+
 
 export { NonConformities };

@@ -2,8 +2,6 @@ import { Template } from 'meteor/templating';
 import { Notifications } from '/imports/api/notifications/notifications.js';
 import { updateViewedBy } from '/imports/api/notifications/methods.js';
 
-window.Notifications = Notifications;
-
 Template.Notifications.viewmodel({
   mixin: ['notifications'],
   onRendered() {
