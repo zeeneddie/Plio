@@ -22,6 +22,8 @@ export * from './problems/checkers.js';
 
 export * from './standards/checkers.js';
 
+export * from './organizations/checkers.js';
+
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
     userId,
