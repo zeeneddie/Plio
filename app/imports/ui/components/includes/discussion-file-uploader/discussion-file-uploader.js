@@ -3,7 +3,7 @@ import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 
-Template.FileUploader2.viewmodel({
+Template.DiscussionsFileUploader.viewmodel({
   mixin: 'modal',
 
   //attachmentFile: null,
@@ -70,7 +70,7 @@ Template.FileUploader2.viewmodel({
           swal({
             showConfirmButton: false,
             text: swalText,
-            timer: 5000,
+            timer: 2000,
             title: "Upload denied",
             type: 'error'
           });

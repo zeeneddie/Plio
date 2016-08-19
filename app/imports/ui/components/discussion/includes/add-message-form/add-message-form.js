@@ -11,9 +11,7 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 
-/*
- * @param {String} standardId // the ID of the current standard
-*/
+
 Template.Discussion_AddMessage_Form.viewmodel({
 	mixin: ['discussions', 'standard'],
 
@@ -90,10 +88,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 					discussionId,
 					files: [fileDoc],
 					type: 'file'
-				}, handleMethodResult(
-					/*Upload the appropriate file to S3*/
-					cbf
-				));
+				}, handleMethodResult(cbf));
 			}
 			else{
 				// Other file docs add to just inserted new message above
@@ -105,7 +100,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 				return addFilesToMessage.call({
 					_id: fileDocId, options
-				}, handleMethodResult(/*Upload the appropriate file to S3*/cbf));
+				}, handleMethodResult(cbf));
 			}
 		});
   },

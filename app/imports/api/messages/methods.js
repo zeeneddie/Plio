@@ -171,7 +171,7 @@ export const getMessages = new ValidatedMethod({
 	}
 });
 
-/* Remove a file from the message
+/* Removes a file doc from a message doc, but not the message:
  * @param {string} _id - a file identifier
 */
 export const removeFileFromMessage = new ValidatedMethod({
