@@ -111,7 +111,6 @@ export const CreatedBySchema = new SimpleSchema({
     optional: true,
     autoValue() {
       if (this.isInsert) {
-        // Workaround for fixtures
         return this.userId || (this.isSet && this.value) || 'system';
       } else {
         this.unset();
@@ -159,6 +158,7 @@ export const BaseEntitySchema = new SimpleSchema([
 export const FilesSchema = new SimpleSchema({
   'files': {
     type: [Object],
+    defaultValue: [],
     optional: true
   },
   'files.$._id': {
@@ -346,6 +346,7 @@ export const BaseProblemsOptionalSchema = ((() => {
       departmentsIds: {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
+        defaultValue: [],
         optional: true
       },
       ...analysis,

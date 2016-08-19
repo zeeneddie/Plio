@@ -311,6 +311,11 @@
       @include rotate(180);
     }
 
+    &.waiting:after {
+      content: "\f110";
+      animation: fa-spin 1s infinite steps(8);
+    }
+
     .row {
       @include flex(1);
     }
@@ -324,9 +329,14 @@
     th, td {
       border-color: #ddd;
       border-bottom-width: 1px;
+      word-break: break-all;
 
       &:first-child {
         padding-left: 1.25rem;
+      }
+
+      &.log-user, &.log-date {
+        width: 15%;
       }
     }
   }
