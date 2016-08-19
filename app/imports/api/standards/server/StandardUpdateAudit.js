@@ -16,6 +16,15 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
         case 'departmentsIds':
           this._departmentsChanged(diff);
           break;
+        case 'improvementPlan':
+          this._improvementPlanChanged(diff);
+          break;
+        case 'improvementPlan.files':
+          this._filesChanged(diff);
+          break;
+        case 'improvementPlan.files.$.url':
+          this._fileUrlChanged(diff);
+          break;
         case 'owner':
           this._userChanged(diff);
           break;
@@ -158,6 +167,15 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
       approvedAt: 'Approved at',
       departmentsIds: 'Departments',
       description: 'Description',
+      improvementPlan: 'Improvement plan',
+      'improvementPlan.desiredOutcome': 'Improvement plan desired outcome',
+      'improvementPlan.targetDate': 'Improvement plan target date for desired outcome',
+      'improvementPlan.reviewDates': 'Improvement plan review dates',
+      'improvementPlan.reviewDates.$.date': 'Improvement plan review date',
+      'improvementPlan.owner': 'Improvement plan owner',
+      'improvementPlan.files': 'Improvement plan files',
+      'improvementPlan.files.$.name': 'Improvement plan file name',
+      'improvementPlan.files.$.url': 'Improvement plan file url',
       issueNumber: 'Issue number',
       nestingLevel: 'Nesting level',
       notes: 'Notes',

@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 import { Departments } from '/imports/api/departments/departments.js';
 import UpdateAudit from './UpdateAudit.js';
 
@@ -119,10 +121,29 @@ export default class DocumentUpdateAudit extends UpdateAudit {
   }
 
   _fileUrlChanged(diff) {
+    const getFileName = (doc, fileUrl) => {
+      let name;
+
+      for (let key in doc) {
+        if (!doc.hasOwnProperty(key)) continue;
+
+        const val = doc[key];
+        if ((key === 'url') && (val === fileUrl)) {
+          name = doc['name'];
+          break;
+        } else if (_(val).isObject()) {
+          name = getFileName(val, fileUrl);
+          if (name) break;
+        }
+      }
+
+      return name;
+    };
+
     const { field, oldValue, newValue } = diff;
 
     if (!oldValue && newValue) {
-      const { name } = _(this._newDoc.files).find(({ url }) => url === newValue) || {};
+      const name = getFileName(this._newDoc, newValue);
 
       this._createLog({
         message: `File ${name} uploaded`,
@@ -131,6 +152,53 @@ export default class DocumentUpdateAudit extends UpdateAudit {
 
       diff.isProcessed = true;
     }
+  }
+
+  _improvementPlanChanged(diff) {
+    const { FIELD_ADDED, FIELD_REMOVED } = this.constructor._changesTypes;
+
+    const { kind, newValue:plan, field } = diff;
+
+    if (kind === FIELD_REMOVED) {
+      this._createLog({ message: 'Improvement plan removed', field });
+      diff.isProcessed = true;
+    }
+
+    if (!((kind === FIELD_ADDED) && _(plan).isObject())) {
+      return;
+    }
+
+    const { owner, reviewDates, targetDate } = plan;
+    const planDesc = [];
+
+    if (owner !== undefined) {
+      const ownerDoc = Meteor.users.findOne({ _id: owner });
+      const ownerName = (ownerDoc && ownerDoc.fullNameOrEmail()) || owner;
+      planDesc.push(`owner - ${ownerName}`);
+    }
+
+    if (_(reviewDates).isArray() && reviewDates.length) {
+      const dates = _(reviewDates).map(
+        ({ date }) => this._getPrettyDate(date)
+      ).join(', ');
+      planDesc.push(`review dates - ${dates}`);
+    }
+
+    if (targetDate !== undefined) {
+      const date = this._getPrettyDate(targetDate);
+      planDesc.push(`target date for desired outcome - ${date}`);
+    }
+
+    let message;
+    if (planDesc.length) {
+      message = `Improvement plan created: ${planDesc.join(', ')}`;
+    } else {
+      message = 'Improvement plan created';
+    }
+
+    this._createLog({ message });
+
+    diff.isProcessed = true;
   }
 
   _userChanged(diff) {

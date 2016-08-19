@@ -34,6 +34,15 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
           this._filesChanged(diff);
         case 'files.$.url':
           this._fileUrlChanged(diff);
+        case 'improvementPlan':
+          this._improvementPlanChanged(diff);
+          break;
+        case 'improvementPlan.files':
+          this._filesChanged(diff);
+          break;
+        case 'improvementPlan.files.$.url':
+          this._fileUrlChanged(diff);
+          break;
         case 'magnitude':
           this._magnitudeChanged(diff);
           break;
@@ -235,6 +244,15 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
       'files.$.url': 'File url',
       identifiedAt: 'Identified date',
       identifiedBy: 'Identified by',
+      improvementPlan: 'Improvement plan',
+      'improvementPlan.desiredOutcome': 'Improvement plan desired outcome',
+      'improvementPlan.targetDate': 'Improvement plan target date for desired outcome',
+      'improvementPlan.reviewDates': 'Improvement plan review dates',
+      'improvementPlan.reviewDates.$.date': 'Improvement plan review date',
+      'improvementPlan.owner': 'Improvement plan owner',
+      'improvementPlan.files': 'Improvement plan files',
+      'improvementPlan.files.$.name': 'Improvement plan file name',
+      'improvementPlan.files.$.url': 'Improvement plan file url',
       magnitude: 'Magnitude',
       sequentialId: 'Sequential ID',
       serialNumber: 'Serial number',

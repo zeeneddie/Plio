@@ -20,7 +20,7 @@ Template.IP_MeansStatement_Edit.viewmodel({
         if (fieldRe.test(key)) {
           obj[`improvementPlan.${key}`] = val;
           delete obj[key];
-        } else if (typeof val === 'object') {
+        } else if (_(val).isObject()) {
           renameFields(val, fieldRe);
         }
       }
