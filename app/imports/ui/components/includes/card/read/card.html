@@ -4,11 +4,11 @@
       <div class="card-block card-heading">
         {{#unless isReadOnly}}
           <div class="card-heading-buttons pull-xs-right">
-            {{#if isDeleted}}
+            {{#if this.isDeleted}}
               <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                 Restore
               </a>
-              {{#if (isOrgOwner this)}}
+              {{#if showDeleteBtn this}}
                 <a class="btn btn-primary" {{b "click: delete(this)"}}>
                   Delete
                 </a>

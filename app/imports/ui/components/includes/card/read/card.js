@@ -7,8 +7,13 @@ Template.Card_Read.viewmodel({
   cardTitle: 'Title',
   doc: '',
   isReadOnly: false,
+  isDeleteBtnShown: false,
   isOrgOwner({ organizationId }) {
     return isOrgOwner(Meteor.userId(), organizationId);
+  },
+  showDeleteBtn({ organizationId }) {
+    console.log(this.isDeleteBtnShown());
+    return isOrgOwner(Meteor.userId(), organizationId) || !!this.isDeleteBtnShown();
   },
   onRestore() {},
   onDelete() {},
