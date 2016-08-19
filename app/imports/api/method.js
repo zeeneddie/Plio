@@ -19,7 +19,7 @@ export default class Method extends ValidatedMethod {
 
 export class CheckedMethod extends Method {
   constructor(props) {
-    if (!props.check) throw new Error('checker method is required');
+    if (!props.check) throw new Error('"check" method is required');
 
     const { run } = props;
 

@@ -20,6 +20,8 @@ export * from './work-items/checkers.js';
 
 export * from './problems/checkers.js';
 
+export * from './standards/checkers.js';
+
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
     userId,
@@ -53,11 +55,7 @@ export const canDeleteUsers = (userId, organizationId) => {
 };
 
 export const isOrgOwner = (userId, organizationId) => {
-  return Roles.userIsInRole(
-    userId,
-    OrgOwnerRoles,
-    organizationId
-  );
+  return OrgOwnerRoles.every(role => Roles.userIsInRole(userId, role, organizationId));
 };
 
 export const isOrgMember = (userId, organizationId) => {
