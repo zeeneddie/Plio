@@ -6,11 +6,27 @@ Template.IP_MeansStatement_Edit.viewmodel({
   files: [],
   uploaderMetaContext() {
     return {
-      organizationId: this.organizationId(),
-      improvementPlanId: this._id()
+      organizationId: this.organizationId()
     };
   },
-  update(...args) {
-    this.parent().update(...args);
+  update({ ...args }, cb) {
+    const renameFields = (obj, fieldRe) => {
+      for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) {
+          continue;
+        }
+
+        const val = obj[key];
+        if (fieldRe.test(key)) {
+          obj[`improvementPlan.${key}`] = val;
+          delete obj[key];
+        } else if (typeof val === 'object') {
+          renameFields(val, fieldRe);
+        }
+      }
+    };
+
+    renameFields(args, /^files/);
+    this.parent().update({ ...args }, cb);
   }
 })

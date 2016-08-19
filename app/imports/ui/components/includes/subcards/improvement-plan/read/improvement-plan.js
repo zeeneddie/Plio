@@ -1,14 +1,11 @@
 import { Template } from 'meteor/templating';
 
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 
 Template.Subcards_ImprovementPlan_Read.viewmodel({
   mixin: ['user', 'date'],
   autorun() {
     this.load(this.doc());
   },
-  documentId: '',
-  documentType: '',
   label: 'Improvement plan',
   desiredOutcome: '',
   targetDate: '',
@@ -16,7 +13,7 @@ Template.Subcards_ImprovementPlan_Read.viewmodel({
   reviewDates: [],
   files: [],
   doc() {
-    return ImprovementPlans.findOne({ documentId: this.documentId() });
+    return this.improvementPlan() || {};
   },
   IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {
     return desiredOutcome || targetDate || owner || ( reviewDates && reviewDates.length > 0 ) || ( files && files.length );

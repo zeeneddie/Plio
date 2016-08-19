@@ -183,6 +183,37 @@ export const FilesSchema = new SimpleSchema({
   }
 });
 
+export const ImprovementPlanSchema = new SimpleSchema([
+  {
+    desiredOutcome: {
+      type: String,
+      optional: true
+    },
+    targetDate: {
+      type: Date,
+      optional: true
+    },
+    reviewDates: {
+      type: [Object],
+      optional: true,
+      defaultValue: []
+    },
+    'reviewDates.$.date': {
+      type: Date
+    },
+    'reviewDates.$._id': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    owner: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  },
+  FilesSchema
+]);
+
 export const getNotifySchema = (field) => {
   return new SimpleSchema({
     notify: {
@@ -347,6 +378,10 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
         defaultValue: [],
+        optional: true
+      },
+      improvementPlan: {
+        type: ImprovementPlanSchema,
         optional: true
       },
       ...analysis,

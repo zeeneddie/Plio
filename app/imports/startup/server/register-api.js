@@ -20,8 +20,6 @@ import '../../api/standards';
 
 import '../../api/lessons';
 
-import '../../api/improvement-plans';
-
 import '../../api/risks';
 
 import '../../api/risk-types';
