@@ -81,11 +81,9 @@
 
           {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
 
-          {{#with improvementPlan}}
-            {{> Subcards_ImprovementPlan_Read
-                improvementPlan=this
-                label="Treatment plan"}}
-          {{/with}}
+          {{> Subcards_ImprovementPlan_Read
+              improvementPlan=this.improvementPlan
+              label="Treatment plan"}}
 
           {{> Subcards_Actions_Read
               type=ActionTypes.CORRECTIVE_ACTION

@@ -25,9 +25,6 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
     return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';
   },
   update({ query = {}, options = {}, ...args }, cb) {
-    console.log(query);
-    console.log(options);
-    console.log(args);
     this.parent().update({ query, options, ...args }, cb);
   }
 });

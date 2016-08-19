@@ -13,7 +13,7 @@ Template.Subcards_ImprovementPlan_Read.viewmodel({
   reviewDates: [],
   files: [],
   doc() {
-    return this.improvementPlan() || {};
+    return this.improvementPlan();
   },
   IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {
     return desiredOutcome || targetDate || owner || ( reviewDates && reviewDates.length > 0 ) || ( files && files.length );
