@@ -5,6 +5,7 @@
   @include flex(1);
   @include flexbox;
   @include flex-direction(column);
+  height: calc(100% - 55px);
 
   &-heading {
     min-height: 55px;
@@ -110,7 +111,7 @@
       margin: 0 0 0 4rem;
       font-size: 16px;
       word-break: break-word;
-      
+
       .file-item {
         max-width: calc(100% - 40px);
       }
@@ -175,11 +176,7 @@
     @include scroll;
     @include hide-scrollbar;
     margin-bottom: 70px;
-    position: absolute;
-    top: 55px;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    height: 100%;
   }
 
   &-form {
