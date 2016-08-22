@@ -8,6 +8,7 @@ import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 
+window.Messages = Messages;
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
@@ -26,7 +27,9 @@ Template.Discussion_Messages.viewmodel({
 
   // The _id of the primary discussion for this standardId
 	discussion() {
-		return Discussions.findOne({ _id: this.discussionId() });
+		const discussion = Discussions.findOne({ _id: this.discussionId() });
+		console.log('discussion', discussion);
+		return discussion;
 	},
 	getStartedByText() {
 		const creator = Meteor.users.findOne({ _id: this.discussion().startedBy });

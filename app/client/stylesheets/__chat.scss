@@ -5,6 +5,7 @@
   @include flex(1);
   @include flexbox;
   @include flex-direction(column);
+  height: calc(100% - 55px);
 
   &-heading {
     min-height: 55px;
@@ -109,6 +110,7 @@
     &-content {
       margin: 0 0 0 4rem;
       font-size: 16px;
+      word-break: break-word;
 
       .file-item {
         max-width: calc(100% - 40px);
