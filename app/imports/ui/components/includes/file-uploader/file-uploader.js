@@ -1,10 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
-
+import { insert, updateUrl } from '/imports/api/files/methods.js'
 
 Template.FileUploader.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'organization'],
+  
   attachmentFile: null,
   uploads: new ReactiveArray(),
   uploadData(fileId) {
@@ -16,9 +17,9 @@ Template.FileUploader.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
-    
+
     if (!uploader) {
-      progress = 0;
+      progress = this.isFileUploading() ? 100 : 0;
     }
 
     return _.isFinite(progress) ? Math.round(progress * 100) : 0;
@@ -56,19 +57,26 @@ Template.FileUploader.viewmodel({
       modal.isSaving(false);
       modal.incUploadsCount();
 
-      uploader.send(file, (err, url) => {
-        modal.decUploadsCount();
-
-        if (url) {
-          url = encodeURI(url);
+      insert.call({ name: 'this.fileName()', extension: 'jpg' }, (err, fileId) => {
+        if (err) {
+          throw err;
         }
+        uploader.send(file, (err, url) => {
+          modal.decUploadsCount();
 
-        if (err && err.error !== 'Aborted') {
-          modal.setError(err.reason);
-        }
+          if (url) {
+            url = encodeURI(url);
+          }
 
-        this.onUpload(err, { _id, url });
-        this.removeUploadData(_id);
+          if (err && err.error !== 'Aborted') {
+            modal.setError(err.reason);
+          }
+
+          updateUrl.call({ _id: fileId, url });
+
+          this.onUpload(err, { _id, url });
+          this.removeUploadData(_id);
+        });
       });
 
       // prevent modal's default method result handling

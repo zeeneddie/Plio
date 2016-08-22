@@ -1,10 +1,10 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
-
+import { insert, updateUrl } from '/imports/api/files/methods.js'
 
 Template.FileUploader2.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'organization'],
 
   attachmentFile: null,
   uploads: new ReactiveArray(), // temporarily stores the files being uploaded
@@ -18,9 +18,9 @@ Template.FileUploader2.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
-    console.log('uploadData', uploadData);
+
     if (!uploader) {
-      progress = 0;
+      progress = 100;
     }
 
     return _.isFinite(progress) ? Math.round(progress * 100) : 0;
@@ -41,29 +41,40 @@ Template.FileUploader2.viewmodel({
     this.attachmentFile(null);
     this.fileInput.val(null);
 
-    this.insertFile({ _id, name }, (err) => {
+    insert.call({
+      name: 'this.fileName()',
+      extension: 'jpg',
+      organizationId: this.organizationId()
+    }, (err, fileId) => {
       if (err) {
         throw err;
       }
-
-      const uploader = new Slingshot.Upload(
-        this.slingshotDirective(), this.metaContext()
-      );
-
-      this.uploads().push({ fileId: _id, uploader });
-
-      uploader.send(file, (err, url) => {
-        if(err){
-          // [TODO] Handle error
+      this.insertFile({ _id, name }, (err) => {
+        if (err) {
           throw err;
         }
 
-        if (url) {
-          url = encodeURI(url);
-        }
+        const uploader = new Slingshot.Upload(
+          this.slingshotDirective(), this.metaContext()
+        );
 
-        this.onUpload(err, { _id, url });
-        this.removeUploadData(_id);
+        this.uploads().push({ fileId: _id, uploader });
+
+        uploader.send(file, (err, url) => {
+          if (err) {
+            // [TODO] Handle error
+            throw err;
+          }
+
+          if (url) {
+            url = encodeURI(url);
+          }
+
+          updateUrl.call({ _id: fileId, url });
+
+          this.onUpload(err, { _id, url });
+          this.removeUploadData(_id);
+        });
       });
     });
   },

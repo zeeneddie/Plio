@@ -45,6 +45,13 @@ export const NewUserDataSchema = new SimpleSchema({
   }
 });
 
+export const UrlSchema = new SimpleSchema({
+  url: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url
+  }
+});
+
 export const idSchemaDoc = {
   type: String,
   regEx: SimpleSchema.RegEx.Id
