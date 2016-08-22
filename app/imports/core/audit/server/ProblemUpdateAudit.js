@@ -1,13 +1,23 @@
 import {
   ProblemMagnitudes, ProblemsStatuses,
   AnalysisStatuses, CollectionNames
-} from '../../constants.js';
-import { Departments } from '../../departments/departments.js';
-import { Standards } from '../../standards/standards.js';
-import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
+} from '/imports/api/constants.js';
+import { Standards } from '/imports/api/standards/standards.js';
+import Utils from '../../utils.js';
+
+import DocumentUpdateAudit from './DocumentUpdateAudit.js';
+import DepartmentUpdateAudit from './mixins/DepartmentUpdateAudit.js';
+import DescriptionUpdateAudit from './mixins/DescriptionUpdateAudit.js';
+import FileUpdateAudit from './mixins/FileUpdateAudit.js';
+import ImprovementPlanUpdateAudit from './mixins/ImprovementPlanUpdateAudit.js';
 
 
-export default class ProblemUpdateAudit extends DocumentUpdateAudit {
+const base = Utils.inherit(DocumentUpdateAudit, [
+  DepartmentUpdateAudit, DescriptionUpdateAudit,
+  FileUpdateAudit, ImprovementPlanUpdateAudit
+]);
+
+export default class ProblemUpdateAudit extends base {
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -26,22 +36,6 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
           break;
         case 'analysis.status':
           this._analysisStatusChanged(diff);
-          break;
-        case 'departmentsIds':
-          this._departmentsChanged(diff);
-          break;
-        case 'files':
-          this._filesChanged(diff);
-        case 'files.$.url':
-          this._fileUrlChanged(diff);
-        case 'improvementPlan':
-          this._improvementPlanChanged(diff);
-          break;
-        case 'improvementPlan.files':
-          this._filesChanged(diff);
-          break;
-        case 'improvementPlan.files.$.url':
-          this._fileUrlChanged(diff);
           break;
         case 'magnitude':
           this._magnitudeChanged(diff);
@@ -236,23 +230,8 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
       'analysis.executor': 'Root cause analysis executor',
       'analysis.status': 'Root cause analysis status',
       'analysis.targetDate': 'Root cause analysis target date',
-      departmentsIds: 'Departments',
-      description: 'Description',
-      files: 'Files',
-      'files.$.extension': 'File extension',
-      'files.$.name': 'File name',
-      'files.$.url': 'File url',
       identifiedAt: 'Identified date',
       identifiedBy: 'Identified by',
-      improvementPlan: 'Improvement plan',
-      'improvementPlan.desiredOutcome': 'Improvement plan desired outcome',
-      'improvementPlan.targetDate': 'Improvement plan target date for desired outcome',
-      'improvementPlan.reviewDates': 'Improvement plan review dates',
-      'improvementPlan.reviewDates.$.date': 'Improvement plan review date',
-      'improvementPlan.owner': 'Improvement plan owner',
-      'improvementPlan.files': 'Improvement plan files',
-      'improvementPlan.files.$.name': 'Improvement plan file name',
-      'improvementPlan.files.$.url': 'Improvement plan file url',
       magnitude: 'Magnitude',
       sequentialId: 'Sequential ID',
       serialNumber: 'Serial number',
@@ -270,20 +249,6 @@ export default class ProblemUpdateAudit extends DocumentUpdateAudit {
     };
 
     return _(fieldLabels).extend(super._fieldLabels);
-  }
-
-  static get _messages() {
-    const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this._changesTypes;
-
-    const messages = {
-      description: {
-        [FIELD_ADDED]: 'Description set',
-        [FIELD_CHANGED]: 'Description changed',
-        [FIELD_REMOVED]: 'Description removed',
-      }
-    };
-
-    return _(messages).extend(super._messages);
   }
 
 }

@@ -1,6 +1,6 @@
 import '../../api/actions';
 
-import '../../api/audit';
+import '../../api/audit-logs';
 
 import '../../api/organizations';
 

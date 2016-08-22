@@ -1,5 +1,6 @@
-import { CollectionNames } from '../../constants.js';
-import ProblemUpdateAudit from '../../problems/server/ProblemUpdateAudit.js';
+import { CollectionNames } from '/imports/api/constants.js';
+
+import ProblemUpdateAudit from './ProblemUpdateAudit.js';
 
 
 export default class NCUpdateAudit extends ProblemUpdateAudit {
@@ -60,10 +61,6 @@ export default class NCUpdateAudit extends ProblemUpdateAudit {
     diff.isProcessed = true;
   }
 
-  static get _collection() {
-    return CollectionNames.NCS;
-  }
-
   static get _fieldLabels() {
     const fieldLabels = {
       cost: 'Approx cost per occurrence',
@@ -73,6 +70,10 @@ export default class NCUpdateAudit extends ProblemUpdateAudit {
     };
 
     return _(fieldLabels).extend(super._fieldLabels);
+  }
+
+  static get _collection() {
+    return CollectionNames.NCS;
   }
 
 }

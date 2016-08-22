@@ -1,11 +1,11 @@
-import { Actions } from '../actions.js';
-import { WorkflowTypes } from '../../constants.js';
-import { isDueToday, isOverdue } from '../../checkers.js';
+import { Actions } from '/imports/api/actions/actions.js';
+import { WorkflowTypes } from '/imports/api/constants.js';
+import { isDueToday, isOverdue } from '/imports/api/checkers.js';
 
-import Workflow from '/imports/core/server/Workflow.js';
-import NCWorkflow from '../../non-conformities/NCWorkflow.js';
-import RiskWorkflow from '../../risks/RiskWorkflow.js';
-import WorkItemWorkflow from '../../work-items/WorkItemWorkflow.js';
+import Workflow from './Workflow.js';
+import NCWorkflow from './NCWorkflow.js';
+import RiskWorkflow from './RiskWorkflow.js';
+import WorkItemWorkflow from './WorkItemWorkflow.js';
 
 
 export default class ActionWorkflow extends Workflow {

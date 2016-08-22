@@ -1,6 +1,6 @@
-import { AuditLogs } from '/imports/api/audit/audit-logs.js';
+import { AuditLogs } from './audit-logs/audit-logs.js';
 
-import UpdateAudit from './UpdateAudit.js';
+import UpdateAudit from '/imports/core/audit/server/UpdateAudit.js';
 
 
 export default {

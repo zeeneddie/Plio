@@ -1,6 +1,6 @@
 import { CollectionNames } from '../../constants.js';
-import AuditService from '/imports/core/server/audit/audit-service.js';
-import RiskUpdateAudit from './RiskUpdateAudit.js';
+import AuditService from '../../base-audit-service.js';
+import RiskUpdateAudit from '/imports/core/audit/server/RiskUpdateAudit.js';
 
 
 export default _.extend({}, AuditService, {

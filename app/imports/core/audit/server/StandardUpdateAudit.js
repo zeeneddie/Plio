@@ -1,10 +1,22 @@
-import { CollectionNames, StandardStatuses } from '../../constants.js';
-import { Departments } from '../../departments/departments.js';
-import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections.js';
-import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
+import { CollectionNames, StandardStatuses } from '/imports/api/constants.js';
+import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
+import Utils from '../../utils.js';
+
+import DocumentUpdateAudit from './DocumentUpdateAudit.js';
+import DepartmentUpdateAudit from './mixins/DepartmentUpdateAudit.js';
+import DescriptionUpdateAudit from './mixins/DescriptionUpdateAudit.js';
+import FileUpdateAudit from './mixins/FileUpdateAudit.js';
+import ImprovementPlanUpdateAudit from './mixins/ImprovementPlanUpdateAudit.js';
+import OwnerUpdateAudit from './mixins/OwnerUpdateAudit.js';
 
 
-export default class StandardUpdateAudit extends DocumentUpdateAudit {
+const base = Utils.inherit(DocumentUpdateAudit, [
+  DepartmentUpdateAudit, DescriptionUpdateAudit,
+  FileUpdateAudit, ImprovementPlanUpdateAudit,
+  OwnerUpdateAudit
+]);
+
+export default class StandardUpdateAudit extends base {
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -13,21 +25,6 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
       }
 
       switch (diff.field) {
-        case 'departmentsIds':
-          this._departmentsChanged(diff);
-          break;
-        case 'improvementPlan':
-          this._improvementPlanChanged(diff);
-          break;
-        case 'improvementPlan.files':
-          this._filesChanged(diff);
-          break;
-        case 'improvementPlan.files.$.url':
-          this._fileUrlChanged(diff);
-          break;
-        case 'owner':
-          this._userChanged(diff);
-          break;
         case 'sectionId':
           this._sectionChanged(diff);
           break;
@@ -165,21 +162,9 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
     const fieldLabels = {
       approved: 'Approved',
       approvedAt: 'Approved at',
-      departmentsIds: 'Departments',
-      description: 'Description',
-      improvementPlan: 'Improvement plan',
-      'improvementPlan.desiredOutcome': 'Improvement plan desired outcome',
-      'improvementPlan.targetDate': 'Improvement plan target date for desired outcome',
-      'improvementPlan.reviewDates': 'Improvement plan review dates',
-      'improvementPlan.reviewDates.$.date': 'Improvement plan review date',
-      'improvementPlan.owner': 'Improvement plan owner',
-      'improvementPlan.files': 'Improvement plan files',
-      'improvementPlan.files.$.name': 'Improvement plan file name',
-      'improvementPlan.files.$.url': 'Improvement plan file url',
       issueNumber: 'Issue number',
       nestingLevel: 'Nesting level',
       notes: 'Notes',
-      owner: 'Owner',
       sectionId: 'Book section',
       source1: 'Source',
       'source1.extension': 'Source extension',
@@ -199,20 +184,6 @@ export default class StandardUpdateAudit extends DocumentUpdateAudit {
     };
 
     return _(fieldLabels).extend(super._fieldLabels);
-  }
-
-  static get _messages() {
-    const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this._changesTypes;
-
-    const messages = {
-      description: {
-        [FIELD_ADDED]: 'Description set',
-        [FIELD_CHANGED]: 'Description changed',
-        [FIELD_REMOVED]: 'Description removed'
-      }
-    };
-
-    return _(messages).extend(super._messages);
   }
 
   static get _ignoredFields() {

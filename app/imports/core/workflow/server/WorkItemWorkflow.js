@@ -1,8 +1,8 @@
-import { WorkItems } from '../work-items.js';
-import { ActionTypes, ProblemTypes, WorkItemsStore } from '../../constants.js';
-import { isDueToday, isOverdue } from '../../checkers.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/api/constants.js';
+import { isDueToday, isOverdue } from '/imports/api/checkers.js';
 
-import Workflow from '/imports/core/server/Workflow.js';
+import Workflow from './Workflow.js';
 
 
 export default class WorkItemWorkflow extends Workflow {

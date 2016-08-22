@@ -1,11 +1,19 @@
-import { ActionStatuses, ProblemTypes, CollectionNames } from '../../constants.js';
-import { Actions } from '../actions.js';
-import { NonConformities } from '../../non-conformities/non-conformities.js';
-import { Risks } from '../../risks/risks.js';
-import DocumentUpdateAudit from '/imports/core/server/audit/DocumentUpdateAudit.js';
+import { ActionStatuses, ProblemTypes, CollectionNames } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Risks } from '/imports/api/risks/risks.js';
+import Utils from '../../utils.js';
+
+import DocumentUpdateAudit from './DocumentUpdateAudit.js';
+import FileUpdateAudit from './mixins/FileUpdateAudit.js';
+import NotesUpdateAudit from './mixins/NotesUpdateAudit.js';
+import OwnerUpdateAudit from './mixins/OwnerUpdateAudit.js';
 
 
-export default class ActionUpdateAudit extends DocumentUpdateAudit {
+const base = Utils.inherit(DocumentUpdateAudit, [
+  FileUpdateAudit, NotesUpdateAudit, OwnerUpdateAudit
+]);
+
+export default class ActionUpdateAudit extends base {
 
   _buildLogs() {
     _(this._diff).each(diff => {
@@ -14,10 +22,6 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       }
 
       switch (diff.field) {
-        case 'files':
-          this._filesChanged(diff);
-        case 'files.$.url':
-          this._fileUrlChanged(diff);
         case 'isCompleted':
           this._completionChanged(diff);
           break;
@@ -30,7 +34,6 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
         case 'status':
           this._statusChanged(diff);
           break;
-        case 'ownerId':
         case 'toBeCompletedBy':
         case 'toBeVerifiedBy':
           this._userChanged(diff);
@@ -191,16 +194,12 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     const fieldLabels = {
       completedAt: 'Completed at',
       completedBy: 'Completed by',
+      completionComments: 'Completion comments',
       completionTargetDate: 'Completion target date',
-      files: 'Files',
-      'files.$.extension': 'File extension',
-      'files.$.name': 'File name',
-      'files.$.url': 'File url',
       isCompleted: 'Completed',
       isVerified: 'Verified',
       isVerifiedAsEffective: 'Verified as effective',
       linkedTo: 'Linked to',
-      ownerId: 'Owner',
       planInPlace: 'Plan in place',
       sequentialId: 'Sequential ID',
       serialNumber: 'Serial number',
@@ -209,6 +208,7 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
       toBeCompletedBy: 'Completion executor',
       toBeVerifiedBy: 'Verification executor',
       type: 'Type',
+      verificationComments: 'Verification comments',
       verificationTargetDate: 'Verification target date',
       verifiedAt: 'Verified at',
       verifiedBy: 'Verified by'
@@ -217,22 +217,27 @@ export default class ActionUpdateAudit extends DocumentUpdateAudit {
     return _(fieldLabels).extend(super._fieldLabels);
   }
 
-  static get _collection() {
-    return CollectionNames.ACTIONS;
-  }
-
   static get _messages() {
-    const changesTypes = this._changesTypes;
+    const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = this._changesTypes;
 
     const messages = {
-      notes: {
-        [changesTypes.FIELD_ADDED]: 'Notes set',
-        [changesTypes.FIELD_CHANGED]: 'Notes changed',
-        [changesTypes.FIELD_REMOVED]: 'Notes removed',
+      completionComments: {
+        [FIELD_ADDED]: 'Completion comments set',
+        [FIELD_CHANGED]: 'Completion comments changed',
+        [FIELD_REMOVED]: 'Completion comments removed'
+      },
+      verificationComments: {
+        [FIELD_ADDED]: 'Verification comments set',
+        [FIELD_CHANGED]: 'Verification comments changed',
+        [FIELD_REMOVED]: 'Verification comments removed'
       }
     };
 
     return _(messages).extend(super._messages);
+  }
+
+  static get _collection() {
+    return CollectionNames.ACTIONS;
   }
 
 }

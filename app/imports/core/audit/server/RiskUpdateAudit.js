@@ -2,9 +2,10 @@ import {
   CollectionNames,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions
-} from '../../constants.js';
-import { RiskTypes } from '../../risk-types/risk-types.js';
-import ProblemUpdateAudit from '../../problems/server/ProblemUpdateAudit.js';
+} from '/imports/api/constants.js';
+import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+
+import ProblemUpdateAudit from './ProblemUpdateAudit.js';
 
 
 export default class RiskUpdateAudit extends ProblemUpdateAudit {
@@ -186,10 +187,6 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
     });
   }
 
-  static get _collection() {
-    return CollectionNames.RISKS;
-  }
-
   static get _fieldLabels() {
     const fieldLabels = {
       review: 'Review',
@@ -237,4 +234,8 @@ export default class RiskUpdateAudit extends ProblemUpdateAudit {
     return _(messages).extend(super._messages);
   }
 
+  static get _collection() {
+    return CollectionNames.RISKS;
+  }
+  
 }

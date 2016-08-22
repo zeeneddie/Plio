@@ -1,7 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 
 import { OccurrencesSchema } from './occurrences-schema.js';
-import OccurrenceAuditService from './occurrence-audit-service.js';
+
+if (Meteor.isServer) {
+  import OccurrenceAuditService from './server/occurrence-audit-service.js';
+}
 
 
 const Occurrences = new Mongo.Collection('Occurrences');

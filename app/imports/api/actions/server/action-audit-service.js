@@ -1,6 +1,6 @@
 import { CollectionNames, ProblemTypes } from '../../constants.js';
-import AuditService from '/imports/core/server/audit/audit-service.js';
-import ActionUpdateAudit from './ActionUpdateAudit.js';
+import AuditService from '../../base-audit-service.js';
+import ActionUpdateAudit from '/imports/core/audit/server/ActionUpdateAudit.js';
 
 
 export default _.extend({}, AuditService, {

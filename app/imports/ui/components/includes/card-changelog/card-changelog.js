@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 
-import { AuditLogs } from '/imports/api/audit/audit-logs.js';
+import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
 import { CollectionNames } from '/imports/api/constants.js';
 
 
