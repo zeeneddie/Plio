@@ -87,12 +87,6 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
-const uncurry = f => (...args) => args.reduce(
-  (g, x) => (g = g(x), typeof g === "function" && g.length === 1
-   ? uncurry(g)
-   : g), f
-);
-
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
@@ -110,7 +104,6 @@ export {
   getTzTargetDate,
   handleMethodResult,
   getCollectionByDocType,
-  uncurry,
   chain,
   chainCheckers,
   checkAndThrow

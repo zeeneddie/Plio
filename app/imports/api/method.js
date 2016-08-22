@@ -7,10 +7,20 @@ import { checkDocAndMembershipAndMore } from './checkers.js';
 
 export default class Method extends ValidatedMethod {
   constructor(props) {
+    const { run } = props;
+
     props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
     props.checkLoggedInError = {
       error: '403',
       reason: UNAUTHORIZED.reason
+    };
+
+    props.run = function({ ...args }) {
+      const res = props.check && props.check.call(this, (checker) => {
+        return checker.call(this, { ...args });
+      });
+
+      return run.call(this, { ...args }, res);
     };
 
     super(props);

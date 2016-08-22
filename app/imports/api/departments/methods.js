@@ -7,8 +7,8 @@ import DepartmentService from './department-service.js';
 import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { chain } from '../helpers.js';
 import {
-  O_EnsureCanChange,
-  O_EnsureCanChangeChecker,
+  ORG_EnsureCanChange,
+  ORG_EnsureCanChangeChecker,
   checkOrgMembership
 } from '../checkers.js';
 import Method, { CheckedMethod } from '../method';
@@ -21,7 +21,7 @@ export const insert = new Method({
   validate: DepartmentSchema.validator(),
 
   run({ organizationId, ...args }) {
-    chain(checkOrgMembership, O_EnsureCanChange)(this.userId, organizationId);
+    chain(checkOrgMembership, ORG_EnsureCanChange)(this.userId, organizationId);
 
     return DepartmentService.insert({ organizationId, ...args });
   }
@@ -32,7 +32,7 @@ export const update = new CheckedMethod({
 
   validate: new SimpleSchema([IdSchema, DepartmentSchema]).validator(),
 
-  check: checker => inject(checker)(O_EnsureCanChangeChecker),
+  check: checker => inject(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
     return DepartmentService.update(doc);
@@ -44,7 +44,7 @@ export const remove = new ValidatedMethod({
 
   validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
-  check: checker => inject(checker)(O_EnsureCanChangeChecker),
+  check: checker => inject(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
     return DepartmentService.remove(doc);
