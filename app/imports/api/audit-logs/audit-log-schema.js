@@ -1,5 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { SystemName } from '../constants.js';
+
 
 export const AuditLogSchema = new SimpleSchema({
   collection: {
@@ -17,7 +19,7 @@ export const AuditLogSchema = new SimpleSchema({
   },
   executor: {
     type: String,
-    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/
+    regEx: new RegExp(`^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`)
   },
   field: {
     type: String,

@@ -26,9 +26,9 @@ export default (base) => class extends base {
     let message;
 
     if (kind === ITEM_ADDED) {
-      message = 'Linked to [departmentName] department';
+      message = 'Document was linked to [departmentName] department';
     } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from [departmentName] department';
+      message = 'Document was unlinked from [departmentName] department';
     }
 
     if (!(departmentId && message)) {

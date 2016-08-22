@@ -80,11 +80,11 @@ export default class ProblemUpdateAudit extends base {
     let message, standardMessage;
 
     if (kind === ITEM_ADDED) {
-      message = 'Linked to "[standardName]" standard';
-      standardMessage = `${docName} linked`;
+      message = 'Document was linked to "[standardName]" standard';
+      standardMessage = `${docName} was linked to this document`;
     } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from "[standardName]" standard';
-      standardMessage = `${docName} unlinked`;
+      message = 'Document was unlinked from "[standardName]" standard';
+      standardMessage = `${docName} was unlinked to from document`;
     }
 
     if (!(standardId && message && standardMessage)) {

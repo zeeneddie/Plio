@@ -35,9 +35,9 @@ export default class DocumentUpdateAudit extends UpdateAudit {
     const { newValue } = diff;
     let message;
     if (newValue === true) {
-      message = 'Deleted';
+      message = 'Document was deleted';
     } else if (newValue === false) {
-      message = 'Restored';
+      message = 'Document was restored';
     }
 
     if (!message) {

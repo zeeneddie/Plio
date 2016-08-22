@@ -36,7 +36,7 @@
       {{/if}}
       <div class="card-footer">
         {{#unless showAllLogs}}
-          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, enable: viewButtonEnabled"}}>
+          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, class: { not-visible: viewButtonHidden }"}}>
             View all changes ({{logsLength}} total)
             {{#if loadingAllLogs}}
               <i class="fa fa-spinner fa-pulse"></i>

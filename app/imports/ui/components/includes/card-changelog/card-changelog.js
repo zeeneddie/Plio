@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { CollectionNames } from '/imports/api/constants.js';
+import { CollectionNames, SystemName } from '/imports/api/constants.js';
 
 
 Template.CardChangelog.viewmodel({
@@ -84,7 +84,7 @@ Template.CardChangelog.viewmodel({
     return AuditLogs.find({ documentId: this.documentId() }, options);
   },
   getUser(userId) {
-    if (userId === 'system') {
+    if (userId === SystemName) {
       return userId;
     } else {
       const user = Meteor.users.findOne({ _id: userId });
@@ -122,7 +122,7 @@ Template.CardChangelog.viewmodel({
   viewRecentLogs() {
     this.showAllLogs(false);
   },
-  viewButtonEnabled() {
-    return this.logsLength() > this.limit();
+  viewButtonHidden() {
+    return this.logsLength() <= this.limit();
   }
 });

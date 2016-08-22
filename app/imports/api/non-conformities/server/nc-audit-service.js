@@ -12,7 +12,7 @@ export default _.extend({}, AuditService, {
     const { standardsIds, createdAt, createdBy, sequentialId, title } = newDocument;
 
     const logs = [];
-    const logMessage = `${sequentialId} "${title}" linked`;
+    const logMessage = `${sequentialId} "${title}" was linked to this document`;
 
     _(standardsIds).forEach((standardId) => {
       logs.push({

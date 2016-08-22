@@ -61,7 +61,7 @@ export default class ActionUpdateAudit extends base {
 
     if (newValue === true) {
       const { newValue:comments } = commentsDiff || {};
-      message = comments ? `Completed: ${comments}` : 'Completed';
+      message = comments ? `Action completed: ${comments}` : 'Completed';
     } else if (newValue === false) {
       message = 'Completion canceled';
     }
@@ -109,9 +109,9 @@ export default class ActionUpdateAudit extends base {
       const { newValue:comments } = commentsDiff || {};
 
       if (isVerifiedAsEffective === true) {
-        message = 'Verified as effective';
+        message = 'Action verified as effective';
       } else {
-        message = 'Failed verification';
+        message = 'Action verification failed';
       }
 
       message = comments ? `${message}: ${comments}` : message;
@@ -149,11 +149,11 @@ export default class ActionUpdateAudit extends base {
     let message, linkedDocMessage;
 
     if (kind === ITEM_ADDED) {
-      message = 'Linked to [docName]';
-      linkedDocMessage = `${actionName} linked`;
+      message = 'Document was linked to [docName]';
+      linkedDocMessage = `${actionName} was linked to this document`;
     } else if (kind === ITEM_REMOVED) {
-      message = 'Unlinked from [docName]';
-      linkedDocMessage = `${actionName} unlinked`;
+      message = 'Document was unlinked from [docName]';
+      linkedDocMessage = `${actionName} was unlinked from this document`;
     }
 
     if (!(_(linkedDoc).isObject() && message && linkedDocMessage)) {
