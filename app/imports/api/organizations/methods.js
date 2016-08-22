@@ -12,7 +12,6 @@ import {
   WorkflowTypes, NCTypes, UserRoles,
   UserMembership, ProblemGuidelineTypes, RKTypes
 } from '../constants';
-import { canChangeOrgSettings, canInviteUsers, canDeleteUsers } from '../checkers.js';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
@@ -43,19 +42,6 @@ const problemGuidelineTypeSchema = new SimpleSchema({
     allowedValues: _.values(ProblemGuidelineTypes)
   }
 });
-
-const unauthorizedErrorMessage = 'Unauthorized user cannot update an organization';
-const changeOrgErrorMessage = 'User is not authorized for editing organization settings';
-
-const checkUser = (userId, orgId) => {
-  if (!userId) {
-    throw new Meteor.Error(403, unauthorizedErrorMessage);
-  }
-
-  if (!canChangeOrgSettings(userId, orgId)) {
-    throw new Meteor.Error(403, changeOrgErrorMessage);
-  }
-};
 
 const ensureCanChange = function ensureCanChange({ _id }) {
   return ORG_EnsureCanChange(this.userId, _id);
@@ -136,7 +122,7 @@ export const setTimezone = new Method({
   }
 });
 
-export const setDefaultCurrency = new ValidatedMethod({
+export const setDefaultCurrency = new Method({
   name: 'Organizations.setDefaultCurrency',
 
   validate: new SimpleSchema([IdSchema, {
@@ -152,7 +138,7 @@ export const setDefaultCurrency = new ValidatedMethod({
   }
 });
 
-export const setWorkflowDefaults = new ValidatedMethod({
+export const setWorkflowDefaults = new Method({
   name: 'Organizations.setWorkflowDefaults',
 
   validate: new SimpleSchema([

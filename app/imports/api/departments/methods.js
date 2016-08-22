@@ -12,6 +12,7 @@ import {
   checkOrgMembership
 } from '../checkers.js';
 import Method, { CheckedMethod } from '../method';
+import curry from 'lodash.curry';
 
 const inject = fn => fn(Departments);
 
@@ -20,10 +21,15 @@ export const insert = new Method({
 
   validate: DepartmentSchema.validator(),
 
-  run({ organizationId, ...args }) {
-    chain(checkOrgMembership, ORG_EnsureCanChange)(this.userId, organizationId);
+  check(checker) {
+    const _checker = ({ organizationId }) => {
+      return chain(checkOrgMembership, ORG_EnsureCanChange)(this.userId, organizationId);
+    };
+    return checker(_checker);
+  },
 
-    return DepartmentService.insert({ organizationId, ...args });
+  run({ ...args }) {
+    return DepartmentService.insert({ ...args });
   }
 });
 
@@ -39,7 +45,7 @@ export const update = new CheckedMethod({
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Departments.remove',
 
   validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),

@@ -27,11 +27,17 @@ export default class Method extends ValidatedMethod {
   }
 }
 
-export class CheckedMethod extends Method {
+export class CheckedMethod extends ValidatedMethod {
   constructor(props) {
     if (!props.check) throw new Error('"check" method is required');
 
     const { run } = props;
+
+    props.mixins = Object.assign([], props.mixins).concat(LoggedInMixin);
+    props.checkLoggedInError = {
+      error: '403',
+      reason: UNAUTHORIZED.reason
+    };
 
     props.run = function({ ...args }) {
       const userId = this.userId;
