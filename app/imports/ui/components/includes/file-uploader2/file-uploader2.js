@@ -18,9 +18,9 @@ Template.FileUploader2.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
-
+    console.log('uploadData', uploadData);
     if (!uploader) {
-      progress = 1;
+      progress = 0;
     }
 
     return _.isFinite(progress) ? Math.round(progress * 100) : 0;

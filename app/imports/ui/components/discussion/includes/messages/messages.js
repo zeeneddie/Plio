@@ -24,7 +24,6 @@ Template.Discussion_Messages.viewmodel({
   // The _id of the primary discussion for this standardId
 	discussion() {
 		const discussion = Discussions.findOne({ _id: this.discussionId() });
-		console.log('discussion', discussion);
 		return discussion;
 	},
 	getStartedByText() {
