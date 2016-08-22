@@ -188,16 +188,6 @@ export default OrganizationService = {
   },
 
   cancelTransfer({ organizationId }) {
-    const isOrgOwner = !!this.collection.findOne({
-      _id: organizationId,
-      users: {
-        $elemMatch: {
-          userId,
-          role: UserMembership.ORG_OWNER
-        }
-      }
-    });
-
     return this.collection.update({
       _id: organizationId,
     }, {

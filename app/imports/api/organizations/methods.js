@@ -448,7 +448,7 @@ export const cancelOrganizationTransfer = new Method({
   check(checker) {
     const mapArgs = fn => ({ organizationId }) => fn(this.userId, organizationId);
 
-    return checker(ORG_EnsureIsOwner);
+    return checker(mapArgs(ORG_EnsureIsOwner));
   },
 
   run({ organizationId }) {

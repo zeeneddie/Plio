@@ -5,7 +5,7 @@ import {
   ORG_CANNOT_INVITE_USERS,
   ORG_CANNOT_DELETE_USERS,
   ORG_OWNER_CANNOT_BE_DELETED,
-  ORG_CANNOT_TRANSFER,
+  ORG_CANNOT_UPDATE,
   ORG_ALREADY_ON_TRANSFER,
   ORG_ALREADY_OWNER,
   ORG_MUST_BE_MEMBER,
@@ -83,7 +83,7 @@ export const ORG_IsOnTransfer = (organizationId) => {
 };
 
 export const ORG_EnsureIsOwner = (userId, organizationId) => {
-  return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_TRANSFER);
+  return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_UPDATE);
 };
 
 export const ORG_EnsureCanTransfer = (userToTransferId, userId, organizationId) => {

@@ -8,7 +8,7 @@ export const ORG_OWNER_CANNOT_BE_DELETED = new Meteor.Error(400, 'Organization o
 
 export const ORG_USER_ALREADY_DELETED = new Meteor.Error(400, 'User is already removed');
 
-export const ORG_CANNOT_TRANSFER = new Meteor.Error(403, 'User is not authorized for updating organization');
+export const ORG_CANNOT_UPDATE = new Meteor.Error(403, 'User is not authorized for updating organization');
 
 export const ORG_ALREADY_ON_TRANSFER = new Meteor.Error(400, 'Organization is already on transfer');
 
