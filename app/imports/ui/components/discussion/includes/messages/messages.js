@@ -28,7 +28,7 @@ Template.Discussion_Messages.viewmodel({
   // The _id of the primary discussion for this standardId
 	discussion() {
 		const discussion = Discussions.findOne({ _id: this.discussionId() });
-		console.log('discussion', discussion);
+		//console.log('discussion', discussion);
 		return discussion;
 	},
 	getStartedByText() {
@@ -104,47 +104,24 @@ Template.Discussion_Messages.viewmodel({
 		return messagesMapped;
 	},
 	notifyOnIncomeMessages(){
-		const init = false;
+		let init = true;
 		const options = {
 			sort: { createdAt: 1 }
 		};
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
-		msg.observeChanges({
-			added(id, { files }){
-				console.log('Added doc');
-				console.log(id);
-				console.log(files);
-				/*const dummyFile = _.find(doc.files, (file) => {
-					return !file.url;
-				});
-
-				if(!dummyFile){
-					console.log('Not dummyFile');
-				}//else{console.log('dummyFile');}*/
-				if(!files || !files.length){
-					console.log('simple message');
-					// send a signal on a successful
-				}
-				else{
-					console.log('file message - do nothing');
-				}
-			},
-			changed(id, { files }){
-				console.log('Changed');console.log(id);console.log(files);
-				// For file containing messages
-				if(files && files.length){
-					console.log('file message');
-					// send a signal on a successful
-				}
-				else{
-					console.log('simple message - do nothing');
-				}
-				//const hasCorrectImages
+		msg.observe({
+			added(doc){
+				/*if(init){
+					return;
+				}*/console.log(`init: ${init}`);
+				console.log('Added a message');
+				init = false;
 			},
 			removed(doc){
-				console.log('Removed doc');
+				//console.log('Removed doc');
 			}
 		});
+		init = false;
 	}
 });

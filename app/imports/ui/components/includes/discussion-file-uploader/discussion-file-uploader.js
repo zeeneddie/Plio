@@ -31,17 +31,41 @@ Template.DiscussionsFileUploader.viewmodel({
   },
   upload() {
     const self = this;
+    const fileMaxSize = Meteor.settings.public.discussionsFilesMaxSize;// 10485760 - 10 MB,
     const files = this.attachmentFiles();
+    let areBadFiles = false; // are there any files which can not be allowed for downloading
+    
     if (!files.length) {
       return;
     }
 
     // File documents to insert in Messages collection with messages docs
-    const fileDocs = Array.prototype.map.call(files, (file) => {
-      return {
-        _id: Random.id(), name: file.name
-      };
+    const fileDocs = [];
+    Array.prototype.forEach.call(files, (file) => {
+      if(file.size > fileMaxSize){
+        areBadFiles = true;
+        return;
+      }
+
+      fileDocs.push({
+        _id: Random.id(), name: file.name, size: file.size
+      });
     });
+
+    // Show notification about bad files presence
+    if(areBadFiles){
+      swal({
+        showConfirmButton: false,
+        text: 'Some files exceed allowed size of 10 MB',
+        timer: 2000,
+        title: "Upload denied",
+        type: 'error'
+      });
+    }
+
+    if(!fileDocs.length){
+      return;
+    }
 
     self.attachmentFiles([]);
     self.fileInput.val(null);
@@ -61,19 +85,6 @@ Template.DiscussionsFileUploader.viewmodel({
 
       uploader.send(file, (err, url) => {
         if(err){
-          let swalText = 'File has wrong format or too large size';
-
-          if( err.reason.indexOf('File exceeds allowed size') >=0 ){
-            swalText = 'One of files exceeds allowed size of 10 MB';
-          }
-
-          swal({
-            showConfirmButton: false,
-            text: swalText,
-            timer: 2000,
-            title: "Upload denied",
-            type: 'error'
-          });
           self.removeFileFromMessage(_id);
 
           //throw err;

@@ -73,7 +73,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		}
 
 		fileDocs.forEach((fileDocArg, i) => {
-			// File document to save with a messaghe doc in Messages collection
+			// File document to save with a message doc in Messages collection
 			fileDoc = {
 				_id: fileDocArg._id,
 				name: fileDocArg.name,
