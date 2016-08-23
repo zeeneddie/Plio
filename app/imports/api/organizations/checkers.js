@@ -1,3 +1,5 @@
+import curry from 'lodash.curry';
+
 import { Organizations } from '../organizations/organizations.js';
 import {
   ORG_CANNOT_CHANGE_SETTINGS,
@@ -21,7 +23,7 @@ import {
   isOrgOwner,
   isOrgMember
 } from '../checkers.js';
-import { checkAndThrow } from '../helpers.js';
+import { checkAndThrow, withUserId } from '../helpers.js';
 
 export const ORG_EnsureCanChange = (userId, organizationId) => {
   return checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);
@@ -32,6 +34,8 @@ export const ORG_EnsureCanChangeChecker = ({ userId }, doc) => {
 
   return doc;
 };
+
+export const ORG_EnsureCanChangeCheckerCurried = withUserId(curry(ORG_EnsureCanChangeChecker));
 
 export const ORG_EnsureCanInvite = (userId, organizationId) => {
   return checkAndThrow(!canInviteUsers(userId, organizationId), ORG_CANNOT_INVITE_USERS);

@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import curry from 'lodash.curry';
 
 import RiskTypesService from './risk-types-service.js';
 import { RiskTypesSchema, EditableFields } from './risk-types-schema.js';
@@ -8,10 +7,11 @@ import { RiskTypes } from './risk-types.js';
 import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
 import Method, { CheckedMethod } from '../method.js';
-import { withUserId, inject } from '../helpers.js';
-import { exists, ORG_EnsureCanChangeChecker } from '../checkers.js';
-
-const ensureCanChangeOrgSettings = withUserId(curry(ORG_EnsureCanChangeChecker));
+import { inject } from '../helpers.js';
+import {
+  ORG_EnsureCanChangeChecker,
+  ORG_EnsureCanChangeCheckerCurried
+} from '../checkers.js';
 
 const injectRT = inject(RiskTypes);
 
@@ -22,7 +22,7 @@ export const insert = new Method({
 
   check(checker) {
     return checker(
-      ensureCanChangeOrgSettings(this.userId)
+      ORG_EnsureCanChangeCheckerCurried(this.userId)
     );
   },
 

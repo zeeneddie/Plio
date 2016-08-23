@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import curry from 'lodash.curry';
 
 import StandardsBookSectionService from './standards-book-section-service.js';
 import {
@@ -9,12 +8,13 @@ import {
 import { StandardsBookSections } from './standards-book-sections.js';
 import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject, withUserId } from '../helpers.js';
-import { exists, ORG_EnsureCanChangeChecker } from '../checkers.js';
+import { inject } from '../helpers.js';
+import {
+  ORG_EnsureCanChangeChecker,
+  ORG_EnsureCanChangeCheckerCurried
+} from '../checkers.js';
 
 const injectSBS = inject(StandardsBookSections);
-
-const ensureCanChangeOrgSettings = withUserId(curry(ORG_EnsureCanChangeChecker));
 
 export const insert = new Method({
   name: 'StandardsBookSections.insert',
@@ -23,7 +23,7 @@ export const insert = new Method({
 
   check(checker) {
     return checker(
-      ensureCanChangeOrgSettings(this.userId)
+      ORG_EnsureCanChangeCheckerCurried(this.userId)
     );
   },
 
