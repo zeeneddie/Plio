@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
@@ -19,7 +20,7 @@ Template.WorkInbox_List.viewmodel({
       const contains = items.find(({ _id }) => _id === this.workItemId());
 
       if (!contains) {
-        const { _id } = Object.assign({}, items.find((el, i, arr) => arr.length)); // get _id of the first element if it exists
+        const { _id } = Object.assign({}, this._getFirstItemByFilter()); // get _id of the first element if it exists
 
         if (_id) {
           Meteor.setTimeout(() => {
@@ -59,6 +60,28 @@ Template.WorkInbox_List.viewmodel({
         return {};
         break;
     };
+  },
+  _getFirstItemByFilter() {
+    const [current, completed, deleted] = [2, 4, 6];
+
+    const assignees = Object.assign({}, this.assignees());
+    const getFirst = _.compose(_.first, this.getTeamItems).bind(this);
+
+    switch(this.activeWorkInboxFilterId()) {
+      case current:
+        return getFirst(_.first(assignees.current), 'current');
+        break;
+      case completed:
+        return getFirst(_.first(assignees.completed), 'completed');
+        break;
+      case deleted:
+        return getFirst(_.first(assignees.deleted), 'deleted');
+        break;
+      default:
+        const currentItems = Object.assign([], this._getItemsByFilter());
+        return _.first(currentItems);
+        break;
+    }
   },
   getPendingItems(_query = {}) {
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
@@ -115,7 +138,7 @@ Template.WorkInbox_List.viewmodel({
     };
   },
   getTeamItems(userId, prop) {
-    const { team = {} } = Object.assign({}, this.items(userId));
+    const { team = {} } = Object.assign({}, invoke(this, 'items', userId));
     return team[prop];
   },
   items(userId) {

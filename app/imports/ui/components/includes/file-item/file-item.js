@@ -17,7 +17,13 @@ Template.FileItem.viewmodel({
   },
   progress() {
     const uploader = this.uploader && this.uploader();
-    return uploader && uploader.progress(this._id()); // 100 -> 0
+    if (this.isUploaded()) {
+      return 100;
+    }
+
+    // console.log('progress', progress, 'isUploaded', this.isUploaded());
+
+    return uploader && uploader.progress(this._id());
   },
   getData() {
     return {

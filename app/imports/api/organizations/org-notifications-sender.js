@@ -22,7 +22,7 @@ export default class OrgNotificationsSender {
 
     const templateData = {
       organizationName: orgName,
-      title: subject,
+      title: emailSubject,
       secondaryText,
       button: {
         label: 'Confirm',
