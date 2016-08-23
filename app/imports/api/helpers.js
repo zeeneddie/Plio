@@ -98,6 +98,8 @@ const inject = anything => fn => fn(anything);
 
 const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
+const withUserId = fn => userId => inject({ userId })(fn);
+
 const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 
@@ -115,5 +117,6 @@ export {
   chainCheckers,
   checkAndThrow,
   inject,
-  injectCurry
+  injectCurry,
+  withUserId
 };

@@ -1,90 +1,56 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import curry from 'lodash.curry';
 
 import RiskTypesService from './risk-types-service.js';
 import { RiskTypesSchema, EditableFields } from './risk-types-schema.js';
 import { RiskTypes } from './risk-types.js';
 import { IdSchema, OrganizationIdSchema } from '../schemas.js';
 import { UserRoles } from '../constants';
+import Method, { CheckedMethod } from '../method.js';
+import { withUserId, inject } from '../helpers.js';
+import { exists, ORG_EnsureCanChangeChecker } from '../checkers.js';
 
-const getRiskType = (_id) => {
-  const riskType = RiskTypes.findOne({ _id });
+const ensureCanChangeOrgSettings = withUserId(curry(ORG_EnsureCanChangeChecker));
 
-  if (!riskType) {
-    throw new Meteor.Error(
-      400,
-      'Risk type does not exist'
-    );
-  }
+const injectRT = inject(RiskTypes);
 
-  return riskType;
-};
-
-const checkUserRights = (userId, { organizationId }) => {
-  const canEditOrgSettings = Roles.userIsInRole(userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
-
-  if (!canEditOrgSettings) {
-    throw new Meteor.Error(
-      403,
-      'User is not authorized for editing organization settings'
-    );
-  }
-};
-
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'RiskTypes.insert',
 
   validate: RiskTypesSchema.validator(),
 
-  run({ organizationId, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a risk type'
-      );
-    }
+  check(checker) {
+    return checker(
+      ensureCanChangeOrgSettings(this.userId)
+    );
+  },
 
-    checkUserRights(this.userId, { organizationId });
-
-    return RiskTypesService.insert({ organizationId, ...args });
+  run({ ...args }) {
+    return RiskTypesService.insert({ ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'RiskTypes.update',
 
   validate: new SimpleSchema([IdSchema, EditableFields]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a risk type'
-      );
-    }
+  check: checker => injectRT(checker)(ORG_EnsureCanChangeChecker),
 
-    const riskType = getRiskType(_id);
-
-    checkUserRights(this.userId, riskType);
-
-    return RiskTypesService.update({ _id, ...args });
+  run({ ...args }) {
+    return RiskTypesService.update({ ...args });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'RiskTypes.remove',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRT(checker)(ORG_EnsureCanChangeChecker),
+
   run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk type'
-      );
-    }
-
-    const riskType = getRiskType(_id);
-
-    checkUserRights(this.userId, riskType);
-
     return RiskTypesService.remove({ _id });
   }
 });

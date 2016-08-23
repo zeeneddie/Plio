@@ -9,7 +9,7 @@ import { Occurrences } from './occurrences.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { IdSchema } from '../schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { chain } from '../helpers.js';
+import { chain, withUserId } from '../helpers.js';
 import { exists, OCC_MembershipChecker } from '../checkers.js';
 
 const { compose } = _;
@@ -18,7 +18,7 @@ const checkOccurrenceExistance = exists(Occurrences);
 
 const checkNCExistance = exists(NonConformities);
 
-const checkMembership = userId => curry(OCC_MembershipChecker)({ userId });
+const checkMembership = withUserId(curry(OCC_MembershipChecker));
 
 export const updateViewedBy = new Method({
   name: 'Occurrences.updateViewedBy',
