@@ -10,11 +10,14 @@ export const MessagesSchema = new SimpleSchema([
 	BaseEntitySchema,
 	DiscussionIdSchema,
 	ViewedBySchema,
-  FilesSchema,
 	{
 		message: {
 			type: String,
 			max: 140,
+			optional: true
+		},
+		fileIds: {
+			type: [String],
 			optional: true
 		},
 

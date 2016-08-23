@@ -51,12 +51,8 @@
 				{{#if isType 'file'}}
 					{{#each files}}
 						{{> FileItem
-				        _id=this._id
-				        name=name
-				        url=url
-				        extension=extension
-								isReadOnly=true
-				        uploader=uploader}}
+				        _id=this
+								isReadOnly=true}}
 					{{/each}}
 				{{/if}}
 			</p>

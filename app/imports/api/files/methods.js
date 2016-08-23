@@ -44,7 +44,7 @@ export const updateUrl = new ValidatedMethod({
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
-    return FilesService.update({ _id }, { $set: { url: url } });
+    return FilesService.update({ _id, url });
   }
 });
 

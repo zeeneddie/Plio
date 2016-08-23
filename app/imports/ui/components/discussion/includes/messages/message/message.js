@@ -8,9 +8,11 @@ import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
-
+import { Files } from '/imports/api/files/files.js';
+window.Files = Files;
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
+	fileIds: [],
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
@@ -61,6 +63,10 @@ Template.Discussion_Message.viewmodel({
 		if (at === this._id()) {
 			FlowRouter.setQueryParams({ at: null });
 		}
+	},
+	files() {
+		const fileIds = this.fileIds() || [];
+		return Files.find({ _id: { $in: fileIds } });
 	},
 	remove(e) {
 		if (!this.isAuthor()) return;

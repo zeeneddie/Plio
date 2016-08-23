@@ -35,7 +35,6 @@ Template.FileUploader2.viewmodel({
       return;
     }
 
-    const _id = Random.id();
     const name = file.name;
 
     this.attachmentFile(null);
@@ -49,7 +48,7 @@ Template.FileUploader2.viewmodel({
       if (err) {
         throw err;
       }
-      this.insertFile({ _id, name }, (err) => {
+      this.addFile({ fileId }, (err) => {
         if (err) {
           throw err;
         }
@@ -58,7 +57,7 @@ Template.FileUploader2.viewmodel({
           this.slingshotDirective(), this.metaContext()
         );
 
-        this.uploads().push({ fileId: _id, uploader });
+        this.uploads().push({ fileId: fileId, uploader });
 
         uploader.send(file, (err, url) => {
           if (err) {
@@ -71,9 +70,7 @@ Template.FileUploader2.viewmodel({
           }
 
           updateUrl.call({ _id: fileId, url });
-
-          this.onUpload(err, { _id, url });
-          this.removeUploadData(_id);
+          this.removeUploadData(fileId);
         });
       });
     });

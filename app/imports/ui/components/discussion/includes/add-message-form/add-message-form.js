@@ -38,49 +38,63 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
+	addFileFn() {
+		return this.addFile.bind(this);
+	},
+	addFile({ fileId }, cb) {
 		if (this.disabled()) return;
 
-    const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
 		const discussionId = this.discussionId();
 
 		addMessage.call({
 			discussionId,
-			files: [fileDoc],
+			fileIds: [fileId],
 			type: 'file'
 		}, handleMethodResult(cb));
-
-    /*if (this.files() && this.files().length) {
-      const options = {
-        $push: {
-          files: fileDoc
-        }
-      };
-
-      this.parent().update({ options }, cb);
-    } else {
-      this.parent().update({
-        files: [fileDoc]
-      }, cb);
-    }*/
-  },
-	onUploadCb() {
-    return this.onUpload.bind(this);
-  },
-  onUpload(err, { _id, url }) {
-    if (err && err.error !== 'Aborted') {
-			// [TODO] Handle error
-      return;
-    }
-
-    const options = {
-      $set: {
-        'files.$.url': url
-      }
-    };
-
-    updateFilesUrls.call({ _id, options });
-  },
+	},
+  // insertFile({ _id, name }, cb) {
+	// 	if (this.disabled()) return;
+	//
+  //   const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
+	// 	const discussionId = this.discussionId();
+	//
+	// 	addMessage.call({
+	// 		discussionId,
+	// 		files: [fileDoc],
+	// 		type: 'file'
+	// 	}, handleMethodResult(cb));
+	//
+  //   /*if (this.files() && this.files().length) {
+  //     const options = {
+  //       $push: {
+  //         files: fileDoc
+  //       }
+  //     };
+	//
+  //     this.parent().update({ options }, cb);
+  //   } else {
+  //     this.parent().update({
+  //       files: [fileDoc]
+  //     }, cb);
+  //   }*/
+  // },
+	// onUploadCb() {
+  //   return this.onUpload.bind(this);
+  // },
+  // onUpload(err, { _id, url }) {
+  //   if (err && err.error !== 'Aborted') {
+	// 		// [TODO] Handle error
+  //     return;
+  //   }
+	//
+  //   const options = {
+  //     $set: {
+  //       'files.$.url': url
+  //     }
+  //   };
+	//
+  //   updateFilesUrls.call({ _id, options });
+  // },
 	onSubmit(e) {
 		e.preventDefault();
 
