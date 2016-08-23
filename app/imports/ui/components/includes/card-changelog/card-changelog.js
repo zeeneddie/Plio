@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { CollectionNames, SystemName } from '/imports/api/constants.js';
+import { SystemName } from '/imports/api/constants.js';
 
 
 Template.CardChangelog.viewmodel({
@@ -20,6 +20,9 @@ Template.CardChangelog.viewmodel({
       this.resetProps();
     },
     function() {
+      this.templateInstance.subscribe('lastUserLog', this.documentId());
+    },
+    function() {
       const { _id } = this.document() || {};
       if (this.documentId.value !== _id) {
         this.documentId(_id);
@@ -34,15 +37,21 @@ Template.CardChangelog.viewmodel({
     this.loadingAllLogs(false);
     this.showAllLogs(false);
   },
-  docCollection() {
-    const collections = {
-      action: CollectionNames.ACTIONS,
-      nc: CollectionNames.NCS,
-      risk: CollectionNames.RISKS,
-      standard: CollectionNames.STANDARDS
-    };
-
-    return collections[this.documentType()];
+  lastUserLog() {
+    return AuditLogs.findOne({
+      documentId: this.documentId(),
+      executor: { $ne: SystemName }
+    }, {
+      sort: { date: -1 }
+    });
+  },
+  lastUserLogExecutor() {
+    const log = this.lastUserLog();
+    return log && log.executor;
+  },
+  lastUserLogDate() {
+    const log = this.lastUserLog();
+    return log && log.date;
   },
   toggleLogs() {
     if (this.areLogsLoaded()) {
@@ -51,27 +60,17 @@ Template.CardChangelog.viewmodel({
       this.loadingLogs(true);
 
       const documentId = this.documentId();
-      const collectionName = this.docCollection();
+      const tpl = this.templateInstance;
 
-      this.templateInstance.subscribe(
-        'documentLogsCount',
-        `document-logs-count-${documentId}`,
-        documentId,
-        collectionName
-      );
+      tpl.subscribe('documentLogsCount', `document-logs-count-${documentId}`, documentId);
 
-      this.templateInstance.subscribe(
-        'auditLogs',
-        documentId,
-        collectionName,
-        {
-          onReady: () => {
-            this.loadingLogs(false);
-            this.areLogsLoaded(true);
-            this.toggleCollapse();
-          }
+      tpl.subscribe('auditLogs', documentId, {
+        onReady: () => {
+          this.loadingLogs(false);
+          this.areLogsLoaded(true);
+          this.toggleCollapse();
         }
-      );
+      });
     }
   },
   logs() {
@@ -102,21 +101,15 @@ Template.CardChangelog.viewmodel({
       this.showAllLogs(true);
     } else {
       this.loadingAllLogs(true);
+      const tpl = this.templateInstance;
 
-      this.templateInstance.subscribe(
-        'auditLogs',
-        this.documentId(),
-        this.docCollection(),
-        this.limit(),
-        0,
-        {
-          onReady: () => {
-            this.loadingAllLogs(false);
-            this.areAllLogsLoaded(true);
-            this.showAllLogs(true);
-          }
+      tpl.subscribe('auditLogs', this.documentId(), this.limit(), 0, {
+        onReady: () => {
+          this.loadingAllLogs(false);
+          this.areAllLogsLoaded(true);
+          this.showAllLogs(true);
         }
-      );
+      });
     }
   },
   viewRecentLogs() {
