@@ -1,10 +1,13 @@
 import moment from 'moment-timezone';
+import curry from 'lodash.curry';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
 import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
+
+const { compose } = _;
 
 
 const compareDates = (date1, date2) => {
@@ -91,6 +94,10 @@ const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
 
+const inject = anything => fn => fn(anything);
+
+const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
+
 const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 
@@ -106,5 +113,7 @@ export {
   getCollectionByDocType,
   chain,
   chainCheckers,
-  checkAndThrow
+  checkAndThrow,
+  inject,
+  injectCurry
 };

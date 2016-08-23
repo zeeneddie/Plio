@@ -11,8 +11,9 @@ import {
   ONLY_ORG_OWNER_CAN_DELETE,
   CANNOT_RESTORE_NOT_DELETED
 } from './errors.js';
-import { chain, checkAndThrow } from './helpers.js';
+import { chain, checkAndThrow, injectCurry } from './helpers.js';
 
+const { compose } = _;
 
 export * from './actions/checkers.js';
 
@@ -23,6 +24,8 @@ export * from './problems/checkers.js';
 export * from './standards/checkers.js';
 
 export * from './organizations/checkers.js';
+
+export * from './occurrences/checkers.js';
 
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
@@ -181,6 +184,10 @@ export const checkDocAndMembershipAndMore = (collection, _id, userId) => {
 
     return doc;
   };
+};
+
+export const exists = collection => fn => (...args) => {
+  return compose(injectCurry(collection, checkDocExistance), fn)(...args);
 };
 
 export const onRemoveChecker = ({ userId }, doc) => {

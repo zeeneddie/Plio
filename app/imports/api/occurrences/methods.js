@@ -1,58 +1,67 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import property from 'lodash.property';
+import curry from 'lodash.curry';
 
 import OccurrencesService from './occurrences-service.js';
 import { RequiredSchema } from './occurrences-schema.js';
 import { Occurrences } from './occurrences.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { IdSchema } from '../schemas.js';
+import Method, { CheckedMethod } from '../method.js';
+import { chain } from '../helpers.js';
+import { exists, OCC_MembershipChecker } from '../checkers.js';
 
-export const updateViewedBy = new ValidatedMethod({
+const { compose } = _;
+
+const checkOccurrenceExistance = exists(Occurrences);
+
+const checkNCExistance = exists(NonConformities);
+
+const checkMembership = userId => curry(OCC_MembershipChecker)({ userId });
+
+export const updateViewedBy = new Method({
   name: 'Occurrences.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check(checker) {
+    // check membership and occurrence existance
+    // as we need the document itself in checkMembership function we just compose it with checkOccurrenceExistance
+    return checker(
+      compose(
+        checkMembership(this.userId),
+        checkOccurrenceExistance(property('_id'))
+      )
+    );
+  },
+
   run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update occurrences'
-      );
-    }
-    if (!Occurrences.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Occurrence does not exist'
-      );
-    }
-
-    if (!!Occurrences.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this occurrence'
-      );
-    }
-
     return OccurrencesService.updateViewedBy({ _id, userId: this.userId });
   }
 });
 
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'Occurrences.insert',
 
   validate: RequiredSchema.validator(),
 
-  run({ ...args, nonConformityId }) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create an occurrence');
-    }
+  check(checker) {
+    // we don't need compose there cause nonConformityId is passed through arguments
+    return checker(
+      chain(
+        checkMembership(this.userId),
+        checkNCExistance(property('nonConformityId'))
+      )
+    );
+  },
 
-    if (!NonConformities.findOne({ _id: nonConformityId })) {
-      throw new Meteor.Error(400, 'Non-conformity with that ID does not exist');
-    }
-
-    return OccurrencesService.insert({ ...args, nonConformityId });
+  run({ ...args }) {
+    return OccurrencesService.insert({ ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new Method({
   name: 'Occurrences.update',
 
   validate(doc) {
@@ -78,25 +87,35 @@ export const update = new ValidatedMethod({
     }
   },
 
-  run({_id, ...args}) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot update an occurrence');
-    }
+  check(checker) {
+    return checker(
+      compose(
+        checkMembership(this.userId),
+        checkOccurrenceExistance(property('_id'))
+      )
+    );
+  },
 
-    return OccurrencesService.update({ _id, ...args });
+  run({ ...args }) {
+    return OccurrencesService.update({ ...args });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new Method({
   name: 'Occurrences.remove',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove occurrences');
-    }
+  check(checker) {
+    return checker(
+      compose(
+        checkMembership(this.userId),
+        checkOccurrenceExistance(property('_id'))
+      )
+    );
+  },
 
+  run({ _id }) {
     return OccurrencesService.remove({ _id });
   }
 });
