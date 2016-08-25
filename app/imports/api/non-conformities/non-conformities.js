@@ -2,7 +2,10 @@ import { Mongo } from 'meteor/mongo';
 
 import { NonConformitiesSchema } from './non-conformities-schema.js';
 import { CollectionNames } from '../constants.js';
-import NCAuditService from './nc-audit-service.js';
+
+if (Meteor.isServer) {
+  import NCAuditService from './server/nc-audit-service.js';
+}
 
 
 const NonConformities = new Mongo.Collection(CollectionNames.NCS);

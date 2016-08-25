@@ -1,7 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardStatuses } from '../constants.js';
-import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema, ViewedBySchema, getNotifySchema } from '../schemas.js';
+import {
+  BaseEntitySchema, OrganizationIdSchema,
+  DeletedSchema, ViewedBySchema,
+  ImprovementPlanSchema, getNotifySchema
+} from '../schemas.js';
 
 
 const optionalFields = new SimpleSchema([
@@ -95,6 +99,10 @@ const optionalFields = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
+      optional: true
     }
   }
 ]);
@@ -170,6 +178,10 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
     type: String,
     optional: true,
     allowedValues: _.keys(StandardStatuses)
+  },
+  improvementPlan: {
+    type: ImprovementPlanSchema,
+    optional: true
   }
 }]);
 

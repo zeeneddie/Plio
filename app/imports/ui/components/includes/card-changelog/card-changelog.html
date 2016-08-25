@@ -6,10 +6,12 @@
           Created by: <span {{b "text: getUser(this.createdBy)"}}></span>
           <br>Date: <span {{b "text: renderDate(this.createdAt)"}}></span>
         </div>
-        <div class="col-xs-6" {{b "if: this.updatedBy && this.updatedAt"}}>
-          Last edited by: <span {{b "text: getUser(this.updatedBy)"}}></span>
-          <br>Date: <span {{b "text: renderDate(this.updatedAt)"}}></span>
-        </div>
+        {{#if lastUserLog}}
+          <div class="col-xs-6">
+            Last edited by: <span {{b "text: getUser(lastUserLogExecutor)"}}></span>
+            <br>Date: <span {{b "text: renderDate(lastUserLogDate)"}}></span>
+          </div>
+        {{/if}}
       </div>
     </div>
 
@@ -36,7 +38,7 @@
       {{/if}}
       <div class="card-footer">
         {{#unless showAllLogs}}
-          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, enable: viewButtonEnabled"}}>
+          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, class: { not-visible: viewButtonHidden }"}}>
             View all changes ({{logsLength}} total)
             {{#if loadingAllLogs}}
               <i class="fa fa-spinner fa-pulse"></i>
