@@ -73,7 +73,10 @@ Template.Risks_Card_Edit.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
+          if (err) {
+            swal.close();
+            return;
+          };
           swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
 
           this.modal().close();

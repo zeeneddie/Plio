@@ -27,28 +27,14 @@ export default {
   },
 
   updateViewedBy({ _id, viewedBy }) {
-    this._ensureWorkItemExists(_id);
-
     return this._service.updateViewedBy({ _id, viewedBy });
   },
 
   remove({ _id, deletedBy }) {
-    this._ensureWorkItemExists(_id);
-
     return this._service.remove({ _id, deletedBy });
   },
 
   restore({ _id }) {
-    const { type, linkedDoc, isDeleted } = this._getWorkItem(_id);
-
-    if (!isDeleted) {
-      throw new Meteor.Error(400, 'Work item needs to be deleted first');
-    }
-
-    if (this.collection.findOne({ _id: { $ne: _id }, type, linkedDoc })) {
-      throw new Meteor.Error(400, 'This work item cannot be restored because this action was assigned to other user');
-    }
-
     return this._service.restore({ _id });
   },
 
@@ -339,20 +325,6 @@ export default {
     })();
 
     return ret;
-  },
-
-  _ensureWorkItemExists(_id) {
-    if (!this.collection.findOne({ _id })) {
-      throw new Meteor.Error(400, 'Work item does not exist');
-    }
-  },
-
-  _getWorkItem(_id) {
-    const workItem = this.collection.findOne({ _id });
-    if (!workItem) {
-      throw new Meteor.Error(400, 'Work item does not exist');
-    }
-    return workItem;
   },
 
   _getProblemDoc(docId, docType) {

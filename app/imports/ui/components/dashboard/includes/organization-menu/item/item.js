@@ -15,6 +15,7 @@ Template.Organization_Menu_Item.viewmodel({
 
     selectOrganization.call({ selectedOrganizationSerialNumber }, (err) => {
       if (err) {
+        console.log(err);
         swal('Oops... Something went wrong', err.reason, 'error');
       }
     });

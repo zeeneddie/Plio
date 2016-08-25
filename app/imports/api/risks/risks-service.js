@@ -4,10 +4,13 @@ import { Risks } from './risks.js';
 import RiskWorkflow from './RiskWorkflow.js';
 import ProblemsService from '../problems/problems-service.js';
 import { ProblemTypes } from '../constants.js';
+import BaseEntityService from '../base-entity-service.js';
 
 
 export default _.extend({}, ProblemsService, {
   collection: Risks,
+
+  _service: new BaseEntityService(Risks),
 
   _abbr: 'RK',
 
@@ -23,7 +26,7 @@ export default _.extend({}, ProblemsService, {
     };
 
     this.collection.update(query, options);
-    
+
     return id;
   },
 

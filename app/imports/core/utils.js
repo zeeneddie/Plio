@@ -1,3 +1,4 @@
+import { check } from 'meteor/check';
 import { AvatarPlaceholders } from '/imports/api/constants.js'
 
 export default Utils = {
@@ -28,7 +29,9 @@ export default Utils = {
     return initials.toUpperCase();
   },
 
-  generateSerialNumber(collection, query = {}) {
+  generateSerialNumber(collection, query = {}, defaultNumber = 1) {
+    check(defaultNumber, Number);
+
     const last = collection.findOne({
       ...query,
       serialNumber: {
@@ -40,6 +43,6 @@ export default Utils = {
       }
     });
 
-    return last ? last.serialNumber + 1 : 1;
+    return last ? last.serialNumber + 1 : defaultNumber;
   }
 }

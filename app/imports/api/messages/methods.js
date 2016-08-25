@@ -7,9 +7,9 @@ import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
 import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema } from '../schemas.js';
-import { checkDocExistance, checkOrgMembership } from '../checkers.js';
+import { checkDocExistance } from '../checkers.js';
 import { getCollectionByDocType } from '../helpers.js';
-import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from './errors.js';
+import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
 
 const onInsertCheck = ({ discussionId }) => {
 	const { linkedTo, documentType } = checkDocExistance({ _id: discussionId }, Discussions);

@@ -5,6 +5,7 @@ import LessonsService from './lessons-service.js';
 import { LessonsSchema, RequiredSchema } from './lessons-schema.js';
 import { LessonsLearned } from './lessons.js';
 import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
+import Method, { CheckedMethod } from '../method.js';
 
 const organizationIdSchema = new SimpleSchema({
   organizationId: {
@@ -13,23 +14,20 @@ const organizationIdSchema = new SimpleSchema({
   }
 });
 
-export const insert = new ValidatedMethod({
+const inject = fn => fn(LessonsLearned);
+
+export const insert = new Method({
   name: 'Lessons.insert',
 
   validate: new SimpleSchema([RequiredSchema, organizationIdSchema, DocumentIdSchema, DocumentTypeSchema]).validator(),
 
   run({ ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot create a Lessons learned document');
-    }
-
     return LessonsService.insert({ ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'Lessons.update',
-
 
   validate(doc) {
     const validationContext = new SimpleSchema([
@@ -46,52 +44,33 @@ export const update = new ValidatedMethod({
     }
   },
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot update a Lessons learned document');
-    }
+  check: checker => inject(checker),
 
+  run({ _id, ...args }) {
     return LessonsService.update({ _id, ...args });
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new CheckedMethod({
   name: 'Lessons.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => inject(checker),
+
   run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a Lessons learned document'
-      );
-    }
-    if (!LessonsLearned.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Lessons learned document does not exist'
-      );
-    }
-
-    if (!!LessonsLearned.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this Lessons learned document'
-      );
-    }
-
     return LessonsService.updateViewedBy({ _id, userId: this.userId });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Lessons.remove',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(403, 'Unauthorized user cannot remove a Lessons learned document');
-    }
+  check: checker => inject(checker),
 
+  run({ _id }) {
     return LessonsService.remove({ _id });
   }
 });

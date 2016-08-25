@@ -4,13 +4,15 @@
       <div class="card-block card-heading">
         {{#unless isReadOnly}}
           <div class="card-heading-buttons pull-xs-right">
-            {{#if isDeleted}}
+            {{#if this.isDeleted}}
               <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                 Restore
               </a>
-              <a class="btn btn-primary" {{b "click: delete(this)"}}>
-                Delete
-              </a>
+              {{#if showDeleteBtn this}}
+                <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                  Delete
+                </a>
+              {{/if}}
             {{else}}
               <a class="btn btn-primary" {{b "click: openModal"}}>
                 <i class="fa fa-pencil"></i>
