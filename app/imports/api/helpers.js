@@ -105,8 +105,6 @@ const withUserId = fn => (userId) => {
 
 const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
 
-const getF = curry((path, obj) => get(obj, path));
-
 const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 
@@ -126,6 +124,5 @@ export {
   inject,
   injectCurry,
   withUserId,
-  mapArgsTo,
-  getF
+  mapArgsTo
 };

@@ -169,7 +169,7 @@ export const setWorkflowDefaults = new Method({
   }
 });
 
-export const setReminder = new ValidatedMethod({
+export const setReminder = new Method({
   name: 'Organizations.setReminder',
 
   validate: new SimpleSchema([
@@ -196,7 +196,7 @@ export const setReminder = new ValidatedMethod({
   }
 });
 
-export const setNCGuideline = new ValidatedMethod({
+export const setNCGuideline = new Method({
   name: 'Organizations.setNCGuideline',
 
   validate: new SimpleSchema([
