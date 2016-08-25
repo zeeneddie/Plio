@@ -1,12 +1,14 @@
 <template name="FileItem_Read">
-  <a class="btn btn-secondary file-label text-xs-left {{#if isUploaded}}uploaded{{else}}no-pointer-events{{/if}}"
-    {{b "href: this.url || '#'"}}>
-    <span>
-      {{#if extension}}
-        <i class="fa fa-lg fa-file-{{extension}}-o margin-right"></i>
-      {{/if}}
-      <span>{{name}}</span>
-    </span>
-    <div class="uploading-file progress progress-striped stripes progress-animated {{#if isUploaded}}uploaded{{/if}}"></div>
-  </a>
+  <div class="file-item">
+    <a class="btn btn-secondary file-label text-xs-left {{#if this.isUploaded}}uploaded{{else}}no-pointer-events{{/if}}"
+      {{b "href: url || ''"}}>
+      <span>
+        {{#if extension}}
+          <i class="fa fa-lg fa-file-{{extension}}-o margin-right"></i>
+        {{/if}}
+        <span>{{name}}</span>
+      </span>
+      <div class="uploading-file progress progress-striped stripes progress-animated {{#if this.isUploaded}}uploaded{{/if}}"></div>
+    </a>
+  </div>
 </template>

@@ -1,13 +1,14 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
-import { insert, updateUrl } from '/imports/api/files/methods.js'
+import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 
 Template.FileUploader2.viewmodel({
+  share: ['uploader'],
   mixin: ['modal', 'organization'],
 
   attachmentFile: null,
-  uploads: new ReactiveArray(), // temporarily stores the files being uploaded
+  // uploads: new ReactiveArray(), // temporarily stores the files being uploaded
 
   uploadData(fileId) { // find the file with fileId is being uploaded
     return _.find(this.uploads().array(), (data) => {
@@ -41,8 +42,8 @@ Template.FileUploader2.viewmodel({
     this.fileInput.val(null);
 
     insert.call({
-      name: 'this.fileName()',
-      extension: 'jpg',
+      name: name,
+      extension: name.split('.').pop().toLowerCase(),
       organizationId: this.organizationId()
     }, (err, fileId) => {
       if (err) {
@@ -56,6 +57,15 @@ Template.FileUploader2.viewmodel({
         const uploader = new Slingshot.Upload(
           this.slingshotDirective(), this.metaContext()
         );
+
+        const progressInterval = Meteor.setInterval(() => {
+          const progress = uploader.progress();
+          console.log('progress', progress);
+          updateProgress.call({ _id: fileId, progress });
+          if (!progress && progress != 0 || progress === 1) {
+            Meteor.clearInterval(progressInterval);
+          }
+        }, 1500);
 
         this.uploads().push({ fileId: fileId, uploader });
 

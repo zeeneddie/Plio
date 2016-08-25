@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import FilesService from './files-service.js';
 import { FilesSchema, RequiredSchema } from './files-schema.js';
-import { IdSchema, DocumentIdSchema, OrganizationIdSchema, UrlSchema } from '../schemas.js';
+import { IdSchema, DocumentIdSchema, OrganizationIdSchema, UrlSchema, ProgressSchema } from '../schemas.js';
 
 // [TODO] Advanced validations
 export const insert = new ValidatedMethod({
@@ -23,14 +23,14 @@ export const insert = new ValidatedMethod({
 export const updateProgress = new ValidatedMethod({
   name: 'Files.updateProgress',
 
-  validate: new SimpleSchema([IdSchema, UrlSchema]).validator(),
+  validate: new SimpleSchema([IdSchema, ProgressSchema]).validator(),
 
   run({ _id, progress }) {
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
-    return FilesService.update({ _id }, { $set: { progress: progress } });
+    return FilesService.update({ _id, progress });
   }
 });
 

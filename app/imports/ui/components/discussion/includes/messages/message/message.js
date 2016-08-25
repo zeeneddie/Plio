@@ -65,7 +65,8 @@ Template.Discussion_Message.viewmodel({
 		}
 	},
 	files() {
-		const fileIds = this.fileIds() || [];
+		const fileIds = this.fileIds() && this.fileIds().array() || [];
+		
 		return Files.find({ _id: { $in: fileIds } });
 	},
 	remove(e) {

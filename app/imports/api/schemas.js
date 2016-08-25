@@ -52,6 +52,16 @@ export const UrlSchema = new SimpleSchema({
   }
 });
 
+export const ProgressSchema = new SimpleSchema({
+  progress: {
+    type: Number,
+    min: 0,
+    max: 1,
+    decimal: true,
+    defaultValue: 0
+  }
+});
+
 export const idSchemaDoc = {
   type: String,
   regEx: SimpleSchema.RegEx.Id

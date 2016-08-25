@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from '../schemas.js';
 
 export const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
@@ -17,17 +17,11 @@ export const RequiredSchema = new SimpleSchema([
 export const FilesSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
+  ProgressSchema,
   {
     url: {
       type: String,
       optional: true
-    },
-    progress: {
-      type: Number,
-      decimal: true,
-      min: 0,
-      max: 1,
-      defaultValue: 0
     }
   }
 ]);

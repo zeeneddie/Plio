@@ -1,8 +1,6 @@
 Template.FileItem_Read.viewmodel({
   autorun() {
-    if (!this.isUploaded()) {
-      const progressWidth = this.progress();
-      this.templateInstance.$('.uploading-file').css({ 'width':  progressWidth + '%' });
-    }
+    const progress = this.progress() * 100;
+    this.templateInstance.$('.uploading-file').css({ 'width': progress + '%' });
   },
 });

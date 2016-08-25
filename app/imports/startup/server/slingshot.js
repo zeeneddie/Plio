@@ -6,10 +6,11 @@ import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
   const {
-    bucketName, acl, discussionsFilesDir, usersAvatarsDir,
+    bucketName, acl, ussionsFilesDir, usersAvatarsDir,
     standardsFilesDir, improvementPlansFilesDir,
     nonConformitiesFilesDir, risksFilesDir,
-    actionsFilesDir
+    actionsFilesDir,
+    discussionsFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -34,8 +35,8 @@ const configureSlignshot = () => {
     },
 
     key(file, metaContext) {
-      const { discussionId } = metaContext;
-      return `${discussionsFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
+      const { organizationId, discussionId } = metaContext;
+      return `uploads/${organizationId}/${discussionsFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
     }
   });
 

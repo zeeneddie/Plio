@@ -50,9 +50,7 @@
 				{{/if}}
 				{{#if isType 'file'}}
 					{{#each files}}
-						{{> FileItem
-				        _id=this
-								isReadOnly=true}}
+						{{> FileItem_Read}}
 					{{/each}}
 				{{/if}}
 			</p>
