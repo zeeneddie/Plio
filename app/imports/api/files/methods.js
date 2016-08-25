@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import FilesService from './files-service.js';
-import { FilesSchema, RequiredSchema } from './files-schema.js';
+import { FileIdsSchema, RequiredSchema } from './files-schema.js';
 import { IdSchema, DocumentIdSchema, OrganizationIdSchema, UrlSchema, ProgressSchema } from '../schemas.js';
 
 // [TODO] Advanced validations

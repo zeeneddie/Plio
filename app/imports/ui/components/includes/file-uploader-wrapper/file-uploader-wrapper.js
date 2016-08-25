@@ -1,60 +1,49 @@
 import { Template } from 'meteor/templating';
-import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
+import { Files } from '/imports/api/files/files.js';
 
 Template.FileUploader_Wrapper.viewmodel({
   mixin: 'organization',
-  files: [],
   slingshotDirective: '',
+
   uploader() {
     return this.child('FileUploader');
   },
-  insertFileFn() {
-    return this.insertFile.bind(this);
+  addFileFn() {
+    return this.addFile.bind(this);
   },
-  insertFile({ name }, cb) {
+  addFile({ fileId }, cb) {
 
     // if (this.files() && this.files().length) {
-    insert.call({
-      name: name,
-      extension: name.split('.').pop().toLowerCase(),
-      organizationId: this.organizationId()
-    }, (err, fileId) => {
-      const options = {
-        $push: {
-          fileIds: fileId
-        }
-      };
-    });
+    const options = {
+      $push: {
+        fileIds: fileId
+      }
+    };
 
     this.parent().update({ options }, cb);
-    //   } else {
-    //     this.parent().update({
-    //       files: [fileDoc]
-    //     }, cb);
-    // }
   },
   onUploadCb() {
     return this.onUpload.bind(this);
   },
-  onUpload(err, { _id, url }) {
+  onUpload(err, { fileId, url }) {
     if (err && err.error !== 'Aborted') {
       ViewModel.findOne('ModalWindow').setError(err.reason);
       return;
     }
 
-    const query = {
-      files: {
-        $elemMatch: { _id }
-      }
-    };
     const options = {
-      $set: {
-        'files.$.url': url
+      $push: {
+        'fileIds': fileId
       }
     };
 
-    this.parent().update({ query, options });
+    this.parent().update({ options });
   },
+  files() {
+		const fileIds = this.fileIds() && this.fileIds().array() || [];
+
+		return Files.find({ _id: { $in: fileIds } });
+	},
   removeFileFn() {
     return this.removeFile.bind(this);
   },

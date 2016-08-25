@@ -1,15 +1,12 @@
 <template name="FileUploader_Wrapper">
   {{#each files}}
     {{> FileItem
-        _id=_id
-        name=name
-        url=url
-        extension=extension
+        this
         removeFile=removeFileFn
         uploader=uploader}}
   {{/each}}
   {{> FileUploader
-      insertFile=insertFileFn
+      addFile=addFileFn
       onUpload=onUploadCb
       slingshotDirective=slingshotDirective
       metaContext=uploaderMetaContext}}

@@ -120,11 +120,11 @@ Template.ESSources.viewmodel({
       this.docxRenderInProgress('');
     }, 5000);
   },
-  insertFileFn() {
-    return this.insertFile.bind(this);
+  addFileFn() {
+    return this.addFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
-    this.fileId(_id);
+  addFile({ fileId, name }, cb) {
+    this.fileId(fileId);
     this.sourceName(name);
     this.update(null, cb);
   },

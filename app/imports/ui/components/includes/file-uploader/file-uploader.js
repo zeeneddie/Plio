@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
-import { insert, updateUrl } from '/imports/api/files/methods.js'
+import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 
 Template.FileUploader.viewmodel({
   mixin: ['modal', 'organization'],
@@ -38,28 +38,40 @@ Template.FileUploader.viewmodel({
     this.attachmentFile(null);
     this.fileInput.val(null);
 
-    this.insertFile({ _id, name }, (err) => {
-      const modal = this.modal();
-
+    insert.call({
+      name: name,
+      extension: name.split('.').pop().toLowerCase(),
+      organizationId: this.organizationId()
+    }, (err, fileId) => {
       if (err) {
-        modal.setError(err.reason);
-        return;
+        throw err;
       }
+      this.addFile({ fileId }, (err) => {
+        const modal = this.modal();
 
-      const uploader = new Slingshot.Upload(
-        this.slingshotDirective(), this.metaContext()
-      );
-
-      this.uploads().push({ fileId: _id, uploader });
-
-      modal.clearError();
-      modal.isSaving(false);
-      modal.incUploadsCount();
-
-      insert.call({ name: 'this.fileName()', extension: 'jpg' }, (err, fileId) => {
         if (err) {
-          throw err;
+          modal.setError(err.reason);
+          return;
         }
+
+        const uploader = new Slingshot.Upload(
+          this.slingshotDirective(), this.metaContext()
+        );
+
+        const progressInterval = Meteor.setInterval(() => {
+          const progress = uploader.progress();
+          updateProgress.call({ _id: fileId, progress });
+          if (!progress && progress != 0 || progress === 1) {
+            Meteor.clearInterval(progressInterval);
+          }
+        }, 1500);
+
+        this.uploads().push({ fileId, uploader });
+
+        modal.clearError();
+        modal.isSaving(false);
+        modal.incUploadsCount();
+
         uploader.send(file, (err, url) => {
           modal.decUploadsCount();
 
@@ -73,13 +85,13 @@ Template.FileUploader.viewmodel({
 
           updateUrl.call({ _id: fileId, url });
 
-          this.onUpload(err, { _id, url });
-          this.removeUploadData(_id);
+          this.onUpload(err, { _id: fileId, url });
+          this.removeUploadData(fileId);
         });
-      });
 
-      // prevent modal's default method result handling
-      return true;
+        // prevent modal's default method result handling
+        return true;
+      });
     });
   },
   cancelUpload(fileId) {

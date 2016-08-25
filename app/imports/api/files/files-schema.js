@@ -14,7 +14,7 @@ export const RequiredSchema = new SimpleSchema([
   }
 ]);
 
-export const FilesSchema = new SimpleSchema([
+export const FileIdsSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   ProgressSchema,

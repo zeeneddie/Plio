@@ -31,7 +31,7 @@
       {{/with}}
       <div {{b "unless: sourceName"}}>
         {{> FileUploader
-            insertFile=insertFileFn
+            addFile=addFileFn
             onUpload=onUploadCb
             slingshotDirective='standardsFiles'
             metaContext=uploaderMetaContext}}
