@@ -3,7 +3,10 @@ import { Mongo } from 'meteor/mongo';
 
 import { RisksSchema } from './risks-schema.js';
 import { CollectionNames } from '../constants.js';
-import RiskAuditService from './risk-audit-service.js';
+
+if (Meteor.isServer) {
+  import RiskAuditService from './server/risk-audit-service.js';
+}
 
 
 

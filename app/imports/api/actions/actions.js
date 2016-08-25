@@ -9,7 +9,10 @@ import {
   ProblemTypes, WorkflowTypes, CollectionNames
 } from '../constants.js';
 import { compareDates } from '../helpers.js';
-import ActionAuditService from './action-audit-service.js';
+
+if (Meteor.isServer) {
+  import ActionAuditService from './server/action-audit-service.js';
+}
 
 
 const Actions = new Mongo.Collection(CollectionNames.ACTIONS);

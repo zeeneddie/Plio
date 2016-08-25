@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 import {
   TimeUnits, DocumentTypes, AnalysisStatuses,
-  ReviewStatuses
+  ReviewStatuses, SystemName
 } from './constants.js';
 import { Utils } from '/imports/core/utils.js';
 
@@ -121,14 +121,16 @@ export const CreatedAtSchema = new SimpleSchema({
   }
 });
 
+const userRegEx = new RegExp(`^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`);
+
 export const CreatedBySchema = new SimpleSchema({
   createdBy: {
     type: String,
-    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/,
+    regEx: userRegEx,
     optional: true,
     autoValue() {
       if (this.isInsert) {
-        return this.userId || (this.isSet && this.value) || 'system';
+        return this.userId || (this.isSet && this.value) || SystemName;
       } else {
         this.unset();
       }
@@ -153,11 +155,11 @@ export const UpdatedAtSchema = new SimpleSchema({
 export const UpdatedBySchema = new SimpleSchema({
   updatedBy: {
     type: String,
-    regEx: /^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|system$/,
+    regEx: userRegEx,
     optional: true,
     autoValue() {
       if (this.isUpdate) {
-        return this.userId || (this.isSet && this.value) || 'system';
+        return this.userId || (this.isSet && this.value) || SystemName;
       } else {
         this.unset();
       }
@@ -199,6 +201,37 @@ export const FilesSchema = new SimpleSchema({
     type: String
   }
 });
+
+export const ImprovementPlanSchema = new SimpleSchema([
+  {
+    desiredOutcome: {
+      type: String,
+      optional: true
+    },
+    targetDate: {
+      type: Date,
+      optional: true
+    },
+    reviewDates: {
+      type: [Object],
+      optional: true,
+      defaultValue: []
+    },
+    'reviewDates.$.date': {
+      type: Date
+    },
+    'reviewDates.$._id': {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    owner: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  },
+  FilesSchema
+]);
 
 export const getNotifySchema = (field) => {
   return new SimpleSchema({
@@ -364,6 +397,10 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: [String],
         regEx: SimpleSchema.RegEx.Id,
         defaultValue: [],
+        optional: true
+      },
+      improvementPlan: {
+        type: ImprovementPlanSchema,
         optional: true
       },
       ...analysis,

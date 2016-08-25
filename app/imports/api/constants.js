@@ -378,6 +378,8 @@ const TruncatedStringLengths = {
   c40: 40
 };
 
+const SystemName = 'Plio';
+
 export {
   ActionTypes,
   ActionStatuses,
@@ -413,5 +415,6 @@ export {
   WorkItemsStore,
   RKTypes,
   TruncatedStringLengths,
-  WorkflowTypes
+  WorkflowTypes,
+  SystemName
 };
