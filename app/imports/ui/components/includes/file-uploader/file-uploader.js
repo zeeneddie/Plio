@@ -5,7 +5,7 @@ import { insert, updateUrl } from '/imports/api/files/methods.js'
 
 Template.FileUploader.viewmodel({
   mixin: ['modal', 'organization'],
-  
+
   attachmentFile: null,
   uploads: new ReactiveArray(),
   uploadData(fileId) {
@@ -33,7 +33,6 @@ Template.FileUploader.viewmodel({
       return;
     }
 
-    const _id = Random.id();
     const name = file.name;
 
     this.attachmentFile(null);

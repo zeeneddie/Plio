@@ -8,7 +8,6 @@ Template.FileUploader2.viewmodel({
   mixin: ['modal', 'organization'],
 
   attachmentFile: null,
-  // uploads: new ReactiveArray(), // temporarily stores the files being uploaded
 
   uploadData(fileId) { // find the file with fileId is being uploaded
     return _.find(this.uploads().array(), (data) => {
@@ -60,7 +59,6 @@ Template.FileUploader2.viewmodel({
 
         const progressInterval = Meteor.setInterval(() => {
           const progress = uploader.progress();
-          console.log('progress', progress);
           updateProgress.call({ _id: fileId, progress });
           if (!progress && progress != 0 || progress === 1) {
             Meteor.clearInterval(progressInterval);

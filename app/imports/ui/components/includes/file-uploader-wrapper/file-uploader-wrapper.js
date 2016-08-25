@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 
 Template.FileUploader_Wrapper.viewmodel({
   mixin: 'organization',
@@ -10,23 +11,27 @@ Template.FileUploader_Wrapper.viewmodel({
   insertFileFn() {
     return this.insertFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
-    const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
+  insertFile({ name }, cb) {
 
-    if (this.files() && this.files().length) {
-
+    // if (this.files() && this.files().length) {
+    insert.call({
+      name: name,
+      extension: name.split('.').pop().toLowerCase(),
+      organizationId: this.organizationId()
+    }, (err, fileId) => {
       const options = {
         $push: {
-          files: fileDoc
+          fileIds: fileId
         }
       };
+    });
 
-      this.parent().update({ options }, cb);
-    } else {
-      this.parent().update({
-        files: [fileDoc]
-      }, cb);
-    }
+    this.parent().update({ options }, cb);
+    //   } else {
+    //     this.parent().update({
+    //       files: [fileDoc]
+    //     }, cb);
+    // }
   },
   onUploadCb() {
     return this.onUpload.bind(this);
