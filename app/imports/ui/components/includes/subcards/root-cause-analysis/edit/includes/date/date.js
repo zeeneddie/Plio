@@ -11,13 +11,14 @@ Template.RCA_TargetDate_Edit.viewmodel({
   onUpdate() {},
   update() {
     return (viewmodel) => {
+      const currentDate = this.templateInstance.data.date;
       const { date } = viewmodel.getData();
 
-      if (date === this.templateInstance.data.date) return;
+      if (Object.is(date, currentDate)) return;
 
       this.date(date);
 
-      this.onUpdate({ date });
+      this.onUpdate({ date }, err => err && this.date(currentDate));
     };
   },
   getData() {

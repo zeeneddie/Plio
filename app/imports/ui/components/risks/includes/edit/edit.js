@@ -2,11 +2,25 @@ import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
 
 import {
-  update, remove, updateViewedBy,
-  insertScore, removeScore,
-  completeAnalysis, undoAnalysis, setAnalysisDate,
-  updateStandards, undoStandardsUpdate, setStandardsUpdateDate,
-  setAnalysisExecutor, setStandardsUpdateExecutor
+  update,
+  remove,
+  updateViewedBy,
+  insertScore,
+  removeScore,
+  completeAnalysis,
+  undoAnalysis,
+  setAnalysisDate,
+  updateStandards,
+  undoStandardsUpdate,
+  setStandardsUpdateDate,
+  setAnalysisExecutor,
+  setStandardsUpdateExecutor,
+  setAnalysisCompletedBy,
+  setAnalysisCompletedDate,
+  setAnalysisComments,
+  setStandardsUpdateCompletedBy,
+  setStandardsUpdateCompletedDate,
+  setStandardsUpdateComments
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
@@ -40,7 +54,13 @@ Template.Risks_Card_Edit.viewmodel({
       setStandardsUpdateExecutor,
       setStandardsUpdateDate,
       updateStandards,
-      undoStandardsUpdate
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
     });
   },
   onUpdateCb() {

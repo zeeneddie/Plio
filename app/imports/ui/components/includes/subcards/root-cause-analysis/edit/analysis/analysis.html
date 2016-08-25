@@ -10,7 +10,7 @@
 
       {{#unless isAnalysisCompleted}}
         {{> RCA_ToBeCompletedBy_Edit
-            by=this.executor
+            assignee=this.executor
             comments=this.completionComments
             isButtonVisible=true
             placeholder="Who will do it?"
@@ -20,21 +20,21 @@
       {{else}}
         {{> RCA_TargetDate_Edit
             date=this.completedAt
-            key="analysis.completedAt"
             placeholder="Completed date"
-            label="Completed date"}}
+            label="Completed date"
+            onUpdate=methods.setCompletedDate}}
 
         {{> RCA_ToBeCompletedBy_Edit
-            by=this.completedBy
+            assignee=this.completedBy
             isButtonVisible=false
-            key="analysis.completedBy"
             placeholder="Completed by"
             label="Completed by"
+            onUpdate=methods.setCompletedBy
             onUndo=methods.undo}}
 
         {{> RCA_Comments_Edit
             comments=this.completionComments
-            onUpdate=onCommentsUpdate}}
+            onUpdate=methods.setComments}}
       {{/unless}}
     {{/with}}
   </div>

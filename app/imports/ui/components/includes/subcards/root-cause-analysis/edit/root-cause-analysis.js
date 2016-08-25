@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
+import curry from 'lodash.curry';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
@@ -32,12 +33,12 @@ Template.Subcards_RCA_Edit.viewmodel({
     const _id = this._id();
     const { timezone } = this.organization();
 
-    const setExecutor = method => ({ executor }, cb) =>
-      this.modal().callMethod(method, { _id, executor }, cb);
-    const setTargetDate = method => ({ date }, cb) =>
-      this.modal().callMethod(method, { _id, targetDate: getTzTargetDate(date, timezone) }, cb);
-    const complete = method => ({ completionComments }, cb) =>
-      this.modal().callMethod(method, { _id, completionComments }, cb);
+    const setKey = curry((key, method) => ({ ...args }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: args[key] }, cb));
+    const setAssignee = curry((key, method) => ({ executor }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: executor }, cb));
+    const setDate = curry((key, method) => ({ date }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: getTzTargetDate(date, timezone) }, cb));
     const undo = method => cb =>
       this.modal().callMethod(method, { _id }, cb);
 
@@ -49,22 +50,49 @@ Template.Subcards_RCA_Edit.viewmodel({
       setStandardsUpdateExecutor,
       setStandardsUpdateDate,
       updateStandards,
-      undoStandardsUpdate
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
     } = this.methodRefs();
 
+    const half = {
+      setExecutor: setAssignee('executor'),
+      setDate: setDate('targetDate'),
+      setCompletedBy: setAssignee('completedBy'),
+      setCompletedDate: setDate('completedAt'),
+      setComments: setKey('completionComments'),
+      complete: setKey('completionComments'),
+      undo: undo
+    };
+
+    const makeMethods = (methods, from) => methods.map((ref, i) => {
+      const key = Object.keys(from)[i];
+      return { [key]: () => from[key](ref) };
+    }).reduce((prev, cur) => ({ ...prev, ...cur }), {});
+
     return {
-      Analysis: () => ({
-        setExecutor: () => setExecutor(setAnalysisExecutor),
-        setDate: () => setTargetDate(setAnalysisDate),
-        complete: () => complete(completeAnalysis),
-        undo: () => undo(undoAnalysis)
-      }),
-      UpdateOfStandards: () => ({
-        setExecutor: () => setExecutor(setStandardsUpdateExecutor),
-        setDate: () => setTargetDate(setStandardsUpdateDate),
-        complete: () => complete(updateStandards),
-        undo: () => undo(undoStandardsUpdate)
-      })
+      Analysis: () => makeMethods([
+        setAnalysisExecutor,
+        setAnalysisDate,
+        setAnalysisCompletedBy,
+        setAnalysisCompletedDate,
+        setAnalysisComments,
+        completeAnalysis,
+        undoAnalysis,
+      ], half),
+      UpdateOfStandards: () => makeMethods([
+        setStandardsUpdateExecutor,
+        setStandardsUpdateDate,
+        setStandardsUpdateCompletedBy,
+        setStandardsUpdateCompletedDate,
+        setStandardsUpdateComments,
+        updateStandards,
+        undoStandardsUpdate,
+      ], half)
     };
   },
   update({ query = {}, options = {}, ...args }, cb) {

@@ -2,29 +2,29 @@ import { Template } from 'meteor/templating';
 
 Template.RCA_ToBeCompletedBy_Edit.viewmodel({
   mixin: ['user', 'search', 'members'],
-  key: '',
-  by: '',
+  assignee: '',
   comments: '',
   selectFirstIfNoSelected: false,
   placeholder: '',
   label: '',
   isButtonVisible: false,
   canButtonBeShown() {
-    return this.getBy() === Meteor.userId();
+    return this.getAssignee() === Meteor.userId();
   },
-  getBy() {
-    return this.by() || '';
+  getAssignee() {
+    return this.assignee() || '';
   },
   onUpdate() {},
-  update(viewmodel) {
+  update() {
     return (viewmodel) => {
+      const currentAssignee = this.templateInstance.data.assignee;
       const { selected:executor } = viewmodel.getData();
 
-      if (executor === this.templateInstance.data.by) return;
+      if (Object.is(executor, currentAssignee)) return;
 
-      this.by(executor);
+      this.assignee(executor);
 
-      this.onUpdate({ executor });
+      this.onUpdate({ executor }, err => err && this.assignee(currentAssignee));
     };
   },
   onComplete() {},

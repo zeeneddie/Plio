@@ -25,7 +25,13 @@ import {
   P_OnUndoStandardsUpdateChecker,
   P_OnUndoAnalysisChecker,
   P_OnSetStandardsUpdateExecutorChecker,
-  P_OnSetStandardsUpdateDateChecker
+  P_OnSetStandardsUpdateDateChecker,
+  P_OnSetAnalysisCompletedByChecker,
+  P_OnSetAnalysisCompletedDateChecker,
+  P_OnSetAnalysisCommentsChecker,
+  P_OnSetStandardsUpdateCompletedByChecker,
+  P_OnSetStandardsUpdateCompletedDateChecker,
+  P_OnSetStandardsUpdateCommentsChecker
 } from '../checkers.js';
 
 const injectNC = inject(NonConformities);
@@ -104,6 +110,60 @@ export const setAnalysisDate = new CheckedMethod({
 
   run({ ...args }, doc) {
     return NonConformitiesService.setAnalysisDate({ ...args }, doc);
+  }
+});
+
+export const setAnalysisCompletedBy = new CheckedMethod({
+  name: 'NonConformities.setAnalysisCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetAnalysisCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return NonConformitiesService.setAnalysisCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setAnalysisCompletedDate = new CheckedMethod({
+  name: 'NonConformities.setAnalysisCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetAnalysisCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return NonConformitiesService.setAnalysisCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setAnalysisComments = new CheckedMethod({
+  name: 'NonConformities.setAnalysisComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetAnalysisCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return NonConformitiesService.setAnalysisComments({ _id, ...args }, doc);
   }
 });
 
@@ -191,6 +251,61 @@ export const setStandardsUpdateDate = new CheckedMethod({
     return NonConformitiesService.setStandardsUpdateDate({ _id, ...args }, doc);
   }
 });
+
+export const setStandardsUpdateCompletedBy = new CheckedMethod({
+  name: 'NonConformities.setStandardsUpdateCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetStandardsUpdateCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return NonConformitiesService.setStandardsUpdateCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setStandardsUpdateCompletedDate = new CheckedMethod({
+  name: 'NonConformities.setStandardsUpdateCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetStandardsUpdateCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return NonConformitiesService.setStandardsUpdateCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setStandardsUpdateComments = new CheckedMethod({
+  name: 'NonConformities.setStandardsUpdateComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectNC(checker)(P_OnSetStandardsUpdateCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return NonConformitiesService.setStandardsUpdateComments({ _id, ...args }, doc);
+  }
+});
+
 
 export const updateViewedBy = new CheckedMethod({
   name: 'NonConformities.updateViewedBy',

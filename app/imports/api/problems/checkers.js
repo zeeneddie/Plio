@@ -12,7 +12,13 @@ import {
   P_STANDARDS_NOT_UPDATED,
   P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_STANDARDS,
   P_CANNOT_SET_DATE_FOR_COMPLETED_STANDARDS,
-  P_AT_LEAST_ONE_ACTION_MUST_BE_CREATED
+  P_AT_LEAST_ONE_ACTION_MUST_BE_CREATED,
+  P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS,
+  P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_STANDARDS,
+  P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS,
+  P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS,
+  P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS,
+  P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS
 } from '../errors.js';
 import { checkAndThrow } from '../helpers.js';
 import { Actions } from '../actions/actions.js';
@@ -37,6 +43,32 @@ export const P_OnCompleteAnalysisChecker = ({ userId }, doc) => {
   checkAndThrow(!P_IsExecutor({ userId }, doc.analysis), P_ANALYSIS_CANNOT_BE_COMPLETED);
 
   checkAndThrow(doc.isAnalysisCompleted(), P_ANALYSIS_ALREADY_COMPLETED);
+
+  return doc;
+};
+
+export const P_OnUndoAnalysisChecker = ({ userId }, doc) => {
+  checkAndThrow(!P_IsExecutor({ userId }, doc.analysis), P_ANALYSIS_CANNOT_BE_UNDONE);
+
+  checkAndThrow(!doc.isAnalysisCompleted(), P_ANALYSIS_NOT_COMPLETED);
+
+  return doc;
+};
+
+export const P_OnSetAnalysisCompletedByChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS);
+
+  return doc
+};
+
+export const P_OnSetAnalysisCompletedDateChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS);
+
+  return doc;
+};
+
+export const P_OnSetAnalysisCommentsChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS);
 
   return doc;
 };
@@ -91,14 +123,6 @@ export const P_OnUndoStandardsUpdateChecker = ({ userId }, doc) => {
   return doc;
 };
 
-export const P_OnUndoAnalysisChecker = ({ userId }, doc) => {
-  checkAndThrow(!P_IsExecutor({ userId }, doc.analysis), P_ANALYSIS_CANNOT_BE_UNDONE);
-
-  checkAndThrow(!doc.isAnalysisCompleted(), P_ANALYSIS_NOT_COMPLETED);
-
-  return doc;
-};
-
 export const P_OnSetStandardsUpdateExecutorChecker = ({ ...args }, doc) => {
   checkAndThrow(doc.areStandardsUpdated(), P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_STANDARDS);
 
@@ -107,6 +131,24 @@ export const P_OnSetStandardsUpdateExecutorChecker = ({ ...args }, doc) => {
 
 export const P_OnSetStandardsUpdateDateChecker = ({ ...args }, doc) => {
   checkAndThrow(doc.areStandardsUpdated(), P_CANNOT_SET_DATE_FOR_COMPLETED_STANDARDS);
+
+  return doc;
+};
+
+export const P_OnSetStandardsUpdateCompletedByChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS);
+
+  return doc
+};
+
+export const P_OnSetStandardsUpdateCompletedDateChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_STANDARDS);
+
+  return doc;
+};
+
+export const P_OnSetStandardsUpdateCommentsChecker = ({ ...args }, doc) => {
+  checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS);
 
   return doc;
 };
