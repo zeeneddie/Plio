@@ -6,7 +6,8 @@
       {{> RCA_TargetDate_Edit
           startDate=defaultTargetDate
           date=this.targetDate
-          onUpdate=onStandardsDateUpdated}}
+          onUpdate=methods.setDate
+          disabled=this.status}}
 
       {{#unless this.status}}
         {{> RCA_ToBeCompletedBy_Edit
@@ -15,8 +16,8 @@
             isButtonVisible=true
             placeholder="Who will do it?"
             label="Who will do it?"
-            onUpdate=onStandardsExecutorUpdated
-            onComplete=onStandardsUpdated}}
+            onUpdate=methods.setExecutor
+            onComplete=methods.complete}}
       {{else}}
         {{> RCA_TargetDate_Edit
             date=this.completedAt
@@ -30,7 +31,7 @@
             key="updateOfStandards.completedBy"
             placeholder="Completed by"
             label="Completed by"
-            onUndo=onStandardsUpdateUndone}}
+            onUndo=methods.undo}}
 
         {{> RCA_Comments_Edit
             comments=this.completionComments

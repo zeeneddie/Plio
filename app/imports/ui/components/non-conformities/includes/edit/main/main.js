@@ -8,6 +8,7 @@ import { isViewed } from '/imports/api/checkers.js';
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: 'organization',
   isStandardsEditable: true,
+  methodrefs: {},
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
@@ -22,6 +23,9 @@ Template.NC_Card_Edit_Main.viewmodel({
   },
   NCGuidelines() {
     return this.organization() && this.organization().ncGuidelines;
+  },
+  getMethodRefs() {
+    return () => this.methodRefs();
   },
   update(...args) {
     this.parent().update(...args);

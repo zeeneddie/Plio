@@ -31,6 +31,18 @@ Template.Risks_Card_Edit.viewmodel({
       riskId: this._id()
     };
   },
+  getMethodRefs() {
+    return () => ({
+      setAnalysisExecutor,
+      setAnalysisDate,
+      completeAnalysis,
+      undoAnalysis,
+      setStandardsUpdateExecutor,
+      setStandardsUpdateDate,
+      updateStandards,
+      undoStandardsUpdate
+    });
+  },
   onUpdateCb() {
     return this.update.bind(this);
   },
@@ -68,72 +80,6 @@ Template.Risks_Card_Edit.viewmodel({
         });
       }
     );
-  },
-  getUpdateAnalysisExecutorFn() {
-    return this.updateAnalysisExecutor.bind(this);
-  },
-  updateAnalysisExecutor({ executor }, cb) {
-    const _id = this._id();
-
-    this.modal().callMethod(setAnalysisExecutor, { _id, executor }, cb)
-  },
-  getUpdateAnalysisDateFn() {
-    return this.updateAnalysisDate.bind(this);
-  },
-  updateAnalysisDate({ date }, cb) {
-    const _id = this._id();
-
-    const { timezone } = this.organization();
-    const tzDate = getTzTargetDate(date, timezone);
-
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
-  },
-  getCompleteAnalysisFn() {
-    return this.completeAnalysis.bind(this);
-  },
-  completeAnalysis({ completionComments }, cb) {
-    const _id = this._id();
-    this.modal().callMethod(completeAnalysis, { _id, completionComments }, cb);
-  },
-  getUndoAnalysisFn() {
-    return this.undoAnalysis.bind(this);
-  },
-  undoAnalysis(cb) {
-    const _id = this._id();
-    this.modal().callMethod(undoAnalysis, { _id }, cb);
-  },
-  getUpdateStandardsExecutorFn() {
-    return this.updateStandardsExecutor.bind(this);
-  },
-  updateStandardsExecutor({ executor }, cb) {
-    const _id = this._id();
-
-    this.modal().callMethod(setStandardsUpdateExecutor, { _id, executor }, cb);
-  },
-  getUpdateStandardsDateFn() {
-    return this.updateStandardsDate.bind(this);
-  },
-  updateStandardsDate({ date }, cb) {
-    const _id = this._id();
-
-    const { timezone } = this.organization();
-    const tzDate = getTzTargetDate(date, timezone);
-
-    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
-  },
-  getUpdateStandardsFn() {
-    return this.updateStandards.bind(this);
-  },
-  updateStandards({ completionComments }, cb) {
-    const _id = this._id();
-    this.modal().callMethod(updateStandards, { _id, completionComments }, cb);
-  },
-  getUndoStandardsUpdateFn() {
-    return this.undoStandardsUpdate.bind(this);
-  },
-  undoStandardsUpdate(cb) {
-    const _id = this._id();
-    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
   },
   showRootCauseAnalysis() {
     return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);

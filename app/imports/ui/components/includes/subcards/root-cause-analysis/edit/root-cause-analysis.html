@@ -3,11 +3,13 @@
       label=RCALabel
       analysis=analysis
       defaultTargetDate=defaultTargetDate
-      isAnalysisCompleted=isAnalysisCompleted}}
+      isAnalysisCompleted=isAnalysisCompleted
+      methods=methods.Analysis}}
   {{#if isAnalysisCompleted}}
     {{> RCA_UOS_Edit
         label=UOSLabel
         updateOfStandards=updateOfStandards
-        defaultTargetDate=defaultTargetDate}}
+        defaultTargetDate=defaultTargetDate
+        methods=methods.UpdateOfStandards}}
   {{/if}}
 </template>

@@ -5,7 +5,8 @@
 
       {{> RCA_TargetDate_Edit
           date=this.targetDate
-          onUpdate=onTargetDateUpdate}}
+          onUpdate=methods.setDate
+          disabled=isAnalysisCompleted}}
 
       {{#unless isAnalysisCompleted}}
         {{> RCA_ToBeCompletedBy_Edit
@@ -14,8 +15,8 @@
             isButtonVisible=true
             placeholder="Who will do it?"
             label="Who will do it?"
-            onUpdate=onUpdateAnalysisExecutor
-            onComplete=onAnalysisCompleted}}
+            onUpdate=methods.setExecutor
+            onComplete=methods.complete}}
       {{else}}
         {{> RCA_TargetDate_Edit
             date=this.completedAt
@@ -29,7 +30,7 @@
             key="analysis.completedBy"
             placeholder="Completed by"
             label="Completed by"
-            onUndo=onAnalysisUndone}}
+            onUndo=methods.undo}}
 
         {{> RCA_Comments_Edit
             comments=this.completionComments
