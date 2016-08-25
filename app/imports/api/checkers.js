@@ -1,10 +1,11 @@
 import { Roles } from 'meteor/alanning:roles';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import moment from 'moment-timezone';
+import curry from 'lodash.curry';
 
 import { UserRoles } from './constants';
 import { Organizations } from './organizations/organizations.js';
-import { AnalysisStatuses, OrgOwnerRoles } from './constants.js';
+import { AnalysisStatuses, UserMembership } from './constants.js';
 import {
   NOT_AN_ORG_MEMBER,
   DOC_NOT_FOUND,
@@ -26,6 +27,13 @@ export * from './standards/checkers.js';
 export * from './organizations/checkers.js';
 
 export * from './occurrences/checkers.js';
+
+export * from './users/checkers.js';
+
+const userIdOrgIdTester = (userId, organizationId) => _.every([
+  SimpleSchema.RegEx.Id.test(userId),
+  SimpleSchema.RegEx.Id.test(organizationId)
+]);
 
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
@@ -59,19 +67,33 @@ export const canDeleteUsers = (userId, organizationId) => {
   );
 };
 
+export const canChangeRoles = (userId, organizationId) => {
+  return Roles.userIsInRole(
+    userId,
+    UserRoles.EDIT_USER_ROLES,
+    organizationId
+  );
+}
+
 export const isOrgOwner = (userId, organizationId) => {
-  return OrgOwnerRoles.every(role => Roles.userIsInRole(userId, role, organizationId));
+  if (!userIdOrgIdTester(userId, organizationId)) return false;
+
+  return !!Organizations.findOne({
+    _id: organizationId,
+    users: {
+      $elemMatch: {
+        userId,
+        role: UserMembership.ORG_OWNER,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  });
 };
 
 export const isOrgMember = (userId, organizationId) => {
-  const areArgsValid = _.every([
-    SimpleSchema.RegEx.Id.test(userId),
-    SimpleSchema.RegEx.Id.test(organizationId)
-  ]);
-
-  if (!areArgsValid) {
-    return false;
-  }
+  if (!userIdOrgIdTester(userId, organizationId)) return false;
 
   return !!Organizations.find({
     _id: organizationId,
@@ -151,9 +173,9 @@ export const isViewed = (doc, userId) => {
   return !!viewedBy.length && viewedBy.includes(userId);
 };
 
-export const checkOrgMembership = (userId, organizationId) => {
+export const checkOrgMembership = curry((userId, organizationId) => {
   return checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER);
-};
+});
 
 export const checkOrgMembershipByDoc = (collection, query, userId) => {
   const doc = Object.assign({}, collection.findOne(query));

@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
+import get from 'lodash.get';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
@@ -98,7 +99,13 @@ const inject = anything => fn => fn(anything);
 
 const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
-const withUserId = fn => userId => inject({ userId })(fn);
+const withUserId = fn => (userId) => {
+  return fn({ userId });
+};
+
+const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
+
+const getF = curry((path, obj) => get(obj, path));
 
 const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
@@ -118,5 +125,7 @@ export {
   checkAndThrow,
   inject,
   injectCurry,
-  withUserId
+  withUserId,
+  mapArgsTo,
+  getF
 };
