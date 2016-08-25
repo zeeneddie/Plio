@@ -12,6 +12,7 @@ import {
   CompleteActionSchema
 } from '../schemas.js';
 import Method, { CheckedMethod } from '../method.js';
+import { inject } from '../helpers.js';
 import {
   checkOrgMembership,
   checkAnalysis,
@@ -27,7 +28,7 @@ import {
   P_OnSetStandardsUpdateDateChecker
 } from '../checkers.js';
 
-const inject = fn => fn(NonConformities);
+const injectNC = inject(NonConformities);
 
 export const insert = new Method({
   name: 'NonConformities.insert',
@@ -61,7 +62,7 @@ export const update = new CheckedMethod({
       };
     };
 
-    inject(checker)(_checker);
+    injectNC(checker)(_checker);
   },
 
   run({ ...args }) {
@@ -82,7 +83,7 @@ export const setAnalysisExecutor = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetAnalysisExecutorChecker),
+  check: checker => injectNC(checker)(P_OnSetAnalysisExecutorChecker),
 
   run({ _id, executor }, doc) {
     return NonConformitiesService.setAnalysisExecutor({ _id, executor }, doc);
@@ -99,7 +100,7 @@ export const setAnalysisDate = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetAnalysisDateChecker),
+  check: checker => injectNC(checker)(P_OnSetAnalysisDateChecker),
 
   run({ ...args }, doc) {
     return NonConformitiesService.setAnalysisDate({ ...args }, doc);
@@ -111,7 +112,7 @@ export const completeAnalysis = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check: checker => inject(checker)(P_OnCompleteAnalysisChecker),
+  check: checker => injectNC(checker)(P_OnCompleteAnalysisChecker),
 
   run({ _id, completionComments }) {
     return NonConformitiesService.completeAnalysis({ _id, completionComments, userId: this.userId });
@@ -123,7 +124,7 @@ export const updateStandards = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check: checker => inject(checker)(P_OnStandardsUpdateChecker),
+  check: checker => injectNC(checker)(P_OnStandardsUpdateChecker),
 
   run({ _id, completionComments }) {
     return NonConformitiesService.updateStandards({ _id, completionComments, userId: this.userId });
@@ -135,7 +136,7 @@ export const undoStandardsUpdate = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(P_OnUndoStandardsUpdateChecker),
+  check: checker => injectNC(checker)(P_OnUndoStandardsUpdateChecker),
 
   run({ _id }) {
     return NonConformitiesService.undoStandardsUpdate({ _id, userId: this.userId });
@@ -147,7 +148,7 @@ export const undoAnalysis = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(P_OnUndoAnalysisChecker),
+  check: checker => injectNC(checker)(P_OnUndoAnalysisChecker),
 
   run({ _id }) {
     return NonConformitiesService.undoAnalysis({ _id, userId: this.userId });
@@ -167,7 +168,7 @@ export const setStandardsUpdateExecutor = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetStandardsUpdateExecutorChecker),
+  check: checker => injectNC(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
   run({ _id, executor }, doc) {
     return NonConformitiesService.setStandardsUpdateExecutor({ _id, executor }, doc);
@@ -184,7 +185,7 @@ export const setStandardsUpdateDate = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetStandardsUpdateDateChecker),
+  check: checker => injectNC(checker)(P_OnSetStandardsUpdateDateChecker),
 
   run({ _id, ...args }, doc) {
     return NonConformitiesService.setStandardsUpdateDate({ _id, ...args }, doc);
@@ -196,7 +197,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectNC(checker),
 
   run({ _id }) {
     return NonConformitiesService.updateViewedBy({ _id, viewedBy: this.userId });
@@ -208,7 +209,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(onRemoveChecker),
+  check: checker => injectNC(checker)(onRemoveChecker),
 
   run({ _id }) {
     return NonConformitiesService.remove({ _id, deletedBy: this.userId });
@@ -220,7 +221,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(onRestoreChecker),
+  check: checker => injectNC(checker)(onRestoreChecker),
 
   run({ _id }) {
     return NonConformitiesService.restore({ _id });

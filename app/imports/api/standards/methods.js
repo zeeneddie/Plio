@@ -21,10 +21,10 @@ import {
   S_EnsureCanChange,
   S_EnsureCanChangeChecker
 } from '../checkers.js';
-import { chain, chainCheckers } from '../helpers.js';
+import { chain, chainCheckers, inject } from '../helpers.js';
 import Method, { CheckedMethod } from '../method.js';
 
-const inject = fn => fn(Standards);
+const injectSTD = inject(Standards);
 
 export const insert = new Method({
   name: 'Standards.insert',
@@ -45,7 +45,7 @@ export const update = new CheckedMethod({
     IdSchema, StandardsUpdateSchema, optionsSchema
   ]).validator(),
 
-  check: checker => inject(checker)(S_EnsureCanChangeChecker),
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ ...args }) {
     return StandardsService.update({ ...args });
@@ -57,7 +57,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(S_EnsureCanChangeChecker),
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ _id }) {
     return StandardsService.updateViewedBy({ _id, userId: this.userId });
@@ -69,7 +69,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(chainCheckers(S_EnsureCanChangeChecker, onRemoveChecker)),
+  check: checker => injectSTD(checker)(chainCheckers(S_EnsureCanChangeChecker, onRemoveChecker)),
 
   run({ _id }) {
     return StandardsService.remove({ _id, deletedBy: this.userId });
@@ -81,7 +81,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(chainCheckers(S_EnsureCanChangeChecker, onRestoreChecker)),
+  check: checker => injectSTD(checker)(chainCheckers(S_EnsureCanChangeChecker, onRestoreChecker)),
 
   run({ _id }) {
     return StandardsService.restore({ _id });
@@ -96,7 +96,7 @@ export const addedToNotifyList = new Method({
     UserIdSchema
   ]).validator(),
 
-  check: checker => inject(checker)(S_EnsureCanChangeChecker),
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ standardId, userId }) {
     if (this.isSimulation) {

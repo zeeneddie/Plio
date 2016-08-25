@@ -27,8 +27,9 @@ import {
   P_OnSetStandardsUpdateDateChecker
 } from '../checkers.js';
 import { ACCESS_DENIED } from '../errors.js';
+import { inject } from '../helpers.js';
 
-const inject = fn => fn(Risks);
+const injectRK = inject(Risks);
 
 export const insert = new Method({
   name: 'Risks.insert',
@@ -65,7 +66,7 @@ export const update = new CheckedMethod({
       };
     };
 
-    return inject(checker)(_checker);
+    return injectRK(checker)(_checker);
   },
 
   run({ ...args }) {
@@ -86,7 +87,7 @@ export const setAnalysisExecutor = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetAnalysisExecutorChecker),
+  check: checker => injectRK(checker)(P_OnSetAnalysisExecutorChecker),
 
   run({ _id, executor }, doc) {
     return RisksService.setAnalysisExecutor({ _id, executor }, doc);
@@ -103,7 +104,7 @@ export const setAnalysisDate = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetAnalysisDateChecker),
+  check: checker => injectRK(checker)(P_OnSetAnalysisDateChecker),
 
   run({ ...args }, doc) {
     return RisksService.setAnalysisDate({ ...args }, doc);
@@ -115,7 +116,7 @@ export const completeAnalysis = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check: checker => inject(checker)(P_OnCompleteAnalysisChecker),
+  check: checker => injectRK(checker)(P_OnCompleteAnalysisChecker),
 
   run({ _id, completionComments }) {
     return RisksService.completeAnalysis({ _id, completionComments, userId: this.userId });
@@ -127,7 +128,7 @@ export const updateStandards = new CheckedMethod({
 
   validate: CompleteActionSchema.validator(),
 
-  check: checker => inject(checker)(P_OnStandardsUpdateChecker),
+  check: checker => injectRK(checker)(P_OnStandardsUpdateChecker),
 
   run({ _id, completionComments }) {
     return RisksService.updateStandards({ _id, completionComments, userId: this.userId });
@@ -139,7 +140,7 @@ export const undoStandardsUpdate = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(P_OnUndoStandardsUpdateChecker),
+  check: checker => injectRK(checker)(P_OnUndoStandardsUpdateChecker),
 
   run({ _id }) {
     return RisksService.undoStandardsUpdate({ _id, userId: this.userId });
@@ -151,7 +152,7 @@ export const undoAnalysis = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(P_OnUndoAnalysisChecker),
+  check: checker => injectRK(checker)(P_OnUndoAnalysisChecker),
 
   run({ _id }) {
     return RisksService.undoAnalysis({ _id, userId: this.userId });
@@ -171,7 +172,7 @@ export const setStandardsUpdateExecutor = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetStandardsUpdateExecutorChecker),
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
   run({ _id, executor }, doc) {
     return RisksService.setStandardsUpdateExecutor({ _id, executor }, doc);
@@ -188,7 +189,7 @@ export const setStandardsUpdateDate = new CheckedMethod({
     }
   ]).validator(),
 
-  check: checker => inject(checker)(P_OnSetStandardsUpdateDateChecker),
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateDateChecker),
 
   run({ ...args }, doc) {
     return RisksService.setStandardsUpdateDate({ ...args }, doc);
@@ -200,7 +201,7 @@ export const updateViewedBy = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectRK(checker),
 
   run({ _id }) {
     return RisksService.updateViewedBy({ _id, viewedBy: this.userId });
@@ -212,7 +213,7 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(onRemoveChecker),
+  check: checker => injectRK(checker)(onRemoveChecker),
 
   run({ _id }) {
     return RisksService.remove({ _id, deletedBy: this.userId });
@@ -224,7 +225,7 @@ export const restore = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check: checker => inject(checker)(onRestoreChecker),
+  check: checker => injectRK(checker)(onRestoreChecker),
 
   run({ _id }) {
     return RisksService.restore({ _id });
@@ -236,7 +237,7 @@ export const insertScore = new CheckedMethod({
 
   validate: new SimpleSchema([IdSchema, RiskScoreSchema]).validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectRK(checker),
 
   run({ ...args }) {
     return RisksService['scores.insert']({ ...args });
@@ -252,7 +253,7 @@ export const removeScore = new CheckedMethod({
     }
   }]).validator(),
 
-  check: checker => inject(checker),
+  check: checker => injectRK(checker),
 
   run({ _id, score }) {
     return RisksService['scores.remove']({ _id, score });
