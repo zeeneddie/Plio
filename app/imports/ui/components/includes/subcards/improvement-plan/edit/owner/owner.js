@@ -14,7 +14,7 @@ Template.IP_Owner_Edit.viewmodel({
 
     this.owner(owner);
 
-    this.parent().update({ owner }, cb);
+    this.parent().update({ 'improvementPlan.owner': owner }, cb);
   },
   getData() {
     const { owner } = this.data();

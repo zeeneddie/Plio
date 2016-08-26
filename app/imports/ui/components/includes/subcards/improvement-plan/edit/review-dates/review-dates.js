@@ -33,7 +33,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
     const _id = Random.id();
 
     options['$addToSet'] = {
-      'reviewDates': { _id, date }
+      'improvementPlan.reviewDates': { _id, date }
     };
 
     if (this.parent().doc()) {
@@ -44,7 +44,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
   },
   set({ _id, date }, cb) {
     const query = {
-      'reviewDates': {
+      'improvementPlan.reviewDates': {
         $elemMatch: { _id }
       }
     };
@@ -52,7 +52,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
     const options = {};
 
     options['$set'] = {
-      'reviewDates.$.date': date
+      'improvementPlan.reviewDates.$.date': date
     }
 
     this.parent().update({ query, options }, cb);
@@ -76,7 +76,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
     }, () => {
       const options = {
         $pull: {
-          reviewDates: { _id }
+          'improvementPlan.reviewDates': { _id }
         }
       };
 

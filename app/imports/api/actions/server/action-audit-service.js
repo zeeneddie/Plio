@@ -1,6 +1,6 @@
 import { CollectionNames, ProblemTypes } from '../../constants.js';
-import AuditService from '/imports/core/server/audit/audit-service.js';
-import ActionUpdateAudit from './ActionUpdateAudit.js';
+import AuditService from '../../base-audit-service.js';
+import ActionUpdateAudit from '/imports/core/audit/server/ActionUpdateAudit.js';
 
 
 export default _.extend({}, AuditService, {
@@ -12,7 +12,7 @@ export default _.extend({}, AuditService, {
     const { linkedTo, createdAt, createdBy, sequentialId, title } = newDocument;
 
     const logs = [];
-    const logMessage = `${sequentialId} "${title}" linked`;
+    const logMessage = `${sequentialId} "${title}" was linked to this document`;
 
     _(linkedTo).each(({ documentId, documentType }) => {
       const collections = {
