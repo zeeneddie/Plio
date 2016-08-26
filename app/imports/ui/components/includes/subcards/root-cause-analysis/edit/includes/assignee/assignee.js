@@ -24,7 +24,7 @@ Template.RCA_ToBeCompletedBy_Edit.viewmodel({
 
       this.assignee(executor);
 
-      this.onUpdate({ executor }, err => err && this.assignee(currentAssignee));
+      this.onUpdate({ executor }, err => err && this.assignee(currentAssignee) && false);
     };
   },
   onComplete() {},

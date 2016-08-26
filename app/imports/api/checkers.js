@@ -170,7 +170,7 @@ export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }
 
 export const isViewed = (doc, userId) => {
   const { viewedBy = [] } = Object.assign({}, doc);
-  return !!viewedBy.length && viewedBy.includes(userId);
+  return viewedBy.includes(userId);
 };
 
 export const checkOrgMembership = curry((userId, organizationId) => {
@@ -212,14 +212,16 @@ export const exists = collection => fn => (...args) => {
   return compose(injectCurry(collection, checkDocExistance), fn)(...args);
 };
 
-export const onRemoveChecker = ({ userId }, doc) => {
-  checkAndThrow(doc.isDeleted && !isOrgOwner(userId, doc.organizationId), ONLY_ORG_OWNER_CAN_DELETE);
+export const wrap = curry((predicate, error) => curry((args, doc) => {
+  checkAndThrow(predicate(args, doc), error);
 
   return doc;
-};
+}));
 
-export const onRestoreChecker = ({ userId }, doc) => {
-  checkAndThrow(!doc.isDeleted, CANNOT_RESTORE_NOT_DELETED);
+export const onRemoveChecker = wrap(({ userId }, doc) => {
+  return doc.isDeleted && !isOrgOwner(userId, doc.organizationId);
+}, ONLY_ORG_OWNER_CAN_DELETE);
 
-  return doc;
-};
+export const onRestoreChecker = wrap((_, doc) => {
+  return !doc.isDeleted;
+}, CANNOT_RESTORE_NOT_DELETED);

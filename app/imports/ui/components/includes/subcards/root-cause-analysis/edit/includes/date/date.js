@@ -18,7 +18,7 @@ Template.RCA_TargetDate_Edit.viewmodel({
 
       this.date(date);
 
-      this.onUpdate({ date }, err => err && this.date(currentDate));
+      this.onUpdate({ date }, err => err && this.date(currentDate) && false);
     };
   },
   getData() {

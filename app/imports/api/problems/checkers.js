@@ -1,4 +1,5 @@
 import {
+  ONLY_OWNER_CAN_CHANGE,
   P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_ANALYSIS,
   P_CANNOT_SET_DATE_FOR_COMPLETED_ANALYSIS,
   P_ANALYSIS_CANNOT_BE_COMPLETED,
@@ -22,6 +23,22 @@ import {
 } from '../errors.js';
 import { checkAndThrow } from '../helpers.js';
 import { Actions } from '../actions/actions.js';
+import { isOrgOwner } from '../checkers.js';
+import { getAnalysisCompletedBy } from '../helpers.js';
+
+const { compose } = _;
+
+export const P_isOwnerChecker = ({ userId } = {}, doc = {}) => {
+  const { organizationId } = doc;
+  const predicate = _.every([
+    !isOrgOwner(userId, organizationId),
+    !Object.is(userId, getAnalysisCompletedBy(doc))
+  ]);
+
+  checkAndThrow(predicate, ONLY_OWNER_CAN_CHANGE);
+
+  return doc;
+};
 
 export const P_IsExecutor = ({ userId } = {}, { executor } = {}) => {
   return Object.is(userId, executor);
@@ -56,18 +73,24 @@ export const P_OnUndoAnalysisChecker = ({ userId }, doc) => {
 };
 
 export const P_OnSetAnalysisCompletedByChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS);
 
   return doc
 };
 
 export const P_OnSetAnalysisCompletedDateChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS);
 
   return doc;
 };
 
 export const P_OnSetAnalysisCommentsChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS);
 
   return doc;
@@ -136,18 +159,24 @@ export const P_OnSetStandardsUpdateDateChecker = ({ ...args }, doc) => {
 };
 
 export const P_OnSetStandardsUpdateCompletedByChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS);
 
   return doc
 };
 
 export const P_OnSetStandardsUpdateCompletedDateChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_STANDARDS);
 
   return doc;
 };
 
 export const P_OnSetStandardsUpdateCommentsChecker = ({ ...args }, doc) => {
+  P_isOwnerChecker({ ...args }, doc);
+
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS);
 
   return doc;
