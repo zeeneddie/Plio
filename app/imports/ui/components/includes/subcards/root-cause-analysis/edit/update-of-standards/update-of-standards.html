@@ -23,6 +23,7 @@
             date=this.completedAt
             placeholder="Completed date"
             label="Completed date"
+            disabled=areCompletionFieldsDisabled
             onUpdate=methods.setCompletedDate}}
 
         {{> RCA_ToBeCompletedBy_Edit
@@ -30,11 +31,13 @@
             isButtonVisible=false
             placeholder="Completed by"
             label="Completed by"
+            disabled=areCompletionFieldsDisabled
             onUpdate=methods.setCompletedBy
             onUndo=methods.undo}}
 
         {{> RCA_Comments_Edit
             comments=this.completionComments
+            disabled=areCompletionFieldsDisabled
             onUpdate=methods.setComments}}
       {{/unless}}
     {{/with}}

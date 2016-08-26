@@ -24,16 +24,20 @@ import {
 import { checkAndThrow } from '../helpers.js';
 import { Actions } from '../actions/actions.js';
 import { isOrgOwner } from '../checkers.js';
-import { getAnalysisCompletedBy } from '../helpers.js';
 
 const { compose } = _;
 
-export const P_isOwnerChecker = ({ userId } = {}, doc = {}) => {
-  const { organizationId } = doc;
-  const predicate = _.every([
-    !isOrgOwner(userId, organizationId),
-    !Object.is(userId, getAnalysisCompletedBy(doc))
-  ]);
+export const P_IsAnalysisOwner = (userId, organizationId, {
+  status,
+  completedBy,
+  completedAt
+} = {}) => (status === 1) && completedBy && completedAt && _.some([
+  isOrgOwner(userId, organizationId),
+  Object.is(userId, completedBy)
+]);
+
+export const P_EnsureIsAnalysisOwner = (userId, organizationId, doc = {}) => {
+  const predicate = !P_IsAnalysisOwner(userId, organizationId, doc);
 
   checkAndThrow(predicate, ONLY_OWNER_CAN_CHANGE);
 
@@ -65,31 +69,33 @@ export const P_OnCompleteAnalysisChecker = ({ userId }, doc) => {
 };
 
 export const P_OnUndoAnalysisChecker = ({ userId }, doc) => {
-  checkAndThrow(!P_IsExecutor({ userId }, doc.analysis), P_ANALYSIS_CANNOT_BE_UNDONE);
-
   checkAndThrow(!doc.isAnalysisCompleted(), P_ANALYSIS_NOT_COMPLETED);
+
+  checkAndThrow(doc.areStandardsUpdated(), P_ANALYSIS_CANNOT_BE_UNDONE);
+
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.analysis);
 
   return doc;
 };
 
-export const P_OnSetAnalysisCompletedByChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
-
+export const P_OnSetAnalysisCompletedByChecker = ({ userId }, doc) => {
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS);
+
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.analysis);
 
   return doc
 };
 
-export const P_OnSetAnalysisCompletedDateChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
+export const P_OnSetAnalysisCompletedDateChecker = ({ userId }, doc) => {
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.analysis);
 
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS);
 
   return doc;
 };
 
-export const P_OnSetAnalysisCommentsChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
+export const P_OnSetAnalysisCommentsChecker = ({ userId }, doc) => {
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.analysis);
 
   checkAndThrow(!doc.isAnalysisCompleted(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS);
 
@@ -139,7 +145,7 @@ export const P_OnStandardsUpdateChecker = ({ userId }, doc) => {
 };
 
 export const P_OnUndoStandardsUpdateChecker = ({ userId }, doc) => {
-  checkAndThrow(!P_IsExecutor({ userId }, doc.updateOfStandards), P_STANDARDS_CANNOT_BE_UNDONE);
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.updateOfStandards);
 
   checkAndThrow(!doc.areStandardsUpdated(), P_STANDARDS_NOT_UPDATED);
 
@@ -158,24 +164,24 @@ export const P_OnSetStandardsUpdateDateChecker = ({ ...args }, doc) => {
   return doc;
 };
 
-export const P_OnSetStandardsUpdateCompletedByChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
+export const P_OnSetStandardsUpdateCompletedByChecker = ({ userId }, doc) => {
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.updateOfStandards);
 
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS);
 
   return doc
 };
 
-export const P_OnSetStandardsUpdateCompletedDateChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
+export const P_OnSetStandardsUpdateCompletedDateChecker = ({ userId }, doc) => {
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.updateOfStandards);
 
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_STANDARDS);
 
   return doc;
 };
 
-export const P_OnSetStandardsUpdateCommentsChecker = ({ ...args }, doc) => {
-  P_isOwnerChecker({ ...args }, doc);
+export const P_OnSetStandardsUpdateCommentsChecker = ({ userId }, doc) => {
+  P_EnsureIsAnalysisOwner(userId, doc.organizationId, doc.updateOfStandards);
 
   checkAndThrow(!doc.areStandardsUpdated(), P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS);
 

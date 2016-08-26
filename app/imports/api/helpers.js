@@ -111,12 +111,6 @@ const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
-const getAnalysisCompletedBy = (doc = {}) => {
-  return doc.isAnalysisCompleted() && doc.areStandardsUpdated();
-    ? get(doc.updateOfStandards, 'completedBy')
-    : get(doc.analysis, 'completedBy');
-};
-
 export {
   compareDates,
   getCollectionByName,
@@ -130,6 +124,5 @@ export {
   inject,
   injectCurry,
   withUserId,
-  mapArgsTo,
-  getAnalysisCompletedBy
+  mapArgsTo
 };

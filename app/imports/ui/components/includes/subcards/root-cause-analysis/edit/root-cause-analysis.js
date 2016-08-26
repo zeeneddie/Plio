@@ -4,9 +4,10 @@ import curry from 'lodash.curry';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
+import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 
 Template.Subcards_RCA_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'date', 'modal'],
+  mixin: ['organization', 'nonconformity', 'date', 'modal', 'utils'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
     const found = _.keys(workflowDefaults)
@@ -24,10 +25,12 @@ Template.Subcards_RCA_Edit.viewmodel({
   magnitude: '',
   analysis: '',
   updateOfStandards: '',
-  isAnalysisCompleted() {
-    const status = get(this.analysis(), 'status');
+  isCompleted({ status } = {}) {
     const completed = parseInt(get(_.invert(AnalysisStatuses), 'Completed'), 10);
     return Object.is(status, completed);
+  },
+  isCurrentOwner(doc) {
+    return P_IsAnalysisOwner(Meteor.userId(), this.organizationId(), doc);
   },
   methods() {
     const _id = this._id();
