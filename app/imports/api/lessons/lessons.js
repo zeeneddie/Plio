@@ -1,7 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 
 import { LessonsSchema } from './lessons-schema.js';
-import LessonAuditService from './lesson-audit-service.js';
+
+if (Meteor.isServer) {
+  import LessonAuditService from './server/lesson-audit-service.js';
+}
 
 
 const LessonsLearned = new Mongo.Collection('LessonsLearned');

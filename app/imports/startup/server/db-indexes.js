@@ -1,5 +1,4 @@
 import { Departments } from '/imports/api/departments/departments.js';
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
@@ -12,12 +11,6 @@ import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 // indexes for Departments
 Departments._ensureIndex({
   organizationId: 1
-});
-
-
-// indexes for ImprovementPlans
-ImprovementPlans._ensureIndex({
-  standardId: 1
 });
 
 

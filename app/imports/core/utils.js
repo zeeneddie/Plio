@@ -44,5 +44,13 @@ export default Utils = {
     });
 
     return last ? last.serialNumber + 1 : defaultNumber;
+  },
+
+  inherit(base, mixins) {
+    let result = base;
+
+    _(mixins).each(mixin => result = mixin(result));
+
+    return result;
   }
 }

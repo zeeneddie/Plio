@@ -73,6 +73,24 @@ Template.NC_Card_Edit.viewmodel({
       updateFn();
     }
   },
+  getMethodRefs() {
+    return () => ({
+      setAnalysisExecutor,
+      setAnalysisDate,
+      completeAnalysis,
+      undoAnalysis,
+      setStandardsUpdateExecutor,
+      setStandardsUpdateDate,
+      updateStandards,
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
+    });
+  },
   remove() {
     const { title } = this.NC();
     const _id = this._id();
