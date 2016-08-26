@@ -35,3 +35,26 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 		// viewedBy: { $ne: this.userId }
   }));
 });
+
+// Unread messages by the logged in user, with info about users that created
+// the messages.
+Meteor.publish('unreadMessagesWithCreatorsInfo', function() {
+  const userId = this.userId;
+
+	if(!userId){
+		return this.ready();
+	}
+
+	const msgs = Messages.find({ viewedBy: { $nin: [userId] } });
+	const userIds = msgs.map((msg) => {
+		return msg.createdBy;
+	});
+
+	return [
+		msgs,
+		Meteor.users.find(
+			{ _id: { $in: userIds } },
+			{ fields: { profile: 1 } }
+		)
+	];
+});

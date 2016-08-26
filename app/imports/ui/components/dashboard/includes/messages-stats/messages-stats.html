@@ -1,0 +1,24 @@
+<template name="Dashboard_MessagesStats">
+  <div class="dashboard-stats">
+		<h4 class="dashboard-stats-title">
+		  {{unreadMessages}}
+		  <a href="#" {{b 'click: markMessagesRead'}}>
+        <i class="fa fa-times-circle"></i>
+      </a>
+		</h4>
+
+    {{#each messages}}
+  		<a class="dashboard-stats-message" href="{{this.url}}">
+    		<i class="fa fa-comment"></i>
+    		<strong>{{this.fullName}}:</strong>
+        {{#unless isFile}}
+    		  {{this.message}}
+        {{else}}
+          <span>File message</span>
+        {{/unless}}
+    		<span class="text-muted">{{this.timeString}}</span>
+  		</a>
+    {{/each}}
+	</div>
+  <hr>
+</template>
