@@ -52,6 +52,20 @@ export const UrlSchema = new SimpleSchema({
   }
 });
 
+export const ErrorSchema = new SimpleSchema({
+  'error.error': {
+    type: String,
+    min: 3,
+    max: 50
+  },
+  'error.details': {
+    type: String,
+    optional: true,
+    min: 3,
+    max: 150
+  }
+});
+
 export const ProgressSchema = new SimpleSchema({
   progress: {
     type: Number,

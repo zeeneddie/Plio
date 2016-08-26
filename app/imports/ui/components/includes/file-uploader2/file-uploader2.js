@@ -14,20 +14,6 @@ Template.FileUploader2.viewmodel({
       return data.fileId === fileId;
     });
   },
-  progress(fileId) {
-    const uploadData = this.uploadData(fileId);
-    const uploader = uploadData && uploadData.uploader;
-    let progress = uploader && uploader.progress();
-
-    if (!uploader) {
-      progress = 100;
-    }
-
-    return _.isFinite(progress) ? Math.round(progress * 100) : 0;
-  },
-  fileName() {
-    return this.attachmentFile() && this.attachmentFile().name;
-  },
   upload() {
     const self = this;
     const file = this.attachmentFile();

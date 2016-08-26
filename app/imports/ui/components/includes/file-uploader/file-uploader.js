@@ -4,28 +4,15 @@ import { ReactiveArray } from 'meteor/manuel:reactivearray';
 import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 
 Template.FileUploader.viewmodel({
+  share: ['uploader'],
   mixin: ['modal', 'organization'],
 
   attachmentFile: null,
-  uploads: new ReactiveArray(),
+  
   uploadData(fileId) {
     return _.find(this.uploads().array(), (data) => {
       return data.fileId === fileId;
     });
-  },
-  progress(fileId) {
-    const uploadData = this.uploadData(fileId);
-    const uploader = uploadData && uploadData.uploader;
-    let progress = uploader && uploader.progress();
-
-    if (!uploader) {
-      progress = this.isFileUploading() ? 100 : 0;
-    }
-
-    return _.isFinite(progress) ? Math.round(progress * 100) : 0;
-  },
-  fileName() {
-    return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
     const file = this.attachmentFile();

@@ -22,6 +22,12 @@ export const FileIdsSchema = new SimpleSchema([
     url: {
       type: String,
       optional: true
+    },
+
+    // 'uploading'/'uploaded'/'terminated'/'failed'
+    status: {
+      type: String,
+      defaultValue: 'in-progress'
     }
   }
 ]);
