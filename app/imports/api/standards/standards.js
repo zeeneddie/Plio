@@ -3,7 +3,10 @@ import { Mongo } from 'meteor/mongo';
 
 import { StandardsSchema } from './standards-schema.js';
 import { CollectionNames } from '../constants.js';
-import StandardAuditService from './standard-audit-service.js';
+
+if (Meteor.isServer) {
+  import StandardAuditService from './server/standard-audit-service.js';
+}
 
 
 const Standards = new Mongo.Collection(CollectionNames.STANDARDS);

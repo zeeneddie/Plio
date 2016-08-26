@@ -3,9 +3,9 @@ import { NonConformities } from '/imports/api/non-conformities/non-conformities.
 import { Risks } from '/imports/api/risks/risks.js';
 import { WorkflowTypes } from '/imports/api/constants.js';
 
-import ActionWorkflow from '/imports/api/actions/ActionWorkflow.js';
-import NCWorkflow from '/imports/api/non-conformities/NCWorkflow.js';
-import RiskWorkflow from '/imports/api/risks/RiskWorkflow.js';
+import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
+import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
+import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 
 
 SyncedCron.add({

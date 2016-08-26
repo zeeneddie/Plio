@@ -19,7 +19,6 @@ Template.StandardsPage.viewmodel({
       const arrDiscussionIds = this._getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
-        template.subscribe('standardImprovementPlan', standardId),
         template.subscribe('nonConformitiesByStandardId', standardId),
         template.subscribe('workItems', organizationId),
         CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)

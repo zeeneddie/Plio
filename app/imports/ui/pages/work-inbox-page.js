@@ -16,7 +16,5 @@ Template.WorkInbox_Page.viewmodel({
     template.subscribe('riskTypes', _id);
     template.subscribe('standards', _id);
     template.subscribe('occurrencesByNCIds', NCIds);
-    template.subscribe('NCImprovementPlan', linkedDocId);
-    template.subscribe('riskImprovementPlan', linkedDocId);
   }
 });
