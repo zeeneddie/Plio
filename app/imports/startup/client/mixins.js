@@ -913,6 +913,9 @@ ViewModel.mixin({
   	}
   },
   messages: {
+    _getMessages({ query, options }){
+      return Messages.find(query, options);
+    },
     _getMessageByDiscussionId(discussionId, protection = {}) {
       return Messages.findOne({ discussionId }, protection);
     },

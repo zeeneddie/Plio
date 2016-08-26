@@ -19,7 +19,7 @@ Template.DiscussionsFileUploader.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
-    console.log('uploadData', uploadData);
+    
     if (!uploader) {
       progress = 0;
     }
@@ -34,7 +34,7 @@ Template.DiscussionsFileUploader.viewmodel({
     const fileMaxSize = Meteor.settings.public.discussionsFilesMaxSize;// 10485760 - 10 MB,
     const files = this.attachmentFiles();
     let areBadFiles = false; // are there any files which can not be allowed for downloading
-    
+
     if (!files.length) {
       return;
     }
