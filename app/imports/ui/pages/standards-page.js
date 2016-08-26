@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 
+
 Template.StandardsPage.viewmodel({
   share: 'window',
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
@@ -19,7 +20,6 @@ Template.StandardsPage.viewmodel({
       const arrDiscussionIds = this._getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
-        template.subscribe('standardImprovementPlan', standardId),
         template.subscribe('nonConformitiesByStandardId', standardId),
         template.subscribe('workItems', organizationId),
         CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
@@ -34,7 +34,7 @@ Template.StandardsPage.viewmodel({
 
           _subHandlers = _subHandlers.concat([
             DiscussionSubs.subscribe('discussionsByStandardId', standardId),
-            MessageSubs.subscribe('messagesByDiscussionIds', arrDiscussionIds, params)
+            // MessageSubs.subscribe('messagesByDiscussionIds', arrDiscussionIds, params)
           ]);
         });
       }

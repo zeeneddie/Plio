@@ -365,15 +365,27 @@ const RiskEvaluationDecisions = {
   'terminate': 'Terminate'
 };
 
+const CollectionNames = {
+  STANDARDS: 'Standards',
+  NCS: 'NonConformities',
+  RISKS: 'Risks',
+  ACTIONS: 'Actions',
+  LESSONS: 'LessonsLearned',
+  OCCURRENCES: 'Occurrences'
+};
+
 const TruncatedStringLengths = {
   c40: 40
 };
+
+const SystemName = 'Plio';
 
 export {
   ActionTypes,
   ActionStatuses,
   ActionPlanOptions,
   ActionUndoTimeInHours,
+  CollectionNames,
   DefaultStandardTypes,
   ProblemGuidelineTypes,
   ProblemsStatuses,
@@ -403,5 +415,6 @@ export {
   WorkItemsStore,
   RKTypes,
   TruncatedStringLengths,
-  WorkflowTypes
+  WorkflowTypes,
+  SystemName
 };

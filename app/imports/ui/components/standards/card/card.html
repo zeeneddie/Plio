@@ -13,7 +13,7 @@
                 {{#unless isDiscussionOpened}}
                   <a class="btn btn-secondary"
                     {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
-    								<i class="fa fa-comments"></i>
+    								Discuss
                     {{#if messagesNotViewedCount}}
     								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
                     {{/if}}
@@ -117,7 +117,7 @@
                   type=ActionTypes.PREVENTATIVE_ACTION
                   standardId=this._id}}
 
-              {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+              {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
 
               {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>

@@ -1,5 +1,7 @@
 import '../../api/actions';
 
+import '../../api/audit-logs';
+
 import '../../api/organizations';
 
 import '../../api/departments';
@@ -17,8 +19,6 @@ import '../../api/users';
 import '../../api/standards';
 
 import '../../api/lessons';
-
-import '../../api/improvement-plans';
 
 import '../../api/risks';
 

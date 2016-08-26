@@ -28,7 +28,7 @@ Template.Discussion_Message.viewmodel({
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-		return ViewModel.findOne('FileUploader2');
+		return ViewModel.findOne('DiscussionsFileUploader');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();

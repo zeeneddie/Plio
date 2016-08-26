@@ -1,6 +1,9 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
+import {
+  BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
+  ImprovementPlanSchema
+} from '../schemas.js';
 import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
@@ -79,6 +82,10 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
+      optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
       optional: true
     }
   }

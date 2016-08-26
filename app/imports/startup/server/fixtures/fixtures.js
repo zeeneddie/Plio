@@ -11,12 +11,11 @@ import { Actions } from '/imports/api/actions/actions.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 
 // Extend the global object to have a scope of collections
-_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, ImprovementPlans, LessonsLearned, Discussions });
+_.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });
 
 import path from 'path';
 import fs from 'fs';

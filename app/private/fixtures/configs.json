@@ -10,7 +10,7 @@
   "RiskTypes": "riskTypes",
   "Risks": "risks",
   "WorkItems": "workItems",
-  "ImprovementPlans": "improvementPlans",
   "LessonsLearned": "lessonsLearned",
-  "Discussions": "discussions"
+  "Discussions": "discussions",
+  "LessonsLearned": "lessonsLearned"
 }

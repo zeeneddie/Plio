@@ -4,7 +4,8 @@ import {
   BaseEntitySchema,
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
-  ReviewSchema
+  ReviewSchema,
+  ImprovementPlanSchema
 } from '../schemas.js';
 import {
   ProblemsStatuses,
@@ -49,9 +50,10 @@ const RiskScoreSchema = new SimpleSchema({
   }
 });
 
- const RiskScoresSchema = new SimpleSchema({
+const RiskScoresSchema = new SimpleSchema({
   scores: {
     type: [RiskScoreSchema],
+    defaultValue: [],
     optional: true
   }
 });
@@ -151,6 +153,10 @@ const RisksUpdateSchema = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
+      optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
       optional: true
     }
   }

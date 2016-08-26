@@ -2,12 +2,15 @@ import { Actions } from './actions.js';
 import { ActionTypes, ProblemTypes, WorkflowTypes, WorkItemsStore } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
-import ActionWorkflow from './ActionWorkflow.js';
-import NCWorkflow from '../non-conformities/NCWorkflow.js';
-import RiskWorkflow from '../risks/RiskWorkflow.js';
 import Utils from '/imports/core/utils.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
+
+if (Meteor.isServer) {
+  import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
+  import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
+  import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+}
 
 
 export default {
@@ -283,7 +286,8 @@ export default {
       _id
     }, {
       $set: {
-        isVerified: false
+        isVerified: false,
+        isVerifiedAsEffective: false
       },
       $unset: {
         verifiedBy: '',

@@ -1,10 +1,42 @@
 import { Meteor } from 'meteor/meteor';
+import property from 'lodash.property';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
 import { isOrgMember } from '../../checkers.js';
 import { Match } from 'meteor/check';
 import Counter from '../../counter/server.js';
+
+Meteor.publish('messages', function(discussionId, {
+	limit = 50,
+	sort = { createdAt: -1 },
+	at = null
+} = {}) {
+	if (at) {
+		const msg = Object.assign({}, Messages.findOne({ _id: at }));
+		const getMsgs = (initial = {}, direction = -1) => {
+			const sign = direction > 0 ? '$gt' : '$lt';
+			const query = {
+				createdAt: { [sign]: initial.createdAt }
+			};
+			const options = {
+				limit: 25,
+				sort: { createdAt: direction },
+				fields: { _id: 1 }
+			};
+			return Messages.find(query, options);
+		};
+		const prior = getMsgs(msg, -1);
+		const following = getMsgs(msg, 1);
+
+		const msgs = [...prior.fetch(), msg, ...following.fetch()];
+		const ids = msgs.map(property('_id'));
+
+		return Messages.find({ _id: { $in: ids } }, { limit, sort });
+	}
+
+	return Messages.find({ discussionId }, { limit, sort });
+});
 
 Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds, params = { limit: 50 }) {
 	const extractUserIds = (cursors, arrayOfIds = []) => {

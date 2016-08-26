@@ -81,7 +81,7 @@
           {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
 
           {{> Subcards_ImprovementPlan_Read
-              documentId=this._id
+              improvementPlan=this.improvementPlan
               label="Treatment plan"}}
 
           {{> Subcards_Actions_Read
@@ -91,8 +91,6 @@
           {{> Subcards_Actions_Read
               type=ActionTypes.RISK_CONTROL
               documentId=this._id}}
-
-          {{> Subcards_ImprovementPlan_Read documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 

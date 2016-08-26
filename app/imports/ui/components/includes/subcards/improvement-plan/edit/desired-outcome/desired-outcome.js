@@ -10,7 +10,7 @@ Template.IP_DesiredOutcome_Edit.viewmodel({
       if (desiredOutcome === this.templateInstance.data.desiredOutcome) return;
 
       this.parent().desiredOutcome(desiredOutcome);
-      this.parent().update({ desiredOutcome });
+      this.parent().update({ 'improvementPlan.desiredOutcome': desiredOutcome });
     });
   },
   getData() {

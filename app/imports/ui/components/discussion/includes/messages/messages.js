@@ -5,37 +5,45 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
-
+import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
-
 	autorun() {
-		const firstMessage = Object.assign([], this.messages()).find((m, i, arr) => !!arr.length);
+		MessageSubs.subscribe('messages', this.discussionId(), this.options());
 
-		this.templateInstance.subscribe(
-			'messagesByDiscussionIds',
-			[this.discussionId()],
-			{
-				at: get(firstMessage, '_id'),
-				limit: this.limit()
-			}
-		);
+		// const firstMessage = Object.assign([], this.messages()).find((m, i, arr) => !!arr.length);
+
+		// this.templateInstance.subscribe(
+		// 	'messagesByDiscussionIds',
+		// 	[this.discussionId()],
+		// 	{
+		// 		at: get(firstMessage, '_id'),
+		// 		limit: this.limit()
+		// 	}
+		// );
 	},
 
 	onRendered() {
 		const discussionId = this.discussionId();
+		const notifications = this.child('Notifications');
 
 		if (discussionId) {
 			bulkUpdateViewedBy.call({ discussionId });
 		}
+
+		// Subscribe notifications to messages
+		this.notifyOnIncomeMessages();
 	},
-
-	limit: 50,
-
+	options:  {
+		limit: 50,
+		sort: { createdAt: -1 },
+		at: 'vvjMtX7PuXgwKduna'
+	},
   // The _id of the primary discussion for this standardId
 	discussion() {
-		return Discussions.findOne({ _id: this.discussionId() });
+		const discussion = Discussions.findOne({ _id: this.discussionId() });
+		return discussion;
 	},
 	getStartedByText() {
 		const creator = Meteor.users.findOne({ _id: get(this.discussion(), 'startedBy') });
@@ -49,8 +57,9 @@ Template.Discussion_Messages.viewmodel({
 			const options = {
   			sort: { createdAt: 1 }
   		};
+			const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
-			return this._getMessagesByDiscussionId(this.discussionId(), options).fetch();
+			return msg.fetch();
 		})();
 
 		const messagesMapped = messages.map((message, i, arr) => {
@@ -112,12 +121,43 @@ Template.Discussion_Messages.viewmodel({
 		const tpl = this.templateInstance;
 
 		if (tpl.$('.infinite-load-older').isAlmostVisible()) {
-			console.log('triggered');
-			console.log(this.limit());
-			this.limit(this.limit() + 50);
+
 	  }
-		// if (tpl.$('.infinite-load-newer').isAlmostVisible()) {
-	  //   this.loadNewer();
-	  // }
-	}, 500)
+	}, 500),
+	loadMore(direction = -1) {
+		const messages = Object.assign([], this.messages());
+		const options = Object.assign({}, this.options());
+		const dir = parseInt(direction, 10);
+		const msg = dir > 0 ? _.last(messages) : _.first(messages);
+		this.options({
+			limit: options.limit + 50,
+			sort: { createdAt: dir },
+			at: get(msg, '_id')
+		});
+		this.options.changed();
+	},
+	notification() {
+		return this.child('Notifications');
+	},
+	notifyOnIncomeMessages() {
+		const self = this;
+		let init = true;
+		const options = {
+			sort: { createdAt: 1 }
+		};
+		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
+
+		msg.observe({
+			added(doc) {
+				if (init) {
+					return;
+				}
+
+				self.notification && self.notification().playSound();
+				init = false;
+			}
+		});
+
+		init = false;
+	}
 });

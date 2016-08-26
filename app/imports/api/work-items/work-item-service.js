@@ -4,7 +4,11 @@ import { Risks } from '../risks/risks.js';
 import { WorkItems } from './work-items.js';
 import BaseEntityService from '../base-entity-service.js';
 import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '../constants.js';
-import WorkItemWorkflow from './WorkItemWorkflow.js';
+
+if (Meteor.isServer) {
+  import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
+}
+
 
 export default {
   collection: WorkItems,
