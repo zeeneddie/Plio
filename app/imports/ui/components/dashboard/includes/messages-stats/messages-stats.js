@@ -48,6 +48,8 @@ Template.Dashboard_MessagesStats.viewmodel({
     return msgs;
   },
   unreadMessages(){
-    return '1 unread message';
+    const msgs = this.messages().length;
+    
+    return `${msgs} unread ${msgs === 1 ? 'message' : 'messages'}`;
   }
 });
