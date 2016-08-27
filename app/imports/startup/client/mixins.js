@@ -238,7 +238,7 @@ ViewModel.mixin({
 
         if (firstName && lastName) {
 
-          // Last name is requires, so it's OK to check both firstName and lastName vars here
+          // Last name is required, so it's OK to check both firstName and lastName vars here
           return disableLastName ? firstName : `${firstName} ${lastName}`;
         } else {
           return user.emails[0].address;

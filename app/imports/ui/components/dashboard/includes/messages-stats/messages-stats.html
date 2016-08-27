@@ -3,9 +3,12 @@
     <div class="dashboard-stats">
   		<h4 class="dashboard-stats-title">
   		  {{unreadMessages}}
-  		  <a href="#" {{b 'click: markMessagesRead'}}>
-          <i class="fa fa-times-circle"></i>
-        </a>
+
+        {{#if messagesCount}}
+    		  <a href="#" {{b 'click: markMessagesRead'}}>
+            <i class="fa fa-times-circle"></i>
+          </a>
+        {{/if}}
   		</h4>
 
       {{#each messages}}
