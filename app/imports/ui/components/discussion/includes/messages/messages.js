@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
+import invoke from 'lodash.invoke';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
@@ -9,22 +11,16 @@ import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
-	autorun() {
-		MessageSubs.subscribe('messages', this.discussionId(), this.options());
+	ready: false,
+	onCreated(template) {
+		this.options({
+			...this.options(),
+			at: FlowRouter.getQueryParam('at')
+		});
 
-		// const firstMessage = Object.assign([], this.messages()).find((m, i, arr) => !!arr.length);
-
-		// this.templateInstance.subscribe(
-		// 	'messagesByDiscussionIds',
-		// 	[this.discussionId()],
-		// 	{
-		// 		at: get(firstMessage, '_id'),
-		// 		limit: this.limit()
-		// 	}
-		// );
+		template.autorun(() => MessageSubs.subscribe('messages', this.discussionId(), this.options()));
 	},
-
-	onRendered() {
+	onRendered(template) {
 		const discussionId = this.discussionId();
 		const notifications = this.child('Notifications');
 
@@ -35,10 +31,9 @@ Template.Discussion_Messages.viewmodel({
 		// Subscribe notifications to messages
 		this.notifyOnIncomeMessages();
 	},
-	options:  {
+	options: {
 		limit: 50,
-		sort: { createdAt: -1 },
-		at: 'vvjMtX7PuXgwKduna'
+		sort: { createdAt: -1 }
 	},
   // The _id of the primary discussion for this standardId
 	discussion() {
@@ -50,7 +45,7 @@ Template.Discussion_Messages.viewmodel({
 		return this.userNameOrEmail(get(creator, '_id'));
 	},
 	getStartedAtText() {
-		return getFormattedDate(this.discussion().startedAt, 'MMMM Do, YYYY');
+		return getFormattedDate(get(this.discussion(), 'startedAt'), 'MMMM Do, YYYY');
 	},
 	messages() {
 		const messages = (() => {
@@ -115,26 +110,33 @@ Template.Discussion_Messages.viewmodel({
 			return Object.assign({}, message, obj);
 		});
 
+		if (messagesMapped.length) {
+			const last = messagesMapped[messagesMapped.length - 1];
+			last.isLast = true;
+		}
+
 		return messagesMapped;
 	},
 	triggerLoadMore: _.throttle(function() {
 		const tpl = this.templateInstance;
 
-		if (tpl.$('.infinite-load-older').isAlmostVisible()) {
-
-	  }
+		if (this.older.isAlmostVisible()) {
+			this.loadMore(-1);
+	  } else if (tpl.$('.infinite-load-newer').isAlmostVisible()) {
+			this.loadMore(1);
+		}
 	}, 500),
 	loadMore(direction = -1) {
 		const messages = Object.assign([], this.messages());
 		const options = Object.assign({}, this.options());
 		const dir = parseInt(direction, 10);
 		const msg = dir > 0 ? _.last(messages) : _.first(messages);
+
 		this.options({
 			limit: options.limit + 50,
 			sort: { createdAt: dir },
 			at: get(msg, '_id')
 		});
-		this.options.changed();
 	},
 	notification() {
 		return this.child('Notifications');

@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import property from 'lodash.property';
+import get from 'lodash.get';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
@@ -17,7 +18,7 @@ Meteor.publish('messages', function(discussionId, {
 		const getMsgs = (initial = {}, direction = -1) => {
 			const sign = direction > 0 ? '$gt' : '$lt';
 			const query = {
-				createdAt: { [sign]: initial.createdAt }
+				createdAt: { [sign]: get(initial, 'createdAt') }
 			};
 			const options = {
 				limit: 25,

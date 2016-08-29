@@ -3,6 +3,7 @@ import Clipboard from 'clipboard';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
+import invoke from 'lodash.invoke';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -10,19 +11,29 @@ import { removeMessageById } from '/imports/api/messages/methods.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 
+const getDOMNodes = template => ({
+	$chat: $(template.firstNode).closest('.chat-content'),
+	$message: template.$('.chat-message-container')
+});
+
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
+	onRendered(template) {
+		const at = FlowRouter.getQueryParam('at');
+		const _id = invoke(this, '_id');
+		const { $chat, $message } = getDOMNodes(template);
+		const msgOffset = $message.offset().top;
 
-	onRendered(tpl) {
-		// if (Messages.findOne({ _id: this._id(), viewedBy: { $ne: Meteor.userId() } })) {
-			const $chat = $(tpl.firstNode).closest('.chat-content');
-			const scrollTo = tpl.$('.chat-message-container');
+		if (Object.is(at, _id)) {
+			const elHeight = $message.height();
+			const chatHeight = $chat.height();
 
-			$chat.scrollTop(
-			    scrollTo.offset().top - $chat.offset().top + $chat.scrollTop()
-			);
-			// $chat.scrollTop(tpl.$('.chat-message-container').position().top);
-		// }
+			const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
+
+			$chat.scrollTop(offset);
+		} else if (!at && invoke(this, 'isLast')) {
+			$chat.scrollTop(msgOffset);
+		}
 
 		const clipboard = new Clipboard('.js-message-copy-link');
 	},
