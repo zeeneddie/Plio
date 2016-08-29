@@ -6,7 +6,7 @@
 
         {{#if messagesCount}}
     		  <a href="#" {{b 'click: markMessagesRead'}}>
-            <i class="fa fa-times-circle"></i>
+            <i class="fa fa-times-circle" title="Mark all visible messages as read"></i>
           </a>
         {{/if}}
   		</h4>
@@ -23,11 +23,11 @@
       {{#if areItemsToLoad}}
         {{#if unreadMessagesLimited}}
           <button type="button" class="btn btn-secondary" {{b 'click: loadAllItems'}}>
-            View all items (X more)
+            View all items ({{itemsToLoadMore}} more)
           </button>
         {{else}}
           <button type="button" class="btn btn-secondary" {{b 'click: hideExcessiveItems'}}>
-            Hide (X items)
+            Hide ({{itemsToLoadMore}} items)
           </button>
         {{/if}}
       {{/if}}

@@ -4,6 +4,7 @@ import { Template } from 'meteor/templating';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
+import { updateViewedBy } from '/imports/api/messages/methods.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UnreadMessages } from '/imports/api/constants.js';
 
@@ -29,27 +30,37 @@ Template.Dashboard_MessagesStats.viewmodel({
   areItemsToLoad(){
     return this.messagesCount() > UnreadMessages.limit;
   },
+  // This cursor is used in few helpers
+  cursorMessagesNotViewed(){
+    return Messages.find({
+      viewedBy: { $nin: [Meteor.userId()] }
+    }, {
+      fields: { viewedBy: 0 },
+      limit: this.unreadMessagesLimited() ? UnreadMessages.limit : 0
+    });
+  },
   hideExcessiveItems(){
-    console.log('Hiding excessive items');
     this.unreadMessagesLimited(true);
   },
+  itemsToLoadMore(){
+    return this.messagesCount() - UnreadMessages.limit;
+  },
   loadAllItems(){
-    console.log('Loading all items');
     this.unreadMessagesLimited(false);
   },
+  // Mark all visible messages as "read"
   markMessagesRead(ev){
-    ev.preventDefault();console.log('Messages are marked as read');
+    ev.preventDefault();
+
+    this.cursorMessagesNotViewed().forEach((msg) => {
+      updateViewedBy.call({ _id: msg._id });
+    });
   },
   messages(){
     const self = this;
     const msgs = [];
 
-    Messages.find({
-      viewedBy: { $nin: [Meteor.userId()] }
-    }, {
-      fields: { viewedBy: 0 },
-      limit: self.unreadMessagesLimited() ? UnreadMessages.limit : 0
-    }).forEach((msg) => {
+    this.cursorMessagesNotViewed().forEach((msg) => {
       const message = (msg.type === 'file')
         ? msg.files.map((file) => { return file.name }).join(', ')
         : msg.message;
@@ -63,15 +74,16 @@ Template.Dashboard_MessagesStats.viewmodel({
         _id: organizationId
       }).serialNumber;
       const url = FlowRouter.path(
-        'standardDiscussion', { orgSerialNumber, standardId: linkedTo },
+        'standardDiscussion',
+        { orgSerialNumber: orgSerialNumber, standardId: linkedTo },
         { at: msg._id }
       );
 
       msgs.push({
         fullName: self.userNameOrEmail(msg.createdBy),
-        message,
+        message: message,
         timeString: moment(msg.createdAt).fromNow(),
-        url
+        url: url
       });
     });
 
