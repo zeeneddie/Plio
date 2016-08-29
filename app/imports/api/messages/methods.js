@@ -12,9 +12,9 @@ import { getCollectionByDocType } from '../helpers.js';
 import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
 
 const onInsertCheck = ({ discussionId }) => {
-	const { linkedTo, documentType } = checkDocExistance({ _id: discussionId }, Discussions);
+	const { linkedTo, documentType } = checkDocExistance(Discussions, { _id: discussionId });
 
-	const { isDeleted, organizationId } = checkDocExistance({ _id: linkedTo }, getCollectionByDocType(documentType));
+	const { isDeleted, organizationId } = checkDocExistance(getCollectionByDocType(documentType), { _id: linkedTo });
 
 	if (isDeleted) {
 		throw CANNOT_CREATE_MESSAGE_FOR_DELETED;
