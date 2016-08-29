@@ -9,7 +9,7 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 import { removeMessageById } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 import { Files } from '/imports/api/files/files.js';
-window.Files = Files;
+
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	fileIds: [],
@@ -21,7 +21,7 @@ Template.Discussion_Message.viewmodel({
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-		return ViewModel.findOne('DiscussionsFileUploader');
+		return ViewModel.findOne('DiscussionFileUploader');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
@@ -66,7 +66,7 @@ Template.Discussion_Message.viewmodel({
 	},
 	files() {
 		const fileIds = this.fileIds() && this.fileIds().array() || [];
-		
+
 		return Files.find({ _id: { $in: fileIds } });
 	},
 	remove(e) {

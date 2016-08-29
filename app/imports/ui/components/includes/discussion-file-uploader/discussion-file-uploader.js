@@ -3,7 +3,7 @@ import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 import { insert, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 
-Template.FileUploader2.viewmodel({
+Template.DiscussionFileUploader.viewmodel({
   share: ['uploader'],
   mixin: ['modal', 'organization'],
 
@@ -83,8 +83,7 @@ Template.FileUploader2.viewmodel({
 
           this.uploads().push({ fileId: fileId, uploader });
           uploader.send(file, (err, url) => {
-            if(err){
-              self.removeFileFromMessage(_id);
+            if (err) {
 
               //throw err;
               return;
