@@ -8,7 +8,7 @@ import './fields';
 import './file-item';
 import './file-uploader';
 import './file-uploader-wrapper';
-import './file-uploader2';
+import './discussion-file-uploader';
 import './list-item';
 import './modal-delete-button';
 import './preloader';

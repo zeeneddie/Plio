@@ -5,9 +5,13 @@
         {{b "value: value, focus: focused, disable: disabled, attr: { placeholder: placeholder }, throttle: 300"}}/>
 
       <span class="input-group-btn">
-        <button type="button" class="btn btn-secondary btn-icon" {{b "class: { disabled: disabled }"}}>
-          <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
-        </button>
+        {{#if Template.contentBlock}}
+          {{> Template.contentBlock}}
+        {{else}}
+          <button type="button" class="btn btn-secondary btn-icon" {{b "class: { disabled: disabled }"}}>
+            <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+          </button>
+        {{/if}}
       </span>
     </div>
     <div class="dropdown-menu dropdown-menu-full">

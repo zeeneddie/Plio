@@ -4,14 +4,7 @@
       {{#with NC}}
         {{> NC_Card_Edit_Main
             NC=this
-            updateAnalysisExecutor=getUpdateAnalysisExecutorFn
-            updateAnalysisDate=getUpdateAnalysisDateFn
-            completeAnalysis=getCompleteAnalysisFn
-            undoAnalysis=getUndoAnalysisFn
-            updateStandardsExecutor=getUpdateStandardsExecutorFn
-            updateStandardsDate=getUpdateStandardsDateFn
-            updateStandards=getUpdateStandardsFn
-            undoStandardsUpdate=getUndoStandardsUpdateFn}}
+            methodRefs=getMethodRefs}}
 
         {{> Subcards_Notify_Edit
             doc=this

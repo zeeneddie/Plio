@@ -6,15 +6,15 @@ import { Messages } from './messages.js';
 import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
-import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema } from '../schemas.js';
-import { checkDocExistance, checkOrgMembership } from '../checkers.js';
+import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema, ProgressSchema, UrlSchema, ErrorSchema } from '../schemas.js';
+import { checkDocExistance } from '../checkers.js';
 import { getCollectionByDocType } from '../helpers.js';
-import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from './errors.js';
+import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
 
 const onInsertCheck = ({ discussionId }) => {
-	const { linkedTo, documentType } = checkDocExistance({ _id: discussionId }, Discussions);
+	const { linkedTo, documentType } = checkDocExistance(Discussions, { _id: discussionId });
 
-	const { isDeleted, organizationId } = checkDocExistance({ _id: linkedTo }, getCollectionByDocType(documentType));
+	const { isDeleted, organizationId } = checkDocExistance(getCollectionByDocType(documentType), { _id: linkedTo });
 
 	if (isDeleted) {
 		throw CANNOT_CREATE_MESSAGE_FOR_DELETED;
@@ -33,8 +33,8 @@ const onUpdateCheck = ({ _id, userId }) => {
 	return true;
 };
 
-export const addMessage = new ValidatedMethod({
-	name: 'Mesages.addMessage',
+export const insert = new ValidatedMethod({
+	name: 'Mesages.insert',
 	validate: MessagesSchema.validator(),
 
 	run({ ...args }) {
@@ -52,51 +52,71 @@ export const addMessage = new ValidatedMethod({
 	}
 });
 
-export const update = new ValidatedMethod({
-  name: 'Messages.update',
+// export const update = new ValidatedMethod({
+//   name: 'Messages.update',
+//
+//   validate: new SimpleSchema([
+//     IdSchema, optionsSchema //, MessageUpdateSchema
+//   ]).validator(),
+//
+//   run({ ...args }) {
+//     const userId = this.userId;
+//     if (!userId) {
+//       throw new Meteor.Error(
+//         403, 'Unauthorized user cannot update a message'
+//       );
+//     }
+//
+// 		onUpdateCheck({ ...args, userId });
+//
+//     return MessagesService.update({ ...args });
+//   }
+// });
 
-  validate: new SimpleSchema([
-    IdSchema, optionsSchema //, MessageUpdateSchema
-  ]).validator(),
+export const updateProgress = new ValidatedMethod({
+  name: 'Files.updateProgress',
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a message'
-      );
+  validate: new SimpleSchema([IdSchema, ProgressSchema]).validator(),
+
+  run({ _id, progress }) {
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
-		onUpdateCheck({ ...args, userId });
-
-    return MessagesService.update({ ...args });
+    return FilesService.update({ _id, progress });
   }
 });
 
-export const updateFilesUrls = new ValidatedMethod({
-  name: 'Messages.updateFilesUrls',
+export const updateUrl = new ValidatedMethod({
+  name: 'Files.updateUrl',
 
-  validate: new SimpleSchema([
-    IdSchema, optionsSchema //, MessageUpdateSchema
-  ]).validator(),
+  validate: new SimpleSchema([IdSchema, UrlSchema]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a message'
-      );
+  run({ _id, url }) {
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
-		// [TODO] only message owner can make an update
 
-		const query = {
-      files: {
-        $elemMatch: { _id }
-      }
-    };
-		const { options } = args;
+    return FilesService.update({ _id, url, status: 'completed' });
+  }
+});
 
-    return MessagesService.update({ query, options });
+export const terminateUploading = new ValidatedMethod({
+  name: 'Files.terminateUploading',
+
+  validate: new SimpleSchema([IdSchema, ErrorSchema]).validator(),
+
+  run({ _id, error }) {
+    if (!this.userId) {
+      throw new Meteor.Error(403, 'Unauthorized user cannot update files');
+    }
+
+    if (error) {
+      FilesService.update({ _id, status: 'failed' });
+      throw new Meteor.Error(error.error, error.details);
+    }
+
+    return FilesService.update({ _id, status: 'terminated' });
   }
 });
 
@@ -131,6 +151,67 @@ export const bulkUpdateViewedBy = new ValidatedMethod({
 		}
 
 		return MessagesService.bulkUpdateViewedBy({ discussionId, userId });
+	}
+});
+
+export const getMessages = new ValidatedMethod({
+	name: 'Messages.getMessages',
+	validate: new SimpleSchema([optionsSchema]).validator(),
+
+	run({ query, options }) {
+		const userId = this.userId;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot messages'
+			);
+		}
+		query.createdBy = userId;
+
+		return Messages.find(query, options);
+	}
+});
+
+/* Removes a file doc from a message doc, but not the message:
+ * @param {string} _id - a file identifier
+*/
+export const removeFileFromMessage = new ValidatedMethod({
+	name: 'Messages.removeFileFromMessage',
+	validate: new SimpleSchema([IdSchema]).validator(),
+
+	run({ _id }){
+		const userId = this.userId;
+		let success = false;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot remove files from messages'
+			);
+		}
+
+		const options = { fields: { createdBy: 1} };
+
+		MessagesService.getMessagesByFileId({ fileId: _id, options }).forEach((msg) => {
+			if (msg.createdBy !== userId) {
+				success = false;
+
+				throw new Meteor.Error(
+					403, 'You can remove files only from messages created by you'
+				);
+			}
+
+			onUpdateCheck({ _id: msg._id, userId });
+
+			const options = {
+				$pull: {
+					files: { _id }
+				}
+			};
+
+			success = MessagesService.update({ _id: msg._id, options });
+		});
+
+		return success;
 	}
 });
 

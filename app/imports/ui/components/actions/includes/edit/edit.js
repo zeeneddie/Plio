@@ -132,7 +132,10 @@ Template.Actions_Edit.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
+          if (err) {
+            swal.close();
+            return;
+          }
 
           swal('Removed!', `An action "${title}" was removed successfully.`, 'success');
 

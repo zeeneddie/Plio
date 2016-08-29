@@ -1,14 +1,39 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import curry from 'lodash.curry';
 
 import ActionService from './action-service.js';
 import { ActionSchema, RequiredSchema } from './action-schema.js';
 import { Actions } from './actions.js';
 import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
 import { ProblemTypes } from '../constants.js';
+import Method, { CheckedMethod } from '../method.js';
+import {
+  checkOrgMembership,
+  onRemoveChecker,
+  onRestoreChecker,
+  ACT_Check,
+  ACT_CheckEverything,
+  ACT_OnLinkChecker,
+  ACT_OnCompleteChecker,
+  ACT_OnUndoCompletionChecker,
+  ACT_OnVerifyChecker,
+  ACT_OnUndoVerificationChecker,
+  ACT_LinkedDocsChecker
+} from '../checkers.js';
+import { chain, checkAndThrow } from '../helpers.js';
+import {
+  ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
+  ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,
+  ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED,
+  ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED,
+  ACT_NOT_LINKED
+} from '../errors.js';
 
 
-export const insert = new ValidatedMethod({
+const inject = fn => fn(Actions);
+
+export const insert = new Method({
   name: 'Actions.insert',
 
   validate(doc) {
@@ -19,19 +44,16 @@ export const insert = new ValidatedMethod({
     return RequiredSchema.validator()(doc);
   },
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create an action'
-      );
-    }
+  run({ organizationId, linkedTo, ...args }) {
+    checkOrgMembership(this.userId, organizationId);
 
-    return ActionService.insert({ ...args });
+    ACT_LinkedDocsChecker(linkedTo);
+
+    return ActionService.insert({ organizationId, linkedTo, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'Actions.update',
 
   validate(doc) {
@@ -60,48 +82,26 @@ export const update = new ValidatedMethod({
     }
   },
 
-  run({ _id, options, query, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update an action'
-      );
-    }
+  check: checker => inject(checker),
 
-    return ActionService.update({ _id, options, query, ...args });
+  run({ _id, ...args }) {
+    return ActionService.update({ _id, ...args });
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new Method({
   name: 'Actions.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => inject(checker),
+
   run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update actions'
-      );
-    }
-
-    if (!Actions.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Action does not exist'
-      );
-    }
-
-    if (!!Actions.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this action'
-      );
-    }
-
-    return ActionService.updateViewedBy({ _id, userId });
+    return ActionService.updateViewedBy({ _id, userId: this.userId });
   }
 });
 
-export const setCompletionDate = new ValidatedMethod({
+export const setCompletionDate = new CheckedMethod({
   name: 'Actions.setCompletionDate',
 
   validate: new SimpleSchema([
@@ -111,18 +111,16 @@ export const setCompletionDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set target date for action completion'
-      );
-    }
+  check(checker) {
+    return inject(checker)(() => action => action.completed(), ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setCompletionDate({ _id, ...args });
   }
 });
 
-export const setCompletionExecutor = new ValidatedMethod({
+export const setCompletionExecutor = new CheckedMethod({
   name: 'Actions.setCompletionExecutor',
 
   validate: new SimpleSchema([
@@ -135,18 +133,16 @@ export const setCompletionExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set executor for action completion'
-      );
-    }
+  check(checker) {
+    return inject(checker)(() => action => action.completed(), ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setCompletionExecutor({ _id, ...args });
   }
 });
 
-export const setVerificationDate = new ValidatedMethod({
+export const setVerificationDate = new CheckedMethod({
   name: 'Actions.setVerificationDate',
 
   validate: new SimpleSchema([
@@ -156,18 +152,16 @@ export const setVerificationDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set target date for action verification'
-      );
-    }
+  check(checker) {
+    return inject(checker)(() => action => action.verified(), ACT_CANNOT_SET_VERIFICATION_DATE_FOR_VERIFIED);
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setVerificationDate({ _id, ...args });
   }
 });
 
-export const setVerificationExecutor = new ValidatedMethod({
+export const setVerificationExecutor = new CheckedMethod({
   name: 'Actions.setVerificationExecutor',
 
   validate: new SimpleSchema([
@@ -180,18 +174,16 @@ export const setVerificationExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set executor for action verification'
-      );
-    }
+  check(checker) {
+    return inject(checker)(() => action => action.verified(), ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED)
+  },
 
+  run({ _id, ...args }) {
     return ActionService.setVerificationExecutor({ _id, ...args });
   }
 });
 
-export const linkDocument = new ValidatedMethod({
+export const linkDocument = new CheckedMethod({
   name: 'Actions.linkDocument',
 
   validate: new SimpleSchema([
@@ -208,19 +200,14 @@ export const linkDocument = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot link actions to documents'
-      );
-    }
+  check: checker => inject(checker)(ACT_OnLinkChecker),
 
-    return ActionService.linkDocument({ ...args });
+  run(...args) {
+    return ActionService.linkDocument(...args);
   }
 });
 
-export const unlinkDocument = new ValidatedMethod({
+export const unlinkDocument = new CheckedMethod({
   name: 'Actions.unlinkDocument',
 
   validate: new SimpleSchema([
@@ -237,54 +224,46 @@ export const unlinkDocument = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403,
-        'Unauthorized user cannot link remove action\'s links to documents'
-      );
-    }
+  check(checker) {
+    const _checker = ({ documentId, documentType }) => {
+       return (action) => {
+         return !action.isLinkedToDocument(documentId, documentType);
+       };
+    };
 
-    return ActionService.unlinkDocument({ ...args });
+    return inject(checker)(_checker, ACT_NOT_LINKED);
+  },
+
+  run({ _id, documentId, documentType }) {
+    return ActionService.unlinkDocument({ _id, documentId, documentType });
   }
 });
 
-export const complete = new ValidatedMethod({
+export const complete = new CheckedMethod({
   name: 'Actions.complete',
 
   validate: CompleteActionSchema.validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot complete an action'
-      );
-    }
+  check: checker => inject(checker)(ACT_OnCompleteChecker),
 
-    return ActionService.complete({ _id, userId, ...args });
+  run({ _id, ...args }) {
+    return ActionService.complete({ _id, ...args, userId: this.userId });
   }
 });
 
-export const undoCompletion = new ValidatedMethod({
+export const undoCompletion = new CheckedMethod({
   name: 'Actions.undoCompletion',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo an action'
-      );
-    }
+  check: checker => inject(checker)(ACT_OnUndoCompletionChecker),
 
-    return ActionService.undoCompletion({ _id, userId });
+  run({ _id }) {
+    return ActionService.undoCompletion({ _id, userId: this.userId });
   }
 });
 
-export const verify = new ValidatedMethod({
+export const verify = new CheckedMethod({
   name: 'Actions.verify',
 
   validate: new SimpleSchema([
@@ -295,65 +274,45 @@ export const verify = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot verify an action'
-      );
-    }
+  check: checker => inject(checker)(ACT_OnVerifyChecker),
 
-    return ActionService.verify({ _id, userId, ...args });
+  run({ _id, ...args }) {
+    return ActionService.verify({ _id, userId: this.userId, ...args });
   }
 });
 
-export const undoVerification = new ValidatedMethod({
+export const undoVerification = new CheckedMethod({
   name: 'Actions.undoVerification',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo an action'
-      );
-    }
+  check: checker => inject(checker)(ACT_OnUndoVerificationChecker),
 
-    return ActionService.undoVerification({ _id, userId });
+  run({ _id }, { action }) {
+    return ActionService.undoVerification({ _id, userId: this.userId }, { action });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Actions.remove',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove an action'
-      );
-    }
+  check: checker => inject(checker)(onRemoveChecker),
 
-    return ActionService.remove({ _id, deletedBy: userId });
+  run({ _id }) {
+    return ActionService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const restore = new ValidatedMethod({
+export const restore = new CheckedMethod({
   name: 'Actions.restore',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore an action'
-      );
-    }
+  check: checker => inject(checker)(onRestoreChecker),
 
+  run({ _id }) {
     return ActionService.restore({ _id });
   }
 });
