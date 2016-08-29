@@ -2,9 +2,22 @@ import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
 
 import {
-  update, remove, completeAnalysis, undoAnalysis,
-  setAnalysisDate, updateStandards, undoStandardsUpdate,
-  setStandardsUpdateDate, setAnalysisExecutor, setStandardsUpdateExecutor
+  update,
+  remove,
+  completeAnalysis,
+  undoAnalysis,
+  setAnalysisDate,
+  updateStandards,
+  undoStandardsUpdate,
+  setStandardsUpdateDate,
+  setAnalysisExecutor,
+  setStandardsUpdateExecutor,
+  setAnalysisCompletedBy,
+  setAnalysisCompletedDate,
+  setAnalysisComments,
+  setStandardsUpdateCompletedBy,
+  setStandardsUpdateCompletedDate,
+  setStandardsUpdateComments
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
@@ -20,6 +33,24 @@ Template.NC_Card_Edit.viewmodel({
       organizationId: this.organizationId(),
       nonConformityId: this._id()
     };
+  },
+  getMethodRefs() {
+    return () => ({
+      setAnalysisExecutor,
+      setAnalysisDate,
+      completeAnalysis,
+      undoAnalysis,
+      setStandardsUpdateExecutor,
+      setStandardsUpdateDate,
+      updateStandards,
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
+    });
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -51,75 +82,15 @@ Template.NC_Card_Edit.viewmodel({
       setStandardsUpdateExecutor,
       setStandardsUpdateDate,
       updateStandards,
-      undoStandardsUpdate
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
     });
   },
-  // getUpdateAnalysisExecutorFn() {
-  //   return this.updateAnalysisExecutor.bind(this);
-  // },
-  // updateAnalysisExecutor({ executor }, cb) {
-  //   const _id = this._id();
-  //
-  //   this.modal().callMethod(setAnalysisExecutor, { _id, executor }, cb)
-  // },
-  // getUpdateAnalysisDateFn() {
-  //   return this.updateAnalysisDate.bind(this);
-  // },
-  // updateAnalysisDate({ date }, cb) {
-  //   const _id = this._id();
-  //
-  //   const { timezone } = this.organization();
-  //   const tzDate = getTzTargetDate(date, timezone);
-  //
-  //   this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
-  // },
-  // getCompleteAnalysisFn() {
-  //   return this.completeAnalysis.bind(this);
-  // },
-  // completeAnalysis({ completionComments }, cb) {
-  //   const _id = this._id();
-  //   this.modal().callMethod(completeAnalysis, { _id, completionComments }, cb);
-  // },
-  // getUndoAnalysisFn() {
-  //   return this.undoAnalysis.bind(this);
-  // },
-  // undoAnalysis(cb) {
-  //   const _id = this._id();
-  //   this.modal().callMethod(undoAnalysis, { _id }, cb);
-  // },
-  // getUpdateStandardsExecutorFn() {
-  //   return this.updateStandardsExecutor.bind(this);
-  // },
-  // updateStandardsExecutor({ executor }, cb) {
-  //   const _id = this._id();
-  //
-  //   this.modal().callMethod(setStandardsUpdateExecutor, { _id, executor }, cb);
-  // },
-  // getUpdateStandardsDateFn() {
-  //   return this.updateStandardsDate.bind(this);
-  // },
-  // updateStandardsDate({ date }, cb) {
-  //   const _id = this._id();
-  //
-  //   const { timezone } = this.organization();
-  //   const tzDate = getTzTargetDate(date, timezone);
-  //
-  //   this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
-  // },
-  // getUpdateStandardsFn() {
-  //   return this.updateStandards.bind(this);
-  // },
-  // updateStandards({ completionComments }, cb) {
-  //   const _id = this._id();
-  //   this.modal().callMethod(updateStandards, { _id, completionComments }, cb);
-  // },
-  // getUndoStandardsUpdateFn() {
-  //   return this.undoStandardsUpdate.bind(this);
-  // },
-  // undoStandardsUpdate(cb) {
-  //   const _id = this._id();
-  //   this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
-  // },
   remove() {
     const { title } = this.NC();
     const _id = this._id();
