@@ -871,7 +871,11 @@ ViewModel.mixin({
     // Only title is required
     sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
       const notificationSound = document.getElementById('notification-sound');
-      notificationSound && notificationSound.play();
+
+      if (notificationSound) {
+        notificationSound.currentTime = 0;
+        notificationSound.play();
+      }
 
       let notification = new Notification(title, {
         body,
@@ -913,6 +917,9 @@ ViewModel.mixin({
   	}
   },
   messages: {
+    _getMessages({ query, options }){
+      return Messages.find(query, options);
+    },
     _getMessageByDiscussionId(discussionId, protection = {}) {
       return Messages.findOne({ discussionId }, protection);
     },

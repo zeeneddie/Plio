@@ -4,9 +4,10 @@
 			<fieldset disabled={{disabled}}>
 				<div class="form-group">
 					<div class="input-group">
-						{{> FileUploader2
+						{{> DiscussionsFileUploader
 							insertFile=insertFileFn
 							onUpload=onUploadCb
+							removeFileFromMessage=removeFileFromMessageCb
 							metaContext=uploaderMetaContext
 							slingshotDirective=slingshotDirective}}
 						<input
