@@ -19,12 +19,15 @@ const getDOMNodes = template => ({
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	onRendered(template) {
+		const clipboard = new Clipboard('.js-message-copy-link');
+
 		const at = FlowRouter.getQueryParam('at');
 		const _id = invoke(this, '_id');
 		const { $chat, $message } = getDOMNodes(template);
 		const msgOffset = $message.offset().top;
 
 		if (Object.is(at, _id)) {
+			// scroll to the center of the linked message
 			const elHeight = $message.height();
 			const chatHeight = $chat.height();
 
@@ -32,10 +35,13 @@ Template.Discussion_Message.viewmodel({
 
 			$chat.scrollTop(offset);
 		} else if (!at && invoke(this, 'isLast')) {
-			$chat.scrollTop(msgOffset);
+			// scroll to the bottom of the chat
+			// all messages are not always in time
+			Tracker.afterFlush(() => {
+				const $chatScrollHeight = $chat.prop('scrollHeight');
+				$chat.scrollTop($chatScrollHeight);
+			});
 		}
-
-		const clipboard = new Clipboard('.js-message-copy-link');
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {

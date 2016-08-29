@@ -8,6 +8,7 @@ import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
@@ -18,7 +19,10 @@ Template.Discussion_Messages.viewmodel({
 			at: FlowRouter.getQueryParam('at')
 		});
 
-		template.autorun(() => MessageSubs.subscribe('messages', this.discussionId(), this.options()));
+		template.autorun(() => {
+			const handle = MessageSubs.subscribe('messages', this.discussionId(), this.options());
+			this.ready(handle);
+		});
 	},
 	onRendered(template) {
 		const discussionId = this.discussionId();
@@ -28,8 +32,13 @@ Template.Discussion_Messages.viewmodel({
 			bulkUpdateViewedBy.call({ discussionId });
 		}
 
+		handleMouseWheel(this.chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
+
 		// Subscribe notifications to messages
 		this.notifyOnIncomeMessages();
+	},
+	onDestroyed(template) {
+		handleMouseWheel(this.chat[0], this.triggerLoadMore.bind(this), 'removeEventListener');
 	},
 	options: {
 		limit: 50,
@@ -117,15 +126,28 @@ Template.Discussion_Messages.viewmodel({
 
 		return messagesMapped;
 	},
-	triggerLoadMore: _.throttle(function() {
-		const tpl = this.templateInstance;
+	triggerLoadMore: _.throttle(function(e) {
+		const direction = wheelDirection(e);
+		const currentY = $(e.target).scrollTop();
+		const loadOlderHandler = this.templateInstance.$('.infinite-load-older');
+		const loadNewerHandler = this.templateInstance.$('.infinite-load-newer');
 
-		if (this.older.isAlmostVisible()) {
-			this.loadMore(-1);
-	  } else if (tpl.$('.infinite-load-newer').isAlmostVisible()) {
-			this.loadMore(1);
-		}
-	}, 500),
+		this.ready(false);
+
+		Meteor.setTimeout(() => {
+			if (direction > 0) {
+				// upscroll
+				if (loadOlderHandler.isAlmostVisible()) {
+					this.loadMore(-1);
+				}
+			} else {
+				// downscroll
+				if (loadNewerHandler.isAlmostVisible()) {
+					this.loadMore(1);
+				}
+			}
+		}, 100);
+	}, 1500),
 	loadMore(direction = -1) {
 		const messages = Object.assign([], this.messages());
 		const options = Object.assign({}, this.options());
@@ -142,7 +164,6 @@ Template.Discussion_Messages.viewmodel({
 		return this.child('Notifications');
 	},
 	notifyOnIncomeMessages() {
-		const self = this;
 		let init = true;
 		const options = {
 			sort: { createdAt: 1 }
@@ -150,12 +171,13 @@ Template.Discussion_Messages.viewmodel({
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
 		msg.observe({
-			added(doc) {
+			added: (doc) => {
 				if (init) {
 					return;
 				}
 
-				self.notification && self.notification().playSound();
+				invoke(this.notification(), 'playSound');
+
 				init = false;
 			}
 		});

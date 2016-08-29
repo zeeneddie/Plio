@@ -1,27 +1,29 @@
 <template name="Discussion_Messages">
-	{{#if Template.subscriptionsReady}}
-		{{#if discussion}}
-			<div class="chat-content scroll" {{b "scroll: triggerLoadMore, resize: triggerLoadMore"}}>
-				{{> Notifications}}
-				<div class="chat-messages">
-					{{#if discussion.isStarted}}
-						<div class="chat-item chat-item-start">
-							<p class="chat-item-text">
-								This discussion was started by <strong>{{getStartedByText}}</strong> on <strong>{{getStartedAtText}}</strong>
-							</p>
-						</div>
-					{{/if}}
-					<div class="infinite-load-older text-xs-center" {{b "ref: older"}}>
-						<button class="btn btn-secondary" {{b "click: loadMore('-1')"}}>Load more</button>
+	{{#if discussion}}
+		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore"}}>
+			{{> Notifications}}
+			<div class="chat-messages">
+				{{#if discussion.isStarted}}
+					<div class="chat-item chat-item-start">
+						<p class="chat-item-text">
+							This discussion was started by <strong>{{getStartedByText}}</strong> on <strong>{{getStartedAtText}}</strong>
+						</p>
 					</div>
-					{{#each messages}}
-						{{> Discussion_Message}}
-					{{/each}}
-					<div class="infinite-load-newer text-xs-center">
-						<button class="btn btn-secondary" {{b "click: loadMore('1')"}}>Load more</button>
-					</div>
+				{{/if}}
+				<div class="infinite-load-older text-xs-center">
+					{{#unless ready}}
+						{{> Preloader size=2}}
+					{{/unless}}
+				</div>
+				{{#each messages}}
+					{{> Discussion_Message}}
+				{{/each}}
+				<div class="infinite-load-newer text-xs-center">
+					{{#unless ready}}
+						{{> Preloader size=2}}
+					{{/unless}}
 				</div>
 			</div>
-		{{/if}}
+		</div>
 	{{/if}}
 </template>
