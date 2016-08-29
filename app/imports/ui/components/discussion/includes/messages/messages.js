@@ -15,7 +15,6 @@ Template.Discussion_Messages.viewmodel({
 
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
-		const notifications = this.child('Notifications');
 
 		if(discussionId){
 			bulkUpdateViewedBy.call({ discussionId });
@@ -102,24 +101,23 @@ Template.Discussion_Messages.viewmodel({
 
 		return messagesMapped;
 	},
-	notification(){
-		return this.child('Notifications');
-	},
-	notifyOnIncomeMessages(){
+	notifyOnIncomeMessages() {
 		const self = this;
 		let init = true;
 		const options = {
 			sort: { createdAt: 1 }
 		};
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
+		const messageSound = self.templateInstance.find('#message-sound');
 
 		msg.observe({
-			added(doc){
-				if(init){
+			added(doc) {
+				if (init) {
 					return;
 				}
-
-				self.notification && self.notification().playSound();
+				
+				messageSound.currentTime = 0;
+				messageSound.play();
 				init = false;
 			}
 		});
