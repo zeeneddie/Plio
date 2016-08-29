@@ -1,8 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '../messages.js';
 import { isOrgMember } from '../../checkers.js';
+import { Messages } from '../messages.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 import Counter from '../../counter/server.js';
 
 Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds){
@@ -50,8 +51,25 @@ Meteor.publish('unreadMessagesWithCreatorsInfo', function() {
 		return msg.createdBy;
 	});
 
+	const discussionIds = msgs.map((msg) => {
+		return msg.discussionId;
+	});
+	const discussions = Discussions.find(
+		{ _id: { $in: discussionIds } },
+		{ fields: { linkedTo: 1, organizationId: 1 } }
+	);
+
+	const organizationIds = discussions.map((discussion) => {
+		return discussion.organizationId;
+	});
+	const organizations = Organizations.find(
+		{ _id: { $in: organizationIds } }, { fields: { serialNumber: 1 } }
+	);
+
 	return [
+		discussions,
 		msgs,
+		organizations,
 		Meteor.users.find(
 			{ _id: { $in: userIds } },
 			{ fields: { profile: 1 } }

@@ -1,6 +1,11 @@
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { moment } from 'meteor/momentjs:moment';
 import { Template } from 'meteor/templating';
 
+import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
+import { UnreadMessages } from '/imports/api/constants.js';
 
 
 Template.Dashboard_MessagesStats.viewmodel({
@@ -19,80 +24,56 @@ Template.Dashboard_MessagesStats.viewmodel({
   ],
   _subHandlers: [],
   isReady: false,
+  unreadMessagesLimited: true,
 
+  areItemsToLoad(){
+    return this.messagesCount() > UnreadMessages.limit;
+  },
+  hideExcessiveItems(){
+    console.log('Hiding excessive items');
+    this.unreadMessagesLimited(true);
+  },
+  loadAllItems(){
+    console.log('Loading all items');
+    this.unreadMessagesLimited(false);
+  },
   markMessagesRead(ev){
     ev.preventDefault();console.log('Messages are marked as read');
   },
   messages(){
     const self = this;
-    /*
-    {
-      createdAt: new Date(),
-      createdBy: 'SQHmBKJ94gJvpLKLt',
-    	discussionId: '123',
-    	viewedBy: [],
-      files: [],
-  		message: 'A',
-  		type: 'text'
-    },
-    {
-      createdAt: new Date(),
-      createdBy: 'SQHmBKJ94gJvpLKLt',
-    	discussionId: '123',
-    	viewedBy: [],
-      files: [],
-  		message: 'B',
-  		type: 'text'
-    },
-    {
-      createdAt: new Date(),
-      createdBy: 'SQHmBKJ94gJvpLKLt',
-    	discussionId: '123',
-    	viewedBy: [],
-      files: [],
-  		message: 'C',
-  		type: 'text'
-    },
-    */
-    const msgs = [
-      /*{
-        fullName: 'Mike Smith',
-        isFile: false,
-        message: 'Hi Steve, can we discuss yesterday\'s NC?',
-        timeString: '30 mins ago',
-        url: 'discussions.html'
-      },
-      {
-        fullName: 'Larry King',
-        isFile: false,
-        message: 'I have completed few things',
-        timeString: '1 hour ago',
-        url: 'discussions.html'
-      },
-      {
-        fullName: 'Larry King',
-        isFile: true,
-        message: 'I have completed few things',
-        timeString: '1 hour ago',
-        url: 'discussions.html'
-      }*/
-    ];
+    const msgs = [];
 
     Messages.find({
       viewedBy: { $nin: [Meteor.userId()] }
     }, {
-      fields: { discussionId: 0, viewedBy: 0 }
+      fields: { viewedBy: 0 },
+      limit: self.unreadMessagesLimited() ? UnreadMessages.limit : 0
     }).forEach((msg) => {
-      console.log(msg);
+      const message = (msg.type === 'file')
+        ? msg.files.map((file) => { return file.name }).join(', ')
+        : msg.message;
+
+      // Get route parameters from collections, not from the router - in order
+      // to make the component most independent
+      const {
+        linkedTo, organizationId
+      } = Discussions.findOne({ _id: msg.discussionId });
+      const orgSerialNumber = Organizations.findOne({
+        _id: organizationId
+      }).serialNumber;
+      const url = FlowRouter.path(
+        'standardDiscussion', { orgSerialNumber, standardId: linkedTo },
+        { at: msg._id }
+      );
 
       msgs.push({
         fullName: self.userNameOrEmail(msg.createdBy),
-        isFile: msg.type === 'file',
-        message: msg.message,
-        timeString: 'what is timestring format behaviour?', // ToDo
-        url: 'from where?' // ToDo
+        message,
+        timeString: moment(msg.createdAt).fromNow(),
+        url
       });
-    });console.dir(msgs);
+    });
 
     return msgs;
   },
@@ -104,7 +85,7 @@ Template.Dashboard_MessagesStats.viewmodel({
     }).count();
   },
   unreadMessages(){
-    const msgs = this.messages().length;
+    const msgs = this.messagesCount();
 
     return `${msgs} unread ${msgs === 1 ? 'message' : 'messages'}`;
   }

@@ -15,14 +15,22 @@
     		<a class="dashboard-stats-message" href="{{this.url}}">
       		<i class="fa fa-comment"></i>
       		<strong>{{this.fullName}}:</strong>
-          {{#unless isFile}}
-      		  {{this.message}}
-          {{else}}
-            <span>File message</span>
-          {{/unless}}
+      		{{this.message}}
       		<span class="text-muted">{{this.timeString}}</span>
     		</a>
       {{/each}}
+
+      {{#if areItemsToLoad}}
+        {{#if unreadMessagesLimited}}
+          <button type="button" class="btn btn-secondary" {{b 'click: loadAllItems'}}>
+            View all items (X more)
+          </button>
+        {{else}}
+          <button type="button" class="btn btn-secondary" {{b 'click: hideExcessiveItems'}}>
+            Hide (X items)
+          </button>
+        {{/if}}
+      {{/if}}
   	</div>
   {{else}}
     {{> Preloader}}
