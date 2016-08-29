@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { NonConformities } from './non-conformities.js';
 import ProblemsService from '../problems/problems-service.js';
 import { ProblemTypes } from '../constants.js';
+import BaseEntityService from '../base-entity-service.js';
 
 if (Meteor.isServer) {
   import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
@@ -11,6 +12,8 @@ if (Meteor.isServer) {
 
 export default _.extend({}, ProblemsService, {
   collection: NonConformities,
+
+  _service: new BaseEntityService(NonConformities),
 
   _abbr: 'NC',
 

@@ -5,31 +5,21 @@ import NotificationsService from './notifications-service.js';
 import { Notifications } from './notifications.js';
 import { RequiredSchema } from './notifications-schema.js';
 import { IdSchema } from '../schemas.js';
+import Method from '../method.js';
+import { checkDocExistance } from '../checkers.js';
 
-export const updateViewedBy = new ValidatedMethod({
+const { compose } = _;
+
+export const updateViewedBy = new Method({
   name: 'Notifications.updateViewedBy',
 
   validate(_id) { IdSchema.validator() },
 
+  check(checker) {
+    return compose(checker, checkDocExistance)(Notifications, { recipientIds: this.userId });
+  },
+
   run(_id) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update notifications'
-      );
-    }
-
-    if (!Notifications.findOne({ _id, recipientIds: this.userId })) {
-      throw new Meteor.Error(
-        400, 'Notification does not exist'
-      );
-    }
-
-    if (!!Notifications.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to the viewedBy list of this notification'
-      );
-    }
-
     return NotificationsService.updateViewedBy({ _id, userId: this.userId });
   }
 });

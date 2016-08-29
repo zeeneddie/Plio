@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Risks } from './risks.js';
 import { ProblemTypes } from '../constants.js';
+import BaseEntityService from '../base-entity-service.js';
 import ProblemsService from '../problems/problems-service.js';
 
 if (Meteor.isServer) {
@@ -11,6 +12,8 @@ if (Meteor.isServer) {
 
 export default _.extend({}, ProblemsService, {
   collection: Risks,
+
+  _service: new BaseEntityService(Risks),
 
   _abbr: 'RK',
 

@@ -1,58 +1,48 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { CheckedMethod } from '../method.js';
 import WorkItemService from './work-item-service.js';
 import { WorkItemsSchema } from './work-item-schema.js';
 import { WorkItems } from './work-items.js';
 import { IdSchema } from '../schemas.js';
+import { inject } from '../helpers.js';
+import { onRemoveChecker, WI_OnRestoreChecker } from '../checkers.js';
 
-export const updateViewedBy = new ValidatedMethod({
+const injectWI = inject(WorkItems);
+
+export const updateViewedBy = new CheckedMethod({
   name: 'WorkItems.updateViewedBy',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update actions'
-      );
-    }
+  check: checker => injectWI(checker),
 
-    return WorkItemService.updateViewedBy({ _id, viewedBy: userId });
+  run({ _id }) {
+    return WorkItemService.updateViewedBy({ _id, viewedBy: this.userId });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'WorkItems.remove',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a work item'
-      );
-    }
+  check: checker => injectWI(checker)(onRemoveChecker),
 
-    return WorkItemService.remove({ _id, deletedBy: userId });
+  run({ _id }) {
+    return WorkItemService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const restore = new ValidatedMethod({
+export const restore = new CheckedMethod({
   name: 'WorkItems.restore',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore a work item'
-      );
-    }
+  check: checker => injectWI(checker)(WI_OnRestoreChecker),
 
+  run({ _id }) {
     return WorkItemService.restore({ _id });
   }
 });

@@ -25,8 +25,6 @@ export default {
   },
 
   updateViewedBy({ _id, userId:viewedBy }) {
-    this._ensureUserHasNotViewed({ _id, viewedBy });
-
     this._service.updateViewedBy({ _id, viewedBy });
   },
 
@@ -35,23 +33,6 @@ export default {
   },
 
   restore({ _id }) {
-    this._ensureStandardIsDeleted(_id);
-
     this._service.restore({ _id });
-  },
-
-  _ensureStandardIsDeleted(_id) {
-    const { isDeleted } = this.collection.findOne({ _id });
-    if (!isDeleted) {
-      throw new Meteor.Error(400, 'Standard needs to be deleted first');
-    }
-  },
-
-  _ensureUserHasNotViewed({ _id, viewedBy }) {
-    if (!!this.collection.findOne({ _id, viewedBy })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
   }
 };
