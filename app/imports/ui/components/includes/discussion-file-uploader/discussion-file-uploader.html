@@ -1,12 +1,8 @@
 <template name="DiscussionFileUploader">
-  <span class="input-group-btn btn-file">
-    <button class="btn btn-secondary">
+  <span class="input-group-btn file-uploader">
+    <button class="btn btn-secondary btn-file">
       <i class="fa fa-paperclip"></i>
+      <input type="file" multiple="multiple" {{b "value: attachmentFiles, change: upload(getData), ref: fileInput"}}>
     </button>
-    <input
-      type="file"
-      multiple="multiple"
-      {{b "value: attachmentFiles, change: upload, ref: fileInput"}}
-    >
   </span>
 </template>

@@ -24,7 +24,7 @@ const onInsertCheck = ({ discussionId }) => {
 };
 
 const onUpdateCheck = ({ _id, userId }) => {
-	const { createdBy } = checkDocExistance({ _id }, Messages);
+	const { createdBy } = checkDocExistance(Messages, { _id });
 
 	if (userId !== createdBy) {
 		throw ONLY_OWNER_CAN_UPDATE;

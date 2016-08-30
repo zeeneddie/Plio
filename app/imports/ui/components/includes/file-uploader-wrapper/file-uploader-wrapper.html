@@ -2,12 +2,11 @@
   {{#each files}}
     {{> FileItem
         this
-        removeFile=removeFileFn
+        removeFile=removeFile
         uploader=uploader}}
   {{/each}}
   {{> FileUploader
       addFile=addFileFn
-      onUpload=onUploadCb
       slingshotDirective=slingshotDirective
       metaContext=uploaderMetaContext}}
 </template>

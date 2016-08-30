@@ -4,7 +4,10 @@ import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 
 import {
-	insert, getMessages, remove, updateProgress, updateUrl
+	insert as insertMessage,
+	getMessages,
+	updateProgress,
+	updateUrl
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
@@ -18,7 +21,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	files: [],
 	messageFile: null,
 	messageText: '',
-	slingshotDirective: 'discussionsFiles',
+	slingshotDirective: 'discussionFiles',
 
 	discussionId(){
 		return this.getDiscussionIdByStandardId(this.standardId());
@@ -27,7 +30,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		if (this.disabled()) return;
 		const discussionId = this.discussionId();
 
-		insert.call({
+		insertMessage.call({
 			discussionId,
 			message: sanitizeHtml(this.messageText()),
 			type: 'text'
@@ -47,7 +50,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		const discussionId = this.discussionId();
 
-		addMessage.call({
+		insertMessage.call({
 			discussionId,
 			fileIds: [fileId],
 			type: 'file'

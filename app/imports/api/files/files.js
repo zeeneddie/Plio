@@ -8,7 +8,6 @@ Files.attachSchema(FileIdsSchema);
 
 Files.helpers({
   isUploaded() {
-    console.log('isUploaded progress', this.progress);
     return this.progress === 1;
   }
 });

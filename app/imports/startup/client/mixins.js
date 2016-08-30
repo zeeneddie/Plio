@@ -16,6 +16,7 @@ import {
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
+import { insert as insertFile, updateUrl, updateProgress } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
 import { Match, check } from 'meteor/check';
 
@@ -124,12 +125,6 @@ ViewModel.mixin({
         }
 
         return instance && instance.isSaving();
-      },
-      incUploadsCount() {
-        this.instance().incUploadsCount();
-      },
-      decUploadsCount() {
-        this.instance().decUploadsCount();
       },
       isWaiting(val) {
         const instance = this.instance();
@@ -927,4 +922,90 @@ ViewModel.mixin({
       return Messages.find({ discussionId }, protection);
     }
   },
+  uploader: {
+
+    uploadData(uploads, fileId) { // find the file with fileId is being uploaded
+      return _.find(uploads.array(), (data) => {
+        return data.fileId === fileId;
+      });
+    },
+    cancelUpload(uploads, fileId) {
+      const uploadData = this.uploadData(uploads, fileId);
+      const uploader = uploadData && uploadData.uploader;
+      if (uploader) {
+        uploader.xhr && uploader.xhr.abort();
+        this.removeUploadData(uploads, fileId);
+      }
+    },
+    removeUploadData(uploads, fileId) {
+      uploads.remove((item) => {
+        return item.fileId === fileId;
+      });
+    },
+    upload({
+      files,
+      maxSize,
+      uploads,
+      beforeUpload
+    }) {
+      if (!files.length) {
+        return;
+      }
+
+      const { slingshotDirective, metaContext, addFile } = this.templateInstance.data;
+
+      beforeUpload();
+      _.each(files, (file) => {
+        const name = file.name;
+
+        if (file.size > maxSize) {
+          toastr.error(`${file.name} size exceeds the allowed maximum of ${fileMaxSize/1024/1024} MB`);
+
+          return;
+        }
+
+        insertFile.call({
+          name: name,
+          extension: name.split('.').pop().toLowerCase(),
+          organizationId: this.organizationId()
+        }, (err, fileId) => {
+          addFile({ fileId });
+
+          const uploader = new Slingshot.Upload(
+            slingshotDirective, metaContext
+          );
+
+          const progressInterval = Meteor.setInterval(() => {
+            const progress = uploader.progress();
+            updateProgress.call({ _id: fileId, progress }, (err, res) => {
+              if (err) {
+                Meteor.clearInterval(progressInterval);
+                throw err;
+              }
+            });
+            if (!progress && progress != 0 || progress === 1) {
+              Meteor.clearInterval(progressInterval);
+            }
+          }, 1500);
+
+          this.uploads().push({ fileId: fileId, uploader });
+
+          uploader.send(file, (err, url) => {
+            if (err) {
+
+              //throw err;
+              return;
+            }
+
+            if (url) {
+              url = encodeURI(url);
+            }
+
+            updateUrl.call({ _id: fileId, url });
+            this.removeUploadData(uploads, fileId);
+          });
+        });
+      });
+    },
+  }
 });

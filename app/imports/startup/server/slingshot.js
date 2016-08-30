@@ -6,11 +6,11 @@ import Utils from '/imports/core/utils';
 
 const configureSlignshot = () => {
   const {
-    bucketName, acl, ussionsFilesDir, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir,
-    nonConformitiesFilesDir, risksFilesDir,
-    actionsFilesDir,
-    discussionsFilesDir
+    bucketName, acl, ussionsFilesDir, userAvatarsDir,
+    standardFilesDir, improvementPlanFilesDir,
+    nonConformityFilesDir, riskFilesDir,
+    actionFilesDir,
+    discussionFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -19,7 +19,7 @@ const configureSlignshot = () => {
     return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
 
-  Slingshot.createDirective('discussionsFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('discussionFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -36,11 +36,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, discussionId } = metaContext;
-      return `uploads/${organizationId}/${discussionsFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${discussionFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
+  Slingshot.createDirective('userAvatars', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -55,11 +55,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { userId } = metaContext;
-      return `${usersAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
+      return `${userAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('standardFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -76,7 +76,7 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
@@ -95,11 +95,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -116,11 +116,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, improvementPlanId } = metaContext;
-      return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${improvementPlanFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('nonConformitiesFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('nonConformityFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -137,11 +137,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, nonConformityId } = metaContext;
-      return `uploads/${organizationId}/${nonConformitiesFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${nonConformityFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('risksFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('riskFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -158,11 +158,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, riskId } = metaContext;
-      return `uploads/${organizationId}/${risksFilesDir}/${riskId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${riskFilesDir}/${riskId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('actionsFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('actionFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -179,7 +179,7 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, actionId } = metaContext;
-      return `uploads/${organizationId}/${actionsFilesDir}/${actionId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${actionFilesDir}/${actionId}/${Random.id()}-${file.name}`;
     }
   });
 };
