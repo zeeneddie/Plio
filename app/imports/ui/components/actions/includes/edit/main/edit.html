@@ -1,7 +1,7 @@
 <template name="Actions_Card_Edit_Main">
   <div class="card-block">
     {{#with action}}
-      {{> Actions_Title title=this.title}}
+      {{> Actions_Title title=this.title sequentialId=this.sequentialId}}
 
       {{> Actions_LinkedTo_Edit
           _id=this._id
@@ -22,7 +22,7 @@
 
       {{> Actions_CompletionTargetDate
           completionTargetDate=this.completionTargetDate
-          enabled=(isCompletionEditable this)
+          enabled=($not ($some this.isCompleted this.isVerified))
           onUpdate=onUpdateCompletionDate}}
 
       {{#unless this.isCompleted}}

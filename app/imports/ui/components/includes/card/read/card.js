@@ -1,10 +1,20 @@
 import { Template } from 'meteor/templating';
 
+import { isOrgOwner } from '/imports/api/checkers.js';
+
 Template.Card_Read.viewmodel({
   mixin: 'utils',
   cardTitle: 'Title',
   doc: '',
   isReadOnly: false,
+  isDeleteBtnShown: false,
+  isOrgOwner({ organizationId }) {
+    return isOrgOwner(Meteor.userId(), organizationId);
+  },
+  showDeleteBtn({ organizationId }) {
+    console.log(this.isDeleteBtnShown());
+    return isOrgOwner(Meteor.userId(), organizationId) || !!this.isDeleteBtnShown();
+  },
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
@@ -43,8 +53,8 @@ Template.Card_Read.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted, ...args }) {
-    if (!isDeleted) return;
+  delete({ _id, title, isDeleted, organizationId, ...args }) {
+    if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
     swal(
       {

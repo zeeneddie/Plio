@@ -57,7 +57,10 @@ Template.EditStandard.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
+          if (err) {
+            swal.close();
+            return;
+          };
 
           swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 

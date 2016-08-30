@@ -7,6 +7,7 @@ import { ActionTypes } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
+import { isOrgOwner } from '/imports/api/checkers.js';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'window',
@@ -24,6 +25,9 @@ Template.Standards_Card_Read.viewmodel({
   isDiscussionOpened: false,
   ActionTypes() {
     return ActionTypes;
+  },
+  isOrgOwner({ organizationId } = {}) {
+    return isOrgOwner(Meteor.userId(), organizationId);
   },
   toggleScreenMode() {
     const $div = this.templateInstance.$('.content-cards-inner');
@@ -123,8 +127,8 @@ Template.Standards_Card_Read.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted }) {
-    if (!isDeleted) return;
+  delete({ _id, title, isDeleted, organizationId }) {
+    if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
     swal(
       {

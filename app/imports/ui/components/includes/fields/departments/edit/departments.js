@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
+import { canChangeOrgSettings } from '/imports/api/checkers.js';
+
 Template.Departments_Edit.viewmodel({
   mixin: ['search', 'organization', 'department'],
   label: 'Department/sector(s)',
@@ -19,6 +21,11 @@ Template.Departments_Edit.viewmodel({
     const query = { ...this.searchObject('value', 'name') };
 
     return this._getDepartmentsByQuery(query);
+  },
+  content() {
+    return canChangeOrgSettings(Meteor.userId(), this.organizationId())
+            ? 'Departments_Create'
+            : null;
   },
   onUpdateCb() {
     return this.update.bind(this);

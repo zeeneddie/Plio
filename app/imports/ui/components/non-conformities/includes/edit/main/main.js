@@ -7,7 +7,6 @@ import { isViewed } from '/imports/api/checkers.js';
 
 Template.NC_Card_Edit_Main.viewmodel({
   mixin: 'organization',
-  isStandardsEditable: true,
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
@@ -16,12 +15,17 @@ Template.NC_Card_Edit_Main.viewmodel({
       updateViewedBy.call({ _id: doc._id });
     }
   },
+  isStandardsEditable: true,
+  methodRefs: '',
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
     return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);
   },
   NCGuidelines() {
     return this.organization() && this.organization().ncGuidelines;
+  },
+  getMethodRefs() {
+    return () => this.methodRefs();
   },
   update(...args) {
     this.parent().update(...args);

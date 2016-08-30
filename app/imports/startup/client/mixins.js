@@ -871,7 +871,11 @@ ViewModel.mixin({
     // Only title is required
     sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
       const notificationSound = document.getElementById('notification-sound');
-      notificationSound && notificationSound.play();
+
+      if (notificationSound) {
+        notificationSound.currentTime = 0;
+        notificationSound.play();
+      }
 
       let notification = new Notification(title, {
         body,

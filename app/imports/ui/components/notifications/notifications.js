@@ -16,23 +16,19 @@ Template.Notifications.viewmodel({
       }
     }
 
-    if( this.isNotificationOnAdded() ){
-      Notifications.find().observe({
-        added: (doc) => {
-          this.sendNotification(doc);
-          updateViewedBy.call(doc._id);
-        }
-      });
-    }
+    Notifications.find().observe({
+      added: (doc) => {
+        this.sendNotification(doc);
+        updateViewedBy.call(doc._id);
+      }
+    });
   },
 
-  audio(){
+  audio() {
     return this.templateInstance.find('#notification-sound');
   },
-  isNotificationOnAdded(){
-    return this.notificationOnAdded && this.notificationOnAdded();
-  },
-  playSound(){
+
+  playSound() {
     const audio = this.audio();
 
     audio && audio.play();
