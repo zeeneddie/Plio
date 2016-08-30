@@ -6,5 +6,13 @@ ViewModel.share({
   },
   search: {
     searchText: ''
+  },
+  messages: {
+    isInitialDataReady: false,
+    options: {
+      limit: 50,
+      at: null,
+      sort: { createdAt: -1 }
+    }
   }
 });

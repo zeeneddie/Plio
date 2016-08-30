@@ -10,31 +10,52 @@ import {
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
+import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 
 Template.Discussion_AddMessage_Form.viewmodel({
+	share: 'messages',
 	mixin: ['discussions', 'standard'],
-
 	disabled: false,
 	files: [],
 	messageFile: null,
 	messageText: '',
 	slingshotDirective: 'discussionsFiles',
-
-	discussionId(){
+	discussionId() {
 		return this.getDiscussionIdByStandardId(this.standardId());
 	},
 	sendTextMessage() {
 		if (this.disabled()) return;
+
 		const discussionId = this.discussionId();
+
+		MessageSubs.clear();
+
+		MessageSubs.reset();
+
+		FlowRouter.setQueryParams({ at: null });
+
+		// Shared props with Discussion_Messages
+		this.isInitialDataReady(false);     // <
+
+		this.options({                      // <
+			...this.options(),
+			at: null
+		});
+
+		Tracker.flush();
 
 		addMessage.call({
 			discussionId,
 			message: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult((err, res) => {
-      if(res){
+      if (res) {
         this.reset();
+
+				const $chat = $('.chat-content');
+
+				$chat.scrollTop($chat.prop('scrollHeight'));
 
         // [ToDo] Call a ringtone on a successful message addition
       }

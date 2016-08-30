@@ -34,13 +34,6 @@ Template.Discussion_Message.viewmodel({
 			const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
 
 			$chat.scrollTop(offset);
-		} else if (!at && invoke(this, 'isLast')) {
-			// scroll to the bottom of the chat
-			// all messages are not always in time
-			Tracker.afterFlush(() => {
-				const $chatScrollHeight = $chat.prop('scrollHeight');
-				$chat.scrollTop($chatScrollHeight);
-			});
 		}
 	},
 	getFormattedDate: getFormattedDate,

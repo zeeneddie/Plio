@@ -10,12 +10,8 @@ import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 
-const applyWheelHandler = function applyWheelHandler(mod) {
-	const elem = this.templateInstance.$('.chat-content');
-	return elem && handleMouseWheel(elem[0], this.triggerLoadMore.bind(this), mod);
-};
-
 Template.Discussion_Messages.viewmodel({
+	share: 'messages',
 	mixin: ['discussions', 'messages', 'standard', 'user'],
 	isReady: true,
 	onCreated(template) {
@@ -25,8 +21,15 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		template.autorun(() => {
-			const handle = MessageSubs.subscribe('messages', this.discussionId(), this.options());
-			this.isReady(handle.ready());
+			MessageSubs.subscribe('messages', this.discussionId(), this.options());
+
+			const isReady = MessageSubs.ready();
+
+			if (isReady) {
+				this.isInitialDataReady(true);
+			}
+
+			this.isReady(isReady);
 		});
 	},
 	onRendered(template) {
@@ -37,17 +40,15 @@ Template.Discussion_Messages.viewmodel({
 			bulkUpdateViewedBy.call({ discussionId });
 		}
 
-		applyWheelHandler.call(this, 'addEventListener');
+		const $chat = Object.assign($(), this.chat);
+		handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
 
 		// Subscribe notifications to messages
 		this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
-		applyWheelHandler.call(this, 'removeEventListener');
-	},
-	options: {
-		limit: 50,
-		sort: { createdAt: -1 }
+		const $chat = Object.assign($(), this.chat);
+		handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'removeEventListener');
 	},
   // The _id of the primary discussion for this standardId
 	discussion() {
@@ -123,11 +124,6 @@ Template.Discussion_Messages.viewmodel({
 
 			return Object.assign({}, message, obj);
 		});
-
-		if (messagesMapped.length) {
-			const last = messagesMapped[messagesMapped.length - 1];
-			last.isLast = true;
-		}
 
 		return messagesMapped;
 	},

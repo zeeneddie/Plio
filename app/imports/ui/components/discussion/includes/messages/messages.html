@@ -15,9 +15,9 @@
 						{{> Preloader size=2}}
 					{{/unless}}
 				</div>
-				{{#each messages}}
-					{{> Discussion_Message}}
-				{{/each}}
+				{{#if isInitialDataReady}}
+					{{> Discussion_Messages_List messages=messages}}
+				{{/if}}
 				<div class="infinite-load-newer text-xs-center">
 					{{#unless isReady}}
 						{{> Preloader size=2}}
