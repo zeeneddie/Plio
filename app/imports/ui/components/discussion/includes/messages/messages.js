@@ -10,9 +10,14 @@ import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 
+const applyWheelHandler = function applyWheelHandler(mod) {
+	const elem = this.templateInstance.$('.chat-content');
+	return elem && handleMouseWheel(elem[0], this.triggerLoadMore.bind(this), mod);
+};
+
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
-	ready: false,
+	isReady: true,
 	onCreated(template) {
 		this.options({
 			...this.options(),
@@ -21,7 +26,7 @@ Template.Discussion_Messages.viewmodel({
 
 		template.autorun(() => {
 			const handle = MessageSubs.subscribe('messages', this.discussionId(), this.options());
-			this.ready(handle);
+			this.isReady(handle.ready());
 		});
 	},
 	onRendered(template) {
@@ -32,13 +37,13 @@ Template.Discussion_Messages.viewmodel({
 			bulkUpdateViewedBy.call({ discussionId });
 		}
 
-		handleMouseWheel(this.chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
+		applyWheelHandler.call(this, 'addEventListener');
 
 		// Subscribe notifications to messages
 		this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
-		handleMouseWheel(this.chat[0], this.triggerLoadMore.bind(this), 'removeEventListener');
+		applyWheelHandler.call(this, 'removeEventListener');
 	},
 	options: {
 		limit: 50,
@@ -128,26 +133,21 @@ Template.Discussion_Messages.viewmodel({
 	},
 	triggerLoadMore: _.throttle(function(e) {
 		const direction = wheelDirection(e);
-		const currentY = $(e.target).scrollTop();
 		const loadOlderHandler = this.templateInstance.$('.infinite-load-older');
 		const loadNewerHandler = this.templateInstance.$('.infinite-load-newer');
 
-		this.ready(false);
-
-		Meteor.setTimeout(() => {
-			if (direction > 0) {
-				// upscroll
-				if (loadOlderHandler.isAlmostVisible()) {
-					this.loadMore(-1);
-				}
-			} else {
-				// downscroll
-				if (loadNewerHandler.isAlmostVisible()) {
-					this.loadMore(1);
-				}
+		if (direction > 0) {
+			// upscroll
+			if (loadOlderHandler.isAlmostVisible()) {
+				this.loadMore(-1);
 			}
-		}, 100);
-	}, 1500),
+		} else {
+			// downscroll
+			if (loadNewerHandler.isAlmostVisible()) {
+				this.loadMore(1);
+			}
+		}
+	}, 3000),
 	loadMore(direction = -1) {
 		const messages = Object.assign([], this.messages());
 		const options = Object.assign({}, this.options());
