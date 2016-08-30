@@ -13,16 +13,18 @@ export const wheelDirection = function(evt) {
 };
 
 export const handleMouseWheel = function(el, listener, operation = 'addEventListener') {
-  if (el[operation]) {
-    el[operation]('mousewheel', listener, false);     // Chrome/Safari/Opera
-    el[operation]('DOMMouseScroll', listener, false); // Firefox
-  } else {
-    // IE
-    if (operation === 'addEventListener') operation = 'attachEvent';
-    else if (operation === 'removeEventListener') operation = 'detachEvent';
-
+  if (el) {
     if (el[operation]) {
-      el[operation]('onmousewheel', listener);
+      el[operation]('mousewheel', listener, false);     // Chrome/Safari/Opera
+      el[operation]('DOMMouseScroll', listener, false); // Firefox
+    } else {
+      // IE
+      if (operation === 'addEventListener') operation = 'attachEvent';
+      else if (operation === 'removeEventListener') operation = 'detachEvent';
+
+      if (el[operation]) {
+        el[operation]('onmousewheel', listener);
+      }
     }
   }
 };

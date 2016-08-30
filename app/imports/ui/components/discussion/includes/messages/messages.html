@@ -10,19 +10,21 @@
 						</p>
 					</div>
 				{{/if}}
-				<div class="infinite-load-older text-xs-center">
-					{{#unless isReady}}
-						{{> Preloader size=2}}
-					{{/unless}}
-				</div>
 				{{#if isInitialDataReady}}
+					<div class="infinite-load-older text-xs-center">
+						{{#unless isReady}}
+							{{> Preloader size=2}}
+						{{/unless}}
+					</div>
+
 					{{> Discussion_Messages_List messages=messages}}
+
+					<div class="infinite-load-newer text-xs-center">
+						{{#unless isReady}}
+							{{> Preloader size=2}}
+						{{/unless}}
+					</div>
 				{{/if}}
-				<div class="infinite-load-newer text-xs-center">
-					{{#unless isReady}}
-						{{> Preloader size=2}}
-					{{/unless}}
-				</div>
 			</div>
 		</div>
 	{{/if}}

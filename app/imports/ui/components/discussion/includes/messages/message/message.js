@@ -11,11 +11,6 @@ import { removeMessageById } from '/imports/api/messages/methods.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 
-const getDOMNodes = template => ({
-	$chat: $(template.firstNode).closest('.chat-content'),
-	$message: template.$('.chat-message-container')
-});
-
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	onRendered(template) {
@@ -23,11 +18,13 @@ Template.Discussion_Message.viewmodel({
 
 		const at = FlowRouter.getQueryParam('at');
 		const _id = invoke(this, '_id');
-		const { $chat, $message } = getDOMNodes(template);
+		const $chat = $(template.firstNode).closest('.chat-content');
+		const $message = template.$('.chat-message-container');
+
 		const msgOffset = $message.offset().top;
 
 		if (Object.is(at, _id)) {
-			// scroll to the center of the linked message
+			// center the linked message in the chat box
 			const elHeight = $message.height();
 			const chatHeight = $chat.height();
 

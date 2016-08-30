@@ -12,7 +12,7 @@ import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 
 Template.Discussion_Messages.viewmodel({
 	share: 'messages',
-	mixin: ['discussions', 'messages', 'standard', 'user'],
+	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
 	isReady: true,
 	onCreated(template) {
 		this.options({
@@ -25,7 +25,7 @@ Template.Discussion_Messages.viewmodel({
 
 			const isReady = MessageSubs.ready();
 
-			if (isReady) {
+			if (isReady && !this.isInitialDataReady()) {
 				this.isInitialDataReady(true);
 			}
 
@@ -44,7 +44,7 @@ Template.Discussion_Messages.viewmodel({
 		handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
 
 		// Subscribe notifications to messages
-		this.notifyOnIncomeMessages();
+		// this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);

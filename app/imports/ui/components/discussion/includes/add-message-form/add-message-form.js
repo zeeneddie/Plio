@@ -2,6 +2,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 
 import {
 	addFilesToMessage, addMessage, getMessages, removeFileFromMessage, removeMessageById,
@@ -13,14 +14,18 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 
+const defaults = {
+	files: [],
+	messageFile: null,
+	messageText: ''
+};
+
 Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'standard'],
 	disabled: false,
-	files: [],
-	messageFile: null,
-	messageText: '',
 	slingshotDirective: 'discussionsFiles',
+	...defaults,
 	discussionId() {
 		return this.getDiscussionIdByStandardId(this.standardId());
 	},
@@ -29,21 +34,23 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		const discussionId = this.discussionId();
 
-		MessageSubs.clear();
+		if (FlowRouter.getQueryParam('at')) {
+			MessageSubs.clear();
 
-		MessageSubs.reset();
+			MessageSubs.reset();
 
-		FlowRouter.setQueryParams({ at: null });
+			FlowRouter.setQueryParams({ at: null });
 
-		// Shared props with Discussion_Messages
-		this.isInitialDataReady(false);     // <
+			// Shared props with Discussion_Messages
+			this.isInitialDataReady(false);     // <
 
-		this.options({                      // <
-			...this.options(),
-			at: null
-		});
+			this.options({                      // <
+				...this.options(),
+				at: null
+			});
 
-		Tracker.flush();
+			Tracker.flush();
+		}
 
 		addMessage.call({
 			discussionId,
@@ -51,7 +58,8 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			type: 'text'
 		}, handleMethodResult((err, res) => {
       if (res) {
-        this.reset();
+				// cannot use vm's reset there cause of shared props
+        this.load(defaults);
 
 				const $chat = $('.chat-content');
 
