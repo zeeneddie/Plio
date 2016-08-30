@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 import { AvatarPlaceholders } from '/imports/api/constants.js'
 
 export default Utils = {
@@ -43,11 +45,16 @@ export default Utils = {
     return last ? last.serialNumber + 1 : 1;
   },
 
-  inherit(base, mixins) {
-    let result = base;
+  getUserFullNameOrEmail(userOrId) {
+    let user = userOrId;
+    if (typeof userOrId === 'string') {
+      user = Meteor.users.findOne(userOrId);
+    }
 
-    _(mixins).each(mixin => result = mixin(result));
+    return (user && user.fullNameOrEmail()) || 'Ghost';
+  },
 
-    return result;
+  getPrettyUTCDate(date) {
+    return `${moment(date).tz('UTC').format('DD MMM YYYY hh:mm:ss')} (UTC)`;
   }
 }
