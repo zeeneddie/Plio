@@ -1,2 +1,2 @@
-import './work-items-stats.html';
-import './work-items-stats.js';
+import './work-item-stats.html';
+import './work-item-stats.js';

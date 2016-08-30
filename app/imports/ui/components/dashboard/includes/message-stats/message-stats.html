@@ -1,0 +1,36 @@
+<template name="Dashboard_MessageStats">
+  {{#if isReady}}
+    {{#if messagesCount}}
+      <div class="dashboard-stats">
+    		<h4 class="dashboard-stats-title">
+    		  {{unreadMessages}}
+    		  <a href="#" {{b 'click: markMessagesRead'}}>
+            <i class="fa fa-times-circle" title="Mark all visible messages as read"></i>
+          </a>
+    		</h4>
+
+        {{#each messages}}
+      		<a class="dashboard-stats-message" href="{{this.url}}">
+        		<i class="fa fa-comment"></i>
+        		<strong>{{this.fullName}}:</strong>
+        		{{this.message}}
+        		<span class="text-muted">{{this.timeString}}</span>
+      		</a>
+        {{/each}}
+
+        {{#if areItemsToLoad}}
+          {{#if unreadMessagesLimited}}
+            <button type="button" class="btn btn-secondary" {{b 'click: loadAllItems'}}>
+              View all items ({{itemsToLoadMore}} more)
+            </button>
+          {{else}}
+            <button type="button" class="btn btn-secondary" {{b 'click: hideExcessiveItems'}}>
+              Hide ({{itemsToLoadMore}} items)
+            </button>
+          {{/if}}
+        {{/if}}
+    	</div>
+      <hr>
+    {{/if}}
+  {{/if}}
+</template>
