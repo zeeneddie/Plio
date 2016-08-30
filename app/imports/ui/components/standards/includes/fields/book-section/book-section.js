@@ -3,6 +3,7 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
+import { canChangeOrgSettings } from '/imports/api/checkers.js';
 
 
 Template.ESBookSection.viewmodel({
@@ -34,6 +35,11 @@ Template.ESBookSection.viewmodel({
     };
     const options = { sort: { title: 1 } };
     return StandardsBookSections.find(query, options);
+  },
+  content() {
+    return canChangeOrgSettings(Meteor.userId(), this.organizationId())
+            ? 'ESBookSectionCreate'
+            : null;
   },
   onUpdateCb() {
     return this.update.bind(this);

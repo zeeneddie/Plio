@@ -3,10 +3,11 @@ import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 
-Template.FileUploader2.viewmodel({
+Template.DiscussionsFileUploader.viewmodel({
   mixin: 'modal',
 
-  attachmentFile: null,
+  //attachmentFile: null,
+  attachmentFiles: [],
   uploads: new ReactiveArray(), // temporarily stores the files being uploaded
 
   uploadData(fileId) { // find the file with fileId is being uploaded
@@ -18,7 +19,7 @@ Template.FileUploader2.viewmodel({
     const uploadData = this.uploadData(fileId);
     const uploader = uploadData && uploadData.uploader;
     let progress = uploader && uploader.progress();
-    console.log('uploadData', uploadData);
+    
     if (!uploader) {
       progress = 0;
     }
@@ -26,44 +27,76 @@ Template.FileUploader2.viewmodel({
     return _.isFinite(progress) ? Math.round(progress * 100) : 0;
   },
   fileName() {
-    return this.attachmentFile() && this.attachmentFile().name;
+    //return this.attachmentFile() && this.attachmentFile().name;
   },
   upload() {
     const self = this;
-    const file = this.attachmentFile();
-    if (!file) {
+    const fileMaxSize = Meteor.settings.public.discussionsFilesMaxSize;// 10485760 - 10 MB,
+    const files = this.attachmentFiles();
+    let areBadFiles = false; // are there any files which can not be allowed for downloading
+
+    if (!files.length) {
       return;
     }
 
-    const _id = Random.id();
-    const name = file.name;
+    // File documents to insert in Messages collection with messages docs
+    const fileDocs = [];
+    Array.prototype.forEach.call(files, (file) => {
+      if(file.size > fileMaxSize){
+        areBadFiles = true;
+        return;
+      }
 
-    this.attachmentFile(null);
-    this.fileInput.val(null);
+      fileDocs.push({
+        _id: Random.id(), name: file.name, size: file.size
+      });
+    });
 
-    this.insertFile({ _id, name }, (err) => {
+    // Show notification about bad files presence
+    if(areBadFiles){
+      swal({
+        showConfirmButton: false,
+        text: 'Some files exceed allowed size of 10 MB',
+        timer: 2000,
+        title: "Upload denied",
+        type: 'error'
+      });
+    }
+
+    if(!fileDocs.length){
+      return;
+    }
+
+    self.attachmentFiles([]);
+    self.fileInput.val(null);
+
+    self.insertFile(fileDocs, (err, res, fileDocObj = null) => {
       if (err) {
         throw err;
       }
 
+      const { _id, i } = fileDocObj;
+      const file = files[i]; // original file to upload
       const uploader = new Slingshot.Upload(
-        this.slingshotDirective(), this.metaContext()
+        self.slingshotDirective(), self.metaContext()
       );
 
       this.uploads().push({ fileId: _id, uploader });
 
       uploader.send(file, (err, url) => {
         if(err){
-          // [TODO] Handle error
-          throw err;
+          self.removeFileFromMessage(_id);
+
+          //throw err;
+          return;
         }
 
         if (url) {
           url = encodeURI(url);
         }
 
-        this.onUpload(err, { _id, url });
-        this.removeUploadData(_id);
+        self.onUpload(err, { _id, url });
+        self.removeUploadData(_id);
       });
     });
   },

@@ -64,7 +64,7 @@ Template.OrgSettings_MainSettings.viewmodel({
         } else {
           swal({
             title: 'Success',
-            text: 'An invitation to transfer ownership is successfully sent',
+            text: 'An invitation to transfer ownership was sent successfully',
             type: 'success',
           });
         }
@@ -92,7 +92,7 @@ Template.OrgSettings_MainSettings.viewmodel({
         } else {
           swal({
             title: 'Success',
-            text: `Transfer of the "${name}" organization is canceled`,
+            text: `Transfer of the "${name}" organization was canceled`,
             type: 'success',
           });
         }

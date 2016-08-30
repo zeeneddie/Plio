@@ -19,6 +19,9 @@ Template.Discussion_Messages.viewmodel({
 		if(discussionId){
 			bulkUpdateViewedBy.call({ discussionId });
 		}
+
+		// Subscribe notifications to messages
+		this.notifyOnIncomeMessages();
 	},
 
   // The _id of the primary discussion for this standardId
@@ -38,8 +41,9 @@ Template.Discussion_Messages.viewmodel({
 			const options = {
   			sort: { createdAt: 1 }
   		};
+			const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
-			return this._getMessagesByDiscussionId(this.discussionId(), options).fetch();
+			return msg.fetch();
 		})();
 
 		const messagesMapped = messages.map((message, i, arr) => {
@@ -96,5 +100,28 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		return messagesMapped;
+	},
+	notifyOnIncomeMessages() {
+		const self = this;
+		let init = true;
+		const options = {
+			sort: { createdAt: 1 }
+		};
+		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
+		const messageSound = self.templateInstance.find('#message-sound');
+
+		msg.observe({
+			added(doc) {
+				if (init) {
+					return;
+				}
+				
+				messageSound.currentTime = 0;
+				messageSound.play();
+				init = false;
+			}
+		});
+
+		init = false;
 	}
 });

@@ -1,10 +1,14 @@
 import moment from 'moment-timezone';
+import curry from 'lodash.curry';
+import get from 'lodash.get';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
 import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
+
+const { compose } = _;
 
 
 const compareDates = (date1, date2) => {
@@ -87,11 +91,38 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
+
+const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
+
+const inject = anything => fn => fn(anything);
+
+const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
+
+const withUserId = fn => (userId) => {
+  return fn({ userId });
+};
+
+const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
+
+const checkAndThrow = (predicate, error = '') => {
+  if (predicate) throw error;
+
+  return true;
+};
+
 export {
   compareDates,
   getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
   handleMethodResult,
-  getCollectionByDocType
+  getCollectionByDocType,
+  chain,
+  chainCheckers,
+  checkAndThrow,
+  inject,
+  injectCurry,
+  withUserId,
+  mapArgsTo
 };
