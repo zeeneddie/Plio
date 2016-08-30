@@ -39,6 +39,41 @@ Meteor.publish('messages', function(discussionId, {
 	return Messages.find({ discussionId }, { limit, sort });
 });
 
+Meteor.publish('messagesLast', function(discussionId) {
+	const discussion = Object.assign({}, Discussions.findOne({ _id: discussionId }));
+
+	if (!this.userId || !isOrgMember(this.userId, get(discussion, 'organizationId'))) {
+		return this.ready();
+	}
+
+	let lastMessageId;
+	let initializing = true;
+
+	const query = { discussionId };
+	const options = { sort: { createdAt: -1 }, skip: 0, limit: 1 };
+
+	const getLastMessageId = () => get(_.first(Messages.find(query, options).fetch()), '_id');
+
+	const handle = Messages.find(query, { sort: options.sort }).observeChanges({
+		added: (id) => {
+			if (!initializing) {
+				this.changed('lastMessage', discussionId, { lastMessageId: id });
+			}
+		},
+		removed: (id) => {
+			this.changed('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+		}
+	});
+
+	initializing = false;
+
+	this.added('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+
+	this.ready();
+
+	this.onStop(() => handle.stop());
+});
+
 Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds, params = { limit: 50 }) {
 	const extractUserIds = (cursors, arrayOfIds = []) => {
 		if (!!cursors && !Match.test(cursors, Array)) {

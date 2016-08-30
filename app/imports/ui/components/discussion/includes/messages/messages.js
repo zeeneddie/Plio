@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 import invoke from 'lodash.invoke';
+import property from 'lodash.property';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
@@ -14,6 +15,7 @@ Template.Discussion_Messages.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
 	isReady: true,
+	lastMessage: new Mongo.Collection('lastMessage'),
 	onCreated(template) {
 		this.options({
 			...this.options(),
@@ -22,6 +24,7 @@ Template.Discussion_Messages.viewmodel({
 
 		template.autorun(() => {
 			MessageSubs.subscribe('messages', this.discussionId(), this.options());
+			template.subscribe('messagesLast', this.discussionId());
 
 			const isReady = MessageSubs.ready();
 
@@ -139,8 +142,14 @@ Template.Discussion_Messages.viewmodel({
 			}
 		} else {
 			// downscroll
-			if (loadNewerHandler.isAlmostVisible()) {
-				this.loadMore(1);
+			const messages = Object.assign([], this.messages());
+			const lastMessageId = get(this.lastMessage().findOne(), 'lastMessageId');
+
+			// don't try to load new messages when there is a last message already presented
+			if (!messages.map(property('_id')).includes(lastMessageId)) {
+				if (loadNewerHandler.isAlmostVisible()) {
+					this.loadMore(1);
+				}
 			}
 		}
 	}, 3000),
