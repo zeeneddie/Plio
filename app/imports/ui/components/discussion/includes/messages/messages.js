@@ -35,12 +35,13 @@ Template.Discussion_Messages.viewmodel({
 			}
 
 			// hack which scrolls to the last position after new messages were prepended
-			if (this._scrollProps()) {
-				Tracker.afterFlush(() => {
-					const { $chat, scrollPosition, scrollHeight } = this._scrollProps();
-					$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - scrollHeight);
-				});
-			}
+			(() => {
+				const { $chat, direction, scrollHeight, scrollPosition } = Object.assign({}, this._scrollProps());
+
+				if (Object.is(direction, -1)) {
+					$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - $chat.prop('clientHeight') - scrollHeight);
+				}
+			})();
 
 			this.isReady(isReady);
 		});
@@ -162,7 +163,7 @@ Template.Discussion_Messages.viewmodel({
 		} else {
 			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
 		}
-	}, 3000),
+	}, 1500),
 	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
 		if (Object.is(dir, 'down')) {
 			onLoadOlder.call(this);
@@ -188,7 +189,7 @@ Template.Discussion_Messages.viewmodel({
 		const msg = dir > 0 ? _.last(messages) : _.first(messages);
 		const $chat = Object.assign($(), this.chat);
 		const scrollPosition = $chat.scrollTop();
-		const scrollHeight = $chat.prop('scrollHeight');
+		const scrollHeight = $chat.prop('scrollHeight') - $chat.prop('clientHeight');
 
 		this.options({
 			limit: options.limit + 50,
@@ -196,9 +197,7 @@ Template.Discussion_Messages.viewmodel({
 			at: get(msg, '_id')
 		});
 
-		if (direction !== 1) {
-			this._scrollProps({ $chat, scrollPosition, scrollHeight });
-		}
+		this._scrollProps({ $chat, scrollPosition, scrollHeight, direction });
 	},
 	notification() {
 		return this.child('Notifications');
