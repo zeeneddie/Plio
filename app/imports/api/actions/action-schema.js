@@ -152,6 +152,7 @@ const ActionSchema = new SimpleSchema([
     },
     files: {
       type: [FileSchema],
+      defaultValue: [],
       optional: true
     }
   }

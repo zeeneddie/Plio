@@ -1,10 +1,9 @@
-import ChangesKinds from './changes-kinds.js';
+import { ChangesKinds } from './document-differ.js';
 import Utils from '../../utils.js';
 
 
 export const isDeletedField = {
   field: 'isDeleted',
-  additionalFields: [ 'deletedAt', 'deletedBy' ],
   shouldCreateLog({ diffs: { deletedAt, deletedBy } }) {
     return deletedAt && deletedBy;
   },
@@ -17,7 +16,7 @@ export const isDeletedField = {
   },
   notificationTemplate: {
     [ChangesKinds.FIELD_CHANGED]:
-      '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{docDesc}}'
+      '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
   },
   logData({ diffs: { isDeleted } }) {
     return { deleted: isDeleted.newValue };
@@ -48,16 +47,16 @@ export const filesField = {
   },
   notificationTemplate: {
     [ChangesKinds.ITEM_ADDED]:
-      '{{userName}} uploaded file "{{fileName}}" for {{docDesc}}',
+      '{{userName}} uploaded file "{{fileName}}" for {{{docDesc}}}',
     [ChangesKinds.ITEM_REMOVED]:
-      '{{userName}} removed file "{{fileName}}" from {{docDesc}}'
+      '{{userName}} removed file "{{fileName}}" from {{{docDesc}}}'
   },
   logData({ diffs: { files } }) {
     return { fileName: files.item.name };
   },
   notificationData({ diffs: { files }, newDoc }) {
     return {
-      actionName: this.docDescription(newDoc),
+      docDesc: this.docDescription(newDoc),
       userName: Utils.getUserFullNameOrEmail(files.executor),
       fileName: files.item.name
     };
@@ -68,27 +67,30 @@ export const filesField = {
 export const fileUrlField = {
   field: 'files.$.url',
   shouldCreateLog({ diffs }) {
-    return !!diffs['files.$.url'].item.url;
+    return !!diffs['files.$.url'].newValue;
   },
   shouldSendNotification({ diffs }) {
-    return !!diffs['files.$.url'].item.url;
+    return !!diffs['files.$.url'].newValue;
   },
   logTemplate: {
+    [ChangesKinds.FIELD_ADDED]: 'File "{{fileName}}" uploaded',
     [ChangesKinds.FIELD_CHANGED]: 'File "{{fileName}}" uploaded',
   },
   notificationTemplate: {
+    [ChangesKinds.FIELD_ADDED]:
+      '{{userName}} uploaded file "{{fileName}}" for {{{docDesc}}}',
     [ChangesKinds.FIELD_CHANGED]:
-      '{{userName}} uploaded file "{{fileName}}" for {{docDesc}}',
+      '{{userName}} uploaded file "{{fileName}}" for {{{docDesc}}}',
   },
   logData({ diffs, newDoc }) {
-    const url = diffs['files.$.url'].item.url;
+    const url = diffs['files.$.url'].newValue;
     const fileDoc = _(newDoc.files).find(file => file.url === url);
 
     return { fileName: fileDoc.name };
   },
   notificationData({ diffs, newDoc }) {
     const diff = diffs['files.$.url'];
-    const url = diff.item.url;
+    const url = diff.newValue;
     const fileDoc = _(newDoc.files).find(file => file.url === url);
 
     return {
@@ -108,9 +110,9 @@ export const notesField = {
     [ChangesKinds.FIELD_REMOVED]: 'Notes removed'
   },
   notificationTemplate: {
-    [ChangesKinds.FIELD_ADDED]: '{{userName}} set notes of {{docDesc}}',
-    [ChangesKinds.FIELD_CHANGED]: '{{userName}} changed notes of {{docDesc}}',
-    [ChangesKinds.FIELD_REMOVED]: '{{userName}} removed notes of {{docDesc}}'
+    [ChangesKinds.FIELD_ADDED]: '{{userName}} set notes of {{{docDesc}}}',
+    [ChangesKinds.FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
+    [ChangesKinds.FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
   },
   logData() { },
   notificationData({ diffs: { notes }, newDoc }) {
@@ -130,9 +132,9 @@ export const notifyField = {
   },
   notificationTemplate: {
     [ChangesKinds.ITEM_ADDED]:
-      '{{userName}} added {{item}} to notification list of {{docDesc}}',
+      '{{userName}} added {{item}} to notification list of {{{docDesc}}}',
     [ChangesKinds.ITEM_REMOVED]:
-      '{{userName}} removed {{item}} from notification list of {{docDesc}}'
+      '{{userName}} removed {{item}} from notification list of {{{docDesc}}}'
   },
   logData({ diffs: { notify } }) {
     return { item: Utils.getUserFullNameOrEmail(notify.item) };
@@ -140,7 +142,7 @@ export const notifyField = {
   notificationData({ diffs: { notify }, newDoc }) {
     return {
       docDesc: this.docDescription(newDoc),
-      userName: Utils.getUserFullNameOrEmail(executor),
+      userName: Utils.getUserFullNameOrEmail(notify.executor),
       item: Utils.getUserFullNameOrEmail(notify.item)
     };
   },
@@ -156,11 +158,11 @@ export const ownerIdField = {
   },
   notificationTemplate: {
     [ChangesKinds.FIELD_ADDED]:
-      '{{userName}} set owner of {{docDesc}} to {{newValue}}',
+      '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
     [ChangesKinds.FIELD_CHANGED]:
-      '{{userName}} changed owner of {{docDesc}} from {{oldValue}} to {{newValue}}',
+      '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
     [ChangesKinds.FIELD_REMOVED]:
-      '{{userName}} removed owner of {{docDesc}}'
+      '{{userName}} removed owner of {{{docDesc}}}'
   },
   logData({ diffs: { ownerId } }) {
     return {
@@ -188,11 +190,11 @@ export const titleField = {
   },
   notificationTemplate: {
     [ChangesKinds.FIELD_ADDED]:
-      '{{userName}} set title of {{docDesc}} to "{{newValue}}"',
+      '{{userName}} set title of {{{docDesc}}} to "{{newValue}}"',
     [ChangesKinds.FIELD_CHANGED]:
-      '{{userName}} changed title of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+      '{{userName}} changed title of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
     [ChangesKinds.FIELD_REMOVED]:
-      '{{userName}} removed title of {{docDesc}}'
+      '{{userName}} removed title of {{{docDesc}}}'
   },
   logData({ diffs: { title } }) {
     return {

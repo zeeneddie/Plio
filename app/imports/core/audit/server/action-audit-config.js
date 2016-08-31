@@ -1,7 +1,8 @@
 import { Actions } from '/imports/api/actions/actions.js';
-import { CollectionNames } from '/imports/api/constants.js';
-import Auditor from './auditor.js';
-import ChangesKinds from './changes-kinds.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { Risks } from '/imports/api/risks/risks.js';
+import { ActionStatuses, CollectionNames, ProblemTypes } from '/imports/api/constants.js';
+import { ChangesKinds } from './document-differ.js';
 import {
   isDeletedField,
   filesField,
@@ -10,7 +11,9 @@ import {
   notifyField,
   ownerIdField,
   titleField
-} from './reusable-update-cases.js';
+} from './reusable-update-handlers.js';
+import NCAuditConfig from './nc-audit-config.js';
+import RiskAuditConfig from './risk-audit-config.js';
 import Utils from '../../utils.js';
 
 
@@ -25,24 +28,27 @@ const getNotificationReceivers = ({ linkedTo, ownerId }) => {
   const usersIds = new Set([ownerId]);
   const standardsIds = new Set();
 
-  const NCsIds = getLinkedDocsIds(linkedTo, ProblemTypes.NC);
-  const risksIds = getLinkedDocsIds(linkedTo, ProblemTypes.RISK);
+  const getIds = (collection, problemType) => {
+    const query = {
+      _id: { $in: getLinkedDocsIds(linkedTo, problemType) }
+    };
 
-  const ids = { NonConformities: NCsIds, Risks: risksIds };
-
-  const getIds = (collection) => {
-    const query = { _id: { $in: ids[collection] } };
-
-    collection.find(query).forEach(({ standardsIds, identifiedBy }) => {
-      _(standardsIds).each(id => standardsIds.add(id));
-      usersIds.add(identifiedBy);
+    collection.find(query).forEach((doc) => {
+      _(doc.standardsIds).each(id => standardsIds.add(id));
+      usersIds.add(doc.identifiedBy);
     });
   };
 
-  _([NonConformities, Risks]).each(collection => getIds(collection));
+  _.each(
+    [
+      { type: ProblemTypes.NC, collection: NonConformities },
+      { type: ProblemTypes.RISK, collection: Risks }
+    ],
+    ({ type, collection }) => getIds(collection, type)
+  );
 
   Standards.find({
-    _id: { $in: standardsIds }
+    _id: { $in: Array.from(standardsIds) }
   }).forEach(({ owner }) => usersIds.add(owner));
 
   return Array.from(usersIds);
@@ -58,7 +64,9 @@ const getLinkedDocName = (documentId, documentType) => {
 };
 
 
-const ActionAuditConfig = {
+export default {
+
+  collection: Actions,
 
   collectionName: CollectionNames.ACTIONS,
 
@@ -68,29 +76,35 @@ const ActionAuditConfig = {
     logData() { },
     notificationData() { },
     notificationReceivers() { },
-    additionalHandlers({ newDoc }) {
+    additionalHandlers({ newDoc, ...rest }) {
       return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
-        const docAuditConfigs = {
+        const auditConfig = {
           [ProblemTypes.NC]: NCAuditConfig,
           [ProblemTypes.RISK]: RiskAuditConfig
-        };
+        }[documentType];
 
         return {
-          config: docAuditConfigs[documentType],
-          handler: actionLinkChanged,
-          args: [{
-            action: newDoc,
-            kind: ChangesKinds.ITEM_ADDED,
+          config: auditConfig,
+          handler: auditConfig.actionLinkChanged,
+          data: _({ newDoc, ...rest }).extend({
+            actionDesc: this.docDescription(newDoc),
+            linked: true,
             documentId
-          }]
+          })
         };
       });
     }
   },
 
-  updateCases: [
+  updateHandlers: [
     {
       field: 'completedAt',
+      shouldCreateLog({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
+      shouldSendNotification({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]:
           'Completion date set to "{{newValue}}"',
@@ -101,11 +115,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion date of {{docDesc}} to "{{newValue}}"',
+          '{{userName}} set completion date of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion date of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed completion date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion date of {{docDesc}}'
+          '{{userName}} removed completion date of {{{docDesc}}}'
       },
       logData({ diffs: { completedAt } }) {
         return {
@@ -116,7 +130,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { completedAt }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(completedAt.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getPrettyUTCDate(completedAt.newValue),
           oldValue: Utils.getPrettyUTCDate(completedAt.oldValue)
         };
@@ -128,6 +142,12 @@ const ActionAuditConfig = {
 
     {
       field: 'completedBy',
+      shouldCreateLog({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
+      shouldSendNotification({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]:
           'Completion executor set to {{newValue}}',
@@ -138,11 +158,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion executor of {{docDesc}} to {{newValue}}',
+          '{{userName}} set completion executor of {{{docDesc}}} to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion executor of {{docDesc}} from {{oldValue}} to {{newValue}}',
+          '{{userName}} changed completion executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion executor of {{docDesc}}'
+          '{{userName}} removed completion executor of {{{docDesc}}}'
       },
       logData({ diffs: { completedBy } }) {
         return {
@@ -153,7 +173,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { completedBy }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(completedBy.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getUserFullNameOrEmail(completedBy.newValue),
           oldValue: Utils.getUserFullNameOrEmail(completedBy.oldValue)
         };
@@ -165,6 +185,12 @@ const ActionAuditConfig = {
 
     {
       field: 'completionComments',
+      shouldCreateLog({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
+      shouldSendNotification({ diffs: { isCompleted } }) {
+        return !isCompleted;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]: 'Completion comments set',
         [ChangesKinds.FIELD_CHANGED]: 'Completion comments changed',
@@ -172,17 +198,17 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion comments of {{docDesc}}',
+          '{{userName}} set completion comments of {{{docDesc}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion comments of {{docDesc}}',
+          '{{userName}} changed completion comments of {{{docDesc}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion comments of {{docDesc}}'
+          '{{userName}} removed completion comments of {{{docDesc}}}'
       },
       logData() { },
       notificationData({ diffs: { completionComments }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(completionComments.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: completionComments.newValue,
           oldValue: completionComments.oldValue
         };
@@ -204,11 +230,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion target date of {{docDesc}} to "{{newValue}}"',
+          '{{userName}} set completion target date of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion target date of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed completion target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion target date of {{docDesc}}'
+          '{{userName}} removed completion target date of {{{docDesc}}}'
       },
       logData({ diffs: { completionTargetDate } }) {
         return {
@@ -219,7 +245,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { completionTargetDate }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(completionTargetDate.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getPrettyUTCDate(completionTargetDate.newValue),
           oldValue: Utils.getPrettyUTCDate(completionTargetDate.oldValue)
         };
@@ -231,7 +257,6 @@ const ActionAuditConfig = {
 
     {
       field: 'isCompleted',
-      additionalFields: ['completedAt', 'completedBy', 'completionComments'],
       shouldCreateLog({ diffs: { completedAt, completedBy } }) {
         return completedAt && completedBy;
       },
@@ -249,10 +274,10 @@ const ActionAuditConfig = {
       notificationTemplate: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{userName}} completed {{docDesc}}' +
+            '{{userName}} completed {{{docDesc}}}' +
             '{{#if comments}} with following comments: {{comments}}{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled completion of {{docDesc}}' +
+            '{{userName}} canceled completion of {{{docDesc}}}' +
           '{{/if}}'
       },
       logData({ diffs: { isCompleted, completionComments } }) {
@@ -266,7 +291,7 @@ const ActionAuditConfig = {
           docDesc: this.docDescription(newDoc),
           completed: isCompleted.newValue,
           comments: completionComments && completionComments.newValue,
-          userName: Utils.getUserFullNameOrEmail(isCompleted.executor)
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
         };
       },
       notificationReceivers({ newDoc }) {
@@ -276,13 +301,6 @@ const ActionAuditConfig = {
 
     {
       field: 'isVerified',
-      additionalFields: [
-        'isVerified',
-        'verifiedAt',
-        'verifiedBy',
-        'isVerifiedAsEffective',
-        'verificationComments'
-      ],
       shouldCreateLog({ diffs: { verifiedAt, verifiedBy } }) {
         return verifiedAt && verifiedBy;
       },
@@ -293,9 +311,9 @@ const ActionAuditConfig = {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +
             '{{#if verifiedAsEffective}}' +
-              'Action verified as effective {{#if comments}}: {{comments}}{{/if}}' +
+              'Action verified as effective{{#if comments}}: {{comments}}{{/if}}' +
             '{{else}}' +
-              'Action failed verification {{#if comments}}: {{comments}}{{/if}}' +
+              'Action failed verification{{#if comments}}: {{comments}}{{/if}}' +
             '{{/if}}' +
           '{{else}}' +
             'Action verification canceled' +
@@ -305,28 +323,30 @@ const ActionAuditConfig = {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +
             '{{#if verifiedAsEffective}}' +
-              '{{userName}} verified {{docDesc}} as effective' +
+              '{{userName}} verified {{{docDesc}}} as effective' +
               '{{#if comments}} with following comments: {{comments}}{{/if}}' +
             '{{else}}' +
-              '{{userName}} failed verification of {{docDesc}}' +
+              '{{userName}} failed verification of {{{docDesc}}}' +
               '{{#if comments}} with following comments: {{comments}}{{/if}}' +
             '{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled verification of {{docDesc}}' +
+            '{{userName}} canceled verification of {{{docDesc}}}' +
           '{{/if}}'
       },
-      logData({ diffs: { isVerified, verificationComments } }) {
+      logData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments } }) {
         return {
           verified: isVerified.newValue,
+          verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
           comments: verificationComments && verificationComments.newValue
         };
       },
-      notificationData({ diffs: { isVerified, verificationComments }, newDoc }) {
+      notificationData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          completed: isVerified.newValue,
+          verified: isVerified.newValue,
+          verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
           comments: verificationComments && verificationComments.newValue,
-          userName: Utils.getUserFullNameOrEmail(isVerified.executor)
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
         };
       },
       notificationReceivers({ newDoc }) {
@@ -337,12 +357,12 @@ const ActionAuditConfig = {
     {
       field: 'linkedTo',
       logTemplate: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{linkedDocDesc}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{linkedDocDesc}}'
+        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{linkedDocDesc}}}',
+        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{linkedDocDesc}}}'
       },
       notificationTemplate: {
-        [ChangesKinds.ITEM_ADDED]: '{{userName}} linked {{docDesc}} to {{linkedDocDesc}}',
-        [ChangesKinds.ITEM_REMOVED]: '{{userName}} unlinked {{docDesc}} from {{linkedDocDesc}}'
+        [ChangesKinds.ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
+        [ChangesKinds.ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
       },
       logData({ diffs: { linkedTo } }) {
         const { item: { documentId, documentType } } = linkedTo;
@@ -357,28 +377,30 @@ const ActionAuditConfig = {
         return {
           docDesc: this.docDescription(newDoc),
           linkedDocDesc: getLinkedDocName(documentId, documentType),
-          userName: Utils.getUserFullNameOrEmail(linkedTo.executor)
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
         };
       },
       notificationReceivers({ newDoc }) {
         return getNotificationReceivers(newDoc);
       },
-      additionalHandlers({ diffs: { linkedTo }, newDoc }) {
-        const { kind, item: { documentId, documentType } } = linkedTo;
+      additionalHandlers({ diffs, newDoc, ...rest }) {
+        const { linkedTo: { kind, item: { documentId, documentType } } } = diffs;
 
-        const docAuditConfigs = {
+        const auditConfig = {
           [ProblemTypes.NC]: NCAuditConfig,
           [ProblemTypes.RISK]: RiskAuditConfig
-        };
+        }[documentType];
+
+        const linked = kind === ChangesKinds.ITEM_ADDED;
 
         return [{
-          config: docAuditConfigs[documentType],
-          handler: actionLinkChanged,
-          args: [{
-            action: newDoc,
-            documentId,
-            kind
-          }]
+          config: auditConfig,
+          handler: auditConfig.actionLinkChanged,
+          data: _({ diffs, newDoc, ...rest }).extend({
+            actionDesc: this.docDescription(newDoc),
+            linked,
+            documentId
+          })
         }];
       }
     },
@@ -392,11 +414,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set plan in place of {{docDesc}} to "{{newValue}}"',
+          '{{userName}} set plan in place of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed plan in place of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed plan in place of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed plan in place of {{docDesc}}'
+          '{{userName}} removed plan in place of {{{docDesc}}}'
       },
       logData({ diffs: { planInPlace }, newDoc }) {
         return {
@@ -407,12 +429,12 @@ const ActionAuditConfig = {
       notificationData({ diffs: { planInPlace }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(planInPlace.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: planInPlace.newValue,
           oldValue: planInPlace.oldValue
         };
       },
-      notificationReceivers(diffs, newDoc, oldDoc) {
+      notificationReceivers({ newDoc }) {
         return getNotificationReceivers(newDoc);
       }
     },
@@ -426,11 +448,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          'Status of {{docDesc}} was set to "{{newValue}}"',
+          'Status of {{{docDesc}}} was set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Status of {{docDesc}} was changed from "{{oldValue}}" to "{{newValue}}"',
+          'Status of {{{docDesc}}} was changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Status of {{docDesc}} removed'
+          'Status of {{{docDesc}}} removed'
       },
       logData({ diffs: { status } }) {
         return {
@@ -462,11 +484,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set executor of {{docDesc}} completion to {{newValue}}',
+          '{{userName}} set executor of {{{docDesc}}} completion to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed executor of {{docDesc}} completion from {{oldValue}} to {{newValue}}',
+          '{{userName}} changed executor of {{{docDesc}}} completion from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed executor of {{docDesc}} completion'
+          '{{userName}} removed executor of {{{docDesc}}} completion'
       },
       logData({ diffs: { toBeCompletedBy } }) {
         return {
@@ -477,7 +499,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { toBeCompletedBy }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(toBeCompletedBy.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.newValue),
           oldValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.oldValue)
         };
@@ -499,22 +521,22 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set executor of {{docDesc}} verification to {{newValue}}',
+          '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed executor of {{docDesc}} verification from {{oldValue}} to {{newValue}}',
+          '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed executor of {{docDesc}} verification'
+          '{{userName}} removed verification executor of {{{docDesc}}}'
       },
       logData({ diffs: { toBeVerifiedBy } }) {
         return {
-          newValue: Utils.getUserFullNameOrEmail(newValue),
-          oldValue: Utils.getUserFullNameOrEmail(oldValue)
+          newValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.newValue),
+          oldValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
         };
       },
       notificationData({ diffs: { toBeVerifiedBy }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(toBeVerifiedBy.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.newValue),
           oldValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
         };
@@ -526,6 +548,12 @@ const ActionAuditConfig = {
 
     {
       field: 'verificationComments',
+      shouldCreateLog({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
+      shouldSendNotification({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]: 'Verification comments set',
         [ChangesKinds.FIELD_CHANGED]: 'Verification comments changed',
@@ -533,17 +561,17 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification comments of {{docDesc}}',
+          '{{userName}} set verification comments of {{{docDesc}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification comments of {{docDesc}}',
+          '{{userName}} changed verification comments of {{{docDesc}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification comments of {{docDesc}}'
+          '{{userName}} removed verification comments of {{{docDesc}}}'
       },
       logData() { },
       notificationData({ diffs: { verificationComments }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(verificationComments.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
         };
       },
       notificationReceivers({ newDoc }) {
@@ -563,11 +591,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification target date of {{docDesc}} to "{{newValue}}"',
+          '{{userName}} set verification target date of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification target date of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed verification target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification target date of {{docDesc}}'
+          '{{userName}} removed verification target date of {{{docDesc}}}'
       },
       logData({ diffs: { verificationTargetDate } }) {
         return {
@@ -578,7 +606,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { verificationTargetDate }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(verificationTargetDate.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getPrettyUTCDate(verificationTargetDate.newValue),
           oldValue: Utils.getPrettyUTCDate(verificationTargetDate.oldValue)
         };
@@ -590,6 +618,12 @@ const ActionAuditConfig = {
 
     {
       field: 'verifiedAt',
+      shouldCreateLog({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
+      shouldSendNotification({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]:
           'Verification date set to "{{newValue}}"',
@@ -600,11 +634,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification date of {{docDesc}} to "{{newValue}}"',
+          '{{userName}} set verification date of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification date of {{docDesc}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed verification date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification date of {{docDesc}}'
+          '{{userName}} removed verification date of {{{docDesc}}}'
       },
       logData({ diffs: { verifiedAt } }) {
         return {
@@ -615,7 +649,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { verifiedAt }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(verifiedAt.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getPrettyUTCDate(verifiedAt.newValue),
           oldValue: Utils.getPrettyUTCDate(verifiedAt.oldValue)
         };
@@ -627,6 +661,12 @@ const ActionAuditConfig = {
 
     {
       field: 'verifiedBy',
+      shouldCreateLog({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
+      shouldSendNotification({ diffs: { isVerified } }) {
+        return !isVerified;
+      },
       logTemplate: {
         [ChangesKinds.FIELD_ADDED]:
           'Verification executor set to {{newValue}}',
@@ -637,11 +677,11 @@ const ActionAuditConfig = {
       },
       notificationTemplate: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification executor of {{docDesc}} to {{newValue}}',
+          '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification executor of {{docDesc}} from {{oldValue}} to {{newValue}}',
+          '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification executor of {{docDesc}}'
+          '{{userName}} removed verification executor of {{{docDesc}}}'
       },
       logData({ diffs: { verifiedBy } }) {
         return {
@@ -652,7 +692,7 @@ const ActionAuditConfig = {
       notificationData({ diffs: { verifiedBy }, newDoc }) {
         return {
           docDesc: this.docDescription(newDoc),
-          userName: Utils.getUserFullNameOrEmail(verifiedBy.executor),
+          userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
           newValue: Utils.getUserFullNameOrEmail(verifiedBy.newValue),
           oldValue: Utils.getUserFullNameOrEmail(verifiedBy.oldValue)
         };
@@ -724,7 +764,7 @@ const ActionAuditConfig = {
       action = Actions.findOne({ _id: docOrId });
     }
 
-    return `${action.seqentialId} "${action.title}"`;
+    return `${action.sequentialId} "${action.title}"`;
   }
 
 };

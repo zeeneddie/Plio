@@ -1,13 +1,17 @@
-import ChangesKinds from './changes-kinds.js';
-
 import deepDiff from 'deep-diff';
 
 
-export default {
+export const ChangesKinds = {
+  FIELD_ADDED: 1,
+  FIELD_CHANGED: 2,
+  FIELD_REMOVED: 3,
+  ITEM_ADDED: 4,
+  ITEM_REMOVED: 5
+};
+
+export const DocumentDiffer = {
 
   getDiff(newDocument, oldDocument) {
-    const { updatedAt:date, updatedBy:executor, _id:documentId } = newDocument;
-
     const diffs = [];
 
     const {
@@ -30,7 +34,7 @@ export default {
       return val;
     };
 
-    const rawDiffs = deepDiff.diff(this._oldDoc, this._newDoc);
+    const rawDiffs = deepDiff.diff(oldDocument, newDocument);
 
     const rawArrayDiffs = _(rawDiffs).filter(diff => diff.kind === 'A');
     const rawFieldDiffs = _(rawDiffs).filter(diff => diff.kind !== 'A');
@@ -40,8 +44,8 @@ export default {
     _(rawArrayDiffs).each((rawDiff) => {
       const { kind, path, item: { kind:itemKind } = {} } = rawDiff;
 
-      const oldArray = getValue(this._oldDoc, path);
-      const newArray = getValue(this._newDoc, path);
+      const oldArray = getValue(oldDocument, path);
+      const newArray = getValue(newDocument, path);
 
       let arr1, arr2, changeKind;
       if (itemKind === 'N') {
@@ -64,10 +68,7 @@ export default {
         kind: changeKind,
         field,
         item,
-        path,
-        date,
-        executor,
-        documentId
+        path
       });
 
       processedArrayFields.push(new RegExp(`^${field}\\.\\$`));
@@ -90,17 +91,15 @@ export default {
       };
 
       diffs.push({
-
         kind: changesKinds[kind],
         field,
         oldValue,
         newValue,
-        path,
-        date,
-        executor,
-        documentId
+        path
       });
     });
+
+    return diffs;
   }
 
 }

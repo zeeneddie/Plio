@@ -9,7 +9,7 @@ import './browser-policies.js';
 import './cron';
 import './db-indexes.js';
 import './aws.js';
-import '/imports/core/audit/server/action-audit-config.js';
+import './audit.js';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.
