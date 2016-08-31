@@ -50,7 +50,6 @@ Template.Discussion_Messages.viewmodel({
 	},
 	onRendered(template) {
 		const discussionId = this.discussionId();
-		const notifications = this.child('Notifications');
 
 		if (discussionId) {
 			bulkUpdateViewedBy.call({ discussionId });
@@ -62,7 +61,7 @@ Template.Discussion_Messages.viewmodel({
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
 
 		// Subscribe notifications to messages
-		// this.notifyOnIncomeMessages();
+		this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);
@@ -210,6 +209,7 @@ Template.Discussion_Messages.viewmodel({
 			sort: { createdAt: 1 }
 		};
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
+		const messageSound = this.templateInstance.find('#message-sound');
 
 		msg.observe({
 			added: (doc) => {
@@ -217,7 +217,10 @@ Template.Discussion_Messages.viewmodel({
 					return;
 				}
 
-				invoke(this.notification(), 'playSound');
+				console.log(messageSound);
+
+				messageSound.currentTime = 0;
+				messageSound.play();
 
 				init = false;
 			}

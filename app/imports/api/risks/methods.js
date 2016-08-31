@@ -11,10 +11,27 @@ import {
   UserIdSchema,
   CompleteActionSchema
 } from '../schemas.js';
+import Method, { CheckedMethod } from '../method.js';
+import {
+  checkOrgMembership,
+  checkAnalysis,
+  onRemoveChecker,
+  onRestoreChecker,
+  P_OnSetAnalysisExecutorChecker,
+  P_OnSetAnalysisDateChecker,
+  P_OnCompleteAnalysisChecker,
+  P_OnStandardsUpdateChecker,
+  P_OnUndoStandardsUpdateChecker,
+  P_OnUndoAnalysisChecker,
+  P_OnSetStandardsUpdateExecutorChecker,
+  P_OnSetStandardsUpdateDateChecker
+} from '../checkers.js';
+import { ACCESS_DENIED } from '../errors.js';
+import { inject } from '../helpers.js';
 
-import { checkAnalysis } from '../checkers.js';
+const injectRK = inject(Risks);
 
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'Risks.insert',
 
   validate: new SimpleSchema([RequiredSchema, {
@@ -25,54 +42,39 @@ export const insert = new ValidatedMethod({
     }
   }]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a risk'
-      );
-    }
+  run({ organizationId, ...args }) {
+    checkOrgMembership(this.userId, organizationId);
 
-    return RisksService.insert({ ...args });
+    return RisksService.insert({ organizationId, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'Risks.update',
 
   validate: new SimpleSchema([
     IdSchema, RisksUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({ _id, options, query, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a risk'
-      );
-    }
+  check(checker) {
+    const _checker = (...args) => {
+      return (doc) => {
+        if (_.has(args, ['scoredBy', 'scoredAt']) && !doc.score) {
+          throw ACCESS_DENIED;
+        }
+        return checkAnalysis(doc, args);
+      };
+    };
 
-    const risk = Risks.findOne({ _id });
+    return injectRK(checker)(_checker);
+  },
 
-    if (!risk) {
-      throw new Meteor.Error(
-        400, 'Risk does not exist'
-      );
-    }
-
-    checkAnalysis(risk, args);
-
-    if (_.has('args', ['scoredBy', 'scoredAt']) && !risk.score) {
-      throw new Meteor.Error(
-        403, 'Access denied'
-      )
-    }
-
-    return RisksService.update({ _id, options, query, ...args });
+  run({ ...args }) {
+    return RisksService.update({ ...args });
   }
 });
 
-export const setAnalysisExecutor = new ValidatedMethod({
+export const setAnalysisExecutor = new CheckedMethod({
   name: 'Risks.setAnalysisExecutor',
 
   validate: new SimpleSchema([
@@ -85,18 +87,14 @@ export const setAnalysisExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, executor }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannnot update root cause analysis'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnSetAnalysisExecutorChecker),
 
-    return RisksService.setAnalysisExecutor({ _id, executor });
+  run({ _id, executor }, doc) {
+    return RisksService.setAnalysisExecutor({ _id, executor }, doc);
   }
 });
 
-export const setAnalysisDate = new ValidatedMethod({
+export const setAnalysisDate = new CheckedMethod({
   name: 'Risks.setAnalysisDate',
 
   validate: new SimpleSchema([
@@ -106,86 +104,62 @@ export const setAnalysisDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update root cause analysis'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnSetAnalysisDateChecker),
 
-    return RisksService.setAnalysisDate({ _id, ...args });
+  run({ ...args }, doc) {
+    return RisksService.setAnalysisDate({ ...args }, doc);
   }
 });
 
-export const completeAnalysis = new ValidatedMethod({
+export const completeAnalysis = new CheckedMethod({
   name: 'Risks.completeAnalysis',
 
   validate: CompleteActionSchema.validator(),
 
-  run({ _id, completionComments }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot complete root cause analysis'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnCompleteAnalysisChecker),
 
-    return RisksService.completeAnalysis({ _id, completionComments, userId });
+  run({ _id, completionComments }) {
+    return RisksService.completeAnalysis({ _id, completionComments, userId: this.userId });
   }
 });
 
-export const updateStandards = new ValidatedMethod({
+export const updateStandards = new CheckedMethod({
   name: 'Risks.updateStandards',
 
   validate: CompleteActionSchema.validator(),
 
-  run({ _id, completionComments }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update standards'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnStandardsUpdateChecker),
 
-    return RisksService.updateStandards({ _id, completionComments, userId });
+  run({ _id, completionComments }) {
+    return RisksService.updateStandards({ _id, completionComments, userId: this.userId });
   }
 });
 
-export const undoStandardsUpdate = new ValidatedMethod({
+export const undoStandardsUpdate = new CheckedMethod({
   name: 'Risks.undoStandardsUpdate',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo standards update'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnUndoStandardsUpdateChecker),
 
-    return RisksService.undoStandardsUpdate({ _id, userId });
+  run({ _id }) {
+    return RisksService.undoStandardsUpdate({ _id, userId: this.userId });
   }
 });
 
-export const undoAnalysis = new ValidatedMethod({
+export const undoAnalysis = new CheckedMethod({
   name: 'Risks.undoAnalysis',
 
   validate: IdSchema.validator(),
 
-  run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot undo root cause analysis'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnUndoAnalysisChecker),
 
-    return RisksService.undoAnalysis({ _id, userId });
+  run({ _id }) {
+    return RisksService.undoAnalysis({ _id, userId: this.userId });
   }
 });
 
-export const setStandardsUpdateExecutor = new ValidatedMethod({
+export const setStandardsUpdateExecutor = new CheckedMethod({
   name: 'Risks.setStandardsUpdateExecutor',
 
   validate: new SimpleSchema([
@@ -198,18 +172,14 @@ export const setStandardsUpdateExecutor = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, executor }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update standards update'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
-    return RisksService.setStandardsUpdateExecutor({ _id, executor });
+  run({ _id, executor }, doc) {
+    return RisksService.setStandardsUpdateExecutor({ _id, executor }, doc);
   }
 });
 
-export const setStandardsUpdateDate = new ValidatedMethod({
+export const setStandardsUpdateDate = new CheckedMethod({
   name: 'Risks.setStandardsUpdateDate',
 
   validate: new SimpleSchema([
@@ -219,98 +189,62 @@ export const setStandardsUpdateDate = new ValidatedMethod({
     }
   ]).validator(),
 
-  run({ _id, ...args }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot set date for standards update'
-      );
-    }
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateDateChecker),
 
-    return RisksService.setStandardsUpdateDate({ _id, ...args });
+  run({ ...args }, doc) {
+    return RisksService.setStandardsUpdateDate({ ...args }, doc);
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new CheckedMethod({
   name: 'Risks.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRK(checker),
+
   run({ _id }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a risk'
-      );
-    }
-
-    return RisksService.updateViewedBy({ _id, viewedBy: userId });
+    return RisksService.updateViewedBy({ _id, viewedBy: this.userId });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Risks.remove',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRK(checker)(onRemoveChecker),
+
   run({ _id }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove risks'
-      );
-    }
-
-    return RisksService.remove({ _id, deletedBy: userId });
+    return RisksService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const restore = new ValidatedMethod({
+export const restore = new CheckedMethod({
   name: 'Risks.restore',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRK(checker)(onRestoreChecker),
+
   run({ _id }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot restore risks'
-      );
-    }
-
     return RisksService.restore({ _id });
   }
 });
 
-export const insertScore = new ValidatedMethod({
+export const insertScore = new CheckedMethod({
   name: 'Risks.scores.insert',
 
   validate: new SimpleSchema([IdSchema, RiskScoreSchema]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
+  check: checker => injectRK(checker),
 
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot score a risk'
-      );
-    }
-
-    const risk = Risks.findOne({ _id });
-
-    if (!risk) {
-      throw new Meteor.Error(
-        400, 'Risk with the given id does not exist'
-      );
-    }
-
-    return RisksService['scores.insert']({ _id, ...args });
+  run({ ...args }) {
+    return RisksService['scores.insert']({ ...args });
   }
 });
 
-export const removeScore = new ValidatedMethod({
+export const removeScore = new CheckedMethod({
   name: 'Risks.scores.remove',
 
   validate: new SimpleSchema([IdSchema, {
@@ -319,23 +253,9 @@ export const removeScore = new ValidatedMethod({
     }
   }]).validator(),
 
+  check: checker => injectRK(checker),
+
   run({ _id, score }) {
-    const userId = this.userId;
-
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a score'
-      );
-    }
-
-    const risk = Risks.findOne({ _id });
-
-    if (!risk) {
-      throw new Meteor.Error(
-        400, 'Risk with the given id does not exist'
-      );
-    }
-
     return RisksService['scores.remove']({ _id, score });
   }
 });

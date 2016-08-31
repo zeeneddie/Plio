@@ -25,6 +25,46 @@ Template.Subcards_RCA_Edit.viewmodel({
     const analysis = this.analysis();
     return analysis && analysis.status && analysis.status === parseInt(_.invert(AnalysisStatuses)['Completed'], 10);
   },
+  methods() {
+    const _id = this._id();
+    const { timezone } = this.organization();
+    const callMethod = this.modal().callMethod;
+
+    const setExecutor = method => ({ executor }, cb) =>
+      callMethod(method, { _id, executor }, cb);
+    const setTargetDate = method => ({ date }, cb) =>
+      callMethod(method, { _id, targetDate: getTzTargetDate(date, timezone) }, cb);
+    const complete = method => ({ completionComments }, cb) =>
+      callMethod(method, { _id, completionComments }, cb);
+    const undo = method => cb =>
+      callMethod(method, { _id }, cb);
+
+    const {
+      setAnalysisExecutor,
+      setAnalysisDate,
+      completeAnalysis,
+      undoAnalysis,
+      setStandardsUpdateExecutor,
+      setStandardsUpdateDate,
+      updateStandards,
+      undoStandardsUpdate
+    } = this.getMethodRefs();
+
+    return {
+      Analysis: () => ({
+        'executor.set': setExecutor(setAnalysisExecutor),
+        'date.set': setTargetDate(setAnalysisDate),
+        'complete': complete(completeAnalysis),
+        'undo': undo(undoAnalysis)
+      }),
+      UpdateOfStandards: () => ({
+        'executor.set': setExecutor(setStandardsUpdateExecutor),
+        'date.set': setTargetDate(setStandardsUpdateDate),
+        'complete': complete(updateStandards),
+        'undo': undo(undoStandardsUpdate)
+      })
+    };
+  },
   update({ query = {}, options = {}, ...args }, cb) {
     const allArgs = { ...args, options, query };
 

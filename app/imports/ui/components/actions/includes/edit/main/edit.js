@@ -6,6 +6,7 @@ import { isViewed } from '/imports/api/checkers.js';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({
+  mixin: 'utils',
   onRendered(templateInstance) {
     const action = templateInstance.data.action;
     const userId = Meteor.userId();

@@ -30,8 +30,6 @@ export default class BaseEntityService {
         }
       };
 
-      // XXX - we need to change the status here as well
-
       return this.collection.update(query, options);
     }
   }

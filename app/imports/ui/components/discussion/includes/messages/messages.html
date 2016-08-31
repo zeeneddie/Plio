@@ -1,7 +1,10 @@
 <template name="Discussion_Messages">
 	{{#if discussion}}
 		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore"}}>
-			{{> Notifications}}
+			<audio id="message-sound">
+        <source src="/sounds/silent-beep.mp3" type="audio/mpeg" />
+      </audio>
+
 			<div class="chat-messages">
 				{{#if discussion.isStarted}}
 					<div class="chat-item chat-item-start">

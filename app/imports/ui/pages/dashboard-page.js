@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
 import pluralize from 'pluralize';
+import property from 'lodash.property';
+
+import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UserSubs, CountSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Dashboard_Page.viewmodel({
@@ -19,7 +21,7 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId),
-        UserSubs.subscribe('organizationUsers', this.organization().users.map(({ _id }) => _id))
+        UserSubs.subscribe('organizationUsers', this.organization().users.map(property('userId')))
       ]);
     },
     function() {

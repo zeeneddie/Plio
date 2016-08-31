@@ -1,13 +1,7 @@
 <template name="Notifications">
   {{#with currentUser.preferences}}
     {{#if this.notificationSound}}
-      <!--audio id="notification-sound" src="{{this.notificationSound}}.mp3">
-      </audio-->
-      <audio id="notification-sound">
-        <source src="{{this.notificationSound}}.mp3" type="audio/mpeg" />
-        <source src="{{this.notificationSound}}.ogg" type="audio/ogg" />
-        <source src="{{this.notificationSound}}.m4r" type="audio/mpeg" />
-      </audio>
+      <audio id="notification-sound" src="{{this.notificationSound}}.mp3" type="audio/mpeg"></audio>
     {{/if}}
   {{/with}}
 </template>

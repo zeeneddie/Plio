@@ -1,5 +1,5 @@
 import { Actions } from './actions.js';
-import { ActionTypes, ProblemTypes, WorkflowTypes, WorkItemsStore } from '../constants.js';
+import { ProblemTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import Utils from '/imports/core/utils.js';
@@ -22,8 +22,6 @@ export default {
     organizationId, type, linkedTo,
     completionTargetDate, toBeCompletedBy, ...args
   }) {
-    linkedTo && this._checkLinkedDocs(linkedTo);
-
     const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
 
     const sequentialId = `${type}${serialNumber}`;
@@ -43,8 +41,6 @@ export default {
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
-    this._ensureActionExists(_id);
-
     if (!_.keys(query).length > 0) {
       query = { _id };
     }
@@ -55,45 +51,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  linkDocument({ _id, documentId, documentType }) {
-    const action = this._getAction(_id);
-
-    let docCollection;
-    if (documentType === ProblemTypes.NC) {
-      if (action.type === ActionTypes.RISK_CONTROL) {
-        throw new Meteor.Error(
-          400, 'Risk control cannot be linked to a non-conformity'
-        );
-      }
-
-      docCollection = NonConformities;
-    } else if (documentType === ProblemTypes.RISK) {
-      if (action.type === ActionTypes.PREVENTATIVE_ACTION) {
-        throw new Meteor.Error(
-          400, 'Preventative action cannot be linked to a risk'
-        );
-      }
-
-      docCollection = Risks;
-    }
-
-    if (!docCollection) {
-      throw new Meteor.Error(400, 'Invalid document type');
-    }
-
-    const doc = docCollection.findOne({ _id: documentId });
-    if (!doc) {
-      throw new Meteor.Error(400, 'Document does not exist');
-    }
-
-    if (action.isLinkedToDocument(documentId, documentType)) {
-      throw new Meteor.Error(
-        400, 'This action is already linked to specified document'
-      );
-    }
-
-    this._checkLinkedDocs([{ documentId, documentType }]);
-
+  linkDocument({ _id, documentId, documentType }, { doc, action }) {
     const ret = this.collection.update({
       _id
     }, {
@@ -124,14 +82,6 @@ export default {
   },
 
   unlinkDocument({ _id, documentId, documentType }) {
-    const action = this._getAction(_id);
-
-    if (!action.isLinkedToDocument(documentId, documentType)) {
-      throw new Meteor.Error(
-        400, 'This action is not linked to specified document'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -150,16 +100,6 @@ export default {
   },
 
   complete({ _id, userId, completionComments }) {
-    const action = this._getAction(_id);
-
-    if (userId !== action.toBeCompletedBy) {
-      throw new Meteor.Error(400, 'You cannot complete this action');
-    }
-
-    if (!action.canBeCompleted()) {
-      throw new Meteor.Error(400, 'This action cannot be completed');
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -180,16 +120,6 @@ export default {
   },
 
   undoCompletion({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (userId !== action.completedBy) {
-      throw new Meteor.Error(400, 'You cannot undo completion of this action');
-    }
-
-    if (!action.canCompletionBeUndone()) {
-      throw new Meteor.Error(400, 'Completion of this action cannot be undone');
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -212,16 +142,6 @@ export default {
   },
 
   verify({ _id, userId, success, verificationComments }) {
-    const action = this._getAction(_id);
-
-    if (userId !== action.toBeVerifiedBy) {
-      throw new Meteor.Error(400, 'You cannot verify this action');
-    }
-
-    if (!action.canBeVerified()) {
-      throw new Meteor.Error(400, 'This action cannot be verified');
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -242,17 +162,7 @@ export default {
     return ret;
   },
 
-  undoVerification({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (userId !== action.verifiedBy) {
-      throw new Meteor.Error(400, 'You cannot undo verification of this action');
-    }
-
-    if (!action.canVerificationBeUndone()) {
-      throw new Meteor.Error(400, 'Verification of this action cannot be undone');
-    }
-
+  undoVerification({ _id, userId }, { action }) {
     const query = {
       'updateOfStandards.status': 1, // Completed
       'updateOfStandards.completedAt': { $exists: true },
@@ -305,14 +215,6 @@ export default {
   },
 
   setCompletionDate({ _id, targetDate }) {
-    const action = this._getAction(_id);
-
-    if (action.completed()) {
-      throw new Meteor.Error(
-        400, 'Cannot set completion date for completed action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -328,14 +230,6 @@ export default {
   },
 
   setCompletionExecutor({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (action.completed()) {
-      throw new Meteor.Error(
-        400, 'Cannot set completion executor for completed action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -348,14 +242,6 @@ export default {
   },
 
   setVerificationDate({ _id, targetDate }) {
-    const action = this._getAction(_id);
-
-    if (action.verified()) {
-      throw new Meteor.Error(
-        400, 'Cannot set verification date for verified action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -371,14 +257,6 @@ export default {
   },
 
   setVerificationExecutor({ _id, userId }) {
-    const action = this._getAction(_id);
-
-    if (action.verified()) {
-      throw new Meteor.Error(
-        400, 'Cannot set verification executor for verified action'
-      );
-    }
-
     const ret = this.collection.update({
       _id
     }, {
@@ -391,14 +269,10 @@ export default {
   },
 
   updateViewedBy({ _id, userId:viewedBy }) {
-    this._ensureActionExists(_id);
-
     this._service.updateViewedBy({ _id, viewedBy });
   },
 
   remove({ _id, deletedBy }) {
-    this._ensureActionExists(_id);
-
     const ret = this._service.remove({ _id, deletedBy });
 
     Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
@@ -407,33 +281,11 @@ export default {
   },
 
   restore({ _id }) {
-    const action = this._getAction(_id);
-
-    if (!action.deleted()) {
-      throw new Meteor.Error(
-        400, 'This action is not deleted so can not be restored'
-      );
-    }
-
     const ret = this._service.restore({ _id });
 
     Meteor.isServer && Meteor.defer(() => this._refreshStatus(_id));
 
     return ret;
-  },
-
-  _ensureActionExists(_id) {
-    if (!this.collection.findOne({ _id })) {
-      throw new Meteor.Error(400, 'Action does not exist');
-    }
-  },
-
-  _getAction(_id) {
-    const action = this.collection.findOne({ _id });
-    if (!action) {
-      throw new Meteor.Error(400, 'Action does not exist');
-    }
-    return action;
   },
 
   _refreshStatus(_id) {
@@ -448,31 +300,5 @@ export default {
     };
 
     new workflowConstructors[documentType](documentId).refreshStatus();
-  },
-
-  _checkLinkedDocs(linkedTo) {
-    const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
-
-    const NCsIds = _.pluck(linkedToByType[ProblemTypes.NC], 'documentId');
-    const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
-
-    const docWithUncompletedAnalysis = NonConformities.findOne({
-      _id: { $in: NCsIds },
-      workflowType: WorkflowTypes.SIX_STEP,
-      'analysis.status': 0 // Not completed
-    }) || Risks.findOne({
-      _id: { $in: risksIds },
-      workflowType: WorkflowTypes.SIX_STEP,
-      'analysis.status': 0 // Not completed
-    });
-
-    if (docWithUncompletedAnalysis) {
-      const { sequentialId, title } = docWithUncompletedAnalysis;
-      const docName = `${sequentialId} ${title}`;
-      throw new Meteor.Error(
-        400,
-        `Root cause analysis for ${sequentialId} "${title}" must be completed first`
-      );
-    }
   }
 };
