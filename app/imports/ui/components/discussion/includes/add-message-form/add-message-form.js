@@ -20,6 +20,12 @@ const defaults = {
 	messageText: ''
 };
 
+const scrollToBottom = () => {
+	const $chat = $('.chat-content');
+
+	$chat.scrollTop($chat.prop('scrollHeight'));
+};
+
 Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'standard'],
@@ -29,11 +35,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	discussionId() {
 		return this.getDiscussionIdByStandardId(this.standardId());
 	},
-	sendTextMessage() {
-		if (this.disabled()) return;
-
-		const discussionId = this.discussionId();
-
+	reInit() {
 		if (FlowRouter.getQueryParam('at')) {
 			MessageSubs.clear();
 
@@ -48,9 +50,14 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				...this.options(),
 				at: null
 			});
-
-			Tracker.flush();
 		}
+	},
+	sendTextMessage() {
+		if (this.disabled()) return;
+
+		const discussionId = this.discussionId();
+
+		this.reInit();
 
 		addMessage.call({
 			discussionId,
@@ -61,10 +68,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				// cannot use vm's reset there cause of shared props
         this.load(defaults);
 
-				const $chat = $('.chat-content');
-
-				$chat.scrollTop($chat.prop('scrollHeight'));
-
+				 scrollToBottom();
         // [ToDo] Call a ringtone on a successful message addition
       }
 		}));
@@ -84,8 +88,15 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		let fileDoc;
 		let fileDocId;
 
+		const extendWithScroll = fn => (err, res) => {
+			scrollToBottom();
 
-		if(!(fileDocs instanceof Array)){
+			fn(err, res);
+		};
+
+		Tracker.afterFlush(() => this.reInit());
+
+		if (!(fileDocs instanceof Array)) {
 			fileDoc = {
 				_id: fileDocs._id,
 				name: fileDocs.name,
@@ -96,7 +107,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				discussionId,
 				files: [fileDoc],
 				type: 'file'
-			}, handleMethodResult(cb));
+			}, handleMethodResult(extendWithScroll(cb)));
 
 			return;
 		}
@@ -108,9 +119,11 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				name: fileDocArg.name,
 				extension: fileDocArg.name.split('.').pop().toLowerCase()
 			};
-			const cbf = function(_id, i){
+			const cbf = function(_id, i) {
 				// Pass each file's ID into callback, so that right file was inserted in S3
-				return function(err, res){
+				return function(err, res) {
+					scrollToBottom();
+
 					cb(err, res, fileDocObj = {_id, i});
 				}
 			}(fileDoc._id, i);
@@ -184,14 +197,14 @@ Template.Discussion_AddMessage_Form.viewmodel({
    * but not the file itself from S3:
    * @param {string} fileId - an identifier of the file which is to remove.
   */
-	removeFileFromMessage(fileId){
+	removeFileFromMessage(fileId) {
     const self = this;
-    const query = { 'files._id': fileId};
-		const options = { fields: {files: 1} };
-		const messagesWithFileId = getMessages.call({query, options});
+    const query = { 'files._id': fileId };
+		const options = { fields: { files: 1 } };
+		const messagesWithFileId = getMessages.call({ query, options });
 
     messagesWithFileId.forEach((message) => {
-      if(message.files.length > 1){
+      if(message.files.length > 1) {
         removeFileFromMessage.call({ _id: fileId });
       }
       else{
@@ -199,7 +212,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
       }
     });
 	},
-	removeFileFromMessageCb(){
+	removeFileFromMessageCb() {
 		return this.removeFileFromMessage.bind(this);
 	},
 
@@ -207,17 +220,17 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	 * but not the file itself from S3:
 	 * @param {String} fileId - the file ID in the "files" array;
 	*/
-	removeFileMessage(fileId){
-		const query = { 'files._id': fileId};
-		const options = { fields: {_id: 1} };
+	removeFileMessage(fileId) {
+		const query = { 'files._id': fileId };
+		const options = { fields: { _id: 1 } };
 		const messagesWithFileId = getMessages.call({query, options});
 
-		if(!messagesWithFileId.count()){
+		if (!messagesWithFileId.count()) {
 			return;
 		}
 
 		messagesWithFileId.forEach((c, i, cr) => {
-			removeMessageById.call({_id: c._id});
+			removeMessageById.call({ _id: c._id });
 		});
 	},
 	removeFileMessageCb(){
