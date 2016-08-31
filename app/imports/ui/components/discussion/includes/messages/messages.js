@@ -168,6 +168,7 @@ Template.Discussion_Messages.viewmodel({
 			// upscroll
 			onLoadOlder.call(this);
 		} else {
+			// downscroll
 			onLoadNewer.call(this);
 		}
 	},
