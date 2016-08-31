@@ -15,6 +15,7 @@ import { swipedetect, isMobile } from '/client/lib/mobile.js';
 Template.Discussion_Messages.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
+	_scrollProps: null,
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastMessage'),
 	onCreated(template) {
@@ -31,6 +32,14 @@ Template.Discussion_Messages.viewmodel({
 
 			if (isReady && !this.isInitialDataReady()) {
 				this.isInitialDataReady(true);
+			}
+
+			// hack which scrolls to the last position after new messages were prepended
+			if (this._scrollProps()) {
+				Tracker.afterFlush(() => {
+					const { $chat, scrollPosition, scrollHeight } = this._scrollProps();
+					$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - scrollHeight);
+				});
 			}
 
 			this.isReady(isReady);
@@ -177,12 +186,19 @@ Template.Discussion_Messages.viewmodel({
 		const options = Object.assign({}, this.options());
 		const dir = parseInt(direction, 10);
 		const msg = dir > 0 ? _.last(messages) : _.first(messages);
+		const $chat = Object.assign($(), this.chat);
+		const scrollPosition = $chat.scrollTop();
+		const scrollHeight = $chat.prop('scrollHeight');
 
 		this.options({
 			limit: options.limit + 50,
 			sort: { createdAt: dir },
 			at: get(msg, '_id')
 		});
+
+		if (direction !== 1) {
+			this._scrollProps({ $chat, scrollPosition, scrollHeight });
+		}
 	},
 	notification() {
 		return this.child('Notifications');
