@@ -7,7 +7,6 @@ import { Organizations } from './organizations/organizations.js';
 import { AnalysisStatuses } from './constants.js';
 import { NOT_AN_ORG_MEMBER, DOC_NOT_FOUND } from './errors.js';
 
-
 export const canChangeStandards = (userId, organizationId) => {
   return Roles.userIsInRole(
     userId,

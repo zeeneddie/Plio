@@ -10,6 +10,7 @@ import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
+import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
 	share: 'messages',
@@ -44,7 +45,9 @@ Template.Discussion_Messages.viewmodel({
 		}
 
 		const $chat = Object.assign($(), this.chat);
-		handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
+		!isMobile() && handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
+
+		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
 
 		// Subscribe notifications to messages
 		// this.notifyOnIncomeMessages();
@@ -131,28 +134,43 @@ Template.Discussion_Messages.viewmodel({
 		return messagesMapped;
 	},
 	triggerLoadMore: _.throttle(function(e) {
-		const direction = wheelDirection(e);
 		const loadOlderHandler = this.templateInstance.$('.infinite-load-older');
 		const loadNewerHandler = this.templateInstance.$('.infinite-load-newer');
-
-		if (direction > 0) {
-			// upscroll
-			if (loadOlderHandler.isAlmostVisible()) {
-				this.loadMore(-1);
-			}
-		} else {
-			// downscroll
+		const onLoadOlder = () => loadOlderHandler.isAlmostVisible() && this.loadMore(-1);
+		const onLoadNewer = () => {
 			const messages = Object.assign([], this.messages());
 			const lastMessageId = get(this.lastMessage().findOne(), 'lastMessageId');
 
-			// don't try to load new messages when there is a last message already presented
 			if (!messages.map(property('_id')).includes(lastMessageId)) {
 				if (loadNewerHandler.isAlmostVisible()) {
 					this.loadMore(1);
 				}
 			}
+		};
+
+		if (e instanceof Event) {
+			this.handleMouseEvents(e, onLoadOlder, onLoadNewer);
+		} else {
+			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
 		}
 	}, 3000),
+	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
+		if (Object.is(dir, 'down')) {
+			onLoadOlder.call(this);
+		} else if (Object.is(dir, 'up')) {
+			onLoadNewer.call(this);
+		}
+	},
+	handleMouseEvents(e, onLoadOlder, onLoadNewer) {
+		const dir = wheelDirection(e);
+
+		if (dir > 0) {
+			// upscroll
+			onLoadOlder.call(this);
+		} else {
+			onLoadNewer.call(this);
+		}
+	},
 	loadMore(direction = -1) {
 		const messages = Object.assign([], this.messages());
 		const options = Object.assign({}, this.options());
