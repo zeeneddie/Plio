@@ -36,11 +36,13 @@ Template.Discussion_Messages.viewmodel({
 
 			// hack which scrolls to the last position after new messages were prepended
 			(() => {
-				const { $chat, direction, scrollHeight, scrollPosition } = Object.assign({}, this._scrollProps());
+				Tracker.afterFlush(() => {
+					const { $chat, direction, scrollHeight, scrollPosition } = Object.assign({}, this._scrollProps());
 
-				if (Object.is(direction, -1)) {
-					$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - $chat.prop('clientHeight') - scrollHeight);
-				}
+					if (Object.is(direction, -1)) {
+						$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - $chat.prop('clientHeight') - scrollHeight);
+					}
+				});
 			})();
 
 			this.isReady(isReady);
