@@ -263,7 +263,7 @@ ViewModel.mixin({
         );
       }
     },
-    canCreateStandards(organizationId) {
+    canCreateAndEditStandards(organizationId) {
       const userId = Meteor.userId();
 
       if (userId && organizationId) {

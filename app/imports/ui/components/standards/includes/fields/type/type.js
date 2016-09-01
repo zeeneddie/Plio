@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
+import get from 'lodash.get';
 
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { DefaultStandardTypes } from '/imports/api/constants.js';
 
 Template.ESType.viewmodel({
   share: 'standard',
@@ -13,11 +15,16 @@ Template.ESType.viewmodel({
       Tracker.nonreactive(() => this.update());
     }
   },
-  typeId: '',
+  typeId() {
+    const organizationId = this.organizationId();
+    const data = DefaultStandardTypes.find(({ abbreviation } = {}) => Object.is(abbreviation, 'POL')); // Policy
+    const type = StandardTypes.findOne({ organizationId, ...type }) || _.first(this.types());
+    return get(type, '_id');
+  },
   types() {
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch();
-    return  !this._id ? [{ _id: '', name: '' }].concat(types) : types; // add empty option
+    return types;
   },
   update() {
     if (!this._id) return;

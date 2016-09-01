@@ -40,6 +40,10 @@
     }
   }
 
+  .text-muted {
+    color: #777;
+  }
+
 }
 
 .dashboard-item {
@@ -112,20 +116,24 @@
 		@media (max-width:767px) {
   	  text-align: left;
   	  border: 0;
-  	  padding: 0;
+  	  padding: 10px 0 0 0;
     }
 
     @media (min-width: 768px) {
-      margin: 1.5rem -1.25rem -1rem;
+      margin: 1.5rem -1.25rem -1.25rem;
     }
 	}
 
 	.label {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     font-size: 13px;
     padding: 4px 8px;
+    border-radius: 4px;
+
+    &.top {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
   }
 
   @media (max-width:767px) {
