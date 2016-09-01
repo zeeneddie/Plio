@@ -13,9 +13,8 @@ import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
-	share: 'messages',
+	share: 'messages', // _scrollProps, isInitialDataReady, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
-	_scrollProps: null,
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastMessage'),
 	onCreated(template) {
@@ -216,8 +215,6 @@ Template.Discussion_Messages.viewmodel({
 				if (init) {
 					return;
 				}
-
-				console.log(messageSound);
 
 				messageSound.currentTime = 0;
 				messageSound.play();

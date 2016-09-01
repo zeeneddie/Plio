@@ -44,6 +44,8 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			FlowRouter.setQueryParams({ at: null });
 
 			// Shared props with Discussion_Messages
+			this._scrollProps(null);  					// <
+
 			this.isInitialDataReady(false);     // <
 
 			this.options({                      // <

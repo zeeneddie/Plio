@@ -9,6 +9,7 @@ ViewModel.share({
   },
   messages: {
     isInitialDataReady: false,
+    _scrollProps: null,
     options: {
       limit: 50,
       at: null,
