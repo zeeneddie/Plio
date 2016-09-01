@@ -7,6 +7,6 @@ Template.FileItem.viewmodel({
     return this.onRemoveClick.bind(this);
   },
   onRemoveClick() {
-    this.removeFile(this);
+    this.removeFile(this.file());
   }
 })

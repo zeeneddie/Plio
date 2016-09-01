@@ -1,8 +1,8 @@
 <template name="FileUploader_Wrapper">
   {{#each files}}
     {{> FileItem
-        this
-        removeFile=removeFile
+        file=this
+        removeFile=removeFileFn
         uploader=uploader}}
   {{/each}}
   {{> FileUploader

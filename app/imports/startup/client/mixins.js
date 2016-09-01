@@ -952,14 +952,15 @@ ViewModel.mixin({
         return;
       }
 
-      const { slingshotDirective, metaContext, addFile } = this.templateInstance.data;
+      const { slingshotDirective, metaContext, addFile, afterUpload } = this.templateInstance.data;
 
-      beforeUpload();
+      beforeUpload && beforeUpload();
+
       _.each(files, (file) => {
         const name = file.name;
 
         if (file.size > maxSize) {
-          toastr.error(`${file.name} size exceeds the allowed maximum of ${fileMaxSize/1024/1024} MB`);
+          toastr.error(`${file.name} size exceeds the allowed maximum of ${maxSize/1024/1024} MB`);
 
           return;
         }
@@ -969,7 +970,7 @@ ViewModel.mixin({
           extension: name.split('.').pop().toLowerCase(),
           organizationId: this.organizationId()
         }, (err, fileId) => {
-          addFile({ fileId });
+          addFile && addFile({ fileId });
 
           const uploader = new Slingshot.Upload(
             slingshotDirective, metaContext
@@ -1000,6 +1001,8 @@ ViewModel.mixin({
             if (url) {
               url = encodeURI(url);
             }
+
+            afterUpload && afterUpload({ fileId, url });
 
             updateUrl.call({ _id: fileId, url });
             this.removeUploadData(uploads, fileId);

@@ -7,6 +7,7 @@ Template.DiscussionFileUploader.viewmodel({
   mixin: ['uploader', 'modal', 'organization'],
 
   attachmentFiles: [],
+  afterUpload: null,
 
   getData() {
     return {
@@ -16,7 +17,8 @@ Template.DiscussionFileUploader.viewmodel({
       beforeUpload: () => {
         this.attachmentFiles([]);
         this.fileInput.val(null);
-      }
+      },
+      afterUpload: this.afterUpload
     }
   }
 });

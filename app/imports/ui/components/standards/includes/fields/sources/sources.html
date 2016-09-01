@@ -20,22 +20,17 @@
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}
     <div {{b "if: sourceType === 'attachment'"}}>
-      {{#with sourceName}}
-        {{> FileItem
-            _id=fileId
-            name=sourceName
-            url=sourceUrl
-            extension=sourceExtension
-            removeFile=removeAttachmentFn
-            uploader=uploader}}
+      {{#with file}}
+        {{> FileItem file=this removeFile=removeAttachmentFn}}
+      {{else}}
+        <div>
+          {{> FileUploader
+              addFile=addFileFn
+              afterUpload=afterUploadCb
+              slingshotDirective='standardFiles'
+              metaContext=uploaderMetaContext}}
+        </div>
       {{/with}}
-      <div {{b "unless: sourceName"}}>
-        {{> FileUploader
-            addFile=addFileFn
-            onUpload=onUploadCb
-            slingshotDirective='standardFiles'
-            metaContext=uploaderMetaContext}}
-      </div>
     </div>
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="Video"

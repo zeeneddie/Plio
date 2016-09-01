@@ -28,11 +28,14 @@ Template.FileUploader_Wrapper.viewmodel({
 
 		return Files.find({ _id: { $in: fileIds } });
 	},
-  removeFile() {
-    const { _id, url } = viewmodel.getData();
+  removeFileFn() {
+    return this.removeFile.bind(this)
+  },
+  removeFile(viewmodel) {
+    const { _id, url } = viewmodel;
     const fileUploader = this.uploader();
 
-    const isFileUploading = !this.isUploaded();
+    const isFileUploading = !viewmodel.isUploaded();
 
     let warningMsg = 'This file will be removed';
     let buttonText = 'Remove';
@@ -55,7 +58,7 @@ Template.FileUploader_Wrapper.viewmodel({
 
       const options = {
         $pull: {
-          fileIds: { _id }
+          fileIds: _id
         }
       };
 
