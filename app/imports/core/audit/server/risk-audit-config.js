@@ -1,6 +1,6 @@
 import { Risks } from '/imports/api/risks/risks.js';
 import { CollectionNames } from '/imports/api/constants.js';
-import { ChangesKinds } from './document-differ.js';
+import { ChangesKinds } from './audit-utils.js';
 import Utils from '../../utils.js';
 
 

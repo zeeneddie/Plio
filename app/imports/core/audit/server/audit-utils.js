@@ -1,3 +1,4 @@
+import Handlebars from 'handlebars';
 import deepDiff from 'deep-diff';
 
 
@@ -103,3 +104,10 @@ export const DocumentDiffer = {
   }
 
 }
+
+export const renderString = (tmpl, dataFn) => {
+  const compiledTemplate = Handlebars.compile(tmpl);
+  const tmplData = dataFn() || {};
+
+  return compiledTemplate(tmplData);
+};

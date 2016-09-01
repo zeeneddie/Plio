@@ -1,6 +1,6 @@
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { CollectionNames } from '/imports/api/constants.js';
-import { ChangesKinds } from './document-differ.js';
+import { ChangesKinds } from './audit-utils.js';
 import Utils from '../../utils.js';
 
 

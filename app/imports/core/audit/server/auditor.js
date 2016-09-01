@@ -1,11 +1,12 @@
 import { Meteor } from 'meteor/meteor';
-import Handlebars from 'handlebars';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { ChangesKinds, DocumentDiffer } from './document-differ.js';
+import { ChangesKinds, DocumentDiffer, renderString } from './audit-utils.js';
 
 
-export default {
+const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED, ITEM_ADDED, ITEM_REMOVED } = ChangesKinds;
+
+export default Auditor = {
 
   _auditConfigs: { },
 
@@ -112,78 +113,108 @@ export default {
   },
 
   _handleChange(config, handler, data, logs, notifications) {
-    const log = this._createLog(config, handler, data);
-    const notification = this._createNotification(config, handler, data);
-
-    log && logs.push(log);
-    notification && notifications.push(notification);
-
-    const additionalHandlers = handler.additionalHandlers
-        && handler.additionalHandlers.call(config, data);
-
-    _(additionalHandlers).each(({ config, handler, data }) => {
-      this._handleChange(config, handler, data, logs, notifications);
-    });
+    this._createLogs(config, handler, data, logs);
+    this._createNotifications(config, handler, data, notifications);
   },
 
-  _createLog(config, handler, data) {
-    if (handler.shouldCreateLog
-          && !handler.shouldCreateLog.call(config, data)) {
-      return;
-    }
-
-    const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED } = ChangesKinds;
+  _createLogs(config, handler, data, logs) {
     const { diffs, newDoc } = data;
     const { updatedAt:date, updatedBy:executor } = newDoc;
     const { kind, field, newValue, oldValue } = diffs[handler.field] || {};
 
-    const logTemplate = handler.logTemplate;
-    const sourceTemplate = _(logTemplate).isObject() ? logTemplate[kind] : logTemplate;
+    _(handler.logs).each((logConfig) => {
+      if (logConfig.shouldCreateLog
+            && !logConfig.shouldCreateLog.call(config, data)) {
+        return;
+      }
 
-    const template = Handlebars.compile(sourceTemplate);
-    const templateData = handler.logData.call(config, data);
-    const message = template(templateData);
+      const { template, templateData, logData } = logConfig;
 
-    const documentId = data.documentId || config.docId(newDoc);
-    const collection = config.collectionName;
+      const logTemplate = _(template).isObject() ? template[kind] : template;
+      if (!logTemplate) {
+        return;
+      }
 
-    const log = { date, executor, field, collection, documentId, message };
+      const message = renderString(
+        logTemplate, templateData.bind(config, data)
+      );
 
-    if (_([FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED]).contains(kind)) {
-      _(log).extend({ newValue, oldValue });
-    }
+      const documentId = data.documentId || config.docId(newDoc);
+      const collection = config.collectionName;
 
-    return log;
+      const log = { date, executor, field, collection, documentId, message };
+
+      if (_([FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED]).contains(kind)) {
+        _(log).extend({ newValue, oldValue });
+      }
+
+      if (logData) {
+        _(log).extend(logData.call(config, data));
+
+        if ((log.collection !== collection) || (log.documentId !== documentId)) {
+          _(['field', 'newValue', 'oldValue']).each(key => delete log[key]);
+        }
+      }
+
+      logs.push(log);
+    });
   },
 
-  _createNotification(config, handler, data) {
-    if (handler.shouldSendNotification
-          && !handler.shouldSendNotification.call(config, data)) {
-      return;
-    }
-
+  _createNotifications(config, handler, data, notifications) {
     const { kind } = data.diffs[handler.field] || {};
 
-    const notificationTemplate = handler.notificationTemplate;
-    const sourceTemplate = _(notificationTemplate).isObject()
-        ? notificationTemplate[kind]
-        : notificationTemplate;
+    _(handler.notifications).each((notificationConfig) => {
+      if (notificationConfig.shouldSendNotification
+            && !notificationConfig.shouldSendNotification.call(config, data)) {
+        return;
+      }
 
-    const template = Handlebars.compile(sourceTemplate);
-    const templateData = handler.notificationData.call(config, data);
-    const text = template(templateData);
+      const {
+        template, templateData, receivers,
+        subjectTemplate, subjectTemplateData, emailTemplateData
+      } = notificationConfig;
 
-    const receivers = handler.notificationReceivers.call(config, data);
+      const notificationTemplate = _(template).isObject()? template[kind] : template;
+      if (!notificationTemplate) {
+        return;
+      }
 
-    return { text, receivers };
+      const text = renderString(
+        notificationTemplate, templateData.bind(config, data)
+      );
+
+      const notificationData = {
+        receivers: receivers.call(config, data),
+        text
+      };
+
+      if (subjectTemplate && subjectTemplateData) {
+        const subject = renderString(
+          subjectTemplate, subjectTemplateData.bind(config, data)
+        );
+
+        _(notificationData).extend({ subject });
+      }
+
+      if (emailTemplateData) {
+        _(notificationData).extend({
+          emailTemplateData: emailTemplateData.call(config, data)
+        });
+      }
+
+      notifications.push(notificationData);
+    });
   },
 
   _saveLogs(logs) {
-    _(logs).each(log => AuditLogs.insert(log));
+    console.log(logs);
+    console.log('\n');
+    //_(logs).each(log => AuditLogs.insert(log));
   },
 
   _sendNotifications(notifications) {
-
+    console.log(notifications);
+    console.log('\n');
   }
 
 };
