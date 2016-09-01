@@ -1,9 +1,13 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
+import curry from 'lodash.curry';
 
 import { AnalysisStatuses } from '/imports/api/constants.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 
 Template.Subcards_RCA_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'date'],
+  mixin: ['organization', 'nonconformity', 'date', 'modal', 'utils'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
     const found = _.keys(workflowDefaults)
@@ -21,23 +25,25 @@ Template.Subcards_RCA_Edit.viewmodel({
   magnitude: '',
   analysis: '',
   updateOfStandards: '',
-  isAnalysisCompleted() {
-    const analysis = this.analysis();
-    return analysis && analysis.status && analysis.status === parseInt(_.invert(AnalysisStatuses)['Completed'], 10);
+  isCompleted({ status } = {}) {
+    const completed = parseInt(get(_.invert(AnalysisStatuses), 'Completed'), 10);
+    return Object.is(status, completed);
+  },
+  isCurrentOwner(doc) {
+    return P_IsAnalysisOwner(Meteor.userId(), this.organizationId(), doc);
   },
   methods() {
     const _id = this._id();
     const { timezone } = this.organization();
-    const callMethod = this.modal().callMethod;
 
-    const setExecutor = method => ({ executor }, cb) =>
-      callMethod(method, { _id, executor }, cb);
-    const setTargetDate = method => ({ date }, cb) =>
-      callMethod(method, { _id, targetDate: getTzTargetDate(date, timezone) }, cb);
-    const complete = method => ({ completionComments }, cb) =>
-      callMethod(method, { _id, completionComments }, cb);
+    const setKey = curry((key, method) => ({ ...args }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: args[key] }, cb));
+    const setAssignee = curry((key, method) => ({ executor }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: executor }, cb));
+    const setDate = curry((key, method) => ({ date }, cb) =>
+      this.modal().callMethod(method, { _id, [key]: getTzTargetDate(date, timezone) }, cb));
     const undo = method => cb =>
-      callMethod(method, { _id }, cb);
+      this.modal().callMethod(method, { _id }, cb);
 
     const {
       setAnalysisExecutor,
@@ -47,51 +53,54 @@ Template.Subcards_RCA_Edit.viewmodel({
       setStandardsUpdateExecutor,
       setStandardsUpdateDate,
       updateStandards,
-      undoStandardsUpdate
-    } = this.getMethodRefs();
+      undoStandardsUpdate,
+      setAnalysisCompletedBy,
+      setAnalysisCompletedDate,
+      setAnalysisComments,
+      setStandardsUpdateCompletedBy,
+      setStandardsUpdateCompletedDate,
+      setStandardsUpdateComments
+    } = this.methodRefs();
+
+    const half = {
+      setExecutor: setAssignee('executor'),
+      setDate: setDate('targetDate'),
+      setCompletedBy: setAssignee('completedBy'),
+      setCompletedDate: setDate('completedAt'),
+      setComments: setKey('completionComments'),
+      complete: setKey('completionComments'),
+      undo: undo
+    };
+
+    const makeMethods = (methods, from) => methods.map((ref, i) => {
+      const key = Object.keys(from)[i];
+      return { [key]: () => from[key](ref) };
+    }).reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
     return {
-      Analysis: () => ({
-        'executor.set': setExecutor(setAnalysisExecutor),
-        'date.set': setTargetDate(setAnalysisDate),
-        'complete': complete(completeAnalysis),
-        'undo': undo(undoAnalysis)
-      }),
-      UpdateOfStandards: () => ({
-        'executor.set': setExecutor(setStandardsUpdateExecutor),
-        'date.set': setTargetDate(setStandardsUpdateDate),
-        'complete': complete(updateStandards),
-        'undo': undo(undoStandardsUpdate)
-      })
+      Analysis: () => makeMethods([
+        setAnalysisExecutor,
+        setAnalysisDate,
+        setAnalysisCompletedBy,
+        setAnalysisCompletedDate,
+        setAnalysisComments,
+        completeAnalysis,
+        undoAnalysis,
+      ], half),
+      UpdateOfStandards: () => makeMethods([
+        setStandardsUpdateExecutor,
+        setStandardsUpdateDate,
+        setStandardsUpdateCompletedBy,
+        setStandardsUpdateCompletedDate,
+        setStandardsUpdateComments,
+        updateStandards,
+        undoStandardsUpdate,
+      ], half)
     };
   },
   update({ query = {}, options = {}, ...args }, cb) {
     const allArgs = { ...args, options, query };
 
     this.parent().update(allArgs, cb);
-  },
-  updateAnalysisExecutor(...args) {
-    this.parent().updateAnalysisExecutor(...args);
-  },
-  updateAnalysisDate(...args) {
-    this.parent().updateAnalysisDate(...args);
-  },
-  completeAnalysis(...args) {
-    this.parent().completeAnalysis(...args);
-  },
-  undoAnalysis(cb) {
-    this.parent().undoAnalysis(cb);
-  },
-  updateStandardsExecutor(...args) {
-    this.parent().updateStandardsExecutor(...args);
-  },
-  updateStandardsDate(...args) {
-    this.parent().updateStandardsDate(...args);
-  },
-  updateStandards(...args) {
-    this.parent().updateStandards(...args);
-  },
-  undoStandardsUpdate(cb) {
-    this.parent().undoStandardsUpdate(cb);
   }
 });

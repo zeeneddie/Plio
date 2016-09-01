@@ -3,8 +3,10 @@
     <img class="img-circle avatar" {{b "attr: {src: randomAvatarUrl}"}}>
     <div class="form-group-flex-flex margin-left">
       {{#ClearableField field="email"}}
-        <input type="text" class="form-control" placeholder="Email address"
-            {{b "value: email"}} />
+        <input type="email" class="form-control" placeholder="Email address"
+          {{b "value: email"}}
+          name="{{inputName}}"
+        />
       {{/ClearableField}}
     </div>
   </div>

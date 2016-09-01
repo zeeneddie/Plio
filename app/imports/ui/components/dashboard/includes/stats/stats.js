@@ -65,7 +65,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
     return pluralize('overdue work item', count, true);
   },
   items() {
-    const query = { status: 2 }; // Overdue
+    const query = { status: 2, assigneeId: Meteor.userId() }; // Overdue
     const options = {
       sort: {
         targetDate: -1 // New overdue items first

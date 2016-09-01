@@ -12,7 +12,6 @@ Template.Card_Read.viewmodel({
     return isOrgOwner(Meteor.userId(), organizationId);
   },
   showDeleteBtn({ organizationId }) {
-    console.log(this.isDeleteBtnShown());
     return isOrgOwner(Meteor.userId(), organizationId) || !!this.isDeleteBtnShown();
   },
   onRestore() {},
@@ -27,6 +26,7 @@ Template.Card_Read.viewmodel({
   }, 1000),
   handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
+      console.log(err);
       swal('Oops... Something went wrong!', err.reason, 'error');
     } else {
       swal(this.capitalize(action), `The document "${title}" was ${action} successfully.`, 'success');

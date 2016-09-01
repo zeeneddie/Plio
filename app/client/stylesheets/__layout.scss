@@ -78,9 +78,13 @@ a:focus {
   overflow: hidden;
   position: relative;
   @include flex(1);
-  @include flexbox;
+
+	&:not(.no-flex) {
+  	@include flexbox;
+	}
 
   > .container {
+		min-height: 100%;
     @media (max-width:1200px) {
       max-width: none;
     }
