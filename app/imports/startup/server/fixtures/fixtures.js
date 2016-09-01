@@ -14,6 +14,8 @@ import { WorkItems } from '/imports/api/work-items/work-items.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 
+import { insertMessageFixtures } from './fixtures-messages.js';
+
 // Extend the global object to have a scope of collections
 _.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });
 
@@ -83,7 +85,7 @@ Meteor.startup(() => {
   const fixturesConfigsEJSON = path.join(fixturesPath, 'configs.json');
   const fixturesConfigs = EJSON.parse(Assets.getText(fixturesConfigsEJSON));
 
-  return _.each(fixturesConfigs, (assetsDir, collectionName) => {
+  _.each(fixturesConfigs, (assetsDir, collectionName) => {
     const collection = getAttributeValue(global, collectionName);
 
     if (collection.find().count()) {
@@ -96,4 +98,6 @@ Meteor.startup(() => {
       return logAction(assets.length, collectionName);
     }
   });
+
+  insertMessageFixtures(1000);
 });

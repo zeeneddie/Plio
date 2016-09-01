@@ -12,11 +12,14 @@ import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
+window.Messages = Messages;
+
 Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, isInitialDataReady, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastMessage'),
+	isInitialDataReady: false,
 	onCreated(template) {
 		this.options({
 			...this.options(),
@@ -79,10 +82,12 @@ Template.Discussion_Messages.viewmodel({
 		return getFormattedDate(get(this.discussion(), 'startedAt'), 'MMMM Do, YYYY');
 	},
 	messages() {
+
 		const messages = (() => {
 			const options = {
   			sort: { createdAt: 1 }
   		};
+
 			const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
 			return msg.fetch();
