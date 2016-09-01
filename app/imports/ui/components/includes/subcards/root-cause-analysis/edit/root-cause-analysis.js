@@ -97,10 +97,5 @@ Template.Subcards_RCA_Edit.viewmodel({
         undoStandardsUpdate,
       ], half)
     };
-  },
-  update({ query = {}, options = {}, ...args }, cb) {
-    const allArgs = { ...args, options, query };
-
-    this.parent().update(allArgs, cb);
   }
 });
