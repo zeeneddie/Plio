@@ -5,7 +5,7 @@ Template.UserDirectory_InviteUsers_UserEntry.viewmodel({
   email: '',
 
   inputName() {
-    return `invite-user-email-${this.avatarIndex()}`;
+    return `invite-user-email-${this.avatarIndex() + 1}`;
   },
 
   randomAvatarUrl() {
