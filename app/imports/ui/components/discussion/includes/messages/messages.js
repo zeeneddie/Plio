@@ -8,11 +8,8 @@ import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 
-window.Messages = Messages;
-
 Template.Discussion_Messages.viewmodel({
 	mixin: ['discussions', 'messages', 'standard', 'user'],
-
 	onRendered(tmp) {
 		const discussionId = this.discussionId();
 
@@ -108,16 +105,17 @@ Template.Discussion_Messages.viewmodel({
 			sort: { createdAt: 1 }
 		};
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
-		const messageSound = self.templateInstance.find('#message-sound');
+		const messageSound = self.templateInstance.find('#message-sound') || {};
 
 		msg.observe({
 			added(doc) {
 				if (init) {
 					return;
 				}
-				
+
 				messageSound.currentTime = 0;
-				messageSound.play();
+				invoke(messageSound, 'play');
+
 				init = false;
 			}
 		});

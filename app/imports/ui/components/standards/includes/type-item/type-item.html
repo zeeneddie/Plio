@@ -1,11 +1,12 @@
 <template name="StandardTypeItem">
   <div class="sub">
-    {{#each sections}}
+    {{#each items}}
       {{> ListItem
           template="StandardSectionItem"
+          items=this.standards
+          rText=this.totalUnreadMessagesHtml
           title=this.title
-          closeAllOnCollapse=false
-          _query=(_getQuery this)}}
+          closeAllOnCollapse=false}}
     {{/each}}
   </div>
 </template>

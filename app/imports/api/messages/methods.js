@@ -34,7 +34,7 @@ const onUpdateCheck = ({ _id, userId }) => {
 };
 
 export const addMessage = new ValidatedMethod({
-	name: 'Mesages.addMessage',
+	name: 'Messages.addMessage',
 	validate: MessagesSchema.validator(),
 
 	run({ ...args }) {
@@ -53,7 +53,7 @@ export const addMessage = new ValidatedMethod({
 });
 
 export const addFilesToMessage = new ValidatedMethod({
-	name: 'Mesages.addFilesToMessage',
+	name: 'Messages.addFilesToMessage',
 	validate: new SimpleSchema([IdSchema, optionsSchema]).validator(),
 
 	run({ ...args }) {
