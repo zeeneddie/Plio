@@ -6,6 +6,13 @@ export const P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_ANALYSIS = new E(400, 'Cannot s
 
 export const P_CANNOT_SET_DATE_FOR_COMPLETED_ANALYSIS = new E(400, 'Cannot set target date for completed root cause analysis');
 
+export const P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_ANALYSIS = new E(400, 'Cannot set completed by for incomplete root cause analysis');
+
+export const P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS = new E(400, 'Cannot set completed at for incomplete root cause analysis');
+
+export const P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS = new E(400, 'Cannot set completion comments for incomplete root cause analysis');
+
+
 export const P_ANALYSIS_CANNOT_BE_COMPLETED = new E(400, 'This root cause analysis cannot be completed');
 
 export const P_ANALYSIS_ALREADY_COMPLETED = new E(400, 'This root cause analysis is already completed');
@@ -29,3 +36,9 @@ export const P_STANDARDS_NOT_UPDATED = new E(400, 'Standards are not updated');
 export const P_CANNOT_SET_EXECUTOR_FOR_COMPLETED_STANDARDS = new E(400, 'Cannot set "Who will do it?" for completed update of standards');
 
 export const P_CANNOT_SET_DATE_FOR_COMPLETED_STANDARDS = new E(400, 'Cannot set target date for completed update of standards');
+
+export const P_CANNOT_SET_COMPLETED_BY_FOR_INCOMPLETE_STANDARDS = new E(400, 'Cannot set completed by for incomplete update of standards');
+
+export const P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_STANDARDS = new E(400, 'Cannot set completed at for incomplete update of standards');
+
+export const P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_STANDARDS = new E(400, 'Cannot set completion comments for incomplete update of standards');
