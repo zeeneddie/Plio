@@ -38,7 +38,7 @@ Template.Risks_Card_Edit.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  slingshotDirective: 'risksFiles',
+  slingshotDirective: 'riskFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),

@@ -9,11 +9,9 @@
         <a target="_blank" {{b "href: this.url, text: this.url"}}></a>
       </h4>
       <h4 class="list-group-item-heading" {{b "if: this.type === 'attachment'"}}>
-        {{> FileItem
-            name=name
-            url=url
-            isReadOnly=true
-            extension=extension}}
+        {{#with file}}
+          {{> FileItem_Read this}}
+        {{/with}}
       </h4>
       {{#if isVideo this.type}}
         <div class="iframe-wrapper video">

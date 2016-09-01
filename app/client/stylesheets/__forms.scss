@@ -446,11 +446,19 @@ fieldset[disabled] {
   opacity: 0.5;
 }
 
-.file-item {
+.file-item, .file-item-read {
   margin-right: 4px;
+  margin-bottom: 8px;
   max-width: 100%;
   display: inline-block;
   position: relative;
+  .file-item-read {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .btn-icon {
+    margin-bottom: 0;
+  }
   .btn.file-label {
     position: relative;
     overflow: hidden;
