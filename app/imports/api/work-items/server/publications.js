@@ -13,12 +13,14 @@ Meteor.publish('workItems', function(organizationId, isDeleted = { $in: [null, f
 
 Meteor.publish('workItemsOverdue', function(organizationId, limit) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
   const query = {
     organizationId,
+    assigneeId: userId,
     isDeleted: { $in: [null, false] },
     status: 2 // overdue
   };
@@ -36,6 +38,7 @@ Meteor.publish('workItemsOverdue', function(organizationId, limit) {
 
 Meteor.publish('workItemsCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
@@ -61,12 +64,14 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
 
 Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
   return new Counter(counterName, WorkItems.find({
     organizationId,
+    assigneeId: userId,
     status: 2,
     isDeleted: { $in: [false, null] }
   }));
