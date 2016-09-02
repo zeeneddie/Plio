@@ -4,7 +4,7 @@ import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
-const getActionOtherFiles = (action) => {
+const getActionFiles = (action) => {
   const fileIds = action.fileIds || [];
   return Files.find({ _id: { $in: fileIds } });
 };
@@ -24,7 +24,7 @@ Meteor.publishComposite('actions', function(organizationId, isDeleted = { $in: [
     },
     children: [{
       find(action) {
-        getActionOtherFiles(action);
+        return getActionFiles(action);
       }
     }]
   }
@@ -51,7 +51,7 @@ Meteor.publishComposite('actionsByIds', function(ids = []) {
     },
     children: [{
       find(action) {
-        getActionOtherFiles(action);
+        return getActionFiles(action);
       }
     }]
   }
