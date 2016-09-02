@@ -41,15 +41,7 @@ Template.UserMenu.viewmodel({
 
       return {
         href,
-        onClick: (e) => {
-          const mobileWidth = isMobileRes();
-
-          if (mobileWidth) {
-            this.width(mobileWidth);
-          }
-
-          FlowRouter.go(href);
-        }
+        onClick: () => this.goToMyProfile(href)
       }
     };
 
@@ -136,14 +128,14 @@ Template.UserMenu.viewmodel({
       organizationId
     });
   },
-  goToMyProfile(e) {
-    e.preventDefault();
+  goToMyProfile(href) {
+    const mobileWidth = isMobileRes();
 
-    if ($(window).width() < 768) {
-      this.width($(window).width());
+    if (mobileWidth) {
+      this.width(mobileWidth);
     }
 
-    FlowRouter.go('userDirectoryUserPage', { orgSerialNumber: this.orgSerialNumber(), userId: Meteor.userId() });
+    FlowRouter.go(href);
   },
   logout(e) {
     e.preventDefault();
