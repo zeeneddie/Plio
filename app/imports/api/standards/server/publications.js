@@ -75,6 +75,7 @@ Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) 
   return new Counter(counterName, Standards.find({
     organizationId,
     viewedBy: { $ne: userId },
+    // [ToDo]: createdAt > date when userId joined the organisation
     isDeleted: { $in: [false, null] }
   }));
 });
