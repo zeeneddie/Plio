@@ -31,6 +31,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		insertMessage.call({
+			organizationId: this.organizationId(),
 			discussionId,
 			message: sanitizeHtml(this.messageText()),
 			type: 'text'
@@ -51,8 +52,9 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		insertMessage.call({
+			organizationId: this.organizationId(),
 			discussionId,
-			fileIds: [fileId],
+			fileId,
 			type: 'file'
 		}, handleMethodResult(cb));
 	},

@@ -155,6 +155,7 @@
       bottom: 0 !important;
       padding-left: 10%;
       padding-right: 10%;
+      overflow-y: scroll;
 
       &::before {
         visibility: visible;
