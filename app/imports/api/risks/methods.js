@@ -24,7 +24,13 @@ import {
   P_OnUndoStandardsUpdateChecker,
   P_OnUndoAnalysisChecker,
   P_OnSetStandardsUpdateExecutorChecker,
-  P_OnSetStandardsUpdateDateChecker
+  P_OnSetStandardsUpdateDateChecker,
+  P_OnSetAnalysisCompletedByChecker,
+  P_OnSetAnalysisCompletedDateChecker,
+  P_OnSetAnalysisCommentsChecker,
+  P_OnSetStandardsUpdateCompletedByChecker,
+  P_OnSetStandardsUpdateCompletedDateChecker,
+  P_OnSetStandardsUpdateCommentsChecker
 } from '../checkers.js';
 import { ACCESS_DENIED } from '../errors.js';
 import { inject } from '../helpers.js';
@@ -108,6 +114,60 @@ export const setAnalysisDate = new CheckedMethod({
 
   run({ ...args }, doc) {
     return RisksService.setAnalysisDate({ ...args }, doc);
+  }
+});
+
+export const setAnalysisCompletedBy = new CheckedMethod({
+  name: 'Risks.setAnalysisCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return RisksService.setAnalysisCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setAnalysisCompletedDate = new CheckedMethod({
+  name: 'Risks.setAnalysisCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setAnalysisCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setAnalysisComments = new CheckedMethod({
+  name: 'Risks.setAnalysisComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setAnalysisComments({ _id, ...args }, doc);
   }
 });
 
@@ -195,6 +255,61 @@ export const setStandardsUpdateDate = new CheckedMethod({
     return RisksService.setStandardsUpdateDate({ ...args }, doc);
   }
 });
+
+export const setStandardsUpdateCompletedBy = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return RisksService.setStandardsUpdateCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setStandardsUpdateCompletedDate = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setStandardsUpdateCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setStandardsUpdateComments = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setStandardsUpdateComments({ _id, ...args }, doc);
+  }
+});
+
 
 export const updateViewedBy = new CheckedMethod({
   name: 'Risks.updateViewedBy',

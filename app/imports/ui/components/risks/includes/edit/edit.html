@@ -4,21 +4,15 @@
       {{#with risk}}
         {{> Risk_Card_Edit_Main
             risk=this
-            updateAnalysisExecutor=getUpdateAnalysisExecutorFn
-            updateAnalysisDate=getUpdateAnalysisDateFn
-            completeAnalysis=getCompleteAnalysisFn
-            undoAnalysis=getUndoAnalysisFn
-            updateStandardsExecutor=getUpdateStandardsExecutorFn
-            updateStandardsDate=getUpdateStandardsDateFn
-            updateStandards=getUpdateStandardsFn
-            undoStandardsUpdate=getUndoStandardsUpdateFn}}
+            methodRefs=getMethodRefs}}
 
         {{#if showRootCauseAnalysis}}
           {{> Subcards_RCA_Edit
               _id=this._id
               analysis=this.analysis
               updateOfStandards=this.updateOfStandards
-              magnitude=this.magnitude}}
+              magnitude=this.magnitude
+              methodRefs=getMethodRefs}}
         {{/if}}
 
         {{> Subcards_Notify_Edit
@@ -58,7 +52,7 @@
 
         {{> Subcards_OtherFiles_Edit
             _id=this._id
-            files=this.files
+            fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
 

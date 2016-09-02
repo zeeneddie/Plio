@@ -29,7 +29,7 @@ export default {
       }
     });
 
-    const { bucketName, acl, standardsFilesDir } = Meteor.settings.AWSS3Bucket;
+    const { bucketName, acl, standardFilesDir } = Meteor.settings.AWSS3Bucket;
 
     const fut = new Future();
 
@@ -77,7 +77,7 @@ export default {
           const params = {
             Bucket: bucketName,
             ACL: acl,
-            Key: `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${fileName}`,
+            Key: `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${fileName}`,
             Body: htmlString,
             ContentType: 'text/html; charset=UTF-8'
           };

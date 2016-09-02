@@ -4,19 +4,18 @@ import { Template } from 'meteor/templating';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
+import { Files } from '/imports/api/files/files.js';
 import { updateViewedBy } from '/imports/api/messages/methods.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { UnreadMessages } from '/imports/api/constants.js';
 
-
 Template.Dashboard_MessageStats.viewmodel({
-  mixin: ['user'],
+  mixin: ['user', 'organization'],
   autorun: [
     function () {
       const tpl = this.templateInstance;
-
       this._subHandlers([
-        tpl.subscribe('unreadMessagesWithCreatorsInfo'),
+        tpl.subscribe('unreadMessages', { organizationId: this.organizationId() }),
       ]);
     },
 
@@ -69,17 +68,29 @@ Template.Dashboard_MessageStats.viewmodel({
     const msgs = [];
 
     this.cursorMessagesNotViewed().forEach((msg) => {
-      const message = (msg.type === 'file')
-        ? msg.files.map(file => file.name).join(', ')
-        : msg.message;
+      let messageData = {};
+
+      if (msg.type === 'file') {
+        const file = Files.findOne({ _id: msg.fileId });
+        messageData.message = file && file.name;
+        messageData.extension = file && file.extension;
+      } else {
+        messageData.message = msg.message;
+      }
 
       /**
        * Get route parameters from collections, not from the router - in order
        * to make the component most independent
        */
+      const discussion = Discussions.findOne({ _id: msg.discussionId });
+
+      if (!discussion) {
+        return;
+      }
+
       const {
         linkedTo, organizationId
-      } = Discussions.findOne({ _id: msg.discussionId });
+      } = discussion;
 
       const orgSerialNumber = Organizations.findOne({
         _id: organizationId
@@ -91,12 +102,13 @@ Template.Dashboard_MessageStats.viewmodel({
         { at: msg._id }
       );
 
-      msgs.push({
-        message,
+      _.extend(messageData, {
         url,
         fullName: self.userNameOrEmail(msg.createdBy),
-        timeString: moment(msg.createdAt).fromNow(),
+        timeString: moment(msg.createdAt).fromNow()
       });
+
+      msgs.push(messageData);
     });
 
     return msgs;

@@ -5,7 +5,8 @@ import {
   BaseProblemsRequiredSchema,
   BaseProblemsOptionalSchema,
   ReviewSchema,
-  ImprovementPlanSchema
+  ImprovementPlanSchema,
+  FileIdsSchema
 } from '../schemas.js';
 import {
   ProblemsStatuses,
@@ -17,6 +18,7 @@ import {
 
 const RequiredSchema = new SimpleSchema([
   BaseProblemsRequiredSchema,
+  FileIdsSchema,
   {
     typeId: {
       type: String,

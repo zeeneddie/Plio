@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 Template.IP_MeansStatement_Edit.viewmodel({
   mixin: 'organization',
-  files: [],
+  fileIds: [],
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId()
@@ -26,7 +26,7 @@ Template.IP_MeansStatement_Edit.viewmodel({
       }
     };
 
-    renameFields(args, /^files/);
+    renameFields(args, /^fileIds/);
     this.parent().update({ ...args }, cb);
   }
 })

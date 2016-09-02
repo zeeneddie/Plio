@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
-import { check } from 'meteor/check'
+import { check } from 'meteor/check';
+import { Files } from '/imports/api/files/files.js';
+import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
   mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
@@ -10,21 +12,20 @@ Template.ESSources.viewmodel({
   },
   sourceType: 'url',
   sourceUrl: '',
-  sourceName: '',
-  sourceExtension() {
-    return this.sourceName().split('.').pop().toLowerCase();
-  },
+  sourceFileId: '',
   sourceHtmlUrl: null,
   docxRenderInProgress: null,
-  fileId: '',
+  file() {
+    return Files.findOne({ _id: this.sourceFileId() });
+  },
   shouldUpdate() {
-    const { type, url, name, htmlUrl } = this.getData();
-    const { sourceType, sourceUrl, sourceName, sourceHtmlUrl } = this.templateInstance.data;
+    const { type, fileId, url, htmlUrl } = this.getData();
+    const { sourceType, sourceFileId, sourceUrl, sourceHtmlUrl } = this.templateInstance.data;
 
     if (type === 'attachment') {
       return _.every([
-        (type && name) || (type && url),
-        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) || (htmlUrl !== sourceHtmlUrl)
+        type, fileId,
+        (type !== sourceType) || (fileId !== sourceFileId) || (htmlUrl !== sourceHtmlUrl)
       ]);
     } else {
       return _.every([
@@ -39,16 +40,14 @@ Template.ESSources.viewmodel({
     const context = this.templateInstance.data;
     if (type === context.sourceType) {
       this.sourceUrl(context.sourceUrl || '');
-      this.sourceName(context.sourceName || '');
     } else {
       this.sourceUrl('');
-      this.sourceName('');
     }
 
     this.update();
   },
   update(e, cb) {
-    let { type, url, name, htmlUrl } = this.getData();
+    let { type, fileId, url, htmlUrl } = this.getData();
 
     if (!this.shouldUpdate()) {
       return;
@@ -63,15 +62,12 @@ Template.ESSources.viewmodel({
       return;
     }
 
-    const sourceDoc = { type, url, htmlUrl };
+    let sourceDoc = { type };
     if (type === 'attachment') {
-      sourceDoc.name = name;
-
-      if (url) {
-        sourceDoc.extension = url.split('.').pop();
-      } else {
-        delete sourceDoc.url;
-      }
+      sourceDoc.fileId = fileId;
+    } else {
+      sourceDoc.url = url;
+      sourceDoc.htmlUrl = htmlUrl;
     }
 
     const query = {
@@ -88,13 +84,15 @@ Template.ESSources.viewmodel({
   },
   renderDocx(url) {
     check(url, String);
-    const isDocx = this.sourceExtension() === 'docx';
+
+    const file = this.file();
+    const isDocx = file.extension === 'docx';
 
     if (isDocx) {
       this.docxRenderInProgress(true);
       Meteor.call('Mammoth.convertDocxToHtml', {
         url,
-        fileName: this.sourceName() + '.html',
+        fileName: file.name + '.html',
         source: `source${this.id()}`,
         standardId:  this.parent()._id(),
       }, (error, result) => {
@@ -120,23 +118,17 @@ Template.ESSources.viewmodel({
       this.docxRenderInProgress('');
     }, 5000);
   },
-  insertFileFn() {
-    return this.insertFile.bind(this);
+  addFileFn() {
+    return this.addFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
-    this.fileId(_id);
-    this.sourceName(name);
+  addFile({ fileId }, cb) {
+    this.sourceFileId(fileId);
     this.update(null, cb);
   },
-  onUploadCb() {
-    return this.onUpload.bind(this);
+  afterUploadCb() {
+    return this.afterUpload.bind(this);
   },
-  onUpload(err, { url }) {
-    if (err) {
-      return;
-    }
-
-    this.sourceUrl(url);
+  afterUpload({ fileId, url }) {
     this.renderDocx(url);
     this.update();
   },
@@ -146,7 +138,8 @@ Template.ESSources.viewmodel({
   removeAttachment() {
     const fileUploader = this.uploader();
 
-    const isFileUploading = fileUploader.isFileUploading(this.fileId());
+    const file = this.file();
+    const isFileUploading = !file.isUploaded();
 
     let warningMsg = 'This attachment will be removed';
     let buttonText = 'Remove';
@@ -163,8 +156,8 @@ Template.ESSources.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      if (isFileUploading) {
-        fileUploader.cancelUpload(this.fileId());
+      if (fileUploader && isFileUploading) {
+        fileUploader.cancelUpload(this.sourceFileId());
       }
 
       const options = {
@@ -172,6 +165,8 @@ Template.ESSources.viewmodel({
           [`source${this.id()}`]: ''
         }
       };
+
+      removeFile.call({ _id: file._id });
 
       this.parent().update({ options }, (err) =>  {
         if (!err && this.id() === 1) {
@@ -195,7 +190,7 @@ Template.ESSources.viewmodel({
     };
   },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name, sourceExtension:extension, sourceHtmlUrl:htmlUrl } = this.data();
-    return { type, url, name, htmlUrl };
+    const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension, sourceHtmlUrl: htmlUrl } = this.data();
+    return { type, fileId, url, htmlUrl };
   }
 });

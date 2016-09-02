@@ -11,7 +11,11 @@
 
         {{#each messages}}
       		<a class="dashboard-stats-message" href="{{this.url}}">
-        		<i class="fa fa-comment"></i>
+            {{#if this.extension}}
+              <i class="fa fa-file-{{this.extension}}-o"></i>
+            {{else}}
+              <i class="fa fa-comment"></i>
+            {{/if}}
         		<strong>{{this.fullName}}:</strong>
         		{{this.message}}
         		<span class="text-muted">{{this.timeString}}</span>

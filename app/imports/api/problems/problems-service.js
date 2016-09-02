@@ -69,6 +69,39 @@ export default {
     return ret;
   },
 
+  setAnalysisCompletedBy({ _id, completedBy }) {
+    const query = { _id };
+    const options = { $set: { 'analysis.completedBy': completedBy } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setAnalysisCompletedDate({ _id, completedAt }) {
+    const query = { _id };
+    const options = { $set: { 'analysis.completedAt': completedAt } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setAnalysisComments({ _id, completionComments }) {
+    const query = { _id };
+    const options = { $set: { 'analysis.completionComments': completionComments } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
   completeAnalysis({ _id, completionComments, userId }) {
     const ret = this.collection.update({
       _id
@@ -179,6 +212,40 @@ export default {
 
     return ret;
   },
+
+  setStandardsUpdateCompletedBy({ _id, completedBy }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completedBy': completedBy } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setStandardsUpdateCompletedDate({ _id, completedAt }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completedAt': completedAt } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
+  setStandardsUpdateComments({ _id, completionComments }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completionComments': completionComments } };
+
+    const ret = this.collection.update(query, options);
+
+    this._refreshStatus(_id);
+
+    return ret;
+  },
+
 
   updateViewedBy({ _id, viewedBy }) {
     return this._service.updateViewedBy({ _id, viewedBy });

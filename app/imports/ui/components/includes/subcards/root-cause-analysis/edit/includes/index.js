@@ -1,4 +1,3 @@
 import './date';
-import './by';
-import './status';
+import './assignee';
 import './comments';

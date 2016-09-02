@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
+import { isViewed } from '/imports/api/checkers.js';
+
 Template.Subcard.viewmodel({
   mixin: ['collapse', 'callWithFocusCheck'],
   doc: '',
@@ -21,8 +23,7 @@ Template.Subcard.viewmodel({
     }
   },
   isNew() {
-    const { viewedBy } = this.doc();
-    return viewedBy && !_.contains(viewedBy, Meteor.userId());
+    return !isViewed(this.doc(), Meteor.userId());
   },
   handleToggleCollapse() {
     this.clearError('');
