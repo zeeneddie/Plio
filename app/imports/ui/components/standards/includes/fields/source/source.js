@@ -18,7 +18,6 @@ Template.SCSource.viewmodel({
     return Files.findOne({ _id: source.fileId });
   },
   sourceFile() {
-    debugger;
     const _id = this.fileId();
     return Files.find({ _id });
   },

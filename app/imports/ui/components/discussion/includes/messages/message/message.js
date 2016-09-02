@@ -12,7 +12,7 @@ import { Files } from '/imports/api/files/files.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
-	fileIds: [],
+	fileId: '',
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
@@ -65,9 +65,7 @@ Template.Discussion_Message.viewmodel({
 		}
 	},
 	files() {
-		const fileIds = this.fileIds() && this.fileIds().array() || [];
-
-		return Files.find({ _id: { $in: fileIds } });
+		return Files.find({ _id: this.fileId() });
 	},
 	remove(e) {
 		if (!this.isAuthor()) return;
@@ -75,8 +73,6 @@ Template.Discussion_Message.viewmodel({
 		const _id = this._id();
 		const callback = (err, res) => {
 			if (err) return;
-
-			swal("Deleted!", "Your message has been deleted.", "success");
 		};
 
 		swal({
@@ -85,7 +81,7 @@ Template.Discussion_Message.viewmodel({
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonText: "Remove",
-			closeOnConfirm: false
+			closeOnConfirm: true
 		},
 		function () {
 			removeMessage.call({ _id }, handleMethodResult(callback));

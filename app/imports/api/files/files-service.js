@@ -15,9 +15,13 @@ export default {
         ...args
       }
     };
-    
+
     return this.collection.update(query, options);
   },
+
+	bulkRemove({ fileIds }) {
+		return this.collection.remove({ _id: { $in: fileIds } });
+	},
 
 	remove({ _id }) {
 		return this.collection.remove({ _id });
