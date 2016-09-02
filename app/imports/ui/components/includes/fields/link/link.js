@@ -3,9 +3,11 @@ import { Template } from 'meteor/templating';
 Template.Link.viewmodel({
   className: '',
   href: '',
-  onClick() {},
   onHandleClick(e) {
+    if (!this.onClick) return;
+
     e.preventDefault();
-    this.onClick(e);
+
+    _.isFunction(this.onClick) && this.onClick(e);
   }
 });
