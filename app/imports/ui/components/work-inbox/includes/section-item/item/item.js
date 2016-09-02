@@ -19,6 +19,20 @@ Template.WorkInbox_Item.viewmodel({
       }
     });
   },
+  linkArgs() {
+    return {
+      isActive: Object.is(this.workItemId(), this._id()),
+      onClick: handler => handler({ workItemId: this._id() }),
+      href: (() => {
+        const params = {
+          workItemId: this._id(),
+          orgSerialNumber: this.organizationSerialNumber()
+        };
+        const queryParams = { filter: this.activeWorkInboxFilterId() };
+        return FlowRouter.path('workInboxItem', params, queryParams);
+      })()
+    };
+  },
   getTypeText({ type }) {
     return this.capitalize(type);
   },
@@ -44,14 +58,5 @@ Template.WorkInbox_Item.viewmodel({
     const { _id } = this.data();
 
     updateViewedBy.call({ _id });
-  },
-  navigate() {
-    if ($(window).width() < 768) {
-      this.width($(window).width());
-    }
-
-    const { _id:workItemId } = this.data();
-
-    FlowRouter.setParams({ workItemId });
   }
 });

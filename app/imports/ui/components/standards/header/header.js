@@ -3,10 +3,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
+import { isMobileRes } from '/imports/api/checkers.js';
 
 Template.StandardsHeader.viewmodel({
   share: ['window', 'search'],
-  mixin: ['standard', 'collapsing', 'filters', 'organization', 'mobile'],
+  mixin: ['standard', 'collapsing', 'filters', 'organization', 'mobile', 'router'],
   isDiscussionOpened: false,
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
@@ -23,19 +24,22 @@ Template.StandardsHeader.viewmodel({
     this.expandCollapsed(this.standardId());
   },
   onNavigate(e) {
-    if ($(window).width() < 768) {
-      const params = {
-        orgSerialNumber: this.organizationSerialNumber(),
-        standardId: this.standardId()
-      };
-      const queryParams = { filter: this.activeStandardFilterId() };
+    const mobileWidth = isMobileRes();
+    const goToDashboard = () => this.goToDashboard(this.organizationSerialNumber());
 
-      this.width(null);
-      return FlowRouter.go('standard', params, queryParams);
-    } else if (this.isDiscussionOpened()) {
-      this.width(null);
+    if (mobileWidth) {
+      if (this.isDiscussionOpened()) {
+        this.width(mobileWidth);
+        return this.goToStandard(this.standardId());
+      } else {
+        if (this.width()) {
+          return this.width(null);
+        } else {
+          return goToDashboard();
+        }
+      }
     }
 
-    return this.navigate(e);
+    return goToDashboard();
   }
 });
