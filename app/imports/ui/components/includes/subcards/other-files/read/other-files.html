@@ -1,18 +1,14 @@
 <template name="Subcards_OtherFiles_Read">
-  {{#with files}}
+  {{#if files}}
     <div class="card-block card-subheading">
       <h4 class="card-title" {{b "text: label"}}></h4>
     </div>
     <div class="list-group">
       <div class="list-group-item">
-        {{#each this}}
-          {{> FileItem
-              name=this.name
-              url=this.url
-              isReadOnly=true
-              extension=this.extension}}
+        {{#each files}}
+          {{> FileItem_Read this}}
         {{/each}}
       </div>
     </div>
-  {{/with}}
+  {{/if}}
 </template>

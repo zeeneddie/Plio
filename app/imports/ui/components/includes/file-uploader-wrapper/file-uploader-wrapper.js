@@ -1,63 +1,41 @@
 import { Template } from 'meteor/templating';
+import { Files } from '/imports/api/files/files.js';
+import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.FileUploader_Wrapper.viewmodel({
   mixin: 'organization',
-  files: [],
   slingshotDirective: '',
+
   uploader() {
     return this.child('FileUploader');
   },
-  insertFileFn() {
-    return this.insertFile.bind(this);
+  addFileFn() {
+    return this.addFile.bind(this);
   },
-  insertFile({ _id, name }, cb) {
-    const fileDoc = { _id, name, extension: name.split('.').pop().toLowerCase() };
+  addFile({ fileId }, cb) {
 
-    if (this.files() && this.files().length) {
-
-      const options = {
-        $push: {
-          files: fileDoc
-        }
-      };
-
-      this.parent().update({ options }, cb);
-    } else {
-      this.parent().update({
-        files: [fileDoc]
-      }, cb);
-    }
-  },
-  onUploadCb() {
-    return this.onUpload.bind(this);
-  },
-  onUpload(err, { _id, url }) {
-    if (err && err.error !== 'Aborted') {
-      ViewModel.findOne('ModalWindow').setError(err.reason);
-      return;
-    }
-
-    const query = {
-      files: {
-        $elemMatch: { _id }
-      }
-    };
+    // if (this.files() && this.files().length) {
     const options = {
-      $set: {
-        'files.$.url': url
+      $push: {
+        fileIds: fileId
       }
     };
 
-    this.parent().update({ query, options });
+    this.parent().update({ options }, cb);
   },
+  files() {
+		const fileIds = this.fileIds() && this.fileIds().array() || [];
+
+		return Files.find({ _id: { $in: fileIds } });
+	},
   removeFileFn() {
-    return this.removeFile.bind(this);
+    return this.removeFile.bind(this)
   },
   removeFile(viewmodel) {
-    const { _id, url } = viewmodel.getData();
+    const { _id, url } = viewmodel;
     const fileUploader = this.uploader();
 
-    const isFileUploading = fileUploader.isFileUploading(_id);
+    const isFileUploading = !viewmodel.isUploaded();
 
     let warningMsg = 'This file will be removed';
     let buttonText = 'Remove';
@@ -74,15 +52,17 @@ Template.FileUploader_Wrapper.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      if (isFileUploading) {
+      if (isFileUploading && fileUploader) {
         fileUploader.cancelUpload(_id);
       }
 
       const options = {
         $pull: {
-          files: { _id }
+          fileIds: _id
         }
       };
+
+      removeFile.call({ _id });
 
       this.parent().update({ options });
     });

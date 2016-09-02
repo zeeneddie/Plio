@@ -2,22 +2,47 @@ import { Meteor } from 'meteor/meteor';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
+import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
-Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds){
-	const userIds = [];
+Meteor.publishComposite('messagesByDiscussionIds', function (arrDiscussionIds) {
+	return {
+		find() {
+			return Messages.find({ discussionId: { $in: arrDiscussionIds } });
+		},
+		children: [{
+	  	find: function (message) {
+	      return Meteor.users.find({ _id: message.userId });
+	    }
+	  }, {
+	  	find: function (message) {
+				if (message.fileIds && message.fileIds.length) {
+	      	return Files.find({ _id: { $in: message.fileIds } });
+				}
+	    }
+	  }]
+	}
+});
+
+Meteor.publish('messagesByDiscussionIds2', function(arrDiscussionIds){
+	let userIds = [];
+	let fileIds = [];
 	const messages = Messages.find({ discussionId: {$in: arrDiscussionIds} });
 
 	messages.forEach((c, i, cr) => {
-		if(userIds.indexOf(c.userId) < 0) {
+		if (userIds.indexOf(c.userId) < 0) {
 			userIds.push(c.userId);
+		}
+		if (c.fileIds && c.fileIds.length) {
+			fileIds = _.union(fileIds, c.fileIds);
 		}
 	});
 
 	return [
 		messages,
-		Meteor.users.find({ _id: { $in: userIds } }, { fields: { profile: 1 } })
+		Meteor.users.find({ _id: { $in: userIds } }, { fields: { profile: 1 } }),
+		Files.find({ _id: { $in: fileIds } })
 	];
 });
 

@@ -6,11 +6,13 @@ import get from 'lodash.get';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
-import { removeMessageById } from '/imports/api/messages/methods.js';
+import { remove as removeMessage } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
+import { Files } from '/imports/api/files/files.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
+	fileIds: [],
 
 	onRendered(tpl) {
 		const $chat = $(tpl.firstNode).closest('.chat-content');
@@ -19,7 +21,7 @@ Template.Discussion_Message.viewmodel({
 	},
 	getFormattedDate: getFormattedDate,
 	uploader() {
-		return ViewModel.findOne('DiscussionsFileUploader');
+		return ViewModel.findOne('DiscussionFileUploader');
 	},
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
@@ -62,6 +64,11 @@ Template.Discussion_Message.viewmodel({
 			FlowRouter.setQueryParams({ at: null });
 		}
 	},
+	files() {
+		const fileIds = this.fileIds() && this.fileIds().array() || [];
+
+		return Files.find({ _id: { $in: fileIds } });
+	},
 	remove(e) {
 		if (!this.isAuthor()) return;
 
@@ -80,8 +87,8 @@ Template.Discussion_Message.viewmodel({
 			confirmButtonText: "Remove",
 			closeOnConfirm: false
 		},
-		function(){
-			removeMessageById.call({ _id }, handleMethodResult(callback));
+		function () {
+			removeMessage.call({ _id }, handleMethodResult(callback));
 		});
 	},
 	openUserDetails() {

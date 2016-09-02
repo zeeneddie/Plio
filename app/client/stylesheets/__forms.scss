@@ -285,6 +285,7 @@ input:focus ~ .clear-field {
 
   table {
     margin-bottom: 10px;
+    border-bottom: none !important;
   }
 
   th, td {
@@ -310,15 +311,15 @@ input:focus ~ .clear-field {
       span {
         -webkit-transform: rotate(-90deg);
         display: block;
-        //position: absolute;
-        //top: 50%;
-        //margin-top: -30px;
-
       }
     }
 
     &.impact-label {
       background: #eee;
+
+      &:first-of-type {
+        min-width: 123px;
+      }
     }
 
     &.impact {
@@ -354,6 +355,10 @@ input:focus ~ .clear-field {
     &.impact-medium { background: $amber-color; }
     &.impact-high { background: $red-color; }
     &.impact-vhigh { background: $red-color; }
+
+    @media (max-width: 543px) {
+      padding: 0;
+    }
   }
 
   td {
@@ -361,6 +366,10 @@ input:focus ~ .clear-field {
     font-weight: bold;
   }
 
+  @media (max-width: 543px) {
+    padding: 0;
+  }
+  
 }
 
 /*
@@ -437,11 +446,19 @@ fieldset[disabled] {
   opacity: 0.5;
 }
 
-.file-item {
+.file-item, .file-item-read {
   margin-right: 4px;
+  margin-bottom: 8px;
   max-width: 100%;
   display: inline-block;
   position: relative;
+  .file-item-read {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .btn-icon {
+    margin-bottom: 0;
+  }
   .btn.file-label {
     position: relative;
     overflow: hidden;

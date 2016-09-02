@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-
+import { Files } from '/imports/api/files/files.js';
 
 Template.Subcards_ImprovementPlan_Read.viewmodel({
   mixin: ['user', 'date'],
@@ -11,7 +11,10 @@ Template.Subcards_ImprovementPlan_Read.viewmodel({
   targetDate: '',
   owner: '',
   reviewDates: [],
-  files: [],
+  files() {
+    const fileIds = this.doc().fileIds || [];
+    return Files.find({ _id: { $in: fileIds } });
+  },
   doc() {
     return this.improvementPlan();
   },

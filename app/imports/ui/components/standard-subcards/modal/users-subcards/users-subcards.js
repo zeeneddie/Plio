@@ -87,7 +87,7 @@ Template.Users_Subcards.viewmodel({
       return;
     }
 
-    const uploader = new Slingshot.Upload('usersAvatars', {
+    const uploader = new Slingshot.Upload('userAvatars', {
       userId: this.UserId()
     });
 

@@ -5,7 +5,7 @@ import { setReminder } from '/imports/api/organizations/methods.js';
 
 Template.OrgSettings_Reminders.viewmodel({
   mixin: 'modal',
-  _lText: 'Reminders for actions',
+  _lText: 'Workflow reminders',
   onChangeCb() {
     return this.onChange.bind(this);
   },
