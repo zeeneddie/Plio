@@ -118,7 +118,7 @@ export default Auditor = {
   },
 
   _createLogs(config, handler, data, logs) {
-    const { diffs, newDoc } = data;
+    const { diffs = {}, newDoc } = data;
     const { updatedAt:date, updatedBy:executor } = newDoc;
     const { kind, field, newValue, oldValue } = diffs[handler.field] || {};
 
@@ -135,33 +135,43 @@ export default Auditor = {
         return;
       }
 
-      const message = renderString(
-        logTemplate, templateData.bind(config, data)
-      );
-
       const documentId = data.documentId || config.docId(newDoc);
       const collection = config.collectionName;
 
-      const log = { date, executor, field, collection, documentId, message };
-
-      if (_([FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED]).contains(kind)) {
-        _(log).extend({ newValue, oldValue });
-      }
-
+      let logDataArr;
       if (logData) {
-        _(log).extend(logData.call(config, data));
-
-        if ((log.collection !== collection) || (log.documentId !== documentId)) {
-          _(['field', 'newValue', 'oldValue']).each(key => delete log[key]);
-        }
+        logDataArr = logData.call(config, data);
+        logDataArr = _(logDataArr).isArray() ? logDataArr : [logDataArr];
       }
 
-      logs.push(log);
+      let tplDataArr = templateData.call(config, data);
+      tplDataArr = _(tplDataArr).isArray() ? tplDataArr : [tplDataArr];
+
+      _(tplDataArr).each((tData, i) => {
+        const message = renderString(logTemplate, tData);
+
+        const log = { date, executor, field, collection, documentId, message };
+
+        if (_([FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED]).contains(kind)) {
+          _(log).extend({ newValue, oldValue });
+        }
+
+        if (logDataArr) {
+          _(log).extend(logDataArr[i]);
+
+          if ((log.collection !== collection) || (log.documentId !== documentId)) {
+            _(['field', 'newValue', 'oldValue']).each(key => delete log[key]);
+          }
+        }
+
+        logs.push(log);
+      });
     });
   },
 
   _createNotifications(config, handler, data, notifications) {
-    const { kind } = data.diffs[handler.field] || {};
+    const { diffs = {} } = data;
+    const { kind } = diffs[handler.field] || {};
 
     _(handler.notifications).each((notificationConfig) => {
       if (notificationConfig.shouldSendNotification
@@ -174,35 +184,46 @@ export default Auditor = {
         subjectTemplate, subjectTemplateData, emailTemplateData
       } = notificationConfig;
 
-      const notificationTemplate = _(template).isObject()? template[kind] : template;
+      const notificationTemplate = _(template).isObject() ? template[kind] : template;
       if (!notificationTemplate) {
         return;
       }
 
-      const text = renderString(
-        notificationTemplate, templateData.bind(config, data)
-      );
+      let tplDataArr = templateData.call(config, data);
+      tplDataArr = _(tplDataArr).isArray() ? tplDataArr : [tplDataArr];
 
-      const notificationData = {
-        receivers: receivers.call(config, data),
-        text
-      };
-
+      let subjects;
       if (subjectTemplate && subjectTemplateData) {
-        const subject = renderString(
-          subjectTemplate, subjectTemplateData.bind(config, data)
+        let subjDataArr = subjectTemplateData.call(config, data);
+        subjDataArr = _(subjDataArr).isArray() ? subjDataArr : [subjDataArr];
+
+        subjects = _(subjDataArr).map(
+          subjData => renderString(subjectTemplate, subjData)
         );
-
-        _(notificationData).extend({ subject });
       }
 
+      let emailTplDataArr;
       if (emailTemplateData) {
-        _(notificationData).extend({
-          emailTemplateData: emailTemplateData.call(config, data)
-        });
+        emailTplDataArr = emailTemplateData.call(config, data);
+        emailTplDataArr = _(emailTplDataArr).isArray() ? emailTplDataArr : [emailTplDataArr];
       }
 
-      notifications.push(notificationData);
+      _(tplDataArr).each((tData, i) => {
+        const text = renderString(notificationTemplate, tData);
+
+        const notificationData = {
+          receivers: receivers.call(config, data),
+          text
+        };
+
+        subjects && _(notificationData).extend({ subject: subjects[i] });
+
+        emailTplDataArr && _(notificationData).extend({
+          emailTemplateData: emailTplDataArr[i]
+        });
+
+        notifications.push(notificationData);
+      });
     });
   },
 

@@ -4,6 +4,11 @@ import { Actions } from '/imports/api/actions/actions.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { ActionStatuses, CollectionNames, ProblemTypes } from '/imports/api/constants.js';
+import {
+  getCollectionByDocType,
+  getUserFullNameOrEmail,
+  getPrettyOrgDate
+} from '/imports/api/helpers.js';
 import { ChangesKinds } from './audit-utils.js';
 import {
   isDeletedField,
@@ -16,7 +21,6 @@ import {
 } from './reusable-update-handlers.js';
 import NCAuditConfig from './nc-audit-config.js';
 import RiskAuditConfig from './risk-audit-config.js';
-import Utils from '../../utils.js';
 
 
 const getNotificationReceivers = ({ linkedTo, ownerId }) => {
@@ -43,10 +47,10 @@ const getNotificationReceivers = ({ linkedTo, ownerId }) => {
 
   _.each(
     [
-      { type: ProblemTypes.NC, collection: NonConformities },
-      { type: ProblemTypes.RISK, collection: Risks }
+      { collection: NonConformities, type: ProblemTypes.NC },
+      { collection: Risks, type: ProblemTypes.RISK }
     ],
-    ({ type, collection }) => getIds(collection, type)
+    ({ collection, type }) => getIds(collection, type)
   );
 
   Standards.find({
@@ -56,13 +60,19 @@ const getNotificationReceivers = ({ linkedTo, ownerId }) => {
   return Array.from(usersIds);
 };
 
-const getLinkedDocName = (documentId, documentType) => {
-  const docAuditConfigs = {
+const getLinkedDocAuditConfig = (documentType) => {
+  return {
     [ProblemTypes.NC]: NCAuditConfig,
     [ProblemTypes.RISK]: RiskAuditConfig
-  };
+  }[documentType];
+};
 
-  return docAuditConfigs[documentType].docDescription(documentId);
+const getLinkedDocName = (documentId, documentType) => {
+  const collection = getCollectionByDocType(documentType);
+  const doc = collection.findOne({ _id: documentId });
+  const docAuditConfig = getLinkedDocAuditConfig(documentType);
+
+  return docAuditConfig.docDescription(doc);
 };
 
 const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED, ITEM_ADDED, ITEM_REMOVED } = ChangesKinds;
@@ -79,9 +89,53 @@ export default ActionAuditConfig = {
       {
         template: 'Document created',
         templateData() { }
+      },
+      {
+        template: '{{{docDesc}}} was linked to this document',
+        templateData({ newDoc }) {
+          return _(newDoc.linkedTo.length).times(() => {
+            return { docDesc: this.docDescription(newDoc) };
+          });
+        },
+        logData({ newDoc: { linkedTo } }) {
+          return _(linkedTo).map(({ documentId, documentType }) => {
+            const auditConfig = getLinkedDocAuditConfig(documentType);
+
+            return {
+              collection: auditConfig.collectionName,
+              documentId
+            };
+          });
+        }
       }
     ],
-    notifications: []
+    notifications: [
+      {
+        template: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
+        templateData({ newDoc }) {
+          const docDesc = this.docDescription(newDoc);
+          const userName = getUserFullNameOrEmail(newDoc.createdBy);
+
+          return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
+            const auditConfig = getLinkedDocAuditConfig(documentType);
+
+            return {
+              linkedDocDesc: getLinkedDocName(documentId, documentType),
+              docDesc,
+              userName
+            };
+          });
+        },
+        receivers({ newDoc }) {
+          return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
+            const collection = getCollectionByDocType(documentType);
+            const { identifiedBy } = collection.findOne({ _id: documentId });
+
+            return identifiedBy;
+          });
+        }
+      }
+    ]
   },
 
   updateHandlers: [
@@ -100,10 +154,12 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               'Completion date removed'
           },
-          templateData({ diffs: { completedAt } }) {
+          templateData({ diffs: { completedAt }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
-              newValue: Utils.getPrettyUTCDate(completedAt.newValue),
-              oldValue: Utils.getPrettyUTCDate(completedAt.oldValue)
+              newValue: getPrettyOrgDate(completedAt.newValue, orgId),
+              oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
             };
           }
         }
@@ -119,11 +175,13 @@ export default ActionAuditConfig = {
               '{{userName}} removed completion date of {{{docDesc}}}'
           },
           templateData({ diffs: { completedAt }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getPrettyUTCDate(completedAt.newValue),
-              oldValue: Utils.getPrettyUTCDate(completedAt.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getPrettyOrgDate(completedAt.newValue, orgId),
+              oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
             };
           },
           receivers({ newDoc }) {
@@ -150,8 +208,8 @@ export default ActionAuditConfig = {
           },
           templateData({ diffs: { completedBy } }) {
             return {
-              newValue: Utils.getUserFullNameOrEmail(completedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(completedBy.oldValue)
+              newValue: getUserFullNameOrEmail(completedBy.newValue),
+              oldValue: getUserFullNameOrEmail(completedBy.oldValue)
             };
           }
         }
@@ -172,9 +230,9 @@ export default ActionAuditConfig = {
           templateData({ diffs: { completedBy }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getUserFullNameOrEmail(completedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(completedBy.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getUserFullNameOrEmail(completedBy.newValue),
+              oldValue: getUserFullNameOrEmail(completedBy.oldValue)
             };
           },
           receivers({ newDoc }) {
@@ -215,7 +273,7 @@ export default ActionAuditConfig = {
           templateData({ diffs: { completionComments }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
               newValue: completionComments.newValue,
               oldValue: completionComments.oldValue
             };
@@ -239,10 +297,12 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               'Completion target date removed'
           },
-          templateData({ diffs: { completionTargetDate } }) {
+          templateData({ diffs: { completionTargetDate }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
-              newValue: Utils.getPrettyUTCDate(completionTargetDate.newValue),
-              oldValue: Utils.getPrettyUTCDate(completionTargetDate.oldValue)
+              newValue: getPrettyOrgDate(completionTargetDate.newValue, orgId),
+              oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
             };
           }
         }
@@ -258,11 +318,13 @@ export default ActionAuditConfig = {
               '{{userName}} removed completion target date of {{{docDesc}}}'
           },
           templateData({ diffs: { completionTargetDate }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getPrettyUTCDate(completionTargetDate.newValue),
-              oldValue: Utils.getPrettyUTCDate(completionTargetDate.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getPrettyOrgDate(completionTargetDate.newValue, orgId),
+              oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
             };
           },
           receivers({ newDoc }) {
@@ -314,7 +376,7 @@ export default ActionAuditConfig = {
               docDesc: this.docDescription(newDoc),
               completed: isCompleted.newValue,
               comments: completionComments && completionComments.newValue,
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy)
             };
           },
           receivers({ newDoc }) {
@@ -377,7 +439,7 @@ export default ActionAuditConfig = {
               verified: isVerified.newValue,
               verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
               comments: verificationComments && verificationComments.newValue,
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy)
             };
           },
           receivers({ newDoc }) {
@@ -413,11 +475,7 @@ export default ActionAuditConfig = {
           },
           logData({ diffs: { linkedTo } }) {
             const { item: { documentId, documentType } } = linkedTo;
-
-            const auditConfig = {
-              [ProblemTypes.NC]: NCAuditConfig,
-              [ProblemTypes.RISK]: RiskAuditConfig
-            }[documentType];
+            const auditConfig = getLinkedDocAuditConfig(documentType);
 
             return {
               collection: auditConfig.collectionName,
@@ -438,11 +496,12 @@ export default ActionAuditConfig = {
             return {
               docDesc: this.docDescription(newDoc),
               linkedDocDesc: getLinkedDocName(documentId, documentType),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+          receivers({ diffs: { linkedTo }, newDoc, oldDoc }) {
+            const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
+            return getNotificationReceivers(doc);
           }
         }
       ]
@@ -478,7 +537,7 @@ export default ActionAuditConfig = {
           templateData({ diffs: { planInPlace }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
               newValue: planInPlace.newValue,
               oldValue: planInPlace.oldValue
             };
@@ -545,8 +604,8 @@ export default ActionAuditConfig = {
           },
           templateData({ diffs: { toBeCompletedBy } }) {
             return {
-              newValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.oldValue)
+              newValue: getUserFullNameOrEmail(toBeCompletedBy.newValue),
+              oldValue: getUserFullNameOrEmail(toBeCompletedBy.oldValue)
             };
           }
         }
@@ -564,9 +623,9 @@ export default ActionAuditConfig = {
           templateData({ diffs: { toBeCompletedBy }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(toBeCompletedBy.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getUserFullNameOrEmail(toBeCompletedBy.newValue),
+              oldValue: getUserFullNameOrEmail(toBeCompletedBy.oldValue)
             };
           },
           receivers({ newDoc }) {
@@ -581,7 +640,7 @@ export default ActionAuditConfig = {
           templateData({ newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy)
             };
           },
           subjectTemplate: 'You have been assigned as a completion executor',
@@ -615,8 +674,8 @@ export default ActionAuditConfig = {
           },
           templateData({ diffs: { toBeVerifiedBy } }) {
             return {
-              newValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
+              newValue: getUserFullNameOrEmail(toBeVerifiedBy.newValue),
+              oldValue: getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
             };
           }
         }
@@ -634,9 +693,9 @@ export default ActionAuditConfig = {
           templateData({ diffs: { toBeVerifiedBy }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getUserFullNameOrEmail(toBeVerifiedBy.newValue),
+              oldValue: getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
             };
           },
           receivers({ newDoc }) {
@@ -651,7 +710,7 @@ export default ActionAuditConfig = {
           templateData({ newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy)
             };
           },
           subjectTemplate: 'You have been assigned as a verification executor',
@@ -702,7 +761,7 @@ export default ActionAuditConfig = {
           templateData({ diffs: { verificationComments }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
             };
           },
           receivers({ newDoc }) {
@@ -724,10 +783,12 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               'Verification target date removed'
           },
-          templateData({ diffs: { verificationTargetDate } }) {
+          templateData({ diffs: { verificationTargetDate }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
-              newValue: Utils.getPrettyUTCDate(verificationTargetDate.newValue),
-              oldValue: Utils.getPrettyUTCDate(verificationTargetDate.oldValue)
+              newValue: getPrettyOrgDate(verificationTargetDate.newValue, orgId),
+              oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
             };
           }
         }
@@ -743,11 +804,13 @@ export default ActionAuditConfig = {
               '{{userName}} removed verification target date of {{{docDesc}}}'
           },
           templateData({ diffs: { verificationTargetDate }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getPrettyUTCDate(verificationTargetDate.newValue),
-              oldValue: Utils.getPrettyUTCDate(verificationTargetDate.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getPrettyOrgDate(verificationTargetDate.newValue, orgId),
+              oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
             };
           },
           receivers({ newDoc }) {
@@ -772,10 +835,12 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               'Verification date removed'
           },
-          templateData({ diffs: { verifiedAt } }) {
+          templateData({ diffs: { verifiedAt }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
-              newValue: Utils.getPrettyUTCDate(verifiedAt.newValue),
-              oldValue: Utils.getPrettyUTCDate(verifiedAt.oldValue)
+              newValue: getPrettyOrgDate(verifiedAt.newValue, orgId),
+              oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
             };
           }
         }
@@ -794,11 +859,13 @@ export default ActionAuditConfig = {
               '{{userName}} removed verification date of {{{docDesc}}}'
           },
           templateData({ diffs: { verifiedAt }, newDoc }) {
+            const orgId = this.docOrgId(newDoc);
+
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getPrettyUTCDate(verifiedAt.newValue),
-              oldValue: Utils.getPrettyUTCDate(verifiedAt.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getPrettyOrgDate(verifiedAt.newValue, orgId),
+              oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
             };
           },
           receivers({ newDoc }) {
@@ -825,8 +892,8 @@ export default ActionAuditConfig = {
           },
           templateData({ diffs: { verifiedBy } }) {
             return {
-              newValue: Utils.getUserFullNameOrEmail(verifiedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(verifiedBy.oldValue)
+              newValue: getUserFullNameOrEmail(verifiedBy.newValue),
+              oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
             };
           }
         }
@@ -847,9 +914,9 @@ export default ActionAuditConfig = {
           templateData({ diffs: { verifiedBy }, newDoc }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-              newValue: Utils.getUserFullNameOrEmail(verifiedBy.newValue),
-              oldValue: Utils.getUserFullNameOrEmail(verifiedBy.oldValue)
+              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              newValue: getUserFullNameOrEmail(verifiedBy.newValue),
+              oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
             };
           },
           receivers({ newDoc }) {
@@ -958,7 +1025,7 @@ export default ActionAuditConfig = {
     }
   ],
 
-  onCreated: {
+  onRemoved: {
     logs: [
       {
         template: 'Document created',
@@ -972,16 +1039,11 @@ export default ActionAuditConfig = {
     return _id;
   },
 
-  docDescription(docOrId) {
-    let action = docOrId;
-    if (_(docOrId).isString()) {
-      action = Actions.findOne({ _id: docOrId });
-    }
-
-    return `${action.sequentialId} "${action.title}"`;
+  docDescription({ sequentialId, title }) {
+    return `${sequentialId} "${title}"`;
   },
 
-  docOrganizationId({ organizationId }) {
+  docOrgId({ organizationId }) {
     return organizationId;
   },
 

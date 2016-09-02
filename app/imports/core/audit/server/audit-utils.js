@@ -105,9 +105,9 @@ export const DocumentDiffer = {
 
 }
 
-export const renderString = (tmpl, dataFn) => {
+export const renderString = (tmpl, data) => {
   const compiledTemplate = Handlebars.compile(tmpl);
-  const tmplData = dataFn() || {};
+  const tmplData = data || {};
 
   return compiledTemplate(tmplData);
 };

@@ -46,18 +46,5 @@ export default Utils = {
     });
 
     return last ? last.serialNumber + 1 : defaultNumber;
-  },
-
-  getUserFullNameOrEmail(userOrId) {
-    let user = userOrId;
-    if (typeof userOrId === 'string') {
-      user = Meteor.users.findOne(userOrId);
-    }
-
-    return (user && user.fullNameOrEmail()) || 'Ghost';
-  },
-
-  getPrettyUTCDate(date) {
-    return `${moment(date).tz('UTC').format('DD MMM YYYY hh:mm:ss')} (UTC)`;
   }
 }

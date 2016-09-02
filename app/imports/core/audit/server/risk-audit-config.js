@@ -34,13 +34,8 @@ export default {
     return _id;
   },
 
-  docDescription(docOrId) {
-    let risk = docOrId;
-    if (_(docOrId).isString()) {
-      risk = Risks.findOne({ _id: docOrId });
-    }
-
-    return `${risk.sequentialId} "${risk.title}"`;
+  docDescription({ sequentialId, title }) {
+    return `${sequentialId} "${title}"`;
   },
 
   actionLinkChanged: {

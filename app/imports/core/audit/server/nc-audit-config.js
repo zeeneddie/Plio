@@ -34,13 +34,8 @@ export default {
     return _id;
   },
 
-  docDescription(docOrId) {
-    let nc = docOrId;
-    if (_(docOrId).isString()) {
-      nc = NonConformities.findOne({ _id: docOrId });
-    }
-
-    return `${nc.sequentialId} "${nc.title}"`;
+  docDescription({ sequentialId, title }) {
+    return `${sequentialId} "${title}"`;
   },
 
   actionLinkChanged: {

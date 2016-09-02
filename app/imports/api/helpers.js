@@ -2,11 +2,14 @@ import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 
+import { Meteor } from 'meteor/meteor';
+
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
 import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
+import { Organizations } from './organizations/organizations.js';
 
 const { compose } = _;
 
@@ -91,6 +94,21 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+const getUserFullNameOrEmail = (userOrId) => {
+  let user = userOrId;
+  if (typeof userOrId === 'string') {
+    user = Meteor.users.findOne(userOrId);
+  }
+
+  return (user && user.fullNameOrEmail()) || 'Ghost';
+};
+
+const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY') => {
+  const { timezone } = Organizations.findOne({ _id: organizationId }) || {};
+
+  return moment(date).tz(timezone || 'UTC').format(format);
+};
+
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
@@ -116,6 +134,8 @@ export {
   getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
+  getUserFullNameOrEmail,
+  getPrettyOrgDate,
   handleMethodResult,
   getCollectionByDocType,
   chain,

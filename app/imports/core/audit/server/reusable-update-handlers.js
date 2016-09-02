@@ -1,5 +1,5 @@
 import { ChangesKinds } from './audit-utils.js';
-import Utils from '../../utils.js';
+import { getUserFullNameOrEmail } from '/imports/api/helpers.js';
 
 
 export const isDeletedField = {
@@ -26,7 +26,7 @@ export const isDeletedField = {
     templateData({ diffs: { isDeleted }, newDoc }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
         deleted: isDeleted.newValue
       };
     },
@@ -62,7 +62,7 @@ export const filesField = {
     templateData({ diffs: { files }, newDoc }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
         fileName: files.item.name
       };
     },
@@ -103,7 +103,7 @@ export const fileUrlField = {
 
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
         fileName: fileDoc.name
       };
     },
@@ -129,7 +129,7 @@ export const notesField = {
     templateData({ diffs: { notes }, newDoc }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
       };
     },
     receivers() { }
@@ -143,7 +143,7 @@ export const notifyField = {
       [ChangesKinds.ITEM_REMOVED]: '{{item}} was removed from notification list'
     },
     templateData({ diffs: { notify } }) {
-      return { item: Utils.getUserFullNameOrEmail(notify.item) };
+      return { item: getUserFullNameOrEmail(notify.item) };
     }
   },
   notificationConfig: {
@@ -156,8 +156,8 @@ export const notifyField = {
     templateData({ diffs: { notify }, newDoc }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-        item: Utils.getUserFullNameOrEmail(notify.item)
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        item: getUserFullNameOrEmail(notify.item)
       };
     },
     receivers() { }
@@ -173,8 +173,8 @@ export const ownerIdField = {
     },
     templateData({ diffs: { ownerId } }) {
       return {
-        newValue: Utils.getUserFullNameOrEmail(ownerId.newValue),
-        oldValue: Utils.getUserFullNameOrEmail(ownerId.oldValue)
+        newValue: getUserFullNameOrEmail(ownerId.newValue),
+        oldValue: getUserFullNameOrEmail(ownerId.oldValue)
       };
     }
   },
@@ -190,9 +190,9 @@ export const ownerIdField = {
     templateData({ diffs: { ownerId }, newDoc }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
-        newValue: Utils.getUserFullNameOrEmail(ownerId.newValue),
-        oldValue: Utils.getUserFullNameOrEmail(ownerId.oldValue)
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        newValue: getUserFullNameOrEmail(ownerId.newValue),
+        oldValue: getUserFullNameOrEmail(ownerId.oldValue)
       };
     },
     receivers() { }
@@ -225,7 +225,7 @@ export const titleField = {
     templateData({ diffs: { title }, newDoc, oldDoc }) {
       return {
         docDesc: this.docDescription(oldDoc),
-        userName: Utils.getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(newDoc.updatedBy),
         newValue: title.newValue,
         oldValue: title.oldValue
       };
