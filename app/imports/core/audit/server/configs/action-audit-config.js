@@ -9,7 +9,7 @@ import {
   getUserFullNameOrEmail,
   getPrettyOrgDate
 } from '/imports/api/helpers.js';
-import { ChangesKinds } from './audit-utils.js';
+import { ChangesKinds } from '../utils/changes-kinds.js';
 import {
   isDeletedField,
   filesField,
@@ -23,7 +23,7 @@ import NCAuditConfig from './nc-audit-config.js';
 import RiskAuditConfig from './risk-audit-config.js';
 
 
-const getNotificationReceivers = ({ linkedTo, ownerId }) => {
+const getNotificationReceivers = ({ linkedTo, ownerId }, executor) => {
   const getLinkedDocsIds = (linkedDocs, docType) => {
     return _.pluck(
       _.filter(linkedDocs, ({ documentType }) => documentType === docType),
@@ -57,7 +57,10 @@ const getNotificationReceivers = ({ linkedTo, ownerId }) => {
     _id: { $in: Array.from(standardsIds) }
   }).forEach(({ owner }) => usersIds.add(owner));
 
-  return Array.from(usersIds);
+  const receivers = Array.from(usersIds);
+  receivers.splice(receivers.indexOf(executor), 1);
+
+  return receivers;
 };
 
 const getLinkedDocAuditConfig = (documentType) => {
@@ -131,7 +134,7 @@ export default ActionAuditConfig = {
             const collection = getCollectionByDocType(documentType);
             const { identifiedBy } = collection.findOne({ _id: documentId });
 
-            return identifiedBy;
+            return [identifiedBy];
           });
         }
       }
@@ -185,7 +188,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -236,7 +239,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -279,7 +282,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -328,7 +331,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -380,7 +383,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -443,7 +446,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -501,7 +504,7 @@ export default ActionAuditConfig = {
           },
           receivers({ diffs: { linkedTo }, newDoc, oldDoc }) {
             const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
-            return getNotificationReceivers(doc);
+            return getNotificationReceivers(doc, newDoc.updatedBy);
           }
         }
       ]
@@ -543,7 +546,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -584,7 +587,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -629,7 +632,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         },
         {
@@ -653,8 +656,10 @@ export default ActionAuditConfig = {
               }
             };
           },
-          receivers({ diffs: { toBeCompletedBy: { newValue } } }) {
-            return [newValue];
+          receivers({ diffs: { toBeCompletedBy: { newValue } }, newDoc }) {
+            if (newValue !== newDoc.updatedBy) {
+              return [newValue];
+            }
           }
         }
       ]
@@ -699,7 +704,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         },
         {
@@ -765,7 +770,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -814,7 +819,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -869,7 +874,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -920,7 +925,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         }
       ]
@@ -934,7 +939,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(isDeletedField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -948,7 +953,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(filesField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -962,7 +967,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(fileUrlField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -976,7 +981,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(notesField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -990,7 +995,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(notifyField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -1004,7 +1009,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(ownerIdField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]
@@ -1018,7 +1023,7 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(titleField.notificationConfig, {
           receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc);
+            return getNotificationReceivers(newDoc, newDoc.updatedBy);
           }
         })
       ]

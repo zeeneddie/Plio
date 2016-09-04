@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
+import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -109,6 +110,14 @@ const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY') => {
   return moment(date).tz(timezone || 'UTC').format(format);
 };
 
+export const renderTemplate = (template, data = {}) => {
+  console.log(template);
+
+  const compiledTemplate = Handlebars.compile(template);
+
+  return compiledTemplate(data);
+};
+
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
@@ -143,6 +152,7 @@ export {
   checkAndThrow,
   inject,
   injectCurry,
+  renderTemplate,
   withUserId,
   mapArgsTo
 };

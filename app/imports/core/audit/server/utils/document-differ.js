@@ -1,16 +1,9 @@
-import Handlebars from 'handlebars';
 import deepDiff from 'deep-diff';
 
+import { ChangesKinds } from './changes-kinds.js';
 
-export const ChangesKinds = {
-  FIELD_ADDED: 1,
-  FIELD_CHANGED: 2,
-  FIELD_REMOVED: 3,
-  ITEM_ADDED: 4,
-  ITEM_REMOVED: 5
-};
 
-export const DocumentDiffer = {
+export default DocumentDiffer = {
 
   getDiff(newDocument, oldDocument) {
     const diffs = [];
@@ -104,10 +97,3 @@ export const DocumentDiffer = {
   }
 
 }
-
-export const renderString = (tmpl, data) => {
-  const compiledTemplate = Handlebars.compile(tmpl);
-  const tmplData = data || {};
-
-  return compiledTemplate(tmplData);
-};

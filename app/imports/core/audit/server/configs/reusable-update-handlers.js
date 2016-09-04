@@ -1,4 +1,4 @@
-import { ChangesKinds } from './audit-utils.js';
+import { ChangesKinds } from '../utils/changes-kinds.js';
 import { getUserFullNameOrEmail } from '/imports/api/helpers.js';
 
 

@@ -1,5 +1,5 @@
 import Auditor from '/imports/core/audit/server/auditor.js';
-import ActionAuditConfig from '/imports/core/audit/server/action-audit-config';
+import ActionAuditConfig from '/imports/core/audit/server/configs/action-audit-config';
 
 
 const auditConfigs = [
