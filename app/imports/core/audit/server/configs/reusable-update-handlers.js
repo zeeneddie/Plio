@@ -23,10 +23,10 @@ export const isDeletedField = {
       [ChangesKinds.FIELD_CHANGED]:
         '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
     },
-    templateData({ diffs: { isDeleted }, newDoc }) {
+    templateData({ diffs: { isDeleted }, newDoc, user }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         deleted: isDeleted.newValue
       };
     },
@@ -59,10 +59,10 @@ export const filesField = {
       [ChangesKinds.ITEM_REMOVED]:
         '{{userName}} removed file "{{fileName}}" from {{{docDesc}}}'
     },
-    templateData({ diffs: { files }, newDoc }) {
+    templateData({ diffs: { files }, newDoc, user }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         fileName: files.item.name
       };
     },
@@ -96,14 +96,14 @@ export const fileUrlField = {
       [ChangesKinds.FIELD_CHANGED]:
         '{{userName}} uploaded file "{{fileName}}" for {{{docDesc}}}',
     },
-    templateData({ diffs, newDoc }) {
+    templateData({ diffs, newDoc, user }) {
       const diff = diffs['files.$.url'];
       const url = diff.newValue;
       const fileDoc = _(newDoc.files).find(file => file.url === url);
 
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         fileName: fileDoc.name
       };
     },
@@ -126,10 +126,10 @@ export const notesField = {
       [ChangesKinds.FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
       [ChangesKinds.FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
     },
-    templateData({ diffs: { notes }, newDoc }) {
+    templateData({ diffs: { notes }, newDoc, user }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
       };
     },
     receivers() { }
@@ -153,10 +153,10 @@ export const notifyField = {
       [ChangesKinds.ITEM_REMOVED]:
         '{{userName}} removed {{item}} from notification list of {{{docDesc}}}'
     },
-    templateData({ diffs: { notify }, newDoc }) {
+    templateData({ diffs: { notify }, newDoc, user }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         item: getUserFullNameOrEmail(notify.item)
       };
     },
@@ -187,10 +187,10 @@ export const ownerIdField = {
       [ChangesKinds.FIELD_REMOVED]:
         '{{userName}} removed owner of {{{docDesc}}}'
     },
-    templateData({ diffs: { ownerId }, newDoc }) {
+    templateData({ diffs: { ownerId }, newDoc, user }) {
       return {
         docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         newValue: getUserFullNameOrEmail(ownerId.newValue),
         oldValue: getUserFullNameOrEmail(ownerId.oldValue)
       };
@@ -222,10 +222,10 @@ export const titleField = {
       [ChangesKinds.FIELD_REMOVED]:
         '{{userName}} removed title of {{{docDesc}}}'
     },
-    templateData({ diffs: { title }, newDoc, oldDoc }) {
+    templateData({ diffs: { title }, newDoc, oldDoc, user }) {
       return {
         docDesc: this.docDescription(oldDoc),
-        userName: getUserFullNameOrEmail(newDoc.updatedBy),
+        userName: getUserFullNameOrEmail(user),
         newValue: title.newValue,
         oldValue: title.oldValue
       };

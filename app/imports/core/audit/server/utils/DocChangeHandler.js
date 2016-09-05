@@ -1,34 +1,53 @@
+import { Meteor } from 'meteor/meteor';
+
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
+import { SystemName } from '/imports/api/constants.js';
 import { renderTemplate } from '/imports/api/helpers.js';
 import { DocChangesKinds, ChangesKinds } from './changes-kinds.js';
 import DocumentDiffer from './document-differ.js';
 import NotificationSender from '../../../NotificationSender.js';
 
 
+const DEFAULT_EMAIL_TEMPLATE = 'minimalisticEmail';
+
 export default class DocChangeHandler {
 
-  constructor(auditConfig, docChangeType, docChangeData) {
+  constructor(auditConfig, docChangeKind, docChangeData) {
     this._config = auditConfig;
-    this._docChangeType = docChangeType;
+    this._docChangeKind = docChangeKind;
 
     const { newDocument, oldDocument, userId } = docChangeData;
 
-    if (docChangeType === DocChangesKinds.DOC_CREATED) {
+    if (docChangeKind === DocChangesKinds.DOC_CREATED) {
       this._newDoc = newDocument;
       this._date = newDocument.createdAt;
-      this._executor = userId;
-    } else if (docChangeType === DocChangesKinds.DOC_UPDATED) {
+      this._userId = userId;
+    } else if (docChangeKind === DocChangesKinds.DOC_UPDATED) {
       this._newDoc = newDocument;
       this._oldDoc = oldDocument
       this._date = newDocument.updatedAt;
-      this._executor = newDocument.updatedBy;
-    } else if (docChangeType === DocChangesKinds.DOC_REMOVED) {
+      this._userId = newDocument.updatedBy;
+    } else if (docChangeKind === DocChangesKinds.DOC_REMOVED) {
       this._oldDoc = oldDocument;
       this._date = new Date();
-      this._executor = userId;
+      this._userId = userId;
     }
 
-    this._documentId = auditConfig.docId(newDocument || oldDocument);
+    if (this._userId === SystemName) {
+      this._user = this._userId;
+    } else {
+      this._user = Meteor.users.findOne({ _id: this._userId });
+    }
+
+    const doc = newDocument || oldDocument;
+    this._docId = auditConfig.docId(doc);
+    this._docDesc = auditConfig.docDescription(doc);
+
+    this._docOrgId = auditConfig.docOrgId(doc);
+
+    const { name:orgName } = Organizations.findOne({ _id: this._docOrgId });
+    this._docOrgName = orgName;
+
     this._collectionName = auditConfig.collectionName;
 
     this._handlersToProcess = [];
@@ -47,7 +66,7 @@ export default class DocChangeHandler {
   }
 
   _getHandlers() {
-    switch (this._docChangeType) {
+    switch (this._docChangeKind) {
       case DocChangesKinds.DOC_CREATED:
         this._getHandlersForCreateAction();
         break;
@@ -65,7 +84,8 @@ export default class DocChangeHandler {
       handler: this._config.onCreated,
       data: {
         newDoc: this._newDoc,
-        userId: this._executor
+        user: this._user,
+        date: this._date
       }
     });
   }
@@ -81,7 +101,9 @@ export default class DocChangeHandler {
     const data = {
       diffs: diffsMap,
       newDoc: this._newDoc,
-      oldDoc: this._oldDoc
+      oldDoc: this._oldDoc,
+      user: this._user,
+      date: this._date
     };
 
     _(diffs).each((diff) => {
@@ -102,7 +124,8 @@ export default class DocChangeHandler {
       handler: this._config.onRemoved,
       data: {
         oldDoc: this._oldDoc,
-        userId: this._executor
+        user: this._user,
+        date: this._date
       }
     });
   }
@@ -161,11 +184,11 @@ export default class DocChangeHandler {
     const message = renderTemplate(logTemplate, tplData);
 
     const collection = this._collectionName;
-    const documentId = this._documentId;
+    const documentId = this._docId;
 
     const log = {
       date: this._date,
-      executor: this._executor,
+      executor: this._userId,
       collection,
       documentId,
       message
@@ -187,7 +210,7 @@ export default class DocChangeHandler {
     if (logData) {
       _(log).extend(logData);
 
-      if ((log.collection !== collection) || (log.documentId !== documentId)) {
+      if (log.documentId !== documentId) {
         _(['field', 'newValue', 'oldValue']).each(key => delete log[key]);
       }
     }
@@ -213,8 +236,9 @@ export default class DocChangeHandler {
     const { kind } = diff || {};
 
     const {
-      template, templateData, receivers,
-      subjectTemplate, subjectTemplateData, emailTemplateData
+      template, templateData,
+      subjectTemplate, subjectTemplateData,
+      notificationData, receivers
     } = notificationConfig;
 
     const notificationTemplate = _(template).isObject() ? template[kind] : template;
@@ -240,37 +264,75 @@ export default class DocChangeHandler {
       );
     }
 
-    let emailTplDataArr;
-    if (emailTemplateData) {
-      emailTplDataArr = emailTemplateData.call(this._config, data);
-      emailTplDataArr = _(emailTplDataArr).isArray() ? emailTplDataArr : [emailTplDataArr];
+    let notificationDataArr;
+    if (notificationData) {
+      notificationDataArr = notificationData.call(this._config, data);
+      notificationDataArr = _(notificationDataArr).isArray()
+          ? notificationDataArr
+          : [notificationDataArr];
     }
 
     _(tplDataArr).each((tplData, index) => {
       const subject = subjects && subjects[index];
-      const emailTplDataObj = emailTplDataArr && emailTplDataArr[index];
+      const notificationDataObj = notificationDataArr && notificationDataArr[index];
       const receivers = notificationReceiversArr[index];
 
       this._buildNotification(
-        notificationTemplate, tplData, subject, emailTplDataObj, receivers
+        notificationTemplate, tplData, subject, notificationDataObj, receivers
       );
     });
   }
 
-  _buildNotification(template, tplData, subject, emailTplData, receivers) {
+  _buildNotification(template, tplData, subject, notificationData, receivers) {
+    if (!receivers || !receivers.length) {
+      return;
+    }
+
     const text = renderTemplate(template, tplData);
 
-    const notification = { receivers, text };
+    const user = this._user;
 
-    subject && _(notification).extend({ subject });
-    emailTplData && _(notification).extend({ emailTplData });
+    if (!subject) {
+      const action = {
+        [DocChangesKinds.DOC_CREATED]: 'created',
+        [DocChangesKinds.DOC_UPDATED]: 'updated',
+        [DocChangesKinds.DOC_REMOVED]: 'removed'
+      }[this._docChangeKind];
+      const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
+      const docDesc = this._docDesc;
+
+      subject = `${userName} ${action} ${docDesc}`;
+    }
+
+    const notification = {
+      recipients: receivers,
+      emailSubject: subject,
+      templateName: DEFAULT_EMAIL_TEMPLATE,
+      templateData: {
+        organizationName: this._docOrgName,
+        title: subject,
+        secondaryText: text
+      },
+      notificationData: {
+        title: subject,
+        body: text
+      }
+    };
+
+    if (_(user).isObject()) {
+      _(notification.templateData).extend({
+        avatar: { url: user.profile.avatar }
+      });
+    }
+
+    notificationData && _(notification).extend(notificationData);
 
     this._notifications.push(notification);
   }
 
   _saveLogs() {
-    console.log(this._logs);
-    console.log('\n');
+    //console.log(this._logs);
+    //console.log('\n');
 
     _(this._logs).each(log => AuditLogs.insert(log));
   }
@@ -279,49 +341,40 @@ export default class DocChangeHandler {
     console.log(this._notifications);
     console.log('\n');
 
-    const orgId = this._config.docOrgId(this._newDoc || this._oldDoc);
-    const { name:orgName } = Organizations.findOne({ _id: orgId });
-
-    const { profile: { avatar } } = Meteor.users.findOne({ _id: this._executor });
-
-    const templateName = 'minimalisticEmail';
+    const notificationsMap = {};
 
     _(this._notifications).each((notification) => {
-      this._sendNotification(notification, {
-        templateName, orgName, avatar
+      _(notification.recipients).each((receiverId) => {
+        const userNotifications = notificationsMap[receiverId];
+
+        if (_(userNotifications).isArray()) {
+          userNotifications.push(notification);
+        } else {
+          notificationsMap[receiverId] = [notification];
+        }
       });
+    });
+
+    const receiversCursor = Meteor.users.find({
+      _id: { $in: _(notificationsMap).keys() }
+    });
+
+    receiversCursor.forEach((user) => {
+      this._sendNotificationsToUser(notificationsMap[user._id], user);
     });
   }
 
-  _sendNotification(notification, { templateName, orgName, avatar }) {
-    if (!notification.receivers.length) {
-      return;
-    }
+  _sendNotificationsToUser(notifications, user) {
+    const isUserOnline = user.status === 'online';
 
-    const docDesc = this._config.docDescription(this._newDoc || this._oldDoc);
-    const emailSubject = notification.subject || `${docDesc} updated`;
+    _(notifications).each(({ recipients, ...args }) => {
+      const sender = new NotificationSender({
+        recipients: user._id,
+        ...args
+      });
 
-    const templateData = {
-      organizationName: orgName,
-      title: emailSubject,
-      secondaryText: notification.text,
-      avatar: { url: avatar }
-    };
-
-    if (notification.emailTplData) {
-      _(templateData).extend(notification.emailTplData);
-    }
-
-    new NotificationSender({
-      recipients: notification.receivers,
-      emailSubject,
-      templateName,
-      templateData,
-      notificationData: {
-        title: emailSubject,
-        body: notification.text
-      }
-    }).sendOnSite().sendEmail()
+      isUserOnline ? sender.sendOnSite() : sender.sendEmail();
+    });
   }
 
   _reset() {

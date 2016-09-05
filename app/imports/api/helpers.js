@@ -111,8 +111,6 @@ const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY') => {
 };
 
 export const renderTemplate = (template, data = {}) => {
-  console.log(template);
-
   const compiledTemplate = Handlebars.compile(template);
 
   return compiledTemplate(data);

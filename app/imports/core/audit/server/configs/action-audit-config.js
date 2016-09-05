@@ -3,7 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/api/actions/actions.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { ActionStatuses, CollectionNames, ProblemTypes } from '/imports/api/constants.js';
+import {
+  ActionStatuses,
+  CollectionNames,
+  ProblemTypes,
+  SystemName
+} from '/imports/api/constants.js';
 import {
   getCollectionByDocType,
   getUserFullNameOrEmail,
@@ -23,7 +28,7 @@ import NCAuditConfig from './nc-audit-config.js';
 import RiskAuditConfig from './risk-audit-config.js';
 
 
-const getNotificationReceivers = ({ linkedTo, ownerId }, executor) => {
+const getNotificationReceivers = ({ linkedTo, ownerId }, user) => {
   const getLinkedDocsIds = (linkedDocs, docType) => {
     return _.pluck(
       _.filter(linkedDocs, ({ documentType }) => documentType === docType),
@@ -58,9 +63,16 @@ const getNotificationReceivers = ({ linkedTo, ownerId }, executor) => {
   }).forEach(({ owner }) => usersIds.add(owner));
 
   const receivers = Array.from(usersIds);
-  receivers.splice(receivers.indexOf(executor), 1);
+
+  const userId = (user === SystemName) ? user : user._id;
+  const index = receivers.indexOf(userId);
+  (index > -1) && receivers.splice(index, 1);
 
   return receivers;
+};
+
+const receiversFn = function({ newDoc, user }) {
+  return getNotificationReceivers(newDoc, user);
 };
 
 const getLinkedDocAuditConfig = (documentType) => {
@@ -78,7 +90,10 @@ const getLinkedDocName = (documentId, documentType) => {
   return docAuditConfig.docDescription(doc);
 };
 
-const { FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED, ITEM_ADDED, ITEM_REMOVED } = ChangesKinds;
+const {
+  FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
+  ITEM_ADDED, ITEM_REMOVED
+} = ChangesKinds;
 
 
 export default ActionAuditConfig = {
@@ -129,12 +144,13 @@ export default ActionAuditConfig = {
             };
           });
         },
-        receivers({ newDoc }) {
+        receivers({ newDoc, user }) {
           return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
             const collection = getCollectionByDocType(documentType);
             const { identifiedBy } = collection.findOne({ _id: documentId });
+            const userId = (user === SystemName) ? user : user._id;
 
-            return [identifiedBy];
+            return (identifiedBy !== userId) ? [identifiedBy]: [];
           });
         }
       }
@@ -169,6 +185,9 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         {
+          shouldSendNotification({ diffs: { isCompleted } }) {
+            return !isCompleted;
+          },
           template: {
             [FIELD_ADDED]:
               '{{userName}} set completion date of {{{docDesc}}} to "{{newValue}}"',
@@ -177,19 +196,17 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed completion date of {{{docDesc}}}'
           },
-          templateData({ diffs: { completedAt }, newDoc }) {
+          templateData({ diffs: { completedAt }, newDoc, user }) {
             const orgId = this.docOrgId(newDoc);
 
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getPrettyOrgDate(completedAt.newValue, orgId),
               oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -230,17 +247,15 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed completion executor of {{{docDesc}}}'
           },
-          templateData({ diffs: { completedBy }, newDoc }) {
+          templateData({ diffs: { completedBy }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getUserFullNameOrEmail(completedBy.newValue),
               oldValue: getUserFullNameOrEmail(completedBy.oldValue)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -273,17 +288,15 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed completion comments of {{{docDesc}}}'
           },
-          templateData({ diffs: { completionComments }, newDoc }) {
+          templateData({ diffs: { completionComments }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: completionComments.newValue,
               oldValue: completionComments.oldValue
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -320,19 +333,17 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed completion target date of {{{docDesc}}}'
           },
-          templateData({ diffs: { completionTargetDate }, newDoc }) {
+          templateData({ diffs: { completionTargetDate }, newDoc, user }) {
             const orgId = this.docOrgId(newDoc);
 
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getPrettyOrgDate(completionTargetDate.newValue, orgId),
               oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -374,17 +385,15 @@ export default ActionAuditConfig = {
                 '{{userName}} canceled completion of {{{docDesc}}}' +
               '{{/if}}'
           },
-          templateData({ diffs: { isCompleted, completionComments }, newDoc }) {
+          templateData({ diffs: { isCompleted, completionComments }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
               completed: isCompleted.newValue,
               comments: completionComments && completionComments.newValue,
-              userName: getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(user)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -436,18 +445,16 @@ export default ActionAuditConfig = {
                 '{{userName}} canceled verification of {{{docDesc}}}' +
               '{{/if}}'
           },
-          templateData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments }, newDoc }) {
+          templateData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
               verified: isVerified.newValue,
               verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
               comments: verificationComments && verificationComments.newValue,
-              userName: getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(user)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -493,18 +500,18 @@ export default ActionAuditConfig = {
             [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
             [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
           },
-          templateData({ diffs: { linkedTo }, newDoc }) {
+          templateData({ diffs: { linkedTo }, newDoc, user }) {
             const { item: { documentId, documentType } } = linkedTo;
 
             return {
               docDesc: this.docDescription(newDoc),
               linkedDocDesc: getLinkedDocName(documentId, documentType),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(user)
             };
           },
-          receivers({ diffs: { linkedTo }, newDoc, oldDoc }) {
+          receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
             const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
-            return getNotificationReceivers(doc, newDoc.updatedBy);
+            return getNotificationReceivers(doc, user);
           }
         }
       ]
@@ -537,17 +544,15 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed plan in place of {{{docDesc}}}'
           },
-          templateData({ diffs: { planInPlace }, newDoc }) {
+          templateData({ diffs: { planInPlace }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: planInPlace.newValue,
               oldValue: planInPlace.oldValue
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -586,9 +591,7 @@ export default ActionAuditConfig = {
               oldValue: ActionStatuses[status.oldValue]
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -623,16 +626,20 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed completion executor of {{{docDesc}}}'
           },
-          templateData({ diffs: { toBeCompletedBy }, newDoc }) {
+          templateData({ diffs: { toBeCompletedBy }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getUserFullNameOrEmail(toBeCompletedBy.newValue),
               oldValue: getUserFullNameOrEmail(toBeCompletedBy.oldValue)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
+          receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
+            const receivers = getNotificationReceivers(newDoc, user);
+            const index = receivers.indexOf(toBeCompletedBy.newValue);
+            (index > -1) && receivers.splice(index, 1);
+
+            return receivers;
           }
         },
         {
@@ -640,26 +647,27 @@ export default ActionAuditConfig = {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
           template: '{{userName}} assigned you as a completion executor for {{{docDesc}}}',
-          templateData({ newDoc }) {
+          templateData({ newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(user)
             };
           },
           subjectTemplate: 'You have been assigned as a completion executor',
           subjectTemplateData() { },
-          emailTemplateData({ newDoc }) {
+          notificationData({ newDoc }) {
             return {
-              button: {
-                label: 'View action',
-                url: this.docUrl(newDoc)
+              templateData: {
+                button: {
+                  label: 'View action',
+                  url: this.docUrl(newDoc)
+                }
               }
             };
           },
-          receivers({ diffs: { toBeCompletedBy: { newValue } }, newDoc }) {
-            if (newValue !== newDoc.updatedBy) {
-              return [newValue];
-            }
+          receivers({ diffs: { toBeCompletedBy: { newValue } }, newDoc, user }) {
+            const userId = (user === SystemName) ? user : user._id;
+            return (newValue !== userId) ? [newValue]: [];
           }
         }
       ]
@@ -695,16 +703,20 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed verification executor of {{{docDesc}}}'
           },
-          templateData({ diffs: { toBeVerifiedBy }, newDoc }) {
+          templateData({ diffs: { toBeVerifiedBy }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getUserFullNameOrEmail(toBeVerifiedBy.newValue),
               oldValue: getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
+          receivers({ diffs: { toBeVerifiedBy }, newDoc, user }) {
+            const receivers = getNotificationReceivers(newDoc, user);
+            const index = receivers.indexOf(toBeVerifiedBy.newValue);
+            (index > -1) && receivers.splice(index, 1);
+
+            return receivers;
           }
         },
         {
@@ -712,24 +724,27 @@ export default ActionAuditConfig = {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
           template: '{{userName}} assigned you as a verification executor for {{{docDesc}}}',
-          templateData({ newDoc }) {
+          templateData({ newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy)
+              userName: getUserFullNameOrEmail(user)
             };
           },
           subjectTemplate: 'You have been assigned as a verification executor',
           subjectTemplateData() { },
-          emailTemplateData({ newDoc }) {
+          notificationData({ newDoc }) {
             return {
-              button: {
-                label: 'View action',
-                url: this.docUrl(newDoc)
+              templateData: {
+                button: {
+                  label: 'View action',
+                  url: this.docUrl(newDoc)
+                }
               }
             };
           },
-          receivers({ diffs: { toBeVerifiedBy: { newValue } } }) {
-            return [newValue];
+          receivers({ diffs: { toBeVerifiedBy: { newValue } }, newDoc, user }) {
+            const userId = (user === SystemName) ? user : user._id;
+            return (newValue !== userId) ? [newValue]: [];
           }
         }
       ]
@@ -763,15 +778,13 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed verification comments of {{{docDesc}}}'
           },
-          templateData({ diffs: { verificationComments }, newDoc }) {
+          templateData({ diffs: { verificationComments }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -808,19 +821,17 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed verification target date of {{{docDesc}}}'
           },
-          templateData({ diffs: { verificationTargetDate }, newDoc }) {
+          templateData({ diffs: { verificationTargetDate }, newDoc, user }) {
             const orgId = this.docOrgId(newDoc);
 
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getPrettyOrgDate(verificationTargetDate.newValue, orgId),
               oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -863,19 +874,17 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed verification date of {{{docDesc}}}'
           },
-          templateData({ diffs: { verifiedAt }, newDoc }) {
+          templateData({ diffs: { verifiedAt }, newDoc, user }) {
             const orgId = this.docOrgId(newDoc);
 
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getPrettyOrgDate(verifiedAt.newValue, orgId),
               oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -916,17 +925,15 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed verification executor of {{{docDesc}}}'
           },
-          templateData({ diffs: { verifiedBy }, newDoc }) {
+          templateData({ diffs: { verifiedBy }, newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(newDoc.updatedBy),
+              userName: getUserFullNameOrEmail(user),
               newValue: getUserFullNameOrEmail(verifiedBy.newValue),
               oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
             };
           },
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         }
       ]
     },
@@ -938,9 +945,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(isDeletedField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -952,9 +957,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(filesField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -966,9 +969,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(fileUrlField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -980,9 +981,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(notesField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -994,9 +993,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(notifyField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -1008,9 +1005,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(ownerIdField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     },
@@ -1022,9 +1017,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(titleField.notificationConfig, {
-          receivers({ newDoc }) {
-            return getNotificationReceivers(newDoc, newDoc.updatedBy);
-          }
+          receivers: receiversFn
         })
       ]
     }
