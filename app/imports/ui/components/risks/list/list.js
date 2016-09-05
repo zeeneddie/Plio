@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { get, head } from 'lodash';
+import get from 'lodash.get';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
@@ -53,16 +53,16 @@ Template.Risks_List.viewmodel({
   _getFirstRiskQueryForFilter() {
     switch(this.activeRiskFilterId()) {
       case 1:
-        return { typeId: get(head(this.types()), '_id') };
+        return { typeId: get(_.first(this.types()), '_id') };
         break;
       case 2:
-        return { status: head(this.statuses()) };
+        return { status: _.first(this.statuses()) };
         break;
       case 3:
-        return { departmentsIds: get(head(this.departments()), '_id') };
+        return { departmentsIds: get(_.first(this.departments()), '_id') };
         break;
       case 4:
-        return { _id: get(head(this.risksDeleted()), '_id') };
+        return { _id: get(_.first(this.risksDeleted()), '_id') };
         break;
       default:
         return {};

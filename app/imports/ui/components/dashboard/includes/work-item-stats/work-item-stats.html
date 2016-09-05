@@ -5,7 +5,7 @@
         <h4 class="dashboard-stats-title" {{b "text: countText"}}></h4>
         {{#each overdueItems}}
           <a class="dashboard-stats-action" {{b "href: this.href"}} target="_blank">
-            <span>{{this.title}}. To do:- {{this.type}}</span>
+            <span>{{this.title}} - {{this.type}} ({{sequentialId}})</span>
             <label class="text-danger" {{b "text: this.time"}}></label>
           </a>
         {{/each}}
