@@ -1,8 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { not } from '/imports/api/helpers.js';
-
 const destructure = fn => (viewmodel) => {
   const {
     selectedItem:user,
@@ -15,19 +13,19 @@ const destructure = fn => (viewmodel) => {
 
 Template.Select_Members.viewmodel({
   mixin: ['members', 'search', 'user'],
-  value: '',
+  values: [],
   placeholder: 'Select',
   currentSelectedMembers() {
-    const { value } = this.data();
-    const query = { _id: { $in: value } };
+    const { values } = this.data();
+    const query = { _id: { $in: values } };
     const options = { sort: { 'profile.firstName': 1 } };
     return this._mapMembers(Meteor.users.find(query, options));
   },
   selectArgs() {
-    const { value, placeholder } = this.data();
+    const { values, placeholder } = this.data();
     const { onUpdate = () => {}, onRemove = () => {} } = this.templateInstance.data;
     const selected = this.currentSelectedMembers();
-    const hasUserId = userId => value.includes(userId);
+    const hasUserId = userId => values.includes(userId);
 
     return {
       selected,
@@ -36,10 +34,14 @@ Template.Select_Members.viewmodel({
       onUpdate: destructure(({ user, userId, users }) => {
         if (hasUserId(userId)) return;
 
+        this.values().push(userId);
+
         return onUpdate({ user, userId, users });
       }),
       onRemove: destructure(({ user, userId, users }) => {
         if (!hasUserId(userId)) return;
+
+        this.values().remove(userId);
 
         return onRemove(({ user, userId, users }));
       })

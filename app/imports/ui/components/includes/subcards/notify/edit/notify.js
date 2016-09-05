@@ -11,12 +11,12 @@ Template.Subcards_Notify_Edit.viewmodel({
   selectArgs() {
     const {
       placeholder,
-      doc: { notify:value = [] } = {}
+      doc: { notify:values = [] } = {}
     } = this.data();
 
 
     return {
-      value,
+      values,
       placeholder,
       onUpdate: ({ user, userId, users }) =>
         this.addToNotifyList(userId),
