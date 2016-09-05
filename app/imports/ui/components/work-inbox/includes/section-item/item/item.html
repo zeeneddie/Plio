@@ -1,15 +1,15 @@
 <template name="WorkInbox_Item">
-  <a class="list-group-item" {{b "click: navigate, href: getHref, class: { active: _id === workItemId }"}}>
-	  <span class="label label-status-indicator"
+  {{#ListItemLink (linkArgs)}}
+    <span class="label label-status-indicator"
       {{b "class: 'label-'+getClassByStatus(status)"}}></span>
     <div class="list-group-item-content">
-			<h4 class="list-group-item-heading pull-left">
-			  <span {{b "text: getTypeText(this)"}}></span>
+      <h4 class="list-group-item-heading pull-left">
+        <span {{b "text: getTypeText(this)"}}></span>
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
-			</h4>
+      </h4>
       <p class="list-group-item-text pull-right" {{b "text: getUserText(this)"}}></p>
       <p class="list-group-item-text pull-left" {{b "text: this.linkedDocument.sequentialId + ' - ' + this.linkedDocument.title"}}></p>
       <p class="list-group-item-text pull-right" {{b "text: getDate(this)"}}></p>
     </div>
-	</a>
+  {{/ListItemLink}}
 </template>
