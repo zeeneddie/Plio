@@ -36,9 +36,9 @@ Template.Discussion_Message.viewmodel({
 		}
 	},
 	getFormattedDate: getFormattedDate,
-	uploader() {
-		return ViewModel.findOne('DiscussionFileUploader');
-	},
+	// uploader() {
+	// 	return ViewModel.findOne('DiscussionFileUploader');
+	// },
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
 	},
@@ -80,8 +80,8 @@ Template.Discussion_Message.viewmodel({
 			FlowRouter.setQueryParams({ at: null });
 		}
 	},
-	files() {
-		return Files.find({ _id: this.fileId() });
+	file() {
+		return Files.findOne({ _id: this.fileId() });
 	},
 	remove(e) {
 		if (!this.isAuthor()) return;

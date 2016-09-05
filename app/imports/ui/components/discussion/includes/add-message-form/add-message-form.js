@@ -5,10 +5,7 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 
 import {
-	insert as insertMessage,
-	getMessages,
-	updateProgress,
-	updateUrl
+	insert as insertMessage
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
@@ -17,7 +14,7 @@ import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 
 const defaults = {
-	files: [],
+	file: '',
 	messageFile: null,
 	messageText: ''
 };
@@ -32,7 +29,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'standard', 'organization'],
 	disabled: false,
-	slingshotDirective: 'discussionsFiles',
+	slingshotDirective: 'discussionFiles',
 	...defaults,
 	discussionId() {
 		return this.getDiscussionIdByStandardId(this.standardId());

@@ -16,7 +16,8 @@ export const insertMessageFixtures = (limit = 1000) => {
         createdAt : new Date,
         createdBy : 'SQHmBKJ94gJvpLKLt',
         updatedAt : new Date,
-        updatedBy : 'SQHmBKJ94gJvpLKLt'
+        updatedBy : 'SQHmBKJ94gJvpLKLt',
+        organizationId: 'KwKXz5RefrE5hjWJ2'
       });
     }
 

@@ -12,8 +12,6 @@ import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
-window.Messages = Messages;
-
 Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, isInitialDataReady, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],

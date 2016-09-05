@@ -49,9 +49,9 @@
 						{{{formattedMessageText}}}
 					{{/if}}
 					{{#if isType 'file'}}
-						{{#each files}}
+						{{#with file}}
 							{{> FileItem_Read this}}
-						{{/each}}
+						{{/with}}
 					{{/if}}
 				</p>
 			</div>
