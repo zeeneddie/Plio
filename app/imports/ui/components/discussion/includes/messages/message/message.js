@@ -3,6 +3,7 @@ import Clipboard from 'clipboard';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
+import invoke from 'lodash.invoke';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
@@ -14,15 +15,30 @@ Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	fileId: '',
 
-	onRendered(tpl) {
-		const $chat = $(tpl.firstNode).closest('.chat-content');
-		$chat.scrollTop($chat.find('.chat-messages').height());
+	onRendered(template) {
 		const clipboard = new Clipboard('.js-message-copy-link');
+
+		const at = FlowRouter.getQueryParam('at');
+		const _id = invoke(this, '_id');
+		const $chat = $(template.firstNode).closest('.chat-content');
+		const $message = template.$('.chat-message-container');
+
+		const msgOffset = $message.offset().top;
+
+		if (Object.is(at, _id)) {
+			// center the linked message in the chat box
+			const elHeight = $message.height();
+			const chatHeight = $chat.height();
+
+			const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
+
+			$chat.scrollTop(offset);
+		}
 	},
 	getFormattedDate: getFormattedDate,
-	uploader() {
-		return ViewModel.findOne('DiscussionFileUploader');
-	},
+	// uploader() {
+	// 	return ViewModel.findOne('DiscussionFileUploader');
+	// },
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
 	},
@@ -64,8 +80,8 @@ Template.Discussion_Message.viewmodel({
 			FlowRouter.setQueryParams({ at: null });
 		}
 	},
-	files() {
-		return Files.find({ _id: this.fileId() });
+	file() {
+		return Files.findOne({ _id: this.fileId() });
 	},
 	remove(e) {
 		if (!this.isAuthor()) return;

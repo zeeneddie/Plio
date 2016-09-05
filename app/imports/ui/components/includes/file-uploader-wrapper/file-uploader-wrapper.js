@@ -53,7 +53,7 @@ Template.FileUploader_Wrapper.viewmodel({
       closeOnConfirm: true
     }, () => {
       if (isFileUploading && fileUploader) {
-        fileUploader.cancelUpload(_id);
+        fileUploader.terminateUploading(_id);
       }
 
       const options = {
