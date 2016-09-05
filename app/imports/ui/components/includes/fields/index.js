@@ -13,3 +13,5 @@ import './title-input';
 import './textbox';
 import './textbox-field';
 import './description';
+import './select-member';
+import './select-members';
