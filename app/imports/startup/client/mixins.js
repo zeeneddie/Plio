@@ -16,7 +16,7 @@ import {
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
-import { insert as insertFile, updateUrl, updateProgress } from '/imports/api/files/methods.js'
+import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
 import { Match, check } from 'meteor/check';
 
@@ -924,28 +924,36 @@ ViewModel.mixin({
   },
   uploader: {
 
-    uploadData(uploads, fileId) { // find the file with fileId is being uploaded
-      return _.find(uploads.array(), (data) => {
+    uploadData(fileId) { // find the file with fileId is being uploaded
+      return _.find(this.uploads().array(), (data) => {
         return data.fileId === fileId;
       });
     },
-    cancelUpload(uploads, fileId) {
-      const uploadData = this.uploadData(uploads, fileId);
+    terminateUploading(fileId) {
+      const uploadData = this.uploadData(fileId);
       const uploader = uploadData && uploadData.uploader;
       if (uploader) {
         uploader.xhr && uploader.xhr.abort();
-        this.removeUploadData(uploads, fileId);
+        this.removeUploadData(fileId);
       }
+      debugger;
+      terminateUploading.call({
+        _id: fileId
+      });
     },
-    removeUploadData(uploads, fileId) {
-      uploads.remove((item) => {
+    removeUploadData(fileId) {
+      this.uploads().remove((item) => {
         return item.fileId === fileId;
       });
+    },
+    uploads() {
+      this.load({ share: 'uploader' });
+
+      return this.uploads();
     },
     upload({
       files,
       maxSize,
-      uploads,
       beforeUpload
     }) {
       if (!files.length) {
@@ -970,6 +978,11 @@ ViewModel.mixin({
           extension: name.split('.').pop().toLowerCase(),
           organizationId: this.organizationId()
         }, (err, fileId) => {
+          if (err) {
+            this.terminateUploading(fileId);
+            throw err;
+          }
+
           addFile && addFile({ fileId });
 
           const uploader = new Slingshot.Upload(
@@ -978,14 +991,18 @@ ViewModel.mixin({
 
           const progressInterval = Meteor.setInterval(() => {
             const progress = uploader.progress();
-            updateProgress.call({ _id: fileId, progress }, (err, res) => {
-              if (err) {
-                Meteor.clearInterval(progressInterval);
-                throw err;
-              }
-            });
+
             if (!progress && progress != 0 || progress === 1) {
               Meteor.clearInterval(progressInterval);
+            } else {
+              updateProgress.call({ _id: fileId, progress }, (err, res) => {
+                if (err) {
+                  Meteor.clearInterval(progressInterval);
+                  this.terminateUploading(fileId);
+
+                  throw err;
+                }
+              });
             }
           }, 1500);
 
@@ -994,7 +1011,7 @@ ViewModel.mixin({
           uploader.send(file, (err, url) => {
             if (err) {
 
-              //throw err;
+              this.terminateUploading(fileId);
               return;
             }
 
@@ -1005,7 +1022,9 @@ ViewModel.mixin({
             afterUpload && afterUpload({ fileId, url });
 
             updateUrl.call({ _id: fileId, url });
-            this.removeUploadData(uploads, fileId);
+            updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
+              this.removeUploadData(fileId);
+            });
           });
         });
       });

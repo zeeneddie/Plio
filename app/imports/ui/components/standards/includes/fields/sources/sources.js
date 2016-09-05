@@ -4,7 +4,7 @@ import { Files } from '/imports/api/files/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
+  mixin: ['uploader', 'urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -136,8 +136,6 @@ Template.ESSources.viewmodel({
     return this.removeAttachment.bind(this);
   },
   removeAttachment() {
-    const fileUploader = this.uploader();
-
     const file = this.file();
     const isFileUploading = !file.isUploaded();
 
@@ -156,9 +154,7 @@ Template.ESSources.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      if (fileUploader && isFileUploading) {
-        fileUploader.cancelUpload(this.sourceFileId());
-      }
+      this.terminateUploading(this.sourceFileId());
 
       const options = {
         $unset: {
@@ -179,9 +175,6 @@ Template.ESSources.viewmodel({
         }
       });
     });
-  },
-  uploader() {
-    return this.child('FileUploader');
   },
   uploaderMetaContext() {
     return {
