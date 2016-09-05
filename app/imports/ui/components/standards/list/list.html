@@ -13,6 +13,7 @@
             items=this.standards
             template="StandardSectionItem"
             rText=this.totalUnreadMessagesHtml
+            hideRTextOnExpand=hideRTextOnExpand
             title=this.title
             _id=this._id}}
       {{/each}}
@@ -24,6 +25,7 @@
             items=(sections this._id)
             template="StandardTypeItem"
             rText=this.totalUnreadMessagesHtml
+            hideRTextOnExpand=hideRTextOnExpand
             title=this.name
             type="standardType"
             _id=this._id}}

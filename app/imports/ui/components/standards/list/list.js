@@ -5,12 +5,14 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { extractIds } from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router', 'utils', {
     counter: 'counter'
   }],
+  hideRTextOnExpand: true,
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
@@ -38,13 +40,13 @@ Template.StandardsList.viewmodel({
   _getQueryForFilter() {
     switch(this.activeStandardFilterId()) {
       case 1:
-        return { sectionId: { $in: this.sections().map(({ _id }) => _id) } };
+        return { sectionId: { $in: extractIds(this.sections()) } };
         break;
       case 2:
-        return { typeId: { $in: this.types().map(({ _id }) => _id) } };
+        return { typeId: { $in: extractIds(this.types()) } };
         break;
       case 3:
-        return { _id: this.standardsDeleted().count() > 0 && this.standardsDeleted().fetch()[0]._id };
+        return { _id: { $in: extractIds(this.standardsDeleted()) } };
         break;
       default:
         return {};
@@ -54,15 +56,14 @@ Template.StandardsList.viewmodel({
   _getFirstStandardQueryForFilter() {
     switch(this.activeStandardFilterId()) {
       case 1:
-        return { sectionId: this.sections().length > 0 && this.sections().map(({ _id }) => _id)[0] };
+        return { sectionId: _.first(extractIds(this.sections())) }
         break;
       case 2:
-        const typeId = this.types().length > 0 && this.types().map(({ _id }) => _id)[0];
-        const sectionIds =
-                this.sections()
-                    .filter(({ _id:sectionId }) => this._getStandardsByQuery({ sectionId, typeId }).count() > 0)
-                    .map(({ _id }) => _id);
-        const sectionId = sectionIds.length > 0 && sectionIds[0];
+        const typeId = _.first(extractIds(this.types()))
+        const sectionId = _.first(extractIds(
+          this.sections().filter(({ _id:sectionId }) =>
+            this._getStandardsByQuery({ sectionId, typeId }).count())
+        ));
         return { typeId, sectionId };
         break;
       default:
@@ -75,7 +76,7 @@ Template.StandardsList.viewmodel({
   },
   renderTotalUnreadMessagesCount(totalUnreadMessages) {
     return totalUnreadMessages ? `<i class="fa fa-comments margin-right"></i>
-                                  <span class="hidden-xs-down">${totalUnreadMessages}</span>`
+                                  <span>${totalUnreadMessages}</span>`
                                : '';
   },
   sections(typeId) {
