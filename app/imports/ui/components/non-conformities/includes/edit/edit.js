@@ -3,21 +3,7 @@ import moment from 'moment-timezone';
 
 import {
   update,
-  remove,
-  completeAnalysis,
-  undoAnalysis,
-  setAnalysisDate,
-  updateStandards,
-  undoStandardsUpdate,
-  setStandardsUpdateDate,
-  setAnalysisExecutor,
-  setStandardsUpdateExecutor,
-  setAnalysisCompletedBy,
-  setAnalysisCompletedDate,
-  setAnalysisComments,
-  setStandardsUpdateCompletedBy,
-  setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  remove
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
@@ -27,30 +13,12 @@ Template.NC_Card_Edit.viewmodel({
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
-  slingshotDirective: 'nonConformitiesFiles',
+  slingshotDirective: 'nonConformityFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
       nonConformityId: this._id()
     };
-  },
-  getMethodRefs() {
-    return () => ({
-      setAnalysisExecutor,
-      setAnalysisDate,
-      completeAnalysis,
-      undoAnalysis,
-      setStandardsUpdateExecutor,
-      setStandardsUpdateDate,
-      updateStandards,
-      undoStandardsUpdate,
-      setAnalysisCompletedBy,
-      setAnalysisCompletedDate,
-      setAnalysisComments,
-      setStandardsUpdateCompletedBy,
-      setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
-    });
   },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
@@ -72,24 +40,6 @@ Template.NC_Card_Edit.viewmodel({
     } else {
       updateFn();
     }
-  },
-  getMethodRefs() {
-    return () => ({
-      setAnalysisExecutor,
-      setAnalysisDate,
-      completeAnalysis,
-      undoAnalysis,
-      setStandardsUpdateExecutor,
-      setStandardsUpdateDate,
-      updateStandards,
-      undoStandardsUpdate,
-      setAnalysisCompletedBy,
-      setAnalysisCompletedDate,
-      setAnalysisComments,
-      setStandardsUpdateCompletedBy,
-      setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
-    });
   },
   remove() {
     const { title } = this.NC();

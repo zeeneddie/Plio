@@ -3,8 +3,7 @@
     <div class="relative">
       {{#with NC}}
         {{> NC_Card_Edit_Main
-            NC=this
-            methodRefs=getMethodRefs}}
+            NC=this}}
 
         {{> Subcards_Notify_Edit
             doc=this
@@ -36,7 +35,7 @@
 
         {{> Subcards_OtherFiles_Edit
             _id=this._id
-            files=this.files
+            fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
       {{/with}}

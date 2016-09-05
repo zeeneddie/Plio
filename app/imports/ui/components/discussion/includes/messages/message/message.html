@@ -44,20 +44,13 @@
 						<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm')"}}></a>
 					</div>
 				{{/if}}
-
 				<p class="chat-item-content" {{b "click: deselect"}}>
 					{{#if isType 'text'}}
 						{{{formattedMessageText}}}
 					{{/if}}
 					{{#if isType 'file'}}
 						{{#each files}}
-							{{> FileItem
-					        _id=this._id
-					        name=name
-					        url=url
-					        extension=extension
-									isReadOnly=true
-					        uploader=uploader}}
+							{{> FileItem_Read this}}
 						{{/each}}
 					{{/if}}
 				</p>

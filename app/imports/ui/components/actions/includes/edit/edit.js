@@ -29,7 +29,7 @@ Template.Actions_Edit.viewmodel({
   isCompletionEditable(isVerified) {
     return !isVerified;
   },
-  slingshotDirective: 'actionsFiles',
+  slingshotDirective: 'actionFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),

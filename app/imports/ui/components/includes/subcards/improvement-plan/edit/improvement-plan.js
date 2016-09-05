@@ -14,12 +14,14 @@ Template.Subcards_ImprovementPlan_Edit.viewmodel({
   targetDate: '',
   owner: '',
   reviewDates: [],
-  files: [],
+  fileIds() {
+    return this.doc() && this.doc().fileIds || [];
+  },
   doc() {
     return this.improvementPlan() || {};
   },
   isTextPresent() {
-    return this.desiredOutcome() || this.files().length;
+    return this.desiredOutcome() || this.fileIds().length;
   },
   getTextIndicator() {
     return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';

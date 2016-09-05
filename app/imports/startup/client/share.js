@@ -15,5 +15,8 @@ ViewModel.share({
       at: null,
       sort: { createdAt: -1 }
     }
+  },
+  uploader: {
+    uploads: new ReactiveArray
   }
 });

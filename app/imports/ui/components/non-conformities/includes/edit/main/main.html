@@ -49,12 +49,7 @@
     </div>
 
     {{#if showRootCauseAnalysis}}
-      {{> Subcards_RCA_Edit
-          _id=this._id
-          analysis=this.analysis
-          updateOfStandards=this.updateOfStandards
-          magnitude=this.magnitude
-          methodRefs=getMethodRefs}}
+      {{> Subcards_RCA_Edit (RCAArgs this)}}
     {{/if}}
   {{/with}}
 </template>

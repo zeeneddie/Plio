@@ -17,7 +17,7 @@ Template.StandardsPage.viewmodel({
       const template = this.templateInstance;
       const organizationId = this.organizationId();
       const standardId = this.standardId();
-      const arrDiscussionIds = this._getDiscussionIdsByStandardId(standardId);
+      const discussionIds = this._getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
         template.subscribe('nonConformitiesByStandardId', standardId),
@@ -34,7 +34,6 @@ Template.StandardsPage.viewmodel({
 
           _subHandlers = _subHandlers.concat([
             DiscussionSubs.subscribe('discussionsByStandardId', standardId),
-            // MessageSubs.subscribe('messagesByDiscussionIds', arrDiscussionIds, params)
           ]);
         });
       }

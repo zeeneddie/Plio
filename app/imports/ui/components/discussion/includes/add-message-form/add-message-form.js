@@ -5,8 +5,10 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 
 import {
-	addFilesToMessage, addMessage, getMessages, removeFileFromMessage, removeMessageById,
-	updateFilesUrls
+	insert as insertMessage,
+	getMessages,
+	updateProgress,
+	updateUrl
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
@@ -28,7 +30,7 @@ const scrollToBottom = () => {
 
 Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
-	mixin: ['discussions', 'standard'],
+	mixin: ['discussions', 'standard', 'organization'],
 	disabled: false,
 	slingshotDirective: 'discussionsFiles',
 	...defaults,
@@ -61,7 +63,8 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		this.reInit();
 
-		addMessage.call({
+		insertMessage.call({
+			organizationId: this.organizationId(),
 			discussionId,
 			message: sanitizeHtml(this.messageText()),
 			type: 'text'
@@ -75,106 +78,21 @@ Template.Discussion_AddMessage_Form.viewmodel({
       }
 		}));
 	},
-	insertFileFn() {
-    return this.insertFile.bind(this);
-  },
-
-	/* Insert file info as documents into Messages collection:
-	 * @param {Array} fileDocs - file documents to save;
-	 * @param {Function} cb - callback function.
-	*/
-  insertFile(fileDocs, cb) {
+	addFileFn() {
+		return this.addFile.bind(this);
+	},
+	addFile({ fileId }, cb) {
 		if (this.disabled()) return;
 
 		const discussionId = this.discussionId();
-		let fileDoc;
-		let fileDocId;
 
-		const extendWithScroll = fn => (err, res) => {
-			scrollToBottom();
-
-			fn(err, res);
-		};
-
-		Tracker.afterFlush(() => this.reInit());
-
-		if (!(fileDocs instanceof Array)) {
-			fileDoc = {
-				_id: fileDocs._id,
-				name: fileDocs.name,
-				extension: fileDocs.name.split('.').pop().toLowerCase()
-			};
-
-			fileDocId = addMessage.call({
-				discussionId,
-				files: [fileDoc],
-				type: 'file'
-			}, handleMethodResult(extendWithScroll(cb)));
-
-			return;
-		}
-
-		fileDocs.forEach((fileDocArg, i) => {
-			// File document to save with a message doc in Messages collection
-			fileDoc = {
-				_id: fileDocArg._id,
-				name: fileDocArg.name,
-				extension: fileDocArg.name.split('.').pop().toLowerCase()
-			};
-			const cbf = function(_id, i) {
-				// Pass each file's ID into callback, so that right file was inserted in S3
-				return function(err, res) {
-					scrollToBottom();
-
-					cb(err, res, fileDocObj = {_id, i});
-				}
-			}(fileDoc._id, i);
-
-			if(i === 0){
-				// Add a new message in Messages collection with 1st file doc
-				fileDocId = addMessage.call({
-					discussionId,
-					files: [fileDoc],
-					type: 'file'
-				}, handleMethodResult(cbf));
-			}
-			else{
-				// Other file docs add to just inserted new message above
-				const options = {
-	        $push: {
-	          files: fileDoc
-	        }
-	      };
-
-				return addFilesToMessage.call({
-					_id: fileDocId, options
-				}, handleMethodResult(cbf));
-			}
-		});
-  },
-	onUploadCb() {
-    return this.onUpload.bind(this);
-  },
-  onUpload(err, { _id, url }) {
-    if (err && err.error !== 'Aborted') {
-			// [TODO] Handle error
-      return;
-    }
-
-    const options = {
-      $set: {
-        'files.$.url': url
-      }
-    };
-
-    updateFilesUrls.call(
-      { _id, options }, handleMethodResult((err, res) => {
-        if(res){
-          // [ToDo] call a ringtone on a success file addition
-        }
-      })
-    );
-  },
+		insertMessage.call({
+			organizationId: this.organizationId(),
+			discussionId,
+			fileId,
+			type: 'file'
+		}, handleMethodResult(cb));
+	},
 	onSubmit(e) {
 		e.preventDefault();
 
@@ -194,51 +112,8 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},
-
-	/* Removes a file document from a message document,
-   * but not the file itself from S3:
-   * @param {string} fileId - an identifier of the file which is to remove.
-  */
-	removeFileFromMessage(fileId) {
-    const self = this;
-    const query = { 'files._id': fileId };
-		const options = { fields: { files: 1 } };
-		const messagesWithFileId = getMessages.call({ query, options });
-
-    messagesWithFileId.forEach((message) => {
-      if(message.files.length > 1) {
-        removeFileFromMessage.call({ _id: fileId });
-      }
-      else{
-        self.removeFileMessage(fileId);
-      }
-    });
-	},
-	removeFileFromMessageCb() {
-		return this.removeFileFromMessage.bind(this);
-	},
-
-	/* Removes the message document with files from the Messages collection,
-	 * but not the file itself from S3:
-	 * @param {String} fileId - the file ID in the "files" array;
-	*/
-	removeFileMessage(fileId) {
-		const query = { 'files._id': fileId };
-		const options = { fields: { _id: 1 } };
-		const messagesWithFileId = getMessages.call({query, options});
-
-		if (!messagesWithFileId.count()) {
-			return;
-		}
-
-		messagesWithFileId.forEach((c, i, cr) => {
-			removeMessageById.call({ _id: c._id });
-		});
-	},
-	removeFileMessageCb(){
-		return this.removeFileMessage.bind(this);
-	},
 	uploaderMetaContext() {
+		const organizationId = this.organizationId();
 		const discussionId = this.discussionId();
 
 		return { discussionId };

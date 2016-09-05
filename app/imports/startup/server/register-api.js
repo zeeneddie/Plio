@@ -35,3 +35,5 @@ import '../../api/notifications';
 import '../../api/mammoth';
 
 import '../../api/work-items';
+
+import '../../api/files';
