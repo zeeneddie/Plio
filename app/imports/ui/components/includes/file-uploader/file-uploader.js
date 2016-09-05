@@ -3,7 +3,6 @@ import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 Template.FileUploader.viewmodel({
-  share: ['uploader'],
   mixin: ['uploader', 'modal', 'organization'],
 
   attachmentFiles: [],
@@ -13,14 +12,13 @@ Template.FileUploader.viewmodel({
     const data = {
       files: this.attachmentFiles(),
       maxSize: Meteor.settings.public.otherFilesMaxSize,
-      uploads: this.uploads(),
       beforeUpload: () => {
         this.attachmentFiles([]);
         this.fileInput.val(null);
       },
       afterUpload: this.afterUpload
     };
-    
+
     return data;
   }
 });

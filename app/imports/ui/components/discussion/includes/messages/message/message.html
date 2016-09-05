@@ -1,59 +1,60 @@
 <template name="Discussion_Message">
-	{{#if dateToShow}}
-		<div class="chat-item-date">
-			<span {{b "text: date"}}></span>
-		</div>
-	{{/if}}
+	<div class="chat-message-container">
+		{{#if dateToShow}}
+			<div class="chat-item-date">
+				<span {{b "text: date"}}></span>
+			</div>
+		{{/if}}
 
-	<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
-		{{#unless isMergedWithPreviousMessage}}
-		<a class="chat-item-avatar img-wrapper sm" role="button" {{b "click: openUserDetails"}}>
-			<img tabindex="0" {{b "src: user.avatar()"}} alt="">
-		</a>
-		{{/unless}}
-
-		<div class="chat-item-card">
+		<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
 			{{#unless isMergedWithPreviousMessage}}
-				<span class="chat-item-author" {{b "text: user.firstName()"}}></span>
-				<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm A')"}}></a>
+			<a class="chat-item-avatar img-wrapper sm" role="button" {{b "click: openUserDetails"}}>
+				<img tabindex="0" {{b "src: user.avatar()"}} alt="">
+			</a>
 			{{/unless}}
 
-			<div class="chat-item-dropdown dropdown">
-				<button type="button" class="btn btn-link" data-toggle="dropdown">
-					<i class="fa fa-ellipsis-h"></i>
-				</button>
+			<div class="chat-item-card">
+				{{#unless isMergedWithPreviousMessage}}
+					<span class="chat-item-author" {{b "text: user.firstName()"}}></span>
+					<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm A')"}}></a>
+				{{/unless}}
 
-				<div class="dropdown-menu dropdown-menu-right js-message-actions">
-					<a href="#" class="dropdown-item js-message-copy-link"
-						data-clipboard-text="{{pathToMessageToCopy}}" {{b "click: copyAsLink"}}>
-						Copy as link
-					</a>
-					{{#if isAuthor}}
-						<a
-							class="dropdown-item js-message-remove"
-							{{b "click: remove"}}>
-							Delete message
+				<div class="chat-item-dropdown dropdown">
+					<button type="button" class="btn btn-link" data-toggle="dropdown">
+						<i class="fa fa-ellipsis-h"></i>
+					</button>
+
+					<div class="dropdown-menu dropdown-menu-right js-message-actions">
+						<a href="#" class="dropdown-item js-message-copy-link"
+							data-clipboard-text="{{pathToMessageToCopy}}" {{b "click: copyAsLink"}}>
+							Copy as link
 						</a>
+						{{#if isAuthor}}
+							<a
+								class="dropdown-item js-message-remove"
+								{{b "click: remove"}}>
+								Delete message
+							</a>
+						{{/if}}
+					</div>
+				</div>
+
+				{{#if isMergedWithPreviousMessage}}
+					<div class="chat-item-gutter">
+						<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm')"}}></a>
+					</div>
+				{{/if}}
+				<p class="chat-item-content" {{b "click: deselect"}}>
+					{{#if isType 'text'}}
+						{{{formattedMessageText}}}
 					{{/if}}
-				</div>
+					{{#if isType 'file'}}
+						{{#with file}}
+							{{> FileItem_Read this}}
+						{{/with}}
+					{{/if}}
+				</p>
 			</div>
-
-			{{#if isMergedWithPreviousMessage}}
-				<div class="chat-item-gutter">
-					<a class="chat-item-time" href="{{pathToMessage}}" {{b "text: getFormattedDate(createdAt, 'h:mm')"}}></a>
-				</div>
-			{{/if}}
-
-			<p class="chat-item-content" {{b "click: deselect"}}>
-				{{#if isType 'text'}}
-					{{{formattedMessageText}}}
-				{{/if}}
-				{{#if isType 'file'}}
-					{{#each files}}
-						{{> FileItem_Read this}}
-					{{/each}}
-				{{/if}}
-			</p>
 		</div>
 	</div>
 </template>

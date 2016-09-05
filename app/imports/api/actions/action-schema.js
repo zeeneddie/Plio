@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {
   BaseEntitySchema,
   OrganizationIdSchema,
-  FileSchema,
+  FileIdsSchema,
   getNotifySchema,
   ViewedBySchema
 } from '../schemas.js';
@@ -69,6 +69,7 @@ const ActionSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   ViewedBySchema,
+  FileIdsSchema,
   getNotifySchema('ownerId'),
   {
     serialNumber: {
@@ -148,11 +149,6 @@ const ActionSchema = new SimpleSchema([
     },
     notes: {
       type: String,
-      optional: true
-    },
-    files: {
-      type: [FileSchema],
-      defaultValue: [],
       optional: true
     }
   }

@@ -369,7 +369,7 @@ input:focus ~ .clear-field {
   @media (max-width: 543px) {
     padding: 0;
   }
-  
+
 }
 
 /*
@@ -474,20 +474,30 @@ fieldset[disabled] {
         opacity: 1;
       }
     }
-  }
-  .uploading-file {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 0%;
-    background-color: #000;
-    opacity: 0.2;
-    transition: all 0.5s ease;
 
-    &.uploaded {
-      visibility: hidden;
+    &.failed:not(.uploaded) {
+      border-color: #d49499;
+
+      .uploading-file {
+        background-color: #ff0000;
+        opacity: 0.2;
+      }
+    }
+
+    .uploading-file {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: #000;
+      opacity: 0.2;
+      transition: all 0.5s ease;
+
+      &.uploaded {
+        visibility: hidden;
+      }
     }
   }
 

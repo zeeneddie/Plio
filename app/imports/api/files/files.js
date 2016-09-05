@@ -10,6 +10,9 @@ Files.helpers({
   isUploaded() {
     return this.progress === 1;
   },
+  isFailed() {
+    return this.status === 'failed' || this.status === 'terminated';
+  },
   extension() {
     return this.name().split('.').pop().toLowerCase();
   }

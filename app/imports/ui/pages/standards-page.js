@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
-import { CountSubs } from '/imports/startup/client/subsmanagers.js';
+import { CountSubs, DiscussionSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
@@ -16,7 +17,7 @@ Template.StandardsPage.viewmodel({
       const template = this.templateInstance;
       const organizationId = this.organizationId();
       const standardId = this.standardId();
-      const arrDiscussionIds = this._getDiscussionIdsByStandardId(standardId);
+      const discussionIds = this._getDiscussionIdsByStandardId(standardId);
       let _subHandlers = [
         template.subscribe('departments', organizationId),
         template.subscribe('nonConformitiesByStandardId', standardId),
@@ -25,10 +26,16 @@ Template.StandardsPage.viewmodel({
       ];
 
       if (this.isDiscussionOpened()) {
-        _subHandlers = _subHandlers.concat([
-          template.subscribe('discussionsByStandardId', standardId),
-          template.subscribe('messagesByDiscussionIds', arrDiscussionIds)
-        ]);
+        Tracker.nonreactive(() => {
+          const params = {
+            limit: 100,
+            at: FlowRouter.getQueryParam('at') || null
+          };
+
+          _subHandlers = _subHandlers.concat([
+            DiscussionSubs.subscribe('discussionsByStandardId', standardId),
+          ]);
+        });
       }
 
       this._subHandlers(_subHandlers);

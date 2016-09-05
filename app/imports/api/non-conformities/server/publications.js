@@ -5,8 +5,15 @@ import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
+import get from 'lodash.get';
+
 const getNCOtherFiles = (nc) => {
-  const fileIds = nc.fileIds || [];
+  let fileIds = nc.fileIds || [];
+  const improvementPlanFileIds = get(nc, 'improvementPlan.fileIds');
+  if (!!improvementPlanFileIds) {
+    fileIds = fileIds.concat(improvementPlanFileIds);
+  }
+
   return Files.find({ _id: { $in: fileIds } });
 };
 

@@ -1,0 +1,14 @@
+{
+	"_id" : "9RLXg3H62oAecYKF8",
+	"organizationId" : "KwKXz5RefrE5hjWJ2",
+	"documentType" : "standard",
+	"linkedTo" : "Zty4NCagWvrcuLYoy",
+	"isPrimary" : true,
+	"createdAt" : {"$date": 1459522800000},
+	"createdBy" : "system",
+	"isStarted" : true,
+	"startedBy" : "SQHmBKJ94gJvpLKLt",
+	"startedAt" : {"$date": 1459522800000},
+	"updatedAt" : {"$date": 1459522800000},
+	"updatedBy" : "SQHmBKJ94gJvpLKLt"
+}
