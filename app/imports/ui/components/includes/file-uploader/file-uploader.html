@@ -1,7 +1,9 @@
 <template name="FileUploader">
-  <span class="btn btn-primary btn-file">
-    <i class="fa fa-plus"></i>
-    Add
-    <input type="file" {{b "value: attachmentFile, change: upload, ref: fileInput"}}>
-  </span>
+  <div class="file-uploader">
+    <span class="btn btn-primary btn-file">
+      <i class="fa fa-plus"></i>
+      Add
+      <input type="file" multiple="multiple" {{b "value: attachmentFiles, change: upload(getData), ref: fileInput"}}>
+    </span>
+  </div>
 </template>

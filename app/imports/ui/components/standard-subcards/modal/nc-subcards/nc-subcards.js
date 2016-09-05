@@ -9,7 +9,7 @@ Template.NC_Subcards.viewmodel({
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
   },
-  slingshotDirective: 'nonConformitiesFiles',
+  slingshotDirective: 'nonConformityFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),

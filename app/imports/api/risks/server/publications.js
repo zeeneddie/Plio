@@ -2,45 +2,78 @@ import { Meteor } from 'meteor/meteor';
 import { Risks } from '../risks.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { isOrgMember } from '../../checkers.js';
+import { Files } from '/imports/api/files/files.js';
 import Counter from '../../counter/server.js';
 
-Meteor.publish('risks', function(organizationId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
-  }
+const getRiskFiles = (risk) => {
+  const fileIds = risk.fileIds || [];
+  return Files.find({ _id: { $in: fileIds } });
+};
 
-  return Risks.find({ organizationId, isDeleted });
+Meteor.publishComposite('risks', function(organizationId, isDeleted = { $in: [null, false] }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return Risks.find({ organizationId, isDeleted });
+    },
+    children: [{
+      find(risk) {
+        return getRiskFiles(risk);
+      }
+    }]
+  }
 });
 
-Meteor.publish('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  const standard = Standards.findOne({ _id: standardId });
-  const { organizationId } = !!standard && standard;
+Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
+  return {
+    find() {
+      const userId = this.userId;
+      const standard = Standards.findOne({ _id: standardId });
+      const { organizationId } = !!standard && standard;
 
-  if (!userId || !standard || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+      if (!userId || !standard || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return Risks.find({ standardId, isDeleted });
+    },
+    children: [{
+      find(risk) {
+        return getRiskFiles(risk);
+      }
+    }]
   }
-
-  return Risks.find({ standardId, isDeleted });
 });
 
-Meteor.publish('risksByIds', function(ids = []) {
-  let query = {
-    _id: { $in: ids },
-    isDeleted: { $in: [null, false] }
-  };
+Meteor.publishComposite('risksByIds', function(ids = []) {
+  return {
+    find() {
+      let query = {
+        _id: { $in: ids },
+        isDeleted: { $in: [null, false] }
+      };
 
-  const userId = this.userId;
-  const { organizationId } = Object.assign({}, Risks.findOne({ ...query }));
+      const userId = this.userId;
+      const { organizationId } = Object.assign({}, Risks.findOne({ ...query }));
 
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      query = { ...query, organizationId };
+
+      return Risks.find(query);
+    },
+    children: [{
+      find(risk) {
+        return getRiskFiles(risk);
+      }
+    }]
   }
-
-  query = { ...query, organizationId };
-
-  return Risks.find(query);
 });
 
 Meteor.publish('risksCount', function(counterName, organizationId) {

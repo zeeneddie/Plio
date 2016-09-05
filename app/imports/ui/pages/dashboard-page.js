@@ -30,7 +30,7 @@ Template.Dashboard_Page.viewmodel({
   ],
   isReady: false,
   _subHandlers: [],
-  _renderMetrics(pluralizeWord = '', totalCount = 0, notViewedCount = 0) {
+  _renderMetrics(pluralizeWord = '', totalCount = 0) {
 
     // Workaround for https://github.com/blakeembrey/pluralize/pull/12
     const lowerCaseLastSChar = (str) => {
@@ -42,8 +42,7 @@ Template.Dashboard_Page.viewmodel({
       }
     }
 
-    const notViewedText = notViewedCount ? `, ${notViewedCount} new` : '';
-    return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, totalCount, true)) + notViewedText : '';
+    return this.isReady() ? lowerCaseLastSChar(pluralize(pluralizeWord, totalCount, true)): '';
   },
   standardsViewedCount() {
     return this.counter.get('standards-count-' + this.organizationId());

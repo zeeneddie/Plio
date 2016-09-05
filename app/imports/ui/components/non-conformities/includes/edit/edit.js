@@ -13,7 +13,7 @@ Template.NC_Card_Edit.viewmodel({
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
-  slingshotDirective: 'nonConformitiesFiles',
+  slingshotDirective: 'nonConformityFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),

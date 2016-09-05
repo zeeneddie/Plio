@@ -70,7 +70,7 @@ a:focus {
 }
 
 .preloader {
-  padding-bottom: 12%;
+  padding-bottom: 10%;
 	margin: 0 !important;
 }
 
@@ -78,9 +78,14 @@ a:focus {
   overflow: hidden;
   position: relative;
   @include flex(1);
-  @include flexbox;
+	height: 100%;
+
+	&:not(.no-flex) {
+  	@include flexbox;
+	}
 
   > .container {
+		min-height: 100%;
     @media (max-width:1200px) {
       max-width: none;
     }

@@ -1,49 +1,89 @@
 import { Meteor } from 'meteor/meteor';
 import { NonConformities } from '../non-conformities.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
-Meteor.publish('nonConformities', function(organizationId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+import get from 'lodash.get';
+
+const getNCOtherFiles = (nc) => {
+  let fileIds = nc.fileIds || [];
+  const improvementPlanFileIds = get(nc, 'improvementPlan.fileIds');
+  if (!!improvementPlanFileIds) {
+    fileIds = fileIds.concat(improvementPlanFileIds);
   }
 
-  return NonConformities.find({ organizationId, isDeleted });
-});
+  return Files.find({ _id: { $in: fileIds } });
+};
 
-Meteor.publish('nonConformitiesByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  const standard = Standards.findOne({ _id: standardId });
-  const { organizationId } = !!standard && standard;
+Meteor.publishComposite('nonConformities', function (organizationId, isDeleted = { $in: [null, false] }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
 
-  if (!userId || !standard || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+      return NonConformities.find({ organizationId, isDeleted });
+    },
+    children: [{
+      find(nc) {
+        return getNCOtherFiles(nc);
+      }
+    }]
   }
-
-  return NonConformities.find({ standardsIds: standardId, isDeleted });
 });
 
-Meteor.publish('nonConformitiesByIds', function(ids = []) {
-  let query = {
-    _id: { $in: ids },
-    isDeleted: { $in: [null, false] }
-  };
+Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isDeleted = { $in: [null, false] }) {
+  return {
+    find() {
+      const userId = this.userId;
+      const standard = Standards.findOne({ _id: standardId });
+      const { organizationId } = !!standard && standard;
 
-  const userId = this.userId;
-  const { organizationId } = Object.assign({}, NonConformities.findOne(query));
+      if (!userId || !standard || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
 
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+      return NonConformities.find({ standardsIds: standardId, isDeleted });
+    },
+    children: [{
+      find(nc) {
+        return getNCOtherFiles(nc);
+      }
+    }]
   }
-
-  query = { ...query, organizationId };
-
-  return NonConformities.find(query);
 });
 
-Meteor.publish('nonConformitiesCount', function(counterName, organizationId) {
+Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
+  return {
+    find() {
+      let query = {
+        _id: { $in: ids },
+        isDeleted: { $in: [null, false] }
+      };
+
+      const userId = this.userId;
+      const { organizationId } = Object.assign({}, NonConformities.findOne(query));
+
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      query = { ...query, organizationId };
+
+      return NonConformities.find(query);
+    },
+    children: [{
+      find(nc) {
+        return getNCOtherFiles(nc);
+      }
+    }]
+  }
+});
+
+Meteor.publish('nonConformitiesCount', function (counterName, organizationId) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();

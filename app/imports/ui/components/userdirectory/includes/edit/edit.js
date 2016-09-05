@@ -82,7 +82,7 @@ Template.UserDirectory_Card_Edit.viewmodel({
       return;
     }
 
-    const uploader = new Slingshot.Upload('usersAvatars', {
+    const uploader = new Slingshot.Upload('userAvatars', {
       userId: this.userId()
     });
 
