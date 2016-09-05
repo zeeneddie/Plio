@@ -1,18 +1,24 @@
 import { Template } from 'meteor/templating';
-
+import invoke from 'lodash.invoke';
 
 Template.Actions_Title.viewmodel({
-  mixin: 'callWithFocusCheck',
+  label: 'Title',
   title: '',
-  update(e) {
-    const { title } = this.getData();
-    if (title === this.templateInstance.data.title) {
-      return;
-    }
+  sequentialId: '',
+  titleArgs() {
+    const { label, title:value, sequentialId:addon } = this.data();
 
-    this.parent().update && this.parent().update({ e, title, withFocusCheck: true });
+    return {
+      label,
+      value,
+      addon,
+      onFocusOut: (e, { value:title }) => {
+        return invoke(this.parent(), 'update', { title });
+      }
+    };
   },
   getData() {
-    return { title: this.title() };
+    const { title } = this.data();
+    return { title };
   }
 });

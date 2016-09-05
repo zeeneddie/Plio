@@ -2,22 +2,24 @@ import { Template } from 'meteor/templating';
 
 Template.NC_Title_Edit.viewmodel({
   label: 'Non-conformity name',
-  titleText: '',
+  title: '',
   sequentialId: '',
-  update(e) {
-    if (!this._id) return;
+  titleArgs() {
+    const { label, title:value, sequentialId:addon } = this.data();
 
-    const title = this.titleText();
+    return {
+      label,
+      value,
+      addon,
+      onFocusOut: (e, { value:title }) => {
+        if (!this._id) return;
 
-    if (!title) {
-      ViewModel.findOne('ModalWindow').setError('Title is required!');
-      return;
-    }
-
-    this.parent().update({ title, e, withFocusCheck: true });
+        this.parent().update({ title });
+      }
+    };
   },
   getData() {
-    const { titleText:title } = this.data();
+    const { title } = this.data();
     return { title };
   }
 });
