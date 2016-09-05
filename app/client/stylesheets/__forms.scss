@@ -369,7 +369,7 @@ input:focus ~ .clear-field {
   @media (max-width: 543px) {
     padding: 0;
   }
-  
+
 }
 
 /*
@@ -446,11 +446,19 @@ fieldset[disabled] {
   opacity: 0.5;
 }
 
-.file-item {
+.file-item, .file-item-read {
   margin-right: 4px;
+  margin-bottom: 8px;
   max-width: 100%;
   display: inline-block;
   position: relative;
+  .file-item-read {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .btn-icon {
+    margin-bottom: 0;
+  }
   .btn.file-label {
     position: relative;
     overflow: hidden;
@@ -466,20 +474,30 @@ fieldset[disabled] {
         opacity: 1;
       }
     }
-  }
-  .uploading-file {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 0%;
-    background-color: #000;
-    opacity: 0.2;
-    transition: all 0.5s ease;
 
-    &.uploaded {
-      visibility: hidden;
+    &.failed:not(.uploaded) {
+      border-color: #d49499;
+
+      .uploading-file {
+        background-color: #ff0000;
+        opacity: 0.2;
+      }
+    }
+
+    .uploading-file {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: #000;
+      opacity: 0.2;
+      transition: all 0.5s ease;
+
+      &.uploaded {
+        visibility: hidden;
+      }
     }
   }
 

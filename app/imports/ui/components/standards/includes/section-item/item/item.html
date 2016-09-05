@@ -1,5 +1,5 @@
 <template name="Standards_Item_Read">
-  <a class="list-group-item pointer" {{b "click: select, href: getHref, class: { active: standardId === this._id }"}}>
+  {{#ListItemLink (linkArgs)}}
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading pull-xs-left">
         <span {{b "text: this.title"}}></span>
@@ -24,5 +24,5 @@
         <p class="list-group-item-text pull-right" {{b "text: renderDate(this.deletedAt)"}}></p>
       {{/if}}
     </div>
-  </a>
+  {{/ListItemLink}}
 </template>

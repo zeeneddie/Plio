@@ -111,6 +111,8 @@ const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
+const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+
 export {
   compareDates,
   getCollectionByName,
@@ -124,5 +126,6 @@ export {
   inject,
   injectCurry,
   withUserId,
-  mapArgsTo
+  mapArgsTo,
+  flattenObjects
 };
