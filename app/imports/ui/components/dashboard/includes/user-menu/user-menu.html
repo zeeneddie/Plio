@@ -8,35 +8,40 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right">
           {{#each getStatuses}}
-            <a class="dropdown-item pointer {{#if isActiveStatus @index}}active{{/if}}" {{b "click: changeStatus"}}>
+            {{#Link (linkArgs.status @index)}}
               <i class="fa fa-circle {{css}} label-status"></i>
               {{text}}
-            </a>
+            {{/Link}}
           {{/each}}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" {{b "click: openUserPreferences"}}>
-            My preferences
-          </a>
-          {{#if organizationId}}
 
-            <a class="dropdown-item" href="{{pathFor 'userDirectoryUserPage' orgSerialNumber=orgSerialNumber userId=currentUser._id}}" {{b "click: goToMyProfile"}}>
+          {{#Link (linkArgs.myPreferences)}}
+            My preferences
+          {{/Link}}
+
+          {{#if organizationId}}
+            {{#Link (linkArgs.myProfile)}}
               My profile
-            </a>
-            <a class="dropdown-item" href="{{pathFor 'userDirectoryPage' orgSerialNumber=orgSerialNumber}}">
+            {{/Link}}
+
+            {{#Link (linkArgs.userDirectory)}}
               User directory
-            </a>
+            {{/Link}}
+
             {{#if canInviteUsers organizationId}}
-              <a class="dropdown-item" {{b "click: onInviteClick"}}>
+              {{#Link (linkArgs.inviteUsers)}}
                 Invite users
-              </a>
+              {{/Link}}
             {{/if}}
           {{/if}}
-          <a class="dropdown-item" href="{{pathFor 'standardSubcardsPage' orgSerialNumber=orgSerialNumber}}">
+
+          {{#Link (linkArgs.standardSubcards)}}
             Standard subcards
-          </a>
-          <a class="dropdown-item" {{b "click: logout"}}>
+          {{/Link}}
+
+          {{#Link (linkArgs.logout)}}
             Logout
-          </a>
+          {{/Link}}
         </div>
       </li>
     </ul>

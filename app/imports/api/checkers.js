@@ -30,6 +30,11 @@ export * from './occurrences/checkers.js';
 
 export * from './users/checkers.js';
 
+export const isMobileRes = () => {
+  const width = $(window).width();
+  return width < 768 && width;
+};
+
 const userIdOrgIdTester = (userId, organizationId) => _.every([
   SimpleSchema.RegEx.Id.test(userId),
   SimpleSchema.RegEx.Id.test(organizationId)
