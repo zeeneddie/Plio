@@ -33,8 +33,18 @@ Template.NC_Card_Edit_Main.viewmodel({
     }
   },
   isStandardsEditable: true,
-  getMethodRefs() {
-    return () => ({
+  RCAArgs({ _id, analysis, updateOfStandards, magnitude } = {}) {
+    return {
+      _id,
+      analysis,
+      updateOfStandards,
+      magnitude,
+      methodRefs: this.methodRefs,
+      ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod)
+    };
+  },
+  methodRefs() {
+    return {
       setAnalysisExecutor,
       setAnalysisDate,
       completeAnalysis,
@@ -49,7 +59,7 @@ Template.NC_Card_Edit_Main.viewmodel({
       setStandardsUpdateCompletedBy,
       setStandardsUpdateCompletedDate,
       setStandardsUpdateComments
-    });
+    };
   },
   showRootCauseAnalysis() {
     const NC = this.NC && this.NC();
