@@ -30,6 +30,15 @@ export const isDeletedField = {
         deleted: isDeleted.newValue
       };
     },
+    subjectTemplate:
+      '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}',
+    subjectTemplateData({ diffs: { isDeleted }, newDoc, user }) {
+      return {
+        docDesc: this.docDescription(newDoc),
+        userName: getUserFullNameOrEmail(user),
+        deleted: isDeleted.newValue
+      };
+    },
     receivers() { }
   }
 };
