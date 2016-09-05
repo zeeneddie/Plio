@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { get, head } from 'lodash';
+import get from 'lodash.get';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
@@ -54,16 +54,16 @@ Template.NC_List.viewmodel({
   _getFirstNCQueryForFilter() {
     switch(this.activeNCFilterId()) {
       case 1:
-        return { magnitude: get(head(this.magnitude()), 'value') };
+        return { magnitude: get(_.first(this.magnitude()), 'value') };
         break;
       case 2:
-        return { status: head(this.statuses()) };
+        return { status: _.first(this.statuses()) };
         break;
       case 3:
-        return { departmentsIds: get(head(this.departments()), '_id') };
+        return { departmentsIds: get(_.first(this.departments()), '_id') };
         break;
       case 4:
-        return { _id: get(head(this.NCsDeleted()), '_id') };
+        return { _id: get(_.first(this.NCsDeleted()), '_id') };
         break;
       default:
         return {};

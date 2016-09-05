@@ -74,6 +74,18 @@ Template.Subcards_RCA_Edit.viewmodel({
 
     const makeMethods = (methods, from) => methods.map((ref, i) => {
       const key = Object.keys(from)[i];
+
+      if (this.callMethod) {
+        /**
+         * because we need to handle this methods differently in subcard, for example
+         * @param {function} method caller
+         * @param {object} method arguments
+         * @param {function} optional callback
+         */
+        return { [key]: () => (...args) =>
+          this.callMethod(from[key](ref), ...args) };
+      }
+
       return { [key]: () => from[key](ref) };
     }).reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
@@ -97,10 +109,5 @@ Template.Subcards_RCA_Edit.viewmodel({
         undoStandardsUpdate,
       ], half)
     };
-  },
-  update({ query = {}, options = {}, ...args }, cb) {
-    const allArgs = { ...args, options, query };
-
-    this.parent().update(allArgs, cb);
   }
 });
