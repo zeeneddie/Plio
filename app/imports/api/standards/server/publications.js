@@ -1,4 +1,7 @@
 import { Meteor } from 'meteor/meteor';
+
+import { getJoinUserToOrganisationDate } from '/imports/api/organizations/utils.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '../standards.js';
 import { isOrgMember } from '../../checkers.js';
 import { Files } from '/imports/api/files/files.js';
@@ -72,10 +75,22 @@ Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) 
     return this.ready();
   }
 
-  return new Counter(counterName, Standards.find({
+  const currentOrgUserJoinedAt = getJoinUserToOrganisationDate({
+    organizationId, userId
+  });console.log(currentOrgUserJoinedAt);
+  const query = {
     organizationId,
     viewedBy: { $ne: userId },
-    // [ToDo]: createdAt > date when userId joined the organisation
     isDeleted: { $in: [false, null] }
-  }));
+  };
+
+  /* [ToDo] continue from here
+  if(currentOrgUserJoinedAt && currentOrgUserJoinedAt < org.createdAt){
+    query.createdAt = { $gt: currentOrgUserJoinedAt };
+  }
+  */
+
+  const standardsCursor = Standards.find(query);
+
+  return new Counter(counterName, standardsCursor);
 });
