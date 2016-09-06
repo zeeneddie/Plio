@@ -9,6 +9,8 @@ import { DefaultStandardTypes } from '/imports/api/constants.js';
 Template.ESType.viewmodel({
   share: 'standard',
   mixin: ['organization', 'collapsing', 'standard'],
+  typeId: '',
+
   autorun() {
     // to fix bug wich randomly calls method
     if (this.typeId() !== this.templateInstance.data.typeId) {
@@ -18,10 +20,9 @@ Template.ESType.viewmodel({
   onCreated() {
     if (!this.typeId()) {
       const defaultType = _.first(Object.assign([], this.types()));
-      this.typeId(defaultType._id);
+      defaultType && this.typeId(defaultType._id);
     }
   },
-  typeId: '',
   types() {
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch();
