@@ -1,47 +1,56 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-Template.TitleInput.viewmodel({
-  mixin: 'callWithFocusCheck',
+const defaults = {
   label: 'Title',
   value: '',
   placeholder: 'Title',
   className: 'form-control',
+  withFocusCheck: true
+};
+
+Template.TitleInput.viewmodel({
+  mixin: 'callWithFocusCheck',
+  ...defaults,
   inputArgs() {
     const {
-      value,
-      className = 'form-control',
-      placeholder = 'Title'
+      value = defaults.value,
+      className = defaults.className,
+      placeholder = defaults.placeholder,
+      withFocusCheck = defaults.withFocusCheck
     } = this.data();
 
     const { onFocusOut = () => {} } = this.templateInstance.data;
+
+    const handler = (e) => {
+      const val = e.target.value;
+
+      if (!val) {
+        invoke(
+          ViewModel.findOne('ModalWindow'),
+          'setError',
+          'Title is required!'
+        );
+
+        this.value(value);
+
+        this.value.changed();
+
+        return this.value();
+      }
+
+      if (Object.is(val, value)) return;
+
+      return onFocusOut(e, { value: val });
+    };
 
     return {
       value,
       className,
       placeholder,
-      onFocusOut: e =>
-        this.callWithFocusCheck(e, () => {
-          const val = e.target.value;
-
-          if (!val) {
-            invoke(
-              ViewModel.findOne('ModalWindow'),
-              'setError',
-              'Title is required!'
-            );
-
-            this.value(value);
-
-            this.value.changed();
-
-            return this.value();
-          }
-
-          if (Object.is(val, value)) return;
-
-          return onFocusOut(e, { value: val });
-        })
+      onFocusOut: e => withFocusCheck
+        ? this.callWithFocusCheck(e, () => handler(e))
+        : handler(e)
     };
   }
 });

@@ -100,9 +100,7 @@ const inject = anything => fn => fn(anything);
 
 const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
-const withUserId = fn => (userId) => {
-  return fn({ userId });
-};
+const withUserId = fn => userId => fn({ userId });
 
 const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
 
@@ -134,5 +132,6 @@ export {
   mapArgsTo,
   flattenObjects,
   extractIds,
-  not
+  not,
+  getOrgOwner
 };

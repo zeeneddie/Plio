@@ -2,13 +2,15 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 Template.Standards_Title_Edit.viewmodel({
-  mixin: ['modal', 'numberRegex'],
+  mixin: 'numberRegex',
   title: '',
   titleArgs() {
     const { title:value } = this.data();
+    const withFocusCheck = this._id ? true : false;
 
     return {
       value,
+      withFocusCheck,
       onFocusOut: (e, { value:title }) => {
         const number = this.parseNumber(title);
         const nestingLevel = (_.first(number) || '').split('.').length || 1;
@@ -21,9 +23,11 @@ Template.Standards_Title_Edit.viewmodel({
           );
         }
 
+        this.title(title);
+
         if (!this._id) return;
 
-        this.parent().update({ title, nestingLevel });
+        return invoke(this.parent(), 'update', { title, nestingLevel });
       }
     };
   },

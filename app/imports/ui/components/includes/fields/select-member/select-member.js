@@ -1,14 +1,29 @@
 import { Template } from 'meteor/templating';
 
+const defaults = {
+  value: Meteor.userId(),
+  placeholder: 'Select',
+  selectFirstIfNoSelected: true,
+  disabled: false
+};
+
 Template.Select_Member.viewmodel({
   mixin: ['members', 'search', 'user'],
-  value: Meteor.userId(),
+  ...defaults,
   selectArgs() {
-    const { value:selected } = this.data();
+    const {
+      value:selected = defaults.value,
+      placeholder = defaults.placeholder,
+      selectFirstIfNoSelected = defaults.selectFirstIfNoSelected,
+      disabled = defaults.disabled
+    } = this.data();
     const { onUpdate = () => {} } = this.templateInstance.data;
 
     return {
       selected,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled,
       items: this._members(),
       onUpdate: (viewmodel) => {
         const { selected:value } = viewmodel.getData();

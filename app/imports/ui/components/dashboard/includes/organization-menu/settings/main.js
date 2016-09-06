@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import {
@@ -16,7 +17,7 @@ Template.OrgSettings_MainSettings.viewmodel({
   name: '',
   currency: '',
   timezone: '',
-  owner: '',
+  ownerId: Meteor.userId(),
   isEditable: false,
   updateName({ e, name }) {
     if (!this.isEditable()) return;

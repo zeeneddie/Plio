@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
-
+import invoke from 'lodash.invoke';
 
 Template.Actions_ToBeCompletedBy.viewmodel({
   mixin: ['search', 'user', 'members'],
@@ -8,17 +8,27 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   placeholder: 'To be completed by',
   selectFirstIfNoSelected: false,
   completionComments: '',
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:userId } = viewmodel.getData();
+  selectArgs() {
+    const {
+      toBeCompletedBy:value,
+      placeholder,
+      selectFirstIfNoSelected
+    } = this.data();
 
-    this.toBeCompletedBy(userId);
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      onUpdate: (viewmodel) => {
+        const { selected:userId } = viewmodel.getData();
 
-    if (!this._id) return;
+        this.toBeCompletedBy(userId);
 
-    this.onUpdate({ userId });
+        if (!this._id) return;
+
+        invoke(this, 'onUpdate', { userId });
+      }
+    };
   },
   canBeCompleted() {
     return !!this.onComplete && (this.toBeCompletedBy() === Meteor.userId());
@@ -26,7 +36,7 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   complete() {
     return (viewmodel) => {
       const { text:completionComments } = viewmodel.getData();
-      
+
       this.onComplete && this.onComplete({ completionComments });
     };
   },

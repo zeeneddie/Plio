@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 Template.NC_Title_Edit.viewmodel({
   label: 'Non-conformity name',
@@ -6,15 +7,19 @@ Template.NC_Title_Edit.viewmodel({
   sequentialId: '',
   titleArgs() {
     const { label, title:value, sequentialId:addon } = this.data();
+    const withFocusCheck = this._id ? true : false;
 
     return {
       label,
       value,
       addon,
+      withFocusCheck,
       onFocusOut: (e, { value:title }) => {
+        this.title(title);
+
         if (!this._id) return;
 
-        this.parent().update({ title });
+        invoke(this.parent(), 'update', { title });
       }
     };
   },
