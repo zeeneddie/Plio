@@ -53,6 +53,7 @@
   .nav {
     .nav-item {
       margin: 0;
+      width: 100%;
     }
 
     .nav-link {
@@ -62,6 +63,7 @@
       font-size: 16px;
       line-height: $navbar-height-standard;
       padding: 0 15px;
+      text-overflow: ellipsis;
 
       &:focus {
         outline: none !important;
@@ -138,6 +140,10 @@
     .dropdown-menu {
       left: 10px;
       top: 80px;
+
+      @media (max-width: 767px) {
+        top: 50px;
+      }
     }
   }
 
