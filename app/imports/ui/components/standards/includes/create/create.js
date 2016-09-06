@@ -22,7 +22,11 @@ Template.CreateStandard.viewmodel({
           this.modal().setError(errorMessage);
           return;
         } else if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new type in Org settings`;
+          errorMessage = `The new standard cannot be created without a type. You can create a new standard type in Org settings`;
+          this.modal().setError(errorMessage);
+          return;
+        } else {
+          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
           this.modal().setError(errorMessage);
           return;
         }

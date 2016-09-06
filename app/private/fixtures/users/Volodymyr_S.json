@@ -36,8 +36,8 @@
       }
     ]
   },
-  "status": "online",
-  "statusConnection": "online",
+  "status": "offline",
+  "statusConnection": "offline",
   "roles": {
     "KwKXz5RefrE5hjWJ2": [
       "create-update-delete-standards",
