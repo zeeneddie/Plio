@@ -1,6 +1,6 @@
 import './useraccounts.js';
 import './userpresence.js';
-import './fixtures.js';
+import './fixtures';
 import './accounts.js';
 import './emailtemplates.js';
 import './slingshot.js';

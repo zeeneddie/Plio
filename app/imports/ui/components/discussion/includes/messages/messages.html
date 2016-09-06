@@ -1,6 +1,6 @@
 <template name="Discussion_Messages">
 	{{#if discussion}}
-		<div class="chat-content scroll">
+		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore"}}>
 			<audio id="message-sound">
         <source src="/sounds/new-message.mp3" type="audio/mpeg" />
       </audio>
@@ -13,9 +13,21 @@
 						</p>
 					</div>
 				{{/if}}
-				{{#each messages}}
-					{{> Discussion_Message}}
-				{{/each}}
+				{{#if isInitialDataReady}}
+					<div class="infinite-load-older text-xs-center">
+						{{#unless isReady}}
+							{{> Preloader size=1}}
+						{{/unless}}
+					</div>
+
+					{{> Discussion_Messages_List messages=messages}}
+
+					<div class="infinite-load-newer text-xs-center">
+						{{#unless isReady}}
+							{{> Preloader size=1}}
+						{{/unless}}
+					</div>
+				{{/if}}
 			</div>
 		</div>
 	{{/if}}
