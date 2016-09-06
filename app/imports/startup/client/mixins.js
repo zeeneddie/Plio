@@ -958,7 +958,6 @@ ViewModel.mixin({
         uploader.xhr && uploader.xhr.abort();
         this.removeUploadData(fileId);
       }
-      debugger;
       terminateUploading.call({
         _id: fileId
       });

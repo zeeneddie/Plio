@@ -9,17 +9,19 @@ import { DefaultStandardTypes } from '/imports/api/constants.js';
 Template.ESType.viewmodel({
   share: 'standard',
   mixin: ['organization', 'collapsing', 'standard'],
+  typeId: '',
+
   autorun() {
     // to fix bug wich randomly calls method
     if (this.typeId() !== this.templateInstance.data.typeId) {
       Tracker.nonreactive(() => this.update());
     }
   },
-  typeId() {
-    const organizationId = this.organizationId();
-    const data = DefaultStandardTypes.find(({ abbreviation } = {}) => Object.is(abbreviation, 'POL')); // Policy
-    const type = StandardTypes.findOne({ organizationId, ...type }) || _.first(this.types());
-    return get(type, '_id');
+  onCreated() {
+    if (!this.typeId()) {
+      const defaultType = _.first(Object.assign([], this.types()));
+      defaultType && this.typeId(defaultType._id);
+    }
   },
   types() {
     const organizationId = this.organizationId();

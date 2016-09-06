@@ -6,7 +6,7 @@ import { Messages } from './messages.js';
 import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
-import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema } from '../schemas.js';
+import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema, OrganizationIdSchema } from '../schemas.js';
 import { checkDocExistance } from '../checkers.js';
 import { getCollectionByDocType } from '../helpers.js';
 import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
@@ -104,6 +104,23 @@ export const bulkUpdateViewedBy = new ValidatedMethod({
 		}
 
 		return MessagesService.bulkUpdateViewedBy({ discussionId, userId });
+	}
+});
+
+export const bulkUpdateViewedByTotal = new ValidatedMethod({
+	name: 'Messages.bulkUpdateViewedByTotal',
+	validate: OrganizationIdSchema.validator(),
+
+	run({ organizationId }) {
+		const userId = this.userId;
+
+		if (!userId) {
+			throw new Meteor.Error(
+				403, 'Unauthorized user cannot update messages'
+			);
+		}
+
+		return MessagesService.bulkUpdateViewedByTotal({ organizationId, userId });
 	}
 });
 
