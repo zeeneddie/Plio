@@ -380,10 +380,6 @@ const TruncatedStringLengths = {
 
 const SystemName = 'Plio';
 
-const UnreadMessages = {
-  limit: 7
-};
-
 export {
   ActionTypes,
   ActionStatuses,

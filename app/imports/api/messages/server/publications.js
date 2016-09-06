@@ -90,33 +90,9 @@ Meteor.publish('messagesLast', function(discussionId) {
 	this.onStop(() => handle.stop());
 });
 
-// Meteor.publishComposite('messagesByDiscussionIds', function ({ discussionIds, organizationId }) {
-// 	return {
-// 		find() {
-// 			const userId = this.userId;
-// 			if (!userId || !isOrgMember(userId, organizationId)) {
-// 		    return this.ready();
-// 		  }
-//
-// 			return Messages.find({ organizationId, discussionId: { $in: discussionIds } });
-// 		},
-// 		children: [{
-// 	  	find: function (message) {
-// 	      return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
-// 	    }
-// 	  }, {
-// 	  	find: function (message) {
-// 				if (message.fileId) {
-// 	      	return Files.find({ _id: message.fileId });
-// 				}
-// 	    }
-// 	  }]
-// 	}
-// });
-
 // Unread messages by the logged in user, with info about users that created
 // the messages.
-Meteor.publishComposite('unreadMessages', function({ organizationId }) {
+Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	return {
 		find() {
 			const userId = this.userId;
@@ -125,7 +101,14 @@ Meteor.publishComposite('unreadMessages', function({ organizationId }) {
 		    return this.ready();
 		  }
 
-			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } });
+			const options = {};
+
+			// Check if limit is an integer number
+		  if (Number(limit) === limit && limit % 1 === 0) {
+		    options.limit = limit;
+		  }
+
+			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } }, options);
 		},
 		children: [{
 	  	find: function (message) {
@@ -209,6 +192,19 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
   }
   return new Counter(counterName, Messages.find({
     discussionId,
+		organizationId: discussion.organizationId,
+		viewedBy: { $ne: userId }
+  }));
+});
+
+Meteor.publish('messagesNotViewedCountTotal', function(counterName, organizationId) {
+  const userId = this.userId;
+
+	if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+  return new Counter(counterName, Messages.find({
+		organizationId: organizationId,
 		viewedBy: { $ne: userId }
   }));
 });
