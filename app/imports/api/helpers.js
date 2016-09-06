@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
+import property from 'lodash.property';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
@@ -113,6 +114,8 @@ const checkAndThrow = (predicate, error = '') => {
 
 const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
+const extractIds = (collection = []) => collection.map(property('_id'));
+
 export {
   compareDates,
   getCollectionByName,
@@ -127,5 +130,6 @@ export {
   injectCurry,
   withUserId,
   mapArgsTo,
-  flattenObjects
+  flattenObjects,
+  extractIds
 };

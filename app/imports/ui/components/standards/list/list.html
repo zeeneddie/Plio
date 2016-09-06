@@ -10,16 +10,22 @@
     {{#if isActiveStandardFilter 1}}
       {{#each sections}}
         {{> ListItem
+            items=this.standards
             template="StandardSectionItem"
+            rText=this.totalUnreadMessagesHtml
+            hideRTextOnExpand=hideRTextOnExpand
             title=this.title
-            _query=(_getQuery this)}}
+            _id=this._id}}
       {{/each}}
     {{/if}}
 
     {{#if isActiveStandardFilter 2}}
       {{#each types}}
         {{> ListItem
+            items=(sections this._id)
             template="StandardTypeItem"
+            rText=this.totalUnreadMessagesHtml
+            hideRTextOnExpand=hideRTextOnExpand
             title=this.name
             type="standardType"
             _id=this._id}}

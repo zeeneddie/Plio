@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import get from 'lodash.get';
 
 import { Discussions } from '../discussions.js';
 import { Standards } from '/imports/api/standards/standards.js'
@@ -8,7 +9,7 @@ Meteor.publish('discussionsByStandardId', function(standardId) {
   const userId = this.userId;
   const standard = Standards.findOne({ _id: standardId });
 
-  if (standard && !userId || !isOrgMember(userId, standard.organizationId)) {
+  if (standard && !userId || !isOrgMember(userId, get(standard, 'organizationId'))) {
     return this.ready();
   }
 
