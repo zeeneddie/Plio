@@ -4,6 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { getJoinUserToOrganisationDate } from '/imports/api/organizations/utils.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
@@ -282,6 +283,27 @@ ViewModel.mixin({
     }
   },
   organization: {
+    /**
+     * The document is new if it was created after the user had joined the
+     * organisation and was not viewed by the user:
+     * @param {Object} doc - must have a property "viewedBy: [String]";
+     * @param {String} userId - user ID.
+    */
+    isNewDoc({ doc, userId }){
+      const dateUserJoinedToOrg = getJoinUserToOrganisationDate({
+        organizationId: this.organizationId(), userId
+      });
+
+      if(!dateUserJoinedToOrg){
+        return false;
+      }
+
+      const isDocViewedByUser = !!doc.viewedBy
+                                && doc.viewedBy instanceof Array
+                                && doc.viewedBy.indexOf(userId) >= 0;
+
+      return doc.createdAt > dateUserJoinedToOrg && !isDocViewedByUser;
+    },
     organization() {
       const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });

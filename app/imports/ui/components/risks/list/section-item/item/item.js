@@ -40,7 +40,12 @@ Template.Risks_Item.viewmodel({
     };
   },
   isNew() {
-    return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const doc = this.currentRisk();console.log(doc);
+    const userId = Meteor.userId();console.log(userId);
+
+    return true;
   },
   updateViewedBy(cb) {
     const _id = this._id();

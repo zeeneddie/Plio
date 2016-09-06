@@ -71,26 +71,23 @@ Meteor.publish('standardsCount', function(counterName, organizationId) {
 
 Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
   const currentOrgUserJoinedAt = getJoinUserToOrganisationDate({
     organizationId, userId
-  });console.log(currentOrgUserJoinedAt);
+  });
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
     isDeleted: { $in: [false, null] }
   };
 
-  /* [ToDo] continue from here
-  if(currentOrgUserJoinedAt && currentOrgUserJoinedAt < org.createdAt){
+  if(currentOrgUserJoinedAt){
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
-  */
 
-  const standardsCursor = Standards.find(query);
-
-  return new Counter(counterName, standardsCursor);
+  return new Counter(counterName, Standards.find(query));
 });

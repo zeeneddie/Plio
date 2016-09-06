@@ -1,3 +1,5 @@
+import { Organizations } from './organizations.js';
+
 /**
  * Get the date of joining the user to the organisation:
  * @param {String} organizationId - the organisation ID;
