@@ -15,12 +15,13 @@ Template.ESType.viewmodel({
       Tracker.nonreactive(() => this.update());
     }
   },
-  typeId() {
-    const organizationId = this.organizationId();
-    const data = DefaultStandardTypes.find(({ abbreviation } = {}) => Object.is(abbreviation, 'POL')); // Policy
-    const type = StandardTypes.findOne({ organizationId, ...type }) || _.first(this.types());
-    return get(type, '_id');
+  onCreated() {
+    if (!this.typeId()) {
+      const defaultType = _.first(Object.assign([], this.types()));
+      this.typeId(defaultType._id);
+    }
   },
+  typeId: '',
   types() {
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch();
