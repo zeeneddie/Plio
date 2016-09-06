@@ -54,7 +54,12 @@ Template.Standards_Item_Read.viewmodel({
     return this.standardType() && this.standardType().name;
   },
   isNew() {
-    return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const doc = this.currentStandard();
+    const userId = Meteor.userId();
+
+    return this.isNewDoc({ doc, userId });
   },
   unreadMessagesCount() {
     return this.counter.get('standard-messages-not-viewed-count-' + this._id());

@@ -42,10 +42,10 @@ Template.Risks_Item.viewmodel({
   isNew() {
     //return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
 
-    const doc = this.currentRisk();console.log(doc);
-    const userId = Meteor.userId();console.log(userId);
+    const doc = this.currentRisk();
+    const userId = Meteor.userId();
 
-    return true;
+    return this.isNewDoc({ doc, userId });
   },
   updateViewedBy(cb) {
     const _id = this._id();

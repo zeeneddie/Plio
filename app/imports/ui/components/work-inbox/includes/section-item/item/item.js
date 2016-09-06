@@ -51,8 +51,13 @@ Template.WorkInbox_Item.viewmodel({
     return FlowRouter.path('workInboxItem', params, queryParams);
   },
   isNew() {
-    const { viewedBy = [] } = this.data();
-    return !viewedBy.find(_id => _id === Meteor.userId());
+    /*const { viewedBy = [] } = this.data();
+    return !viewedBy.find(_id => _id === Meteor.userId());*/
+
+    /*const doc = this.currentStandard();
+    const userId = Meteor.userId();
+
+    return this.isNewDoc({ doc, userId });*/
   },
   updateViewedBy() {
     const { _id } = this.data();
