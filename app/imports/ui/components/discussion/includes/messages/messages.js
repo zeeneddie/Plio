@@ -18,6 +18,7 @@ Template.Discussion_Messages.viewmodel({
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastMessage'),
 	isInitialDataReady: false,
+
 	onCreated(template) {
 		this.options({
 			...this.options(),
@@ -166,7 +167,7 @@ Template.Discussion_Messages.viewmodel({
 		} else {
 			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
 		}
-	}, 1500),
+	}, 1000),
 	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
 		if (Object.is(dir, 'down')) {
 			onLoadOlder.call(this);
@@ -211,7 +212,7 @@ Template.Discussion_Messages.viewmodel({
 			sort: { createdAt: 1 }
 		};
 		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
-		const messageSound = this.templateInstance.find('#message-sound');
+		const messageSound = this.templateInstance.find('#message-sound') || {};
 
 		msg.observe({
 			added: (doc) => {
@@ -220,7 +221,7 @@ Template.Discussion_Messages.viewmodel({
 				}
 
 				messageSound.currentTime = 0;
-				messageSound.play();
+				invoke(messageSound, 'play');
 
 				init = false;
 			}

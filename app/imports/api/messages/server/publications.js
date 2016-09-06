@@ -210,6 +210,5 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
   return new Counter(counterName, Messages.find({
     discussionId,
 		viewedBy: { $ne: userId }
-		// viewedBy: { $ne: this.userId }
   }));
 });
