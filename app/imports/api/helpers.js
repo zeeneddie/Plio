@@ -132,6 +132,5 @@ export {
   mapArgsTo,
   flattenObjects,
   extractIds,
-  not,
-  getOrgOwner
+  not
 };
