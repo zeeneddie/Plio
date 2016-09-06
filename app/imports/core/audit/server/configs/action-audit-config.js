@@ -951,30 +951,6 @@ export default ActionAuditConfig = {
     },
 
     {
-      field: 'files',
-      logs: [
-        filesField.logConfig
-      ],
-      notifications: [
-        _({}).extend(filesField.notificationConfig, {
-          receivers: receiversFn
-        })
-      ]
-    },
-
-    {
-      field: 'files.$.url',
-      logs: [
-        fileUrlField.logConfig
-      ],
-      notifications: [
-        _({}).extend(fileUrlField.notificationConfig, {
-          receivers: receiversFn
-        })
-      ]
-    },
-
-    {
       field: 'notes',
       logs: [
         notesField.logConfig
@@ -1026,7 +1002,7 @@ export default ActionAuditConfig = {
   onRemoved: {
     logs: [
       {
-        template: 'Document created',
+        template: 'Document removed',
         templateData() { }
       }
     ],
