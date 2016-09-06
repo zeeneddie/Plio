@@ -63,6 +63,7 @@ const RiskScoresSchema = new SimpleSchema({
 const riskEvaluation = {
   riskEvaluation: {
     type: Object,
+    defaultValue: {},
     optional: true
   },
   'riskEvaluation.comments': {

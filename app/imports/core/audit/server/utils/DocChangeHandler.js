@@ -21,7 +21,7 @@ export default class DocChangeHandler {
     if (docChangeKind === DocChangesKinds.DOC_CREATED) {
       this._newDoc = newDocument;
       this._date = newDocument.createdAt;
-      this._userId = userId;
+      this._userId = userId || newDocument.createdBy;
     } else if (docChangeKind === DocChangesKinds.DOC_UPDATED) {
       this._newDoc = newDocument;
       this._oldDoc = oldDocument
@@ -45,7 +45,7 @@ export default class DocChangeHandler {
 
     this._docOrgId = auditConfig.docOrgId(doc);
 
-    const { name:orgName } = Organizations.findOne({ _id: this._docOrgId });
+    const { name:orgName } = Organizations.findOne({ _id: this._docOrgId }) || {};
     this._docOrgName = orgName;
 
     this._collectionName = auditConfig.collectionName;

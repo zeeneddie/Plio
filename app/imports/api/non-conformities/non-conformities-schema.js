@@ -17,6 +17,7 @@ const OptionalSchema = new SimpleSchema([
     },
     ref: {
       type: Object,
+      defaultValue: {},
       optional: true
     },
     'ref.text': {
