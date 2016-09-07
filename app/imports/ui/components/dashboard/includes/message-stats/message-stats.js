@@ -69,7 +69,7 @@ Template.Dashboard_MessageStats.viewmodel({
   },
   messages() {
     return Messages.find({
-      organizationId: this.organizationsId(),
+      organizationId: this.organizationId(),
       viewedBy: { $ne: Meteor.userId() }
     }, {
       fields: { viewedBy: 0 },
