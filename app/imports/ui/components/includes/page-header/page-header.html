@@ -1,0 +1,24 @@
+<template name="PageHeader">
+  <div class="navbar">
+    <span class="navbar-title dropdown">
+      <a class="dropdown-toggle pointer" data-toggle="dropdown">
+        {{header}}
+      </a>
+      <div class="dropdown-menu">
+        {{#each filters}}
+          <a class="dropdown-item pointer"
+            {{b "class: { active: isActiveFilter(this.value) }, click: onSelectFilter(this.value)"}}>
+            {{text}}
+          </a>
+        {{/each}}
+      </div>
+    </span>
+    <ul class="nav navbar-nav pull-xs-left">
+      <li class="nav-item">
+        <a class="nav-link pointer" {{b "click: onNavigate"}}>
+        	<i class="fa fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>

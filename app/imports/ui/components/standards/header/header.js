@@ -9,6 +9,27 @@ Template.StandardsHeader.viewmodel({
   share: ['window', 'search'],
   mixin: ['standard', 'collapsing', 'filters', 'organization', 'mobile', 'router'],
   isDiscussionOpened: false,
+  headerArgs() {
+    const filters = Object.keys(StandardFilters).map((key) => ({
+      text: StandardFilters[key],
+      value: key
+    }));
+    const isActiveFilter = this.isActiveStandardFilter.bind(this);
+    const filter = filters.find(({ value }) => isActiveFilter(value));
+    const header = `Compliance standards by - ${filter.text}`;
+
+    return {
+      header,
+      filters,
+      isActiveFilter,
+      onSelectFilter: (value) => {
+        FlowRouter.setQueryParams({ filter: value });
+        this.searchText('');
+        this.expandCollapsed(this.standardId());
+      },
+      onNavigate: this.onNavigate.bind(this)
+    };
+  },
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
   },
