@@ -1,7 +1,7 @@
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { CollectionNames } from '/imports/api/constants.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
-import problemUpdateHandlers from './problem-update-handlers.js';
+import ProblemAuditConfig from './problem-audit-config.js';
 
 
 const {
@@ -9,24 +9,14 @@ const {
   ITEM_ADDED, ITEM_REMOVED
 } = ChangesKinds;
 
-export default NCAuditConfig = {
+export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   collection: NonConformities,
 
   collectionName: CollectionNames.NCS,
 
-  onCreated: {
-    logs: [
-      {
-        template: 'Document created',
-        templateData() { }
-      }
-    ],
-    notifications: []
-  },
-
   updateHandlers: [
-    ...problemUpdateHandlers,
+    ...ProblemAuditConfig.updateHandlers,
 
     {
       field: 'cost',
@@ -102,32 +92,10 @@ export default NCAuditConfig = {
     }
   ],
 
-  onRemoved: {
-    logs: [
-      {
-        template: 'Document removed',
-        templateData() { }
-      }
-    ],
-    notifications: []
-  },
-
-  docId({ _id }) {
-    return _id;
-  },
-
-  docDescription({ sequentialId, title }) {
-    return `${sequentialId} "${title}"`;
-  },
-
-  docOrgId({ organizationId }) {
-    return organizationId;
-  },
-
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
 
     return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${_id}`);
   }
 
-};
+});

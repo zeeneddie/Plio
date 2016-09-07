@@ -6,7 +6,7 @@ import {
 } from '/imports/api/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
-import problemUpdateHandlers from './problem-update-handlers.js';
+import ProblemAuditConfig from './problem-audit-config.js';
 
 
 const {
@@ -14,24 +14,14 @@ const {
   ITEM_ADDED, ITEM_REMOVED
 } = ChangesKinds;
 
-export default RiskAuditConfig = {
+export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   collection: Risks,
 
   collectionName: CollectionNames.RISKS,
 
-  onCreated: {
-    logs: [
-      {
-        template: 'Document created',
-        templateData() { }
-      }
-    ],
-    notifications: []
-  },
-
   updateHandlers: [
-    ...problemUpdateHandlers,
+    ...ProblemAuditConfig.updateHandlers,
 
     {
       field: 'review.comments',
@@ -224,30 +214,7 @@ export default RiskAuditConfig = {
       ],
       notifications: []
     }
-
   ],
-
-  onRemoved: {
-    logs: [
-      {
-        template: 'Document removed',
-        templateData() { }
-      }
-    ],
-    notifications: []
-  },
-
-  docId({ _id }) {
-    return _id;
-  },
-
-  docDescription({ sequentialId, title }) {
-    return `${sequentialId} "${title}"`;
-  },
-
-  docOrgId({ organizationId }) {
-    return organizationId;
-  },
 
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
@@ -255,4 +222,4 @@ export default RiskAuditConfig = {
     return Meteor.absoluteUrl(`${serialNumber}/risks/${_id}`);
   }
 
-};
+});
