@@ -116,7 +116,7 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, improvementPlanId } = metaContext;
-      return `uploads/${organizationId}/${improvementPlanFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${improvementPlanFilesDir}/${Random.id()}-${file.name}`;
     }
   });
 
