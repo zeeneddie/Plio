@@ -29,6 +29,22 @@ export default ProblemAuditConfig = {
       {
         template: 'Document created',
         templateData() { }
+      },
+      {
+        template: '{{{docDesc}}} was linked to this document',
+        templateData({ newDoc }) {
+          return _(newDoc.standardsIds.length).times(() => {
+            return { docDesc: this.docDescription(newDoc) };
+          });
+        },
+        logData({ newDoc: { standardsIds } }) {
+          return _(standardsIds).map((standardId) => {
+            return {
+              collection: StandardAuditConfig.collectionName,
+              documentId: standardId
+            };
+          });
+        }
       }
     ],
     notifications: []
