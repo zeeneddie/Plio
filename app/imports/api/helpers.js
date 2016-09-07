@@ -116,6 +116,9 @@ const extractIds = (collection = []) => collection.map(property('_id'));
 
 const not = expression => !expression;
 
+const mapByIndex = (value = {}, index = 0, arr = []) =>
+  Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+
 export {
   compareDates,
   getCollectionByName,
@@ -132,5 +135,6 @@ export {
   mapArgsTo,
   flattenObjects,
   extractIds,
-  not
+  not,
+  mapByIndex
 };
