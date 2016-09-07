@@ -54,10 +54,10 @@ Template.WorkInbox_Item.viewmodel({
     /*const { viewedBy = [] } = this.data();
     return !viewedBy.find(_id => _id === Meteor.userId());*/
 
-    /*const doc = this.currentStandard();
+    const doc = this.currentWorkItem();
     const userId = Meteor.userId();
 
-    return this.isNewDoc({ doc, userId });*/
+    return this.isNewDoc({ doc, userId });
   },
   updateViewedBy() {
     const { _id } = this.data();

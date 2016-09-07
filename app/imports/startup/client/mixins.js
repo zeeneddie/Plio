@@ -540,6 +540,9 @@ ViewModel.mixin({
     }
   },
   workInbox: {
+    currentWorkItem(){
+      return WorkItems.findOne({ _id: this.workItemId() });
+    },
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
