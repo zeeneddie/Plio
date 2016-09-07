@@ -17,8 +17,6 @@ import {
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import {
   isDeletedField,
-  filesField,
-  fileUrlField,
   notesField,
   notifyField,
   ownerIdField,
