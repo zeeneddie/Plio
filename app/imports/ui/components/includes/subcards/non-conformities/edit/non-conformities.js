@@ -26,6 +26,7 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         isStandardsEditable: this.isStandardsEditable(),
         standardsIds: [this._id && this._id()],
         _lText: 'New non-conformity',
+        isNew: false,
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
       }

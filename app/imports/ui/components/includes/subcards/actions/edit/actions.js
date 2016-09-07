@@ -109,6 +109,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       content: 'Actions_AddSubcard',
       _lText: this.newSubcardTitle(),
       type: this.type(),
+      isNew: false,
       insertFn: this.insertFn(),
       removeFn: this.removeFn(),
       updateFn: this.updateFn()
