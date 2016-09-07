@@ -177,6 +177,31 @@ export default RiskAuditConfig = {
     },
 
     {
+      field: 'scores',
+      logs: [
+        {
+          template: {
+            [ITEM_ADDED]:
+              'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
+            [ITEM_REMOVED]:
+              'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
+          },
+          templateData({ diffs: { scores }, newDoc }) {
+            const { item: { value, scoredAt, scoredBy } } = scores;
+            const orgId = this.docOrgId(newDoc);
+
+            return {
+              value,
+              date: getPrettyOrgDate(scoredAt, orgId),
+              userName: getUserFullNameOrEmail(scoredBy)
+            };
+          }
+        }
+      ],
+      notifications: []
+    },
+
+    {
       field: 'typeId',
       logs: [
         {

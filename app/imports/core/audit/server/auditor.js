@@ -8,24 +8,24 @@ export default Auditor = {
 
   _auditConfigs: { },
 
-  documentCreated(newDocument, userId, collection) {
-    const config = this._auditConfigs[collection];
+  documentCreated(newDocument, userId, collectionName) {
+    const config = this._auditConfigs[collectionName];
 
     new DocChangeHandler(config, DocChangesKinds.DOC_CREATED, {
       newDocument, userId
     }).handleChange();
   },
 
-  documentUpdated(newDocument, oldDocument, collection) {
-    const config = this._auditConfigs[collection];
+  documentUpdated(newDocument, oldDocument, collectionName) {
+    const config = this._auditConfigs[collectionName];
 
     new DocChangeHandler(config, DocChangesKinds.DOC_UPDATED, {
       newDocument, oldDocument
     }).handleChange();
   },
 
-  documentRemoved(oldDocument, userId, collection) {
-    const config = this._auditConfigs[collection];
+  documentRemoved(oldDocument, userId, collectionName) {
+    const config = this._auditConfigs[collectionName];
 
     new DocChangeHandler(config, DocChangesKinds.DOC_REMOVED, {
       oldDocument, userId
@@ -33,28 +33,28 @@ export default Auditor = {
   },
 
   registerConfig(config) {
-    const collection = config.collection;
+    const { collection, collectionName } = config;
     const auditor = this;
 
     collection.after.insert(function(userId, doc) {
       Meteor.isServer && Meteor.defer(
-        () => auditor.documentCreated(doc, userId, collection)
+        () => auditor.documentCreated(doc, userId, collectionName)
       );
     });
 
     collection.after.update(function(userId, doc, fieldNames, modifier, options) {
       Meteor.isServer && Meteor.defer(
-        () => auditor.documentUpdated(doc, this.previous, collection)
+        () => auditor.documentUpdated(doc, this.previous, collectionName)
       );
     });
 
     collection.after.remove(function(userId, doc) {
       Meteor.isServer && Meteor.defer(
-        () => auditor.documentRemoved(doc, userId, collection)
+        () => auditor.documentRemoved(doc, userId, collectionName)
       );
     });
 
-    this._auditConfigs[collection] = config;
+    this._auditConfigs[collectionName] = config;
   }
 
 };

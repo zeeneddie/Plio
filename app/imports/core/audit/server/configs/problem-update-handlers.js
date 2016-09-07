@@ -68,7 +68,7 @@ export default problemUpdateHandlers = [
             'Root cause analysis executor removed'
         },
         templateData({ diffs }) {
-          const { newValue, oldValue } = diff['analysis.completedBy'];
+          const { newValue, oldValue } = diffs['analysis.completedBy'];
 
           return {
             newValue: getUserFullNameOrEmail(newValue),

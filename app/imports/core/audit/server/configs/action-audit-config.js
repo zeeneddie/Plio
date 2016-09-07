@@ -153,6 +153,32 @@ export default ActionAuditConfig = {
             return (identifiedBy !== userId) ? [identifiedBy]: [];
           });
         }
+      },
+      {
+        template: '{{userName}} assigned you to complete {{{docDesc}}}',
+        templateData({ newDoc, user }) {
+          return {
+            docDesc: this.docDescription(newDoc),
+            userName: getUserFullNameOrEmail(user)
+          };
+        },
+        subjectTemplate: 'You have been assigned to complete an action',
+        subjectTemplateData() { },
+        notificationData({ newDoc }) {
+          return {
+            templateData: {
+              button: {
+                label: 'View action',
+                url: this.docUrl(newDoc)
+              }
+            }
+          };
+        },
+        receivers({ newDoc, user }) {
+          const { toBeCompletedBy } = newDoc;
+          const userId = (user === SystemName) ? user : user._id;
+          return (toBeCompletedBy !== userId) ? [toBeCompletedBy]: [];
+        }
       }
     ]
   },
@@ -646,14 +672,14 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { toBeCompletedBy: { kind } } }) {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
-          template: '{{userName}} assigned you as a completion executor for {{{docDesc}}}',
+          template: '{{userName}} assigned you to complete {{{docDesc}}}',
           templateData({ newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
               userName: getUserFullNameOrEmail(user)
             };
           },
-          subjectTemplate: 'You have been assigned as a completion executor',
+          subjectTemplate: 'You have been assigned to complete an action',
           subjectTemplateData() { },
           notificationData({ newDoc }) {
             return {
@@ -723,14 +749,14 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { toBeVerifiedBy: { kind } } }) {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
-          template: '{{userName}} assigned you as a verification executor for {{{docDesc}}}',
+          template: '{{userName}} assigned you to verify {{{docDesc}}}',
           templateData({ newDoc, user }) {
             return {
               docDesc: this.docDescription(newDoc),
               userName: getUserFullNameOrEmail(user)
             };
           },
-          subjectTemplate: 'You have been assigned as a verification executor',
+          subjectTemplate: 'You have been assigned to verify an action',
           subjectTemplateData() { },
           notificationData({ newDoc }) {
             return {
