@@ -29,7 +29,23 @@ export default {
 	},
 
 	bulkUpdateViewedBy({ discussionId, userId }) {
-		return this.collection.update({ discussionId }, {
+		const user = Meteor.users.findOne({ _id: userId });
+
+		return this.collection.update({
+			discussionId,
+			createdAt: { $gte: user.createdAt }
+		}, {
+			$addToSet: { viewedBy: userId }
+		}, { multi: true });
+	},
+
+	bulkUpdateViewedByTotal({ organizationId, userId }) {
+		const user = Meteor.users.findOne({ _id: userId });
+
+		return this.collection.update({
+			organizationId,
+			createdAt: { $gte: user.createdAt }
+		}, {
 			$addToSet: { viewedBy: userId }
 		}, { multi: true });
 	},

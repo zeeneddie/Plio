@@ -40,8 +40,8 @@
       }
     ]
   },
-  "status": "online",
-  "statusConnection": "online",
+  "status": "offline",
+  "statusConnection": "offline",
   "roles": {
     "8bcNPN8sKTtJFw4uy": [
       "create-update-delete-standards",

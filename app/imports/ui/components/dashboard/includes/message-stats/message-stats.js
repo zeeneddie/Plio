@@ -5,84 +5,94 @@ import { Template } from 'meteor/templating';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Files } from '/imports/api/files/files.js';
-import { updateViewedBy } from '/imports/api/messages/methods.js';
+import { bulkUpdateViewedByTotal } from '/imports/api/messages/methods.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UnreadMessages } from '/imports/api/constants.js';
+import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import pluralize from 'pluralize';
 
 Template.Dashboard_MessageStats.viewmodel({
-  mixin: ['user', 'organization'],
-  autorun: [
-    function () {
-      const tpl = this.templateInstance;
-      this._subHandlers([
-        tpl.subscribe('unreadMessages', { organizationId: this.organizationId() }),
-      ]);
-    },
-
-    function () {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
-  ],
-
+  mixin: ['user', 'organization', {
+    counter: 'counter'
+  }],
   _subHandlers: [],
+  isInitialDataReady: false,
   isReady: false,
-  unreadMessagesLimited: true,
+  enableLimit: true,
+  limit: 5,
+  currentDate: new Date(),
 
-  areItemsToLoad() {
-    return this.messagesCount() > UnreadMessages.limit;
+  autorun() {
+    const isReady = this._subHandlers().every(handler => handler.ready());
+
+    if (!this.isInitialDataReady()) {
+      this.isInitialDataReady(isReady);
+    } else {
+      this.isReady(isReady);
+    }
   },
+  onCreated(template) {
+    template.autorun(() => {
+      const limit = this.enableLimit() ? this.limit() : false;
+      const organizationId = this.organizationId();
 
-  // This cursor is used in few helpers
-  cursorMessagesNotViewed() {
+      this._subHandlers([
+        MessageSubs.subscribe('unreadMessages', { organizationId: organizationId, limit }),
+        CountSubs.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
+      ]);
+    });
+
+    this.interval = Meteor.setInterval(() => {
+      this.currentDate(new Date());
+    }, 60 * 1000);
+  },
+  onDestroyed() {
+    this.clearInterval();
+  },
+  clearInterval() {
+    Meteor.clearInterval(this.interval);
+  },
+  hasItemsToLoad() {
+    const total = this.unreadMessagesCount();
+    const current = Object.assign([], this.unreadMessages()).length;
+    return total > current;
+  },
+  unreadMessagesCount() {
+    return this.counter.get('unread-messages-count-' + this.organizationId());
+  },
+  hiddenUnreadMessagesNumber() {
+    const count = this.unreadMessagesCount() || Object.assign([], this.unreadMessages()).length;
+    return count - this.limit();
+  },
+  countText() {
+    const count = this.unreadMessagesCount() || Object.assign([], this.unreadMessages()).length;
+    return pluralize('unread message', count, true);
+  },
+  messages() {
     return Messages.find({
-      viewedBy: { $nin: [Meteor.userId()] }
+      viewedBy: { $ne: Meteor.userId() }
     }, {
       fields: { viewedBy: 0 },
-      limit: this.unreadMessagesLimited() ? UnreadMessages.limit : 0
-    });
+      limit: this.enableLimit() ? this.limit() : 0
+    }).fetch();
   },
-
-  hideExcessiveItems() {
-    this.unreadMessagesLimited(true);
-  },
-
-  itemsToLoadMore() {
-    return this.messagesCount() - UnreadMessages.limit;
-  },
-
-  loadAllItems() {
-    this.unreadMessagesLimited(false);
-  },
-
-  // Mark all visible messages as "read"
-  markMessagesRead(ev) {
-    ev.preventDefault();
-
-    this.cursorMessagesNotViewed().forEach(
-      msg => updateViewedBy.call({ _id: msg._id })
-    );
-  },
-
-  messages() {
+  unreadMessages() {
     const self = this;
-    const msgs = [];
-
-    this.cursorMessagesNotViewed().forEach((msg) => {
+    const messages = Object.assign([], this.messages());
+    const docs = messages.map((message) => {
       let messageData = {};
-
-      if (msg.type === 'file') {
-        const file = Files.findOne({ _id: msg.fileId });
+      if (message.type === 'file') {
+        const file = Files.findOne({ _id: message.fileId });
         messageData.message = file && file.name;
         messageData.extension = file && file.extension;
       } else {
-        messageData.message = msg.message;
+        messageData.message = message.message;
       }
 
       /**
        * Get route parameters from collections, not from the router - in order
        * to make the component most independent
        */
-      const discussion = Discussions.findOne({ _id: msg.discussionId });
+      const discussion = Discussions.findOne({ _id: message.discussionId });
 
       if (!discussion) {
         return;
@@ -92,39 +102,32 @@ Template.Dashboard_MessageStats.viewmodel({
         linkedTo, organizationId
       } = discussion;
 
-      const orgSerialNumber = Organizations.findOne({
-        _id: organizationId
-      }).serialNumber;
+      const orgSerialNumber = this.organizationSerialNumber();
 
       const url = FlowRouter.path(
         'standardDiscussion',
         { orgSerialNumber, standardId: linkedTo },
-        { at: msg._id }
+        { at: message._id }
       );
 
       _.extend(messageData, {
         url,
-        fullName: self.userNameOrEmail(msg.createdBy),
-        timeString: moment(msg.createdAt).fromNow()
+        fullName: self.userNameOrEmail(message.createdBy),
+        timeString: moment(message.createdAt).from(this.currentDate(), true)
       });
 
-      msgs.push(messageData);
+      return messageData;
     });
 
-    return msgs;
+    return docs;
+  },
+  loadAll() {
+    this.enableLimit(false);
   },
 
-  messagesCount() {
-    return Messages.find({
-      viewedBy: { $nin: [Meteor.userId()] }
-    }, {
-      fields: { _id: 1 }
-    }).count();
-  },
-
-  unreadMessages() {
-    const msgs = this.messagesCount();
-
-    return `${msgs} unread ${msgs === 1 ? 'message' : 'messages'}`;
-  },
+  // Mark all messages as "read"
+  bulkUpdateViewedByTotal(e) {
+    e.preventDefault();
+    bulkUpdateViewedByTotal.call({ organizationId: this.organizationId() });
+  }
 });

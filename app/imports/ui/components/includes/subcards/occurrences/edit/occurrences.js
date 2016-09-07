@@ -31,6 +31,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
         _lText: `${seqId}-new occurrence`,
         _rText: '',
         content: 'Subcards_Occurrence',
+        isNew: false,
         insertFn: this.insertFn(),
         removeFn: this.removeFn(),
         updateFn: this.updateFn()

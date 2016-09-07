@@ -12,9 +12,23 @@ Template.Risks_Create.viewmodel({
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
-        this.modal().setError(errorMessage);
-        return;
+        if (key === 'title') {
+          errorMessage = `The new risk cannot be created without a title. Please enter a title for your risk`;
+          this.modal().setError(errorMessage);
+          return;
+        } else if (key === 'sectionId') {
+          errorMessage = `The new risk cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          this.modal().setError(errorMessage);
+          return;
+        } else if (key === 'typeId') {
+          errorMessage = `The new standard cannot be created without a type. You can create a new risk type in Org settings`;
+          this.modal().setError(errorMessage);
+          return;
+        } else {
+          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+          this.modal().setError(errorMessage);
+          return;
+        }
       }
     }
 

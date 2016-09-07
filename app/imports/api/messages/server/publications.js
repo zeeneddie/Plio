@@ -62,61 +62,40 @@ Meteor.publish('messagesLast', function(discussionId) {
 		return this.ready();
 	}
 
-	let lastMessageId;
 	let initializing = true;
 
 	const query = { discussionId };
-	const options = { sort: { createdAt: -1 }, skip: 0, limit: 1 };
+	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
 
-	const getLastMessageId = () => get(_.first(Messages.find(query, options).fetch()), '_id');
+	const getLastMessageId = () => ({
+		lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id')
+	});
 
-	const handle = Messages.find(query, { sort: options.sort }).observeChanges({
+	const handle = Messages.find(query, options).observeChanges({
 		added: (id) => {
 			if (!initializing) {
 				this.changed('lastMessage', discussionId, { lastMessageId: id });
 			}
 		},
 		removed: (id) => {
-			this.changed('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+			if (!initializing) {
+				this.changed('lastMessage', discussionId, getLastMessageId());
+			}
 		}
 	});
 
 	initializing = false;
 
-	this.added('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+	this.added('lastMessage', discussionId, getLastMessageId());
 
 	this.ready();
 
 	this.onStop(() => handle.stop());
 });
 
-// Meteor.publishComposite('messagesByDiscussionIds', function ({ discussionIds, organizationId }) {
-// 	return {
-// 		find() {
-// 			const userId = this.userId;
-// 			if (!userId || !isOrgMember(userId, organizationId)) {
-// 		    return this.ready();
-// 		  }
-//
-// 			return Messages.find({ organizationId, discussionId: { $in: discussionIds } });
-// 		},
-// 		children: [{
-// 	  	find: function (message) {
-// 	      return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
-// 	    }
-// 	  }, {
-// 	  	find: function (message) {
-// 				if (message.fileId) {
-// 	      	return Files.find({ _id: message.fileId });
-// 				}
-// 	    }
-// 	  }]
-// 	}
-// });
-
 // Unread messages by the logged in user, with info about users that created
 // the messages.
-Meteor.publishComposite('unreadMessages', function({ organizationId }) {
+Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	return {
 		find() {
 			const userId = this.userId;
@@ -125,7 +104,14 @@ Meteor.publishComposite('unreadMessages', function({ organizationId }) {
 		    return this.ready();
 		  }
 
-			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } });
+			const options = {};
+
+			// Check if limit is an integer number
+		  if (Number(limit) === limit && limit % 1 === 0) {
+		    options.limit = limit;
+		  }
+
+			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } }, options);
 		},
 		children: [{
 	  	find: function (message) {
@@ -209,6 +195,19 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
   }
   return new Counter(counterName, Messages.find({
     discussionId,
+		organizationId: discussion.organizationId,
+		viewedBy: { $ne: userId }
+  }));
+});
+
+Meteor.publish('messagesNotViewedCountTotal', function(counterName, organizationId) {
+  const userId = this.userId;
+
+	if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+  return new Counter(counterName, Messages.find({
+		organizationId: organizationId,
 		viewedBy: { $ne: userId }
   }));
 });
