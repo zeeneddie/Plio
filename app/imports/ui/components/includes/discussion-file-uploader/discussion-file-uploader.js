@@ -3,16 +3,16 @@ import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
 Template.DiscussionFileUploader.viewmodel({
-  mixin: ['uploader', 'modal', 'organization'],
+  mixin: ['uploader', 'modal', 'organization', 'notifications'],
 
   attachmentFiles: [],
   afterUpload: null,
-
   getData() {
     const data = {
       files: this.attachmentFiles(),
       maxSize: Meteor.settings.public.discussionFilesMaxSize,
       beforeUpload: () => {
+        this.playNewMessageSound();
         this.attachmentFiles([]);
         this.fileInput.val(null);
       },

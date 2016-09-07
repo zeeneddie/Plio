@@ -69,6 +69,7 @@ Template.Dashboard_MessageStats.viewmodel({
   },
   messages() {
     return Messages.find({
+      organizationId: this.organizationsId(),
       viewedBy: { $ne: Meteor.userId() }
     }, {
       fields: { viewedBy: 0 },
@@ -82,10 +83,10 @@ Template.Dashboard_MessageStats.viewmodel({
       let messageData = {};
       if (message.type === 'file') {
         const file = Files.findOne({ _id: message.fileId });
-        messageData.message = file && file.name;
+        messageData.text = file && file.name;
         messageData.extension = file && file.extension;
       } else {
-        messageData.message = message.message;
+        messageData.text = message.text;
       }
 
       /**
@@ -104,11 +105,14 @@ Template.Dashboard_MessageStats.viewmodel({
 
       const orgSerialNumber = this.organizationSerialNumber();
 
-      const url = FlowRouter.path(
-        'standardDiscussion',
-        { orgSerialNumber, standardId: linkedTo },
-        { at: message._id }
-      );
+      let url = '';
+      if (discussion.documentType === 'standard') {
+        url = FlowRouter.path(
+          'standardDiscussion',
+          { orgSerialNumber, standardId: linkedTo },
+          { at: message._id }
+        );
+      }
 
       _.extend(messageData, {
         url,

@@ -12,7 +12,7 @@ export const MessagesSchema = new SimpleSchema([
 	ViewedBySchema,
 	OrganizationIdSchema,
 	{
-		message: {
+		text: {
 			type: String,
 			max: 140,
 			optional: true

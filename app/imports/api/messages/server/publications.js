@@ -55,7 +55,7 @@ Meteor.publishComposite('messages', function(discussionId, {
 	}
 });
 
-Meteor.publish('messagesLast', function(discussionId) {
+Meteor.publish('discussionMessagesLast', function(discussionId) {
 	const discussion = Object.assign({}, Discussions.findOne({ _id: discussionId }));
 
 	if (!this.userId || !isOrgMember(this.userId, get(discussion, 'organizationId'))) {
@@ -74,19 +74,101 @@ Meteor.publish('messagesLast', function(discussionId) {
 	const handle = Messages.find(query, options).observeChanges({
 		added: (id) => {
 			if (!initializing) {
-				this.changed('lastMessage', discussionId, { lastMessageId: id });
+				this.changed('lastDiscussionMessage', discussionId, { lastMessageId: id });
 			}
 		},
 		removed: (id) => {
 			if (!initializing) {
-				this.changed('lastMessage', discussionId, getLastMessageId());
+				this.changed('lastDiscussionMessage', discussionId, getLastMessageId());
 			}
 		}
 	});
 
 	initializing = false;
 
-	this.added('lastMessage', discussionId, getLastMessageId());
+	this.added('lastDiscussionMessage', discussionId, getLastMessageId());
+
+	this.ready();
+
+	this.onStop(() => handle.stop());
+});
+
+Meteor.publish('organizationMessagesLast', function(organizationId) {
+	if (!this.userId || !isOrgMember(this.userId, organizationId)) {
+		return this.ready();
+	}
+
+	let initializing = true;
+
+	const query = { organizationId };
+	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
+
+	const getLastMessageId = () => {
+		return get(Messages.findOne(query, _.omit(options, 'limit')), '_id');
+	};
+
+	const getMessageData = (id) => {
+		let message = Messages.findOne({ _id: id });
+		let text = '';
+		if (message.type === 'file' && message.fileId) {
+			const file = Files.findOne({ _id: message.fileId }, { fields: { name: 1 } });
+			text = file.name;
+		} else {
+			text = message.text
+		}
+
+		const organization = Organizations.findOne({
+			_id: message.organizationId
+		}, {
+			fields: { serialNumber: 1 }
+		});
+
+		const discussion = Discussions.findOne({
+			_id: message.discussionId
+		}, {
+			fields: { linkedTo: 1, documentType: 1 }
+		});
+
+		let route = {};
+		if (discussion.documentType === 'standard') {
+			route.name = 'standardDiscussion';
+			route.params = { orgSerialNumber: organization.serialNumber, standardId: discussion.linkedTo };
+			route.query = { at: message._id };
+		}
+
+		const user = Meteor.users.findOne({
+			_id: message.createdBy
+		}, {
+			fields: { profile: 1, emails: 1 }
+		});
+
+		const messageData = {
+			text,
+			userAvatar: user.profile.avatar,
+			userFullNameOrEmail: user.fullNameOrEmail(),
+			route: route,
+			createdBy: message.createdBy
+		};
+
+		return messageData;
+	};
+
+	const handle = Messages.find(query, options).observeChanges({
+		added: (id) => {
+			if (!initializing) {
+				this.changed('lastOrganizationMessage', organizationId, getMessageData(id));
+			}
+		},
+		removed: (id) => {
+			if (!initializing) {
+				this.changed('lastOrganizationMessage', organizationId);
+			}
+		}
+	});
+
+	initializing = false;
+	const messageId = getLastMessageId();
+	this.added('lastOrganizationMessage', organizationId, getMessageData(messageId));
 
 	this.ready();
 
