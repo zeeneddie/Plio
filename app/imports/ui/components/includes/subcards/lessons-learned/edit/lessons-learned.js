@@ -26,6 +26,7 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
       {
         content: 'Subcards_LessonLearned',
         _lText: 'New lessons learned',
+        isNew: false,
         linkedTo: this.linkedTo(),
         linkedToId: this.linkedToId(),
         insertFn: this.insertFn(),
