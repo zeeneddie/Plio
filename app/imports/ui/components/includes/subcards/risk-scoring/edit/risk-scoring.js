@@ -72,6 +72,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
         },
         content: 'Subcards_RiskScore',
         _lText: 'New risk score',
+        isNew: false,
         guideHtml: this.guideHtml(),
         tableData: this.tableData(),
         insertFn: this.insertFn(),

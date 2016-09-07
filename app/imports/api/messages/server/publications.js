@@ -62,28 +62,31 @@ Meteor.publish('messagesLast', function(discussionId) {
 		return this.ready();
 	}
 
-	let lastMessageId;
 	let initializing = true;
 
 	const query = { discussionId };
-	const options = { sort: { createdAt: -1 }, skip: 0, limit: 1 };
+	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
 
-	const getLastMessageId = () => get(_.first(Messages.find(query, options).fetch()), '_id');
+	const getLastMessageId = () => ({
+		lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id')
+	});
 
-	const handle = Messages.find(query, { sort: options.sort }).observeChanges({
+	const handle = Messages.find(query, options).observeChanges({
 		added: (id) => {
 			if (!initializing) {
 				this.changed('lastMessage', discussionId, { lastMessageId: id });
 			}
 		},
 		removed: (id) => {
-			this.changed('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+			if (!initializing) {
+				this.changed('lastMessage', discussionId, getLastMessageId());
+			}
 		}
 	});
 
 	initializing = false;
 
-	this.added('lastMessage', discussionId, { lastMessageId: getLastMessageId() });
+	this.added('lastMessage', discussionId, getLastMessageId());
 
 	this.ready();
 
