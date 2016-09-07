@@ -20,7 +20,9 @@ const orgUserSchema = new SimpleSchema({
   },
   joinedAt: {
     autoValue(){
-      return new Date();
+      if(!this.isSet){
+        return new Date();
+      }
     },
     type: Date,
   },
