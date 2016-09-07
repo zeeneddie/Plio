@@ -57,7 +57,7 @@ Template.WorkInbox_Item.viewmodel({
     const doc = this.currentWorkItem();
     const userId = Meteor.userId();
 
-    return this.isNewDoc({ doc, userId });
+    return doc && this.isNewDoc({ doc, userId });
   },
   updateViewedBy() {
     const { _id } = this.data();

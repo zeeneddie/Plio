@@ -56,10 +56,12 @@ Template.Standards_Item_Read.viewmodel({
   isNew() {
     //return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
 
-    const doc = this.currentStandard();
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getStandardByQuery(filter, options);
     const userId = Meteor.userId();
 
-    return this.isNewDoc({ doc, userId });
+    return doc && this.isNewDoc({ doc, userId });
   },
   unreadMessagesCount() {
     return this.counter.get('standard-messages-not-viewed-count-' + this._id());

@@ -286,7 +286,7 @@ ViewModel.mixin({
     /**
      * The document is new if it was created after the user had joined the
      * organisation and was not viewed by the user:
-     * @param {Object} doc - must have a property "viewedBy: [String]";
+     * @param { createdAt: Number, viewedBy: [String] } doc;
      * @param {String} userId - user ID.
     */
     isNewDoc({ doc, userId }){
@@ -302,7 +302,7 @@ ViewModel.mixin({
                                 && doc.viewedBy instanceof Array
                                 && doc.viewedBy.indexOf(userId) >= 0;
 
-      return doc.createdAt > dateUserJoinedToOrg && !isDocViewedByUser;
+      return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
     },
     organization() {
       const serialNumber = this.organizationSerialNumber();
@@ -948,7 +948,6 @@ ViewModel.mixin({
     }
   },
   uploader: {
-
     uploadData(fileId) { // find the file with fileId is being uploaded
       return _.find(this.uploads().array(), (data) => {
         return data.fileId === fileId;
@@ -976,10 +975,10 @@ ViewModel.mixin({
       return this.uploads();
     },
     upload({
-      files,
-      maxSize,
-      beforeUpload
-    }) {
+        files,
+        maxSize,
+        beforeUpload
+      }) {
       if (!files.length) {
         return;
       }
