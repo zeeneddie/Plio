@@ -8,11 +8,12 @@ Template.Subcards_Wrapper.viewmodel({
   _rText: '',
   loading: false,
   saveAllUnsavedNewSubcards() {
-    const subcards = ViewModel.find(vm => !invoke(vm, '_id') && invoke(vm, 'isSubcard'));
+    // const subcards = ViewModel.find(vm => !invoke(vm, '_id') && invoke(vm, 'isSubcard'));
+    const subcards = this.parent().children(vm => !invoke(vm, '_id') && invoke(vm, 'isSubcard'));
 
-    if (subcards.length) {
+    if (!this.collapsed() && subcards.length) {
       subcards.forEach(subcard => invoke(subcard, 'save'));
-      
+
       return true;
     }
 

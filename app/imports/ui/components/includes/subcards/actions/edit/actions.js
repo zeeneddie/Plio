@@ -133,7 +133,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       _.extend(newSubcardData, { standardId });
     }
 
-    this.addForm('Subcard', newSubcardData);
+    this.addForm('Subcard', newSubcardData, null, null, this.templateInstance.view);
   },
   insertFn() {
     return this.insert.bind(this);
