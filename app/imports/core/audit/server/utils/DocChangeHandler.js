@@ -2,13 +2,13 @@ import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
 import { SystemName } from '/imports/api/constants.js';
-import { renderTemplate } from '/imports/api/helpers.js';
+import { deepExtend, renderTemplate } from '/imports/api/helpers.js';
 import { DocChangesKinds, ChangesKinds } from './changes-kinds.js';
 import DocumentDiffer from './document-differ.js';
 import NotificationSender from '../../../NotificationSender.js';
 
 
-const DEFAULT_EMAIL_TEMPLATE = 'minimalisticEmail';
+const DEFAULT_EMAIL_TEMPLATE = 'personalEmail';
 
 export default class DocChangeHandler {
 
@@ -325,7 +325,7 @@ export default class DocChangeHandler {
       });
     }
 
-    notificationData && _(notification).extend(notificationData);
+    notificationData && deepExtend(notification, notificationData);
 
     this._notifications.push(notification);
   }

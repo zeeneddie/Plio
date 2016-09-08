@@ -138,6 +138,16 @@ const checkAndThrow = (predicate, error = '') => {
 
 const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
+const deepExtend = (dest, src) => {
+  _(src).each((val, key) => {
+    if (_(val).isObject() && _(dest[key]).isObject()) {
+      deepExtend(dest[key], val);
+    } else {
+      dest[key] = val;
+    }
+  });
+};
+
 export {
   compareDates,
   getCollectionByName,
@@ -155,5 +165,6 @@ export {
   renderTemplate,
   withUserId,
   mapArgsTo,
-  flattenObjects
+  flattenObjects,
+  deepExtend
 };

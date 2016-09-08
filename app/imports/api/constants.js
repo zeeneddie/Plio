@@ -371,7 +371,8 @@ const CollectionNames = {
   RISKS: 'Risks',
   ACTIONS: 'Actions',
   LESSONS: 'LessonsLearned',
-  OCCURRENCES: 'Occurrences'
+  OCCURRENCES: 'Occurrences',
+  MESSAGES: 'Messages'
 };
 
 const TruncatedStringLengths = {

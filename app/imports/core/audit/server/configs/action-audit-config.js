@@ -611,7 +611,7 @@ export default ActionAuditConfig = {
         }
       ],
       notifications: [
-        {
+        /*{
           template: {
             [FIELD_ADDED]:
               'Status of {{{docDesc}}} was set to "{{newValue}}"',
@@ -628,7 +628,7 @@ export default ActionAuditConfig = {
             };
           },
           receivers: getReceivers
-        }
+        }*/
       ]
     },
 
