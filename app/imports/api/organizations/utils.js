@@ -5,10 +5,10 @@ import { Organizations } from './organizations.js';
  * @param {String} organizationId - the organisation ID;
  * @param {String} userId - the user ID;
 */
-export const getJoinUserToOrganisationDate = ({ organizationId, userId }) => {
+export const getJoinUserToOrganizationDate = ({ organizationId, userId }) => {
   const org = Organizations.findOne({ _id: organizationId });
 
-  if(!org){
+  if (!org) {
     return;
   }
 

@@ -63,7 +63,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		insertMessage.call({
 			organizationId: this.organizationId(),
 			discussionId,
-			message: sanitizeHtml(this.messageText()),
+			text: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult((err, res) => {
       if (res) {

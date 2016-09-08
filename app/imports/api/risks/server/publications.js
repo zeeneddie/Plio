@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganisationDate } from '/imports/api/organizations/utils.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Risks } from '../risks.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { isOrgMember } from '../../checkers.js';
@@ -97,7 +97,7 @@ Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
     return this.ready();
   }
 
-  const currentOrgUserJoinedAt = getJoinUserToOrganisationDate({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
     organizationId, userId
   });
   const query = {
@@ -106,7 +106,7 @@ Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
     isDeleted: { $in: [false, null] }
   };
 
-  if(currentOrgUserJoinedAt){
+  if (currentOrgUserJoinedAt) {
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 

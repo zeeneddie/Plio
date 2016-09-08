@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganisationDate } from '/imports/api/organizations/utils.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { WorkItems } from '../work-items.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
@@ -62,7 +62,7 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
     return this.ready();
   }
 
-  const currentOrgUserJoinedAt = getJoinUserToOrganisationDate({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
     organizationId, userId
   });
   const query = {

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganisationDate } from '/imports/api/organizations/utils.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { NonConformities } from '../non-conformities.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Files } from '/imports/api/files/files.js';
@@ -105,7 +105,7 @@ Meteor.publish('nonConformitiesNotViewedCount', function(counterName, organizati
     return this.ready();
   }
 
-  const currentOrgUserJoinedAt = getJoinUserToOrganisationDate({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
     organizationId, userId
   });
   const query = {
