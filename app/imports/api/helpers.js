@@ -110,7 +110,7 @@ const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
-const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
 const extractIds = (collection = []) => collection.map(property('_id'));
 
@@ -118,6 +118,9 @@ const not = expression => !expression;
 
 const mapByIndex = (value = {}, index = 0, arr = []) =>
   Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+
+const mapValues = curry((mapper, obj) =>
+  flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
 
 export {
   compareDates,
@@ -136,5 +139,6 @@ export {
   flattenObjects,
   extractIds,
   not,
-  mapByIndex
+  mapByIndex,
+  mapValues
 };
