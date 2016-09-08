@@ -9,9 +9,6 @@
           _id=this._id
           description=this.description}}
 
-      {{> NC_WorkflowType
-          workflowType=this.workflowType}}
-
       {{> NC_Status_Edit
           _id=this._id
           status=this.status}}
@@ -49,12 +46,7 @@
     </div>
 
     {{#if showRootCauseAnalysis}}
-      {{> Subcards_RCA_Edit
-          _id=this._id
-          analysis=this.analysis
-          updateOfStandards=this.updateOfStandards
-          magnitude=this.magnitude
-          methodRefs=getMethodRefs}}
+      {{> Subcards_RCA_Edit (RCAArgs this)}}
     {{/if}}
   {{/with}}
 </template>

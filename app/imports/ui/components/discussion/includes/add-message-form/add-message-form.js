@@ -2,42 +2,75 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 
 import {
-	insert as insertMessage,
-	getMessages,
-	updateProgress,
-	updateUrl
+	insert as insertMessage
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
+import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
+
+const defaults = {
+	file: '',
+	messageFile: null,
+	messageText: ''
+};
+
+const scrollToBottom = () => {
+	const $chat = $('.chat-content');
+
+	$chat.scrollTop($chat.prop('scrollHeight'));
+};
 
 Template.Discussion_AddMessage_Form.viewmodel({
+	share: 'messages',
 	mixin: ['discussions', 'standard', 'organization'],
-
 	disabled: false,
-	files: [],
-	messageFile: null,
-	messageText: '',
 	slingshotDirective: 'discussionFiles',
-
-	discussionId(){
+	...defaults,
+	discussionId() {
 		return this.getDiscussionIdByStandardId(this.standardId());
+	},
+	reInit() {
+		if (FlowRouter.getQueryParam('at')) {
+			MessageSubs.clear();
+
+			MessageSubs.reset();
+
+			FlowRouter.setQueryParams({ at: null });
+
+			// Shared props with Discussion_Messages
+			this._scrollProps(null);  					// <
+
+			this.isInitialDataReady(false);     // <
+
+			this.options({                      // <
+				...this.options(),
+				at: null
+			});
+		}
 	},
 	sendTextMessage() {
 		if (this.disabled()) return;
+
 		const discussionId = this.discussionId();
 
+		this.reInit();
+
 		insertMessage.call({
+			organizationId: this.organizationId(),
 			discussionId,
-			message: sanitizeHtml(this.messageText()),
+			text: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult((err, res) => {
-      if(res){
-        this.reset();
+      if (res) {
+				// cannot use vm's reset there cause of shared props
+        this.load(defaults);
 
+				 scrollToBottom();
         // [ToDo] Call a ringtone on a successful message addition
       }
 		}));
@@ -51,8 +84,9 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		insertMessage.call({
+			organizationId: this.organizationId(),
 			discussionId,
-			fileIds: [fileId],
+			fileId,
 			type: 'file'
 		}, handleMethodResult(cb));
 	},
@@ -75,54 +109,10 @@ Template.Discussion_AddMessage_Form.viewmodel({
 			//[ToDo][Modal] Ask to not add an empty message or just skip?
 		}
 	},
-
-	// /* Removes a file document from a message document,
-  //  * but not the file itself from S3:
-  //  * @param {string} fileId - an identifier of the file which is to remove.
-  // */
-	// removeFileFromMessage(fileId){
-  //   const self = this;
-  //   const query = { 'files._id': fileId};
-	// 	const options = { fields: {files: 1} };
-	// 	const messagesWithFileId = getMessages.call({query, options});
-	//
-  //   messagesWithFileId.forEach((message) => {
-  //     if(message.files.length > 1){
-  //       removeFileFromMessage.call({ _id: fileId });
-  //     }
-  //     else{
-  //       self.removeFileMessage(fileId);
-  //     }
-  //   });
-	// },
-	// removeFileFromMessageCb(){
-	// 	return this.removeFileFromMessage.bind(this);
-	// },
-
-	// /* Removes the message document with files from the Messages collection,
-	//  * but not the file itself from S3:
-	//  * @param {String} fileId - the file ID in the "files" array;
-	// */
-	// removeFileMessage(fileId){
-	// 	const query = { 'files._id': fileId};
-	// 	const options = { fields: {_id: 1} };
-	// 	const messagesWithFileId = getMessages.call({query, options});
-	//
-	// 	if(!messagesWithFileId.count()){
-	// 		return;
-	// 	}
-	//
-	// 	messagesWithFileId.forEach((c, i, cr) => {
-	// 		removeMessageById.call({_id: c._id});
-	// 	});
-	// },
-	// removeFileMessageCb(){
-	// 	return this.removeFileMessage.bind(this);
-	// },
 	uploaderMetaContext() {
 		const organizationId = this.organizationId();
 		const discussionId = this.discussionId();
 
-		return { discussionId };
+		return { organizationId, discussionId };
 	},
 });

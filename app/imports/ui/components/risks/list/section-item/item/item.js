@@ -24,24 +24,34 @@ Template.Risks_Item.viewmodel({
   title: '',
   score: '',
   viewedBy: [],
-  getHref() {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), riskId: this._id() };
-    const queryParams = { filter: this.activeRiskFilterId() };
-    return FlowRouter.path('risk', params, queryParams);
+  linkArgs() {
+    const _id = this._id();
+    return {
+      isActive: Object.is(this.riskId(), _id),
+      onClick: handler => handler({ riskId: _id }),
+      href: (() => {
+        const params = {
+          riskId: _id,
+          orgSerialNumber: this.organizationSerialNumber()
+        };
+        const queryParams = { filter: this.activeRiskFilterId() };
+        return FlowRouter.path('risk', params, queryParams);
+      })()
+    };
   },
   isNew() {
-    return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getRiskByQuery(filter, options);
+    const userId = Meteor.userId();
+
+    return doc && this.isNewDoc({ doc, userId });
   },
   updateViewedBy(cb) {
     const _id = this._id();
 
     updateViewedBy.call({ _id }, cb);
-  },
-  navigate() {
-    if ($(window).width() < 768) {
-      this.width($(window).width());
-    }
-
-    FlowRouter.setParams({ riskId: this._id() });
   }
 });

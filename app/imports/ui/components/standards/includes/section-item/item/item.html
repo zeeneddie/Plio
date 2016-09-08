@@ -1,5 +1,5 @@
 <template name="Standards_Item_Read">
-  <a class="list-group-item pointer" {{b "click: select, href: getHref, class: { active: standardId === this._id }"}}>
+  {{#ListItemLink (linkArgs)}}
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading pull-xs-left">
         <span {{b "text: this.title"}}></span>
@@ -9,9 +9,20 @@
           <span>Draft</span>
         </span>
       </h4>
-      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
+      {{#if this.isDeleted}}
+        <p class="list-group-item-text pull-right" {{b "text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
+      {{else}}
+        {{#if unreadMessagesCount}}
+          <p class="list-group-item-text pull-right text-danger">
+            <i class="fa fa-comments"></i>
+            <span {{b "text: unreadMessagesCount"}}></span>
+          </p>
+        {{/if}}
+      {{/if}}
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
-      <p class="list-group-item-text pull-right" {{b "if: this.isDeleted, text: renderDate(this.deletedAt)"}}></p>
+      {{#if this.isDeleted}}
+        <p class="list-group-item-text pull-right" {{b "text: renderDate(this.deletedAt)"}}></p>
+      {{/if}}
     </div>
-  </a>
+  {{/ListItemLink}}
 </template>

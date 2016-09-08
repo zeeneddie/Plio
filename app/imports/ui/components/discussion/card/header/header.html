@@ -2,7 +2,7 @@
 	<div class="card-block card-heading chat-heading">
 		<div class="discussions-hd-top">
 			<div class="card-heading-buttons pull-xs-left">
-				<a class="btn btn-secondary" href="{{pathFor 'standard' orgSerialNumber=organizationSerialNumber standardId=standardId query=getStandardFilter}}">
+				<a class="btn btn-secondary" {{b "click: onNavigate, attr: { href: routePath }"}}>
 					<i class="fa fa-angle-left fa-lg margin-right"></i>
 					Back
 				</a>

@@ -28,13 +28,30 @@ Template.NC_Item.viewmodel({
   status: '',
   title: '',
   viewedBy: [],
-  getHref() {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId: this._id() };
-    const queryParams = { filter: this.activeNCFilterId() };
-    return FlowRouter.path('nonconformity', params, queryParams);
+  linkArgs() {
+    const _id = this._id();
+    return {
+      isActive: Object.is(this.NCId(), _id),
+      onClick: handler => handler({ nonconformityId: _id }),
+      href: (() => {
+        const params = {
+          nonconformityId: _id,
+          orgSerialNumber: this.organizationSerialNumber()
+        };
+        const queryParams = { filter: this.activeNCFilterId() };
+        return FlowRouter.path('nonconformity', params, queryParams);
+      })()
+    };
   },
   isNew() {
-    return !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getNCByQuery(filter, options);
+    const userId = Meteor.userId();
+
+    return doc && this.isNewDoc({ doc, userId });
   },
   renderTitle() {
     const count = this.occurrences().count();
@@ -57,12 +74,5 @@ Template.NC_Item.viewmodel({
     const _id = this._id();
 
     updateViewedBy.call({ _id });
-  },
-  navigate() {
-    if ($(window).width() < 768) {
-      this.width($(window).width());
-    }
-
-    FlowRouter.setParams({ nonconformityId: this._id() });
   }
 });

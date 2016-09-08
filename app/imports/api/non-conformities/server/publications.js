@@ -1,12 +1,22 @@
 import { Meteor } from 'meteor/meteor';
+
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { NonConformities } from '../non-conformities.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
+import get from 'lodash.get';
+
+
 const getNCOtherFiles = (nc) => {
-  const fileIds = nc.fileIds || [];
+  let fileIds = nc.fileIds || [];
+  const improvementPlanFileIds = get(nc, 'improvementPlan.fileIds');
+  if (!!improvementPlanFileIds) {
+    fileIds = fileIds.concat(improvementPlanFileIds);
+  }
+
   return Files.find({ _id: { $in: fileIds } });
 };
 
@@ -90,13 +100,23 @@ Meteor.publish('nonConformitiesCount', function (counterName, organizationId) {
 
 Meteor.publish('nonConformitiesNotViewedCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  return new Counter(counterName, NonConformities.find({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+    organizationId, userId
+  });
+  const query = {
     organizationId,
     viewedBy: { $ne: userId },
     isDeleted: { $in: [false, null] }
-  }));
+  };
+
+  if(currentOrgUserJoinedAt){
+    query.createdAt = { $gt: currentOrgUserJoinedAt };
+  }
+
+  return new Counter(counterName, NonConformities.find(query));
 });

@@ -4,6 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
@@ -16,7 +17,7 @@ import {
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/api/constants.js';
-import { insert as insertFile, updateUrl, updateProgress } from '/imports/api/files/methods.js'
+import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
 import { Match, check } from 'meteor/check';
 
@@ -25,7 +26,7 @@ const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?
 
 ViewModel.persist = false;
 
-ViewModel.mixin({
+export default {
   collapse: {
     collapsed: true,
     toggleCollapse: _.throttle(function(cb, timeout) {
@@ -205,7 +206,7 @@ ViewModel.mixin({
     }
   },
   addForm: {
-    addForm(template, context = {}) {
+    addForm(template, context = {}, parentNode, nextNode, parentView) {
       if (_.isFunction(this.onChangeCb)) {
         context['onChange'] = this.onChangeCb();
       }
@@ -217,7 +218,9 @@ ViewModel.mixin({
       return Blaze.renderWithData(
         Template[template],
         context,
-        this.forms[0]
+        parentNode || _.first(this.forms),
+        nextNode,
+        parentView || this.templateInstance.view
       );
     }
   },
@@ -233,7 +236,7 @@ ViewModel.mixin({
 
         if (firstName && lastName) {
 
-          // Last name is requires, so it's OK to check both firstName and lastName vars here
+          // Last name is required, so it's OK to check both firstName and lastName vars here
           return disableLastName ? firstName : `${firstName} ${lastName}`;
         } else {
           return user.emails[0].address;
@@ -282,6 +285,30 @@ ViewModel.mixin({
     }
   },
   organization: {
+
+    /**
+     * The document is new if it was created after the user had joined the
+     * organisation and was not viewed by the user:
+     * @param { createdAt: Number, viewedBy: [String] } doc;
+     * @param {String} userId - user ID.
+    */
+    isNewDoc({ doc, userId }){
+      const dateUserJoinedToOrg = getJoinUserToOrganizationDate({
+        organizationId: this.organizationId(), userId
+      });
+
+      if (!dateUserJoinedToOrg) {
+        return false;
+      }
+
+      const viewedBy = doc.viewedBy;
+
+      const isDocViewedByUser = !!viewedBy
+                                && Match.test(viewedBy, Array)
+                                && _.contains(viewedBy, userId)
+
+      return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
+    },
     organization() {
       const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });
@@ -518,6 +545,9 @@ ViewModel.mixin({
     }
   },
   workInbox: {
+    currentWorkItem(){
+      return WorkItems.findOne({ _id: this.workItemId() });
+    },
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
@@ -620,9 +650,6 @@ ViewModel.mixin({
     },
     chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
-    },
-    findParentRecursive(templateName, instance) {
-      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
@@ -923,31 +950,37 @@ ViewModel.mixin({
     }
   },
   uploader: {
-
-    uploadData(uploads, fileId) { // find the file with fileId is being uploaded
-      return _.find(uploads.array(), (data) => {
+    uploadData(fileId) { // find the file with fileId is being uploaded
+      return _.find(this.uploads().array(), (data) => {
         return data.fileId === fileId;
       });
     },
-    cancelUpload(uploads, fileId) {
-      const uploadData = this.uploadData(uploads, fileId);
+    terminateUploading(fileId) {
+      const uploadData = this.uploadData(fileId);
       const uploader = uploadData && uploadData.uploader;
       if (uploader) {
         uploader.xhr && uploader.xhr.abort();
-        this.removeUploadData(uploads, fileId);
+        this.removeUploadData(fileId);
       }
+      terminateUploading.call({
+        _id: fileId
+      });
     },
-    removeUploadData(uploads, fileId) {
-      uploads.remove((item) => {
+    removeUploadData(fileId) {
+      this.uploads().remove((item) => {
         return item.fileId === fileId;
       });
     },
+    uploads() {
+      this.load({ share: 'uploader' });
+
+      return this.uploads();
+    },
     upload({
-      files,
-      maxSize,
-      uploads,
-      beforeUpload
-    }) {
+        files,
+        maxSize,
+        beforeUpload
+      }) {
       if (!files.length) {
         return;
       }
@@ -970,6 +1003,11 @@ ViewModel.mixin({
           extension: name.split('.').pop().toLowerCase(),
           organizationId: this.organizationId()
         }, (err, fileId) => {
+          if (err) {
+            this.terminateUploading(fileId);
+            throw err;
+          }
+
           addFile && addFile({ fileId });
 
           const uploader = new Slingshot.Upload(
@@ -978,14 +1016,18 @@ ViewModel.mixin({
 
           const progressInterval = Meteor.setInterval(() => {
             const progress = uploader.progress();
-            updateProgress.call({ _id: fileId, progress }, (err, res) => {
-              if (err) {
-                Meteor.clearInterval(progressInterval);
-                throw err;
-              }
-            });
+
             if (!progress && progress != 0 || progress === 1) {
               Meteor.clearInterval(progressInterval);
+            } else {
+              updateProgress.call({ _id: fileId, progress }, (err, res) => {
+                if (err) {
+                  Meteor.clearInterval(progressInterval);
+                  this.terminateUploading(fileId);
+
+                  throw err;
+                }
+              });
             }
           }, 1500);
 
@@ -994,7 +1036,7 @@ ViewModel.mixin({
           uploader.send(file, (err, url) => {
             if (err) {
 
-              //throw err;
+              this.terminateUploading(fileId);
               return;
             }
 
@@ -1005,10 +1047,12 @@ ViewModel.mixin({
             afterUpload && afterUpload({ fileId, url });
 
             updateUrl.call({ _id: fileId, url });
-            this.removeUploadData(uploads, fileId);
+            updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
+              this.removeUploadData(fileId);
+            });
           });
         });
       });
     },
   }
-});
+};

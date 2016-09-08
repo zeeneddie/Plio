@@ -58,12 +58,7 @@ export const terminateUploading = new ValidatedMethod({
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
-    if (error) {
-      FilesService.update({ _id, status: 'failed' });
-      throw new Meteor.Error(error.error, error.details);
-    }
-
-    return FilesService.update({ _id, status: 'terminated' });
+    return FilesService.update({ _id, status: 'failed' });
   }
 });
 

@@ -10,5 +10,11 @@ const CountSubs = new SubsManager({
 const WorkItemSubs = new SubsManager({
   expireIn: 10
 });
+const DiscussionSubs = new SubsManager({
+  expireIn: 10
+});
+const MessageSubs = new SubsManager({
+  expireIn: 10
+});
 
-export { OrgSubs, UserSubs, CountSubs, WorkItemSubs };
+export { OrgSubs, UserSubs, CountSubs, WorkItemSubs, DiscussionSubs, MessageSubs };

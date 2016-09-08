@@ -25,8 +25,8 @@
     "organizationName": "D. Inc",
     "avatar": "https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png"
   },
-  "status": "away",
-  "statusConnection": "away",
+  "status": "offline",
+  "statusConnection": "offline",
   "selectedOrganizationSerialNumber": 98,
   "roles": {
     "KwKXz5RefrE5hjWJ2": [

@@ -7,6 +7,13 @@ Template.Dashboard_WorkItemStats.viewmodel({
   mixin: ['utils', 'organization', 'workInbox', {
     counter: 'counter'
   }],
+  _subHandlers: [],
+  isInitialDataReady: false,
+  isReady: true,
+  enableLimit: true,
+  limit: 5,
+  currentDate: new Date(),
+  
   autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
@@ -42,12 +49,6 @@ Template.Dashboard_WorkItemStats.viewmodel({
   clearInterval() {
     Meteor.clearInterval(this.interval);
   },
-  _subHandlers: [],
-  isInitialDataReady: false,
-  isReady: true,
-  enableLimit: true,
-  limit: 5,
-  currentDate: new Date(),
   hasItemsToLoad() {
     const total = this.overdueCount();
     const current = Object.assign([], this.items()).length;

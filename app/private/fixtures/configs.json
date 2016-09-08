@@ -10,5 +10,6 @@
   "RiskTypes": "riskTypes",
   "Risks": "risks",
   "WorkItems": "workItems",
-  "LessonsLearned": "lessonsLearned"
+  "LessonsLearned": "lessonsLearned",
+  "Discussions": "discussions"
 }

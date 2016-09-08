@@ -2,10 +2,12 @@
   {{#if isInitialDataReady}}
     {{#if items.length}}
       <div class="dashboard-stats">
-        <h4 class="dashboard-stats-title" {{b "text: countText"}}></h4>
+        <h4 class="dashboard-stats-title">
+          {{countText}}
+        </h4>
         {{#each overdueItems}}
           <a class="dashboard-stats-action" {{b "href: this.href"}} target="_blank">
-            <span>{{this.title}}. To do:- {{this.type}}</span>
+            <span>{{this.title}} - {{this.type}} ({{sequentialId}})</span>
             <label class="text-danger" {{b "text: this.time"}}></label>
           </a>
         {{/each}}

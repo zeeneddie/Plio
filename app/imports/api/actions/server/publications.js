@@ -1,37 +1,60 @@
 import { Meteor } from 'meteor/meteor';
 import { Actions } from '../actions.js';
+import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
+const getActionFiles = (action) => {
+  const fileIds = action.fileIds || [];
+  return Files.find({ _id: { $in: fileIds } });
+};
 
-Meteor.publish('actions', function(organizationId, isDeleted = { $in: [null, false] }) {
-  const userId = this.userId;
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+Meteor.publishComposite('actions', function(organizationId, isDeleted = { $in: [null, false] }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return Actions.find({
+        organizationId,
+        isDeleted
+      });
+    },
+    children: [{
+      find(action) {
+        return getActionFiles(action);
+      }
+    }]
   }
-
-  return Actions.find({
-    organizationId,
-    isDeleted
-  });
 });
 
-Meteor.publish('actionsByIds', function(ids = []) {
-  let query = {
-    _id: { $in: ids },
-    isDeleted: { $in: [null, false] }
-  };
+Meteor.publishComposite('actionsByIds', function(ids = []) {
+  return {
+    find() {
+      let query = {
+        _id: { $in: ids },
+        isDeleted: { $in: [null, false] }
+      };
 
-  const { organizationId } = Object.assign({}, Actions.findOne(query));
-  const userId = this.userId;
+      const { organizationId } = Object.assign({}, Actions.findOne(query));
+      const userId = this.userId;
 
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      query = { ...query, organizationId };
+
+      return Actions.find(query);
+    },
+    children: [{
+      find(action) {
+        return getActionFiles(action);
+      }
+    }]
   }
-
-  query = { ...query, organizationId };
-
-  return Actions.find(query);
 });
 
 Meteor.publish('actionsCount', function(counterName, organizationId) {

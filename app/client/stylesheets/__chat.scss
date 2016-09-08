@@ -14,9 +14,11 @@
   &-item {
     padding: .3rem 1.25rem;
 
-    &.message:last-of-type .dropdown-menu{
-      top: auto !important;
-      bottom: 100% !important;
+    &:last-of-type {
+      .dropdown-menu {
+        bottom: 100%;
+        top: auto;
+      }
     }
 
     &.first {
@@ -216,6 +218,7 @@
       line-height: 22px;
       font-size: 22px;
       margin-bottom: 0;
+      text-overflow: clip;
     }
   }
 }

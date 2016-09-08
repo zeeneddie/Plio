@@ -4,7 +4,7 @@ import { Files } from '/imports/api/files/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
-  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
+  mixin: ['uploader', 'urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -13,24 +13,25 @@ Template.ESSources.viewmodel({
   sourceType: 'url',
   sourceUrl: '',
   sourceFileId: '',
-  sourceHtmlUrl: null,
   docxRenderInProgress: null,
   file() {
-    return Files.findOne({ _id: this.sourceFileId() });
+    const fileId = this.sourceFileId();
+
+    return Files.findOne({ _id: fileId });
   },
   shouldUpdate() {
-    const { type, fileId, url, htmlUrl } = this.getData();
-    const { sourceType, sourceFileId, sourceUrl, sourceHtmlUrl } = this.templateInstance.data;
+    const { type, fileId, url } = this.getData();
+    const { sourceType, sourceFileId, sourceUrl } = this.templateInstance.data;
 
     if (type === 'attachment') {
       return _.every([
         type, fileId,
-        (type !== sourceType) || (fileId !== sourceFileId) || (htmlUrl !== sourceHtmlUrl)
+        (type !== sourceType) || (fileId !== sourceFileId)
       ]);
     } else {
       return _.every([
         type && url,
-        (type !== sourceType) || (url !== sourceUrl) || (htmlUrl !== sourceHtmlUrl)
+        (type !== sourceType) || (url !== sourceUrl)
       ]);
     }
   },
@@ -47,18 +48,9 @@ Template.ESSources.viewmodel({
     this.update();
   },
   update(e, cb) {
-    let { type, fileId, url, htmlUrl } = this.getData();
+    let { type, fileId, url } = this.getData();
 
     if (!this.shouldUpdate()) {
-      return;
-    }
-
-    if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
-      url = `http://${url}`;
-    }
-
-    if (url && !this.IsValidUrl(url)) {
-      ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
       return;
     }
 
@@ -66,8 +58,17 @@ Template.ESSources.viewmodel({
     if (type === 'attachment') {
       sourceDoc.fileId = fileId;
     } else {
-      sourceDoc.url = url;
-      sourceDoc.htmlUrl = htmlUrl;
+      if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
+        url = `http://${url}`;
+      }
+
+      if (url && !this.IsValidUrl(url)) {
+        ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
+        
+        return;
+      } else {
+        sourceDoc.url = url;
+      }
     }
 
     const query = {
@@ -105,7 +106,6 @@ Template.ESSources.viewmodel({
             this.renderDocxError(`Rendering document: ${result.error}`);
           } else {
             this.docxRenderInProgress('');
-            this.sourceHtmlUrl(result);
           }
         }
       });
@@ -136,8 +136,6 @@ Template.ESSources.viewmodel({
     return this.removeAttachment.bind(this);
   },
   removeAttachment() {
-    const fileUploader = this.uploader();
-
     const file = this.file();
     const isFileUploading = !file.isUploaded();
 
@@ -156,9 +154,7 @@ Template.ESSources.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      if (fileUploader && isFileUploading) {
-        fileUploader.cancelUpload(this.sourceFileId());
-      }
+      this.terminateUploading(this.sourceFileId());
 
       const options = {
         $unset: {
@@ -180,9 +176,6 @@ Template.ESSources.viewmodel({
       });
     });
   },
-  uploader() {
-    return this.child('FileUploader');
-  },
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
@@ -190,7 +183,7 @@ Template.ESSources.viewmodel({
     };
   },
   getData() {
-    const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension, sourceHtmlUrl: htmlUrl } = this.data();
-    return { type, fileId, url, htmlUrl };
+    const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension } = this.data();
+    return { type, fileId, url };
   }
 });

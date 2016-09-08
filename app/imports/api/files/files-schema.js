@@ -21,6 +21,7 @@ export const FileIdsSchema = new SimpleSchema([
   {
     url: {
       type: String,
+      defaultValue: '',
       optional: true
     },
 

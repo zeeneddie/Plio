@@ -7,7 +7,9 @@ import { updateViewedBy } from '/imports/api/standards/methods.js';
 
 Template.Standards_Item_Read.viewmodel({
   share: 'window',
-  mixin: ['organization', 'standard', 'user', 'date'],
+  mixin: ['organization', 'standard', 'user', 'date', {
+    counter: 'counter'
+  }],
   title: '',
   sectionId: '',
   typeId: '',
@@ -19,10 +21,30 @@ Template.Standards_Item_Read.viewmodel({
   notify: '',
   onCreated(template) {
     template.autorun((computation) => {
-      if (this._id() === this.standardId() && this.isNew()) {
+      const standardId = this.standardId();
+      const _id = this._id();
+
+      template.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + _id, _id);
+
+      if (_id === standardId && this.isNew()) {
         Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
       }
     });
+  },
+  linkArgs() {
+    const _id = this._id();
+    return {
+      isActive: Object.is(this.standardId(), _id),
+      onClick: handler => handler({ standardId: _id }),
+      href: (() => {
+        const params = {
+          standardId: _id,
+          orgSerialNumber: this.organizationSerialNumber()
+        };
+        const queryParams = { filter: this.activeStandardFilterId() };
+        return FlowRouter.path('standard', params, queryParams);
+      })()
+    };
   },
   standardType() {
     const typeId = this.typeId && this.typeId();
@@ -31,13 +53,18 @@ Template.Standards_Item_Read.viewmodel({
   typeName() {
     return this.standardType() && this.standardType().name;
   },
-  getHref() {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), standardId: this._id() };
-    const queryParams = { filter: this.activeStandardFilterId() };
-    return FlowRouter.path('standard', params, queryParams);
-  },
   isNew() {
-    return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getStandardByQuery(filter, options);
+    const userId = Meteor.userId();
+
+    return doc && this.isNewDoc({ doc, userId });
+  },
+  unreadMessagesCount() {
+    return this.counter.get('standard-messages-not-viewed-count-' + this._id());
   },
   select() {
     if ($(window).width() < 768) {

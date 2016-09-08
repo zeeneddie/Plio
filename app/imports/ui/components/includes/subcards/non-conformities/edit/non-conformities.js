@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
+
 import {
-  insert, update, remove,
-  setAnalysisDate, completeAnalysis, undoAnalysis,
-  updateStandards, undoStandardsUpdate, setStandardsUpdateDate
+  insert, update, remove
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
@@ -26,8 +26,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       {
         content: 'NC_Create',
         isStandardsEditable: this.isStandardsEditable(),
-        standardsIds: [this._id && this._id()],
+        standardsIds: [invoke(this, '_id')],
         _lText: 'New non-conformity',
+        isNew: false,
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
       }
@@ -83,47 +84,5 @@ Template.Subcards_NonConformities_Edit.viewmodel({
         }
       );
     }
-  },
-  updateAnalysisDateFn() {
-    return this.updateAnalysisDate.bind(this);
-  },
-  updateAnalysisDate({ _id, date }, cb) {
-    const { timezone } = this.organization();
-    const tzDate = getTzTargetDate(date, timezone);
-
-    this.modal().callMethod(setAnalysisDate, { _id, targetDate: tzDate }, cb);
-  },
-  completeAnalysisFn() {
-    return this.completeAnalysis.bind(this);
-  },
-  completeAnalysis({ _id }, cb) {
-    this.modal().callMethod(completeAnalysis, { _id }, cb);
-  },
-  undoAnalysisFn() {
-    return this.undoAnalysis.bind(this);
-  },
-  undoAnalysis({ _id }, cb) {
-    this.modal().callMethod(undoAnalysis, { _id }, cb);
-  },
-  updateStandardsDateFn() {
-    return this.updateStandardsDate.bind(this);
-  },
-  updateStandardsDate({ _id, date }, cb) {
-    const { timezone } = this.organization();
-    const tzDate = getTzTargetDate(date, timezone);
-
-    this.modal().callMethod(setStandardsUpdateDate, { _id, targetDate: tzDate }, cb);
-  },
-  updateStandardsFn() {
-    return this.updateStandards.bind(this);
-  },
-  updateStandards({ _id }, cb) {
-    this.modal().callMethod(updateStandards, { _id }, cb);
-  },
-  undoStandardsUpdateFn() {
-    return this.undoStandardsUpdate.bind(this);
-  },
-  undoStandardsUpdate({ _id }, cb) {
-    this.modal().callMethod(undoStandardsUpdate, { _id }, cb);
-  },
+  }
 });

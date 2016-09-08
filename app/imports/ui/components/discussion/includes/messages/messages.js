@@ -1,46 +1,90 @@
 import { Template } from 'meteor/templating';
-import invoke from 'lodash.invoke';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
-import curry from 'lodash.curry';
+import invoke from 'lodash.invoke';
+import property from 'lodash.property';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
-
-window.Messages = Messages;
+import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
+import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
-	mixin: ['discussions', 'messages', 'standard', 'user'],
+	share: 'messages', // _scrollProps, isInitialDataReady, options
+	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
+	isReady: true,
+	lastMessage: new Mongo.Collection('lastMessage'),
+	isInitialDataReady: false,
+	onCreated(template) {
+		this.options({
+			...this.options(),
+			at: FlowRouter.getQueryParam('at')
+		});
 
-	onRendered(tmp) {
+		template.autorun(() => {
+			MessageSubs.subscribe('messages', this.discussionId(), this.options());
+			template.subscribe('messagesLast', this.discussionId());
+
+			const isReady = MessageSubs.ready();
+
+			if (isReady && !this.isInitialDataReady()) {
+				this.isInitialDataReady(true);
+			}
+
+			// hack which scrolls to the last position after new messages were prepended
+			(() => {
+				Tracker.afterFlush(() => {
+					const { $chat, direction, scrollHeight, scrollPosition } = Object.assign({}, this._scrollProps());
+
+					if (Object.is(direction, -1)) {
+						$chat.scrollTop(scrollPosition + $chat.prop('scrollHeight') - $chat.prop('clientHeight') - scrollHeight);
+					}
+				});
+			})();
+
+			this.isReady(isReady);
+		});
+	},
+	onRendered(template) {
 		const discussionId = this.discussionId();
 
-		if(discussionId){
+		if (discussionId) {
 			bulkUpdateViewedBy.call({ discussionId });
 		}
 
-		// Subscribe notifications to messages
+		const $chat = Object.assign($(), this.chat);
+		!isMobile() && handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
+
+		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
+
 		this.notifyOnIncomeMessages();
 	},
-
+	onDestroyed(template) {
+		const $chat = Object.assign($(), this.chat);
+		handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'removeEventListener');
+	},
   // The _id of the primary discussion for this standardId
 	discussion() {
 		const discussion = Discussions.findOne({ _id: this.discussionId() });
 		return discussion;
 	},
 	getStartedByText() {
-		const creator = Meteor.users.findOne({ _id: this.discussion().startedBy });
-		return this.userNameOrEmail(creator && creator._id);
+		const creator = Meteor.users.findOne({ _id: get(this.discussion(), 'startedBy') });
+		return this.userNameOrEmail(get(creator, '_id'));
 	},
 	getStartedAtText() {
-		return getFormattedDate(this.discussion().startedAt, 'MMMM Do, YYYY');
+		return getFormattedDate(get(this.discussion(), 'startedAt'), 'MMMM Do, YYYY');
 	},
 	messages() {
+
 		const messages = (() => {
 			const options = {
   			sort: { createdAt: 1 }
   		};
+
 			const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
 
 			return msg.fetch();
@@ -101,27 +145,80 @@ Template.Discussion_Messages.viewmodel({
 
 		return messagesMapped;
 	},
-	notifyOnIncomeMessages() {
-		const self = this;
-		let init = true;
-		const options = {
-			sort: { createdAt: 1 }
-		};
-		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
-		const messageSound = self.templateInstance.find('#message-sound');
+	triggerLoadMore: _.throttle(function(e) {
+		const loadOlderHandler = this.templateInstance.$('.infinite-load-older');
+		const loadNewerHandler = this.templateInstance.$('.infinite-load-newer');
+		const onLoadOlder = () => loadOlderHandler.isAlmostVisible() && this.loadMore(-1);
+		const onLoadNewer = () => {
+			const messages = Object.assign([], this.messages());
+			const lastMessageId = get(this.lastMessage().findOne(), 'lastMessageId');
 
-		msg.observe({
-			added(doc) {
-				if (init) {
-					return;
+			if (!messages.map(property('_id')).includes(lastMessageId)) {
+				if (loadNewerHandler.isAlmostVisible()) {
+					this.loadMore(1);
 				}
-				
-				messageSound.currentTime = 0;
-				messageSound.play();
-				init = false;
 			}
+		};
+
+		if (e instanceof Event) {
+			this.handleMouseEvents(e, onLoadOlder, onLoadNewer);
+		} else {
+			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
+		}
+	}, 1000),
+	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
+		if (Object.is(dir, 'down')) {
+			onLoadOlder.call(this);
+		} else if (Object.is(dir, 'up')) {
+			onLoadNewer.call(this);
+		}
+	},
+	handleMouseEvents(e, onLoadOlder, onLoadNewer) {
+		const dir = wheelDirection(e);
+
+		if (dir > 0) {
+			// upscroll
+			onLoadOlder.call(this);
+		} else {
+			// downscroll
+			onLoadNewer.call(this);
+		}
+	},
+	loadMore(direction = -1) {
+		const messages = Object.assign([], this.messages());
+		const options = Object.assign({}, this.options());
+		const dir = parseInt(direction, 10);
+		const msg = dir > 0 ? _.last(messages) : _.first(messages);
+		const $chat = Object.assign($(), this.chat);
+		const scrollPosition = $chat.scrollTop();
+		const scrollHeight = $chat.prop('scrollHeight') - $chat.prop('clientHeight');
+
+		this.options({
+			limit: options.limit + 50,
+			sort: { createdAt: dir },
+			at: get(msg, '_id')
 		});
 
-		init = false;
+		this._scrollProps({ $chat, scrollPosition, scrollHeight, direction });
+	},
+	notification() {
+		return this.child('Notifications');
+	},
+	notifyOnIncomeMessages() {
+		const $chat = Object.assign($(), this.chat);
+		const $sound = this.templateInstance.find('#message-sound');
+
+		if ($sound) {
+			this.lastMessage().find().observeChanges({
+				changed(__, { lastMessageId:_id }) {
+					const { createdBy } = Object.assign({}, Messages.findOne({ _id }));
+
+					if (!Object.is(createdBy, Meteor.userId())) {
+						$sound.currentTime = 0;
+						invoke($sound, 'play');
+					}
+				}
+			});
+		}
 	}
 });

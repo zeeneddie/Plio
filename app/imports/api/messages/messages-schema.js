@@ -1,8 +1,8 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import {
-	BaseEntitySchema, DiscussionIdSchema, FileIdsSchema,
-	UserIdSchema, ViewedBySchema
+	BaseEntitySchema, DiscussionIdSchema, FileIdSchema,
+	UserIdSchema, ViewedBySchema, OrganizationIdSchema
 } from '../schemas.js';
 
 
@@ -10,11 +10,16 @@ export const MessagesSchema = new SimpleSchema([
 	BaseEntitySchema,
 	DiscussionIdSchema,
 	ViewedBySchema,
-	FileIdsSchema,
+	OrganizationIdSchema,
 	{
-		message: {
+		text: {
 			type: String,
 			max: 140,
+			optional: true
+		},
+		fileId: {
+			type: String,
+		  regEx: SimpleSchema.RegEx.Id,
 			optional: true
 		},
 

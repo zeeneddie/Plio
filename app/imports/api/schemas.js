@@ -192,6 +192,7 @@ export const FileIdsSchema = new SimpleSchema({
   fileIds: {
     type: [String],
     regEx: SimpleSchema.RegEx.Id,
+    defaultValue: [],
     optional: true
   }
 });
@@ -302,6 +303,7 @@ export const FileSchema = new SimpleSchema({
 
 export const BaseProblemsRequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
+  FileIdsSchema,
   {
     title: {
       type: String,
