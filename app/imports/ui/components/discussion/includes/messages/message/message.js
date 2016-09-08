@@ -7,7 +7,7 @@ import invoke from 'lodash.invoke';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
-import { remove as removeMessage } from '/imports/api/messages/methods.js';
+import { remove as removeMessage, updateViewedBy } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 import { Files } from '/imports/api/files/files.js';
 
@@ -22,6 +22,8 @@ Template.Discussion_Message.viewmodel({
 		const $chat = $(template.firstNode).closest('.chat-content');
 		const $message = template.$('.chat-message-container');
 
+		updateViewedBy.call({ _id });
+
 		if (Object.is(at, _id)) {
 			const msgOffset = $message.offset().top;
 
@@ -35,9 +37,6 @@ Template.Discussion_Message.viewmodel({
 		}
 	},
 	getFormattedDate: getFormattedDate,
-	// uploader() {
-	// 	return ViewModel.findOne('DiscussionFileUploader');
-	// },
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
 	},
