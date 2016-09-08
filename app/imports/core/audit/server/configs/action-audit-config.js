@@ -1007,7 +1007,8 @@ export default ActionAuditConfig = {
       notifications: [
         _({}).extend(notifyField.notificationConfig, {
           receivers: getReceivers
-        })
+        }),
+        notifyField.personalNotificationConfig
       ]
     },
 

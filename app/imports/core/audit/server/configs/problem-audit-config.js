@@ -661,7 +661,9 @@ export default ProblemAuditConfig = {
       logs: [
         notifyField.logConfig
       ],
-      notifications: []
+      notifications: [
+        notifyField.personalNotificationConfig
+      ]
     },
 
     {

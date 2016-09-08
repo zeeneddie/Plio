@@ -1,6 +1,7 @@
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { Files } from '/imports/api/files/files.js';
+import { SystemName } from '/imports/api/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
 
 
@@ -363,9 +364,9 @@ export const notifyField = {
   notificationConfig: {
     template: {
       [ITEM_ADDED]:
-        '{{userName}} added {{item}} to notification list of {{{docDesc}}}',
+        '{{userName}} added {{item}} to the notification list of {{{docDesc}}}',
       [ITEM_REMOVED]:
-        '{{userName}} removed {{item}} from notification list of {{{docDesc}}}'
+        '{{userName}} removed {{item}} from the notification list of {{{docDesc}}}'
     },
     templateData({ diffs: { notify }, newDoc, user }) {
       return {
@@ -375,6 +376,36 @@ export const notifyField = {
       };
     },
     receivers() { }
+  },
+  personalNotificationConfig: {
+    shouldSendNotification({ diffs: { notify: { kind } } }) {
+      return kind === ITEM_ADDED;
+    },
+    template: '{{userName}} added you to the notification list of {{{docDesc}}}',
+    templateData({ newDoc, user }) {
+      return {
+        docDesc: this.docDescription(newDoc),
+        userName: getUserFullNameOrEmail(user)
+      };
+    },
+    subjectTemplate: 'You have been added to the notification list',
+    subjectTemplateData() { },
+    notificationData({ newDoc }) {
+      return {
+        templateData: {
+          button: {
+            label: 'View document',
+            url: this.docUrl(newDoc)
+          }
+        }
+      };
+    },
+    receivers({ diffs: { notify }, user }) {
+      const { item:addedUserId } = notify;
+      const userId = (user === SystemName) ? user : user._id;
+
+      return (addedUserId !== userId) ? [addedUserId]: [];
+    }
   }
 };
 
