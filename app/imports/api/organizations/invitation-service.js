@@ -6,7 +6,7 @@ import { Organizations } from './organizations.js';
 import { OrgMemberRoles, UserMembership } from '../constants.js';
 
 import Utils from '/imports/core/utils';
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/core/NotificationSender';
 
 
 class InvitationSender {

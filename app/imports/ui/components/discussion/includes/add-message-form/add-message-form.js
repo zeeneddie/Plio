@@ -59,7 +59,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		this.reInit();
-
 		insertMessage.call({
 			organizationId: this.organizationId(),
 			discussionId,

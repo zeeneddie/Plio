@@ -80,7 +80,6 @@ Template.Dashboard_MessageStats.viewmodel({
     const self = this;
     const messages = Object.assign([], this.messages());
     const docs = messages.map((message) => {
-      console.log('message', message);
       let messageData = {};
       if (message.type === 'file') {
         const file = Files.findOne({ _id: message.fileId });
@@ -120,8 +119,6 @@ Template.Dashboard_MessageStats.viewmodel({
         fullName: self.userNameOrEmail(message.createdBy),
         timeString: moment(message.createdAt).from(this.currentDate(), true)
       });
-
-      console.log('messageData', messageData);
 
       return messageData;
     });

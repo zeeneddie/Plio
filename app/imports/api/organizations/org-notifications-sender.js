@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '../organizations/organizations.js';
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/core/NotificationSender';
 
 
 export default class OrgNotificationsSender {
