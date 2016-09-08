@@ -145,11 +145,22 @@ export default ActionAuditConfig = {
         },
         receivers({ newDoc, user }) {
           return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
-            const collection = getCollectionByDocType(documentType);
-            const { identifiedBy } = collection.findOne({ _id: documentId });
             const userId = (user === SystemName) ? user : user._id;
 
-            return (identifiedBy !== userId) ? [identifiedBy]: [];
+            const collection = getCollectionByDocType(documentType);
+            const { identifiedBy, standardsIds } = collection.findOne({
+              _id: documentId
+            }) || {};
+
+            const standardOwners = new Set();
+            Standards.find({ _id: { $in: standardsIds }  }).forEach(({ owner }) => {
+              (owner !== userId) && standardOwners.add(owner);
+            });
+
+            const receivers = Array.from(standardOwners);
+            (identifiedBy !== userId) && receivers.push(identifiedBy);
+
+            return receivers;
           });
         }
       },
