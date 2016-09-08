@@ -25,8 +25,12 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		template.autorun(() => {
-			MessageSubs.subscribe('messages', this.discussionId(), this.options());
-			template.subscribe('discussionMessagesLast', this.discussionId());
+			const discussionId = this.discussionId();
+
+			if (!discussionId) return;
+
+			MessageSubs.subscribe('messages', discussionId, this.options());
+			template.subscribe('discussionMessagesLast', discussionId);
 
 			const isReady = MessageSubs.ready();
 
