@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import { Departments } from '/imports/api/departments/departments.js';
+import { Files } from '/imports/api/files/files.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
 
 
@@ -61,6 +62,38 @@ export const descriptionField = {
       return {
         docDesc: this.docDescription(newDoc),
         userName: getUserFullNameOrEmail(user),
+      };
+    },
+    receivers() { }
+  }
+};
+
+export const fileIdsField = {
+  logConfig: {
+    template: {
+      [ITEM_ADDED]: 'File "{{name}}" added',
+      [ITEM_REMOVED]: 'File removed'
+    },
+    templateData({ diffs: { fileIds } }) {
+      const { item:_id } = fileIds;
+      const { name } = Files.findOne({ _id }) || {};
+
+      return { name };
+    }
+  },
+  notificationConfig: {
+    template: {
+      [ITEM_ADDED]: '{{userName}} added file "{{name}}" to {{{docDesc}}}',
+      [ITEM_REMOVED]: '{{userName}} removed file from {{{docDesc}}}'
+    },
+    templateData({ diffs: { fileIds }, newDoc, user }) {
+      const { item:_id } = fileIds;
+      const { name } = Files.findOne({ _id }) || {};
+
+      return {
+        name,
+        docDesc: this.docDescription(newDoc),
+        userName: getUserFullNameOrEmail(user)
       };
     },
     receivers() { }

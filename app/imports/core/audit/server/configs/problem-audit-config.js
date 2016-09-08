@@ -5,6 +5,7 @@ import { ChangesKinds } from '../utils/changes-kinds.js';
 import {
   departmentsIdsField,
   descriptionField,
+  fileIdsField,
   IPDesiredOutcomeField,
   IPOwnerField,
   IPReviewDatesField,
@@ -595,6 +596,14 @@ export default ProblemAuditConfig = {
       field: 'description',
       logs: [
         descriptionField.logConfig
+      ],
+      notifications: []
+    },
+
+    {
+      field: 'fileIds',
+      logs: [
+        fileIdsField.logConfig
       ],
       notifications: []
     },

@@ -16,6 +16,7 @@ import {
 } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import {
+  fileIdsField,
   isDeletedField,
   notesField,
   notifyField,
@@ -69,7 +70,7 @@ const getNotificationReceivers = ({ linkedTo, ownerId }, user) => {
   return receivers;
 };
 
-const receiversFn = function({ newDoc, user }) {
+const getReceivers = function({ newDoc, user }) {
   return getNotificationReceivers(newDoc, user);
 };
 
@@ -230,7 +231,7 @@ export default ActionAuditConfig = {
               oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -279,7 +280,7 @@ export default ActionAuditConfig = {
               oldValue: getUserFullNameOrEmail(completedBy.oldValue)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -320,7 +321,7 @@ export default ActionAuditConfig = {
               oldValue: completionComments.oldValue
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -367,7 +368,7 @@ export default ActionAuditConfig = {
               oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -417,7 +418,7 @@ export default ActionAuditConfig = {
               userName: getUserFullNameOrEmail(user)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -478,7 +479,7 @@ export default ActionAuditConfig = {
               userName: getUserFullNameOrEmail(user)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -576,7 +577,7 @@ export default ActionAuditConfig = {
               oldValue: planInPlace.oldValue
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -615,7 +616,7 @@ export default ActionAuditConfig = {
               oldValue: ActionStatuses[status.oldValue]
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -808,7 +809,7 @@ export default ActionAuditConfig = {
               userName: getUserFullNameOrEmail(user),
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -855,7 +856,7 @@ export default ActionAuditConfig = {
               oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -908,7 +909,7 @@ export default ActionAuditConfig = {
               oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
       ]
     },
@@ -957,8 +958,20 @@ export default ActionAuditConfig = {
               oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
             };
           },
-          receivers: receiversFn
+          receivers: getReceivers
         }
+      ]
+    },
+
+    {
+      field: 'fileIds',
+      logs: [
+        fileIdsField.logConfig
+      ],
+      notifications: [
+        _({}).extend(fileIdsField.notificationConfig, {
+          receivers: getReceivers
+        })
       ]
     },
 
@@ -969,7 +982,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(isDeletedField.notificationConfig, {
-          receivers: receiversFn
+          receivers: getReceivers
         })
       ]
     },
@@ -981,7 +994,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(notesField.notificationConfig, {
-          receivers: receiversFn
+          receivers: getReceivers
         })
       ]
     },
@@ -993,7 +1006,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(notifyField.notificationConfig, {
-          receivers: receiversFn
+          receivers: getReceivers
         })
       ]
     },
@@ -1005,7 +1018,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(ownerIdField.notificationConfig, {
-          receivers: receiversFn
+          receivers: getReceivers
         })
       ]
     },
@@ -1017,7 +1030,7 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         _({}).extend(titleField.notificationConfig, {
-          receivers: receiversFn
+          receivers: getReceivers
         })
       ]
     }

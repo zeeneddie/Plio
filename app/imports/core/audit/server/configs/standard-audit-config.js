@@ -1,6 +1,7 @@
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { Files } from '/imports/api/files/files.js';
 import { CollectionNames, StandardStatuses, SystemName } from '/imports/api/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
