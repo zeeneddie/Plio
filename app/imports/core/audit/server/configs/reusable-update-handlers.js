@@ -158,7 +158,7 @@ export const IPReviewDatesField = {
         '{{userName}} removed improvement plan\'s review date for {{{docDesc}}}: "{{date}}"'
     },
     templateData({ diffs, newDoc, user }) {
-      const { item:date } = diffs['improvementPlan.reviewDates'];
+      const { item: { date } } = diffs['improvementPlan.reviewDates'];
       const orgId = this.docOrgId(newDoc);
 
       return {

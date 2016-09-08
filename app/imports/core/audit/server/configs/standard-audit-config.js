@@ -1,7 +1,7 @@
 import { Standards } from '/imports/api/standards/standards.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { CollectionNames, StandardStatuses } from '/imports/api/constants.js';
+import { CollectionNames, StandardStatuses, SystemName } from '/imports/api/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import {
@@ -22,6 +22,13 @@ const {
   FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
   ITEM_ADDED, ITEM_REMOVED
 } = ChangesKinds;
+
+const getReceivers = function({ newDoc, user }) {
+  const { owner } = newDoc;
+  const userId = (user === SystemName) ? user : user._id;
+
+  return (owner !== userId) ? [owner]: [];
+};
 
 export default StandardAuditConfig = {
 
@@ -54,7 +61,27 @@ export default StandardAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [
+        {
+          template: {
+            [FIELD_ADDED]:
+              '{{userName}} set issue number of {{{docDesc}}} to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              '{{userName}} changed issue number of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              '{{userName}} removed issue number of {{{docDesc}}}'
+          },
+          templateData({ diffs: { issueNumber }, newDoc, user }) {
+            return {
+              docDesc: this.docDescription(newDoc),
+              userName: getUserFullNameOrEmail(user),
+              newValue: issueNumber.newValue,
+              oldValue: issueNumber.oldValue
+            };
+          },
+          receivers: getReceivers
+        }
+      ]
     },
 
     {
@@ -74,7 +101,27 @@ export default StandardAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [
+        {
+          template: {
+            [FIELD_ADDED]:
+              '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
+            [FIELD_CHANGED]:
+              '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+            [FIELD_REMOVED]:
+              '{{userName}} removed owner of {{{docDesc}}}'
+          },
+          templateData({ diffs: { owner }, newDoc, user }) {
+            return {
+              docDesc: this.docDescription(newDoc),
+              userName: getUserFullNameOrEmail(user),
+              newValue: getUserFullNameOrEmail(owner.newValue),
+              oldValue: getUserFullNameOrEmail(owner.oldValue)
+            };
+          },
+          receivers: getReceivers
+        }
+      ]
     },
 
     {
@@ -104,7 +151,34 @@ export default StandardAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [
+        {
+          template: {
+            [FIELD_ADDED]:
+              '{{userName}} set book section of {{{docDesc}}} to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              '{{userName}} changed book section of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              '{{userName}} removed book section of {{{docDesc}}}'
+          },
+          templateData({ diffs: { sectionId }, newDoc, user }) {
+            const { title:newSection } = StandardsBookSections.findOne({
+              _id: sectionId.newValue
+            });
+            const { title:oldSection } = StandardsBookSections.findOne({
+              _id: sectionId.oldValue
+            });
+
+            return {
+              docDesc: this.docDescription(newDoc),
+              userName: getUserFullNameOrEmail(user),
+              newValue: newSection,
+              oldValue: oldSection
+            };
+          },
+          receivers: getReceivers
+        }
+      ]
     },
 
     {
@@ -124,7 +198,27 @@ export default StandardAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [
+        {
+          template: {
+            [FIELD_ADDED]:
+              '{{userName}} set status of {{{docDesc}}} to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              '{{userName}} changed status of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              '{{userName}} removed status of {{{docDesc}}}'
+          },
+          templateData({ diffs: { status }, newDoc, user }) {
+            return {
+              docDesc: this.docDescription(newDoc),
+              userName: getUserFullNameOrEmail(user),
+              newValue: StandardStatuses[status.newValue],
+              oldValue: StandardStatuses[status.oldValue]
+            };
+          },
+          receivers: getReceivers
+        }
+      ]
     },
 
     {
@@ -147,7 +241,34 @@ export default StandardAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [
+        {
+          template: {
+            [FIELD_ADDED]:
+              '{{userName}} set type of {{{docDesc}}} to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              '{{userName}} changed type of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              '{{userName}} removed type of {{{docDesc}}}'
+          },
+          templateData({ diffs: { typeId }, newDoc, user }) {
+            const { name:newType } = StandardTypes.findOne({
+              _id: typeId.newValue
+            });
+            const { name:oldType } = StandardTypes.findOne({
+              _id: typeId.oldValue
+            });
+
+            return {
+              docDesc: this.docDescription(newDoc),
+              userName: getUserFullNameOrEmail(user),
+              newValue: newType,
+              oldValue: oldType
+            };
+          },
+          receivers: getReceivers
+        }
+      ]
     },
 
     {
@@ -155,7 +276,11 @@ export default StandardAuditConfig = {
       logs: [
         IPDesiredOutcomeField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(IPDesiredOutcomeField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -163,7 +288,11 @@ export default StandardAuditConfig = {
       logs: [
         IPOwnerField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(IPOwnerField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -171,7 +300,11 @@ export default StandardAuditConfig = {
       logs: [
         IPReviewDatesField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(IPReviewDatesField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -179,7 +312,11 @@ export default StandardAuditConfig = {
       logs: [
         IPReviewDateField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(IPReviewDateField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -187,7 +324,11 @@ export default StandardAuditConfig = {
       logs: [
         IPTargetDateField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(IPTargetDateField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -195,7 +336,11 @@ export default StandardAuditConfig = {
       logs: [
         departmentsIdsField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(departmentsIdsField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -203,7 +348,11 @@ export default StandardAuditConfig = {
       logs: [
         descriptionField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(descriptionField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -211,7 +360,11 @@ export default StandardAuditConfig = {
       logs: [
         isDeletedField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(isDeletedField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -219,7 +372,11 @@ export default StandardAuditConfig = {
       logs: [
         notifyField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(notifyField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     },
 
     {
@@ -227,7 +384,11 @@ export default StandardAuditConfig = {
       logs: [
         titleField.logConfig
       ],
-      notifications: []
+      notifications: [
+        _({}).extend(titleField.notificationConfig, {
+          receivers: getReceivers
+        })
+      ]
     }
   ],
 
