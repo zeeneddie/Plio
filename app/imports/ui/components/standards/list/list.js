@@ -13,30 +13,45 @@ Template.StandardsList.viewmodel({
     counter: 'counter'
   }],
   hideRTextOnExpand: true,
-  autorun() {
-    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
+  onRendered(template) {
+    // hack to get around infinite redirect loop
+    template.autorun(() => {
+      const list = this.list;
+      const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
       const query = this._getQueryForFilter();
-
       const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
-      if (!contains) {
-        const standard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+      const standardId = this.standardId();
+      const orgSerialNumber = this.organizationSerialNumber();
 
-        if (standard) {
-          const { _id } = standard;
-          Meteor.setTimeout(() => {
-            this.goToStandard(_id);
-            this.expandCollapsed(this.standardId());
-          }, 0);
-        } else {
-          Meteor.setTimeout(() => {
-            const params = { orgSerialNumber: this.organizationSerialNumber() };
-            const queryParams = { filter: FlowRouter.getQueryParam('filter') };
-            FlowRouter.go('standards', params, queryParams);
-          }, 0);
-        }
+      const data = {
+        contains,
+        defaultStandard,
+        standardId,
+        orgSerialNumber
+      };
+
+      shouldUpdate && this.watcher(data);
+    });
+  },
+  watcher: _.debounce(function({
+    contains,
+    defaultStandard,
+    standardId,
+    orgSerialNumber
+  }) {
+    if (!contains) {
+      if (defaultStandard) {
+        const { _id } = defaultStandard;
+        this.goToStandard(_id);
+        this.expandCollapsed(_id);
+      } else {
+        const params = { orgSerialNumber };
+        const queryParams = { filter: FlowRouter.getQueryParam('filter') };
+        FlowRouter.go('standards', params, queryParams);
       }
     }
-  },
+  }, 50),
   _getQueryForFilter() {
     switch(this.activeStandardFilterId()) {
       case 1:

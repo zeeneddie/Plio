@@ -8,6 +8,7 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
 import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Match } from 'meteor/check';
 import Counter from '../../counter/server.js';
 
@@ -216,7 +217,15 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 		    options.limit = limit;
 		  }
 
-			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } }, options);
+			const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		    organizationId, userId
+		  });
+
+			return Messages.find({
+				organizationId: organizationId,
+				viewedBy: { $nin: [userId] },
+				createdAt: { $gte: currentOrgUserJoinedAt }
+			}, options);
 		},
 		children: [{
 	  	find: function (message) {
@@ -243,13 +252,20 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
   const userId = this.userId;
 	const discussion = Discussions.findOne({ linkedTo: documentId, isPrimary: true });
 	const discussionId = discussion && discussion._id;
+	const organizationId = discussion.organizationId;
 
-	if (!discussionId || !userId || !isOrgMember(userId, discussion.organizationId)) {
+	if (!discussionId || !userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		organizationId, userId
+	});
+
   return new Counter(counterName, Messages.find({
     discussionId,
-		organizationId: discussion.organizationId,
+		organizationId,
+		createdAt: { $gte: currentOrgUserJoinedAt },
 		viewedBy: { $ne: userId }
   }));
 });
@@ -263,8 +279,14 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 	if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		organizationId, userId
+	});
+
   return new Counter(counterName, Messages.find({
 		organizationId: organizationId,
+		createdAt: { $gte: currentOrgUserJoinedAt },
 		viewedBy: { $ne: userId }
   }));
 });

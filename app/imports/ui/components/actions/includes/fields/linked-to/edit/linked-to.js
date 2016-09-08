@@ -8,7 +8,7 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
 
 Template.Actions_LinkedTo_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils'],
+  mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils', 'vmTraverse'],
   linkedTo: '',
   standardId: '',
   isEditable: false,
@@ -110,7 +110,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     // if we are viewing subcard show error in subcard, otherwise in modal
     if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.findParentRecursive('Subcard', this.parent());
+      const subcard = this.VMFindParent('Subcard', this.parent());
 
       if (!subcard) {
         ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');

@@ -18,9 +18,10 @@ Template.Risks_Card_Read.viewmodel({
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
   },
-  renderType(_id) {
-    const type = RiskTypes.findOne({ _id });
-    return !!type ? type.title : '';
+  type() {
+    const risk = this.risk();
+    const type = risk && risk.typeId && RiskTypes.findOne({ _id: risk.typeId });
+    return type;
   },
   onOpenEditModalCb() {
     return this.openEditModal.bind(this);

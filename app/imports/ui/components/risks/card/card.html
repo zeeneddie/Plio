@@ -21,10 +21,12 @@
               </h4>
             </div>
 
-            <div class="list-group-item" {{b "if: this.description"}}>
-              <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-            </div>
+            {{#if this.description}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+              </div>
+            {{/if}}
 
             {{> Fields_Standards_Read standardsIds=this.standardsIds}}
 
@@ -44,18 +46,22 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Magnitude</p>
-                  <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+              {{#if this.magnitude}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Magnitude</p>
+                    <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Type</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderType(this.typeId)"}}></h4>
+              {{/if}}
+              {{#with type}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Type</p>
+                    <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                  </div>
                 </div>
-              </div>
+              {{/with}}
             </div>
 
             <div class="row">

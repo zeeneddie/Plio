@@ -112,6 +112,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const organizationId = this.organizationId();
 		const discussionId = this.discussionId();
 
-		return { discussionId };
+		return { organizationId, discussionId };
 	},
 });

@@ -11,12 +11,12 @@ export const insertMessageFixtures = (limit = 1000) => {
     for (let i = 0; i < limit; i++) {
       MessagesService.insert({
         discussionId,
-        message : `Text message ${i + 1}`,
-        type : 'text',
-        createdAt : new Date,
-        createdBy : 'SQHmBKJ94gJvpLKLt',
-        updatedAt : new Date,
-        updatedBy : 'SQHmBKJ94gJvpLKLt',
+        text: `Text message ${i + 1}`,
+        type: 'text',
+        createdAt: new Date,
+        createdBy: 'SQHmBKJ94gJvpLKLt',
+        updatedAt: new Date,
+        updatedBy: 'SQHmBKJ94gJvpLKLt',
         organizationId: 'KwKXz5RefrE5hjWJ2'
       });
     }
