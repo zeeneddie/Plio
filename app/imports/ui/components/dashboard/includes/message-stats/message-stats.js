@@ -107,6 +107,7 @@ Template.Dashboard_MessageStats.viewmodel({
       const orgSerialNumber = this.organizationSerialNumber();
 
       let url = '';
+      console.log('discussion', discussion);
       if (discussion.documentType === 'standard') {
         url = FlowRouter.path(
           'standardDiscussion',

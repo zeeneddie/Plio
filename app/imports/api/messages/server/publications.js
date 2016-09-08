@@ -233,7 +233,7 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	    }
 	  }, {
 			find: function (message) {
-				return Discussions.find({ _id: message.discussionId }, { fields: { linkedTo: 1, organizationId: 1 } });
+				return Discussions.find({ _id: message.discussionId }, { fields: { linkedTo: 1, organizationId: 1, documentType: 1 } });
 			}
 		}, {
 	  	find: function (message) {
