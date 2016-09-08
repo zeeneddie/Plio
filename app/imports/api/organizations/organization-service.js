@@ -148,7 +148,7 @@ export default OrganizationService = {
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
     const transferId = Random.id();
 
-    new OrgNotificationsSender(organizationId).sendOwnershipInvite(newOwnerId, transferId);
+    // new OrgNotificationsSender(organizationId).sendOwnershipInvite(newOwnerId, transferId);
 
     return this.collection.update({
       _id: organizationId,

@@ -5,6 +5,7 @@ import RiskAuditConfig from '/imports/core/audit/server/configs/risk-audit-confi
 import StandardAuditConfig from '/imports/core/audit/server/configs/standard-audit-config.js';
 import OccurenceAuditConfig from '/imports/core/audit/server/configs/occurence-audit-config.js';
 import MessageAuditConfig from '/imports/core/audit/server/configs/message-audit-config.js';
+import OrgAuditConfig from '/imports/core/audit/server/configs/org-audit-config.js';
 
 
 const auditConfigs = [
@@ -13,7 +14,8 @@ const auditConfigs = [
   RiskAuditConfig,
   StandardAuditConfig,
   OccurenceAuditConfig,
-  MessageAuditConfig
+  MessageAuditConfig,
+  OrgAuditConfig
 ];
 
 _(auditConfigs).each(config => Auditor.registerConfig(config));
