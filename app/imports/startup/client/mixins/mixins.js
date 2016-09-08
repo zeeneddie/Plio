@@ -25,7 +25,7 @@ const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?
 
 ViewModel.persist = false;
 
-ViewModel.mixin({
+export default {
   collapse: {
     collapsed: true,
     toggleCollapse: _.throttle(function(cb, timeout) {
@@ -205,7 +205,7 @@ ViewModel.mixin({
     }
   },
   addForm: {
-    addForm(template, context = {}) {
+    addForm(template, context = {}, parentNode, nextNode, parentView) {
       if (_.isFunction(this.onChangeCb)) {
         context['onChange'] = this.onChangeCb();
       }
@@ -217,7 +217,9 @@ ViewModel.mixin({
       return Blaze.renderWithData(
         Template[template],
         context,
-        this.forms[0]
+        parentNode || _.first(this.forms),
+        nextNode,
+        parentView || this.templateInstance.view
       );
     }
   },
@@ -620,9 +622,6 @@ ViewModel.mixin({
     },
     chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
-    },
-    findParentRecursive(templateName, instance) {
-      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
@@ -1029,4 +1028,4 @@ ViewModel.mixin({
       });
     },
   }
-});
+};
