@@ -54,10 +54,12 @@
             <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
-                <div class="list-group-item" {{b "if: this.description"}}>
-                  <p class="list-group-item-text">Description</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-                </div>
+                {{#if this.description}}
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Description</p>
+                    <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+                  </div>
+                {{/if}}
 
                 <div class="row">
                   <div class="col-sm-6">
@@ -66,26 +68,25 @@
                       <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
                     </div>
                   </div>
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Section</p>
-                      {{#with section}}
+                  {{#with section}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Section</p>
                         <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                      {{/with}}
+                      </div>
                     </div>
-                  </div>
-
+                  {{/with}}
                 </div>
 
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Type</p>
-                      {{#with type}}
-                        <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
-                      {{/with}}
+                  {{#with type}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Type</p>
+                          <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                      </div>
                     </div>
-                  </div>
+                  {{/with}}
                   <div class="col-sm-6">
                     <div class="list-group-item">
                       <p class="list-group-item-text">Owner</p>
