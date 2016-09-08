@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 import { Files } from '/imports/api/files/files.js';
-window.Files = Files;
 
 Template.IP_MeansStatement_Edit.viewmodel({
   mixin: 'organization',
@@ -11,7 +10,6 @@ Template.IP_MeansStatement_Edit.viewmodel({
     };
   },
   update({ ...args }, cb) {
-    console.log('this.fileIds()', this.fileIds());
     const renameFields = (obj, fieldRe) => {
       for (let key in obj) {
         if (!obj.hasOwnProperty(key)) {
