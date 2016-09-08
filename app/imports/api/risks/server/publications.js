@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Risks } from '../risks.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { isOrgMember } from '../../checkers.js';
@@ -90,13 +92,23 @@ Meteor.publish('risksCount', function(counterName, organizationId) {
 
 Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  return new Counter(counterName, Risks.find({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+    organizationId, userId
+  });
+  const query = {
     organizationId,
     viewedBy: { $ne: userId },
     isDeleted: { $in: [false, null] }
-  }));
+  };
+
+  if (currentOrgUserJoinedAt) {
+    query.createdAt = { $gt: currentOrgUserJoinedAt };
+  }
+
+  return new Counter(counterName, Risks.find(query));
 });

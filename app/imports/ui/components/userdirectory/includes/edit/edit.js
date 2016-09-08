@@ -204,9 +204,11 @@ Template.UserDirectory_Card_Edit.viewmodel({
     return this.removeUser.bind(this);
   },
   removeUser() {
+    const user = this.user();
+    const fullNameOrEmail = user && user.fullNameOrEmail() || 'This user';
     swal({
       title: 'Are you sure?',
-      text: 'This user will be removed from the organization',
+      text: `${fullNameOrEmail} will be removed from the organization`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Delete',
@@ -221,9 +223,10 @@ Template.UserDirectory_Card_Edit.viewmodel({
           FlowRouter.go('userDirectoryPage', {
             orgSerialNumber: this.organization().serialNumber
           });
+
           // have to wait some time before opening new sweet alert
           Meteor.setTimeout(() => {
-            swal('Removed', 'User has been removed', 'success');
+            swal('Removed', `${fullNameOrEmail} has been removed from this organization`, 'success');
           }, 500);
         }
       });

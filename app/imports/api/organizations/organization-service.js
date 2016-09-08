@@ -4,8 +4,10 @@ import { Random } from 'meteor/random';
 
 import { Organizations } from './organizations.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
+import RisksTypeService from '../risk-types/risk-types-service.js';
 import {
   DefaultStandardTypes,
+  DefaultRiskTypes,
   OrganizationDefaults,
   OrgOwnerRoles,
   OrgMemberRoles,
@@ -43,6 +45,15 @@ export default OrganizationService = {
     _.each(DefaultStandardTypes, ({ name, abbreviation }) => {
       StandardsTypeService.insert({
         name,
+        abbreviation,
+        organizationId,
+        createdBy: ownerId
+      });
+    });
+
+    _.each(DefaultRiskTypes, ({ title, abbreviation }) => {
+      RisksTypeService.insert({
+        title,
         abbreviation,
         organizationId,
         createdBy: ownerId

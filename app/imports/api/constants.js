@@ -299,6 +299,21 @@ const StandardFilters = {
   3: 'deleted'
 };
 
+const DefaultRiskTypes = [
+  {
+    title: 'Industrial accident',
+    abbreviation: 'IND'
+  },
+  {
+    title: 'Strike or stoppage',
+    abbreviation: 'STR'
+  },
+  {
+    title: 'Technical failure',
+    abbreviation: 'TFA'
+  }
+];
+
 const RiskFilters = {
   1: 'type',
   2: 'status',
@@ -381,10 +396,6 @@ const TruncatedStringLengths = {
 
 const SystemName = 'Plio';
 
-const UnreadMessages = {
-  limit: 7
-};
-
 export {
   ActionTypes,
   ActionStatuses,
@@ -392,6 +403,7 @@ export {
   ActionUndoTimeInHours,
   CollectionNames,
   DefaultStandardTypes,
+  DefaultRiskTypes,
   ProblemGuidelineTypes,
   ProblemsStatuses,
   AnalysisStatuses,

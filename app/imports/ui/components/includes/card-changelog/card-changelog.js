@@ -20,15 +20,15 @@ Template.CardChangelog.viewmodel({
       this.resetProps();
     },
     function() {
-      this.templateInstance.subscribe('lastUserLog', this.documentId());
-    },
-    function() {
       const { _id } = this.document() || {};
       if (this.documentId.value !== _id) {
         this.documentId(_id);
       }
     }
   ],
+  onCreated(template) {
+    template.autorun(() => template.subscribe('lastUserLog', this.documentId()));
+  },
   resetProps() {
     this.collapsed(true);
     this.areLogsLoaded(false);

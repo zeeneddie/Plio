@@ -1,7 +1,10 @@
 import { Meteor } from 'meteor/meteor';
+
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { WorkItems } from '../work-items.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
+
 
 Meteor.publish('workItems', function(organizationId, isDeleted = { $in: [null, false] }) {
   const userId = this.userId;
@@ -43,23 +46,39 @@ Meteor.publish('workItemsCount', function(counterName, organizationId) {
     return this.ready();
   }
 
-  return new Counter(counterName, WorkItems.find({
+  const query = {
     organizationId,
     isDeleted: { $in: [false, null] }
-  }));
+  };
+  const cursor = WorkItems.find(query);
+
+  return new Counter(counterName, cursor);
 });
 
 Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  return new Counter(counterName, WorkItems.find({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+    organizationId, userId
+  });
+  const query = {
     organizationId,
     viewedBy: { $ne: userId },
+    isCompleted: false,
     isDeleted: { $in: [false, null] }
-  }));
+  };
+
+  if(currentOrgUserJoinedAt){
+    query.createdAt = { $gt: currentOrgUserJoinedAt };
+  }
+
+  const cursor = WorkItems.find(query);
+
+  return new Counter(counterName, cursor);
 });
 
 Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {

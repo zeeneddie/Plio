@@ -60,7 +60,6 @@ Template.Discussion_Messages.viewmodel({
 
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
 
-		// Subscribe notifications to messages
 		this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
@@ -166,7 +165,7 @@ Template.Discussion_Messages.viewmodel({
 		} else {
 			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
 		}
-	}, 1500),
+	}, 1000),
 	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
 		if (Object.is(dir, 'down')) {
 			onLoadOlder.call(this);
@@ -206,26 +205,20 @@ Template.Discussion_Messages.viewmodel({
 		return this.child('Notifications');
 	},
 	notifyOnIncomeMessages() {
-		let init = true;
-		const options = {
-			sort: { createdAt: 1 }
-		};
-		const msg = this._getMessagesByDiscussionId(this.discussionId(), options);
-		const messageSound = this.templateInstance.find('#message-sound');
+		const $chat = Object.assign($(), this.chat);
+		const $sound = this.templateInstance.find('#message-sound');
 
-		msg.observe({
-			added: (doc) => {
-				if (init) {
-					return;
+		if ($sound) {
+			this.lastMessage().find().observeChanges({
+				changed(__, { lastMessageId:_id }) {
+					const { createdBy } = Object.assign({}, Messages.findOne({ _id }));
+
+					if (!Object.is(createdBy, Meteor.userId())) {
+						$sound.currentTime = 0;
+						invoke($sound, 'play');
+					}
 				}
-
-				messageSound.currentTime = 0;
-				messageSound.play();
-
-				init = false;
-			}
-		});
-
-		init = false;
+			});
+		}
 	}
 });

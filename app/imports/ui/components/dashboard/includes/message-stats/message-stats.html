@@ -1,15 +1,14 @@
 <template name="Dashboard_MessageStats">
-  {{#if isReady}}
-    {{#if messagesCount}}
+  {{#if isInitialDataReady}}
+    {{#if messages.length}}
       <div class="dashboard-stats">
     		<h4 class="dashboard-stats-title">
-    		  {{unreadMessages}}
-    		  <a href="#" {{b 'click: markMessagesRead'}}>
+    		  {{countText}}
+    		  <a href="#" {{b 'click: bulkUpdateViewedByTotal'}}>
             <i class="fa fa-times-circle" title="Mark all visible messages as read"></i>
           </a>
     		</h4>
-
-        {{#each messages}}
+        {{#each unreadMessages}}
       		<a class="dashboard-stats-message" href="{{this.url}}">
             {{#if this.extension}}
               <i class="fa fa-file-{{this.extension}}-o"></i>
@@ -17,21 +16,30 @@
               <i class="fa fa-comment"></i>
             {{/if}}
         		<strong>{{this.fullName}}:</strong>
-        		{{this.message}}
+        		{{this.text}}
         		<span class="text-muted">{{this.timeString}}</span>
       		</a>
         {{/each}}
-
-        {{#if areItemsToLoad}}
-          {{#if unreadMessagesLimited}}
-            <button type="button" class="btn btn-secondary" {{b 'click: loadAllItems'}}>
-              View all items ({{itemsToLoadMore}} more)
+        {{#if hasItemsToLoad}}
+          <button type="button" class="btn btn-secondary" {{b 'click: loadAll'}}>
+            View all items
+            {{#if isReady}}
+              <span>({{hiddenUnreadMessagesNumber}} more)</span>
+            {{else}}
+              <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+            {{/if}}
+          </button>
+        {{else}}
+          {{#unless enableLimit}}
+            <button type="button" class="btn btn-secondary" {{b 'click: enableLimit(true)'}}>
+              <span>Hide</span>
+              {{#if isReady}}
+                <span>({{hiddenUnreadMessagesNumber}} items)</span>
+              {{else}}
+                <i class="fa fa-spinner fa-pulse fa-fw margin-bottom"></i>
+              {{/if}}
             </button>
-          {{else}}
-            <button type="button" class="btn btn-secondary" {{b 'click: hideExcessiveItems'}}>
-              Hide ({{itemsToLoadMore}} items)
-            </button>
-          {{/if}}
+          {{/unless}}
         {{/if}}
     	</div>
       <hr>

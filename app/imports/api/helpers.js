@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
+import property from 'lodash.property';
 import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
@@ -148,6 +149,8 @@ const deepExtend = (dest, src) => {
   });
 };
 
+const extractIds = (collection = []) => collection.map(property('_id'));
+
 export {
   compareDates,
   getCollectionByName,
@@ -166,5 +169,6 @@ export {
   withUserId,
   mapArgsTo,
   flattenObjects,
-  deepExtend
+  deepExtend,
+  extractIds
 };

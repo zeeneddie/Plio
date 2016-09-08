@@ -1,4 +1,6 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
+
 import {
   insert, update, remove
 } from '/imports/api/non-conformities/methods.js';
@@ -24,8 +26,9 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       {
         content: 'NC_Create',
         isStandardsEditable: this.isStandardsEditable(),
-        standardsIds: [this._id && this._id()],
+        standardsIds: [invoke(this, '_id')],
         _lText: 'New non-conformity',
+        isNew: false,
         insertFn: this.insert.bind(this),
         removeFn: this.remove.bind(this)
       }

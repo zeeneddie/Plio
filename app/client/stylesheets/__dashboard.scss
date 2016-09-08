@@ -1,6 +1,11 @@
 .dashboard-header {
   max-height: 80px;
 
+  & > .nav.pull-xs-left {
+    max-width: 60%;
+    white-space: nowrap;
+  }
+
   .org-name {
     font-size: 26px;
   }

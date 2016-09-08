@@ -23,9 +23,9 @@ Template.Discussion_Message.viewmodel({
 		const $chat = $(template.firstNode).closest('.chat-content');
 		const $message = template.$('.chat-message-container');
 
-		const msgOffset = $message.offset().top;
-
 		if (Object.is(at, _id)) {
+			const msgOffset = $message.offset().top;
+
 			// center the linked message in the chat box
 			const elHeight = $message.height();
 			const chatHeight = $chat.height();
@@ -52,7 +52,7 @@ Template.Discussion_Message.viewmodel({
 		return FlowRouter.getQueryParam('at') === this._id();
 	},
 	formattedMessageText() {
-		const message = this.message && this.message();
+		const message = this.text && this.text();
 
 		return message && Autolinker.link(
 			message, { truncate: TruncatedStringLengths.c40 }
