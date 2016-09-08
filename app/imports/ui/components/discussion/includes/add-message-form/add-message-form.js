@@ -27,7 +27,7 @@ const scrollToBottom = () => {
 
 Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
-	mixin: ['discussions', 'standard', 'organization', 'notifications'],
+	mixin: ['discussions', 'standard', 'organization'],
 	disabled: false,
 	slingshotDirective: 'discussionFiles',
 	...defaults,
@@ -59,8 +59,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		this.reInit();
-		debugger;
-		this.playNewMessageSound();
 		insertMessage.call({
 			organizationId: this.organizationId(),
 			discussionId,
@@ -84,7 +82,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 
 		const discussionId = this.discussionId();
 
-		// this.playNewMessageSound();
 		insertMessage.call({
 			organizationId: this.organizationId(),
 			discussionId,

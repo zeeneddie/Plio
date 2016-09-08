@@ -14,7 +14,6 @@ import { Files } from '/imports/api/files/files.js';
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	fileId: '',
-
 	onRendered(template) {
 		const clipboard = new Clipboard('.js-message-copy-link');
 

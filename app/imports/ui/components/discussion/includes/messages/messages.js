@@ -14,7 +14,7 @@ import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, isInitialDataReady, options
-	mixin: ['discussions', 'messages', 'standard', 'user', 'utils', 'notifications'],
+	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastDiscussionMessage'),
 	isInitialDataReady: false,
@@ -59,8 +59,6 @@ Template.Discussion_Messages.viewmodel({
 		!isMobile() && handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
 
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
-
-		this.playSoundOnIncomeMessages();
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);
@@ -200,19 +198,5 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		this._scrollProps({ $chat, scrollPosition, scrollHeight, direction });
-	},
-	notification() {
-		return this.child('Notifications');
-	},
-	playSoundOnIncomeMessages() {
-		const self = this;
-		this.lastMessage().find().observeChanges({
-			changed(__, { lastMessageId: _id }) {
-				const { createdBy } = Object.assign({}, Messages.findOne({ _id }));
-				if (createdBy !== Meteor.userId()) {
-					self.playNewMessageSound();
-				}
-			}
-		});
 	}
 });
