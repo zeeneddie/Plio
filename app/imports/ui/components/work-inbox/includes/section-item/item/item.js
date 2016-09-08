@@ -54,7 +54,9 @@ Template.WorkInbox_Item.viewmodel({
     /*const { viewedBy = [] } = this.data();
     return !viewedBy.find(_id => _id === Meteor.userId());*/
 
-    const doc = this.currentWorkItem();
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getWorkItemByQuery(filter, options);
     const userId = Meteor.userId();
 
     return doc && this.isNewDoc({ doc, userId });

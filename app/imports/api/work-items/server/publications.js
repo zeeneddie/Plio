@@ -46,10 +46,13 @@ Meteor.publish('workItemsCount', function(counterName, organizationId) {
     return this.ready();
   }
 
-  return new Counter(counterName, WorkItems.find({
+  const query = {
     organizationId,
     isDeleted: { $in: [false, null] }
-  }));
+  };
+  const cursor = WorkItems.find(query);
+
+  return new Counter(counterName, cursor);
 });
 
 Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) {
@@ -65,6 +68,7 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
   const query = {
     organizationId,
     viewedBy: { $ne: userId },
+    isCompleted: false,
     isDeleted: { $in: [false, null] }
   };
 
@@ -72,7 +76,9 @@ Meteor.publish('workItemsNotViewedCount', function(counterName, organizationId) 
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 
-  return new Counter(counterName, WorkItems.find(query));
+  const cursor = WorkItems.find(query);
+
+  return new Counter(counterName, cursor);
 });
 
 Meteor.publish('workItemsOverdueCount', function(counterName, organizationId) {
