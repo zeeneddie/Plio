@@ -18,6 +18,14 @@ const orgUserSchema = new SimpleSchema({
     defaultValue: false,
     optional: true
   },
+  joinedAt: {
+    autoValue(){
+      if(!this.isSet){
+        return new Date();
+      }
+    },
+    type: Date,
+  },
   removedBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,

@@ -4,6 +4,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
@@ -284,6 +285,30 @@ export default {
     }
   },
   organization: {
+
+    /**
+     * The document is new if it was created after the user had joined the
+     * organisation and was not viewed by the user:
+     * @param { createdAt: Number, viewedBy: [String] } doc;
+     * @param {String} userId - user ID.
+    */
+    isNewDoc({ doc, userId }){
+      const dateUserJoinedToOrg = getJoinUserToOrganizationDate({
+        organizationId: this.organizationId(), userId
+      });
+
+      if (!dateUserJoinedToOrg) {
+        return false;
+      }
+
+      const viewedBy = doc.viewedBy;
+
+      const isDocViewedByUser = !!viewedBy
+                                && Match.test(viewedBy, Array)
+                                && _.contains(viewedBy, userId)
+
+      return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
+    },
     organization() {
       const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });
@@ -520,6 +545,9 @@ export default {
     }
   },
   workInbox: {
+    currentWorkItem(){
+      return WorkItems.findOne({ _id: this.workItemId() });
+    },
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
@@ -922,7 +950,6 @@ export default {
     }
   },
   uploader: {
-
     uploadData(fileId) { // find the file with fileId is being uploaded
       return _.find(this.uploads().array(), (data) => {
         return data.fileId === fileId;
@@ -950,10 +977,10 @@ export default {
       return this.uploads();
     },
     upload({
-      files,
-      maxSize,
-      beforeUpload
-    }) {
+        files,
+        maxSize,
+        beforeUpload
+      }) {
       if (!files.length) {
         return;
       }
