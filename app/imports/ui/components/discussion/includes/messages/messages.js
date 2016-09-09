@@ -14,7 +14,7 @@ import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, isInitialDataReady, options
-	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
+	mixin: ['discussions', 'messages', 'standard', 'user', 'utils', 'notifications'],
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastDiscussionMessage'),
 	isInitialDataReady: false,
@@ -64,18 +64,7 @@ Template.Discussion_Messages.viewmodel({
 
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
 
-		// scroll to the bottom if the previous position before new message was at the bottom of chat box
-		this.lastMessage().find().observeChanges({
-			changed() {
-				const prev = $isScrolledToBottom($chat);
-				Meteor.setTimeout(() => {
-					const cur = $isScrolledToBottom($chat);
-					if (prev && !cur) {
-						$scrollToBottom($chat);
-					}
-				}, 200);
-			}
-		});
+		this.handleIncomingMessages();
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);
@@ -180,7 +169,7 @@ Template.Discussion_Messages.viewmodel({
 		} else {
 			this.handleTouchEvents(e, onLoadOlder, onLoadNewer);
 		}
-	}, 1000),
+	}, 1500),
 	handleTouchEvents(dir, onLoadOlder, onLoadNewer) {
 		if (Object.is(dir, 'down')) {
 			onLoadOlder.call(this);
@@ -215,5 +204,22 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		this._scrollProps({ $chat, scrollPosition, scrollHeight, direction });
+	},
+	handleIncomingMessages() {
+		const $chat = Object.assign($(), this.chat);
+		this.lastMessage().find().observe({
+			changed: ({ createdBy } = {}) => {
+				if (createdBy !== Meteor.userId()) this.playNewMessageSound();
+
+				// scroll to the bottom if the previous position before new message was at the bottom of chat box
+				const prev = $isScrolledToBottom($chat);
+				Meteor.setTimeout(() => {
+					const cur = $isScrolledToBottom($chat);
+					if (prev && !cur) {
+						$scrollToBottom($chat);
+					}
+				}, 200);
+			}
+		});
 	}
 });

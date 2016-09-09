@@ -19,7 +19,7 @@ Template.StandardsPage.viewmodel({
       const standardId = this.standardId();
       const discussionIds = this._getDiscussionIdsByStandardId(standardId);
 
-      if (!standardId) return;
+      if (!standardId || !organizationId) return;
 
       let _subHandlers = [
         template.subscribe('departments', organizationId),
