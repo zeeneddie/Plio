@@ -3,7 +3,7 @@
   "organizationId" : "KwKXz5RefrE5hjWJ2",
   "targetDate": {"$date": 1469537283966},
   "type": "complete action",
-  "status": 0,
+  "status": 2,
   "assigneeId": "SQHmBKJ94gJvpLKLt",
   "linkedDoc": {
     "_id": "hR3QzcjMKfZv9RQLe",
