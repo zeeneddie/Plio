@@ -133,7 +133,7 @@ export default OrganizationService = {
       userId, _.values(UserRoles), organizationId
     );
 
-    this.collection.update({
+    const ret = this.collection.update({
       _id: organizationId,
       'users.userId': userId
     }, {
@@ -143,6 +143,12 @@ export default OrganizationService = {
         'users.$.removedAt': new Date()
       }
     });
+
+    Meteor.isServer && Meteor.defer(() =>
+      new OrgNotificationsSender(organizationId).userRemoved(userId, removedBy)
+    );
+
+    return ret;
   },
 
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
@@ -161,7 +167,7 @@ export default OrganizationService = {
     });
 
     Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).sendOwnershipInvite(
+      new OrgNotificationsSender(organizationId).transferCreated(
         newOwnerId, transferId, currOwnerId
       )
     );
@@ -202,7 +208,7 @@ export default OrganizationService = {
     });
 
     Meteor.isServer && Meteor.defer(() =>
-      new OrgNotificationsSender(organizationId).sendTransferInfo(newOwnerId, currOwnerId)
+      new OrgNotificationsSender(organizationId).transferCompleted(newOwnerId, currOwnerId)
     );
   },
 
