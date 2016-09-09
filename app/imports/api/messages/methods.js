@@ -7,7 +7,7 @@ import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Discussions } from '../discussions/discussions.js';
 import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema, OrganizationIdSchema } from '../schemas.js';
-import { checkDocExistance } from '../checkers.js';
+import { checkDocExistance, checkOrgMembership } from '../checkers.js';
 import { getCollectionByDocType } from '../helpers.js';
 import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
 
@@ -24,12 +24,13 @@ const onInsertCheck = ({ discussionId }) => {
 };
 
 const onUpdateCheck = ({ _id, userId }) => {
-	const { createdBy } = checkDocExistance(Messages, { _id });
+	const { createdBy, organizationId } = checkDocExistance(Messages, { _id });
 
 	if (userId !== createdBy) {
 		throw ONLY_OWNER_CAN_UPDATE;
 	}
 
+	checkOrgMembership(userId, organizationId);
 	return true;
 };
 
@@ -46,8 +47,8 @@ export const insert = new ValidatedMethod({
 			);
 		}
 
+		checkOrgMembership(userId, args.organizationId);
 		onInsertCheck({ ...args });
-
 		return MessagesService.insert({ ...args });
 	}
 });
@@ -68,7 +69,6 @@ export const update = new ValidatedMethod({
     }
 
 		onUpdateCheck({ ...args, userId });
-
     return MessagesService.update({ ...args });
   }
 });
@@ -156,7 +156,6 @@ export const remove = new ValidatedMethod({
 		}
 
 		onUpdateCheck({ _id, userId });
-
 		return MessagesService.remove({ _id });
 	}
 });

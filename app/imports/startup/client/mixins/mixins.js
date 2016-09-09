@@ -11,6 +11,7 @@ import { NonConformities } from '/imports/api/non-conformities/non-conformities.
 import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
+import invoke from 'lodash.invoke';
 import {
   DocumentTypes, UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
@@ -898,7 +899,6 @@ export default {
         notificationSound.currentTime = 0;
         notificationSound.play();
       }
-
       let notification = new Notification(title, {
         body,
         tag: tag || _id,
@@ -915,6 +915,14 @@ export default {
       Meteor.setTimeout(() => {
         notification.close();
       }, timeout);
+    },
+    playNewMessageSound() {
+      const $sound = document.getElementById('message-sound');
+
+      if ($sound) {
+        $sound.currentTime = 0;
+        invoke($sound, 'play');
+      }
     }
   },
   discussions: {

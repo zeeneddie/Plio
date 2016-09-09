@@ -135,7 +135,6 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
-  
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],

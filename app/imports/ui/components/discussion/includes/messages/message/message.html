@@ -1,12 +1,12 @@
 <template name="Discussion_Message">
-	<div class="chat-message-container chat-item">
+	<div class="chat-message-container">
 		{{#if dateToShow}}
 			<div class="chat-item-date">
 				<span {{b "text: date"}}></span>
 			</div>
 		{{/if}}
 
-		<div id="{{_id}}" class="message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
+		<div id="{{_id}}" class="chat-item message" {{b "class: { first: !isMergedWithPreviousMessage, selected: isSelected }"}}>
 			{{#unless isMergedWithPreviousMessage}}
 			<a class="chat-item-avatar img-wrapper sm" role="button" {{b "click: openUserDetails"}}>
 				<img tabindex="0" {{b "src: user.avatar()"}} alt="">

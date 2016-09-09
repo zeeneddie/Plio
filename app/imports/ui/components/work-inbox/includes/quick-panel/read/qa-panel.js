@@ -10,6 +10,9 @@ const { TYPES } = WorkItemsStore;
 Template.WorkInbox_QAPanel_Read.viewmodel({
   mixin: ['user', 'date', 'utils', 'modal', 'workItemStatus', 'workInbox', 'router', 'organization'],
   doc: '',
+  isCurrentUserAssignee({ assigneeId }) {
+    return Meteor.userId() === assigneeId;
+  },
   getButtonText({ type }) {
     if (type === TYPES.VERIFY_ACTION) {
       return 'Verify';

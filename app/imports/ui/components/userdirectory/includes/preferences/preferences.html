@@ -15,7 +15,7 @@
               {{b "options: sounds, optionsValue: file, optionsText: name, value: notificationSound, defaultText: 'No sound', enable: areNotificationsEnabled"}}>
           </select>
         </div>
-        <button type="button" class="btn btn-secondary" {{b "click: playSound, enable: isPlayEnabled &&areNotificationsEnabled && notificationSound"}}>
+        <button type="button" class="btn btn-secondary" {{b "click: playSound, enable: isPlayEnabled && areNotificationsEnabled && notificationSound"}}>
           <i class="fa fa-volume-up fa-lg" aria-hidden="true"></i>
         </button>
         {{#if notificationSound}}

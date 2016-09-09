@@ -11,15 +11,15 @@
     min-height: 55px;
   }
 
+  &-message-container:last-of-type {
+    .dropdown-menu {
+      bottom: 100%;
+      top: auto;
+    }
+  }
+
   &-item {
     padding: .3rem 1.25rem;
-
-    &:last-of-type {
-      .dropdown-menu {
-        bottom: 100%;
-        top: auto;
-      }
-    }
 
     &.first {
       .file-item {
