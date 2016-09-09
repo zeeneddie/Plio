@@ -148,9 +148,7 @@ export default OrganizationService = {
   createTransfer({ organizationId, newOwnerId, currOwnerId }) {
     const transferId = Random.id();
 
-    // new OrgNotificationsSender(organizationId).sendOwnershipInvite(newOwnerId, transferId);
-
-    return this.collection.update({
+    this.collection.update({
       _id: organizationId,
     }, {
       $set: {
@@ -161,6 +159,12 @@ export default OrganizationService = {
         }
       }
     });
+
+    Meteor.isServer && Meteor.defer(() =>
+      new OrgNotificationsSender(organizationId).sendOwnershipInvite(
+        newOwnerId, transferId, currOwnerId
+      )
+    );
   },
 
   transfer({ newOwnerId, transferId }, organization) {
@@ -196,6 +200,10 @@ export default OrganizationService = {
     }, {
       $unset: { transfer: '' }
     });
+
+    Meteor.isServer && Meteor.defer(() =>
+      new OrgNotificationsSender(organizationId).sendTransferInfo(newOwnerId, currOwnerId)
+    );
   },
 
   cancelTransfer({ organizationId }) {

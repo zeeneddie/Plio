@@ -12,7 +12,7 @@ export default class OrgNotificationsSender {
     });
   }
 
-  sendOwnershipInvite(newOwnerId, transferId) {
+  sendOwnershipInvite(newOwnerId, transferId, inviterId) {
     const orgName = this._organization.name;
 
     const emailSubject = `You have been invited to become an owner of the ${orgName} organization`;
@@ -30,6 +30,46 @@ export default class OrgNotificationsSender {
       }
     };
 
-    new NotificationSender({ recipients: newOwnerId, emailSubject, templateData, templateName: 'minimalisticEmail' }).sendEmail();
+    const inviter = Meteor.users.findOne({ _id: inviterId });
+    const inviterName = inviter.fullNameOrEmail();
+
+    const title = `You have been invited to become an organization owner`;
+    const body = `${inviterName} invited you to become an owner of ${orgName} organization`;
+
+    new NotificationSender({
+      recipients: newOwnerId,
+      emailSubject,
+      templateData,
+      templateName: 'minimalisticEmail',
+      notificationData: { title, body, url }
+    }).sendAll();
+  }
+
+  sendTransferInfo(newOwnerId, inviterId) {
+    const orgName = this._organization.name;
+    const newOwner = Meteor.users.findOne({ _id: newOwnerId });
+    const newOwnerName = newOwner.fullNameOrEmail();
+
+    const emailSubject = `Organization transferred`;
+    const secondaryText = `${newOwnerName} accepted the invitation to become an owner of ${orgName} organization`;
+
+    const templateData = {
+      organizationName: orgName,
+      title: emailSubject,
+      secondaryText
+    };
+
+    const notificationData = {
+      title: emailSubject,
+      body: secondaryText
+    };
+
+    new NotificationSender({
+      recipients: inviterId,
+      templateName: 'minimalisticEmail',
+      emailSubject,
+      templateData,
+      notificationData
+    }).sendAll();
   }
 }
