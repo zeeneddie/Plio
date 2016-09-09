@@ -195,8 +195,10 @@ class InvitationSender {
     if (!userIdToInvite) {
       userIdToInvite = this._createNewUser();
       this._inviteUser(userIdToInvite, false);
+      return 1;
     } else {
       this._inviteUser(userIdToInvite, true);
+      return 2;
     }
   }
 
@@ -209,7 +211,7 @@ class InvitationSender {
 
 export default InvitationService = {
   inviteUserByEmail(organizationId, userEmail, welcomeMessage) {
-    new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
+    return new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
   },
 
   acceptInvitation(invitationId, userData) {

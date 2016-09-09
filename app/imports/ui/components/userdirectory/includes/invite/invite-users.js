@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
+import pluralize from 'pluralize';
+
 import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
@@ -28,8 +30,11 @@ Template.UserDirectory_InviteUsers.viewmodel({
         organizationId, emails, welcomeMessage
       }, (err, res) => {
         if (!err) {
-          const invitedEmails = res.invitedEmails;
-          const successMessagePart = invitedEmails.length > 0 ? `Invite${invitedEmails.length > 1 ? 's' : ''} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.` : '';
+          const invitedEmails = res.invitedEmails || [];
+          const addedEmails = res.addedEmails || [];
+          const invitedEmailsText = invitedEmails.length > 0 ? `${pluralize('Invite', invitedEmails.length)} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.\n` : '';
+          const addedEmailsText = addedEmails.length > 0 ? `"${addedEmails.join(', ')}" ${addedEmails.length > 1 ? 'were' : 'was'} added to this organization immediately.\n` : '';
+          const successMessagePart = `${invitedEmailsText}${addedEmailsText}`;
           const failMessagePart = res.error ? `\n${res.error}` : '';
 
           let notificationTitle;
@@ -43,7 +48,7 @@ Template.UserDirectory_InviteUsers.viewmodel({
             notificationTitle = 'Invited!'
           }
 
-          const expirationMessagePart = `\nExpiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}`;
+          const expirationMessagePart = invitedEmailsText.length ? `\nInvitation expiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}` : '';
           swal(notificationTitle, `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
             failMessagePart ? 'error' : 'success');
           this.modal().close();
