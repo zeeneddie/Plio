@@ -25,7 +25,8 @@ const OptionalSchema = new SimpleSchema([
     },
     'ref.url': {
       type: String,
-      regEx: SimpleSchema.RegEx.Url
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
     }
   }
 ]);
