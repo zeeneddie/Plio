@@ -6,37 +6,31 @@ import property from 'lodash.property';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
-import { getFormattedDate, $isScrolledToBottom, $scrollToBottom } from '/imports/api/helpers.js';
+import {
+	getFormattedDate,
+	$isScrolledToBottom,
+	$scrollToBottom,
+	$isScrolledElementVisible
+} from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
 import { swipedetect, isMobile } from '/client/lib/mobile.js';
 
 Template.Discussion_Messages.viewmodel({
-	share: 'messages', // _scrollProps, isInitialDataReady, options
+	share: 'messages', // _scrollProps, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils', 'notifications'],
 	isReady: true,
 	lastMessage: new Mongo.Collection('lastDiscussionMessage'),
-	isInitialDataReady: false,
 	onCreated(template) {
-		this.options({
-			...this.options(),
-			at: FlowRouter.getQueryParam('at')
-		});
-
 		template.autorun(() => {
 			const discussionId = this.discussionId();
 
 			if (!discussionId) return;
 
-			MessageSubs.subscribe('messages', discussionId, this.options());
 			template.subscribe('discussionMessagesLast', discussionId);
 
 			const isReady = MessageSubs.ready();
-
-			if (isReady && !this.isInitialDataReady()) {
-				this.isInitialDataReady(true);
-			}
 
 			// hack which scrolls to the last position after new messages were prepended
 			(() => {
@@ -149,16 +143,33 @@ Template.Discussion_Messages.viewmodel({
 
 		return messagesMapped;
 	},
+	isLastMessageRendered() {
+		const lastMessageId = get(this.lastMessage().findOne(), 'lastMessageId');
+
+		return Object.assign([], this.messages())
+			.map(property('_id'))
+			.includes(lastMessageId);
+	},
 	triggerLoadMore: _.throttle(function(e) {
 		const loadOlderHandler = this.templateInstance.$('.infinite-load-older');
 		const loadNewerHandler = this.templateInstance.$('.infinite-load-newer');
-		const onLoadOlder = () => loadOlderHandler.isAlmostVisible() && this.loadMore(-1);
+
+
+		const onLoadOlder = () => {
+			const messages = Object.assign([], this.messages());
+
+			if (messages.length < 50) return;
+
+			if ($isScrolledElementVisible(loadOlderHandler, this.chat)) {
+				this.loadMore(-1);
+			}
+		}
 		const onLoadNewer = () => {
 			const messages = Object.assign([], this.messages());
 			const lastMessageId = get(this.lastMessage().findOne(), 'lastMessageId');
 
-			if (!messages.map(property('_id')).includes(lastMessageId)) {
-				if (loadNewerHandler.isAlmostVisible()) {
+			if ($isScrolledElementVisible(loadNewerHandler, this.chat)) {
+				if (!this.isLastMessageRendered()) {
 					this.loadMore(1);
 				}
 			}
@@ -208,8 +219,13 @@ Template.Discussion_Messages.viewmodel({
 	handleIncomingMessages() {
 		const $chat = Object.assign($(), this.chat);
 		this.lastMessage().find().observe({
-			changed: ({ createdBy } = {}) => {
-				if (createdBy !== Meteor.userId()) this.playNewMessageSound();
+			changed: ({ lastMessageId, createdBy } = {}) => {
+				if (Object.is(createdBy, Meteor.userId())) {
+					Tracker.afterFlush(() => $scrollToBottom($chat));
+				} else {
+					// play new-message sound if the sender is not a current user
+					this.playNewMessageSound();
+				}
 
 				// scroll to the bottom if the previous position before new message was at the bottom of chat box
 				const prev = $isScrolledToBottom($chat);
