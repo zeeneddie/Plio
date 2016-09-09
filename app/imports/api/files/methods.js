@@ -2,8 +2,21 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import FilesService from './files-service.js';
+import { Files } from './files.js';
 import { FileIdsSchema, RequiredSchema } from './files-schema.js';
 import { IdSchema, DocumentIdSchema, OrganizationIdSchema, UrlSchema, ProgressSchema, ErrorSchema } from '../schemas.js';
+import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js';
+import { ONLY_OWNER_CAN_UPDATE } from '/imports/api/errors.js';
+
+const onUpdateCheck = ({ _id, userId }) => {
+	const { createdBy, organizationId } = checkDocExistance(Files, { _id });
+	if (userId !== createdBy) {
+		throw ONLY_OWNER_CAN_UPDATE;
+	}
+
+  checkOrgMembership(userId, organizationId);
+	return true;
+};
 
 // [TODO] Advanced validations
 export const insert = new ValidatedMethod({
@@ -12,10 +25,12 @@ export const insert = new ValidatedMethod({
   validate: new SimpleSchema([RequiredSchema]).validator(),
 
   run({ ...args }) {
-    if (!this.userId) {
+    const userId = this.userId;
+    if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create files');
     }
 
+    checkOrgMembership(userId, args.organizationId);
     return FilesService.insert({ ...args });
   }
 });
@@ -26,10 +41,13 @@ export const updateProgress = new ValidatedMethod({
   validate: new SimpleSchema([IdSchema, ProgressSchema]).validator(),
 
   run({ _id, progress }) {
+    const userId = this.userId;
+
     if (!this.userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
+    onUpdateCheck({ _id, userId });
     return FilesService.update({ _id, progress });
   }
 });
@@ -40,10 +58,13 @@ export const updateUrl = new ValidatedMethod({
   validate: new SimpleSchema([IdSchema, UrlSchema]).validator(),
 
   run({ _id, url }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
+    onUpdateCheck({ _id, userId });
     return FilesService.update({ _id, url, status: 'completed' });
   }
 });
@@ -54,10 +75,13 @@ export const terminateUploading = new ValidatedMethod({
   validate: new SimpleSchema([IdSchema, ErrorSchema]).validator(),
 
   run({ _id, error }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot update files');
     }
 
+    onUpdateCheck({ _id, userId });
     return FilesService.update({ _id, status: 'failed' });
   }
 });
@@ -68,10 +92,13 @@ export const remove = new ValidatedMethod({
   validate: IdSchema.validator(),
 
   run({ _id }) {
-    if (!this.userId) {
+    const userId = this.userId;
+
+    if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot remove files');
     }
 
+    onUpdateCheck({ _id, userId });
     return FilesService.remove({ _id });
   }
 });

@@ -8,7 +8,10 @@ import { Files } from '/imports/api/files/files.js';
 import Counter from '../../counter/server.js';
 
 const getRiskFiles = (risk) => {
-  const fileIds = risk.fileIds || [];
+  let fileIds = risk.fileIds || [];
+  const IPFileIds = risk.improvementPlan && risk.improvementPlan.fileIds || [];
+  fileIds = fileIds.concat(IPFileIds);
+  
   return Files.find({ _id: { $in: fileIds } });
 };
 

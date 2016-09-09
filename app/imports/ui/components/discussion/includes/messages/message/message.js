@@ -7,14 +7,13 @@ import invoke from 'lodash.invoke';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
-import { remove as removeMessage } from '/imports/api/messages/methods.js';
+import { remove as removeMessage, updateViewedBy } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
 import { Files } from '/imports/api/files/files.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],
 	fileId: '',
-
 	onRendered(template) {
 		const clipboard = new Clipboard('.js-message-copy-link');
 
@@ -22,6 +21,8 @@ Template.Discussion_Message.viewmodel({
 		const _id = invoke(this, '_id');
 		const $chat = $(template.firstNode).closest('.chat-content');
 		const $message = template.$('.chat-message-container');
+
+		updateViewedBy.call({ _id });
 
 		if (Object.is(at, _id)) {
 			const msgOffset = $message.offset().top;
@@ -36,9 +37,6 @@ Template.Discussion_Message.viewmodel({
 		}
 	},
 	getFormattedDate: getFormattedDate,
-	// uploader() {
-	// 	return ViewModel.findOne('DiscussionFileUploader');
-	// },
 	isAuthor() {
 		return Meteor.userId() === this.createdBy();
 	},
@@ -52,10 +50,10 @@ Template.Discussion_Message.viewmodel({
 		return FlowRouter.getQueryParam('at') === this._id();
 	},
 	formattedMessageText() {
-		const message = this.text && this.text();
+		const messageText = this.text && this.text();
 
-		return message && Autolinker.link(
-			message, { truncate: TruncatedStringLengths.c40 }
+		return messageText && Autolinker.link(
+			messageText, { truncate: TruncatedStringLengths.c40 }
 		);
 	},
 	copyAsLink(e) {

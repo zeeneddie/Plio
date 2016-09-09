@@ -16,7 +16,7 @@ Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, isInitialDataReady, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils'],
 	isReady: true,
-	lastMessage: new Mongo.Collection('lastMessage'),
+	lastMessage: new Mongo.Collection('lastDiscussionMessage'),
 	isInitialDataReady: false,
 	onCreated(template) {
 		this.options({
@@ -25,8 +25,12 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		template.autorun(() => {
-			MessageSubs.subscribe('messages', this.discussionId(), this.options());
-			template.subscribe('messagesLast', this.discussionId());
+			const discussionId = this.discussionId();
+
+			if (!discussionId) return;
+
+			MessageSubs.subscribe('messages', discussionId, this.options());
+			template.subscribe('discussionMessagesLast', discussionId);
 
 			const isReady = MessageSubs.ready();
 
@@ -59,8 +63,6 @@ Template.Discussion_Messages.viewmodel({
 		!isMobile() && handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
 
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
-
-		this.notifyOnIncomeMessages();
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);
@@ -200,25 +202,5 @@ Template.Discussion_Messages.viewmodel({
 		});
 
 		this._scrollProps({ $chat, scrollPosition, scrollHeight, direction });
-	},
-	notification() {
-		return this.child('Notifications');
-	},
-	notifyOnIncomeMessages() {
-		const $chat = Object.assign($(), this.chat);
-		const $sound = this.templateInstance.find('#message-sound');
-
-		if ($sound) {
-			this.lastMessage().find().observeChanges({
-				changed(__, { lastMessageId:_id }) {
-					const { createdBy } = Object.assign({}, Messages.findOne({ _id }));
-
-					if (!Object.is(createdBy, Meteor.userId())) {
-						$sound.currentTime = 0;
-						invoke($sound, 'play');
-					}
-				}
-			});
-		}
 	}
 });
