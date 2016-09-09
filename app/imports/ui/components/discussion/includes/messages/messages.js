@@ -6,7 +6,7 @@ import property from 'lodash.property';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
-import { getFormattedDate } from '/imports/api/helpers.js';
+import { getFormattedDate, $isScrolledToBottom, $scrollToBottom } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { wheelDirection, handleMouseWheel } from '/client/lib/scroll.js';
@@ -63,6 +63,19 @@ Template.Discussion_Messages.viewmodel({
 		!isMobile() && handleMouseWheel($chat[0], this.triggerLoadMore.bind(this), 'addEventListener');
 
 		isMobile() && swipedetect($chat[0], this.triggerLoadMore.bind(this));
+
+		// scroll to the bottom if the previous position before new message was at the bottom of chat box
+		this.lastMessage().find().observeChanges({
+			changed() {
+				const prev = $isScrolledToBottom($chat);
+				Meteor.setTimeout(() => {
+					const cur = $isScrolledToBottom($chat);
+					if (prev && !cur) {
+						$scrollToBottom($chat);
+					}
+				}, 200);
+			}
+		});
 	},
 	onDestroyed(template) {
 		const $chat = Object.assign($(), this.chat);

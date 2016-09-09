@@ -9,7 +9,7 @@ import {
 } from '/imports/api/messages/methods.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { DocumentTypes } from '/imports/api/constants.js';
-import { handleMethodResult } from '/imports/api/helpers.js';
+import { handleMethodResult, $scrollToBottom } from '/imports/api/helpers.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 
 
@@ -22,7 +22,7 @@ const defaults = {
 const scrollToBottom = () => {
 	const $chat = $('.chat-content');
 
-	$chat.scrollTop($chat.prop('scrollHeight'));
+	$scrollToBottom($chat);
 };
 
 Template.Discussion_AddMessage_Form.viewmodel({
