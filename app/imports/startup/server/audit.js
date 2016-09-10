@@ -19,3 +19,5 @@ const auditConfigs = [
 ];
 
 _(auditConfigs).each(config => Auditor.registerConfig(config));
+
+Auditor.startAudit();

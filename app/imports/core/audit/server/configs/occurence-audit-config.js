@@ -21,11 +21,7 @@ export default OccurenceAuditConfig = {
   onCreated: {
     logs: [
       {
-        template: 'Occurence added: date - {{date}}',
-        templateData({ newDoc }) {
-          const orgId = this.docOrgId(newDoc);
-          return { date: getPrettyOrgDate(newDoc.date, orgId) };
-        },
+        message: 'Occurence added: date - {{date}}',
         logData({ newDoc: { nonConformityId } }) {
           return {
             collection: NCAuditConfig.collectionName,
@@ -34,7 +30,13 @@ export default OccurenceAuditConfig = {
         }
       }
     ],
-    notifications: []
+    notifications: [],
+    data({ newDoc }) {
+      const auditConfig = this;
+      const orgId = () => auditConfig.docOrgId(newDoc);
+
+      return { date: () => getPrettyOrgDate(newDoc.date, orgId()) };
+    }
   },
 
   updateHandlers: [
@@ -42,21 +44,13 @@ export default OccurenceAuditConfig = {
       field: 'date',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Occurrence date set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Occurrence date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Occurrence date removed'
-          },
-          templateData({ diffs: { date }, newDoc }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(date.newValue, orgId),
-              oldValue: getPrettyOrgDate(date.oldValue, orgId)
-            };
           },
           logData({ newDoc: { nonConformityId } }) {
             return {
@@ -66,19 +60,28 @@ export default OccurenceAuditConfig = {
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs: { date }, newDoc }) {
+        const auditConfig = this;
+        const { newValue, oldValue } = date;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      }
     },
 
     {
       field: 'description',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Occurrence description set',
             [FIELD_CHANGED]: 'Occurrence description changed',
             [FIELD_REMOVED]: 'Occurrence description removed'
           },
-          templateData() { },
           logData({ newDoc: { nonConformityId } }) {
             return {
               collection: NCAuditConfig.collectionName,
@@ -94,11 +97,7 @@ export default OccurenceAuditConfig = {
   onRemoved: {
     logs: [
       {
-        template: 'Occurence removed: date - {{date}}',
-        templateData({ oldDoc }) {
-          const orgId = this.docOrgId(oldDoc);
-          return { date: getPrettyOrgDate(oldDoc.date, orgId) };
-        },
+        message: 'Occurence removed: date - {{date}}',
         logData({ oldDoc: { nonConformityId } }) {
           return {
             collection: NCAuditConfig.collectionName,
@@ -107,7 +106,13 @@ export default OccurenceAuditConfig = {
         }
       }
     ],
-    notifications: []
+    notifications: [],
+    data({ oldDoc }) {
+      const auditConfig = this;
+      const orgId = () => auditConfig.docOrgId(oldDoc);
+
+      return { date: () => getPrettyOrgDate(oldDoc.date, orgId()) };
+    }
   },
 
   docId({ _id }) {
