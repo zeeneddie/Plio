@@ -1,9 +1,9 @@
-import { getPrettyOrgDate } from '/imports/api/helpers.js';
 import { CollectionNames } from '/imports/api/constants.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../utils/helpers.js';
 import NCAuditConfig from './nc-audit-config.js';
 
 
@@ -11,6 +11,16 @@ const {
   FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
   ITEM_ADDED, ITEM_REMOVED
 } = ChangesKinds;
+
+const getLogData = function(args) {
+  const { newDoc, oldDoc } = args;
+  const { nonConformityId } = newDoc || oldDoc;
+
+  return {
+    collection: NCAuditConfig.collectionName,
+    documentId: nonConformityId
+  };
+};
 
 export default OccurenceAuditConfig = {
 
@@ -21,13 +31,8 @@ export default OccurenceAuditConfig = {
   onCreated: {
     logs: [
       {
-        message: 'Occurence added: date - {{date}}',
-        logData({ newDoc: { nonConformityId } }) {
-          return {
-            collection: NCAuditConfig.collectionName,
-            documentId: nonConformityId
-          };
-        }
+        message: '{{docDesc}} added: date - {{date}}',
+        logData: getLogData
       }
     ],
     notifications: [],
@@ -35,7 +40,10 @@ export default OccurenceAuditConfig = {
       const auditConfig = this;
       const orgId = () => auditConfig.docOrgId(newDoc);
 
-      return { date: () => getPrettyOrgDate(newDoc.date, orgId()) };
+      return {
+        docDesc: () => auditConfig.docDescription(newDoc),
+        date: () => getPrettyOrgDate(newDoc.date, orgId())
+      };
     }
   },
 
@@ -46,18 +54,13 @@ export default OccurenceAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Occurrence date set to "{{newValue}}"',
+              '{{docDesc}} date set to "{{newValue}}"',
             [FIELD_CHANGED]:
-              'Occurrence date changed from "{{oldValue}}" to "{{newValue}}"',
+              '{{docDesc}} date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
-              'Occurrence date removed'
+              '{{docDesc}} date removed'
           },
-          logData({ newDoc: { nonConformityId } }) {
-            return {
-              collection: NCAuditConfig.collectionName,
-              documentId: nonConformityId
-            };
-          }
+          logData: getLogData
         }
       ],
       notifications: [],
@@ -67,6 +70,7 @@ export default OccurenceAuditConfig = {
         const orgId = () => auditConfig.docOrgId(newDoc);
 
         return {
+          docDesc: () => auditConfig.docDescription(newDoc),
           newValue: () => getPrettyOrgDate(newValue, orgId()),
           oldValue: () => getPrettyOrgDate(oldValue, orgId())
         };
@@ -78,32 +82,26 @@ export default OccurenceAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Occurrence description set',
-            [FIELD_CHANGED]: 'Occurrence description changed',
-            [FIELD_REMOVED]: 'Occurrence description removed'
+            [FIELD_ADDED]: '{{docDesc}} description set',
+            [FIELD_CHANGED]: '{{docDesc}} description changed',
+            [FIELD_REMOVED]: '{{docDesc}} description removed'
           },
-          logData({ newDoc: { nonConformityId } }) {
-            return {
-              collection: NCAuditConfig.collectionName,
-              documentId: nonConformityId
-            };
-          }
+          logData: getLogData
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ newDoc }) {
+        const auditConfig = this;
+        return { docDesc: () => auditConfig.docDescription(newDoc), };
+      }
     }
   ],
 
   onRemoved: {
     logs: [
       {
-        message: 'Occurence removed: date - {{date}}',
-        logData({ oldDoc: { nonConformityId } }) {
-          return {
-            collection: NCAuditConfig.collectionName,
-            documentId: nonConformityId
-          };
-        }
+        message: '{{docDesc}} removed: date - {{date}}',
+        logData: getLogData
       }
     ],
     notifications: [],
@@ -111,7 +109,10 @@ export default OccurenceAuditConfig = {
       const auditConfig = this;
       const orgId = () => auditConfig.docOrgId(oldDoc);
 
-      return { date: () => getPrettyOrgDate(oldDoc.date, orgId()) };
+      return {
+        docDesc: () => auditConfig.docDescription(oldDoc),
+        date: () => getPrettyOrgDate(oldDoc.date, orgId())
+      };
     }
   },
 
@@ -129,10 +130,9 @@ export default OccurenceAuditConfig = {
   },
 
   docUrl({ nonConformityId }) {
-    const { organizationId } = NonConformities.findOne({ _id: nonConformityId });
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
+    const NC = NonConformities.findOne({ _id: nonConformityId });
 
-    return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${nonConformityId}`);
+    return NCAuditConfig.docUrl(NC);
   }
 
 };

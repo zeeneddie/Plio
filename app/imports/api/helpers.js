@@ -95,6 +95,19 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+export const getCollectionNameByDocType = (docType) => {
+  return {
+    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
+    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
+    [DocumentTypes.RISK]: CollectionNames.RISKS
+  }[docType];
+};
+
+export const getLinkedDoc = (documentId, documentType) => {
+  const collection = getCollectionByDocType(documentType);
+  return collection.findOne({ _id: documentId });
+};
+
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
