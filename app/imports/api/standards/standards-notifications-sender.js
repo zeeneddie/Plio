@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Standards } from './standards.js';
 import { Organizations } from '../organizations/organizations.js';
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/core/NotificationSender';
 
 
 export default class StandardsNotificationsSender {
