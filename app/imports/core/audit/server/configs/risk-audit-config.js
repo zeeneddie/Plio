@@ -108,18 +108,18 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
               'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Risk evaluation treatment decision removed'
-          },
-          templateData({ diffs }) {
-            const { newValue, oldValue } = diffs['riskEvaluation.decision'];
-
-            return {
-              newValue: () => RiskEvaluationDecisions[newValue],
-              oldValue: () => RiskEvaluationDecisions[oldValue]
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs }) {
+        const { newValue, oldValue } = diffs['riskEvaluation.decision'];
+
+        return {
+          newValue: () => RiskEvaluationDecisions[newValue],
+          oldValue: () => RiskEvaluationDecisions[oldValue]
+        };
+      }
     },
 
     {

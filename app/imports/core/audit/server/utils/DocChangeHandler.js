@@ -41,6 +41,7 @@ export default class DocChangeHandler {
     }
 
     const doc = newDocument || oldDocument;
+
     this._docId = auditConfig.docId(doc);
     this._docDesc = auditConfig.docDescription(doc);
     this._docUrl = auditConfig.docUrl(doc);

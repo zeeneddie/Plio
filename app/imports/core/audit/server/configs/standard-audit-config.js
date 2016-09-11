@@ -149,6 +149,7 @@ export default StandardAuditConfig = {
       ],
       data({ diffs: { sectionId }, newDoc, user }) {
         const auditConfig = this;
+        const { newValue, oldValue } = sectionId;
 
         const getSectionTitle = (_id) => {
           const { title } = StandardsBookSections.findOne({ _id }) || {};
@@ -227,6 +228,7 @@ export default StandardAuditConfig = {
       ],
       data({ diffs: { typeId }, newDoc, user }) {
         const auditConfig = this;
+        const { newValue, oldValue } = typeId;
 
         const getStandardTypeName = (_id) => {
           const { name } = StandardTypes.findOne({ _id }) || {};

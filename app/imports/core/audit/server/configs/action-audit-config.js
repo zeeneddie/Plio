@@ -146,15 +146,14 @@ export default ActionAuditConfig = {
               _id: documentId
             }) || {};
 
-            const standardOwners = new Set();
+            const receivers = new Set();
             Standards.find({ _id: { $in: standardsIds }  }).forEach(({ owner }) => {
-              (owner !== userId) && standardOwners.add(owner);
+              (owner !== userId) && receivers.add(owner);
             });
 
-            const receivers = Array.from(standardOwners);
-            (identifiedBy !== userId) && receivers.push(identifiedBy);
+            (identifiedBy !== userId) && receivers.add(identifiedBy);
 
-            return receivers;
+            return Array.from(receivers);
           });
         }
       },
@@ -1024,8 +1023,8 @@ export default ActionAuditConfig = {
   },
 
   docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    const { _id:workItemId } = WorkItems.findOne({ 'linkedDoc._id': _id });
+    const { serialNumber } = Organizations.findOne({ _id: organizationId }) || {};
+    const { _id:workItemId } = WorkItems.findOne({ 'linkedDoc._id': _id }) || {};
 
     return Meteor.absoluteUrl(`${serialNumber}/work-inbox/${workItemId}`);
   }

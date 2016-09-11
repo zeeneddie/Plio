@@ -449,7 +449,7 @@ export default ProblemAuditConfig = {
       ],
       notifications: [],
       data({ diffs }) {
-        const { newValue, oldValue } = diff['updateOfStandards.completedBy'];
+        const { newValue, oldValue } = diffs['updateOfStandards.completedBy'];
 
         return {
           newValue: () => getUserFullNameOrEmail(newValue),
@@ -565,7 +565,7 @@ export default ProblemAuditConfig = {
       field: 'updateOfStandards.targetDate',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Update of standards target date set to "{{newValue}}"',
             [FIELD_CHANGED]:
