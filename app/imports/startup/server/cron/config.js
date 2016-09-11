@@ -29,6 +29,6 @@ SyncedCron.config({
   collectionTTL: 172800
 });
 
-if (Utils.isProduction()) {
+//if (Utils.isProduction()) {
   SyncedCron.start();
-}
+//}
