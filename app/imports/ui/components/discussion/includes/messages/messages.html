@@ -1,6 +1,6 @@
 <template name="Discussion_Messages">
 	{{#with discussion}}
-		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore"}}>
+		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore, class: { loading: !isReady }"}}>
 			<audio id="message-sound">
         <source src="/sounds/new-message.mp3" type="audio/mpeg" />
       </audio>
