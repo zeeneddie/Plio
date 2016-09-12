@@ -21,3 +21,4 @@ import './list';
 import './navbar';
 import './header';
 import './page-header';
+import './page';

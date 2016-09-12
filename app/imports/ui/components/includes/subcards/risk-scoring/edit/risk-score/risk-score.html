@@ -7,7 +7,7 @@
       score=score}}
   {{> RiskScoring_Guidelines ref="guidelinesRef" guideHtml=guideHtml}}
   {{#with score}}
-    {{#if $every this.value this.rowId}}
+    {{#if every this.value this.rowId}}
       <div class="card-block">
         {{> RiskScoring_ScoredBy_Edit
             disabled=disabled

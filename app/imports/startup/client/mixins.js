@@ -630,15 +630,6 @@ ViewModel.mixin({
     },
     $eq(val1, val2) {
       return val1 === val2;
-    },
-    $not(predicate) {
-      return !predicate;
-    },
-    $every(...args) {
-      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
-    },
-    $some(...args) {
-      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {
@@ -856,7 +847,7 @@ ViewModel.mixin({
       }
     }
   },
-  notifications: {
+  ifications: {
 
     // Notifications document can be passed as an argument
     // _id is used as notification tag if there's no tag argument passed

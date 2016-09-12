@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
+import invoke from 'lodash.invoke';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
@@ -122,6 +123,23 @@ const mapByIndex = (value = {}, index = 0, arr = []) =>
 const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
 
+const inspire = curry((props, instance, ...args) =>
+  flattenObjects(props.map((key, i) =>
+    ({ [key]: invoke(instance, key, ...((arr = []) => arr[i] || [])(args)) }))));
+
+// Espessialy useful with viewmodel
+// Example of usage:
+// inspire({
+//   hello(a, b) {
+//     return `world ${a} ${b}`;
+//   },
+//   today(a) {
+//     return 'is friday ' + a;
+//   }
+// }, ['hello', 'today'], ['!!', '1'], [' wohoooooo!']);
+//
+// > { hello: 'world !! 1', today: 'is friday  wohoooooo!' }
+
 export {
   compareDates,
   getCollectionByName,
@@ -140,5 +158,6 @@ export {
   extractIds,
   not,
   mapByIndex,
-  mapValues
+  mapValues,
+  inspire
 };

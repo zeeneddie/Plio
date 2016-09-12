@@ -26,7 +26,7 @@
 
       {{> Actions_CompletionTargetDate
           completionTargetDate=this.completionTargetDate
-          enabled=($not ($some this.isCompleted this.isVerified))
+          enabled=(not (some this.isCompleted this.isVerified))
           onUpdate=onUpdateCompletionDate}}
 
       {{#unless this.isCompleted}}
