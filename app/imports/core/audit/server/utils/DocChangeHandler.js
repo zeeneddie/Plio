@@ -25,7 +25,7 @@ export default class DocChangeHandler {
       this._userId = userId || newDocument.createdBy;
     } else if (docChangeKind === DocChangesKinds.DOC_UPDATED) {
       this._newDoc = newDocument;
-      this._oldDoc = oldDocument
+      this._oldDoc = oldDocument;
       this._date = newDocument.updatedAt;
       this._userId = newDocument.updatedBy;
     } else if (docChangeKind === DocChangesKinds.DOC_REMOVED) {

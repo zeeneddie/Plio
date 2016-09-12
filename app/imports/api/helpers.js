@@ -147,8 +147,6 @@ export {
   getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
-  getUserFullNameOrEmail,
-  getPrettyOrgDate,
   handleMethodResult,
   getCollectionByDocType,
   chain,

@@ -13,7 +13,7 @@ SyncedCron.add({
   },
 
   job() {
-    const utcTime = moment(new Date()).tz('UTC').format('HH:mm');
+    const utcTime = moment().tz('UTC').format('HH:mm');
     const offsets = TZOffsets[utcTime];
 
     const timezones = _(moment.tz.names()).filter((name) => {
