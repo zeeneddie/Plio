@@ -13,8 +13,10 @@ Template.Risks_Type_Edit.viewmodel({
     }
   },
   onCreated() {
-    if (!this.typeId() && this.types().length > 0) {
-      this.typeId(this.types()[0]._id);
+    const types = this.types();
+
+    if (!this.typeId() && types.length > 0) {
+      this.typeId(types[0]._id);
     }
   },
   typeId: '',

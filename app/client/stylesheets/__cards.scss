@@ -16,6 +16,14 @@
     padding-right: 14px;
   }
 
+  * > .display-on-parent-hover  {
+    display: none;
+  }
+
+  *:hover > .display-on-parent-hover {
+    display: inline;
+  }
+
   iframe {
     max-width: 100%;
   }

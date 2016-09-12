@@ -13,4 +13,4 @@ import './main.html';
 import './main.js';
 import './settings.html';
 import './settings.js';
-import './risks-types';
+import './risk-types';

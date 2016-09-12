@@ -12,28 +12,15 @@ Template.registerHelper('callback', function(param, obj) {
   return () => obj[param].bind(instance);
 });
 
-Template.registerHelper('not', function(value) {
-  return !value;
-});
-
-Template.registerHelper('eq', function(val1, val2) {
-  return Object.is(val1, val2);
-});
-
-Template.registerHelper('every', cutSpacebarsKw(function(...values) {
-  return values.every(value => !!value);
-}));
-
-Template.registerHelper('some', cutSpacebarsKw(function(...values) {
-  return values.some(value => !!value);
-}));
-
-Template.registerHelper('pick', cutSpacebarsKw(function(obj, ...keys) {
-  return _.pick(obj, ...keys);
-}));
-
-Template.registerHelper('omit', cutSpacebarsKw(function(obj, ...keys) {
-  return _.omit(obj, ...keys);
-}));
-
 Template.registerHelper('log', console.log);
+
+const helpers = {
+  not: val => !val,
+  eq: (val1, val2) => Object.is(val1, val2),
+  every: (...values) => values.every(value => !!value),
+  some: (...values) => values.some(value => !!value),
+  pick: (obj, ...keys) => _.pick(obj, ...keys),
+  omit: (obj, ...keys) => _.omit(obj, keys)
+};
+
+Object.keys(helpers).forEach(key => Template.registerHelper(key, cutSpacebarsKw(helpers[key])));

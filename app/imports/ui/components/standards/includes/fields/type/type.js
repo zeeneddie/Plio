@@ -45,6 +45,6 @@ Template.ESType.viewmodel({
   },
   getData() {
     const { typeId } = this.data();
-    return { typeId };
+    return { typeId: typeId || this.typeId() };
   }
 });

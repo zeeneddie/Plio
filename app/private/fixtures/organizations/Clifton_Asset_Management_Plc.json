@@ -4,6 +4,7 @@
   "serialNumber": 98,
   "users": [
     {
+      "joinedAt": { "$date": 1459508400000 },
       "userId": "SQHmBKJ94gJvpLKLt",
       "role": "owner"
     },

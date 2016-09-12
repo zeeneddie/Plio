@@ -12,23 +12,25 @@
         <br>
         <span {{b "text: getDescription(this)"}}></span>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 text-xs-right qa-buttons">
-        {{#if not (some this.isDeleted this.isCompleted)}}
-          <button type="button" class="btn btn-success" {{b "click: openQAModal(this)"}}>
-            <i class="fa fa-check margin-right"></i>
-            <span {{b "text: getButtonText(this)"}}></span>
+      {{#if isCurrentUserAssignee this}}
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 text-xs-right qa-buttons">
+          {{#if not (some this.isDeleted this.isCompleted)}}
+            <button type="button" class="btn btn-success" {{b "click: openQAModal(this)"}}>
+              <i class="fa fa-check margin-right"></i>
+              <span {{b "text: getButtonText(this)"}}></span>
+            </button>
+          {{/if}}
+          {{#if this.isDeleted}}
+            <button class="btn btn-secondary" {{b "click: restore(this)"}}>
+              <i class="fa fa-undo text-default margin-right"></i>
+              Undo delete
+            </button>
+          {{/if}}
+          <button class="btn btn-link m-l-1" {{b "click: delete(this)"}}>
+            <i class="fa fa-trash fa-lg alert-danger"></i>
           </button>
-        {{/if}}
-        {{#if this.isDeleted}}
-          <button class="btn btn-secondary" {{b "click: restore(this)"}}>
-            <i class="fa fa-undo text-default margin-right"></i>
-            Undo delete
-          </button>
-        {{/if}}
-        <button class="btn btn-link m-l-1" {{b "click: delete(this)"}}>
-          <i class="fa fa-trash fa-lg alert-danger"></i>
-        </button>
-      </div>
+        </div>
+      {{/if}}
     </div>
   {{/with}}
 </template>

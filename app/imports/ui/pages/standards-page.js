@@ -18,10 +18,13 @@ Template.StandardsPage.viewmodel({
       const organizationId = this.organizationId();
       const standardId = this.standardId();
       const discussionIds = this._getDiscussionIdsByStandardId(standardId);
+
+      if (!standardId) return;
+
       let _subHandlers = [
         template.subscribe('departments', organizationId),
-        template.subscribe('nonConformitiesByStandardId', standardId),
         template.subscribe('workItems', organizationId),
+        template.subscribe('nonConformitiesByStandardId', standardId),
         CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
       ];
 

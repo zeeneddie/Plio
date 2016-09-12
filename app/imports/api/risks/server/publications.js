@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Risks } from '../risks.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { isOrgMember } from '../../checkers.js';
@@ -6,7 +8,10 @@ import { Files } from '/imports/api/files/files.js';
 import Counter from '../../counter/server.js';
 
 const getRiskFiles = (risk) => {
-  const fileIds = risk.fileIds || [];
+  let fileIds = risk.fileIds || [];
+  const IPFileIds = risk.improvementPlan && risk.improvementPlan.fileIds || [];
+  fileIds = fileIds.concat(IPFileIds);
+  
   return Files.find({ _id: { $in: fileIds } });
 };
 
@@ -90,13 +95,23 @@ Meteor.publish('risksCount', function(counterName, organizationId) {
 
 Meteor.publish('risksNotViewedCount', function(counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  return new Counter(counterName, Risks.find({
+  const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+    organizationId, userId
+  });
+  const query = {
     organizationId,
     viewedBy: { $ne: userId },
     isDeleted: { $in: [false, null] }
-  }));
+  };
+
+  if (currentOrgUserJoinedAt) {
+    query.createdAt = { $gt: currentOrgUserJoinedAt };
+  }
+
+  return new Counter(counterName, Risks.find(query));
 });

@@ -299,6 +299,21 @@ const StandardFilters = {
   3: 'deleted'
 };
 
+const DefaultRiskTypes = [
+  {
+    title: 'Industrial accident',
+    abbreviation: 'IND'
+  },
+  {
+    title: 'Strike or stoppage',
+    abbreviation: 'STR'
+  },
+  {
+    title: 'Technical failure',
+    abbreviation: 'TFA'
+  }
+];
+
 const RiskFilters = {
   1: 'type',
   2: 'status',
@@ -374,6 +389,12 @@ const CollectionNames = {
   OCCURRENCES: 'Occurrences'
 };
 
+const InvitationStatuses = {
+  failed: 0,
+  invited: 1,
+  added: 2
+};
+
 const TruncatedStringLengths = {
   c40: 40
 };
@@ -387,6 +408,7 @@ export {
   ActionUndoTimeInHours,
   CollectionNames,
   DefaultStandardTypes,
+  DefaultRiskTypes,
   ProblemGuidelineTypes,
   ProblemsStatuses,
   AnalysisStatuses,
@@ -414,6 +436,7 @@ export {
   ReviewStatuses,
   WorkItemsStore,
   RKTypes,
+  InvitationStatuses,
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,

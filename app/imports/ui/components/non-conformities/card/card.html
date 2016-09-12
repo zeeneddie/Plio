@@ -17,14 +17,21 @@
               <h4 class="list-group-item-heading">
                 <span {{b "text: this.title"}}></span>
                 <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+                <span class="label text-default">
+                  {{getStatusName this.status}}
+                  {{#if this.workflowType}}
+                    <span class="display-on-parent-hover">({{this.workflowType}} workflow)</span>
+                  {{/if}}
+                </span>
               </h4>
             </div>
-
-            <div class="list-group-item" {{b "if: this.description"}}>
-              <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-            </div>
+            
+            {{#if this.description}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+              </div>
+            {{/if}}
 
             {{> Fields_Standards_Read standardsIds=this.standardsIds}}
 
@@ -50,14 +57,22 @@
                   <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="list-group-item" {{b "if: this.ref"}}>
-                  {{#with this.ref}}
-                    <p class="list-group-item-text">Help desk ref</p>
-                    <h4 class="list-group-item-heading"><a class="pointer" {{b "text: this.text, attr: { href: this.url }"}}></a></h4>
-                  {{/with}}
-                </div>
-              </div>
+              {{#with this.ref}}
+                {{#if this.text}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Help desk ref</p>
+                      <h4 class="list-group-item-heading">
+                        {{#if this.url}}
+                          <a class="pointer" {{b "attr: { href: this.url }"}}>{{this.text}}</a>
+                        {{else}}
+                          <span>{{this.text}}</span>
+                        {{/if}}
+                      </h4>
+                    </div>
+                  </div>
+                {{/if}}
+              {{/with}}
             </div>
 
             <div class="row">

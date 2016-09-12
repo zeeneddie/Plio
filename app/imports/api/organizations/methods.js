@@ -10,7 +10,7 @@ import InvitationService from './invitation-service';
 import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
 import {
   WorkflowTypes, NCTypes, UserRoles,
-  UserMembership, ProblemGuidelineTypes, RKTypes
+  UserMembership, ProblemGuidelineTypes, RKTypes, InvitationStatuses
 } from '../constants';
 import {
   IdSchema, TimePeriodSchema,
@@ -335,12 +335,18 @@ export const inviteMultipleUsersByEmail = new Method({
     }
 
     let invitedEmails = [];
+    let addedEmails = [];
     let errors = [];
     emails.forEach(email => {
       //aggregate service errors for each email
       try {
-        InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
-        invitedEmails.push(email);
+        const invitationStatus = InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
+        console.log('invitationStatus', invitationStatus);
+        if (invitationStatus === InvitationStatuses.invited) {
+          invitedEmails.push(email);
+        } else if (invitationStatus === InvitationStatuses.added) {
+          addedEmails.push(email);
+        }
       } catch (err) {
         console.error(err);
         errors.push(err.reason);
@@ -357,6 +363,7 @@ export const inviteMultipleUsersByEmail = new Method({
 
     return {
       invitedEmails,
+      addedEmails,
       error: generateErrorMessage(),
       expirationTime: InvitationService.getInvitationExpirationTime()
     };

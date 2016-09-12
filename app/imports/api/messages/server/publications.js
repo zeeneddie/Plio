@@ -1,19 +1,89 @@
 import { Meteor } from 'meteor/meteor';
 import property from 'lodash.property';
 import get from 'lodash.get';
+import { check } from 'meteor/check';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '../messages.js';
 import { Files } from '/imports/api/files/files.js';
 import { isOrgMember } from '../../checkers.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Match } from 'meteor/check';
 import Counter from '../../counter/server.js';
+
+const getLastMessageId = (query, options) => ({
+	lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id')
+});
+
+const getMessageData = (id) => {
+	let text = '';
+	const message = Object.assign({}, Messages.findOne({ _id: id }));
+
+	if (message.type === 'file' && message.fileId) {
+		const file = Files.findOne({ _id: message.fileId }, { fields: { name: 1 } });
+		text = file.name;
+	} else {
+		text = message.text
+	}
+
+	const organization = Object.assign({}, Organizations.findOne({
+		_id: message.organizationId
+	}, {
+		fields: { serialNumber: 1 }
+	}));
+
+	const discussion = Object.assign({}, Discussions.findOne({
+		_id: message.discussionId
+	}, {
+		fields: { linkedTo: 1, documentType: 1 }
+	}));
+
+	const route = {};
+	if (discussion.documentType === 'standard') {
+		route.name = 'standardDiscussion';
+		route.params = { orgSerialNumber: organization.serialNumber, standardId: discussion.linkedTo };
+		route.query = { at: message._id };
+	}
+
+	const user = Meteor.users.findOne({
+		_id: message.createdBy
+	}, {
+		fields: { profile: 1, emails: 1 }
+	});
+
+	const messageData = {
+		text,
+		userAvatar: user && user.profile.avatar,
+		userFullNameOrEmail: user && user.fullNameOrEmail(),
+		route: route,
+		createdBy: message.createdBy
+	};
+
+	return messageData;
+};
 
 Meteor.publishComposite('messages', function(discussionId, {
 	limit = 50,
 	sort = { createdAt: -1 },
 	at = null
 } = {}) {
+	check(discussionId, String);
+
+	new SimpleSchema({
+		limit: { type: Number },
+		at: {
+			type: String,
+			regEx: SimpleSchema.RegEx.Id,
+			optional: true
+		},
+		sort: {
+			type: new SimpleSchema({
+				createdAt: { type: Number }
+			})
+		}
+	}).validate({ limit, sort, at });
+
 	return {
 		find() {
 			if (at) {
@@ -55,7 +125,9 @@ Meteor.publishComposite('messages', function(discussionId, {
 	}
 });
 
-Meteor.publish('messagesLast', function(discussionId) {
+Meteor.publish('discussionMessagesLast', function(discussionId) {
+	check(discussionId, String);
+
 	const discussion = Object.assign({}, Discussions.findOne({ _id: discussionId }));
 
 	if (!this.userId || !isOrgMember(this.userId, get(discussion, 'organizationId'))) {
@@ -67,26 +139,57 @@ Meteor.publish('messagesLast', function(discussionId) {
 	const query = { discussionId };
 	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
 
-	const getLastMessageId = () => ({
-		lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id')
-	});
-
 	const handle = Messages.find(query, options).observeChanges({
 		added: (id) => {
 			if (!initializing) {
-				this.changed('lastMessage', discussionId, { lastMessageId: id });
+				this.changed('lastDiscussionMessage', discussionId, { lastMessageId: id });
 			}
 		},
 		removed: (id) => {
 			if (!initializing) {
-				this.changed('lastMessage', discussionId, getLastMessageId());
+				this.changed('lastDiscussionMessage', discussionId, getLastMessageId(query, options));
 			}
 		}
 	});
 
 	initializing = false;
 
-	this.added('lastMessage', discussionId, getLastMessageId());
+	this.added('lastDiscussionMessage', discussionId, getLastMessageId(query, options));
+
+	this.ready();
+
+	this.onStop(() => handle.stop());
+});
+
+Meteor.publish('organizationMessagesLast', function(organizationId) {
+	check(organizationId, String);
+
+	if (!this.userId || !isOrgMember(this.userId, organizationId)) {
+		return this.ready();
+	}
+
+	let initializing = true;
+
+	const query = { organizationId };
+	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
+
+	const handle = Messages.find(query, options).observeChanges({
+		added: (id) => {
+			if (!initializing) {
+				this.changed('lastOrganizationMessage', organizationId, getMessageData(id));
+			}
+		},
+		removed: (id) => {
+			if (!initializing) {
+				this.changed('lastOrganizationMessage', organizationId);
+			}
+		}
+	});
+
+	initializing = false;
+
+	const messageId = getLastMessageId(query, options);
+	this.added('lastOrganizationMessage', organizationId, getMessageData(messageId));
 
 	this.ready();
 
@@ -96,6 +199,9 @@ Meteor.publish('messagesLast', function(discussionId) {
 // Unread messages by the logged in user, with info about users that created
 // the messages.
 Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
+	check(organizationId, String);
+	check(limit, Number);
+
 	return {
 		find() {
 			const userId = this.userId;
@@ -111,7 +217,15 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 		    options.limit = limit;
 		  }
 
-			return Messages.find({ organizationId: organizationId, viewedBy: { $nin: [userId] } }, options);
+			const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		    organizationId, userId
+		  });
+
+			return Messages.find({
+				organizationId: organizationId,
+				viewedBy: { $nin: [userId] },
+				createdAt: { $gte: currentOrgUserJoinedAt }
+			}, options);
 		},
 		children: [{
 	  	find: function (message) {
@@ -119,7 +233,7 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	    }
 	  }, {
 			find: function (message) {
-				return Discussions.find({ _id: message.discussionId }, { fields: { linkedTo: 1, organizationId: 1 } });
+				return Discussions.find({ _id: message.discussionId }, { fields: { linkedTo: 1, organizationId: 1, documentType: 1 } });
 			}
 		}, {
 	  	find: function (message) {
@@ -131,83 +245,48 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	}
 });
 
-// Meteor.publish('messagesByDiscussionIds', function(arrDiscussionIds, params = { limit: 50 }) {
-// 	const extractUserIds = (cursors, arrayOfIds = []) => {
-// 		if (!!cursors && !Match.test(cursors, Array)) {
-// 			cursors = [cursors];
-// 		}
-//
-// 		_.each(cursors, (cursor) => {
-// 			cursor.forEach((c, i, cr) => {
-// 				if(arrayOfIds.indexOf(c.userId) < 0) {
-// 					arrayOfIds.push(c.userId);
-// 				}
-// 			});
-// 		});
-//
-// 		return arrayOfIds;
-// 	};
-//
-// 	const extractMessageIds = (cursors, arrayOfIds = []) => {
-// 		if (!!cursors && !Match.test(cursors, Array)) {
-// 			cursors = [cursors];
-// 		}
-//
-// 		_.each(cursors, (cursor) => {
-// 			cursor.forEach((c, i, cr) => {
-// 				if(arrayOfIds.indexOf(c._id) < 0) {
-// 					arrayOfIds.push(c._id);
-// 				}
-// 			});
-// 		});
-// 		return arrayOfIds;
-// 	};
-//
-// 	let messages;
-//
-// 	if (params.at) {
-// 		const selectedMessage = Messages.findOne({ _id: params.at });
-//
-// 		const priorMessagesCursor = Messages.find({ discussionId: { $in: arrDiscussionIds }, createdAt: { $lte: selectedMessage.createdAt } }, { sort: { createdAt: -1 }, limit: 25, fields: { _id: 1 } });
-// 		const followingMessagesCursor = Messages.find({ discussionId: { $in: arrDiscussionIds }, createdAt: { $gt: selectedMessage.createdAt } }, { sort: { createdAt: 1 }, limit: 25, fields: { _id: 1 } });
-// 		const latestMessages = Messages.find({ discussionId: { $in: arrDiscussionIds } }, { sort: { createdAt: -1 }, limit: 25, fields: { _id: 1 } });
-// 		const messageIds = extractMessageIds([latestMessages]);
-// 		messages = Messages.find({ _id: { $in: messageIds } });
-// 	} else {
-// 		messages = Messages.find({ discussionId: { $in: arrDiscussionIds } }, { sort: { createdAt: -1 }, limit: params.limit });
-// 	}
-//
-// 	const userIds = extractUserIds(messages);
-//
-// 	return [
-// 		messages,
-// 		Meteor.users.find({ _id: { $in: userIds } }, { fields: { profile: 1, emails: 1, roles: 1 } })
-// 	];
-// });
-
 Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
+	check(counterName, String);
+	check(documentId, String);
+
   const userId = this.userId;
 	const discussion = Discussions.findOne({ linkedTo: documentId, isPrimary: true });
 	const discussionId = discussion && discussion._id;
+	const organizationId = discussion.organizationId;
 
-	if (!discussionId || !userId || !isOrgMember(userId, discussion.organizationId)) {
+	if (!discussionId || !userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		organizationId, userId
+	});
+
   return new Counter(counterName, Messages.find({
     discussionId,
-		organizationId: discussion.organizationId,
+		organizationId,
+		createdAt: { $gte: currentOrgUserJoinedAt },
 		viewedBy: { $ne: userId }
   }));
 });
 
 Meteor.publish('messagesNotViewedCountTotal', function(counterName, organizationId) {
+	check(counterName, String);
+	check(organizationId, String);
+
   const userId = this.userId;
 
 	if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
+
+	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+		organizationId, userId
+	});
+
   return new Counter(counterName, Messages.find({
 		organizationId: organizationId,
+		createdAt: { $gte: currentOrgUserJoinedAt },
 		viewedBy: { $ne: userId }
   }));
 });

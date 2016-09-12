@@ -44,7 +44,14 @@ Template.NC_Item.viewmodel({
     };
   },
   isNew() {
-    return !this.viewedBy().find(_id => _id === Meteor.userId());
+    //return !this.viewedBy().find(_id => _id === Meteor.userId());
+
+    const filter = { _id: this._id() };
+    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const doc = this._getNCByQuery(filter, options);
+    const userId = Meteor.userId();
+
+    return doc && this.isNewDoc({ doc, userId });
   },
   renderTitle() {
     const count = this.occurrences().count();

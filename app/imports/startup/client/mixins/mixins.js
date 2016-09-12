@@ -4,12 +4,14 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
+import invoke from 'lodash.invoke';
 import {
   DocumentTypes, UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
@@ -25,7 +27,7 @@ const vimeoRegex = /(http|https)?:\/\/(www\.)?vimeo.com\/(?:channels\/(?:\w+\/)?
 
 ViewModel.persist = false;
 
-ViewModel.mixin({
+export default {
   collapse: {
     collapsed: true,
     toggleCollapse: _.throttle(function(cb, timeout) {
@@ -205,7 +207,7 @@ ViewModel.mixin({
     }
   },
   addForm: {
-    addForm(template, context = {}) {
+    addForm(template, context = {}, parentNode, nextNode, parentView) {
       if (_.isFunction(this.onChangeCb)) {
         context['onChange'] = this.onChangeCb();
       }
@@ -217,7 +219,9 @@ ViewModel.mixin({
       return Blaze.renderWithData(
         Template[template],
         context,
-        this.forms[0]
+        parentNode || _.first(this.forms),
+        nextNode,
+        parentView || this.templateInstance.view
       );
     }
   },
@@ -282,6 +286,30 @@ ViewModel.mixin({
     }
   },
   organization: {
+
+    /**
+     * The document is new if it was created after the user had joined the
+     * organisation and was not viewed by the user:
+     * @param { createdAt: Number, viewedBy: [String] } doc;
+     * @param {String} userId - user ID.
+    */
+    isNewDoc({ doc, userId }){
+      const dateUserJoinedToOrg = getJoinUserToOrganizationDate({
+        organizationId: this.organizationId(), userId
+      });
+
+      if (!dateUserJoinedToOrg) {
+        return false;
+      }
+
+      const viewedBy = doc.viewedBy;
+
+      const isDocViewedByUser = !!viewedBy
+                                && Match.test(viewedBy, Array)
+                                && _.contains(viewedBy, userId)
+
+      return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
+    },
     organization() {
       const serialNumber = this.organizationSerialNumber();
       return Organizations.findOne({ serialNumber });
@@ -518,6 +546,9 @@ ViewModel.mixin({
     }
   },
   workInbox: {
+    currentWorkItem(){
+      return WorkItems.findOne({ _id: this.workItemId() });
+    },
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
@@ -620,9 +651,6 @@ ViewModel.mixin({
     },
     chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
-    },
-    findParentRecursive(templateName, instance) {
-      return instance && instance instanceof ViewModel && (instance.templateName() === templateName && instance || this.findParentRecursive(templateName, instance.parent()));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
@@ -859,7 +887,6 @@ ViewModel.mixin({
         notificationSound.currentTime = 0;
         notificationSound.play();
       }
-
       let notification = new Notification(title, {
         body,
         tag: tag || _id,
@@ -876,6 +903,14 @@ ViewModel.mixin({
       Meteor.setTimeout(() => {
         notification.close();
       }, timeout);
+    },
+    playNewMessageSound() {
+      const $sound = document.getElementById('message-sound');
+
+      if ($sound) {
+        $sound.currentTime = 0;
+        invoke($sound, 'play');
+      }
     }
   },
   discussions: {
@@ -911,7 +946,6 @@ ViewModel.mixin({
     }
   },
   uploader: {
-
     uploadData(fileId) { // find the file with fileId is being uploaded
       return _.find(this.uploads().array(), (data) => {
         return data.fileId === fileId;
@@ -939,10 +973,10 @@ ViewModel.mixin({
       return this.uploads();
     },
     upload({
-      files,
-      maxSize,
-      beforeUpload
-    }) {
+        files,
+        maxSize,
+        beforeUpload
+      }) {
       if (!files.length) {
         return;
       }
@@ -1017,4 +1051,4 @@ ViewModel.mixin({
       });
     },
   }
-});
+};

@@ -59,11 +59,10 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		this.reInit();
-
 		insertMessage.call({
 			organizationId: this.organizationId(),
 			discussionId,
-			message: sanitizeHtml(this.messageText()),
+			text: sanitizeHtml(this.messageText()),
 			type: 'text'
 		}, handleMethodResult((err, res) => {
       if (res) {
@@ -113,6 +112,6 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const organizationId = this.organizationId();
 		const discussionId = this.discussionId();
 
-		return { discussionId };
+		return { organizationId, discussionId };
 	},
 });
