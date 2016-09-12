@@ -23,7 +23,7 @@ import {
 } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Edit_Main.viewmodel({
-  mixin: 'organization',
+  mixin: ['organization', 'getChildrenData'],
   onRendered(templateInstance) {
     const doc = templateInstance.data.NC;
     const userId = Meteor.userId();
@@ -72,9 +72,6 @@ Template.NC_Card_Edit_Main.viewmodel({
     this.parent().update(...args);
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

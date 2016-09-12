@@ -1,17 +1,15 @@
 <template name="Risks_Create">
-  <div>
-    <div class="card-block">
-      {{> NC_Title_Edit label="Risk name"}}
+  {{#Card_Create ref="card"}}
+    {{> NC_Title_Edit label="Risk name"}}
 
-      {{> Fields_Standards_Edit}}
+    {{> Fields_Standards_Edit}}
 
-      {{> NC_IdentifiedBy_Edit}}
+    {{> NC_IdentifiedBy_Edit}}
 
-      {{> NC_IdentifiedDate_Edit}}
+    {{> NC_IdentifiedDate_Edit}}
 
-      {{> Problems_Magnitude_Edit guidelines=RKGuidelines}}
+    {{> Problems_Magnitude_Edit guidelines=RKGuidelines}}
 
-      {{> Risks_Type_Edit}}
-    </div>
-  </div>
+    {{> Risks_Type_Edit}}
+  {{/Card_Create}}
 </template>

@@ -93,6 +93,8 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
+
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
@@ -127,7 +129,7 @@ const inspire = curry((props, instance, ...args) =>
   flattenObjects(props.map((key, i) =>
     ({ [key]: invoke(instance, key, ...((arr = []) => arr[i] || [])(args)) }))));
 
-// Espessialy useful with viewmodel
+// Especially useful with viewmodel
 // Example of usage:
 // inspire({
 //   hello(a, b) {
@@ -159,5 +161,6 @@ export {
   not,
   mapByIndex,
   mapValues,
-  inspire
+  inspire,
+  setModalError
 };

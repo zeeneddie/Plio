@@ -1,14 +1,15 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
 import { Actions } from '/imports/api/actions/actions.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate, setModalError, inspire } from '/imports/api/helpers.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'workInbox', 'organization', 'router', 'collapsing'],
+  mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),
@@ -23,7 +24,7 @@ Template.Actions_Create.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         const errorMessage = `The new action cannot be created without a ${key}. Please enter a ${key} for your action.`;
-        this.modal().setError(errorMessage);
+        setModalError(errorMessage);
         return;
       }
     }
@@ -31,49 +32,36 @@ Template.Actions_Create.viewmodel({
     this.insert(data);
   },
   insert({ completionTargetDate, ...args }) {
-    const organizationId = this.organizationId();
+    const { organizationId, organization = {} } = inspire(['organization', 'organizationId'], this);
     const { type } = this.data();
 
-    const { timezone } = this.organization();
+    const { timezone } = organization;
     const tzDate = getTzTargetDate(completionTargetDate, timezone);
 
     const allArgs = {
+      ...args,
       type,
       organizationId,
-      completionTargetDate: tzDate,
-      ...args
+      completionTargetDate: tzDate
     };
 
-    this.modal().callMethod(insert, allArgs, (err, _id) => {
-      if (err) {
-        return;
-      } else {
-        this.modal().close();
+    const cb = (_id, open) => {
+      const action = this._getActionByQuery({ _id });
+      const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
+      const queryParams = this._getQueryParams(workItem)(Meteor.userId());
 
-        Meteor.setTimeout(() => {
-          const action = this._getActionByQuery({ _id });
-          const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
-          const queryParams = this._getQueryParams(workItem)(Meteor.userId());
+      workItem && this.goToWorkItem(workItem._id, queryParams);
 
-          if (workItem) {
-            this.goToWorkItem(workItem._id, queryParams);
+      open({
+        _id,
+        _title: action ? this._getNameByType(action.type) : '',
+        template: 'Actions_Edit'
+      });
+    };
 
-            this.expandCollapsed(workItem._id);
-          }
-
-          this.modal().open({
-            _id,
-            _title: action ? this._getNameByType(action.type) : '',
-            template: 'Actions_Edit'
-          });
-        }, 400);
-      }
-    });
+    return invoke(this.card, 'insert', insert, allArgs, cb);
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

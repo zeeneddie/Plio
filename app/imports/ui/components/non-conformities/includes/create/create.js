@@ -1,9 +1,11 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 import { insert } from '/imports/api/non-conformities/methods.js';
+import { setModalError, inspire } from '/imports/api/helpers.js';
 
 Template.NC_Create.viewmodel({
-  mixin: ['modal', 'organization', 'nonconformity', 'router', 'collapsing'],
+  mixin: ['organization', 'nonconformity', 'router', 'getChildrenData'],
   isStandardsEditable: true,
   standardsIds: [],
   NCGuidelines() {
@@ -15,45 +17,31 @@ Template.NC_Create.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         const errorMessage = `The new non-conformity cannot be created without a ${key}. Please enter a ${key} for your non-conformity.`;
-        this.modal().setError(errorMessage);
-        return;
+        return setModalError(errorMessage);
       }
     }
 
     this.insert(data);
   },
   insert({ ...args }) {
-    const organizationId = this.organizationId();
-
     const allArgs = {
       ...args,
-      organizationId
+      ...inspire(['organizationId'], this)
     };
 
-    this.modal().callMethod(insert, allArgs, (err, _id) => {
-      if (err) {
-        return;
-      } else {
-        this.modal().close();
+    const cb = (_id, open) => {
+      this.goToNC(_id, false);
 
-        Meteor.setTimeout(() => {
-          this.goToNC(_id, false);
+      open({
+        _id,
+        _title: 'Non-conformity',
+        template: 'NC_Card_Edit'
+      });
+    };
 
-          this.expandCollapsed(_id);
-
-          this.modal().open({
-            _id,
-            _title: 'Non-conformity',
-            template: 'NC_Card_Edit'
-          });
-        }, 400);
-      }
-    });
+    return invoke(this.card, 'insert', insert, allArgs, cb);
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

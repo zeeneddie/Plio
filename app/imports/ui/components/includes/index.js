@@ -22,3 +22,4 @@ import './navbar';
 import './header';
 import './page-header';
 import './page';
+import './card-create';

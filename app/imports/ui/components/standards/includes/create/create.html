@@ -1,17 +1,15 @@
 <template name="CreateStandard">
-  <form>
-    <div class="card-block">
-      {{> Standards_Title_Edit}}
+  {{#Card_Create ref="card"}}
+    {{> Standards_Title_Edit}}
 
-      {{> ESBookSection}}
+    {{> ESBookSection}}
 
-      {{> ESType}}
+    {{> ESType}}
 
-      {{> Standards_Owner_Edit}}
+    {{> Standards_Owner_Edit}}
 
-      {{> ESIssueNumber}}
+    {{> ESIssueNumber}}
 
-      {{> ESStatus}}
-    </div>
-  </form>
+    {{> ESStatus}}
+  {{/Card_Create}}
 </template>

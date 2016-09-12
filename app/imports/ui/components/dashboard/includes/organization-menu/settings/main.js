@@ -13,7 +13,7 @@ import {
 
 
 Template.OrgSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router'],
+  mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router', 'getChildrenData'],
   name: '',
   currency: '',
   timezone: '',
@@ -101,9 +101,6 @@ Template.OrgSettings_MainSettings.viewmodel({
     });
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });
