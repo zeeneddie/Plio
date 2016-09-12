@@ -7,6 +7,5 @@ import './bindings.js';
 import './share.js';
 import './swal.js';
 import './subsmanagers.js';
-import './infinite-scrolling.js';
 import './polyfills';
 import './mixins';

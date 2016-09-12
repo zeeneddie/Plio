@@ -8,7 +8,6 @@ ViewModel.share({
     searchText: ''
   },
   messages: {
-    isInitialDataReady: false,
     _scrollProps: null,
     options: {
       limit: 50,

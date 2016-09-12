@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
+import invoke from 'lodash.invoke';
 
 import {
 	insert as insertMessage
@@ -19,12 +20,6 @@ const defaults = {
 	messageText: ''
 };
 
-const scrollToBottom = () => {
-	const $chat = $('.chat-content');
-
-	$chat.scrollTop($chat.prop('scrollHeight'));
-};
-
 Template.Discussion_AddMessage_Form.viewmodel({
 	share: 'messages',
 	mixin: ['discussions', 'standard', 'organization'],
@@ -36,21 +31,23 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	},
 	reInit() {
 		if (FlowRouter.getQueryParam('at')) {
-			MessageSubs.clear();
+			const isLastMessageRendered = ViewModel.findOne('Discussion_Messages', vm => invoke(vm, 'isLastMessageRendered'));
 
-			MessageSubs.reset();
+			if (!isLastMessageRendered) {
+				MessageSubs.reset();
+				MessageSubs.clear();
 
-			FlowRouter.setQueryParams({ at: null });
 
-			// Shared props with Discussion_Messages
-			this._scrollProps(null);  					// <
+				FlowRouter.setQueryParams({ at: null });
 
-			this.isInitialDataReady(false);     // <
+				// Shared props with Discussion_Messages
+				this._scrollProps(null);  					// <
 
-			this.options({                      // <
-				...this.options(),
-				at: null
-			});
+				this.options({                      // <
+					...this.options(),
+					at: null
+				});
+			}
 		}
 	},
 	sendTextMessage() {
@@ -59,20 +56,20 @@ Template.Discussion_AddMessage_Form.viewmodel({
 		const discussionId = this.discussionId();
 
 		this.reInit();
-		insertMessage.call({
-			organizationId: this.organizationId(),
-			discussionId,
-			text: sanitizeHtml(this.messageText()),
-			type: 'text'
-		}, handleMethodResult((err, res) => {
-      if (res) {
-				// cannot use vm's reset there cause of shared props
-        this.load(defaults);
 
-				 scrollToBottom();
-        // [ToDo] Call a ringtone on a successful message addition
-      }
-		}));
+		Meteor.setTimeout(() => {
+			insertMessage.call({
+				organizationId: this.organizationId(),
+				discussionId,
+				text: sanitizeHtml(this.messageText()),
+				type: 'text'
+			}, handleMethodResult((err, res) => {
+	      if (res) {
+					// cannot use vm's reset there cause of shared props
+	        this.load(defaults);
+	      }
+			}))
+		}, 0);
 	},
 	addFileFn() {
 		return this.addFile.bind(this);
