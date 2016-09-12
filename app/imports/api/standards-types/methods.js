@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { Standards } from '/imports/api/standards/standards.js';
+import StandardsService from '/imports/api/standards/standards-service.js';
 import StandardsTypeService from './standards-type-service.js';
 import { StandardsTypeSchema } from './standards-type-schema.js';
 import { StandardTypes } from './standards-types.js';
@@ -50,6 +52,20 @@ export const remove = new CheckedMethod({
   check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
-    return StandardsTypeService.remove(doc);
+    const typeId = doc._id;
+    const query = { typeId };
+    const options = {
+      $set: { typeId: null } // [ToDo] typeId can not be equal 0. Solve this
+    };
+
+    //const removedStandardTypes = StandardsTypeService.remove(doc);
+
+    // Update the standard docs with "typeId" equal to the deleted type ID
+    /*if(removedStandardTypes){
+      StandardsService.update({ query, options });
+    }
+
+    return removedStandardTypes;
+    */
   }
 });

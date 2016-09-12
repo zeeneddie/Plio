@@ -44,8 +44,8 @@ Template.OrgSettings_StandardTypes.viewmodel({
       Blaze.remove(viewModel.templateInstance.view);
       return;
     }
-
-    const { title } = viewModel.getData();
+    console.log('onDeleteStandardTypes');
+    const { title } = viewModel.getData();return;
 
     swal({
       title: 'Are you sure?',
