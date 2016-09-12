@@ -73,6 +73,7 @@ Template.Dashboard_MessageStats.viewmodel({
       viewedBy: { $ne: Meteor.userId() }
     }, {
       fields: { viewedBy: 0 },
+      sort: { createdAt: -1 },
       limit: this.enableLimit() ? this.limit() : 0
     }).fetch();
   },

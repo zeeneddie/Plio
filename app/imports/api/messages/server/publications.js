@@ -206,7 +206,6 @@ Meteor.publish('organizationMessagesLast', function(organizationId) {
 // the messages.
 Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	check(organizationId, String);
-	check(limit, Number);
 
 	return {
 		find() {
@@ -222,6 +221,10 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 		  if (Number(limit) === limit && limit % 1 === 0) {
 		    options.limit = limit;
 		  }
+
+			options.sort = {
+				createdAt: -1
+			};
 
 			const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		    organizationId, userId
