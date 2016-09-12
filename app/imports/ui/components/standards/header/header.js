@@ -12,9 +12,9 @@ Template.StandardsHeader.viewmodel({
     return {
       idToExpand: this.standardId(),
       header: `Compliance standards by -`,
+      prependWith: 'by',
       filters: StandardFilters,
-      isActiveFilter: this.isActiveStandardFilter.bind(this),
-      onNavigate: this.onNavigate.bind(this)
+      isActiveFilter: this.isActiveStandardFilter.bind(this)
     };
   },
   standard() {
@@ -25,16 +25,8 @@ Template.StandardsHeader.viewmodel({
     const goToDashboard = () => this.goToDashboard(this.organizationSerialNumber());
 
     if (mobileWidth) {
-      if (this.isDiscussionOpened()) {
-        this.width(mobileWidth);
-        return this.goToStandard(this.standardId());
-      } else {
-        if (this.width()) {
-          return this.width(null);
-        } else {
-          return goToDashboard();
-        }
-      }
+      this.width(mobileWidth);
+      return this.goToStandard(this.standardId());
     }
 
     return goToDashboard();

@@ -1,6 +1,6 @@
 <template name="Header">
-  <div class="navbar">
-    <span class="navbar-title dropdown">
+  {{#Navbar}}
+    {{#Navbar_Title}}
       <a class="dropdown-toggle pointer" data-toggle="dropdown">
         {{header}}
       </a>
@@ -12,13 +12,7 @@
           </a>
         {{/each}}
       </div>
-    </span>
-    <ul class="nav navbar-nav pull-xs-left">
-      <li class="nav-item">
-        <a class="nav-link pointer" {{b "click: onNavigate"}}>
-        	<i class="fa fa-angle-left"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
+    {{/Navbar_Title}}
+    {{> Navbar_Arrow onClick=(callback 'onNavigate')}}
+  {{/Navbar}}
 </template>

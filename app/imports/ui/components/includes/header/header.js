@@ -5,5 +5,5 @@ import { Template } from 'meteor/templating';
    filters: [],
    isActiveFilter() {},
    onSelectFilter() {},
-   onNavigate() {},
+   onNavigate() {}
  });
