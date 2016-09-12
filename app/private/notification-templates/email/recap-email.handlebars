@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <table class="layout layout--no-gutter" style="border-spacing:0;background:#ffffff;margin:0;padding:0;border:0;border-collapse:collapse;text-align:left;width:100%">
+    <tbody>
+      <tr>
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+          <p>{{title}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+          {{#each recapData}}
+            <p>{{title}}</p>
+
+            {{#each docs}}
+              <a href="{{url}}">{{title}}</a>
+
+              <table style="font-size:12px;">
+                <thead>
+                  <tr>
+                    <th style="padding: 7px;">User</th>
+                    <th style="padding: 7px;">Change summary</th>
+                    <th style="padding: 7px;">Date &amp; time</th>
+                  </tr>
+                </thead>
+                {{#each logs}}
+                  <tr>
+                    <td style="border-top: 2px solid #eceeef; padding: 7px;">{{executor}}</td>
+                    <td style="border-top: 2px solid #eceeef; padding: 7px;">{{message}}</td>
+                    <td style="border-top: 2px solid #eceeef; padding: 7px;">{{date}}</td>
+                  </tr>
+                {{/each}}
+              </table>
+            {{/each}}
+          {{/each}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

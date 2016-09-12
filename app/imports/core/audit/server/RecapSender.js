@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import pluralize from 'pluralize';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
 import { CollectionNames } from '/imports/api/constants.js';
@@ -7,11 +8,12 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 import { getCollectionByName } from '/imports/api/helpers.js';
 import NotificationSender from '../../NotificationSender.js';
 
 
-const RECAP_EMAIL_TEMPLATE = '';
+const RECAP_EMAIL_TEMPLATE = 'recapEmail';
 
 export default class RecapSender {
 
@@ -81,8 +83,9 @@ export default class RecapSender {
     const docCollection = getCollectionByName(collection);
     const doc = docCollection.findOne({ _id: documentId });
     const docTitle = this._getDocTitle(doc, collection);
+    const docUrl = this._getDocUrl(doc, collection);
 
-    this._docsMap[documentId] = { docTitle };
+    this._docsMap[documentId] = { docTitle, docUrl };
 
     const { notify } = doc;
 
@@ -136,16 +139,38 @@ export default class RecapSender {
       title: this._emailSubject,
     };
 
+    const recapData = [];
+
     _(['standards', 'ncs', 'risks', 'actions']).each((key) => {
-      templateData[key] = [];
+      const docsLength = docsIds[key].length;
+      if (!docsLength) {
+        return;
+      }
+
+      const docType = {
+        standards: 'standard',
+        ncs: 'non-conformity',
+        risks: 'risk',
+        actions: 'action'
+      }[key];
+
+      const title = `${docsLength} ${pluralize(docType, docsLength)} ` +
+          `${pluralize('was', docsLength)} updated`;
+
+      const docsData = [];
 
       _(docsIds[key]).each((id) => {
-        templateData[key].push({
+        docsData.push({
           title: this._docsMap[id].docTitle,
+          url: this._docsMap[id].docUrl,
           logs: this._logsMap[id]
         });
       });
+
+      recapData.push({ title, docs: docsData });
     });
+
+    _(templateData).extend({ recapData });
 
     new NotificationSender({
       recipients: userId,
@@ -166,10 +191,29 @@ export default class RecapSender {
 
   _getDocTitle(doc, collectionName) {
     if (collectionName === CollectionNames.STANDARDS) {
-      return `"${doc.title}"`;
+      return `${doc.title}`;
     } else {
       return `${doc.sequentialId} "${doc.title}"`;
     }
+  }
+
+  _getDocUrl(doc, collectionName) {
+    const { serialNumber } = this._organization;
+    let { _id } = doc;
+
+    const path = {
+      [CollectionNames.STANDARDS]: 'standards',
+      [CollectionNames.NCS]: 'non-conformities',
+      [CollectionNames.RISKS]: 'risks',
+      [CollectionNames.ACTIONS]: 'work-items'
+    }[collectionName];
+
+    if (collectionName === CollectionNames.ACTIONS) {
+      const workItem = WorkItems.findOne({ 'linkedDoc._id': _id }) || {};
+      _id = workItem._id;
+    }
+
+    return Meteor.absoluteUrl(`${serialNumber}/${path}/${_id}`);
   }
 
   _getEmailSubject() {
