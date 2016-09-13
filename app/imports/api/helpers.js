@@ -116,6 +116,18 @@ const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev
 
 const extractIds = (collection = []) => collection.map(property('_id'));
 
+const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+
+const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+
+const $isScrolledElementVisible = (el, container) => {
+  var containerTop = $(container).offset().top;
+  var containerBottom = containerTop + $(container).height();
+  var elemTop = $(el).position().top;
+  var elemBottom = elemTop + $(el).height();
+  return ((elemBottom < containerBottom) && (elemTop > containerTop));
+}
+
 export {
   compareDates,
   getCollectionByName,
@@ -131,5 +143,8 @@ export {
   withUserId,
   mapArgsTo,
   flattenObjects,
-  extractIds
+  extractIds,
+  $isScrolledToBottom,
+  $scrollToBottom,
+  $isScrolledElementVisible
 };

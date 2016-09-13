@@ -139,22 +139,28 @@ Meteor.publish('discussionMessagesLast', function(discussionId) {
 	const query = { discussionId };
 	const options = { sort: { createdAt: -1 }, limit: 1, fields: { _id: 1 } };
 
+	const getId = () => Object.assign({}, getLastMessageId(query, options)).lastMessageId;
+	const getData = (_id) => {
+		const { _id:lastMessageId, createdBy } = Object.assign({}, Messages.findOne({ _id }));
+		return { lastMessageId, createdBy };
+	};
+
 	const handle = Messages.find(query, options).observeChanges({
 		added: (id) => {
 			if (!initializing) {
-				this.changed('lastDiscussionMessage', discussionId, { lastMessageId: id });
+				this.changed('lastDiscussionMessage', discussionId, getData(id));
 			}
 		},
 		removed: (id) => {
 			if (!initializing) {
-				this.changed('lastDiscussionMessage', discussionId, getLastMessageId(query, options));
+				this.changed('lastDiscussionMessage', discussionId, getData(getId()));
 			}
 		}
 	});
 
 	initializing = false;
 
-	this.added('lastDiscussionMessage', discussionId, getLastMessageId(query, options));
+	this.added('lastDiscussionMessage', discussionId, getData(getId()));
 
 	this.ready();
 
@@ -200,7 +206,6 @@ Meteor.publish('organizationMessagesLast', function(organizationId) {
 // the messages.
 Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	check(organizationId, String);
-	check(limit, Number);
 
 	return {
 		find() {
@@ -216,6 +221,10 @@ Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 		  if (Number(limit) === limit && limit % 1 === 0) {
 		    options.limit = limit;
 		  }
+
+			options.sort = {
+				createdAt: -1
+			};
 
 			const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		    organizationId, userId
@@ -250,7 +259,7 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 	check(documentId, String);
 
   const userId = this.userId;
-	const discussion = Discussions.findOne({ linkedTo: documentId, isPrimary: true });
+	const discussion = Object.assign({}, Discussions.findOne({ linkedTo: documentId, isPrimary: true }));
 	const discussionId = discussion && discussion._id;
 	const organizationId = discussion.organizationId;
 

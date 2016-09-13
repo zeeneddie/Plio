@@ -19,22 +19,24 @@ Template.Discussion_Message.viewmodel({
 
 		const at = FlowRouter.getQueryParam('at');
 		const _id = invoke(this, '_id');
-		const $chat = $(template.firstNode).closest('.chat-content');
-		const $message = template.$('.chat-message-container');
 
 		updateViewedBy.call({ _id });
 
-		if (Object.is(at, _id)) {
-			const msgOffset = $message.offset().top;
+		Tracker.afterFlush(() => {
+			if (Object.is(at, _id)) {
+				const $chat = $('.chat-content');
+				const $message = template.$('.chat-message-container');
+				const msgOffset = $message.offset().top;
 
-			// center the linked message in the chat box
-			const elHeight = $message.height();
-			const chatHeight = $chat.height();
+				// center the linked message in the chat box
+				const elHeight = $message.height();
+				const chatHeight = $chat.height();
 
-			const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
+				const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
 
-			$chat.scrollTop(offset);
-		}
+				$chat.scrollTop(offset);
+			}
+		})
 	},
 	getFormattedDate: getFormattedDate,
 	isAuthor() {
