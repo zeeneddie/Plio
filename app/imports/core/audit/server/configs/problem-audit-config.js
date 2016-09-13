@@ -47,7 +47,34 @@ export default ProblemAuditConfig = {
         }
       }
     ],
-    notifications: []
+    notifications: [
+      {
+        text: '{{userName}} created {{{docDesc}}} for {{{standardDesc}}}',
+        data({ newDoc, user }) {
+          const auditConfig = this;
+          const docDesc = auditConfig.docDescription(newDoc);
+          const userName = getUserFullNameOrEmail(user);
+
+          const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
+
+          return standards.map((standard) => {
+            return {
+              standardDesc: StandardAuditConfig.docDescription(standard),
+              docDesc,
+              userName
+            };
+          });
+        },
+        receivers({ newDoc, user }) {
+          const userId = getUserId(user);
+          const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
+
+          return standards.map(({ owner }) => {
+            return (owner !== userId) ? [owner] : [];
+          });
+        }
+      }
+    ]
   },
 
   updateHandlers: [
@@ -340,14 +367,31 @@ export default ProblemAuditConfig = {
           }
         }
       ],
-      notifications: [],
-      data({ diffs: { standardsIds } }) {
+      notifications: [
+        {
+          text: {
+            [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{standardDesc}}}',
+            [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{standardDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { standardsIds }, newDoc, user }) {
+        const auditConfig = this;
         const { item:standardId } = standardsIds;
         const standard = () => Standards.findOne({ _id: standardId });
 
         return {
-          standardDesc: () => StandardAuditConfig.docDescription(standard())
+          docDesc: () => auditConfig.docDescription(newDoc),
+          standardDesc: () => StandardAuditConfig.docDescription(standard()),
+          userName: () => getUserFullNameOrEmail(user)
         };
+      },
+      receivers({ diffs: { standardsIds }, newDoc, user }) {
+        const userId = getUserId(user);
+        const { item:standardId } = standardsIds;
+        const { owner } = Standards.findOne({ _id: standardId }) || {};
+
+        return (owner !== userId) ? [owner] : [];
       }
     },
 

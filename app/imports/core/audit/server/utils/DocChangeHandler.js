@@ -368,16 +368,10 @@ export default class DocChangeHandler {
   }
 
   _saveLogs() {
-    //console.log(this._logs);
-    //console.log('\n');
-
     _(this._logs).each(log => AuditLogs.insert(log));
   }
 
   _sendNotifications() {
-    console.log(this._notifications);
-    console.log('\n');
-
     const notificationsMap = {};
 
     _(this._notifications).each((notification) => {

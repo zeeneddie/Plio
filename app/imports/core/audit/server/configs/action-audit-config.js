@@ -122,10 +122,10 @@ export default ActionAuditConfig = {
     notifications: [
       {
         text: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
-        data({ newDoc }) {
+        data({ newDoc, user }) {
           const auditConfig = this;
           const docDesc = auditConfig.docDescription(newDoc);
-          const userName = getUserFullNameOrEmail(newDoc.createdBy);
+          const userName = getUserFullNameOrEmail(user);
 
           return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
             const auditConfig = getLinkedDocAuditConfig(documentType);
