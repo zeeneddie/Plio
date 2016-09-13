@@ -9,6 +9,7 @@ import {
   departmentsIdsField,
   descriptionField,
   IPDesiredOutcomeField,
+  IPFileIdsField,
   IPOwnerField,
   IPReviewDatesField,
   IPReviewDateField,
@@ -118,7 +119,15 @@ export default StandardAuditConfig = {
           oldValue: () => getUserFullNameOrEmail(oldValue)
         };
       },
-      receivers: getReceivers
+      receivers({ newDoc, oldDoc, user }) {
+        const { owner:newOwner } = newDoc;
+        const { owner:oldOwner } = oldDoc;
+        const userId = getUserId(user);
+
+        return _([newOwner, oldOwner]).filter((owner) => {
+          return owner !== userId;
+        });
+      }
     },
 
     {
@@ -278,6 +287,18 @@ export default StandardAuditConfig = {
         IPDesiredOutcomeField.notificationConfig
       ],
       data: IPDesiredOutcomeField.data,
+      receivers: getReceivers
+    },
+
+    {
+      field: IPFileIdsField.field,
+      logs: [
+        IPFileIdsField.logConfig
+      ],
+      notifications: [
+        IPFileIdsField.notificationConfig
+      ],
+      data: IPFileIdsField.data,
       receivers: getReceivers
     },
 

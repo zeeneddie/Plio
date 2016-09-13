@@ -118,6 +118,33 @@ export const IPDesiredOutcomeField = {
   }
 };
 
+export const IPFileIdsField = {
+  field: 'improvementPlan.fileIds',
+  logConfig: {
+    message: {
+      [ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
+      [ITEM_REMOVED]: 'Improvement plan file removed'
+    }
+  },
+  notificationConfig: {
+    text: {
+      [ITEM_ADDED]: '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}}',
+      [ITEM_REMOVED]: '{{userName}} removed file from improvement plan of {{{docDesc}}}'
+    }
+  },
+  data({ diffs, newDoc, user }) {
+    const _id = diffs['improvementPlan.fileIds'].item;
+    const { name } = Files.findOne({ _id }) || {};
+    const auditConfig = this;
+
+    return {
+      name: () => name,
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user)
+    };
+  }
+};
+
 export const IPOwnerField = {
   field: 'improvementPlan.owner',
   logConfig: {
