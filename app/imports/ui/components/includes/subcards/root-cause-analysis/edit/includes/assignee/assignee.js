@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.RCA_ToBeCompletedBy_Edit.viewmodel({
-  assignee: '',
+  assignee: Meteor.userId(),
   comments: '',
   selectFirstIfNoSelected: false,
   placeholder: 'Assignee',
@@ -10,12 +10,11 @@ Template.RCA_ToBeCompletedBy_Edit.viewmodel({
   disabled: false,
   selectArgs() {
     const {
-      assignee:value,
+      assignee:value = '',
       selectFirstIfNoSelected,
       placeholder,
       disabled
     } = this.data();
-
     return {
       value,
       placeholder,
