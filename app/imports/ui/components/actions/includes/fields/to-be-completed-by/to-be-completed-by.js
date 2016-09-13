@@ -10,7 +10,7 @@ Template.Actions_ToBeCompletedBy.viewmodel({
   completionComments: '',
   selectArgs() {
     const {
-      toBeCompletedBy:value,
+      toBeCompletedBy:value = '',
       placeholder,
       selectFirstIfNoSelected
     } = this.data();

@@ -9,7 +9,7 @@ Template.Actions_ToBeVerifiedBy.viewmodel({
   selectFirstIfNoSelected: false,
   selectArgs() {
     const {
-      toBeVerifiedBy:value,
+      toBeVerifiedBy:value = '',
       placeholder,
       selectFirstIfNoSelected
     } = this.data();
