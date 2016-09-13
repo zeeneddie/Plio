@@ -118,7 +118,15 @@ export default StandardAuditConfig = {
           oldValue: () => getUserFullNameOrEmail(oldValue)
         };
       },
-      receivers: getReceivers
+      receivers({ newDoc, oldDoc, user }) {
+        const { owner:newOwner } = newDoc;
+        const { owner:oldOwner } = oldDoc;
+        const userId = getUserId(user);
+
+        return _([newOwner, oldOwner]).filter((owner) => {
+          return owner !== userId;
+        });
+      }
     },
 
     {
