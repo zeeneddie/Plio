@@ -5,13 +5,8 @@
       canButtonBeShown=canBeCompleted
       onComplete=complete}}
 
-      {{> Select_Single
-          items=_members
-          selected=toBeCompletedBy
-          placeholder=placeholder
-          selectFirstIfNoSelected=selectFirstIfNoSelected
-          onUpdate=onUpdateCb}}
-          
+      {{> Select_Member (selectArgs)}}
+
     {{/Completion_Edit}}
   {{/FormField}}
 </template>

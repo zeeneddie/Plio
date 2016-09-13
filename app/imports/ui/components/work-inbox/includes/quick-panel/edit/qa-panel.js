@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
+import { chain } from '/imports/api/helpers.js';
+
 Template.WorkInbox_QAPanel_Edit.viewmodel({
   mixin: ['modal', 'utils'],
   content: 'Actions_QAPanel_Edit_Complete',
@@ -21,6 +23,6 @@ Template.WorkInbox_QAPanel_Edit.viewmodel({
       }
     };
 
-    this.modal().callMethod(method, { _id, ...args }, this.chain(callback, cb));
+    this.modal().callMethod(method, { _id, ...args }, chain(callback, cb));
   }
 });

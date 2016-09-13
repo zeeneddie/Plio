@@ -1,23 +1,30 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 Template.NC_Title_Edit.viewmodel({
   label: 'Non-conformity name',
-  titleText: '',
+  title: '',
   sequentialId: '',
-  update(e) {
-    if (!this._id) return;
+  titleArgs() {
+    const { label, title:value, sequentialId:addon } = this.data();
+    const withFocusCheck = this._id ? true : false;
 
-    const title = this.titleText();
+    return {
+      label,
+      value,
+      addon,
+      withFocusCheck,
+      onFocusOut: (e, { value:title }) => {
+        this.title(title);
 
-    if (!title) {
-      ViewModel.findOne('ModalWindow').setError('Title is required!');
-      return;
-    }
+        if (!this._id) return;
 
-    this.parent().update({ title, e, withFocusCheck: true });
+        invoke(this.parent(), 'update', { title });
+      }
+    };
   },
   getData() {
-    const { titleText:title } = this.data();
+    const { title } = this.data();
     return { title };
   }
 });

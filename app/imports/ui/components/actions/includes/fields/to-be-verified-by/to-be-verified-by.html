@@ -10,12 +10,7 @@
       onComplete=verify
       onFail=failVerification}}
 
-      {{> Select_Single
-          items=_members
-          selected=toBeVerifiedBy
-          placeholder=placeholder
-          selectFirstIfNoSelected=selectFirstIfNoSelected
-          onUpdate=onUpdateCb}}
+      {{> Select_Member (selectArgs)}}
 
     {{/Completion_Edit}}
   {{/FormField}}

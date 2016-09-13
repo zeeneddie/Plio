@@ -1,22 +1,25 @@
 <template name="StandardsPage">
-  {{#unless isDiscussionOpened}}
-    <div class="content-list scroll" {{b "if: !width || width > 768"}}>
+  {{#Page classNames=classNames}}
+    {{#if isDiscussionOpened}}
+      {{> Standards_Card_Read
+          _id=standardId
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{else}}
       {{> StandardsList}}
-    </div>
-  {{/unless}}
-  <div class="content-cards hidden-sm-down scroll" style={{styles}}>
-    {{> Standards_Card_Read
-        _id=standardId
-        isDiscussionOpened=isDiscussionOpened
-        messagesNotViewedCount=messagesNotViewedCount}}
-  </div>
-  {{#if isDiscussionOpened}}
-    <div class="content-cards content-cards-flush scroll">
+    {{/if}}
+  {{else}}
+    {{#if isDiscussionOpened}}
       {{> Discussion_Card
           discussionId=discussion._id
           linkedTo=standardId
           isReady=isReady
           standard=standard}}
-    </div>
-  {{/if}}
+    {{else}}
+      {{> Standards_Card_Read
+          _id=standardId
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{/if}}
+  {{/Page}}
 </template>

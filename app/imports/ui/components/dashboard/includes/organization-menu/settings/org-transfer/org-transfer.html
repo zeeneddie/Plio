@@ -1,17 +1,11 @@
 <template name="OrgSettings_OrgTransfer">
   {{#FormField label="Org owner"}}
-    {{#Select_Single
-      items=_members
-      selected=ownerId
-      placeholder=placeholder
-      selectFirstIfNoSelected=selectFirstIfNoSelected
-      disabled=($not isInputEnabled)
-      onUpdate=selectOwner}}
+    {{#Select_Member (selectArgs)}}
       <button type="button" class="btn btn-primary no-margin"
           {{b "enable: isButtonEnabled, click: transferOrg"}}>
         Transfer
       </button>
-    {{/Select_Single}}
+    {{/Select_Member}}
     <div class="cancel-org-transfer" {{b "if: invitationSent"}}>
       <span class="label text-default" {{b "text: invitationSentText"}}>
       </span>

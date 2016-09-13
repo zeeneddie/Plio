@@ -12,3 +12,4 @@ import './notes';
 import './review';
 import './wrapper';
 import './subcard';
+import './wrapper-add';

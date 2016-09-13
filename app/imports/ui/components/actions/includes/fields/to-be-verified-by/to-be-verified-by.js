@@ -1,21 +1,31 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 
 Template.Actions_ToBeVerifiedBy.viewmodel({
-  mixin: ['search', 'user', 'members'],
   toBeVerifiedBy: '',
   placeholder: 'To be verified by',
   selectFirstIfNoSelected: false,
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected } = viewmodel.getData();
+  selectArgs() {
+    const {
+      toBeVerifiedBy:value = '',
+      placeholder,
+      selectFirstIfNoSelected
+    } = this.data();
 
-    this.toBeVerifiedBy(selected);
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      onUpdate: (viewmodel) => {
+        const { selected:userId } = viewmodel.getData();
 
-    this.onUpdate({ userId: selected });
+        this.toBeVerifiedBy(userId);
+
+        return invoke(this, 'onUpdate', { userId });
+      }
+    };
   },
   canBeVerified() {
     return !!this.onVerify && (this.toBeVerifiedBy() === Meteor.userId());

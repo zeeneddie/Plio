@@ -1,5 +1,6 @@
 <template name="Subcards_Occurrences_Edit">
-  {{#Subcards_Wrapper
+  {{> Subcards_Wrapper_Add (wrapperArgs)}}
+  <!-- {{#Subcards_Wrapper
     _lText="Occurrences"
     _rText=occurrences.count
     renderContentOnInitial=renderContentOnInitial}}
@@ -27,5 +28,5 @@
         <button type="button" class="btn btn-link" {{b "click: addOccurrence"}}>Add an occurrence</button>
       </div>
     </div>
-  {{/Subcards_Wrapper}}
+  {{/Subcards_Wrapper}} -->
 </template>

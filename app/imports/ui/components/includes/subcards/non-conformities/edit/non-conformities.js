@@ -5,14 +5,46 @@ import {
   insert, update, remove
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
+import { inspire } from '/imports/api/helpers.js';
 
 
 Template.Subcards_NonConformities_Edit.viewmodel({
-  mixin: ['addForm', 'nonconformity', 'organization', 'modal'],
+  mixin: ['nonconformity', 'organization', 'modal'],
   _query: {},
   isStandardsEditable: false,
-  renderContentOnInitial() {
-    return !(this.NCs().count() > 5);
+  wrapperArgs() {
+    const {
+      NCs,
+      _id,
+      isStandardsEditable
+    } = inspire([
+      'NCs',
+      '_id',
+      'isStandardsEditable'
+    ], this);
+
+    const items = NCs.fetch();
+
+    return {
+      items,
+      addText: 'Add a new non-conformity',
+      renderContentOnInitial: !(items.length > 5),
+      _lText: 'Non-conformities',
+      _rText: items.length,
+      onAdd: this.onAdd({ _id, isStandardsEditable }),
+      getSubcardArgs: this.getSubcardArgs.bind(this)
+    };
+  },
+  getSubcardArgs(doc) {
+    return {
+      doc,
+      _id: doc._id,
+      _lText: this.renderText(doc),
+      content: 'NC_Subcard',
+      insertFn: this.insert.bind(this),
+      updateFn: this.update.bind(this),
+      removeFn: this.remove.bind(this)
+    };
   },
   NCs() {
     return this._getNCsByQuery({ ...this._query() }, { sort: { serialNumber: 1 } });
@@ -20,13 +52,13 @@ Template.Subcards_NonConformities_Edit.viewmodel({
   renderText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;
   },
-  addNC() {
-    this.addForm(
+  onAdd({ _id, isStandardsEditable }) {
+    return add => add(
       'Subcard',
       {
+        isStandardsEditable,
         content: 'NC_Create',
-        isStandardsEditable: this.isStandardsEditable(),
-        standardsIds: [invoke(this, '_id')],
+        standardsIds: [_id],
         _lText: 'New non-conformity',
         isNew: false,
         insertFn: this.insert.bind(this),
@@ -34,22 +66,13 @@ Template.Subcards_NonConformities_Edit.viewmodel({
       }
     );
   },
-  insertFn() {
-    return this.insert.bind(this);
-  },
   insert({ ...args }, cb) {
     const organizationId = this.organizationId();
 
     this.modal().callMethod(insert, { ...args, organizationId }, cb);
   },
-  updateFn() {
-    return this.update.bind(this);
-  },
   update({ _id, ...args }, cb = () => {}) {
     this.modal().callMethod(update, { _id, ...args }, cb);
-  },
-  removeFn() {
-    return this.remove.bind(this);
   },
   remove(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
