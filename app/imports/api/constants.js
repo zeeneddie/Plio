@@ -386,9 +386,7 @@ const CollectionNames = {
   RISKS: 'Risks',
   ACTIONS: 'Actions',
   LESSONS: 'LessonsLearned',
-  OCCURRENCES: 'Occurrences',
-  MESSAGES: 'Messages',
-  ORGANIZATIONS: 'Organizations'
+  OCCURRENCES: 'Occurrences'
 };
 
 const InvitationStatuses = {
@@ -438,7 +436,6 @@ export {
   ReviewStatuses,
   WorkItemsStore,
   RKTypes,
-  InvitationStatuses,
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,
