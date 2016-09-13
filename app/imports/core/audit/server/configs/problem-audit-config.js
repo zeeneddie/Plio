@@ -7,6 +7,7 @@ import {
   descriptionField,
   fileIdsField,
   IPDesiredOutcomeField,
+  IPFileIdsField,
   IPOwnerField,
   IPReviewDatesField,
   IPReviewDateField,
@@ -666,6 +667,15 @@ export default ProblemAuditConfig = {
       ],
       notifications: [],
       data: IPDesiredOutcomeField.data
+    },
+
+    {
+      field: IPFileIdsField.field,
+      logs: [
+        IPFileIdsField.logConfig
+      ],
+      notifications: [],
+      data: IPFileIdsField.data
     },
 
     {

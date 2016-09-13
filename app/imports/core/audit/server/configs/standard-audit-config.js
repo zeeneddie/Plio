@@ -9,6 +9,7 @@ import {
   departmentsIdsField,
   descriptionField,
   IPDesiredOutcomeField,
+  IPFileIdsField,
   IPOwnerField,
   IPReviewDatesField,
   IPReviewDateField,
@@ -286,6 +287,18 @@ export default StandardAuditConfig = {
         IPDesiredOutcomeField.notificationConfig
       ],
       data: IPDesiredOutcomeField.data,
+      receivers: getReceivers
+    },
+
+    {
+      field: IPFileIdsField.field,
+      logs: [
+        IPFileIdsField.logConfig
+      ],
+      notifications: [
+        IPFileIdsField.notificationConfig
+      ],
+      data: IPFileIdsField.data,
       receivers: getReceivers
     },
 
