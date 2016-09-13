@@ -646,9 +646,6 @@ export default {
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
     },
-    chain(...fns) {
-      return (...args) => fns.forEach(fn => fn(...args));
-    },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);

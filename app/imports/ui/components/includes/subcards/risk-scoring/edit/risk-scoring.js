@@ -7,7 +7,7 @@ import { inspire, chain } from '/imports/api/helpers.js';
 const getTableData = instance => inspire(['tableData', 'guideHtml'], instance);
 
 Template.Subcards_RiskScoring_Edit.viewmodel({
-  mixin: ['riskScore', 'date', 'addForm', 'utils', 'organization'],
+  mixin: ['riskScore', 'date', 'organization'],
   label: 'Risk scoring',
   scores: [],
   wrapperArgs() {
