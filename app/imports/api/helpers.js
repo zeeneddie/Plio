@@ -142,6 +142,8 @@ const inspire = curry((props, instance, ...args) =>
 //
 // > { hello: 'world !! 1', today: 'is friday  wohoooooo!' }
 
+const invokeId = instance => invoke(instance, '_id');
+
 export {
   compareDates,
   getCollectionByName,
@@ -162,5 +164,6 @@ export {
   mapByIndex,
   mapValues,
   inspire,
-  setModalError
+  setModalError,
+  invokeId
 };

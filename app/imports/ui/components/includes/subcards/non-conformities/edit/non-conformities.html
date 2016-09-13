@@ -1,28 +1,3 @@
 <template name="Subcards_NonConformities_Edit">
-  {{#Subcards_Wrapper
-    _lText="Non-conformities"
-    _rText=NCs.count
-    renderContentOnInitial=renderContentOnInitial}}
-    <div class="card-block">
-      {{#if NCs.count}}
-        <div class="card">
-          {{#each NCs}}
-            {{> Subcard
-                NC=this
-                doc=this
-                _id=this._id
-                _lText=(renderText this)
-                content="NC_Subcard"
-                insertFn=insertFn
-                updateFn=updateFn
-                removeFn=removeFn}}
-          {{/each}}
-        </div>
-      {{/if}}
-      <div class="card new-cards" {{b "ref: forms"}}></div>
-      <div class="text-xs-center">
-        <button type="button" class="btn btn-link" {{b "click: addNC"}}>Add a non-conformity</button>
-      </div>
-    </div>
-  {{/Subcards_Wrapper}}
+  {{> Subcards_Wrapper_Add (wrapperArgs)}}
 </template>
