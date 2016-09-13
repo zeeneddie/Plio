@@ -52,20 +52,6 @@ export const remove = new CheckedMethod({
   check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
 
   run(doc) {
-    const typeId = doc._id;
-    const query = { typeId };
-    const options = {
-      $set: { typeId: null } // [ToDo] typeId can not be equal 0. Solve this
-    };
-
-    //const removedStandardTypes = StandardsTypeService.remove(doc);
-
-    // Update the standard docs with "typeId" equal to the deleted type ID
-    /*if(removedStandardTypes){
-      StandardsService.update({ query, options });
-    }
-
-    return removedStandardTypes;
-    */
+    return StandardsTypeService.remove(doc);
   }
 });
