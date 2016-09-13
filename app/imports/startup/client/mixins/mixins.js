@@ -866,8 +866,7 @@ export default {
       }
     }
   },
-  ifications: {
-
+  notifications: {
     // Notifications document can be passed as an argument
     // _id is used as notification tag if there's no tag argument passed
     // Only title is required

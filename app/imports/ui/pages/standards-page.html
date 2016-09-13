@@ -11,6 +11,7 @@
   {{else}}
     {{#if isDiscussionOpened}}
       {{> Discussion_Card
+          discussionId=discussion._id
           linkedTo=standardId
           isReady=isReady
           standard=standard}}
