@@ -646,18 +646,12 @@ export default {
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
     },
-    compose(...fns) {
-      return fns.reduce((f, g) => (...args) => f(g(...args)));
-    },
     chain(...fns) {
       return (...args) => fns.forEach(fn => fn(...args));
     },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
-    },
-    $eq(val1, val2) {
-      return val1 === val2;
     }
   },
   magnitude: {

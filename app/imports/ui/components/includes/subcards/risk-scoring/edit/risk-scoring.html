@@ -1,5 +1,6 @@
 <template name="Subcards_RiskScoring_Edit">
-  {{#Subcards_Wrapper
+  {{> Subcards_Wrapper_Add (wrapperArgs)}}
+  <!-- {{#Subcards_Wrapper
     _lText=label
     _rText=(getScoreLabel scoresSorted.[0])
     renderContentOnInitial=renderContentOnInitial}}
@@ -28,5 +29,5 @@
         <button type="button" class="btn btn-link" {{b "click: add"}}>Add a risk score</button>
       </div>
     </div>
-  {{/Subcards_Wrapper}}
+  {{/Subcards_Wrapper}} -->
 </template>
