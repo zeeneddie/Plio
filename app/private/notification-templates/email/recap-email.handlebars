@@ -12,7 +12,11 @@
             <p>{{title}}</p>
 
             {{#each docs}}
-              <a href="{{url}}">{{title}}</a>
+              {{#if url}}
+                <a href="{{url}}">{{title}}</a>
+              {{else}}
+                <p>{{title}}</p>
+              {{/if}}
 
               <table style="font-size:12px;">
                 <thead>

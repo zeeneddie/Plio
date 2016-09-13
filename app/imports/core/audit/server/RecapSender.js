@@ -66,7 +66,8 @@ export default class RecapSender {
     let executor = log.executor;
     if (!this._updateExecutorsMap[executor]) {
       const executorDoc = Meteor.users.findOne({ _id: executor });
-      this._updateExecutorsMap[executor] = executorDoc.fullNameOrEmail();
+      const name = (executorDoc && executorDoc.fullNameOrEmail()) || executor;
+      this._updateExecutorsMap[executor] = name;
     }
     executor = this._updateExecutorsMap[executor];
 
@@ -114,7 +115,11 @@ export default class RecapSender {
     const { _id:organizationId } = this._organization;
 
     const getDocsIds = (collection) => {
-      return collection.find({ organizationId }).map(({ _id }) => _id);
+      return collection.find({
+        organizationId
+      }, {
+        fields: { _id: 1 }
+      }).map(({ _id }) => _id);
     };
 
     return [
@@ -198,20 +203,18 @@ export default class RecapSender {
   }
 
   _getDocUrl(doc, collectionName) {
+    if (collectionName === CollectionNames.ACTIONS) {
+      return;
+    }
+
     const { serialNumber } = this._organization;
     let { _id } = doc;
 
     const path = {
       [CollectionNames.STANDARDS]: 'standards',
       [CollectionNames.NCS]: 'non-conformities',
-      [CollectionNames.RISKS]: 'risks',
-      [CollectionNames.ACTIONS]: 'work-items'
+      [CollectionNames.RISKS]: 'risks'
     }[collectionName];
-
-    if (collectionName === CollectionNames.ACTIONS) {
-      const workItem = WorkItems.findOne({ 'linkedDoc._id': _id }) || {};
-      _id = workItem._id;
-    }
 
     return Meteor.absoluteUrl(`${serialNumber}/${path}/${_id}`);
   }
