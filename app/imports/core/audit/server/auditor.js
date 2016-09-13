@@ -8,6 +8,20 @@ export default Auditor = {
 
   _auditConfigs: { },
 
+  _isAuditStarted: false,
+
+  startAudit() {
+    this._isAuditStarted = true;
+  },
+
+  stopAudit() {
+    this._isAuditStarted = false;
+  },
+
+  isAuditStarted() {
+    return this._isAuditStarted === true;
+  },
+
   documentCreated(newDocument, userId, collectionName) {
     const config = this._auditConfigs[collectionName];
 
@@ -37,21 +51,27 @@ export default Auditor = {
     const auditor = this;
 
     collection.after.insert(function(userId, doc) {
-      Meteor.isServer && Meteor.defer(
-        () => auditor.documentCreated(doc, userId, collectionName)
-      );
+      Meteor.defer(() => {
+        if (auditor.isAuditStarted()) {
+          auditor.documentCreated(doc, userId, collectionName);
+        }
+      });
     });
 
     collection.after.update(function(userId, doc, fieldNames, modifier, options) {
-      Meteor.isServer && Meteor.defer(
-        () => auditor.documentUpdated(doc, this.previous, collectionName)
-      );
+      Meteor.defer(() => {
+        if (auditor.isAuditStarted()) {
+          auditor.documentUpdated(doc, this.previous, collectionName);
+        }
+      });
     });
 
     collection.after.remove(function(userId, doc) {
-      Meteor.isServer && Meteor.defer(
-        () => auditor.documentRemoved(doc, userId, collectionName)
-      );
+      Meteor.defer(() => {
+        if (auditor.isAuditStarted()) {
+          auditor.documentRemoved(doc, userId, collectionName);
+        }
+      });
     });
 
     this._auditConfigs[collectionName] = config;

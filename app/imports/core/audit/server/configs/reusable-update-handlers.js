@@ -1,8 +1,7 @@
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { Files } from '/imports/api/files/files.js';
-import { SystemName } from '/imports/api/constants.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
+import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 
 
 const {
@@ -11,470 +10,410 @@ const {
 } = ChangesKinds;
 
 export const departmentsIdsField = {
+  field: 'departmentsIds',
   logConfig: {
-    template: {
+    message: {
       [ITEM_ADDED]: 'Document was linked to {{{departmentDesc}}}',
       [ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}'
-    },
-    templateData({ diffs: { departmentsIds } }) {
-      const { item:departmentId } = departmentsIds;
-      const department = Departments.findOne({ _id: departmentId });
-
-      return {
-        departmentDesc: `${department.name} department`
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{departmentDesc}}}',
       [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{departmentDesc}}}'
-    },
-    templateData({ diffs: { departmentsIds }, newDoc, user }) {
-      const { item:departmentId } = departmentsIds;
-      const department = Departments.findOne({ _id: departmentId });
+    }
+  },
+  data({ diffs: { departmentsIds }, newDoc, user }) {
+    const { item:departmentId } = departmentsIds;
+    const department = () => Departments.findOne({ _id: departmentId });
+    const auditConfig = this;
 
-      return {
-        docDesc: this.docDescription(newDoc),
-        departmentDesc: `${department.name} department`,
-        userName: getUserFullNameOrEmail(user)
-      };
-    },
-    receivers() { }
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      departmentDesc: () => `${department().name} department`,
+      userName: () => getUserFullNameOrEmail(user)
+    };
   }
 };
 
 export const descriptionField = {
+  field: 'description',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]: 'Description set',
       [FIELD_CHANGED]: 'Description changed',
       [FIELD_REMOVED]: 'Description removed'
-    },
-    templateData() { }
+    }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]: '{{userName}} set description of {{{docDesc}}}',
       [FIELD_CHANGED]: '{{userName}} changed description of {{{docDesc}}}',
       [FIELD_REMOVED]: '{{userName}} removed description of {{{docDesc}}}'
-    },
-    templateData({ diffs: { description }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-      };
-    },
-    receivers() { }
+    }
+  },
+  data({ diffs: { description }, newDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+    };
   }
 };
 
 export const fileIdsField = {
+  field: 'fileIds',
   logConfig: {
-    template: {
+    message: {
       [ITEM_ADDED]: 'File "{{name}}" added',
       [ITEM_REMOVED]: 'File removed'
-    },
-    templateData({ diffs: { fileIds } }) {
-      const { item:_id } = fileIds;
-      const { name } = Files.findOne({ _id }) || {};
-
-      return { name };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [ITEM_ADDED]: '{{userName}} added file "{{name}}" to {{{docDesc}}}',
       [ITEM_REMOVED]: '{{userName}} removed file from {{{docDesc}}}'
-    },
-    templateData({ diffs: { fileIds }, newDoc, user }) {
-      const { item:_id } = fileIds;
-      const { name } = Files.findOne({ _id }) || {};
+    }
+  },
+  data({ diffs: { fileIds }, newDoc, user }) {
+    const { item:_id } = fileIds;
+    const { name } = Files.findOne({ _id }) || {};
+    const auditConfig = this;
 
-      return {
-        name,
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user)
-      };
-    },
-    receivers() { }
+    return {
+      name: () => name,
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user)
+    };
   }
 };
 
 export const IPDesiredOutcomeField = {
+  field: 'improvementPlan.desiredOutcome',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]: 'Improvement plan statement of desired outcome set',
       [FIELD_CHANGED]: 'Improvement plan statement of desired outcome changed',
       [FIELD_REMOVED]: 'Improvement plan statement of desired outcome removed'
-    },
-    templateData() { }
+    }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]:
         '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}}',
       [FIELD_CHANGED]:
         '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}}',
       [FIELD_REMOVED]:
         '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}}'
-    },
-    templateData({ newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user)
-      };
-    },
-    receivers() { }
+    }
+  },
+  data({ newDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user)
+    };
   }
 };
 
 export const IPOwnerField = {
+  field: 'improvementPlan.owner',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]:
         'Improvement plan owner set to {{newValue}}',
       [FIELD_CHANGED]:
         'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
       [FIELD_REMOVED]:
         'Improvement plan owner removed'
-    },
-    templateData({ diffs }) {
-      const { newValue, oldValue } = diffs['improvementPlan.owner'];
-
-      return {
-        newValue: getUserFullNameOrEmail(newValue),
-        oldValue: getUserFullNameOrEmail(oldValue)
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]:
         '{{userName}} set improvement plan\'s owner of {{{docDesc}}} to {{newValue}}',
       [FIELD_CHANGED]:
         '{{userName}} changed improvement plan\'s owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
       [FIELD_REMOVED]:
         '{{userName}} removed improvement plan\'s owner of {{{docDesc}}}'
-    },
-    templateData({ diffs, newDoc, user }) {
-      const { newValue, oldValue } = diffs['improvementPlan.owner'];
+    }
+  },
+  data({ diffs, newDoc, user }) {
+    const { newValue, oldValue } = diffs['improvementPlan.owner'];
+    const auditConfig = this;
 
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        newValue: getUserFullNameOrEmail(newValue),
-        oldValue: getUserFullNameOrEmail(oldValue)
-      };
-    },
-    receivers() { }
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      newValue: () => getUserFullNameOrEmail(newValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
+    };
   }
 };
 
 export const IPReviewDatesField = {
+  field: 'improvementPlan.reviewDates',
   logConfig: {
-    template: {
+    message: {
       [ITEM_ADDED]: 'Improvement plan review date added: "{{date}}"',
       [ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"'
-    },
-    templateData({ diffs, newDoc }) {
-      const { item: { date } } = diffs['improvementPlan.reviewDates'];
-      const orgId = this.docOrgId(newDoc);
-
-      return { date: getPrettyOrgDate(date, orgId) };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [ITEM_ADDED]:
         '{{userName}} added improvement plan\'s review date for {{{docDesc}}}: "{{date}}"',
       [ITEM_REMOVED]:
         '{{userName}} removed improvement plan\'s review date for {{{docDesc}}}: "{{date}}"'
-    },
-    templateData({ diffs, newDoc, user }) {
-      const { item: { date } } = diffs['improvementPlan.reviewDates'];
-      const orgId = this.docOrgId(newDoc);
+    }
+  },
+  data({ diffs, newDoc, user }) {
+    const { item: { date } } = diffs['improvementPlan.reviewDates'];
+    const auditConfig = this;
+    const orgId = () => auditConfig.docOrgId(newDoc);
 
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        date: getPrettyOrgDate(date, orgId)
-      };
-    },
-    receivers() { }
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      date: () => getPrettyOrgDate(date, orgId())
+    };
   }
 };
 
 export const IPReviewDateField = {
+  field: 'improvementPlan.reviewDates.$.date',
   logConfig: {
-    template: {
+    message: {
       [FIELD_CHANGED]:
         'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
-    },
-    templateData({ diffs, newDoc }) {
-      const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
-      const orgId = this.docOrgId(newDoc);
-
-      return {
-        newValue: getPrettyOrgDate(newValue, orgId),
-        oldValue: getPrettyOrgDate(oldValue, orgId)
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_CHANGED]:
         '{{userName}} changed improvement plan\'s review date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
-    },
-    templateData({ diffs, newDoc, user }) {
-      const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
-      const orgId = this.docOrgId(newDoc);
+    }
+  },
+  data({ diffs, newDoc, user }) {
+    const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
+    const auditConfig = this;
+    const orgId = () => auditConfig.docOrgId(newDoc);
 
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        newValue: getPrettyOrgDate(newValue, orgId),
-        oldValue: getPrettyOrgDate(oldValue, orgId)
-      };
-    },
-    receivers() { }
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      newValue: () => getPrettyOrgDate(newValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+    };
   }
 };
 
 export const IPTargetDateField = {
+  field: 'improvementPlan.targetDate',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]:
         'Improvement plan target date for desired outcome set to "{{newValue}}"',
       [FIELD_CHANGED]:
         'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
       [FIELD_REMOVED]:
         'Improvement plan target date for desired outcome removed'
-    },
-    templateData({ diffs, newDoc }) {
-      const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-      const orgId = this.docOrgId(newDoc);
-
-      return {
-        newValue: getPrettyOrgDate(newValue, orgId),
-        oldValue: getPrettyOrgDate(oldValue, orgId)
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]:
         '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} to "{{newValue}}"',
       [FIELD_CHANGED]:
         '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
       [FIELD_REMOVED]:
         '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}}'
-    },
-    templateData({ diffs, newDoc, user }) {
-      const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-      const orgId = this.docOrgId(newDoc);
+    }
+  },
+  data({ diffs, newDoc, user }) {
+    const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
+    const auditConfig = this;
+    const orgId = () => auditConfig.docOrgId(newDoc);
 
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        newValue: getPrettyOrgDate(newValue, orgId),
-        oldValue: getPrettyOrgDate(oldValue, orgId)
-      };
-    },
-    receivers() { }
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      newValue: () => getPrettyOrgDate(newValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+    };
   }
 };
 
 export const isDeletedField = {
+  field: 'isDeleted',
   logConfig: {
     shouldCreateLog({ diffs: { deletedAt, deletedBy } }) {
       return deletedAt && deletedBy;
     },
-    template: {
+    message: {
       [FIELD_CHANGED]:
         '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
-    },
-    templateData({ diffs: { isDeleted } }) {
-      return { deleted: isDeleted.newValue };
     }
   },
   notificationConfig: {
     shouldSendNotification({ diffs: { deletedAt, deletedBy } }) {
       return deletedAt && deletedBy;
     },
-    template: {
+    text: {
       [ChangesKinds.FIELD_CHANGED]:
         '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
     },
-    templateData({ diffs: { isDeleted }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        deleted: isDeleted.newValue
-      };
-    },
-    subjectTemplate:
-      '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}',
-    subjectTemplateData({ diffs: { isDeleted }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        deleted: isDeleted.newValue
-      };
-    },
-    receivers() { }
+    title: {
+      [ChangesKinds.FIELD_CHANGED]:
+        '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+    }
+  },
+  data({ diffs: { isDeleted }, newDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      deleted: () => isDeleted.newValue
+    };
   }
 };
 
 export const notesField = {
+  field: 'notes',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]: 'Notes set',
       [FIELD_CHANGED]: 'Notes changed',
       [FIELD_REMOVED]: 'Notes removed'
-    },
-    templateData() { }
+    }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]: '{{userName}} set notes of {{{docDesc}}}',
       [FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
       [FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
-    },
-    templateData({ diffs: { notes }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-      };
-    },
-    receivers() { }
+    }
+  },
+  data({ diffs: { notes }, newDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user)
+    };
   }
 };
 
 export const notifyField = {
+  field: 'notify',
   logConfig: {
-    template: {
+    message: {
       [ITEM_ADDED]: '{{item}} was added to notification list',
       [ITEM_REMOVED]: '{{item}} was removed from notification list'
-    },
-    templateData({ diffs: { notify } }) {
-      return { item: getUserFullNameOrEmail(notify.item) };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [ITEM_ADDED]:
         '{{userName}} added {{item}} to the notification list of {{{docDesc}}}',
       [ITEM_REMOVED]:
         '{{userName}} removed {{item}} from the notification list of {{{docDesc}}}'
-    },
-    templateData({ diffs: { notify }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        item: getUserFullNameOrEmail(notify.item)
-      };
-    },
-    receivers() { }
+    }
   },
   personalNotificationConfig: {
     shouldSendNotification({ diffs: { notify: { kind } } }) {
       return kind === ITEM_ADDED;
     },
-    template: '{{userName}} added you to the notification list of {{{docDesc}}}',
-    templateData({ newDoc, user }) {
+    text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+    title: 'You have been added to the notification list',
+    emailTemplateData({ newDoc }) {
       return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user)
-      };
-    },
-    subjectTemplate: 'You have been added to the notification list',
-    subjectTemplateData() { },
-    notificationData({ newDoc }) {
-      return {
-        templateData: {
-          button: {
-            label: 'View document',
-            url: this.docUrl(newDoc)
-          }
+        button: {
+          label: 'View document',
+          url: this.docUrl(newDoc)
         }
       };
     },
     receivers({ diffs: { notify }, user }) {
       const { item:addedUserId } = notify;
-      const userId = (user === SystemName) ? user : user._id;
+      const userId = getUserId(user);
 
       return (addedUserId !== userId) ? [addedUserId]: [];
     }
+  },
+  data({ diffs: { notify }, newDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      item: () => getUserFullNameOrEmail(notify.item)
+    };
   }
 };
 
 export const ownerIdField = {
+  field: 'ownerId',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]: 'Owner set to {{newValue}}',
       [FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
       [FIELD_REMOVED]: 'Owner removed'
-    },
-    templateData({ diffs: { ownerId } }) {
-      return {
-        newValue: getUserFullNameOrEmail(ownerId.newValue),
-        oldValue: getUserFullNameOrEmail(ownerId.oldValue)
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]:
         '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
       [FIELD_CHANGED]:
         '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
       [FIELD_REMOVED]:
         '{{userName}} removed owner of {{{docDesc}}}'
-    },
-    templateData({ diffs: { ownerId }, newDoc, user }) {
-      return {
-        docDesc: this.docDescription(newDoc),
-        userName: getUserFullNameOrEmail(user),
-        newValue: getUserFullNameOrEmail(ownerId.newValue),
-        oldValue: getUserFullNameOrEmail(ownerId.oldValue)
-      };
-    },
-    receivers() { }
+    }
+  },
+  data({ diffs: { ownerId }, newDoc, user }) {
+    const { newValue, oldValue } = ownerId;
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(newDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      newValue: () => getUserFullNameOrEmail(newValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
+    };
   }
 };
 
 export const titleField = {
+  field: 'title',
   logConfig: {
-    template: {
+    message: {
       [FIELD_ADDED]: 'Title set to "{{newValue}}"',
       [FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
       [FIELD_REMOVED]: 'Title removed'
-    },
-    templateData({ diffs: { title } }) {
-      return {
-        newValue: title.newValue,
-        oldValue: title.oldValue
-      };
     }
   },
   notificationConfig: {
-    template: {
+    text: {
       [FIELD_ADDED]:
         '{{userName}} set title of {{{docDesc}}} to "{{newValue}}"',
       [FIELD_CHANGED]:
         '{{userName}} changed title of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
       [FIELD_REMOVED]:
         '{{userName}} removed title of {{{docDesc}}}'
-    },
-    templateData({ diffs: { title }, newDoc, oldDoc, user }) {
-      return {
-        docDesc: this.docDescription(oldDoc),
-        userName: getUserFullNameOrEmail(user),
-        newValue: title.newValue,
-        oldValue: title.oldValue
-      };
-    },
-    receivers() { }
+    }
+  },
+  data({ diffs: { title }, newDoc, oldDoc, user }) {
+    const auditConfig = this;
+
+    return {
+      docDesc: () => auditConfig.docDescription(oldDoc),
+      userName: () => getUserFullNameOrEmail(user),
+      newValue: () => title.newValue,
+      oldValue: () => title.oldValue
+    };
   }
 };

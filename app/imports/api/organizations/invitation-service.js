@@ -2,9 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
 import { Roles } from 'meteor/alanning:roles';
+
 import { Organizations } from './organizations.js';
 import { OrgMemberRoles, UserMembership } from '../constants.js';
 
+import OrgNotificationsSender from './org-notifications-sender.js';
 import Utils from '/imports/core/utils';
 import NotificationSender from '/imports/core/NotificationSender';
 
@@ -72,6 +74,7 @@ class InvitationSender {
           invitedAt: new Date(),
           invitedBy: Meteor.userId(),
           invitationExpirationDate,
+          invitationOrgId: this._organizationId,
           'emails.0.verified': true,
           // unset firstName, lastName and initials
           'profile.firstName': '',
@@ -195,8 +198,10 @@ class InvitationSender {
     if (!userIdToInvite) {
       userIdToInvite = this._createNewUser();
       this._inviteUser(userIdToInvite, false);
+      return 1;
     } else {
       this._inviteUser(userIdToInvite, true);
+      return 2;
     }
   }
 
@@ -209,7 +214,14 @@ class InvitationSender {
 
 export default InvitationService = {
   inviteUserByEmail(organizationId, userEmail, welcomeMessage) {
-    new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
+    const ret = new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
+
+    const inviterId = Meteor.userId();
+    Meteor.defer(() =>
+      new OrgNotificationsSender(organizationId).userInvited(userEmail, inviterId)
+    );
+
+    return ret;
   },
 
   acceptInvitation(invitationId, userData) {
@@ -228,9 +240,14 @@ export default InvitationService = {
         $set: {profile: updateUserProfile},
         $unset: {
           invitationId: '',
-          invitationExpirationDate: ''
+          invitationExpirationDate: '',
+          invitationOrgId: ''
         }
       });
+
+      Meteor.defer(() =>
+        new OrgNotificationsSender(invitedUser.invitationOrgId).userAcceptedInvite(invitedUser)
+      );
     } else {
       throw new Meteor.Error(404, 'Invitation does not exist');
     }

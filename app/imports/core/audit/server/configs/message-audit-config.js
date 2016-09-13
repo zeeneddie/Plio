@@ -2,9 +2,14 @@ import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { CollectionNames, SystemName } from '/imports/api/constants.js';
-import { getUserFullNameOrEmail } from '/imports/api/helpers.js';
+import { getUserFullNameOrEmail, getUserId } from '../utils/helpers.js';
 import StandardAuditConfig from './standard-audit-config.js';
 
+
+const getDiscussionStandard = (discussionId) => {
+  const { linkedTo } = Discussions.findOne({ _id: discussionId }) || {};
+  return linkedTo && (Standards.findOne({ _id: linkedTo }) || {});
+};
 
 export default MessageAuditConfig = {
 
@@ -16,42 +21,40 @@ export default MessageAuditConfig = {
     logs: [],
     notifications: [
       {
-        template:
+        text:
           '{{userName}}' +
           '{{#if isFile}} uploaded new file for ' +
           '{{else}} added new message to {{/if}}' +
           'the discussion of {{{docDesc}}}',
-        templateData({ newDoc: { discussionId, type }, user }) {
+        title: 'New message in discussion',
+        data({ newDoc: { discussionId, type }, user }) {
           const isFile = type === 'file';
 
-          const { linkedTo } = Discussions.findOne({ _id: discussionId }) || {};
-          const standard = Standards.findOne({ _id: linkedTo }) || {};
-          const docDesc = StandardAuditConfig.docDescription(standard);
+          const getStandardDesc = () => {
+            return StandardAuditConfig.docDescription(
+              getDiscussionStandard(discussionId)
+            );
+          };
 
           return {
-            docDesc,
-            isFile,
-            userName: getUserFullNameOrEmail(user)
+            docDesc: getStandardDesc,
+            isFile: () => isFile,
+            userName: () => getUserFullNameOrEmail(user)
           };
         },
-        subjectTemplate: 'New message in discussion',
-        subjectTemplateData() { },
-        notificationData({ newDoc }) {
+        emailTemplateData({ newDoc }) {
           return {
-            templateData: {
-              button: {
-                label: 'View message',
-                url: this.docUrl(newDoc)
-              }
+            button: {
+              label: 'View message',
+              url: this.docUrl(newDoc)
             }
           };
         },
         receivers({ newDoc: { discussionId }, user }) {
           const receivers = new Set();
-          const userId = (user === SystemName) ? user : user._id;
+          const userId = getUserId(user);
 
-          const { linkedTo } = Discussions.findOne({ _id: discussionId }) || {};
-          const { owner } = Standards.findOne({ _id: linkedTo }) || {};
+          const { owner } = getDiscussionStandard(discussionId) || {};
           (owner !== userId) && receivers.add(owner);
 
           Messages.find({

@@ -1,10 +1,5 @@
-import {
-  CollectionNames,
-  SystemName,
-  OrgCurrencies,
-  UserMembership
-} from '/imports/api/constants.js';
-import { getUserFullNameOrEmail } from '/imports/api/helpers.js';
+import { CollectionNames, OrgCurrencies, UserMembership } from '/imports/api/constants.js';
+import { getUserFullNameOrEmail, getUserId } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 
 
@@ -14,7 +9,7 @@ const {
 } = ChangesKinds;
 
 const getReceivers = function({ newDoc: { users }, user }) {
-  const executorId = (user === SystemName) ? user : user._id;
+  const executorId = getUserId(user);
 
   const orgOwners = _(users).filter((userData) => {
     const { userId, role, isRemoved } = userData;
@@ -36,26 +31,27 @@ const getWorkflowDefaultsConfig = (field, label) => {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               `{{userName}} changed workflow type for ${label} ` +
               `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
-          },
-          templateData({ diffs, newDoc, user }) {
-            const { newValue, oldValue } = diffs[
-              `workflowDefaults.${field}.workflowType`
-            ];
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue,
-              oldValue
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs, newDoc, user }) {
+        const { newValue, oldValue } = diffs[
+          `workflowDefaults.${field}.workflowType`
+        ];
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -63,30 +59,28 @@ const getWorkflowDefaultsConfig = (field, label) => {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               `{{userName}} changed default step time for ${label} ` +
               `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
-          },
-          templateData({ diffs, newDoc, user }) {
-            const { newValue, oldValue } = diffs[
-              `workflowDefaults.${field}.stepTime.timeUnit`
-            ];
-
-            const timeVal = newDoc.workflowDefaults[field].stepTime.timeValue;
-            const newStepTime = `${timeVal} ${newValue}`;
-            const oldStepTime = `${timeVal} ${oldValue}`;
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: newStepTime,
-              oldValue: oldStepTime
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs, newDoc, user }) {
+        const auditConfig = this;
+        const { newValue, oldValue } = diffs[
+          `workflowDefaults.${field}.stepTime.timeUnit`
+        ];
+        const timeVal = newDoc.workflowDefaults[field].stepTime.timeValue;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => `${timeVal} ${newValue}`,
+          oldValue: () => `${timeVal} ${oldValue}`
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -94,30 +88,28 @@ const getWorkflowDefaultsConfig = (field, label) => {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               `{{userName}} changed default step time for ${label} ` +
               `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
-          },
-          templateData({ diffs, newDoc, user }) {
-            const { newValue, oldValue } = diffs[
-              `workflowDefaults.${field}.stepTime.timeValue`
-            ];
-
-            const timeUnit = newDoc.workflowDefaults[field].stepTime.timeUnit;
-            const newStepTime = `${newValue} ${timeUnit}`;
-            const oldStepTime = `${oldValue} ${timeUnit}`;
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: newStepTime,
-              oldValue: oldStepTime
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs, newDoc, user }) {
+        const auditConfig = this;
+        const { newValue, oldValue } = diffs[
+          `workflowDefaults.${field}.stepTime.timeValue`
+        ];
+        const timeUnit = newDoc.workflowDefaults[field].stepTime.timeUnit;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => `${newValue} ${timeUnit}`,
+          oldValue: () => `${oldValue} ${timeUnit}`
+        };
+      },
+      receivers: getReceivers
     },
   ];
 };
@@ -130,30 +122,28 @@ const getRemindersConfig = (field, label) => {
         logs: [],
         notifications: [
           {
-            template: {
+            text: {
               [FIELD_CHANGED]:
                 `{{userName}} changed ${reminderLabel} for ${label} ` +
                 `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
-            },
-            templateData({ diffs, newDoc, user }) {
-              const { newValue, oldValue } = diffs[
-                `reminders.${field}.${reminderType}.timeValue`
-              ];
-
-              const timeUnit = newDoc.reminders[field][reminderType].timeUnit;
-              const newStepTime = `${newValue} ${timeUnit}`;
-              const oldStepTime = `${oldValue} ${timeUnit}`;
-
-              return {
-                docDesc: this.docDescription(newDoc),
-                userName: getUserFullNameOrEmail(user),
-                newValue: newStepTime,
-                oldValue: oldStepTime
-              };
-            },
-            receivers: getReceivers
+            }
           }
-        ]
+        ],
+        data({ diffs, newDoc, user }) {
+          const auditConfig = this;
+          const { newValue, oldValue } = diffs[
+            `reminders.${field}.${reminderType}.timeValue`
+          ];
+          const timeUnit = newDoc.reminders[field][reminderType].timeUnit;
+
+          return {
+            docDesc: () => auditConfig.docDescription(newDoc),
+            userName: () => getUserFullNameOrEmail(user),
+            newValue: () => `${newValue} ${timeUnit}`,
+            oldValue: () => `${oldValue} ${timeUnit}`
+          };
+        },
+        receivers: getReceivers
       },
 
       {
@@ -161,30 +151,28 @@ const getRemindersConfig = (field, label) => {
         logs: [],
         notifications: [
           {
-            template: {
+            text: {
               [FIELD_CHANGED]:
                 `{{userName}} changed ${reminderLabel} for ${label} ` +
                 `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
-            },
-            templateData({ diffs, newDoc, user }) {
-              const { newValue, oldValue } = diffs[
-                `reminders.${field}.${reminderType}.timeUnit`
-              ];
-
-              const timeValue = newDoc.reminders[field][reminderType].timeValue;
-              const newStepTime = `${timeValue} ${newValue}`;
-              const oldStepTime = `${timeValue} ${oldValue}`;
-
-              return {
-                docDesc: this.docDescription(newDoc),
-                userName: getUserFullNameOrEmail(user),
-                newValue: newStepTime,
-                oldValue: oldStepTime
-              };
-            },
-            receivers: getReceivers
+            }
           }
-        ]
+        ],
+        data({ diffs, newDoc, user }) {
+          const auditConfig = this;
+          const { newValue, oldValue } = diffs[
+            `reminders.${field}.${reminderType}.timeUnit`
+          ];
+          const timeValue = newDoc.reminders[field][reminderType].timeValue;
+
+          return {
+            docDesc: () => auditConfig.docDescription(newDoc),
+            userName: () => getUserFullNameOrEmail(user),
+            newValue: () => `${timeValue} ${newValue}`,
+            oldValue: () => `${timeValue} ${oldValue}`
+          };
+        },
+        receivers: getReceivers
       }
     ];
   };
@@ -202,18 +190,20 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
     logs: [],
     notifications: [
       {
-        template: {
+        text: {
           [FIELD_CHANGED]: `{{userName}} changed guidelines for ${label} in {{{docDesc}}}`
-        },
-        templateData({ newDoc, user }) {
-          return {
-            docDesc: this.docDescription(newDoc),
-            userName: getUserFullNameOrEmail(user)
-          };
-        },
-        receivers: getReceivers
+        }
       }
-    ]
+    ],
+    data({ newDoc, user }) {
+      const auditConfig = this;
+
+      return {
+        docDesc: () => auditConfig.docDescription(newDoc),
+        userName: () => getUserFullNameOrEmail(user)
+      };
+    },
+    receivers: getReceivers
   };
 };
 
@@ -231,21 +221,24 @@ export default OrgAuditConfig = {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
-          },
-          templateData({ diffs: { name }, oldDoc, user }) {
-            return {
-              docDesc: this.docDescription(oldDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: name.newValue,
-              oldValue: name.oldValue
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { name }, oldDoc, user }) {
+        const { newValue, oldValue } = name;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(oldDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -253,21 +246,24 @@ export default OrgAuditConfig = {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               '{{userName}} changed timezone of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
-          },
-          templateData({ diffs: { timezone }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: timezone.newValue,
-              oldValue: timezone.oldValue
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { timezone }, newDoc, user }) {
+        const { newValue, oldValue } = timezone;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -275,21 +271,24 @@ export default OrgAuditConfig = {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]:
               '{{userName}} changed currency of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
-          },
-          templateData({ diffs: { currency }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: OrgCurrencies[currency.newValue],
-              oldValue: OrgCurrencies[currency.oldValue]
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { currency }, newDoc, user }) {
+        const { newValue, oldValue } = currency;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => OrgCurrencies[newValue],
+          oldValue: () => OrgCurrencies[oldValue]
+        };
+      },
+      receivers: getReceivers
     },
 
     ...getWorkflowDefaultsConfig(
@@ -329,97 +328,21 @@ export default OrgAuditConfig = {
       logs: [],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_CHANGED]: '{{userName}} changed risk scoring guidelines in {{{docDesc}}}'
-          },
-          templateData({ newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          receivers: getReceivers
-        }
-      ]
-    },
-
-    {
-      field: 'transfer',
-      logs: [],
-      notifications: [
-        {
-          shouldSendNotification({ diffs: { transfer: { kind } } }) {
-            return kind === FIELD_ADDED;
-          },
-          template: {
-            [FIELD_ADDED]:
-              '{{userName}} invited you to become an owner of {{{docDesc}}}'
-          },
-          templateData({ newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          subjectTemplate: 'You have been invited to become an organization owner',
-          subjectTemplateData() { },
-          notificationData({ diffs: { transfer: { newValue: { transferId } } } }) {
-            return {
-              templateData: {
-                button: {
-                  label: 'Confirm',
-                  url: Meteor.absoluteUrl(`transfer-organization/${transferId}`)
-                }
-              }
-            };
-          },
-          receivers({ diffs: { transfer: { newValue: { newOwnerId } } } }) {
-            return [newOwnerId];
           }
         }
-      ]
-    },
+      ],
+      data({ newDoc, user }) {
+        const auditConfig = this;
 
-    {
-      field: 'users.$.role',
-      logs: [],
-      notifications: [
-        {
-          shouldSendNotification({ diffs, newDoc }) {
-            const { newOwnerId } = newDoc.transfer || {};
-            const { newValue:newRole, path } = diffs['users.$.role'];
-            const { userId } = newDoc.users[parseInt(path[1])];
-
-            console.log(newRole);
-            console.log(newOwnerId);
-            console.log(userId);
-
-            return (newRole === UserMembership.ORG_OWNER) && (userId === newOwnerId);
-          },
-          template: {
-            [FIELD_CHANGED]:
-              '{{userName}} accepted the invitation to become an owner of {{{docDesc}}}'
-          },
-          templateData({ newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          subjectTemplate: 'Organization transferred',
-          subjectTemplateData() { },
-          receivers({ newDoc }) {
-            const { userId } = _(newDoc.users).find(({ role }) => {
-              return role === UserMembership.ORG_OWNER;
-            }) || {};
-
-            console.log(userId);
-
-            return [userId];
-          }
-        }
-      ]
-    },
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      },
+      receivers: getReceivers
+    }
   ],
 
   onRemoved: { },

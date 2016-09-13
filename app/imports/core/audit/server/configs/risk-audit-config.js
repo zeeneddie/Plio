@@ -4,7 +4,7 @@ import {
   RiskEvaluationPriorities,
   RiskEvaluationDecisions
 } from '/imports/api/constants.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '/imports/api/helpers.js';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import ProblemAuditConfig from './problem-audit-config.js';
 
@@ -27,12 +27,11 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       field: 'review.comments',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Review comments set',
             [FIELD_CHANGED]: 'Review comments changed',
             [FIELD_REMOVED]: 'Review comments removed'
-          },
-          templateData() { }
+          }
         }
       ],
       notifications: []
@@ -42,57 +41,57 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       field: 'review.reviewedAt',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Review date set to "{{newValue}}"',
             [FIELD_CHANGED]: 'Review date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]: 'Review date removed'
-          },
-          templateData({ diffs, newDoc }) {
-            const { newValue, oldValue } = diffs['review.reviewedAt'];
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(newValue, orgId),
-              oldValue: getPrettyOrgDate(oldValue, orgId)
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs, newDoc }) {
+        const { newValue, oldValue } = diffs['review.reviewedAt'];
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          newValue: getPrettyOrgDate(newValue, orgId()),
+          oldValue: getPrettyOrgDate(oldValue, orgId())
+        };
+      }
     },
 
     {
       field: 'review.reviewedBy',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Review executor set to {{newValue}}',
             [FIELD_CHANGED]: 'Review executor changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]: 'Review executor removed'
-          },
-          templateData({ diffs, newDoc }) {
-            const { newValue, oldValue } = diffs['review.reviewedBy'];
-
-            return {
-              newValue: getUserFullNameOrEmail(newValue),
-              oldValue: getUserFullNameOrEmail(oldValue)
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs, newDoc }) {
+        const { newValue, oldValue } = diffs['review.reviewedBy'];
+
+        return {
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      }
     },
 
     {
       field: 'riskEvaluation.comments',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Risk evaluation comments set',
             [FIELD_CHANGED]: 'Risk evaluation comments changed',
             [FIELD_REMOVED]: 'Risk evaluation comments removed'
-          },
-          templateData() { }
+          }
         }
       ],
       notifications: []
@@ -102,40 +101,39 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       field: 'riskEvaluation.decision',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Risk evaluation treatment decision set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Risk evaluation treatment decision removed'
-          },
-          templateData({ diffs }) {
-            const { newValue, oldValue } = diffs['riskEvaluation.decision'];
-
-            return {
-              newValue: RiskEvaluationDecisions[newValue],
-              oldValue: RiskEvaluationDecisions[oldValue]
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs }) {
+        const { newValue, oldValue } = diffs['riskEvaluation.decision'];
+
+        return {
+          newValue: () => RiskEvaluationDecisions[newValue],
+          oldValue: () => RiskEvaluationDecisions[oldValue]
+        };
+      }
     },
 
     {
       field: 'riskEvaluation.prevLossExp',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Risk evaluation previous loss experience set',
             [FIELD_CHANGED]:
               'Risk evaluation previous loss experience changed',
             [FIELD_REMOVED]:
               'Risk evaluation previous loss experience removed'
-          },
-          templateData() { }
+          }
         }
       ],
       notifications: []
@@ -145,74 +143,78 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       field: 'riskEvaluation.priority',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Risk evaluation treatment priority set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Risk evaluation treatment priority changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Risk evaluation treatment priority removed'
-          },
-          templateData({ diffs }) {
-            const { newValue, oldValue } = diffs['riskEvaluation.priority'];
-
-            return {
-              newValue: RiskEvaluationPriorities[newValue],
-              oldValue: RiskEvaluationPriorities[oldValue]
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs }) {
+        const { newValue, oldValue } = diffs['riskEvaluation.priority'];
+
+        return {
+          newValue: () => RiskEvaluationPriorities[newValue],
+          oldValue: () => RiskEvaluationPriorities[oldValue]
+        };
+      }
     },
 
     {
       field: 'scores',
       logs: [
         {
-          template: {
+          message: {
             [ITEM_ADDED]:
               'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
             [ITEM_REMOVED]:
               'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
-          },
-          templateData({ diffs: { scores }, newDoc }) {
-            const { item: { value, scoredAt, scoredBy } } = scores;
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              value,
-              date: getPrettyOrgDate(scoredAt, orgId),
-              userName: getUserFullNameOrEmail(scoredBy)
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs: { scores }, newDoc }) {
+        const { item: { value, scoredAt, scoredBy } } = scores;
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          value: () => value,
+          date: () => getPrettyOrgDate(scoredAt, orgId()),
+          userName: () => getUserFullNameOrEmail(scoredBy)
+        };
+      }
     },
 
     {
       field: 'typeId',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Risk type set to "{{newValue}}"',
             [FIELD_CHANGED]: 'Risk type changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]: 'Risk type removed'
-          },
-          templateData({ diffs: { typeId } }) {
-            const { newValue, oldValue } = typeId;
-            const { title:newType } = RiskTypes.findOne({ _id: newValue });
-            const { title:oldType } = RiskTypes.findOne({ _id: oldValue });
-
-            return {
-              newValue: newType,
-              oldValue: oldType
-            };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs: { typeId } }) {
+        const { newValue, oldValue } = typeId;
+
+        const getRiskTypeTitle = (_id) => {
+          const { title } = RiskTypes.findOne({ _id }) || {};
+          return title;
+        };
+
+        return {
+          newValue: () => getRiskTypeTitle(newValue),
+          oldValue: () => getRiskTypeTitle(oldValue)
+        };
+      }
     }
   ],
 

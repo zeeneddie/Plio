@@ -2,7 +2,8 @@ import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
 import { SystemName } from '/imports/api/constants.js';
-import { deepExtend, renderTemplate } from '/imports/api/helpers.js';
+import { deepExtend } from '/imports/api/helpers.js';
+import { renderTemplate } from './helpers.js';
 import { DocChangesKinds, ChangesKinds } from './changes-kinds.js';
 import DocumentDiffer from './document-differ.js';
 import NotificationSender from '../../../NotificationSender.js';
@@ -24,7 +25,7 @@ export default class DocChangeHandler {
       this._userId = userId || newDocument.createdBy;
     } else if (docChangeKind === DocChangesKinds.DOC_UPDATED) {
       this._newDoc = newDocument;
-      this._oldDoc = oldDocument
+      this._oldDoc = oldDocument;
       this._date = newDocument.updatedAt;
       this._userId = newDocument.updatedBy;
     } else if (docChangeKind === DocChangesKinds.DOC_REMOVED) {
@@ -40,8 +41,10 @@ export default class DocChangeHandler {
     }
 
     const doc = newDocument || oldDocument;
+
     this._docId = auditConfig.docId(doc);
     this._docDesc = auditConfig.docDescription(doc);
+    this._docUrl = auditConfig.docUrl(doc);
 
     this._docOrgId = auditConfig.docOrgId(doc);
 
@@ -82,7 +85,7 @@ export default class DocChangeHandler {
   _getHandlersForCreateAction() {
     this._handlersToProcess.push({
       handler: this._config.onCreated,
-      data: {
+      args: {
         newDoc: this._newDoc,
         user: this._user,
         date: this._date
@@ -98,7 +101,7 @@ export default class DocChangeHandler {
       diffsMap[field] = { field, ...rest };
     });
 
-    const data = {
+    const args = {
       diffs: diffsMap,
       newDoc: this._newDoc,
       oldDoc: this._oldDoc,
@@ -115,14 +118,14 @@ export default class DocChangeHandler {
         return;
       }
 
-      this._handlersToProcess.push({ handler, data });
+      this._handlersToProcess.push({ handler, args });
     });
   }
 
   _getHandlersForRemoveAction() {
     this._handlersToProcess.push({
       handler: this._config.onRemoved,
-      data: {
+      args: {
         oldDoc: this._oldDoc,
         user: this._user,
         date: this._date
@@ -131,57 +134,58 @@ export default class DocChangeHandler {
   }
 
   _processHandlers() {
-    _(this._handlersToProcess).each(({ handler, data }) => {
-      this._processHandler(handler, data);
+    _(this._handlersToProcess).each(({ handler, args }) => {
+      this._processHandler(handler, args);
     });
   }
 
-  _processHandler(handler, data) {
-    this._createLogs(handler, data);
-    this._createNotifications(handler, data);
+  _processHandler(handler, args) {
+    this._createLogs(handler, args);
+    this._createNotifications(handler, args);
   }
 
-  _createLogs(handler, data) {
+  _createLogs(handler, args) {
     _(handler.logs).each((logConfig) => {
-      if (logConfig.shouldCreateLog
-            && !logConfig.shouldCreateLog.call(this._config, data)) {
+      const { shouldCreateLog } = logConfig;
+      if (shouldCreateLog && !shouldCreateLog.call(this._config, args)) {
         return;
       }
 
-      const { diffs = {} } = data;
+      const { diffs = {} } = args;
       const diff = diffs[handler.field];
 
-      this._buildLogs(handler, data, logConfig, diff);
+      this._buildLogs(handler, args, logConfig, diff);
     });
   }
 
-  _buildLogs(handler, data, logConfig, diff) {
-    const { template, templateData, logData } = logConfig;
+  _buildLogs(handler, args, logConfig, diff) {
+    const getData = logConfig.data || handler.data;
+    const { message, logData:getLogData } = logConfig;
     const { kind } = diff || {};
 
-    const logTemplate = _(template).isObject() ? template[kind] : template;
-    if (!logTemplate) {
+    const msgTemplate = _(message).isObject() ? message[kind] : message;
+    if (!msgTemplate) {
       return;
     }
 
-    let logDataArr;
-    if (logData) {
-      logDataArr = logData.call(this._config, data);
-      logDataArr = _(logDataArr).isArray() ? logDataArr : [logDataArr];
+    let logData;
+    if (getLogData) {
+      logData = getLogData.call(this._config, args);
+      logData = _(logData).isArray() ? logData : [logData];
     }
 
-    let tplDataArr = templateData.call(this._config, data);
-    tplDataArr = _(tplDataArr).isArray() ? tplDataArr : [tplDataArr];
+    let data = getData && getData.call(this._config, args);
+    data = _(data).isArray() ? data : [data];
 
-    _(tplDataArr).each((tplData, index) => {
-      const logDataObj = logDataArr && logDataArr[index];
+    _(data).each((templateData, index) => {
+      const logDataObj = logData && logData[index];
 
-      this._buildLog(logTemplate, tplData, diff, logDataObj);
+      this._buildLog(msgTemplate, templateData, diff, logDataObj);
     });
   }
 
-  _buildLog(logTemplate, tplData, diff, logData) {
-    const message = renderTemplate(logTemplate, tplData);
+  _buildLog(msgTemplate, templateData, diff, logData) {
+    const message = renderTemplate(msgTemplate, templateData);
 
     const collection = this._collectionName;
     const documentId = this._docId;
@@ -218,116 +222,149 @@ export default class DocChangeHandler {
     this._logs.push(log);
   }
 
-  _createNotifications(handler, data, notificationConfig) {
+  _createNotifications(handler, args) {
     _(handler.notifications).each((notificationConfig) => {
-      if (notificationConfig.shouldSendNotification
-            && !notificationConfig.shouldSendNotification.call(this._config, data)) {
+      const { shouldSendNotification } = notificationConfig;
+      if (shouldSendNotification && !shouldSendNotification.call(this._config, args)) {
         return;
       }
 
-      const { diffs = {} } = data;
+      const { diffs = {} } = args;
       const diff = diffs[handler.field];
 
-      this._buildNotifications(handler, data, notificationConfig, diff);
+      this._buildNotifications(handler, args, notificationConfig, diff);
     });
   }
 
-  _buildNotifications(handler, data, notificationConfig, diff) {
+  _buildNotifications(handler, args, notificationConfig, diff) {
+    const getData = notificationConfig.data || handler.data;
+    const getReceivers = notificationConfig.receivers || handler.receivers;
     const { kind } = diff || {};
 
     const {
-      template, templateData,
-      subjectTemplate, subjectTemplateData,
-      notificationData, receivers
+      text, title, emailTemplateName,
+      emailText, emailSubject, emailTemplateData:getEmailTplData,
+      pushText, pushTitle, pushData:getPushData,
+      sendBoth=false
     } = notificationConfig;
 
-    const notificationTemplate = _(template).isObject() ? template[kind] : template;
-    if (!notificationTemplate) {
+    let emailTemplate = emailText || text;
+    let pushTemplate = pushText || text;
+
+    emailTemplate = _(emailTemplate).isObject() ? emailTemplate[kind] : emailTemplate;
+    pushTemplate = _(pushTemplate).isObject() ? pushTemplate[kind] : pushTemplate;
+
+    if (!emailTemplate && !pushTemplate) {
       return;
     }
 
-    let tplDataArr = templateData.call(this._config, data);
-    tplDataArr = _(tplDataArr).isArray() ? tplDataArr : [tplDataArr];
+    let emailSubjectTemplate = emailSubject || title;
+    let pushTitleTemplate = pushTitle || title;
 
-    const notificationReceivers = receivers.call(this._config, data) || [];
-    const notificationReceiversArr = _(notificationReceivers[0]).isArray()
-        ? notificationReceivers
-        : [notificationReceivers]
+    emailSubjectTemplate = _(emailSubjectTemplate).isObject()
+        ? emailSubjectTemplate[kind]
+        : emailSubjectTemplate;
 
-    let subjects;
-    if (subjectTemplate && subjectTemplateData) {
-      let subjDataArr = subjectTemplateData.call(this._config, data);
-      subjDataArr = _(subjDataArr).isArray() ? subjDataArr : [subjDataArr];
+    pushTitleTemplate = _(pushTitleTemplate).isObject()
+        ? pushTitleTemplate[kind]
+        : pushTitleTemplate;
 
-      subjects = _(subjDataArr).map(
-        subjData => renderTemplate(subjectTemplate, subjData)
-      );
+    let data = getData && getData.call(this._config, args);
+    data = _(data).isArray() ? data : [data];
+
+    let receiversArr = getReceivers.call(this._config, args) || [];
+    receiversArr = _(receiversArr[0]).isArray() ? receiversArr : [receiversArr];
+
+    let emailTplDataArr;
+    if (getEmailTplData) {
+      emailTplDataArr = getEmailTplData.call(this._config, args);
+      emailTplDataArr = _(emailTplDataArr).isArray() ? emailTplDataArr : [emailTplDataArr];
     }
 
-    let notificationDataArr;
-    if (notificationData) {
-      notificationDataArr = notificationData.call(this._config, data);
-      notificationDataArr = _(notificationDataArr).isArray()
-          ? notificationDataArr
-          : [notificationDataArr];
+    let pushDataArr;
+    if (getPushData) {
+      pushDataArr = getPushData.call(this._config, args);
+      pushDataArr = _(pushDataArr).isArray() ? pushDataArr : [pushDataArr];
     }
 
-    _(tplDataArr).each((tplData, index) => {
-      const subject = subjects && subjects[index];
-      const notificationDataObj = notificationDataArr && notificationDataArr[index];
-      const receivers = notificationReceiversArr[index];
+    _(data).each((templateData, index) => {
+      const emailTemplateData = emailTplDataArr && emailTplDataArr[index];
+      const pushData = pushDataArr && pushDataArr[index];
+      const receivers = receiversArr[index];
 
-      this._buildNotification(
-        notificationTemplate, tplData, subject, notificationDataObj, receivers
-      );
+      this._buildNotification({
+        emailTemplate, emailSubjectTemplate, emailTemplateData,
+        pushTemplate, pushTitleTemplate, pushData,
+        emailTemplateName, receivers, templateData,
+        sendBoth
+      });
     });
   }
 
-  _buildNotification(template, tplData, subject, notificationData, receivers) {
+  _buildNotification({
+    emailTemplate, emailSubjectTemplate, emailTemplateData,
+    pushTemplate, pushTitleTemplate, pushData,
+    emailTemplateName, receivers, templateData,
+    sendBoth
+  }) {
     if (!receivers || !receivers.length) {
       return;
     }
 
-    const text = renderTemplate(template, tplData);
+    const emailText = renderTemplate(emailTemplate, templateData);
+    const pushText = renderTemplate(pushTemplate, templateData);
 
-    const user = this._user;
+    let emailSubject;
+    if (emailSubjectTemplate) {
+      emailSubject = renderTemplate(emailSubjectTemplate, templateData);
+    } else {
+      emailSubject = this._getDefaultNotificationTitle();
+    }
 
-    if (!subject) {
-      const action = {
-        [DocChangesKinds.DOC_CREATED]: 'created',
-        [DocChangesKinds.DOC_UPDATED]: 'updated',
-        [DocChangesKinds.DOC_REMOVED]: 'removed'
-      }[this._docChangeKind];
-      const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
-      const docDesc = this._docDesc;
-
-      subject = `${userName} ${action} ${docDesc}`;
+    let pushTitle;
+    if (pushTitleTemplate) {
+      pushTitle = renderTemplate(pushTitleTemplate, templateData);
+    } else {
+      pushTitle = this._getDefaultNotificationTitle();
     }
 
     const notification = {
       recipients: receivers,
-      emailSubject: subject,
-      templateName: DEFAULT_EMAIL_TEMPLATE,
-      templateData: {
+      templateName: emailTemplateName || DEFAULT_EMAIL_TEMPLATE,
+      emailSubject,
+      templateData: _({
         organizationName: this._docOrgName,
-        title: subject,
-        secondaryText: text
-      },
-      notificationData: {
-        title: subject,
-        body: text
-      }
+        title: emailSubject,
+        secondaryText: emailText
+      }).extend(emailTemplateData),
+      notificationData: _({
+        title: pushTitle,
+        body: pushText,
+        url: this._docUrl
+      }).extend(pushData),
+      sendBoth
     };
 
-    if (_(user).isObject()) {
+    if (_(this._user).isObject()) {
       _(notification.templateData).extend({
-        avatar: { url: user.profile.avatar }
+        avatar: { url: this._user.profile.avatar }
       });
     }
 
-    notificationData && deepExtend(notification, notificationData);
-
     this._notifications.push(notification);
+  }
+
+  _getDefaultNotificationTitle() {
+    const user = this._user;
+    const action = {
+      [DocChangesKinds.DOC_CREATED]: 'created',
+      [DocChangesKinds.DOC_UPDATED]: 'updated',
+      [DocChangesKinds.DOC_REMOVED]: 'removed'
+    }[this._docChangeKind];
+    const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
+    const docDesc = this._docDesc;
+
+    return `${userName} ${action} ${docDesc}`;
   }
 
   _saveLogs() {
@@ -367,13 +404,17 @@ export default class DocChangeHandler {
   _sendNotificationsToUser(notifications, user) {
     const isUserOnline = user.status === 'online';
 
-    _(notifications).each(({ recipients, ...args }) => {
+    _(notifications).each(({ recipients, sendBoth, ...args }) => {
       const sender = new NotificationSender({
         recipients: user._id,
         ...args
       });
 
-      isUserOnline ? sender.sendOnSite() : sender.sendEmail();
+      if (sendBoth) {
+        sender.sendAll();
+      } else {
+        isUserOnline ? sender.sendOnSite() : sender.sendEmail();
+      }
     });
   }
 

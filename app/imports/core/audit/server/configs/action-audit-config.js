@@ -3,18 +3,10 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/api/actions/actions.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import {
-  ActionStatuses,
-  CollectionNames,
-  ProblemTypes,
-  SystemName
-} from '/imports/api/constants.js';
-import {
-  getCollectionByDocType,
-  getUserFullNameOrEmail,
-  getPrettyOrgDate
-} from '/imports/api/helpers.js';
+import { ActionStatuses, CollectionNames, ProblemTypes } from '/imports/api/constants.js';
+import { getCollectionByDocType } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
+import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 import {
   fileIdsField,
   isDeletedField,
@@ -63,7 +55,7 @@ const getNotificationReceivers = ({ linkedTo, ownerId }, user) => {
 
   const receivers = Array.from(usersIds);
 
-  const userId = (user === SystemName) ? user : user._id;
+  const userId = getUserId(user);
   const index = receivers.indexOf(userId);
   (index > -1) && receivers.splice(index, 1);
 
@@ -104,14 +96,15 @@ export default ActionAuditConfig = {
   onCreated: {
     logs: [
       {
-        template: 'Document created',
-        templateData() { }
+        message: 'Document created',
       },
       {
-        template: '{{{docDesc}}} was linked to this document',
-        templateData({ newDoc }) {
+        message: '{{{docDesc}}} was linked to this document',
+        data({ newDoc }) {
+          const auditConfig = this;
+
           return _(newDoc.linkedTo.length).times(() => {
-            return { docDesc: this.docDescription(newDoc) };
+            return { docDesc: () => auditConfig.docDescription(newDoc) };
           });
         },
         logData({ newDoc: { linkedTo } }) {
@@ -128,9 +121,10 @@ export default ActionAuditConfig = {
     ],
     notifications: [
       {
-        template: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
-        templateData({ newDoc }) {
-          const docDesc = this.docDescription(newDoc);
+        text: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
+        data({ newDoc }) {
+          const auditConfig = this;
+          const docDesc = auditConfig.docDescription(newDoc);
           const userName = getUserFullNameOrEmail(newDoc.createdBy);
 
           return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
@@ -145,48 +139,48 @@ export default ActionAuditConfig = {
         },
         receivers({ newDoc, user }) {
           return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
-            const userId = (user === SystemName) ? user : user._id;
+            const userId = getUserId(user);
 
             const collection = getCollectionByDocType(documentType);
             const { identifiedBy, standardsIds } = collection.findOne({
               _id: documentId
             }) || {};
 
-            const standardOwners = new Set();
+            const receivers = new Set();
             Standards.find({ _id: { $in: standardsIds }  }).forEach(({ owner }) => {
-              (owner !== userId) && standardOwners.add(owner);
+              (owner !== userId) && receivers.add(owner);
             });
 
-            const receivers = Array.from(standardOwners);
-            (identifiedBy !== userId) && receivers.push(identifiedBy);
+            (identifiedBy !== userId) && receivers.add(identifiedBy);
 
-            return receivers;
+            return Array.from(receivers);
           });
         }
       },
       {
-        template: '{{userName}} assigned you to complete {{{docDesc}}}',
-        templateData({ newDoc, user }) {
+        text: '{{userName}} assigned you to complete {{{docDesc}}}',
+        title: 'You have been assigned to complete an action',
+        sendBoth: true,
+        emailTemplateData({ newDoc }) {
           return {
-            docDesc: this.docDescription(newDoc),
-            userName: getUserFullNameOrEmail(user)
+            button: {
+              label: 'View action',
+              url: this.docUrl(newDoc)
+            }
           };
         },
-        subjectTemplate: 'You have been assigned to complete an action',
-        subjectTemplateData() { },
-        notificationData({ newDoc }) {
+        data({ newDoc, user }) {
+          const auditConfig = this;
+
           return {
-            templateData: {
-              button: {
-                label: 'View action',
-                url: this.docUrl(newDoc)
-              }
-            }
+            docDesc: () => auditConfig.docDescription(newDoc),
+            userName: () => getUserFullNameOrEmail(user)
           };
         },
         receivers({ newDoc, user }) {
           const { toBeCompletedBy } = newDoc;
-          const userId = (user === SystemName) ? user : user._id;
+          const userId = getUserId(user);
+
           return (toBeCompletedBy !== userId) ? [toBeCompletedBy]: [];
         }
       }
@@ -201,21 +195,13 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Completion date set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Completion date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Completion date removed'
-          },
-          templateData({ diffs: { completedAt }, newDoc }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(completedAt.newValue, orgId),
-              oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
-            };
           }
         }
       ],
@@ -224,27 +210,29 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set completion date of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
               '{{userName}} changed completion date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               '{{userName}} removed completion date of {{{docDesc}}}'
-          },
-          templateData({ diffs: { completedAt }, newDoc, user }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getPrettyOrgDate(completedAt.newValue, orgId),
-              oldValue: getPrettyOrgDate(completedAt.oldValue, orgId)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { completedAt }, newDoc, user }) {
+        const { newValue, oldValue } = completedAt;
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -254,19 +242,13 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Completion executor set to {{newValue}}',
             [FIELD_CHANGED]:
               'Completion executor changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               'Completion executor removed'
-          },
-          templateData({ diffs: { completedBy } }) {
-            return {
-              newValue: getUserFullNameOrEmail(completedBy.newValue),
-              oldValue: getUserFullNameOrEmail(completedBy.oldValue)
-            };
           }
         }
       ],
@@ -275,25 +257,28 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set completion executor of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
               '{{userName}} changed completion executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               '{{userName}} removed completion executor of {{{docDesc}}}'
-          },
-          templateData({ diffs: { completedBy }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getUserFullNameOrEmail(completedBy.newValue),
-              oldValue: getUserFullNameOrEmail(completedBy.oldValue)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { completedBy }, newDoc, user }) {
+        const { newValue, oldValue } = completedBy;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -303,12 +288,11 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          message: {
             [FIELD_ADDED]: 'Completion comments set',
             [FIELD_CHANGED]: 'Completion comments changed',
             [FIELD_REMOVED]: 'Completion comments removed'
-          },
-          templateData() { }
+          }
         }
       ],
       notifications: [
@@ -316,72 +300,69 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isCompleted } }) {
             return !isCompleted;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set completion comments of {{{docDesc}}}',
             [FIELD_CHANGED]:
               '{{userName}} changed completion comments of {{{docDesc}}}',
             [FIELD_REMOVED]:
               '{{userName}} removed completion comments of {{{docDesc}}}'
-          },
-          templateData({ diffs: { completionComments }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: completionComments.newValue,
-              oldValue: completionComments.oldValue
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { completionComments }, newDoc, user }) {
+        const { newValue, oldValue } = completionComments;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      },
+      receivers: getReceivers
     },
 
     {
       field: 'completionTargetDate',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Completion target date set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Completion target date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Completion target date removed'
-          },
-          templateData({ diffs: { completionTargetDate }, newDoc }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(completionTargetDate.newValue, orgId),
-              oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
-            };
           }
         }
       ],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set completion target date of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
               '{{userName}} changed completion target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               '{{userName}} removed completion target date of {{{docDesc}}}'
-          },
-          templateData({ diffs: { completionTargetDate }, newDoc, user }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getPrettyOrgDate(completionTargetDate.newValue, orgId),
-              oldValue: getPrettyOrgDate(completionTargetDate.oldValue, orgId)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { completionTargetDate }, newDoc, user }) {
+        const { newValue, oldValue } = completionTargetDate;
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -391,19 +372,13 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { completedAt, completedBy } }) {
             return completedAt && completedBy;
           },
-          template: {
+          message: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
                 'Action completed{{#if comments}}: {{comments}}{{/if}}' +
               '{{else}}' +
                 'Action completion canceled' +
               '{{/if}}'
-          },
-          templateData({ diffs: { isCompleted, completionComments } }) {
-            return {
-              completed: isCompleted.newValue,
-              comments: completionComments && completionComments.newValue
-            };
           }
         }
       ],
@@ -412,7 +387,7 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { completedAt, completedBy } }) {
             return completedAt && completedBy;
           },
-          template: {
+          text: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
                 '{{userName}} completed {{{docDesc}}}' +
@@ -420,18 +395,20 @@ export default ActionAuditConfig = {
               '{{else}}' +
                 '{{userName}} canceled completion of {{{docDesc}}}' +
               '{{/if}}'
-          },
-          templateData({ diffs: { isCompleted, completionComments }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              completed: isCompleted.newValue,
-              comments: completionComments && completionComments.newValue,
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { isCompleted, completionComments }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          completed: () => isCompleted.newValue,
+          comments: () => completionComments && completionComments.newValue,
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -441,7 +418,7 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { verifiedAt, verifiedBy } }) {
             return verifiedAt && verifiedBy;
           },
-          logTemplate: {
+          message: {
             [FIELD_CHANGED]:
               '{{#if verified}}' +
                 '{{#if verifiedAsEffective}}' +
@@ -452,13 +429,6 @@ export default ActionAuditConfig = {
               '{{else}}' +
                 'Action verification canceled' +
               '{{/if}}'
-          },
-          logData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments } }) {
-            return {
-              verified: isVerified.newValue,
-              verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
-              comments: verificationComments && verificationComments.newValue
-            };
           }
         }
       ],
@@ -467,7 +437,7 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { verifiedAt, verifiedBy } }) {
             return verifiedAt && verifiedBy;
           },
-          template: {
+          text: {
             [FIELD_CHANGED]:
               '{{#if verified}}' +
                 '{{#if verifiedAsEffective}}' +
@@ -480,44 +450,42 @@ export default ActionAuditConfig = {
               '{{else}}' +
                 '{{userName}} canceled verification of {{{docDesc}}}' +
               '{{/if}}'
-          },
-          templateData({ diffs: { isVerified, isVerifiedAsEffective, verificationComments }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              verified: isVerified.newValue,
-              verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
-              comments: verificationComments && verificationComments.newValue,
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs, newDoc, user }) {
+        const { isVerified, isVerifiedAsEffective, verificationComments } = diffs;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          verified: () => isVerified.newValue,
+          verifiedAsEffective: () => isVerifiedAsEffective && isVerifiedAsEffective.newValue,
+          comments: () => verificationComments && verificationComments.newValue,
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      },
+      receivers: getReceivers
     },
 
     {
       field: 'linkedTo',
       logs: [
         {
-          template: {
+          message: {
             [ITEM_ADDED]: 'Document was linked to {{{linkedDocDesc}}}',
             [ITEM_REMOVED]: 'Document was unlinked from {{{linkedDocDesc}}}'
-          },
-          templateData({ diffs: { linkedTo } }) {
-            const { item: { documentId, documentType } } = linkedTo;
-
-            return {
-              linkedDocDesc: getLinkedDocName(documentId, documentType)
-            };
           }
         },
         {
-          template: {
+          message: {
             [ITEM_ADDED]: '{{{docDesc}}} was linked to this document',
             [ITEM_REMOVED]: '{{{docDesc}}} was unlinked from this document'
           },
-          templateData({ newDoc }) {
-            return { docDesc: this.docDescription(newDoc) };
+          data({ newDoc }) {
+            const auditConfig = this;
+
+            return { docDesc: () => auditConfig.docDescription(newDoc) };
           },
           logData({ diffs: { linkedTo } }) {
             const { item: { documentId, documentType } } = linkedTo;
@@ -532,81 +500,73 @@ export default ActionAuditConfig = {
       ],
       notifications: [
         {
-          template: {
+          text: {
             [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
             [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
-          },
-          templateData({ diffs: { linkedTo }, newDoc, user }) {
-            const { item: { documentId, documentType } } = linkedTo;
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              linkedDocDesc: getLinkedDocName(documentId, documentType),
-              userName: getUserFullNameOrEmail(user)
-            };
-          },
-          receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
-            const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
-            return getNotificationReceivers(doc, user);
           }
         }
-      ]
+      ],
+      data({ diffs: { linkedTo }, newDoc, user }) {
+        const { item: { documentId, documentType } } = linkedTo;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          linkedDocDesc: () => getLinkedDocName(documentId, documentType),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      },
+      receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
+        const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
+        return getNotificationReceivers(doc, user);
+      }
     },
 
     {
       field: 'planInPlace',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Plan in place set to "{{newValue}}"',
             [FIELD_CHANGED]: 'Plan in place changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]: 'Plan in place removed'
-          },
-          templateData({ diffs: { planInPlace }, newDoc }) {
-            return {
-              newValue: planInPlace.newValue,
-              oldValue: planInPlace.oldValue
-            };
           }
         }
       ],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set plan in place of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
               '{{userName}} changed plan in place of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               '{{userName}} removed plan in place of {{{docDesc}}}'
-          },
-          templateData({ diffs: { planInPlace }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: planInPlace.newValue,
-              oldValue: planInPlace.oldValue
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { planInPlace }, newDoc, user }) {
+        const { newValue, oldValue } = planInPlace;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      },
+      receivers: getReceivers
     },
 
     {
       field: 'status',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]: 'Status set to "{{newValue}}"',
             [FIELD_CHANGED]: 'Status changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]: 'Status removed'
-          },
-          templateData({ diffs: { status } }) {
-            return {
-              newValue: ActionStatuses[status.newValue],
-              oldValue: ActionStatuses[status.oldValue]
-            };
           }
         }
       ],
@@ -629,161 +589,162 @@ export default ActionAuditConfig = {
           },
           receivers: getReceivers
         }*/
-      ]
+      ],
+      data({ diffs: { status } }) {
+        const { newValue, oldValue } = status;
+
+        return {
+          newValue: () => ActionStatuses[newValue],
+          oldValue: () => ActionStatuses[oldValue]
+        };
+      },
+      receivers: getReceivers
     },
 
     {
       field: 'toBeCompletedBy',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Completion executor set to {{newValue}}',
             [FIELD_CHANGED]:
               'Completion executor changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               'Completion executor removed'
-          },
-          templateData({ diffs: { toBeCompletedBy } }) {
-            return {
-              newValue: getUserFullNameOrEmail(toBeCompletedBy.newValue),
-              oldValue: getUserFullNameOrEmail(toBeCompletedBy.oldValue)
-            };
           }
         }
       ],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set completion executor of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
               '{{userName}} changed completion executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               '{{userName}} removed completion executor of {{{docDesc}}}'
-          },
-          templateData({ diffs: { toBeCompletedBy }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getUserFullNameOrEmail(toBeCompletedBy.newValue),
-              oldValue: getUserFullNameOrEmail(toBeCompletedBy.oldValue)
-            };
-          },
-          receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
-            const receivers = getNotificationReceivers(newDoc, user);
-            const index = receivers.indexOf(toBeCompletedBy.newValue);
-            (index > -1) && receivers.splice(index, 1);
-
-            return receivers;
           }
         },
         {
           shouldSendNotification({ diffs: { toBeCompletedBy: { kind } } }) {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
-          template: '{{userName}} assigned you to complete {{{docDesc}}}',
-          templateData({ newDoc, user }) {
+          text: '{{userName}} assigned you to complete {{{docDesc}}}',
+          title: 'You have been assigned to complete an action',
+          sendBoth: true,
+          data({ newDoc, user }) {
+            const auditConfig = this;
+
             return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user)
+              docDesc: () => auditConfig.docDescription(newDoc),
+              userName: () => getUserFullNameOrEmail(user)
             };
           },
-          subjectTemplate: 'You have been assigned to complete an action',
-          subjectTemplateData() { },
-          notificationData({ newDoc }) {
+          emailTemplateData({ newDoc }) {
             return {
-              templateData: {
-                button: {
-                  label: 'View action',
-                  url: this.docUrl(newDoc)
-                }
+              button: {
+                label: 'View action',
+                url: this.docUrl(newDoc)
               }
             };
           },
-          receivers({ diffs: { toBeCompletedBy: { newValue } }, newDoc, user }) {
-            const userId = (user === SystemName) ? user : user._id;
-            return (newValue !== userId) ? [newValue]: [];
+          receivers({ diffs: { toBeCompletedBy: { newValue } }, user }) {
+            return (newValue !== getUserId(user)) ? [newValue]: [];
           }
         }
-      ]
+      ],
+      data({ diffs: { toBeCompletedBy }, newDoc, user }) {
+        const { newValue, oldValue } = toBeCompletedBy;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      },
+      receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
+        const receivers = getNotificationReceivers(newDoc, user);
+        const index = receivers.indexOf(toBeCompletedBy.newValue);
+        (index > -1) && receivers.splice(index, 1);
+
+        return receivers;
+      }
     },
 
     {
       field: 'toBeVerifiedBy',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Verification executor set to {{newValue}}',
             [FIELD_CHANGED]:
               'Verification executor changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               'Verification executor removed'
-          },
-          templateData({ diffs: { toBeVerifiedBy } }) {
-            return {
-              newValue: getUserFullNameOrEmail(toBeVerifiedBy.newValue),
-              oldValue: getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
-            };
           }
         }
       ],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
               '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               '{{userName}} removed verification executor of {{{docDesc}}}'
-          },
-          templateData({ diffs: { toBeVerifiedBy }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getUserFullNameOrEmail(toBeVerifiedBy.newValue),
-              oldValue: getUserFullNameOrEmail(toBeVerifiedBy.oldValue)
-            };
-          },
-          receivers({ diffs: { toBeVerifiedBy }, newDoc, user }) {
-            const receivers = getNotificationReceivers(newDoc, user);
-            const index = receivers.indexOf(toBeVerifiedBy.newValue);
-            (index > -1) && receivers.splice(index, 1);
-
-            return receivers;
           }
         },
         {
           shouldSendNotification({ diffs: { toBeVerifiedBy: { kind } } }) {
             return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
           },
-          template: '{{userName}} assigned you to verify {{{docDesc}}}',
-          templateData({ newDoc, user }) {
+          text: '{{userName}} assigned you to verify {{{docDesc}}}',
+          title: 'You have been assigned to verify an action',
+          sendBoth: true,
+          data({ newDoc, user }) {
+            const auditConfig = this;
+
             return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user)
+              docDesc: () => auditConfig.docDescription(newDoc),
+              userName: () => getUserFullNameOrEmail(user)
             };
           },
-          subjectTemplate: 'You have been assigned to verify an action',
-          subjectTemplateData() { },
-          notificationData({ newDoc }) {
+          emailTemplateData({ newDoc }) {
             return {
-              templateData: {
-                button: {
-                  label: 'View action',
-                  url: this.docUrl(newDoc)
-                }
+              button: {
+                label: 'View action',
+                url: this.docUrl(newDoc)
               }
             };
           },
-          receivers({ diffs: { toBeVerifiedBy: { newValue } }, newDoc, user }) {
-            const userId = (user === SystemName) ? user : user._id;
-            return (newValue !== userId) ? [newValue]: [];
+          receivers({ diffs: { toBeVerifiedBy: { newValue } }, user }) {
+            return (newValue !== getUserId(user)) ? [newValue]: [];
           }
         }
-      ]
+      ],
+      data({ diffs: { toBeVerifiedBy }, newDoc, user }) {
+        const { newValue, oldValue } = toBeVerifiedBy;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      },
+      receivers({ diffs: { toBeVerifiedBy }, newDoc, user }) {
+        const receivers = getNotificationReceivers(newDoc, user);
+        const index = receivers.indexOf(toBeVerifiedBy.newValue);
+        (index > -1) && receivers.splice(index, 1);
+
+        return receivers;
+      }
     },
 
     {
@@ -793,12 +754,11 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          message: {
             [FIELD_ADDED]: 'Verification comments set',
             [FIELD_CHANGED]: 'Verification comments changed',
             [FIELD_REMOVED]: 'Verification comments removed'
-          },
-          templateData() { },
+          }
         }
       ],
       notifications: [
@@ -806,70 +766,66 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set verification comments of {{{docDesc}}}',
             [FIELD_CHANGED]:
               '{{userName}} changed verification comments of {{{docDesc}}}',
             [FIELD_REMOVED]:
               '{{userName}} removed verification comments of {{{docDesc}}}'
-          },
-          templateData({ diffs: { verificationComments }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { verificationComments }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+        };
+      },
+      receivers: getReceivers
     },
 
     {
       field: 'verificationTargetDate',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Verification target date set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Verification target date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Verification target date removed'
-          },
-          templateData({ diffs: { verificationTargetDate }, newDoc }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(verificationTargetDate.newValue, orgId),
-              oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
-            };
           }
         }
       ],
       notifications: [
         {
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set verification target date of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
               '{{userName}} changed verification target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               '{{userName}} removed verification target date of {{{docDesc}}}'
-          },
-          templateData({ diffs: { verificationTargetDate }, newDoc, user }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getPrettyOrgDate(verificationTargetDate.newValue, orgId),
-              oldValue: getPrettyOrgDate(verificationTargetDate.oldValue, orgId)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { verificationTargetDate }, newDoc, user }) {
+        const { newValue, oldValue } = verificationTargetDate;
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -879,21 +835,13 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Verification date set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Verification date changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Verification date removed'
-          },
-          templateData({ diffs: { verifiedAt }, newDoc }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              newValue: getPrettyOrgDate(verifiedAt.newValue, orgId),
-              oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
-            };
           }
         }
       ],
@@ -902,27 +850,29 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set verification date of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
               '{{userName}} changed verification date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               '{{userName}} removed verification date of {{{docDesc}}}'
-          },
-          templateData({ diffs: { verifiedAt }, newDoc, user }) {
-            const orgId = this.docOrgId(newDoc);
-
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getPrettyOrgDate(verifiedAt.newValue, orgId),
-              oldValue: getPrettyOrgDate(verifiedAt.oldValue, orgId)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { verifiedAt }, newDoc, user }) {
+        const { newValue, oldValue } = verifiedAt;
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      },
+      receivers: getReceivers
     },
 
     {
@@ -932,19 +882,13 @@ export default ActionAuditConfig = {
           shouldCreateLog({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Verification executor set to {{newValue}}',
             [FIELD_CHANGED]:
               'Verification executor changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               'Verification executor removed'
-          },
-          templateData({ diffs: { verifiedBy } }) {
-            return {
-              newValue: getUserFullNameOrEmail(verifiedBy.newValue),
-              oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
-            };
           }
         }
       ],
@@ -953,106 +897,114 @@ export default ActionAuditConfig = {
           shouldSendNotification({ diffs: { isVerified } }) {
             return !isVerified;
           },
-          template: {
+          text: {
             [FIELD_ADDED]:
               '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
               '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               '{{userName}} removed verification executor of {{{docDesc}}}'
-          },
-          templateData({ diffs: { verifiedBy }, newDoc, user }) {
-            return {
-              docDesc: this.docDescription(newDoc),
-              userName: getUserFullNameOrEmail(user),
-              newValue: getUserFullNameOrEmail(verifiedBy.newValue),
-              oldValue: getUserFullNameOrEmail(verifiedBy.oldValue)
-            };
-          },
-          receivers: getReceivers
+          }
         }
-      ]
+      ],
+      data({ diffs: { verifiedBy }, newDoc, user }) {
+        const { newValue, oldValue } = verifiedBy;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      },
+      receivers: getReceivers
     },
 
     {
-      field: 'fileIds',
+      field: fileIdsField.field,
       logs: [
         fileIdsField.logConfig
       ],
       notifications: [
-        _({}).extend(fileIdsField.notificationConfig, {
-          receivers: getReceivers
-        })
-      ]
+        fileIdsField.notificationConfig
+      ],
+      data: fileIdsField.data,
+      receivers: getReceivers
     },
 
     {
-      field: 'isDeleted',
+      field: isDeletedField.field,
       logs: [
         isDeletedField.logConfig
       ],
       notifications: [
-        _({}).extend(isDeletedField.notificationConfig, {
-          receivers: getReceivers
-        })
-      ]
+        isDeletedField.notificationConfig
+      ],
+      data: isDeletedField.data,
+      receivers: getReceivers
     },
 
     {
-      field: 'notes',
+      field: notesField.field,
       logs: [
         notesField.logConfig
       ],
       notifications: [
-        _({}).extend(notesField.notificationConfig, {
-          receivers: getReceivers
-        })
-      ]
+        notesField.notificationConfig
+      ],
+      data: notesField.data,
+      receivers: getReceivers
     },
 
     {
-      field: 'notify',
+      field: notifyField.field,
       logs: [
         notifyField.logConfig
       ],
       notifications: [
-        _({}).extend(notifyField.notificationConfig, {
-          receivers: getReceivers
-        }),
+        notifyField.notificationConfig,
         notifyField.personalNotificationConfig
-      ]
+      ],
+      data: notifyField.data,
+      receivers({ diffs: { notify }, newDoc, user }) {
+        const receivers = getNotificationReceivers(newDoc, user);
+        const index = receivers.indexOf(notify.item);
+        (index > -1) && receivers.splice(index, 1);
+
+        return receivers;
+      }
     },
 
     {
-      field: 'ownerId',
+      field: ownerIdField.field,
       logs: [
         ownerIdField.logConfig
       ],
       notifications: [
-        _({}).extend(ownerIdField.notificationConfig, {
-          receivers: getReceivers
-        })
-      ]
+        ownerIdField.notificationConfig,
+      ],
+      data: ownerIdField.data,
+      receivers: getReceivers
     },
 
     {
-      field: 'title',
+      field: titleField.field,
       logs: [
         titleField.logConfig
       ],
       notifications: [
-        _({}).extend(titleField.notificationConfig, {
-          receivers: getReceivers
-        })
-      ]
+        titleField.notificationConfig,
+      ],
+      data: titleField.data,
+      receivers: getReceivers
     }
   ],
 
   onRemoved: {
     logs: [
       {
-        template: 'Document removed',
-        templateData() { }
+        message: 'Document removed'
       }
     ],
     notifications: []
@@ -1071,10 +1023,9 @@ export default ActionAuditConfig = {
   },
 
   docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    const { _id:workItemId } = WorkItems.findOne({ 'linkedDoc._id': _id });
+    const { serialNumber } = Organizations.findOne({ _id: organizationId }) || {};
+    const { _id:workItemId } = WorkItems.findOne({ 'linkedDoc._id': _id }) || {};
 
     return Meteor.absoluteUrl(`${serialNumber}/work-inbox/${workItemId}`);
   }
-
 };

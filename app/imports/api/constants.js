@@ -391,6 +391,12 @@ const CollectionNames = {
   ORGANIZATIONS: 'Organizations'
 };
 
+const InvitationStatuses = {
+  failed: 0,
+  invited: 1,
+  added: 2
+};
+
 const TruncatedStringLengths = {
   c40: 40
 };
@@ -432,6 +438,7 @@ export {
   ReviewStatuses,
   WorkItemsStore,
   RKTypes,
+  InvitationStatuses,
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,

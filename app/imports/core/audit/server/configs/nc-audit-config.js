@@ -22,73 +22,88 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
       field: 'cost',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Approx cost per occurrence set to "{{newValue}}"',
             [FIELD_CHANGED]:
               'Approx cost per occurrence changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
               'Approx cost per occurrence removed'
-          },
-          templateData({ diffs: { cost: { newValue, oldValue } } }) {
-            return { newValue, oldValue };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs: { cost: { newValue, oldValue } } }) {
+        return {
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      }
     },
 
     {
       field: 'ref',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_ADDED]:
               'Help desk ref added: ID - {{text}}, URL: {{url}}',
             [FIELD_REMOVED]:
               'Help desk ref removed: ID - {{text}}, URL: {{url}}'
-          },
-          templateData({ diffs: { ref: { newValue, oldValue } } }) {
-            const { text, url } = newValue || oldValue;
-            return { text, url };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs: { ref: { newValue, oldValue } } }) {
+        const { text, url } = newValue || oldValue;
+
+        return {
+          text: () => text,
+          url: () => url
+        };
+      }
     },
 
     {
       field: 'ref.text',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_CHANGED]:
               'Help desk ref ID changed from "{{oldValue}}" to "{{newValue}}"'
-          },
-          templateData({ diffs }) {
-            const { newValue, oldValue } = diffs['ref.text'];
-            return { newValue, oldValue };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs }) {
+        const { newValue, oldValue } = diffs['ref.text'];
+
+        return {
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      }
     },
 
     {
       field: 'ref.url',
       logs: [
         {
-          template: {
+          message: {
             [FIELD_CHANGED]:
               'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"'
-          },
-          templateData({ diffs }) {
-            const { newValue, oldValue } = diffs['ref.url'];
-            return { newValue, oldValue };
           }
         }
       ],
-      notifications: []
+      notifications: [],
+      data({ diffs }) {
+        const { newValue, oldValue } = diffs['ref.url'];
+
+        return {
+          newValue: () => newValue,
+          oldValue: () => oldValue
+        };
+      }
     }
   ],
 

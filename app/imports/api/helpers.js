@@ -2,7 +2,6 @@ import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
-import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -96,25 +95,17 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
-const getUserFullNameOrEmail = (userOrId) => {
-  let user = userOrId;
-  if (typeof userOrId === 'string') {
-    user = Meteor.users.findOne(userOrId);
-  }
-
-  return (user && user.fullNameOrEmail()) || 'Ghost';
+export const getCollectionNameByDocType = (docType) => {
+  return {
+    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
+    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
+    [DocumentTypes.RISK]: CollectionNames.RISKS
+  }[docType];
 };
 
-const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY') => {
-  const { timezone } = Organizations.findOne({ _id: organizationId }) || {};
-
-  return moment(date).tz(timezone || 'UTC').format(format);
-};
-
-export const renderTemplate = (template, data = {}) => {
-  const compiledTemplate = Handlebars.compile(template);
-
-  return compiledTemplate(data);
+export const getLinkedDoc = (documentId, documentType) => {
+  const collection = getCollectionByDocType(documentType);
+  return collection.findOne({ _id: documentId });
 };
 
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
@@ -156,8 +147,6 @@ export {
   getCollectionByName,
   getFormattedDate,
   getTzTargetDate,
-  getUserFullNameOrEmail,
-  getPrettyOrgDate,
   handleMethodResult,
   getCollectionByDocType,
   chain,
