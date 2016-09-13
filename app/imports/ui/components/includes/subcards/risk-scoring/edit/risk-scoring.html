@@ -1,33 +1,3 @@
 <template name="Subcards_RiskScoring_Edit">
   {{> Subcards_Wrapper_Add (wrapperArgs)}}
-  <!-- {{#Subcards_Wrapper
-    _lText=label
-    _rText=(getScoreLabel scoresSorted.[0])
-    renderContentOnInitial=renderContentOnInitial}}
-    <div class="card-block">
-      {{#if scores.length}}
-        <div class="card">
-          {{#each scoresSorted}}
-            {{> Subcard
-                _id=this._id
-                score=this
-                _lText=(renderDate this.scoredAt)
-                _rText=(getScoreLabel this)
-                tableData=tableData
-                disabled=true
-                isNew=false
-                guideHtml=guideHtml
-                content="Subcards_RiskScore"
-                insertFn=insertFn
-                updateFn=updateFn
-                removeFn=removeFn}}
-          {{/each}}
-        </div>
-      {{/if}}
-      <div class="card new-cards" {{b "ref: forms"}}></div>
-      <div class="text-xs-center">
-        <button type="button" class="btn btn-link" {{b "click: add"}}>Add a risk score</button>
-      </div>
-    </div>
-  {{/Subcards_Wrapper}} -->
 </template>

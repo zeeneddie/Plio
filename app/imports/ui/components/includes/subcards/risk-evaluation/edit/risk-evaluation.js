@@ -3,6 +3,7 @@ import { Template } from 'meteor/templating';
 import { chain } from '/imports/api/helpers.js';
 
 Template.Subcards_RiskEvaluation_Edit.viewmodel({
+  mixin: 'utils',
   autorun() {
     this.load(this.riskEvaluation());
   },

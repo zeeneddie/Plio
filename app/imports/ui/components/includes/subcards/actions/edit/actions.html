@@ -1,5 +1,6 @@
 <template name="Subcards_Actions_Edit">
-  {{#Subcards_Wrapper
+  {{> Subcards_Wrapper_Add (wrapperArgs)}}
+  <!-- {{#Subcards_Wrapper
     _lText=title
     _rText=actionsIndicators
     renderContentOnInitial=renderContentOnInitial}}
@@ -40,5 +41,5 @@
         <button type="button" class="btn btn-link" {{b "text: addButtonText, click: addAction"}}></button>
       </div>
     </div>
-  {{/Subcards_Wrapper}}
+  {{/Subcards_Wrapper}} -->
 </template>
