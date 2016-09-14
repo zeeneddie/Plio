@@ -52,11 +52,12 @@ This means that someone added a new npm module and you need to install it.
 
 `meteor -p 2000`
 
-#UI prototype
-The latest ui prototype:
-[http://ui2.isometrica.io/ui1-3/index.html](http://ui2.isometrica.io/ui1-3/index.html)
 
 #DEVELOPMENT
+
+## UI prototype
+The latest ui prototype:
+[http://ui2.isometrica.io/ui1-3/index.html](http://ui2.isometrica.io/ui1-3/index.html)
 
 ## Contribution process
 
