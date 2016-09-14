@@ -95,10 +95,26 @@ Template.NC_List.viewmodel({
   departments(withSearchQuery) {
     const query = { organizationId: this.organizationId() };
     const options = { sort: { name: 1 } };
-    return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
+    const departments = Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
       return this._getNCsByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
+    });//console.log(departments);
+
+    return departments;
   },
+
+  // Find Non-Conformities without departments
+  uncategorizedByDepartments(){
+    const query = { organizationId: this.organizationId() };
+    const options = { sort: { name: 1 } };
+    //const ncs = NonConformities.find(query, options).fetch();//console.log(departments);
+    const ncs = this._getNCsByQuery({ query, options }).fetch();console.log(ncs);
+
+    //return departments;
+    return ncs.length && {
+      name: 'Uncategorized',
+    };
+  },
+
   NCsDeleted(withSearchQuery) {
     const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };

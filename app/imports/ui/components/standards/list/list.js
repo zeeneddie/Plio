@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import invoke from 'lodash.invoke'
+import invoke from 'lodash.invoke';
 import get from 'lodash.get';
 import property from 'lodash.property';
 
@@ -19,8 +19,8 @@ Template.StandardsList.viewmodel({
       const list = this.list;
       const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
       const query = this._getQueryForFilter();
-      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
-      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });console.log(contains);
+      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });console.log(defaultStandard);
       const standardId = this.standardId();
       const orgSerialNumber = this.organizationSerialNumber();
 
@@ -43,6 +43,8 @@ Template.StandardsList.viewmodel({
     if (!contains) {
       if (defaultStandard) {
         const { _id } = defaultStandard;
+
+        // [ToDo] How to avoid redirecting from the page of an uncategorized standard?
         this.goToStandard(_id);
         this.expandCollapsed(_id);
       } else {

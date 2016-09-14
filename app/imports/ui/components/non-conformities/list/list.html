@@ -38,6 +38,11 @@
               rText=(calculateTotalCost this._id)
               _query=(_getDepartmentQuery this)}}
         {{/each}}
+
+        {{#with uncategorizedByDepartments}}
+          <p>NC without departments</p>
+          
+        {{/with}}
       {{/if}}
 
       {{#if isActiveNCFilter 4}}
