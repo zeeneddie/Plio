@@ -117,11 +117,11 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis executor set to {{newValue}}',
+              'Root cause analysis completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Root cause analysis executor changed from {{oldValue}} to {{newValue}}',
+              'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Root cause analysis executor removed'
+              'Root cause analysis completed by removed'
           }
         }
       ],
@@ -484,11 +484,11 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Update of standards executor set to {{newValue}}',
+              'Update of standards completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Update of standards executor changed from {{oldValue}} to {{newValue}}',
+              'Update of standards completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Update of standards executor removed'
+              'Update of standards completed by removed'
           }
         }
       ],

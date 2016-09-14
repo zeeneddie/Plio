@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/api/actions/actions.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
-import { ActionStatuses, CollectionNames, ProblemTypes } from '/imports/api/constants.js';
+import { ActionStatuses, CollectionNames, ProblemTypes, WorkItemsStore } from '/imports/api/constants.js';
 import { getCollectionByDocType } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
@@ -244,11 +244,11 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Completion executor set to {{newValue}}',
+              'Completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Completion executor changed from {{oldValue}} to {{newValue}}',
+              'Completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Completion executor removed'
+              'Completed by removed'
           }
         }
       ],
@@ -259,11 +259,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completion executor of {{{docDesc}}} to {{newValue}}',
+              '{{userName}} set completed by of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed completion executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{userName}} changed completed by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed completion executor of {{{docDesc}}}'
+              '{{userName}} removed completed by of {{{docDesc}}}'
           }
         }
       ],
@@ -607,11 +607,11 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Completion executor set to {{newValue}}',
+              'To be completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Completion executor changed from {{oldValue}} to {{newValue}}',
+              'To be completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Completion executor removed'
+              'To be completed by removed'
           }
         }
       ],
@@ -619,11 +619,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completion executor of {{{docDesc}}} to {{newValue}}',
+              '{{userName}} set to be completed by of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed completion executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{userName}} changed to be completed by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed completion executor of {{{docDesc}}}'
+              '{{userName}} removed to be completed by of {{{docDesc}}}'
           }
         },
         {
@@ -680,11 +680,11 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Verification executor set to {{newValue}}',
+              'To be verified by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Verification executor changed from {{oldValue}} to {{newValue}}',
+              'To be verified by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Verification executor removed'
+              'To be verified by removed'
           }
         }
       ],
@@ -692,11 +692,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
+              '{{userName}} set to be verified by of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{userName}} changed to be verified by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed verification executor of {{{docDesc}}}'
+              '{{userName}} removed to be verified by of {{{docDesc}}}'
           }
         },
         {
@@ -884,11 +884,11 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Verification executor set to {{newValue}}',
+              'Verified by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Verification executor changed from {{oldValue}} to {{newValue}}',
+              'Verified by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Verification executor removed'
+              'Verified by removed'
           }
         }
       ],
@@ -899,11 +899,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verification executor of {{{docDesc}}} to {{newValue}}',
+              '{{userName}} set verified by of {{{docDesc}}} to {{newValue}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed verification executor of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{userName}} changed verified by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed verification executor of {{{docDesc}}}'
+              '{{userName}} removed verified by of {{{docDesc}}}'
           }
         }
       ],
@@ -1022,9 +1022,20 @@ export default ActionAuditConfig = {
     return organizationId;
   },
 
-  docUrl({ _id, organizationId }) {
+  docUrl({ _id, organizationId, isCompleted }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId }) || {};
-    const { _id:workItemId } = WorkItems.findOne({ 'linkedDoc._id': _id }) || {};
+
+    const workItemQuery = {
+      'linkedDoc._id': _id
+    };
+
+    if (isCompleted) {
+      workItemQuery['type'] = WorkItemsStore.TYPES.VERIFY_ACTION;
+    } else {
+      workItemQuery['type'] = WorkItemsStore.TYPES.COMPLETE_ACTION;
+    }
+
+    const { _id:workItemId } = WorkItems.findOne(workItemQuery) || {};
 
     return Meteor.absoluteUrl(`${serialNumber}/work-inbox/${workItemId}`);
   }
