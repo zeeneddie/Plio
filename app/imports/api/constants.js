@@ -388,7 +388,8 @@ const CollectionNames = {
   LESSONS: 'LessonsLearned',
   OCCURRENCES: 'Occurrences',
   MESSAGES: 'Messages',
-  ORGANIZATIONS: 'Organizations'
+  ORGANIZATIONS: 'Organizations',
+  WORK_ITEMS: 'WorkItems'
 };
 
 const InvitationStatuses = {
