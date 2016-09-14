@@ -1,43 +1,38 @@
 import React from 'react';
+import { composeWithTracker } from 'react-komposer';
 
 import MessagesList from '../components/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
 
-export default class MessagesListContainer extends React.Component {
-  constructor(props) {
-    super(props);
+const composer = ({ discussionId, limit = 50, ...args }, onData) => {
+  const subscription = Meteor.subscribe('messages', discussionId, { limit });
 
-    const discussionId = props.discussionId;
+  if (subscription.ready()) {
+    const messages = Messages.find({ discussionId }, { sort: { createdAt: 1 } }).fetch();
+
+    onData(null, { messages });
+  }
+}
+
+const Container = composeWithTracker(composer)(MessagesList);
+
+export default class MessagesListContainer extends React.Component {
+  constructor() {
+    super();
 
     this.state = {
-      limit: 50,
-      isReady: false,
-      messages: []
+      limit: 50
     };
-
-    Meteor.setInterval(() => {
-      Meteor.subscribe('messages', discussionId, { limit: this.state.limit }, {
-        onReady: () => this.setState({
-          isReady: true,
-          messages: Messages.find({ discussionId }, { sort: { createdAt: 1 } }).fetch()
-        })
-      });
-    }, 1000);
   }
 
   render() {
-    const { isReady, messages, limit } = this.state;
-    const list = (<MessagesList
-                  messages={messages}
-                  limit={limit}
-                  onHandleLoad={e => this._onHandleLoad(e)} />);
-
-    return isReady ? list : null;
+    const props = { ...this.props, ...this.state };
+    return (<Container handleLoadData={e => this._handleLoadData(e)} {...props}/>);
   }
 
-  _onHandleLoad(e) {
+  _handleLoadData(e) {
     this.setState({
       limit: this.state.limit + 50
     });
   }
-}
+};

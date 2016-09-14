@@ -2,13 +2,12 @@ import React from 'react';
 
 import Message from './message';
 import { handleMouseWheel } from '/client/lib/scroll.js';
-import { $isScrolledElementVisible } from '/imports/api/helpers.js';
 
 export default class MessagesList extends React.Component {
   constructor() {
     super();
 
-    this._wheelListener = _.throttle(this._wheelListener, 1500).bind(this);
+    this._wheelListener = _.throttle(this._wheelListener, 1000).bind(this);
   }
 
   componentDidMount() {
@@ -17,18 +16,21 @@ export default class MessagesList extends React.Component {
 
   render() {
     return (
-      <div className="chat-messages">
-        <div className="infinite-load-older text-xs-center" ref="loader"></div>
-        <div className="chat-messages-list">
-          {this.props.messages.map(message => <Message key={message._id} {...message}/>)}
+      <div className="chat-content scroll" ref="chat">
+        <div className="chat-messages">
+          <div className="infinite-load-older text-xs-center" ref="loader">
+          </div>
+          <div className="chat-messages-list">
+            {this.props.messages.map(message => <Message key={message._id} {...message}/>)}
+          </div>
         </div>
       </div>
     );
   }
 
   _wheelListener(e) {
-    if ($isScrolledElementVisible(this.refs.loader, document.getElementById('discussion'))) {
-      this.props.onHandleLoad(this.props.limit);
+    if ($(this.refs.loader).isAlmostVisible()) {
+      this.props.handleLoadData(e);
     }
   }
 };

@@ -69,6 +69,7 @@ Meteor.publishComposite('messages', function(discussionId, {
 	at = null
 } = {}) {
 	check(discussionId, String);
+	console.log(arguments);
 
 	new SimpleSchema({
 		limit: { type: Number },

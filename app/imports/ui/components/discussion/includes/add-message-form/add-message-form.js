@@ -52,7 +52,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 	},
 	sendTextMessage() {
 		if (this.disabled()) return;
-
+		
 		const discussionId = this.discussionId();
 
 		this.reInit();
@@ -98,6 +98,7 @@ Template.Discussion_AddMessage_Form.viewmodel({
 				'error'
 			);
 		}
+
 
 		if (!!this.messageText()) {
 			this.sendTextMessage();
