@@ -2,18 +2,50 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
+import { inspire, chain } from '/imports/api/helpers.js';
+
+const getTableData = instance => inspire(['tableData', 'guideHtml'], instance);
+
 Template.Subcards_RiskScoring_Edit.viewmodel({
-  mixin: ['riskScore', 'date', 'addForm', 'utils', 'organization'],
+  mixin: ['riskScore', 'date', 'organization'],
   label: 'Risk scoring',
-  scores: '',
-  renderContentOnInitial() {
-    return !(this.scoresSorted().length > 5);
+  scores: [],
+  wrapperArgs() {
+    const {
+      label:_lText,
+      scoresSorted:items
+    } = inspire(['scoresSorted', 'label'], this);
+
+    return {
+      items,
+      _lText,
+      _rText: this.getScoreLabel(_.first(items)),
+      addText: 'Add a new risk score',
+      renderContentOnInitial: !(items.length > 5),
+      onAdd: this.onAdd.bind(this),
+      getSubcardArgs: this.getSubcardArgs.bind(this)
+    };
+  },
+  getSubcardArgs(doc) {
+    return {
+      doc,
+      _id: doc._id,
+      score: doc,
+      _lText: this.renderDate(doc.scoredAt),
+      _rText: this.getScoreLabel(doc),
+      disabled: true,
+      isNew: false,
+      content: 'Subcards_RiskScore',
+      insertFn: this.insert.bind(this),
+      removeFn: this.remove.bind(this),
+      ...getTableData(this)
+    };
   },
   scoresSorted() {
-    return Array.from(this.scores() || []).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
+    return Object.assign([], this.scores()).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
   },
   guideHtml() {
-    const { rkScoringGuidelines } = this.organization() || {};
+    const { rkScoringGuidelines } = Object.assign({}, this.organization());
     return rkScoringGuidelines;
   },
   tableData() {
@@ -62,8 +94,8 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
                  </span>`
               : '';
   },
-  add() {
-    this.addForm(
+  onAdd(add) {
+    return add(
       'Subcard',
       {
         score: {
@@ -73,51 +105,41 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
         content: 'Subcards_RiskScore',
         _lText: 'New risk score',
         isNew: false,
-        guideHtml: this.guideHtml(),
-        tableData: this.tableData(),
-        insertFn: this.insertFn(),
-        removeFn: this.removeFn()
+        insertFn: this.insert.bind(this),
+        removeFn: this.remove.bind(this),
+        ...getTableData(this)
       }
     );
   },
   onInsert() {},
-  insertFn() {
-    return ({ ...args }, cb) => {
-      this.onInsert({ ...args }, cb)
-    };
-  },
-  updateFn() {
-    return ({ ...args }, cb = () => {}) => cb();
+  insert({ ...args }, cb) {
+    return this.onInsert({ ...args }, cb);
   },
   onRemove() {},
-  removeFn() {
-    return (viewmodel, cb = () => {}) => {
-      const { document:score = {} } = viewmodel.data();
-      const { _id } = score;
+  remove(viewmodel, cb = () => {}) {
+    const { score = {} } = viewmodel.data();
+    const { _id } = score;
 
-      if (!_id) {
-        viewmodel.destroy();
-      } else {
-        swal(
-          {
-            title: 'Are you sure?',
-            text: `Risk score will be removed.`,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Remove',
-            closeOnConfirm: false
-          },
-          () => {
-            const showSuccess = (err) => {
-              if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
-            };
+    if (!_id) {
+      viewmodel.destroy();
+    } else {
+      swal(
+        {
+          title: 'Are you sure?',
+          text: `Risk score will be removed.`,
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Remove',
+          closeOnConfirm: false
+        },
+        () => {
+          const showSuccess = (err) => {
+            if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
+          };
 
-            const callback = this.chain(showSuccess, cb);
-
-            this.onRemove({ score }, callback);
-          }
-        );
-      }
-    };
+          this.onRemove({ score }, chain(showSuccess, cb));
+        }
+      );
+    }
   }
 });

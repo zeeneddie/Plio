@@ -5,6 +5,7 @@ import { insert } from '/imports/api/actions/methods.js';
 
 
 Template.Actions_CreateSubcard.viewmodel({
+  mixin: 'getChildrenData',
   type: '',
   title: '',
   ownerId: Meteor.userId(),
@@ -18,9 +19,6 @@ Template.Actions_CreateSubcard.viewmodel({
     return !this.linkedTo().length;
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

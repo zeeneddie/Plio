@@ -28,7 +28,7 @@
         {{> RCA_ToBeCompletedBy_Edit
             assignee=this.completedBy
             isButtonVisible=false
-            canButtonBeShown=($not areStandardsUpdated)
+            canButtonBeShown=(not areStandardsUpdated)
             placeholder="Completed by"
             label="Completed by"
             disabled=areCompletionFieldsDisabled

@@ -1,14 +1,13 @@
-<template name="Risk_Card_Edit_Main">  
+<template name="Risk_Card_Edit_Main">
   {{#with risk}}
     <div class="card-block">
       {{> NC_Title_Edit
           _id=this._id
-          titleText=this.title
+          title=this.title
           sequentialId=this.sequentialId
           label="Risk name"}}
 
-      {{> ES_Description_Edit
-          _id=this._id
+      {{> DescriptionTextBox
           description=this.description}}
 
       {{> NC_Status_Edit

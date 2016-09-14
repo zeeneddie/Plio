@@ -1,5 +1,7 @@
 import { Template } from 'meteor/templating';
 
+import { mapByIndex } from '/imports/api/helpers.js';
+
 Template.Subcards_RiskScore.viewmodel({
   mixin: 'utils',
   disabled: false,
@@ -10,7 +12,7 @@ Template.Subcards_RiskScore.viewmodel({
   tableDataWithGuidelines() {
     const { tableData = {} } = this.data();
     const { data = [] } = tableData;
-    const newData = this.mapByIndex(data, data.length - 1, { label: this.guidelinesText() });
+    const newData = mapByIndex({ label: this.guidelinesText() }, data.length - 1, data);
     return { ...tableData, data: newData };
   },
   guidelinesText() {

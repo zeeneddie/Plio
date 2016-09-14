@@ -8,18 +8,25 @@ Template.Subcards_Notify_Edit.viewmodel({
   doc: '',
   documentType: '',
   placeholder: 'User to notify',
-  currentNotifyUsersIds() {
-    return Array.from(this.currentNotifyUsers() || []).map(({ _id }) => _id);
-  },
-  currentNotifyUsers() {
-    const usersIds = (this.doc() && this.doc().notify) || [];
-    const query = { _id: { $in: usersIds } };
-    const options = { sort: { 'profile.firstName': 1 } };
-    return this._mapMembers(Meteor.users.find(query, options));
+  selectArgs() {
+    const {
+      placeholder,
+      doc: { notify:values = [] } = {}
+    } = this.data();
+
+
+    return {
+      values,
+      placeholder,
+      onUpdate: ({ user, userId, users }) =>
+        this.addToNotifyList(userId),
+      onRemove: ({ user, userId, users }) =>
+        this.update(userId, '$pull')
+    };
   },
   onUpdate() {},
   update(userId, option, cb) {
-    const _id = this.doc() && this.doc()._id;
+    const { doc: { _id } = {} } = this.data();
     const query = { _id };
     const options = {
       [`${option}`]: {
@@ -29,18 +36,7 @@ Template.Subcards_Notify_Edit.viewmodel({
 
     this.onUpdate({ query, options }, cb);
   },
-  onSelectUserCb() {
-    return this.onSelectUser.bind(this);
-  },
-  onSelectUser(viewmodel) {
-    const { selectedItemId:userId } = viewmodel.getData();
-    const currentNotifyUsersIds = Array.from(this.currentNotifyUsersIds() || []);
-
-    if (currentNotifyUsersIds.find(_id => _id === userId)) return;
-
-    this.addToNotifyList(userId, viewmodel);
-  },
-  addToNotifyList(userId, viewmodel) {
+  addToNotifyList(userId) {
     const callback = (err, res) => {
       if (err) {
         return;
@@ -62,16 +58,5 @@ Template.Subcards_Notify_Edit.viewmodel({
     };
 
     this.update(userId, '$addToSet', callback);
-  },
-  onRemoveFromNotifyListCb() {
-    return this.removeFromNotifyList.bind(this);
-  },
-  removeFromNotifyList(viewmodel) {
-    const { selectedItemId:userId } = viewmodel.getData();
-    const currentNotifyUsersIds = Array.from(this.currentNotifyUsersIds() || []);
-
-    if (!currentNotifyUsersIds.find(_id => _id === userId)) return;
-
-    this.update(userId, '$pull');
   }
 });

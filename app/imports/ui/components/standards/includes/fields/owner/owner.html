@@ -1,8 +1,5 @@
-<template name="ESOwner">
-  {{#FormField label="Owner"}}
-    {{> Select_Single
-        items=_members
-        selected=owner
-        onUpdate=onUpdateCb}}
+<template name="Standards_Owner_Edit">
+  {{#FormField label=label}}
+    {{> Select_Member (selectArgs)}}
   {{/FormField}}
 </template>

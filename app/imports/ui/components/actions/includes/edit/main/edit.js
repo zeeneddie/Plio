@@ -6,7 +6,7 @@ import { isViewed } from '/imports/api/checkers.js';
 
 
 Template.Actions_Card_Edit_Main.viewmodel({
-  mixin: 'utils',
+  mixin: ['utils', 'getChildrenData'],
   onRendered(templateInstance) {
     const action = templateInstance.data.action;
     const userId = Meteor.userId();
@@ -66,9 +66,6 @@ Template.Actions_Card_Edit_Main.viewmodel({
     return action && action.getWorkflowType() === WorkflowTypes.SIX_STEP;
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

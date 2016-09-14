@@ -1,9 +1,10 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate, flattenObjects, inspire } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
 import {
@@ -24,28 +25,61 @@ import {
   setVerificationExecutor
 } from '/imports/api/actions/methods.js';
 
+const getLinks = instance => inspire(['documentId', 'documentType'], instance);
+
+const getMethods = (instance) => {
+  const methodsRefs = ['insertFn', 'updateFn', 'removeFn', 'completeFn', 'verifyFn', 'undoCompletionFn', 'undoVerificationFn', 'linkDocumentFn', 'unlinkDocumentFn', 'updateCompletionDateFn', 'updateCompletionExecutorFn', 'updateVerificationDateFn', 'updateVerificationExecutorFn'];
+
+  const methods = flattenObjects(methodsRefs.map(ref =>
+    ({ [ref]: instance[ref.replace('Fn', '')].bind(instance) })));
+
+  return methods;
+};
+
 
 Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
-  renderContentOnInitial() {
-    return !(this.actions().count() > 5);
+  wrapperArgs() {
+    const items = Object.assign([], invoke(this.actions(), 'fetch'));
+
+    return {
+      items,
+      renderContentOnInitial: !(items.length > 5),
+      onAdd: this.onAdd.bind(this),
+      getSubcardArgs: this.getSubcardArgs.bind(this),
+      ...inspire(['addText', '_lText', '_rText'], this)
+    };
   },
-  title() {
-    return pluralize(this._getNameByType(this.type()));
+  getSubcardArgs(doc) {
+    return {
+      doc,
+      _id: doc._id,
+      action: doc,
+      isLinkedToEditable: true,
+      _lText: this.lText(doc),
+      _rText: this.rText(doc),
+      content: 'Actions_EditSubcard',
+      ...getMethods(this),
+      ...inspire(['type', 'standardId'], this)
+    };
   },
-  addButtonText() {
+  addText() {
     const name = this.lowercase(this._getNameByType(this.type()));
     return `Add ${name}`;
   },
-  actionsIndicators() {
+  _lText() {
+    return pluralize(this._getNameByType(this.type()));
+  },
+  _rText() {
     const actions = this.actions().fetch();
     const amber = actions.filter(({ status }) => [2, 5].includes(status));
     const red = actions.filter(({ status }) => [3, 6, 7].includes(status));
-    const count = array => array.length > 0 ? array.length : '';
-    const generateHtml = (array, color) => count(array) ? `<span class="hidden-xs-down">${count(array)}</span>
-                                                           <i class="fa fa-circle text-${color} margin-left"></i> `
-                                                        :  '';
+    const count = array => array.length || '';
+    const generateHtml = (array, color) => count(array)
+      ? `<span class="hidden-xs-down">${count(array)}</span>
+         <i class="fa fa-circle text-${color} margin-left"></i>`
+      :  '';
 
     return generateHtml(amber, 'warning') + generateHtml(red, 'danger');
   },
@@ -71,8 +105,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       type: actionType
     };
 
-    const documentId = this.documentId && this.documentId();
-    const documentType = this.documentType && this.documentType();
+    const { documentId, documentType } = getLinks(this);
     const standardId = this.standardId && this.standardId();
 
     if (documentId && documentType) {
@@ -104,39 +137,36 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     return this._getActionsByQuery(query, { sort: { sequentialId: 1 } });
   },
-  addAction() {
-    const newSubcardData = {
-      content: 'Actions_AddSubcard',
-      _lText: this.newSubcardTitle(),
-      type: this.type(),
-      isNew: false,
-      insertFn: this.insertFn(),
-      removeFn: this.removeFn(),
-      updateFn: this.updateFn()
-    };
+  onAdd(add) {
+    return add(
+      'Subcard',
+      {
+        content: 'Actions_AddSubcard',
+        _lText: `New ${this.lowercase(this._getNameByType(this.type()))}`,
+        isNew: false,
+        ..._.pick(getMethods(this), 'insertFn', 'updateFn', 'removeFn'),
+        ...inspire(['type'], this),
+        ...(() => {
+          let data = {};
+          const links = getLinks(this);
+          const standardId = invoke(this, 'standardId');
 
-    const documentId = this.documentId && this.documentId();
-    const documentType = this.documentType && this.documentType();
-    if (documentId && documentType) {
-      _.extend(newSubcardData, {
-        documentId,
-        documentType,
-        linkedTo: [{
-          documentId: documentId,
-          documentType: documentType
-        }]
-      });
-    }
+          if (standardId) {
+            data = { ...data, standardId };
+          }
 
-    const standardId = this.standardId && this.standardId();
-    if (standardId) {
-      _.extend(newSubcardData, { standardId });
-    }
+          if (_.values(links).every(_.identity)) {
+            data = {
+              ...data,
+              ...links,
+              linkedTo: [links]
+            };
+          }
 
-    this.addForm('Subcard', newSubcardData, null, null, this.templateInstance.view);
-  },
-  insertFn() {
-    return this.insert.bind(this);
+          return data;
+        })()
+      }
+    );
   },
   insert({ _id, linkTo, completionTargetDate, ...args }, cb) {
     if (_id) {
@@ -166,9 +196,6 @@ Template.Subcards_Actions_Edit.viewmodel({
         ...args
       }, cb);
     }
-  },
-  updateFn() {
-    return this.update.bind(this);
   },
   update({ ...args }, cb) {
     this.modal().callMethod(update, { ...args }, cb);
@@ -204,47 +231,23 @@ Template.Subcards_Actions_Edit.viewmodel({
       });
     }
   },
-  removeFn() {
-    return this.remove.bind(this);
-  },
-  completeFn() {
-    return this.complete.bind(this);
-  },
   complete({ ...args }, cb) {
     this.modal().callMethod(complete, { ...args }, cb);
-  },
-  undoCompletionFn() {
-    return this.undoCompletion.bind(this);
   },
   undoCompletion({ ...args }, cb) {
     this.modal().callMethod(undoCompletion, { ...args }, cb);
   },
-  verifyFn() {
-    return this.verify.bind(this);
-  },
   verify({ ...args }, cb) {
     this.modal().callMethod(verify, { ...args }, cb);
-  },
-  undoVerificationFn() {
-    return this.undoVerification.bind(this);
   },
   undoVerification({ ...args }, cb) {
     this.modal().callMethod(undoVerification, { ...args }, cb);
   },
-  linkDocumentFn() {
-    return this.linkDocument.bind(this);
-  },
   linkDocument({ ...args }, cb) {
     this.modal().callMethod(linkDocument, { ...args }, cb);
   },
-  unlinkDocumentFn() {
-    return this.unlinkDocument.bind(this);
-  },
   unlinkDocument({ ...args }, cb) {
     this.modal().callMethod(unlinkDocument, { ...args }, cb);
-  },
-  updateCompletionDateFn() {
-    return this.updateCompletionDate.bind(this);
   },
   updateCompletionDate({ targetDate, ...args }, cb) {
     const { timezone } = this.organization();
@@ -255,14 +258,8 @@ Template.Subcards_Actions_Edit.viewmodel({
       ...args
     }, cb);
   },
-  updateCompletionExecutorFn() {
-    return this.updateCompletionExecutor.bind(this);
-  },
   updateCompletionExecutor({ ...args }, cb) {
     this.modal().callMethod(setCompletionExecutor, { ...args }, cb);
-  },
-  updateVerificationDateFn() {
-    return this.updateVerificationDate.bind(this);
   },
   updateVerificationDate({ targetDate, ...args }, cb) {
     const { timezone } = this.organization();
@@ -272,9 +269,6 @@ Template.Subcards_Actions_Edit.viewmodel({
       targetDate: tzDate,
       ...args
     }, cb);
-  },
-  updateVerificationExecutorFn() {
-    return this.updateVerificationExecutor.bind(this);
   },
   updateVerificationExecutor({ ...args }, cb) {
     this.modal().callMethod(setVerificationExecutor, { ...args }, cb);

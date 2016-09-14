@@ -8,4 +8,5 @@ import './share.js';
 import './swal.js';
 import './subsmanagers.js';
 import './polyfills';
+import './blaze-helpers.js';
 import './mixins';
