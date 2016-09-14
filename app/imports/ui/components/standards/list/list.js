@@ -106,7 +106,10 @@ Template.StandardsList.viewmodel({
       return _sections;
     })());
 
-    // Filter the sections with the search query & typeId
+    /**
+     * Filter the sections which fit the search query and have the standards
+     * connected
+    */
     const filtered = sections.filter(({ _id: sectionId }) => {
       const query = ((() => {
         const _query = { sectionId, ...searchQuery };
@@ -115,7 +118,7 @@ Template.StandardsList.viewmodel({
       return this._getStandardsByQuery(query).count() > 0;
     });
 
-    // Filtered sections with standards
+    // Add appropriate standards to the filtered sections
     const withStandards = filtered.map((section) => {
       const standards = this._getStandardsByQuery({ ...searchQuery })
         .fetch()
@@ -136,37 +139,40 @@ Template.StandardsList.viewmodel({
       });
     });
 
-    // Find standards of non-existent types
-    const uncategorizedByType = ((() => {
-      const query = { organizationId: this.organizationId(), ...searchQuery };
-      const standards = [];
+    /**
+     * Adding "Uncategorized" section: only for standarts grouped by sections
+    */
+    if(this.isActiveStandardFilter(1)){
+      // Find standards of non-existent sections
+      const uncategorizedStandards = ((() => {
+        const query = { organizationId: this.organizationId(), ...searchQuery };
 
-      this._getStandardsByQuery(query).forEach((standard) => {
-        const typeId = standard.typeId;
+        return this._getStandardsByQuery(query).fetch().filter((standard) => {
+          const sectionId = standard.sectionId;
 
-        if( !this.standardTypeExists({ typeId }) ){
-          standards.push(standard);
-        }
-      });
+          return !StandardsBookSections.find({ _id: sectionId }).count();
+        });
+      })());
 
-      return standards;
-    })());
+      /**
+       * Add the section "Uncategorized" if there are standards of non-existent
+       * sections or types
+      */
+      if(uncategorizedStandards.length){
+        const standardsIds = uncategorizedStandards.map(property('_id'));
+        const totalUnreadMessages = standardsIds.reduce((prev, cur) => {
+          return prev + this.counter.get('standard-messages-not-viewed-count-' + cur);
+        }, 0);
+        const totalUnreadMessagesHtml = this.renderTotalUnreadMessagesCount(totalUnreadMessages);
 
-    // Add the section "Uncategorized" if there are standards with non-existent types
-    if(uncategorizedByType.length){
-      const standardsIds = uncategorizedByType.map(property('_id'));
-      const totalUnreadMessages = standardsIds.reduce((prev, cur) => {
-        return prev + this.counter.get('standard-messages-not-viewed-count-' + cur);
-      }, 0);
-      const totalUnreadMessagesHtml = this.renderTotalUnreadMessagesCount(totalUnreadMessages);
-
-      withStandards.push({
-        organizationId: this.organizationId(),
-        standards: uncategorizedByType,
-        title: 'Uncategorized',
-        totalUnreadMessages,
-        totalUnreadMessagesHtml
-      });
+        withStandards.push({
+          organizationId: this.organizationId(),
+          standards: uncategorizedStandards,
+          title: 'Uncategorized',
+          totalUnreadMessages,
+          totalUnreadMessagesHtml
+        });
+      }
     }
 
     return withStandards;
@@ -185,11 +191,14 @@ Template.StandardsList.viewmodel({
       const sections = this.sections(type._id);
       const totalUnreadMessages = sections.reduce((prev, cur) => prev + cur.totalUnreadMessages, 0);
       const totalUnreadMessagesHtml = this.renderTotalUnreadMessagesCount(totalUnreadMessages);
+      const items = sections;
 
       return Object.assign({}, type, {
+        items,
         sections,
         totalUnreadMessages,
-        totalUnreadMessagesHtml
+        totalUnreadMessagesHtml,
+        typeTemplate: 'StandardTypeItem'
       });
     });
 
@@ -197,8 +206,44 @@ Template.StandardsList.viewmodel({
       return sections.length > 0;
     });
 
+    /**
+     * Adding "Uncategorized" type section: only for standarts grouped by types
+    */
+    // Find standards of non-existent types
+    const uncategorizedStandards = ((() => {
+      const query = { organizationId: this.organizationId(), ...this._getSearchQuery() };
+
+      return this._getStandardsByQuery(query).fetch().filter((standard) => {
+        const typeId = standard.typeId;
+
+        return !StandardTypes.find({ _id: typeId }).count();
+      });
+    })());
+
+    if(uncategorizedStandards.length){
+      let totalUnreadMessages = 0;
+
+      uncategorizedStandards.forEach((standard) => {
+        const sections = this.sections(standard.typeId);
+
+        totalUnreadMessages += sections.reduce((prev, cur) => prev + cur.totalUnreadMessages, 0);
+      });
+
+      const totalUnreadMessagesHtml = this.renderTotalUnreadMessagesCount(totalUnreadMessages);
+
+      filtered.push({
+        name: 'Uncategorized',
+        organizationId: this.organizationId(),
+        items: uncategorizedStandards,
+        totalUnreadMessages,
+        totalUnreadMessagesHtml,
+        typeTemplate: 'StandardSectionItem',
+      });
+    }
+
     return filtered;
   },
+
   standardsDeleted() {
     const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
