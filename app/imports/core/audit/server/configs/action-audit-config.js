@@ -156,33 +156,6 @@ export default ActionAuditConfig = {
             return Array.from(receivers);
           });
         }
-      },
-      {
-        text: '{{userName}} assigned you to complete {{{docDesc}}}',
-        title: 'You have been assigned to complete an action',
-        sendBoth: true,
-        emailTemplateData({ newDoc }) {
-          return {
-            button: {
-              label: 'View action',
-              url: this.docUrl(newDoc)
-            }
-          };
-        },
-        data({ newDoc, user }) {
-          const auditConfig = this;
-
-          return {
-            docDesc: () => auditConfig.docDescription(newDoc),
-            userName: () => getUserFullNameOrEmail(user)
-          };
-        },
-        receivers({ newDoc, user }) {
-          const { toBeCompletedBy } = newDoc;
-          const userId = getUserId(user);
-
-          return (toBeCompletedBy !== userId) ? [toBeCompletedBy]: [];
-        }
       }
     ]
   },
@@ -625,33 +598,6 @@ export default ActionAuditConfig = {
             [FIELD_REMOVED]:
               '{{userName}} removed to be completed by of {{{docDesc}}}'
           }
-        },
-        {
-          shouldSendNotification({ diffs: { toBeCompletedBy: { kind } } }) {
-            return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
-          },
-          text: '{{userName}} assigned you to complete {{{docDesc}}}',
-          title: 'You have been assigned to complete an action',
-          sendBoth: true,
-          data({ newDoc, user }) {
-            const auditConfig = this;
-
-            return {
-              docDesc: () => auditConfig.docDescription(newDoc),
-              userName: () => getUserFullNameOrEmail(user)
-            };
-          },
-          emailTemplateData({ newDoc }) {
-            return {
-              button: {
-                label: 'View action',
-                url: this.docUrl(newDoc)
-              }
-            };
-          },
-          receivers({ diffs: { toBeCompletedBy: { newValue } }, user }) {
-            return (newValue !== getUserId(user)) ? [newValue]: [];
-          }
         }
       ],
       data({ diffs: { toBeCompletedBy }, newDoc, user }) {
@@ -697,33 +643,6 @@ export default ActionAuditConfig = {
               '{{userName}} changed to be verified by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
               '{{userName}} removed to be verified by of {{{docDesc}}}'
-          }
-        },
-        {
-          shouldSendNotification({ diffs: { toBeVerifiedBy: { kind } } }) {
-            return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
-          },
-          text: '{{userName}} assigned you to verify {{{docDesc}}}',
-          title: 'You have been assigned to verify an action',
-          sendBoth: true,
-          data({ newDoc, user }) {
-            const auditConfig = this;
-
-            return {
-              docDesc: () => auditConfig.docDescription(newDoc),
-              userName: () => getUserFullNameOrEmail(user)
-            };
-          },
-          emailTemplateData({ newDoc }) {
-            return {
-              button: {
-                label: 'View action',
-                url: this.docUrl(newDoc)
-              }
-            };
-          },
-          receivers({ diffs: { toBeVerifiedBy: { newValue } }, user }) {
-            return (newValue !== getUserId(user)) ? [newValue]: [];
           }
         }
       ],
@@ -1022,21 +941,6 @@ export default ActionAuditConfig = {
     return organizationId;
   },
 
-  docUrl({ _id, organizationId, isCompleted }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId }) || {};
+  docUrl(doc) { }
 
-    const workItemQuery = {
-      'linkedDoc._id': _id
-    };
-
-    if (isCompleted) {
-      workItemQuery['type'] = WorkItemsStore.TYPES.VERIFY_ACTION;
-    } else {
-      workItemQuery['type'] = WorkItemsStore.TYPES.COMPLETE_ACTION;
-    }
-
-    const { _id:workItemId } = WorkItems.findOne(workItemQuery) || {};
-
-    return Meteor.absoluteUrl(`${serialNumber}/work-inbox/${workItemId}`);
-  }
 };
