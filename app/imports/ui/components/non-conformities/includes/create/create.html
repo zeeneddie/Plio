@@ -1,18 +1,16 @@
 <template name="NC_Create">
-  <div>
-    <div class="card-block">
-      {{> NC_Title_Edit}}
+  {{#Card_Create ref="card"}}
+    {{> NC_Title_Edit}}
 
-      {{> Fields_Standards_Edit
-          isEditable=isStandardsEditable
-          standardsIds=standardsIds}}
+    {{> Fields_Standards_Edit
+        isEditable=isStandardsEditable
+        standardsIds=standardsIds}}
 
-      {{> NC_IdentifiedBy_Edit}}
+    {{> NC_IdentifiedBy_Edit}}
 
-      {{> NC_IdentifiedDate_Edit}}
+    {{> NC_IdentifiedDate_Edit}}
 
-      {{> Problems_Magnitude_Edit
-          guidelines=NCGuidelines}}
-    </div>
-  </div>
+    {{> Problems_Magnitude_Edit
+        guidelines=NCGuidelines}}
+  {{/Card_Create}}
 </template>

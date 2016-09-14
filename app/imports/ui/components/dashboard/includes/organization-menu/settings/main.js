@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import {
@@ -12,11 +13,11 @@ import {
 
 
 Template.OrgSettings_MainSettings.viewmodel({
-  mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router'],
+  mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router', 'getChildrenData'],
   name: '',
   currency: '',
   timezone: '',
-  owner: '',
+  ownerId: Meteor.userId(),
   isEditable: false,
   updateName({ e, name }) {
     if (!this.isEditable()) return;
@@ -100,9 +101,6 @@ Template.OrgSettings_MainSettings.viewmodel({
     });
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

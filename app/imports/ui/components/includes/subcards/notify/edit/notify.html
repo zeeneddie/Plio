@@ -1,12 +1,7 @@
 <template name="Subcards_Notify_Edit">
-  {{#Subcards_Wrapper _lText="Notify changes" _rText=currentNotifyUsers.length}}
+  {{#Subcards_Wrapper _lText="Notify changes" _rText=doc.notify.length}}
     <div class="card-block" id="notify">
-      {{> Select_Multi
-          selected=currentNotifyUsers
-          items=_members
-          placeholder=placeholder
-          onUpdate=onSelectUserCb
-          onRemove=onRemoveFromNotifyListCb}}
+      {{> Select_Members (selectArgs)}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

@@ -7,12 +7,31 @@ import { isOrgOwner } from '/imports/api/checkers.js';
 
 
 Template.OrgSettings_OrgTransfer.viewmodel({
-  mixin: ['organization', 'user', 'search', 'date', 'members', 'utils'],
-  ownerId: '',
+  mixin: ['organization', 'user', 'date', 'utils'],
   inputText: '',
+  ownerId: Meteor.userId(),
   placeholder: 'Org owner',
-  selectOwner() {
-    return ({ selected:ownerId }) => this.ownerId(ownerId());
+  selectFirstIfNoSelected: true,
+  selectArgs() {
+    const {
+      ownerId:value,
+      placeholder,
+      selectFirstIfNoSelected
+    } = this.data();
+
+    const disabled = !this.isInputEnabled();
+
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled,
+      onUpdate: (viewmodel) => {
+        const { selected:ownerId } = viewmodel.getData();
+
+        return this.ownerId(ownerId);
+      }
+    };
   },
   transferOrg(e) {
     e.stopPropagation();

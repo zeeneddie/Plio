@@ -1,0 +1,11 @@
+<!-- Hack to be able to use multiple content blocks -->
+<template name="Page">
+  {{#if not styles.display}}
+    <div {{b "class: classNames.left"}}>
+      {{> Template.contentBlock}}
+    </div>
+  {{/if}}
+  <div {{b "class: classNames.right, attr: { style: styles.display }"}}>
+    {{> Template.elseBlock}}
+  </div>
+</template>

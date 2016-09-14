@@ -18,3 +18,8 @@ import './subcards';
 import './time-picker';
 import './quill-editor';
 import './list';
+import './navbar';
+import './header';
+import './page-header';
+import './page';
+import './card-create';

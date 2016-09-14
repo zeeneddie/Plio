@@ -1,0 +1,18 @@
+<template name="Header">
+  {{#Navbar}}
+    {{#Navbar_Title}}
+      <a class="dropdown-toggle pointer" data-toggle="dropdown">
+        {{header}}
+      </a>
+      <div class="dropdown-menu">
+        {{#each filters}}
+          <a class="dropdown-item pointer"
+            {{b "class: { active: isActiveFilter(this.value) }, click: onSelectFilter(this.value)"}}>
+            {{text}}
+          </a>
+        {{/each}}
+      </div>
+    {{/Navbar_Title}}
+    {{> Navbar_Arrow onClick=(callback 'onNavigate')}}
+  {{/Navbar}}
+</template>

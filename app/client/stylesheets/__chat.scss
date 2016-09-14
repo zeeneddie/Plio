@@ -18,6 +18,14 @@
     }
   }
 
+  &-content {
+    &.loading {
+      .chat-item-date {
+        display: none;
+      }
+    }
+  }
+
   &-item {
     padding: .3rem 1.25rem;
 

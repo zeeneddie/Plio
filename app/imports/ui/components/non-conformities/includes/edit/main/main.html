@@ -2,11 +2,10 @@
   {{#with NC}}
     <div class="card-block">
       {{> NC_Title_Edit
-          _id=this._id titleText=this.title
+          _id=this._id title=this.title
           sequentialId=this.sequentialId}}
 
-      {{> ES_Description_Edit
-          _id=this._id
+      {{> DescriptionTextBox
           description=this.description}}
 
       {{> NC_Status_Edit

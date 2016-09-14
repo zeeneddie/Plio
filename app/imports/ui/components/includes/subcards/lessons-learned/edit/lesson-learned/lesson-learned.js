@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 import { updateViewedBy } from '/imports/api/lessons/methods.js';
-
 import { isViewed } from '/imports/api/checkers.js';
 
 Template.Subcards_LessonLearned.viewmodel({
@@ -17,13 +17,33 @@ Template.Subcards_LessonLearned.viewmodel({
     const doc = templateInstance.data.document;
     const userId = Meteor.userId();
 
-    if(doc && !isViewed(doc, userId)) {
+    if (doc && !isViewed(doc, userId)) {
       updateViewedBy.call({ _id: doc._id });
     }
   },
-  updateTitle(e) {
-    const cb = err => err && this.title(this.templateInstance.data.title);
-    this.parent().update({ title: this.title(), e, withFocusCheck: true }, cb);
+  titleArgs() {
+    const { title:value } = this.data();
+    const withFocusCheck = this._id ? true : false;
+
+    return {
+      value,
+      withFocusCheck,
+      onFocusOut: (e, { value:title }) => {
+        this.title(title);
+
+        const cb = err => err && this.title(this.templateInstance.data.title) && false;
+
+        return invoke(this.parent(), 'update', { title }, cb);
+      }
+    };
+  },
+  selectArgs() {
+    const { owner:value } = this.data();
+
+    return {
+      value,
+      onUpdate: this.onUpdateOwner.bind(this)
+    };
   },
   onChangeDateCb() {
     return this.onChangeDate.bind(this);
@@ -36,13 +56,8 @@ Template.Subcards_LessonLearned.viewmodel({
     this.date(date);
     this.parent().update({ date });
   },
-  onUpdateOwnerCb() {
-    return this.onUpdateOwner.bind(this);
-  },
   onUpdateOwner(viewmodel) {
     const { selected:owner } = viewmodel.getData();
-
-    if (this.templateInstance.data.owner === owner) return;
 
     this.owner(owner);
     this.parent().update({ owner });

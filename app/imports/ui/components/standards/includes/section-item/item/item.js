@@ -24,6 +24,8 @@ Template.Standards_Item_Read.viewmodel({
       const standardId = this.standardId();
       const _id = this._id();
 
+      if (!_id) return;
+
       template.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + _id, _id);
 
       if (_id === standardId && this.isNew()) {

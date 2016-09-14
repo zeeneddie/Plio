@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 import { ActionUndoTimeInHours } from '/imports/api/constants.js';
 
 
 Template.Actions_CompletedBy.viewmodel({
-  mixin: ['search', 'user', 'members'],
   completedBy: '',
   completedAt: '',
   placeholder: 'Completed by',
@@ -26,18 +26,26 @@ Template.Actions_CompletedBy.viewmodel({
   onDestroyed() {
     this.clearInterval();
   },
+  selectArgs() {
+    const { completedBy:value, placeholder, selectFirstIfNoSelected } = this.data();
+    const disabled = this.isDisabled();
+
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled,
+      onUpdate: (viewmodel) => {
+        const { selected:completedBy } = viewmodel.getData();
+
+        this.completedBy(completedBy);
+
+        invoke(this.parent(), 'update', { completedBy });
+      }
+    };
+  },
   clearInterval() {
     Meteor.clearInterval(this.interval);
-  },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:completedBy } = viewmodel.getData();
-
-    this.completedBy(completedBy);
-
-    this.parent().update && this.parent().update({ completedBy });
   },
   onUndo() {},
   undo() {

@@ -6,13 +6,13 @@
       isAnalysisCompleted=(isCompleted analysis)
       methods=methods.Analysis
       areStandardsUpdated=(isCompleted updateOfStandards)
-      areCompletionFieldsDisabled=($not (isCurrentOwner analysis))}}
+      areCompletionFieldsDisabled=(not (isCurrentOwner analysis))}}
   {{#if isCompleted analysis}}
     {{> RCA_UOS_Edit
         label=UOSLabel
         updateOfStandards=updateOfStandards
         defaultTargetDate=defaultTargetDate
         methods=methods.UpdateOfStandards
-        areCompletionFieldsDisabled=($not (isCurrentOwner updateOfStandards))}}
+        areCompletionFieldsDisabled=(not (isCurrentOwner updateOfStandards))}}
   {{/if}}
 </template>
