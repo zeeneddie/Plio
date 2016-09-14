@@ -4,13 +4,14 @@ import { composeWithTracker } from 'react-komposer';
 import MessagesList from '../components/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
 
-const composer = ({ discussionId, limit = 50, ...args }, onData) => {
+const composer = ({ discussionId, limit = 50 }, onData) => {
   const subscription = Meteor.subscribe('messages', discussionId, { limit });
+  const getMessages = () => Messages.find({ discussionId }, { sort: { createdAt: 1 } }).fetch();
+
+  onData(null, { messages: getMessages(), loading: true });
 
   if (subscription.ready()) {
-    const messages = Messages.find({ discussionId }, { sort: { createdAt: 1 } }).fetch();
-
-    onData(null, { messages });
+    onData(null, { messages: getMessages(), loading: false });
   }
 }
 

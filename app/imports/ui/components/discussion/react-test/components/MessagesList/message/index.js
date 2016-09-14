@@ -1,5 +1,4 @@
 import React from 'react';
-import property from 'lodash.property';
 
 const Message = (props) => (
   <div className="chat-message-container">

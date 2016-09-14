@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Message from './message';
-import { handleMouseWheel } from '/client/lib/scroll.js';
+import Message from './Message';
+import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
 
 export default class MessagesList extends React.Component {
   constructor() {
@@ -19,6 +19,7 @@ export default class MessagesList extends React.Component {
       <div className="chat-content scroll" ref="chat">
         <div className="chat-messages">
           <div className="infinite-load-older text-xs-center" ref="loader">
+            {this.props.loading && 'Loading...'}
           </div>
           <div className="chat-messages-list">
             {this.props.messages.map(message => <Message key={message._id} {...message}/>)}
@@ -29,8 +30,14 @@ export default class MessagesList extends React.Component {
   }
 
   _wheelListener(e) {
-    if ($(this.refs.loader).isAlmostVisible()) {
-      this.props.handleLoadData(e);
+    if (this.props.loading) return;
+
+    const wheelDir = wheelDirection(e);
+
+    if (wheelDir > 0) {
+      if ($(this.refs.loader).isAlmostVisible()) {
+        this.props.handleLoadData(e);
+      }
     }
   }
 };
