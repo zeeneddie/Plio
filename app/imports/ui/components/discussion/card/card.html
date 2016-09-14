@@ -4,7 +4,8 @@
 			{{> Discussion_Header ""}}
 
 			{{#if isReady}}
-				{{> Discussion_Messages discussionId=discussionId}}
+				<!-- {{> Discussion_Messages discussionId=discussionId}} -->
+				{{> React_Test discussionId=discussionId}}
 				{{> Discussion_AddMessage_Form
 						disabled=standard.isDeleted
 						discussionId=discussionId}}
