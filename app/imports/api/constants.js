@@ -439,7 +439,6 @@ export {
   ReviewStatuses,
   WorkItemsStore,
   RKTypes,
-  InvitationStatuses,
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,

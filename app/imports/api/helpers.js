@@ -200,7 +200,6 @@ export {
   flattenObjects,
   deepExtend,
   extractIds,
-  extractIds,
   not,
   mapByIndex,
   mapValues,

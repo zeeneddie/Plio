@@ -160,7 +160,7 @@ export default class RecapSender {
       }[key];
 
       const title = `${docsLength} ${pluralize(docType, docsLength)} ` +
-          `${pluralize('was', docsLength)} updated`;
+          `${pluralize('was', docsLength)} updated:`;
 
       const docsData = [];
 
