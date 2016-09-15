@@ -147,6 +147,6 @@ export default WorkItemAuditConfig = {
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId }) || {};
 
-    return Meteor.absoluteUrl(`${serialNumber}/work-inbox/${_id}`);
+    return Meteor.absoluteUrl(`${serialNumber}/work-inbox?id=${_id}`);
   }
 };

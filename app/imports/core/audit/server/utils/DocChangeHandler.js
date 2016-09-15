@@ -334,8 +334,7 @@ export default class DocChangeHandler {
       emailSubject,
       templateData: _({
         organizationName: this._docOrgName,
-        title: emailSubject,
-        secondaryText: emailText
+        title: emailText
       }).extend(emailTemplateData),
       notificationData: _({
         title: pushTitle,
