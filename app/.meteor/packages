@@ -59,4 +59,7 @@ konecty:autolinker
 tunifight:loggedin-mixin
 djedi:sanitize-html-client
 shell-server
+
 # meteorhacks:sikka
+
+meteorhacks:kadira
