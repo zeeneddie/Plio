@@ -7,13 +7,7 @@
       onComplete=complete
       onUndo=undo}}
 
-      {{> Select_Single
-          placeholder=placeholder
-          selectFirstIfNoSelected=selectFirstIfNoSelected
-          items=_members
-          selected=getAssignee
-          disabled=disabled
-          onUpdate=update}}
+      {{> Select_Member (selectArgs)}}
 
     {{/Completion_Edit}}
   {{/FormField}}

@@ -5,13 +5,7 @@
       canButtonBeShown=canBeUndone
       onUndo=undo}}
 
-      {{> Select_Single
-          items=_members
-          selected=completedBy
-          placeholder=placeholder
-          selectFirstIfNoSelected=selectFirstIfNoSelected
-          disabled=isDisabled
-          onUpdate=onUpdateCb}}
+      {{> Select_Member (selectArgs)}}
 
     {{/Completion_Edit}}
 

@@ -1,22 +1,32 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 Template.RiskScoring_ScoredBy_Edit.viewmodel({
-  mixin: ['members', 'search', 'user'],
   scoredBy: '',
   label: 'Scored by',
   placeholder: 'Scored by',
   selectFirstIfNoSelected: false,
   disabled: false,
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:scoredBy } = viewmodel.getData();
+  selectArgs() {
+    const {
+      scoredBy:value,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled
+    } = this.data();
 
-    if (this.templateInstance.data.scoredBy === scoredBy) return;
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled,
+      onUpdate: (viewmodel) => {
+        const { selected:scoredBy } = viewmodel.getData();
 
-    this.scoredBy(scoredBy);
+        this.scoredBy(scoredBy);
 
-    this.parent().update({ scoredBy });
+        return invoke(this.parent(), 'update', { scoredBy });
+      }
+    };
   }
 });

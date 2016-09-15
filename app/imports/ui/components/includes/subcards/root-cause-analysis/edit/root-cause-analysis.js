@@ -11,7 +11,7 @@ Template.Subcards_RCA_Edit.viewmodel({
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;
     const found = _.keys(workflowDefaults)
-                    .find(key => this.magnitude() === key.replace('Nc', ''));
+      .find(key => this.magnitude() === key.replace('Nc', ''));
     const workflowDefault = workflowDefaults[found];
     if (workflowDefault) {
       const { timeUnit, timeValue } = workflowDefault;

@@ -1,13 +1,36 @@
 import { Template } from 'meteor/templating';
 
 Template.RCA_ToBeCompletedBy_Edit.viewmodel({
-  mixin: ['user', 'search', 'members'],
-  assignee: '',
+  assignee: Meteor.userId(),
   comments: '',
   selectFirstIfNoSelected: false,
-  placeholder: '',
+  placeholder: 'Assignee',
   label: '',
   isButtonVisible: false,
+  disabled: false,
+  selectArgs() {
+    const {
+      assignee:value = '',
+      selectFirstIfNoSelected,
+      placeholder,
+      disabled
+    } = this.data();
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      disabled,
+      onUpdate: (viewmodel) => {
+        const { selected:executor } = viewmodel.getData();
+
+        this.assignee(executor);
+
+        const cb = err => err && this.assignee(this.templateInstance.data.assignee) && false;
+
+        return this.onUpdate({ executor }, cb);
+      }
+    };
+  },
   canButtonBeShown() {
     return this.getAssignee() === Meteor.userId();
   },
@@ -15,24 +38,6 @@ Template.RCA_ToBeCompletedBy_Edit.viewmodel({
     return this.assignee() || '';
   },
   onUpdate() {},
-  update() {
-    return (viewmodel) => {
-      const currentAssignee = this.templateInstance.data.assignee;
-      const { selected:executor } = viewmodel.getData();
-
-      if (Object.is(executor, currentAssignee)) return;
-
-      this.assignee(executor);
-
-      this.onUpdate({ executor }, (err) => {
-        if (err) {
-          this.assignee(currentAssignee);
-        }
-
-        return false;
-      });
-    };
-  },
   onComplete() {},
   complete() {
     return (viewmodel) => {

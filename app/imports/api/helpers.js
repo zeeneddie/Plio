@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
+import invoke from 'lodash.invoke';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -108,6 +109,8 @@ export const getLinkedDoc = (documentId, documentType) => {
   return collection.findOne({ _id: documentId });
 };
 
+const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
+
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
 const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
@@ -116,9 +119,7 @@ const inject = anything => fn => fn(anything);
 
 const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
-const withUserId = fn => (userId) => {
-  return fn({ userId });
-};
+const withUserId = fn => userId => fn({ userId });
 
 const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
 
@@ -128,7 +129,7 @@ const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
-const flattenObjects = collection => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
 const deepExtend = (dest, src) => {
   _(src).each((val, key) => {
@@ -141,6 +142,33 @@ const deepExtend = (dest, src) => {
 };
 
 const extractIds = (collection = []) => collection.map(property('_id'));
+
+const not = expression => !expression;
+
+const mapByIndex = (value = {}, index = 0, arr = []) =>
+  Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+
+const mapValues = curry((mapper, obj) =>
+  flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
+
+const inspire = curry((props, instance, ...args) =>
+  flattenObjects(props.map((key, i) =>
+    ({ [key]: invoke(instance, key, ...((arr = []) => arr[i] || [])(args)) }))));
+
+// Especially useful with viewmodel
+// Example of usage:
+// inspire({
+//   hello(a, b) {
+//     return `world ${a} ${b}`;
+//   },
+//   today(a) {
+//     return 'is friday ' + a;
+//   }
+// }, ['hello', 'today'], ['!!', '1'], [' wohoooooo!']);
+//
+// > { hello: 'world !! 1', today: 'is friday  wohoooooo!' }
+
+const invokeId = instance => invoke(instance, '_id');
 
 const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
@@ -171,7 +199,13 @@ export {
   mapArgsTo,
   flattenObjects,
   deepExtend,
-  extractIds
+  extractIds,
+  not,
+  mapByIndex,
+  mapValues,
+  inspire,
+  setModalError,
+  invokeId,
   $isScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible

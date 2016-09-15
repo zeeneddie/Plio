@@ -646,30 +646,9 @@ export default {
     chooseOne(predicate) {
       return (i1, i2) => predicate ? i1 : i2;
     },
-    compose(...fns) {
-      return fns.reduce((f, g) => (...args) => f(g(...args)));
-    },
-    chain(...fns) {
-      return (...args) => fns.forEach(fn => fn(...args));
-    },
     toArray(arrayLike = []) {
       const array = arrayLike.hasOwnProperty('collection') ? arrayLike.fetch() : arrayLike;
       return Array.from(array || []);
-    },
-    mapByIndex(arr, index, value) {
-      return Object.assign([], arr, { [index]: { ...arr[index], ...value } });
-    },
-    $eq(val1, val2) {
-      return val1 === val2;
-    },
-    $not(predicate) {
-      return !predicate;
-    },
-    $every(...args) {
-      return Array.prototype.slice.call(args, 0, args.length - 1).every(arg => !!arg);
-    },
-    $some(...args) {
-      return Array.prototype.slice.call(args, 0, args.length - 1).some(arg => !!arg);
     }
   },
   magnitude: {
