@@ -117,11 +117,11 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis executor set to {{newValue}}',
+              'Root cause analysis completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Root cause analysis executor changed from {{oldValue}} to {{newValue}}',
+              'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Root cause analysis executor removed'
+              'Root cause analysis completed by removed'
           }
         }
       ],
@@ -167,38 +167,7 @@ export default ProblemAuditConfig = {
           }
         }
       ],
-      notifications: [
-        {
-          shouldSendNotification({ diffs }) {
-            const { kind } = diffs['analysis.executor'];
-            return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
-          },
-          text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}}',
-          title: 'You have been assigned to do a root cause analysis',
-          sendBoth: true,
-          data({ newDoc, user }) {
-            const auditConfig = this;
-
-            return {
-              docDesc: () => auditConfig.docDescription(newDoc),
-              userName: () => getUserFullNameOrEmail(user)
-            };
-          },
-          emailTemplateData({ newDoc }) {
-            return {
-              button: {
-                label: 'View document',
-                url: this.docUrl(newDoc)
-              }
-            };
-          },
-          receivers({ diffs, newDoc, user }) {
-            const { newValue } = diffs['analysis.executor'];
-            const userId = getUserId(user);
-            return (newValue !== userId) ? [newValue]: [];
-          }
-        }
-      ],
+      notifications: [],
       data({ diffs }) {
         const { newValue, oldValue } = diffs['analysis.executor'];
 
@@ -484,11 +453,11 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Update of standards executor set to {{newValue}}',
+              'Update of standards completed by set to {{newValue}}',
             [FIELD_CHANGED]:
-              'Update of standards executor changed from {{oldValue}} to {{newValue}}',
+              'Update of standards completed by changed from {{oldValue}} to {{newValue}}',
             [FIELD_REMOVED]:
-              'Update of standards executor removed'
+              'Update of standards completed by removed'
           }
         }
       ],
@@ -534,38 +503,7 @@ export default ProblemAuditConfig = {
           }
         }
       ],
-      notifications: [
-        {
-          shouldSendNotification({ diffs }) {
-            const { kind } = diffs['updateOfStandards.executor'];
-            return _([FIELD_ADDED, FIELD_CHANGED]).contains(kind);
-          },
-          text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}}',
-          title: 'You have been assigned to do an update of standards',
-          sendBoth: true,
-          data({ newDoc, user }) {
-            const auditConfig = this;
-
-            return {
-              docDesc: () => auditConfig.docDescription(newDoc),
-              userName: () => getUserFullNameOrEmail(user)
-            };
-          },
-          emailTemplateData({ newDoc }) {
-            return {
-              button: {
-                label: 'View document',
-                url: this.docUrl(newDoc)
-              }
-            };
-          },
-          receivers({ diffs, newDoc, user }) {
-            const { newValue } = diffs['updateOfStandards.executor'];
-            const userId = getUserId(user);
-            return (newValue !== userId) ? [newValue]: [];
-          }
-        }
-      ],
+      notifications: [],
       data({ diffs }) {
         const { newValue, oldValue } = diffs['updateOfStandards.executor'];
 

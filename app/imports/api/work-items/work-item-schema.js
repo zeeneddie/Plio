@@ -23,7 +23,8 @@ const WorkItemsSchema = new SimpleSchema([
   DeletedSchema,
   {
     targetDate: {
-      type: Date
+      type: Date,
+      optional: true
     },
     linkedDoc: {
       type: linkedDocSchema

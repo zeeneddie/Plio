@@ -7,6 +7,7 @@ import OccurenceAuditConfig from '/imports/core/audit/server/configs/occurence-a
 import LessonAuditConfig from '/imports/core/audit/server/configs/lesson-audit-config.js';
 import MessageAuditConfig from '/imports/core/audit/server/configs/message-audit-config.js';
 import OrgAuditConfig from '/imports/core/audit/server/configs/org-audit-config.js';
+import WorkItemAuditConfig from '/imports/core/audit/server/configs/work-item-audit-config.js';
 
 
 const auditConfigs = [
@@ -17,7 +18,8 @@ const auditConfigs = [
   OccurenceAuditConfig,
   LessonAuditConfig,
   MessageAuditConfig,
-  OrgAuditConfig
+  OrgAuditConfig,
+  WorkItemAuditConfig
 ];
 
 _(auditConfigs).each(config => Auditor.registerConfig(config));

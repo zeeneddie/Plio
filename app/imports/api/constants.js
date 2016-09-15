@@ -386,7 +386,10 @@ const CollectionNames = {
   RISKS: 'Risks',
   ACTIONS: 'Actions',
   LESSONS: 'LessonsLearned',
-  OCCURRENCES: 'Occurrences'
+  OCCURRENCES: 'Occurrences',
+  MESSAGES: 'Messages',
+  ORGANIZATIONS: 'Organizations',
+  WORK_ITEMS: 'WorkItems'
 };
 
 const InvitationStatuses = {
