@@ -16,6 +16,7 @@ Template.NC_Card_Read.viewmodel({
   NCs() {
     const list = ViewModel.findOne('NC_List');
     const query = list && list._getQueryForFilter();
+    
     return this._getNCsByQuery(query);
   },
   hasNCs() {

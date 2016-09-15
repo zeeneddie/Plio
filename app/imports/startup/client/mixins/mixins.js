@@ -544,7 +544,7 @@ export default {
       return NonConformities.findOne({ _id });
     },
     _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { isDeleted, ...args, organizationId: this.organizationId() };
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };//console.log(query);
       return NonConformities.find(query, options);
     },
     _getNCByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
