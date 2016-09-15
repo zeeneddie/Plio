@@ -9,7 +9,11 @@ import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.
 
 Template.NC_List.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
+  mixin: [
+    'search', 'collapsing', 'organization', 'modal', 'magnitude',
+    'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
+    'department'
+  ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
@@ -103,16 +107,40 @@ Template.NC_List.viewmodel({
   },
 
   // Find Non-Conformities without departments
-  uncategorizedByDepartments(){
-    const query = { organizationId: this.organizationId() };
-    const options = { sort: { name: 1 } };
-    //const ncs = NonConformities.find(query, options).fetch();//console.log(departments);
-    const ncs = this._getNCsByQuery({ query, options }).fetch();console.log(ncs);
-
-    //return departments;
-    return ncs.length && {
-      name: 'Uncategorized',
+  uncategorizedByDepartments(withSearchQuery){
+    const query = { organizationId: this.organizationId(), ...this._getSearchQuery(withSearchQuery) };
+    const options = {
+      fields: {
+        departmentsIds: 1,
+      },
+      sort: { name: -1 }
     };
+    const ncs = this._getNCsByQuery(query, options).fetch().filter((nc) => {
+      const filter = { _id: { $in: nc.departmentsIds } };
+      const options = { fields: { _id: 1 } };
+      const departments = this._getDepartmentsByQuery(filter, options);
+
+      return !departments.length;
+    });
+
+    return {
+      name: 'Uncategorized',
+      ncs,
+      options: {
+        sort: { title: 1 },
+      },
+    };
+  },
+
+  /**
+   * Make a query object for finding NCs related to non-existent departmens:
+   * @param {Array} ncs - fetched NC docs with non-existent departments;
+  */
+  _uncategorizedByDepartmentsQuery({ ncs }){
+    const ncIds = ncs
+                  .map(nc => nc._id);
+
+    return { _id: { $in: ncIds } };
   },
 
   NCsDeleted(withSearchQuery) {

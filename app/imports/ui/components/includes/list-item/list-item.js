@@ -10,5 +10,5 @@ Template.ListItem.viewmodel({
   isRTextDisplayed() {
     return this.rText() && (!this.hideRTextOnExpand() || (this.collapsed() && this.hideRTextOnExpand()));
   },
-  closeAllOnCollapse: true
+  closeAllOnCollapse: true,
 });

@@ -40,8 +40,14 @@
         {{/each}}
 
         {{#with uncategorizedByDepartments}}
-          <p>NC without departments</p>
-          
+          {{> ListItem
+              template="NC_SectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              hideRTextOnExpand=true
+              rText=(this.ncs.length)
+              _query=(_uncategorizedByDepartmentsQuery this)
+              _options=this.options}}
         {{/with}}
       {{/if}}
 

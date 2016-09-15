@@ -176,6 +176,7 @@ export default {
 
       return searchObject;
     },
+
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
