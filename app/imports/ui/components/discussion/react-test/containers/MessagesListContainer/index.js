@@ -4,40 +4,47 @@ import { connect } from 'react-redux';
 
 import MessagesList from '../../components/Discussion/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
-import { setMessages, setLimit } from '/client/redux/actions/messagesActions';
+import { setMessages, setLoading } from '/client/redux/actions/messagesActions';
 import store from '/client/redux/store';
+import { $scrollToBottom } from '/imports/api/helpers.js';
+
+const getMessagesState = () => store.getState().messages;
 
 const onPropsChange = ({ discussionId, limit = 50, dispatch }, onData) => {
   const subscription = Meteor.subscribe('messages', discussionId, { limit });
+  const $chat = $('.chat-content');
+  let prevChatScrollTop, prevChatScrollHeight;
 
-  onData(null, { messages: store.getState().messages.messages, loading: true });
+  dispatch(setLoading(true));
+
+  const state = getMessagesState();
+
+  if (state.messages.length) {
+    onData(null, state);
+
+    prevChatScrollTop = $chat.scrollTop();
+    prevChatScrollHeight = $chat.prop('scrollHeight');
+  }
 
   if (subscription.ready()) {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
 
+    dispatch(setLoading(false));
     dispatch(setMessages(messages));
 
-    onData(null, { messages, loading: false });
+    onData(null, getMessagesState());
+
+    if (!_.every([prevChatScrollTop, prevChatScrollHeight], _.isUndefined)) {
+      $chat.scrollTop(prevChatScrollTop + $chat.prop('scrollHeight') - prevChatScrollHeight);
+    }
   }
 
   return () => subscription.stop();
 };
 
-class MessagesListContainer extends React.Component {
-  render() {
-    return (<MessagesList handleLoadData={e => this._handleLoadData(e)} {...this.props}/>);
-  }
-
-  _handleLoadData(e) {
-    const { limit, dispatch } = this.props;
-
-    dispatch(setLimit(limit + 50));
-  }
-};
-
 export default composeAll(
   composeWithTracker(onPropsChange),
   connect(store => ({ limit: store.messages.limit }))
-)(MessagesListContainer);
+)(MessagesList);

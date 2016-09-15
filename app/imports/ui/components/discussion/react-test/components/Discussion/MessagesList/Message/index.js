@@ -1,8 +1,15 @@
 import React from 'react';
 
 export default class Message extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return !_.isEqual(nextProps, this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('updated');
+  }
+
   render() {
-    console.log('rendered');
     return (
       <div className="chat-message-container">
         <p className="chat-item-content">
@@ -12,13 +19,3 @@ export default class Message extends React.Component {
     );
   }
 }
-
-// const Message = (props) => (
-//   <div className="chat-message-container">
-//     <p className="chat-item-content">
-//       {props.text}
-//     </p>
-//   </div>
-// );
-//
-// export default Message;

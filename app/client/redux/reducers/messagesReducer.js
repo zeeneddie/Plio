@@ -1,4 +1,4 @@
-import { SET_MESSAGES, SET_LIMIT } from '../actions/types';
+import { SET_MESSAGES, SET_LIMIT, SET_LOADING } from '../actions/types';
 
 const initialState = {
   loading: false,
@@ -13,6 +13,9 @@ export default function reducer(state=initialState, action) {
       break;
     case SET_LIMIT:
       return { ...state, limit: action.payload };
+      break;
+    case SET_LOADING:
+      return { ...state, loading: action.payload };
       break;
     default:
       return state;

@@ -2,6 +2,7 @@ import React from 'react';
 
 import Message from './Message';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
+import { setLimit } from '/client/redux/actions/messagesActions';
 
 export default class MessagesList extends React.Component {
   constructor() {
@@ -17,6 +18,7 @@ export default class MessagesList extends React.Component {
   }
 
   render() {
+    const messages = this.props.messages.map(message => <Message key={message._id} {...message}/>);
     return (
       <div className="chat-content scroll" ref="chat">
         <div className="chat-messages">
@@ -24,7 +26,7 @@ export default class MessagesList extends React.Component {
             {this.props.loading && 'Loading...'}
           </div>
           <div className="chat-messages-list">
-            {this.props.messages.map(message => <Message key={message._id} {...message}/>)}
+            {messages}
           </div>
         </div>
       </div>
@@ -32,13 +34,14 @@ export default class MessagesList extends React.Component {
   }
 
   _wheelListener(e) {
-    if (this.props.loading) return;
+    const { loading, limit, dispatch } = this.props;
+    if (loading) return;
 
     const wheelDir = wheelDirection(e);
 
     if (wheelDir > 0) {
       if ($(this.refs.loader).isAlmostVisible()) {
-        this.props.handleLoadData(e);
+        dispatch(setLimit(limit + 50));
       }
     }
   }
