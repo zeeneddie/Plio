@@ -11,6 +11,8 @@ export default class MessagesList extends React.Component {
   }
 
   componentDidMount() {
+    $(this.refs.chat).scrollTop(this.refs.chat.scrollHeight);
+
     handleMouseWheel(this.refs.chat, this._wheelListener, 'addEventListener');
   }
 

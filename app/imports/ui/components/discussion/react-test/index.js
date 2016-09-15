@@ -1,11 +1,19 @@
 import './react-test.html';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MessagesListContainer from './containers/MessagesListContainer';
+import { Provider } from 'react-redux';
+
+import Discussion from './components/Discussion';
+import store from '/client/redux/store';
 
 Template.React_Test.onRendered(function() {
+  const { discussionId, organizationId } = this.data;
+  
   ReactDOM.render(
-    <MessagesListContainer discussionId={this.data.discussionId}/>,
+    <Provider store={store}>
+      <Discussion discussionId={discussionId}
+                  organizationId={organizationId} />
+    </Provider>,
     this.$('#discussion')[0]
   );
 });
