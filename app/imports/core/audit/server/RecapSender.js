@@ -144,7 +144,7 @@ export default class RecapSender {
     const docLogs = this._logsMap[documentId];
 
     const { timezone } = this._organization;
-    const date = moment(log.date).tz(timezone).format('DD MMM YYYY, h:mm A');
+    const date = moment(log.date).tz(timezone).format('h:mm A');
 
     let executor = log.executor;
     if (!this._updateExecutorsMap[executor]) {
