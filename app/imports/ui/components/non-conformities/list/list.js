@@ -44,16 +44,11 @@ Template.NC_List.viewmodel({
       case 2:
         return { status: { $in: this.statuses(withSearchQuery) } };
         break;
-      /*
       case 3:
-        return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
-        break;
-      */
-      case 3:
-        const wsq = this.departments(withSearchQuery);//console.log(wsq);
+        const wsq = this.departments(withSearchQuery);
         return wsq.length
                 ? { departmentsIds: { $in: wsq.map(({ _id }) => _id) } }
-                : {};
+                : {}; // get all NCs, if there are no departments
         break;
       case 4:
         return { isDeleted: true };

@@ -7,7 +7,10 @@ import { ProblemsStatuses } from '/imports/api/constants.js';
 
 Template.Risks_List.viewmodel({
   share: 'search',
-  mixin: ['search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus', 'collapsing', 'router', 'utils'],
+  mixin: [
+    'search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus',
+    'collapsing', 'router', 'utils'
+  ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
@@ -75,6 +78,7 @@ Template.Risks_List.viewmodel({
   _getTypeQuery({ _id:typeId }) {
     return { typeId };
   },
+
   types(withSearchQuery) {
     const organizationId = this.organizationId();
     const query = { organizationId };
@@ -83,6 +87,59 @@ Template.Risks_List.viewmodel({
       return this._getRisksByQuery({ typeId, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
+
+  /**
+   * === Risks, connected to non-existent types or without types ===
+   * @param {Object} withSearchQuery - search query object
+  */
+  uncategorizedByTypes(withSearchQuery){
+    const organizationId = this.organizationId();
+    const query = { organizationId };
+    const options = {
+      fields: {
+        _id: 1,
+        typeId: 1,
+      },
+      sort: { title: 1 },
+    };
+
+    const risks = this._getRisksByQuery(query, options)
+      .fetch()
+      .filter((risk) => {
+        if(!risk.typeId){
+          return true;
+        }
+
+        const filter = { _id: risk.typeId };
+        const options = {};
+        const riskTypes = RiskTypes.find(filter, options);
+
+        return !riskTypes.count();
+      });
+
+    return risks.length && {
+      risks,
+      title: 'Uncategorized',
+    };
+  },
+
+  /**
+   * === Options while finding uncategorized risks
+  */
+  _getUncategorizedByTypesOptions(){
+    return {};
+  },
+
+  /**
+   * === Query to find risks not connected to any risk types ===
+   * @param {Array} risks - documents of risks not connected to risk types;
+  */
+  _getUncategorizedByTypesQuery(risks){
+    const riskIds = risks.map( risk => risk._id );
+
+    return { _id: { $in: riskIds } };
+  },
+
   _getStatusQuery(status) {
     return { status };
   },

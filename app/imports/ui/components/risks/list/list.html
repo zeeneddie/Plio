@@ -12,6 +12,14 @@
               title=this.title
               _query=(_getTypeQuery this)}}
         {{/each}}
+
+        {{#with uncategorizedByTypes}}
+          {{> ListItem
+              template='Risks_SectionItem'
+              title=this.title
+              _options=_getUncategorizedByTypesOptions
+              _query=(_getUncategorizedByTypesQuery this.risks)}}
+        {{/with}}
       {{/if}}
 
       {{#if isActiveRiskFilter 2}}
