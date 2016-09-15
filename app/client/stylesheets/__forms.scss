@@ -274,6 +274,8 @@ input:focus ~ .clear-field {
 
   .dropdown-menu {
     left: 0;
+    max-height: 289px;
+    overflow-y: scroll;
   }
 }
 
