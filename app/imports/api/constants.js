@@ -101,7 +101,6 @@ const ActionPlanOptions = {
 };
 
 const TimeUnits = {
-  HOURS: 'hours',
   DAYS: 'days',
   WEEKS: 'weeks'
 };
