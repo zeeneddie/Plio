@@ -339,8 +339,8 @@ const WorkInboxFilters = {
 
 const DocumentTypes = {
   STANDARD: 'standard',
-  NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
+  NON_CONFORMITY: ProblemTypes.NC,
+  RISK: ProblemTypes.RISK
 };
 
 const ActionDocumentTypes = {
