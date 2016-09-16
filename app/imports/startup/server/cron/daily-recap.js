@@ -21,7 +21,7 @@ SyncedCron.add({
     });
 
     Organizations.find({ timezone: { $in: timezones } }).forEach((org) => {
-      new RecapSender(org).send();
+      new RecapSender(org._id).send();
     });
   }
 });
