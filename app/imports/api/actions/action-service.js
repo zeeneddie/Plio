@@ -1,10 +1,12 @@
 import { Actions } from './actions.js';
+import { Organizations } from '/imports/api/organizations/organizations.js';
 import { ProblemTypes, WorkflowTypes } from '../constants.js';
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import Utils from '/imports/core/utils.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
+import { getWorkflowDefaultStepDate } from '/imports/api/helpers.js';
 
 if (Meteor.isServer) {
   import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
@@ -127,6 +129,9 @@ export default {
   },
 
   complete({ _id, userId, completionComments }) {
+    const action = this.collection.findOne({ _id });
+    const linkedTo = action.linkedTo || [];
+    const organization = Organizations.findOne({ _id: action.organizationId });
     const ret = this.collection.update({
       _id
     }, {
@@ -134,7 +139,8 @@ export default {
         completionComments,
         isCompleted: true,
         completedBy: userId,
-        completedAt: new Date()
+        completedAt: new Date(),
+        verificationTargetDate: getWorkflowDefaultStepDate({ organization, linkedTo })
       }
     });
 

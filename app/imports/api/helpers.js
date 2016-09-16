@@ -12,6 +12,7 @@ import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
 import { Organizations } from './organizations/organizations.js';
+import { ProblemMagnitudes } from '/imports/api/constants.js';
 
 const { compose } = _;
 
@@ -63,7 +64,7 @@ const getFormattedDate = (date, stringFormat) => {
 };
 
 const getTzTargetDate = (targetDate, timezone) => {
-  return moment.tz([
+  return targetDate && moment.tz([
     targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
   ], timezone).toDate();
 };
@@ -195,6 +196,31 @@ const $isScrolledElementVisible = (el, container) => {
   return ((elemBottom < containerBottom) && (elemTop > containerTop));
 }
 
+const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
+  let magnitude = ProblemMagnitudes.MINOR;
+
+  // Select the highest magnitude among all linked documents
+  _.each(linkedTo, ({ documentId, documentType }) => {
+    const collection = getDocumentCollectionByType(documentType);
+    const doc = collection.findOne({ _id: documentId });
+    if (magnitude === ProblemMagnitudes.CRITICAL) {
+      return;
+    }
+
+    if (doc.magnitude === ProblemMagnitudes.MINOR) {
+      return;
+    }
+
+    magnitude = doc.magnitude;
+  });
+
+  const workflowStepTime = organization.workflowStepTime(magnitude);
+  const { timeValue, timeUnit } = workflowStepTime;
+  const date = moment().add(timeValue, timeUnit).toDate();
+
+  return date;
+}
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -222,5 +248,6 @@ export {
   invokeId,
   $isScrolledToBottom,
   $scrollToBottom,
-  $isScrolledElementVisible
+  $isScrolledElementVisible,
+  getWorkflowDefaultStepDate
 };
