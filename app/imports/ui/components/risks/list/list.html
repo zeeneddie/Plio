@@ -17,7 +17,6 @@
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
-              rText=this.risks.length
               _options=_getUncategorizedRisksOptions
               _query=(_getUncategorizedRisksQuery this.risks)}}
         {{/with}}
@@ -46,7 +45,6 @@
               template="Risks_SectionItem"
               title=this.name
               closeAllOnCollapse=false
-              rText=this.risks.length
               _options=_getUncategorizedRisksOptions
               _query=(_getUncategorizedRisksQuery this.risks)}}
         {{/with}}

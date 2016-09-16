@@ -6,6 +6,7 @@ import get from 'lodash.get';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
+import { extractIds } from '/imports/api/helpers.js';
 
 Template.NC_List.viewmodel({
   share: 'search',
@@ -17,16 +18,18 @@ Template.NC_List.viewmodel({
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
+      const NCId = this.NCId();
 
-      const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
+      const contains = this._getNCByQuery({ ...query, _id: NCId });
       if (!contains) {
-        const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter() });
+        const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter() }) ||
+                   _.first(get(this.uncategorizedByDepartments(), 'ncs'));
 
         if (nc) {
           const { _id } = nc;
           Meteor.setTimeout(() => {
             this.goToNC(_id);
-            this.expandCollapsed(this.NCId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
@@ -47,8 +50,8 @@ Template.NC_List.viewmodel({
       case 3:
         const wsq = this.departments(withSearchQuery);
         return wsq.length
-                ? { departmentsIds: { $in: wsq.map(({ _id }) => _id) } }
-                : {}; // get all NCs, if there are no departments
+                ? { departmentsIds: { $in: extractIds(wsq) } }
+                : this._uncategorizedByDepartmentsQuery(this.uncategorizedByDepartments());
         break;
       case 4:
         return { isDeleted: true };
@@ -110,7 +113,7 @@ Template.NC_List.viewmodel({
   },
 
   // Find Non-Conformities without departments
-  uncategorizedByDepartments(withSearchQuery){
+  uncategorizedByDepartments(withSearchQuery) {
     const query = { organizationId: this.organizationId(), ...this._getSearchQuery(withSearchQuery) };
     const options = {
       fields: {
@@ -127,8 +130,8 @@ Template.NC_List.viewmodel({
     });
 
     return {
-      name: 'Uncategorized',
       ncs,
+      name: 'Uncategorized',
       options: {
         sort: { title: 1 },
       },
@@ -139,11 +142,8 @@ Template.NC_List.viewmodel({
    * Make a query object for finding NCs related to non-existent departmens:
    * @param {Array} ncs - fetched NC docs with non-existent departments;
   */
-  _uncategorizedByDepartmentsQuery({ ncs }){
-    const ncIds = ncs
-                  .map(nc => nc._id);
-
-    return { _id: { $in: ncIds } };
+  _uncategorizedByDepartmentsQuery({ ncs = [] }) {
+    return { _id: { $in: extractIds(ncs) } };
   },
 
   NCsDeleted(withSearchQuery) {
@@ -181,7 +181,7 @@ Template.NC_List.viewmodel({
       }
 
       const sections = ViewModel.find('NC_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.NCs && this.toArray(vm.NCs()).map(({ _id }) => _id));
+      const ids = this.toArray(sections).map(vm => vm.NCs && extractIds(this.toArray(vm.NCs())));
       return _.flatten(ids);
     };
   },

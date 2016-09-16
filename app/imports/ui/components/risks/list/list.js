@@ -4,6 +4,7 @@ import get from 'lodash.get';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemsStatuses } from '/imports/api/constants.js';
+import { extractIds, findById } from '/imports/api/helpers.js';
 
 Template.Risks_List.viewmodel({
   share: 'search',
@@ -14,11 +15,14 @@ Template.Risks_List.viewmodel({
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
       const query = this._getQueryForFilter();
+      const riskId = this.riskId();
 
-      const contains = this._getRiskByQuery({ ...query, _id: this.riskId() });
+      const contains = this._getRiskByQuery({ ...query, _id: riskId });
 
       if (!contains) {
-        const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() });
+        const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() }) ||
+                     _.first(get(this.uncategorizedByDepartments(), 'risks')) ||
+                     _.first(get(this.uncategorizedByTypes(), 'risks'));
 
         if (risk) {
           const { _id } = risk;
@@ -37,13 +41,19 @@ Template.Risks_List.viewmodel({
   _getQueryForFilter(withSearchQuery) {
     switch(this.activeRiskFilterId()) {
       case 1:
-        return { typeId: { $in: this.types(withSearchQuery).map(({ _id }) => _id) } };
+        const types = this.types(withSearchQuery);
+        return types.length
+          ? { typeId: { $in: extractIds(this.types(withSearchQuery)) } }
+          : this._getUncategorizedRisksQuery(get(this.uncategorizedByTypes(), 'risks'));
         break;
       case 2:
         return { status: { $in: this.statuses(withSearchQuery) } };
         break;
       case 3:
-        return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
+        const departments = this.departments(withSearchQuery);
+        return departments.length
+          ? { departmentsIds: { $in: extractIds(departments) } }
+          : this._getUncategorizedRisksQuery(get(this.uncategorizedByDepartments(), 'risks'));
         break;
       case 4:
         return { isDeleted: true };

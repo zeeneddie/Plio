@@ -171,6 +171,9 @@ const $isScrolledElementVisible = (el, container) => {
 
 const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
 
+const findById = curry((_id, array) =>
+  Object.assign([], array).find((item = {}) => Object.is(item._id, _id)));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -197,5 +200,6 @@ export {
   $isScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
-  flattenMap
+  flattenMap,
+  findById
 };

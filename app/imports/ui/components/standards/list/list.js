@@ -5,7 +5,7 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { extractIds, flattenMap, inspire } from '/imports/api/helpers.js';
+import { extractIds, flattenMap, inspire, findById } from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -56,8 +56,7 @@ Template.StandardsList.viewmodel({
     }
   }, 50),
   _findStandardForFilter(_id) {
-    const predicate = (standard = {}) => Object.is(standard._id, _id);
-    const finder = (array = []) => array.find(predicate);
+    const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
     const { types, sections, standardsDeleted, activeStandardFilterId } = inspire(
       ['types', 'sections', 'standardsDeleted', 'activeStandardFilterId'],
