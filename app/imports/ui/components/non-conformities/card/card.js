@@ -11,10 +11,7 @@ Template.NC_Card_Read.viewmodel({
     return ActionTypes;
   },
   NC() {
-    //return this._getNCByQuery({ _id: this._id() });
-    const _id = this._id();console.log(_id);
-
-    return this._getNCByQuery({ _id });
+    return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
     const list = ViewModel.findOne('NC_List');
