@@ -16,6 +16,18 @@ import { Organizations } from './organizations/organizations.js';
 const { compose } = _;
 
 
+const getDocumentCollectionByType = (type) => {
+  if (type === DocumentTypes.NON_CONFORMITY) {
+    return NonConformities;
+  } else if (type === DocumentTypes.RISK) {
+    return Risks;
+  } else if (type === DocumentTypes.STANDARD) {
+    return Standards;
+  }
+
+  return false;
+};
+
 const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
     throw new Error(
@@ -175,14 +187,16 @@ const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >
 const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
 const $isScrolledElementVisible = (el, container) => {
-  var containerTop = $(container).offset().top;
-  var containerBottom = containerTop + $(container).height();
-  var elemTop = $(el).position().top;
-  var elemBottom = elemTop + $(el).height();
+  const containerTop = $(container).offset().top;
+  const containerBottom = containerTop + $(container).height();
+  const elPosition = $(el).position();
+  const elemTop = elPosition && elPosition.top;
+  const elemBottom = elPosition && elemTop + $(el).height();
   return ((elemBottom < containerBottom) && (elemTop > containerTop));
 }
 
 export {
+  getDocumentCollectionByType,
   compareDates,
   getCollectionByName,
   getFormattedDate,

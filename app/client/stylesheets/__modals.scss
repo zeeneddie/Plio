@@ -62,7 +62,18 @@
       }
 
       .list-group {
+
+        border-bottom: none;
+        padding: 0;
         &-item {
+          &:first-child {
+            border-top: 0;
+          }
+        }
+
+        .list-group-item {
+          border: 1px solid #ddd;
+
           &:first-child {
             border-top: 0;
           }

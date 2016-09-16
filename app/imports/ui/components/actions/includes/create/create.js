@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
 import invoke from 'lodash.invoke';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
@@ -7,14 +8,19 @@ import { Actions } from '/imports/api/actions/actions.js';
 import { getTzTargetDate, setModalError, inspire } from '/imports/api/helpers.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 
-
 Template.Actions_Create.viewmodel({
-  mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
+  mixin: ['workInbox', 'organization', 'router', 'getChildrenData', 'workflow'],
   type: '',
   title: '',
   ownerId: Meteor.userId(),
   planInPlace: ActionPlanOptions.NO,
-  completionTargetDate: new Date(),
+  completionTargetDate() {
+    const organization = this.organization();
+    const linkedToVM = this.child('Actions_LinkedTo_Edit');
+    const linkedTo = linkedToVM && linkedToVM.linkedTo() || [];
+
+    return this.getWorkflowDefaultStepDate({ organization, linkedTo });
+  },
   toBeCompletedBy: Meteor.userId(),
   verificationTargetDate: '',
   toBeVerifiedBy: '',

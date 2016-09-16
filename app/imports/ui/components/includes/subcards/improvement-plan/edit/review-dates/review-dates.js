@@ -25,8 +25,10 @@ Template.IP_ReviewDate_Edits.viewmodel({
     if (_id) {
       this.set({ _id, date });
     } else {
-      this.addToSet({ date }, () => viewmodel.destroy());
+      this.addToSet({ date });
     }
+
+    viewmodel.destroy();
   },
   addToSet({ date }, cb) {
     const options = {};
