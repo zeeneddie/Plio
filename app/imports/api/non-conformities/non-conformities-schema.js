@@ -17,11 +17,13 @@ const OptionalSchema = new SimpleSchema([
     },
     ref: {
       type: Object,
+      defaultValue: {},
       optional: true
     },
     'ref.text': {
       type: String,
-      max: 20
+      max: 20,
+      optional: true
     },
     'ref.url': {
       type: String,

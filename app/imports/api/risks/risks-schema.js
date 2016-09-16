@@ -63,6 +63,7 @@ const RiskScoresSchema = new SimpleSchema({
 const riskEvaluation = {
   riskEvaluation: {
     type: Object,
+    defaultValue: {},
     optional: true
   },
   'riskEvaluation.comments': {
@@ -77,11 +78,13 @@ const riskEvaluation = {
   },
   'riskEvaluation.priority': {
     type: String,
-    allowedValues: _.keys(RiskEvaluationPriorities)
+    allowedValues: _.keys(RiskEvaluationPriorities),
+    optional: true
   },
   'riskEvaluation.decision': {
     type: String,
-    allowedValues: _.keys(RiskEvaluationDecisions)
+    allowedValues: _.keys(RiskEvaluationDecisions),
+    optional: true
   }
 };
 

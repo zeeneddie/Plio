@@ -4,11 +4,14 @@ import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
 
+import { Meteor } from 'meteor/meteor';
+
 import { CollectionNames, DocumentTypes } from './constants.js';
 import { Actions } from './actions/actions.js';
 import { NonConformities } from './non-conformities/non-conformities.js';
 import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
+import { Organizations } from './organizations/organizations.js';
 
 const { compose } = _;
 
@@ -105,6 +108,19 @@ const getCollectionByDocType = (docType) => {
   }
 };
 
+export const getCollectionNameByDocType = (docType) => {
+  return {
+    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
+    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
+    [DocumentTypes.RISK]: CollectionNames.RISKS
+  }[docType];
+};
+
+export const getLinkedDoc = (documentId, documentType) => {
+  const collection = getCollectionByDocType(documentType);
+  return collection.findOne({ _id: documentId });
+};
+
 const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
 const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
@@ -126,6 +142,16 @@ const checkAndThrow = (predicate, error = '') => {
 };
 
 const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+
+const deepExtend = (dest, src) => {
+  _(src).each((val, key) => {
+    if (_(val).isObject() && _(dest[key]).isObject()) {
+      deepExtend(dest[key], val);
+    } else {
+      dest[key] = val;
+    }
+  });
+};
 
 const extractIds = (collection = []) => collection.map(property('_id'));
 
@@ -182,9 +208,11 @@ export {
   checkAndThrow,
   inject,
   injectCurry,
+  renderTemplate,
   withUserId,
   mapArgsTo,
   flattenObjects,
+  deepExtend,
   extractIds,
   not,
   mapByIndex,

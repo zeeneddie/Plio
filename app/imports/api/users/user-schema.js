@@ -140,6 +140,11 @@ const UserSchema = new SimpleSchema({
     type: Date,
     optional: true
   },
+  invitationOrgId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  },
   selectedOrganizationSerialNumber: {
     type: Number,
     optional: true
