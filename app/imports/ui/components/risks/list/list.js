@@ -126,15 +126,17 @@ Template.Risks_List.viewmodel({
   /**
    * === Options while finding uncategorized risks
   */
-  _getUncategorizedByTypesOptions(){
-    return {};
+  _getUncategorizedRisksOptions(){
+    return {
+      sort: { title: 1 }
+    };
   },
 
   /**
    * === Query to find risks not connected to any risk types ===
    * @param {Array} risks - documents of risks not connected to risk types;
   */
-  _getUncategorizedByTypesQuery(risks){
+  _getUncategorizedRisksQuery(risks){
     const riskIds = risks.map( risk => risk._id );
 
     return { _id: { $in: riskIds } };
@@ -151,6 +153,7 @@ Template.Risks_List.viewmodel({
   _getDepartmentQuery({ _id:departmentsIds }) {
     return { departmentsIds };
   },
+
   departments(withSearchQuery) {
     const query = { organizationId: this.organizationId() };
     const options = { sort: { name: 1 } };
@@ -158,6 +161,39 @@ Template.Risks_List.viewmodel({
       return this._getRisksByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
     });
   },
+
+  /**
+   * === Risks, connected to non-existent sectors/departments or without ===
+   * @param {Object} withSearchQuery - search query object
+  */
+  uncategorizedByDepartments(withSearchQuery){
+    const query = {
+      organizationId: this.organizationId(),
+      ...this._getSearchQuery(withSearchQuery),
+    };
+    const options = {
+      fields: {
+        departmentsIds: 1,
+        title: 1,
+      },
+    };
+    const risks = this._getRisksByQuery(query, options)
+      .fetch()
+      .filter(({ departmentsIds }) => {
+        const query = { _id: { $in: departmentsIds } };
+        const options = {
+          fields: { _id: 1 }
+        };
+
+        return !departmentsIds.length || !Departments.find(query, options).count();
+      });
+
+    return {
+      name: 'Uncategorized',
+      risks,
+    };
+  },
+
   risksDeleted(withSearchQuery) {
     const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };

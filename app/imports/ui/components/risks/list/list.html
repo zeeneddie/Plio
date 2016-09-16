@@ -17,8 +17,9 @@
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
-              _options=_getUncategorizedByTypesOptions
-              _query=(_getUncategorizedByTypesQuery this.risks)}}
+              rText=this.risks.length
+              _options=_getUncategorizedRisksOptions
+              _query=(_getUncategorizedRisksQuery this.risks)}}
         {{/with}}
       {{/if}}
 
@@ -39,6 +40,16 @@
               closeAllOnCollapse=false
               _query=(_getDepartmentQuery this)}}
         {{/each}}
+
+        {{#with uncategorizedByDepartments}}
+          {{> ListItem
+              template="Risks_SectionItem"
+              title=this.name
+              closeAllOnCollapse=false
+              rText=this.risks.length
+              _options=_getUncategorizedRisksOptions
+              _query=(_getUncategorizedRisksQuery this.risks)}}
+        {{/with}}
       {{/if}}
 
       {{#if isActiveRiskFilter 4}}

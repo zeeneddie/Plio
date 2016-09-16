@@ -19,8 +19,8 @@ Template.StandardsList.viewmodel({
       const list = this.list;
       const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
       const query = this._getQueryForFilter();
-      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });console.log(contains);
-      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });console.log(defaultStandard);
+      const contains = this._getStandardByQuery({ ...query,  _id: this.standardId() });
+      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
       const standardId = this.standardId();
       const orgSerialNumber = this.organizationSerialNumber();
 
