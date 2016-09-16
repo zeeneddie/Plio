@@ -169,6 +169,8 @@ const $isScrolledElementVisible = (el, container) => {
   return ((elemBottom < containerBottom) && (elemTop > containerTop));
 }
 
+const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -194,5 +196,6 @@ export {
   invokeId,
   $isScrolledToBottom,
   $scrollToBottom,
-  $isScrolledElementVisible
+  $isScrolledElementVisible,
+  flattenMap
 };

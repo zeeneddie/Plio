@@ -5,7 +5,7 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { extractIds } from '/imports/api/helpers.js';
+import { extractIds, flattenMap, inspire } from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -20,21 +20,10 @@ Template.StandardsList.viewmodel({
       const orgSerialNumber = this.organizationSerialNumber();
       const list = this.list;
       const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
-      const query = this._getQueryForFilter();
-      const contains = ((() => {
-        const uncategorizedSection = Object.assign([], this.sections())
-          .find(({ title }) => Object.is(title, 'Uncategorized'));
-        const uncategorizedType = Object.assign([], this.types())
-          .find(({ name }) => Object.is(name, 'Uncategorized'));
-        const uncategorizedSectionStandards = Object.assign([], get(uncategorizedSection, 'standards'));
-        const uncategorizedTypeStandards = Object.assign([], get(uncategorizedType, 'items'));
-        const predicate = standard => Object.is(standard._id, standardId);
-
-        return this._getStandardByQuery({ ...query,  _id: this.standardId() }) ||
-               uncategorizedSectionStandards.find(predicate) ||
-               uncategorizedTypeStandards.find(predicate);
-      })());
-      const defaultStandard = this._getStandardByQuery({ ...query, ...this._getFirstStandardQueryForFilter() });
+      const {
+        result:contains,
+        first:defaultStandard
+      } = this._findStandardForFilter(standardId);
 
       const data = {
         contains,
@@ -66,34 +55,45 @@ Template.StandardsList.viewmodel({
       }
     }
   }, 50),
-  _getQueryForFilter() {
-    switch(this.activeStandardFilterId()) {
+  _findStandardForFilter(_id) {
+    const predicate = (standard = {}) => Object.is(standard._id, _id);
+    const finder = (array = []) => array.find(predicate);
+    const flattenMapStandards = flattenMap(property('standards'));
+    const { types, sections, standardsDeleted, activeStandardFilterId } = inspire(
+      ['types', 'sections', 'standardsDeleted', 'activeStandardFilterId'],
+      this
+    );
+
+    switch(activeStandardFilterId) {
       case 1:
-        return { sectionId: { $in: extractIds(this.sections()) } };
+        const mappedSections = flattenMapStandards(sections);
+        return {
+          result: finder(mappedSections),
+          first: _.first(mappedSections)
+        }
         break;
       case 2:
-        return { typeId: { $in: extractIds(this.types()) } };
+        const mappedTypes = flattenMap(property('items'), types);
+        const mappedTypesSections = flattenMapStandards(mappedTypes);
+        return {
+          result: finder(mappedTypes) || finder(mappedTypesSections),
+          first: (() => {
+            // because there may be a situation when only 'Uncategorized' type exists
+            const firstMappedType = _.first(mappedTypes);
+
+            if (get(firstMappedType, 'standards')) {
+              return _.first(mappedTypesSections);
+            }
+
+            return firstMappedType;
+          })()
+        };
         break;
       case 3:
-        return { _id: { $in: extractIds(this.standardsDeleted()) } };
-        break;
-      default:
-        return {};
-        break;
-    };
-  },
-  _getFirstStandardQueryForFilter() {
-    switch(this.activeStandardFilterId()) {
-      case 1:
-        return { sectionId: _.first(extractIds(this.sections())) }
-        break;
-      case 2:
-        const typeId = _.first(extractIds(this.types()))
-        const sectionId = _.first(extractIds(
-          this.sections().filter(({ _id:sectionId }) =>
-            this._getStandardsByQuery({ sectionId, typeId }).count())
-        ));
-        return { typeId, sectionId };
+        return {
+          result: finder(standardsDeleted),
+          first: _.first(standardsDeleted)
+        }
         break;
       default:
         return {};
@@ -240,7 +240,7 @@ Template.StandardsList.viewmodel({
   standardsDeleted() {
     const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
-    return this._getStandardsByQuery(query, options);
+    return this._getStandardsByQuery(query, options).fetch();
   },
   sortVms(vms, isTypesFirst = false) {
     const types = vms.filter((vm) => vm.type && vm.type() === 'standardType');
@@ -258,7 +258,7 @@ Template.StandardsList.viewmodel({
   onSearchInputValue() {
     return (value) => {
       if (this.isActiveStandardFilter(3)) {
-        return this.toArray(this.standardsDeleted());
+        return Object.assign([], this.standardsDeleted());
       }
 
       const sections = Object.assign([], this.sections());
