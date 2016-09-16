@@ -2,7 +2,7 @@ export default class Counter {
   constructor(name, cursor, interval) {
     this.name = name;
     this.cursor = cursor;
-    this.interval = interval || 1000 * 10;
+    this.interval = interval || 500 * 10;
     this._collectionName = 'counters-collection';
   }
 

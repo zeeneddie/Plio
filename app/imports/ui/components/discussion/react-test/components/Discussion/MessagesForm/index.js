@@ -10,7 +10,8 @@ const MessagesForm = (props) => (
               name="message"
 							type="text"
 							className="form-control"
-							placeholder="Add a comment"/>
+							placeholder="Add a comment"
+              autoComplete="off"/>
 						<span className="input-group-btn">
 							<button type="submit" className="btn btn-secondary">
 								<i className="fa fa-angle-right"></i>

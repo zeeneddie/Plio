@@ -3,6 +3,7 @@ import React from 'react';
 import Message from './Message';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
 import { setLimit, setScrollDir } from '/client/redux/actions/messagesActions';
+import { $isScrolledElementVisible } from '/imports/api/helpers.js';
 
 export default class MessagesList extends React.Component {
   constructor() {
@@ -40,9 +41,8 @@ export default class MessagesList extends React.Component {
 
     const wheelDir = wheelDirection(e);
 
-    dispatch(setScrollDir(wheelDir));
-
     if (wheelDir > 0) {
+      $isScrolledElementVisible(this.refs.loader, this.refs.chat);
       if ($(this.refs.loader).isAlmostVisible()) {
         dispatch(setLimit(limit + 50));
       }

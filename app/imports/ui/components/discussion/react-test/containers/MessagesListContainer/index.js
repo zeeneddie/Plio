@@ -6,15 +6,14 @@ import MessagesList from '../../components/Discussion/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
 import { setMessages, setLoading } from '/client/redux/actions/messagesActions';
 import store from '/client/redux/store';
-import { $scrollToBottom, $isScrolledToBottom } from '/imports/api/helpers.js';
+import { $scrollToBottom } from '/imports/api/helpers.js';
 
 const getMessagesState = () => store.getState().messages;
 
-const onPropsChange = ({ discussionId, limit = 50, dispatch, scrollDir }, onData) => {
+const onPropsChange = ({ discussionId, limit = 50, dispatch }, onData) => {
   const subscription = Meteor.subscribe('messages', discussionId, { limit });
   const $chat = $('.chat-content');
-  let prevChatScrollTop, prevChatScrollHeight, isLastPositionAtBottom;
-  console.log(scrollDir);
+  let prevChatScrollTop, prevChatScrollHeight;
 
   dispatch(setLoading(true));
 
@@ -25,7 +24,6 @@ const onPropsChange = ({ discussionId, limit = 50, dispatch, scrollDir }, onData
 
     prevChatScrollTop = $chat.scrollTop();
     prevChatScrollHeight = $chat.prop('scrollHeight');
-    isLastPositionAtBottom = $isScrolledToBottom($chat);
   }
 
   if (subscription.ready()) {
@@ -48,5 +46,5 @@ const onPropsChange = ({ discussionId, limit = 50, dispatch, scrollDir }, onData
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  connect(store => _.pick(store.messages, 'limit', 'scrollDir'))
+  connect(store => _.pick(store.messages, 'limit'))
 )(MessagesList);
