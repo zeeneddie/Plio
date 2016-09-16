@@ -18,17 +18,29 @@ Meteor.publish('invitationInfo', function (invitationId) {
     return;
   }
 
-  const invitedUserCursor = Meteor.users.find({invitationId: invitationId}, {fields: {emails: 1, invitationId: 1}});
+  const invitedUserCursor = Meteor.users.find({
+    invitationId: invitationId
+  }, {
+    fields: { emails: 1, invitationId: 1, invitationOrgId: 1 }
+  });
 
   if (invitedUserCursor.count() === 0) {
     sendInternalError('Invitation do not exist');
     return;
   }
 
-  let invitedUserId = invitedUserCursor.fetch()[0]._id;
+  const { _id:invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
+
+  console.log(invitedUserCursor.fetch()[0]);
+  console.log(invitedUserId);
+  console.log(invitationOrgId);
+
   return [
     invitedUserCursor,
-    Organizations.find({'users.userId': invitedUserId}, {
+    Organizations.find({
+      _id: invitationOrgId,
+      'users.userId': invitedUserId
+    }, {
       limit: 1,
       fields: {name: 1, serialNumber: 1}
     })

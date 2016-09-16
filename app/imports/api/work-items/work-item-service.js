@@ -10,6 +10,13 @@ if (Meteor.isServer) {
 }
 
 
+const {
+  COMPLETE_ACTION,
+  VERIFY_ACTION,
+  COMPLETE_ANALYSIS,
+  COMPLETE_UPDATE_OF_STANDARDS
+} = WorkItemsStore.TYPES;
+
 export default {
   collection: WorkItems,
 
@@ -59,243 +66,150 @@ export default {
   },
 
   actionCompleted(actionId) {
-    const action = Actions.findOne({ _id: actionId });
-
-    this.collection.update({
-      'linkedDoc._id': actionId,
-      type: WorkItemsStore.TYPES.COMPLETE_ACTION,
-      isCompleted: false
-    }, {
-      $set: { isCompleted: true }
-    });
-
-    const { verificationTargetDate, toBeVerifiedBy } = action;
-    if ((action.getWorkflowType() === WorkflowTypes.SIX_STEP)
-          && verificationTargetDate
-          && toBeVerifiedBy) {
-      const { organizationId, type } = action;
-
-      const verifyWorkItemsLength = this.collection.find({
-        type: WorkItemsStore.TYPES.VERIFY_ACTION,
-        'linkedDoc._id': actionId,
-        isCompleted: false
-      }).count();
-
-      if (!verifyWorkItemsLength) {
-        this.collection.insert({
-          organizationId,
-          targetDate: verificationTargetDate,
-          assigneeId: toBeVerifiedBy,
-          type: WorkItemsStore.TYPES.VERIFY_ACTION,
-          isCompleted: false,
-          linkedDoc: {
-            _id: actionId,
-            type
-          }
-        });
-      }
-    }
+    this._completed(actionId, COMPLETE_ACTION);
   },
 
   actionCompletionCanceled(actionId) {
-    return this._undo(actionId, WorkItemsStore.TYPES.VERIFY_ACTION);
-  },
+    this._canceled(actionId, COMPLETE_ACTION);
 
-  actionVerified(actionId) {
-    this.collection.update({
+    this.collection.remove({
       'linkedDoc._id': actionId,
       type: WorkItemsStore.TYPES.VERIFY_ACTION,
       isCompleted: false
-    }, {
-      $set: { isCompleted: true }
     });
   },
 
-  actionVerificationCanceled(actionId) {
-    return this._undo(actionId);
+  actionVerified(actionId) {
+    this._completed(actionId, VERIFY_ACTION);
   },
 
-  actionUpdated(actionId) {
-    const action = Actions.findOne({ _id: actionId });
-    const {
-      completionTargetDate, toBeCompletedBy,
-      verificationTargetDate, toBeVerifiedBy,
-      type, organizationId
-    } = action;
+  actionVerificationCanceled(actionId) {
+    this._canceled(actionId, VERIFY_ACTION);
+  },
 
-    if (!action.completed() && completionTargetDate && toBeCompletedBy) {
-      const query = {
+  actionCompletionUserUpdated(actionId, userId) {
+    this._userUpdated(actionId, userId, COMPLETE_ACTION);
+  },
+
+  actionCompletionDateUpdated(actionId, date) {
+    this._dateUpdated(actionId, date, COMPLETE_ACTION);
+  },
+
+  actionVerificationUserUpdated(actionId, userId) {
+    this._userUpdated(actionId, userId, VERIFY_ACTION);
+  },
+
+  actionVerificationDateUpdated(actionId, date) {
+    this._dateUpdated(actionId, date, VERIFY_ACTION);
+  },
+
+  actionWorkflowChanged(actionId, workflowType) {
+    if (workflowType === WorkflowTypes.THREE_STEP) {
+      this.collection.remove({
         'linkedDoc._id': actionId,
-        type: WorkItemsStore.TYPES.COMPLETE_ACTION,
+        type: WorkItemsStore.TYPES.VERIFY_ACTION,
         isCompleted: false
-      };
-
-      const existingItem = this.collection.findOne(query);
-
-      if (!existingItem) {
-        this.collection.insert(_.extend(query, {
-          organizationId,
-          type: WorkItemsStore.TYPES.COMPLETE_ACTION,
-          targetDate: completionTargetDate,
-          assigneeId: toBeCompletedBy,
-          isCompleted: false,
-          linkedDoc: {
-            _id: actionId,
-            type
-          }
-        }));
-      } else {
-        const { targetDate:existingDate, assigneeId:existingExecutor } = existingItem;
-
-        if ((existingDate !== completionTargetDate) ||
-              (existingExecutor !== toBeCompletedBy)) {
-          this.collection.update(query, {
-            $set: {
-              targetDate: completionTargetDate,
-              assigneeId: toBeCompletedBy
-            }
-          });
-        }
-      }
-    }
-
-    const workflowType = action.getWorkflowType();
-    const query = {
-      'linkedDoc._id': actionId,
-      type: WorkItemsStore.TYPES.VERIFY_ACTION,
-      isCompleted: false
-    };
-    const existingItem = this.collection.findOne(query);
-
-    if ((workflowType === WorkflowTypes.SIX_STEP)
-          && !action.verified()
-          && verificationTargetDate
-          && toBeVerifiedBy) {
-
-      if (!existingItem) {
-        this.collection.insert({
-          linkedDoc: {
-            _id: actionId,
-            type
-          },
-          type: WorkItemsStore.TYPES.VERIFY_ACTION,
-          targetDate: verificationTargetDate,
-          assigneeId: toBeVerifiedBy,
-          isCompleted: false,
-          organizationId
-        });
-      } else {
-        const { targetDate:existingDate, assigneeId:existingExecutor } = existingItem;
-
-        if ((existingDate !== verificationTargetDate) ||
-              (existingExecutor !== toBeVerifiedBy)) {
-          this.collection.update(query, {
-            $set: {
-              targetDate: verificationTargetDate,
-              assigneeId: toBeVerifiedBy
-            }
-          });
-        }
-      }
-    } else if ((workflowType === WorkflowTypes.THREE_STEP) && existingItem) {
-      this.collection.remove({ _id: existingItem._id });
+      });
     }
   },
 
   analysisCompleted(docId, docType) {
-    this.collection.update({
-      'linkedDoc._id': docId,
-      type: WorkItemsStore.TYPES.COMPLETE_ANALYSIS,
-      isCompleted: false
-    }, {
-      $set: { isCompleted: true }
-    });
-
-    const updateStandardWorkItemsLength = this.collection.find({
-      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
-      'linkedDoc._id': docId,
-      isCompleted: false
-    }).count();
-
-    if (!updateStandardWorkItemsLength) {
-      const doc = this._getProblemDoc(docId, docType);
-      const { organizationId, updateOfStandards: { targetDate, executor } } = doc;
-
-      targetDate && executor && this.collection.insert({
-        organizationId,
-        targetDate,
-        assigneeId: executor,
-        type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
-        isCompleted: false,
-        linkedDoc: {
-          _id: docId,
-          type: docType
-        }
-      });
-    }
+    this._completed(docId, COMPLETE_ANALYSIS, docType);
   },
 
   analysisCanceled(docId, docType) {
-    return this._undo(docId, WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS);
+    this._canceled(docId, COMPLETE_ANALYSIS, docType);
+
+    this.collection.remove({
+      'linkedDoc._id': docId,
+      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
+      isCompleted: false
+    });
   },
 
   standardsUpdated(docId, docType) {
+    this._completed(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+  },
+
+  standardsUpdateCanceled(docId, docType) {
+    this._canceled(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+  },
+
+  analysisUserUpdated(docId, docType, userId) {
+    this._userUpdated(docId, userId, COMPLETE_ANALYSIS, docType);
+  },
+
+  analysisDateUpdated(docId, docType, date) {
+    this._dateUpdated(docId, date, COMPLETE_ANALYSIS, docType);
+  },
+
+  updateOfStandardsUserUpdated(docId, docType, userId) {
+    this._userUpdated(docId, userId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+  },
+
+  updateOfStandardsDateUpdated(docId, docType, date) {
+    this._dateUpdated(docId, date, COMPLETE_UPDATE_OF_STANDARDS, docType);
+  },
+
+  _userUpdated(docId, userId, workItemType, docType) {
+    const { _id } = this.collection.findOne({
+      'linkedDoc._id': docId,
+      type: workItemType,
+      isCompleted: false
+    }) || {};
+
+    if (!_id) {
+      const {
+        organizationId, targetDate, type
+      } = this._getDocData(docId, docType, workItemType);
+
+      const newId = this.collection.insert({
+        organizationId,
+        targetDate,
+        assigneeId: userId,
+        type: workItemType,
+        linkedDoc: {
+          type,
+          _id: docId
+        }
+      });
+
+      this._refreshStatus(newId);
+    } else {
+      this.collection.update({ _id }, {
+        $set: { assigneeId: userId }
+      });
+    }
+  },
+
+  _dateUpdated(docId, date, workItemType, docType) {
     this.collection.update({
       'linkedDoc._id': docId,
-      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
+      type: workItemType,
+      isCompleted: false
+    }, {
+      $set: { targetDate: date }
+    });
+  },
+
+  _completed(docId, workItemType, docType) {
+    this.collection.update({
+      'linkedDoc._id': docId,
+      type: workItemType,
       isCompleted: false
     }, {
       $set: { isCompleted: true }
     });
   },
 
-  standardsUpdateCanceled(docId, docType) {
-    return this._undo(docId);
-  },
-
-  onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId }) {
-    if (!targetDate || !assigneeId) return;
-
-    const query = {
-      type,
-      'linkedDoc._id': _id,
-      isCompleted: false
-    };
-
-    const update = () => {
-      const options = { $set: { targetDate, assigneeId } };
-
-      return this.collection.update(query, options);
-    };
-
-    const insert = () => {
-      const workItemId = this.collection.insert({
-        organizationId,
-        targetDate,
-        assigneeId,
-        type,
-        linkedDoc: {
-          _id,
-          type: docType
-        }
-      });
-
-      this._refreshStatus(workItemId);
-    };
-
-    if (this.collection.findOne(query)) {
-      return update();
-    } else {
-      return insert();
-    }
-  },
-
-  connectedAnalysisUpdated(type, docType, { _id, organizationId, analysis: { targetDate, executor:assigneeId } = {}, ...args }) {
-    this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
-  },
-
-  connectedStandardsUpdated(type, docType, { _id, organizationId, updateOfStandards: { targetDate, executor:assigneeId } = {}, ...args }) {
-    this.onProblemUpdated(type, docType, { _id, organizationId, targetDate, assigneeId });
+  _canceled(docId, workItemType, docType) {
+    this.collection.update({
+      'linkedDoc._id': docId,
+      type: workItemType,
+      isCompleted: true
+    }, {
+      $set: { isCompleted: false }
+    });
   },
 
   _refreshStatus(_id) {
@@ -305,30 +219,34 @@ export default {
     });
   },
 
-  _undo(linkedDocId, type) {
-    const query = { 'linkedDoc._id': linkedDocId };
-    const options = {
-      $set: {
-        isCompleted: false
+  _getDocData(docId, docType, workItemType) {
+    let doc, targetDate, type;
+
+    if (docType) {
+      doc = this._getProblemDoc(docId, docType);
+      type = docType;
+
+      if (workItemType === COMPLETE_ANALYSIS) {
+        targetDate = doc.analysis.targetDate;
+      } else if (workItemType === COMPLETE_UPDATE_OF_STANDARDS) {
+        targetDate = doc.updateOfStandards.targetDate;
       }
+    } else {
+      doc = Actions.findOne({ _id: docId });
+      type = doc.type;
+
+      if (workItemType === COMPLETE_ACTION) {
+        targetDate = doc.completionTargetDate;
+      } else if (workItemType === VERIFY_ACTION) {
+        targetDate = doc.verificationTargetDate;
+      }
+    }
+
+    return {
+      organizationId: doc.organizationId,
+      targetDate,
+      type
     };
-
-    (() => {
-      // if document is completed and "to be verified by" is chosen then completion is undone we need to remove the "verify" item
-      const { _id } = Object.assign({}, this.collection.findOne({ ...query, type }));
-
-      _id && this.collection.remove({ _id });
-    })();
-
-    const ret = this.collection.update(query, options);
-
-    (() => {
-      const { _id } = Object.assign({}, this.collection.findOne(query));
-
-      this._refreshStatus(_id);
-    })();
-
-    return ret;
   },
 
   _getProblemDoc(docId, docType) {

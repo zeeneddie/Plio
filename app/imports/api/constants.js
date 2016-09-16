@@ -101,7 +101,6 @@ const ActionPlanOptions = {
 };
 
 const TimeUnits = {
-  HOURS: 'hours',
   DAYS: 'days',
   WEEKS: 'weeks'
 };
@@ -339,8 +338,8 @@ const WorkInboxFilters = {
 
 const DocumentTypes = {
   STANDARD: 'standard',
-  NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
+  NON_CONFORMITY: ProblemTypes.NC,
+  RISK: ProblemTypes.RISK
 };
 
 const ActionDocumentTypes = {
@@ -386,7 +385,10 @@ const CollectionNames = {
   RISKS: 'Risks',
   ACTIONS: 'Actions',
   LESSONS: 'LessonsLearned',
-  OCCURRENCES: 'Occurrences'
+  OCCURRENCES: 'Occurrences',
+  MESSAGES: 'Messages',
+  ORGANIZATIONS: 'Organizations',
+  WORK_ITEMS: 'WorkItems'
 };
 
 const InvitationStatuses = {
@@ -436,7 +438,6 @@ export {
   ReviewStatuses,
   WorkItemsStore,
   RKTypes,
-  InvitationStatuses,
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,
