@@ -2,7 +2,7 @@ import React from 'react';
 
 import Message from './Message';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
-import { setLimit } from '/client/redux/actions/messagesActions';
+import { setLimit, setScrollDir } from '/client/redux/actions/messagesActions';
 
 export default class MessagesList extends React.Component {
   constructor() {
@@ -12,9 +12,10 @@ export default class MessagesList extends React.Component {
   }
 
   componentDidMount() {
-    $(this.refs.chat).scrollTop(this.refs.chat.scrollHeight);
+    const { chat } = this.refs;
+    $(chat).scrollTop(chat.scrollHeight);
 
-    handleMouseWheel(this.refs.chat, this._wheelListener, 'addEventListener');
+    handleMouseWheel(chat, this._wheelListener, 'addEventListener');
   }
 
   render() {
@@ -38,6 +39,8 @@ export default class MessagesList extends React.Component {
     if (loading) return;
 
     const wheelDir = wheelDirection(e);
+
+    dispatch(setScrollDir(wheelDir));
 
     if (wheelDir > 0) {
       if ($(this.refs.loader).isAlmostVisible()) {

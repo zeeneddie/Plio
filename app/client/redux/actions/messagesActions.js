@@ -1,4 +1,4 @@
-import { SET_MESSAGES, SET_LIMIT, SET_LOADING } from './types';
+import { SET_MESSAGES, SET_LIMIT, SET_LOADING, SET_SCROLL_DIR } from './types';
 
 export function setMessages(messages) {
   return {
@@ -19,4 +19,11 @@ export function setLoading(bool) {
     type: SET_LOADING,
     payload: bool
   };
+}
+
+export function setScrollDir(int) {
+  return {
+    type: SET_SCROLL_DIR,
+    payload: int
+  }
 }

@@ -1,9 +1,10 @@
-import { SET_MESSAGES, SET_LIMIT, SET_LOADING } from '../actions/types';
+import { SET_MESSAGES, SET_LIMIT, SET_LOADING, SET_SCROLL_DIR } from '../actions/types';
 
 const initialState = {
+  messages: [],
   loading: false,
   limit: 50,
-  messages: []
+  scrollDir: null
 };
 
 export default function reducer(state=initialState, action) {
@@ -16,6 +17,9 @@ export default function reducer(state=initialState, action) {
       break;
     case SET_LOADING:
       return { ...state, loading: action.payload };
+      break;
+    case SET_SCROLL_DIR:
+      return { ...state, scrollDir: action.payload };
       break;
     default:
       return state;

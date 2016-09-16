@@ -25,8 +25,6 @@ export default class MessagesFormContainer extends React.Component {
     }, handleMethodResult((err, _id) => {
       if (err) return;
 
-      $scrollToBottom($('.chat-content'));
-
       messageInput.value = '';
     }))
   }
