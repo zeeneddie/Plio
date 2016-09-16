@@ -13,6 +13,18 @@ import { Standards } from './standards/standards.js';
 const { compose } = _;
 
 
+const getDocumentCollectionByType = (type) => {
+  if (type === DocumentTypes.NON_CONFORMITY) {
+    return NonConformities;
+  } else if (type === DocumentTypes.RISK) {
+    return Risks;
+  } else if (type === DocumentTypes.STANDARD) {
+    return Standards;
+  }
+
+  return false;
+};
+
 const compareDates = (date1, date2) => {
   if (!_.isDate(date1)) {
     throw new Error(
@@ -158,6 +170,7 @@ const $isScrolledElementVisible = (el, container) => {
 }
 
 export {
+  getDocumentCollectionByType,
   compareDates,
   getCollectionByName,
   getFormattedDate,
