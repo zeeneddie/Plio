@@ -441,5 +441,6 @@ export {
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,
+  InvitationStatuses,
   UnreadMessages
 };
