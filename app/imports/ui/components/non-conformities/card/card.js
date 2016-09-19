@@ -16,10 +16,12 @@ Template.NC_Card_Read.viewmodel({
     return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
+    const organizationId = this.organizationId();
     const query = this.isActiveNCFilter(4)
       ? { isDeleted: true }
       : { isDeleted: { $in: [null, false] } };
-    return this._getNCsByQuery(query).fetch();
+
+    return this._getNCsByQuery({ organizationId, ...query }).fetch();
   },
   occurrences() {
     const query = { nonConformityId: get(this.NC(), '_id') };

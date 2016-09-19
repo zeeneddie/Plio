@@ -12,7 +12,6 @@ import { Standards } from './standards/standards.js';
 
 const { compose } = _;
 
-
 const getDocumentCollectionByType = (type) => {
   if (type === DocumentTypes.NON_CONFORMITY) {
     return NonConformities;
@@ -176,6 +175,12 @@ const findById = curry((_id, array) =>
 
 const length = (array = []) => array.length;
 
+const propItems = property('items');
+
+const lengthItems = compose(length, propItems);
+
+const flattenMapItems = flattenMap(propItems);
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -204,5 +209,8 @@ export {
   $isScrolledElementVisible,
   flattenMap,
   findById,
-  length
+  length,
+  propItems,
+  lengthItems,
+  flattenMapItems
 };

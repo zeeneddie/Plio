@@ -1,6 +1,6 @@
 <template name="Risks_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if risks.count}}
+    {{#if risks.length}}
       {{#Card_Read
         isReadOnly=isReadOnly
         cardTitle="Risk"
@@ -109,11 +109,7 @@
           {{#if isActiveRiskFilter 4}}
             <h5>There are no deleted risks yet.</h5>
           {{else}}
-            {{#if isActiveRiskFilter 3}}
-              <h5>There are no risks with departments/sectors yet.</h5>
-            {{else}}
-              <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
-            {{/if}}
+            <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
           {{/if}}
         </div>
       </div>

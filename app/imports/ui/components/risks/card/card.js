@@ -11,16 +11,19 @@ Template.Risks_Card_Read.viewmodel({
     return ActionTypes;
   },
   risks() {
-    const list = ViewModel.findOne('Risks_List');
-    const query = list && list._getQueryForFilter();
-    return this._getRisksByQuery(query);
+    const organizationId = this.organizationId();
+    const query = this.isActiveRiskFilter(4)
+      ? { isDeleted: true }
+      : { isDeleted: { $in: [null, false] } };
+
+    return this._getRisksByQuery({ organizationId, ...query }).fetch();
   },
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
   },
   type() {
-    const risk = this.risk();
-    const type = risk && risk.typeId && RiskTypes.findOne({ _id: risk.typeId });
+    const risk = Object.assign({}, this.risk());
+    const type = RiskTypes.findOne({ _id: risk.typeId });
     return type;
   },
   onOpenEditModalCb() {

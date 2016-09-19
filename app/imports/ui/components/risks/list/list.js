@@ -1,10 +1,14 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
+import curry from 'lodash.curry';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemsStatuses } from '/imports/api/constants.js';
-import { extractIds, findById } from '/imports/api/helpers.js';
+import {
+  extractIds, findById, lengthItems,
+  flattenMapItems, inspire
+} from '/imports/api/helpers.js';
 
 Template.Risks_List.viewmodel({
   share: 'search',
@@ -14,18 +18,12 @@ Template.Risks_List.viewmodel({
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const query = this._getQueryForFilter();
       const riskId = this.riskId();
-
-      const contains = this._getRiskByQuery({ ...query, _id: riskId });
+      const { result:contains, first:defaultDoc } = this._findRiskForFilter(riskId);
 
       if (!contains) {
-        const risk = this._getRiskByQuery({ ...query, ...this._getFirstRiskQueryForFilter() }) ||
-                     _.first(get(this.uncategorizedByDepartments(), 'risks')) ||
-                     _.first(get(this.uncategorizedByTypes(), 'risks'));
-
-        if (risk) {
-          const { _id } = risk;
+        if (defaultDoc) {
+          const { _id } = defaultDoc;
           Meteor.setTimeout(() => {
             this.goToRisk(_id);
             this.expandCollapsed(_id);
@@ -38,187 +36,144 @@ Template.Risks_List.viewmodel({
       }
     }
   },
-  _getQueryForFilter(withSearchQuery) {
+  _findRiskForFilter(_id) {
+    const { types, statuses, departments, risksDeleted } = inspire(
+      ['types', 'statuses', 'departments', 'risksDeleted'],
+      this
+    );
+    const finder = findById(_id);
+    const results = curry((transformer, array) => {
+      const items = transformer(array);
+      return {
+        result: finder(items),
+        first: _.first(items),
+        array: items
+      };
+    });
+    const resulstsFromItems = results(flattenMapItems);
+
     switch(this.activeRiskFilterId()) {
       case 1:
-        const types = this.types(withSearchQuery);
-        return types.length
-          ? { typeId: { $in: extractIds(this.types(withSearchQuery)) } }
-          : this._getUncategorizedRisksQuery(get(this.uncategorizedByTypes(), 'risks'));
+        return resulstsFromItems(types);
         break;
       case 2:
-        return { status: { $in: this.statuses(withSearchQuery) } };
+        return resulstsFromItems(statuses);
         break;
       case 3:
-        const departments = this.departments(withSearchQuery);
-        return departments.length
-          ? { departmentsIds: { $in: extractIds(departments) } }
-          : this._getUncategorizedRisksQuery(get(this.uncategorizedByDepartments(), 'risks'));
+        return resulstsFromItems(departments);
         break;
       case 4:
-        return { isDeleted: true };
+        return results(_.identity, risksDeleted);
         break;
       default:
         return {};
         break;
     };
   },
-  _getFirstRiskQueryForFilter() {
-    switch(this.activeRiskFilterId()) {
-      case 1:
-        return { typeId: get(_.first(this.types()), '_id') };
-        break;
-      case 2:
-        return { status: _.first(this.statuses()) };
-        break;
-      case 3:
-        return { departmentsIds: get(_.first(this.departments()), '_id') };
-        break;
-      case 4:
-        return { _id: get(_.first(this.risksDeleted()), '_id') };
-        break;
-      default:
-        return {};
-        break;
-    };
+  _getSearchQuery() {
+    return this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]);
   },
-  _getSearchQuery(bool = true) {
-    return bool ? this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]) : {};
-  },
-  _getTypeQuery({ _id:typeId }) {
-    return { typeId };
-  },
-
-  types(withSearchQuery) {
+  types() {
     const organizationId = this.organizationId();
-    const query = { organizationId };
-    const options = { sort: { title: 1 } };
-    return RiskTypes.find(query, options).fetch().filter(({ _id:typeId }) => {
-      return this._getRisksByQuery({ typeId, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
-  },
+    const mainQuery = {
+      organizationId,
+      ...this._getSearchQuery()
+    };
 
-  /**
-   * === Risks, connected to non-existent types or without types ===
-   * @param {Object} withSearchQuery - search query object
-  */
-  uncategorizedByTypes(withSearchQuery){
+    const mapper = (type) => {
+      const query = { ...mainQuery, typeId: type._id };
+      const items = this._getRisksByQuery(query).fetch();
+
+      return {
+        ...type,
+        items
+      };
+    };
+
+    const types = ((() => {
+      const query = { organizationId };
+      const options = { sort: { title: 1 } };
+
+      return RiskTypes.find(query, options).fetch();
+    })());
+
+    const uncategorized = ((() => {
+      const filterFn = risk => !types.find(type => Object.is(type._id, risk.typeId));
+      const items = this._getRisksByQuery(mainQuery).fetch().filter(filterFn);
+
+      return {
+        organizationId,
+        items,
+        _id: 'Risks.types.uncategorized',
+        title: 'Uncategorized'
+      };
+    })());
+
+    return types
+      .map(mapper)
+      .concat(uncategorized)
+      .filter(lengthItems);
+  },
+  statuses() {
+    const mapper = (status) => {
+      const query = { status, ...this._getSearchQuery() };
+      const items = this._getRisksByQuery(query).fetch();
+
+      return { status, items };
+    };
+    const keys = Object.keys(ProblemsStatuses).map(s => parseInt(s, 10));
+
+    return keys.map(mapper).filter(lengthItems);
+  },
+  departments() {
     const organizationId = this.organizationId();
-    const query = { organizationId };
-    const options = {
-      fields: {
-        _id: 1,
-        typeId: 1,
-      },
-      sort: { title: 1 },
+    const mainQuery = {
+      organizationId,
+      ...this._getSearchQuery()
     };
 
-    const risks = this._getRisksByQuery(query, options)
-      .fetch()
-      .filter((risk) => {
-        if(!risk.typeId){
-          return true;
-        }
+    const mapper = (department) => {
+      const query = {
+        ...mainQuery,
+        departmentsIds: department._id
+      };
+      const items = this._getRisksByQuery(query).fetch();
 
-        const filter = { _id: risk.typeId };
-        const options = {};
-        const riskTypes = RiskTypes.find(filter, options);
-
-        return !riskTypes.count();
-      });
-
-    return risks.length && {
-      risks,
-      title: 'Uncategorized',
+      return { ...department, items };
     };
+
+    const departments = ((() => {
+      const query = { organizationId };
+      const options = { sort: { name: 1 } };
+
+      return Departments.find(query, options).fetch();
+    })());
+
+    const uncategorized = ((() => {
+      const filterFn = risk => !departments.find(department =>
+        risk.departmentsIds.includes(department._id));
+      const items = this._getRisksByQuery(mainQuery).fetch().filter(filterFn);
+
+      return {
+        organizationId,
+        items,
+        _id: 'Risks.departments.uncategorized',
+        name: 'Uncategorized'
+      };
+    })());
+
+    return departments
+      .map(mapper)
+      .concat(uncategorized)
+      .filter(lengthItems);
   },
-
-  /**
-   * === Options while finding uncategorized risks
-  */
-  _getUncategorizedRisksOptions(){
-    return {
-      sort: { title: 1 }
-    };
-  },
-
-  /**
-   * === Query to find risks not connected to any risk types ===
-   * @param {Array} risks - documents of risks not connected to risk types;
-  */
-  _getUncategorizedRisksQuery(risks){
-    const riskIds = risks.map( risk => risk._id );
-
-    return { _id: { $in: riskIds } };
-  },
-
-  _getStatusQuery(status) {
-    return { status };
-  },
-  statuses(withSearchQuery) {
-    return _.keys(ProblemsStatuses)
-            .map(status => parseInt(status, 10))
-            .filter(status => this._getRisksByQuery({ status, ...this._getSearchQuery(withSearchQuery) }).count() > 0);
-  },
-  _getDepartmentQuery({ _id:departmentsIds }) {
-    return { departmentsIds };
-  },
-
-  departments(withSearchQuery) {
-    const query = { organizationId: this.organizationId() };
-    const options = { sort: { name: 1 } };
-    return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
-      return this._getRisksByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
-  },
-
-  /**
-   * === Risks, connected to non-existent sectors/departments or without ===
-   * @param {Object} withSearchQuery - search query object
-  */
-  uncategorizedByDepartments(withSearchQuery){
-    const query = {
-      organizationId: this.organizationId(),
-      ...this._getSearchQuery(withSearchQuery),
-    };
-    const options = {
-      fields: {
-        departmentsIds: 1,
-        title: 1,
-      },
-    };
-    const risks = this._getRisksByQuery(query, options)
-      .fetch()
-      .filter(({ departmentsIds }) => {
-        const query = { _id: { $in: departmentsIds } };
-        const options = {
-          fields: { _id: 1 }
-        };
-
-        return !departmentsIds.length || !Departments.find(query, options).count();
-      });
-
-    return {
-      name: 'Uncategorized',
-      risks,
-    };
-  },
-
-  risksDeleted(withSearchQuery) {
-    const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
+  risksDeleted() {
+    const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getRisksByQuery(query, options).fetch();
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveRiskFilter(4)) {
-        return this.toArray(this.risksDeleted());
-      }
-
-      const sections = ViewModel.find('Risks_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.risks && vm.risks().map(({ _id }) => _id));
-      return _.flatten(ids);
-    };
+    return value => this._findRiskForFilter().array;
   },
   onModalOpen() {
     return () =>

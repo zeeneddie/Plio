@@ -8,11 +8,11 @@ import curry from 'lodash.curry';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
-import { extractIds, length, inspire, findById, flattenMap } from '/imports/api/helpers.js';
-
-const propItems = property('items');
-const lengthOfItems = _.compose(length, propItems);
-const flattenMapItems = flattenMap(propItems);
+import {
+  extractIds, length, inspire,
+  findById, flattenMap, lengthItems,
+  flattenMapItems
+} from '/imports/api/helpers.js';
 
 Template.NC_List.viewmodel({
   share: 'search',
@@ -41,11 +41,10 @@ Template.NC_List.viewmodel({
       }
     }
   },
-  _findNCForFilter(_id, withSearchQuery) {
+  _findNCForFilter(_id) {
     const { magnitude, statuses, departments, NCsDeleted } = inspire(
       ['magnitude', 'statuses', 'departments', 'NCsDeleted'],
-      this,
-      ..._.times(4,  i => Array.of(withSearchQuery))
+      this
     );
     const finder = findById(_id);
     const results = curry((transformer, array) => {
@@ -76,35 +75,35 @@ Template.NC_List.viewmodel({
         break;
     }
   },
-  _getSearchQuery(bool = true) {
-     return bool ? this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]) : {};
+  _getSearchQuery() {
+     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
-  magnitude(withSearchQuery) {
+  magnitude() {
     const mapper = (m) => {
-      const query = { magnitude:m.value, ...this._getSearchQuery(withSearchQuery) };
+      const query = { magnitude:m.value, ...this._getSearchQuery() };
       const items = this._getNCsByQuery(query).fetch();
 
       return { ...m, items };
     };
 
-    return this._magnitude().map(mapper).filter(lengthOfItems);
+    return this._magnitude().map(mapper).filter(lengthItems);
   },
-  statuses(withSearchQuery) {
+  statuses() {
     const mapper = (status) => {
-      const query = { status, ...this._getSearchQuery(withSearchQuery) };
+      const query = { status, ...this._getSearchQuery() };
       const items = this._getNCsByQuery(query).fetch();
 
       return { status, items };
     };
     const keys = Object.keys(ProblemsStatuses).map(s => parseInt(s, 10));
 
-    return keys.map(mapper).filter(lengthOfItems);
+    return keys.map(mapper).filter(lengthItems);
   },
-  departments(withSearchQuery) {
+  departments() {
     const organizationId = this.organizationId();
     const mainQuery = {
       organizationId,
-      ...this._getSearchQuery(withSearchQuery)
+      ...this._getSearchQuery()
     };
 
     const mapper = (department) => {
@@ -125,8 +124,9 @@ Template.NC_List.viewmodel({
     })());
 
     const uncategorized = ((() => {
-      const query = { ...mainQuery, departmentsIds: { $exists: true, $eq: [] } };
-      const items = this._getNCsByQuery(query).fetch();
+      const filterFn = nc => !departments.find(department =>
+        nc.departmentsIds.includes(department._id));
+      const items = this._getNCsByQuery(mainQuery).fetch().filter(filterFn);
 
       return {
         organizationId,
@@ -139,10 +139,10 @@ Template.NC_List.viewmodel({
     return departments
       .map(mapper)
       .concat(uncategorized)
-      .filter(lengthOfItems);
+      .filter(lengthItems);
   },
-  NCsDeleted(withSearchQuery) {
-    const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
+  NCsDeleted() {
+    const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getNCsByQuery(query, options).fetch();
   },
@@ -158,7 +158,7 @@ Template.NC_List.viewmodel({
     return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   onSearchInputValue() {
-    return (value) => this._findNCForFilter().array;
+    return value => this._findNCForFilter().array;
   },
   onModalOpen() {
     return () =>
