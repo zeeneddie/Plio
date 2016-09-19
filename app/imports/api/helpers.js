@@ -3,6 +3,7 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
+import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -221,6 +222,11 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   return date;
 }
 
+const renderTemplate = (template, data = {}) => {
+  const compiledTemplate = Handlebars.compile(template);
+  return compiledTemplate(data);
+};
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -249,5 +255,6 @@ export {
   $isScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
-  getWorkflowDefaultStepDate
+  getWorkflowDefaultStepDate,
+  renderTemplate
 };
