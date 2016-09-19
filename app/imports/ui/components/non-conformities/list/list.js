@@ -158,7 +158,7 @@ Template.NC_List.viewmodel({
     return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   onSearchInputValue() {
-    return value => this._findNCForFilter().array;
+    return value => extractIds(this._findNCForFilter().array);
   },
   onModalOpen() {
     return () =>

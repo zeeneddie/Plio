@@ -173,7 +173,7 @@ Template.Risks_List.viewmodel({
     return this._getRisksByQuery(query, options).fetch();
   },
   onSearchInputValue() {
-    return value => this._findRiskForFilter().array;
+    return value => extractIds(this._findRiskForFilter().array);
   },
   onModalOpen() {
     return () =>

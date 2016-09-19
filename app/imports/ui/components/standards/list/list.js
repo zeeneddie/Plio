@@ -234,7 +234,6 @@ Template.StandardsList.viewmodel({
 
     return withUncategorized;
   },
-
   standardsDeleted() {
     const query = { ...this._getSearchQuery(), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
