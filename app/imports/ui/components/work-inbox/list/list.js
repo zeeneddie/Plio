@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionDocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
+import { ActionDocumentTypes, WorkItemsStore, WorkInboxFilters } from '/imports/api/constants.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 const { TYPES } = WorkItemsStore;
 
@@ -16,28 +16,48 @@ Template.WorkInbox_List.viewmodel({
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const items = Object.assign([], this._getItemsByFilter());
-      const contains = items.find(({ _id }) => _id === this.workItemId());
+      const queriedId = this.queriedWorkItemId();
 
-      if (!contains) {
-        const { _id } = Object.assign({}, this._getFirstItemByFilter()); // get _id of the first element if it exists
+      if (queriedId) {
+        // find filter that covers queried work item
+        const filter = _(_(WorkInboxFilters).keys()).find((filterId) => {
+          const items = Object.assign([], this._getItemsByFilter(parseInt(filterId)));
+          return !!items.find(({ _id }) => _id === queriedId);
+        });
 
-        if (_id) {
+        if (filter) {
           Meteor.setTimeout(() => {
-            this.goToWorkItem(_id);
-            this.expandCollapsed(_id);
+            this.goToWorkItem(queriedId, { filter });
+            this.expandCollapsed(queriedId);
           }, 0);
-        } else {
-          Meteor.setTimeout(() => {
-            this.goToWorkInbox();
-          }, 0);
+        }
+      } else {
+        const workItemId = this.workItemId();
+        const items = Object.assign([], this._getItemsByFilter());
+        const contains = items.find(({ _id }) => _id === workItemId);
+
+        if (!contains) {
+          const { _id } = Object.assign({}, this._getFirstItemByFilter()); // get _id of the first element if it exists
+
+          if (_id) {
+            Meteor.setTimeout(() => {
+              this.goToWorkItem(_id);
+              this.expandCollapsed(_id);
+            }, 0);
+          } else {
+            Meteor.setTimeout(() => {
+              this.goToWorkInbox();
+            }, 0);
+          }
         }
       }
     }
   },
-  _getItemsByFilter() {
+  _getItemsByFilter(filter) {
     const { my = {}, team = {} } = Object.assign({}, this.items());
-    switch(this.activeWorkInboxFilterId()) {
+    filter = filter || this.activeWorkInboxFilterId();
+
+    switch(filter) {
       case 1:
         return my.current;
         break;

@@ -441,6 +441,7 @@ export const ReviewSchema = ((() => {
   return new SimpleSchema({
     review: {
       type: schema,
+      defaultValue: {},
       optional: true
     }
   });

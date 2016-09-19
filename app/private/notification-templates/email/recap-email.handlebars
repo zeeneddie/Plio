@@ -1,0 +1,52 @@
+<div class="wrapper">
+  <table class="layout layout--no-gutter" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+    <tbody>
+      <tr>
+        <td class="column" align="left" valign="middle" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; color: #353535; padding-top:30px;">
+          <img src="https://s3-eu-west-1.amazonaws.com/plio/images/plio-logo.png" width="100" alt="Plio">
+          <p style="margin-top: 10px; margin-bottom: 0; font-size: 15px;">{{title}}</p>
+        </td>
+      </tr>
+      <tr>
+        <td align="center">
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;">
+                {{#each recapData}}
+                  <p style="margin-top: 40px;">{{title}}</p>
+
+                  {{#each docs}}
+                    {{#if url}}
+                      <p style="margin: 12px 0;">
+                        <a href="{{url}}">{{desc}}</a>
+                      </p>
+                    {{else}}
+                      <p>{{desc}}</p>
+                    {{/if}}
+
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style: "border: 1px solid #ddd; border-bottom: none;">
+                      <thead>
+                        <tr>
+                          <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">User</th>
+                          <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">Change summary</th>
+                          <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">Date &amp; time</th>
+                        </tr>
+                      </thead>
+                      {{#each logs}}
+                        <tr>
+                          <td width="20%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{executor}}</td>
+                          <td width="55%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{message}}</td>
+                          <td width="25%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{date}}</td>
+                        </tr>
+                      {{/each}}
+                    </table>
+                  {{/each}}
+                {{/each}}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

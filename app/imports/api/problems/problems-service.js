@@ -45,8 +45,7 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    const WIType = WorkItemsStore.TYPES.COMPLETE_ANALYSIS;
-    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { ...analysis, executor }, ...rest }); // updated doc
+    WorkItemService.analysisUserUpdated(_id, this._docType, executor);
 
     this._refreshStatus(_id);
 
@@ -61,8 +60,7 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    const WIType = WorkItemsStore.TYPES.COMPLETE_ANALYSIS;
-    WorkItemService.connectedAnalysisUpdated(WIType, this._docType, { analysis: { targetDate, ...analysis }, ...rest }); // updated doc
+    WorkItemService.analysisDateUpdated(_id, this._docType, targetDate);
 
     this._refreshStatus(_id);
 
@@ -129,7 +127,9 @@ export default {
       $unset: {
         'analysis.completedAt': '',
         'analysis.completedBy': '',
-        'analysis.completionComments': ''
+        'analysis.completionComments': '',
+        'updateOfStandards.targetDate': '',
+        'updateOfStandards.executor': ''
       }
     });
 
@@ -188,8 +188,7 @@ export default {
 
     const ret = this.collection.update(query, options);
 
-    const WIType = WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS;
-    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { ...updateOfStandards, executor }, ...rest }); // updated doc
+    WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, executor);
 
     this._refreshStatus(_id);
 
@@ -207,8 +206,7 @@ export default {
 
     this._refreshStatus(_id);
 
-    const WIType = WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS;
-    WorkItemService.connectedStandardsUpdated(WIType, this._docType, { updateOfStandards: { targetDate, ...updateOfStandards }, ...rest }); // updated doc
+    WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
 
     return ret;
   },
