@@ -1,12 +1,12 @@
 <template name="Subcards_Occurrences_Read">
-  <div {{b "if: occurrences.count > 0"}}>
+  {{#if occurrences.length}}
     <div class="card-block card-subheading">
       <h4 class="card-title">Occurrences</h4>
     </div>
     <div class="list-group">
       <div class="list-group-item">
-        <h4 class="list-group-item-heading" {{b "text: occurrences.count"}}></h4>
+        <h4 class="list-group-item-heading" {{b "text: occurrences.length"}}></h4>
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>

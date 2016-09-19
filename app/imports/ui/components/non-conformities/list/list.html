@@ -9,11 +9,11 @@
         {{#each magnitude}}
           {{> ListItem
               template="NC_SectionItem"
+              items=this.items
               title=this.name
               magnitude=this.value
               hideRTextOnExpand=true
-              rText=(calculateTotalCost this.value)
-              _query=(_getMagnitudeQuery this)}}
+              rText=(calculateTotalCost this.items)}}
         {{/each}}
       {{/if}}
 
@@ -21,10 +21,10 @@
         {{#each statuses}}
           {{> ListItem
               template="NC_SectionItem"
-              title=(getStatusName this)
-              _query=(_getStatusQuery this)
+              items=this.items
+              title=(getStatusName this.status)
               hideRTextOnExpand=true
-              rText=(calculateTotalCost this)}}
+              rText=(calculateTotalCost this.items)}}
         {{/each}}
       {{/if}}
 
@@ -32,22 +32,12 @@
         {{#each departments}}
           {{> ListItem
               template="NC_SectionItem"
+              items=this.items
               title=this.name
               closeAllOnCollapse=false
               hideRTextOnExpand=true
-              rText=(calculateTotalCost this._id)
-              _query=(_getDepartmentQuery this)}}
+              rText=(calculateTotalCost this.items)}}
         {{/each}}
-
-        {{#with uncategorizedByDepartments}}
-          {{> ListItem
-              template="NC_SectionItem"
-              title=this.name
-              closeAllOnCollapse=false
-              hideRTextOnExpand=false
-              _query=(_uncategorizedByDepartmentsQuery this)
-              _options=this.options}}
-        {{/with}}
       {{/if}}
 
       {{#if isActiveNCFilter 4}}

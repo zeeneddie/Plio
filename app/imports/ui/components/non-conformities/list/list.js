@@ -2,11 +2,17 @@ import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
+import property from 'lodash.property';
+import curry from 'lodash.curry';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
-import { extractIds } from '/imports/api/helpers.js';
+import { extractIds, length, inspire, findById, flattenMap } from '/imports/api/helpers.js';
+
+const propItems = property('items');
+const lengthOfItems = _.compose(length, propItems);
+const flattenMapItems = flattenMap(propItems);
 
 Template.NC_List.viewmodel({
   share: 'search',
@@ -17,16 +23,12 @@ Template.NC_List.viewmodel({
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const query = this._getQueryForFilter();
-      const NCId = this.NCId();
+      const { result:contains, first:defaultDoc } = this._findNCForFilter(this.NCId());
 
-      const contains = this._getNCByQuery({ ...query, _id: NCId });
       if (!contains) {
-        const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter() }) ||
-                   _.first(get(this.uncategorizedByDepartments(), 'ncs'));
+        if (defaultDoc) {
+          const { _id } = defaultDoc;
 
-        if (nc) {
-          const { _id } = nc;
           Meteor.setTimeout(() => {
             this.goToNC(_id);
             this.expandCollapsed(_id);
@@ -34,156 +36,129 @@ Template.NC_List.viewmodel({
         } else {
           Meteor.setTimeout(() => {
             this.goToNCs();
-          }, 0)
+          }, 0);
         }
       }
     }
   },
-  _getQueryForFilter(withSearchQuery) {
+  _findNCForFilter(_id, withSearchQuery) {
+    const { magnitude, statuses, departments, NCsDeleted } = inspire(
+      ['magnitude', 'statuses', 'departments', 'NCsDeleted'],
+      this,
+      ..._.times(4,  i => Array.of(withSearchQuery))
+    );
+    const finder = findById(_id);
+    const results = curry((transformer, array) => {
+      const items = transformer(array);
+      return {
+        result: finder(items),
+        first: _.first(items),
+        array: items
+      };
+    });
+    const resulstsFromItems = results(flattenMapItems);
+
     switch(this.activeNCFilterId()) {
       case 1:
-        return { magnitude: { $in: this.magnitude(withSearchQuery).map(({ value }) => value) } };
+        return resulstsFromItems(magnitude);
         break;
       case 2:
-        return { status: { $in: this.statuses(withSearchQuery) } };
+        return resulstsFromItems(statuses);
         break;
       case 3:
-        const wsq = this.departments(withSearchQuery);
-        return wsq.length
-                ? { departmentsIds: { $in: extractIds(wsq) } }
-                : this._uncategorizedByDepartmentsQuery(this.uncategorizedByDepartments());
+        return resulstsFromItems(departments);
         break;
       case 4:
-        return { isDeleted: true };
+        return results(_.identity, NCsDeleted);
         break;
       default:
         return {};
         break;
-    };
-  },
-  _getFirstNCQueryForFilter() {
-    switch(this.activeNCFilterId()) {
-      case 1:
-        return { magnitude: get(_.first(this.magnitude()), 'value') };
-        break;
-      case 2:
-        return { status: _.first(this.statuses()) };
-        break;
-      case 3:
-        return { departmentsIds: get(_.first(this.departments()), '_id') };
-        break;
-      case 4:
-        return { _id: get(_.first(this.NCsDeleted()), '_id') };
-        break;
-      default:
-        return {};
-        break;
-    };
+    }
   },
   _getSearchQuery(bool = true) {
      return bool ? this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]) : {};
    },
-  _getMagnitudeQuery({ value:magnitude }) {
-    return { magnitude };
-  },
   magnitude(withSearchQuery) {
-    return this._magnitude().filter(({ value:magnitude }) => {
-      return this._getNCsByQuery({ magnitude, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
-  },
-  _getStatusQuery(status) {
-    return { status };
+    const mapper = (m) => {
+      const query = { magnitude:m.value, ...this._getSearchQuery(withSearchQuery) };
+      const items = this._getNCsByQuery(query).fetch();
+
+      return { ...m, items };
+    };
+
+    return this._magnitude().map(mapper).filter(lengthOfItems);
   },
   statuses(withSearchQuery) {
-    return _.keys(ProblemsStatuses)
-            .map(status => parseInt(status, 10))
-            .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery(withSearchQuery) }).count() > 0);
-  },
-  _getDepartmentQuery({ _id:departmentsIds }) {
-    return { departmentsIds };
+    const mapper = (status) => {
+      const query = { status, ...this._getSearchQuery(withSearchQuery) };
+      const items = this._getNCsByQuery(query).fetch();
+
+      return { status, items };
+    };
+    const keys = Object.keys(ProblemsStatuses).map(s => parseInt(s, 10));
+
+    return keys.map(mapper).filter(lengthOfItems);
   },
   departments(withSearchQuery) {
-    const query = { organizationId: this.organizationId() };
-    const options = { sort: { name: 1 } };
-    const departments = Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
-      return this._getNCsByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
-
-    return departments;
-  },
-
-  // Find Non-Conformities without departments
-  uncategorizedByDepartments(withSearchQuery) {
-    const query = { organizationId: this.organizationId(), ...this._getSearchQuery(withSearchQuery) };
-    const options = {
-      fields: {
-        departmentsIds: 1,
-      },
-      sort: { name: -1 }
+    const organizationId = this.organizationId();
+    const mainQuery = {
+      organizationId,
+      ...this._getSearchQuery(withSearchQuery)
     };
-    const ncs = this._getNCsByQuery(query, options).fetch().filter((nc) => {
-      const filter = { _id: { $in: nc.departmentsIds } };
-      const options = { fields: { _id: 1 } };
-      const departments = this._getDepartmentsByQuery(filter, options);
 
-      return !departments.length;
-    });
+    const mapper = (department) => {
+      const query = {
+        ...mainQuery,
+        departmentsIds: department._id
+      };
+      const items = this._getNCsByQuery(query).fetch();
 
-    return {
-      ncs,
-      name: 'Uncategorized',
-      options: {
-        sort: { title: 1 },
-      },
+      return { ...department, items };
     };
-  },
 
-  /**
-   * Make a query object for finding NCs related to non-existent departmens:
-   * @param {Array} ncs - fetched NC docs with non-existent departments;
-  */
-  _uncategorizedByDepartmentsQuery({ ncs = [] }) {
-    return { _id: { $in: extractIds(ncs) } };
-  },
+    const departments = ((() => {
+      const query = { organizationId };
+      const options = { sort: { name: 1 } };
 
+      return Departments.find(query, options).fetch();
+    })());
+
+    const uncategorized = ((() => {
+      const query = { ...mainQuery, departmentsIds: { $exists: true, $eq: [] } };
+      const items = this._getNCsByQuery(query).fetch();
+
+      return {
+        organizationId,
+        items,
+        _id: 'NonConformities.departments.uncategorized',
+        name: 'Uncategorized'
+      };
+    })());
+
+    return departments
+      .map(mapper)
+      .concat(uncategorized)
+      .filter(lengthOfItems);
+  },
   NCsDeleted(withSearchQuery) {
     const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
     const options = { sort: { deletedAt: -1 } };
     return this._getNCsByQuery(query, options).fetch();
   },
-  calculateTotalCost(value) {
-    const ncs = this._getNCsByQuery({
-      $or: [
-        { magnitude: value },
-        { status: value },
-        { departmentsIds: value }
-      ],
-      cost: { $exists: true }
-    }).fetch();
-
-    const total = ncs.reduce((prev, { _id, cost }) => {
-      const occurrences = ((() => {
-        const query = { nonConformityId: _id };
-        return Occurrences.find(query);
-      })());
-      const t = cost * occurrences.count();
+  calculateTotalCost(items) {
+    const total = items.reduce((prev, { _id:nonConformityId, cost } = {}) => {
+      const occurrences = Occurrences.find({ nonConformityId }).fetch();
+      const t = cost * occurrences.length || 0;
       return prev + t;
     }, 0);
 
-    const { currency } = this.organization() || {};
+    const { currency } = Object.assign({}, this.organization());
 
     return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveNCFilter(4)) {
-        return this.toArray(this.NCsDeleted());
-      }
-
-      const sections = ViewModel.find('NC_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.NCs && extractIds(this.toArray(vm.NCs())));
-      return _.flatten(ids);
-    };
+    return (value) => this._findNCForFilter().array;
   },
   onModalOpen() {
     return () =>

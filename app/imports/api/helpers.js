@@ -174,6 +174,8 @@ const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).m
 const findById = curry((_id, array) =>
   Object.assign([], array).find((item = {}) => Object.is(item._id, _id)));
 
+const length = (array = []) => array.length;
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -201,5 +203,6 @@ export {
   $scrollToBottom,
   $isScrolledElementVisible,
   flattenMap,
-  findById
+  findById,
+  length
 };

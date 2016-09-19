@@ -1,6 +1,6 @@
 <template name="NC_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasNCs}}
+    {{#if NCs.length}}
       {{#Card_Read
         isReadOnly=isReadOnly
         cardTitle="Non-conformity"
@@ -25,7 +25,7 @@
                 </span>
               </h4>
             </div>
-            
+
             {{#if this.description}}
               <div class="list-group-item">
                 <p class="list-group-item-text">Description</p>
@@ -102,7 +102,7 @@
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
 
-          {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}}
+          {{> Subcards_Occurrences_Read occurrences=occurrences}}
 
           {{> Subcards_Actions_Read
               type=ActionTypes.CORRECTIVE_ACTION
@@ -125,11 +125,7 @@
           {{#if isActiveNCFilter 4}}
             <h5>There are no deleted non-conformities yet.</h5>
           {{else}}
-            {{#if isActiveNCFilter 3}}
-              <h5>There are no non-conformities with departments yet.</h5>
-            {{else}}
-              <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
-            {{/if}}
+            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
           {{/if}}
         </div>
       </div>

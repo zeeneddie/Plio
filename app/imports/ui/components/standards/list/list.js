@@ -45,7 +45,6 @@ Template.StandardsList.viewmodel({
       if (defaultStandard) {
         const { _id } = defaultStandard;
 
-        // [ToDo] How to avoid redirecting from the page of an uncategorized standard?
         this.goToStandard(_id);
         this.expandCollapsed(_id);
       } else {
