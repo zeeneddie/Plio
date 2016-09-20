@@ -3,17 +3,14 @@ import get from 'lodash.get';
 import curry from 'lodash.curry';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { ProblemsStatuses } from '/imports/api/constants.js';
 import {
   extractIds, findById, lengthItems,
   flattenMapItems, inspire
 } from '/imports/api/helpers.js';
 
 Template.Risks_List.viewmodel({
-  share: 'search',
   mixin: [
-    'search', 'collapse', 'organization', 'modal', 'risk', 'problemsStatus',
+    'organization', 'modal', 'risk', 'problemsStatus',
     'collapsing', 'router', 'utils'
   ],
   autorun() {
@@ -37,8 +34,8 @@ Template.Risks_List.viewmodel({
     }
   },
   _findRiskForFilter(_id) {
-    const { types, statuses, departments, risksDeleted } = inspire(
-      ['types', 'statuses', 'departments', 'risksDeleted'],
+    const { types, statuses, departments, deleted } = inspire(
+      ['types', 'statuses', 'departments', 'deleted'],
       this
     );
     const finder = findById(_id);
@@ -63,20 +60,12 @@ Template.Risks_List.viewmodel({
         return resulstsFromItems(departments);
         break;
       case 4:
-        return results(_.identity, risksDeleted);
+        return results(_.identity, deleted);
         break;
       default:
         return {};
         break;
     };
-  },
-  _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]);
-  },
-  _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
-    return this.searchText()
-      ? { sort: { sequentialId: 1, title: 1 } }
-      : defaults;
   },
   types() {
     const organizationId = this.organizationId();
@@ -118,64 +107,6 @@ Template.Risks_List.viewmodel({
       .map(mapper)
       .concat(uncategorized)
       .filter(lengthItems);
-  },
-  statuses() {
-    const mapper = (status) => {
-      const query = { status, ...this._getSearchQuery() };
-      const items = this._getRisksByQuery(query, this._getSearchOptions()).fetch();
-
-      return { status, items };
-    };
-    const keys = Object.keys(ProblemsStatuses).map(s => parseInt(s, 10));
-
-    return keys.map(mapper).filter(lengthItems);
-  },
-  departments() {
-    const organizationId = this.organizationId();
-    const mainQuery = {
-      organizationId,
-      ...this._getSearchQuery()
-    };
-
-    const mapper = (department) => {
-      const query = {
-        ...mainQuery,
-        departmentsIds: department._id
-      };
-      const items = this._getRisksByQuery(query, this._getSearchOptions()).fetch();
-
-      return { ...department, items };
-    };
-
-    const departments = ((() => {
-      const query = { organizationId };
-      const options = { sort: { name: 1 } };
-
-      return Departments.find(query, options).fetch();
-    })());
-
-    const uncategorized = ((() => {
-      const filterFn = risk => !departments.find(department =>
-        risk.departmentsIds.includes(department._id));
-      const items = this._getRisksByQuery(mainQuery, this._getSearchOptions()).fetch().filter(filterFn);
-
-      return {
-        organizationId,
-        items,
-        _id: 'Risks.departments.uncategorized',
-        name: 'Uncategorized'
-      };
-    })());
-
-    return departments
-      .map(mapper)
-      .concat(uncategorized)
-      .filter(lengthItems);
-  },
-  risksDeleted() {
-    const query = { ...this._getSearchQuery(), isDeleted: true };
-    const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
-    return this._getRisksByQuery(query, options).fetch();
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);

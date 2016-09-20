@@ -6,20 +6,15 @@ import property from 'lodash.property';
 import curry from 'lodash.curry';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
 import {
-  extractIds, length, inspire,
-  findById, flattenMap, lengthItems,
-  flattenMapItems
+  extractIds, inspire, findById,
+  lengthItems, flattenMapItems
 } from '/imports/api/helpers.js';
 
 Template.NC_List.viewmodel({
-  share: 'search',
   mixin: [
-    'search', 'collapsing', 'organization', 'modal', 'magnitude',
+    'collapsing', 'organization', 'modal', 'magnitude',
     'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
-    'department'
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
@@ -42,8 +37,8 @@ Template.NC_List.viewmodel({
     }
   },
   _findNCForFilter(_id) {
-    const { magnitude, statuses, departments, NCsDeleted } = inspire(
-      ['magnitude', 'statuses', 'departments', 'NCsDeleted'],
+    const { magnitude, statuses, departments, deleted } = inspire(
+      ['magnitude', 'statuses', 'departments', 'deleted'],
       this
     );
     const finder = findById(_id);
@@ -68,20 +63,12 @@ Template.NC_List.viewmodel({
         return resulstsFromItems(departments);
         break;
       case 4:
-        return results(_.identity, NCsDeleted);
+        return results(_.identity, deleted);
         break;
       default:
         return {};
         break;
     }
-  },
-  _getSearchQuery() {
-     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
-   },
-  _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
-    return this.searchText()
-      ? { sort: { sequentialId: 1, title: 1 } }
-      : defaults;
   },
   magnitude() {
     const mapper = (m) => {
@@ -92,64 +79,6 @@ Template.NC_List.viewmodel({
     };
 
     return this._magnitude().map(mapper).filter(lengthItems);
-  },
-  statuses() {
-    const mapper = (status) => {
-      const query = { status, ...this._getSearchQuery() };
-      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
-
-      return { status, items };
-    };
-    const keys = Object.keys(ProblemsStatuses).map(s => parseInt(s, 10));
-
-    return keys.map(mapper).filter(lengthItems);
-  },
-  departments() {
-    const organizationId = this.organizationId();
-    const mainQuery = {
-      organizationId,
-      ...this._getSearchQuery()
-    };
-
-    const mapper = (department) => {
-      const query = {
-        ...mainQuery,
-        departmentsIds: department._id
-      };
-      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
-
-      return { ...department, items };
-    };
-
-    const departments = ((() => {
-      const query = { organizationId };
-      const options = { sort: { name: 1 } };
-
-      return Departments.find(query, options).fetch();
-    })());
-
-    const uncategorized = ((() => {
-      const filterFn = nc => !departments.find(department =>
-        nc.departmentsIds.includes(department._id));
-      const items = this._getNCsByQuery(mainQuery, this._getSearchOptions()).fetch().filter(filterFn);
-
-      return {
-        organizationId,
-        items,
-        _id: 'NonConformities.departments.uncategorized',
-        name: 'Uncategorized'
-      };
-    })());
-
-    return departments
-      .map(mapper)
-      .concat(uncategorized)
-      .filter(lengthItems);
-  },
-  NCsDeleted() {
-    const query = { ...this._getSearchQuery(), isDeleted: true };
-    const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
-    return this._getNCsByQuery(query, options).fetch();
   },
   calculateTotalCost(items) {
     const total = items.reduce((prev, { _id:nonConformityId, cost } = {}) => {
