@@ -1,6 +1,8 @@
 import moment from 'moment-timezone';
 
-import { ActionTypes, DocumentTypes } from '/imports/api/constants.js';
+import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { capitalize } from '/imports/api/helpers.js';
 
 
 const ReminderTypes = {
@@ -8,7 +10,7 @@ const ReminderTypes = {
   COMPLETE_UPDATE_OF_STANDARDS: 2,
   COMPLETE_ACTION: 3,
   VERIFY_ACTION: 4,
-  COMPLETE_IMPROVEMENT_PLAN: 5
+  REVIEW_IMPROVEMENT_PLAN: 5
 };
 
 const ReminderDocTypes = {
@@ -24,7 +26,7 @@ const getProblemName = doc => `${doc.sequentialId} "${doc.title}"`;
 
 const getActionName = doc => `${doc.sequentialId} "${doc.title}"`;
 
-const getStandardName = doc => `"${doc.title}" standard`;
+const getStandardName = doc => `"${doc.title}"`;
 
 const getProblemDesc = (docType) => {
   return {
@@ -41,7 +43,9 @@ const getActionDesc = (docType) => {
   }[docType];
 };
 
-const getProblemUrl = ({ doc, docType, org }) {
+const getStandardDesc = () => 'standard';
+
+const getProblemUrl = ({ doc, docType, org }) => {
   const path = {
     [ReminderDocTypes.NC]: 'non-conformities',
     [ReminderDocTypes.RISK]: 'risks'
@@ -50,7 +54,7 @@ const getProblemUrl = ({ doc, docType, org }) {
   return Meteor.absoluteUrl(`${org.serialNumber}/${path}/${doc._id}`);
 };
 
-const getActionUrl = ({ doc, docType, reminderType, org }) {
+const getActionUrl = ({ doc, docType, reminderType, org }) => {
   const workItemType = {
     [ReminderTypes.COMPLETE_ACTION]: WorkItemsStore.TYPES.COMPLETE_ACTION,
     [ReminderTypes.VERIFY_ACTION]: WorkItemsStore.TYPES.VERIFY_ACTION
@@ -79,7 +83,7 @@ const getDocDesc = (docType) => {
     case ReminderDocTypes.RISK_CONTROL:
       return getActionDesc(docType);
     case ReminderDocTypes.STANDARD:
-      return getStandardName(doc);
+      return getStandardDesc();
   }
 };
 
@@ -93,7 +97,7 @@ const getDocName = (doc, docType) => {
     case ReminderDocTypes.RISK_CONTROL:
       return getActionName(doc);
     case ReminderDocTypes.STANDARD:
-      return 'standard'
+      return getStandardName(doc);
   }
 };
 
@@ -116,11 +120,11 @@ const ReminderConfig = {
   [ReminderTypes.COMPLETE_ANALYSIS]: {
     title: 'Root cause analysis must be completed',
     text: 'Root cause analysis of {{problemDesc}} {{{problemName}}} must be completed on {{date}}',
-    data: ({ doc, docType, org }) => {
+    data: ({ doc, docType, date, org }) => {
       return {
         problemName: () => getProblemName(doc),
         problemDesc: () => getProblemDesc(docType),
-        date: () => getPrettyDate(doc.analysis.targetDate, org.timezone)
+        date: () => getPrettyDate(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -132,11 +136,11 @@ const ReminderConfig = {
   [ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS]: {
     title: 'Update of standards must be completed',
     text: 'Update of standards related to {{problemDesc}} {{{problemName}}} must be completed on {{date}}',
-    data: ({ doc, docType, org }) => {
+    data: ({ doc, docType, date, org }) => {
       return {
         problemName: () => getProblemName(doc),
         problemDesc: () => getProblemDesc(docType),
-        date: () => getPrettyDate(doc.updateOfStandards.targetDate, org.timezone)
+        date: () => getPrettyDate(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -148,11 +152,11 @@ const ReminderConfig = {
   [ReminderTypes.COMPLETE_ACTION]: {
     title: 'Action must be completed',
     text: '{{actionDesc}} {{{actionName}}} must be completed on {{date}}',
-    data: ({ doc, docType, org }) => {
+    data: ({ doc, docType, date, org }) => {
       return {
         actionName: () => getActionName(doc),
-        actionDesc: () => getActionDesc(docType),
-        date: () => getPrettyDate(doc.completionTargetDate, org.timezone)
+        actionDesc: () => capitalize(getActionDesc(docType)),
+        date: () => getPrettyDate(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -164,11 +168,11 @@ const ReminderConfig = {
   [ReminderTypes.VERIFY_ACTION]: {
     title: 'Action must be verified',
     text: '{{actionDesc}} {{{actionName}}} must be verified on {{date}}',
-    data: ({ doc, docType, org }) => {
+    data: ({ doc, docType, date, org }) => {
       return {
         actionName: () => getActionName(doc),
-        actionDesc: () => getActionDesc(docType),
-        date: () => getPrettyDate(doc.verificationTargetDate, org.timezone)
+        actionDesc: () => capitalize(getActionDesc(docType)),
+        date: () => getPrettyDate(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -177,14 +181,14 @@ const ReminderConfig = {
     url: getActionUrl
   },
 
-  [ReminderTypes.COMPLETE_IMPROVEMENT_PLAN]: {
-    title: 'Improvement plan must be completed',
-    text: 'Improvement plan for {{docDesc}} {{{docName}}} must be completed on {{date}}',
-    data: ({ doc, docType, org }) => {
+  [ReminderTypes.REVIEW_IMPROVEMENT_PLAN]: {
+    title: 'Improvement plan must be reviewed',
+    text: 'Improvement plan for {{docDesc}} {{{docName}}} must be reviewed on {{date}}',
+    data: ({ doc, docType, date, org }) => {
       return {
         docName: () => getDocName(doc, docType),
         docDesc: () => getDocDesc(docType),
-        date: () => getPrettyDate(doc.improvementPlan.targetDate, org.timezone)
+        date: () => getPrettyDate(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {

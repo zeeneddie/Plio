@@ -1,6 +1,5 @@
-import SyncedCron from 'meteor/percolate:synced-cron';
-
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import ReminderSender from '/imports/core/reminders/server/ReminderSender.js';
 import TZOffsets from './tz-offsets.js';
 
 

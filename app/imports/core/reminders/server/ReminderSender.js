@@ -1,3 +1,4 @@
+import { Match } from 'meteor/check';
 import moment from 'moment-timezone';
 
 import { Actions } from '/imports/api/actions/actions.js';
@@ -10,6 +11,8 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { ReminderConfig, ReminderTypes } from './reminder-config.js';
 import NotificationSender from '/imports/core/NotificationSender';
 
+
+const REMINDER_EMAIL_TEMPLATE = 'personalEmail';
 
 export default class ReminderSender {
 
@@ -24,7 +27,8 @@ export default class ReminderSender {
     }
 
     this._organization = organization;
-
+    this._timezone = organization.timezone || 'UTC';
+    this._date = moment().tz(this._timezone).startOf('day').toDate();
     this._reminders = [];
   }
 
@@ -68,27 +72,33 @@ export default class ReminderSender {
         $or: [{
           'analysis.status': 0, // Not completed
           'analysis.targetDate': {
-            $gt: startDate,
-            $lt: endDate
+            $gte: startDate,
+            $lte: endDate
           }
         }, {
           'analysis.status': 1, // Completed
           'updateOfStandards.status': 0, // Not completed
           'updateOfStandards.targetDate': {
-            $gt: startDate,
-            $lt: endDate
+            $gte: startDate,
+            $lte: endDate
           }
         }]
       };
 
       collection.find(query).forEach((doc) => {
-        const reminderData = { doc, docType };
+        const reminderData = { doc, docType, dateConfig };
 
         const analysisCompleted = doc.analysis.status === 1;
         if (analysisCompleted) {
-          reminderData.reminderType = ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS;
+          _(reminderData).extend({
+            reminderType: ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS,
+            date: doc.updateOfStandards.targetDate
+          });
         } else {
-          reminderData.reminderType = ReminderTypes.COMPLETE_ANALYSIS;
+          _(reminderData).extend({
+            reminderType: ReminderTypes.COMPLETE_ANALYSIS,
+            date: doc.analysis.targetDate
+          });
         }
 
         this._reminders.push(reminderData);
@@ -103,27 +113,33 @@ export default class ReminderSender {
       $or: [{
         isCompleted: false,
         completionTargetDate: {
-          $gt: startDate,
-          $lt: endDate
+          $gte: startDate,
+          $lte: endDate
         }
       }, {
         isCompleted: true,
         isVerified: false,
-        verifivcaTargetDate: {
-          $gt: startDate,
-          $lt: endDate
+        verificationTargetDate: {
+          $gte: startDate,
+          $lte: endDate
         }
       }]
     };
 
     Actions.find(actionQuery).forEach((doc) => {
-      const reminderData = { doc, docType: doc.type }
+      const reminderData = { doc, dateConfig, docType: doc.type };
 
       const isCompleted = doc.isCompleted === true;
       if (isCompleted) {
-        reminderData.reminderType = ReminderTypes.VERIFY_ACTION;
+        _(reminderData).extend({
+          reminderType: ReminderTypes.VERIFY_ACTION,
+          date: doc.verificationTargetDate
+        });
       } else {
-        reminderData.reminderType = ReminderTypes.COMPLETE_ACTION;
+        _(reminderData).extend({
+          reminderType: ReminderTypes.COMPLETE_ACTION,
+          date: doc.completionTargetDate
+        });
       }
 
       this._reminders.push(reminderData);
@@ -134,18 +150,26 @@ export default class ReminderSender {
     const { start, until } = dateConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-    const reminderType = ReminderTypes.COMPLETE_IMPROVEMENT_PLAN;
+    const reminderType = ReminderTypes.REVIEW_IMPROVEMENT_PLAN;
 
     const createReminders = (collection, docType) => {
       const query = {
-        'improvementPlan.targetDate': {
-          $gt: startDate,
-          $lt: endDate
+        'improvementPlan.reviewDates.date': {
+          $gte: startDate,
+          $lte: endDate
         }
       };
 
       collection.find(query).forEach((doc) => {
-        this._reminders.push({ doc, docType, reminderType });
+        const reviewDates = _(doc.improvementPlan.reviewDates).sortBy('date');
+
+        const reviewDate = _(reviewDates).find(({ date }) => {
+          return (date >= startDate) && (date <= endDate);
+        });
+
+        reviewDate && this._reminders.push({
+          doc, docType, dateConfig, reminderType, date: reviewDate.date
+        });
       });
     };
 
@@ -156,7 +180,13 @@ export default class ReminderSender {
 
   _sendReminders() {
     _(this._reminders).each((reminder) => {
-      const config = ReminderConfig[reminder.reminderType];
+      const { date, dateConfig, reminderType } = reminder;
+
+      if (!this._shouldSendReminder(date, dateConfig)) {
+        return;
+      }
+
+      const config = ReminderConfig[reminderType];
 
       const args = {
         org: this._organization,
@@ -169,28 +199,79 @@ export default class ReminderSender {
 
       const receivers = config.receivers(args);
 
-      const templateData = {
+      const emailTemplateData = {
         organizationName: this._organization.name,
-        title: text,
+        title: text
       };
 
+      const url = config.url(args);
+      url && _(emailTemplateData).extend({
+        button: {
+          label: 'View document',
+          url
+        }
+      });
+
       new NotificationSender({
-        templateName: '',
+        templateName: REMINDER_EMAIL_TEMPLATE,
         recipients: receivers,
         emailSubject: title,
-        templateData
+        templateData: emailTemplateData
       }).sendEmail();
     });
   }
 
   _getDateRange(before, after) {
+    const dateConfigPattern = {
+      timeValue: Number,
+      timeUnit: String
+    };
+
+    _([before, after]).each((config) => {
+      if (!Match.test(config, dateConfigPattern)) {
+        throw new Error(
+          `${JSON.stringify(config)} is not a valid reminder configuration`
+        );
+      }
+    });
+
     const duration = moment.duration(before.timeValue, before.timeUnit);
     duration.add(after.timeValue, after.timeUnit);
 
-    const startDate = moment().subtract(duration).toDate();
-    const endDate = moment().add(duration).toDate();
+    const startDate = moment(this._date)
+        .subtract(duration)
+        .tz(this._timezone)
+        .startOf('day')
+        .toDate();
+
+    const endDate = moment(this._date)
+        .add(duration)
+        .tz(this._timezone)
+        .startOf('day')
+        .toDate();
 
     return { startDate, endDate };
+  }
+
+  _shouldSendReminder(date, dateConfig) {
+    const { start, interval } = dateConfig;
+    const today = this._date;
+
+    const startDate = moment(today)
+        .subtract(start.timeValue, start.timeUnit)
+        .tz(this._timezone)
+        .startOf('day')
+        .toDate();
+
+    let temp = startDate;
+
+    while (moment(temp).isSameOrBefore(today)) {
+      if (moment(temp).isSame(today)) {
+        return true;
+      }
+
+      temp = moment(temp).add(interval.timeValue, interval.timeUnit).toDate();
+    }
   }
 
 }
