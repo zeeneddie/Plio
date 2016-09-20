@@ -73,6 +73,11 @@ Template.Risks_List.viewmodel({
   _getSearchQuery() {
     return this.searchObject('searchText', [{ name: 'sequentialId' }, { name: 'title' }]);
   },
+  _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
+    return this.searchText()
+      ? { sort: { sequentialId: 1, title: 1 } }
+      : defaults;
+  },
   types() {
     const organizationId = this.organizationId();
     const mainQuery = {
@@ -82,7 +87,7 @@ Template.Risks_List.viewmodel({
 
     const mapper = (type) => {
       const query = { ...mainQuery, typeId: type._id };
-      const items = this._getRisksByQuery(query).fetch();
+      const items = this._getRisksByQuery(query, this._getSearchOptions()).fetch();
 
       return {
         ...type,
@@ -99,7 +104,7 @@ Template.Risks_List.viewmodel({
 
     const uncategorized = ((() => {
       const filterFn = risk => !types.find(type => Object.is(type._id, risk.typeId));
-      const items = this._getRisksByQuery(mainQuery).fetch().filter(filterFn);
+      const items = this._getRisksByQuery(mainQuery, this._getSearchOptions()).fetch().filter(filterFn);
 
       return {
         organizationId,
@@ -117,7 +122,7 @@ Template.Risks_List.viewmodel({
   statuses() {
     const mapper = (status) => {
       const query = { status, ...this._getSearchQuery() };
-      const items = this._getRisksByQuery(query).fetch();
+      const items = this._getRisksByQuery(query, this._getSearchOptions()).fetch();
 
       return { status, items };
     };
@@ -137,7 +142,7 @@ Template.Risks_List.viewmodel({
         ...mainQuery,
         departmentsIds: department._id
       };
-      const items = this._getRisksByQuery(query).fetch();
+      const items = this._getRisksByQuery(query, this._getSearchOptions()).fetch();
 
       return { ...department, items };
     };
@@ -152,7 +157,7 @@ Template.Risks_List.viewmodel({
     const uncategorized = ((() => {
       const filterFn = risk => !departments.find(department =>
         risk.departmentsIds.includes(department._id));
-      const items = this._getRisksByQuery(mainQuery).fetch().filter(filterFn);
+      const items = this._getRisksByQuery(mainQuery, this._getSearchOptions()).fetch().filter(filterFn);
 
       return {
         organizationId,
@@ -169,7 +174,7 @@ Template.Risks_List.viewmodel({
   },
   risksDeleted() {
     const query = { ...this._getSearchQuery(), isDeleted: true };
-    const options = { sort: { deletedAt: -1 } };
+    const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
     return this._getRisksByQuery(query, options).fetch();
   },
   onSearchInputValue() {

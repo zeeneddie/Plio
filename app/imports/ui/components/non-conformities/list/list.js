@@ -78,10 +78,15 @@ Template.NC_List.viewmodel({
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
+  _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
+    return this.searchText()
+      ? { sort: { sequentialId: 1, title: 1 } }
+      : defaults;
+  },
   magnitude() {
     const mapper = (m) => {
       const query = { magnitude:m.value, ...this._getSearchQuery() };
-      const items = this._getNCsByQuery(query).fetch();
+      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
 
       return { ...m, items };
     };
@@ -91,7 +96,7 @@ Template.NC_List.viewmodel({
   statuses() {
     const mapper = (status) => {
       const query = { status, ...this._getSearchQuery() };
-      const items = this._getNCsByQuery(query).fetch();
+      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
 
       return { status, items };
     };
@@ -111,7 +116,7 @@ Template.NC_List.viewmodel({
         ...mainQuery,
         departmentsIds: department._id
       };
-      const items = this._getNCsByQuery(query).fetch();
+      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
 
       return { ...department, items };
     };
@@ -126,7 +131,7 @@ Template.NC_List.viewmodel({
     const uncategorized = ((() => {
       const filterFn = nc => !departments.find(department =>
         nc.departmentsIds.includes(department._id));
-      const items = this._getNCsByQuery(mainQuery).fetch().filter(filterFn);
+      const items = this._getNCsByQuery(mainQuery, this._getSearchOptions()).fetch().filter(filterFn);
 
       return {
         organizationId,
@@ -143,7 +148,7 @@ Template.NC_List.viewmodel({
   },
   NCsDeleted() {
     const query = { ...this._getSearchQuery(), isDeleted: true };
-    const options = { sort: { deletedAt: -1 } };
+    const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
     return this._getNCsByQuery(query, options).fetch();
   },
   calculateTotalCost(items) {
