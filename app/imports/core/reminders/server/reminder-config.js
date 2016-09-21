@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import pluralize from 'pluralize';
 
 import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
@@ -115,16 +116,42 @@ const getDocUrl = ({ docType, ...rest }) => {
   }
 };
 
+const getDiffInDays = (targetDate, timezone) => {
+  const today = moment().tz(timezone).startOf('day').toDate();
+  const diff = moment(targetDate).diff(today);
+  const days = Math.abs(moment.duration(diff).asDays());
+
+  return `${days} ${pluralize('day', days)}`;
+};
+
 const ReminderConfig = {
 
   [ReminderTypes.COMPLETE_ANALYSIS]: {
-    title: 'Root cause analysis must be completed',
-    text: 'Root cause analysis of {{problemDesc}} {{{problemName}}} must be completed on {{date}}',
-    data: ({ doc, docType, date, org }) => {
+    title: {
+      beforeDue:
+        'Root cause analysis of {{problemDesc}} {{{problemName}}} is {{diff}} before due',
+      dueToday:
+        'Root cause analysis of {{problemDesc}} {{{problemName}}} is due today',
+      overdue:
+        'Root cause analysis of {{problemDesc}} {{{problemName}}} is {{diff}} overdue'
+    },
+    text: {
+      beforeDue:
+        'You have been asked to complete a root cause analysis of {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
+      dueToday:
+        'You have been asked to complete a root cause analysis of {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is due today.',
+      overdue:
+        'You have been asked to complete a root cause analysis of {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.'
+    },
+    data: ({ doc, docType, date, dateConfig, org }) => {
       return {
         problemName: () => getProblemName(doc),
         problemDesc: () => getProblemDesc(docType),
-        date: () => getPrettyDate(date, org.timezone)
+        date: () => getPrettyDate(date, org.timezone),
+        diff: () => getDiffInDays(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -134,13 +161,31 @@ const ReminderConfig = {
   },
 
   [ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS]: {
-    title: 'Update of standards must be completed',
-    text: 'Update of standards related to {{problemDesc}} {{{problemName}}} must be completed on {{date}}',
+    title: {
+      beforeDue:
+        'Update of standards related to {{problemDesc}} {{{problemName}}} is {{diff}} before due',
+      dueToday:
+        'Update of standards related to {{problemDesc}} {{{problemName}}} is due today',
+      overdue:
+        'Update of standards related to {{problemDesc}} {{{problemName}}} is {{diff}} overdue'
+    },
+    text: {
+      beforeDue:
+        'You have been asked to complete an update of standards related to {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
+      dueToday:
+        'You have been asked to complete an update of standards related to {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is due today.',
+      overdue:
+        'You have been asked to complete an update of standards related to {{problemDesc}} ' +
+        '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.'
+    },
     data: ({ doc, docType, date, org }) => {
       return {
         problemName: () => getProblemName(doc),
         problemDesc: () => getProblemDesc(docType),
-        date: () => getPrettyDate(date, org.timezone)
+        date: () => getPrettyDate(date, org.timezone),
+        diff: () => getDiffInDays(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -150,13 +195,30 @@ const ReminderConfig = {
   },
 
   [ReminderTypes.COMPLETE_ACTION]: {
-    title: 'Action must be completed',
-    text: '{{actionDesc}} {{{actionName}}} must be completed on {{date}}',
+    title: '{{actionDesc}} must be completed',
+    title: {
+      beforeDue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} before due',
+      dueToday: '{{actionDescCapitalized}} {{{actionName}}} is due today',
+      overdue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} overdue'
+    },
+    text: {
+      beforeDue:
+        'You have been asked to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is {{diff}} before due.',
+      dueToday:
+        'You have been asked to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is due today.',
+      overdue:
+        'You have been asked to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        ' This action is {{diff}} overdue.'
+    },
     data: ({ doc, docType, date, org }) => {
       return {
         actionName: () => getActionName(doc),
-        actionDesc: () => capitalize(getActionDesc(docType)),
-        date: () => getPrettyDate(date, org.timezone)
+        actionDesc: () => getActionDesc(docType),
+        actionDescCapitalized: () => capitalize(getActionDesc(docType)),
+        date: () => getPrettyDate(date, org.timezone),
+        diff: () => getDiffInDays(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -166,13 +228,29 @@ const ReminderConfig = {
   },
 
   [ReminderTypes.VERIFY_ACTION]: {
-    title: 'Action must be verified',
-    text: '{{actionDesc}} {{{actionName}}} must be verified on {{date}}',
+    title: {
+      beforeDue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} before due',
+      dueToday: '{{actionDescCapitalized}} {{{actionName}}} is due today',
+      overdue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} overdue'
+    },
+    text: {
+      beforeDue:
+        'You have been asked to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is {{diff}} before due.',
+      dueToday:
+        'You have been asked to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is due today.',
+      overdue:
+        'You have been asked to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        ' This action is {{diff}} overdue.'
+    },
     data: ({ doc, docType, date, org }) => {
       return {
         actionName: () => getActionName(doc),
-        actionDesc: () => capitalize(getActionDesc(docType)),
-        date: () => getPrettyDate(date, org.timezone)
+        actionDesc: () => getActionDesc(docType),
+        actionDescCapitalized: () => capitalize(getActionDesc(docType)),
+        date: () => getPrettyDate(date, org.timezone),
+        diff: () => getDiffInDays(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {
@@ -182,13 +260,28 @@ const ReminderConfig = {
   },
 
   [ReminderTypes.REVIEW_IMPROVEMENT_PLAN]: {
-    title: 'Improvement plan must be reviewed',
-    text: 'Improvement plan for {{docDesc}} {{{docName}}} must be reviewed on {{date}}',
+    title: {
+      beforeDue: 'Improvement plan review is {{diff}} before due',
+      dueToday: 'Improvement plan review is due today',
+      overdue: 'Improvement plan review is {{diff}} overdue'
+    },
+    text: {
+      beforeDue:
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
+        'This action is {{diff}} before due.',
+      dueToday:
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
+        'This action is due today.',
+      overdue:
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
+        ' This action is {{diff}} overdue.'
+    },
     data: ({ doc, docType, date, org }) => {
       return {
         docName: () => getDocName(doc, docType),
         docDesc: () => getDocDesc(docType),
-        date: () => getPrettyDate(date, org.timezone)
+        date: () => getPrettyDate(date, org.timezone),
+        diff: () => getDiffInDays(date, org.timezone)
       };
     },
     receivers: ({ doc }) => {

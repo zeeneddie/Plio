@@ -217,7 +217,11 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
 
   const workflowStepTime = organization.workflowStepTime(magnitude);
   const { timeValue, timeUnit } = workflowStepTime;
-  const date = moment().add(timeValue, timeUnit).toDate();
+  const date = moment()
+      .tz(organization.timezone)
+      .startOf('day')
+      .add(timeValue, timeUnit)
+      .toDate();
 
   return date;
 }

@@ -71,13 +71,17 @@ export default class ReminderSender {
         _id: { $in: ids },
         $or: [{
           'analysis.status': 0, // Not completed
+          'analysis.executor': { $exists: true },
           'analysis.targetDate': {
             $gte: startDate,
             $lte: endDate
           }
         }, {
           'analysis.status': 1, // Completed
+          'analysis.completedAt': { $exists: true },
+          'analysis.completedBy': { $exists: true },
           'updateOfStandards.status': 0, // Not completed
+          'updateOfStandards.executor': { $exists: true },
           'updateOfStandards.targetDate': {
             $gte: startDate,
             $lte: endDate
@@ -86,22 +90,24 @@ export default class ReminderSender {
       };
 
       collection.find(query).forEach((doc) => {
-        const reminderData = { doc, docType, dateConfig };
+        const isAnalysisCompleted = doc.analysis.status === 1;
+        let date, reminderType;
 
-        const analysisCompleted = doc.analysis.status === 1;
-        if (analysisCompleted) {
-          _(reminderData).extend({
-            reminderType: ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS,
-            date: doc.updateOfStandards.targetDate
-          });
+        if (isAnalysisCompleted) {
+          date = doc.updateOfStandards.targetDate;
+          reminderType = ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS;
         } else {
-          _(reminderData).extend({
-            reminderType: ReminderTypes.COMPLETE_ANALYSIS,
-            date: doc.analysis.targetDate
-          });
+          date = doc.analysis.targetDate;
+          reminderType = ReminderTypes.COMPLETE_ANALYSIS;
         }
 
-        this._reminders.push(reminderData);
+        if (!this._shouldSendReminder(date, dateConfig)) {
+          return;
+        }
+
+        this._reminders.push({
+          doc, docType, dateConfig, date, reminderType
+        });
       });
     };
 
@@ -112,13 +118,17 @@ export default class ReminderSender {
       'linkedTo.documentId': { $in: [...NCsIds, ...risksIds] },
       $or: [{
         isCompleted: false,
+        toBeCompletedBy: { $exists: true },
         completionTargetDate: {
           $gte: startDate,
           $lte: endDate
         }
       }, {
         isCompleted: true,
+        completedAt: { $exists: true },
+        completedBy: { $exists: true },
         isVerified: false,
+        toBeVerifiedBy: { $exists: true },
         verificationTargetDate: {
           $gte: startDate,
           $lte: endDate
@@ -127,22 +137,24 @@ export default class ReminderSender {
     };
 
     Actions.find(actionQuery).forEach((doc) => {
-      const reminderData = { doc, dateConfig, docType: doc.type };
-
       const isCompleted = doc.isCompleted === true;
+      let date, reminderType;
+
       if (isCompleted) {
-        _(reminderData).extend({
-          reminderType: ReminderTypes.VERIFY_ACTION,
-          date: doc.verificationTargetDate
-        });
+        date = doc.verificationTargetDate;
+        reminderType = ReminderTypes.VERIFY_ACTION;
       } else {
-        _(reminderData).extend({
-          reminderType: ReminderTypes.COMPLETE_ACTION,
-          date: doc.completionTargetDate
-        });
+        date = doc.completionTargetDate;
+        reminderType = ReminderTypes.COMPLETE_ACTION;
       }
 
-      this._reminders.push(reminderData);
+      if (!this._shouldSendReminder(date, dateConfig)) {
+        return;
+      }
+
+      this._reminders.push({
+        doc, dateConfig, date, reminderType, docType: doc.type
+      });
     });
   }
 
@@ -154,6 +166,7 @@ export default class ReminderSender {
 
     const createReminders = (collection, docType) => {
       const query = {
+        'improvementPlan.owner': { $exists: true },
         'improvementPlan.reviewDates.date': {
           $gte: startDate,
           $lte: endDate
@@ -164,7 +177,7 @@ export default class ReminderSender {
         const reviewDates = _(doc.improvementPlan.reviewDates).sortBy('date');
 
         const reviewDate = _(reviewDates).find(({ date }) => {
-          return (date >= startDate) && (date <= endDate);
+          return this._shouldSendReminder(date, dateConfig);
         });
 
         reviewDate && this._reminders.push({
@@ -180,11 +193,7 @@ export default class ReminderSender {
 
   _sendReminders() {
     _(this._reminders).each((reminder) => {
-      const { date, dateConfig, reminderType } = reminder;
-
-      if (!this._shouldSendReminder(date, dateConfig)) {
-        return;
-      }
+      const { date, reminderType } = reminder;
 
       const config = ReminderConfig[reminderType];
 
@@ -194,8 +203,18 @@ export default class ReminderSender {
       };
       const templateData = config.data(args);
 
-      const title = renderTemplate(config.title, templateData);
-      const text = renderTemplate(config.text, templateData);
+      const today = this._date;
+      let templateKey;
+      if (moment(today).isBefore(date)) {
+        templateKey = 'beforeDue';
+      } else if (moment(today).isSame(date)) {
+        templateKey = 'dueToday';
+      } else if (moment(today).isAfter(date)) {
+        templateKey = 'overdue';
+      }
+
+      const title = renderTemplate(config.title[templateKey], templateData);
+      const text = renderTemplate(config.text[templateKey], templateData);
 
       const receivers = config.receivers(args);
 
@@ -207,7 +226,7 @@ export default class ReminderSender {
       const url = config.url(args);
       url && _(emailTemplateData).extend({
         button: {
-          label: 'View document',
+          label: 'Go to this action',
           url
         }
       });
@@ -253,20 +272,25 @@ export default class ReminderSender {
     return { startDate, endDate };
   }
 
-  _shouldSendReminder(date, dateConfig) {
-    const { start, interval } = dateConfig;
-    const today = this._date;
+  _shouldSendReminder(targetDate, dateConfig) {
+    const { start, interval, until } = dateConfig;
 
-    const startDate = moment(today)
+    const startDate = moment(targetDate)
         .subtract(start.timeValue, start.timeUnit)
+        .tz(this._timezone)
+        .startOf('day')
+        .toDate();
+
+    const endDate = moment(targetDate)
+        .add(until.timeValue, until.timeUnit)
         .tz(this._timezone)
         .startOf('day')
         .toDate();
 
     let temp = startDate;
 
-    while (moment(temp).isSameOrBefore(today)) {
-      if (moment(temp).isSame(today)) {
+    while (moment(temp).isSameOrBefore(endDate)) {
+      if (moment(temp).isSame(this._date)) {
         return true;
       }
 
