@@ -552,6 +552,9 @@ export default {
     workItemId() {
       return FlowRouter.getParam('workItemId');
     },
+    queriedWorkItemId() {
+      return FlowRouter.getQueryParam('id');
+    },
     isActiveWorkInboxFilter(filterId) {
       return this.activeWorkInboxFilterId() === parseInt(filterId, 10);
     },

@@ -23,6 +23,15 @@ Organizations.helpers({
     };
 
     return this.workflowDefaults[keyMapping[problemMagnitude]].workflowType;
+  },
+  workflowStepTime(problemMagnitude) {
+    const keyMapping = {
+      [ProblemMagnitudes.MINOR]: 'minorProblem',
+      [ProblemMagnitudes.MAJOR]: 'majorProblem',
+      [ProblemMagnitudes.CRITICAL]: 'criticalProblem'
+    };
+
+    return this.workflowDefaults[keyMapping[problemMagnitude]].stepTime;
   }
 });
 

@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { inspire } from '/imports/api/helpers.js';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 
 Template.StandardsPage.viewmodel({
   share: ['messages' ,'window'],

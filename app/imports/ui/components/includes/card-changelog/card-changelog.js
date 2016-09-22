@@ -91,7 +91,7 @@ Template.CardChangelog.viewmodel({
     }
   },
   getPrettyDate(dateObj) {
-    return this.renderDate(dateObj);
+    return this.renderDate(dateObj, 'DD MMM YYYY, h:mm A');
   },
   logsLength() {
     return this.get(`document-logs-count-${this.documentId()}`);

@@ -25,9 +25,15 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     const typeText = this.getTypeText({ type });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
-    const date = this.renderDate(chooseOne(completedAt, targetDate));
 
-    return `${typeText} ${chooseOne('', 'to be')} ${operation} by ${assignee} ${chooseOne('on', 'by')} ${date}`;
+    let desc = `${typeText} ${chooseOne('', 'to be')} ${operation} by ${assignee}`;
+
+    const date = chooseOne(completedAt, targetDate);
+    if (date) {
+      desc = `${desc} ${chooseOne('on', 'by')} ${this.renderDate(date)}`;
+    }
+
+    return desc;
   },
   getTypeText({ type }) {
     return this.capitalize(type.substr(type.indexOf(' ') + 1));

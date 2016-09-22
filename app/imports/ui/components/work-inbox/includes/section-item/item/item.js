@@ -38,7 +38,7 @@ Template.WorkInbox_Item.viewmodel({
   },
   getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
-    return this.renderDate(date);
+    return date ? this.renderDate(date) : '';
   },
   getUserText({ isDeleted, createdBy, deletedBy }) {
     return isDeleted
