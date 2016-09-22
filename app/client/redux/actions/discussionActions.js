@@ -4,7 +4,8 @@ import {
   SET_LIMIT,
   SET_SORT,
   SET_AT,
-  RESET
+  RESET,
+  SET_LAST_MESSAGE_ID
 } from './types';
 import { initialState } from '../reducers/discussionReducer';
 
@@ -47,5 +48,12 @@ export function reset() {
   return {
     type: RESET,
     payload: initialState
+  }
+}
+
+export function setLastMessageId(id) {
+  return {
+    type: SET_LAST_MESSAGE_ID,
+    payload: id
   }
 }

@@ -4,7 +4,8 @@ import {
   SET_LIMIT,
   SET_SORT,
   SET_AT,
-  RESET
+  RESET,
+  SET_LAST_MESSAGE_ID
 } from '../actions/types';
 
 export const initialState = {
@@ -12,7 +13,8 @@ export const initialState = {
   loading: false,
   limit: 50,
   sort: { createdAt: -1 },
-  at: null
+  at: null,
+  lastMessageId: null
 };
 
 export default function reducer(state=initialState, action) {
@@ -34,6 +36,9 @@ export default function reducer(state=initialState, action) {
       break;
     case RESET:
       return { ...state, ...action.payload };
+      break;
+    case SET_LAST_MESSAGE_ID:
+      return { ...state, lastMessageId: action.payload };
       break;
     default:
       return state;

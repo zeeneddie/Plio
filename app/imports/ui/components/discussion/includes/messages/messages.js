@@ -21,7 +21,7 @@ Template.Discussion_Messages.viewmodel({
 	share: 'messages', // _scrollProps, options
 	mixin: ['discussions', 'messages', 'standard', 'user', 'utils', 'notifications'],
 	isReady: true,
-	lastMessage: new Mongo.Collection('lastDiscussionMessage'),
+	// lastMessage: new Mongo.Collection('lastDiscussionMessage'),
 	onCreated(template) {
 		template.autorun(() => {
 			const discussionId = this.discussionId();
@@ -77,7 +77,6 @@ Template.Discussion_Messages.viewmodel({
 		return getFormattedDate(get(this.discussion(), 'startedAt'), 'MMMM Do, YYYY');
 	},
 	messages() {
-
 		const messages = (() => {
 			const options = {
   			sort: { createdAt: 1 }

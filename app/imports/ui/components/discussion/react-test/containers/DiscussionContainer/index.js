@@ -11,9 +11,11 @@ class DiscussionContainer extends React.Component {
 
     bulkUpdateViewedBy.call({ discussionId });
 
-    dispatch(reset());
-
     dispatch(setAt(FlowRouter.getQueryParam('at')));
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(reset());
   }
 
   render() {

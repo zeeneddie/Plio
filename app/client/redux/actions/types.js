@@ -9,3 +9,5 @@ export const SET_SORT = 'SET_SORT';
 export const SET_AT = 'SET_AT';
 
 export const RESET = 'RESET';
+
+export const SET_LAST_MESSAGE_ID = 'SET_LAST_MESSAGE_ID';

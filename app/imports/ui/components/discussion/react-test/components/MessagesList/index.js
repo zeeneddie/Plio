@@ -39,6 +39,7 @@ export default class MessagesList extends React.Component {
     const { chat } = this.refs;
 
     if (shouldScroll) {
+      // TODO: Need to find a way to do the same when scrolling down
       $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
 
       shouldScroll = false;
@@ -107,7 +108,7 @@ export default class MessagesList extends React.Component {
   }
 
   _loadMore(sortDir) {
-    const { loading, limit, dispatch, messages = [] } = this.props;
+    const { loading, limit, dispatch, messages = [], lastMessageId } = this.props;
 
     if (loading) return;
 
@@ -136,7 +137,10 @@ export default class MessagesList extends React.Component {
     } else {
       // downscroll
       if ($('.infinite-load-newer').isAlmostVisible()) {
-        dispatchAll();
+        // load if the last message of discussion is not equal to the last rendered message
+        if (!Object.is(get(message, '_id'), lastMessageId)) {
+          dispatchAll();
+        }
       }
     }
   }

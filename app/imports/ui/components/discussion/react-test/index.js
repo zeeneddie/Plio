@@ -17,3 +17,7 @@ Template.React_Test.onRendered(function() {
     this.$('#discussion')[0]
   );
 });
+
+Template.React_Test.onDestroyed(function() {
+  ReactDOM.unmountComponentAtNode(this.$('#discussion')[0]);
+});

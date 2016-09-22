@@ -2,13 +2,16 @@ import React from 'react';
 import { composeAll, composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import uniqBy from 'lodash.uniqby';
+import get from 'lodash.get';
 
 import MessagesList from '../../components/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
-import { setMessages, setLoading } from '/client/redux/actions/discussionActions';
-import store from '/client/redux/store';
+import { setMessages, setLoading, setLastMessageId } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
+import { extractIds } from '/imports/api/helpers.js';
+
+const lastDiscussionMessage = new Mongo.Collection('lastDiscussionMessage');
 
 const getDiscussionState = () => getState('discussion');
 
@@ -20,8 +23,10 @@ const onPropsChange = (props, onData) => {
     sort = { createdAt: -1 },
     at = null
   } = props;
+  console.log(props);
 
   const subscription = Meteor.subscribe('messages', discussionId, { limit, sort, at });
+  const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
 
   dispatch(setLoading(true));
 
@@ -50,11 +55,15 @@ const onPropsChange = (props, onData) => {
 
     dispatch(setLoading(false));
     dispatch(setMessages(newMessages));
+    dispatch(setLastMessageId(get(lastDiscussionMessage.findOne(), 'lastMessageId')));
 
     onData(null, getDiscussionState());
   }
 
-  return () => subscription.stop();
+  return () => {
+    subscription.stop();
+    lastMessageSubscription.stop();
+  }
 };
 
 export default composeAll(
