@@ -1,7 +1,7 @@
 import React from 'react';
 import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 
-import MessagesForm from '../../components/Discussion/MessagesForm';
+import MessagesForm from '../../components/MessagesForm';
 import { handleMethodResult, $scrollToBottom } from '/imports/api/helpers.js';
 import { insert } from '/imports/api/messages/methods.js';
 

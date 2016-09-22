@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import messages from './messagesReducer';
+import discussion from './discussionReducer';
 
 export default combineReducers({
-  messages
+  discussion
 });

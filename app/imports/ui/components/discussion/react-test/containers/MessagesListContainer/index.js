@@ -1,44 +1,57 @@
 import React from 'react';
 import { composeAll, composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
+import uniqBy from 'lodash.uniqby';
 
-import MessagesList from '../../components/Discussion/MessagesList';
+import MessagesList from '../../components/MessagesList';
 import { Messages } from '/imports/api/messages/messages.js';
-import { setMessages, setLoading } from '/client/redux/actions/messagesActions';
+import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { setMessages, setLoading } from '/client/redux/actions/discussionActions';
 import store from '/client/redux/store';
-import { $scrollToBottom } from '/imports/api/helpers.js';
+import { getState } from '/client/redux/store';
 
-const getMessagesState = () => store.getState().messages;
+const getDiscussionState = () => getState('discussion');
 
-const onPropsChange = ({ discussionId, limit = 50, dispatch }, onData) => {
-  const subscription = Meteor.subscribe('messages', discussionId, { limit });
-  const $chat = $('.chat-content');
-  let prevChatScrollTop, prevChatScrollHeight;
+const onPropsChange = (props, onData) => {
+  const {
+    discussionId,
+    dispatch,
+    limit = 50,
+    sort = { createdAt: -1 },
+    at = null
+  } = props;
+
+  const subscription = Meteor.subscribe('messages', discussionId, { limit, sort, at });
 
   dispatch(setLoading(true));
 
-  const state = getMessagesState();
+  const state = getDiscussionState();
 
   if (state.messages.length) {
     onData(null, state);
-
-    prevChatScrollTop = $chat.scrollTop();
-    prevChatScrollHeight = $chat.prop('scrollHeight');
   }
 
   if (subscription.ready()) {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
+    const newMessages = ((() => {
+      if (at) {
+        const allMessages = getDiscussionState().messages.concat(messages);
+        const uniqMessages = uniqBy(allMessages, '_id');
+        const sorter = ({ createdAt:c1 }, { createdAt:c2 }) => c1 - c2;
+        const sortedMessages = uniqMessages.sort(sorter);
+
+        return sortedMessages;
+      }
+
+      return messages;
+    })());
 
     dispatch(setLoading(false));
-    dispatch(setMessages(messages));
+    dispatch(setMessages(newMessages));
 
-    onData(null, getMessagesState());
-
-    if (!_.every([prevChatScrollTop, prevChatScrollHeight], _.isUndefined)) {
-      $chat.scrollTop(prevChatScrollTop + $chat.prop('scrollHeight') - prevChatScrollHeight);
-    }
+    onData(null, getDiscussionState());
   }
 
   return () => subscription.stop();
@@ -46,5 +59,5 @@ const onPropsChange = ({ discussionId, limit = 50, dispatch }, onData) => {
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  connect(store => _.pick(store.messages, 'limit'))
+  connect(store => _.pick(store.discussion, 'limit', 'sort', 'at'))
 )(MessagesList);

@@ -155,8 +155,6 @@ const $isScrolledElementVisible = (el, container) => {
   const elemTop = elPosition && elPosition.top;
   const elemBottom = elPosition && elemTop + $(el).height();
 
-  console.log(elemTop, containerTop);
-
   return ((elemBottom < containerBottom) && (elemTop >= containerTop));
 }
 

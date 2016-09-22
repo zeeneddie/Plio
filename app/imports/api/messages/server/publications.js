@@ -89,7 +89,7 @@ Meteor.publishComposite('messages', function(discussionId, {
 		find() {
 			if (at) {
 				const msg = Object.assign({}, Messages.findOne({ _id: at }));
-				const getMsgs = (initial = {}, direction = -1) => {
+				const getMsgs = (initial = {}, direction) => {
 					const sign = direction > 0 ? '$gt' : '$lt';
 					const query = {
 						createdAt: { [sign]: get(initial, 'createdAt') }

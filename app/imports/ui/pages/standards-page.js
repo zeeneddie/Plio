@@ -37,12 +37,12 @@ Template.StandardsPage.viewmodel({
         });
 
         if (discussionId) {
-          const messagesHandle = MessageSubs.subscribe('messages', discussionId, options);
-          if (!this.isInitialMessagesReady()) {
-            _subHandlers = _subHandlers.concat([messagesHandle]);
-
-            this.isInitialMessagesReady(messagesHandle.ready());
-          }
+          // const messagesHandle = MessageSubs.subscribe('messages', discussionId, options);
+          // if (!this.isInitialMessagesReady()) {
+          //   _subHandlers = _subHandlers.concat([messagesHandle]);
+          //
+          //   this.isInitialMessagesReady(messagesHandle.ready());
+          // }
         }
       } else {
         _subHandlers = [

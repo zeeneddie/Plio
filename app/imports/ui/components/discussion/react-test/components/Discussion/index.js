@@ -1,14 +1,13 @@
 import React from 'react';
+
 import MessagesListContainer from '../../containers/MessagesListContainer';
 import MessagesFormContainer from '../../containers/MessagesFormContainer';
 
-export default class Discussion extends React.Component {
-  render() {
-    return (
-      <div className="chat">
-        <MessagesListContainer {...this.props}/>
-        <MessagesFormContainer {...this.props}/>
-      </div>
-    )
-  }
-};
+const Discussion = (props) => (
+  <div className="chat">
+    <MessagesListContainer {...props}/>
+    <MessagesFormContainer {...props}/>
+  </div>
+);
+
+export default Discussion;
