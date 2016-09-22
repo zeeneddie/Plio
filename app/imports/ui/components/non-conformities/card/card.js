@@ -4,11 +4,22 @@ import get from 'lodash.get';
 import { ActionTypes } from '/imports/api/constants.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+
+  onCreated(template) {
+    template.autorun(() => {
+      const _id = this.NCId();
+      const organizationId = this.organizationId();
+      if (_id && organizationId) {
+        DocumentCardSubs.subscribe('nonConformityCard', { _id, organizationId });
+      }
+    });
+  },
   ActionTypes() {
     return ActionTypes;
   },

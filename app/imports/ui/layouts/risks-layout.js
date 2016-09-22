@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, UserSubs, DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Risks_Layout.viewmodel({
   mixin: ['organization', 'risk'],
@@ -14,18 +14,16 @@ Template.Risks_Layout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards', _id),
-        this.templateInstance.subscribe('lessons', _id),
+        DocumentsListSubs.subscribe('standardsList', _id),
         this.templateInstance.subscribe('departments', _id),
         this.templateInstance.subscribe('riskTypes', _id),
-        this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('nonConformities', _id)
+        DocumentsListSubs.subscribe('nonConformitiesList', _id)
       ];
 
       if (this.isActiveRiskFilter(4)) {
-        _subHandlers.push(this.templateInstance.subscribe('risks', _id, true));
+        _subHandlers.push(DocumentsListSubs.subscribe('risksList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('risks', _id));
+        _subHandlers.push(DocumentsListSubs.subscribe('risksList', _id));
       }
 
       this._subHandlers(_subHandlers);

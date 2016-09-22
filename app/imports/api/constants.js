@@ -407,6 +407,66 @@ const UncategorizedTypeSection = {
   abbreviation: 'UNC'
 };
 
+const StandardsListProjection = {
+  organizationId: 1,
+  title: 1,
+  typeId: 1,
+  sectionId: 1,
+  nestingLevel: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const RisksListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  identifiedAt: 1,
+  typeId: 1,
+  departmentsIds: 1,
+  status: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const NonConformitiesListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  cost: 1,
+  createdAt: 1,
+  magnitude: 1,
+  status: 1,
+  departmentsIds: 1,
+  viewedBy: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const WorkItemsListProjection = {
+  organizationId: 1,
+  targetDate: 1,
+  type: 1,
+  status: 1,
+  linkedDoc: 1,
+  assigneeId: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isCompleted: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -449,5 +509,9 @@ export {
   SystemName,
   InvitationStatuses,
   UnreadMessages,
-  UncategorizedTypeSection
+  UncategorizedTypeSection,
+  StandardsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
 };

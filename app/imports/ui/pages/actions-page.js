@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.ActionsPage.viewmodel({
   share: 'window',
@@ -14,7 +15,7 @@ Template.ActionsPage.viewmodel({
     template.subscribe('lessons', _id);
     template.subscribe('departments', _id);
     template.subscribe('riskTypes', _id);
-    template.subscribe('standards', _id);
+    DocumentsListSubs.subscribe('standardsList', _id);
     template.subscribe('occurrencesByNCIds', NCIds);
   }
 });

@@ -2,11 +2,22 @@ import { Template } from 'meteor/templating';
 
 import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
 
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+
+  onCreated(template) {
+    template.autorun(() => {
+      const _id = this.riskId();
+      const organizationId = this.organizationId();
+      if (_id && organizationId) {
+        DocumentCardSubs.subscribe('riskCard', { _id, organizationId });
+      }
+    });
+  },
   ActionTypes() {
     return ActionTypes;
   },
