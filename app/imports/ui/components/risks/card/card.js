@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { ActionTypes } from '/imports/api/constants.js';
+import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
 
@@ -24,7 +24,7 @@ Template.Risks_Card_Read.viewmodel({
   type() {
     const risk = Object.assign({}, this.risk());
     const type = RiskTypes.findOne({ _id: risk.typeId });
-    return type;
+    return type || UncategorizedTypeSection;
   },
   onOpenEditModalCb() {
     return this.openEditModal.bind(this);

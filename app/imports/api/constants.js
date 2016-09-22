@@ -259,35 +259,35 @@ const OrganizationDefaults = {
 
 const DefaultStandardTypes = [
   {
-    name: 'Policy',
+    title: 'Policy',
     abbreviation: 'POL'
   },
   {
-    name: 'Checklist',
+    title: 'Checklist',
     abbreviation: 'CHK'
   },
   {
-    name: 'Standard Operating Procedure',
+    title: 'Standard Operating Procedure',
     abbreviation: 'SOP'
   },
   {
-    name: 'Work instruction',
+    title: 'Work instruction',
     abbreviation: 'WRK'
   },
   {
-    name: 'Product specification',
+    title: 'Product specification',
     abbreviation: 'SPC'
   },
   {
-    name: 'Test method',
+    title: 'Test method',
     abbreviation: 'TST'
   },
   {
-    name: 'Regulation',
+    title: 'Regulation',
     abbreviation: 'REG'
   },
   {
-    name: 'Other',
+    title: 'Other',
     abbreviation: 'DOC'
   }
 ];
@@ -401,6 +401,12 @@ const TruncatedStringLengths = {
   c40: 40
 };
 
+const UncategorizedTypeSection = {
+  _id: 'uncategorized',
+  title: 'Uncategorized',
+  abbreviation: 'UNC'
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -442,5 +448,6 @@ export {
   WorkflowTypes,
   SystemName,
   InvitationStatuses,
-  UnreadMessages
+  UnreadMessages,
+  UncategorizedTypeSection
 };

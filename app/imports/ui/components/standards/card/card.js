@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
-import { ActionTypes } from '/imports/api/constants.js';
+import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
@@ -63,11 +63,15 @@ Template.Standards_Card_Read.viewmodel({
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
-    return StandardsBookSections.findOne({ _id });
+    const section = StandardsBookSections.findOne({ _id });
+
+    return section || UncategorizedTypeSection;
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardTypes.findOne({ _id });
+    let type = StandardTypes.findOne({ _id });
+
+    return type || UncategorizedTypeSection;
   },
   _getNCsQuery() {
     return { standardsIds: get(this.standard(), '_id') };

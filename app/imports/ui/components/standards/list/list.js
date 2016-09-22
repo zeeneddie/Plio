@@ -187,7 +187,7 @@ Template.StandardsList.viewmodel({
     // Standard types for this organization
     const types = ((() => {
       const query = { organizationId };
-      const options = { sort: { name: 1 } };
+      const options = { sort: { title: 1 } };
       return StandardTypes.find(query, options).fetch();
     })());
 
@@ -223,7 +223,7 @@ Template.StandardsList.viewmodel({
           organizationId,
           _id: 'StandardTypes.Uncategorized', // We need a fake id here for searching purposes
           items: standards,
-          name: 'Uncategorized',
+          title: 'Uncategorized',
           typeTemplate: 'StandardSectionItem',
           ...this._getTotalUnreadMessagesHtml(standards)
         });
