@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardSubcardsLayout.viewmodel({
   mixin: ['organization', 'nonconformity'],
@@ -12,10 +12,10 @@ Template.StandardSubcardsLayout.viewmodel({
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        this.templateInstance.subscribe('organizationUsers', userIds),
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
         DocumentsListSubs.subscribe('standardsList', _id),
-        this.templateInstance.subscribe('departments', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
         DocumentsListSubs.subscribe('risksList', _id)
       ];
 

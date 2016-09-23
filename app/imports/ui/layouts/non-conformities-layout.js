@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs, DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, UserSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.NC_Layout.viewmodel({
   mixin: ['organization', 'nonconformity'],
@@ -16,7 +16,7 @@ Template.NC_Layout.viewmodel({
         UserSubs.subscribe('organizationUsers', userIds),
         DocumentsListSubs.subscribe('standardsList', _id),
         DocumentsListSubs.subscribe('risksList', _id),
-        this.templateInstance.subscribe('departments', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
       ];
 
       // this.isActiveNCFilter(4) is true if deleted filter is active

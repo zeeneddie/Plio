@@ -13,8 +13,9 @@ Template.NC_Card_Read.viewmodel({
 
   onCreated(template) {
     template.autorun(() => {
-      const _id = this.NCId();
+      const _id = this._id();
       const organizationId = this.organizationId();
+
       if (_id && organizationId) {
         DocumentCardSubs.subscribe('nonConformityCard', { _id, organizationId });
       }

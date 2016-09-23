@@ -6,6 +6,7 @@ import { Standards } from '/imports/api/standards/standards.js';
 import { Files } from '/imports/api/files/files.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Actions } from '/imports/api/actions/actions.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { isOrgMember } from '../../checkers.js';
 import { NonConformitiesListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
@@ -65,6 +66,10 @@ Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) 
     }, {
       find({ _id }) {
         return Actions.find({ 'linkedTo.documentId': _id });
+      }
+    }, {
+      find({ _id }) {
+        return Occurrences.find({ nonConformityId: _id });
       }
     }]
   }

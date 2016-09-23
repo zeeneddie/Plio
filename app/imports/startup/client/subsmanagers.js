@@ -22,6 +22,9 @@ const DocumentCardSubs = new SubsManager({
 const DocumentsListSubs = new SubsManager({
   expireIn: 10
 });
+const OrgSettingsDocSubs = new SubsManager({
+  expireIn: 15
+});
 
 export {
   OrgSubs,
@@ -31,5 +34,6 @@ export {
   DiscussionSubs,
   MessageSubs,
   DocumentCardSubs,
-  DocumentsListSubs
+  DocumentsListSubs,
+  OrgSettingsDocSubs
 };

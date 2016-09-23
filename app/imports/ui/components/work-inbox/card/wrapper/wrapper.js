@@ -12,7 +12,7 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
 
   onCreated(template) {
     template.autorun(() => {
-      const _id = this.workItemId();
+      const _id = this._id();
       const organizationId = this.organizationId();
       if (_id && organizationId) {
         DocumentCardSubs.subscribe('workItemCard', { _id, organizationId });

@@ -69,6 +69,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
         find(nc) {
           return Actions.find({ 'linkedTo.documentId': nc._id });
         },
+      }, {
         find(nc) {
           return WorkItems.find({ 'linkedDoc._id': nc._id });
         }
@@ -81,6 +82,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
         find(risk) {
           return Actions.find({ 'linkedTo.documentId': risk._id });
         },
+      }, {
         find(risk) {
           return WorkItems.find({ 'linkedDoc._id': risk._id });
         }

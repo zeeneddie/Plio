@@ -11,7 +11,7 @@ Template.Risks_Card_Read.viewmodel({
 
   onCreated(template) {
     template.autorun(() => {
-      const _id = this.riskId();
+      const _id = this._id();
       const organizationId = this.organizationId();
       if (_id && organizationId) {
         DocumentCardSubs.subscribe('riskCard', { _id, organizationId });

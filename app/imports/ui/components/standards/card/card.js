@@ -16,7 +16,7 @@ Template.Standards_Card_Read.viewmodel({
 
   onCreated(template) {
     template.autorun(() => {
-      const _id = this.standardId();
+      const _id = this._id();
       const organizationId = this.organizationId();
       if (_id && organizationId) {
         DocumentCardSubs.subscribe('standardCard', { _id, organizationId });

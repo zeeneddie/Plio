@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs, DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, UserSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardsLayout.viewmodel({
   mixin: ['organization', 'standard'],
@@ -15,9 +15,9 @@ Template.StandardsLayout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards-book-sections', _id),
-        this.templateInstance.subscribe('standards-types', _id),
-        this.templateInstance.subscribe('departments', _id),
+        OrgSettingsDocSubs.subscribe('standards-book-sections', _id),
+        OrgSettingsDocSubs.subscribe('standards-types', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
       ];
 
       if (this.isActiveStandardFilter(3)) {
