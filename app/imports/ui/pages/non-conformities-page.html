@@ -1,6 +1,6 @@
 <template name="NC_Page">
   {{#Page}}
-    {{> NC_List}}
+    {{> Problems_ListWrapper (listArgs)}}
   {{else}}
     {{> NC_Card_Read _id=NCId}}
   {{/Page}}

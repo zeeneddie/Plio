@@ -5,17 +5,18 @@ import { Risks } from '../risks.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { isOrgMember } from '../../checkers.js';
 import { Files } from '/imports/api/files/files.js';
+import { RisksListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 
 const getRiskFiles = (risk) => {
   let fileIds = risk.fileIds || [];
   const IPFileIds = risk.improvementPlan && risk.improvementPlan.fileIds || [];
   fileIds = fileIds.concat(IPFileIds);
-  
+
   return Files.find({ _id: { $in: fileIds } });
 };
 
-Meteor.publishComposite('risks', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {
     find() {
       const userId = this.userId;
@@ -23,11 +24,40 @@ Meteor.publishComposite('risks', function(organizationId, isDeleted = { $in: [nu
         return this.ready();
       }
 
-      return Risks.find({ organizationId, isDeleted });
+      return Risks.find({ organizationId, isDeleted }, {
+        fields: RisksListProjection
+      });
+    }
+  }
+});
+
+Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return Risks.find({ _id, organizationId });
     },
     children: [{
       find(risk) {
         return getRiskFiles(risk);
+      }
+    }, {
+      find(risk) {
+        return Standards.find({ _id: risk.standardsIds }, {
+          fileds: { title: 1 }
+        });
+      }
+    }, {
+      find({ _id }) {
+        return LessonsLearned.find({ documentId: _id });
+      }
+    }, {
+      find({ _id }) {
+        return Actions.find({ 'linkedTo.documentId': _id });
       }
     }]
   }

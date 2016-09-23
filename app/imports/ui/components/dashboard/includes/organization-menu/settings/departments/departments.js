@@ -2,13 +2,14 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 import { Departments } from '/imports/api/departments/departments.js';
+import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 
 Template.OrgSettings_Departments.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
   onCreated(template) {
-    template.autorun(() => template.subscribe('departments', this.organizationId()));
+    template.autorun(() => OrgSettingsDocSubs.subscribe('departments', this.organizationId()));
   },
   _lText: 'Department/sector(s)',
   _rText() {

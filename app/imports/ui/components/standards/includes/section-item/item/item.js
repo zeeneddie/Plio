@@ -4,6 +4,7 @@ import { Tracker } from 'meteor/tracker';
 
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
+import { UncategorizedTypeSection } from '/imports/api/constants.js';
 
 Template.Standards_Item_Read.viewmodel({
   share: 'window',
@@ -53,7 +54,7 @@ Template.Standards_Item_Read.viewmodel({
     return StandardTypes.findOne({ _id: typeId });
   },
   typeName() {
-    return this.standardType() && this.standardType().name;
+    return this.standardType() && this.standardType().title || UncategorizedTypeSection.title;
   },
   isNew() {
     //return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());

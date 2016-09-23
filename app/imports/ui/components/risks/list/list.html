@@ -10,7 +10,7 @@
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
-              _query=(_getTypeQuery this)}}
+              items=this.items}}
         {{/each}}
       {{/if}}
 
@@ -18,8 +18,8 @@
         {{#each statuses}}
           {{> ListItem
               template="Risks_SectionItem"
-              title=(getStatusName this)
-              _query=(_getStatusQuery this)}}
+              title=(getStatusName this.status)
+              items=this.items}}
         {{/each}}
       {{/if}}
 
@@ -29,12 +29,12 @@
               template="Risks_SectionItem"
               title=this.name
               closeAllOnCollapse=false
-              _query=(_getDepartmentQuery this)}}
+              items=this.items}}
         {{/each}}
       {{/if}}
 
       {{#if isActiveRiskFilter 4}}
-        {{#each risksDeleted}}
+        {{#each deleted}}
           {{> Risks_Item}}
         {{/each}}
       {{/if}}

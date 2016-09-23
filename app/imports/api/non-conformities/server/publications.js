@@ -4,7 +4,11 @@ import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.
 import { NonConformities } from '../non-conformities.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { Files } from '/imports/api/files/files.js';
+import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import { Actions } from '/imports/api/actions/actions.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { isOrgMember } from '../../checkers.js';
+import { NonConformitiesListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 
 import get from 'lodash.get';
@@ -20,7 +24,7 @@ const getNCOtherFiles = (nc) => {
   return Files.find({ _id: { $in: fileIds } });
 };
 
-Meteor.publishComposite('nonConformities', function (organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('nonConformitiesList', function (organizationId, isDeleted = { $in: [null, false] }) {
   return {
     find() {
       const userId = this.userId;
@@ -28,11 +32,44 @@ Meteor.publishComposite('nonConformities', function (organizationId, isDeleted =
         return this.ready();
       }
 
-      return NonConformities.find({ organizationId, isDeleted });
+      return NonConformities.find({ organizationId, isDeleted }, {
+        fields: NonConformitiesListProjection
+      });
+    }
+  }
+});
+
+Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return NonConformities.find({ _id, organizationId });
     },
     children: [{
       find(nc) {
         return getNCOtherFiles(nc);
+      }
+    }, {
+      find(nc) {
+        return Standards.find({ _id: nc.standardsIds }, {
+          fileds: { title: 1 }
+        });
+      }
+    }, {
+      find({ _id }) {
+        return LessonsLearned.find({ documentId: _id });
+      }
+    }, {
+      find({ _id }) {
+        return Actions.find({ 'linkedTo.documentId': _id });
+      }
+    }, {
+      find({ _id }) {
+        return Occurrences.find({ nonConformityId: _id });
       }
     }]
   }

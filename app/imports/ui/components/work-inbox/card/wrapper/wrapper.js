@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { WorkItemsStore } from '/imports/api/constants.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
 
 const { LINKED_TYPES } = WorkItemsStore;
@@ -8,6 +9,16 @@ const { LINKED_TYPES } = WorkItemsStore;
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   isRendered: false,
   mixin: ['workInbox', 'organization', 'utils'],
+
+  onCreated(template) {
+    template.autorun(() => {
+      const _id = this._id();
+      const organizationId = this.organizationId();
+      if (_id && organizationId) {
+        DocumentCardSubs.subscribe('workItemCard', { _id, organizationId });
+      }
+    });
+  },
   onRendered() {
     this.isRendered(true);
   },

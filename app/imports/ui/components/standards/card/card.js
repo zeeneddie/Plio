@@ -3,15 +3,26 @@ import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
-import { ActionTypes } from '/imports/api/constants.js';
+import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'window',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
+
+  onCreated(template) {
+    template.autorun(() => {
+      const _id = this._id();
+      const organizationId = this.organizationId();
+      if (_id && organizationId) {
+        DocumentCardSubs.subscribe('standardCard', { _id, organizationId });
+      }
+    });
+  },
   onRendered(template) {
     template.autorun(() => {
       this.collapsed(this.hasDocxAttachment());
@@ -63,11 +74,15 @@ Template.Standards_Card_Read.viewmodel({
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
-    return StandardsBookSections.findOne({ _id });
+    const section = StandardsBookSections.findOne({ _id });
+
+    return section || UncategorizedTypeSection;
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardTypes.findOne({ _id });
+    let type = StandardTypes.findOne({ _id });
+
+    return type || UncategorizedTypeSection;
   },
   _getNCsQuery() {
     return { standardsIds: get(this.standard(), '_id') };
@@ -75,7 +90,7 @@ Template.Standards_Card_Read.viewmodel({
   pathToDiscussion() {
     const params = {
       orgSerialNumber: this.organizationSerialNumber(),
-      standardId: get(this.standard(), '_id')
+      standardId: this.standardId()
     };
     const queryParams = { filter: this.activeStandardFilterId() };
     return FlowRouter.path('standardDiscussion', params, queryParams);
