@@ -1,4 +1,4 @@
-import { Discussions } from './discussions.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
 
 
 export default {

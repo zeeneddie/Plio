@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { WorkItems } from '../work-items.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 

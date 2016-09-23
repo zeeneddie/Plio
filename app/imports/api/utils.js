@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import { check } from 'meteor/check';
 
-import { AvatarPlaceholders } from '/imports/api/constants.js';
+import { AvatarPlaceholders } from '/imports/share/constants.js';
 
 export default Utils = {
   getRandomAvatarUrl() {

@@ -1,6 +1,6 @@
 import curry from 'lodash.curry';
 
-import { Organizations } from '../organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import {
   ORG_CANNOT_CHANGE_SETTINGS,
   ORG_ALREADY_EXISTS,
@@ -24,7 +24,7 @@ import {
   isOrgOwner,
   isOrgMember
 } from '../checkers.js';
-import { checkAndThrow, withUserId } from '../helpers.js';
+import { checkAndThrow, withUserId } from '/imports/share/helpers.js';
 
 export const ORG_EnsureCanChange = (userId, organizationId) => {
   return checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);

@@ -3,9 +3,8 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 
-import { UserRoles } from './constants';
-import { Organizations } from './organizations/organizations.js';
-import { AnalysisStatuses, UserMembership } from './constants.js';
+import { AnalysisStatuses, UserMembership, UserRoles } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import {
   NOT_AN_ORG_MEMBER,
   DOC_NOT_FOUND,

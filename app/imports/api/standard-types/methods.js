@@ -2,11 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsTypeService from './standard-types-service.js';
-import { StandardsTypeSchema } from './standard-types-schema.js';
-import { StandardTypes } from './standard-types.js';
-import { IdSchema, OrganizationIdSchema } from '../schemas.js';
+import { StandardsTypeSchema } from '/imports/share/schemas/standard-types-schema.js';
+import { StandardTypes } from '/imports/share/collections/standard-types.js';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '../helpers.js';
+import { inject } from '/imports/share/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

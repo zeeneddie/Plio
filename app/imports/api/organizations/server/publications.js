@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Organizations } from '../organizations.js';
-import { Departments } from '../../departments/departments.js';
-import { StandardTypes } from '../../standards-types/standards-types.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import {
   StandardsBookSections
-} from '../../standards-book-sections/standards-book-sections.js';
-import { Standards } from '../../standards/standards.js';
-import { LessonsLearned } from '../../lessons/lessons.js';
+} from '/imports/share/collections/standards-book-sections.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -31,10 +31,6 @@ Meteor.publish('invitationInfo', function (invitationId) {
 
   const { _id:invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
 
-  console.log(invitedUserCursor.fetch()[0]);
-  console.log(invitedUserId);
-  console.log(invitationOrgId);
-
   return [
     invitedUserCursor,
     Organizations.find({
@@ -44,7 +40,7 @@ Meteor.publish('invitationInfo', function (invitationId) {
       limit: 1,
       fields: {name: 1, serialNumber: 1}
     })
-  ]
+  ];
 });
 
 const getUserOrganizations = (userId, orgSelector = {}, options = {}) => {

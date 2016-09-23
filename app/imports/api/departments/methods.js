@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Departments } from './departments.js';
-import { DepartmentSchema } from './department-schema';
+import { Departments } from '/imports/share/collections/departments.js';
+import { DepartmentSchema } from '/imports/share/schemas/department-schema';
 import DepartmentService from './department-service.js';
-import { IdSchema, OrganizationIdSchema } from '../schemas.js';
-import { chain } from '../helpers.js';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
+import { chain } from '/imports/share/helpers.js';
 import {
   ORG_EnsureCanChange,
   ORG_EnsureCanChangeChecker,

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 
-import { Organizations } from './organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
 import RisksTypeService from '../risk-types/risk-types-service.js';
 import {
@@ -13,7 +13,7 @@ import {
   OrgMemberRoles,
   UserMembership,
   UserRoles
-} from '../constants.js';
+} from '/imports/share/constants.js';
 import Utils from '../../core/utils.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
 

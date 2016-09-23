@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Departments } from '../departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 import { isOrgMember } from '../../checkers.js';
 
 

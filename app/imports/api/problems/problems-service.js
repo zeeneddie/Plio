@@ -1,10 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Organizations } from '../organizations/organizations.js';
-import { Actions } from '../actions/actions.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Actions } from '/imports/share/collections/actions.js';
 import Utils from '/imports/core/utils.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { WorkItemsStore } from '../constants.js';
+import { WorkItemsStore } from '/imports/share/constants.js';
 
 export default {
 

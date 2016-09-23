@@ -1,7 +1,11 @@
+import moment from 'moment-timezone';
+
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import ReminderSender from '/imports/core/reminders/server/ReminderSender.js';
-import TZOffsets from './tz-offsets.js';
 
+
+// send reminders at 00:00
+const REMINDERS_SENDING_HOUR = 0;
 
 SyncedCron.add({
   name: 'Send reminders',
@@ -11,11 +15,8 @@ SyncedCron.add({
   },
 
   job() {
-    const utcTime = moment().tz('UTC').format('HH:mm');
-    const offsets = TZOffsets[utcTime];
-
     const timezones = _(moment.tz.names()).filter((name) => {
-      return _(offsets).contains(moment.tz(name).format('Z'));
+      return moment().tz(name).hours() === REMINDERS_SENDING_HOUR;
     });
 
     Organizations.find({ timezone: { $in: timezones } }).forEach((org) => {

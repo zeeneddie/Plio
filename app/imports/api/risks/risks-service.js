@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Risks } from './risks.js';
-import { ProblemTypes } from '../constants.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 import ProblemsService from '../problems/problems-service.js';
 

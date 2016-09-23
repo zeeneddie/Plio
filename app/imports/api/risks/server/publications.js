@@ -1,17 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { Risks } from '../risks.js';
-import { Standards } from '/imports/api/standards/standards.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { isOrgMember } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import Counter from '../../counter/server.js';
 
 const getRiskFiles = (risk) => {
   let fileIds = risk.fileIds || [];
   const IPFileIds = risk.improvementPlan && risk.improvementPlan.fileIds || [];
   fileIds = fileIds.concat(IPFileIds);
-  
+
   return Files.find({ _id: { $in: fileIds } });
 };
 

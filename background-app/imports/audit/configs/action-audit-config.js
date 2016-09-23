@@ -7,14 +7,6 @@ import { ActionStatuses, CollectionNames, ProblemTypes, WorkItemsStore } from '/
 import { getCollectionByDocType } from '/imports/api/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
-import {
-  fileIdsField,
-  isDeletedField,
-  notesField,
-  notifyField,
-  ownerIdField,
-  titleField
-} from './reusable-update-handlers.js';
 import NCAuditConfig from './nc-audit-config.js';
 import RiskAuditConfig from './risk-audit-config.js';
 
@@ -339,6 +331,38 @@ export default ActionAuditConfig = {
     },
 
     {
+      field: 'fileIds',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: 'File "{{name}}" added',
+            [ITEM_REMOVED]: 'File removed'
+          }
+        }
+      ],
+      notifications: [
+        {
+          text: {
+            [ITEM_ADDED]: '{{userName}} added file "{{name}}" to {{{docDesc}}}',
+            [ITEM_REMOVED]: '{{userName}} removed file from {{{docDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { fileIds }, newDoc, user }) {
+        const { item:_id } = fileIds;
+        const { name } = Files.findOne({ _id }) || {};
+        const auditConfig = this;
+
+        return {
+          name: () => name,
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+      receivers: getReceivers
+    },
+
+    {
       field: 'isCompleted',
       logs: [
         {
@@ -381,6 +405,46 @@ export default ActionAuditConfig = {
           userName: () => getUserFullNameOrEmail(user)
         };
       },
+      receivers: getReceivers
+    },
+
+    {
+      field: 'isDeleted',
+      logs: [
+        {
+          shouldCreateLog({ diffs: { deletedAt, deletedBy } }) {
+            return deletedAt && deletedBy;
+          },
+          message: {
+            [FIELD_CHANGED]:
+              '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
+          }
+        }
+      ],
+      notifications: [
+        {
+          shouldSendNotification({ diffs: { deletedAt, deletedBy } }) {
+            return deletedAt && deletedBy;
+          },
+          text: {
+            [ChangesKinds.FIELD_CHANGED]:
+              '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+          },
+          title: {
+            [ChangesKinds.FIELD_CHANGED]:
+              '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { isDeleted }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          deleted: () => isDeleted.newValue
+        };
+      }
       receivers: getReceivers
     },
 
@@ -496,6 +560,133 @@ export default ActionAuditConfig = {
     },
 
     {
+      field: 'notes',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Notes set',
+            [FIELD_CHANGED]: 'Notes changed',
+            [FIELD_REMOVED]: 'Notes removed'
+          }
+        }
+      ],
+      notifications: [
+        {
+          text: {
+            [FIELD_ADDED]: '{{userName}} set notes of {{{docDesc}}}',
+            [FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
+            [FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { notes }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+      receivers: getReceivers
+    },
+
+    {
+      field: 'notify',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: '{{item}} was added to notification list',
+            [ITEM_REMOVED]: '{{item}} was removed from notification list'
+          }
+        }
+      ],
+      notifications: [
+        {
+          text: {
+            [ITEM_ADDED]:
+              '{{userName}} added {{item}} to the notification list of {{{docDesc}}}',
+            [ITEM_REMOVED]:
+              '{{userName}} removed {{item}} from the notification list of {{{docDesc}}}'
+          }
+        },
+        {
+          shouldSendNotification({ diffs: { notify: { kind } } }) {
+            return kind === ITEM_ADDED;
+          },
+          text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+          title: 'You have been added to the notification list',
+          emailTemplateData({ newDoc }) {
+            return {
+              button: {
+                label: 'View document',
+                url: this.docUrl(newDoc)
+              }
+            };
+          },
+          receivers({ diffs: { notify }, user }) {
+            const { item:addedUserId } = notify;
+            const userId = getUserId(user);
+
+            return (addedUserId !== userId) ? [addedUserId]: [];
+          }
+        }
+      },
+      data({ diffs: { notify }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          item: () => getUserFullNameOrEmail(notify.item)
+        };
+      },
+      receivers({ diffs: { notify }, newDoc, user }) {
+        const receivers = getNotificationReceivers(newDoc, user);
+        const index = receivers.indexOf(notify.item);
+        (index > -1) && receivers.splice(index, 1);
+
+        return receivers;
+      }
+    },
+
+    {
+      field: 'ownerId',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Owner set to {{newValue}}',
+            [FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
+            [FIELD_REMOVED]: 'Owner removed'
+          }
+        }
+      ],
+      notifications: [
+        {
+          text: {
+            [FIELD_ADDED]:
+              '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
+            [FIELD_CHANGED]:
+              '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+            [FIELD_REMOVED]:
+              '{{userName}} removed owner of {{{docDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { ownerId }, newDoc, user }) {
+        const { newValue, oldValue } = ownerId;
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      },
+      receivers: getReceivers
+    },
+
+    {
       field: 'planInPlace',
       logs: [
         {
@@ -569,6 +760,42 @@ export default ActionAuditConfig = {
         return {
           newValue: () => ActionStatuses[newValue],
           oldValue: () => ActionStatuses[oldValue]
+        };
+      },
+      receivers: getReceivers
+    },
+
+    {
+      field: 'title',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Title set to "{{newValue}}"',
+            [FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]: 'Title removed'
+          }
+        }
+      ],
+      notifications: [
+        {
+          text: {
+            [FIELD_ADDED]:
+              '{{userName}} set title of {{{docDesc}}} to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              '{{userName}} changed title of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              '{{userName}} removed title of {{{docDesc}}}'
+          }
+        }
+      ],
+      data({ diffs: { title }, newDoc, oldDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(oldDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => title.newValue,
+          oldValue: () => title.oldValue
         };
       },
       receivers: getReceivers
@@ -838,86 +1065,8 @@ export default ActionAuditConfig = {
         };
       },
       receivers: getReceivers
-    },
-
-    {
-      field: fileIdsField.field,
-      logs: [
-        fileIdsField.logConfig
-      ],
-      notifications: [
-        fileIdsField.notificationConfig
-      ],
-      data: fileIdsField.data,
-      receivers: getReceivers
-    },
-
-    {
-      field: isDeletedField.field,
-      logs: [
-        isDeletedField.logConfig
-      ],
-      notifications: [
-        isDeletedField.notificationConfig
-      ],
-      data: isDeletedField.data,
-      receivers: getReceivers
-    },
-
-    {
-      field: notesField.field,
-      logs: [
-        notesField.logConfig
-      ],
-      notifications: [
-        notesField.notificationConfig
-      ],
-      data: notesField.data,
-      receivers: getReceivers
-    },
-
-    {
-      field: notifyField.field,
-      logs: [
-        notifyField.logConfig
-      ],
-      notifications: [
-        notifyField.notificationConfig,
-        notifyField.personalNotificationConfig
-      ],
-      data: notifyField.data,
-      receivers({ diffs: { notify }, newDoc, user }) {
-        const receivers = getNotificationReceivers(newDoc, user);
-        const index = receivers.indexOf(notify.item);
-        (index > -1) && receivers.splice(index, 1);
-
-        return receivers;
-      }
-    },
-
-    {
-      field: ownerIdField.field,
-      logs: [
-        ownerIdField.logConfig
-      ],
-      notifications: [
-        ownerIdField.notificationConfig,
-      ],
-      data: ownerIdField.data,
-      receivers: getReceivers
-    },
-
-    {
-      field: titleField.field,
-      logs: [
-        titleField.logConfig
-      ],
-      notifications: [
-        titleField.notificationConfig,
-      ],
-      data: titleField.data,
-      receivers: getReceivers
     }
+
   ],
 
   onRemoved: {

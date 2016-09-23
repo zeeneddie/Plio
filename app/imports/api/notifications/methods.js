@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import NotificationsService from './notifications-service.js';
-import { Notifications } from './notifications.js';
-import { RequiredSchema } from './notifications-schema.js';
-import { IdSchema } from '../schemas.js';
+import { Notifications } from '/imports/share/collections/notifications.js';
+import { RequiredSchema } from '/imports/share/schemas/notifications-schema.js';
+import { IdSchema } from '/imports/share/schemas/schemas.js';
 import Method from '../method.js';
 import { checkDocExistance } from '../checkers.js';
 

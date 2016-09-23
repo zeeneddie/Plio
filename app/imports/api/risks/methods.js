@@ -2,7 +2,11 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import RisksService from './risks-service.js';
-import { RisksUpdateSchema, RequiredSchema, RiskScoreSchema } from './risks-schema.js';
+import {
+  RisksUpdateSchema,
+  RequiredSchema,
+  RiskScoreSchema
+} from '/imports/share/schemas/risks-schema.js';
 import { Risks } from './risks.js';
 import {
   IdSchema,
@@ -10,7 +14,7 @@ import {
   optionsSchema,
   UserIdSchema,
   CompleteActionSchema
-} from '../schemas.js';
+} from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
 import {
   checkOrgMembership,
@@ -33,7 +37,7 @@ import {
   P_OnSetStandardsUpdateCommentsChecker
 } from '../checkers.js';
 import { ACCESS_DENIED } from '../errors.js';
-import { inject } from '../helpers.js';
+import { inject } from '/imports/share/helpers.js';
 
 const injectRK = inject(Risks);
 

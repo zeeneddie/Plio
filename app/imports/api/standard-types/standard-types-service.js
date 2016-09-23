@@ -1,4 +1,4 @@
-import { StandardTypes } from './standard-types.js';
+import { StandardTypes } from '/imports/share/collections/standard-types.js';
 
 
 export default StandardsTypeService = {

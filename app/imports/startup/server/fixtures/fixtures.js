@@ -1,18 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 
 // Import all collections that should be filled with fixture data here
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
 
 import { insertMessageFixtures } from './fixtures-messages.js';
 

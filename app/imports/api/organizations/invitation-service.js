@@ -3,12 +3,12 @@ import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
 import { Roles } from 'meteor/alanning:roles';
 
-import { Organizations } from './organizations.js';
-import { OrgMemberRoles, UserMembership } from '../constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { OrgMemberRoles, UserMembership } from '/imports/share/constants.js';
 
 import OrgNotificationsSender from './org-notifications-sender.js';
 import Utils from '/imports/core/utils';
-import NotificationSender from '/imports/core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 class InvitationSender {

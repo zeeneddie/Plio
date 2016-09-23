@@ -1,4 +1,4 @@
-import { NonConformities } from './non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import FilesService from '../files/files-service.js';
 
 import get from 'lodash.get';

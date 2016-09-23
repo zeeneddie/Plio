@@ -1,12 +1,12 @@
-import { Actions } from './actions.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { ProblemTypes, WorkflowTypes } from '../constants.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
 import Utils from '/imports/core/utils.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate } from '/imports/api/helpers.js';
+import { getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
 
 if (Meteor.isServer) {
   import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';

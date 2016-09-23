@@ -6,7 +6,6 @@ import './emailtemplates.js';
 import './slingshot.js';
 import './mail.js';
 import './browser-policies.js';
-import './cron';
 import './db-indexes.js';
 import './aws.js';
 import './audit.js';

@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
 
-import { Discussions } from '../discussions.js';
-import { Standards } from '/imports/api/standards/standards.js'
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Standards } from '/imports/share/collections/standards.js'
 import { isOrgMember } from '../../checkers.js';
 
 Meteor.publish('discussionsByStandardId', function(standardId) {

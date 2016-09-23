@@ -2,20 +2,6 @@ import { ProblemMagnitudes, ProblemsStatuses } from '/imports/api/constants.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
-import {
-  departmentsIdsField,
-  descriptionField,
-  fileIdsField,
-  IPDesiredOutcomeField,
-  IPFileIdsField,
-  IPOwnerField,
-  IPReviewDatesField,
-  IPReviewDateField,
-  IPTargetDateField,
-  isDeletedField,
-  notifyField,
-  titleField
-} from './reusable-update-handlers.js';
 import StandardAuditConfig from './standard-audit-config.js';
 
 
@@ -235,6 +221,76 @@ export default ProblemAuditConfig = {
     },
 
     {
+      field: 'departmentsIds',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: 'Document was linked to {{{departmentDesc}}}',
+            [ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}'
+          }
+        }
+      },
+      notifications: [],
+      data({ diffs: { departmentsIds }, newDoc, user }) {
+        const { item:departmentId } = departmentsIds;
+        const department = () => Departments.findOne({ _id: departmentId });
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          departmentDesc: () => `${department().name} department`,
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+    },
+
+    {
+      field: 'description',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Description set',
+            [FIELD_CHANGED]: 'Description changed',
+            [FIELD_REMOVED]: 'Description removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs: { description }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+        };
+      }
+    },
+
+    {
+      field: 'fileIds',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: 'File "{{name}}" added',
+            [ITEM_REMOVED]: 'File removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs: { fileIds }, newDoc, user }) {
+        const { item:_id } = fileIds;
+        const { name } = Files.findOne({ _id }) || {};
+        const auditConfig = this;
+
+        return {
+          name: () => name,
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+    },
+
+    {
       field: 'identifiedAt',
       logs: [
         {
@@ -286,6 +342,183 @@ export default ProblemAuditConfig = {
     },
 
     {
+      field: 'improvementPlan.desiredOutcome',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Improvement plan statement of desired outcome set',
+            [FIELD_CHANGED]: 'Improvement plan statement of desired outcome changed',
+            [FIELD_REMOVED]: 'Improvement plan statement of desired outcome removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+    },
+
+    {
+      field: 'improvementPlan.fileIds',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
+            [ITEM_REMOVED]: 'Improvement plan file removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs, newDoc, user }) {
+        const _id = diffs['improvementPlan.fileIds'].item;
+        const { name } = Files.findOne({ _id }) || {};
+        const auditConfig = this;
+
+        return {
+          name: () => name,
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user)
+        };
+      }
+    },
+
+    {
+      field: 'improvementPlan.owner',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]:
+              'Improvement plan owner set to {{newValue}}',
+            [FIELD_CHANGED]:
+              'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
+            [FIELD_REMOVED]:
+              'Improvement plan owner removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs, newDoc, user }) {
+        const { newValue, oldValue } = diffs['improvementPlan.owner'];
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getUserFullNameOrEmail(newValue),
+          oldValue: () => getUserFullNameOrEmail(oldValue)
+        };
+      }
+    },
+
+    {
+      field: 'improvementPlan.reviewDates',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: 'Improvement plan review date added: "{{date}}"',
+            [ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs, newDoc, user }) {
+        const { item: { date } } = diffs['improvementPlan.reviewDates'];
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          date: () => getPrettyOrgDate(date, orgId())
+        };
+      }
+    },
+
+    {
+      field: 'improvementPlan.reviewDates.$.date',
+      logs: [
+        {
+          message: {
+            [FIELD_CHANGED]:
+              'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs, newDoc, user }) {
+        const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      }
+    },
+
+    {
+      field: 'improvementPlan.targetDate',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]:
+              'Improvement plan target date for desired outcome set to "{{newValue}}"',
+            [FIELD_CHANGED]:
+              'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]:
+              'Improvement plan target date for desired outcome removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs, newDoc, user }) {
+        const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
+        const auditConfig = this;
+        const orgId = () => auditConfig.docOrgId(newDoc);
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => getPrettyOrgDate(newValue, orgId()),
+          oldValue: () => getPrettyOrgDate(oldValue, orgId())
+        };
+      }
+    },
+
+    {
+      field: 'isDeleted',
+      logs: [
+        {
+          shouldCreateLog({ diffs: { deletedAt, deletedBy } }) {
+            return deletedAt && deletedBy;
+          },
+          message: {
+            [FIELD_CHANGED]:
+              '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs: { isDeleted }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          deleted: () => isDeleted.newValue
+        };
+      }
+    },
+
+    {
       field: 'magnitude',
       logs: [
         {
@@ -304,6 +537,50 @@ export default ProblemAuditConfig = {
         return {
           newValue: () => newValue,
           oldValue: () => oldValue
+        };
+      }
+    },
+
+    {
+      field: 'notify',
+      logs: [
+        {
+          message: {
+            [ITEM_ADDED]: '{{item}} was added to notification list',
+            [ITEM_REMOVED]: '{{item}} was removed from notification list'
+          }
+        }
+      ],
+      notifications: [
+        {
+          shouldSendNotification({ diffs: { notify: { kind } } }) {
+            return kind === ITEM_ADDED;
+          },
+          text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+          title: 'You have been added to the notification list',
+          emailTemplateData({ newDoc }) {
+            return {
+              button: {
+                label: 'View document',
+                url: this.docUrl(newDoc)
+              }
+            };
+          },
+          receivers({ diffs: { notify }, user }) {
+            const { item:addedUserId } = notify;
+            const userId = getUserId(user);
+
+            return (addedUserId !== userId) ? [addedUserId]: [];
+          }
+        }
+      ],
+      data({ diffs: { notify }, newDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(newDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          item: () => getUserFullNameOrEmail(notify.item)
         };
       }
     },
@@ -410,6 +687,30 @@ export default ProblemAuditConfig = {
         return {
           newValue: () => ProblemsStatuses[newValue],
           oldValue: () => ProblemsStatuses[oldValue]
+        };
+      }
+    },
+
+    {
+      field: 'title',
+      logs: [
+        {
+          message: {
+            [FIELD_ADDED]: 'Title set to "{{newValue}}"',
+            [FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_REMOVED]: 'Title removed'
+          }
+        }
+      ],
+      notifications: [],
+      data({ diffs: { title }, newDoc, oldDoc, user }) {
+        const auditConfig = this;
+
+        return {
+          docDesc: () => auditConfig.docDescription(oldDoc),
+          userName: () => getUserFullNameOrEmail(user),
+          newValue: () => title.newValue,
+          oldValue: () => title.oldValue
         };
       }
     },
@@ -569,117 +870,8 @@ export default ProblemAuditConfig = {
           oldValue: () => getPrettyOrgDate(oldValue, orgId())
         };
       }
-    },
-
-    {
-      field: departmentsIdsField.field,
-      logs: [
-        departmentsIdsField.logConfig
-      ],
-      notifications: [],
-      data: departmentsIdsField.data
-    },
-
-    {
-      field: descriptionField.field,
-      logs: [
-        descriptionField.logConfig
-      ],
-      notifications: [],
-      data: descriptionField.data
-    },
-
-    {
-      field: fileIdsField.field,
-      logs: [
-        fileIdsField.logConfig
-      ],
-      notifications: [],
-      data: fileIdsField.data
-    },
-
-    {
-      field: IPDesiredOutcomeField.field,
-      logs: [
-        IPDesiredOutcomeField.logConfig
-      ],
-      notifications: [],
-      data: IPDesiredOutcomeField.data
-    },
-
-    {
-      field: IPFileIdsField.field,
-      logs: [
-        IPFileIdsField.logConfig
-      ],
-      notifications: [],
-      data: IPFileIdsField.data
-    },
-
-    {
-      field: IPOwnerField.field,
-      logs: [
-        IPOwnerField.logConfig
-      ],
-      notifications: [],
-      data: IPOwnerField.data
-    },
-
-    {
-      field: IPReviewDatesField.field,
-      logs: [
-        IPReviewDatesField.logConfig
-      ],
-      notifications: [],
-      data: IPReviewDatesField.data
-    },
-
-    {
-      field: IPReviewDateField.field,
-      logs: [
-        IPReviewDateField.logConfig
-      ],
-      notifications: [],
-      data: IPReviewDateField.data
-    },
-
-    {
-      field: IPTargetDateField.field,
-      logs: [
-        IPTargetDateField.logConfig
-      ],
-      notifications: [],
-      data: IPTargetDateField.data
-    },
-
-    {
-      field: isDeletedField.field,
-      logs: [
-        isDeletedField.logConfig
-      ],
-      notifications: [],
-      data: isDeletedField.data
-    },
-
-    {
-      field: notifyField.field,
-      logs: [
-        notifyField.logConfig
-      ],
-      notifications: [
-        notifyField.personalNotificationConfig
-      ],
-      data: notifyField.data,
-    },
-
-    {
-      field: titleField.field,
-      logs: [
-        titleField.logConfig
-      ],
-      notifications: [],
-      data: titleField.data
     }
+
   ],
 
   onRemoved: {

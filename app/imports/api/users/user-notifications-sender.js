@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 export default class UserNotificationsSender {

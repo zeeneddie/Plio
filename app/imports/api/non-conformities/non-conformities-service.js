@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
-import { NonConformities } from './non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import ProblemsService from '../problems/problems-service.js';
-import { ProblemTypes } from '../constants.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 
 if (Meteor.isServer) {

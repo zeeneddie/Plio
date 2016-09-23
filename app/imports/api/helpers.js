@@ -7,13 +7,12 @@ import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
-import { CollectionNames, DocumentTypes } from './constants.js';
-import { Actions } from './actions/actions.js';
-import { NonConformities } from './non-conformities/non-conformities.js';
-import { Risks } from './risks/risks.js';
-import { Standards } from './standards/standards.js';
-import { Organizations } from './organizations/organizations.js';
-import { ProblemMagnitudes } from '/imports/api/constants.js';
+import { CollectionNames, DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 const { compose } = _;
 

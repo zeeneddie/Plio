@@ -2,17 +2,17 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import NonConformitiesService from './non-conformities-service.js';
-import { NonConformitiesUpdateSchema, RequiredSchema } from './non-conformities-schema.js';
-import { NonConformities } from './non-conformities.js';
+import { NonConformitiesUpdateSchema, RequiredSchema } from '/imports/share/schemas/non-conformities-schema.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import {
   IdSchema,
   OrganizationIdSchema,
   optionsSchema,
   UserIdSchema,
   CompleteActionSchema
-} from '../schemas.js';
+} from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '../helpers.js';
+import { inject } from '/imports/share/collections/helpers.js';
 import {
   checkOrgMembership,
   checkAnalysis,

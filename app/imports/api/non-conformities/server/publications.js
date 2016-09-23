@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { NonConformities } from '../non-conformities.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { Files } from '/imports/api/files/files.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 

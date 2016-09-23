@@ -1,5 +1,5 @@
 import { Accounts } from 'meteor/accounts-base';
-import HandlebarsCompiledCache from '/imports/core/HandlebarsCompiledCache';
+import HandlebarsCompiledCache from '/imports/share/utils/HandlebarsCompiledCache';
 
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({

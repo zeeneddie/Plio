@@ -1,8 +1,8 @@
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import { Actions } from './actions.js';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '../constants.js';
-import { checkAndThrow } from '../helpers.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { ProblemTypes, ActionTypes, WorkflowTypes } from '/imports/share/constants.js';
+import { checkAndThrow } from '/imports/share/helpers.js';
 import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
 import {
   INVALID_DOC_TYPE,

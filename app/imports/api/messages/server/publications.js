@@ -4,9 +4,9 @@ import get from 'lodash.get';
 import { check } from 'meteor/check';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '../messages.js';
-import { Files } from '/imports/api/files/files.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Match } from 'meteor/check';

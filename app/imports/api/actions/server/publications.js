@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
-import { Actions } from '../actions.js';
-import { Files } from '/imports/api/files/files.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
 import Counter from '../../counter/server.js';
 
@@ -27,7 +27,7 @@ Meteor.publishComposite('actions', function(organizationId, isDeleted = { $in: [
         return getActionFiles(action);
       }
     }]
-  }
+  };
 });
 
 Meteor.publishComposite('actionsByIds', function(ids = []) {
@@ -54,7 +54,7 @@ Meteor.publishComposite('actionsByIds', function(ids = []) {
         return getActionFiles(action);
       }
     }]
-  }
+  };
 });
 
 Meteor.publish('actionsCount', function(counterName, organizationId) {

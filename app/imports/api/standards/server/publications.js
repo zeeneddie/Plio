@@ -1,10 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Standards } from '../standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { isOrgMember } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import Counter from '../../counter/server.js';
 import get from 'lodash.get';
 

@@ -3,10 +3,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import curry from 'lodash.curry';
 
 import ActionService from './action-service.js';
-import { ActionSchema, RequiredSchema } from './action-schema.js';
-import { Actions } from './actions.js';
-import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '../schemas.js';
-import { ProblemTypes } from '../constants.js';
+import { ActionSchema, RequiredSchema } from '/imports/share/schemas/action-schema.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { IdSchema, optionsSchema, StandardIdSchema, CompleteActionSchema } from '/imports/share/schemas/schemas.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import Method, { CheckedMethod } from '../method.js';
 import {
   checkOrgMembership,
@@ -21,7 +21,7 @@ import {
   ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker
 } from '../checkers.js';
-import { chain, checkAndThrow, inject } from '../helpers.js';
+import { chain, checkAndThrow, inject } from '/imports/share/helpers.js';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,

@@ -1,4 +1,4 @@
-import { UserSchema } from '../../api/users/user-schema.js';
+import { UserSchema } from '/imports/share/schemas/user-schema.js';
 
 Meteor.users.attachSchema(UserSchema);
 

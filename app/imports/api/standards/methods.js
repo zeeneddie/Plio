@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsService from './standards-service.js';
-import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
-import { Standards } from './standards.js';
+import { StandardsSchema, StandardsUpdateSchema } from '/imports/share/schemas/standards-schema.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import StandardsNotificationsSender from './standards-notifications-sender.js';
 import {
   IdSchema,
@@ -11,8 +11,8 @@ import {
   optionsSchema,
   StandardIdSchema,
   UserIdSchema
-} from '../schemas.js';
-import { UserRoles } from '../constants.js';
+} from '/imports/share/schemas/schemas.js';
+import { UserRoles } from '/imports/share/constants.js';
 import {
   canChangeStandards,
   checkOrgMembership,
@@ -21,7 +21,7 @@ import {
   S_EnsureCanChange,
   S_EnsureCanChangeChecker
 } from '../checkers.js';
-import { chain, chainCheckers, inject } from '../helpers.js';
+import { chain, chainCheckers, inject } from '/imports/share/helpers.js';
 import Method, { CheckedMethod } from '../method.js';
 
 const injectSTD = inject(Standards);

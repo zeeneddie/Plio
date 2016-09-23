@@ -4,12 +4,12 @@ import property from 'lodash.property';
 import curry from 'lodash.curry';
 
 import OccurrencesService from './occurrences-service.js';
-import { RequiredSchema } from './occurrences-schema.js';
-import { Occurrences } from './occurrences.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { IdSchema } from '../schemas.js';
+import { RequiredSchema } from '/imports/share/schemas/occurrences-schema.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { IdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { chain, withUserId } from '../helpers.js';
+import { chain, withUserId } from '/imports/share/helpers.js';
 import { exists, OCC_MembershipChecker } from '../checkers.js';
 
 const { compose } = _;
