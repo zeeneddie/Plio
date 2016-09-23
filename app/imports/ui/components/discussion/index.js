@@ -1,3 +1,3 @@
 import './card';
 import './includes';
-import './react-test';
+import './discussion-react';

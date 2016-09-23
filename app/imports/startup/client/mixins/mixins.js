@@ -108,49 +108,6 @@ export default {
       return item.toggleCollapse(cb);
     }
   },
-  modal: {
-    modal: {
-      instance() {
-        return ViewModel.findOne('ModalWindow');
-      },
-      open(data) {
-        Blaze.renderWithData(Template.ModalWindow, data, document.body);
-      },
-      close() {
-        this.instance() && this.instance().modal.modal('hide');
-      },
-      isSaving(val) {
-        const instance = this.instance();
-
-        if (val !== undefined) {
-          instance && instance.isSaving(val);
-        }
-
-        return instance && instance.isSaving();
-      },
-      isWaiting(val) {
-        const instance = this.instance();
-
-        if (val !== undefined) {
-          instance.isWaiting(val);
-        }
-
-        return instance.isWaiting();
-      },
-      setError(err) {
-        return this.instance() && this.instance().setError(err);
-      },
-      clearError() {
-        return this.instance() && this.instance().clearError();
-      },
-      callMethod(method, args, cb) {
-        return this.instance() && this.instance().callMethod(method, args, cb);
-      },
-      handleMethodResult(cb) {
-        return this.instance() && this.instance().handleMethodResult(cb);
-      }
-    }
-  },
   search: {
     searchObject(prop, fields) {
       const searchObject = {};
@@ -866,43 +823,6 @@ export default {
         default:
           return '';
           break;
-      }
-    }
-  },
-  notifications: {
-    // Notifications document can be passed as an argument
-    // _id is used as notification tag if there's no tag argument passed
-    // Only title is required
-    sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
-      const notificationSound = document.getElementById('notification-sound');
-
-      if (notificationSound) {
-        notificationSound.currentTime = 0;
-        notificationSound.play();
-      }
-      let notification = new Notification(title, {
-        body,
-        tag: tag || _id,
-        icon: icon || '/p-logo-square.png',
-        silent
-      });
-
-      if (url) {
-        notification.onclick = function () {
-          window.open(url);
-        };
-      }
-
-      Meteor.setTimeout(() => {
-        notification.close();
-      }, timeout);
-    },
-    playNewMessageSound() {
-      const $sound = document.getElementById('message-sound');
-
-      if ($sound) {
-        $sound.currentTime = 0;
-        invoke($sound, 'play');
       }
     }
   },

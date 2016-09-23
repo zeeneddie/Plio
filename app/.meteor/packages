@@ -60,3 +60,4 @@ tunifight:loggedin-mixin
 djedi:sanitize-html-client
 shell-server
 meteorhacks:kadira
+gadicc:blaze-react-component

@@ -3,17 +3,21 @@ import ReactDOM from 'react-dom';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 
-import Message from '../Message';
 import InfiniteLoader from '../InfiniteLoader';
+import MessagesList from '../MessagesList';
+import MessagesListHeader from '../MessagesListHeader';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
-import { setLimit, setSort, setAt } from '/client/redux/actions/discussionActions';
-import { $isScrolledElementVisible } from '/imports/api/helpers.js';
+import {
+  setLimit,
+  setSort,
+  setAt,
+  setShouldScrollToBottom
+} from '/client/redux/actions/discussionActions';
 import { swipedetect, isTouchDevice } from '/client/lib/mobile.js';
 
 let prevChatScrollTop, prevChatScrollHeight, shouldScroll;
 
-
-export default class MessagesList extends React.Component {
+export default class MessagesListWrapper extends React.Component {
   constructor(props) {
     super(props);
 
@@ -38,6 +42,11 @@ export default class MessagesList extends React.Component {
   componentDidUpdate(prevProps) {
     const { chat } = this.refs;
 
+    if (prevProps.shouldScrollToBotom) {
+      $(chat).scrollTop(9E99);
+      this.props.dispatch(setShouldScrollToBottom(false));
+    }
+
     if (shouldScroll) {
       // TODO: Need to find a way to do the same when scrolling down
       $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
@@ -49,7 +58,14 @@ export default class MessagesList extends React.Component {
   componentDidMount() {
     const { chat } = this.refs;
 
-    $(chat).scrollTop(chat.scrollHeight);
+    if (this.props.at) {
+      // scroll to the center of the chat
+      const center = ($(chat).height() / 2 + $(chat).offset().top) / 2;
+      $(chat).scrollTop(center);
+    } else {
+      // scroll to the bottom of the chat
+      $(chat).scrollTop(chat.scrollHeight);
+    }
 
     swipedetect(chat, this._triggerLoadMore.bind(this), 'addEventListener');
 
@@ -65,19 +81,25 @@ export default class MessagesList extends React.Component {
   }
 
   render() {
-    const messages = this.props.messages.map(message => <Message key={message._id} {...message}/>);
+    const { discussion, messages } = this.props;
+
     return (
       <div className="chat-content scroll" ref="chat">
         <div className="chat-messages">
+          {discussion.isStarted && <MessagesListHeader discussion={discussion}/>}
+
           <InfiniteLoader
             loading={this.props.loading}
             className='infinite-load-older text-xs-center'/>
+
           <div className="chat-messages-list">
-            {messages}
+            <MessagesList messages={messages} discussion={discussion}/>
           </div>
+
           <InfiniteLoader
             loading={this.props.loading}
             className='infinite-load-newer text-xs-center'/>
+
         </div>
       </div>
     );
@@ -124,7 +146,7 @@ export default class MessagesList extends React.Component {
         ? actions.concat(setAt(get(message, '_id')))
         : actions;
 
-      dispatch(batchActions(allActions))
+      dispatch(batchActions(allActions));
     };
 
     if (sortDir < 0) {

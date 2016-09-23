@@ -5,7 +5,8 @@ import {
   SET_SORT,
   SET_AT,
   RESET,
-  SET_LAST_MESSAGE_ID
+  SET_LAST_MESSAGE_ID,
+  SET_SHOULD_SCROLL_TO_BOTTOM
 } from '../actions/types';
 
 export const initialState = {
@@ -14,7 +15,8 @@ export const initialState = {
   limit: 50,
   sort: { createdAt: -1 },
   at: null,
-  lastMessageId: null
+  lastMessageId: null,
+  shouldScrollToBotom: false
 };
 
 export default function reducer(state=initialState, action) {
@@ -34,11 +36,14 @@ export default function reducer(state=initialState, action) {
     case SET_AT:
       return { ...state, at: action.payload };
       break;
-    case RESET:
-      return { ...state, ...action.payload };
-      break;
     case SET_LAST_MESSAGE_ID:
       return { ...state, lastMessageId: action.payload };
+      break;
+    case SET_SHOULD_SCROLL_TO_BOTTOM:
+      return { ...state, shouldScrollToBotom: action.payload };
+      break;
+    case RESET:
+      return { ...state, ...action.payload };
       break;
     default:
       return state;

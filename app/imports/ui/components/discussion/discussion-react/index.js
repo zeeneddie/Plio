@@ -1,4 +1,5 @@
-import './react-test.html';
+import './discussion-react.html';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -6,7 +7,7 @@ import { Provider } from 'react-redux';
 import DiscussionContainer from './containers/DiscussionContainer';
 import store from '/client/redux/store';
 
-Template.React_Test.onRendered(function() {
+Template.Discussion_React.onRendered(function() {
   const { discussionId, organizationId } = this.data;
 
   ReactDOM.render(
@@ -18,6 +19,6 @@ Template.React_Test.onRendered(function() {
   );
 });
 
-Template.React_Test.onDestroyed(function() {
+Template.Discussion_React.onDestroyed(function() {
   ReactDOM.unmountComponentAtNode(this.$('#discussion')[0]);
 });

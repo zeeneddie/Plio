@@ -222,6 +222,28 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   return date;
 }
 
+const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
+
+const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
+
+// useful with recompose's withProps:
+// const transformer = transsoc({
+//   'userAvatar': getUserAvatar,
+//   'pathToMessage': getMessagePath
+// });
+// withProps(transformer)(Component);
+// > {
+//   pathToMessage: '/98/standards/Mc7jjwYJ9gXPkibS8/discussion?at=jBwoZSJ3S4xkzvpdY',
+//   userAvatar: 'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png'
+// }
+// Object<key: path, value: func> -> obj -> obj
+const transsoc = curry((transformations, obj) => {
+  const keys = Object.keys(Object.assign({}, transformations));
+  const result = keys.map(key => assoc(key, transformations[key](obj), obj));
+
+  return _.pick(flattenObjects(result), ...keys);
+})
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -250,5 +272,8 @@ export {
   $isScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
-  getWorkflowDefaultStepDate
+  getWorkflowDefaultStepDate,
+  assoc,
+  invokeC,
+  transsoc
 };

@@ -11,3 +11,5 @@ export const SET_AT = 'SET_AT';
 export const RESET = 'RESET';
 
 export const SET_LAST_MESSAGE_ID = 'SET_LAST_MESSAGE_ID';
+
+export const SET_SHOULD_SCROLL_TO_BOTTOM = 'SET_SHOULD_SCROLL_TO_BOTTOM';
