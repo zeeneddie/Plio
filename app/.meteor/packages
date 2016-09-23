@@ -63,3 +63,4 @@ shell-server
 # meteorhacks:sikka
 
 meteorhacks:kadira
+percolate:migrations
