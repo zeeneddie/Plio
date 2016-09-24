@@ -1,15 +1,16 @@
 <template name="Risks_Card_Read">
-  <div class="content-cards-inner flex scroll">
+  <div class="content-cards-inner flex scroll" {{b "class: { content: !risk }"}}>
     {{#if risks.length}}
-      {{#Card_Read
-        isReadOnly=isReadOnly
-        cardTitle="Risk"
-        doc=risk
-        onRestore=onRestoreCb
-        onDelete=onDeleteCb
-        onOpenEditModal=onOpenEditModalCb}}
+      {{#with risk}}
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Risk"
+          doc=this
+          isReady=isReady
+          onRestore=onRestoreCb
+          onDelete=onDeleteCb
+          onOpenEditModal=onOpenEditModalCb}}
 
-        {{#with risk}}
           <div class="list-group">
 
             <div class="list-group-item">
@@ -101,8 +102,10 @@
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
           {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
-        {{/with}}
-      {{/Card_Read}}
+        {{/Card_Read}}
+      {{else}}
+        {{> PreloaderPage}}
+      {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">

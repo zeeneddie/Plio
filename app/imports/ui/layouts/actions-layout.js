@@ -15,13 +15,13 @@ Template.ActionsLayout.viewmodel({
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
         DocumentsListSubs.subscribe('nonConformitiesList', _id),
-        DocumentsListSubs.subscribe('risksList', _id),
+        DocumentsListSubs.subscribe('risksList', _id)
       ];
 
       if (this.isActiveWorkInboxFilter('Deleted actions')) {
-        _subHandlers.push(this.templateInstance.subscribe('actions', _id, true));
+        _subHandlers.push(this.templateInstance.subscribe('actionsList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('actions', _id));
+        _subHandlers.push(this.templateInstance.subscribe('actionsList', _id));
       }
 
       this._subHandlers(_subHandlers);

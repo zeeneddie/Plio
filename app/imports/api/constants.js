@@ -415,6 +415,7 @@ const StandardsListProjection = {
   nestingLevel: 1,
   viewedBy: 1,
   createdAt: 1,
+  owner: 1,
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1
@@ -429,6 +430,25 @@ const RisksListProjection = {
   typeId: 1,
   departmentsIds: 1,
   status: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const ActionsListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  linkedTo: 1,
+  type: 1,
+  status: 1,
+  ownerId: 1,
+  isCompleted: 1,
+  completionTargetDate: 1,
+  toBeCompletedBy: 1,
   viewedBy: 1,
   createdAt: 1,
   isDeleted: 1,
@@ -512,6 +532,7 @@ export {
   UnreadMessages,
   UncategorizedTypeSection,
   StandardsListProjection,
+  ActionsListProjection,
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection

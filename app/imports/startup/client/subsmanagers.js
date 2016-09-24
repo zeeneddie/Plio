@@ -5,7 +5,7 @@ const UserSubs = new SubsManager({
   expireIn: 20
 });
 const CountSubs = new SubsManager({
-  expireIn: 10
+  expireIn: 20
 });
 const WorkItemSubs = new SubsManager({
   expireIn: 10

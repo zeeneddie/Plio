@@ -1,15 +1,16 @@
 <template name="NC_Card_Read">
-  <div class="content-cards-inner flex scroll">
+  <div class="content-cards-inner flex scroll" {{b "class: { content: !NC }"}}>
     {{#if NCs.length}}
-      {{#Card_Read
-        isReadOnly=isReadOnly
-        cardTitle="Non-conformity"
-        doc=NC
-        onRestore=onRestoreCb
-        onDelete=onDeleteCb
-        onOpenEditModal=onOpenEditModalCb}}
+      {{#with NC}}
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Non-conformity"
+          doc=NC
+          isReady=isReady
+          onRestore=onRestoreCb
+          onDelete=onDeleteCb
+          onOpenEditModal=onOpenEditModalCb}}
 
-        {{#with NC}}
           <div class="list-group">
 
             <div class="list-group-item">
@@ -117,8 +118,11 @@
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
           {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
-        {{/with}}
-      {{/Card_Read}}
+
+        {{/Card_Read}}
+      {{else}}
+        {{> PreloaderPage}}
+      {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">

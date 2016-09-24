@@ -14,6 +14,7 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
+
     // hack to get around infinite redirect loop
     template.autorun(() => {
       const standardId = this.standardId();

@@ -454,6 +454,9 @@ fieldset[disabled] {
   width: 100%;
   display: inline-block;
   position: relative;
+  
+  // Safari progress bar invisible border fix
+  padding-left: 0.0158rem;
   .file-item-read {
     margin-right: 0;
     margin-bottom: 0;
@@ -519,6 +522,7 @@ fieldset[disabled] {
       margin-right: 0;
       border-right: none;
       width: 100%;
+      min-height: 34px;
       text-overflow: ellipsis;
       overflow: hidden;
     }

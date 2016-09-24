@@ -8,14 +8,22 @@ import { restore, remove } from '/imports/api/risks/methods.js';
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+  _subHandlers: [],
+  isReady: false,
 
   onCreated(template) {
     template.autorun(() => {
       const _id = this._id();
       const organizationId = this.organizationId();
+      const _subHandlers = [];
       if (_id && organizationId) {
-        DocumentCardSubs.subscribe('riskCard', { _id, organizationId });
+        _subHandlers.push(DocumentCardSubs.subscribe('riskCard', { _id, organizationId }));
+        this._subHandlers(_subHandlers);
       }
+    });
+    
+    template.autorun(() => {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
     });
   },
   ActionTypes() {

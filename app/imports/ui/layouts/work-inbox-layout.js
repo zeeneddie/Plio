@@ -14,8 +14,9 @@ Template.WorkInbox_Layout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
+        DocumentsListSubs.subscribe('actionsList', _id),
         DocumentsListSubs.subscribe('nonConformitiesList', _id),
-        DocumentsListSubs.subscribe('risksList', _id)
+        DocumentsListSubs.subscribe('risksList', _id),
       ];
 
       // My deleted or Team deleated work items

@@ -10,15 +10,23 @@ import { restore, remove } from '/imports/api/non-conformities/methods.js';
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+  _subHandlers: [],
+  isReady: false,
 
   onCreated(template) {
     template.autorun(() => {
       const _id = this._id();
       const organizationId = this.organizationId();
+      const _subHandlers = [];
 
       if (_id && organizationId) {
-        DocumentCardSubs.subscribe('nonConformityCard', { _id, organizationId });
+        _subHandlers.push(DocumentCardSubs.subscribe('nonConformityCard', { _id, organizationId }));
+        this._subHandlers(_subHandlers);
       }
+    });
+
+    template.autorun(() => {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
     });
   },
   ActionTypes() {
