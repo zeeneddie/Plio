@@ -66,12 +66,14 @@
                 {{/if}}
 
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Issue number</p>
-                      <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                  {{#if this.issueNumber}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Issue number</p>
+                        <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                      </div>
                     </div>
-                  </div>
+                  {{/if}}
                   {{#with section}}
                     <div class="col-sm-6">
                       <div class="list-group-item">
