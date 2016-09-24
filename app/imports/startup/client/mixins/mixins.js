@@ -789,7 +789,11 @@ export default {
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
+      this.load({ mixin: 'organization' });
+      const organization = this.organization();
+      const memberIds = organization && organization.getMemberIds() || [];
       const query = {
+        _id: { $in: memberIds },
         ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
         ..._query
       };
