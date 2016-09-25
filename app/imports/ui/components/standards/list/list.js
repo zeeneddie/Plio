@@ -126,7 +126,7 @@ Template.StandardsList.viewmodel({
     // All sections of the current organization
     const sections = ((() => {
       const query = { organizationId };
-      const options = { sort: { title: 1 } };
+      const options = { sort: { titlePrefix: 1 } };
       const _sections = StandardsBookSections.find(query, options).fetch();
 
       return _sections;

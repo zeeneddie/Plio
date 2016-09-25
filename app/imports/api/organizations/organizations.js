@@ -6,7 +6,6 @@ import { UserMembership, ProblemMagnitudes } from '../constants';
 
 const Organizations = new Mongo.Collection('Organizations');
 Organizations.attachSchema(OrganizationSchema);
-
 Organizations.helpers({
   ownerId() {
     const ownerDoc = _.find(this.users, (doc) => {

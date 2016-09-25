@@ -357,7 +357,8 @@ export default {
     standardTypeExists({ typeId }){
       return StandardTypes.find({ _id: typeId }).count() > 0;
     },
-    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
+    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {},
+      options = { sort: { titlePrefix: 1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
