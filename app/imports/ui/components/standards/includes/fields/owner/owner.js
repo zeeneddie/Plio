@@ -3,15 +3,14 @@ import { Meteor } from 'meteor/meteor';
 
 Template.Standards_Owner_Edit.viewmodel({
   label: 'Owner',
-  owner: Meteor.userId(),
+  owner() { return Meteor.userId() },
   selectArgs() {
-    const { owner:value } = this.data();
+    const { owner: value } = this.data();
 
     return {
       value,
       onUpdate: (viewmodel) => {
-        const { selected:owner } = viewmodel.getData();
-
+        const { selected: owner } = viewmodel.getData();
         this.owner(owner);
 
         if (!this._id) return;
@@ -21,7 +20,7 @@ Template.Standards_Owner_Edit.viewmodel({
     };
   },
   getData() {
-    const { owner } = this.data();
+    const { owner = Meteor.userId() } = this.data();
     return { owner };
   }
 });

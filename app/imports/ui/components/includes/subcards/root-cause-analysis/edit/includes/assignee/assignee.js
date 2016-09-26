@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.RCA_ToBeCompletedBy_Edit.viewmodel({
-  assignee: Meteor.userId(),
+  assignee() { return Meteor.userId() },
   comments: '',
   selectFirstIfNoSelected: false,
   placeholder: 'Assignee',

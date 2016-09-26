@@ -3,6 +3,7 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
+import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -228,10 +229,21 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
 
   const workflowStepTime = organization.workflowStepTime(magnitude);
   const { timeValue, timeUnit } = workflowStepTime;
-  const date = moment().add(timeValue, timeUnit).toDate();
+  const date = moment()
+      .tz(organization.timezone)
+      .startOf('day')
+      .add(timeValue, timeUnit)
+      .toDate();
 
   return date;
 }
+
+const renderTemplate = (template, data = {}) => {
+  const compiledTemplate = Handlebars.compile(template);
+  return compiledTemplate(data);
+};
+
+const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
 
 export {
   getDocumentCollectionByType,
@@ -261,6 +273,7 @@ export {
   $isScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
+  capitalize,
   flattenMap,
   findById,
   length,
