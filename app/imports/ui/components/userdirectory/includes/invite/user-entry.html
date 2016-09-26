@@ -1,13 +1,15 @@
 <template name="UserDirectory_InviteUsers_UserEntry">
-  <div class="form-group form-group-flex">
-    <img class="img-circle avatar" {{b "attr: {src: randomAvatarUrl}"}}>
-    <div class="form-group-flex-flex margin-left">
-      {{#ClearableField field="email"}}
-        <input type="email" class="form-control" placeholder="Email address"
-          {{b "value: email"}}
-          name="invite-user-email-{{avatarIndex}}"
-        />
-      {{/ClearableField}}
+  <form name="inviteUserEmail">
+    <div class="form-group form-group-flex">
+      <img class="img-circle avatar" {{b "attr: {src: randomAvatarUrl}"}}>
+      <div class="form-group-flex-flex margin-left">
+        {{#ClearableField field="email"}}
+          <input type="email" class="form-control" placeholder="Email address"
+            {{b "value: email"}}
+            name="invite-user-email"
+          />
+        {{/ClearableField}}
+      </div>
     </div>
-  </div>
+  </form>
 </template>

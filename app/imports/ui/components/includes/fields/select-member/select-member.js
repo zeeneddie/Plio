@@ -12,7 +12,7 @@ Template.Select_Member.viewmodel({
   ...defaults,
   selectArgs() {
     const {
-      value:selected = defaults.value,
+      value: selected = defaults.value,
       placeholder = defaults.placeholder,
       selectFirstIfNoSelected = defaults.selectFirstIfNoSelected,
       disabled = defaults.disabled

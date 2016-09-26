@@ -6,6 +6,7 @@ import { Messages } from '/imports/api/messages/messages.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Standards } from '/imports/api/standards/standards.js';
+import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Departments } from '/imports/api/departments/departments.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Risks } from '/imports/api/risks/risks.js';
@@ -132,6 +133,7 @@ export default {
 
       return searchObject;
     },
+
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
@@ -306,6 +308,11 @@ export default {
     currentStandard() {
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
+    },
+
+    // Whether a given standard type exists
+    standardTypeExists({ typeId }){
+      return StandardTypes.find({ _id: typeId }).count() > 0;
     },
     _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
@@ -494,7 +501,7 @@ export default {
       return NonConformities.findOne({ _id });
     },
     _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { isDeleted, ...args, organizationId: this.organizationId() };
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };//console.log(query);
       return NonConformities.find(query, options);
     },
     _getNCByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
@@ -739,7 +746,11 @@ export default {
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
+      this.load({ mixin: 'organization' });
+      const organization = this.organization();
+      const memberIds = organization && organization.getMemberIds() || [];
       const query = {
+        _id: { $in: memberIds },
         ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
         ..._query
       };

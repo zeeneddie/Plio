@@ -341,7 +341,6 @@ export const inviteMultipleUsersByEmail = new Method({
       //aggregate service errors for each email
       try {
         const invitationStatus = InvitationService.inviteUserByEmail(organizationId, email, welcomeMessage);
-        console.log('invitationStatus', invitationStatus);
         if (invitationStatus === InvitationStatuses.invited) {
           invitedEmails.push(email);
         } else if (invitationStatus === InvitationStatuses.added) {

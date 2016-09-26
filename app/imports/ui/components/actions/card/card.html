@@ -6,6 +6,7 @@
           isReadOnly=isReadOnly
           cardTitle=(_getNameByType this.type)
           doc=this
+          isReady=isReady
           onOpenEditModal=onOpenEditModalCb}}
 
           <div class="list-group">
@@ -36,12 +37,13 @@
               </div>
             </div>
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Plan in place?</p>
-              <h4 class="list-group-item-heading"
-                {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
-            </div>
-
+            {{#if this.planInPlace}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Plan in place?</p>
+                <h4 class="list-group-item-heading"
+                  {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
+              </div>
+            {{/if}}
           </div>
 
           <div class="list-group">

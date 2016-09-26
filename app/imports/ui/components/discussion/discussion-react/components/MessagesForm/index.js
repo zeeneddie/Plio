@@ -1,9 +1,7 @@
 import React from 'react';
-import { compose, withProps, withHandlers, nest } from 'recompose';
-import Blaze from 'meteor/gadicc:blaze-react-component';
+import { withHandlers } from 'recompose';
 
-import { submit, addFile } from './constants';
-import DiscussionFileUploader from '../DiscussionFileUploader';
+import { submit } from './constants';
 
 const MessagesForm = (props) => (
   <div className="chat-form" onSubmit={e => props.onSubmit(e)}>
@@ -32,12 +30,6 @@ const MessagesForm = (props) => (
 	</div>
 );
 
-const enhancedForm = withHandlers({
+export default withHandlers({
   onSubmit: submit
 })(MessagesForm);
-
-const enhancedUploader = withHandlers({
-  onAddFile: addFile
-})(DiscussionFileUploader);
-
-export default nest(enhancedForm, enhancedUploader);

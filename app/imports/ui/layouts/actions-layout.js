@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, UserSubs, DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.ActionsLayout.viewmodel({
   mixin: ['organization', 'workInbox'],
@@ -14,14 +14,14 @@ Template.ActionsLayout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('nonConformities', _id),
-        this.templateInstance.subscribe('risks', _id),
+        DocumentsListSubs.subscribe('nonConformitiesList', _id),
+        DocumentsListSubs.subscribe('risksList', _id)
       ];
 
       if (this.isActiveWorkInboxFilter('Deleted actions')) {
-        _subHandlers.push(this.templateInstance.subscribe('actions', _id, true));
+        _subHandlers.push(this.templateInstance.subscribe('actionsList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('actions', _id));
+        _subHandlers.push(this.templateInstance.subscribe('actionsList', _id));
       }
 
       this._subHandlers(_subHandlers);

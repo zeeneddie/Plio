@@ -2,6 +2,7 @@
   border-color: #ccc;
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   margin-bottom: 1.25rem;
+  width: 100%;
   z-index: 101;
   &.new-cards:not(:first-of-type) {
     border-top: 1px solid #ddd;
@@ -95,7 +96,7 @@
 
   &-block {
     @include clearfix;
-    
+
     hr {
       margin: 1.75rem -1.25rem;
       border-color: #ddd;

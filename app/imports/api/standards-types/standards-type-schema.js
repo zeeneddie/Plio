@@ -7,7 +7,7 @@ export const StandardsTypeSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationIdSchema,
   {
-    name: {
+    title: {
       type: String,
       min: 1,
       max: 40

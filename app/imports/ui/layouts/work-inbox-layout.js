@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs, UserSubs, DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.WorkInbox_Layout.viewmodel({
   mixin: ['organization', 'workInbox', 'nonconformity', 'risk'],
@@ -14,17 +14,17 @@ Template.WorkInbox_Layout.viewmodel({
       const _subHandlers = [
         OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
         UserSubs.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('nonConformities', _id),
-        this.templateInstance.subscribe('risks', _id),
-        this.templateInstance.subscribe('actions', _id)
+        DocumentsListSubs.subscribe('actionsList', _id),
+        DocumentsListSubs.subscribe('nonConformitiesList', _id),
+        DocumentsListSubs.subscribe('risksList', _id),
       ];
 
       // My deleted or Team deleated work items
       if (this.isActiveWorkInboxFilter(5) ||
           this.isActiveWorkInboxFilter(6)) {
-        _subHandlers.push(this.templateInstance.subscribe('workItems', _id, true));
+        _subHandlers.push(DocumentsListSubs.subscribe('workItemsList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('workItems', _id));
+        _subHandlers.push(DocumentsListSubs.subscribe('workItemsList', _id));
       }
 
       this._subHandlers(_subHandlers);

@@ -16,7 +16,6 @@ import { ProblemMagnitudes } from '/imports/api/constants.js';
 
 const { compose } = _;
 
-
 const getDocumentCollectionByType = (type) => {
   if (type === DocumentTypes.NON_CONFORMITY) {
     return NonConformities;
@@ -197,6 +196,19 @@ const $isScrolledElementVisible = (el, container) => {
   return ((elemBottom < containerBottom) && (elemTop >= containerTop));
 }
 
+const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
+
+const findById = curry((_id, array) =>
+  Object.assign([], array).find((item = {}) => Object.is(item._id, _id)));
+
+const length = (array = []) => array.length;
+
+const propItems = property('items');
+
+const lengthItems = compose(length, propItems);
+
+const flattenMapItems = flattenMap(propItems);
+
 const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   let magnitude = ProblemMagnitudes.MINOR;
 
@@ -278,5 +290,12 @@ export {
   assoc,
   invokeC,
   transsoc,
-  pickC
+  pickC,
+  flattenMap,
+  findById,
+  length,
+  propItems,
+  lengthItems,
+  flattenMapItems,
+  getWorkflowDefaultStepDate
 };

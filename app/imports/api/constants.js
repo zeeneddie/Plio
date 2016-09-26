@@ -259,35 +259,35 @@ const OrganizationDefaults = {
 
 const DefaultStandardTypes = [
   {
-    name: 'Policy',
+    title: 'Policy',
     abbreviation: 'POL'
   },
   {
-    name: 'Checklist',
+    title: 'Checklist',
     abbreviation: 'CHK'
   },
   {
-    name: 'Standard Operating Procedure',
+    title: 'Standard Operating Procedure',
     abbreviation: 'SOP'
   },
   {
-    name: 'Work instruction',
+    title: 'Work instruction',
     abbreviation: 'WRK'
   },
   {
-    name: 'Product specification',
+    title: 'Product specification',
     abbreviation: 'SPC'
   },
   {
-    name: 'Test method',
+    title: 'Test method',
     abbreviation: 'TST'
   },
   {
-    name: 'Regulation',
+    title: 'Regulation',
     abbreviation: 'REG'
   },
   {
-    name: 'Other',
+    title: 'Other',
     abbreviation: 'DOC'
   }
 ];
@@ -401,6 +401,93 @@ const TruncatedStringLengths = {
   c40: 40
 };
 
+const UncategorizedTypeSection = {
+  _id: 'uncategorized',
+  title: 'Uncategorized',
+  abbreviation: 'UNC'
+};
+
+const StandardsListProjection = {
+  organizationId: 1,
+  title: 1,
+  typeId: 1,
+  sectionId: 1,
+  nestingLevel: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  owner: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const RisksListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  identifiedAt: 1,
+  typeId: 1,
+  departmentsIds: 1,
+  status: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const ActionsListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  linkedTo: 1,
+  type: 1,
+  status: 1,
+  ownerId: 1,
+  isCompleted: 1,
+  completionTargetDate: 1,
+  toBeCompletedBy: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const NonConformitiesListProjection = {
+  organizationId: 1,
+  serialNumber: 1,
+  sequentialId: 1,
+  title: 1,
+  cost: 1,
+  createdAt: 1,
+  identifiedAt: 1,
+  magnitude: 1,
+  status: 1,
+  departmentsIds: 1,
+  viewedBy: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
+const WorkItemsListProjection = {
+  organizationId: 1,
+  targetDate: 1,
+  type: 1,
+  status: 1,
+  linkedDoc: 1,
+  assigneeId: 1,
+  viewedBy: 1,
+  createdAt: 1,
+  isCompleted: 1,
+  isDeleted: 1,
+  deletedAt: 1,
+  deletedBy: 1
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -441,5 +528,12 @@ export {
   TruncatedStringLengths,
   WorkflowTypes,
   SystemName,
-  UnreadMessages
+  InvitationStatuses,
+  UnreadMessages,
+  UncategorizedTypeSection,
+  StandardsListProjection,
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
 };

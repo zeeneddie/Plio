@@ -1,11 +1,13 @@
 import { Template } from 'meteor/templating';
-import { UserRolesNames } from '../../../../api/constants.js';
+import get from 'lodash.get';
 
+import { UserRolesNames } from '../../../../api/constants.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 
 Template.SS_Card_Read.viewmodel({
   share: 'window',
-  mixin: ['modal', 'nonconformity', 'standard', 'risk', 'action', 'user', 'mobile'],
+  mixin: ['modal', 'nonconformity', 'standard', 'risk', 'workInbox', 'user', 'mobile'],
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
@@ -22,6 +24,11 @@ Template.SS_Card_Read.viewmodel({
   UserId: "SQHmBKJ94gJvpLKLt",
   NC() {
     return this._getNCByQuery({ _id: this.NCId() });
+  },
+  occurrences() {
+    const query = { nonConformityId: get(this.NC(), '_id') };
+    const options = { sort: { serialNumber: 1 } };
+    return Occurrences.find(query, options);
   },
   risk() {
     return this._getRiskByQuery({ _id: this.RiskId() });

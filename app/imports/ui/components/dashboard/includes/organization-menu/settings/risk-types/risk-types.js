@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
+import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/risk-types/methods.js';
 
 Template.OrgSettings_RisksTypes.viewmodel({
   mixin: ['modal', 'addForm', 'utils'],
   onCreated(template) {
-    template.autorun(() => template.subscribe('riskTypes', this.organizationId()));
+    template.autorun(() => OrgSettingsDocSubs.subscribe('riskTypes', this.organizationId()));
   },
   _lText: 'Risk types',
   _rText() {
