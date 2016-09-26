@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { FileIdsSchema } from './files-schema.js';
+import { FileIdsSchema } from '../schemas/files-schema.js';
 
 
 const Files = new Mongo.Collection('Files');

@@ -1,14 +1,14 @@
 import { Mongo } from 'meteor/mongo';
+import moment from 'moment-timezone';
 
-import { ActionSchema } from './action-schema.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import { WorkItems } from '../work-items/work-items.js';
+import { ActionSchema } from '../schemas/action-schema.js';
+import { NonConformities } from './non-conformities.js';
+import { Risks } from './risks.js';
+import { WorkItems } from './work-items.js';
 import {
   ActionUndoTimeInHours, ProblemMagnitudes,
   ProblemTypes, WorkflowTypes, CollectionNames
 } from '../constants.js';
-import { compareDates } from '../helpers.js';
 
 
 const Actions = new Mongo.Collection(CollectionNames.ACTIONS);
@@ -64,10 +64,9 @@ Actions.helpers({
       return false;
     }
 
-    const undoDeadline = new Date(completedAt.getTime());
-    undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
+    const undoDeadline = moment(completedAt).add(ActionUndoTimeInHours, 'hours');
 
-    return compareDates(undoDeadline, new Date()) === 1;
+    return undoDeadline.isAfter(new Date());
   },
   canBeVerified() {
     const { isCompleted, isVerified } = this;
@@ -80,10 +79,9 @@ Actions.helpers({
       return false;
     }
 
-    const undoDeadline = new Date(verifiedAt.getTime());
-    undoDeadline.setHours(undoDeadline.getHours() + ActionUndoTimeInHours);
+    const undoDeadline = moment(verifiedAt).add(ActionUndoTimeInHours, 'hours');
 
-    return compareDates(undoDeadline, new Date()) === 1;
+    return undoDeadline.isAfter(new Date());
   },
   isLinkedToDocument(docId, docType) {
     return !!_.find(this.linkedTo, ({ documentId, documentType }) => {

@@ -2,10 +2,10 @@ import { Template } from 'meteor/templating';
 import { CountSubs, DiscussionSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '/imports/api/messages/messages.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
 import { inspire } from '/imports/api/helpers.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 
 Template.StandardsPage.viewmodel({
   share: ['messages' ,'window'],

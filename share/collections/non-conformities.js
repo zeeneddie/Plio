@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { NonConformitiesSchema } from './non-conformities-schema.js';
+import { NonConformitiesSchema } from '../schemas/non-conformities-schema.js';
 import { CollectionNames } from '../constants.js';
 
 

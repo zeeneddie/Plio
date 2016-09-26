@@ -5,7 +5,7 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { DepartmentSchema } from '/imports/share/schemas/department-schema';
 import DepartmentService from './department-service.js';
 import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
-import { chain } from '/imports/share/helpers.js';
+import { chain } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChange,
   ORG_EnsureCanChangeChecker,

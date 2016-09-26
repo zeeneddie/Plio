@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Dashboard_Layout.viewmodel({

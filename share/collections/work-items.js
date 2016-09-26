@@ -1,9 +1,9 @@
 import { Mongo } from 'meteor/mongo';
 
-import { WorkItemsSchema } from './work-item-schema.js';
-import { Actions } from '../actions/actions.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
+import { WorkItemsSchema } from '../schemas/work-item-schema.js';
+import { Actions } from './actions.js';
+import { NonConformities } from './non-conformities.js';
+import { Risks } from './risks.js';
 import { WorkItemsStore } from '../constants.js';
 
 

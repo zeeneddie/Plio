@@ -3,9 +3,9 @@ import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
-import { ActionTypes } from '/imports/api/constants.js';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 

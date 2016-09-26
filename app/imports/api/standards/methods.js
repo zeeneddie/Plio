@@ -21,7 +21,7 @@ import {
   S_EnsureCanChange,
   S_EnsureCanChangeChecker
 } from '../checkers.js';
-import { chain, chainCheckers, inject } from '/imports/share/helpers.js';
+import { chain, chainCheckers, inject } from '/imports/api/helpers.js';
 import Method, { CheckedMethod } from '../method.js';
 
 const injectSTD = inject(Standards);

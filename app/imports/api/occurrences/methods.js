@@ -9,7 +9,7 @@ import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { IdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { chain, withUserId } from '/imports/share/helpers.js';
+import { chain, withUserId } from '/imports/api/helpers.js';
 import { exists, OCC_MembershipChecker } from '../checkers.js';
 
 const { compose } = _;

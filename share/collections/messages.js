@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { MessagesSchema } from './messages-schema.js';
+import { MessagesSchema } from '../schemas/messages-schema.js';
 
 
 const Messages = new Mongo.Collection('Messages');

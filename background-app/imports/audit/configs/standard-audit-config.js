@@ -1,8 +1,8 @@
-import { Standards } from '/imports/api/standards/standards.js';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Files } from '/imports/api/files/files.js';
-import { CollectionNames, StandardStatuses } from '/imports/api/constants.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { Files } from '/imports/share/collections/files.js';
+import { CollectionNames, StandardStatuses } from '/imports/share/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 

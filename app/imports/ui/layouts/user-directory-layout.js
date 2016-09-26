@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 
 Template.UserDirectory_Layout.viewmodel({

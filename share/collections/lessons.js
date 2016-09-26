@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { LessonsSchema } from './lessons-schema.js';
+import { LessonsSchema } from '../schemas/lessons-schema.js';
 
 
 const LessonsLearned = new Mongo.Collection('LessonsLearned');

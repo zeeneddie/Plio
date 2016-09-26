@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({

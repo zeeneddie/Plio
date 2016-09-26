@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { RiskEvaluationPriorities } from '/imports/api/constants.js';
+import { RiskEvaluationPriorities } from '/imports/share/constants.js';
 
 Template.RiskEvaluation_Priority_Edit.viewmodel({
   priority: '',

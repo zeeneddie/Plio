@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
 import { getWorkflowDefaultStepDate } from '/imports/api/helpers.js';
 

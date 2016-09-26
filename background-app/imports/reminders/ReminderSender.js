@@ -1,15 +1,15 @@
 import { Match } from 'meteor/check';
 import moment from 'moment-timezone';
 
-import { Actions } from '/imports/api/actions/actions.js';
-import { DocumentTypes, ProblemMagnitudes } from '/imports/api/constants.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { renderTemplate } from '/imports/api/helpers.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Standards } from '/imports/api/standards/standards.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { renderTemplate } from '/imports/share/helpers.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { ReminderConfig, ReminderTypes } from './reminder-config.js';
-import NotificationSender from '/imports/core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
 const REMINDER_EMAIL_TEMPLATE = 'personalEmail';

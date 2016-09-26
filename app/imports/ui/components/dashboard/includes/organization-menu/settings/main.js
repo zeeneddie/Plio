@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import {
   insert,
   setName,

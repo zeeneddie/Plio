@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { Actions } from '/imports/share/collections/actions.js';
-import Utils from '/imports/core/utils.js';
+import { generateSerialNumber } from '/imports/api/helpers.js';
 import WorkItemService from '../work-items/work-item-service.js';
 import { WorkItemsStore } from '/imports/share/constants.js';
 
@@ -11,7 +11,7 @@ export default {
   insert({ organizationId, magnitude, ...args }) {
     const organization = Organizations.findOne({ _id: organizationId });
 
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+    const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${this._abbr}${serialNumber}`;
 
     const workflowType = organization.workflowType(magnitude);

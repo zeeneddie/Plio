@@ -7,7 +7,7 @@ import {
   ReviewSchema,
   ImprovementPlanSchema,
   FileIdsSchema
-} from '../schemas.js';
+} from './schemas.js';
 import {
   ProblemsStatuses,
   RiskEvaluationPriorities,

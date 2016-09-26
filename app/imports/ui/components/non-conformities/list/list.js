@@ -3,9 +3,9 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/api/constants.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/share/constants.js';
 
 Template.NC_List.viewmodel({
   share: 'search',

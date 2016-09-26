@@ -6,7 +6,7 @@ import { StandardsTypeSchema } from '/imports/share/schemas/standards-type-schem
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/share/helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

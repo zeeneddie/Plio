@@ -6,7 +6,7 @@ import {
   DocumentIdSchema,
   DocumentTypeSchema,
   ViewedBySchema
-} from '../schemas.js';
+} from './schemas.js';
 
 
 const RequiredSchema = new SimpleSchema({

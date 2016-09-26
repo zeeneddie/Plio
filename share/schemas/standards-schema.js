@@ -5,7 +5,7 @@ import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
   ImprovementPlanSchema, getNotifySchema
-} from '../schemas.js';
+} from './schemas.js';
 
 
 const optionalFields = new SimpleSchema([

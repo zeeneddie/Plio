@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
-import NotificationsService from '/imports/api/notifications/notifications-service.js'
 
+import { Notifications } from '../collections/notifications.js'
 import HandlebarsCompiledCache from './HandlebarsCompiledCache';
 
 
@@ -137,7 +137,7 @@ export default class NotificationSender {
     }
 
     notificationData.recipientIds = recipients;
-    NotificationsService.insert(notificationData);
+    Notifications.insert(notificationData);
   }
 
   /**

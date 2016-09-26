@@ -11,7 +11,7 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { IdSchema, UserIdSchema } from '/imports/share/schemas/schemas.js';
 import { UserRoles, UserMembership } from '/imports/share/constants.js';
 import Method from '../method.js';
-import { withUserId, chain, mapArgsTo } from '/imports/share/helpers.js';
+import { withUserId, chain, mapArgsTo } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
   exists,

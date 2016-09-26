@@ -1,8 +1,8 @@
-import { Actions } from '/imports/api/actions/actions.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { CollectionNames, ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/api/constants.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { CollectionNames, ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 import ActionAuditConfig from './action-audit-config.js';
 import NCAuditConfig from './nc-audit-config.js';

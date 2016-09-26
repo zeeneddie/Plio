@@ -1,16 +1,16 @@
 import moment from 'moment-timezone';
 import pluralize from 'pluralize';
 
-import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { CollectionNames } from '/imports/api/constants.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { getCollectionByName } from '/imports/api/helpers.js';
-import NotificationSender from '../../NotificationSender.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { CollectionNames } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { getCollectionByName } from '/imports/share/helpers.js';
+import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
 const RECAP_EMAIL_TEMPLATE = 'recapEmail';

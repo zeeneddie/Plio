@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions, WorkflowTypes } from '/imports/api/constants.js';
+import { ActionPlanOptions, WorkflowTypes } from '/imports/share/constants.js';
 import { updateViewedBy } from '/imports/api/actions/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
 

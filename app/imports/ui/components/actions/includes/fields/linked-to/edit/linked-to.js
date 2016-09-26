@@ -3,9 +3,9 @@ import { Blaze } from 'meteor/blaze';
 import get from 'lodash.get';
 import invoke from 'lodash.invoke';
 
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
 
 Template.Actions_LinkedTo_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils', 'vmTraverse'],

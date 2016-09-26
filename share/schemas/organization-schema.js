@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { OrgCurrencies,  WorkflowTypes, UserMembership } from '/imports/api/constants.js';
-import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from '../schemas.js';
+import { OrgCurrencies,  WorkflowTypes, UserMembership } from '../constants.js';
+import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({

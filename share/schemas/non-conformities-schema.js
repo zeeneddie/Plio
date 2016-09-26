@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {
   BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
   ImprovementPlanSchema, FileIdsSchema
-} from '../schemas.js';
+} from './schemas.js';
 import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;

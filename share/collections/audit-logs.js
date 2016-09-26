@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { AuditLogSchema } from './audit-log-schema.js';
+import { AuditLogSchema } from '../schemas/audit-log-schema.js';
 
 
 const AuditLogs = new Mongo.Collection('AuditLogs');

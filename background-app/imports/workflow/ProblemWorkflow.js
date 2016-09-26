@@ -1,5 +1,5 @@
-import { WorkflowTypes } from '/imports/api/constants.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { isDueToday, isOverdue } from '/imports/api/checkers.js';
 
 import Workflow from './Workflow.js';

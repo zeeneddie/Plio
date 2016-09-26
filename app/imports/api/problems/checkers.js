@@ -21,7 +21,7 @@ import {
   P_CANNOT_SET_COMPLETED_DATE_FOR_INCOMPLETE_ANALYSIS,
   P_CANNOT_SET_COMPLETION_COMMENTS_FOR_INCOMPLETE_ANALYSIS
 } from '../errors.js';
-import { checkAndThrow } from '/imports/share/helpers.js';
+import { checkAndThrow } from '/imports/api/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { isOrgOwner } from '../checkers.js';
 

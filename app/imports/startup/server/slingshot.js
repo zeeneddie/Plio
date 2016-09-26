@@ -1,8 +1,6 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Random } from 'meteor/random';
 
-import Utils from '/imports/core/utils';
-
 
 const configureSlignshot = () => {
   const {
@@ -184,6 +182,6 @@ const configureSlignshot = () => {
   });
 };
 
-// if (Utils.isProduction()) {
+// if (Meteor.isProduction) {
   configureSlignshot();
 // }

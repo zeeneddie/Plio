@@ -1,4 +1,4 @@
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 
 import ProblemWorkflow from './ProblemWorkflow.js';
 

@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { ProblemsStatuses } from '/imports/api/constants.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { ProblemsStatuses } from '/imports/share/constants.js';
 
 Template.Risks_List.viewmodel({
   share: 'search',

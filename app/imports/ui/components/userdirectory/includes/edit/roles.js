@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { UserRoles, UserRolesNames } from '/imports/api/constants.js';
+import { UserRoles, UserRolesNames } from '/imports/share/constants.js';
 
 
 Template.UserEdit_Roles.viewmodel({

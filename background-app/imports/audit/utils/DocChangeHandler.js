@@ -1,12 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { SystemName } from '/imports/api/constants.js';
-import { deepExtend } from '/imports/api/helpers.js';
-import { renderTemplate } from './helpers.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { SystemName } from '/imports/share/constants.js';
 import { DocChangesKinds, ChangesKinds } from './changes-kinds.js';
+import { renderTemplate } from '/imports/share/helpers.js';
 import DocumentDiffer from './document-differ.js';
-import NotificationSender from '../../../NotificationSender.js';
+import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
 const DEFAULT_EMAIL_TEMPLATE = 'personalEmail';

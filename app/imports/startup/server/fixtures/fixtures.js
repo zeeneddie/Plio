@@ -16,7 +16,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 
 import { insertMessageFixtures } from './fixtures-messages.js';
 
-import Auditor from '/imports/core/audit/server/auditor.js';
+// import Auditor from '/imports/core/audit/server/auditor.js';
 
 // Extend the global object to have a scope of collections
 _.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });
@@ -25,7 +25,7 @@ import path from 'path';
 import fs from 'fs';
 import { EJSON } from 'meteor/ejson';
 
-import { UserRoles } from '/imports/api/constants.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 // If attrPath is 'Organization' and obj is global, it returns the value of global.Organization
 // If attrPath is 'Meteor.users' and obj is this, it returns the value of this.Meteor.users
@@ -77,7 +77,7 @@ const logAction = (assetsNumber, collectionName) => {
 };
 
 Meteor.startup(() => {
-  Auditor.stopAudit();
+  //Auditor.stopAudit();
 
   if (!Meteor.roles.find().count()) {
     _.each(UserRoles, (name) => {
@@ -105,5 +105,5 @@ Meteor.startup(() => {
 
   insertMessageFixtures(1000);
 
-  Auditor.startAudit();
+  //Auditor.startAudit();
 });

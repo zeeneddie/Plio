@@ -1,4 +1,4 @@
-import { Risks } from '/imports/api/risks/risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 
 import ProblemWorkflow from './ProblemWorkflow.js';
 

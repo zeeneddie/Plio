@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { StandardsTypeSchema } from './standard-types-schema.js';
+import { StandardsTypeSchema } from '../schemas/standard-types-schema.js';
 
 
 const StandardTypes = new Mongo.Collection('StandardTypes');

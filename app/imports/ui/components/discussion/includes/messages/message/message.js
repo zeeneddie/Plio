@@ -5,11 +5,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 import invoke from 'lodash.invoke';
 
-import { getFormattedDate } from '/imports/api/helpers.js';
+import { getFormattedDate } from '/imports/share/helpers.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 import { remove as removeMessage, updateViewedBy } from '/imports/api/messages/methods.js';
 import { TruncatedStringLengths } from '/imports/api/constants.js';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 
 Template.Discussion_Message.viewmodel({
 	mixin: ['discussions', 'organization', 'standard', 'modal'],

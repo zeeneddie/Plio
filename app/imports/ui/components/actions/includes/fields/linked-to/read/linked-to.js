@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ProblemTypes } from '/imports/api/constants.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 
 Template.Actions_LinkedTo_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'risk', 'utils', 'problemsStatus'],

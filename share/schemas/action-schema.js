@@ -1,4 +1,5 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import moment from 'moment-timezone';
 
 import {
   BaseEntitySchema,
@@ -6,9 +7,8 @@ import {
   FileIdsSchema,
   getNotifySchema,
   ViewedBySchema
-} from '../schemas.js';
+} from './schemas.js';
 import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes } from '../constants.js';
-import { compareDates } from '../helpers.js';
 
 
 const checkDate = function() {
@@ -17,7 +17,7 @@ const checkDate = function() {
     return;
   }
 
-  return (compareDates(value, new Date()) > -1) ? 'badDate' : true;
+  return moment(value).isAfter(new Date()) ? 'badDate' : true;
 };
 
 const linkedToSchema = new SimpleSchema({

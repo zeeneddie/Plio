@@ -3,15 +3,14 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
-import Utils from '/imports/core/utils.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
+import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/api/helpers.js';
 
 if (Meteor.isServer) {
-  import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
-  import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
-  import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+  //import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
+  //import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
+  //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 }
 
 
@@ -24,7 +23,7 @@ export default {
     organizationId, type, linkedTo,
     completionTargetDate, toBeCompletedBy, ...args
   }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
+    const serialNumber = generateSerialNumber(this.collection, { organizationId, type });
 
     const sequentialId = `${type}${serialNumber}`;
 
@@ -318,20 +317,20 @@ export default {
   },
 
   _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
+    /*Meteor.isServer && Meteor.defer(() => {
       const workflow = new ActionWorkflow(_id);
       workflow.refreshStatus();
-    });
+    });*/
   },
 
   _refreshLinkedDocStatus(documentId, documentType) {
-    Meteor.isServer && Meteor.defer(() => {
+    /*Meteor.isServer && Meteor.defer(() => {
       const workflowConstructors = {
         [ProblemTypes.NC]: NCWorkflow,
         [ProblemTypes.RISK]: RiskWorkflow
       };
 
       new workflowConstructors[documentType](documentId).refreshStatus();
-    });
+    });*/
   }
 };

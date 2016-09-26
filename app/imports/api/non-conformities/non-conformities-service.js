@@ -6,7 +6,7 @@ import { ProblemTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 
 if (Meteor.isServer) {
-  import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
+  // import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
 }
 
 
@@ -28,8 +28,8 @@ export default _.extend({}, ProblemsService, {
   },
 
   _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
+    /*Meteor.isServer && Meteor.defer(() => {
       new NCWorkflow(_id).refreshStatus();
-    });
+    });*/
   }
 });

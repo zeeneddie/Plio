@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
-import { UserRolesNames } from '../../../../api/constants.js';
+import { UserRolesNames } from '/imports/share/constants.js';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 Template.SS_Card_Read.viewmodel({
   share: 'window',

@@ -4,8 +4,7 @@ import moment from 'moment-timezone';
 import {
   TimeUnits, DocumentTypes, AnalysisStatuses,
   ReviewStatuses, SystemName
-} from './constants.js';
-import { Utils } from '/imports/core/utils.js';
+} from '../constants.js';
 
 
 export const IdSchema = new SimpleSchema({

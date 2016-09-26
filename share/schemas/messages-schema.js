@@ -3,7 +3,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {
 	BaseEntitySchema, DiscussionIdSchema, FileIdSchema,
 	UserIdSchema, ViewedBySchema, OrganizationIdSchema
-} from '../schemas.js';
+} from './schemas.js';
 
 
 export const MessagesSchema = new SimpleSchema([

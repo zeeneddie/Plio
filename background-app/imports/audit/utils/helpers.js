@@ -1,8 +1,8 @@
 import Handlebars from 'handlebars';
 import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { DocumentTypes, SystemName } from '/imports/api/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { DocumentTypes, SystemName } from '/imports/share/constants.js';
 import StandardAuditConfig from '../configs/standard-audit-config.js';
 import NCAuditConfig from '../configs/nc-audit-config.js';
 import RiskAuditConfig from '../configs/risk-audit-config.js';
@@ -37,10 +37,4 @@ export const getLinkedDocAuditConfig = (docType) => {
     [DocumentTypes.NON_CONFORMITY]: NCAuditConfig,
     [DocumentTypes.RISK]: RiskAuditConfig
   }[docType];
-};
-
-export const renderTemplate = (template, data = {}) => {
-  const compiledTemplate = Handlebars.compile(template);
-
-  return compiledTemplate(data);
 };

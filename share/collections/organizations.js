@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { OrganizationSchema } from './organization-schema.js';
+import { OrganizationSchema } from '../schemas/organization-schema.js';
 import { UserMembership, ProblemMagnitudes } from '../constants';
 
 

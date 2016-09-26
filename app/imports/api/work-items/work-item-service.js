@@ -6,7 +6,7 @@ import BaseEntityService from '../base-entity-service.js';
 import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
 if (Meteor.isServer) {
-  import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
+  // import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
 }
 
 
@@ -213,10 +213,10 @@ export default {
   },
 
   _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
+    /*Meteor.isServer && Meteor.defer(() => {
       const workflow = new WorkItemWorkflow(_id);
       workflow.refreshStatus();
-    });
+    });*/
   },
 
   _getDocData(docId, docType, workItemType) {

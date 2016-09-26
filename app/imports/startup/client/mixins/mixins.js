@@ -13,11 +13,11 @@ import { Actions } from '/imports/share/collections/actions.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import invoke from 'lodash.invoke';
 import {
-  DocumentTypes, UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
-  OrgCurrencies, ActionStatuses, WorkInboxFilters,
+  DocumentTypes, UserRoles, ProblemGuidelineTypes,
+  ProblemsStatuses, OrgCurrencies, ActionStatuses,
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/share/constants.js';
+import { NonConformityFilters, StandardFilters, RiskFilters } from '/imports/api/constants.js';
 import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
 import { Match, check } from 'meteor/check';

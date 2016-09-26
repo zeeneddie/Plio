@@ -8,7 +8,7 @@ import {
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
 import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/share/helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

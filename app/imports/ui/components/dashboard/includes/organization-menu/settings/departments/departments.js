@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 
 

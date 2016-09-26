@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import ReminderSender from '/imports/core/reminders/server/ReminderSender.js';
 
 

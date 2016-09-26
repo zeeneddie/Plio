@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
 
 Template.ListItem.viewmodel({
   share: ['search'],

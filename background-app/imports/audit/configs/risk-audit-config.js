@@ -1,9 +1,9 @@
-import { Risks } from '/imports/api/risks/risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import {
   CollectionNames,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions
-} from '/imports/api/constants.js';
+} from '/imports/share/constants.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import ProblemAuditConfig from './problem-audit-config.js';

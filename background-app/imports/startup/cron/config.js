@@ -1,6 +1,3 @@
-import Utils from '/imports/core/utils';
-
-
 SyncedCron.config({
 
   // Log job run details to console
@@ -29,6 +26,6 @@ SyncedCron.config({
   collectionTTL: 172800
 });
 
-if (Utils.isProduction()) {
+if (Meteor.isProduction) {
   SyncedCron.start();
 }

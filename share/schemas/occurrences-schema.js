@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, ViewedBySchema } from '../schemas.js';
+import { BaseEntitySchema, ViewedBySchema } from './schemas.js';
 
 const RequiredSchema = new SimpleSchema({
   nonConformityId: {

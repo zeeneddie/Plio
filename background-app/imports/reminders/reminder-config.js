@@ -1,9 +1,9 @@
 import moment from 'moment-timezone';
 import pluralize from 'pluralize';
 
-import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/api/constants.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { capitalize } from '/imports/api/helpers.js';
+import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { capitalize } from '/imports/share/helpers.js';
 
 
 const ReminderTypes = {

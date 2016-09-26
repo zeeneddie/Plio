@@ -1,13 +1,13 @@
 import { Accounts } from 'meteor/accounts-base';
-import Utils from '/imports/core/utils';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/api/helpers.js';
 import UserNotificationsSender from '/imports/api/users/user-notifications-sender.js';
 
 
 function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
-    user.profile.avatar = Utils.getRandomAvatarUrl();
-    user.profile.initials = Utils.generateUserInitials(options.profile);
+    user.profile.avatar = getRandomAvatarUrl();
+    user.profile.initials = generateUserInitials(options.profile);
   }
 
   return user;

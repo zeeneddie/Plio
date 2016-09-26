@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { PhoneTypes } from '../constants.js';
-import { TimezoneSchema } from '../schemas.js';
+import { TimezoneSchema } from './schemas.js';
 
 
 const PhoneNumberSchema = new SimpleSchema({

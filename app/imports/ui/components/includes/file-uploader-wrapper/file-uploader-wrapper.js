@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.FileUploader_Wrapper.viewmodel({

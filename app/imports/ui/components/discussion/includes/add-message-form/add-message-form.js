@@ -8,8 +8,8 @@ import invoke from 'lodash.invoke';
 import {
 	insert as insertMessage
 } from '/imports/api/messages/methods.js';
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { DocumentTypes } from '/imports/api/constants.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { DocumentTypes } from '/imports/share/constants.js';
 import { handleMethodResult } from '/imports/api/helpers.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
 

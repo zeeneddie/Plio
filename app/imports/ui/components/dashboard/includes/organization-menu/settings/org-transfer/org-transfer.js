@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UserMembership } from '/imports/api/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { UserMembership } from '/imports/share/constants.js';
 import { isOrgOwner } from '/imports/api/checkers.js';
 
 

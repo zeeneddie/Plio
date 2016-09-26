@@ -1,4 +1,4 @@
-import { CollectionNames, OrgCurrencies, UserMembership } from '/imports/api/constants.js';
+import { CollectionNames, OrgCurrencies, UserMembership } from '/imports/share/constants.js';
 import { getUserFullNameOrEmail, getUserId } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 

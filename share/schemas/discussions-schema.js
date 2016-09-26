@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
+import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
 import { DocumentTypes } from '../constants.js';
 
 

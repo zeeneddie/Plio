@@ -7,7 +7,7 @@ import {
   RequiredSchema,
   RiskScoreSchema
 } from '/imports/share/schemas/risks-schema.js';
-import { Risks } from './risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import {
   IdSchema,
   OrganizationIdSchema,
@@ -37,7 +37,7 @@ import {
   P_OnSetStandardsUpdateCommentsChecker
 } from '../checkers.js';
 import { ACCESS_DENIED } from '../errors.js';
-import { inject } from '/imports/share/helpers.js';
+import { inject } from '/imports/api/helpers.js';
 
 const injectRK = inject(Risks);
 

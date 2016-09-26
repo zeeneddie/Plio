@@ -12,7 +12,7 @@ import {
   CompleteActionSchema
 } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/share/collections/helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
   checkAnalysis,

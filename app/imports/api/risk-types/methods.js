@@ -7,7 +7,7 @@ import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
 import { UserRoles } from '/imports/share/constants';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '/imports/share/helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

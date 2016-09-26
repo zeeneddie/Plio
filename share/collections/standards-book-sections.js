@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { StandardsBookSectionSchema  } from './standards-book-section-schema.js';
+import { StandardsBookSectionSchema  } from '../schemas/standards-book-section-schema.js';
 
 
 const StandardsBookSections = new Mongo.Collection('StandardsBookSections');

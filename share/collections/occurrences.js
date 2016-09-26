@@ -1,6 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 
-import { OccurrencesSchema } from './occurrences-schema.js';
+import { OccurrencesSchema } from '../schemas/occurrences-schema.js';
 
 
 const Occurrences = new Mongo.Collection('Occurrences');

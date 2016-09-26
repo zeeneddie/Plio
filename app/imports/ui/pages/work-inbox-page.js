@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
 
 Template.WorkInbox_Page.viewmodel({
   mixin: ['organization', 'nonconformity', 'workInbox'],

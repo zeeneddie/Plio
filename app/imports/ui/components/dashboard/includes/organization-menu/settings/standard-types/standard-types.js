@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { StandardTypes } from '/imports/api/standard-types/standard-types.js';
+import { StandardTypes } from '/imports/share/collections/standard-types.js';
 import { insert, update, remove } from '/imports/api/standard-types/methods.js';
 
 Template.OrgSettings_StandardTypes.viewmodel({

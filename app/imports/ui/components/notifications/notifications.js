@@ -4,7 +4,7 @@
  * @param {boolean} notificationOnAdded - whether to send notifications when they are added;
 */
 import { Template } from 'meteor/templating';
-import { Notifications } from '/imports/api/notifications/notifications.js';
+import { Notifications } from '/imports/share/collections/notifications.js';
 import { updateViewedBy } from '/imports/api/notifications/methods.js';
 
 Template.Notifications.viewmodel({

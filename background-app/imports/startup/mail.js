@@ -1,7 +1,5 @@
-import Utils from '/imports/core/utils';
+const { login, password, hostname, port } = Meteor.settings.mail;
 
-const {login, password, hostname, port} = Meteor.settings.mail;
-
-if (Utils.isProduction()) {
+if (Meteor.isProduction) {
   process.env.MAIL_URL = `smtp://${login}:${password}@${hostname}:${port}`;
 }

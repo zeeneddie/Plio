@@ -21,7 +21,7 @@ import {
   ACT_OnUndoVerificationChecker,
   ACT_LinkedDocsChecker
 } from '../checkers.js';
-import { chain, checkAndThrow, inject } from '/imports/share/helpers.js';
+import { chain, checkAndThrow, inject } from '/imports/api/helpers.js';
 import {
   ACT_CANNOT_SET_TARGET_DATE_FOR_COMPLETED,
   ACT_CANNOT_SET_EXECUTOR_FOR_COMPLETED,

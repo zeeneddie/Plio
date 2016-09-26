@@ -24,7 +24,7 @@ import {
   isOrgOwner,
   isOrgMember
 } from '../checkers.js';
-import { checkAndThrow, withUserId } from '/imports/share/helpers.js';
+import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
 
 export const ORG_EnsureCanChange = (userId, organizationId) => {
   return checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);

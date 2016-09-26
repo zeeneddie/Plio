@@ -1,5 +1,5 @@
-import { ProblemMagnitudes, ProblemsStatuses } from '/imports/api/constants.js';
-import { Standards } from '/imports/api/standards/standards.js';
+import { ProblemMagnitudes, ProblemsStatuses } from '/imports/share/constants.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
 import { ChangesKinds } from '../utils/changes-kinds.js';
 import StandardAuditConfig from './standard-audit-config.js';

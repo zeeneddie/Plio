@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 import curry from 'lodash.curry';
 
-import { AnalysisStatuses } from '/imports/api/constants.js';
+import { AnalysisStatuses } from '/imports/share/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 

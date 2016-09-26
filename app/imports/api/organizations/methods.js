@@ -21,7 +21,7 @@ import {
   UserIdSchema, TimezoneSchema
 } from '/imports/share/schemas/schemas';
 import Method, { CheckedMethod } from '../method.js';
-import { chain } from '/imports/share/helpers.js';
+import { chain } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
   checkDocExistance,

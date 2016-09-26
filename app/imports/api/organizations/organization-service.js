@@ -14,14 +14,14 @@ import {
   UserMembership,
   UserRoles
 } from '/imports/share/constants.js';
-import Utils from '../../core/utils.js';
+import { generateSerialNumber } from '/imports/api/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
 
 export default OrganizationService = {
   collection: Organizations,
 
   insert({ name, timezone, currency, ownerId }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, {}, 100);
+    const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
     const { workflowDefaults, reminders, ncGuidelines, rkGuidelines, rkScoringGuidelines } = OrganizationDefaults;
 

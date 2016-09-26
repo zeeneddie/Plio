@@ -1,11 +1,11 @@
-import { Actions } from '/imports/api/actions/actions.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { WorkflowTypes } from '/imports/api/constants.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
 
-import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
-import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
-import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+//import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
+//import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
+//import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 
 
 SyncedCron.add({
@@ -16,7 +16,7 @@ SyncedCron.add({
   },
 
   job() {
-    const actions = Actions.find({
+    /*const actions = Actions.find({
       $or: [{
         isCompleted: false,
         completedAt: { $exists: false },
@@ -51,6 +51,6 @@ SyncedCron.add({
     NCs.forEach(doc => new NCWorkflow(doc).refreshStatus());
 
     const risks = Risks.find(problemDocQuery);
-    risks.forEach(doc => new RiskWorkflow(doc).refreshStatus());
+    risks.forEach(doc => new RiskWorkflow(doc).refreshStatus());*/
   }
 });

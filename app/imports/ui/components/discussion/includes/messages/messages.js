@@ -4,13 +4,13 @@ import get from 'lodash.get';
 import invoke from 'lodash.invoke';
 import property from 'lodash.property';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '/imports/api/messages/messages.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { getFormattedDate } from '/imports/share/helpers.js';
 import {
-	getFormattedDate,
-	$isScrolledToBottom,
-	$scrollToBottom,
-	$isScrolledElementVisible
+  $isScrolledToBottom,
+  $scrollToBottom,
+  $isScrolledElementVisible
 } from '/imports/api/helpers.js';
 import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';

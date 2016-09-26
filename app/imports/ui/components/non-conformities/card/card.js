@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { ActionTypes } from '/imports/api/constants.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({

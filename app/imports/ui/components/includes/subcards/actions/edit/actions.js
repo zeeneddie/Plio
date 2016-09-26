@@ -3,10 +3,10 @@ import pluralize from 'pluralize';
 import moment from 'moment-timezone';
 import invoke from 'lodash.invoke';
 
-import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
 import { getTzTargetDate, flattenObjects, inspire } from '/imports/api/helpers.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import {
   insert,
   update,

@@ -3,8 +3,8 @@ import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import get from 'lodash.get';
 
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { DefaultStandardTypes } from '/imports/api/constants.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { DefaultStandardTypes } from '/imports/share/constants.js';
 
 Template.ESType.viewmodel({
   share: 'standard',

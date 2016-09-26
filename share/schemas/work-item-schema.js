@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema, DeletedSchema } from '../schemas.js';
+import { BaseEntitySchema, ViewedBySchema, OrganizationIdSchema, DeletedSchema } from './schemas.js';
 import { WorkItemsStore } from '../constants.js';
 
 const { TYPES, LINKED_TYPES, STATUSES } = WorkItemsStore;

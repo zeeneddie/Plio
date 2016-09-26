@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ProblemTypes } from '/imports/api/constants.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 
 Template.Subcards_Actions_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'actionStatus', 'nonconformity', 'risk', 'utils'],

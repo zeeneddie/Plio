@@ -6,7 +6,7 @@ import BaseEntityService from '../base-entity-service.js';
 import ProblemsService from '../problems/problems-service.js';
 
 if (Meteor.isServer) {
-  import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+  //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
 }
 
 
@@ -53,8 +53,8 @@ export default _.extend({}, ProblemsService, {
   },
 
   _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
+    /*Meteor.isServer && Meteor.defer(() => {
       new RiskWorkflow(_id).refreshStatus();
-    });
+    });*/
   }
 });

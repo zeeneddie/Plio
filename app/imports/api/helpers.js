@@ -17,154 +17,39 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 const { compose } = _;
 
 
-const getDocumentCollectionByType = (type) => {
-  if (type === DocumentTypes.NON_CONFORMITY) {
-    return NonConformities;
-  } else if (type === DocumentTypes.RISK) {
-    return Risks;
-  } else if (type === DocumentTypes.STANDARD) {
-    return Standards;
-  }
+export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
-  return false;
-};
+export const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
-const compareDates = (date1, date2) => {
-  if (!_.isDate(date1)) {
-    throw new Error(
-      'First argument of "compareDates" function must be of type Date'
-    );
-  }
+export const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
 
-  if (!_.isDate(date2)) {
-    throw new Error(
-      'Second argument of "compareDates" function must be of type Date'
-    );
-  }
+export const inject = anything => fn => fn(anything);
 
-  const utcDate1 = new Date(
-    date1.getTime() + (date1.getTimezoneOffset() * 60000)
-  );
+export const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
-  const utcDate2 = new Date(
-    date2.getTime() + (date2.getTimezoneOffset() * 60000)
-  );
+export const withUserId = fn => userId => fn({ userId });
 
-  if (utcDate1 > utcDate2) {
-    return 1;
-  } else if (utcDate1 === utcDate2) {
-    return 0;
-  } else if (utcDate1 < utcDate2) {
-    return -1;
-  }
-};
+export const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
 
-const getFormattedDate = (date, stringFormat) => {
-  return moment(date).format(stringFormat);
-};
-
-const getTzTargetDate = (targetDate, timezone) => {
-  return targetDate && moment.tz([
-    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
-  ], timezone).toDate();
-};
-
-const handleMethodResult = (cb) => {
-  return (err, res) => {
-    if (err) {
-      toastr.error(err.reason);
-    }
-    if (_.isFunction(cb)) {
-      cb(err, res);
-    }
-  };
-};
-
-const getCollectionByName = (colName) => {
-  const collections = {
-    [CollectionNames.ACTIONS]: Actions,
-    [CollectionNames.NCS]: NonConformities,
-    [CollectionNames.RISKS]: Risks,
-    [CollectionNames.STANDARDS]: Standards
-  };
-
-  return collections[colName];
-};
-
-const getCollectionByDocType = (docType) => {
-  const { STANDARD, NON_CONFORMITY, RISK } = DocumentTypes;
-  switch(docType) {
-    case STANDARD:
-      return Standards;
-      break;
-    case NON_CONFORMITY:
-      return NonConformities;
-      break;
-    case RISK:
-      return Risks;
-      break;
-    default:
-      return undefined;
-      break;
-  }
-};
-
-export const getCollectionNameByDocType = (docType) => {
-  return {
-    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
-    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
-    [DocumentTypes.RISK]: CollectionNames.RISKS
-  }[docType];
-};
-
-export const getLinkedDoc = (documentId, documentType) => {
-  const collection = getCollectionByDocType(documentType);
-  return collection.findOne({ _id: documentId });
-};
-
-const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
-
-const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
-
-const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
-
-const inject = anything => fn => fn(anything);
-
-const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
-
-const withUserId = fn => userId => fn({ userId });
-
-const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
-
-const checkAndThrow = (predicate, error = '') => {
+export const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 
   return true;
 };
 
-const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+export const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
-const deepExtend = (dest, src) => {
-  _(src).each((val, key) => {
-    if (_(val).isObject() && _(dest[key]).isObject()) {
-      deepExtend(dest[key], val);
-    } else {
-      dest[key] = val;
-    }
-  });
-};
+export const extractIds = (collection = []) => collection.map(property('_id'));
 
-const extractIds = (collection = []) => collection.map(property('_id'));
+export const not = expression => !expression;
 
-const not = expression => !expression;
-
-const mapByIndex = (value = {}, index = 0, arr = []) =>
+export const mapByIndex = (value = {}, index = 0, arr = []) =>
   Object.assign([], arr, { [index]: { ...arr[index], ...value } });
 
-const mapValues = curry((mapper, obj) =>
+export const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
 
-const inspire = curry((props, instance, ...args) =>
+export const inspire = curry((props, instance, ...args) =>
   flattenObjects(props.map((key, i) =>
     ({ [key]: invoke(instance, key, ...((arr = []) => arr[i] || [])(args)) }))));
 
@@ -181,22 +66,33 @@ const inspire = curry((props, instance, ...args) =>
 //
 // > { hello: 'world !! 1', today: 'is friday  wohoooooo!' }
 
-const invokeId = instance => invoke(instance, '_id');
+export const invokeId = instance => invoke(instance, '_id');
 
-const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+export const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
-const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
-const $isScrolledElementVisible = (el, container) => {
+export const $isScrolledElementVisible = (el, container) => {
   const containerTop = $(container).offset().top;
   const containerBottom = containerTop + $(container).height();
   const elPosition = $(el).position();
   const elemTop = elPosition && elPosition.top;
   const elemBottom = elPosition && elemTop + $(el).height();
   return ((elemBottom < containerBottom) && (elemTop > containerTop));
-}
+};
 
-const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
+export const getRandomAvatarUrl = () => {
+  const randomAvatarIndex = Math.floor(Math.random() * 16);
+  return AvatarPlaceholders[randomAvatarIndex];
+};
+
+export const getTzTargetDate = (targetDate, timezone) => {
+  return targetDate && moment.tz([
+    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
+  ], timezone).toDate();
+};
+
+export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   let magnitude = ProblemMagnitudes.MINOR;
 
   // Select the highest magnitude among all linked documents
@@ -223,44 +119,50 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
       .toDate();
 
   return date;
-}
-
-const renderTemplate = (template, data = {}) => {
-  const compiledTemplate = Handlebars.compile(template);
-  return compiledTemplate(data);
 };
 
-const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
+export const generateUserInitials = (userProfile) => {
+  const { firstName, lastName} = userProfile;
+  let initials = '';
+  if (firstName) {
+    initials += firstName.charAt(0);
+  }
 
-export {
-  getDocumentCollectionByType,
-  compareDates,
-  getCollectionByName,
-  getFormattedDate,
-  getTzTargetDate,
-  handleMethodResult,
-  getCollectionByDocType,
-  chain,
-  chainCheckers,
-  checkAndThrow,
-  inject,
-  injectCurry,
-  renderTemplate,
-  withUserId,
-  mapArgsTo,
-  flattenObjects,
-  deepExtend,
-  extractIds,
-  not,
-  mapByIndex,
-  mapValues,
-  inspire,
-  setModalError,
-  invokeId,
-  $isScrolledToBottom,
-  $scrollToBottom,
-  $isScrolledElementVisible,
-  getWorkflowDefaultStepDate,
-  renderTemplate,
-  capitalize
+  if (lastName) {
+    initials += lastName.charAt(0);
+  }
+
+  return initials.toUpperCase();
+};
+
+export const generateSerialNumber = (collection, query = {}, defaultNumber = 1) => {
+  check(defaultNumber, Number);
+
+  const last = collection.findOne({
+    ...query,
+    serialNumber: {
+      $type: 16 // 32-bit integer
+    }
+  }, {
+    sort: {
+      serialNumber: -1
+    }
+  });
+
+  return last ? last.serialNumber + 1 : defaultNumber;
+};
+
+export const handleMethodResult = (cb) => {
+  return (err, res) => {
+    if (err) {
+      toastr.error(err.reason);
+    }
+    if (_.isFunction(cb)) {
+      cb(err, res);
+    }
+  };
+};
+
+export const showError = (errorMsg) => {
+  toastr.error(errorMsg);
 };

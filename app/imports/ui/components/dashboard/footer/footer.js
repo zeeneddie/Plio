@@ -1,14 +1,14 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations';
+import { Organizations } from '/imports/share/collections/organizations';
 import { Roles } from 'meteor/alanning:roles';
 
-import { UserRoles } from '/imports/api/constants.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 Template.Dashboard_Footer.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
   onInviteClick(e) {
     e.preventDefault();
-    
+
     this.modal().open({
       organizationId: this.organizationId(),
       template: 'UserDirectory_InviteUsers',

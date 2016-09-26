@@ -22,7 +22,7 @@ import {
   setStandardsUpdateCompletedDate,
   setStandardsUpdateComments
 } from '/imports/api/risks/methods.js';
-import { WorkflowTypes } from '/imports/api/constants.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 

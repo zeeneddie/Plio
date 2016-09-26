@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 import property from 'lodash.property';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { UserSubs, CountSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Dashboard_Page.viewmodel({
