@@ -146,7 +146,7 @@ Template.StandardsList.viewmodel({
 
     // Add appropriate standards to the filtered sections
     const withStandards = filtered.map((section) => {
-      let standards = this._getStandardsByQuery(mainQuery)
+      const standards = this._getStandardsByQuery(mainQuery)
         .fetch()
         .filter((standard) => {
           return Object.is(section._id, standard.sectionId) &&
