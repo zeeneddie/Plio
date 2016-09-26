@@ -9,14 +9,20 @@ import MessageAuthor from '../MessageAuthor';
 import MessageTime from '../MessageTime';
 import MessageGutter from '../MessageGutter';
 import MessageContent from '../MessageContent';
+import MessageMenu from '../MessageMenu';
 
 import {
-  openUserDetails,
+  isAuthor,
   getMessagePath,
   getUserAvatar,
   getUserFirstName,
   getUserFullNameOrEmail,
-  getMessageTime
+  getMessageTime,
+  getMessageContents,
+  getPathToMessageToCopy,
+  openUserDetails,
+  deselect,
+  remove
 } from './constants.js';
 
 import { transsoc } from '/imports/api/helpers.js';
@@ -31,17 +37,22 @@ const Message = (props) => {
           <MessageAvatar
             avatar={props.userAvatar}
             alt={props.userFullNameOrEmail}
-            onClick={e => props.openUserDetails(e)} />}
+            onClick={e => props.onMessageAvatarClick(e)} />}
 
           <MessageCard>
             {!props.isMergedWithPreviousMessage &&
-              <div>
+              (<div>
                 <MessageAuthor name={props.userFirstName}/>
 
                 <MessageTime
                   href={props.pathToMessage}
                   time={props.time}/>
-              </div>}
+              </div>)}
+
+            <MessageMenu
+              isAuthor={props.isAuthor}
+              pathToMessageToCopy={props.pathToMessageToCopy}
+              delete={e => props.onMessageDelete(e)}/>
 
             <MessageGutter>
               <MessageTime
@@ -49,7 +60,9 @@ const Message = (props) => {
                 time={props.time}/>
             </MessageGutter>
 
-            <MessageContent text={props.text}/>
+            <MessageContent
+              contents={props.contents}
+              onClick={e => props.onMessageContentsClick(e)}/>
           </MessageCard>
       </MessageBox>
     </div>
@@ -63,13 +76,18 @@ export default compose(
     }
   }),
   withHandlers({
-    openUserDetails
+    onMessageAvatarClick: openUserDetails,
+    onMessageContentsClick: deselect,
+    onMessageDelete: remove
   }),
   withProps(transsoc({
+    isAuthor,
     userAvatar: getUserAvatar,
     userFirstName: getUserFirstName,
     userFullNameOrEmail: getUserFullNameOrEmail,
     pathToMessage: getMessagePath,
-    time: getMessageTime
+    time: getMessageTime,
+    contents: getMessageContents,
+    pathToMessageToCopy: getPathToMessageToCopy
   }))
 )(Message);

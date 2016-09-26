@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
+import Clipboard from 'clipboard';
 
 import InfiniteLoader from '../InfiniteLoader';
 import MessagesList from '../MessagesList';
@@ -70,6 +71,8 @@ export default class MessagesListWrapper extends React.Component {
     swipedetect(chat, this._triggerLoadMore.bind(this), 'addEventListener');
 
     handleMouseWheel(chat, this._triggerLoadMore.bind(this), 'addEventListener');
+
+    new Clipboard('.js-message-copy-link');
   }
 
   componentWillUnmount() {

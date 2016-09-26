@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Tracker } from 'meteor/tracker';
 
 import Discussion from '../../components/Discussion';
 import { setAt, reset } from '/client/redux/actions/discussionActions';
