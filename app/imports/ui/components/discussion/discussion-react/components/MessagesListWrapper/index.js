@@ -49,8 +49,13 @@ export default class MessagesListWrapper extends React.Component {
     }
 
     if (shouldScroll) {
-      // TODO: Need to find a way to do the same when scrolling down
-      $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
+      if (prevProps.sort.createdAt > 0) {
+        // downscroll
+        $(chat).scrollTop(prevChatScrollTop);
+      } else {
+        // upscroll
+        $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
+      }
 
       shouldScroll = false;
     }
@@ -58,14 +63,16 @@ export default class MessagesListWrapper extends React.Component {
 
   componentDidMount() {
     const { chat } = this.refs;
+    const scrollHeight = chat.scrollHeight;
+    const height = $(chat).height();
 
     if (this.props.at) {
       // scroll to the center of the chat
-      const center = ($(chat).height() / 2 + $(chat).offset().top) / 2;
+      const center = (scrollHeight - height) / 2;
       $(chat).scrollTop(center);
     } else {
       // scroll to the bottom of the chat
-      $(chat).scrollTop(chat.scrollHeight);
+      $(chat).scrollTop(9E99);
     }
 
     swipedetect(chat, this._triggerLoadMore.bind(this), 'addEventListener');
