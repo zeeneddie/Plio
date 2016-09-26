@@ -20,6 +20,7 @@ import {
   getMessageTime,
   getMessageContents,
   getPathToMessageToCopy,
+  getClassName,
   openUserDetails,
   deselect,
   remove
@@ -32,7 +33,7 @@ const Message = (props) => {
     <div className="chat-message-container">
       {props.dateToShow && <MessageDate date={props.date} />}
 
-      <MessageBox {...props}>
+      <MessageBox className={props.className}>
         {!props.isMergedWithPreviousMessage &&
           <MessageAvatar
             avatar={props.userAvatar}
@@ -88,6 +89,7 @@ export default compose(
     pathToMessage: getMessagePath,
     time: getMessageTime,
     contents: getMessageContents,
-    pathToMessageToCopy: getPathToMessageToCopy
+    pathToMessageToCopy: getPathToMessageToCopy,
+    className: getClassName
   }))
 )(Message);

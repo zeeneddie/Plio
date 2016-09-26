@@ -1,8 +1,7 @@
 import React from 'react';
-import { getClassName } from './constants.js';
 
 const MessageBox = (props) => (
-  <div className={`chat-item message ${getClassName(props)}`}>
+  <div className={`chat-item message ${props.className}`}>
     {props.children}
   </div>
 );

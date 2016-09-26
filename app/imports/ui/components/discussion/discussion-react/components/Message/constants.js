@@ -8,11 +8,15 @@ import { TruncatedStringLengths } from '/imports/api/constants';
 import { remove as removeMessage } from '/imports/api/messages/methods';
 import { Files } from '/imports/api/files/files';
 
+// Helpers
+
 export const invokeUser = path => obj => invokeC(path, obj.user);
 
 export const isAuthor = props => Object.is(Meteor.userId(), props.createdBy);
 
 export const getFile = props => Files.findOne({ _id: props.fileId });
+
+export const isSelected = props => Object.is(props._id, FlowRouter.getQueryParam('at'));
 
 // Prop creators
 
@@ -62,6 +66,14 @@ export const getPathToMessageToCopy = (props) => {
 
   return `${url}${path}`;
 };
+
+export const getClassName = (props) => {
+  const first = props.isMergedWithPreviousMessage ? '' : 'first';
+  const selected = isSelected(props) ? 'selected' : '';
+
+  return `${first} ${selected}`;
+};
+
 
 // Handlers
 
