@@ -1,6 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Autolinker } from 'meteor/konecty:autolinker';
 import Blaze from 'meteor/gadicc:blaze-react-component';
+import React from 'react';
 
 import modal from '/imports/startup/client/mixins/modal';
 import { invokeC, getFormattedDate, handleMethodResult } from '/imports/api/helpers';
@@ -36,10 +37,10 @@ export const getUserFirstName = invokeUser('firstName');
 
 export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A');
 
-export const getMessageContents = ({ type = 'text', text = '', file = {} } = {}) => {
-  switch(type) {
+export const getMessageContents = (props) => {
+  switch(props.type) {
     case 'text':
-      return Autolinker.link(text, {
+      return Autolinker.link(props.text || '', {
         truncate: TruncatedStringLengths.c40
       });
       break;
@@ -47,7 +48,7 @@ export const getMessageContents = ({ type = 'text', text = '', file = {} } = {})
       return <Blaze template='FileItem_Read' {...getFile(props)}/>
       break;
     default:
-      return text;
+      return props.text;
       break;
   }
 }

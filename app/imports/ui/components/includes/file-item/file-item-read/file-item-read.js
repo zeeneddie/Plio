@@ -2,6 +2,9 @@ import { terminateUploading } from '/imports/api/files/methods.js';
 
 Template.FileItem_Read.viewmodel({
   mixin: 'uploader',
+  progress: 0,
+  createdBy: '',
+  _id: '',
   autorun: [
     function () {
       const progress = this.progress();

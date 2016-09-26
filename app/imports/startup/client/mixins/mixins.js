@@ -944,6 +944,8 @@ export default {
 
           uploader.send(file, (err, url) => {
             if (err) {
+              console.log(err);
+              toastr.error(err.reason);
 
               this.terminateUploading(fileId);
               return;

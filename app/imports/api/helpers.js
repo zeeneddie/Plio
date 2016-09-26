@@ -244,6 +244,8 @@ const transsoc = curry((transformations, obj) => {
   return _.pick(flattenObjects(result), ...keys);
 })
 
+const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -275,5 +277,6 @@ export {
   getWorkflowDefaultStepDate,
   assoc,
   invokeC,
-  transsoc
+  transsoc,
+  pickC
 };

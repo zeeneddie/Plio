@@ -2,13 +2,13 @@ import React from 'react';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
 import MessagesListContainer from '../../containers/MessagesListContainer';
-import MessagesFormContainer from '../../containers/MessagesFormContainer';
+import MessagesForm from '../../components/MessagesForm';
 
 const Discussion = (props) => (
   <div className="card chat">
     <Blaze template="Discussion_Header"/>
     <MessagesListContainer {...props}/>
-    <MessagesFormContainer {...props}/>
+    <MessagesForm {...props}/>
   </div>
 );
 

@@ -1,11 +1,19 @@
 import React from 'react';
+import { compose, withProps, withHandlers, nest } from 'recompose';
+import Blaze from 'meteor/gadicc:blaze-react-component';
+
+import { submit, addFile } from './constants';
+import DiscussionFileUploader from '../DiscussionFileUploader';
 
 const MessagesForm = (props) => (
   <div className="chat-form" onSubmit={e => props.onSubmit(e)}>
 		<form className="f1">
-			<fieldset>
+			<fieldset disabled={props.disabled}>
 				<div className="form-group">
 					<div className="input-group">
+            <div className="input-group-btn file-uploader">
+              {props.children}
+            </div>
 						<input
               name="message"
 							type="text"
@@ -24,4 +32,12 @@ const MessagesForm = (props) => (
 	</div>
 );
 
-export default MessagesForm;
+const enhancedForm = withHandlers({
+  onSubmit: submit
+})(MessagesForm);
+
+const enhancedUploader = withHandlers({
+  onAddFile: addFile
+})(DiscussionFileUploader);
+
+export default nest(enhancedForm, enhancedUploader);
