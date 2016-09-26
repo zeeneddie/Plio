@@ -3,15 +3,30 @@ import { Meteor } from 'meteor/meteor';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { WorkItems } from '../work-items.js';
 import { isOrgMember } from '../../checkers.js';
+import { WorkItemsListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 
 
-Meteor.publish('workItems', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publish('workItemsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   const userId = this.userId;
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
-  return WorkItems.find({ organizationId, isDeleted });
+  return WorkItems.find({ organizationId, isDeleted }, {
+    fields: WorkItemsListProjection
+  });
+});
+
+Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+      return WorkItems.find({ _id, organizationId });
+    }
+  }
 });
 
 Meteor.publish('workItemsOverdue', function(organizationId, limit) {

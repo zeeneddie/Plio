@@ -14,9 +14,6 @@ Template.OrgSettings_StandardTypes.viewmodel({
     return invoke(this.standardsTypes(), 'count');
   },
   placeholder: 'Standard type',
-  standardsTypesMapped() {
-    return this.standardsTypes() && this.standardsTypes().map(({ name, ...args }) => ({ ...args, title: name }));
-  },
   onChangeCb() {
     return this.onChange.bind(this);
   },

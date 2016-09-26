@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrgSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardSubcardsLayout.viewmodel({
   mixin: ['organization', 'nonconformity'],
@@ -11,19 +12,17 @@ Template.StandardSubcardsLayout.viewmodel({
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards', _id),
-        this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('risks', _id)
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
+        DocumentsListSubs.subscribe('standardsList', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
+        DocumentsListSubs.subscribe('risksList', _id)
       ];
 
       if (this.isActiveNCFilter(4)) {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id, true));
+        _subHandlers.push(DocumentsListSubs.subscribe('nonConformitiesList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id));
+        _subHandlers.push(DocumentsListSubs.subscribe('nonConformitiesList', _id));
       }
 
       this._subHandlers(_subHandlers);

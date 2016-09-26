@@ -4,16 +4,15 @@ import invoke from 'lodash.invoke';
 
 Template.Actions_Owner.viewmodel({
   label: 'Owner',
-  ownerId: Meteor.userId(),
+  ownerId() { Meteor.userId() },
   placeholder: 'Owner',
   selectArgs() {
-    const { ownerId:value, placeholder } = this.data();
-
+    const { ownerId: value, placeholder } = this.data();
     return {
       value,
       placeholder,
       onUpdate: (viewmodel) => {
-        const { selected:ownerId } = viewmodel.getData();
+        const { selected: ownerId } = viewmodel.getData();
 
         this.ownerId(ownerId);
 

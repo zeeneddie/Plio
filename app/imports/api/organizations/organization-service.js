@@ -42,9 +42,9 @@ export default OrganizationService = {
       createdBy: ownerId
     });
 
-    _.each(DefaultStandardTypes, ({ name, abbreviation }) => {
+    _.each(DefaultStandardTypes, ({ title, abbreviation }) => {
       StandardsTypeService.insert({
-        name,
+        title,
         abbreviation,
         organizationId,
         createdBy: ownerId

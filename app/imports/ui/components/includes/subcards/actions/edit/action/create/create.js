@@ -8,7 +8,7 @@ Template.Actions_CreateSubcard.viewmodel({
   mixin: ['getChildrenData', 'organization'],
   type: '',
   title: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();

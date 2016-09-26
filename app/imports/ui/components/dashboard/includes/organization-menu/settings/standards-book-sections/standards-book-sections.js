@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import invoke from 'lodash.invoke';
 
 import {
@@ -12,7 +13,7 @@ import {
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
   onCreated(template) {
-    template.autorun(() => template.subscribe('standards-book-sections', this.organizationId()));
+    template.autorun(() => OrgSettingsDocSubs.subscribe('standards-book-sections', this.organizationId()));
   },
   _lText: 'Standards book sections',
   _rText() {
