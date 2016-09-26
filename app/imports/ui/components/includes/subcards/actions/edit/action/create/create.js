@@ -8,7 +8,7 @@ Template.Actions_CreateSubcard.viewmodel({
   mixin: ['getChildrenData', 'organization'],
   type: '',
   title: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -17,7 +17,7 @@ Template.Actions_CreateSubcard.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy: Meteor.userId(),
+  toBeCompletedBy() { return Meteor.userId() },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   linkedTo: [],

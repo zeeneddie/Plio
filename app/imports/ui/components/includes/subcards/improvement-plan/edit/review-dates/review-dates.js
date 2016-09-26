@@ -1,8 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
+
 Template.IP_ReviewDate_Edits.viewmodel({
-  mixin: ['addForm', 'date'],
+  mixin: ['addForm', 'date', 'organization'],
   reviewDates: [],
   addReviewDate() {
     this.addForm('IP_ReviewDate_Edit', {
@@ -20,7 +23,10 @@ Template.IP_ReviewDate_Edits.viewmodel({
   },
   update(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
-    const { date } = viewmodel.getData();
+
+    const { timezone } = this.organization();
+    let { date } = viewmodel.getData();
+    date = getTzTargetDate(date, timezone);
 
     if (_id) {
       this.set({ _id, date });
