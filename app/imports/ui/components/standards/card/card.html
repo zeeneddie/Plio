@@ -1,39 +1,43 @@
 <template name="Standards_Card_Read">
-  <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode }"}}>
+  <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode, content: !standard }"}}>
     {{#if standards.count}}
       {{#with standard}}
         <div class="card standard-details">
           <div class="card-block card-heading">
             <div class="card-heading-buttons pull-xs-right">
-              {{#if hasDocxAttachment}}
-                <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
-                </a>
-              {{/if}}
-              {{#unless isDiscussionOpened}}
-                <a class="btn btn-secondary"
-                  {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
-  								Discuss
-                  {{#if messagesNotViewedCount}}
-  								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
-                  {{/if}}
-  							</a>
-              {{/unless}}
-              {{#if canCreateAndEditStandards organizationId}}
-                {{#if isDeleted}}
-                  <a class="btn btn-secondary" {{b "click: restore(this)"}}>
-                    Restore
-                  </a>
-                  {{#if isOrgOwner this}}
-                    <a class="btn btn-primary" {{b "click: delete(this)"}}>
-                      Delete
-                    </a>
-                  {{/if}}
-                {{else}}
-                  <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
-                    <i class="fa fa-pencil"></i>
-                    Edit
+              {{#if isReady}}
+                {{#if hasDocxAttachment}}
+                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
                   </a>
                 {{/if}}
+                {{#unless isDiscussionOpened}}
+                  <a class="btn btn-secondary"
+                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
+    								Discuss
+                    {{#if messagesNotViewedCount}}
+    								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+                    {{/if}}
+    							</a>
+                {{/unless}}
+                {{#if canCreateAndEditStandards organizationId}}
+                  {{#if isDeleted}}
+                    <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                      Restore
+                    </a>
+                    {{#if isOrgOwner this}}
+                      <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                        Delete
+                      </a>
+                    {{/if}}
+                  {{else}}
+                    <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
+                      <i class="fa fa-pencil"></i>
+                      Edit
+                    </a>
+                  {{/if}}
+                {{/if}}
+              {{else}}
+                {{> PreloaderButton}}
               {{/if}}
             </div>
             <h3 class="card-title">
@@ -62,12 +66,14 @@
                 {{/if}}
 
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Issue number</p>
-                      <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                  {{#if this.issueNumber}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Issue number</p>
+                        <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                      </div>
                     </div>
-                  </div>
+                  {{/if}}
                   {{#with section}}
                     <div class="col-sm-6">
                       <div class="list-group-item">
@@ -83,7 +89,7 @@
                     <div class="col-sm-6">
                       <div class="list-group-item">
                         <p class="list-group-item-text">Type</p>
-                          <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
+                          <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
                       </div>
                     </div>
                   {{/with}}
@@ -132,6 +138,8 @@
             {{> CardChangelog document=this}}
           </div>
         </div>
+      {{else}}
+        {{> PreloaderPage}}
       {{/with}}
     {{else}}
       <div class="card">

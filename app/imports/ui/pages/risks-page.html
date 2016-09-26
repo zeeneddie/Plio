@@ -1,6 +1,6 @@
 <template name="Risks_Page">
   {{#Page}}
-    {{> Risks_List}}
+    {{> Problems_ListWrapper (listArgs)}}
   {{else}}
     {{> Risks_Card_Read _id=riskId}}
   {{/Page}}

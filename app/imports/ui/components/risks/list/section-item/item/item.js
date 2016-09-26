@@ -43,7 +43,7 @@ Template.Risks_Item.viewmodel({
     //return this.viewedBy() && !this.viewedBy().find(_id => _id === Meteor.userId());
 
     const filter = { _id: this._id() };
-    const options = { fields: { createdAt: 1, viewedBy: 1 } };
+    const options = { fields: { identifiedAt: 1, viewedBy: 1 } };
     const doc = this._getRiskByQuery(filter, options);
     const userId = Meteor.userId();
 
