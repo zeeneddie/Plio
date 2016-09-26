@@ -2,17 +2,17 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
 Template.NC_IdentifiedBy_Edit.viewmodel({
-  identifiedBy: Meteor.userId(),
   label: 'Identified by',
   placeholder: 'Identified by',
+  identifiedBy() { return Meteor.userId() },
   selectArgs() {
-    const { identifiedBy:value, placeholder } = this.data();
+    const { identifiedBy: value, placeholder } = this.data();
 
     return {
       value,
       placeholder,
       onUpdate: (viewmodel) => {
-        const { selected:identifiedBy } = viewmodel.getData();
+        const { selected: identifiedBy } = viewmodel.getData();
 
         this.identifiedBy(identifiedBy);
 
@@ -23,7 +23,7 @@ Template.NC_IdentifiedBy_Edit.viewmodel({
     };
   },
   getData() {
-    const { identifiedBy } = this.data();
+    const { identifiedBy = Meteor.userId() } = this.data();
     return { identifiedBy };
   }
 });

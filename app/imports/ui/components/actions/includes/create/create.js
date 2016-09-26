@@ -21,7 +21,7 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy: Meteor.userId(),
+  toBeCompletedBy() { return Meteor.userId() },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {

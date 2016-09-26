@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
 
 const defaults = {
-  value() { return Meteor.userId() },
   placeholder: 'Select',
   selectFirstIfNoSelected: true,
   disabled: false
@@ -12,7 +11,7 @@ Template.Select_Member.viewmodel({
   ...defaults,
   selectArgs() {
     const {
-      value: selected = this.value(),
+      value: selected = Meteor.userId(),
       placeholder = this.placeholder(),
       selectFirstIfNoSelected = this.selectFirstIfNoSelected(),
       disabled = this.disabled()

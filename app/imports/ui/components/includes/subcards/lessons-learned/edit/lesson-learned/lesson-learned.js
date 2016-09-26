@@ -9,7 +9,7 @@ Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
   title: '',
   date: new Date(),
-  owner: Meteor.userId(),
+  owner() { return Meteor.userId() },
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',

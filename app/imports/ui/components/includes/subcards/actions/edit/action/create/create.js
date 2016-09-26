@@ -17,7 +17,7 @@ Template.Actions_CreateSubcard.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy: Meteor.userId(),
+  toBeCompletedBy() { return Meteor.userId() },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   linkedTo: [],
