@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 
 import { StandardsBookSectionSchema  } from './standards-book-section-schema.js';
-
+import { getTitlePrefix } from '/imports/api/helpers.js';
 
 const StandardsBookSections = new Mongo.Collection('StandardsBookSections', {
   transform(doc) {
@@ -16,7 +16,6 @@ const StandardsBookSections = new Mongo.Collection('StandardsBookSections', {
     return doc;
   }
 });
-
 StandardsBookSections.attachSchema(StandardsBookSectionSchema);
-if(Meteor.isClient) window.StandardsBookSections = StandardsBookSections;
+
 export { StandardsBookSections };

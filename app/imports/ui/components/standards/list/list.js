@@ -5,7 +5,7 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { extractIds, flattenMap, inspire, findById } from '/imports/api/helpers.js';
+import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -126,10 +126,10 @@ Template.StandardsList.viewmodel({
     // All sections of the current organization
     const sections = ((() => {
       const query = { organizationId };
-      const options = { sort: { titlePrefix: 1 } };
+      const options = { sort: { title: 1 } };
       const _sections = StandardsBookSections.find(query, options).fetch();
 
-      return _sections;
+      return sortArrayByTitlePrefix(_sections);
     })());
 
     /**
@@ -146,12 +146,14 @@ Template.StandardsList.viewmodel({
 
     // Add appropriate standards to the filtered sections
     const withStandards = filtered.map((section) => {
-      const standards = this._getStandardsByQuery(mainQuery)
+      let standards = this._getStandardsByQuery(mainQuery)
         .fetch()
         .filter((standard) => {
           return Object.is(section._id, standard.sectionId) &&
                  (typeId ? Object.is(typeId, standard.typeId) : true);
         });
+
+      sortArrayByTitlePrefix(standards);
 
       return Object.assign({}, section, {
         standards,

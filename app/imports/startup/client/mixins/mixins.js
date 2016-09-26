@@ -358,7 +358,7 @@ export default {
       return StandardTypes.find({ _id: typeId }).count() > 0;
     },
     _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {},
-      options = { sort: { titlePrefix: 1 } }) {
+      options = { sort: { title: 1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
@@ -545,7 +545,7 @@ export default {
       return NonConformities.findOne({ _id });
     },
     _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
-      const query = { isDeleted, ...args, organizationId: this.organizationId() };//console.log(query);
+      const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return NonConformities.find(query, options);
     },
     _getNCByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {

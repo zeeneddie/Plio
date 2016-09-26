@@ -245,6 +245,50 @@ const renderTemplate = (template, data = {}) => {
 
 const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
 
+const getTitlePrefix = (title) => {
+  let titlePrefix;
+  const matchedPrefixArray = title.match(/^[\d\.]+/g);
+
+  if (matchedPrefixArray && matchedPrefixArray.length) {
+    const stringPrefix = matchedPrefixArray[0];
+
+    // Convert 1.2.3.4 to 1.2345 for sorting purposes
+    const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
+      return b + c.replace(/\./g, '');
+    });
+    titlePrefix = parseFloat(stringPrefixFloat) || title;
+  } else {
+    titlePrefix = title;
+  }
+
+  return titlePrefix;
+};
+
+// 1, 1.2, 3, 10.3, a, b, c
+const sortArrayByTitlePrefix = (arr) => {
+  return arr.sort(function (a, b) {
+    a = a.titlePrefix;
+    b = b.titlePrefix;
+    if (typeof a === 'number' && typeof b !== 'number') {
+      return -1;
+    }
+    if (typeof b === 'number' && typeof a !== 'number') {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    if (a === b) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
+};
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -280,5 +324,7 @@ export {
   propItems,
   lengthItems,
   flattenMapItems,
-  getWorkflowDefaultStepDate
+  getWorkflowDefaultStepDate,
+  getTitlePrefix,
+  sortArrayByTitlePrefix
 };
