@@ -6,7 +6,9 @@ import {
   SET_AT,
   RESET,
   SET_LAST_MESSAGE_ID,
-  SET_SHOULD_SCROLL_TO_BOTTOM
+  SET_SHOULD_SCROLL_TO_BOTTOM,
+  SET_PRIOR_LIMIT,
+  SET_FOLLOWING_LIMIT
 } from './types';
 import { initialState } from '../reducers/discussionReducer';
 
@@ -63,5 +65,19 @@ export function setShouldScrollToBottom(bool) {
   return {
     type: SET_SHOULD_SCROLL_TO_BOTTOM,
     payload: bool
+  }
+}
+
+export function setPriorLimit(limit) {
+  return {
+    type: SET_PRIOR_LIMIT,
+    payload: limit
+  }
+}
+
+export function setFollowingLimit(limit) {
+  return {
+    type: SET_FOLLOWING_LIMIT,
+    payload: limit
   }
 }

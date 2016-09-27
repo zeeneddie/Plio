@@ -7,6 +7,7 @@ import get from 'lodash.get';
 import { withProps } from 'recompose';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
+import PreloaderPage from '../../components/PreloaderPage';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { MessageSubs } from '/imports/startup/client/subsmanagers.js';
@@ -44,13 +45,16 @@ const onPropsChange = (props, onData) => {
   const {
     discussionId,
     dispatch,
-    limit = 50,
     sort = { createdAt: -1 },
-    at = null
+    at = null,
+    limit = 50,
+    priorLimit = 50,
+    followingLimit = 50
   } = props;
   console.log(props);
 
-  const subscription = Meteor.subscribe('messages', discussionId, { limit, sort, at });
+  const subOpts = { limit, sort, at, priorLimit, followingLimit };
+  const subscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
 
   dispatch(setLoading(true));
@@ -65,22 +69,10 @@ const onPropsChange = (props, onData) => {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
-    const newMessages = ((() => {
-      if (at) {
-        const allMessages = getDiscussionState().messages.concat(messages);
-        const uniqMessages = uniqBy(allMessages, '_id');
-        const sorter = ({ createdAt:c1 }, { createdAt:c2 }) => c1 - c2;
-        const sortedMessages = uniqMessages.sort(sorter);
-
-        return sortedMessages;
-      }
-
-      return messages;
-    })());
 
     const actions = [
       setLoading(false),
-      setMessages(newMessages),
+      setMessages(messages),
       setLastMessageId(get(lastDiscussionMessage.findOne(), 'lastMessageId'))
     ];
 
@@ -99,6 +91,6 @@ const onPropsChange = (props, onData) => {
 export default composeAll(
   withProps(props =>
     ({ discussion: Discussions.findOne({ _id: props.discussionId }) })),
-  composeWithTracker(onPropsChange),
-  connect(store => _.pick(store.discussion, 'limit', 'sort', 'at'))
+  composeWithTracker(onPropsChange, PreloaderPage),
+  connect(store => _.pick(store.discussion, 'sort', 'at', 'limit', 'priorLimit', 'followingLimit'))
 )(MessagesListWrapper);

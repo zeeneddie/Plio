@@ -1,17 +1,9 @@
 <template name="Discussion_Card">
-	{{#if (every discussionId organizationId)}}
-		{{> Discussion_React discussionId=discussionId organizationId=organizationId}}
-	{{/if}}
-	<!-- <div class="card chat">
-		{{> Discussion_Header ""}}
-
-		{{#if isReady}}
-			{{> Discussion_Messages discussionId=discussionId}}
-			{{> Discussion_AddMessage_Form
-					disabled=standard.isDeleted
-					discussionId=discussionId}}
-		{{else}}
-			{{> PreloaderPage ""}}
+	{{#if isReady}}
+		{{#if (every discussionId organizationId)}}
+			{{> Discussion_React discussionId=discussionId organizationId=organizationId}}
 		{{/if}}
-	</div> -->
+	{{else}}
+		{{> PreloaderPage ""}}
+	{{/if}}
 </template>

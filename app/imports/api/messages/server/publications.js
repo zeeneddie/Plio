@@ -66,7 +66,9 @@ const getMessageData = (id) => {
 Meteor.publishComposite('messages', function(discussionId, {
 	limit = 50,
 	sort = { createdAt: -1 },
-	at = null
+	at = null,
+	priorLimit,
+	followingLimit
 } = {}) {
 	check(discussionId, String);
 	console.log(arguments);
@@ -89,25 +91,22 @@ Meteor.publishComposite('messages', function(discussionId, {
 		find() {
 			if (at) {
 				const msg = Object.assign({}, Messages.findOne({ _id: at }));
-				const getMsgs = (initial = {}, direction) => {
-					const sign = direction > 0 ? '$gt' : '$lt';
-					const query = {
-						createdAt: { [sign]: get(initial, 'createdAt') }
-					};
-					const options = {
-						limit: 25,
-						sort: { createdAt: direction },
-						fields: { _id: 1 }
-					};
-					return Messages.find(query, options);
+				const getMessages = (l, c) => {
+					const sign = c > 0 ? '$gt' : '$lt';
+					const query = { createdAt: { [sign]: msg.createdAt } };
+					const options = { limit: l, sort: { createdAt: c } };
+					return Messages.find(query, options).fetch();
+				}
+				const prior = getMessages(priorLimit, -1);
+				const following = getMessages(followingLimit, 1);
+				const query = {
+					createdAt: {
+						$lte: _.last(following).createdAt,
+						$gte: _.last(prior).createdAt
+					}
 				};
-				const prior = getMsgs(msg, -1);
-				const following = getMsgs(msg, 1);
-
-				const msgs = [...prior.fetch(), msg, ...following.fetch()];
-				const ids = msgs.map(property('_id'));
-
-				return Messages.find({ _id: { $in: ids } }, { limit, sort });
+				const options = { sort: { createdAt: 1 } };
+				return Messages.find(query, options);
 			}
 
 			return Messages.find({ discussionId }, { limit, sort });

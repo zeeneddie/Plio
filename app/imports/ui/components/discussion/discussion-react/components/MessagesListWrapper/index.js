@@ -11,8 +11,9 @@ import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
 import {
   setLimit,
   setSort,
-  setAt,
-  setShouldScrollToBottom
+  setShouldScrollToBottom,
+  setPriorLimit,
+  setFollowingLimit
 } from '/client/redux/actions/discussionActions';
 import { swipedetect, isTouchDevice } from '/client/lib/mobile.js';
 
@@ -140,7 +141,15 @@ export default class MessagesListWrapper extends React.Component {
   }
 
   _loadMore(sortDir) {
-    const { loading, limit, dispatch, messages = [], lastMessageId } = this.props;
+    const {
+      loading,
+      limit,
+      priorLimit,
+      followingLimit,
+      dispatch,
+      messages = [],
+      lastMessageId
+    } = this.props;
 
     if (loading) return;
 
@@ -152,9 +161,18 @@ export default class MessagesListWrapper extends React.Component {
         setLimit(limit + 50),
         setSort(sort)
       ];
-      const allActions = FlowRouter.getQueryParam('at')
-        ? actions.concat(setAt(get(message, '_id')))
-        : actions;
+
+      const allActions = ((() => {
+        if (FlowRouter.getQueryParam('at')) {
+          const action = sortDir > 0
+            ? setFollowingLimit(followingLimit + 50)
+            : setPriorLimit(priorLimit + 50);
+
+          return actions.concat(action);
+        }
+
+        return actions;
+      })());
 
       dispatch(batchActions(allActions));
     };
