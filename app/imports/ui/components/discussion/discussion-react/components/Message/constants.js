@@ -1,21 +1,19 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Autolinker } from 'meteor/konecty:autolinker';
-import Blaze from 'meteor/gadicc:blaze-react-component';
 import React from 'react';
 
 import modal from '/imports/startup/client/mixins/modal';
 import { invokeC, getFormattedDate, handleMethodResult } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 import { remove as removeMessage } from '/imports/api/messages/methods';
-import { Files } from '/imports/api/files/files';
+
+import FileItemRead from '../FileItemRead';
 
 // Helpers
 
 export const invokeUser = path => obj => invokeC(path, obj.user);
 
 export const isAuthor = props => Object.is(Meteor.userId(), props.createdBy);
-
-export const getFile = props => Files.findOne({ _id: props.fileId });
 
 export const isSelected = props => Object.is(props._id, FlowRouter.getQueryParam('at'));
 
@@ -45,7 +43,7 @@ export const getMessageContents = (props) => {
       });
       break;
     case 'file':
-      return <Blaze template='FileItem_Read' {...getFile(props)}/>
+      return <FileItemRead {...props} />;
       break;
     default:
       return props.text;

@@ -2,24 +2,23 @@ import { terminateUploading } from '/imports/api/files/methods.js';
 
 Template.FileItem_Read.viewmodel({
   mixin: 'uploader',
-  progress: 0,
-  createdBy: '',
-  _id: '',
-  autorun: [
-    function () {
-      const progress = this.progress();
-      const progressPercentage = progress && progress * 100 || 0;
-      this.templateInstance.$('.uploading-file').css({ 'width': progressPercentage + '%' });
-    },
+  file: {},
+  autorun() {
+    const { createdBy, progress, _id } = Object.assign({}, this.file());
 
-    // Terminate uploading if there is no uploader and the progress < 1
-    function () {
-      if (this.createdBy() === Meteor.userId()) {
-        const uploadData = this.uploadData(this._id());
-        if (this.progress() < 1 && this.progress() > 0 && !uploadData) {
-          this.terminateUploading(this._id());
-        }
+    if (createdBy === Meteor.userId()) {
+      const uploadData = this.uploadData(_id);
+      if (progress < 1 && progress > 0 && !uploadData) {
+        this.terminateUploading(_id);
       }
     }
-  ]
+  },
+  styles() {
+    return {
+      getWidth({ progress = 0 } = {}) {
+        const percentage = progress * 100;
+        return `${percentage}%`;
+      }
+    }
+  }
 });

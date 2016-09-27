@@ -7,11 +7,13 @@ import { transsoc, pickC } from '/imports/api/helpers';
 
 const DiscussionFileUploader = (props) => {
   return (
-    <Blaze
-      template="DiscussionFileUploader"
-      addFile={(...args) => props.onAddFile(...args)}
-      metaContext={props.uploaderMetaContext}
-      slingshotDirective={props.slingshotDirective}/>
+    <div className="input-group-btn file-uploader">
+      <Blaze
+        template="DiscussionFileUploader"
+        addFile={(...args) => props.onAddFile(...args)}
+        metaContext={props.uploaderMetaContext}
+        slingshotDirective={props.slingshotDirective}/>
+    </div>
   )
 };
 

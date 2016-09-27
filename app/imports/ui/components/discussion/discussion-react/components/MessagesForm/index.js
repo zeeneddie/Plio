@@ -9,9 +9,7 @@ const MessagesForm = (props) => (
 			<fieldset disabled={props.disabled}>
 				<div className="form-group">
 					<div className="input-group">
-            <div className="input-group-btn file-uploader">
-              {props.children}
-            </div>
+            {props.children}
 						<input
               name="message"
 							type="text"
