@@ -4,10 +4,10 @@ import { WorkItemsSchema } from '../schemas/work-item-schema.js';
 import { Actions } from './actions.js';
 import { NonConformities } from './non-conformities.js';
 import { Risks } from './risks.js';
-import { WorkItemsStore } from '../constants.js';
+import { CollectionNames, WorkItemsStore } from '../constants.js';
 
 
-const WorkItems = new Mongo.Collection('WorkItems');
+const WorkItems = new Mongo.Collection(CollectionNames.WORK_ITEMS);
 WorkItems.attachSchema(WorkItemsSchema);
 
 WorkItems.helpers({

@@ -50,14 +50,22 @@ export const AvatarPlaceholders = [
 ];
 
 export const CollectionNames = {
-  STANDARDS: 'Standards',
-  NCS: 'NonConformities',
-  RISKS: 'Risks',
   ACTIONS: 'Actions',
+  AUDIT_LOGS: 'AuditLogs',
+  DEPARTMENTS: 'Departments',
+  DISCUSSIONS: 'Discussions',
+  FILES: 'Files',
   LESSONS: 'LessonsLearned',
-  OCCURRENCES: 'Occurrences',
   MESSAGES: 'Messages',
+  NCS: 'NonConformities',
+  NOTIFICATIONS: 'Notifications',
+  OCCURRENCES: 'Occurrences',
   ORGANIZATIONS: 'Organizations',
+  RISK_TYPES: 'RiskTypes',
+  RISKS: 'Risks',
+  STANDARD_TYPES: 'StandardTypes',
+  STANDARD_BOOK_SECTIONS: 'StandardsBookSections',
+  STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems'
 };
 

@@ -1,10 +1,11 @@
 import { Mongo } from 'meteor/mongo';
 
+import { CollectionNames } from '../constants.js';
 import { OrganizationSchema } from '../schemas/organization-schema.js';
 import { UserMembership, ProblemMagnitudes } from '../constants';
 
 
-const Organizations = new Mongo.Collection('Organizations');
+const Organizations = new Mongo.Collection(CollectionNames.ORGANIZATIONS);
 Organizations.attachSchema(OrganizationSchema);
 
 Organizations.helpers({

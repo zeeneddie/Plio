@@ -1,9 +1,10 @@
 import { Mongo } from 'meteor/mongo';
 
+import { CollectionNames } from '../constants.js';
 import { FileIdsSchema } from '../schemas/files-schema.js';
 
 
-const Files = new Mongo.Collection('Files');
+const Files = new Mongo.Collection(CollectionNames.FILES);
 Files.attachSchema(FileIdsSchema);
 
 Files.helpers({

@@ -8,7 +8,7 @@ import DocumentDiffer from './document-differ.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
-const DEFAULT_EMAIL_TEMPLATE = 'personalEmail';
+const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
 
 export default class DocChangeHandler {
 
@@ -26,7 +26,7 @@ export default class DocChangeHandler {
       this._newDoc = newDocument;
       this._oldDoc = oldDocument;
       this._date = newDocument.updatedAt;
-      this._userId = newDocument.updatedBy;
+      this._userId = userId || newDocument.updatedBy;
     } else if (docChangeKind === DocChangesKinds.DOC_REMOVED) {
       this._oldDoc = oldDocument;
       this._date = new Date();

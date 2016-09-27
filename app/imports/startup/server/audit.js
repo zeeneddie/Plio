@@ -1,27 +1,28 @@
-/*import Auditor from '/imports/core/audit/server/auditor.js';
-import ActionAuditConfig from '/imports/core/audit/server/configs/action-audit-config.js';
-import NCAuditConfig from '/imports/core/audit/server/configs/nc-audit-config.js';
-import RiskAuditConfig from '/imports/core/audit/server/configs/risk-audit-config.js';
-import StandardAuditConfig from '/imports/core/audit/server/configs/standard-audit-config.js';
-import OccurenceAuditConfig from '/imports/core/audit/server/configs/occurence-audit-config.js';
-import LessonAuditConfig from '/imports/core/audit/server/configs/lesson-audit-config.js';
-import MessageAuditConfig from '/imports/core/audit/server/configs/message-audit-config.js';
-import OrgAuditConfig from '/imports/core/audit/server/configs/org-audit-config.js';
-import WorkItemAuditConfig from '/imports/core/audit/server/configs/work-item-audit-config.js';
+import { CollectionNames } from '/imports/share/constants.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import AuditManager from '/imports/utils/server/audit-manager.js';
 
 
-const auditConfigs = [
-  ActionAuditConfig,
-  NCAuditConfig,
-  RiskAuditConfig,
-  StandardAuditConfig,
-  OccurenceAuditConfig,
-  LessonAuditConfig,
-  MessageAuditConfig,
-  OrgAuditConfig,
-  WorkItemAuditConfig
-];
+const collections = {
+  [CollectionNames.ACTIONS]: Actions,
+  [CollectionNames.NCS]: NonConformities,
+  [CollectionNames.RISKS]: Risks,
+  [CollectionNames.STANDARDS]: Standards,
+  [CollectionNames.OCCURRENCES]: Occurrences,
+  [CollectionNames.LESSONS]: LessonsLearned,
+  [CollectionNames.MESSAGES]: Messages,
+  [CollectionNames.ORGANIZATIONS]: Organizations,
+  [CollectionNames.WORK_ITEMS]: WorkItems
+};
 
-_(auditConfigs).each(config => Auditor.registerConfig(config));
+_(collections).each((coll, name) => AuditManager.registerCollection(coll, name));
 
-Auditor.startAudit();*/
+AuditManager.startAudit();
