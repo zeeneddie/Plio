@@ -54,7 +54,7 @@ Template.ESBookSection.viewmodel({
     if (!this._id) return;
 
     if (!sectionId) {
-      this.modal().setError('Book section is required!');
+      this.modal().setError('Standards section is required!');
       return;
     }
 

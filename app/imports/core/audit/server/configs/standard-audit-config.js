@@ -136,11 +136,11 @@ export default StandardAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Book section set to "{{newValue}}"',
+              'Standards section set to "{{newValue}}"',
             [FIELD_CHANGED]:
-              'Book section changed from "{{oldValue}}" to "{{newValue}}"',
+              'Standards section changed from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
-              'Book section removed'
+              'Standards section removed'
           }
         }
       ],
