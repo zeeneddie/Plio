@@ -1,1 +1,6 @@
+.meteor/dev_bundle
+.meteor/local
 node_modules/
+settings-local.json
+settings-production.json
+npm-debug.log

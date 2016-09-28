@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
-import RecapSender from '/imports/core/audit/server/RecapSender.js';
+import RecapSender from '/imports/recaps/RecapSender.js';
 
 
 // send recaps at 00:00

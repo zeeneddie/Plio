@@ -1,6 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from './helpers.js';
-import { getPrettyOrgDate } from '../../utils/helpers.js';
+import { getLogData } from '../helpers.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {

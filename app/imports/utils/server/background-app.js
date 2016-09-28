@@ -6,14 +6,27 @@ export default BackgroundApp = {
 
   _connection: null,
 
+  _url: null,
+
+  getUrl() {
+    return this._url;
+  },
+
+  setUrl(url) {
+    this._url = url;
+  },
+
   isConnected() {
     const conn = this._connection;
     return conn && (conn.status().connected === true);
   },
 
   connect() {
-    const url = Meteor.settings.backgroundApp.url;
-    this._connection = DDP.connect(url);
+    if (!this._connection) {
+      this._connection = DDP.connect(this.getUrl());
+    } else {
+      this._connection.reconnect();
+    }
   },
 
   disconnect() {

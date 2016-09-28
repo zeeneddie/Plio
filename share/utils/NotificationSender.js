@@ -3,15 +3,7 @@ import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js'
-import HandlebarsCompiledCache from './HandlebarsCompiledCache';
-
-
-const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
-const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
-  minimalisticEmail: getAssetPath('email', 'minimalistic-email'),
-  personalEmail: getAssetPath('email', 'personal-email'),
-  recapEmail: getAssetPath('email', 'recap-email')
-}) : false;
+import HandlebarsCache from './handlebars-cache.js';
 
 
 /**
@@ -68,7 +60,7 @@ export default class NotificationSender {
   _renderTemplateWithData() {
     let templateData = this._options.templateData;
     let templateName = this._options.templateName;
-    return handlebarsCache.render(templateName, templateData, this._options.helpers);
+    return HandlebarsCache.render(templateName, templateData, this._options.helpers);
   }
 
   _getEmailSubject() {

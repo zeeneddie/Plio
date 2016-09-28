@@ -1,10 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { SystemName } from '/imports/share/constants.js';
-import { DocChangesKinds, ChangesKinds } from './changes-kinds.js';
+import { DocChangesKinds, ChangesKinds } from './utils/changes-kinds.js';
 import { renderTemplate } from '/imports/share/helpers.js';
-import DocumentDiffer from './document-differ.js';
+import DocumentDiffer from './utils/document-differ.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
@@ -141,6 +142,7 @@ export default class DocChangeHandler {
   _processHandler(handler, args) {
     this._createLogs(handler, args);
     this._createNotifications(handler, args);
+    this._processTriggers(handler, args);
   }
 
   _createLogs(handler, args) {
@@ -408,6 +410,15 @@ export default class DocChangeHandler {
         isUserOnline ? sender.sendOnSite() : sender.sendEmail();
       }
     });
+  }
+
+  _processTriggers(handler, args) {
+    const triggers = handler.triggers;
+    if (!_(triggers).isArray()) {
+      return;
+    }
+
+    _(triggers).each(triggerFn => triggerFn.call(this._config, args));
   }
 
   _reset() {

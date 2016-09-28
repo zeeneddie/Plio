@@ -17,7 +17,10 @@ import {
   ProblemsStatuses, OrgCurrencies, ActionStatuses,
   ActionTypes, ReviewStatuses, WorkItemsStore
 } from '/imports/share/constants.js';
-import { NonConformityFilters, StandardFilters, RiskFilters } from '/imports/api/constants.js';
+import {
+  NonConformityFilters, StandardFilters,
+  RiskFilters, WorkInboxFilters
+} from '/imports/api/constants.js';
 import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
 import { Match, check } from 'meteor/check';

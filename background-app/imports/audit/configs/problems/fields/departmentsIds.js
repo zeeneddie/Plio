@@ -12,7 +12,7 @@ export default {
         [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}'
       }
     }
-  },
+  ],
   notifications: [],
   data({ diffs: { departmentsIds } }) {
     const { item:departmentId } = departmentsIds;

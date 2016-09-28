@@ -6,8 +6,10 @@ import invoke from 'lodash.invoke';
 import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 import { CollectionNames, DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
+import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
@@ -97,7 +99,7 @@ export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
 
   // Select the highest magnitude among all linked documents
   _.each(linkedTo, ({ documentId, documentType }) => {
-    const collection = getDocumentCollectionByType(documentType);
+    const collection = getCollectionByDocType(documentType);
     const doc = collection.findOne({ _id: documentId });
     if (magnitude === ProblemMagnitudes.CRITICAL) {
       return;

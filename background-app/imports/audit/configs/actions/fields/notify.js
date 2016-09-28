@@ -42,7 +42,7 @@ export default {
         return (addedUserId !== userId) ? [addedUserId]: [];
       }
     }
-  },
+  ],
   data({ diffs: { notify }, newDoc, user }) {
     const auditConfig = this;
 

@@ -1,5 +1,12 @@
+import { Standards } from '/imports/share/collections/standards.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../../utils/helpers.js';
+import {
+  getUserFullNameOrEmail,
+  getPrettyOrgDate,
+  getUserId
+} from '../../utils/helpers.js';
+import { getLinkedDocAuditConfig, getLinkedDocName } from './helpers.js';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
 
 
 export default {
@@ -65,6 +72,11 @@ export default {
           return Array.from(receivers);
         });
       }
+    }
+  ],
+  triggers: [
+    function({ newDoc: { _id } }) {
+      new ActionWorkflow(_id).refreshStatus();
     }
   ]
 };

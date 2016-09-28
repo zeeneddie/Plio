@@ -3,8 +3,8 @@ import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes } from '/imports/share/constants.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { getUserId } from '../../utils/helpers.js';
-import NCAuditConfig from './nc-audit-config.js';
-import RiskAuditConfig from './risk-audit-config.js';
+import NCAuditConfig from '../non-conformities/nc-audit-config.js';
+import RiskAuditConfig from '../risks/risk-audit-config.js';
 
 
 export const getReceivers = ({ linkedTo, ownerId }, user) => {

@@ -1,4 +1,4 @@
-import NCAuditConfig from './nc-audit-config.js';
+import NCAuditConfig from '../non-conformities/nc-audit-config.js';
 
 
 export const getLogData = function(args) {

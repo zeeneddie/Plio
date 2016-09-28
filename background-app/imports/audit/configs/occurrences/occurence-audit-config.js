@@ -1,7 +1,7 @@
 import { CollectionNames } from '/imports/share/constants.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Occurrences } from '/imports/share/collections/occurrences.js';
-import NCAuditConfig from './nc-audit-config.js';
+import NCAuditConfig from '../non-conformities/nc-audit-config.js';
 
 import onCreated from './on-created.js';
 import onRemoved from './on-removed.js';

@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { WorkflowTypes } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 
 export default class Workflow {

@@ -2,9 +2,14 @@
   "name": "background-app",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --port 4000 --settings settings-local.json",
+    "debug": "meteor debug --settings settings-local.json"
   },
   "dependencies": {
-    "meteor-node-stubs": "~0.2.0"
+    "deep-diff": "^0.3.4",
+    "handlebars": "^4.0.5",
+    "meteor-node-stubs": "~0.2.0",
+    "moment-timezone": "^0.5.5",
+    "pluralize": "^3.0.0"
   }
 }

@@ -1,6 +1,6 @@
 import { ProblemMagnitudes, ProblemsStatuses } from '/imports/share/constants.js';
 import { Standards } from '/imports/share/collections/standards.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../utils/helpers.js';
+import { getUserFullNameOrEmail, getPrettyOrgDate, getUserId } from '../../utils/helpers.js';
 import StandardAuditConfig from '../standards/standard-audit-config.js';
 
 import onCreated from './on-created.js';

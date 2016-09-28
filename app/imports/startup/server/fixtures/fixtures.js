@@ -16,7 +16,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 
 import { insertMessageFixtures } from './fixtures-messages.js';
 
-// import Auditor from '/imports/core/audit/server/auditor.js';
+import AuditManager from '/imports/utils/server/audit-manager.js';
 
 // Extend the global object to have a scope of collections
 _.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });
@@ -77,7 +77,7 @@ const logAction = (assetsNumber, collectionName) => {
 };
 
 Meteor.startup(() => {
-  //Auditor.stopAudit();
+  AuditManager.stopAudit();
 
   if (!Meteor.roles.find().count()) {
     _.each(UserRoles, (name) => {
@@ -105,5 +105,5 @@ Meteor.startup(() => {
 
   insertMessageFixtures(1000);
 
-  //Auditor.startAudit();
+  AuditManager.startAudit();
 });

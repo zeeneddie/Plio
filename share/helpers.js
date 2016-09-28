@@ -66,6 +66,33 @@ export const getLinkedDoc = (documentId, documentType) => {
   return collection.findOne({ _id: documentId });
 };
 
+const checkTargetDate = (targetDate, timezone) => {
+  if (!targetDate) {
+    return false;
+  }
+
+  timezone = timezone || moment.tz.guess();
+
+  const tzNow = moment().tz(timezone);
+  const tzTargetDate = moment(targetDate).tz(timezone);
+
+  if (tzNow.isAfter(tzTargetDate, 'day')) {
+    return 1;
+  } else if (tzNow.isSame(tzTargetDate, 'day')) {
+    return 0;
+  } else if (tzNow.isBefore(tzTargetDate, 'day')) {
+    return -1;
+  }
+};
+
+export const isDueToday = (targetDate, timezone) => {
+  return checkTargetDate(targetDate, timezone) === 0;
+};
+
+export const isOverdue = (targetDate, timezone) => {
+  return checkTargetDate(targetDate, timezone) === 1;
+};
+
 export const renderTemplate = (template, data = {}) => {
   const compiledTemplate = Handlebars.compile(template);
   return compiledTemplate(data);

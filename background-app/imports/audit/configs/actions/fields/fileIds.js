@@ -32,6 +32,6 @@ export default {
       docDesc: () => auditConfig.docDescription(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
-  }
+  },
   receivers: getReceivers
 };

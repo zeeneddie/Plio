@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { BackgroundApp } from './background-app.js';
+import BackgroundApp from './background-app.js';
 
 
-export default Auditor = {
+export default AuditManager = {
 
   _isAuditStarted: false,
 

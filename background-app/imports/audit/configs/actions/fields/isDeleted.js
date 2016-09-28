@@ -39,6 +39,6 @@ export default {
       userName: () => getUserFullNameOrEmail(user),
       deleted: () => isDeleted.newValue
     };
-  }
+  },
   receivers: getReceivers
 };

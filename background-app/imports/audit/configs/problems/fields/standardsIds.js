@@ -1,7 +1,7 @@
 import { Standards } from '/imports/share/collections/standards.js';
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers.js';
-import StandardAuditConfig from '../standards/standard-audit-config.js';
+import StandardAuditConfig from '../../standards/standard-audit-config.js';
 
 
 export default {

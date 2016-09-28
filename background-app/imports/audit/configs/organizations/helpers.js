@@ -1,5 +1,5 @@
 import { UserMembership } from '/imports/share/constants.js';
-import { getUserId } from '../utils/helpers.js';
+import { getUserId } from '../../utils/helpers.js';
 
 
 export const getReceivers = function({ newDoc: { users }, user }) {

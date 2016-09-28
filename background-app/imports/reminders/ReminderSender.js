@@ -12,7 +12,7 @@ import { ReminderConfig, ReminderTypes } from './reminder-config.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
-const REMINDER_EMAIL_TEMPLATE = 'personalEmail';
+const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
 export default class ReminderSender {
 

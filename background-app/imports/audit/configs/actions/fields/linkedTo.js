@@ -1,7 +1,7 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import {
   getUserFullNameOrEmail, getLinkedDocAuditConfig,
-  getLinkedDocName, getReceivers
+  getLinkedDocName
 } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
 
@@ -38,8 +38,10 @@ export default {
   notifications: [
     {
       text: {
-        [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
-        [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
+        [ChangesKinds.ITEM_ADDED]:
+          '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
       }
     }
   ],

@@ -1,7 +1,5 @@
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants.js';
-import { isDueToday, isOverdue } from '/imports/api/checkers.js';
-
 import Workflow from './Workflow.js';
 
 

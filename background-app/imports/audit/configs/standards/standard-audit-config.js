@@ -4,6 +4,9 @@ import { CollectionNames } from '/imports/share/constants.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 
+import onCreated from './on-created.js';
+import onRemoved from './on-removed.js';
+
 import departmentsIds from './fields/departmentsIds.js';
 import description from './fields/description.js';
 import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';

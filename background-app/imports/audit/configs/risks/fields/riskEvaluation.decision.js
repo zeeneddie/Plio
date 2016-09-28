@@ -7,11 +7,11 @@ export default {
   logs: [
     {
       message: {
-        [FIELD_ADDED]:
+        [ChangesKinds.FIELD_ADDED]:
           'Risk evaluation treatment decision set to "{{newValue}}"',
-        [FIELD_CHANGED]:
+        [ChangesKinds.FIELD_CHANGED]:
           'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
-        [FIELD_REMOVED]:
+        [ChangesKinds.FIELD_REMOVED]:
           'Risk evaluation treatment decision removed'
       }
     }

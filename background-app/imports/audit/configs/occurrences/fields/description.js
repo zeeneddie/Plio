@@ -1,5 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from './helpers.js';
+import { getLogData } from '../helpers.js';
 
 
 export default {

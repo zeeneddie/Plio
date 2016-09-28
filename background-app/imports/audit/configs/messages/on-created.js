@@ -1,7 +1,7 @@
 import { Discussions } from '/imports/share/collections/discussions.js';
 import { Standards } from '/imports/share/collections/standards.js';
-import { getUserFullNameOrEmail, getUserId } from '../utils/helpers.js';
-import StandardAuditConfig from './standard-audit-config.js';
+import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
+import StandardAuditConfig from '../standards/standard-audit-config.js';
 
 
 const getDiscussionStandard = (discussionId) => {
