@@ -15,5 +15,6 @@ email@1.1.17
 aldeed:collection2
 aldeed:simple-schema
 dburles:collection-helpers
+matb33:collection-hooks
 mdg:validated-method
 percolate:synced-cron
