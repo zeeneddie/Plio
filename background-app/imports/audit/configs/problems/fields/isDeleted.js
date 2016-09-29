@@ -19,5 +19,10 @@ export default {
     return {
       deleted: () => isDeleted.newValue
     };
-  }
+  },
+  triggers: [
+    function({ newDoc: { _id } }) {
+      new this.workflowConstructor(_id).refreshStatus();
+    }
+  ]
 };

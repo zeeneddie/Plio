@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 
 import { NonConformitiesSchema } from '../schemas/non-conformities-schema.js';
 import { CollectionNames } from '../constants.js';
+import { WorkItems } from './work-items.js';
 
 
 const NonConformities = new Mongo.Collection(CollectionNames.NCS);

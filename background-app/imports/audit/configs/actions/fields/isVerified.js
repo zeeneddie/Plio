@@ -1,6 +1,7 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
 
 
 export default {
@@ -57,5 +58,14 @@ export default {
       userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
+  triggers: [
+    function({ diffs: { verifiedAt, verifiedBy }, newDoc: { _id } }) {
+      if (verifiedAt && verifiedBy) {
+        new ActionWorkflow(_id).refreshStatus();
+      }
+    }
+  ]
 };

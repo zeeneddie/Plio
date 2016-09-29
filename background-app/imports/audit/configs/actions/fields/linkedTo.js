@@ -1,9 +1,11 @@
+import { ProblemTypes } from '/imports/share/constants.js';
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import {
-  getUserFullNameOrEmail, getLinkedDocAuditConfig,
-  getLinkedDocName
-} from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { getUserFullNameOrEmail, getLinkedDocAuditConfig } from '../../../utils/helpers.js';
+import { getLinkedDocName, getReceivers } from '../helpers.js';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+import NCWorkflow from '/imports/workflow/NCWorkflow.js';
+import RiskWorkflow from '/imports/workflow/RiskWorkflow.js';
+
 
 export default {
   field: 'linkedTo',
@@ -56,7 +58,23 @@ export default {
     };
   },
   receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
-    const doc = (linkedTo.kind === ITEM_ADDED) ? newDoc : oldDoc;
+    const doc = (linkedTo.kind === ChangesKinds.ITEM_ADDED) ? newDoc : oldDoc;
     return getReceivers(doc, user);
-  }
+  },
+  triggers: [
+    function({ diffs: { linkedTo }, newDoc: { _id } }) {
+      if (linkedTo.kind === ChangesKinds.ITEM_REMOVED) {
+        const { documentId, documentType } = linkedTo.item;
+
+        const workflowConstructor = {
+          [ProblemTypes.NC]: NCWorkflow,
+          [ProblemTypes.RISK]: RiskWorkflow
+        }[documentType];
+
+        new workflowConstructor(documentId).refreshStatus();
+      }
+
+      new ActionWorkflow(_id).refreshStatus();
+    }
+  ]
 };

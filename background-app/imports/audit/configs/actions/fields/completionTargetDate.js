@@ -1,6 +1,7 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
 
 
 export default {
@@ -41,5 +42,12 @@ export default {
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
+  triggers: [
+    function({ newDoc: { _id } }) {
+      new ActionWorkflow(_id).refreshStatus();
+    }
+  ]
 };

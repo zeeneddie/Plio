@@ -4,6 +4,7 @@ import { CollectionNames } from '/imports/share/constants.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import ProblemAuditConfig from '../problems/problem-audit-config.js';
+import NCWorkflow from '/imports/workflow/NCWorkflow.js';
 
 import cost from './fields/cost.js';
 import ref from './fields/ref.js';
@@ -16,6 +17,8 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
   collection: NonConformities,
 
   collectionName: CollectionNames.NCS,
+
+  workflowConstructor: NCWorkflow,
 
   updateHandlers: [
     ...ProblemAuditConfig.updateHandlers,

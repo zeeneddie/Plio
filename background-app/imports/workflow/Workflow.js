@@ -49,9 +49,9 @@ export default class Workflow {
       }, {
         $set: { status }
       });
-
-      this._onUpdateStatus(status);
     }
+
+    this._onUpdateStatus(status);
   }
 
   _onUpdateStatus(status) {

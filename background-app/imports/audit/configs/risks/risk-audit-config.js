@@ -4,6 +4,7 @@ import { Risks } from '/imports/share/collections/risks.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { CollectionNames } from '/imports/share/constants.js';
 import ProblemAuditConfig from '../problems/problem-audit-config.js';
+import RiskWorkflow from '/imports/workflow/RiskWorkflow.js';
 
 import reviewComments from './fields/review.comments.js';
 import reviewReviewedAt from './fields/review.reviewedAt.js';
@@ -21,6 +22,8 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
   collection: Risks,
 
   collectionName: CollectionNames.RISKS,
+
+  workflowConstructor: RiskWorkflow,
 
   updateHandlers: [
     ...ProblemAuditConfig.updateHandlers,

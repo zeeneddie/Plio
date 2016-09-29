@@ -27,5 +27,12 @@ export default {
       completed: () => status === 1, // Completed
       comments: () => comments
     };
-  }
+  },
+  triggers: [
+    function({ diffs, newDoc: { _id } }) {
+      if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
+        new this.workflowConstructor(_id).refreshStatus();
+      }
+    }
+  ]
 };

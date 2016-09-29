@@ -47,5 +47,7 @@ export default {
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  }
 };

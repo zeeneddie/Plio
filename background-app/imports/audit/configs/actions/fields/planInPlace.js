@@ -36,5 +36,7 @@ export default {
       oldValue: () => oldValue
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  }
 };

@@ -30,5 +30,7 @@ export default {
       userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  }
 };

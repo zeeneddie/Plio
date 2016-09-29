@@ -5,10 +5,6 @@ import { WorkItems } from '/imports/share/collections/work-items.js';
 import BaseEntityService from '../base-entity-service.js';
 import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
-if (Meteor.isServer) {
-  // import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
-}
-
 
 const {
   COMPLETE_ACTION,
@@ -173,8 +169,6 @@ export default {
           _id: docId
         }
       });
-
-      this._refreshStatus(newId);
     } else {
       this.collection.update({ _id }, {
         $set: { assigneeId: userId }
@@ -210,13 +204,6 @@ export default {
     }, {
       $set: { isCompleted: false }
     });
-  },
-
-  _refreshStatus(_id) {
-    /*Meteor.isServer && Meteor.defer(() => {
-      const workflow = new WorkItemWorkflow(_id);
-      workflow.refreshStatus();
-    });*/
   },
 
   _getDocData(docId, docType, workItemType) {

@@ -7,12 +7,6 @@ import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
 import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/api/helpers.js';
 
-if (Meteor.isServer) {
-  //import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
-  //import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
-  //import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
-}
-
 
 export default {
   collection: Actions,
@@ -34,8 +28,6 @@ export default {
     });
 
     WorkItemService.actionCreated(actionId);
-
-    this._refreshStatus(actionId);
 
     return actionId;
   },
@@ -88,9 +80,6 @@ export default {
       });
     }
 
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -121,9 +110,6 @@ export default {
       WorkItemService.actionWorkflowChanged(_id, newWorkflow);
     }
 
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -144,8 +130,6 @@ export default {
     });
 
     WorkItemService.actionCompleted(_id);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -168,8 +152,6 @@ export default {
 
     WorkItemService.actionCompletionCanceled(_id);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -187,8 +169,6 @@ export default {
     });
 
     WorkItemService.actionVerified(_id);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -239,8 +219,6 @@ export default {
 
     WorkItemService.actionVerificationCanceled(_id);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -252,8 +230,6 @@ export default {
     });
 
     WorkItemService.actionCompletionDateUpdated(_id, targetDate);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -279,8 +255,6 @@ export default {
 
     WorkItemService.actionVerificationDateUpdated(_id, targetDate);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -301,36 +275,11 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    const ret = this._service.remove({ _id, deletedBy });
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this._service.remove({ _id, deletedBy });
   },
 
   restore({ _id }) {
-    const ret = this._service.restore({ _id });
-
-    this._refreshStatus(_id);
-
-    return ret;
-  },
-
-  _refreshStatus(_id) {
-    /*Meteor.isServer && Meteor.defer(() => {
-      const workflow = new ActionWorkflow(_id);
-      workflow.refreshStatus();
-    });*/
-  },
-
-  _refreshLinkedDocStatus(documentId, documentType) {
-    /*Meteor.isServer && Meteor.defer(() => {
-      const workflowConstructors = {
-        [ProblemTypes.NC]: NCWorkflow,
-        [ProblemTypes.RISK]: RiskWorkflow
-      };
-
-      new workflowConstructors[documentType](documentId).refreshStatus();
-    });*/
+    return this._service.restore({ _id });
   }
+  
 };

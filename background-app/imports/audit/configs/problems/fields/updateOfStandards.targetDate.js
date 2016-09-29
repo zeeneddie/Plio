@@ -26,5 +26,10 @@ export default {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
-  }
+  },
+  triggers: [
+    function({ newDoc: { _id } }) {
+      new this.workflowConstructor(_id).refreshStatus();
+    }
+  ]
 };

@@ -23,5 +23,7 @@ export default {
       oldValue: () => ActionStatuses[oldValue]
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  }
 };

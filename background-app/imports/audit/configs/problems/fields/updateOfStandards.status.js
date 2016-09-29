@@ -28,5 +28,13 @@ export default {
       completed: status === 1, // Completed
       comments
     };
-  }
+  },
+  triggers: [
+    function({ diffs, newDoc: { _id } }) {
+      if (diffs['updateOfStandards.completedAt']
+            && diffs['updateOfStandards.completedBy']) {
+        new this.workflowConstructor(_id).refreshStatus();
+      }
+    }
+  ]
 };

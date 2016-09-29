@@ -1,3 +1,4 @@
+import { Standards } from '/imports/share/collections/standards.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes } from '/imports/share/constants.js';
