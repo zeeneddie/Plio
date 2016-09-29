@@ -118,7 +118,7 @@ export function subscribeToMessages(discussionId, subOptions = {}) {
   }
 }
 
-export function fetchLastMessage(discussionId) {
+export function subscribeToLastMessage(discussionId) {
   return (dispatch) => {
     const handle = Meteor.subscribe('discussionMessagesLast', discussionId, {
       onReady() {

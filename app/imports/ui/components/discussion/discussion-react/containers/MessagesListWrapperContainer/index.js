@@ -17,7 +17,7 @@ import {
   setShouldScrollToBottom,
   subscribeToMessages,
   fetchMessages,
-  fetchLastMessage
+  subscribeToLastMessage
 } from '/client/redux/actions/discussionActions';
 import store, { getState } from '/client/redux/store';
 import notifications from '/imports/startup/client/mixins/notifications';
@@ -42,14 +42,11 @@ const observer = () => {
   return () => handle.stop();
 };
 
-const observerCleanup = observer();
-
 const getSubOptions = pickC(['limit', 'sort', 'at', 'priorLimit', 'followingLimit']);
 
 const subscribe = ({ dispatch, discussionId, ...props } = {}) => {
-  const lastMessageHandle = dispatch(fetchLastMessage(discussionId));
   const messagesHandle = dispatch(subscribeToMessages(discussionId, getSubOptions(props)));
-  return [lastMessageHandle, messagesHandle];
+  return [messagesHandle];
 }
 
 export default compose(
@@ -67,20 +64,22 @@ export default compose(
     componentWillMount() {
       this._subs = [];
 
+      this._lastMessageHandle = this.props.dispatch(subscribeToLastMessage(this.props.discussionId));
+
       this._subs = this._subs.concat(subscribe(this.props));
 
       this.props.dispatch(fetchMessages(this.props.discussionId));
+
+      this._observerCleanup = observer();
     },
     componentWillUnmount() {
-      observerCleanup();
+      this._observerCleanup();
+
+      this._lastMessageHandle.stop();
+
       this._subs.map((subs = []) => subs.map(sub => sub.stop()));
     }
   }),
   connect(state => ({ ...state.discussion })),
-  showSpinnerWhileLoading(property('isInitialDataLoaded')),
-  // branch(
-  //   props => props.isInitialDataLoaded,
-  //   _.identity,
-  //   renderComponent(PreloaderPage)
-  // ),
+  showSpinnerWhileLoading(property('isInitialDataLoaded'))
 )(MessagesListWrapper);

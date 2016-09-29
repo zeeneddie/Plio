@@ -184,6 +184,8 @@ const invokeId = instance => invoke(instance, '_id');
 
 const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
+const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
+
 const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
 const $isScrolledElementVisible = (el, container) => {
@@ -292,6 +294,7 @@ export {
   setModalError,
   invokeId,
   $isScrolledToBottom,
+  $isAlmostScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
   getWorkflowDefaultStepDate,

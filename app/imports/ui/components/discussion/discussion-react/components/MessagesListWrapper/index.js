@@ -17,7 +17,12 @@ import {
   setFollowingLimit
 } from '/client/redux/actions/discussionActions';
 import { swipedetect, isTouchDevice } from '/client/lib/mobile';
-import { lengthMessages, $isScrolledToBottom } from '/imports/api/helpers';
+import { lengthMessages, $isScrolledToBottom, $isAlmostScrolledToBottom } from '/imports/api/helpers';
+
+const receivedOneNewMessage = (props, prevProps) =>
+  Object.is(lengthMessages(props), lengthMessages(prevProps) + 1);
+const isOwnerOfNewMessage = props =>
+  Object.is(Object.assign({}, _.last(props.messages)).createdBy, Meteor.userId());
 
 let prevChatScrollTop, prevChatScrollHeight;
 
@@ -35,18 +40,20 @@ export default class MessagesListWrapper extends React.Component {
       prevChatScrollTop = $(chat).scrollTop();
       prevChatScrollHeight = chat.scrollHeight;
     }
+
+    if (!nextProps.loading && receivedOneNewMessage(nextProps, this.props)) {
+    }
   }
 
   componentDidUpdate(prevProps) {
     const { chat } = this.refs;
 
-    const receivedOneNewMessage = Object.is(lengthMessages(this.props), lengthMessages(prevProps) + 1);
-    const isOwnerOfNewMessage = Object.is(Object.assign({}, _.last(this.props.messages)).createdBy, Meteor.userId());
     const notLoading = !this.props.loading;
+    const received = receivedOneNewMessage(this.props, prevProps);
 
     // scroll to the last position if not loading, current messages count is bigger than last count and it receives more than 1 message (means it has loaded messages through subscription)
     if (notLoading &&
-        !receivedOneNewMessage &&
+        !received &&
         lengthMessages(this.props) > lengthMessages(prevProps)) {
       if (prevProps.sort.createdAt > 0) {
         // downscroll
@@ -58,9 +65,11 @@ export default class MessagesListWrapper extends React.Component {
     }
 
     // scroll to bottom if component receives only 1 new message and the sender is current user
-    if (notLoading && receivedOneNewMessage && isOwnerOfNewMessage) {
+    // have to use $isAlmostScrolledToBottom because sometimes chat is not scrolled down when new message was appended
+    if (notLoading &&
+        received &&
+        (isOwnerOfNewMessage(this.props) || $isAlmostScrolledToBottom($(chat)))) {
       $(chat).scrollTop(9E99);
-      this.props.dispatch(setShouldScrollToBottom(false));
     }
   }
 
@@ -69,11 +78,7 @@ export default class MessagesListWrapper extends React.Component {
     const scrollHeight = chat.scrollHeight;
     const height = $(chat).height();
 
-    if (this.props.at) {
-      // scroll to the center of the chat
-      // const center = (scrollHeight - height) / 2;
-      // $(chat).scrollTop(center);
-    } else {
+    if (!this.props.at) {
       // scroll to the bottom of the chat
       $(chat).scrollTop(9E99);
     }
