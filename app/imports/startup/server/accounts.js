@@ -29,7 +29,7 @@ const resetPassword = Meteor.server.method_handlers['resetPassword'];
 Meteor.server.method_handlers['resetPassword'] = function(...args) {
   const res = resetPassword.call(this, ...args);
 
-  Meteor.defer(() => new UserNotificationsSender(res.userId).passwordReset());
+  Meteor.defer(() => new UserNotificationsSender(res.id).passwordReset());
 
   return res;
 };

@@ -220,7 +220,7 @@ export default class ReminderSender {
 
       const emailTemplateData = {
         organizationName: this._organization.name,
-        title: text
+        text
       };
 
       const url = config.url(args);

@@ -45,7 +45,9 @@ export default OrgAuditConfig = {
   },
 
   docUrl({ serialNumber }) {
-    return Meteor.absoluteUrl(`${serialNumber}`);
+    return Meteor.absoluteUrl(`${serialNumber}`, {
+      rootUrl: Meteor.settings.mainApp.url
+    });
   }
 
 };

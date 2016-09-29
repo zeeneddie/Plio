@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 
 import { RisksSchema } from '../schemas/risks-schema.js';
 import { CollectionNames } from '../constants.js';
+import { WorkItems } from './work-items.js';
 
 
 const Risks = new Mongo.Collection(CollectionNames.RISKS);

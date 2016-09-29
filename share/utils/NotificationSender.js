@@ -83,6 +83,21 @@ export default class NotificationSender {
   }
 
   /**
+   * Returns default Plio email
+   * @returns {String}
+   * @private
+   */
+  _getDefaultEmail() {
+    const orgName = this._options.templateData.organizationName;
+
+    if (orgName) {
+      return `Plio (${orgName})<noreply@pliohub.com>`;
+    } else {
+      return `Plio <noreply@pliohub.com>`;
+    }
+  }
+
+  /**
    * Returns an array of emails of interested users
    * @param recipients
    * @returns {[String]}
@@ -100,7 +115,7 @@ export default class NotificationSender {
   _sendEmailBasic(recipients, text) {
     let emailOptions = {
       subject: this._getEmailSubject(),
-      from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
+      from: this._getUserEmail(this._options.senderId) || this._getDefaultEmail(),
       to: this._getUserEmails(recipients),
       html: text
     };

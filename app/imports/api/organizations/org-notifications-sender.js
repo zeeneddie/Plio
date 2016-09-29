@@ -134,6 +134,10 @@ export default class OrgNotificationsSender {
   }
 
   userRemoved(userId, removedBy) {
+    if (this._orgOwnerId === removedBy) {
+      return;
+    }
+
     const user = Meteor.users.findOne({ _id: userId });
     const userName = user.fullNameOrEmail();
 

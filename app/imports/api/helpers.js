@@ -8,7 +8,12 @@ import Handlebars from 'handlebars';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
-import { CollectionNames, DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
+import {
+  AvatarPlaceholders,
+  CollectionNames,
+  DocumentTypes,
+  ProblemMagnitudes
+} from '/imports/share/constants.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';

@@ -1,4 +1,5 @@
 import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
 import StandardAuditConfig from '../standards/standard-audit-config.js';

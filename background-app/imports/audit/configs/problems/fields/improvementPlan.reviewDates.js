@@ -1,5 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {

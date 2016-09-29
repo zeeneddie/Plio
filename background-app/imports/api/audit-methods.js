@@ -32,6 +32,8 @@ const documentCreated = new ValidatedMethod({
   }).validator(),
 
   run({ newDocument, userId, collectionName }) {
+    this.unblock();
+
     const config = AuditConfigs.get(collectionName);
 
     new DocChangeHandler(config, DocChangesKinds.DOC_CREATED, {
@@ -52,6 +54,8 @@ const documentUpdated = new ValidatedMethod({
   }).validator(),
 
   run({ newDocument, oldDocument, userId, collectionName }) {
+    this.unblock();
+
     const config = AuditConfigs.get(collectionName);
 
     new DocChangeHandler(config, DocChangesKinds.DOC_UPDATED, {
@@ -71,6 +75,8 @@ const documentRemoved = new ValidatedMethod({
   }).validator(),
 
   run({ oldDocument, userId, collectionName }) {
+    this.unblock();
+
     const config = AuditConfigs.get(collectionName);
 
     new DocChangeHandler(config, DocChangesKinds.DOC_REMOVED, {

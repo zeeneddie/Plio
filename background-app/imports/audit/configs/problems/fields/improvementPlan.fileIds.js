@@ -1,3 +1,4 @@
+import { Files } from '/imports/share/collections/files.js';
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 

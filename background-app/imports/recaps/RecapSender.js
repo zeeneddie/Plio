@@ -188,17 +188,22 @@ export default class RecapSender {
 
   _makeRecapData() {
     const { serialNumber } = this._organization;
+    const mainAppUrl = Meteor.settings.mainApp.url;
 
     this._makeCollectionData(
       Standards, this._standardsIds, 'standard',
       doc => doc.title,
-      doc => Meteor.absoluteUrl(`${serialNumber}/standards/${doc._id}`)
+      doc => Meteor.absoluteUrl(`${serialNumber}/standards/${doc._id}`, {
+        rootUrl: mainAppUrl
+      })
     );
 
     this._makeCollectionData(
       NonConformities, this._ncsIds, 'non-conformity',
       doc => `${doc.sequentialId} "${doc.title}"`,
-      doc => Meteor.absoluteUrl(`${serialNumber}/non-conformities/${doc._id}`)
+      doc => Meteor.absoluteUrl(`${serialNumber}/non-conformities/${doc._id}`, {
+        rootUrl: mainAppUrl
+      })
     );
 
     this._makeCollectionData(
@@ -211,7 +216,9 @@ export default class RecapSender {
           sort: { createdAt: -1 }
         });
         if (workItem) {
-          return Meteor.absoluteUrl(`${serialNumber}/work-inbox?id=${workItem._id}`);
+          return Meteor.absoluteUrl(`${serialNumber}/work-inbox?id=${workItem._id}`, {
+            rootUrl: mainAppUrl
+          });
         }
       }
     );
@@ -219,7 +226,9 @@ export default class RecapSender {
     this._makeCollectionData(
       Risks, this._risksIds, 'risk',
       doc => `${doc.sequentialId} "${doc.title}"`,
-      doc => Meteor.absoluteUrl(`${serialNumber}/risks/${doc._id}`)
+      doc => Meteor.absoluteUrl(`${serialNumber}/risks/${doc._id}`, {
+        rootUrl: mainAppUrl
+      })
     );
   }
 

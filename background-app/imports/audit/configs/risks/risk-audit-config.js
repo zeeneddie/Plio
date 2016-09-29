@@ -40,7 +40,9 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/risks/${_id}`);
+    return Meteor.absoluteUrl(`${serialNumber}/risks/${_id}`, {
+      rootUrl: Meteor.settings.mainApp.url
+    });
   }
 
 });

@@ -43,7 +43,10 @@ export default MessageAuditConfig = {
     }) || {};
 
     return Meteor.absoluteUrl(
-      `${serialNumber}/standards/${linkedTo}/discussion?at=${_id}`
+      `${serialNumber}/standards/${linkedTo}/discussion?at=${_id}`,
+      {
+        rootUrl: Meteor.settings.mainApp.url
+      }
     );
   }
 

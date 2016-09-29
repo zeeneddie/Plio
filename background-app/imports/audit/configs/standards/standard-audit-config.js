@@ -68,7 +68,9 @@ export default StandardAuditConfig = {
 
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/standards/${_id}`);
+    return Meteor.absoluteUrl(`${serialNumber}/standards/${_id}`, {
+      rootUrl: Meteor.settings.mainApp.url
+    });
   }
 
 };

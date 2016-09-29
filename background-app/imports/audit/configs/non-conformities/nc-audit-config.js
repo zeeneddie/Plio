@@ -30,7 +30,9 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${_id}`);
+    return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${_id}`, {
+      rootUrl: Meteor.settings.mainApp.url
+    });
   }
 
 });

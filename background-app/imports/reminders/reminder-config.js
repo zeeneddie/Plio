@@ -52,7 +52,9 @@ const getProblemUrl = ({ doc, docType, org }) => {
     [ReminderDocTypes.RISK]: 'risks'
   }[docType];
 
-  return Meteor.absoluteUrl(`${org.serialNumber}/${path}/${doc._id}`);
+  return Meteor.absoluteUrl(`${org.serialNumber}/${path}/${doc._id}`, {
+    rootUrl: Meteor.settings.mainApp.url
+  });
 };
 
 const getActionUrl = ({ doc, docType, reminderType, org }) => {
@@ -67,11 +69,15 @@ const getActionUrl = ({ doc, docType, reminderType, org }) => {
     isCompleted: false
   }) || {};
 
-  return Meteor.absoluteUrl(`${org.serialNumber}/work-inbox?id=${_id}`);
+  return Meteor.absoluteUrl(`${org.serialNumber}/work-inbox?id=${_id}`, {
+    rootUrl: Meteor.settings.mainApp.url
+  });
 };
 
 const getStandardUrl = ({ doc, org }) => {
-  return Meteor.absoluteUrl(`${org.serialNumber}/standards/${doc._id}`);
+  return Meteor.absoluteUrl(`${org.serialNumber}/standards/${doc._id}`, {
+    rootUrl: Meteor.settings.mainApp.url
+  });
 };
 
 const getDocDesc = (docType) => {
