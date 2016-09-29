@@ -15,6 +15,8 @@ export const submit = ({ disabled, discussionId, organizationId, dispatch }) => 
 
     const messageInput = e.target.elements.message;
 
+    if (!messageInput.value) return;
+
     insert.call({
       organizationId,
       discussionId,
@@ -26,8 +28,10 @@ export const submit = ({ disabled, discussionId, organizationId, dispatch }) => 
       messageInput.value = '';
 
       if (FlowRouter.getQueryParam('at')) {
-        dispatch(reset());
-        dispatch(setShouldScrollToBottom(true));
+        Meteor.setTimeout(() => {
+          dispatch(reset());
+          dispatch(setShouldScrollToBottom(true));
+        }, 0);
       }
     }));
   }

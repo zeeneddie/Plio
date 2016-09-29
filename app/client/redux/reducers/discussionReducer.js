@@ -8,12 +8,14 @@ import {
   SET_LAST_MESSAGE_ID,
   SET_SHOULD_SCROLL_TO_BOTTOM,
   SET_PRIOR_LIMIT,
-  SET_FOLLOWING_LIMIT
+  SET_FOLLOWING_LIMIT,
+  SET_INITIAL_DATA_LOADED
 } from '../actions/types';
 
 export const initialState = {
   messages: [],
   loading: false,
+  isInitialDataLoaded: false,
   limit: 50,
   sort: { createdAt: -1 },
   at: null,
@@ -30,6 +32,9 @@ export default function reducer(state=initialState, action) {
       break;
     case SET_LOADING:
       return { ...state, loading: action.payload };
+      break;
+    case SET_INITIAL_DATA_LOADED:
+      return { ...state, isInitialDataLoaded: action.payload };
       break;
     case SET_LIMIT:
       return { ...state, limit: action.payload };

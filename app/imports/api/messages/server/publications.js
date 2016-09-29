@@ -101,8 +101,8 @@ Meteor.publishComposite('messages', function(discussionId, {
 				const following = getMessages(followingLimit, 1);
 				const query = {
 					createdAt: {
-						$lte: _.last(following).createdAt,
-						$gte: _.last(prior).createdAt
+						$lte: following.length && _.last(following).createdAt,
+						$gte: prior.length && _.last(prior).createdAt
 					}
 				};
 				const options = { sort: { createdAt: 1 } };

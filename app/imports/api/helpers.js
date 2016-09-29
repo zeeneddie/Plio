@@ -182,7 +182,7 @@ const inspire = curry((props, instance, ...args) =>
 
 const invokeId = instance => invoke(instance, '_id');
 
-const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
 const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
@@ -206,6 +206,10 @@ const length = (array = []) => array.length;
 const propItems = property('items');
 
 const lengthItems = compose(length, propItems);
+
+const propMessages = property('messages');
+
+const lengthMessages = compose(length, propMessages);
 
 const flattenMapItems = flattenMap(propItems);
 
@@ -258,6 +262,10 @@ const transsoc = curry((transformations, obj) => {
 
 const pickC = curry((keys, obj) => _.pick(obj, ...keys));
 
+const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
+
+const pickFromDiscussion = pickFrom('discussion');
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -297,5 +305,9 @@ export {
   propItems,
   lengthItems,
   flattenMapItems,
-  getWorkflowDefaultStepDate
+  getWorkflowDefaultStepDate,
+  propMessages,
+  lengthMessages,
+  pickFrom,
+  pickFromDiscussion
 };

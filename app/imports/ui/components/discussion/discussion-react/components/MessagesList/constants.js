@@ -1,7 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
+import ReactDOM from 'react-dom';
 
 import { getFormattedDate } from '/imports/api/helpers.js';
+
+const isMessageSelected = (props, at) => Object.is(props._id, at);
 
 const getUser = (_id) => {
   const query = { _id };
@@ -21,7 +24,21 @@ const getDate = date => {
   return date ? getFormattedDate(date, format) : null;
 };
 
-export const transformMessages = ({ discussion, messages }) => {
+const scrollToSelectedMessage = (component) => {
+  const $chat = $('.chat-content');
+  const $message = $(ReactDOM.findDOMNode(component));
+  const msgOffset = $message.offset().top;
+
+  // center the linked message in the chat box
+  const elHeight = $message.height();
+  const chatHeight = $chat.height();
+
+  const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
+
+  $chat.scrollTop(offset);
+};
+
+export const transformMessages = ({ discussion, messages, at }) => {
   const messagesMapped = messages.map((message, i, arr) => {
     const { _id, createdBy, createdAt } = message;
 
@@ -31,12 +48,16 @@ export const transformMessages = ({ discussion, messages }) => {
       const date = getDate(createdAt);
       const documentId = discussion.linkedTo;
 
+      const isSelected = isMessageSelected(message, at);
+
       return {
         _id,
         date,
         documentId,
         createdAt,
         user,
+        isSelected,
+        ...(() => isSelected ? { scrollToSelectedMessage } : null)(),
         dateToShow: (() => {
           const prevCreatedAt = get(messages[i - 1], 'createdAt');
           const prevMessageDate = getDate(prevCreatedAt);

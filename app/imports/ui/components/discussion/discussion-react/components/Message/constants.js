@@ -6,6 +6,7 @@ import modal from '/imports/startup/client/mixins/modal';
 import { invokeC, getFormattedDate, handleMethodResult } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 import { remove as removeMessage } from '/imports/api/messages/methods';
+import { setAt } from '/client/redux/actions/discussionActions';
 
 import FileItemRead from '../FileItemRead';
 
@@ -15,7 +16,16 @@ export const invokeUser = path => obj => invokeC(path, obj.user);
 
 export const isAuthor = props => Object.is(Meteor.userId(), props.createdBy);
 
-export const isSelected = props => Object.is(props._id, FlowRouter.getQueryParam('at'));
+export const setAtWithRouter = (val, props) => {
+  FlowRouter.setQueryParams({ at: val });
+  props.dispatch(setAt(val));
+}
+
+export const clearAtWithRouter = (props) => {
+  if (props.isSelected) {
+    setAtWithRouter(null, props);
+  }
+}
 
 // Prop creators
 
@@ -38,9 +48,12 @@ export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A
 export const getMessageContents = (props) => {
   switch(props.type) {
     case 'text':
-      return Autolinker.link(props.text || '', {
-        truncate: TruncatedStringLengths.c40
+      const createMarkup = () => ({
+        __html: Autolinker.link(props.text || '', {
+          truncate: TruncatedStringLengths.c40
+        })
       });
+      return <span dangerouslySetInnerHTML={createMarkup()}></span>;
       break;
     case 'file':
       return <FileItemRead {...props} />;
@@ -68,7 +81,7 @@ export const getPathToMessageToCopy = (props) => {
 
 export const getClassName = (props) => {
   const first = props.isMergedWithPreviousMessage ? '' : 'first';
-  const selected = isSelected(props) ? 'selected' : '';
+  const selected = props.isSelected ? 'selected' : '';
 
   return `${first} ${selected}`;
 };
@@ -88,15 +101,9 @@ export const openUserDetails = (props) => {
   };
 }
 
-export const deselect = (props) => {
-  return (e) => {
-    const at = FlowRouter.getQueryParam('at');
+export const select = props => e => props.dispatch(setAt(props._id));
 
-    if (Object.is(at, props._id)) {
-      FlowRouter.setQueryParams({ at: null });
-    }
-  };
-}
+export const deselect = props => e => clearAtWithRouter(props);
 
 export const remove = (props) => {
   return (e) => {
@@ -110,6 +117,10 @@ export const remove = (props) => {
       confirmButtonText: 'Remove',
       closeOnConfirm: true
     },
-    () => removeMessage.call({ _id: props._id }, handleMethodResult));
+    () => {
+      const cb = (err, res) => !err && clearAtWithRouter(props);
+
+      return removeMessage.call({ _id: props._id }, handleMethodResult(cb));
+    });
   };
 };

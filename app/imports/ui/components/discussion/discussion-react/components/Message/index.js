@@ -1,5 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { compose, lifecycle, shallowEqual, withHandlers, withProps } from 'recompose';
+import invoke from 'lodash.invoke';
 
 import MessageDate from '../MessageDate';
 import MessageBox from '../MessageBox';
@@ -22,6 +24,7 @@ import {
   getPathToMessageToCopy,
   getClassName,
   openUserDetails,
+  select,
   deselect,
   remove
 } from './constants.js';
@@ -46,6 +49,7 @@ const Message = (props) => {
                 <MessageAuthor name={props.userFirstName}/>
 
                 <MessageTime
+                  onClick={e => props.onMessageTimeClick(e)}
                   href={props.pathToMessage}
                   time={props.time}/>
               </div>)}
@@ -57,6 +61,7 @@ const Message = (props) => {
 
             <MessageGutter>
               <MessageTime
+                onClick={e => props.onMessageTimeClick(e)}
                 href={props.pathToMessage}
                 time={props.time}/>
             </MessageGutter>
@@ -73,12 +78,21 @@ const Message = (props) => {
 export default compose(
   lifecycle({
     shouldComponentUpdate(nextProps) {
-      return shallowEqual(this.props, nextProps);
+      return this.props._id === nextProps.at                                       ||
+             (this.props.at === this.props._id && !nextProps.at)                   ||
+             (this.props.at === this.props._id && nextProps.at !== this.props._id) ||
+             shallowEqual(this.props, nextProps);
+    },
+    componentDidMount() {
+      if (this.props.isSelected) {
+        invoke(this.props, 'scrollToSelectedMessage', this);
+      }
     }
   }),
   withHandlers({
     onMessageAvatarClick: openUserDetails,
     onMessageContentsClick: deselect,
+    onMessageTimeClick: select,
     onMessageDelete: remove
   }),
   withProps(transsoc({

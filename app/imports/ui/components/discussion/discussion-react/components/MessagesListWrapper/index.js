@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import Clipboard from 'clipboard';
+import { connect } from 'react-redux';
 
-import InfiniteLoader from '../InfiniteLoader';
-import MessagesList from '../MessagesList';
+import InfiniteLoader from '/imports/ui/react/components/InfiniteLoader';
+import MessagesListContainer from '../../containers/MessagesListContainer';
 import MessagesListHeader from '../MessagesListHeader';
-import { handleMouseWheel, wheelDirection } from '/client/lib/scroll.js';
+import { handleMouseWheel, wheelDirection } from '/client/lib/scroll';
 import {
   setLimit,
   setSort,
@@ -15,9 +16,10 @@ import {
   setPriorLimit,
   setFollowingLimit
 } from '/client/redux/actions/discussionActions';
-import { swipedetect, isTouchDevice } from '/client/lib/mobile.js';
+import { swipedetect, isTouchDevice } from '/client/lib/mobile';
+import { lengthMessages, $isScrolledToBottom } from '/imports/api/helpers';
 
-let prevChatScrollTop, prevChatScrollHeight, shouldScroll;
+let prevChatScrollTop, prevChatScrollHeight;
 
 export default class MessagesListWrapper extends React.Component {
   constructor(props) {
@@ -33,23 +35,19 @@ export default class MessagesListWrapper extends React.Component {
       prevChatScrollTop = $(chat).scrollTop();
       prevChatScrollHeight = chat.scrollHeight;
     }
-
-    if (!nextProps.loading && nextProps.messages.length > this.props.messages.length) {
-      if (!_.every([prevChatScrollTop, prevChatScrollHeight], _.isUndefined)) {
-        shouldScroll = true;
-      }
-    }
   }
 
   componentDidUpdate(prevProps) {
     const { chat } = this.refs;
 
-    if (prevProps.shouldScrollToBotom) {
-      $(chat).scrollTop(9E99);
-      this.props.dispatch(setShouldScrollToBottom(false));
-    }
+    const receivedOneNewMessage = Object.is(lengthMessages(this.props), lengthMessages(prevProps) + 1);
+    const isOwnerOfNewMessage = Object.is(Object.assign({}, _.last(this.props.messages)).createdBy, Meteor.userId());
+    const notLoading = !this.props.loading;
 
-    if (shouldScroll) {
+    // scroll to the last position if not loading, current messages count is bigger than last count and it receives more than 1 message (means it has loaded messages through subscription)
+    if (notLoading &&
+        !receivedOneNewMessage &&
+        lengthMessages(this.props) > lengthMessages(prevProps)) {
       if (prevProps.sort.createdAt > 0) {
         // downscroll
         $(chat).scrollTop(prevChatScrollTop);
@@ -57,8 +55,12 @@ export default class MessagesListWrapper extends React.Component {
         // upscroll
         $(chat).scrollTop(prevChatScrollTop + chat.scrollHeight - prevChatScrollHeight);
       }
+    }
 
-      shouldScroll = false;
+    // scroll to bottom if component receives only 1 new message and the sender is current user
+    if (notLoading && receivedOneNewMessage && isOwnerOfNewMessage) {
+      $(chat).scrollTop(9E99);
+      this.props.dispatch(setShouldScrollToBottom(false));
     }
   }
 
@@ -69,8 +71,8 @@ export default class MessagesListWrapper extends React.Component {
 
     if (this.props.at) {
       // scroll to the center of the chat
-      const center = (scrollHeight - height) / 2;
-      $(chat).scrollTop(center);
+      // const center = (scrollHeight - height) / 2;
+      // $(chat).scrollTop(center);
     } else {
       // scroll to the bottom of the chat
       $(chat).scrollTop(9E99);
@@ -104,7 +106,7 @@ export default class MessagesListWrapper extends React.Component {
             className='infinite-load-older text-xs-center'/>
 
           <div className="chat-messages-list">
-            <MessagesList messages={messages} discussion={discussion}/>
+            <MessagesListContainer messages={messages} discussion={discussion}/>
           </div>
 
           <InfiniteLoader
