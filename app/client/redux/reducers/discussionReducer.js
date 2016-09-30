@@ -9,7 +9,8 @@ import {
   SET_SHOULD_SCROLL_TO_BOTTOM,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
-  SET_INITIAL_DATA_LOADED
+  SET_INITIAL_DATA_LOADED,
+  SET_RESET_COMPLETED
 } from '../actions/types';
 
 export const initialState = {
@@ -22,7 +23,8 @@ export const initialState = {
   lastMessageId: null,
   shouldScrollToBotom: false,
   priorLimit: 50,
-  followingLimit: 50
+  followingLimit: 50,
+  resetCompleted: false
 };
 
 export default function reducer(state=initialState, action) {
@@ -56,6 +58,9 @@ export default function reducer(state=initialState, action) {
     case SET_SHOULD_SCROLL_TO_BOTTOM:
       return { ...state, shouldScrollToBotom: action.payload };
       break;
+      break;
+    case SET_RESET_COMPLETED:
+      return { ...state, resetCompleted: action.payload };
       break;
     case RESET:
       return { ...state, ...action.payload };

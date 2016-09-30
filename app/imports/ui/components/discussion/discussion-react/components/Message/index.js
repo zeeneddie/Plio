@@ -78,10 +78,12 @@ const Message = (props) => {
 export default compose(
   lifecycle({
     shouldComponentUpdate(nextProps) {
-      return this.props._id === nextProps.at                                       ||
-             (this.props.at === this.props._id && !nextProps.at)                   ||
-             (this.props.at === this.props._id && nextProps.at !== this.props._id) ||
-             shallowEqual(this.props, nextProps);
+      return this.props._id === nextProps.at                     ||
+             (this.props.at === this.props._id && !nextProps.at) ||
+             (this.props.at === this.props._id && nextProps.at !== this.props._id);
+    },
+    componentDidUpdate() {
+      console.log('updated');
     },
     componentDidMount() {
       if (this.props.isSelected) {

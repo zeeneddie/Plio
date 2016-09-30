@@ -268,6 +268,8 @@ const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
 const pickFromDiscussion = pickFrom('discussion');
 
+const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -312,5 +314,6 @@ export {
   propMessages,
   lengthMessages,
   pickFrom,
-  pickFromDiscussion
+  pickFromDiscussion,
+  omitC
 };

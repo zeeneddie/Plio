@@ -28,10 +28,9 @@ export const submit = ({ disabled, discussionId, organizationId, dispatch }) => 
       messageInput.value = '';
 
       if (FlowRouter.getQueryParam('at')) {
-        Meteor.setTimeout(() => {
-          dispatch(reset());
-          dispatch(setShouldScrollToBottom(true));
-        }, 0);
+        FlowRouter.setQueryParams({ at: null });
+        dispatch(reset());
+        dispatch(setShouldScrollToBottom(true));
       }
     }));
   }

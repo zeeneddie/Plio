@@ -20,7 +20,7 @@ class DiscussionContainer extends React.Component {
   }
 
   render() {
-    return (<Discussion at={FlowRouter.getQueryParam('at')} {...this.props}/>);
+    return (<Discussion {...this.props}/>);
   }
 }
 

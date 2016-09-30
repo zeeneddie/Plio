@@ -11,7 +11,8 @@ import {
   SET_SHOULD_SCROLL_TO_BOTTOM,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
-  SET_INITIAL_DATA_LOADED
+  SET_INITIAL_DATA_LOADED,
+  SET_RESET_COMPLETED
 } from './types';
 import { initialState } from '../reducers/discussionReducer';
 import { Messages } from '/imports/api/messages/messages';
@@ -62,7 +63,7 @@ export function setAt(at) {
 export function reset() {
   return {
     type: RESET,
-    payload: initialState
+    payload: { ...initialState, resetCompleted: true }
   }
 }
 
@@ -147,5 +148,13 @@ export function fetchMessages(discussionId) {
 
       dispatch(setMessages(messages));
     });
+  }
+}
+
+
+export function setResetCompleted(bool) {
+  return {
+    type: SET_RESET_COMPLETED,
+    payload: bool
   }
 }
