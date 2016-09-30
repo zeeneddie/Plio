@@ -47,16 +47,13 @@ Template.StandardsPage.viewmodel({
         }
       } else {
         _subHandlers = [
-         template.subscribe('departments', organizationId),
-         template.subscribe('workItems', organizationId),
-         template.subscribe('nonConformitiesByStandardId', standardId),
          CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
        ];
       }
 
       this._subHandlers(_subHandlers);
     },
-    function() {
+    function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],

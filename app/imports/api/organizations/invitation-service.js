@@ -5,7 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { OrgMemberRoles, UserMembership } from '/imports/share/constants.js';
-import { getRandomAvatarUrl, generateUserInitials } from '/imports/api/helpers.js';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
 
 import OrgNotificationsSender from './org-notifications-sender.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';

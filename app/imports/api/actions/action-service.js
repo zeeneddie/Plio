@@ -5,7 +5,7 @@ import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/api/helpers.js';
+import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/share/helpers.js';
 
 
 export default {
@@ -281,5 +281,5 @@ export default {
   restore({ _id }) {
     return this._service.restore({ _id });
   }
-  
+
 };

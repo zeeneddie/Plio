@@ -11,6 +11,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import invoke from 'lodash.invoke';
 import {
   DocumentTypes, UserRoles, ProblemGuidelineTypes,
@@ -178,6 +179,7 @@ export default {
 
       return searchObject;
     },
+
     searchResultsNumber: 0,
     searchResultsText() {
       return `${this.searchResultsNumber()} matching results`;
@@ -353,7 +355,13 @@ export default {
       const _id =  FlowRouter.getParam('standardId');
       return Standards.findOne({ _id });
     },
-    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { title: 1 } }) {
+
+    // Whether a given standard type exists
+    standardTypeExists({ typeId }){
+      return StandardTypes.find({ _id: typeId }).count() > 0;
+    },
+    _getStandardsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {},
+      options = { sort: { title: 1 } }) {
       const query = { isDeleted, ...args, organizationId: this.organizationId() };
       return Standards.find(query, options);
     },
@@ -785,7 +793,11 @@ export default {
       return child && child.value();
     },
     _members(_query = {}, options = { sort: { 'profile.firstName': 1 } }) {
+      this.load({ mixin: 'organization' });
+      const organization = this.organization();
+      const memberIds = organization && organization.getMemberIds() || [];
       const query = {
+        _id: { $in: memberIds },
         ...this.searchObject('_searchString', [{ name: 'profile.firstName' }, { name: 'profile.lastName' }, { name: 'emails.0.address' }]),
         ..._query
       };

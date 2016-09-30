@@ -12,6 +12,7 @@ Template.ESType.viewmodel({
   typeId: '',
 
   autorun() {
+    
     // to fix bug wich randomly calls method
     if (this.typeId() !== this.templateInstance.data.typeId) {
       Tracker.nonreactive(() => this.update());
@@ -26,6 +27,7 @@ Template.ESType.viewmodel({
   types() {
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch();
+
     return types;
   },
   update() {

@@ -12,6 +12,7 @@ import './aws.js';
 import './audit.js';
 import './background-app.js';
 import './cron';
+import './migrations.js';
 
 // This defines all the collections, publications and methods that the application provides
 // as an API to the client.

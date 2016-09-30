@@ -9,7 +9,7 @@ import { isOrgOwner } from '/imports/api/checkers.js';
 Template.OrgSettings_OrgTransfer.viewmodel({
   mixin: ['organization', 'user', 'date', 'utils'],
   inputText: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   placeholder: 'Org owner',
   selectFirstIfNoSelected: true,
   selectArgs() {

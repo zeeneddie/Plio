@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+
 
 Template.WorkInbox_Page.viewmodel({
   mixin: ['organization', 'nonconformity', 'workInbox'],
@@ -11,10 +13,8 @@ Template.WorkInbox_Page.viewmodel({
     const { linkedDoc: { _id:linkedDocId } = {} } =
       Object.assign({}, this._getWorkItemByQuery({ _id: this.workItemId() }));
 
-    template.subscribe('lessons', _id);
-    template.subscribe('departments', _id);
-    template.subscribe('riskTypes', _id);
-    template.subscribe('standards', _id);
-    template.subscribe('occurrencesByNCIds', NCIds);
+    OrgSettingsDocSubs.subscribe('departments', _id);
+    OrgSettingsDocSubs.subscribe('riskTypes', _id);
+    DocumentsListSubs.subscribe('standardsList', _id);
   }
 });

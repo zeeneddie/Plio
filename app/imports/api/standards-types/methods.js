@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { Standards } from '/imports/api/standards/standards.js';
+import StandardsService from '/imports/api/standards/standards-service.js';
 import StandardsTypeService from './standards-type-service.js';
 import { StandardsTypeSchema } from '/imports/share/schemas/standards-type-schema.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';

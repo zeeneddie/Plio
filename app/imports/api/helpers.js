@@ -23,7 +23,6 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 
 const { compose } = _;
 
-
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
 export const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
@@ -75,6 +74,19 @@ export const inspire = curry((props, instance, ...args) =>
 
 export const invokeId = instance => invoke(instance, '_id');
 
+export const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
+
+export const findById = curry((_id, array) =>
+  Object.assign([], array).find((item = {}) => Object.is(item._id, _id)));
+
+export const length = (array = []) => array.length;
+
+export const propItems = property('items');
+
+export const lengthItems = compose(length, propItems);
+
+export const flattenMapItems = flattenMap(propItems);
+
 export const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
 export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
@@ -86,77 +98,6 @@ export const $isScrolledElementVisible = (el, container) => {
   const elemTop = elPosition && elPosition.top;
   const elemBottom = elPosition && elemTop + $(el).height();
   return ((elemBottom < containerBottom) && (elemTop > containerTop));
-};
-
-export const getRandomAvatarUrl = () => {
-  const randomAvatarIndex = Math.floor(Math.random() * 16);
-  return AvatarPlaceholders[randomAvatarIndex];
-};
-
-export const getTzTargetDate = (targetDate, timezone) => {
-  return targetDate && moment.tz([
-    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
-  ], timezone).toDate();
-};
-
-export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
-  let magnitude = ProblemMagnitudes.MINOR;
-
-  // Select the highest magnitude among all linked documents
-  _.each(linkedTo, ({ documentId, documentType }) => {
-    const collection = getCollectionByDocType(documentType);
-    const doc = collection.findOne({ _id: documentId });
-    if (magnitude === ProblemMagnitudes.CRITICAL) {
-      return;
-    }
-
-    if (doc.magnitude === ProblemMagnitudes.MINOR) {
-      return;
-    }
-
-    magnitude = doc.magnitude;
-  });
-
-  const workflowStepTime = organization.workflowStepTime(magnitude);
-  const { timeValue, timeUnit } = workflowStepTime;
-  const date = moment()
-      .tz(organization.timezone)
-      .startOf('day')
-      .add(timeValue, timeUnit)
-      .toDate();
-
-  return date;
-};
-
-export const generateUserInitials = (userProfile) => {
-  const { firstName, lastName} = userProfile;
-  let initials = '';
-  if (firstName) {
-    initials += firstName.charAt(0);
-  }
-
-  if (lastName) {
-    initials += lastName.charAt(0);
-  }
-
-  return initials.toUpperCase();
-};
-
-export const generateSerialNumber = (collection, query = {}, defaultNumber = 1) => {
-  check(defaultNumber, Number);
-
-  const last = collection.findOne({
-    ...query,
-    serialNumber: {
-      $type: 16 // 32-bit integer
-    }
-  }, {
-    sort: {
-      serialNumber: -1
-    }
-  });
-
-  return last ? last.serialNumber + 1 : defaultNumber;
 };
 
 export const handleMethodResult = (cb) => {
@@ -172,4 +113,29 @@ export const handleMethodResult = (cb) => {
 
 export const showError = (errorMsg) => {
   toastr.error(errorMsg);
+};
+
+// 1, 1.2, 3, 10.3, a, b, c
+export const sortArrayByTitlePrefix = (arr) => {
+  return arr.sort(function (a, b) {
+    a = a.titlePrefix;
+    b = b.titlePrefix;
+    if (typeof a === 'number' && typeof b !== 'number') {
+      return -1;
+    }
+    if (typeof b === 'number' && typeof a !== 'number') {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    if (a === b) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
 };

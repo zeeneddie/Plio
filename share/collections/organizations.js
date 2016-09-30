@@ -7,7 +7,6 @@ import { UserMembership, ProblemMagnitudes } from '../constants';
 
 const Organizations = new Mongo.Collection(CollectionNames.ORGANIZATIONS);
 Organizations.attachSchema(OrganizationSchema);
-
 Organizations.helpers({
   ownerId() {
     const ownerDoc = _.find(this.users, (doc) => {
@@ -33,6 +32,16 @@ Organizations.helpers({
     };
 
     return this.workflowDefaults[keyMapping[problemMagnitude]].stepTime;
+  },
+  getMemberIds() {
+    const members = this.users || [];
+    const memberIds = _.map(members, (member) => {
+      if (!member.isRemoved) {
+        return member.userId;
+      }
+    });
+
+    return memberIds;
   }
 });
 

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { Actions } from '/imports/share/collections/actions.js';
-import { generateSerialNumber } from '/imports/api/helpers.js';
+import { generateSerialNumber } from '/imports/share/helpers.js';
 import WorkItemService from '../work-items/work-item-service.js';
 import { WorkItemsStore } from '/imports/share/constants.js';
 

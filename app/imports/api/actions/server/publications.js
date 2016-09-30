@@ -2,6 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/share/collections/actions.js';
 import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
+import {
+  ActionsListProjection,
+  ProblemTypes,
+  NonConformitiesListProjection,
+  RisksListProjection
+} from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 
 const getActionFiles = (action) => {
@@ -9,7 +15,7 @@ const getActionFiles = (action) => {
   return Files.find({ _id: { $in: fileIds } });
 };
 
-Meteor.publishComposite('actions', function(organizationId, isDeleted = { $in: [null, false] }) {
+Meteor.publishComposite('actionsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {
     find() {
       const userId = this.userId;
@@ -20,11 +26,53 @@ Meteor.publishComposite('actions', function(organizationId, isDeleted = { $in: [
       return Actions.find({
         organizationId,
         isDeleted
+      }, {
+        fields: ActionsListProjection
+      });
+    }
+  }
+});
+
+Meteor.publishComposite('actionCard', function({ _id, organizationId }) {
+  return {
+    find() {
+      const userId = this.userId;
+      if (!userId || !isOrgMember(userId, organizationId)) {
+        return this.ready();
+      }
+
+      return Actions.find({
+        _id,
+        organizationId
       });
     },
     children: [{
       find(action) {
         return getActionFiles(action);
+      }
+    }, {
+      find({ linkedTo }) {
+        const NCIds = _.map(_.where(linkedTo, {
+          documentType: ProblemTypes.NC
+        }), (lt) => {
+          return lt.documentId;
+        });
+
+        return NonConformities.find({ _id: { $in: NCIds }, organizationId }, {
+          fields: _.extend(NonConformitiesListProjection, { workflowType: 1 })
+        });
+      }
+    }, {
+      find({ linkedTo }) {
+        const riskIds = _.map(_.where(linkedTo, {
+          documentType: ProblemTypes.RISK
+        }), (lt) => {
+          return lt.documentId;
+        });
+
+        return Risks.find({ _id: { $in: riskIds }, organizationId }, {
+          fields: _.extend(RisksListProjection, { workflowType: 1 })
+        });
       }
     }]
   };

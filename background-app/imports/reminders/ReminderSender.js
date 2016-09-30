@@ -225,6 +225,10 @@ export default class ReminderSender {
 
       const url = config.url(args);
       url && _(emailTemplateData).extend({
+        avatar: {
+          alt: 'Plio',
+          url: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
+        },
         button: {
           label: 'Go to this action',
           url

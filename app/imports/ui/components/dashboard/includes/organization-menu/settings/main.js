@@ -17,7 +17,7 @@ Template.OrgSettings_MainSettings.viewmodel({
   name: '',
   currency: '',
   timezone: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   isEditable: false,
   updateName({ e, name }) {
     if (!this.isEditable()) return;

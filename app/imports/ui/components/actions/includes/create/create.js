@@ -5,14 +5,15 @@ import invoke from 'lodash.invoke';
 import { ActionPlanOptions } from '/imports/share/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
 import { Actions } from '/imports/share/collections/actions.js';
-import { getTzTargetDate, getWorkflowDefaultStepDate, setModalError, inspire } from '/imports/api/helpers.js';
+import { getTzTargetDate, getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
+import { setModalError, inspire } from '/imports/api/helpers.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 
 Template.Actions_Create.viewmodel({
   mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
   completionTargetDate() {
     const organization = this.organization();
@@ -21,7 +22,7 @@ Template.Actions_Create.viewmodel({
 
     return getWorkflowDefaultStepDate({ organization, linkedTo });
   },
-  toBeCompletedBy: Meteor.userId(),
+  toBeCompletedBy() { return Meteor.userId() },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {

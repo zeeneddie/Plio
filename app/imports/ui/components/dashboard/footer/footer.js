@@ -3,6 +3,8 @@ import { Organizations } from '/imports/share/collections/organizations';
 import { Roles } from 'meteor/alanning:roles';
 
 import { UserRoles } from '/imports/share/constants.js';
+import { DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
+
 
 Template.Dashboard_Footer.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
@@ -20,7 +22,7 @@ Template.Dashboard_Footer.viewmodel({
     });
   },
   openAddNCModal() {
-    this.templateInstance.subscribe('standards', this.organizationId());
+    DocumentsListSubs.subscribe('standardsList', this.organizationId());
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Create',

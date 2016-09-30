@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import invoke from 'lodash.invoke';
 
 import {
@@ -12,7 +13,7 @@ import {
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
   onCreated(template) {
-    template.autorun(() => template.subscribe('standards-book-sections', this.organizationId()));
+    template.autorun(() => OrgSettingsDocSubs.subscribe('standards-book-sections', this.organizationId()));
   },
   _lText: 'Standards book sections',
   _rText() {
@@ -51,7 +52,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Book section "${title}" will be removed.`,
+      text: `Standards section "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -66,7 +67,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Book section "${title}" was removed successfully.`,
+            `Standards section "${title}" was removed successfully.`,
             'success'
           );
         }

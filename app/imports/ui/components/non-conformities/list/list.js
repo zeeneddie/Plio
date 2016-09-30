@@ -2,141 +2,100 @@ import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
+import property from 'lodash.property';
+import curry from 'lodash.curry';
 
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { Departments } from '/imports/share/collections/departments.js';
 import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/share/constants.js';
+import {
+  extractIds, inspire, findById,
+  lengthItems, flattenMapItems
+} from '/imports/api/helpers.js';
+
 
 Template.NC_List.viewmodel({
-  share: 'search',
-  mixin: ['search', 'collapsing', 'organization', 'modal', 'magnitude', 'nonconformity', 'router', 'utils', 'currency', 'problemsStatus'],
+  mixin: [
+    'collapsing', 'organization', 'modal', 'magnitude',
+    'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
+  ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const query = this._getQueryForFilter();
+      const { result:contains, first:defaultDoc } = this._findNCForFilter(this.NCId());
 
-      const contains = this._getNCByQuery({ ...query, _id: this.NCId() });
       if (!contains) {
-        const nc = this._getNCByQuery({ ...query, ...this._getFirstNCQueryForFilter() });
+        if (defaultDoc) {
+          const { _id } = defaultDoc;
 
-        if (nc) {
-          const { _id } = nc;
           Meteor.setTimeout(() => {
             this.goToNC(_id);
-            this.expandCollapsed(this.NCId());
+            this.expandCollapsed(_id);
           }, 0);
         } else {
           Meteor.setTimeout(() => {
             this.goToNCs();
-          }, 0)
+          }, 0);
         }
       }
     }
   },
-  _getQueryForFilter(withSearchQuery) {
-    switch(this.activeNCFilterId()) {
-      case 1:
-        return { magnitude: { $in: this.magnitude(withSearchQuery).map(({ value }) => value) } };
-        break;
-      case 2:
-        return { status: { $in: this.statuses(withSearchQuery) } };
-        break;
-      case 3:
-        return { departmentsIds: { $in: this.departments(withSearchQuery).map(({ _id }) => _id) } };
-        break;
-      case 4:
-        return { isDeleted: true };
-        break;
-      default:
-        return {};
-        break;
-    };
-  },
-  _getFirstNCQueryForFilter() {
-    switch(this.activeNCFilterId()) {
-      case 1:
-        return { magnitude: get(_.first(this.magnitude()), 'value') };
-        break;
-      case 2:
-        return { status: _.first(this.statuses()) };
-        break;
-      case 3:
-        return { departmentsIds: get(_.first(this.departments()), '_id') };
-        break;
-      case 4:
-        return { _id: get(_.first(this.NCsDeleted()), '_id') };
-        break;
-      default:
-        return {};
-        break;
-    };
-  },
-  _getSearchQuery(bool = true) {
-     return bool ? this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]) : {};
-   },
-  _getMagnitudeQuery({ value:magnitude }) {
-    return { magnitude };
-  },
-  magnitude(withSearchQuery) {
-    return this._magnitude().filter(({ value:magnitude }) => {
-      return this._getNCsByQuery({ magnitude, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
+  _findNCForFilter(_id) {
+    const { magnitude, statuses, departments, deleted } = inspire(
+      ['magnitude', 'statuses', 'departments', 'deleted'],
+      this
+    );
+    const finder = findById(_id);
+    const results = curry((transformer, array) => {
+      const items = transformer(array);
+      return {
+        result: finder(items),
+        first: _.first(items),
+        array: items
+      };
     });
-  },
-  _getStatusQuery(status) {
-    return { status };
-  },
-  statuses(withSearchQuery) {
-    return _.keys(ProblemsStatuses)
-            .map(status => parseInt(status, 10))
-            .filter(status => this._getNCsByQuery({ status, ...this._getSearchQuery(withSearchQuery) }).count() > 0);
-  },
-  _getDepartmentQuery({ _id:departmentsIds }) {
-    return { departmentsIds };
-  },
-  departments(withSearchQuery) {
-    const query = { organizationId: this.organizationId() };
-    const options = { sort: { name: 1 } };
-    return Departments.find(query, options).fetch().filter(({ _id:departmentsIds }) => {
-      return this._getNCsByQuery({ departmentsIds, ...this._getSearchQuery(withSearchQuery) }).count() > 0;
-    });
-  },
-  NCsDeleted(withSearchQuery) {
-    const query = { ...this._getSearchQuery(withSearchQuery), isDeleted: true };
-    const options = { sort: { deletedAt: -1 } };
-    return this._getNCsByQuery(query, options).fetch();
-  },
-  calculateTotalCost(value) {
-    const ncs = this._getNCsByQuery({
-      $or: [
-        { magnitude: value },
-        { status: value },
-        { departmentsIds: value }
-      ],
-      cost: { $exists: true }
-    }).fetch();
+    const resulstsFromItems = results(flattenMapItems);
 
-    const total = ncs.reduce((prev, { _id, cost }) => {
-      const occurrences = ((() => {
-        const query = { nonConformityId: _id };
-        return Occurrences.find(query);
-      })());
-      const t = cost * occurrences.count();
+    switch(this.activeNCFilterId()) {
+      case 1:
+        return resulstsFromItems(magnitude);
+        break;
+      case 2:
+        return resulstsFromItems(statuses);
+        break;
+      case 3:
+        return resulstsFromItems(departments);
+        break;
+      case 4:
+        return results(_.identity, deleted);
+        break;
+      default:
+        return {};
+        break;
+    }
+  },
+  magnitude() {
+    const mapper = (m) => {
+      const query = { magnitude:m.value, ...this._getSearchQuery() };
+      const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
+
+      return { ...m, items };
+    };
+
+    return this._magnitude().map(mapper).filter(lengthItems);
+  },
+  calculateTotalCost(items) {
+    const total = items.reduce((prev, { _id:nonConformityId, cost } = {}) => {
+      const occurrences = Occurrences.find({ nonConformityId }).fetch();
+      const t = cost * occurrences.length || 0;
       return prev + t;
     }, 0);
 
-    const { currency } = this.organization() || {};
+    const { currency } = Object.assign({}, this.organization());
 
     return total ? this.getCurrencySymbol(currency) + this.round(total) : '';
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveNCFilter(4)) {
-        return this.toArray(this.NCsDeleted());
-      }
-
-      const sections = ViewModel.find('NC_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.NCs && this.toArray(vm.NCs()).map(({ _id }) => _id));
-      return _.flatten(ids);
-    };
+    return value => extractIds(this._findNCForFilter().array);
   },
   onModalOpen() {
     return () =>

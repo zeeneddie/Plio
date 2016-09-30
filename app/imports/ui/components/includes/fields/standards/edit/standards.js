@@ -2,6 +2,8 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 import { Standards } from '/imports/share/collections/standards.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
@@ -18,7 +20,8 @@ Template.Fields_Standards_Edit.viewmodel({
     return invoke(this.child('Select_Multi'), 'value');
   },
   standards() {
-    return this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) });
+    const standards = this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) }).fetch();
+    return sortArrayByTitlePrefix(standards);
   },
   onUpdateCb() {
     return this.update.bind(this);

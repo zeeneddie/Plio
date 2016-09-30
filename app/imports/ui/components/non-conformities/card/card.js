@@ -1,12 +1,34 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
 
 import { ActionTypes } from '/imports/share/constants.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
+  _subHandlers: [],
+  isReady: false,
+
+  onCreated(template) {
+    template.autorun(() => {
+      const _id = this._id();
+      const organizationId = this.organizationId();
+      const _subHandlers = [];
+
+      if (_id && organizationId) {
+        _subHandlers.push(DocumentCardSubs.subscribe('nonConformityCard', { _id, organizationId }));
+        this._subHandlers(_subHandlers);
+      }
+    });
+
+    template.autorun(() => {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
+    });
+  },
   ActionTypes() {
     return ActionTypes;
   },
@@ -14,12 +36,17 @@ Template.NC_Card_Read.viewmodel({
     return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
-    const list = ViewModel.findOne('NC_List');
-    const query = list && list._getQueryForFilter();
-    return this._getNCsByQuery(query);
+    const organizationId = this.organizationId();
+    const query = this.isActiveNCFilter(4)
+      ? { isDeleted: true }
+      : { isDeleted: { $in: [null, false] } };
+
+    return this._getNCsByQuery({ organizationId, ...query }).fetch();
   },
-  hasNCs() {
-    return this.NCs().count() > 0;
+  occurrences() {
+    const query = { nonConformityId: get(this.NC(), '_id') };
+    const options = { sort: { serialNumber: 1 } };
+    return Occurrences.find(query, options).fetch();
   },
   getStatus(status) {
     return status || 1;
@@ -62,18 +89,6 @@ Template.NC_Card_Read.viewmodel({
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
-    const callback = (err) => {
-      cb(err, () => {
-        const NCs = this._getNCsByQuery({});
-
-        if (NCs.count() > 0) {
-          Meteor.setTimeout(() => {
-            this.goToNCs();
-          }, 0);
-        }
-      });
-    };
-
-    remove.call({ _id }, callback);
+    remove.call({ _id }, cb);
   }
 });

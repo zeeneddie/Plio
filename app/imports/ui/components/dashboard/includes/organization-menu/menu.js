@@ -16,6 +16,7 @@ Template.Organization_Menu.viewmodel({
   },
   openOrgSettings(e) {
     e.preventDefault();
+    
     this.modal().open({
       template: 'OrgSettings',
       _title: 'Org Settings',

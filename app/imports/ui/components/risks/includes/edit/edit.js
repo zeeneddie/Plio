@@ -24,7 +24,7 @@ import {
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.Risks_Card_Edit.viewmodel({

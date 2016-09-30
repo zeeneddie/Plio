@@ -1,5 +1,5 @@
 import { Accounts } from 'meteor/accounts-base';
-import { getRandomAvatarUrl, generateUserInitials } from '/imports/api/helpers.js';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
 import UserNotificationsSender from '/imports/api/users/user-notifications-sender.js';
 
 

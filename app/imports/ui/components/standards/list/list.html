@@ -22,11 +22,11 @@
     {{#if isActiveStandardFilter 2}}
       {{#each types}}
         {{> ListItem
-            items=(sections this._id)
-            template="StandardTypeItem"
+            items=this.items
+            template=this.typeTemplate
             rText=this.totalUnreadMessagesHtml
             hideRTextOnExpand=hideRTextOnExpand
-            title=this.name
+            title=this.title
             type="standardType"
             _id=this._id}}
       {{/each}}
