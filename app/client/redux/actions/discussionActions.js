@@ -30,13 +30,6 @@ export function setLoading(bool) {
   }
 }
 
-export function setInitialDataLoaded(bool) {
-  return {
-    type: SET_INITIAL_DATA_LOADED,
-    payload: bool
-  }
-}
-
 export function setSort(sort) {
   return {
     type: SET_SORT,
@@ -78,63 +71,6 @@ export function setFollowingLimit(limit) {
     payload: limit
   }
 }
-
-let handle;
-
-export function subscribeToMessages(discussionId, subOptions = {}) {
-  const query = { discussionId };
-  const options = { sort: { createdAt: 1 } };
-  return (dispatch) => {
-    let handle = Meteor.subscribe('messages', discussionId, subOptions, {
-      onReady() {
-        const messages = Messages.find(query, options).fetch();
-
-        dispatch(batchActions([
-          setMessages(messages),
-          setInitialDataLoaded(true),
-          setLoading(false)
-        ]));
-      }
-    });
-
-    dispatch(setLoading(true));
-
-    return handle;
-  }
-}
-
-export function subscribeToLastMessage(discussionId) {
-  return (dispatch) => {
-    const handle = Meteor.subscribe('discussionMessagesLast', discussionId, {
-      onReady() {
-        const messageId = Object.assign({}, LastDiscussionMessage.findOne()).lastMessageId;
-        dispatch(setLastMessageId(messageId));
-      }
-    });
-
-    return handle;
-  }
-}
-
-export function fetchMessages(discussionId) {
-  return (dispatch, getState) => {
-    const query = { discussionId };
-    const options = { sort: { createdAt: 1 } };
-
-    Tracker.autorun(() => {
-      const { loading, isInitialDataLoaded, messages:storedMessages } = getState().discussion;
-      const messages = Messages.find(query, options).fetch();
-
-      if (!messages.length     ||
-          loading              ||
-          !isInitialDataLoaded ||
-          messages.length === storedMessages.length) return;
-
-      dispatch(setMessages(messages));
-    });
-  }
-}
-
 
 export function setResetCompleted(bool) {
   return {
