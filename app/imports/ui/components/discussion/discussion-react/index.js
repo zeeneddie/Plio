@@ -8,12 +8,13 @@ import DiscussionContainer from './containers/DiscussionContainer';
 import store from '/client/redux/store';
 
 Template.Discussion_React.onRendered(function() {
-  const { discussionId, organizationId } = this.data;
+  const { discussionId, organizationId, standard } = this.data;
 
   ReactDOM.render(
     <Provider store={store}>
       <DiscussionContainer discussionId={discussionId}
-                           organizationId={organizationId} />
+                           organizationId={organizationId}
+                           standard={standard}/>
     </Provider>,
     this.$('#discussion')[0]
   );

@@ -2,16 +2,16 @@ import React from 'react';
 import Blaze from 'meteor/gadicc:blaze-react-component';
 
 import MessagesListWrapperContainer from '../../containers/MessagesListWrapperContainer';
-import MessagesForm from '../../components/MessagesForm';
+import MessagesFormContainer from '../../containers/MessagesFormContainer';
 import DiscussionFileUploader from '../../components/DiscussionFileUploader';
 
 const Discussion = (props) => (
   <div className="card chat">
     <Blaze template="Discussion_Header"/>
     <MessagesListWrapperContainer {...props}/>
-    <MessagesForm {...props}>
+    <MessagesFormContainer {...props}>
       <DiscussionFileUploader {...props}/>
-    </MessagesForm>
+    </MessagesFormContainer>
   </div>
 );
 

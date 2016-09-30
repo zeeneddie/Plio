@@ -1,7 +1,4 @@
 import React from 'react';
-import { withHandlers } from 'recompose';
-
-import { submit } from './constants';
 
 const MessagesForm = (props) => (
   <div className="chat-form" onSubmit={e => props.onSubmit(e)}>
@@ -28,6 +25,4 @@ const MessagesForm = (props) => (
 	</div>
 );
 
-export default withHandlers({
-  onSubmit: submit
-})(MessagesForm);
+export default MessagesForm;

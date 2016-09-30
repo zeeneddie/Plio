@@ -5,9 +5,13 @@ import { insert } from '/imports/api/messages/methods';
 import { handleMethodResult } from '/imports/api/helpers';
 import { reset } from '/client/redux/actions/discussionActions';
 
+const MESSAGES_LENGTH_LIMIT_BEFORE_RESET = 100;
+
 // Handlers
 
-export const submit = ({ disabled, discussionId, organizationId, dispatch }) => {
+export const submit = ({
+  discussionId, organizationId, dispatch, messages, disabled
+}) => {
   return (e) => {
     e.preventDefault();
 
@@ -27,7 +31,7 @@ export const submit = ({ disabled, discussionId, organizationId, dispatch }) => 
 
       messageInput.value = '';
 
-      if (FlowRouter.getQueryParam('at')) {
+      if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_LENGTH_LIMIT_BEFORE_RESET) {
         FlowRouter.setQueryParams({ at: null });
         dispatch(reset());
       }
