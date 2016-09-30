@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { Actions } from '/imports/share/collections/actions.js';
 import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import {
   ActionsListProjection,
-  ProblemTypes,
   NonConformitiesListProjection,
   RisksListProjection
 } from '/imports/api/constants.js';
