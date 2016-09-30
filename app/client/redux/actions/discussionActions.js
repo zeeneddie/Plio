@@ -1,5 +1,3 @@
-import { batchActions } from 'redux-batched-actions';
-
 import {
   SET_MESSAGES,
   SET_LOADING,
@@ -12,9 +10,8 @@ import {
   SET_INITIAL_DATA_LOADED,
   SET_RESET_COMPLETED
 } from './types';
+
 import { initialState } from '../reducers/discussionReducer';
-import { Messages } from '/imports/api/messages/messages';
-import { LastDiscussionMessage } from '/client/collections';
 
 export function setMessages(messages) {
   return {
