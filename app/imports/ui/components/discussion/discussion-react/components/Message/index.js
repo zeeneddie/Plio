@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { compose, lifecycle, shallowEqual, withHandlers, withProps } from 'recompose';
-import invoke from 'lodash.invoke';
 
 import MessageDate from '../MessageDate';
 import MessageBox from '../MessageBox';
@@ -12,24 +10,6 @@ import MessageTime from '../MessageTime';
 import MessageGutter from '../MessageGutter';
 import MessageContent from '../MessageContent';
 import MessageMenu from '../MessageMenu';
-
-import {
-  isAuthor,
-  getMessagePath,
-  getUserAvatar,
-  getUserFirstName,
-  getUserFullNameOrEmail,
-  getMessageTime,
-  getMessageContents,
-  getPathToMessageToCopy,
-  getClassName,
-  openUserDetails,
-  select,
-  deselect,
-  remove
-} from './constants.js';
-
-import { transsoc } from '/imports/api/helpers.js';
 
 const Message = (props) => {
   return (
@@ -75,34 +55,4 @@ const Message = (props) => {
   );
 };
 
-export default compose(
-  lifecycle({
-    shouldComponentUpdate(nextProps) {
-      return this.props._id === nextProps.at                     ||
-             (this.props.at === this.props._id && !nextProps.at) ||
-             (this.props.at === this.props._id && nextProps.at !== this.props._id);
-    },
-    componentDidMount() {
-      if (this.props.isSelected) {
-        invoke(this.props, 'scrollToSelectedMessage', this);
-      }
-    }
-  }),
-  withHandlers({
-    onMessageAvatarClick: openUserDetails,
-    onMessageContentsClick: deselect,
-    onMessageTimeClick: select,
-    onMessageDelete: remove
-  }),
-  withProps(transsoc({
-    isAuthor,
-    userAvatar: getUserAvatar,
-    userFirstName: getUserFirstName,
-    userFullNameOrEmail: getUserFullNameOrEmail,
-    pathToMessage: getMessagePath,
-    time: getMessageTime,
-    contents: getMessageContents,
-    pathToMessageToCopy: getPathToMessageToCopy,
-    className: getClassName
-  }))
-)(Message);
+export default Message;

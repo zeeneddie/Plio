@@ -1,14 +1,14 @@
 import React from 'react';
 import { withProps } from 'recompose';
 
-import Message from '../Message';
+import MessageWrapper from '../MessageWrapper';
 import { transformMessages } from './constants.js';
 import { transsoc } from '/imports/api/helpers.js';
 
 const MessagesList = (props) => (
   <div>
     {props.messages.map(message =>
-      <Message
+      <MessageWrapper
         key={message._id}
         at={props.at}
         dispatch={props.dispatch}
