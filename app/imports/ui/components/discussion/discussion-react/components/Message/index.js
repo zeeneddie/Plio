@@ -82,9 +82,6 @@ export default compose(
              (this.props.at === this.props._id && !nextProps.at) ||
              (this.props.at === this.props._id && nextProps.at !== this.props._id);
     },
-    componentDidUpdate() {
-      console.log('updated');
-    },
     componentDidMount() {
       if (this.props.isSelected) {
         invoke(this.props, 'scrollToSelectedMessage', this);

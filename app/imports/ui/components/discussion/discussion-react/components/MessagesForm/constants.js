@@ -3,7 +3,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { insert } from '/imports/api/messages/methods';
 import { handleMethodResult } from '/imports/api/helpers';
-import { reset, setShouldScrollToBottom } from '/client/redux/actions/discussionActions';
+import { reset } from '/client/redux/actions/discussionActions';
 
 // Handlers
 
@@ -30,7 +30,6 @@ export const submit = ({ disabled, discussionId, organizationId, dispatch }) => 
       if (FlowRouter.getQueryParam('at')) {
         FlowRouter.setQueryParams({ at: null });
         dispatch(reset());
-        dispatch(setShouldScrollToBottom(true));
       }
     }));
   }

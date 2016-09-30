@@ -8,7 +8,6 @@ import {
   SET_AT,
   RESET,
   SET_LAST_MESSAGE_ID,
-  SET_SHOULD_SCROLL_TO_BOTTOM,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
   SET_INITIAL_DATA_LOADED,
@@ -71,13 +70,6 @@ export function setLastMessageId(id) {
   return {
     type: SET_LAST_MESSAGE_ID,
     payload: id
-  }
-}
-
-export function setShouldScrollToBottom(bool) {
-  return {
-    type: SET_SHOULD_SCROLL_TO_BOTTOM,
-    payload: bool
   }
 }
 

@@ -6,7 +6,6 @@ import {
   SET_AT,
   RESET,
   SET_LAST_MESSAGE_ID,
-  SET_SHOULD_SCROLL_TO_BOTTOM,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
   SET_INITIAL_DATA_LOADED,
@@ -21,7 +20,6 @@ export const initialState = {
   sort: { createdAt: -1 },
   at: null,
   lastMessageId: null,
-  shouldScrollToBotom: false,
   priorLimit: 50,
   followingLimit: 50,
   resetCompleted: false
@@ -46,6 +44,7 @@ export default function reducer(state=initialState, action) {
       break;
     case SET_FOLLOWING_LIMIT:
       return { ...state, followingLimit: action.payload };
+      break;
     case SET_SORT:
       return { ...state, sort: action.payload };
       break;
@@ -54,10 +53,6 @@ export default function reducer(state=initialState, action) {
       break;
     case SET_LAST_MESSAGE_ID:
       return { ...state, lastMessageId: action.payload };
-      break;
-    case SET_SHOULD_SCROLL_TO_BOTTOM:
-      return { ...state, shouldScrollToBotom: action.payload };
-      break;
       break;
     case SET_RESET_COMPLETED:
       return { ...state, resetCompleted: action.payload };
