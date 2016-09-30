@@ -5,15 +5,17 @@ import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 
 export const StandardsTypeSchema = new SimpleSchema([
   BaseEntitySchema,
-  OrganizationIdSchema, 
+  OrganizationIdSchema,
   {
-    name: {
+    title: {
       type: String,
-      min: 1
+      min: 1,
+      max: 40
     },
     abbreviation: {
       type: String,
-      min: 1
+      min: 1,
+      max: 10
     }
   }
 ]);

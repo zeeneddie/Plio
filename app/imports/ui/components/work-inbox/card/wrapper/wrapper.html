@@ -1,0 +1,44 @@
+<template name="WorkInbox_Card_Read_Wrapper">
+  {{#if isRendered}}
+    {{#if workItemId}}
+      {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
+        {{> WorkInbox_QAPanel_Read doc=workItem}}
+        {{> Actions_Card_Read
+            isReadOnly=workItem.isDeleted
+            _id=linkedDocId}}
+      {{/if}}
+
+      {{#if isDocType LINKED_TYPES.NC}}
+        {{> WorkInbox_QAPanel_Read doc=workItem}}
+        {{> NC_Card_Read
+            isReadOnly=workItem.isDeleted
+            _id=linkedDocId}}
+      {{/if}}
+
+      {{#if isDocType LINKED_TYPES.RISK}}
+        {{> WorkInbox_QAPanel_Read doc=workItem}}
+        {{> Risks_Card_Read
+            isReadOnly=workItem.isDeleted
+            _id=linkedDocId}}
+      {{/if}}
+    {{else}}
+      <div class="content-cards-inner flex scroll">
+        <div class="card">
+          <div class="card-block card-heading">
+            {{#if some (isActiveWorkInboxFilter 1) (isActiveWorkInboxFilter 2)}}
+              <h5>There are no current work items</h5>
+            {{/if}}
+
+            {{#if some (isActiveWorkInboxFilter 3) (isActiveWorkInboxFilter 4)}}
+              <h5>There are no completed work items</h5>
+            {{/if}}
+
+            {{#if some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6)}}
+              <h5>There are no deleted work items</h5>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    {{/if}}
+  {{/if}}
+</template>

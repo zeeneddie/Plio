@@ -1,0 +1,97 @@
+<template name="UserDirectory_Card_Read_Inner">
+  <div class="list-group">
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="list-group-item">
+          <div class="user-avatar img-wrapper sm img-circle pull-xs-left">
+            <img {{b "src: user.avatar"}}>
+          </div>
+          {{#if user.fullName}}
+            <p class="list-group-item-text">Name</p>
+            <h4 class="list-group-item-heading" {{b "text: user.fullName"}}></h4>
+          {{/if}}
+        </div>
+      </div>
+      {{#if user.initials}}
+        <div class="col-sm-6">
+          <div class="list-group-item">
+            <p class="list-group-item-text">Initials</p>
+            <h4 class="list-group-item-heading" {{b "text: user.initials" }}>=</h4>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+    {{#if user.description}}
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="list-group-item">
+            <p class="list-group-item-text">Description</p>
+            <h4 class="list-group-item-heading" {{b "text: user.description" }}></h4>
+          </div>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+  <div class="card-block card-subheading">
+    <h4 class="card-title">Contact details</h4>
+  </div>
+  <div>
+    <div class="list-group">
+      <div class="list-group-item">
+        <p class="list-group-item-text">Email</p>
+        <h4 class="list-group-item-heading"><a href="mailto:{{user.email}}" {{b "text: user.email" }}></a></h4>
+      </div>
+      {{#if user.address}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Address</p>
+          <h4 class="list-group-item-heading" {{b "text: user.formattedAddress"}}></h4>
+        </div>
+      {{/if}}
+      <div class="row">
+        {{#each user.phoneNumbers}}
+          <div class="col-sm-6">
+            <div class="list-group-item">
+              <p class="list-group-item-text" {{b "text: phoneType(this.type)"}}></p>
+              <h4 class="list-group-item-heading"><a {{b "text: this.number, href: 'tel:' + this.number" }}></a></h4>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+      {{#if user.skype}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Skype name</p>
+          <h4 class="list-group-item-heading"><a href="skype:{{user.skype}}?call" {{b "text: user.skype"}}></a></h4>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <div class="card-block card-subheading">
+    <h4 class="card-title" {{b "text: superpowersTitle"}}></h4>
+  </div>
+  <div>
+    <div class="list-group">
+      <div class="list-group-item">
+        {{#each superpowers}}
+          <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
+            <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
+            </i>
+            {{value}}
+          </h4>
+        {{/each}}
+      </div>
+      {{#if orgOwnerLabel}}
+        <div class="list-group-item">
+          <p class="list-group-item-text text-xs-left">{{orgOwnerLabel}}</p>
+        </div>
+      {{/if}}
+      <div class="list-group-item" {{b "if: !isInvitationAccepted || !isEmailVerified"}}>
+        {{#unless (isInvitationAccepted)}}
+          <h4 class="list-group-item-text">Invitation not yet accepted</h4>
+        {{/unless}}
+        {{#unless (isEmailVerified)}}
+          <h4 class="list-group-item-text">Email address not yet verified</h4>
+        {{/unless}}
+      </div>
+    </div>
+  </div>
+</template>

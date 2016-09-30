@@ -1,86 +1,57 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+import { Standards } from '/imports/api/standards/standards.js';
+import StandardsService from '/imports/api/standards/standards-service.js';
 import StandardsTypeService from './standards-type-service.js';
 import { StandardsTypeSchema } from './standards-type-schema.js';
+import { StandardTypes } from './standards-types.js';
 import { IdSchema, OrganizationIdSchema } from '../schemas.js';
-import { UserRoles } from '../constants';
+import Method, { CheckedMethod } from '../method.js';
+import { inject } from '../helpers.js';
+import {
+  ORG_EnsureCanChangeChecker,
+  ORG_EnsureCanChangeCheckerCurried
+} from '../checkers.js';
 
+const injectST = inject(StandardTypes);
 
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'StandardTypes.insert',
 
   validate: StandardsTypeSchema.validator(),
 
+  check(checker) {
+    return checker(
+      ORG_EnsureCanChangeCheckerCurried(this.userId)
+    );
+  },
+
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a standard type'
-      );
-    }
-
-    const { organizationId } = doc;
-    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
-
-    if (!canEditOrgSettings) {
-      throw new Meteor.Error(
-        403,
-        'User is not authorized for editing organization settings'
-      );
-    }
-
     return StandardsTypeService.insert(doc);
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'StandardTypes.update',
 
   validate: new SimpleSchema([IdSchema, StandardsTypeSchema]).validator(),
 
+  check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
+
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a standard type'
-      );
-    }
-
-    const { organizationId } = doc;
-    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
-
-    if (!canEditOrgSettings) {
-      throw new Meteor.Error(
-        403,
-        'User is not authorized for editing organization settings'
-      );
-    }
-
     return StandardsTypeService.update(doc);
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'StandardTypes.remove',
 
   validate: new SimpleSchema([IdSchema, OrganizationIdSchema]).validator(),
 
+  check: checker => injectST(checker)(ORG_EnsureCanChangeChecker),
+
   run(doc) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a standard type'
-      );
-    }
-
-    const { organizationId } = doc;
-    const canEditOrgSettings = Roles.userIsInRole(this.userId, UserRoles.CHANGE_ORG_SETTINGS, organizationId);
-
-    if (!canEditOrgSettings) {
-      throw new Meteor.Error(
-        403,
-        'User is not authorized for editing organization settings'
-      );
-    }
-
     return StandardsTypeService.remove(doc);
   }
 });

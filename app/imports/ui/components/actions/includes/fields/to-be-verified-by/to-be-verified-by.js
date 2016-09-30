@@ -1,50 +1,54 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 
 Template.Actions_ToBeVerifiedBy.viewmodel({
-  mixin: ['search', 'user', 'members'],
   toBeVerifiedBy: '',
   placeholder: 'To be verified by',
   selectFirstIfNoSelected: false,
-  canVerificationFormBeShown: false,
-  verificationComments: '',
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected } = viewmodel.getData();
+  selectArgs() {
+    const {
+      toBeVerifiedBy:value = '',
+      placeholder,
+      selectFirstIfNoSelected
+    } = this.data();
 
-    this.toBeVerifiedBy(selected);
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      onUpdate: (viewmodel) => {
+        const { selected:userId } = viewmodel.getData();
 
-    this.parent().update && this.parent().update({ toBeVerifiedBy: selected });
+        this.toBeVerifiedBy(userId);
+
+        return invoke(this, 'onUpdate', { userId });
+      }
+    };
   },
   canBeVerified() {
     return !!this.onVerify && (this.toBeVerifiedBy() === Meteor.userId());
   },
-  isVerifyButtonVisible() {
-    return this.canBeVerified();
-  },
-  isVerificationFormVisible() {
-    return this.canBeVerified() && this.canVerificationFormBeShown();
-  },
-  showVerificationForm() {
-    this.canVerificationFormBeShown(true);
-  },
-  hideVerificationForm() {
-    this.canVerificationFormBeShown(false);
-  },
   verify() {
-    this.onVerify && this.onVerify({
-      success: true,
-      verificationComments: this.verificationComments()
-    });
+    return (viewmodel) => {
+      const { text:verificationComments } = viewmodel.getData();
+
+      this.onVerify && this.onVerify({
+        verificationComments,
+        success: true
+      });
+    };
   },
   failVerification() {
-    this.onVerify && this.onVerify({
-      success: false,
-      verificationComments: this.verificationComments()
-    });
+    return (viewmodel) => {
+      const { text:verificationComments } = viewmodel.getData();
+
+      this.onVerify && this.onVerify({
+        verificationComments,
+        success: false
+      });
+    };
   },
   getData() {
     return { toBeVerifiedBy: this.toBeVerifiedBy() };

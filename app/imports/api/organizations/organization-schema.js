@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { OrgCurrencies,  UserMembership } from '/imports/api/constants.js';
-import { BaseEntitySchema, TimePeriodSchema } from '../schemas.js';
+import { OrgCurrencies,  WorkflowTypes, UserMembership } from '/imports/api/constants.js';
+import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from '../schemas.js';
 
 
 const orgUserSchema = new SimpleSchema({
@@ -18,6 +18,14 @@ const orgUserSchema = new SimpleSchema({
     defaultValue: false,
     optional: true
   },
+  joinedAt: {
+    autoValue(){
+      if(!this.isSet){
+        return new Date();
+      }
+    },
+    type: Date,
+  },
   removedBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -29,15 +37,25 @@ const orgUserSchema = new SimpleSchema({
   }
 });
 
+const problemWorkflowSchema = new SimpleSchema({
+  workflowType: {
+    type: String,
+    allowedValues: _.values(WorkflowTypes)
+  },
+  stepTime: {
+    type: TimePeriodSchema
+  }
+});
+
 const workflowDefaultsSchema = new SimpleSchema({
-  minorNc: {
-    type: TimePeriodSchema
+  minorProblem: {
+    type: problemWorkflowSchema
   },
-  majorNc: {
-    type: TimePeriodSchema
+  majorProblem: {
+    type: problemWorkflowSchema
   },
-  criticalNc: {
-    type: TimePeriodSchema
+  criticalProblem: {
+    type: problemWorkflowSchema
   }
 });
 
@@ -68,7 +86,7 @@ const remindersSchema = new SimpleSchema({
   }
 });
 
-const ncGuidelinesSchema = new SimpleSchema({
+const guidelinesSchema = new SimpleSchema({
   minor: {
     type: String
   },
@@ -103,10 +121,19 @@ const OrganizationEditableFields = {
     optional: true
   },
   ncGuidelines: {
-    type: ncGuidelinesSchema,
+    type: guidelinesSchema,
     optional: true
   },
-  ...OrganizationCurrencySchema
+  rkGuidelines: {
+    type: guidelinesSchema,
+    optional: true
+  },
+  rkScoringGuidelines: {
+    type: String,
+    optional: true
+  },
+  ...OrganizationCurrencySchema,
+  ...TimezoneSchema.schema()
 };
 
 const transferSchema = new SimpleSchema({

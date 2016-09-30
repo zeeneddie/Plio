@@ -13,7 +13,7 @@ Template.IP_TargetDate_Edit.viewmodel({
 
     if (targetDate === this.templateInstance.data.targetDate) return;
 
-    this.parent().update({ targetDate }, cb);
+    this.parent().update({ 'improvementPlan.targetDate': targetDate }, cb);
   },
   getTodayDate() {
     return this.renderDate(new Date());

@@ -1,0 +1,49 @@
+<template name="UserMenu">
+  {{#if currentUser}}
+    <ul class="nav navbar-nav pull-xs-right">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
+          <i class="fa fa-circle {{getActiveClass}} label-status"></i>
+          <span>{{userNameOrEmail currentUser}}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          {{#each getStatuses}}
+            {{#Link (linkArgs.status @index)}}
+              <i class="fa fa-circle {{css}} label-status"></i>
+              {{text}}
+            {{/Link}}
+          {{/each}}
+          <div class="dropdown-divider"></div>
+
+          {{#Link (linkArgs.myPreferences)}}
+            My preferences
+          {{/Link}}
+
+          {{#if organizationId}}
+            {{#Link (linkArgs.myProfile)}}
+              My profile
+            {{/Link}}
+
+            {{#Link (linkArgs.userDirectory)}}
+              User directory
+            {{/Link}}
+
+            {{#if canInviteUsers organizationId}}
+              {{#Link (linkArgs.inviteUsers)}}
+                Invite users
+              {{/Link}}
+            {{/if}}
+          {{/if}}
+
+          {{#Link (linkArgs.standardSubcards)}}
+            Standard subcards
+          {{/Link}}
+
+          {{#Link (linkArgs.logout)}}
+            Logout
+          {{/Link}}
+        </div>
+      </li>
+    </ul>
+  {{/if}}
+</template>

@@ -1,14 +1,16 @@
 <template name="NC_Card_Read">
-  <div class="content-cards-inner flex scroll">
-    {{#if hasNCs}}
-      {{#Card_Read
-        cardTitle="Non-conformity"
-        document=NC
-        onRestore=onRestoreCb
-        onDelete=onDeleteCb
-        onOpenEditModal=onOpenEditModalCb}}
+  <div class="content-cards-inner flex scroll" {{b "class: { content: !NC }"}}>
+    {{#if NCs.length}}
+      {{#with NC}}
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Non-conformity"
+          doc=NC
+          isReady=isReady
+          onRestore=onRestoreCb
+          onDelete=onDeleteCb
+          onOpenEditModal=onOpenEditModalCb}}
 
-        {{#with NC}}
           <div class="list-group">
 
             <div class="list-group-item">
@@ -16,14 +18,21 @@
               <h4 class="list-group-item-heading">
                 <span {{b "text: this.title"}}></span>
                 <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+                <span class="label text-default">
+                  {{getStatusName this.status}}
+                  {{#if this.workflowType}}
+                    <span class="display-on-parent-hover">({{this.workflowType}} workflow)</span>
+                  {{/if}}
+                </span>
               </h4>
             </div>
 
-            <div class="list-group-item" {{b "if: this.description"}}>
-              <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-            </div>
+            {{#if this.description}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+              </div>
+            {{/if}}
 
             {{> Fields_Standards_Read standardsIds=this.standardsIds}}
 
@@ -31,7 +40,7 @@
               <div class="col-sm-6">
                 <div class="list-group-item">
                   <p class="list-group-item-text">Identified by</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.identifiedBy)"}}></h4>
+                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.identifiedBy)"}}></h4>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -49,14 +58,22 @@
                   <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
                 </div>
               </div>
-              <div class="col-sm-6">
-                <div class="list-group-item" {{b "if: this.ref"}}>
-                  {{#with this.ref}}
-                    <p class="list-group-item-text">Help desk ref</p>
-                    <h4 class="list-group-item-heading"><a class="pointer" {{b "text: this.text, attr: { href: this.url }"}}></a></h4>
-                  {{/with}}
-                </div>
-              </div>
+              {{#with this.ref}}
+                {{#if this.text}}
+                  <div class="col-sm-6">
+                    <div class="list-group-item">
+                      <p class="list-group-item-text">Help desk ref</p>
+                      <h4 class="list-group-item-heading">
+                        {{#if this.url}}
+                          <a class="pointer" {{b "attr: { href: this.url }"}}>{{this.text}}</a>
+                        {{else}}
+                          <span>{{this.text}}</span>
+                        {{/if}}
+                      </h4>
+                    </div>
+                  </div>
+                {{/if}}
+              {{/with}}
             </div>
 
             <div class="row">
@@ -70,7 +87,7 @@
 
             <div class="row">
               <div class="col-sm-12">
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
               </div>
@@ -86,7 +103,7 @@
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
 
-          {{> Subcards_Occurrences_Read _query=_getOccurrencesQuery}}
+          {{> Subcards_Occurrences_Read occurrences=occurrences}}
 
           {{> Subcards_Actions_Read
               type=ActionTypes.CORRECTIVE_ACTION
@@ -96,24 +113,23 @@
               type=ActionTypes.PREVENTATIVE_ACTION
               documentId=this._id}}
 
-          {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+          {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{> Subcards_OtherFiles_Read files=this.files}}
-        {{/with}}
-      {{/Card_Read}}
+          {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+
+        {{/Card_Read}}
+      {{else}}
+        {{> PreloaderPage}}
+      {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
-          {{#if isActiveNCFilter 'deleted'}}
+          {{#if isActiveNCFilter 4}}
             <h5>There are no deleted non-conformities yet.</h5>
           {{else}}
-            {{#if isActiveNCFilter 'department'}}
-              <h5>There are no non-conformities with departments yet.</h5>
-            {{else}}
-              <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
-            {{/if}}
+            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
           {{/if}}
         </div>
       </div>

@@ -1,17 +1,27 @@
 import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+import invoke from 'lodash.invoke';
 
 import { ActionPlanOptions } from '/imports/api/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
-
+import { Actions } from '/imports/api/actions/actions.js';
+import { getTzTargetDate, getWorkflowDefaultStepDate, setModalError, inspire } from '/imports/api/helpers.js';
+import { WorkItems } from '/imports/api/work-items/work-items.js';
 
 Template.Actions_Create.viewmodel({
-  mixin: ['modal', 'action', 'organization', 'router', 'collapsing'],
+  mixin: ['workInbox', 'organization', 'router', 'getChildrenData'],
   type: '',
   title: '',
-  ownerId: Meteor.userId(),
+  ownerId() { return Meteor.userId() },
   planInPlace: ActionPlanOptions.NO,
-  completionTargetDate: new Date(),
-  toBeCompletedBy: Meteor.userId(),
+  completionTargetDate() {
+    const organization = this.organization();
+    const linkedToVM = this.child('Actions_LinkedTo_Edit');
+    const linkedTo = linkedToVM && linkedToVM.linkedTo() || [];
+
+    return getWorkflowDefaultStepDate({ organization, linkedTo });
+  },
+  toBeCompletedBy() { return Meteor.userId() },
   verificationTargetDate: '',
   toBeVerifiedBy: '',
   save() {
@@ -20,48 +30,44 @@ Template.Actions_Create.viewmodel({
     for (let key in data) {
       if (!data[key]) {
         const errorMessage = `The new action cannot be created without a ${key}. Please enter a ${key} for your action.`;
-        this.modal().setError(errorMessage);
+        setModalError(errorMessage);
         return;
       }
     }
 
     this.insert(data);
   },
-  insert({ ...args }) {
-    const organizationId = this.organizationId();
+  insert({ completionTargetDate, ...args }) {
+    const { organizationId, organization = {} } = inspire(['organization', 'organizationId'], this);
     const { type } = this.data();
 
+    const { timezone } = organization;
+    const tzDate = getTzTargetDate(completionTargetDate, timezone);
+
     const allArgs = {
+      ...args,
       type,
       organizationId,
-      ...args
+      completionTargetDate: tzDate
     };
 
-    this.modal().callMethod(insert, allArgs, (err, _id) => {
-      if (err) {
-        return;
-      } else {
-        this.modal().close();
+    const cb = (_id, open) => {
+      const action = this._getActionByQuery({ _id });
+      const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': _id });
+      const queryParams = this._getQueryParams(workItem)(Meteor.userId());
 
-        Meteor.setTimeout(() => {
-          const action = this._getActionByQuery({ _id });
-          this.goToAction(_id, false);
+      workItem && this.goToWorkItem(workItem._id, queryParams);
 
-          this.expandCollapsed(_id);
+      open({
+        _id,
+        _title: action ? this._getNameByType(action.type) : '',
+        template: 'Actions_Edit'
+      });
+    };
 
-          this.modal().open({
-            _id,
-            _title: action ? this._getNameByType(action.type) : '',
-            template: 'Actions_Edit'
-          });
-        }, 400);
-      }
-    });
+    return invoke(this.card, 'insert', insert, allArgs, cb);
   },
   getData() {
-    return this.children(vm => vm.getData)
-                .reduce((prev, cur) => {
-                  return { ...prev, ...cur.getData() };
-                }, {});
+    return this.getChildrenData();
   }
 });

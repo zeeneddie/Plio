@@ -1,8 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
+
 Template.IP_ReviewDate_Edits.viewmodel({
-  mixin: ['addForm', 'date'],
+  mixin: ['addForm', 'date', 'organization'],
   reviewDates: [],
   addReviewDate() {
     this.addForm('IP_ReviewDate_Edit', {
@@ -20,23 +23,28 @@ Template.IP_ReviewDate_Edits.viewmodel({
   },
   update(viewmodel) {
     const _id = viewmodel._id && viewmodel._id();
-    const { date } = viewmodel.getData();
+
+    const { timezone } = this.organization();
+    let { date } = viewmodel.getData();
+    date = getTzTargetDate(date, timezone);
 
     if (_id) {
       this.set({ _id, date });
     } else {
-      this.addToSet({ date }, () => viewmodel.destroy());
+      this.addToSet({ date });
     }
+
+    viewmodel.destroy();
   },
   addToSet({ date }, cb) {
     const options = {};
     const _id = Random.id();
 
     options['$addToSet'] = {
-      'reviewDates': { _id, date }
+      'improvementPlan.reviewDates': { _id, date }
     };
 
-    if (this.parent().document()) {
+    if (this.parent().doc()) {
       this.parent().update({ options }, cb)
     } else {
       this.parent().insert({ reviewDates: [{ _id, date }] }, cb);
@@ -44,17 +52,15 @@ Template.IP_ReviewDate_Edits.viewmodel({
   },
   set({ _id, date }, cb) {
     const query = {
-      'reviewDates': {
-        $elemMatch: {
-          _id: _id
-        }
+      'improvementPlan.reviewDates': {
+        $elemMatch: { _id }
       }
     };
 
     const options = {};
 
     options['$set'] = {
-      'reviewDates.$.date': date
+      'improvementPlan.reviewDates.$.date': date
     }
 
     this.parent().update({ query, options }, cb);
@@ -78,7 +84,7 @@ Template.IP_ReviewDate_Edits.viewmodel({
     }, () => {
       const options = {
         $pull: {
-          reviewDates: { _id }
+          'improvementPlan.reviewDates': { _id }
         }
       };
 

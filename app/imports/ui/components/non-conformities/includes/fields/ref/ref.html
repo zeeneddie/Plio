@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-sm-4">
         {{#ClearableField field="text"}}
-          <input type="text" class="form-control margin-right" placeholder="ID" {{b "value: text, focusout: update"}}>
+          <input type="text" class="form-control margin-right" placeholder="ID" {{b "value: text, focusout: updateText"}}>
         {{/ClearableField}}
       </div>
       <div class="col-sm-8">
         {{#ClearableField field="url"}}
-          <input type="text" class="form-control" placeholder="URL" {{b "value: url, focusout: update"}}>
+          <input type="text" class="form-control" placeholder="URL" {{b "value: url, focusout: updateUrl"}}>
         {{/ClearableField}}
       </div>
     </div>

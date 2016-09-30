@@ -1,5 +1,4 @@
 import './title';
-import './description';
 import './type';
 import './book-section';
 import './owner';

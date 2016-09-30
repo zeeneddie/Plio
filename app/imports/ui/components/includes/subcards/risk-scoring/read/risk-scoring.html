@@ -1,0 +1,34 @@
+<template name="Subcards_RiskScoring_Read">
+  {{#if scoresSorted.length}}
+    <div class="card-block card-subheading">
+      <h4 class="card-title">Risk scoring</h4>
+    </div>
+    <div class="list-group">
+      <table class="table borderless big">
+        <thead>
+          <tr>
+            <th class="list-group-item-text">Score</th>
+            <th class="list-group-item-text">Scored date</th>
+            <th class="list-group-item-text">Scored by</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each scoresSorted}}
+            <tr>
+              <td>
+                <span class="label" {{b "text: this.value, class: 'impact-'+getClassByScore(this.value)"}}></span>
+                <span class="list-group-item-heading"  {{b "text: getNameByScore(this.value)"}}></span>
+              </td>
+              <td>
+                <span class="list-group-item-heading"  {{b "text: renderDate(this.scoredAt)"}}></span>
+              </td>
+              <td>
+                <span class="list-group-item-heading"  {{b "text: userNameOrEmail(this.scoredBy)"}}></span>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+</template>

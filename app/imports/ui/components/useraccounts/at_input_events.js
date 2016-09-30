@@ -39,7 +39,13 @@ export default {
     }, 200);
   },
   'keyup input'(e, tpl) {
+    e.preventDefault();
+    
     var parentData = Template.parentData();
+
+    if (e.keyCode === 13) {
+      $("#at-pwd-form").trigger("submit");
+    }
 
     Meteor.setTimeout(() => {
       if (tpl.view.isDestroyed) {

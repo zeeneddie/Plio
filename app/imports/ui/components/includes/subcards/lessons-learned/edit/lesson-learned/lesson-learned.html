@@ -1,11 +1,6 @@
 <template name="Subcards_LessonLearned">
   <div class="card-block">
-    {{#FormField label="Title"}}
-      {{#ClearableField field="title"}}
-        <input type="text" class="form-control" placeholder="Title"
-            {{b "value: title, focusout: updateTitle"}} />
-      {{/ClearableField}}
-    {{/FormField}}
+    {{> TitleInput (titleArgs)}}
 
     {{#FormField label="Linked to"}}
       {{#if linkedToId}}
@@ -26,10 +21,7 @@
     {{/FormField}}
 
     {{#FormField label="Created by"}}
-      {{> SelectItem
-          items=_members
-          selected=owner
-          onUpdate=onUpdateOwnerCb}}
+      {{> Select_Member (selectArgs)}}
     {{/FormField}}
   </div>
 

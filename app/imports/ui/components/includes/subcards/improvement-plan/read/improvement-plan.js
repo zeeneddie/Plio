@@ -1,21 +1,22 @@
 import { Template } from 'meteor/templating';
-
-import { ImprovementPlans } from '/imports/api/improvement-plans/improvement-plans.js';
+import { Files } from '/imports/api/files/files.js';
 
 Template.Subcards_ImprovementPlan_Read.viewmodel({
   mixin: ['user', 'date'],
   autorun() {
-    this.load(this.document());
+    this.load(this.doc());
   },
-  documentId: '',
-  documentType: '',
+  label: 'Improvement plan',
   desiredOutcome: '',
   targetDate: '',
   owner: '',
   reviewDates: [],
-  files: [],
-  document() {
-    return ImprovementPlans.findOne({ documentId: this.documentId() });
+  files() {
+    const fileIds = this.doc().fileIds || [];
+    return Files.find({ _id: { $in: fileIds } });
+  },
+  doc() {
+    return this.improvementPlan();
   },
   IPHasFields({ desiredOutcome, targetDate, reviewDates, owner, files }) {
     return desiredOutcome || targetDate || owner || ( reviewDates && reviewDates.length > 0 ) || ( files && files.length );

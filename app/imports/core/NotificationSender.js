@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
+import NotificationsService from '/imports/api/notifications/notifications-service.js'
 
 import HandlebarsCompiledCache from './HandlebarsCompiledCache';
 
@@ -8,7 +9,8 @@ import HandlebarsCompiledCache from './HandlebarsCompiledCache';
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
   minimalisticEmail: getAssetPath('email', 'minimalistic-email'),
-  personalEmail: getAssetPath('email', 'personal-email')
+  personalEmail: getAssetPath('email', 'personal-email'),
+  recapEmail: getAssetPath('email', 'recap-email')
 }) : false;
 
 
@@ -20,43 +22,41 @@ const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
  * Usage example:
  *
  * ```
- * new NotificationSender('Test3', 'test', {
- *     username: 'User',
- *     persons: [
- *         {name: 'John'},
- *         {name: 'James'},
- *         {name: 'Jim'}
- *     ]
- * }, {
- *     helpers: {
- *         greeting: function () {
- *             return 'Hello, ' + this.name;
- *         }
- *     }
+ * new NotificationSender({
+ *  recipients: userId,
+ *  emailSubject,
+ *  templateName: 'minimalisticEmail',
+ *  templateData
  * }).sendBoth('kfZMbk62tgFSxmDen');
  *
  * ```
  */
 export default class NotificationSender {
   /**
-   * @param {string} subject notification's subject/title
-   * @param {string} templateName handlebars template name
-   * @param {object} [templateData] data to render on template
-   * @param {object} [options] additional configuration
-   * @param {string} [options.senderId] user that sent notification
-   * @param {object} [options.helpers] define you own formatting helpers
-   * in others too
+   * @param {object} [config] Notification configuration
+   * @param {array | string} [config.recipients] An array of emails and/or _ids or email/_id string
+   * @param {string} [config.emailSubject] Subject of the email
+   * @param {object} [config.templateData] Template data scope
+   * @param {string} [config.templateName] Name of template
+   * @param {object} [config.notificationData] Notification configuration (Check out Notification API)
+   * @param {string} [config.options] Additional options
    * @constructor
    */
-  constructor(subject, templateName, templateData, options = {}) {
+  constructor({ recipients, emailSubject, templateData, templateName, notificationData, options = {}}) {
     if (Meteor.isClient) {
       throw new Meteor.Error(500, 'You cannot send notifications from client side');
     }
 
+    if (typeof recipients === 'string') {
+      recipients = [recipients];
+    }
+
     this._options = _.extend(options, {
-      subject,
+      recipients,
+      emailSubject,
+      templateData,
       templateName,
-      templateData
+      notificationData
     });
   }
 
@@ -72,7 +72,7 @@ export default class NotificationSender {
   }
 
   _getEmailSubject() {
-    return this._options.subject;
+    return this._options.emailSubject;
   }
 
   /**
@@ -84,17 +84,32 @@ export default class NotificationSender {
   _getUserEmail(userId) {
     if (userId && userId.indexOf('@') > -1) {
       return userId;
+    } else {
+      let user = Meteor.users.findOne(userId);
+      return user && user.emails && user.emails.length ? user.emails[0].address : false;
     }
-
-    let user = Meteor.users.findOne(userId);
-    return user && user.emails && user.emails.length ? user.emails[0].address : false;
   }
 
-  _sendEmailBasic(receiver, text) {
+  /**
+   * Returns an array of emails of interested users
+   * @param recipients
+   * @returns {[String]}
+   * @private
+   */
+  _getUserEmails(userIds) {
+    let userEmails = [];
+    userIds.forEach((userId) => {
+      let email = this._getUserEmail(userId);
+      email && userEmails.push(email);
+    });
+    return userEmails;
+  }
+
+  _sendEmailBasic(recipients, text) {
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
-      to: this._getUserEmail(receiver),
+      to: this._getUserEmails(recipients),
       html: text
     };
 
@@ -102,13 +117,45 @@ export default class NotificationSender {
   }
 
   /**
-   * Sends email to specified receiver
-   *
-   * @param receiver user ID or email
+   * Sends email to specified recipients
    */
-  sendEmail(receiver) {
-    let html = this._renderTemplateWithData();
-    this._sendEmailBasic(receiver, html);
+  sendEmail() {
+    const recipients = this._options.recipients || [];
+    const templateName = this._options.templateName;
+    let html = this._renderTemplateWithData(templateName);
+
+    this._sendEmailBasic(recipients, html);
+
+    // enables method chaining
+    return this;
+  }
+
+  _sendOnSiteBasic(recipients) {
+    const notificationData = this._options.notificationData;
+    if (!notificationData) {
+      return;
+    }
+
+    notificationData.recipientIds = recipients;
+    NotificationsService.insert(notificationData);
+  }
+
+  /**
+   * Sends browser notification to specified recipients
+   */
+  sendOnSite() {
+    const recipients = this._options.recipients || [];
+
+    this._sendOnSiteBasic(recipients);
+
+    // enables method chaining
+    return this;
+  }
+
+  sendAll() {
+    this.sendEmail();
+    this.sendOnSite();
+    // we don't need method chaining here
   }
 
   static getAbsoluteUrl(path) {

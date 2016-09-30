@@ -1,0 +1,15 @@
+<template name="NC_Item">
+  {{#ListItemLink (linkArgs)}}
+    <span class="label label-status-indicator"
+      {{b "class: { label-success: this.magnitude === 'minor', label-warning: this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span>
+    <div class="list-group-item-content">
+      <h4 class="list-group-item-heading pull-left">
+        <span {{b "text: renderTitle"}}></span>
+        <span class="label label-primary" {{b "if: isNew"}}>New</span>
+      </h4>
+      <p class="list-group-item-text text-danger pull-right" {{b "if: occurrences.count, text: totalCost"}}></p>
+      <p class="list-group-item-text pull-left" {{b "text: this.sequentialId"}}></p>
+      <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
+    </div>
+  {{/ListItemLink}}
+</template>

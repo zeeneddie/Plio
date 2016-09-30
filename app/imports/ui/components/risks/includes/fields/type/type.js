@@ -4,7 +4,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 
-Template.RKType.viewmodel({
+Template.Risks_Type_Edit.viewmodel({
   mixin: ['organization', 'collapsing', 'risk'],
   autorun() {
     // to fix bug wich randomly calls method
@@ -13,8 +13,10 @@ Template.RKType.viewmodel({
     }
   },
   onCreated() {
-    if (!this.typeId() && this.types().length > 0) {
-      this.typeId(this.types()[0]._id);
+    const types = this.types();
+
+    if (!this.typeId() && types.length > 0) {
+      this.typeId(types[0]._id);
     }
   },
   typeId: '',

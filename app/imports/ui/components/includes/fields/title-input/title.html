@@ -1,0 +1,12 @@
+<template name="TitleInput">
+  {{#FormField label=label}}
+    {{#ClearableField field="value"}}
+      <div {{b "class: { input-group: addon }"}}>
+        {{#if addon}}
+          <div class="input-group-addon" {{b "text: addon"}}></div>
+        {{/if}}
+        {{> TextInput (inputArgs)}}
+      </div>
+    {{/ClearableField}}
+  {{/FormField}}
+</template>

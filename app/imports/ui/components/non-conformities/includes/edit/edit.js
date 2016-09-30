@@ -1,13 +1,19 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
 
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import {
+  update,
+  remove
+} from '/imports/api/non-conformities/methods.js';
+import { getTzTargetDate } from '/imports/api/helpers.js';
+
 
 Template.NC_Card_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
-  slingshotDirective: 'nonConformitiesFiles',
+  slingshotDirective: 'nonConformityFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
@@ -50,7 +56,11 @@ Template.NC_Card_Edit.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
+          if (err) {
+            swal.close();
+            return;
+          };
+
           swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
 
           this.modal().close();

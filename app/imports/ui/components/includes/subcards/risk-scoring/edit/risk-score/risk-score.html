@@ -1,0 +1,22 @@
+<template name="Subcards_RiskScore">
+  {{> ScoreTable_Edit
+      disabled=disabled
+      tableData=tableDataWithGuidelines
+      onUpdate=onScoreUpdate
+      onGuidePanelToggle=onGuidePanelToggle
+      score=score}}
+  {{> RiskScoring_Guidelines ref="guidelinesRef" guideHtml=guideHtml}}
+  {{#with score}}
+    {{#if every this.value this.rowId}}
+      <div class="card-block">
+        {{> RiskScoring_ScoredBy_Edit
+            disabled=disabled
+            scoredBy=this.scoredBy}}
+
+        {{> RiskScoring_ScoredAt_Edit
+            disabled=disabled
+            scoredAt=this.scoredAt}}
+      </div>
+    {{/if}}
+  {{/with}}
+</template>

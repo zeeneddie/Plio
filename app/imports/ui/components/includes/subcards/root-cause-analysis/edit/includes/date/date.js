@@ -1,23 +1,25 @@
 import { Template } from 'meteor/templating';
 
-Template.NC_RCA_Date_Edit.viewmodel({
-  key: 'analysis',
+Template.RCA_TargetDate_Edit.viewmodel({
+  mixin: 'utils',
   date: '',
   startDate: new Date(),
   defaultDate: false,
   placeholder: 'Target date',
   label: 'Target date',
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { date:date } = viewmodel.getData();
+  disabled: false,
+  onUpdate() {},
+  update() {
+    return (viewmodel) => {
+      const currentDate = this.templateInstance.data.date;
+      const { date } = viewmodel.getData();
 
-    if (date === this.templateInstance.data.date) return;
+      if (Object.is(date, currentDate)) return;
 
-    this.date(date);
+      this.date(date);
 
-    this.parent().update({ [this.key()]: date });
+      this.onUpdate({ date }, err => err && this.date(currentDate) && false);
+    };
   },
   getData() {
     const { date } = this.data();

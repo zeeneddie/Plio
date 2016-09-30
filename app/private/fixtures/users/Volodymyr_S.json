@@ -15,6 +15,10 @@
       "verified": true
     }
   ],
+  "preferences": {
+    "areNotificationsEnabled": true,
+    "notificationSound": "/sounds/graceful"
+  },
   "profile": {
     "firstName": "Volodymyr",
     "lastName": "S",
@@ -32,8 +36,8 @@
       }
     ]
   },
-  "status": "online",
-  "statusConnection": "online",
+  "status": "offline",
+  "statusConnection": "offline",
   "roles": {
     "KwKXz5RefrE5hjWJ2": [
       "create-update-delete-standards",

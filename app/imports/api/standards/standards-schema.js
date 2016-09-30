@@ -1,7 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { StandardStatuses } from '../constants.js';
-import { BaseEntitySchema, OrganizationIdSchema, DeletedSchema, ViewedBySchema, getNotifySchema } from '../schemas.js';
+import {
+  BaseEntitySchema, OrganizationIdSchema,
+  DeletedSchema, ViewedBySchema,
+  ImprovementPlanSchema, getNotifySchema
+} from '../schemas.js';
 
 
 const optionalFields = new SimpleSchema([
@@ -25,22 +29,19 @@ const optionalFields = new SimpleSchema([
       type: String,
       optional: true
     },
-    departments: {
+    departmentsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
+      defaultValue: [],
       optional: true
     },
     source1: {
       type: Object,
       optional: true
     },
-    'source1.extension': {
+    'source1.fileId': {
       type: String,
-      autoValue() {
-        if (this.isSet) {
-          return this.value.toLowerCase();
-        }
-      },
+      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     'source1.type': {
@@ -56,21 +57,13 @@ const optionalFields = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Url,
       optional: true
     },
-    'source1.name': {
-      type: String,
-      optional: true
-    },
     source2: {
       type: Object,
       optional: true
     },
-    'source2.extension': {
+    'source2.fileId': {
       type: String,
-      autoValue() {
-        if (this.isSet) {
-          return this.value.toLowerCase();
-        }
-      },
+      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     'source2.type': {
@@ -86,13 +79,13 @@ const optionalFields = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Url,
       optional: true
     },
-    'source2.name': {
-      type: String,
-      optional: true
-    },
     lessons: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
       optional: true
     }
   }
@@ -169,6 +162,10 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
     type: String,
     optional: true,
     allowedValues: _.keys(StandardStatuses)
+  },
+  improvementPlan: {
+    type: ImprovementPlanSchema,
+    optional: true
   }
 }]);
 

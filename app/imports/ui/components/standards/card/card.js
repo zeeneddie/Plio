@@ -1,19 +1,34 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import get from 'lodash.get';
 
+import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { update, remove } from '/imports/api/standards/methods.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
+import { restore, remove } from '/imports/api/standards/methods.js';
+import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 
-Template.StandardsCard.viewmodel({
-  share: 'standard',
-  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'action'],
+Template.Standards_Card_Read.viewmodel({
+  share: 'window',
+  mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
+  _subHandlers: [],
+  isReady: false,
+
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('standardImprovementPlan', this.standardId());
-      template.subscribe('departments', this.organizationId());
-      template.subscribe('nonConformitiesByStandardId', this.standardId());
+      const _id = this._id();
+      const organizationId = this.organizationId();
+      const _subHandlers = [];
+      if (_id && organizationId) {
+        _subHandlers.push(DocumentCardSubs.subscribe('standardCard', { _id, organizationId }));
+        this._subHandlers(_subHandlers);
+      }
+    });
+
+    template.autorun(() => {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
     });
   },
   onRendered(template) {
@@ -26,6 +41,13 @@ Template.StandardsCard.viewmodel({
   },
   closeAllOnCollapse: false,
   isFullScreenMode: false,
+  isDiscussionOpened: false,
+  ActionTypes() {
+    return ActionTypes;
+  },
+  isOrgOwner({ organizationId } = {}) {
+    return isOrgOwner(Meteor.userId(), organizationId);
+  },
   toggleScreenMode() {
     const $div = this.templateInstance.$('.content-cards-inner');
     const offset = $div.offset();
@@ -36,7 +58,7 @@ Template.StandardsCard.viewmodel({
         $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
       }, 150);
     } else {
-      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': '0', 'bottom': '0', 'left': offset.left });
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': $(window).width() - (offset.left + $div.outerWidth()), 'bottom': '0', 'left': offset.left });
 
       setTimeout(() => {
 
@@ -47,14 +69,12 @@ Template.StandardsCard.viewmodel({
     }
 
   },
-  hasStandards() {
-    return this.standards().count() > 0;
-  },
   standards() {
-    return this._getStandardsByQuery({});
+    const isDeleted = this.isActiveStandardFilter(3) ? true : { $in: [null, false] };
+    return this._getStandardsByQuery({ isDeleted });
   },
   standard() {
-    return this._getStandardByQuery({ _id: this.standardId() });
+    return this._getStandardByQuery({ _id: this._id() });
   },
   hasDocxAttachment() {
     const standard = this.standard();
@@ -62,22 +82,47 @@ Template.StandardsCard.viewmodel({
   },
   section() {
     const _id = !!this.standard() && this.standard().sectionId;
-    return StandardsBookSections.findOne({ _id });
+    const section = StandardsBookSections.findOne({ _id });
+
+    return section || UncategorizedTypeSection;
   },
   type() {
     const _id = !!this.standard() && this.standard().typeId;
-    return StandardTypes.findOne({ _id });
+    let type = StandardTypes.findOne({ _id });
+
+    return type || UncategorizedTypeSection;
   },
   _getNCsQuery() {
-    return { standardsIds: this.standardId() };
+    return { standardsIds: get(this.standard(), '_id') };
   },
-  openEditStandardModal() {
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      standardId: this.standardId()
+    };
+    const queryParams = { filter: this.activeStandardFilterId() };
+    return FlowRouter.path('standardDiscussion', params, queryParams);
+  },
+  onDiscussionOpen(e) {
+    e.preventDefault();
+
+    const mobileWidth = isMobileRes()
+
+    if (mobileWidth) {
+      this.width(mobileWidth);
+    }
+
+    return FlowRouter.go(this.pathToDiscussion());
+  },
+  openEditStandardModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) return;
+
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
-      _id: this.standardId()
+      _id: get(this.standard(), '_id')
     });
-  },
+  }, 1000),
   restore({ _id, title, isDeleted }) {
     if (!isDeleted) return;
 
@@ -91,13 +136,13 @@ Template.StandardsCard.viewmodel({
         closeOnConfirm: false,
       },
       () => {
-        update.call({ _id, isDeleted: false }, (err) => {
+        restore.call({ _id }, (err) => {
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
             swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
 
-            FlowRouter.setQueryParams({ by: 'section' });
+            FlowRouter.setQueryParams({ filter: 1 });
             Meteor.setTimeout(() => {
               this.goToStandard(_id);
               this.expandCollapsed(_id);
@@ -107,8 +152,8 @@ Template.StandardsCard.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted }) {
-    if (!isDeleted) return;
+  delete({ _id, title, isDeleted, organizationId }) {
+    if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
     swal(
       {

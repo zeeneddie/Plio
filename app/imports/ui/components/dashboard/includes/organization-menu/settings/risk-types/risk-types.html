@@ -1,0 +1,16 @@
+<template name="OrgSettings_RisksTypes">
+  {{#Subcards_Wrapper
+    _lText=_lText
+    _rText=_rText
+    loading=(not Template.subscriptionsReady)}}
+    <div class="card-block">
+      {{> SimpleSelection_Edit
+          items=riskTypes
+          addButtonText="Add risks type"
+          placeholder=placeholder
+          showAbbreviation=true
+          onChange=onChangeCb
+          onDelete=onDeleteCb}}
+    </div>
+  {{/Subcards_Wrapper}}
+</template>

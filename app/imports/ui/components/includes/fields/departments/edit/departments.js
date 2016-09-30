@@ -1,65 +1,82 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { Departments } from '/imports/api/departments/departments.js';
+import { canChangeOrgSettings } from '/imports/api/checkers.js';
 
 Template.Departments_Edit.viewmodel({
-  mixin: ['search', 'organization'],
+  mixin: ['search', 'organization', 'department'],
+  label: 'Department/sector(s)',
+  placeholder: 'Department/sector',
+  selectFirstIfNoSelected: false,
   departmentsIds: [],
-  departmentsIdsArray() {
-    return Array.from(this.departmentsIds() || []);
+  selected() {
+    const departmentsIds = Array.from(this.departmentsIds() || []);
+    return this._getDepartmentsByQuery({ _id: { $in: departmentsIds }});
   },
-  departmentSearchText() {
-    const child = this.child('SelectItem');
+  value() {
+    const child = this.child('Select_Multi');
     return child && child.value();
   },
   departments() {
-    const ids = this.departmentsIdsArray();
-    const query = {
-      ...this.searchObject('departmentSearchText', 'name'),
-      organizationId: this.organizationId(),
-      _id: { $nin: ids }
-    };
+    const query = { ...this.searchObject('value', 'name') };
 
-    return Departments.find(query).map(({ name, _id }) => ({ title: name, name, _id }));
+    return this._getDepartmentsByQuery(query);
   },
-  currentDepartments() {
-    const ids = this.departmentsIdsArray();
-    const query = { _id: { $in: ids }, organizationId: this.organizationId() };
-    return Departments.find(query);
+  content() {
+    return canChangeOrgSettings(Meteor.userId(), this.organizationId())
+            ? 'Departments_Create'
+            : null;
   },
-  update(departmentId, option, cb) {
+  onUpdateCb() {
+    return this.update.bind(this);
+  },
+  update(viewmodel) {
+    const { selectedItemId, selected } = viewmodel.getData();
+
+    if (this.areIdsIncludesItemId(selectedItemId)) return;
+
+    const newDepartmentsIds = this.concatIds(this.departmentsIds(), selectedItemId);
+
+    this.departmentsIds(newDepartmentsIds);
+
+    this.callUpdate(selectedItemId, selected, '$addToSet');
+  },
+  callUpdate(selectedItemId, selected, option) {
+    if (!this._id) return;
+
     const options = {
       [`${option}`]: {
-        departments: departmentId
+        departmentsIds: selectedItemId
       }
     };
 
-    this.parent().update({ options }, cb);
-  },
-  onSelectCb() {
-    return this.onSelect.bind(this);
-  },
-  onSelect(viewmodel) {
-    const { selected:departmentId } = viewmodel.getData();
-
-    if (this.departmentsIdsArray().find(id => id === departmentId)) return;
-
-    const cb = () => {
-      viewmodel.value('');
-      viewmodel.selected('');
-    };
-
-    this.update(departmentId, '$addToSet', cb);
+    this.parent().update({ options });
   },
   onRemoveCb() {
     return this.remove.bind(this);
   },
-  remove(e) {
-    const { _id } = Blaze.getData(e.target);
+  remove(viewmodel) {
+    const { selectedItemId, selected } = viewmodel.getData();
 
-    if (!this.departmentsIdsArray().find(id => id === _id)) return;
+    if (!this.areIdsIncludesItemId(selectedItemId)) return;
 
-    this.update(_id, '$pull');
+    const newDepartmentsIds = this.filterIds(this.departmentsIds(), selectedItemId);
+
+    this.departmentsIds(newDepartmentsIds);
+
+    this.callUpdate(selectedItemId, selected, '$pull');
+  },
+  concatIds(ids, id) {
+    return Array.from(ids || []).concat([id]);
+  },
+  filterIds(ids, id) {
+    return Array.from(ids || []).filter(_id => _id !== id);
+  },
+  areIdsIncludesItemId(selectedItemId) {
+    return this.departmentsIds() && this.departmentsIds().includes && this.departmentsIds().includes(selectedItemId);
+  },
+  getData() {
+    const { departmentsIds } = this.data();
+    return { departmentsIds };
   }
 });

@@ -3,13 +3,14 @@ import { Tracker } from 'meteor/tracker';
 
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-
+import { canChangeOrgSettings } from '/imports/api/checkers.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
   onCreated() {
     const section = ((() => {
-      const sections = this.bookSections().fetch();
+      const sections = this.bookSections();
       return sections.length > 0 && sections[0];
     })());
     if (!this.selectedBookSectionId() && section) {
@@ -18,7 +19,7 @@ Template.ESBookSection.viewmodel({
   },
   selectedBookSectionId: '',
   section() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   bookSections() {
@@ -28,12 +29,19 @@ Template.ESBookSection.viewmodel({
           organizationId: this.organizationId()
         },
         {
-          ...this.searchObject('section', 'title')
+          ...this.searchObject('section')
         }
       ]
     };
     const options = { sort: { title: 1 } };
-    return StandardsBookSections.find(query, options);
+    const sections = StandardsBookSections.find(query, options).fetch();
+
+    return sortArrayByTitlePrefix(sections);
+  },
+  content() {
+    return canChangeOrgSettings(Meteor.userId(), this.organizationId())
+            ? 'ESBookSectionCreate'
+            : null;
   },
   onUpdateCb() {
     return this.update.bind(this);
@@ -46,7 +54,7 @@ Template.ESBookSection.viewmodel({
     if (!this._id) return;
 
     if (!sectionId) {
-      this.modal().setError('Book section is required!');
+      this.modal().setError('Standards section is required!');
       return;
     }
 
@@ -56,7 +64,7 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    const { selected:sectionId } = this.child('SelectItem').getData();
+    const { selected:sectionId } = this.child('Select_Single').getData();
     return { sectionId };
   }
 });

@@ -1,0 +1,17 @@
+<template name="Subcards_Review_Edit">
+  {{#Subcards_Wrapper _lText=label _rText=""}}
+    <div class="card-block">
+      <div id="review">
+
+        {{> Review_Status status=status}}
+
+        {{> Review_LastReviewed reviewedAt=reviewedAt}}
+
+        {{> Review_ReviewedBy reviewedBy=reviewedBy}}
+
+        {{> Review_Comments comments=comments}}
+
+      </div>
+    </div>
+  {{/Subcards_Wrapper}}
+</template>

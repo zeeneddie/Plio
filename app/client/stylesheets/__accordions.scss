@@ -1,6 +1,6 @@
 .card-block-collapse-toggle {
   position: relative;
-  padding-left: 45px;
+  padding-left: 45px !important;
   cursor: pointer;
   font-size: 15px;
   min-height: 57px;
@@ -42,7 +42,7 @@
 
       & > span {
         margin-left: 5px;
-      } 
+      }
     }
   }
 
@@ -80,6 +80,7 @@
 .card-block-collapse {
   .card-block {
     border-top: 1px solid #ddd;
+    padding: 1.32rem;
 
     > .card {
       @media (max-width:767px) {

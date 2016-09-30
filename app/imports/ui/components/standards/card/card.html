@@ -1,30 +1,45 @@
-<template name="StandardsCard">
-  <div class="content-cards-inner flex" {{b "class: { expanded: isFullScreenMode }"}}>
-    {{#if hasStandards}}
+<template name="Standards_Card_Read">
+  <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode, content: !standard }"}}>
+    {{#if standards.count}}
       {{#with standard}}
         <div class="card standard-details">
           <div class="card-block card-heading">
-            {{#if canCreateStandards organizationId}}
-              <div class="card-heading-buttons pull-xs-right">
+            <div class="card-heading-buttons pull-xs-right">
+              {{#if isReady}}
                 {{#if hasDocxAttachment}}
                   <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
                   </a>
                 {{/if}}
-                {{#if isDeleted}}
-                  <a class="btn btn-secondary" {{b "click: restore(this)"}}>
-                    Restore
-                  </a>
-                  <a class="btn btn-primary" {{b "click: delete(this)"}}>
-                    Delete
-                  </a>
-                {{else}}
-                  <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
-                    <i class="fa fa-pencil"></i>
-                    Edit
-                  </a>
+                {{#unless isDiscussionOpened}}
+                  <a class="btn btn-secondary"
+                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
+    								Discuss
+                    {{#if messagesNotViewedCount}}
+    								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+                    {{/if}}
+    							</a>
+                {{/unless}}
+                {{#if canCreateAndEditStandards organizationId}}
+                  {{#if isDeleted}}
+                    <a class="btn btn-secondary" {{b "click: restore(this)"}}>
+                      Restore
+                    </a>
+                    {{#if isOrgOwner this}}
+                      <a class="btn btn-primary" {{b "click: delete(this)"}}>
+                        Delete
+                      </a>
+                    {{/if}}
+                  {{else}}
+                    <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
+                      <i class="fa fa-pencil"></i>
+                      Edit
+                    </a>
+                  {{/if}}
                 {{/if}}
-              </div>
-            {{/if}}
+              {{else}}
+                {{> PreloaderButton}}
+              {{/if}}
+            </div>
             <h3 class="card-title">
               Compliance standard
             </h3>
@@ -43,48 +58,51 @@
             <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
-                <div class="list-group-item" {{b "if: this.description"}}>
-                  <p class="list-group-item-text">Description</p>
-                  <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-                </div>
+                {{#if this.description}}
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Description</p>
+                    <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+                  </div>
+                {{/if}}
 
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Issue number</p>
-                      <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                  {{#if this.issueNumber}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Issue number</p>
+                        <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Section</p>
-                      {{#with section}}
+                  {{/if}}
+                  {{#with section}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Section</p>
                         <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                      {{/with}}
+                      </div>
                     </div>
-                  </div>
-
+                  {{/with}}
                 </div>
 
                 <div class="row">
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Type</p>
-                      {{#with type}}
-                        <h4 class="list-group-item-heading" {{b "text: this.name"}}></h4>
-                      {{/with}}
+                  {{#with type}}
+                    <div class="col-sm-6">
+                      <div class="list-group-item">
+                        <p class="list-group-item-text">Type</p>
+                          <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                      </div>
                     </div>
-                  </div>
+                  {{/with}}
                   <div class="col-sm-6">
                     <div class="list-group-item">
                       <p class="list-group-item-text">Owner</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.owner)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.owner)"}}></h4>
                     </div>
                   </div>
 
                 </div>
 
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
 
@@ -108,7 +126,7 @@
                   type=ActionTypes.PREVENTATIVE_ACTION
                   standardId=this._id}}
 
-              {{> Subcards_ImprovementPlan_Read documentId=this._id}}
+              {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
 
               {{> Subcards_LessonsLearned_Read documentId=this._id}}
             </div>
@@ -120,11 +138,13 @@
             {{> CardChangelog document=this}}
           </div>
         </div>
+      {{else}}
+        {{> PreloaderPage}}
       {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
-          {{#if isActiveStandardFilter 'deleted'}}
+          {{#if isActiveStandardFilter 3}}
             <h5>There are no deleted standards yet!</h5>
           {{else}}
             <h5>There are no standards yet! Click on the 'Add' button to create your first standard.</h5>

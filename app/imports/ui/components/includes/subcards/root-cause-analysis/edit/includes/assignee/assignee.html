@@ -1,0 +1,14 @@
+<template name="RCA_ToBeCompletedBy_Edit">
+  {{#FormField label=label}}
+    {{#Completion_Edit
+      isButtonVisible=isButtonVisible
+      canButtonBeShown=canButtonBeShown
+      text=comments
+      onComplete=complete
+      onUndo=undo}}
+
+      {{> Select_Member (selectArgs)}}
+
+    {{/Completion_Edit}}
+  {{/FormField}}
+</template>

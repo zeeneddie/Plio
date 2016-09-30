@@ -1,12 +1,12 @@
-<template name="ActionsCard">
-  {{> Actions_QAPanel_Read document=action}}
-
+<template name="Actions_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasActions}}
+    {{#if actions.count}}
       {{#with action}}
         {{#Card_Read
+          isReadOnly=isReadOnly
           cardTitle=(_getNameByType this.type)
-          document=this
+          doc=this
+          isReady=isReady
           onOpenEditModal=onOpenEditModalCb}}
 
           <div class="list-group">
@@ -20,7 +20,7 @@
               </h4>
             </div>
 
-            {{> Actions_LinkedTo_Read linkedDocs=this.linkedDocuments}}
+            {{> Actions_LinkedTo_Read linkedTo=this.linkedTo}}
 
             <div class="row">
               <div class="col-sm-6">
@@ -32,17 +32,18 @@
               <div class="col-sm-6">
                 <div class="list-group-item">
                   <p class="list-group-item-text">Owner</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.ownerId)"}}></h4>
+                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.ownerId)"}}></h4>
                 </div>
               </div>
             </div>
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Plan in place?</p>
-              <h4 class="list-group-item-heading"
-                {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
-            </div>
-
+            {{#if this.planInPlace}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Plan in place?</p>
+                <h4 class="list-group-item-heading"
+                  {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
+              </div>
+            {{/if}}
           </div>
 
           <div class="list-group">
@@ -62,17 +63,17 @@
                 <div class="list-group-item">
                   {{#if this.isCompleted}}
                     <p class="list-group-item-text">Completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.completedBy)"}}></h4>
+                    <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.completedBy)"}}></h4>
                   {{else}}
                     <p class="list-group-item-text">To be completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeCompletedBy)"}}></h4>
+                    <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.toBeCompletedBy)"}}></h4>
                   {{/if}}
                 </div>
               </div>
             </div>
-            {{#with this.completionResult}}
+            {{#with this.completionComments}}
               <div class="list-group-item">
-                <p class="list-group-item-text">Result</p>
+                <p class="list-group-item-text">Comments</p>
                 <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
               </div>
             {{/with}}
@@ -84,7 +85,13 @@
                 <div class="col-sm-6">
                   <div class="list-group-item">
                     {{#if this.isVerified}}
-                      <p class="list-group-item-text">Verified as effective date</p>
+                      <p class="list-group-item-text">
+                        {{#if this.isVerifiedAsEffective}}
+                          Verified as effective date
+                        {{else}}
+                          Assessed as ineffective date
+                        {{/if}}
+                      </p>
                       <h4 class="list-group-item-heading" {{b "text: renderDate(this.verifiedAt)"}}></h4>
                     {{else}}
                       <p class="list-group-item-text">Verification target date</p>
@@ -96,17 +103,17 @@
                   <div class="list-group-item">
                     {{#if this.isVerified}}
                       <p class="list-group-item-text">Verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.verifiedBy)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.verifiedBy)"}}></h4>
                     {{else}}
                       <p class="list-group-item-text">To be verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeVerifiedBy)"}}></h4>
+                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.toBeVerifiedBy)"}}></h4>
                     {{/if}}
                   </div>
                 </div>
               </div>
-              {{#with this.verificationResult}}
+              {{#with this.verificationComments}}
                 <div class="list-group-item">
-                  <p class="list-group-item-text">Result</p>
+                  <p class="list-group-item-text">Comments</p>
                   <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
                 </div>
               {{/with}}
@@ -119,7 +126,7 @@
 
           {{> Subcards_Notes_Read notes=this.notes}}
 
-          {{> Subcards_OtherFiles_Read label="Files" files=this.files}}
+          {{> Subcards_OtherFiles_Read label="Files" fileIds=this.fileIds}}
         {{/Card_Read}}
 
       {{/with}}
