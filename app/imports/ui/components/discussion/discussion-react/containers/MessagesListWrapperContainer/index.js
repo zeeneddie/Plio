@@ -45,22 +45,21 @@ const onPropsChange = (props, onData) => {
     dispatch,
     sort = { createdAt: -1 },
     at = null,
-    limit = 50,
     priorLimit = 50,
     followingLimit = 50,
     resetCompleted = false
   } = props;
-  const subOpts = { limit, sort, at, priorLimit, followingLimit };
+  const subOpts = { sort, at, priorLimit, followingLimit };
   const subscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
 
-  // dispatch(setLoading(true));
-  //
-  // const state = getDiscussionState();
-  //
-  // if (state.messages.length) {
-  //   onData(null, state);
-  // }
+  dispatch(setLoading(true));
+
+  const state = getDiscussionState();
+
+  if (state.messages.length) {
+    onData(null, state);
+  }
 
   if (subscription.ready()) {
     const query = { discussionId };
@@ -106,5 +105,5 @@ export default composeAll(
     }
   }),
   composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
-  connect(pickFromDiscussion(['at', 'sort', 'limit', 'priorLimit', 'followingLimit', 'resetCompleted']))
+  connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted']))
 )(MessagesListWrapper);

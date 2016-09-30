@@ -10,14 +10,12 @@ import MessagesListContainer from '../../containers/MessagesListContainer';
 import MessagesListHeader from '../MessagesListHeader';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll';
 import {
-  setLimit,
   setSort,
-  setShouldScrollToBottom,
   setPriorLimit,
   setFollowingLimit
 } from '/client/redux/actions/discussionActions';
-import { swipedetect, isTouchDevice } from '/client/lib/mobile';
-import { lengthMessages, $isScrolledToBottom, $isAlmostScrolledToBottom } from '/imports/api/helpers';
+import { swipedetect } from '/client/lib/mobile';
+import { lengthMessages, $isAlmostScrolledToBottom } from '/imports/api/helpers';
 
 const receivedOneNewMessage = (props, prevProps) =>
   Object.is(lengthMessages(props), lengthMessages(prevProps) + 1);
@@ -165,7 +163,7 @@ export default class MessagesListWrapper extends React.Component {
 
     const dispatchAll = () => {
       const actions = [
-        setLimit(limit + 50),
+        setFollowingLimit(followingLimit + 50),
         setSort(sort)
       ];
 

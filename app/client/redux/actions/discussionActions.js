@@ -3,7 +3,6 @@ import { batchActions } from 'redux-batched-actions';
 import {
   SET_MESSAGES,
   SET_LOADING,
-  SET_LIMIT,
   SET_SORT,
   SET_AT,
   RESET,
@@ -35,13 +34,6 @@ export function setInitialDataLoaded(bool) {
   return {
     type: SET_INITIAL_DATA_LOADED,
     payload: bool
-  }
-}
-
-export function setLimit(limit) {
-  return {
-    type: SET_LIMIT,
-    payload: limit
   }
 }
 

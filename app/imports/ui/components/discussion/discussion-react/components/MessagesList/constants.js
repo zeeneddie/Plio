@@ -50,6 +50,22 @@ export const transformMessages = ({ discussion, messages, at }) => {
 
       const isSelected = isMessageSelected(message, at);
 
+      const dateToShow = ((() => {
+        const prevCreatedAt = get(messages[i - 1], 'createdAt');
+        const prevMessageDate = getDate(prevCreatedAt);
+
+        return date !== prevMessageDate;
+      })());
+
+      const isMergedWithPreviousMessage = ((() => {
+        const prevMessage = messages[i - 1];
+        const prevCreatedAt = get(prevMessage, 'createdAt');
+        const prevCreatedBy = get(prevMessage, 'createdBy');
+
+         return (message.createdBy === prevCreatedBy &&
+                 message.createdAt - prevCreatedAt < 5 * 60 * 1000);
+      })());
+
       return {
         _id,
         date,
@@ -57,21 +73,10 @@ export const transformMessages = ({ discussion, messages, at }) => {
         createdAt,
         user,
         isSelected,
-        ...(() => isSelected ? { scrollToSelectedMessage } : null)(),
-        dateToShow: (() => {
-          const prevCreatedAt = get(messages[i - 1], 'createdAt');
-          const prevMessageDate = getDate(prevCreatedAt);
-
-          return date !== prevMessageDate;
-        })(),
-        isMergedWithPreviousMessage: (() => {
-          const prevMessage = messages[i - 1];
-          const prevCreatedAt = get(prevMessage, 'createdAt');
-          const prevCreatedBy = get(prevMessage, 'createdBy');
-
-           return (message.createdBy === prevCreatedBy &&
-                   message.createdAt - prevCreatedAt < 5 * 60 * 1000);
-        })()
+        dateToShow,
+        isMergedWithPreviousMessage,
+        height: isMergedWithPreviousMessage ? 33.84 : 55.65,
+        ...(() => isSelected ? { scrollToSelectedMessage } : null)()
       };
     })();
 
