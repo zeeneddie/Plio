@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrgSubs, UserSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardsLayout.viewmodel({
   mixin: ['organization', 'standard'],
@@ -12,20 +13,17 @@ Template.StandardsLayout.viewmodel({
       const userIds = _.pluck(users, 'userId');
 
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards-book-sections', _id),
-        this.templateInstance.subscribe('standards-types', _id),
-        this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('nonConformities', _id),
-        this.templateInstance.subscribe('risks', _id)
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
+        OrgSettingsDocSubs.subscribe('standards-book-sections', _id),
+        OrgSettingsDocSubs.subscribe('standards-types', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
       ];
 
-      if (this.isActiveStandardFilter('deleted')) {
-        _subHandlers.push(this.templateInstance.subscribe('standardsDeleted', _id));
+      if (this.isActiveStandardFilter(3)) {
+        _subHandlers.push(DocumentsListSubs.subscribe('standardsList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('standards', _id));
+        _subHandlers.push(DocumentsListSubs.subscribe('standardsList', _id));
       }
 
       this._subHandlers(_subHandlers);

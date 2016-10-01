@@ -1,15 +1,16 @@
 import { Template } from 'meteor/templating';
+
 import { RiskFilters } from '/imports/api/constants.js';
 
-Template.RisksHeader.viewmodel({
-  share: ['window', 'search'],
-  mixin: ['risk', 'mobile', 'organization', 'collapsing'],
-  riskFilters() {
-    return RiskFilters;
-  },
-  selectFilter(filter) {
-    this.searchText('');
-    FlowRouter.setQueryParams({ by: filter });
-    this.expandCollapsed(this.riskId());
+Template.Risks_Header.viewmodel({
+  mixin: 'risk',
+  headerArgs() {
+    return {
+      idToExpand: this.riskId(),
+      header: 'Risks by -',
+      prependWith: 'by',
+      filters: RiskFilters,
+      isActiveFilter: this.isActiveRiskFilter.bind(this)
+    };
   }
 });

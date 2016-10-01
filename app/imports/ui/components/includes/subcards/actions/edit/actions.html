@@ -1,36 +1,3 @@
 <template name="Subcards_Actions_Edit">
-  {{#SubCard_EditWrapper _lText=title _rText=actionsIndicators}}
-    <div class="card-block">
-      {{#if actions.count}}
-        <div id="actions" class="card">
-          {{#each actions}}
-            {{> SubCard_Edit
-                _id=this._id
-                action=this
-                type=type
-                isLinkedToEditable=true
-                _lText=(lText this)
-                _rText=(rText this)
-                content="Actions_EditSubcard"
-                insertFn=insertFn
-                removeFn=removeFn
-                updateFn=updateFn
-                completeFn=completeFn
-                undoCompletionFn=undoCompletionFn
-                verifyFn=verifyFn
-                undoVerificationFn=undoVerificationFn
-                linkStandardFn=linkStandardFn
-                unlinkStandardFn=unlinkStandardFn
-                linkDocumentFn=linkDocumentFn
-                unlinkDocumentFn=unlinkDocumentFn
-                standardId=standardId}}
-          {{/each}}
-        </div>
-      {{/if}}
-      <div class="card new-cards" {{b "ref: forms"}}></div>
-      <div class="text-xs-center">
-        <button type="button" class="btn btn-link" {{b "text: addButtonText, click: addAction"}}></button>
-      </div>
-    </div>
-  {{/SubCard_EditWrapper}}
+  {{> Subcards_Wrapper_Add (wrapperArgs)}}
 </template>

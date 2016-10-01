@@ -1,6 +1,6 @@
 <template name="ModalWindow">
   <div class="modal fade" data-backdrop="static" data-keyboard="false" {{b "ref: modal"}}>
-    <div class="modal-dialog">
+    <div class="modal-dialog content-cards">
       <div class="card">
         <div class="card-block card-heading modal-window-heading">
           <div class="card-heading-buttons"
@@ -16,7 +16,7 @@
             </button>
           </div>
 
-          <h4 class="card-title" {{b "text: _title"}}></h4>
+          <h4 class="card-title text-xs-center" {{b "text: _title"}}></h4>
 
           <div class="card-heading-buttons"
             {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
@@ -52,9 +52,9 @@
           </div>
         </div>
 
-        <form>
+        <div class="modal-window-content">
           {{> Template.dynamic template=template}}
-        </form>
+        </div>
       </div>
     </div>
   </div>

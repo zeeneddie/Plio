@@ -1,37 +1,42 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 
 
-Slingshot.fileRestrictions('usersAvatars', {
-  allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
-  maxSize: 10 * 1024 * 1024 // 10 MB
+Slingshot.fileRestrictions('discussionFiles', {
+  allowedFileTypes: null,
+  maxSize: Meteor.settings.public.discussionFilesMaxSize
 });
 
-Slingshot.fileRestrictions('standardsFiles', {
+Slingshot.fileRestrictions('userAvatars', {
+  allowedFileTypes: ['image/png', 'image/jpeg', 'image/gif'],
+  maxSize: Meteor.settings.public.userAvatarsMaxSize
+});
+
+Slingshot.fileRestrictions('standardFiles', {
   allowedFileTypes: null,
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });
 
 Slingshot.fileRestrictions('htmlAttachmentPreview', {
   allowedFileTypes: 'text/html',
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });
 
-Slingshot.fileRestrictions('improvementPlansFiles', {
+Slingshot.fileRestrictions('improvementPlanFiles', {
   allowedFileTypes: null,
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });
 
-Slingshot.fileRestrictions('nonConformitiesFiles', {
+Slingshot.fileRestrictions('nonConformityFiles', {
   allowedFileTypes: null,
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });
 
-Slingshot.fileRestrictions('risksFiles', {
+Slingshot.fileRestrictions('riskFiles', {
   allowedFileTypes: null,
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });
 
-Slingshot.fileRestrictions('actionsFiles', {
+Slingshot.fileRestrictions('actionFiles', {
   allowedFileTypes: null,
-  maxSize: 20 * 1024 * 1024 // 20 MB
+  maxSize: Meteor.settings.public.otherFilesMaxSize
 });

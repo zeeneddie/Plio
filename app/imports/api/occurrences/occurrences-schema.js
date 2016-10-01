@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema } from '../schemas.js';
+import { BaseEntitySchema, ViewedBySchema } from '../schemas.js';
 
 const RequiredSchema = new SimpleSchema({
   nonConformityId: {
@@ -19,6 +19,7 @@ const RequiredSchema = new SimpleSchema({
 const OccurrencesSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
+  ViewedBySchema,
   {
     serialNumber: {
       type: Number,

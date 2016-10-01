@@ -1,9 +1,5 @@
 export default [
   {
-    "name": "All Eyes On Me",
-    "file": "/sounds/all-eyes-on-me"
-  },
-  {
     "name": "Arpeggio",
     "file": "/sounds/arpeggio"
   },
@@ -28,10 +24,10 @@ export default [
     "file": "/sounds/job-done"
   },
   {
-    "name": "Office 1",
+    "name": "Office",
     "file": "/sounds/office-1" },
   {
-    "name": "Oringz-W428",
+    "name": "Oringz",
     "file": "/sounds/oringz-w428"
   },
   {

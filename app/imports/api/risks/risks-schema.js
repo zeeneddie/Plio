@@ -1,10 +1,24 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
-import { ProblemsStatuses, TreatmentPlanPriorities, TreatmentPlanDecisions } from '../constants.js';
+import {
+  BaseEntitySchema,
+  BaseProblemsRequiredSchema,
+  BaseProblemsOptionalSchema,
+  ReviewSchema,
+  ImprovementPlanSchema,
+  FileIdsSchema
+} from '../schemas.js';
+import {
+  ProblemsStatuses,
+  RiskEvaluationPriorities,
+  RiskEvaluationDecisions,
+  WorkflowTypes
+} from '../constants.js';
+
 
 const RequiredSchema = new SimpleSchema([
   BaseProblemsRequiredSchema,
+  FileIdsSchema,
   {
     typeId: {
       type: String,
@@ -13,63 +27,78 @@ const RequiredSchema = new SimpleSchema([
   }
 ]);
 
-const riskAnalysisScore = {
-  score: {
-    type: Object,
-    optional: true
-  },
-  'score.rowId': {
-    type: Number
-  },
-  'score.value': {
-    type: Number,
-    min: 1,
-    max: 100
-  },
-  'score.scoredBy': {
+const RiskScoreSchema = new SimpleSchema({
+  _id: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
-  'score.scoredAt': {
+  rowId: {
+    type: Number,
+    label: 'Risk score'
+  },
+  value: {
+    type: Number,
+    min: 1,
+    max: 100
+  },
+  scoredBy: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  scoredAt: {
     type: Date,
+    label: 'Date'
+  }
+});
+
+const RiskScoresSchema = new SimpleSchema({
+  scores: {
+    type: [RiskScoreSchema],
+    defaultValue: [],
     optional: true
   }
-};
+});
 
-const treatmentPlan = {
-  treatmentPlan: {
+const riskEvaluation = {
+  riskEvaluation: {
     type: Object,
+    defaultValue: {},
     optional: true
   },
-  'treatmentPlan.comments': {
+  'riskEvaluation.comments': {
     type: String,
-    max: 140
+    max: 140,
+    optional: true
   },
-  'treatmentPlan.prevLossExp': {
+  'riskEvaluation.prevLossExp': {
     type: String,
-    max: 140
+    max: 140,
+    optional: true
   },
-  'treatmentPlan.priority': {
+  'riskEvaluation.priority': {
     type: String,
-    allowedValues: _.keys(TreatmentPlanPriorities)
+    allowedValues: _.keys(RiskEvaluationPriorities),
+    optional: true
   },
-  'treatmentPlan.decision': {
+  'riskEvaluation.decision': {
     type: String,
-    allowedValues: _.keys(TreatmentPlanDecisions)
+    allowedValues: _.keys(RiskEvaluationDecisions),
+    optional: true
   }
 };
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
+  ReviewSchema,
+  RiskScoresSchema,
   {
     type: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    ...riskAnalysisScore,
-    ...treatmentPlan
+    ...riskEvaluation
   }
 ]);
 
@@ -90,6 +119,10 @@ const RisksSchema = new SimpleSchema([
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1
+    },
+    workflowType: {
+      type: String,
+      allowedValues: _.values(WorkflowTypes)
     }
   }
 ]);
@@ -126,8 +159,12 @@ const RisksUpdateSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
       optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
+      optional: true
     }
   }
 ]);
 
-export { RisksSchema, RisksUpdateSchema, RequiredSchema, OptionalSchema };
+export { RisksSchema, RisksUpdateSchema, RequiredSchema, OptionalSchema, RiskScoreSchema, RiskScoresSchema };

@@ -1,0 +1,25 @@
+<template name="WorkInbox_QAPanel_Edit_Complete">
+  {{#if isType 'VERIFY_ACTION'}}
+    <div class="margin-bottom">
+      <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
+        <i class="fa fa-check margin-right"></i>
+        <span>Verified as effective</span>
+      </button>
+      <button type="button" class="btn btn-danger pull-xs-right" {{b "click: update(false)"}}>
+        <i class="fa fa-times margin-right"></i>
+        Assessed as ineffective
+      </button>
+    </div>
+  {{else}}
+    <div class="margin-bottom text-xs-center">
+      <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
+        <i class="fa fa-check margin-right"></i>
+        <span>Complete</span>
+      </button>
+    </div>
+  {{/if}}
+
+  <div class="form-group">
+    <textarea class="form-control" placeholder="{{getCommentsPlaceholder}}" rows="6" {{b "value: comments"}}></textarea>
+  </div>
+</template>

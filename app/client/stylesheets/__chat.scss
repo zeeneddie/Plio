@@ -1,22 +1,61 @@
-.chat {  
+.chat {
   background: white;
   position: relative;
-  
+
   @include flex(1);
   @include flexbox;
   @include flex-direction(column);
-  
+  height: calc(100% - 55px);
+
   &-heading {
     min-height: 55px;
   }
-  
+
+  &-message-container:last-of-type {
+    .dropdown-menu {
+      bottom: 100%;
+      top: auto;
+    }
+  }
+
+  &-content {
+    &.loading {
+      .chat-item-date {
+        display: none;
+      }
+    }
+  }
+
   &-item {
-    padding: .5rem 1.25rem;
-    
+    padding: .3rem 1.25rem;
+
+    &.first {
+      .file-item {
+        margin-top: 6px;
+      }
+    }
+
+    &.selected {
+      background-color: #f5f5f5;
+    }
+
+    &.selected, &:hover {
+      .chat-item-dropdown .btn, .chat-item-gutter {
+        visibility: visible !important;
+      }
+    }
+    &-gutter {
+      position: absolute;
+      visibility: hidden;
+      width: 40px;
+      top: 0;
+      text-align: center;
+      padding: 2px 0;
+    }
     &-date {
       text-align: center;
       position: relative;
-      
+
       &:after {
         content: '';
         position: absolute;
@@ -27,7 +66,7 @@
         background: #ddd;
         z-index: 1;
       }
-      
+
       span {
         display: inline-block;
         padding: 0 10px;
@@ -42,7 +81,7 @@
       border-top: 0;
       padding-top: 1rem;
     }
-    &-avatar {
+    &-avatar, &-avatar-in-popover {
       $avatar-size: 40px;
       border-radius: 50%;
       width: $avatar-size;
@@ -50,9 +89,20 @@
       float: left;
       margin-right: 15px;
       margin-top: 4px;
+      position: relative;
+      z-index: 1;
+    }
+    &-avatar-in-popover {
+      $popover-height: 100px;
+      $popover-width: 100px;
+      float: none;
+      margin: 0;
+      height: $popover-height;
+      width: $popover-width;
     }
     &-card {
       @include clearfix;
+      position: relative;
     }
     &-author {
       font-size: 15px;
@@ -62,31 +112,44 @@
     &-time {
       font-size: 13px;
       color: #999;
-      float: right;
     }
     &-channel {
       color: #777;
       font-size: 13px;
     }
-    &-text {
-      margin: 0;
+    &-content {
+      margin: 0 0 0 4rem;
       font-size: 16px;
-  
+      word-break: break-word;
+
+      .file-item-read {
+        max-width: calc(100% - 40px);
+        margin-bottom: 0;
+      }
+
       .chat-item-start & {
         color: #777;
-        
+
       }
     }
     &-dropdown {
       float: right;
       clear: right;
-      
+
       .btn {
         padding: 0 5px;
         outline: none !important;
+        visibility: hidden;
         color: #aaa;
         font-size: 18px;
-        
+        height: 25px;
+        line-height: 25px;
+        transition: none;
+
+        &[aria-expanded="true"] {
+          display: block !important;
+        }
+
         &:hover {
           color: $blue-color;
         }
@@ -94,7 +157,7 @@
       &.open .btn {
         color: $blue-color;
       }
-      
+
       .dropdown-menu {
         margin: 0;
       }
@@ -108,23 +171,25 @@
       }
       .form-control {
         font-size: 16px;
-        //line-height: 22px;
-        background: transparent;  
-        //height: 38px;      
+        background: transparent;
+        height: 36px;
       }
       .btn {
         line-height: 22px;
+        height: 36px;
         font-size: 22px;
         margin: 0;
       }
     }
   }
-  
+
   &-content {
     @include scroll;
     @include hide-scrollbar;
+    margin-bottom: 70px;
+    height: 100%;
   }
-  
+
   &-form {
     padding: 0 1.25rem 1.25rem ;
     position: absolute;
@@ -133,30 +198,35 @@
     bottom: 0;
     background: white;
     z-index: 2;
-  
+
     .form-group {
       margin: 0;
       position: relative;
       padding-left: 55px;
     }
-    
+
     .input-group {
       position: relative;
       z-index: 2;
-    }    
-  
+    }
+
     .form-control {
+      height: 36px;
       font-size: 16px;
-      //padding: 24px 14px 8px;
-      //padding-top: 1.75rem;
       background: transparent;
-      
+
+    }
+    .btn-file {
+      .btn {
+        border-right: none;
+      }
     }
     .btn {
-      //padding: 16px 12px;
+      height: 36px;
       line-height: 22px;
       font-size: 22px;
       margin-bottom: 0;
+      text-overflow: clip;
     }
-  } 
+  }
 }

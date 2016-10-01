@@ -12,6 +12,12 @@
   }
 }
 
+.form-group {
+  &.margin-top {
+    margin-top: 1rem !important;
+  }
+}
+
 
 /* Labels */
 
@@ -111,6 +117,14 @@
   width: 100%;
   color: #333;
   border-radius: .25rem;
+}
+
+select {
+  &.disabled, &:disabled {
+    background-color: #eceeef;
+    opacity: 1;
+    cursor: not-allowed;
+  }
 }
 
 /*
@@ -226,7 +240,7 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
-  
+
   &.focused > .clear-field {
     visibility: visible;
   }
@@ -260,6 +274,8 @@ input:focus ~ .clear-field {
 
   .dropdown-menu {
     left: 0;
+    max-height: 289px;
+    overflow-y: scroll;
   }
 }
 
@@ -271,6 +287,7 @@ input:focus ~ .clear-field {
 
   table {
     margin-bottom: 10px;
+    border-bottom: none !important;
   }
 
   th, td {
@@ -296,20 +313,25 @@ input:focus ~ .clear-field {
       span {
         -webkit-transform: rotate(-90deg);
         display: block;
-        //position: absolute;
-        //top: 50%;
-        //margin-top: -30px;
-
       }
     }
 
     &.impact-label {
       background: #eee;
+
+      &:first-of-type {
+        min-width: 123px;
+      }
     }
 
     &.impact {
       cursor: pointer;
       position: relative;
+
+      &.disabled {
+        opacity: .65;
+        pointer-events: none;
+      }
 
       &:after {
         content: '';
@@ -335,11 +357,19 @@ input:focus ~ .clear-field {
     &.impact-medium { background: $amber-color; }
     &.impact-high { background: $red-color; }
     &.impact-vhigh { background: $red-color; }
+
+    @media (max-width: 543px) {
+      padding: 0;
+    }
   }
 
   td {
     color: white;
     font-weight: bold;
+  }
+
+  @media (max-width: 543px) {
+    padding: 0;
   }
 
 }
@@ -418,9 +448,63 @@ fieldset[disabled] {
   opacity: 0.5;
 }
 
-.file-item {
+.file-item, .file-item-read {
   margin-right: 4px;
-  max-width: 100%;
+  margin-bottom: 8px;
+  width: 100%;
+  display: inline-block;
+  position: relative;
+  
+  // Safari progress bar invisible border fix
+  padding-left: 0.0158rem;
+  .file-item-read {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .btn-icon {
+    margin-bottom: 0;
+  }
+  .btn.file-label {
+    position: relative;
+    overflow: hidden;
+    transition: none;
+    margin: 0;
+
+    & > span {
+      opacity: 0.4
+    }
+
+    &.uploaded {
+      & > span {
+        opacity: 1;
+      }
+    }
+
+    &.failed:not(.uploaded) {
+      border-color: #d49499;
+
+      .uploading-file {
+        background-color: #ff0000;
+        opacity: 0.2;
+      }
+    }
+
+    .uploading-file {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background-color: #000;
+      opacity: 0.2;
+      transition: all 0.5s ease;
+
+      &.uploaded {
+        visibility: hidden;
+      }
+    }
+  }
 
   .button-wrapper {
     position: relative;
@@ -438,18 +522,9 @@ fieldset[disabled] {
       margin-right: 0;
       border-right: none;
       width: 100%;
+      min-height: 34px;
       text-overflow: ellipsis;
       overflow: hidden;
-    }
-
-    .uploading-file {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-      opacity: 0.7;
     }
   }
 }
@@ -499,4 +574,17 @@ input[disabled], textarea[disabled] {
 
 input[type="number"] {
   min-width: 60px;
+}
+
+.stripes {
+    background-size: 30px 30px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+                      transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+                      transparent 75%, transparent);
+
+    animation: animate-stripes 3s linear infinite;
+}
+
+@keyframes animate-stripes {
+    0% {background-position: 0 0;} 100% {background-position: 60px 0;}
 }

@@ -1,14 +1,16 @@
-<template name="RisksCard">
-  <div class="content-cards-inner flex scroll">
-    {{#if hasRisks}}
-      {{#Card_Read
-        cardTitle="Risk"
-        document=risk
-        onRestore=onRestoreCb
-        onDelete=onDeleteCb
-        onOpenEditModal=onOpenEditModalCb}}
+<template name="Risks_Card_Read">
+  <div class="content-cards-inner flex scroll" {{b "class: { content: !risk }"}}>
+    {{#if risks.length}}
+      {{#with risk}}
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Risk"
+          doc=this
+          isReady=isReady
+          onRestore=onRestoreCb
+          onDelete=onDeleteCb
+          onOpenEditModal=onOpenEditModalCb}}
 
-        {{#with risk}}
           <div class="list-group">
 
             <div class="list-group-item">
@@ -20,10 +22,12 @@
               </h4>
             </div>
 
-            <div class="list-group-item" {{b "if: this.description"}}>
-              <p class="list-group-item-text">Description</p>
-              <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-            </div>
+            {{#if this.description}}
+              <div class="list-group-item">
+                <p class="list-group-item-text">Description</p>
+                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
+              </div>
+            {{/if}}
 
             {{> Fields_Standards_Read standardsIds=this.standardsIds}}
 
@@ -31,7 +35,7 @@
               <div class="col-sm-6">
                 <div class="list-group-item">
                   <p class="list-group-item-text">Identified by</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.identifiedBy)"}}></h4>
+                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.identifiedBy)"}}></h4>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -43,23 +47,27 @@
             </div>
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Magnitude</p>
-                  <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+              {{#if this.magnitude}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Magnitude</p>
+                    <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Type</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderType(this.typeId)"}}></h4>
+              {{/if}}
+              {{#with type}}
+                <div class="col-sm-6">
+                  <div class="list-group-item">
+                    <p class="list-group-item-text">Type</p>
+                    <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
+                  </div>
                 </div>
-              </div>
+              {{/with}}
             </div>
 
             <div class="row">
               <div class="col-sm-12">
-                {{#with departments}}
+                {{#with departmentsIds}}
                   {{> Departments_Read departmentsIds=this}}
                 {{/with}}
               </div>
@@ -75,9 +83,13 @@
             {{> Subcards_Notify_Read users=this}}
           {{/with}}
 
-          {{> Subcards_RiskAnalysis_Read score=this.score}}
+          {{> Subcards_RiskScoring_Read scores=this.scores}}
 
-          {{> Subcards_TreatmentPlan_Read treatmentPlan=this.treatmentPlan}}
+          {{> Subcards_RiskEvaluation_Read riskEvaluation=this.riskEvaluation}}
+
+          {{> Subcards_ImprovementPlan_Read
+              improvementPlan=this.improvementPlan
+              label="Treatment plan"}}
 
           {{> Subcards_Actions_Read
               type=ActionTypes.CORRECTIVE_ACTION
@@ -87,37 +99,20 @@
               type=ActionTypes.RISK_CONTROL
               documentId=this._id}}
 
-          {{> Subcards_ImprovementPlan_Read documentId=this._id}}
-
           {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{#with files}}
-            <div class="card-block card-subheading">
-              <h4 class="card-title">Other files</h4>
-            </div>
-            <div class="list-group-item">
-              {{#each this}}
-                <a class="btn btn-secondary btn-inline" {{b "href: this.url || '#'"}}>
-                  <i class="fa fa-lg fa-file-{{extension}}-o margin-right">
-                  </i>
-                  <span>{{this.name}}</span>
-                </a>
-              {{/each}}
-            </div>
-          {{/with}}
-        {{/with}}
-      {{/Card_Read}}
+          {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+        {{/Card_Read}}
+      {{else}}
+        {{> PreloaderPage}}
+      {{/with}}
     {{else}}
       <div class="card">
         <div class="card-block card-heading">
-          {{#if isActiveRiskFilter 'deleted'}}
+          {{#if isActiveRiskFilter 4}}
             <h5>There are no deleted risks yet.</h5>
           {{else}}
-            {{#if isActiveRiskFilter 'department'}}
-              <h5>There are no risks with departments yet.</h5>
-            {{else}}
-              <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
-            {{/if}}
+            <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
           {{/if}}
         </div>
       </div>

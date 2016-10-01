@@ -1,20 +1,28 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
 
 Template.Actions_Owner.viewmodel({
-  mixin: ['search', 'user', 'members'],
-  ownerId: Meteor.userId(),
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:ownerId } = viewmodel.getData();
+  label: 'Owner',
+  placeholder: 'Owner',
+  ownerId() { return Meteor.userId() },
+  selectArgs() {
+    const { ownerId: value, placeholder } = this.data();
+    
+    return {
+      value,
+      placeholder,
+      onUpdate: (viewmodel) => {
+        const { selected: ownerId } = viewmodel.getData();
 
-    this.ownerId(ownerId);
+        this.ownerId(ownerId);
 
-    this.parent().update && this.parent().update({ ownerId });
+        invoke(this.parent(), 'update', { ownerId });
+      }
+    };
   },
   getData() {
-    return { ownerId: this.ownerId() };
+    const { ownerId = Meteor.userId() } = this.data();
+    return { ownerId };
   }
 });

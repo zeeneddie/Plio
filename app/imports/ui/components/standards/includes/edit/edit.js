@@ -1,9 +1,23 @@
 import { Template } from 'meteor/templating';
 
-import { update, remove } from '/imports/api/standards/methods.js';
+import { update, remove, updateViewedBy } from '/imports/api/standards/methods.js';
+import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditStandard.viewmodel({
   mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck'],
+  onRendered() {
+    const doc = this._getStandardByQuery({ _id: this.standardId() });
+    const userId = Meteor.userId();
+
+    if (!isViewed(doc, userId)) {
+      Tracker.nonreactive(() => this.updateViewedBy());
+    }
+  },
+  updateViewedBy() {
+    const _id = this._id();
+
+    updateViewedBy.call({ _id });
+  },
   standard() {
     const _id = this._id && this._id();
     return this._getStandardByQuery({ _id });
@@ -43,7 +57,10 @@ Template.EditStandard.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
+          if (err) {
+            swal.close();
+            return;
+          };
 
           swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
 

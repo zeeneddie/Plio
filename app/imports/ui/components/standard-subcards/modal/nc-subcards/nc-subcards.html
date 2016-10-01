@@ -1,0 +1,33 @@
+<template name="NC_Subcards">
+  {{! NON-CONFORMITIES SUBCARDS}}
+  {{#with NC}}
+    {{> Subcards_Notify_Edit
+        doc=this
+        documentType="non-conformity"
+        onUpdate=onUpdateNotifyUserCb}}
+
+    {{> Subcards_Occurrences_Edit
+        _id=this._id
+        occurrencesIds=this.occurrences}} {{! can`t find occurences. Where are they?}}
+
+    {{> Subcards_Actions_Edit
+        type="CA"
+        documentId=this._id
+        documentType="non-conformity"}}
+
+    {{> Subcards_ImprovementPlan_Edit
+        improvementPlan=this.improvementPlan}}
+
+    {{> Subcards_LessonsLearned_Edit
+        documentId=this._id
+        documentType="non-conformity"
+        linkedTo=this.title
+        linkedToId=this.sequentialId}}
+
+    {{> Subcards_OtherFiles_Edit
+        _id=this._id
+        fileIds=this.fileIds
+        uploaderMetaContext=uploaderMetaContext
+        slingshotDirective=slingshotDirective}}
+  {{/with}}
+</template>

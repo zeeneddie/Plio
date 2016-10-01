@@ -1,8 +1,25 @@
 <template name="StandardsPage">
-  <div class="content-list scroll" {{b "if: !width || width > 768"}}>
-    {{> StandardsList}}
-  </div>
-  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
-    {{> StandardsCard}}
-  </div>
+  {{#Page classNames=classNames}}
+    {{#if isDiscussionOpened}}
+      {{> Standards_Card_Read
+          _id=standardId
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{else}}
+      {{> StandardsList}}
+    {{/if}}
+  {{else}}
+    {{#if isDiscussionOpened}}
+      {{> Discussion_Card
+          discussionId=discussion._id
+          linkedTo=standardId
+          isReady=isReady
+          standard=standard}}
+    {{else}}
+      {{> Standards_Card_Read
+          _id=standardId
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{/if}}
+  {{/Page}}
 </template>

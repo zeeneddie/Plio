@@ -3,11 +3,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import {
   BaseEntitySchema,
   OrganizationIdSchema,
-  FileSchema,
+  FileIdsSchema,
   getNotifySchema,
   ViewedBySchema
 } from '../schemas.js';
-import { ActionTypes, ActionPlanOptions, ProblemTypes } from '../constants.js';
+import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes } from '../constants.js';
 import { compareDates } from '../helpers.js';
 
 
@@ -69,6 +69,7 @@ const ActionSchema = new SimpleSchema([
   BaseEntitySchema,
   RequiredSchema,
   ViewedBySchema,
+  FileIdsSchema,
   getNotifySchema('ownerId'),
   {
     serialNumber: {
@@ -81,9 +82,8 @@ const ActionSchema = new SimpleSchema([
     },
     status: {
       type: Number,
-      min: 0,
-      max: 9,
-      defaultValue: 0
+      allowedValues: _.keys(ActionStatuses).map(key => parseInt(key, 10)),
+      defaultValue: 1
     },
     isCompleted: {
       type: Boolean,
@@ -104,6 +104,10 @@ const ActionSchema = new SimpleSchema([
       optional: true
     },
     isVerified: {
+      type: Boolean,
+      defaultValue: false
+    },
+    isVerifiedAsEffective: {
       type: Boolean,
       defaultValue: false
     },
@@ -145,10 +149,6 @@ const ActionSchema = new SimpleSchema([
     },
     notes: {
       type: String,
-      optional: true
-    },
-    files: {
-      type: [FileSchema],
       optional: true
     }
   }

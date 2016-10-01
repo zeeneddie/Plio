@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
+import { OrgSubs, UserSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.RisksLayout.viewmodel({
+Template.Risks_Layout.viewmodel({
   mixin: ['organization', 'risk'],
   _subHandlers: [],
   isReady: false,
@@ -11,20 +12,18 @@ Template.RisksLayout.viewmodel({
       const { _id, users } = !!org && org;
       const userIds = _.pluck(users, 'userId');
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards', _id),
-        this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('riskTypes', _id),
-        this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('nonConformities', _id)
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
+        UserSubs.subscribe('organizationUsers', userIds),
+        DocumentsListSubs.subscribe('standardsList', _id),
+        OrgSettingsDocSubs.subscribe('departments', _id),
+        OrgSettingsDocSubs.subscribe('riskTypes', _id),
+        DocumentsListSubs.subscribe('nonConformitiesList', _id)
       ];
 
-      if (this.isActiveRiskFilter('deleted')) {
-        _subHandlers.push(this.templateInstance.subscribe('risks', _id, true));
+      if (this.isActiveRiskFilter(4)) {
+        _subHandlers.push(DocumentsListSubs.subscribe('risksList', _id, true));
       } else {
-        _subHandlers.push(this.templateInstance.subscribe('risks', _id));
+        _subHandlers.push(DocumentsListSubs.subscribe('risksList', _id));
       }
 
       this._subHandlers(_subHandlers);

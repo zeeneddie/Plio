@@ -1,25 +1,26 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-Template.ESOwner.viewmodel({
-  mixin: ['search', 'user', 'members'],
-  owner: Meteor.userId(),
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:owner } = viewmodel.getData();
+Template.Standards_Owner_Edit.viewmodel({
+  label: 'Owner',
+  owner() { return Meteor.userId() },
+  selectArgs() {
+    const { owner: value } = this.data();
 
-    if (owner === this.templateInstance.data.owner) return;
+    return {
+      value,
+      onUpdate: (viewmodel) => {
+        const { selected: owner } = viewmodel.getData();
+        this.owner(owner);
 
-    this.owner(owner);
+        if (!this._id) return;
 
-    if (!this._id) return;
-
-    return this.parent().update({ owner });
+        return this.parent().update({ owner });
+      }
+    };
   },
   getData() {
-    const { owner } = this.data();
+    const { owner = Meteor.userId() } = this.data();
     return { owner };
   }
 });

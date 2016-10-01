@@ -2,11 +2,13 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
 import { Roles } from 'meteor/alanning:roles';
+
 import { Organizations } from './organizations.js';
 import { OrgMemberRoles, UserMembership } from '../constants.js';
 
+import OrgNotificationsSender from './org-notifications-sender.js';
 import Utils from '/imports/core/utils';
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/core/NotificationSender';
 
 
 class InvitationSender {
@@ -72,6 +74,7 @@ class InvitationSender {
           invitedAt: new Date(),
           invitedBy: Meteor.userId(),
           invitationExpirationDate,
+          invitationOrgId: this._organizationId,
           'emails.0.verified': true,
           // unset firstName, lastName and initials
           'profile.firstName': '',
@@ -92,11 +95,11 @@ class InvitationSender {
     }
   }
 
-  _sendExistingUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
+  _sendExistingUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
     let sender = Meteor.user();
 
     //send notification
-    let notificationData = Object.assign({
+    let templateData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} added you to the ${this._organization.name} management system.`,
       avatar: {
         alt: `${sender.profile.firstName} ${sender.profile.lastName}`,
@@ -110,16 +113,16 @@ class InvitationSender {
       }
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
-      .sendEmail(userIdToInvite);
+    new NotificationSender({ recipients: userIdToInvite, emailSubject, templateData, templateName: 'personalEmail' })
+      .sendEmail();
   }
 
-  _sendNewUserInvite(userIdToInvite, notificationSubject, basicNotificationData) {
+  _sendNewUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
     let sender = Meteor.user();
     let invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
 
     // send invitation
-    let notificationData = Object.assign({
+    let templateData = Object.assign({
       title: `${sender.profile.firstName} ${sender.profile.lastName} invited you to join the ${this._organization.name} compliance management system.`,
       secondaryText: this._welcomeMessage,
       avatar: {
@@ -134,8 +137,8 @@ class InvitationSender {
       footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
 
-    new NotificationSender(notificationSubject, 'personalEmail', notificationData)
-      .sendEmail(userIdToInvite);
+    new NotificationSender({ recipients: userIdToInvite, emailSubject, templateName: 'personalEmail', templateData })
+      .sendEmail();
   }
 
   _inviteUser(userIdToInvite, isExisting) {
@@ -195,8 +198,10 @@ class InvitationSender {
     if (!userIdToInvite) {
       userIdToInvite = this._createNewUser();
       this._inviteUser(userIdToInvite, false);
+      return 1;
     } else {
       this._inviteUser(userIdToInvite, true);
+      return 2;
     }
   }
 
@@ -209,7 +214,14 @@ class InvitationSender {
 
 export default InvitationService = {
   inviteUserByEmail(organizationId, userEmail, welcomeMessage) {
-    new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
+    const ret = new InvitationSender(organizationId, userEmail, welcomeMessage).invite();
+
+    const inviterId = Meteor.userId();
+    Meteor.defer(() =>
+      new OrgNotificationsSender(organizationId).userInvited(userEmail, inviterId)
+    );
+
+    return ret;
   },
 
   acceptInvitation(invitationId, userData) {
@@ -228,9 +240,14 @@ export default InvitationService = {
         $set: {profile: updateUserProfile},
         $unset: {
           invitationId: '',
-          invitationExpirationDate: ''
+          invitationExpirationDate: '',
+          invitationOrgId: ''
         }
       });
+
+      Meteor.defer(() =>
+        new OrgNotificationsSender(invitedUser.invitationOrgId).userAcceptedInvite(invitedUser)
+      );
     } else {
       throw new Meteor.Error(404, 'Invitation does not exist');
     }

@@ -1,54 +1,60 @@
-import { Risks } from './risks.js';
-import { generateSerialNumber } from '/imports/core/utils.js';
+import { Meteor } from 'meteor/meteor';
 
-export default {
+import { Risks } from './risks.js';
+import { ProblemTypes } from '../constants.js';
+import BaseEntityService from '../base-entity-service.js';
+import ProblemsService from '../problems/problems-service.js';
+
+if (Meteor.isServer) {
+  import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
+}
+
+
+export default _.extend({}, ProblemsService, {
   collection: Risks,
 
-  insert({ organizationId, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+  _service: new BaseEntityService(Risks),
 
-    const sequentialId = `RK${serialNumber}`;
+  _abbr: 'RK',
 
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, ...args });
-  },
+  _docType: ProblemTypes.RISK,
 
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
-    }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
-    }
-
-    return this.collection.update(query, options);
-  },
-
-  updateViewedBy({ _id, userId }) {
+  'scores.insert'({ _id, ...args }) {
+    const id = Random.id();
     const query = { _id };
     const options = {
       $addToSet: {
-        viewedBy: userId
+        scores: { _id: id, ...args }
+      }
+    };
+
+    this.collection.update(query, options);
+
+    return id;
+  },
+
+  'scores.remove'({ _id, score }) {
+    const query = { _id };
+    const options = {
+      '$pull': {
+        'scores': score
       }
     };
 
     return this.collection.update(query, options);
   },
 
-  remove({ _id, deletedBy, isDeleted }) {
-    const query = { _id };
-
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
-
-      return this.collection.update(query, options);
+  _getDoc(_id) {
+    const risk = this.collection.findOne({ _id });
+    if (!risk) {
+      throw new Meteor.Error(400, 'Risk does not exist');
     }
+    return risk;
+  },
+
+  _refreshStatus(_id) {
+    Meteor.isServer && Meteor.defer(() => {
+      new RiskWorkflow(_id).refreshStatus();
+    });
   }
-};
+});

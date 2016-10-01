@@ -1,86 +1,74 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
+import get from 'lodash.get';
 
 import { insert } from '/imports/api/standards/methods.js';
 import { addedToNotifyList } from '/imports/api/standards/methods.js';
 import Utils from '/imports/core/utils.js';
+import { setModalError, inspire } from '/imports/api/helpers.js';
 
 Template.CreateStandard.viewmodel({
-  share: ['standard'],
-  mixin: ['modal', 'standard', 'numberRegex', 'organization', 'collapsing', 'router'],
+  mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData'],
   save() {
     const data = this.getChildrenData();
 
     for (let key in data) {
       if (!data[key]) {
         let errorMessage;
-        if (key === 'typeId') {
-          errorMessage = `The new standard cannot be created without a type. You can create a new type in Org settings`;
+        if (key === 'title') {
+          errorMessage = `The new standard cannot be created without a title. Please enter a title for your standard`;
+          setModalError(errorMessage);
+          return;
         } else if (key === 'sectionId') {
           errorMessage = `The new standard cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          setModalError(errorMessage);
+          return;
+        } else if (key === 'typeId') {
+          errorMessage = `The new standard cannot be created without a type. You can create a new standard type in Org settings`;
+          setModalError(errorMessage);
+          return;
+        } else {
+          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+          setModalError(errorMessage);
+          return;
         }
-        this.modal().setError(errorMessage);
-        return;
       }
     }
 
     this.insert(data);
   },
-  getChildrenData() {
-    const data = {};
-
-    this.children(vm => vm.getData && vm.getData())
-        .forEach(vm => _.extend(data, vm.getData()));
-
-    return data;
-  },
   insert({ title, sectionId, typeId, owner, issueNumber, status }) {
     const number = this.parseNumber(title);
     const nestingLevel = (number && number[0].split('.').length) || 1;
-    const organizationId = this.organizationId();
 
     if (nestingLevel > 4) {
-      this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
+      setModalError('Maximum nesting is 4 levels. Please change your title.');
       return;
     }
 
     const args = {
-      organizationId,
       title,
       sectionId,
       typeId,
       owner,
       issueNumber,
       status,
-      nestingLevel
+      nestingLevel,
+      ...inspire(['organizationId'], this)
     };
 
-    this.modal().callMethod(insert, args, (err, _id) => {
-      if (err) {
-        return;
-      }
+    const cb = (_id, open) => {
+      this.isActiveStandardFilter('deleted')
+        ? this.goToStandard(_id, false)
+        : this.goToStandard(_id);
 
-      addedToNotifyList.call({
-        standardId: _id,
-        userId: args.owner
-      }, (err, res) => {
-        if (err) {
-          Utils.showError('Failed to send email to standard\'s owner');
-        }
-      });
+      open({
+        _id,
+        _title: 'Compliance standard',
+        template: 'EditStandard'
+      })
+    };
 
-      this.modal().close();
-
-      Meteor.setTimeout(() => {
-        this.isActiveStandardFilter('deleted') ? this.goToStandard(_id, false) : this.goToStandard(_id);
-
-        this.expandCollapsed(_id);
-
-        this.modal().open({
-          _id: _id,
-          _title: 'Compliance standard',
-          template: 'EditStandard'
-        });
-      }, 400);
-    });
+    return invoke(this.card, 'insert', insert, args, cb);
   }
 });

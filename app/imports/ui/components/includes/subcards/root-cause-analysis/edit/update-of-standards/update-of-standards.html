@@ -1,29 +1,45 @@
-<template name="NC_UpdateOfStandards_Edit">
+<template name="RCA_UOS_Edit">
   <div class="card-block">
-    {{#FormField label="Update of standard(s)"}}{{/FormField}}
+    {{#with updateOfStandards}}
+      {{#FormField label=label}}{{/FormField}}
 
-    {{> NC_RCA_Date_Edit
-        startDate=defaultTargetDate
-        date=targetDate
-        key="updateOfStandards.targetDate"}}
+      {{> RCA_TargetDate_Edit
+          startDate=defaultTargetDate
+          date=this.targetDate
+          onUpdate=methods.setDate
+          disabled=this.status}}
 
-    {{> NC_RCA_Status_Edit
-      status=status
-      executor=executor
-      key="updateOfStandards.status"}}
+      {{#unless this.status}}
+        {{> RCA_ToBeCompletedBy_Edit
+            assignee=this.executor
+            comments=this.completionComments
+            isButtonVisible=true
+            placeholder="Who will do it?"
+            label="Who will do it?"
+            onUpdate=methods.setExecutor
+            onComplete=methods.complete}}
+      {{else}}
+        {{> RCA_TargetDate_Edit
+            date=this.completedAt
+            placeholder="Completed date"
+            label="Completed date"
+            disabled=areCompletionFieldsDisabled
+            onUpdate=methods.setCompletedDate}}
 
-    {{#if updateOfStandards.status}}
-      {{> NC_RCA_Date_Edit
-          date=completedAt
-          key="updateOfStandards.completedAt"
-          placeholder="Completed date"
-          label="Completed date"}}
+        {{> RCA_ToBeCompletedBy_Edit
+            assignee=this.completedBy
+            isButtonVisible=false
+            placeholder="Completed by"
+            label="Completed by"
+            disabled=areCompletionFieldsDisabled
+            onUpdate=methods.setCompletedBy
+            onUndo=methods.undo}}
 
-      {{> NC_RCA_By_Edit
-        by=completedBy
-        key="updateOfStandards.completedBy"
-        placeholder="Completed by"
-        label="Completed by"}}
-    {{/if}}
+        {{> RCA_Comments_Edit
+            comments=this.completionComments
+            disabled=areCompletionFieldsDisabled
+            onUpdate=methods.setComments}}
+      {{/unless}}
+    {{/with}}
   </div>
 </template>

@@ -1,6 +1,5 @@
 import { UserSchema } from '../../api/users/user-schema.js';
 
-
 Meteor.users.attachSchema(UserSchema);
 
 Meteor.users.helpers({
@@ -72,5 +71,8 @@ Meteor.users.helpers({
   },
   hasAcceptedInvite() {
     return !this.invitationId && !this.invitationExpirationDate;
+  },
+  areNotificationsEnabled() {
+    return this.preferences && this.preferences.areNotificationsEnabled;
   }
 });

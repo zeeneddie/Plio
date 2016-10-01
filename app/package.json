@@ -4,14 +4,23 @@
   "scripts": {
     "start": "meteor run --settings settings-local.json",
     "debug": "meteor debug --settings settings-local.json",
-    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-local.json"
+    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-production.json"
   },
   "dependencies": {
     "aws-sdk": "^2.4.3",
+    "bcrypt": "^0.8.7",
+    "clipboard": "^1.5.12",
+    "deep-diff": "^0.3.4",
     "fibers": "^1.0.13",
     "handlebars": "^4.0.5",
+    "lodash": "^4.15.0",
+    "lodash.curry": "^4.1.1",
+    "lodash.get": "^4.4.2",
+    "lodash.invoke": "^4.5.1",
+    "lodash.property": "^4.4.2",
     "mammoth": "^1.0.3",
     "meteor-node-stubs": "^0.2.3",
+    "moment-timezone": "^0.5.5",
     "path": "^0.12.7",
     "pluralize": "^2.0.0",
     "quill": "^0.20.1"

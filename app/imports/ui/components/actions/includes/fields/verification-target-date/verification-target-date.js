@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 Template.Actions_VerificationTargetDate.viewmodel({
   verificationTargetDate: '',
-  defaultDate: false,
+  defaultDate: true,
   placeholder: 'Verification - target date',
   onUpdateCb() {
     return this.update.bind(this);
@@ -17,7 +17,7 @@ Template.Actions_VerificationTargetDate.viewmodel({
 
     this.verificationTargetDate(date);
 
-    this.parent().update && this.parent().update({ verificationTargetDate: date });
+    this.onUpdate && this.onUpdate({ targetDate: date });
   },
   getData() {
     return { verificationTargetDate: this.verificationTargetDate() };

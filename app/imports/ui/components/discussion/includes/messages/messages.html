@@ -1,0 +1,32 @@
+<template name="Discussion_Messages">
+	{{#with discussion}}
+		<div class="chat-content scroll" {{b "ref: chat, resize: triggerLoadMore, class: { loading: !isReady }"}}>
+			<audio id="message-sound">
+        <source src="/sounds/new-message.mp3" type="audio/mpeg" />
+      </audio>
+
+			<div class="chat-messages">
+				{{#if this.isStarted}}
+					<div class="chat-item chat-item-start">
+						<p class="chat-item-text">
+							This discussion was started by <strong>{{getStartedByText}}</strong> on <strong>{{getStartedAtText}}</strong>
+						</p>
+					</div>
+				{{/if}}
+				<div class="infinite-load-older text-xs-center">
+					{{#unless isReady}}
+						{{> Preloader size=1}}
+					{{/unless}}
+				</div>
+
+				{{> Discussion_Messages_List messages=messages}}
+
+				<div class="infinite-load-newer text-xs-center">
+					{{#unless isReady}}
+						{{> Preloader size=1}}
+					{{/unless}}
+				</div>
+			</div>
+		</div>
+	{{/with}}
+</template>

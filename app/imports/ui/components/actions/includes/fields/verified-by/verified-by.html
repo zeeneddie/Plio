@@ -1,18 +1,14 @@
 <template name="Actions_VerifiedBy">
   {{#FormField label="Verified by"}}
-    <div class="form-group-flex">
-      {{> SelectItem
-          items=_members
-          selected=verifiedBy
-          placeholder=placeholder
-          selectFirstIfNoSelected=selectFirstIfNoSelected
-          onUpdate=onUpdateCb}}
-      {{#if canBeUndone}}
-        <button type="button" class="btn btn-link margin-left" {{b "click: onUndo"}}>
-          Undo
-        </button>
-      {{/if}}
-    </div>
+    {{#Completion_Edit
+      isButtonVisible=false
+      canButtonBeShown=canBeUndone
+      onUndo=undo}}
+
+      {{> Select_Member (selectArgs)}}
+
+    {{/Completion_Edit}}
+
     {{#if canBeUndone}}
       <p class="text-muted">
         Verified {{passedFromVerified}}, {{leftToUndo}} left to undo

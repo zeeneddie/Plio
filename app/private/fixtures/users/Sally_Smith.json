@@ -15,6 +15,10 @@
       "verified": true
     }
   ],
+  "preferences": {
+    "areNotificationsEnabled": true,
+    "notificationSound": "/sounds/graceful"
+  },
   "profile": {
     "firstName": "Sally",
     "lastName": "Smith",

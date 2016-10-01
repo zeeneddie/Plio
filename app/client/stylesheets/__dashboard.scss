@@ -1,14 +1,27 @@
+.dashboard-header {
+  max-height: 80px;
+
+  & > .nav.pull-xs-left {
+    max-width: 60%;
+    white-space: nowrap;
+  }
+
+  .org-name {
+    font-size: 26px;
+  }
+}
+
 .dashboard-items {
   @include flexbox;
   @include flex-wrap(wrap);
   padding-top: 30px;
   margin: 0 -15px;
-  
+
   @media (max-width:767px) {
     padding-top: 0;
     margin: 0;
   }
-  
+
   @media (min-width:768px) and (max-width:1200px) {
     padding-left: 30px;
     padding-right: 30px;
@@ -21,15 +34,19 @@
     @media (max-width:767px) {
       width: 100%;
       padding: 0;
-    }  
-    
+    }
+
     @media (min-width:768px) and (max-width:991px) {
       width: 33.3333%;
-    }  
-    
+    }
+
     @media (min-width:992px) {
       width: 20%;
-    } 
+    }
+  }
+
+  .text-muted {
+    color: #777;
   }
 
 }
@@ -60,17 +77,17 @@
     font-size: 42px;
     margin: 10px auto 10px;
     color: $light-blue-color;
-    
+
     @media (max-width:767px) {
       float: left;
       margin: 0 15px 0 0;
     }
-	}   
-	
+	}
+
 	.card-block {
 		@include clearfix;
 	}
-	 
+
 	.card-title {
 		margin-top: 0;
 		padding: 0;
@@ -79,9 +96,9 @@
 		font-size: 18px;
 		text-align: center;
 		color: #333;
-		
+
 		@media (max-width:767px) {
-  	  text-align: left;	
+  	  text-align: left;
     }
 	}
 
@@ -93,115 +110,119 @@
 		text-overflow: ellipsis;
 		color: #777;
 	}
-	
+
 	.card-footer {
 		background: transparent;
 		border-color: #ddd;
 		text-align: center;
 		padding: 1rem;
     min-height: 50px;
-		
+
 		@media (max-width:767px) {
-  	  text-align: left;	
+  	  text-align: left;
   	  border: 0;
-  	  padding: 0;
+  	  padding: 10px 0 0 0;
     }
-    
+
     @media (min-width: 768px) {
-      margin: 1.5rem -1.25rem -1rem;
+      margin: 1.5rem -1.25rem -1.25rem;
     }
 	}
-	
+
 	.label {
-    position: absolute;
-    top: 5px;
-    right: 5px;
     font-size: 13px;
     padding: 4px 8px;
+    border-radius: 4px;
+
+    &.top {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
   }
 
   @media (max-width:767px) {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     &-disabled {
       border-width: 0 0 1px;
-    } 
+    }
   }
 }
 
 
 .dashboard-stats {
   padding: 5px 0;
-  
+
   @media (max-width:1199px) {
     padding-left: 30px;
     padding-right: 30px;
   }
-  
+
   @media (max-width:767px) {
     padding-left: 15px;
     padding-right: 15px;
   }
-  
+
   &-title {
     font-family: $font-light;
     margin: 0 0 10px;
-    
+
     a {
       margin-left: 5px;
     }
   }
-  
+
   &-user {
     margin-right: 15px;
     display: inline-block;
     font-family: $font-semibold;
     padding: 5px 0;
-    
+
     i {
       margin-right: 5px;
       color: #16A916;
     }
   }
-  
+
   &-message {
     padding: 5px 0;
     cursor: pointer;
     display: block;
-    
+
     i {
       margin-right: 5px;
       color: #00BCF2;
     }
-    
+
     span {
       margin-left: 5px;
     }
-    
+
     /*
     a {
       opacity: 0;
       margin-left: 5px;
       @include transition(opacity .3s ease);
     }
-    
+
     &:hover a {
       opacity: 1;
     }
     */
   }
-  
+
   &-action {
     padding: 5px 0;
     cursor: pointer;
     display: block;
-    
+
     .label {
       font-size: 14px;
       position: relative;
       top: -1px;
       margin-right: 5px;
     }
-    
+
     .text-danger {
       margin-left: 5px;
     }
@@ -212,45 +233,45 @@
 .dashboard-footer {
   padding: 15px 0;
   @include clearfix;
-  
+
   @media (max-width:1199px) {
     padding-left: 30px;
     padding-right: 30px;
   }
-  
+
   @media (max-width:767px) {
     padding-left: 15px;
     padding-right: 15px;
   }
-  
+
   &-buttons {
     margin-bottom: 15px;
-    
+
     @media (max-width: 767px) {
       text-align: center;
     }
-    
+
     @media (min-width:768px) {
       float: left;
     }
-  
+
     .btn {
       margin-right: 20px;
       margin-bottom: 15px;
       padding: 10px 18px;
       font-size: 14px;
-      
+
       &:last-child {
         margin-right: 0;
       }
-    }    
+    }
   }
 
   &-logo {
     @media (max-width: 767px) {
       text-align: center;
     }
-    
+
     @media (min-width:768px) {
       float: right;
     }

@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Files } from '/imports/api/files/files.js';
 
 Template.SCSource.viewmodel({
   mixin: ['urlRegex', 'iframe'],
@@ -11,6 +12,14 @@ Template.SCSource.viewmodel({
   },
   isVideo(type) {
     return type === 'video';
+  },
+  file() {
+    const source = this.source();
+    return Files.findOne({ _id: source.fileId });
+  },
+  sourceFile() {
+    const _id = this.fileId();
+    return Files.find({ _id });
   },
   renderVideoSrc(url) {
     if (!this.source() || this.source().type !== 'video') {

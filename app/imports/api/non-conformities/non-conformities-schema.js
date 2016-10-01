@@ -1,7 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema } from '../schemas.js';
-import { ProblemsStatuses } from '../constants.js';
+import {
+  BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
+  ImprovementPlanSchema, FileIdsSchema
+} from '../schemas.js';
+import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
 
@@ -14,15 +17,18 @@ const OptionalSchema = new SimpleSchema([
     },
     ref: {
       type: Object,
+      defaultValue: {},
       optional: true
     },
     'ref.text': {
       type: String,
-      max: 20
+      max: 20,
+      optional: true
     },
     'ref.url': {
       type: String,
-      regEx: SimpleSchema.RegEx.Url
+      regEx: SimpleSchema.RegEx.Url,
+      optional: true
     }
   }
 ]);
@@ -45,6 +51,10 @@ const NonConformitiesSchema = new SimpleSchema([
       type: Number,
       allowedValues: _.keys(ProblemsStatuses).map(key => parseInt(key, 10)),
       defaultValue: 1
+    },
+    workflowType: {
+      type: String,
+      allowedValues: _.values(WorkflowTypes)
     }
   }
 ]);
@@ -75,6 +85,10 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
+      optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
       optional: true
     }
   }

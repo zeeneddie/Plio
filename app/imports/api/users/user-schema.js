@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { PhoneTypes } from '../constants.js';
+import { TimezoneSchema } from '../schemas.js';
 
 
 const PhoneNumberSchema = new SimpleSchema({
@@ -56,10 +57,12 @@ const UserProfileSchema = new SimpleSchema({
     type: [PhoneNumberSchema],
     optional: true
   },
+  // temporary fields, needed to create an organization
   organizationName: {
     type: String,
     optional: true
-  }
+  },
+  organizationTimezone: TimezoneSchema.getDefinition('timezone')
 });
 
 const UserPreferencesSchema = new SimpleSchema({
@@ -69,6 +72,7 @@ const UserPreferencesSchema = new SimpleSchema({
   },
   notificationSound: {
     type: String,
+    defaultValue: '/sounds/graceful',
     optional: true
   }
 });
@@ -134,6 +138,11 @@ const UserSchema = new SimpleSchema({
   },
   invitationExpirationDate: {
     type: Date,
+    optional: true
+  },
+  invitationOrgId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
     optional: true
   },
   selectedOrganizationSerialNumber: {
