@@ -6,6 +6,12 @@ import { CollectionNames } from '/imports/share/constants.js';
 import ProblemAuditConfig from '../problems/problem-audit-config.js';
 import RiskWorkflow from '/imports/workflow/RiskWorkflow.js';
 
+import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';
+import improvementPlanFileIds from './fields/improvementPlan.fileIds.js';
+import improvementPlanOwner from './fields/improvementPlan.owner.js';
+import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date.js';
+import improvementPlanReviewDates from './fields/improvementPlan.reviewDates.js';
+import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import reviewComments from './fields/review.comments.js';
 import reviewReviewedAt from './fields/review.reviewedAt.js';
 import reviewReviewedBy from './fields/review.reviewedBy.js';
@@ -27,6 +33,12 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   updateHandlers: [
     ...ProblemAuditConfig.updateHandlers,
+    improvementPlanDesiredOutcome,
+    improvementPlanFileIds,
+    improvementPlanOwner,
+    improvementPlanReviewDatesDate,
+    improvementPlanReviewDates,
+    improvementPlanTargetDate,
     reviewComments,
     reviewReviewedAt,
     reviewReviewedBy,

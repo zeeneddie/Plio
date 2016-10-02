@@ -7,6 +7,12 @@ import ProblemAuditConfig from '../problems/problem-audit-config.js';
 import NCWorkflow from '/imports/workflow/NCWorkflow.js';
 
 import cost from './fields/cost.js';
+import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';
+import improvementPlanFileIds from './fields/improvementPlan.fileIds.js';
+import improvementPlanOwner from './fields/improvementPlan.owner.js';
+import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date.js';
+import improvementPlanReviewDates from './fields/improvementPlan.reviewDates.js';
+import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import ref from './fields/ref.js';
 import refText from './fields/ref.text.js';
 import refUrl from './fields/ref.url.js';
@@ -23,6 +29,12 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
   updateHandlers: [
     ...ProblemAuditConfig.updateHandlers,
     cost,
+    improvementPlanDesiredOutcome,
+    improvementPlanFileIds,
+    improvementPlanOwner,
+    improvementPlanReviewDatesDate,
+    improvementPlanReviewDates,
+    improvementPlanTargetDate,
     ref,
     refText,
     refUrl

@@ -17,12 +17,6 @@ import description from './fields/description.js';
 import fileIds from './fields/fileIds.js';
 import identifiedAt from './fields/identifiedAt.js';
 import identifiedBy from './fields/identifiedBy.js';
-import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';
-import improvementPlanFileIds from './fields/improvementPlan.fileIds.js';
-import improvementPlanOwner from './fields/improvementPlan.owner.js';
-import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date.js';
-import improvementPlanReviewDates from './fields/improvementPlan.reviewDates.js';
-import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import isDeleted from './fields/isDeleted.js';
 import magnitude from './fields/magnitude.js';
 import notify from './fields/notify.js';
@@ -53,12 +47,6 @@ export default ProblemAuditConfig = {
     fileIds,
     identifiedAt,
     identifiedBy,
-    improvementPlanDesiredOutcome,
-    improvementPlanFileIds,
-    improvementPlanOwner,
-    improvementPlanReviewDatesDate,
-    improvementPlanReviewDates,
-    improvementPlanTargetDate,
     isDeleted,
     magnitude,
     notify,
