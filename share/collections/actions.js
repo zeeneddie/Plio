@@ -99,6 +99,9 @@ Actions.helpers({
   verifiedAsEffective() {
     return this.verified() && (this.isVerifiedAsEffective === true);
   },
+  failedVerification() {
+    return this.verified() && (this.isVerifiedAsEffective === false);
+  },
   deleted() {
     const { isDeleted, deletedAt, deletedBy } = this;
     return (isDeleted === true) && deletedAt && deletedBy;
@@ -127,7 +130,10 @@ Actions.helpers({
   },
   getWorkItems() {
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
-  }
+  },
+  getWorkItemsIds() {
+    return WorkItems.find({ 'linkedDoc._id': this._id }).map(doc => doc._id);
+  },
 });
 
 

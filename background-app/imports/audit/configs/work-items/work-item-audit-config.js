@@ -7,6 +7,8 @@ import { getLinkedDoc, getLinkedDocAuditConfig } from './helpers.js';
 
 import onCreated from './on-created.js';
 import assigneeId from './fields/assigneeId.js';
+import isCompleted from './fields/isCompleted.js';
+import targetDate from './fields/targetDate.js';
 
 
 export default WorkItemAuditConfig = {
@@ -18,7 +20,9 @@ export default WorkItemAuditConfig = {
   onCreated,
 
   updateHandlers: [
-    assigneeId
+    assigneeId,
+    isCompleted,
+    targetDate
   ],
 
   onRemoved: { },

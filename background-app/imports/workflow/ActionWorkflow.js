@@ -1,17 +1,15 @@
 import { Actions } from '/imports/share/collections/actions.js';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isDueToday, isOverdue } from '/imports/share/helpers.js';
-
 import Workflow from './Workflow.js';
 import NCWorkflow from './NCWorkflow.js';
 import RiskWorkflow from './RiskWorkflow.js';
-import WorkItemWorkflow from './WorkItemWorkflow.js';
 
 
 export default class ActionWorkflow extends Workflow {
 
-  constructor(idOrDoc) {
-    super(idOrDoc);
+  _prepare() {
+    super._prepare();
     this._workflowType = this._getWorkflowType();
   }
 
@@ -31,14 +29,11 @@ export default class ActionWorkflow extends Workflow {
   _onUpdateStatus(status) {
     const action = this._doc;
 
-    const workItems = action.getWorkItems();
-    _(workItems).each(doc => new WorkItemWorkflow(doc).refreshStatus());
+    const NCsIds = action.getLinkedNCsIds();
+    _(NCsIds).each(id => new NCWorkflow(id).refreshStatus());
 
-    const NCs = action.getLinkedNCs();
-    const risks = action.getLinkedRisks();
-
-    _(NCs).each(doc => new NCWorkflow(doc).refreshStatus());
-    _(risks).each(doc => new RiskWorkflow(doc).refreshStatus());
+    const risksIds = action.getLinkedRisksIds();
+    _(risksIds).each(id => new RiskWorkflow(id).refreshStatus());
   }
 
   _getDeletedStatus() {
@@ -51,12 +46,10 @@ export default class ActionWorkflow extends Workflow {
     const action = this._doc;
 
     if (action.completed()) {
-      const completedStatuses = {
+      return {
         [WorkflowTypes.THREE_STEP]: 9, // Completed
         [WorkflowTypes.SIX_STEP]: 4 // In progress - completed, not yet verified
-      };
-
-      return completedStatuses[this._workflowType];
+      }[this._workflowType];
     }
 
     const { completionTargetDate } = action;
@@ -102,7 +95,7 @@ export default class ActionWorkflow extends Workflow {
     return this._doc.getWorkflowType();
   }
 
-  static _collection() {
+  static get _collection() {
     return Actions;
   }
 

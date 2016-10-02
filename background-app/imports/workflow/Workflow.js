@@ -6,26 +6,22 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 
 export default class Workflow {
 
-  constructor(idOrDoc) {
-    const isId = SimpleSchema.RegEx.Id.test(idOrDoc);
-    const isDoc = _.isObject(idOrDoc);
-
-    if (!(isId || isDoc)) {
-      throw new Error('Invalid argument for Workflow constructor');
+  constructor(id) {
+    if (!SimpleSchema.RegEx.Id.test(id)) {
+      throw new Error(`${JSON.stringify(id)} is not valid document ID`);
     }
 
-    if (isId) {
-      this._id = idOrDoc;
-      this._doc = this._getDoc();
-    } else {
-      this._doc = idOrDoc;
-      this._id = this._doc._id;
-    }
+    this._id = id;
+  }
 
+  _prepare() {
+    this._doc = this._getDoc();
     this._timezone = this._getOrgTimezone();
   }
 
   refreshStatus() {
+    this._prepare();
+
     const newStatus = this._getStatus();
     this._updateStatus(newStatus);
   }
@@ -44,7 +40,7 @@ export default class Workflow {
     const { status:savedStatus } = this._doc;
 
     if (savedStatus !== status) {
-      this.constructor._collection().update({
+      this.constructor._collection.update({
         _id: this._id
       }, {
         $set: { status }
@@ -59,7 +55,12 @@ export default class Workflow {
   }
 
   _getDoc() {
-    return this.constructor._collection().findOne({ _id: this._id });
+    const doc = this.constructor._collection.findOne({ _id: this._id });
+    if (!doc) {
+      throw new Error(`Document with ID ${this._id} does not exist`);
+    }
+
+    return doc;
   }
 
   _getThreeStepStatus() {
@@ -80,7 +81,7 @@ export default class Workflow {
     return timezone || 'UTC';
   }
 
-  static _collection() {
+  static get _collection() {
     // Implement in child class
   }
 

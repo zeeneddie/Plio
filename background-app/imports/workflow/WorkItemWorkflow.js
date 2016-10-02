@@ -1,5 +1,5 @@
 import { WorkItems } from '/imports/share/collections/work-items.js';
-import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants.js';
+import { isDueToday, isOverdue } from '/imports/share/helpers.js';
 import Workflow from './Workflow.js';
 
 
@@ -12,41 +12,21 @@ export default class WorkItemWorkflow extends Workflow {
       return 3; // completed
     }
 
-    const { TYPES:WorkItemTypes } = WorkItemsStore;
-    const { type:workItemType } = workItem;
-    const { status:linkedDocStatus } = workItem.getLinkedDoc();
+    const { targetDate } = workItem;
+    const timezone = this._timezone;
 
-    const statuses = {
-      [WorkItemTypes.COMPLETE_ACTION]: {
-        dueToday: 2, // In progress - due for completion today
-        overdue: 3 // In progress - completion overdue
-      },
-      [WorkItemTypes.VERIFY_ACTION]: {
-        dueToday: 5, // In progress - completed, verification due today
-        overdue: 6 // In progress - completed, verification overdue
-      },
-      [WorkItemTypes.COMPLETE_ANALYSIS]: {
-        dueToday: 4, // Open - analysis due today
-        overdue: 5 // Open - analysis overdue
-      },
-      [WorkItemTypes.COMPLETE_UPDATE_OF_STANDARDS]: {
-        dueToday: 15, // Open - action(s) verified as effective, update of standard(s) due today
-        overdue: 16 // Open - action(s) verified as effective, update of standard(s) past due
-      }
-    };
-
-    if (linkedDocStatus === statuses[workItemType]['overdue']) {
+    if (isOverdue(targetDate, timezone)) {
       return 2; // overdue
     }
 
-    if (linkedDocStatus === statuses[workItemType]['dueToday']) {
+    if (isDueToday(targetDate, timezone)) {
       return 1; // due today
     }
 
     return 0; // in progress
   }
 
-  static _collection() {
+  static get _collection() {
     return WorkItems;
   }
 

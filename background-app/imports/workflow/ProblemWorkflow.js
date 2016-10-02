@@ -1,25 +1,20 @@
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { Actions } from '/imports/share/collections/actions.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { isDueToday, isOverdue } from '/imports/share/helpers.js';
-
 import Workflow from './Workflow.js';
-import WorkItemWorkflow from './WorkItemWorkflow.js';
 
 
 export default class ProblemWorkflow extends Workflow {
 
-  constructor(idOrDoc) {
-    super(idOrDoc);
+  _prepare() {
+    super._prepare();
 
-    const actions = Actions.find({
+    this._actions = Actions.find({
       'linkedTo.documentId': this._id,
       isDeleted: false,
       deletedAt: { $exists: false },
       deletedBy: { $exists: false }
     }).fetch();
-
-    this._actions = actions;
 
     this._completedActionsLength = this._getCompletedActionsLength();
 
@@ -31,28 +26,18 @@ export default class ProblemWorkflow extends Workflow {
   }
 
   _getVerifiedActionsLength() {
-    return _.filter(this._actions, ({ status }) => {
-      return status === 8; // Completed - verified as effective
-    }).length;
+    return _(this._actions).filter(action => action.verifiedAsEffective()).length;
   }
 
   _getCompletedActionsLength() {
-    return _.filter(this._actions, ({ status }) => {
-      // 4: In progress - completed, not yet verified
-      // 5: In progress - completed, verification due today
-      // 6: In progress - completed, verification overdue
-      // 7: Completed - failed verification
-      // 8: Completed - verified as effective
-      // 9: Completed
-      return _.contains([4, 5, 6, 7, 8, 9], status);
-    }).length;
+    return _(this._actions).filter(action => action.completed()).length;
   }
 
   _standardsUpdated() {
     return this._doc.areStandardsUpdated();
   }
 
-  _allActionsVerified() {
+  _allActionsVerifiedAsEffective() {
     const actionsLength = this._actions.length;
     return (actionsLength > 0) && (this._verifiedActionsLength === actionsLength);
   }
@@ -84,11 +69,6 @@ export default class ProblemWorkflow extends Workflow {
         || 2;
   }
 
-  _onUpdateStatus(status) {
-    const workItems = this._doc.getWorkItems();
-    _(workItems).each(doc => new WorkItemWorkflow(doc).refreshStatus());
-  }
-
   _getDeletedStatus() {
     if (this._doc.deleted()) {
       return 20; // Deleted
@@ -98,7 +78,7 @@ export default class ProblemWorkflow extends Workflow {
   _getStandardsUpdateStatus() {
     if (!(this._analysisCompleted()
           && this._allActionsCompleted()
-          && this._allActionsVerified())) {
+          && this._allActionsVerifiedAsEffective())) {
       return;
     }
 
@@ -140,15 +120,18 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if all actions are verified
-    if (this._allActionsVerified()) {
+    if (this._allActionsVerifiedAsEffective()) {
       return 14; // Open - action(s) verified as effective, awaiting update of standard(s)
     }
 
     const actions = this._actions;
+    const timezone = this._timezone;
+
+    const unverifiedActions = _(actions).filter(action => !action.verified());
 
     // check if there is overduded verification
-    const overduded = _.find(actions, ({ status }) => {
-      return status === 6; // In progress - completed, verification overdue
+    const overduded = _(unverifiedActions).find((action) => {
+      return isOverdue(action.verificationTargetDate, timezone);
     });
 
     if (overduded) {
@@ -156,8 +139,8 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is verification for today
-    const dueToday = _.find(actions, ({ status }) => {
-      return status === 5; // In progress - completed, verification due today
+    const dueToday = _(unverifiedActions).find((action) => {
+      return isDueToday(action.verificationTargetDate, timezone);
     });
 
     if (dueToday) {
@@ -165,8 +148,8 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is failed verification
-    const failed = _.find(actions, ({ status }) => {
-      return status === 7; // Completed - failed verification
+    const failed = _(actions).find((action) => {
+      return action.failedVerification();
     });
 
     if (failed) {
@@ -184,19 +167,20 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if all actions are completed
     if (this._allActionsCompleted()) {
-      const completedStatuses = {
+      return {
         [WorkflowTypes.THREE_STEP]: 18, // Closed - action(s) completed
         [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
-      };
-
-      return completedStatuses[workflowType];
+      }[workflowType];
     }
 
     const actions = this._actions;
+    const timezone = this._timezone;
+
+    const uncompletedActions = _(actions).filter(action => !action.completed());
 
     // check if there is overduded action
-    const overduded = _.find(actions, ({ status }) => {
-      return status === 3; // In progress - completion overdue
+    const overduded = _(uncompletedActions).find((action) => {
+      return isOverdue(action.completionTargetDate, timezone);
     });
 
     if (overduded) {
@@ -204,8 +188,8 @@ export default class ProblemWorkflow extends Workflow {
     }
 
     // check if there is an action that must completed today
-    const dueToday = _.find(actions, ({ status }) => {
-      return status === 2; // In progress - due for completion today
+    const dueToday = _(uncompletedActions).find((action) => {
+      return isDueToday(action.completionTargetDate, timezone);
     });
 
     if (dueToday) {
@@ -214,12 +198,10 @@ export default class ProblemWorkflow extends Workflow {
 
     // check if there is at least one completed action
     if (this._completedActionsLength >= 1) {
-      const completedStatuses = {
+      return {
         [WorkflowTypes.THREE_STEP]: 10, // Open - action(s) completed
         [WorkflowTypes.SIX_STEP]: 11 // Open - action(s) completed, awaiting verification
-      };
-
-      return completedStatuses[workflowType];
+      }[workflowType];
     }
   }
 
