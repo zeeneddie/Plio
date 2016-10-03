@@ -5,6 +5,7 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   mixin: 'callWithFocusCheck',
   placeholder: '',
   showAbbreviation: false,
+  requireAbbreviation: false,
   onChange() {},
   onFocusOut(e) {
     const data = prop => ({
@@ -15,9 +16,11 @@ Template.SimpleSelection_Edit_Item.viewmodel({
     const abbr = data('abbreviation');
 
     if (this.showAbbreviation()) {
-      if ( (!title.current || !abbr.current) || (title.current === title.stored && abbr.current === abbr.stored) ) return;
-    } else {
-      if ( !title.current || title.current === title.stored ) return;
+      if (!title.current || (title.current === title.stored && abbr.current === abbr.stored)) {
+        return;
+      }
+    } else if (!title.current || title.current === title.stored) {
+       return;
     }
 
     return this.callWithFocusCheck(e, () => this.onChange(this));

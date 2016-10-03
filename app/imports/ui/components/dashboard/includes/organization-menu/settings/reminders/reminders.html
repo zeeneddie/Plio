@@ -2,19 +2,19 @@
   {{#Subcards_Wrapper _lText=_lText}}
     <div class="card-block">
       {{> OrgSettings_Reminder
-          title="Minor non-conformities"
+          title="Minor non-conformities/risks"
           timeData=reminders.minorNc
           type="minorNc"
           onChange=onChangeCb}}
 
       {{> OrgSettings_Reminder
-          title="Major non-conformities"
+          title="Major non-conformities/risks"
           timeData=reminders.majorNc
           type="majorNc"
           onChange=onChangeCb}}
 
       {{> OrgSettings_Reminder
-          title="Critical non-conformities"
+          title="Critical non-conformities/risks"
           timeData=reminders.criticalNc
           type="criticalNc"
           onChange=onChangeCb}}
