@@ -47,6 +47,8 @@ export default class WorkflowUpdater {
         verifiedBy: { $exists: false },
         status: { $ne: 9 } // Completed
       }]
+    }, {
+      fields: { _id: 1 }
     }).map(doc => doc._id);
 
     _(actionsIds).each(id => new ActionWorkflow(id).refreshStatus());
@@ -65,16 +67,25 @@ export default class WorkflowUpdater {
       }]
     };
 
-    const NCsIds = NonConformities.find(problemDocQuery).map(doc => doc._id);
+    const NCsIds = NonConformities.find(problemDocQuery, {
+      fields: { _id: 1 }
+    }).map(doc => doc._id);
+
     _(NCsIds).each(id => new NCWorkflow(id).refreshStatus());
 
-    const risksIds = Risks.find(problemDocQuery).map(doc => doc._id);
+    const risksIds = Risks.find(problemDocQuery, {
+      fields: { _id: 1 }
+    }).map(doc => doc._id);
+
     _(risksIds).each(id => new RiskWorkflow(id).refreshStatus());
 
     const workItemsIds = WorkItems.find({
       organizationId: this._organizationId,
       isCompleted: false
+    }, {
+      fields: { _id: 1 } 
     }).map(doc => doc._id);
+
     _(workItemsIds).each(id => new WorkItemWorkflow(id).refreshStatus());
   }
 

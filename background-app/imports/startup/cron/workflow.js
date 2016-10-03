@@ -15,7 +15,11 @@ SyncedCron.add({
       return moment().tz(name).hours() === 0;
     });
 
-    Organizations.find({ timezone: { $in: timezones } }).forEach((org) => {
+    Organizations.find({
+      timezone: { $in: timezones }
+    }, {
+      fields: { _id: 1 }
+    }).forEach((org) => {
       new WorkflowUpdater(org._id).update();
     });
   }

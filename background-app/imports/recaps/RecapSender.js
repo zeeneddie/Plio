@@ -213,6 +213,7 @@ export default class RecapSender {
         const workItem = WorkItems.findOne({
           'linkedDoc._id': doc._id
         }, {
+          fields: { _id: 1 },
           sort: { createdAt: -1 }
         });
         if (workItem) {

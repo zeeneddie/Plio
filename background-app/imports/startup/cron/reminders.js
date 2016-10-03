@@ -19,7 +19,11 @@ SyncedCron.add({
       return moment().tz(name).hours() === REMINDERS_SENDING_HOUR;
     });
 
-    Organizations.find({ timezone: { $in: timezones } }).forEach((org) => {
+    Organizations.find({
+      timezone: { $in: timezones }
+    }, {
+      fields: { _id: 1 }
+    }).forEach((org) => {
       new ReminderSender(org._id).send();
     });
   }

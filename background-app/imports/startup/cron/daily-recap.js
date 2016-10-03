@@ -19,7 +19,11 @@ SyncedCron.add({
       return moment().tz(name).hours() === RECAP_SENDING_HOUR;
     });
 
-    Organizations.find({ timezone: { $in: timezones } }).forEach((org) => {
+    Organizations.find({
+      timezone: { $in: timezones }
+    }, {
+      fields: { _id: 1 }
+    }).forEach((org) => {
       new RecapSender(org._id).send();
     });
   }
