@@ -4,6 +4,7 @@ import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import Clipboard from 'clipboard';
 import { connect } from 'react-redux';
+import { shallowEqual } from 'recompose';
 
 import InfiniteLoader from '/imports/ui/react/components/InfiniteLoader';
 import MessagesListContainer from '../../containers/MessagesListContainer';
@@ -34,7 +35,7 @@ export default class MessagesListWrapper extends React.Component {
   componentWillUpdate(nextProps) {
     const { chat } = this.refs;
 
-    if (nextProps.loading && !this.props.loading) {
+    if (nextProps.loading) {
       prevChatScrollTop = $(chat).scrollTop();
       prevChatScrollHeight = chat.scrollHeight;
     }
@@ -59,7 +60,7 @@ export default class MessagesListWrapper extends React.Component {
       }
     }
 
-    // scroll to bottom if component receives only 1 new message and the sender is current user
+    // scroll to the bottom if component receives only 1 new message and the sender is current user
     // have to use $isAlmostScrolledToBottom because sometimes chat is not scrolled down when new message was appended
     if (notLoading &&
         receivedOneMessage &&
@@ -159,24 +160,20 @@ export default class MessagesListWrapper extends React.Component {
     const message = sortDir > 0 ? _.last(messages) : _.first(messages);
 
     const dispatchAll = () => {
-      const actions = [
-        setFollowingLimit(followingLimit + 50),
-        setSort(sort)
-      ];
+      const actions = ((() => {
+        const _at = FlowRouter.getQueryParam('at');
+        const setSortDir = setSort(sort);
+        const incFollowingLimitBy50 = setFollowingLimit(followingLimit + 50);
+        const incPriorLimitBy50 = setPriorLimit(priorLimit + 50);
 
-      const allActions = ((() => {
-        if (FlowRouter.getQueryParam('at')) {
-          const action = sortDir > 0
-            ? setFollowingLimit(followingLimit + 50)
-            : setPriorLimit(priorLimit + 50);
+        const _actions = _at
+          ? [setSortDir, sortDir > 0 ? incFollowingLimitBy50 : incPriorLimitBy50]
+          : [setSortDir, incFollowingLimitBy50];
 
-          return actions.concat(action);
-        }
-
-        return actions;
+        return _actions;
       })());
 
-      dispatch(batchActions(allActions));
+      return dispatch(batchActions(actions));
     };
 
     if (sortDir < 0) {

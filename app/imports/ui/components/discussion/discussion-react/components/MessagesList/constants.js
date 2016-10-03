@@ -75,7 +75,6 @@ export const transformMessages = ({ discussion, messages, at }) => {
         isSelected,
         dateToShow,
         isMergedWithPreviousMessage,
-        height: isMergedWithPreviousMessage ? 33.84 : 55.65,
         ...(() => isSelected ? { scrollToSelectedMessage } : null)()
       };
     })();

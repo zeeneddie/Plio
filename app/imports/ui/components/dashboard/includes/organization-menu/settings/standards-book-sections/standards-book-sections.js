@@ -52,7 +52,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
 
     swal({
       title: 'Are you sure?',
-      text: `Book section "${title}" will be removed.`,
+      text: `Standards section "${title}" will be removed.`,
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Remove',
@@ -67,7 +67,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
         } else {
           swal(
             'Removed!',
-            `Book section "${title}" was removed successfully.`,
+            `Standards section "${title}" was removed successfully.`,
             'success'
           );
         }

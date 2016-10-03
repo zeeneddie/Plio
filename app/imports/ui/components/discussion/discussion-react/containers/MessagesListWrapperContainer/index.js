@@ -50,8 +50,9 @@ const onPropsChange = (props, onData) => {
     resetCompleted = false
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };
-  const subscription = Meteor.subscribe('messages', discussionId, subOpts);
+  const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
+  const subscriptions = [messagesSubscription, lastMessageSubscription];
 
   dispatch(setLoading(true));
 
@@ -61,15 +62,17 @@ const onPropsChange = (props, onData) => {
     onData(null, state);
   }
 
-  if (subscription.ready()) {
+  const isSubscriptionReady = handle => handle.ready();
+
+  if (subscriptions.every(isSubscriptionReady)) {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
 
     const actions = [
       setLoading(false),
-      setMessages(messages),
-      setLastMessageId(get(LastDiscussionMessage.findOne(), 'lastMessageId'))
+      setLastMessageId(get(LastDiscussionMessage.findOne(), 'lastMessageId')),
+      setMessages(messages)
     ];
 
     dispatch(batchActions(actions));
@@ -82,8 +85,9 @@ const onPropsChange = (props, onData) => {
   }
 
   return () => {
-    subscription.stop();
-    lastMessageSubscription.stop();
+    const stopSubscription = sub => sub.stop();
+    
+    subscriptions.map(stopSubscription);
     observerCleanup && observerCleanup();
   }
 };

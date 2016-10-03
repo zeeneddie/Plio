@@ -3,6 +3,7 @@ import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
+import Handlebars from 'handlebars';
 
 import { Meteor } from 'meteor/meteor';
 
@@ -235,7 +236,11 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
 
   const workflowStepTime = organization.workflowStepTime(magnitude);
   const { timeValue, timeUnit } = workflowStepTime;
-  const date = moment().add(timeValue, timeUnit).toDate();
+  const date = moment()
+      .tz(organization.timezone)
+      .startOf('day')
+      .add(timeValue, timeUnit)
+      .toDate();
 
   return date;
 }
@@ -269,6 +274,57 @@ const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 const pickFromDiscussion = pickFrom('discussion');
 
 const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+
+const renderTemplate = (template, data = {}) => {
+  const compiledTemplate = Handlebars.compile(template);
+  return compiledTemplate(data);
+};
+
+const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
+
+const getTitlePrefix = (title) => {
+  let titlePrefix;
+  const matchedPrefixArray = title.match(/^[\d\.]+/g);
+
+  if (matchedPrefixArray && matchedPrefixArray.length) {
+    const stringPrefix = matchedPrefixArray[0];
+
+    // Convert 1.2.3.4 to 1.2345 for sorting purposes
+    const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
+      return b + c.replace(/\./g, '');
+    });
+    titlePrefix = parseFloat(stringPrefixFloat) || title;
+  } else {
+    titlePrefix = title;
+  }
+
+  return titlePrefix;
+};
+
+// 1, 1.2, 3, 10.3, a, b, c
+const sortArrayByTitlePrefix = (arr) => {
+  return arr.sort(function (a, b) {
+    a = a.titlePrefix;
+    b = b.titlePrefix;
+    if (typeof a === 'number' && typeof b !== 'number') {
+      return -1;
+    }
+    if (typeof b === 'number' && typeof a !== 'number') {
+      return 1;
+    }
+    if (a < b) {
+      return -1;
+    }
+    if (a > b) {
+      return 1;
+    }
+    if (a === b) {
+      return 0;
+    } else {
+      return -1;
+    }
+  });
+};
 
 export {
   getDocumentCollectionByType,
@@ -304,6 +360,7 @@ export {
   invokeC,
   transsoc,
   pickC,
+  capitalize,
   flattenMap,
   findById,
   length,
@@ -315,5 +372,7 @@ export {
   lengthMessages,
   pickFrom,
   pickFromDiscussion,
-  omitC
+  omitC,
+  getTitlePrefix,
+  sortArrayByTitlePrefix
 };
