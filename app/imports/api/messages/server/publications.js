@@ -63,6 +63,35 @@ const getMessageData = (id) => {
 	return messageData;
 };
 
+// Meteor.publish('messages', function(discussionId, {
+// 	sort,
+// 	at,
+// 	priorLimit,
+// 	followingLimit
+// }) {
+// 	if (at) {
+// 		const msg = Object.assign({}, Messages.findOne({ _id: at }));
+// 		const getMessages = (l, c) => {
+// 			const sign = c > 0 ? '$gt' : '$lt';
+// 			const query = { createdAt: { [sign]: msg.createdAt } };
+// 			const options = { limit: l, sort: { createdAt: c } };
+// 			return Messages.find(query, options).fetch();
+// 		}
+// 		const prior = getMessages(priorLimit, -1);
+// 		const following = getMessages(followingLimit, 1);
+// 		const query = {
+// 			createdAt: {
+// 				$lte: following.length && _.last(following).createdAt,
+// 				$gte: prior.length && _.last(prior).createdAt
+// 			}
+// 		};
+// 		const options = { sort: { createdAt: 1 } };
+// 		return Messages.find(query, options);
+// 	}
+//
+// 	return Messages.find({ discussionId }, { limit: followingLimit, sort });
+// });
+
 Meteor.publishComposite('messages', function(discussionId, {
 	sort = { createdAt: -1 },
 	at = null,

@@ -38,20 +38,17 @@ export default class MessagesListWrapper extends React.Component {
       prevChatScrollTop = $(chat).scrollTop();
       prevChatScrollHeight = chat.scrollHeight;
     }
-
-    if (!nextProps.loading && receivedOneNewMessage(nextProps, this.props)) {
-    }
   }
 
   componentDidUpdate(prevProps) {
     const { chat } = this.refs;
 
     const notLoading = !this.props.loading;
-    const received = receivedOneNewMessage(this.props, prevProps);
+    const receivedOneMessage = receivedOneNewMessage(this.props, prevProps);
 
     // scroll to the last position if not loading, current messages count is bigger than last count and it receives more than 1 message (means it has loaded messages through subscription)
     if (notLoading &&
-        !received &&
+        !receivedOneMessage &&
         lengthMessages(this.props) > lengthMessages(prevProps)) {
       if (prevProps.sort.createdAt > 0) {
         // downscroll
@@ -65,7 +62,7 @@ export default class MessagesListWrapper extends React.Component {
     // scroll to bottom if component receives only 1 new message and the sender is current user
     // have to use $isAlmostScrolledToBottom because sometimes chat is not scrolled down when new message was appended
     if (notLoading &&
-        received &&
+        receivedOneMessage &&
         (isOwnerOfNewMessage(this.props) || $isAlmostScrolledToBottom($(chat)))) {
       $(chat).scrollTop(9E99);
     }

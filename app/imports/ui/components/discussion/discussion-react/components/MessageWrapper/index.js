@@ -1,5 +1,6 @@
 import React from 'react';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
+import invoke from 'lodash.invoke';
 
 import { transsoc } from '/imports/api/helpers.js';
 import Message from '../Message';
