@@ -1,6 +1,6 @@
 <template name="UserPreferences">
   <div class="card-block">
-    {{#FormField label="Notifications"}}
+    {{#FormField label="Desktop notifications"}}
       <button type="button" class="btn btn-checkbox btn-secondary"
           id="notifications-checkbox" data-toggle="button" autocomplete="off"
           {{b "click: updateNotifications, class: {active: areNotificationsEnabled}"}}>

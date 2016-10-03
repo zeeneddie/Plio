@@ -259,6 +259,10 @@ const OrganizationDefaults = {
 
 const DefaultStandardTypes = [
   {
+    title: 'Process',
+    abbreviation: 'PRO'
+  },
+  {
     title: 'Policy',
     abbreviation: 'POL'
   },
@@ -267,28 +271,31 @@ const DefaultStandardTypes = [
     abbreviation: 'CHK'
   },
   {
-    title: 'Standard Operating Procedure',
+    title: 'Compliance management objective',
+    abbreviation: 'CMO'
+  },
+  {
+    title: 'Compliance obligation',
+    abbreviation: 'COB'
+  },
+  {
+    title: 'Standard operating procedure',
     abbreviation: 'SOP'
   },
   {
     title: 'Work instruction',
-    abbreviation: 'WRK'
+    abbreviation: 'WORK'
   },
   {
     title: 'Product specification',
-    abbreviation: 'SPC'
+    abbreviation: 'SPEC'
   },
   {
-    title: 'Test method',
-    abbreviation: 'TST'
+    title: 'Risk control',
+    abbreviation: 'RSC'
   },
   {
-    title: 'Regulation',
-    abbreviation: 'REG'
-  },
-  {
-    title: 'Other',
-    abbreviation: 'DOC'
+    title: 'Section header'
   }
 ];
 
