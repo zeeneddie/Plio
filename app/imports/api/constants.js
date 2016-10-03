@@ -495,6 +495,11 @@ const WorkItemsListProjection = {
   deletedBy: 1
 };
 
+const AnalysisTitles = {
+  rootCauseAnalysis: 'Root cause analysis',
+  riskAnalysis: 'Initial risk analysis'
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -542,5 +547,6 @@ export {
   ActionsListProjection,
   NonConformitiesListProjection,
   RisksListProjection,
-  WorkItemsListProjection
+  WorkItemsListProjection,
+  AnalysisTitles
 };
