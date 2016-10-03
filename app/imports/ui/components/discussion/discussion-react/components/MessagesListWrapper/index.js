@@ -32,6 +32,10 @@ export default class MessagesListWrapper extends React.Component {
     this._triggerLoadMore = _.throttle(this._triggerLoadMore, 1000).bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !shallowEqual(this.props, nextProps);
+  }
+
   componentWillUpdate(nextProps) {
     const { chat } = this.refs;
 

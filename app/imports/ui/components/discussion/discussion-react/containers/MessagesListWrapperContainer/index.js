@@ -40,7 +40,7 @@ const observer = () => {
 };
 
 const onPropsChange = (props, onData) => {
-  let {
+  const {
     discussionId,
     dispatch,
     sort = { createdAt: -1 },
@@ -85,8 +85,8 @@ const onPropsChange = (props, onData) => {
   }
 
   return () => {
-    const stopSubscription = sub => sub.stop();
-    
+    const stopSubscription = handle => handle.stop();
+
     subscriptions.map(stopSubscription);
     observerCleanup && observerCleanup();
   }
