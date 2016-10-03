@@ -148,11 +148,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set book section of {{{docDesc}}} to "{{newValue}}"',
+              '{{userName}} set standards section of {{{docDesc}}} to "{{newValue}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed book section of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{userName}} changed standards section of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed book section of {{{docDesc}}}'
+              '{{userName}} removed standards section of {{{docDesc}}}'
           }
         }
       ],

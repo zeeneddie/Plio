@@ -21,19 +21,19 @@ Template.OrgSettings_StandardTypes.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { title:name, abbreviation } = viewModel.getData();
+    const { title, abbreviation } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        name, abbreviation, organizationId
+        title, abbreviation, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      this.modal().callMethod(update, { _id, name, abbreviation, organizationId });
+      this.modal().callMethod(update, { _id, title, abbreviation, organizationId });
     }
   },
   onDelete(viewModel) {
