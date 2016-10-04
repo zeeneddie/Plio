@@ -7,7 +7,7 @@ Template.NC_Header.viewmodel({
   headerArgs() {
     return {
       idToExpand: this.NCId(),
-      header: 'Non-conformities by -',
+      header: 'Non-conformities',
       prependWith: 'by',
       filters: NonConformityFilters,
       isActiveFilter: this.isActiveNCFilter.bind(this)
