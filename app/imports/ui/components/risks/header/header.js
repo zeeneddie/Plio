@@ -7,7 +7,7 @@ Template.Risks_Header.viewmodel({
   headerArgs() {
     return {
       idToExpand: this.riskId(),
-      header: 'Risks by -',
+      header: 'Risks',
       prependWith: 'by',
       filters: RiskFilters,
       isActiveFilter: this.isActiveRiskFilter.bind(this)

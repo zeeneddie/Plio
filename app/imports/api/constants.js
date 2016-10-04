@@ -257,6 +257,18 @@ const OrganizationDefaults = {
   rkScoringGuidelines: getDefaultGuideline('Risk scoring')
 };
 
+const DefaultStandardSections = [
+  {
+    title: 'Introduction'
+  },
+  {
+    title: 'High level standards'
+  },
+  {
+    title: 'Business standards'
+  }
+];
+
 const DefaultStandardTypes = [
   {
     title: 'Process',
@@ -508,6 +520,7 @@ export {
   ActionPlanOptions,
   ActionUndoTimeInHours,
   CollectionNames,
+  DefaultStandardSections,
   DefaultStandardTypes,
   DefaultRiskTypes,
   ProblemGuidelineTypes,

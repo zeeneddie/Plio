@@ -45,7 +45,7 @@ const RequiredSchema = new SimpleSchema([
     },
     linkedTo: {
       type: [linkedToSchema],
-      minCount: 1
+      optional: true
     },
     ownerId: {
       type: String,
