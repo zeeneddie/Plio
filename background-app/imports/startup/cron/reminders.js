@@ -4,8 +4,8 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import ReminderSender from '/imports/reminders/ReminderSender.js';
 
 
-// send reminders at 00:00
-const REMINDERS_SENDING_HOUR = 0;
+// send reminders at 05:00
+const REMINDERS_SENDING_HOUR = 5;
 
 SyncedCron.add({
   name: 'Send reminders',
