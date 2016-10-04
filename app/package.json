@@ -26,7 +26,6 @@
     "pluralize": "^2.0.0",
     "quill": "^0.20.1",
     "react": "^15.3.1",
-    "react-addons-pure-render-mixin": "^15.3.2",
     "react-dom": "^15.3.1",
     "react-komposer": "git://github.com/damonmaria/react-komposer.git#shouldResubscribe-option",
     "react-redux": "^4.4.5",
