@@ -85,38 +85,57 @@ export const DefaultRiskTypes = [
   }
 ];
 
-export const DefaultStandardTypes = [
+export const DefaultStandardSections = [
   {
-    name: 'Policy',
+    title: 'Introduction'
+  },
+  {
+    title: 'High level standards'
+  },
+  {
+    title: 'Business standards'
+  }
+];
+
+const DefaultStandardTypes = [
+  {
+    title: 'Process',
+    abbreviation: 'PRO'
+  },
+  {
+    title: 'Policy',
     abbreviation: 'POL'
   },
   {
-    name: 'Checklist',
+    title: 'Checklist',
     abbreviation: 'CHK'
   },
   {
-    name: 'Standard Operating Procedure',
+    title: 'Compliance management objective',
+    abbreviation: 'CMO'
+  },
+  {
+    title: 'Compliance obligation',
+    abbreviation: 'COB'
+  },
+  {
+    title: 'Standard operating procedure',
     abbreviation: 'SOP'
   },
   {
-    name: 'Work instruction',
-    abbreviation: 'WRK'
+    title: 'Work instruction',
+    abbreviation: 'WORK'
   },
   {
-    name: 'Product specification',
-    abbreviation: 'SPC'
+    title: 'Product specification',
+    abbreviation: 'SPEC'
   },
   {
-    name: 'Test method',
-    abbreviation: 'TST'
+    title: 'Risk control',
+    abbreviation: 'RSC'
   },
   {
-    name: 'Regulation',
-    abbreviation: 'REG'
-  },
-  {
-    name: 'Other',
-    abbreviation: 'DOC'
+    title: 'Section header'
   }
 ];
 

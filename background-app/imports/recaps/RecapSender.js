@@ -108,7 +108,7 @@ export default class RecapSender {
       recipients,
       emailSubject,
       templateData
-    }).sendEmail();
+    }).sendEmail({ isReportEnabled: true });
   }
 
   _getAllDocsIds() {

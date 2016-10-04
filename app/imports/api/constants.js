@@ -1,3 +1,8 @@
+export const AnalysisTitles = {
+  rootCauseAnalysis: 'Root cause analysis',
+  riskAnalysis: 'Initial risk analysis'
+};
+
 export const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',

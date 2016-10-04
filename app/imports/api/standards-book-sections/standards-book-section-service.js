@@ -5,9 +5,9 @@ export default StandardsBookSectionService = {
 
   collection: StandardsBookSections,
 
-  insert({ title, organizationId }) {
+  insert({ title, organizationId, createdBy }) {
     return this.collection.insert({
-      title, organizationId
+      title, organizationId, createdBy
     });
   },
 

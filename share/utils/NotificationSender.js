@@ -112,12 +112,21 @@ export default class NotificationSender {
     return userEmails;
   }
 
-  _sendEmailBasic(recipients, text) {
+  _sendEmailBasic({ recipients, html, isReportEnabled }) {
+    let emails = this._getUserEmails(recipients);
+    let bcc = [];
+    if (isReportEnabled) {
+
+      // Reporting of beta user activity
+      bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
+    }
+
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || this._getDefaultEmail(),
-      to: this._getUserEmails(recipients),
-      html: text
+      to: emails,
+      bcc,
+      html
     };
 
     Email.send(emailOptions);
@@ -126,12 +135,12 @@ export default class NotificationSender {
   /**
    * Sends email to specified recipients
    */
-  sendEmail() {
+  sendEmail({ isReportEnabled }) {
     const recipients = this._options.recipients || [];
     const templateName = this._options.templateName;
     let html = this._renderTemplateWithData(templateName);
 
-    this._sendEmailBasic(recipients, html);
+    this._sendEmailBasic({ recipients, html, isReportEnabled });
 
     // enables method chaining
     return this;
