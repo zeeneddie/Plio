@@ -107,17 +107,18 @@ export default class NotificationSender {
 
   _sendEmailBasic({ recipients, html, isReportEnabled }) {
     let emails = this._getUserEmails(recipients);
-
+    let bcc = [];
     if (isReportEnabled) {
 
       // Reporting of beta user activity
-      emails.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com', 'mike.rokosh@gmail.com');
+      bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
 
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || `Plio (${this._options.templateData.organizationName})<noreply@pliohub.com>`,
       to: emails,
+      bcc,
       html
     };
 
