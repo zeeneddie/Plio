@@ -24,9 +24,10 @@ import {
 export default compose(
   lifecycle({
     shouldComponentUpdate(nextProps) {
-      return this.props._id === nextProps.at                     ||
-             (this.props.at === this.props._id && !nextProps.at) ||
-             (this.props.at === this.props._id && nextProps.at !== this.props._id);
+      return this.props._id === nextProps.at                                       ||
+             (this.props.at === this.props._id && !nextProps.at)                   ||
+             (this.props.at === this.props._id && nextProps.at !== this.props._id) ||
+             !this.props.isMergedWithPreviousMessage && nextProps.isMergedWithPreviousMessage;
     },
     componentDidMount() {
       if (this.props.isSelected) {
