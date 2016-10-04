@@ -16,7 +16,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 
 import { insertMessageFixtures } from './fixtures-messages.js';
 
-import AuditManager from '/imports/utils/server/audit-manager.js';
+import AuditManager from '/imports/share/utils/audit-manager.js';
 
 // Extend the global object to have a scope of collections
 _.extend(global, { Organizations, Occurrences, Standards, StandardTypes, StandardsBookSections, NonConformities, Actions, RiskTypes, Risks, WorkItems, LessonsLearned, Discussions });

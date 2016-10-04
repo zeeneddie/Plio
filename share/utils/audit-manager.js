@@ -1,7 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 
+import { Changelog } from '/imports/share/collections/changelog.js';
+import { DocChangesKinds } from '/imports/share/constants.js';
 
-export default BaseAuditManager = {
+
+export default AuditManager = {
 
   _isAuditStarted: false,
 
@@ -17,11 +20,33 @@ export default BaseAuditManager = {
     return this._isAuditStarted === true;
   },
 
-  documentCreated(newDocument, userId, collectionName) { },
+  documentCreated(newDocument, userId, collectionName) {
+    Changelog.insert({
+      collection: collectionName,
+      changeKind: DocChangesKinds.DOC_CREATED,
+      newDocument,
+      userId
+    });
+  },
 
-  documentUpdated(newDocument, oldDocument, userId, collectionName) { },
+  documentUpdated(newDocument, oldDocument, userId, collectionName) {
+    Changelog.insert({
+      collection: collectionName,
+      changeKind: DocChangesKinds.DOC_UPDATED,
+      newDocument,
+      oldDocument,
+      userId
+    });
+  },
 
-  documentRemoved(oldDocument, userId, collectionName) { },
+  documentRemoved(oldDocument, userId, collectionName) {
+    Changelog.insert({
+      collection: collectionName,
+      changeKind: DocChangesKinds.DOC_REMOVED,
+      oldDocument,
+      userId
+    });
+  },
 
   registerCollection(collection, collectionName) {
     const auditManager = this;

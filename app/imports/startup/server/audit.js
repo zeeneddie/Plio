@@ -8,7 +8,7 @@ import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { Messages } from '/imports/share/collections/messages.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
-import AuditManager from '/imports/utils/server/audit-manager.js';
+import AuditManager from '/imports/share/utils/audit-manager.js';
 
 
 const collections = {

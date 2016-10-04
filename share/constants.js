@@ -52,6 +52,7 @@ export const AvatarPlaceholders = [
 export const CollectionNames = {
   ACTIONS: 'Actions',
   AUDIT_LOGS: 'AuditLogs',
+  CHANGELOG: 'Changelog',
   DEPARTMENTS: 'Departments',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
@@ -118,6 +119,12 @@ export const DefaultStandardTypes = [
     abbreviation: 'DOC'
   }
 ];
+
+export const DocChangesKinds = {
+  DOC_CREATED: 1,
+  DOC_UPDATED: 2,
+  DOC_REMOVED: 3
+};
 
 export const DocumentTypes = {
   STANDARD: 'standard',

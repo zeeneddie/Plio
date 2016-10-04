@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
-import { SystemName } from '/imports/share/constants.js';
-import { DocChangesKinds, ChangesKinds } from './utils/changes-kinds.js';
+import { DocChangesKinds, SystemName } from '/imports/share/constants.js';
+import { ChangesKinds } from './utils/changes-kinds.js';
 import { renderTemplate } from '/imports/share/helpers.js';
 import DocumentDiffer from './utils/document-differ.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';

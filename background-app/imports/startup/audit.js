@@ -1,4 +1,7 @@
+import { Changelog } from '/imports/share/collections/changelog.js';
 import AuditConfigs from '/imports/audit/audit-configs.js';
+import AuditManager from '/imports/share/utils/audit-manager.js';
+import DocChangeHandler from '/imports/audit/DocChangeHandler.js';
 import ActionAuditConfig from '/imports/audit/configs/actions/action-audit-config.js';
 import NCAuditConfig from '/imports/audit/configs/non-conformities/nc-audit-config.js';
 import RiskAuditConfig from '/imports/audit/configs/risks/risk-audit-config.js';
@@ -22,4 +25,21 @@ const auditConfigs = [
   WorkItemAuditConfig
 ];
 
-_(auditConfigs).each(config => AuditConfigs.add(config));
+_(auditConfigs).each((config) => {
+  AuditConfigs.add(config);
+  AuditManager.registerCollection(config.collection, config.collectionName);
+});
+
+AuditManager.startAudit();
+
+Changelog.find().observe({
+  added: ({ _id, collection, changeKind, newDocument, oldDocument, userId }) => {
+    const auditConfig = AuditConfigs.get(collection);
+
+    new DocChangeHandler(auditConfig, changeKind, {
+      newDocument, oldDocument, userId
+    }).handleChange();
+
+    Changelog.remove({ _id });
+  }
+});

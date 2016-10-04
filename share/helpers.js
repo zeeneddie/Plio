@@ -2,7 +2,7 @@ import { check } from 'meteor/check';
 import moment from 'moment-timezone';
 import Handlebars from 'handlebars';
 
-import { CollectionNames, DocumentTypes, ProblemMagnitudes } from './constants.js';
+import { AvatarPlaceholders, CollectionNames, DocumentTypes, ProblemMagnitudes } from './constants.js';
 import { Actions } from './collections/actions.js';
 import { NonConformities } from './collections/non-conformities.js';
 import { Risks } from './collections/risks.js';

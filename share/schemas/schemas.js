@@ -134,12 +134,14 @@ export const CreatedAtSchema = new SimpleSchema({
   }
 });
 
-const userRegEx = new RegExp(`^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`);
+const dbChangeExecutor = new RegExp(
+  `^([23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17})|${SystemName}$`
+);
 
 export const CreatedBySchema = new SimpleSchema({
   createdBy: {
     type: String,
-    regEx: userRegEx,
+    regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
       if (this.isInsert) {
@@ -168,7 +170,7 @@ export const UpdatedAtSchema = new SimpleSchema({
 export const UpdatedBySchema = new SimpleSchema({
   updatedBy: {
     type: String,
-    regEx: userRegEx,
+    regEx: dbChangeExecutor,
     optional: true,
     autoValue() {
       if (this.isUpdate) {
