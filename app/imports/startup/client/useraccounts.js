@@ -37,7 +37,10 @@ AccountsTemplates.addField({
   placeholder: 'First name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  }
 });
 
 AccountsTemplates.addField({
@@ -47,7 +50,10 @@ AccountsTemplates.addField({
   placeholder: 'Last name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  }
 });
 
 AccountsTemplates.addField(email);

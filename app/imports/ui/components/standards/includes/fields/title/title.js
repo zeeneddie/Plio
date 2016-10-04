@@ -4,6 +4,7 @@ import invoke from 'lodash.invoke';
 Template.Standards_Title_Edit.viewmodel({
   mixin: 'numberRegex',
   title: '',
+
   titleArgs() {
     const { title:value } = this.data();
     const withFocusCheck = this._id ? true : false;
@@ -11,6 +12,7 @@ Template.Standards_Title_Edit.viewmodel({
     return {
       value,
       withFocusCheck,
+      label: 'Document title',
       onFocusOut: (e, { value:title }) => {
         const number = this.parseNumber(title);
         const nestingLevel = (_.first(number) || '').split('.').length || 1;

@@ -10,6 +10,32 @@
     }
   }
 
+  .dropdown-toggle {
+     &::after {
+       content: '\f107';
+       font-family: 'FontAwesome';
+       border: 0;
+       width: auto;
+       height: 24px;
+       line-height: 20px;
+       font-size: 24px;
+     }
+
+     &::after, .text-muted,  {
+      -moz-transition: color 0.4s ease;
+      -o-transition: color 0.4s ease;
+      -webkit-transition: color 0.4s ease;
+      transition: color 0.4s ease;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    &:hover {
+      &::after, .text-muted {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
   &-title {
     line-height: $navbar-height-standard;
     padding: 0;

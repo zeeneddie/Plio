@@ -48,10 +48,11 @@ import get from 'lodash.get';
       text: `${prependWith} ${filtersData[key]}`.trim()
     }));
     const activeFilter = filters.find(({ value }) => isActiveFilter(value));
-    const header = `${text} ${get(activeFilter, 'text').replace('by', '')}`;
-
-     return {
+    const header = `${text}`;
+    const currentFilterLabel = `- ${prependWith} ${get(activeFilter, 'text').replace('by', '')}`;
+    return {
        header,
+       currentFilterLabel,
        filters,
        isActiveFilter,
        onSelectFilter: (value) => {

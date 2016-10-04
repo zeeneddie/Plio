@@ -62,7 +62,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       _title,
       operation: this.getOperationText({ type }),
       typeText: this.getTypeText({ type, linkedDoc }),
-      doc: { type, ...args },
+      doc: { type, linkedDoc, ...args },
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });

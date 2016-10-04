@@ -3,9 +3,11 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 
 import { Organizations } from './organizations.js';
+import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
 import RisksTypeService from '../risk-types/risk-types-service.js';
 import {
+  DefaultStandardSections,
   DefaultStandardTypes,
   DefaultRiskTypes,
   OrganizationDefaults,
@@ -40,6 +42,14 @@ export default OrganizationService = {
       rkGuidelines,
       rkScoringGuidelines,
       createdBy: ownerId
+    });
+
+    _.each(DefaultStandardSections, ({ title }) => {
+      StandardsBookSectionService.insert({
+        title,
+        organizationId,
+        createdBy: ownerId
+      });
     });
 
     _.each(DefaultStandardTypes, ({ title, abbreviation }) => {
