@@ -88,6 +88,7 @@ const onPropsChange = (props, onData) => {
     const stopSubscription = handle => handle.stop();
 
     subscriptions.map(stopSubscription);
+
     observerCleanup && observerCleanup();
   }
 };
@@ -104,7 +105,7 @@ export default composeAll(
     ({ discussion: Discussions.findOne({ _id: props.discussionId }) })),
   lifecycle({
     componentWillMount() {
-      // run observer that returns cleanup function
+      // run observer that returns a cleanup function
       observerCleanup = observer();
     }
   }),

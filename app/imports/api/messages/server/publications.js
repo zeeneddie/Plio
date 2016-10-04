@@ -66,8 +66,8 @@ const getMessageData = (id) => {
 Meteor.publishComposite('messages', function(discussionId, {
 	sort = { createdAt: -1 },
 	at = null,
-	priorLimit,
-	followingLimit
+	priorLimit = 50,
+	followingLimit = 50
 } = {}) {
 	check(discussionId, String);
 	console.log(arguments);
