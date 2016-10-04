@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItemsStore, AnalysisTitles, ProblemTypes } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
 
 const { TYPES } = WorkItemsStore;
@@ -20,9 +20,9 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       return 'Complete';
     }
   },
-  getDescription({ type, assigneeId, targetDate, isCompleted, completedAt }) {
+  getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
     const chooseOne = this.chooseOne(isCompleted);
-    const typeText = this.getTypeText({ type });
+    const typeText = this.getTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
 
@@ -35,7 +35,16 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
 
     return desc;
   },
-  getTypeText({ type }) {
+  getTypeText({ type, linkedDoc }) {
+    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
+      if (linkedDoc) {
+        if (linkedDoc.type === ProblemTypes.RISK) {
+          return this.capitalize(AnalysisTitles.riskAnalysis);
+        } else {
+          return this.capitalize(AnalysisTitles.rootCauseAnalysis);
+        }
+      }
+    }
     return this.capitalize(type.substr(type.indexOf(' ') + 1));
   },
   getOperationText({ type }) {
@@ -47,12 +56,12 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
         return `${this.lowercase(this.getButtonText({ type }))}d`;
     }
   },
-  openQAModal({ type, ...args }) {
+  openQAModal({ type, linkedDoc, ...args }) {
     const _title = this.capitalize(type);
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),
-      typeText: this.getTypeText({ type }),
+      typeText: this.getTypeText({ type, linkedDoc }),
       doc: { type, ...args },
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'

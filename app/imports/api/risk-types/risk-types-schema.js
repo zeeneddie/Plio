@@ -6,13 +6,16 @@ import { BaseEntitySchema, OrganizationIdSchema } from '../schemas.js';
 const EditableFields = new SimpleSchema({
   title: {
     type: String,
+    label: 'Risk type label',
     min: 1,
     max: 40
   },
   abbreviation: {
     type: String,
+    label: 'Risk type abbreviation',
     min: 1,
-    max: 40
+    max: 4,
+    optional: true
   }
 });
 

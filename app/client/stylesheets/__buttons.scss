@@ -6,7 +6,9 @@
   overflow: hidden;
   @include transition(all .3s ease);
 
-
+  &.disabled, &:disabled {
+    cursor: default;
+  }
 
   &-primary {
     background: $blue-color;
