@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 import { inspire, chain } from '/imports/api/helpers.js';
-import { riskScoreTypes } from '/imports/api/constants.js';
 
 const getTableData = instance => inspire(['tableData', 'guideHtml'], instance);
 
@@ -18,18 +17,12 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
     } = inspire(['scoresSorted', 'label'], this);
 
     // On the top level sub card header it is the most recent Residual risk score that is displayed. If there is no Residual risk score entered yet, then the Inherent risk score is the one that is displayed.
-    const topLevelScore = (() => {
-      return _.find(items, (item) => {
-        return item.scoreTypeId === riskScoreTypes.residual.id
-      }) || _.find(items, (item) => {
-        return item.scoreTypeId === riskScoreTypes.inherent.id
-      }) || {};
-    })();
+    const primaryScore = this.getPrimaryScore(items);
 
     return {
       items,
       _lText,
-      _rText: this.getScoreLabel(topLevelScore),
+      _rText: this.getScoreLabel(primaryScore),
       addText: 'Add a new risk score',
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
@@ -52,7 +45,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
     };
   },
   scoresSorted() {
-    return Object.assign([], this.scores()).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
+    return this.sortScores(this.scores(), -1);
   },
   guideHtml() {
     const { rkScoringGuidelines } = Object.assign({}, this.organization());

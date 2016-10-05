@@ -447,6 +447,7 @@ const RisksListProjection = {
   title: 1,
   identifiedAt: 1,
   typeId: 1,
+  scores: 1,
   departmentsIds: 1,
   status: 1,
   viewedBy: 1,
