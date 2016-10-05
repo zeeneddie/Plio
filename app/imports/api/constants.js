@@ -512,6 +512,19 @@ const AnalysisTitles = {
   riskAnalysis: 'Initial risk analysis'
 };
 
+const riskScoreTypes = {
+  inherent: {
+    id: 'inherent',
+    label: 'Inherent risk',
+    adj: 'Inherent'
+  },
+  residual: {
+    id: 'residual',
+    label: 'Residual risk',
+    adj: 'Residual'
+  }
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -561,5 +574,6 @@ export {
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection,
-  AnalysisTitles
+  AnalysisTitles,
+  riskScoreTypes
 };

@@ -9,10 +9,12 @@
   {{#with score}}
     {{#if every this.value this.rowId}}
       <div class="card-block">
+        {{> RiskScoring_ScoreType_Edit
+            disabled=disabled
+            scoreTypeId=this.scoreTypeId}}
         {{> RiskScoring_ScoredBy_Edit
             disabled=disabled
             scoredBy=this.scoredBy}}
-
         {{> RiskScoring_ScoredAt_Edit
             disabled=disabled
             scoredAt=this.scoredAt}}

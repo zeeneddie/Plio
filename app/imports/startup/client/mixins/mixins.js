@@ -17,7 +17,7 @@ import {
   DocumentTypes, UserRoles, StandardFilters, RiskFilters,
   NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
   OrgCurrencies, ActionStatuses, WorkInboxFilters,
-  ActionTypes, ReviewStatuses, WorkItemsStore
+  ActionTypes, ReviewStatuses, WorkItemsStore, riskScoreTypes
 } from '/imports/api/constants.js';
 import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';
@@ -835,6 +835,14 @@ export default {
     }
   },
   riskScore: {
+    getScoreTypeAdjLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.adj;
+    },
+    getScoreTypeLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.label;
+    },
     getNameByScore(score) {
       if (score >= 0 && score < 20) {
         return 'Very low';
