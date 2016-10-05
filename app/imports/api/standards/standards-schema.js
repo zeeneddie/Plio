@@ -97,7 +97,8 @@ const StandardsSchema = new SimpleSchema([
   OrganizationIdSchema,
   {
     title: {
-      type: String
+      type: String,
+      max: 80
     },
     typeId: {
       type: String,
