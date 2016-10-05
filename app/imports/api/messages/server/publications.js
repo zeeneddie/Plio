@@ -63,6 +63,12 @@ const getMessageData = (id) => {
 	return messageData;
 };
 
+Meteor.publish('msgs', function(discussionId) {
+	const query = { discussionId };
+	const options = { sort: { createdAt: -1 }, limit: 50 };
+	return Messages.find(query, options);
+});
+
 Meteor.publishComposite('messages', function(discussionId, {
 	sort = { createdAt: -1 },
 	at = null,
@@ -70,7 +76,6 @@ Meteor.publishComposite('messages', function(discussionId, {
 	followingLimit = 50
 } = {}) {
 	check(discussionId, String);
-	console.log(arguments);
 
 	new SimpleSchema({
 		priorLimit: { type: Number },
@@ -109,7 +114,9 @@ Meteor.publishComposite('messages', function(discussionId, {
 				return Messages.find(query, options);
 			}
 
-			return Messages.find({ discussionId }, { limit: followingLimit, sort });
+			const query = { discussionId };
+			const options = { sort, limit: followingLimit };
+			return Messages.find(query, options);
 		},
 		children: [{
 	  	find: function (message) {

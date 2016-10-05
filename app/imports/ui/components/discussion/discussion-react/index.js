@@ -6,8 +6,26 @@ import { Provider } from 'react-redux';
 
 import DiscussionContainer from './containers/DiscussionContainer';
 import store from '/client/redux/store';
+import { Messages } from '/imports/api/messages/messages';
+import Container from './containers/MessagesListWrapperContainer';
 
 Template.Discussion_React.viewmodel({
+  // messages: [],
+  // onCreated(template) {
+  //   const p1 = performance.now();
+  //
+  //   template.subscribe('msgs', template.data.discussionId, {
+  //     onReady: () => {
+  //       const p2 = performance.now();
+  //
+  //       console.log(p2 - p1);
+  //
+  //       const messages = Messages.find().fetch();
+  //
+  //       this.messages(messages);
+  //     }
+  //   });
+  // }
   onRendered(template) {
     const { discussionId, organizationId, standard } = template.data;
 
