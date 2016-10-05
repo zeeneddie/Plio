@@ -10,7 +10,7 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+          '{{userName}} changed name of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
       }
     }
   ],
@@ -20,6 +20,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(oldDoc),
+      docName: () => auditConfig.docName(oldDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
       oldValue: () => oldValue

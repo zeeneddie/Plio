@@ -22,11 +22,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set book section of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set book section of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed book section of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed book section of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed book section of {{{docDesc}}}'
+          '{{userName}} removed book section of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -41,6 +41,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getSectionTitle(newValue),
       oldValue: () => getSectionTitle(oldValue)

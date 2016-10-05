@@ -16,9 +16,12 @@ export default {
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: '{{userName}} set notes of {{{docDesc}}}',
-        [ChangesKinds.FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
-        [ChangesKinds.FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set notes of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed notes of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed notes of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -27,6 +30,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

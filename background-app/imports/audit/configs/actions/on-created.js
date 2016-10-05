@@ -5,7 +5,7 @@ import {
   getPrettyOrgDate,
   getUserId
 } from '../../utils/helpers.js';
-import { getLinkedDocAuditConfig, getLinkedDocName } from './helpers.js';
+import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers.js';
 import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
 
 
@@ -15,12 +15,12 @@ export default {
       message: 'Document created',
     },
     {
-      message: '{{{docDesc}}} was linked to this document',
+      message: '{{{docName}}} was linked to this document',
       data({ newDoc }) {
         const auditConfig = this;
 
         return _(newDoc.linkedTo.length).times(() => {
-          return { docDesc: () => auditConfig.docDescription(newDoc) };
+          return { docName: () => auditConfig.docName(newDoc) };
         });
       },
       logData({ newDoc: { linkedTo } }) {
@@ -37,18 +37,21 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
+      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{linkedDocDesc}}} {{{linkedDocName}}}',
       data({ newDoc, user }) {
         const auditConfig = this;
         const docDesc = auditConfig.docDescription(newDoc);
+        const docName = auditConfig.docName(newDoc);
         const userName = getUserFullNameOrEmail(user);
 
         return _(newDoc.linkedTo).map(({ documentId, documentType }) => {
           const auditConfig = getLinkedDocAuditConfig(documentType);
 
           return {
-            linkedDocDesc: getLinkedDocName(documentId, documentType),
+            linkedDocDesc: getLinkedDocDescription(documentId, documentType),
+            linkedDocName: getLinkedDocName(documentId, documentType),
             docDesc,
+            docName,
             userName
           };
         });

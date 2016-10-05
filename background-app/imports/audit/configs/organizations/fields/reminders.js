@@ -14,7 +14,7 @@ const getRemindersConfig = (field, label) => {
             text: {
               [ChangesKinds.FIELD_CHANGED]:
                 `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
             }
           }
         ],
@@ -27,6 +27,7 @@ const getRemindersConfig = (field, label) => {
 
           return {
             docDesc: () => auditConfig.docDescription(newDoc),
+            docName: () => auditConfig.docName(newDoc),
             userName: () => getUserFullNameOrEmail(user),
             newValue: () => `${newValue} ${timeUnit}`,
             oldValue: () => `${oldValue} ${timeUnit}`
@@ -43,7 +44,7 @@ const getRemindersConfig = (field, label) => {
             text: {
               [ChangesKinds.FIELD_CHANGED]:
                 `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
             }
           }
         ],
@@ -56,6 +57,7 @@ const getRemindersConfig = (field, label) => {
 
           return {
             docDesc: () => auditConfig.docDescription(newDoc),
+            docName: () => auditConfig.docName(newDoc),
             userName: () => getUserFullNameOrEmail(user),
             newValue: () => `${timeValue} ${newValue}`,
             oldValue: () => `${timeValue} ${oldValue}`
@@ -74,8 +76,8 @@ const getRemindersConfig = (field, label) => {
 };
 
 export default [
-  ...getRemindersConfig('minorNc', 'minor non-conformities'),
-  ...getRemindersConfig('majorNc', 'major non-conformities'),
-  ...getRemindersConfig('criticalNc', 'critical non-conformities'),
+  ...getRemindersConfig('minorNc', 'minor non-conformities/risks'),
+  ...getRemindersConfig('majorNc', 'major non-conformities/risks'),
+  ...getRemindersConfig('criticalNc', 'critical non-conformities/risks'),
   ...getRemindersConfig('improvementPlan', 'improvement plans')
 ];

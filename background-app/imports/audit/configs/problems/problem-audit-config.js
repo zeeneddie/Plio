@@ -67,7 +67,7 @@ export default ProblemAuditConfig = {
     return _id;
   },
 
-  docDescription({ sequentialId, title }) {
+  docName({ sequentialId, title }) {
     return `${sequentialId} "${title}"`;
   },
 

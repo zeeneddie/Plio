@@ -11,7 +11,7 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
       {
         text: {
           [ChangesKinds.FIELD_CHANGED]:
-            `{{userName}} changed guidelines for ${label} in {{{docDesc}}}`
+            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
         }
       }
     ],
@@ -20,6 +20,7 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
 
       return {
         docDesc: () => auditConfig.docDescription(newDoc),
+        docName: () => auditConfig.docName(newDoc),
         userName: () => getUserFullNameOrEmail(user)
       };
     },

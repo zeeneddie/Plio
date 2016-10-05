@@ -58,8 +58,12 @@ export default StandardAuditConfig = {
     return _id;
   },
 
-  docDescription({ title }) {
-    return `"${title}" standard`;
+  docDescription(doc) {
+    return 'standard';
+  },
+
+  docName({ title }) {
+    return `"${title}"`;
   },
 
   docOrgId({ organizationId }) {

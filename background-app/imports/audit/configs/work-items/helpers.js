@@ -43,6 +43,7 @@ export const getData = function({ newDoc, user }) {
   const auditConfig = this;
   return {
     docDesc: () => auditConfig.docDescription(newDoc),
+    docName: () => auditConfig.docName(newDoc),
     userName: () => getUserFullNameOrEmail(user)
   };
 };
@@ -67,8 +68,8 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === COMPLETE_ACTION;
       },
-      text: '{{userName}} assigned you to complete {{{docDesc}}}',
-      title: 'You have been assigned to complete an action',
+      text: '{{userName}} assigned you to complete {{{docDesc}}} {{{docName}}}',
+      title: 'You have been assigned to complete a {{{docDesc}}}',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -76,8 +77,8 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === VERIFY_ACTION;
       },
-      text: '{{userName}} assigned you to verify {{{docDesc}}}',
-      title: 'You have been assigned to verify an action',
+      text: '{{userName}} assigned you to verify {{{docDesc}}} {{{docName}}}',
+      title: 'You have been assigned to verify a {{{docDesc}}}',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -85,7 +86,7 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === COMPLETE_ANALYSIS;
       },
-      text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}}',
+      text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}} {{{docName}}}',
       title: 'You have been assigned to do a root cause analysis',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
@@ -94,7 +95,7 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === COMPLETE_UPDATE_OF_STANDARDS;
       },
-      text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}}',
+      text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}} {{{docName}}}',
       title: 'You have been assigned to do an update of standards',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData

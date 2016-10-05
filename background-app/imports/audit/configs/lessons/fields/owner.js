@@ -24,7 +24,7 @@ export default {
     const { newValue, oldValue } = owner;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       newValue: () => getUserFullNameOrEmail(newValue),
       oldValue: () => getUserFullNameOrEmail(oldValue)
     };

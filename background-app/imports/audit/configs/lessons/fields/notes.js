@@ -17,6 +17,6 @@ export default {
   notifications: [],
   data({ newDoc }) {
     const auditConfig = this;
-    return { docDesc: () => auditConfig.docDescription(newDoc) };
+    return { docName: () => auditConfig.docName(newDoc) };
   }
 };
