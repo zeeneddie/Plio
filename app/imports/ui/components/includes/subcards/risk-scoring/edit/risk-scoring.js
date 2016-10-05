@@ -12,14 +12,17 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   scores: [],
   wrapperArgs() {
     const {
-      label:_lText,
-      scoresSorted:items
+      label: _lText,
+      scoresSorted: items
     } = inspire(['scoresSorted', 'label'], this);
+
+    // On the top level sub card header it is the most recent Residual risk score that is displayed. If there is no Residual risk score entered yet, then the Inherent risk score is the one that is displayed.
+    const primaryScore = this.getPrimaryScore(items);
 
     return {
       items,
       _lText,
-      _rText: this.getScoreLabel(_.first(items)),
+      _rText: this.getScoreLabel(primaryScore),
       addText: 'Add a new risk score',
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
@@ -31,7 +34,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
       doc,
       _id: doc._id,
       score: doc,
-      _lText: this.renderDate(doc.scoredAt),
+      _lText: `${this.getScoreTypeAdjLabel(doc.scoreTypeId)} - ${this.renderDate(doc.scoredAt)}`,
       _rText: this.getScoreLabel(doc),
       disabled: true,
       isNew: false,
@@ -42,7 +45,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
     };
   },
   scoresSorted() {
-    return Object.assign([], this.scores()).sort(({ scoredAt:sc1 }, { scoredAt:sc2 }) => sc2 - sc1);
+    return this.sortScores(this.scores(), -1);
   },
   guideHtml() {
     const { rkScoringGuidelines } = Object.assign({}, this.organization());
@@ -88,11 +91,11 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   },
   getScoreLabel({ value } = {}) {
     return value
-              ? `<span>${this.getNameByScore(value)}</span>
-                 <span class="label impact-${this.getClassByScore(value)}">
-                   ${value}
-                 </span>`
-              : '';
+      ? `<span>${this.getNameByScore(value)}</span>
+         <span class="label impact-${this.getClassByScore(value)}">
+           ${value}
+         </span>`
+      : '';
   },
   onAdd(add) {
     return add(

@@ -1,7 +1,7 @@
 <template name="Risks_Item">
   {{#ListItemLink (linkArgs)}}
-    {{#if score}}
-      <span class="label risk-square" {{b "text: score.value, class: 'impact-'+getClassByScore(score.value)"}}></span>
+    {{#if primaryScore}}
+      <span class="label risk-square" {{b "text: primaryScore.value, class: 'impact-'+getClassByScore(primaryScore.value)"}}></span>
     {{/if}}
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading">

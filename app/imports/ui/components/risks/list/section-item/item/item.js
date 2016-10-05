@@ -21,9 +21,14 @@ Template.Risks_Item.viewmodel({
   sequentialId: '',
   type: '',
   status: '',
+  scores: '',
   title: '',
-  score: '',
+  primaryScore: '',
   viewedBy: [],
+  primaryScore() {
+    const scoresSorted = this.sortScores(this.scores(), -1);
+    return this.getPrimaryScore(scoresSorted);
+  },
   linkArgs() {
     const _id = this._id();
     return {

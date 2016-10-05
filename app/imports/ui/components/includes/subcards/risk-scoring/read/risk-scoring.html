@@ -7,6 +7,7 @@
       <table class="table borderless big">
         <thead>
           <tr>
+            <th class="list-group-item-text">Score type</th>
             <th class="list-group-item-text">Score</th>
             <th class="list-group-item-text">Scored date</th>
             <th class="list-group-item-text">Scored by</th>
@@ -16,14 +17,17 @@
           {{#each scoresSorted}}
             <tr>
               <td>
-                <span class="label" {{b "text: this.value, class: 'impact-'+getClassByScore(this.value)"}}></span>
-                <span class="list-group-item-heading"  {{b "text: getNameByScore(this.value)"}}></span>
+                <span class="list-group-item-heading">{{getScoreTypeAdjLabel this.scoreTypeId}}</span>
               </td>
               <td>
-                <span class="list-group-item-heading"  {{b "text: renderDate(this.scoredAt)"}}></span>
+                <span class="label" {{b "class: 'impact-'+getClassByScore(this.value)"}}>{{this.value}}</span>
+                <span class="list-group-item-heading">{{getNameByScore this.value}}</span>
               </td>
               <td>
-                <span class="list-group-item-heading"  {{b "text: userNameOrEmail(this.scoredBy)"}}></span>
+                <span class="list-group-item-heading">{{renderDate this.scoredAt}}</span>
+              </td>
+              <td>
+                <span class="list-group-item-heading">{{userNameOrEmail this.scoredBy}}</span>
               </td>
             </tr>
           {{/each}}

@@ -447,6 +447,7 @@ const RisksListProjection = {
   title: 1,
   identifiedAt: 1,
   typeId: 1,
+  scores: 1,
   departmentsIds: 1,
   status: 1,
   viewedBy: 1,
@@ -512,6 +513,19 @@ const AnalysisTitles = {
   riskAnalysis: 'Initial risk analysis'
 };
 
+const riskScoreTypes = {
+  inherent: {
+    id: 'inherent',
+    label: 'Inherent risk',
+    adj: 'Inherent'
+  },
+  residual: {
+    id: 'residual',
+    label: 'Residual risk',
+    adj: 'Residual'
+  }
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -561,5 +575,6 @@ export {
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection,
-  AnalysisTitles
+  AnalysisTitles,
+  riskScoreTypes
 };
