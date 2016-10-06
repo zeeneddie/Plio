@@ -180,7 +180,12 @@
 
     i {
       margin-right: 5px;
-      color: #16A916;
+      &.online {
+        color: #16A916;
+      }
+      &.away {
+        color: #ff8c00;
+      }
     }
   }
 

@@ -1,13 +1,13 @@
 <template name="Subcards_RootCauseAnalysis_Read">
-  {{#with analysis}}
+  {{#if analysis}}
     {{> Subcards_RootCauseAnalysis_Read_Item
-        doc=this
-        heading="Root cause analysis"}}
-  {{/with}}
+        doc=analysis
+        heading=RCALabel}}
+  {{/if}}
 
-  {{#with updateOfStandards}}
+  {{#if updateOfStandards}}
     {{> Subcards_RootCauseAnalysis_Read_Item
-        doc=this
-        heading="Update of standards"}}
-  {{/with}}
+        doc=updateOfStandards
+        heading=UOSLabel}}
+  {{/if}}
 </template>

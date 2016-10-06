@@ -172,7 +172,7 @@ const OrganizationDefaults = {
       }
     },
     majorProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
@@ -256,6 +256,18 @@ const OrganizationDefaults = {
   },
   rkScoringGuidelines: getDefaultGuideline('Risk scoring')
 };
+
+const DefaultStandardSections = [
+  {
+    title: 'Introduction'
+  },
+  {
+    title: 'High level standards'
+  },
+  {
+    title: 'Business standards'
+  }
+];
 
 const DefaultStandardTypes = [
   {
@@ -435,6 +447,7 @@ const RisksListProjection = {
   title: 1,
   identifiedAt: 1,
   typeId: 1,
+  scores: 1,
   departmentsIds: 1,
   status: 1,
   viewedBy: 1,
@@ -500,6 +513,19 @@ const AnalysisTitles = {
   riskAnalysis: 'Initial risk analysis'
 };
 
+const riskScoreTypes = {
+  inherent: {
+    id: 'inherent',
+    label: 'Inherent risk',
+    adj: 'Inherent'
+  },
+  residual: {
+    id: 'residual',
+    label: 'Residual risk',
+    adj: 'Residual'
+  }
+};
+
 const SystemName = 'Plio';
 
 export {
@@ -508,6 +534,7 @@ export {
   ActionPlanOptions,
   ActionUndoTimeInHours,
   CollectionNames,
+  DefaultStandardSections,
   DefaultStandardTypes,
   DefaultRiskTypes,
   ProblemGuidelineTypes,
@@ -548,5 +575,6 @@ export {
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection,
-  AnalysisTitles
+  AnalysisTitles,
+  riskScoreTypes
 };
