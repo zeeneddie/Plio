@@ -55,7 +55,7 @@ const onPropsChange = (props, onData) => {
     resetCompleted = false
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };
-  const messagesSubscription = Meteor.subscribe('msgs', discussionId, subOpts);
+  const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
 

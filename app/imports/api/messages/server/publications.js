@@ -63,12 +63,6 @@ const getMessageData = (id) => {
 	return messageData;
 };
 
-Meteor.publish('msgs', function(discussionId) {
-	const query = { discussionId };
-	const options = { sort: { createdAt: -1 }, limit: 50 };
-	return Messages.find(query, options);
-});
-
 Meteor.publishComposite('messages', function(discussionId, {
 	sort = { createdAt: -1 },
 	at = null,
