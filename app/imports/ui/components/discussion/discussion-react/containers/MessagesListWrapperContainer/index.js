@@ -3,28 +3,27 @@ import { composeAll, composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
-import property from 'lodash.property';
-import { compose, withProps, lifecycle, shallowEqual } from 'recompose';
+import { withProps, lifecycle, shallowEqual } from 'recompose';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
 import { Messages } from '/imports/api/messages/messages';
 import { Discussions } from '/imports/api/discussions/discussions';
-import { MessageSubs } from '/imports/startup/client/subsmanagers';
 import {
   setMessages,
   setLoading,
   setLastMessageId,
   setResetCompleted
 } from '/client/redux/actions/discussionActions';
-import store, { getState } from '/client/redux/store';
+import { getState } from '/client/redux/store';
 import notifications from '/imports/startup/client/mixins/notifications';
 import { pickFromDiscussion, pickC, omitC } from '/imports/api/helpers';
 import { LastDiscussionMessage } from '/client/collections';
+import { markMessagesAsRead } from './constants.js';
 
 const getDiscussionState = () => getState('discussion');
 
-let observerCleanup;
+let observerCleanup, intervalCleanup;
 
 const observer = () => {
   const handle = LastDiscussionMessage.find().observe({
@@ -39,6 +38,12 @@ const observer = () => {
   return () => handle.stop();
 };
 
+const interval = (fn) => {
+  const handle = Meteor.setInterval(() => fn(), 3000);
+
+  return () => Meteor.clearInterval(handle);
+};
+
 const onPropsChange = (props, onData) => {
   const {
     discussionId,
@@ -50,7 +55,7 @@ const onPropsChange = (props, onData) => {
     resetCompleted = false
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };
-  const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
+  const messagesSubscription = Meteor.subscribe('msgs', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
 
@@ -68,10 +73,15 @@ const onPropsChange = (props, onData) => {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
+    let lastMessageId;
+
+    Tracker.nonreactive(() => {
+      lastMessageId = get(LastDiscussionMessage.findOne(), 'lastMessageId');
+    });
 
     const actions = [
       setLoading(false),
-      setLastMessageId(get(LastDiscussionMessage.findOne(), 'lastMessageId')),
+      setLastMessageId(lastMessageId),
       setMessages(messages)
     ];
 
@@ -90,6 +100,8 @@ const onPropsChange = (props, onData) => {
     subscriptions.map(stopSubscription);
 
     observerCleanup && observerCleanup();
+
+    intervalCleanup && intervalCleanup();
   }
 };
 
@@ -101,14 +113,22 @@ const shouldResubscribe = (props, nextProps) => {
 }
 
 export default composeAll(
-  withProps(props =>
-    ({ discussion: Discussions.findOne({ _id: props.discussionId }) })),
   lifecycle({
     componentWillMount() {
-      // run observer that returns a cleanup function
+      const getLastMessage = () => Object.assign({}, _.last(this.props.messages));
+
+      markMessagesAsRead(this.props.discussion, getLastMessage());
+
+      // run observer and interval that returns a cleanup function
+
+      intervalCleanup = interval(() => markMessagesAsRead(this.props.discussion, getLastMessage()));
+
       observerCleanup = observer();
     }
   }),
+  withProps(props =>
+    ({ discussion: Discussions.findOne({ _id: props.discussionId }) })),
+  withProps(props => ({})),
   composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
   connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted']))
 )(MessagesListWrapper);

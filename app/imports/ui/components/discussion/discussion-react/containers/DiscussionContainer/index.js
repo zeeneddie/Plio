@@ -1,25 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Tracker } from 'meteor/tracker';
+import { compose, lifecycle } from 'recompose';
 
 import Discussion from '../../components/Discussion';
 import { setAt, reset } from '/client/redux/actions/discussionActions';
-import { bulkUpdateViewedBy } from '/imports/api/messages/methods.js';
 
-class DiscussionContainer extends React.Component {
-  componentWillMount() {
-    const { dispatch, discussionId } = this.props;
+export default compose(
+  connect(),
+  lifecycle({
+    componentWillMount() {
+      const { dispatch, discussionId } = this.props;
 
-    dispatch(setAt(FlowRouter.getQueryParam('at')));
-  }
-
-  componentWillUnmount() {
-    this.props.dispatch(reset());
-  }
-
-  render() {
-    return (<Discussion {...this.props}/>);
-  }
-}
-
-export default connect()(DiscussionContainer);
+      dispatch(setAt(FlowRouter.getQueryParam('at')));
+    },
+    componentWillUnmount() {
+      this.props.dispatch(reset());
+    }
+  })
+)(Discussion);

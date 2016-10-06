@@ -21,15 +21,17 @@ export const submit = ({
 
     if (!messageInput.value) return;
 
+    const value = messageInput.value;
+
+    messageInput.value = '';
+
     insert.call({
       organizationId,
       discussionId,
-      text: sanitizeHtml(messageInput.value),
+      text: sanitizeHtml(value),
       type: 'text'
     }, handleMethodResult((err, _id) => {
       if (err) return;
-
-      messageInput.value = '';
 
       if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_LENGTH_LIMIT_BEFORE_RESET) {
         FlowRouter.setQueryParams({ at: null });

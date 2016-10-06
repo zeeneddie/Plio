@@ -1,4 +1,5 @@
-import { Discussions } from './discussions.js';
+import { Discussions } from './discussions';
+import { Messages } from '../messages/messages';
 
 
 export default {
@@ -18,5 +19,49 @@ export default {
 
 	remove({ _id }) {
 		return this.collection.remove({ _id });
+	},
+
+	updateViewedBy({ _id, messageId, userId }) {
+		const query = {
+			_id,
+			viewedBy: {
+				$elemMatch: { userId }
+			}
+		};
+
+		const message = Object.assign({}, Messages.findOne({ _id: messageId }));
+
+		const doc = {
+			userId,
+			messageId,
+			viewedUpTo: message.createdAt
+		};
+
+		if (!this.collection.findOne(query)) {
+			const newQuery = { _id };
+			const modifier = {
+				$addToSet: {
+					viewedBy: doc
+				}
+			};
+
+			if (Meteor.isServer) {
+				return Meteor.defer(() => this.collection.update(newQuery, modifier));
+			}
+
+			return this.collection.update(newQuery, modifier)
+		}
+
+		const modifier = {
+			$set: {
+				'viewedBy.$': doc
+			}
+		};
+
+		if (Meteor.isServer) {
+			return Meteor.defer(() => this.collection.update(query, modifier));
+		}
+
+		return this.collection.update(query, modifier);
 	}
 };
