@@ -395,10 +395,6 @@ export const BaseProblemsOptionalSchema = ((() => {
         defaultValue: [],
         optional: true
       },
-      improvementPlan: {
-        type: ImprovementPlanSchema,
-        optional: true
-      },
       ...analysis,
       ...updateOfStandards
     }
