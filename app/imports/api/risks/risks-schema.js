@@ -103,10 +103,6 @@ const OptionalSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
-    improvementPlan: {
-      type: ImprovementPlanSchema,
-      optional: true
-    },
     ...riskEvaluation
   }
 ]);

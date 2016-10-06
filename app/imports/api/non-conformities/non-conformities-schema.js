@@ -112,6 +112,10 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
       regEx: SimpleSchema.RegEx.Id,
       minCount: 1,
       optional: true
+    },
+    improvementPlan: {
+      type: ImprovementPlanSchema,
+      optional: true
     }
   }
 ]);
