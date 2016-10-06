@@ -162,6 +162,8 @@ const PhoneTypes = {
 const getDefaultGuideline = (type, problemType) => (
   `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
 
+const defaultRiskScoringGuideline = 'Please go to Organization settings and provide a brief summary of how Risks should be scored in your organization.';
+
 const OrganizationDefaults = {
   workflowDefaults: {
     minorProblem: {
@@ -254,7 +256,7 @@ const OrganizationDefaults = {
     major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
     critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
   },
-  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
+  rkScoringGuidelines: defaultRiskScoringGuideline
 };
 
 const DefaultStandardSections = [
