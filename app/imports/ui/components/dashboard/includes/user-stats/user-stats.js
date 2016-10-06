@@ -16,7 +16,7 @@ Template.Dashboard_UserStats.viewmodel({
     const orgUserIds = org.users.map(user => user.userId);
 
     return Meteor.users.find(
-      { _id: { $in: orgUserIds }, status: 'online'},
+      { _id: { $in: orgUserIds }, status: { $in: ['online', 'away'] } },
       { sort: { 'profile.firstName': 1 } }
     );
   },
