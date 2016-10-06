@@ -10,8 +10,6 @@ class DiscussionContainer extends React.Component {
   componentWillMount() {
     const { dispatch, discussionId } = this.props;
 
-    bulkUpdateViewedBy.call({ discussionId });
-
     dispatch(setAt(FlowRouter.getQueryParam('at')));
   }
 
