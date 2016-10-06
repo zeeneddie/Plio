@@ -91,7 +91,7 @@ Meteor.publishComposite('messages', function(discussionId, {
 			if (at) {
 				const msg = Object.assign({}, Messages.findOne({ _id: at }));
 				const getMessages = (l, c) => {
-					const sign = c > 0 ? '$gt' : '$lt';
+					const sign = c > 0 ? '$gte' : '$lte';
 					const query = { createdAt: { [sign]: msg.createdAt } };
 					const options = { limit: l, sort: { createdAt: c } };
 					return Messages.find(query, options).fetch();
@@ -261,8 +261,9 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 
   const userId = this.userId;
 	const discussion = Object.assign({}, Discussions.findOne({ linkedTo: documentId, isPrimary: true }));
-	const discussionId = discussion && discussion._id;
+	const discussionId = discussion._id;
 	const organizationId = discussion.organizationId;
+	const { viewedBy = [] } = discussion;
 
 	if (!discussionId || !userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -270,13 +271,15 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 
 	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		organizationId, userId
-	});
+	}) || null;
+	const { viewedUpTo = null } = Object.assign({}, viewedBy.find(obj => Object.is(obj.userId, userId)));
 
   return new Counter(counterName, Messages.find({
     discussionId,
 		organizationId,
-		createdAt: { $gte: currentOrgUserJoinedAt },
-		viewedBy: { $ne: userId }
+		createdAt: {
+			$gt: new Date(Math.max(viewedUpTo, currentOrgUserJoinedAt))
+		}
   }));
 });
 

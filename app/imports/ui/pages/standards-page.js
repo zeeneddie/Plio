@@ -22,11 +22,12 @@ Template.StandardsPage.viewmodel({
         _subHandlers = _subHandlers.concat([
           DiscussionSubs.subscribe('discussionsByStandardId', standardId),
         ]);
-      } else {
-        _subHandlers = [
-         CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
-       ];
       }
+      // else {
+      //   _subHandlers = [
+      //    CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
+      //  ];
+      // }
 
       this._subHandlers(_subHandlers);
     },

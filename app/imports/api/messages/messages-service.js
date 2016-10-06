@@ -47,7 +47,8 @@ export default {
 
 		return this.collection.update({
 			organizationId,
-			createdAt: { $gte: user.createdAt }
+			createdAt: { $gte: user.createdAt },
+			viewedBy: { $ne: userId }
 		}, {
 			$addToSet: { viewedBy: userId }
 		}, { multi: true });

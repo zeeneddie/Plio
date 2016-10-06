@@ -36,7 +36,7 @@ Template.Dashboard_MessageStats.viewmodel({
       const organizationId = this.organizationId();
 
       this._subHandlers([
-        MessageSubs.subscribe('unreadMessages', { organizationId: organizationId, limit }),
+        MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
         CountSubs.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
       ]);
     });

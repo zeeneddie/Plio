@@ -45,11 +45,7 @@ export default {
 				}
 			};
 
-			if (Meteor.isServer) {
-				return Meteor.defer(() => this.collection.update(newQuery, modifier));
-			}
-
-			return this.collection.update(newQuery, modifier)
+			return this.collection.update(newQuery, modifier);
 		}
 
 		const modifier = {
@@ -57,10 +53,6 @@ export default {
 				'viewedBy.$': doc
 			}
 		};
-
-		if (Meteor.isServer) {
-			return Meteor.defer(() => this.collection.update(query, modifier));
-		}
 
 		return this.collection.update(query, modifier);
 	}
