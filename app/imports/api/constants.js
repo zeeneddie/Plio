@@ -528,6 +528,8 @@ const riskScoreTypes = {
 
 const SystemName = 'Plio';
 
+const RCAMaxCauses = 5;
+
 export {
   ActionTypes,
   ActionStatuses,
@@ -576,5 +578,6 @@ export {
   RisksListProjection,
   WorkItemsListProjection,
   AnalysisTitles,
-  riskScoreTypes
+  riskScoreTypes,
+  RCAMaxCauses
 };

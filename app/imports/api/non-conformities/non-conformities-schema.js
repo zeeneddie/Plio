@@ -4,34 +4,33 @@ import {
   BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
   ImprovementPlanSchema, FileIdsSchema
 } from '../schemas.js';
-import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
+import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
 
-const RootCauseAnalysisSchema = (() => {
-  const getCausesDef = () => {
-    return _(5).times(n => ({
-      [`rootCauseAnalysis.cause${n+1}`]: {
-        type: String,
-        optional: true
-      }
-    }));
-  };
-
-  const CausesSchaema = new SimpleSchema(getCausesDef());
-
-  return new SimpleSchema([
-    {
-      rootCauseAnalysis: {
-        type: Object,
-        defaultValue: {},
-        optional: true
-      }
+const RootCauseAnalysisSchema = new SimpleSchema([
+  {
+    rootCauseAnalysis: {
+      type: Object,
+      defaultValue: {},
+      optional: true
     },
-    CausesSchaema,
-    FileIdsSchema
-  ]);
-})();
+    'rootCauseAnalysis.causes': {
+      type: [Object],
+      defaultValue: [],
+      maxCount: RCAMaxCauses
+    },
+    'rootCauseAnalysis.causes.$.index': {
+      type: Number,
+      min: 1,
+      max: RCAMaxCauses
+    },
+    'rootCauseAnalysis.causes.$.text': {
+      type: String
+    }
+  },
+  FileIdsSchema
+]);
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
