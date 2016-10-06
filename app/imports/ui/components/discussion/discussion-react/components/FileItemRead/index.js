@@ -1,6 +1,6 @@
 import React from 'react';
 import { composeWithTracker } from 'react-komposer';
-import Blaze from 'meteor/gadicc:blaze-react-component';
+import Blaze from 'meteor/blaze-react-component';
 
 import { getFile } from './constants';
 

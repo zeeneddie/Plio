@@ -6,7 +6,7 @@ AccountsTemplates.configure({
     signInLink_pre: "Already have an account?",
     signInLink_link: "Login",
     title: {
-      signUp: 'Sign up for a Plio account',
+      signUp: 'Sign up for a Plio account - 30 day free trial',
       signIn: 'Login'
     },
     button: {
@@ -37,7 +37,10 @@ AccountsTemplates.addField({
   placeholder: 'First name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  }
 });
 
 AccountsTemplates.addField({
@@ -47,7 +50,10 @@ AccountsTemplates.addField({
   placeholder: 'Last name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  }
 });
 
 AccountsTemplates.addField(email);

@@ -43,7 +43,7 @@ const Message = (props) => {
               <MessageTime
                 onClick={e => props.onMessageTimeClick(e)}
                 href={props.pathToMessage}
-                time={props.time}/>
+                time={props.time.split(' ')[0]}/>
             </MessageGutter>
 
             <MessageContent

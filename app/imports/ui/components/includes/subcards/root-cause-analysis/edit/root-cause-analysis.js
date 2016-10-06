@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 import curry from 'lodash.curry';
 
-import { AnalysisStatuses } from '/imports/api/constants.js';
+import { AnalysisStatuses, AnalysisTitles } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 
@@ -20,7 +20,7 @@ Template.Subcards_RCA_Edit.viewmodel({
       return date.toDate();
     }
   },
-  RCALabel: 'Root cause analysis',
+  RCALabel: AnalysisTitles.rootCauseAnalysis,
   UOSLabel: 'Update of standard(s)',
   magnitude: '',
   analysis: '',

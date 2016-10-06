@@ -11,7 +11,7 @@ Template.StandardsHeader.viewmodel({
   headerArgs() {
     return {
       idToExpand: this.standardId(),
-      header: `Compliance standards by -`,
+      header: `Compliance standards`,
       prependWith: 'by',
       filters: StandardFilters,
       isActiveFilter: this.isActiveStandardFilter.bind(this)

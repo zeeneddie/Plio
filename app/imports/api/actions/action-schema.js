@@ -37,7 +37,7 @@ const RequiredSchema = new SimpleSchema([
     title: {
       type: String,
       min: 1,
-      max: 40
+      max: 80
     },
     type: {
       type: String,
@@ -45,7 +45,7 @@ const RequiredSchema = new SimpleSchema([
     },
     linkedTo: {
       type: [linkedToSchema],
-      minCount: 1
+      optional: true
     },
     ownerId: {
       type: String,

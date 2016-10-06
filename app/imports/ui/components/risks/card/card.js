@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { ActionTypes, UncategorizedTypeSection } from '/imports/api/constants.js';
+import { ActionTypes, UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants.js';
 import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
@@ -10,6 +10,7 @@ Template.Risks_Card_Read.viewmodel({
   isReadOnly: false,
   _subHandlers: [],
   isReady: false,
+  RiskRCALabel: AnalysisTitles.riskAnalysis,
 
   onCreated(template) {
     template.autorun(() => {
@@ -21,7 +22,7 @@ Template.Risks_Card_Read.viewmodel({
         this._subHandlers(_subHandlers);
       }
     });
-    
+
     template.autorun(() => {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     });

@@ -2,7 +2,7 @@ import React from 'react';
 
 const MessageDate = props => (
   <div className="chat-item-date">
-    {props.date}
+    <span>{props.date}</span>
   </div>
 );
 

@@ -5,7 +5,7 @@ import pluralize from 'pluralize';
 import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
-  mixin: 'modal',
+  mixin: ['modal', 'organization'],
   welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share compliance standards documents, to record non-conformities and risks and to track actions. See you soon.',
   usersEntries: _.range(0, 4).map((i) => {
     return {avatarIndex: i};
@@ -30,10 +30,12 @@ Template.UserDirectory_InviteUsers.viewmodel({
         organizationId, emails, welcomeMessage
       }, (err, res) => {
         if (!err) {
+          const organization = this.organization();
+          const organizationName = organization && organization.name || 'organization';
           const invitedEmails = res.invitedEmails || [];
           const addedEmails = res.addedEmails || [];
-          const invitedEmailsText = invitedEmails.length > 0 ? `${pluralize('Invite', invitedEmails.length)} to "${invitedEmails.join(', ')}" ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.\n` : '';
-          const addedEmailsText = addedEmails.length > 0 ? `"${addedEmails.join(', ')}" ${addedEmails.length > 1 ? 'were' : 'was'} added to this organization immediately.\n` : '';
+          const invitedEmailsText = invitedEmails.length > 0 ? `${pluralize('Invite', invitedEmails.length)} to ${invitedEmails.join(', ')} ${invitedEmails.length > 1 ? 'were' : 'was'} sent successfully.\n` : '';
+          const addedEmailsText = addedEmails.length > 0 ? `${addedEmails.join(', ')} ${addedEmails.length > 1 ? 'are already Plio users. These users have' : 'is already a Plio user. This user has' } now been added to the ${organizationName} organization in Plio.\n` : '';
           const successMessagePart = `${invitedEmailsText}${addedEmailsText}`;
           const failMessagePart = res.error ? `\n${res.error}` : '';
 

@@ -8,7 +8,7 @@ Template.WorkInbox_Header.viewmodel({
   headerArgs() {
     return {
       idToExpand: this.workItemId(),
-      header: 'Work inbox -',
+      header: 'Work inbox',
       filters: WorkInboxFilters,
       isActiveFilter: this.isActiveWorkInboxFilter.bind(this)
     };

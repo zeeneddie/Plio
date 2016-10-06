@@ -63,5 +63,5 @@ shell-server
 # meteorhacks:sikka
 
 meteorhacks:kadira
-gadicc:blaze-react-component
 percolate:migrations
+blaze-react-component
