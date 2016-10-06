@@ -172,7 +172,7 @@ const OrganizationDefaults = {
       }
     },
     majorProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
