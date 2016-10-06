@@ -16,6 +16,7 @@ base64@1.0.9
 binary-heap@1.0.9
 blaze@2.1.8
 blaze-html-templates@1.0.4
+blaze-react-component@1.2.0
 blaze-tools@1.0.9
 boilerplate-generator@1.0.9
 browser-policy@1.0.9
@@ -49,7 +50,6 @@ fastclick@1.0.12
 force-ssl@1.0.12
 fortawesome:fontawesome@4.5.0
 fourseven:scss@3.9.0
-gadicc:blaze-react-component@1.2.0
 geojson-utils@1.0.9
 hot-code-push@1.0.4
 html-tools@1.0.10
