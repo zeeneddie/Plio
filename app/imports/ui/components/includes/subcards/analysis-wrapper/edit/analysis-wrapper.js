@@ -6,7 +6,7 @@ import { AnalysisStatuses, AnalysisTitles } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 
-Template.Subcards_RCA_Edit.viewmodel({
+Template.Subcards_AnalysisWrapper_Edit.viewmodel({
   mixin: ['organization', 'nonconformity', 'date', 'modal', 'utils'],
   defaultTargetDate() {
     const workflowDefaults = this.organization().workflowDefaults;

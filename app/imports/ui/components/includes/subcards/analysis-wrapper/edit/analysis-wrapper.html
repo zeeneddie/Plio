@@ -1,5 +1,5 @@
-<template name="Subcards_RCA_Edit">
-  {{> RCA_Analysis_Edit
+<template name="Subcards_AnalysisWrapper_Edit">
+  {{> Analysis_Edit
       label=RCALabel
       analysis=analysis
       defaultTargetDate=defaultTargetDate
@@ -8,7 +8,7 @@
       areStandardsUpdated=(isCompleted updateOfStandards)
       areCompletionFieldsDisabled=(not (isCurrentOwner analysis))}}
   {{#if isCompleted analysis}}
-    {{> RCA_UOS_Edit
+    {{> UOS_Edit
         label=UOSLabel
         updateOfStandards=updateOfStandards
         defaultTargetDate=defaultTargetDate

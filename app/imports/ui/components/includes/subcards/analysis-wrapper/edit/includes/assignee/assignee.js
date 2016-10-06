@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RCA_ToBeCompletedBy_Edit.viewmodel({
+Template.Analysis_ToBeCompletedBy_Edit.viewmodel({
   assignee() { return Meteor.userId() },
   comments: '',
   selectFirstIfNoSelected: false,

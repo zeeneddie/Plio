@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RCA_Comments_Edit.viewmodel({
+Template.Analysis_Comments_Edit.viewmodel({
   comments: '',
   placeholder: 'Completion comments',
   onUpdate() {},

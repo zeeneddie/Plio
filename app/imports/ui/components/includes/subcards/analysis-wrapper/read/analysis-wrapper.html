@@ -1,12 +1,12 @@
-<template name="Subcards_RootCauseAnalysis_Read">
+<template name="Subcards_AnalysisWrapper_Read">
   {{#if analysis}}
-    {{> Subcards_RootCauseAnalysis_Read_Item
+    {{> Subcards_Analysis_Read_Item
         doc=analysis
         heading=RCALabel}}
   {{/if}}
 
   {{#if updateOfStandards}}
-    {{> Subcards_RootCauseAnalysis_Read_Item
+    {{> Subcards_Analysis_Read_Item
         doc=updateOfStandards
         heading=UOSLabel}}
   {{/if}}

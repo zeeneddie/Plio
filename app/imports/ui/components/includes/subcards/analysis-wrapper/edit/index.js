@@ -1,5 +1,5 @@
-import './root-cause-analysis.html';
-import './root-cause-analysis.js';
+import './analysis-wrapper.html';
+import './analysis-wrapper.js';
 import './analysis';
 import './update-of-standards'
 import './includes';
