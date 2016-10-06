@@ -8,8 +8,34 @@ import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
 
+const RootCauseAnalysisSchema = (() => {
+  const getCausesDef = () => {
+    return _(5).times(n => ({
+      [`rootCauseAnalysis.cause${n+1}`]: {
+        type: String,
+        optional: true
+      }
+    }));
+  };
+
+  const CausesSchaema = new SimpleSchema(getCausesDef());
+
+  return new SimpleSchema([
+    {
+      rootCauseAnalysis: {
+        type: Object,
+        defaultValue: {},
+        optional: true
+      }
+    },
+    CausesSchaema,
+    FileIdsSchema
+  ]);
+})();
+
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
+  RootCauseAnalysisSchema,
   {
     cost: {
       type: Number,
