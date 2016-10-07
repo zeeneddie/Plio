@@ -11,6 +11,8 @@ import { isOrgMember } from '../../checkers.js';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Match } from 'meteor/check';
 import Counter from '../../counter/server.js';
+import { getNewerDate, getC } from '../../helpers.js';
+import { getUserViewedByData } from '../../discussions/helpers.js';
 
 const getLastMessageId = (query, options) => ({
 	lastMessageId: get(Messages.findOne(query, _.omit(options, 'limit')), '_id')
@@ -208,50 +210,56 @@ Meteor.publish('organizationMessagesLast', function(organizationId) {
 Meteor.publishComposite('unreadMessages', function({ organizationId, limit }) {
 	check(organizationId, String);
 
+	const userId = this.userId;
+	const getUserData = getUserViewedByData(userId);
+	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
+    organizationId, userId
+  });
+
 	return {
 		find() {
-			const userId = this.userId;
-
 			if (!userId || !isOrgMember(userId, organizationId)) {
 		    return this.ready();
 		  }
 
-			const options = {};
-
-			// Check if limit is an integer number
-		  if (Number(limit) === limit && limit % 1 === 0) {
-		    options.limit = limit;
-		  }
-
-			options.sort = {
-				createdAt: -1
-			};
-
-			const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
-		    organizationId, userId
-		  });
-
-			return Messages.find({
-				organizationId: organizationId,
-				viewedBy: { $nin: [userId] },
-				createdAt: { $gte: currentOrgUserJoinedAt }
-			}, options);
+			return Discussions.find({ organizationId });
 		},
 		children: [{
-	  	find: function (message) {
-	      return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
-	    }
-	  }, {
-			find: function (message) {
-				return Discussions.find({ _id: message.discussionId }, { fields: { linkedTo: 1, organizationId: 1, documentType: 1 } });
-			}
-		}, {
-	  	find: function (message) {
-				if (message.fileId) {
-	      	return Files.find({ _id: message.fileId });
+			find: function(discussion) {
+				const { _id:discussionId } = discussion;
+				const { viewedUpTo } = Object.assign({}, getUserData(discussion));
+				const query = {
+					discussionId,
+					organizationId,
+					createdAt: {
+						$gt: getNewerDate(currentOrgUserJoinedAt, viewedUpTo)
+					}
+				};
+				const options = {
+					sort: {
+						createdAt: -1
+					}
+				};
+
+				// Check if limit is an integer number
+				if (Number(limit) === limit && limit % 1 === 0) {
+					options.limit = limit;
 				}
-	    }
-	  }]
+
+				return Messages.find(query, options);
+			},
+			children: [{
+				find: function (message) {
+					return Meteor.users.find({ _id: message.userId }, { fields: { profile: 1 } });
+				}
+			}, {
+				find: function (message) {
+					if (message.fileId) {
+						return Files.find({ _id: message.fileId });
+					}
+				}
+			}]
+		}]
 	}
 });
 
@@ -263,7 +271,6 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 	const discussion = Object.assign({}, Discussions.findOne({ linkedTo: documentId, isPrimary: true }));
 	const discussionId = discussion._id;
 	const organizationId = discussion.organizationId;
-	const { viewedBy = [] } = discussion;
 
 	if (!discussionId || !userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
@@ -271,14 +278,14 @@ Meteor.publish('messagesNotViewedCount', function(counterName, documentId) {
 
 	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		organizationId, userId
-	}) || null;
-	const { viewedUpTo = null } = Object.assign({}, viewedBy.find(obj => Object.is(obj.userId, userId)));
+	});
+	const { viewedUpTo = null } = Object.assign({}, getUserViewedByData(userId, discussion));
 
   return new Counter(counterName, Messages.find({
     discussionId,
 		organizationId,
 		createdAt: {
-			$gt: new Date(Math.max(viewedUpTo, currentOrgUserJoinedAt))
+			$gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt)
 		}
   }));
 });
@@ -296,10 +303,23 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		organizationId, userId
 	});
+	const discussions = Discussions.find({ organizationId }).fetch();
+	const viewedBydata = discussions.map((discussion) => {
+		const { viewedUpTo } = Object.assign({}, getUserViewedByData(userId, discussion));
+
+		return {
+			viewedUpTo,
+			discussionId: discussion._id
+		};
+	});
 
   return new Counter(counterName, Messages.find({
-		organizationId: organizationId,
-		createdAt: { $gte: currentOrgUserJoinedAt },
-		viewedBy: { $ne: userId }
+		organizationId,
+		$or: viewedBydata.map(({ viewedUpTo, discussionId }) => ({
+			discussionId,
+			createdAt: {
+				$gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt)
+			}
+		}))
   }));
 });

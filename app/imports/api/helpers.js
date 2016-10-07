@@ -275,6 +275,8 @@ const pickFromDiscussion = pickFrom('discussion');
 
 const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
+const getC = curry((path, obj) => get(obj, path));
+
 const renderTemplate = (template, data = {}) => {
   const compiledTemplate = Handlebars.compile(template);
   return compiledTemplate(data);
@@ -326,6 +328,8 @@ const sortArrayByTitlePrefix = (arr) => {
   });
 };
 
+const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -373,6 +377,8 @@ export {
   pickFrom,
   pickFromDiscussion,
   omitC,
+  getC,
   getTitlePrefix,
-  sortArrayByTitlePrefix
+  sortArrayByTitlePrefix,
+  getNewerDate
 };
