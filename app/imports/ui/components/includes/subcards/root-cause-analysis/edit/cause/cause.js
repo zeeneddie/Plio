@@ -3,9 +3,28 @@ import { Template } from 'meteor/templating';
 
 Template.RCA_Cause_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
+  onCreated() {
+    this._originalData = this.templateInstance.data;
+    this.loadData(this.cause());
+  },
+  autorun() {
+    const cause = this.cause();
+    if (!_.isEqual(this.templateInstance.data, this._originalData)) {
+      this.loadData(cause);
+      this._originalData = this.templateInstance.data;
+    }
+  },
+  cause: '',
   index: '',
   text: '',
   isNew: true,
+  loadData(cause) {
+    this.load({
+      index: cause.index,
+      text: cause.text,
+      isNew: cause.isNew
+    });
+  },
   label() {
     return `Cause ${this.index()}`;
   },
@@ -18,9 +37,11 @@ Template.RCA_Cause_Edit.viewmodel({
 
       let args;
       if (this.isNew()) {
-        args = {
-          options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } }
-        };
+        if (text) {
+          args = {
+            options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } }
+          };
+        }
       } else {
         if (text) {
           args = {

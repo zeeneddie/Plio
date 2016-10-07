@@ -10,22 +10,17 @@ const RequiredSchema = BaseProblemsRequiredSchema;
 
 const RootCauseAnalysisSchema = new SimpleSchema([
   {
-    rootCauseAnalysis: {
-      type: Object,
-      defaultValue: {},
-      optional: true
-    },
-    'rootCauseAnalysis.causes': {
+    'causes': {
       type: [Object],
       defaultValue: [],
       maxCount: RCAMaxCauses
     },
-    'rootCauseAnalysis.causes.$.index': {
+    'causes.$.index': {
       type: Number,
       min: 1,
       max: RCAMaxCauses
     },
-    'rootCauseAnalysis.causes.$.text': {
+    'causes.$.text': {
       type: String
     }
   },
@@ -34,7 +29,6 @@ const RootCauseAnalysisSchema = new SimpleSchema([
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
-  RootCauseAnalysisSchema,
   {
     cost: {
       type: Number,
@@ -53,6 +47,11 @@ const OptionalSchema = new SimpleSchema([
     'ref.url': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    rootCauseAnalysis: {
+      type: RootCauseAnalysisSchema,
+      defaultValue: {},
       optional: true
     }
   }

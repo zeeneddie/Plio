@@ -5,14 +5,13 @@ import { RCAMaxCauses } from '/imports/api/constants.js';
 
 Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   mixin: ['collapse', 'modal'],
-  autorun() {
-    this.load(this.doc());
-  },
   doc() {
     return this.rootCauseAnalysis() || {};
   },
   label: 'Root cause analysis',
-  causes: [],
+  causes() {
+    return this.doc() && this.doc().causes || [];
+  },
   fileIds() {
     return this.doc() && this.doc().fileIds || [];
   },
