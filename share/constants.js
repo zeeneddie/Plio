@@ -70,7 +70,7 @@ export const CollectionNames = {
   WORK_ITEMS: 'WorkItems'
 };
 
-const DefaultRiskTypes = [
+export const DefaultRiskTypes = [
   {
     title: 'Credit risk'
   },
@@ -106,7 +106,7 @@ export const DefaultStandardSections = [
   }
 ];
 
-const DefaultStandardTypes = [
+export const DefaultStandardTypes = [
   {
     title: 'Process',
     abbreviation: 'PRO'
