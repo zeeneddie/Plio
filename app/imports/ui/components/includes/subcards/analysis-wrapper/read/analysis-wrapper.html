@@ -1,0 +1,13 @@
+<template name="Subcards_AnalysisWrapper_Read">
+  {{#if analysis}}
+    {{> Subcards_Analysis_Read_Item
+        doc=analysis
+        heading=RCALabel}}
+  {{/if}}
+
+  {{#if updateOfStandards}}
+    {{> Subcards_Analysis_Read_Item
+        doc=updateOfStandards
+        heading=UOSLabel}}
+  {{/if}}
+</template>
