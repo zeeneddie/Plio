@@ -6,7 +6,7 @@ AccountsTemplates.configure({
     signInLink_pre: "Already have an account?",
     signInLink_link: "Login",
     title: {
-      signUp: 'Sign up for a Plio account',
+      signUp: 'Sign up for a Plio account - 30 day free trial',
       signIn: 'Login'
     },
     button: {

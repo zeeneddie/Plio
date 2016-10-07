@@ -120,6 +120,10 @@ $variable-padding: .75rem;
         }
       }
 
+      .list-group-item-text.label {
+        color: #fff !important;
+      }
+
       &.active {
         background: $blue-color;
 
@@ -131,7 +135,7 @@ $variable-padding: .75rem;
         }
 
         .list-group-item-text {
-          color: lighten($blue-color, 40%) !important;
+          color: lighten($blue-color, 40%);
         }
       }
 

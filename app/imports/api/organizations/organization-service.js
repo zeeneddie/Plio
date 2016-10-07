@@ -61,10 +61,9 @@ export default OrganizationService = {
       });
     });
 
-    _.each(DefaultRiskTypes, ({ title, abbreviation }) => {
+    _.each(DefaultRiskTypes, ({ title }) => {
       RisksTypeService.insert({
         title,
-        abbreviation,
         organizationId,
         createdBy: ownerId
       });
