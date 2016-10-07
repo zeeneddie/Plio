@@ -186,3 +186,27 @@
   min-height: 34px;
   text-overflow: initial;
 }
+
+.btn {
+  &.btn-secondary {
+    @include pretty-buttons($btn-secondary-color, $btn-secondary-bg);
+  }
+  &.btn-primary {
+    @include pretty-buttons($btn-primary-color, $btn-primary-bg);
+  }
+  &.btn-success {
+    @include pretty-buttons($btn-success-color, $btn-success-bg);
+  }
+  &.btn-info {
+    @include pretty-buttons($btn-info-color, $btn-info-bg);
+  }
+  &.btn-warning {
+    @include pretty-buttons($btn-warning-color, $btn-warning-bg);
+  }
+  &.btn-danger {
+    @include pretty-buttons($btn-danger-color, $btn-danger-bg);
+  }
+  &.btn-inverse {
+    @include pretty-buttons(white, #474949);
+  }
+}

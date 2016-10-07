@@ -309,7 +309,7 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
     title: {
       type: String,
       min: 1,
-      max: 40
+      max: 80
     },
     identifiedBy: {
       type: String,

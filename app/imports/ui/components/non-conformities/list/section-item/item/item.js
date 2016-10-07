@@ -7,7 +7,7 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'nonconformity', 'currency', 'organization'],
+  mixin: ['date', 'nonconformity', 'currency', 'organization', 'problemsStatus'],
   onCreated(template) {
     const currency = this.organization() && this.organization().currency;
     this.load({ currency });

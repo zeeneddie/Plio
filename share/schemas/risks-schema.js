@@ -42,6 +42,11 @@ const RiskScoreSchema = new SimpleSchema({
     min: 1,
     max: 100
   },
+  scoreTypeId: {
+    type: String,
+    label: 'Score type',
+    max: 40
+  },
   scoredBy: {
     type: String,
     regEx: SimpleSchema.RegEx.Id
@@ -133,7 +138,7 @@ const RisksUpdateSchema = new SimpleSchema([
     title: {
       type: String,
       min: 1,
-      max: 40,
+      max: 80,
       optional: true
     },
     identifiedBy: {

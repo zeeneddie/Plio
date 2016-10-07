@@ -11,7 +11,7 @@ export const StandardsTypeSchema = new SimpleSchema([
       type: String,
       label: 'Standard type title',
       min: 1,
-      max: 40
+      max: 80
     },
     abbreviation: {
       type: String,

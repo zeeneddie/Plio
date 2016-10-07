@@ -14,7 +14,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
   doc: '',
   comments: '',
   update(success) {
-    const { _id, type, linkedDoc: { type:docType } } = this.data();
+    const { _id, type, linkedDoc: { type: docType } } = this.data();
     const method = this._getMethodByType({ type, docType });
     const args = {
       ...this.getData(),

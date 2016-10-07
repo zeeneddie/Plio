@@ -8,7 +8,7 @@ const EditableFields = new SimpleSchema({
     type: String,
     label: 'Risk type label',
     min: 1,
-    max: 40
+    max: 80
   },
   abbreviation: {
     type: String,

@@ -16,7 +16,8 @@ import invoke from 'lodash.invoke';
 import {
   DocumentTypes, UserRoles, ProblemGuidelineTypes,
   ProblemsStatuses, OrgCurrencies, ActionStatuses,
-  ActionTypes, ReviewStatuses, WorkItemsStore
+  ActionTypes, ReviewStatuses, WorkItemsStore,
+  riskScoreTypes
 } from '/imports/share/constants.js';
 import {
   NonConformityFilters, StandardFilters,
@@ -838,6 +839,30 @@ export default {
     }
   },
   riskScore: {
+    sortScores(scores, direction) {
+      return Array.from(scores || []).sort(({ scoredAt: sc1 }, { scoredAt: sc2 }) => {
+        if (direction === -1) {
+          return sc2 - sc1;
+        } else {
+          return sc1 - sc2;
+        }
+      });
+    },
+    getPrimaryScore(scores) {
+      return _.find(scores, (score) => {
+        return score && score.scoreTypeId === riskScoreTypes.residual.id
+      }) || _.find(scores, (score) => {
+        return score && score.scoreTypeId === riskScoreTypes.inherent.id
+      }) || {};
+    },
+    getScoreTypeAdjLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.adj;
+    },
+    getScoreTypeLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.label;
+    },
     getNameByScore(score) {
       if (score >= 0 && score < 20) {
         return 'Very low';

@@ -70,18 +70,27 @@ export const CollectionNames = {
   WORK_ITEMS: 'WorkItems'
 };
 
-export const DefaultRiskTypes = [
+const DefaultRiskTypes = [
   {
-    title: 'Industrial accident',
-    abbreviation: 'IND'
+    title: 'Credit risk'
   },
   {
-    title: 'Strike or stoppage',
-    abbreviation: 'STR'
+    title: 'Liquidity risk'
   },
   {
-    title: 'Technical failure',
-    abbreviation: 'TFA'
+    title: 'Market risk'
+  },
+  {
+    title: 'Operational risk'
+  },
+  {
+    title: 'Regulatory risk'
+  },
+  {
+    title: 'Reputational risk'
+  },
+  {
+    title: 'Infosecurity risk'
   }
 ];
 
@@ -222,6 +231,19 @@ export const RiskEvaluationPriorities = {
   'high': 'High'
 };
 
+export const riskScoreTypes = {
+  inherent: {
+    id: 'inherent',
+    label: 'Inherent risk',
+    adj: 'Inherent'
+  },
+  residual: {
+    id: 'residual',
+    label: 'Residual risk',
+    adj: 'Residual'
+  }
+};
+
 export const StandardStatuses = {
   'issued': 'Issued',
   'draft': 'Draft'
@@ -304,6 +326,8 @@ export const OrgCurrencies = {
 const getDefaultGuideline = (type, problemType) => (
   `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
 
+const defaultRiskScoringGuideline = 'Please go to Organization settings and provide a brief summary of how Risks should be scored in your organization.';
+
 export const OrganizationDefaults = {
   workflowDefaults: {
     minorProblem: {
@@ -314,7 +338,7 @@ export const OrganizationDefaults = {
       }
     },
     majorProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
@@ -396,5 +420,5 @@ export const OrganizationDefaults = {
     major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
     critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
   },
-  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
+  rkScoringGuidelines: defaultRiskScoringGuideline
 };
