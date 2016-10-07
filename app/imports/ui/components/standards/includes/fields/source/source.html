@@ -10,7 +10,7 @@
       </h4>
       <h4 class="list-group-item-heading" {{b "if: this.type === 'attachment'"}}>
         {{#with file}}
-          {{> FileItem_Read this}}
+          {{> FileItem_Read file=this}}
         {{/with}}
       </h4>
       {{#if isVideo this.type}}
