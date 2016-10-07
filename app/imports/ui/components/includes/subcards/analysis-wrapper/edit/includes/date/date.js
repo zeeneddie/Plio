@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-Template.RCA_TargetDate_Edit.viewmodel({
+Template.Analysis_TargetDate_Edit.viewmodel({
   mixin: 'utils',
   date: '',
   startDate: new Date(),
