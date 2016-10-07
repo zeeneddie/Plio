@@ -10,3 +10,4 @@ import './subsmanagers.js';
 import './polyfills';
 import './blaze-helpers.js';
 import './mixins';
+import './jquery-plugins.js';

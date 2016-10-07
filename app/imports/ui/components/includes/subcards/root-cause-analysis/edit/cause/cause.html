@@ -1,0 +1,6 @@
+<template name="RCA_Cause_Edit">
+  {{#FormField label=label}}
+    <textarea class="form-control" rows="3" placeholder="{{label}}"
+      {{b "value: text, focusout: update"}}></textarea>
+  {{/FormField}}
+</template>

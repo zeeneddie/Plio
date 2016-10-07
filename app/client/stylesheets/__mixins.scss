@@ -190,9 +190,55 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down
 }
 
+@mixin gradient-vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+  background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9
+}
+
 @mixin hide-scrollbar {
   &::-webkit-scrollbar {
     width: 0px;
     background: transparent;
+  }
+}
+
+@mixin box-shadow($shadow...) {
+  @if $enable-shadows {
+    box-shadow: $shadow;
+  }
+}
+
+@mixin pretty-buttons($color, $background, $text-shadow: none) {
+
+  color: $color;
+  @include gradient-vertical(lighten($background, 5%), darken($background, 5%), 0%, 100%);
+  border-color: darken($background, 10%);
+  border-bottom-color: darken($background, 20%);
+  text-shadow: $text-shadow;
+  @include box-shadow(inset 0 1px 0 rgba(255, 255, 255, .1));
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    &:not(.btn-checkbox) {
+      @include gradient-vertical(darken($background, 0), darken($background, 10%), 0%, 100%);
+      border-color: darken($background, 20%);
+      color: $color;
+    }
+  }
+
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        background-color: $background;
+        border-color: darken($background, 5%);
+    }
   }
 }

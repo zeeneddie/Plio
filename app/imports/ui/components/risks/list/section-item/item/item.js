@@ -6,7 +6,7 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 
 Template.Risks_Item.viewmodel({
   share: 'window',
-  mixin: ['risk', 'date', 'riskScore', 'organization'],
+  mixin: ['risk', 'date', 'riskScore', 'organization', 'problemsStatus'],
   onCreated(template) {
     template.autorun((computation) => {
       if (this._id() === this.riskId() && this.isNew()) {

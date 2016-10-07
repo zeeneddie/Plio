@@ -1,14 +1,20 @@
 <template name="Risks_Item">
   {{#ListItemLink (linkArgs)}}
-    {{#if primaryScore}}
-      <span class="label risk-square" {{b "text: primaryScore.value, class: 'impact-'+getClassByScore(primaryScore.value)"}}></span>
-    {{/if}}
+    {{#unless isActiveRiskFilter 2}}
+      {{#if primaryScore}}
+        <span class="label risk-square" {{b "text: primaryScore.value, class: 'impact-'+getClassByScore(primaryScore.value)"}}></span>
+      {{/if}}
+    {{/unless}}
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading">
         <span {{b "text: title"}}></span>
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
       </h4>
-      <p class="list-group-item-text pull-left" {{b "text: this.sequentialId"}}></p>
+      {{#if isActiveRiskFilter 2}}
+        <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>
+      {{else}}
+        <p class="list-group-item-text pull-left" {{b "text: this.sequentialId"}}></p>
+      {{/if}}
       <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
     </div>
   {{/ListItemLink}}

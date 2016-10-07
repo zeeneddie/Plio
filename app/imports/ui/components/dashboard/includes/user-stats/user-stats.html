@@ -5,7 +5,7 @@
     </h4>
     {{#each usersOnline}}
       <span class="dashboard-stats-user">
-        <i class="fa fa-user"></i>
+        <i class="fa fa-user {{this.status}}"></i>
         {{userNameOrEmail this}}
       </span>
     {{/each}}
