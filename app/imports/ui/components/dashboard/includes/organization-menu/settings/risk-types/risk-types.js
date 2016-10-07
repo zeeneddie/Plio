@@ -22,19 +22,19 @@ Template.OrgSettings_RisksTypes.viewmodel({
     return this.onDelete.bind(this);
   },
   onChange(viewModel) {
-    const { title, abbreviation } = viewModel.getData();
+    const { title } = viewModel.getData();
     const organizationId = this.organizationId();
 
     if (!viewModel._id) {
       Blaze.remove(viewModel.templateInstance.view);
 
       this.modal().callMethod(insert, {
-        title, abbreviation, organizationId
+        title, organizationId
       });
     } else {
       const _id = viewModel._id();
 
-      this.modal().callMethod(update, { _id, title, abbreviation });
+      this.modal().callMethod(update, { _id, title });
     }
   },
   onDelete(viewModel) {

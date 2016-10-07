@@ -321,16 +321,25 @@ const StandardFilters = {
 
 const DefaultRiskTypes = [
   {
-    title: 'Industrial accident',
-    abbreviation: 'IND'
+    title: 'Credit risk'
   },
   {
-    title: 'Strike or stoppage',
-    abbreviation: 'STR'
+    title: 'Liquidity risk'
   },
   {
-    title: 'Technical failure',
-    abbreviation: 'TFA'
+    title: 'Market risk'
+  },
+  {
+    title: 'Operational risk'
+  },
+  {
+    title: 'Regulatory risk'
+  },
+  {
+    title: 'Reputational risk'
+  },
+  {
+    title: 'Infosecurity risk'
   }
 ];
 
