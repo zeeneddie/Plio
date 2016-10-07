@@ -5,10 +5,10 @@ import { Template } from 'meteor/templating';
 import { Discussions } from '/imports/api/discussions/discussions.js';
 import { Messages } from '/imports/api/messages/messages.js';
 import { Files } from '/imports/api/files/files.js';
-import { bulkUpdateViewedByTotal } from '/imports/api/messages/methods.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
+import { updateViewedByOrganization } from '/imports/api/discussions/methods.js';
 
 Template.Dashboard_MessageStats.viewmodel({
   mixin: ['user', 'organization', {
@@ -20,7 +20,6 @@ Template.Dashboard_MessageStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
-
   autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
@@ -37,7 +36,7 @@ Template.Dashboard_MessageStats.viewmodel({
 
       this._subHandlers([
         MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
-        CountSubs.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
+        template.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
       ]);
     });
 
@@ -69,10 +68,8 @@ Template.Dashboard_MessageStats.viewmodel({
   },
   messages() {
     return Messages.find({
-      organizationId: this.organizationId(),
-      viewedBy: { $ne: Meteor.userId() }
+      organizationId: this.organizationId()
     }, {
-      fields: { viewedBy: 0 },
       sort: { createdAt: -1 },
       limit: this.enableLimit() ? this.limit() : 0
     }).fetch();
@@ -129,10 +126,10 @@ Template.Dashboard_MessageStats.viewmodel({
   loadAll() {
     this.enableLimit(false);
   },
-
   // Mark all messages as "read"
-  bulkUpdateViewedByTotal(e) {
+  markAllAsRead(e) {
     e.preventDefault();
-    bulkUpdateViewedByTotal.call({ organizationId: this.organizationId() });
+
+    updateViewedByOrganization.call({ _id: this.organizationId() });
   }
 });

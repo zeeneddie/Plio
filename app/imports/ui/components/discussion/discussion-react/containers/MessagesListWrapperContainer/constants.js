@@ -1,4 +1,4 @@
-import { updateViewedBy } from '/imports/api/discussions/methods';
+import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
 
 export const markMessagesAsRead = (discussion = {}, doc = {}) => {
   const { _id, viewedBy = [] } = discussion;
@@ -8,7 +8,7 @@ export const markMessagesAsRead = (discussion = {}, doc = {}) => {
 
   // mark messages as read if the last message is actually a new one
   if (viewedUpTo < doc.createdAt) {
-    updateViewedBy.call({
+    updateViewedByDiscussion.call({
       _id,
       messageId: doc._id
     });

@@ -303,8 +303,8 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 	const currentOrgUserJoinedAt = getJoinUserToOrganizationDate({
 		organizationId, userId
 	});
-	const discussions = Discussions.find({ organizationId }).fetch();
-	const viewedBydata = discussions.map((discussion) => {
+	const discussions = Discussions.find({ organizationId });
+	const viewedByData = discussions.map((discussion) => {
 		const { viewedUpTo } = Object.assign({}, getUserViewedByData(userId, discussion));
 
 		return {
@@ -313,13 +313,17 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 		};
 	});
 
-  return new Counter(counterName, Messages.find({
+	const makeQuery = () => viewedByData.map(({ viewedUpTo, discussionId }) => ({
+		discussionId,
+		createdAt: {
+			$gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt)
+		}
+	}));
+
+	const query = {
 		organizationId,
-		$or: viewedBydata.map(({ viewedUpTo, discussionId }) => ({
-			discussionId,
-			createdAt: {
-				$gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt)
-			}
-		}))
-  }));
+		$or: makeQuery()
+  };
+
+  return new Counter(counterName, Messages.find(query));
 });

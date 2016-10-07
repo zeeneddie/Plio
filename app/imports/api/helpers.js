@@ -380,5 +380,5 @@ export {
   getC,
   getTitlePrefix,
   sortArrayByTitlePrefix,
-  getNewerDate
+  getNewerDate,
 };
