@@ -7,6 +7,7 @@ Template.Datepicker.viewmodel({
       // BUG: if date is less than startDate, it is not displayed in text input
       // startDate: this.startDate(),
       endDate: this.endDate(),
+      todayHighlight: true,
       format: 'dd M yyyy',
       autoclose: true
     });

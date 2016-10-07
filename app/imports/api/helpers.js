@@ -183,7 +183,9 @@ const inspire = curry((props, instance, ...args) =>
 
 const invokeId = instance => invoke(instance, '_id');
 
-const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+
+const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
 
 const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
@@ -193,7 +195,8 @@ const $isScrolledElementVisible = (el, container) => {
   const elPosition = $(el).position();
   const elemTop = elPosition && elPosition.top;
   const elemBottom = elPosition && elemTop + $(el).height();
-  return ((elemBottom < containerBottom) && (elemTop > containerTop));
+
+  return ((elemBottom < containerBottom) && (elemTop >= containerTop));
 }
 
 const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
@@ -206,6 +209,10 @@ const length = (array = []) => array.length;
 const propItems = property('items');
 
 const lengthItems = compose(length, propItems);
+
+const propMessages = property('messages');
+
+const lengthMessages = compose(length, propMessages);
 
 const flattenMapItems = flattenMap(propItems);
 
@@ -237,6 +244,38 @@ const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
 
   return date;
 }
+
+const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
+
+const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
+
+// useful with recompose's withProps:
+// const transformer = transsoc({
+//   'userAvatar': getUserAvatar,
+//   'pathToMessage': getMessagePath
+// });
+// withProps(transformer)(Component);
+// > {
+//   pathToMessage: '/98/standards/Mc7jjwYJ9gXPkibS8/discussion?at=jBwoZSJ3S4xkzvpdY',
+//   userAvatar: 'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png'
+// }
+// Object<key: path, value: func> -> obj -> obj
+const transsoc = curry((transformations, obj) => {
+  const keys = Object.keys(Object.assign({}, transformations));
+  const result = keys.map(key => assoc(key, transformations[key](obj), obj));
+
+  return _.pick(flattenObjects(result), ...keys);
+})
+
+const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+
+const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
+
+const pickFromDiscussion = pickFrom('discussion');
+
+const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+
+const getC = curry((path, obj) => get(obj, path));
 
 const renderTemplate = (template, data = {}) => {
   const compiledTemplate = Handlebars.compile(template);
@@ -289,6 +328,8 @@ const sortArrayByTitlePrefix = (arr) => {
   });
 };
 
+const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -315,8 +356,14 @@ export {
   setModalError,
   invokeId,
   $isScrolledToBottom,
+  $isAlmostScrolledToBottom,
   $scrollToBottom,
   $isScrolledElementVisible,
+  getWorkflowDefaultStepDate,
+  assoc,
+  invokeC,
+  transsoc,
+  pickC,
   capitalize,
   flattenMap,
   findById,
@@ -325,6 +372,13 @@ export {
   lengthItems,
   flattenMapItems,
   getWorkflowDefaultStepDate,
+  propMessages,
+  lengthMessages,
+  pickFrom,
+  pickFromDiscussion,
+  omitC,
+  getC,
   getTitlePrefix,
-  sortArrayByTitlePrefix
+  sortArrayByTitlePrefix,
+  getNewerDate,
 };

@@ -1,4 +1,7 @@
 <template name="Departments_Create">
-  <div class="dropdown-divider" {{b "if: items.count > 0"}}></div>
-  <a class="dropdown-item pointer" {{b "click: addNewDepartment"}}><strong {{b "text: departmentHintText"}}></strong></a>
+  <div class="dropdown-divider"></div>
+  <a class="dropdown-item pointer" {{b "click: addNewDepartment"}}>
+    <strong {{b "text: departmentHintText"}}></strong>
+    {{> Select_Add_Button value=this.value}}
+  </a>
 </template>

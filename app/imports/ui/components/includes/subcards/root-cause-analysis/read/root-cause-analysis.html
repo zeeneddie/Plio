@@ -1,13 +1,23 @@
 <template name="Subcards_RootCauseAnalysis_Read">
-  {{#if analysis}}
-    {{> Subcards_RootCauseAnalysis_Read_Item
-        doc=analysis
-        heading=RCALabel}}
-  {{/if}}
-
-  {{#if updateOfStandards}}
-    {{> Subcards_RootCauseAnalysis_Read_Item
-        doc=updateOfStandards
-        heading=UOSLabel}}
-  {{/if}}
+  <div class="card-block card-subheading">
+    <h4 class="card-title">Root cause analysis</h4>
+  </div>
+  <div class="list-group">
+    {{#each causesData}}
+      {{#if text}}
+        <div class="list-group-item">
+          <p class="list-group-item-text">Cause {{index}}</p>
+          <h4 class="list-group-item-heading">{{text}}</h4>
+        </div>
+      {{/if}}
+    {{/each}}
+    {{#if files.count}}
+      <div class="list-group-item">
+        <p class="list-group-item-text">Files</p>
+        {{#each files}}
+          {{> FileItem_Read file=this}}
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
 </template>

@@ -1,18 +1,11 @@
-<template name="Subcards_RCA_Edit">
-  {{> RCA_Analysis_Edit
-      label=RCALabel
-      analysis=analysis
-      defaultTargetDate=defaultTargetDate
-      isAnalysisCompleted=(isCompleted analysis)
-      methods=methods.Analysis
-      areStandardsUpdated=(isCompleted updateOfStandards)
-      areCompletionFieldsDisabled=(not (isCurrentOwner analysis))}}
-  {{#if isCompleted analysis}}
-    {{> RCA_UOS_Edit
-        label=UOSLabel
-        updateOfStandards=updateOfStandards
-        defaultTargetDate=defaultTargetDate
-        methods=methods.UpdateOfStandards
-        areCompletionFieldsDisabled=(not (isCurrentOwner updateOfStandards))}}
-  {{/if}}
+<template name="Subcards_RootCauseAnalysis_Edit">
+  {{#Subcards_Wrapper _lText=label _rText=getTextIndicator}}
+    <div class="card-block" id="root-cause-analysis">
+      {{#each causesData}}
+        {{> RCA_Cause_Edit cause=this}}
+      {{/each}}
+
+      {{> RCA_Files_Edit fileIds=fileIds}}
+    </div>
+  {{/Subcards_Wrapper}}
 </template>
