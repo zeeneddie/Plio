@@ -222,9 +222,11 @@
   &:focus,
   &:active,
   &.active {
-    @include gradient-vertical(darken($background, 0), darken($background, 10%), 0%, 100%);
-    border-color: darken($background, 20%);
-    color: $color;
+    &:not(.btn-checkbox) {
+      @include gradient-vertical(darken($background, 0), darken($background, 10%), 0%, 100%);
+      border-color: darken($background, 20%);
+      color: $color;
+    }
   }
 
   &.disabled,
