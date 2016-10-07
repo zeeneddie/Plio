@@ -1,7 +1,7 @@
 <template name="NC_Item">
   {{#ListItemLink (linkArgs)}}
     <span class="label label-status-indicator"
-      {{b "class: { label-success: this.magnitude === 'minor', label-warning: this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span>
+      {{b "class: { label-warning: this.magnitude === 'minor' || this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span>
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading pull-left">
         <span {{b "text: renderTitle"}}></span>
