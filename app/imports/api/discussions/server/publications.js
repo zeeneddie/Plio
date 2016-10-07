@@ -22,7 +22,9 @@ Meteor.publish('discussionsByStandardId', function(standardId) {
       isStarted: 1,
       startedAt: 1,
       startedBy: 1,
-      isPrimary: 1
+      isPrimary: 1,
+      organizationId: 1,
+      viewedBy: 1
     }
   };
 

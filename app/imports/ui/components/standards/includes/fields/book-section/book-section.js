@@ -29,7 +29,7 @@ Template.ESBookSection.viewmodel({
           organizationId: this.organizationId()
         },
         {
-          ...this.searchObject('section')
+          ...this.searchObject('section', [{ name: 'title' }])
         }
       ]
     };

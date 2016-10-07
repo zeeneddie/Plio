@@ -30,6 +30,9 @@
     padding: .3rem 1.25rem;
 
     &.first {
+      .chat-item-gutter {
+        display: none;
+      }
       .file-item {
         margin-top: 6px;
       }

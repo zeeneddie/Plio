@@ -99,6 +99,10 @@
               analysis=this.analysis
               updateOfStandards=this.updateOfStandards}}
 
+          {{#if rootCauseAnalysis}}
+            {{> Subcards_RootCauseAnalysis_Read rootCauseAnalysis=rootCauseAnalysis}}
+          {{/if}}
+
           {{#with notify}}
             {{> Subcards_Notify_Read users=this}}
           {{/with}}

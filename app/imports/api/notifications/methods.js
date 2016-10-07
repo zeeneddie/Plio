@@ -13,13 +13,14 @@ const { compose } = _;
 export const updateViewedBy = new Method({
   name: 'Notifications.updateViewedBy',
 
-  validate(_id) { IdSchema.validator() },
+  validate({ _id }) { IdSchema.validator() },
 
   check(checker) {
-    return compose(checker, checkDocExistance)(Notifications, { recipientIds: this.userId });
+    return checker(({ _id }) =>
+      checkDocExistance(Notifications, { _id, recipientIds: this.userId }));
   },
 
-  run(_id) {
+  run({ _id }) {
     return NotificationsService.updateViewedBy({ _id, userId: this.userId });
   }
 });

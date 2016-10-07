@@ -2,7 +2,6 @@ import { Template } from 'meteor/templating';
 
 import { RCAMaxCauses } from '/imports/api/constants.js';
 
-
 Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
   mixin: ['collapse', 'modal'],
   doc() {
