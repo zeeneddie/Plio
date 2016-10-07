@@ -1,8 +1,10 @@
+import { DEFAULT_POLLING_INTERVAL_FOR_COUNTER } from '../constants';
+
 export default class Counter {
   constructor(name, cursor, interval) {
     this.name = name;
     this.cursor = cursor;
-    this.interval = interval || 500 * 10;
+    this.interval = interval || DEFAULT_POLLING_INTERVAL_FOR_COUNTER;
     this._collectionName = 'counters-collection';
   }
 

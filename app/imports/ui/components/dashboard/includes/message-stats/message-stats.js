@@ -9,6 +9,7 @@ import { Organizations } from '/imports/api/organizations/organizations.js';
 import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
 import { updateViewedByOrganization } from '/imports/api/discussions/methods.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.Dashboard_MessageStats.viewmodel({
   mixin: ['user', 'organization', {
@@ -20,6 +21,7 @@ Template.Dashboard_MessageStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
+  listener: null,
   autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
@@ -30,13 +32,16 @@ Template.Dashboard_MessageStats.viewmodel({
     }
   },
   onCreated(template) {
+    // we need a dummy variable to update publish function because meteor doesn't depend on reactive variables inside of publish
+    let dummy = 0;
     template.autorun(() => {
+      this.listener.depend();
       const limit = this.enableLimit() ? this.limit() : false;
       const organizationId = this.organizationId();
 
       this._subHandlers([
         MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
-        template.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
+        template.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId, dummy++)
       ]);
     });
 
@@ -130,6 +135,12 @@ Template.Dashboard_MessageStats.viewmodel({
   markAllAsRead(e) {
     e.preventDefault();
 
-    updateViewedByOrganization.call({ _id: this.organizationId() });
+    const cb = (err) => {
+      if (!err) {
+        this.listener.changed();
+      }
+    };
+
+    updateViewedByOrganization.call({ _id: this.organizationId() }, handleMethodResult(cb));
   }
 });

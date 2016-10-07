@@ -325,5 +325,5 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 		$or: makeQuery()
   };
 
-  return new Counter(counterName, Messages.find(query));
+	return new Counter(counterName, Messages.find(query));
 });
