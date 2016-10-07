@@ -1,13 +1,4 @@
-export const isMobile = () => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch(e) {
-    return false;
-  }
-};
-
-export function swipedetect(el, callback){
+export function swipedetect(el, callback, operation = 'addEventListener') {
   var touchsurface = el,
   swipedir,
   startX,
@@ -21,16 +12,20 @@ export function swipedetect(el, callback){
   startTime,
   handleswipe = callback || function(swipedir){}
 
-  touchsurface.addEventListener('touchstart', function(e){
+  touchsurface[operation]('touchstart', onTouchStart, false);
+
+  touchsurface[operation]('touchend', onTouchEnd, false);
+
+  function onTouchStart(e) {
       var touchobj = e.changedTouches[0]
       swipedir = 'none'
       dist = 0
       startX = touchobj.pageX
       startY = touchobj.pageY
       startTime = new Date().getTime() // record time when finger first makes contact with surface
-  }, false)
+  }
 
-  touchsurface.addEventListener('touchend', function(e){
+  function onTouchEnd(e) {
       var touchobj = e.changedTouches[0]
       distX = touchobj.pageX - startX // get horizontal dist traveled by finger while in contact with surface
       distY = touchobj.pageY - startY // get vertical dist traveled by finger while in contact with surface
@@ -44,5 +39,5 @@ export function swipedetect(el, callback){
           }
       }
       handleswipe(swipedir)
-  }, false)
+  }
 };

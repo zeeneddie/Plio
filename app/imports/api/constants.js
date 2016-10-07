@@ -539,6 +539,8 @@ const riskScoreTypes = {
 
 const SystemName = 'Plio';
 
+const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 500 * 10; // 5 sec
+
 export {
   ActionTypes,
   ActionStatuses,
@@ -587,5 +589,6 @@ export {
   RisksListProjection,
   WorkItemsListProjection,
   AnalysisTitles,
-  riskScoreTypes
+  riskScoreTypes,
+  DEFAULT_POLLING_INTERVAL_FOR_COUNTER
 };

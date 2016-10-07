@@ -6,6 +6,7 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { Standards } from '/imports/api/standards/standards.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Messages } from '/imports/api/messages/messages.js';
 
 
 // indexes for Departments
@@ -159,4 +160,24 @@ Risks._ensureIndex({
 Risks._ensureIndex({
   sequentialId: 1,
   title: 1
+});
+
+// Messages indexes
+
+Messages._ensureIndex({
+  discussionId: 1
+});
+
+Messages._ensureIndex({
+  createdAt: 1
+});
+
+Messages._ensureIndex({
+  discussionId: 1,
+  createdAt: 1
+});
+
+Messages._ensureIndex({
+  discussionId: 1,
+  createdAt: -1
 });
