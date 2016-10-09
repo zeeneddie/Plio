@@ -168,8 +168,7 @@ class InvitationSender {
         $addToSet: {
           users: {
             userId: userIdToInvite,
-            role: UserMembership.ORG_MEMBER,
-            isRemoved: false
+            role: UserMembership.ORG_MEMBER
           }
         }
       });
