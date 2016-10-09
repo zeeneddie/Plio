@@ -179,8 +179,8 @@ export default class RecapSender {
 
   _getRecipients() {
     const orgMembers = _(this._organization.users).filter((userData) => {
-      const { isRemoved, removedAt, removedBy } = userData;
-      return !isRemoved && !removedAt && !removedBy;
+      const { isRemoved, removedAt, removedBy, sendDailyRecap } = userData;
+      return !isRemoved && !removedAt && !removedBy && sendDailyRecap;
     });
 
     return _(orgMembers).pluck('userId');
