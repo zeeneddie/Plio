@@ -4,9 +4,28 @@ import {
   BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
   ImprovementPlanSchema, FileIdsSchema
 } from '../schemas.js';
-import { ProblemsStatuses, WorkflowTypes } from '../constants.js';
+import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes } from '../constants.js';
 
 const RequiredSchema = BaseProblemsRequiredSchema;
+
+const RootCauseAnalysisSchema = new SimpleSchema([
+  {
+    'causes': {
+      type: [Object],
+      defaultValue: [],
+      maxCount: RCAMaxCauses
+    },
+    'causes.$.index': {
+      type: Number,
+      min: 1,
+      max: RCAMaxCauses
+    },
+    'causes.$.text': {
+      type: String
+    }
+  },
+  FileIdsSchema
+]);
 
 const OptionalSchema = new SimpleSchema([
   BaseProblemsOptionalSchema,
@@ -28,6 +47,11 @@ const OptionalSchema = new SimpleSchema([
     'ref.url': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
+      optional: true
+    },
+    rootCauseAnalysis: {
+      type: RootCauseAnalysisSchema,
+      defaultValue: {},
       optional: true
     }
   }

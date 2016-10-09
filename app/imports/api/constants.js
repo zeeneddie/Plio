@@ -539,6 +539,10 @@ const riskScoreTypes = {
 
 const SystemName = 'Plio';
 
+const RCAMaxCauses = 5;
+
+const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
+
 export {
   ActionTypes,
   ActionStatuses,
@@ -587,5 +591,7 @@ export {
   RisksListProjection,
   WorkItemsListProjection,
   AnalysisTitles,
-  riskScoreTypes
+  riskScoreTypes,
+  RCAMaxCauses,
+  DEFAULT_POLLING_INTERVAL_FOR_COUNTER
 };

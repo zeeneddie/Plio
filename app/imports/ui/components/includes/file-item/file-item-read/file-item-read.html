@@ -1,14 +1,16 @@
 <template name="FileItem_Read">
-  <div class="file-item-read">
-    <a class="btn btn-secondary file-label text-xs-left {{#if this.isUploaded}}uploaded{{else}}no-pointer-events {{#if this.isFailed}}failed{{/if}}{{/if}}"
-      {{b "href: url || ''"}}>
-      <span>
-        {{#if extension}}
-          <i class="fa fa-lg fa-file-{{extension}}-o margin-right"></i>
-        {{/if}}
-        <span>{{name}}</span>
-      </span>
-      <div class="uploading-file progress progress-striped stripes progress-animated {{#if this.isUploaded}}uploaded{{/if}}"></div>
-    </a>
-  </div>
+  {{#with file}}
+    <div class="file-item-read">
+      <a class="btn btn-secondary file-label text-xs-left"
+        {{b "href: this.url || '', class: { uploaded: this.isUploaded, failed: this.isFailed, no-pointer-events: !this.isUploaded }"}}>
+        <span>
+          {{#if extension}}
+            <i class="fa fa-lg fa-file-{{this.extension}}-o margin-right"></i>
+          {{/if}}
+          <span>{{this.name}}</span>
+        </span>
+        <div class="uploading-file progress progress-striped stripes progress-animated" {{b "class: { uploaded: this.isUploaded }, style: { width: styles.getWidth(this)}"}}></div>
+      </a>
+    </div>
+  {{/with}}
 </template>

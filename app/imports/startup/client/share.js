@@ -7,14 +7,6 @@ ViewModel.share({
   search: {
     searchText: ''
   },
-  messages: {
-    _scrollProps: null,
-    options: {
-      limit: 50,
-      at: null,
-      sort: { createdAt: -1 }
-    }
-  },
   uploader: {
     uploads: new ReactiveArray
   }
