@@ -5,8 +5,10 @@
         {{> NC_Card_Edit_Main
             NC=this}}
 
-        {{> Subcards_RootCauseAnalysis_Edit
-            rootCauseAnalysis=this.rootCauseAnalysis}}
+        {{#if showRootCauseAnalysis}}
+          {{> Subcards_RootCauseAnalysis_Edit
+              rootCauseAnalysis=this.rootCauseAnalysis}}
+        {{/if}}
 
         {{> Subcards_Notify_Edit
             doc=this
