@@ -62,10 +62,6 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
 
       return NonConformities;
     } else if (Object.is(documentType, ProblemTypes.RISK)) {
-      if (Object.is(action.type, ActionTypes.PREVENTATIVE_ACTION)) {
-        throw ACT_PA_CANNOT_BE_LINKED_TO_RISK;
-      }
-
       return Risks;
     }
   })());
