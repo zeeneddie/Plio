@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
+import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
 import { Standards } from '../standards.js';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember, isOrgMemberBySelector } from '../../checkers.js';
 import { Files } from '/imports/api/files/files.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
@@ -13,6 +13,10 @@ import { WorkItems } from '/imports/api/work-items/work-items.js';
 import Counter from '../../counter/server.js';
 import { StandardsListProjection } from '/imports/api/constants.js';
 import get from 'lodash.get';
+import property from 'lodash.property';
+import { check, Match } from 'meteor/check';
+import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections';
+import { StandardTypes } from '../../standards-types/standards-types';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -23,6 +27,49 @@ const getStandardFiles = (standard) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
+
+Meteor.publishComposite('standardsLayout', function(serialNumber, isDeleted = { $in: [null, false] }) {
+  check(serialNumber, Number);
+  check(isDeleted, Match.OneOf(Boolean, {
+    $in: Array
+  }));
+
+  const userId = this.userId;
+
+  if (!userId || !isOrgMemberBySelector(userId, { serialNumber })) {
+    return this.ready();
+  }
+
+  return {
+    find() {
+      return getUserOrganizations(userId, { serialNumber });
+    },
+    children: [
+      {
+        find({ users = [] }) {
+          const userIds = users.map(property('userId'));
+
+          return Meteor.users.find({ _id: { $in: userIds } });
+        }
+      },
+      {
+        find({ _id:organizationId }) {
+          return StandardsBookSections.find({ organizationId });
+        }
+      },
+      {
+        find({ _id:organizationId }) {
+          return StandardTypes.find({ organizationId });
+        }
+      },
+      {
+        find({ _id:organizationId }) {
+          return Standards.find({ organizationId, isDeleted });
+        }
+      }
+    ]
+  };
+});
 
 Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {

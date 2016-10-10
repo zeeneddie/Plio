@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, UserSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers.js';
+let p1, p2;
 
 Template.StandardsLayout.viewmodel({
   mixin: ['organization', 'standard'],
@@ -8,28 +9,26 @@ Template.StandardsLayout.viewmodel({
   autorun: [
     function() {
       const orgSerialNumber = this.organizationSerialNumber();
-      const org = this.organization();
-      const { _id, users } = !!org && org;
-      const userIds = _.pluck(users, 'userId');
+      const isDeleted = this.isActiveStandardFilter(3)
+        ? true
+        : { $in: [null, false] };
 
       const _subHandlers = [
-        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        UserSubs.subscribe('organizationUsers', userIds),
-        OrgSettingsDocSubs.subscribe('standards-book-sections', _id),
-        OrgSettingsDocSubs.subscribe('standards-types', _id),
-        OrgSettingsDocSubs.subscribe('departments', _id),
+        DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted)
       ];
 
-      if (this.isActiveStandardFilter(3)) {
-        _subHandlers.push(DocumentsListSubs.subscribe('standardsList', _id, true));
-      } else {
-        _subHandlers.push(DocumentsListSubs.subscribe('standardsList', _id));
-      }
-
       this._subHandlers(_subHandlers);
+
+      p1 = performance.now();
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
+    },
+    function() {
+      if (this.isReady()) {
+          p2 = performance.now();
+          console.log(p2 - p1);
+      }
     }
   ]
 });
