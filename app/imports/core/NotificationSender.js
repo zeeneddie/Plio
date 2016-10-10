@@ -105,7 +105,7 @@ export default class NotificationSender {
     return userEmails;
   }
 
-  _sendEmailBasic({ recipients, html, isReportEnabled }) {
+  _sendEmailBasic({ recipients, html, isReportEnabled = false }) {
     let emails = this._getUserEmails(recipients);
     let bcc = [];
     if (isReportEnabled) {
@@ -128,12 +128,13 @@ export default class NotificationSender {
   /**
    * Sends email to specified recipients
    */
-  sendEmail({ isReportEnabled }) {
+  sendEmail(args) {
     const recipients = this._options.recipients || [];
     const templateName = this._options.templateName;
     let html = this._renderTemplateWithData(templateName);
+    const isReportEnabled = args && args.isReportEnabled;
 
-    this._sendEmailBasic({ recipients, html, isReportEnabled });
+    this._sendEmailBasic({ recipients, html, isReportEnabled});
 
     // enables method chaining
     return this;
