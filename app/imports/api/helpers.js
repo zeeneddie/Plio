@@ -74,6 +74,22 @@ export const inspire = curry((props, instance, ...args) =>
 
 export const invokeId = instance => invoke(instance, '_id');
 
+export const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+
+export const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
+
+export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+
+export const $isScrolledElementVisible = (el, container) => {
+  const containerTop = $(container).offset().top;
+  const containerBottom = containerTop + $(container).height();
+  const elPosition = $(el).position();
+  const elemTop = elPosition && elPosition.top;
+  const elemBottom = elPosition && elemTop + $(el).height();
+
+  return ((elemBottom < containerBottom) && (elemTop >= containerTop));
+};
+
 export const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
 
 export const findById = curry((_id, array) =>
@@ -85,20 +101,43 @@ export const propItems = property('items');
 
 export const lengthItems = compose(length, propItems);
 
+export const propMessages = property('messages');
+
+export const lengthMessages = compose(length, propMessages);
+
 export const flattenMapItems = flattenMap(propItems);
 
-export const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
 
-export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
 
-export const $isScrolledElementVisible = (el, container) => {
-  const containerTop = $(container).offset().top;
-  const containerBottom = containerTop + $(container).height();
-  const elPosition = $(el).position();
-  const elemTop = elPosition && elPosition.top;
-  const elemBottom = elPosition && elemTop + $(el).height();
-  return ((elemBottom < containerBottom) && (elemTop > containerTop));
-};
+// useful with recompose's withProps:
+// const transformer = transsoc({
+//   'userAvatar': getUserAvatar,
+//   'pathToMessage': getMessagePath
+// });
+// withProps(transformer)(Component);
+// > {
+//   pathToMessage: '/98/standards/Mc7jjwYJ9gXPkibS8/discussion?at=jBwoZSJ3S4xkzvpdY',
+//   userAvatar: 'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png'
+// }
+// Object<key: path, value: func> -> obj -> obj
+export const transsoc = curry((transformations, obj) => {
+  const keys = Object.keys(Object.assign({}, transformations));
+  const result = keys.map(key => assoc(key, transformations[key](obj), obj));
+
+  return _.pick(flattenObjects(result), ...keys);
+})
+
+export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+
+export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
+
+export const pickFromDiscussion = pickFrom('discussion');
+
+export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+
+export const getC = curry((path, obj) => get(obj, path));
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {
@@ -139,3 +178,5 @@ export const sortArrayByTitlePrefix = (arr) => {
     }
   });
 };
+
+export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));

@@ -87,9 +87,9 @@
 
   &[data-toggle="buttons"] {
     .btn.active {
-      background: $light-blue-color;
-      border-color: $light-blue-color;
-      color: white;
+      background: $light-blue-color !important;
+      border-color: $light-blue-color !important;
+      color: white !important;
     }
   }
 }

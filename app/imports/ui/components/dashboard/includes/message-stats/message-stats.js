@@ -9,6 +9,8 @@ import { bulkUpdateViewedByTotal } from '/imports/api/messages/methods.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
+import { updateViewedByOrganization } from '/imports/api/discussions/methods.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.Dashboard_MessageStats.viewmodel({
   mixin: ['user', 'organization', {
@@ -20,7 +22,7 @@ Template.Dashboard_MessageStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
-
+  listener: null,
   autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
@@ -31,13 +33,16 @@ Template.Dashboard_MessageStats.viewmodel({
     }
   },
   onCreated(template) {
+    // we need a dummy variable to update publish function because meteor doesn't depend on reactive variables inside of publish
+    let dummy = 0;
     template.autorun(() => {
+      this.listener.depend();
       const limit = this.enableLimit() ? this.limit() : false;
       const organizationId = this.organizationId();
 
       this._subHandlers([
-        MessageSubs.subscribe('unreadMessages', { organizationId: organizationId, limit }),
-        CountSubs.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId)
+        MessageSubs.subscribe('unreadMessages', { organizationId, limit }),
+        template.subscribe('messagesNotViewedCountTotal', 'unread-messages-count-' + organizationId, organizationId, dummy++)
       ]);
     });
 
@@ -69,10 +74,8 @@ Template.Dashboard_MessageStats.viewmodel({
   },
   messages() {
     return Messages.find({
-      organizationId: this.organizationId(),
-      viewedBy: { $ne: Meteor.userId() }
+      organizationId: this.organizationId()
     }, {
-      fields: { viewedBy: 0 },
       sort: { createdAt: -1 },
       limit: this.enableLimit() ? this.limit() : 0
     }).fetch();
@@ -129,10 +132,16 @@ Template.Dashboard_MessageStats.viewmodel({
   loadAll() {
     this.enableLimit(false);
   },
-
   // Mark all messages as "read"
-  bulkUpdateViewedByTotal(e) {
+  markAllAsRead(e) {
     e.preventDefault();
-    bulkUpdateViewedByTotal.call({ organizationId: this.organizationId() });
+
+    const cb = (err) => {
+      if (!err) {
+        this.listener.changed();
+      }
+    };
+
+    updateViewedByOrganization.call({ _id: this.organizationId() }, handleMethodResult(cb));
   }
 });

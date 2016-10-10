@@ -1,0 +1,18 @@
+<template name="Subcards_AnalysisWrapper_Edit">
+  {{> Analysis_Edit
+      label=RCALabel
+      analysis=analysis
+      defaultTargetDate=defaultTargetDate
+      isAnalysisCompleted=(isCompleted analysis)
+      methods=methods.Analysis
+      areStandardsUpdated=(isCompleted updateOfStandards)
+      areCompletionFieldsDisabled=(not (isCurrentOwner analysis))}}
+  {{#if isCompleted analysis}}
+    {{> UOS_Edit
+        label=UOSLabel
+        updateOfStandards=updateOfStandards
+        defaultTargetDate=defaultTargetDate
+        methods=methods.UpdateOfStandards
+        areCompletionFieldsDisabled=(not (isCurrentOwner updateOfStandards))}}
+  {{/if}}
+</template>

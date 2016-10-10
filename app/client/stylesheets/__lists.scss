@@ -137,6 +137,10 @@ $variable-padding: .75rem;
         .list-group-item-text {
           color: lighten($blue-color, 40%);
         }
+
+        .list-group-item-text.text-danger {
+          color: lighten($blue-color, 40%) !important;
+        }
       }
 
     }

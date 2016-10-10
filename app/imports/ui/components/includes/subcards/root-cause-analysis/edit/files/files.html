@@ -1,0 +1,8 @@
+<template name="RCA_Files_Edit">
+  {{#FormField label="Files"}}
+    {{> FileUploader_Wrapper
+        fileIds=fileIds
+        slingshotDirective="rootCauseAnalysisFiles"
+        uploaderMetaContext=uploaderMetaContext}}
+  {{/FormField}}
+</template>

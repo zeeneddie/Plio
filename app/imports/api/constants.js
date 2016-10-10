@@ -3,6 +3,8 @@ export const AnalysisTitles = {
   riskAnalysis: 'Initial risk analysis'
 };
 
+export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
+
 export const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',

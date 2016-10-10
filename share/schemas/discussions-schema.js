@@ -3,6 +3,13 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
 import { DocumentTypes } from '../constants.js';
 
+export const ViewedBySchema = new SimpleSchema({
+  userId: idSchemaDoc,
+  messageId: idSchemaDoc,
+  viewedUpTo: {
+    type: Date
+  }
+});
 
 export const DiscussionsSchema = new SimpleSchema([
   BaseEntitySchema,
@@ -29,6 +36,10 @@ export const DiscussionsSchema = new SimpleSchema([
     isStarted: {
       type: Boolean,
       defaultValue: false
+    },
+    viewedBy: {
+      type: [ViewedBySchema],
+      optional: true
     }
   }
 ]);

@@ -1,0 +1,64 @@
+<template name="Subcards_Analysis_Read_Item">
+  {{#with doc}}
+    {{#if every this.executor this.targetDate}}
+      <div class="card-block card-subheading">
+        <h4 class="card-title">{{heading}}</h4>
+      </div>
+      <div class="list-group">
+
+        <div class="list-group-item">
+          <p class="list-group-item-text">Status</p>
+          <h4 class="list-group-item-heading" {{b "text: getAnalysisStatusName(this.status)"}}></h4>
+        </div>
+
+        <div class="row">
+          {{#with this.executor}}
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Who will do it?</p>
+                <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
+              </div>
+            </div>
+          {{/with}}
+
+          {{#with this.targetDate}}
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Target date</p>
+                <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+              </div>
+            </div>
+          {{/with}}
+        </div>
+
+        <div class="row">
+          {{#with this.completedAt}}
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Completed date</p>
+                <h4 class="list-group-item-heading" {{b "text: renderDate(this)"}}></h4>
+              </div>
+            </div>
+          {{/with}}
+
+          {{#with this.completedBy}}
+            <div class="col-sm-6">
+              <div class="list-group-item">
+                <p class="list-group-item-text">Completed by</p>
+                <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this)"}}></h4>
+              </div>
+            </div>
+          {{/with}}
+        </div>
+
+        {{#with this.completionComments}}
+          <div class="list-group-item">
+            <p class="list-group-item-text">Comments</p>
+            <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
+          </div>
+        {{/with}}
+
+      </div>
+    {{/if}}
+  {{/with}}
+</template>

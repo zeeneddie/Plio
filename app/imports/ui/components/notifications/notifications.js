@@ -19,7 +19,7 @@ Template.Notifications.viewmodel({
     Notifications.find().observe({
       added: (doc) => {
         this.sendNotification(doc);
-        updateViewedBy.call(doc._id);
+        updateViewedBy.call({ _id: doc._id });
       }
     });
   },

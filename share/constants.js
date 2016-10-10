@@ -218,6 +218,8 @@ export const ReviewStatuses = {
   2: 'Up-to-date'
 };
 
+export const RCAMaxCauses = 5;
+
 export const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
   'treat': 'Treat',

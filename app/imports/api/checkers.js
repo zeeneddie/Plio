@@ -29,6 +29,8 @@ export * from './occurrences/checkers.js';
 
 export * from './users/checkers.js';
 
+export * from './discussions/checkers.js';
+
 export const isMobileRes = () => {
   const width = $(window).width();
   return width < 768 && width;

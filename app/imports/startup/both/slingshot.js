@@ -40,3 +40,8 @@ Slingshot.fileRestrictions('actionFiles', {
   allowedFileTypes: null,
   maxSize: Meteor.settings.public.otherFilesMaxSize
 });
+
+Slingshot.fileRestrictions('rootCauseAnalysisFiles', {
+  allowedFileTypes: null,
+  maxSize: Meteor.settings.public.otherFilesMaxSize
+});

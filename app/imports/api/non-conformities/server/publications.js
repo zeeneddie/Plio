@@ -20,6 +20,10 @@ const getNCOtherFiles = (nc) => {
   if (!!improvementPlanFileIds) {
     fileIds = fileIds.concat(improvementPlanFileIds);
   }
+  const rcaFileIds = get(nc, 'rootCauseAnalysis.fileIds');
+  if (!!rcaFileIds) {
+    fileIds = fileIds.concat(rcaFileIds);
+  }
 
   return Files.find({ _id: { $in: fileIds } });
 };
