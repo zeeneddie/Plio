@@ -18,7 +18,8 @@ Template.NC_List.viewmodel({
   ],
   autorun() {
     if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const { result:contains, first:defaultDoc } = this._findNCForFilter(this.NCId());
+      const NCId = this.NCId();
+      const { result:contains, first:defaultDoc } = this._findNCForFilter(NCId);
 
       if (!contains) {
         if (defaultDoc) {
@@ -33,6 +34,8 @@ Template.NC_List.viewmodel({
             this.goToNCs();
           }, 0);
         }
+      } else {
+        this.expandCollapsed(NCId);
       }
     }
   },
