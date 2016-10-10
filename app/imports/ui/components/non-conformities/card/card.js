@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { ActionTypes, WorkflowTypes } from '/imports/api/constants.js';
+import { ActionTypes } from '/imports/api/constants.js';
 import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
@@ -90,18 +90,5 @@ Template.NC_Card_Read.viewmodel({
     if (!isDeleted) return;
 
     remove.call({ _id }, cb);
-  },
-  showRootCauseAnalysis() {
-    const NC = this.NC();
-    if (!NC) { 
-      return;
-    }
-
-    const rca = NC.rootCauseAnalysis;
-
-    return _.every([
-      NC.workflowType === WorkflowTypes.SIX_STEP,
-      !!_(rca.causes).find(cause => cause.text && !!cause.text.length)
-    ]);
   }
 });

@@ -5,7 +5,6 @@ import {
   update,
   remove
 } from '/imports/api/non-conformities/methods.js';
-import { WorkflowTypes } from '/imports/api/constants.js';
 import { getTzTargetDate } from '/imports/api/helpers.js';
 
 
@@ -69,8 +68,4 @@ Template.NC_Card_Edit.viewmodel({
       }
     );
   },
-  showRootCauseAnalysis() {
-    const NC = this.NC && this.NC();
-    return NC && (NC.workflowType === WorkflowTypes.SIX_STEP);
-  }
 });
