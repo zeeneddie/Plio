@@ -537,6 +537,18 @@ const riskScoreTypes = {
   }
 };
 
+const StringLimits = {
+  abbreviation: {
+    min: 1,
+    max: 4
+  },
+  title: {
+    min: 1,
+    max: 80
+  }
+};
+
+
 const SystemName = 'Plio';
 
 const RCAMaxCauses = 5;
@@ -593,5 +605,6 @@ export {
   AnalysisTitles,
   riskScoreTypes,
   RCAMaxCauses,
-  DEFAULT_POLLING_INTERVAL_FOR_COUNTER
+  DEFAULT_POLLING_INTERVAL_FOR_COUNTER,
+  StringLimits
 };

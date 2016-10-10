@@ -8,11 +8,14 @@ import {
   ViewedBySchema
 } from '../schemas.js';
 
+import { StringLimits } from '/imports/api/constants.js';
+
 
 const RequiredSchema = new SimpleSchema({
   title: {
     type: String,
-    min: 1
+    min: StringLimits.title.min,
+    max: StringLimits.title.max
   },
   date: {
     type: Date

@@ -10,7 +10,7 @@
       {{#if showAbbreviation}}
         <div class="margin-left margin-right">
           {{#ClearableField field="abbreviation"}}
-            <input type="text" class="form-control" placeholder="Short"
+            <input type="text" class="form-control" placeholder="Short" maxlength="{{abbreviationMaxLength}}"
                 {{b "value: abbreviation, focusout: onFocusOut"}} style="width:100px" />
           {{/ClearableField}}
         </div>
