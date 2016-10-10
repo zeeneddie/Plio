@@ -8,7 +8,7 @@ import { updateUserSettings } from '/imports/api/organizations/methods.js';
 Template.UserPreferences_DailyRecap.viewmodel({
   mixin: ['modal', 'collapse'],
   userId: '',
-  orgCount() {
+  orgsCount() {
     return _(this.orgsData()).filter(doc => doc.sendDailyRecap).length;
   },
   orgsData() {
