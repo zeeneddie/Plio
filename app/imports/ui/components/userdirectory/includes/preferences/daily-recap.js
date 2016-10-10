@@ -22,7 +22,8 @@ Template.UserPreferences_DailyRecap.viewmodel({
         }
       }
     }, {
-      fields: { _id: 1, name: 1, users: 1 }
+      fields: { _id: 1, name: 1, users: 1 },
+      sort: { name: 1 }
     });
 
     return userOrganizations.map((org) => {
@@ -32,8 +33,8 @@ Template.UserPreferences_DailyRecap.viewmodel({
 
       return {
         orgId: org._id,
-        orgName: org.name, 
-        sendDailyRecap: orgUserDoc.sendDailyRecap 
+        orgName: org.name,
+        sendDailyRecap: orgUserDoc.sendDailyRecap
       };
     });
   },
