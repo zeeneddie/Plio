@@ -58,6 +58,9 @@
           </div>
         {{/with}}
 
+        {{#if rootCauseAnalysis}}
+          {{> Subcards_RootCauseAnalysis_Read rootCauseAnalysis=rootCauseAnalysis}}
+        {{/if}}
       </div>
     {{/if}}
   {{/with}}
