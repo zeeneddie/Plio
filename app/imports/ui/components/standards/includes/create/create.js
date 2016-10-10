@@ -37,7 +37,7 @@ Template.CreateStandard.viewmodel({
 
     this.insert(data);
   },
-  insert({ title, sectionId, typeId, owner, issueNumber, status }) {
+  insert({ title, sectionId, typeId, owner, status }) {
     const number = this.parseNumber(title);
     const nestingLevel = (number && number[0].split('.').length) || 1;
 
@@ -51,7 +51,6 @@ Template.CreateStandard.viewmodel({
       sectionId,
       typeId,
       owner,
-      issueNumber,
       status,
       nestingLevel,
       ...inspire(['organizationId'], this)

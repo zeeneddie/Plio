@@ -87,6 +87,13 @@ const optionalFields = new SimpleSchema([
     improvementPlan: {
       type: ImprovementPlanSchema,
       optional: true
+    },
+    issueNumber: {
+      type: Number,
+      min: 1,
+      max: 1000,
+      defaultValue: 1,
+      optional: true
     }
   }
 ]);
@@ -114,11 +121,6 @@ const StandardsSchema = new SimpleSchema([
     owner: {
       type: String,
       regEx: SimpleSchema.RegEx.Id
-    },
-    issueNumber: {
-      type: Number,
-      min: 1,
-      max: 1000
     },
     status: {
       type: String,
