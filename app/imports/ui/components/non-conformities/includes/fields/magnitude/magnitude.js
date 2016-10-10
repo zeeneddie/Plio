@@ -10,7 +10,7 @@ Template.Problems_Magnitude_Edit.viewmodel({
   minor: '',
   major: '',
   critical: '',
-  label: 'Initial categorization',
+  label: 'Magnitude',
   guidelinesText() {
     return this.collapsed() ? 'Guidelines' : 'Hide guidelines';
   },
