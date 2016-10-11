@@ -1,8 +1,7 @@
 <template name="WorkInbox_QAPanel_Edit_Complete">
   {{#if isType 'VERIFY_ACTION'}}
     <div class="margin-bottom">
-      <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
-        <i class="fa fa-check margin-right"></i>
+      <button type="button" class="btn btn-primary" {{b "click: update(true)"}}>
         <span>Verified as effective</span>
       </button>
       <button type="button" class="btn btn-danger pull-xs-right" {{b "click: update(false)"}}>
@@ -12,8 +11,7 @@
     </div>
   {{else}}
     <div class="margin-bottom text-xs-center">
-      <button type="button" class="btn btn-success" {{b "click: update(true)"}}>
-        <i class="fa fa-check margin-right"></i>
+      <button type="button" class="btn btn-primary" {{b "click: update(true)"}}>
         <span>Complete</span>
       </button>
     </div>

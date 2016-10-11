@@ -71,7 +71,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `The work item "${this.capitalize(type)}" will be restored!`,
+        text: `The work item "${this.capitalize(type || '')}" will be restored!`,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Restore',
@@ -80,6 +80,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       () => {
         const callback = (err) => {
           if (err) {
+            console.log('err', err);
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
             swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
