@@ -9,6 +9,7 @@ import {
 } from '../../standards-book-sections/standards-book-sections.js';
 import { Standards } from '../../standards/standards.js';
 import { LessonsLearned } from '../../lessons/lessons.js';
+import { getUserOrganizations } from '../utils.js';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -31,10 +32,6 @@ Meteor.publish('invitationInfo', function (invitationId) {
 
   const { _id:invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
 
-  console.log(invitedUserCursor.fetch()[0]);
-  console.log(invitedUserId);
-  console.log(invitationOrgId);
-
   return [
     invitedUserCursor,
     Organizations.find({
@@ -46,23 +43,6 @@ Meteor.publish('invitationInfo', function (invitationId) {
     })
   ]
 });
-
-const getUserOrganizations = (userId, orgSelector = {}, options = {}) => {
-  const selector = {
-    users: {
-      $elemMatch: {
-        userId,
-        isRemoved: false,
-        removedBy: { $exists: false },
-        removedAt: { $exists: false }
-      }
-    }
-  };
-
-  _.extend(selector, orgSelector);
-
-  return Organizations.find(selector, options);
-};
 
 Meteor.publish('currentUserOrganizations', function() {
   if (this.userId) {

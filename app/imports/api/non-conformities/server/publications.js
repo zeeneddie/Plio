@@ -10,6 +10,7 @@ import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { isOrgMember } from '../../checkers.js';
 import { NonConformitiesListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
+import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
 import get from 'lodash.get';
 
@@ -27,6 +28,18 @@ const getNCOtherFiles = (nc) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
+
+const getNCLayoutPub = (userId, serialNumber, isDeleted) => [
+  {
+    find({ _id:organizationId }) {
+      const query = { organizationId, isDeleted };
+      const options = { fields: NonConformitiesListProjection };
+      return NonConformities.find(query, options);
+    }
+  }
+];
+
+Meteor.publishComposite('nonConformitiesLayout', getPublishCompositeOrganizationUsers(getNCLayoutPub));
 
 Meteor.publishComposite('nonConformitiesList', function (organizationId, isDeleted = { $in: [null, false] }) {
   return {

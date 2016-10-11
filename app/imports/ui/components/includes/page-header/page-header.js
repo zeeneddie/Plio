@@ -4,8 +4,8 @@ import get from 'lodash.get';
 
 /**
  * @param {string} header - The main header text without words after '-'
- * @param {string} [idToExpand] - id of the document we want to expand after filter switch
- * @param {string} [prependWith] - prepend dropdown items with
+ * @param {string} idToExpand - id of the document we want to expand after filter switch
+ * @param {string} prependWith - prepend dropdown items with
  * @param {object} filters - filters to display
  */
  Template.PageHeader.viewmodel({
@@ -25,12 +25,12 @@ import get from 'lodash.get';
     } = this.data();
     const {
       /**
-       * [@function]
+       * @function
        * @param {string} value - id of the current filter
        */
       onSelectFilter,
       /**
-       * [@function]
+       * @function
        * @param {object} e - event
        */
       onNavigate,

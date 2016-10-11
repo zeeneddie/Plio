@@ -14,7 +14,6 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
-
     // hack to get around infinite redirect loop
     template.autorun(() => {
       const standardId = this.standardId();
@@ -53,6 +52,8 @@ Template.StandardsList.viewmodel({
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };
         FlowRouter.go('standards', params, queryParams);
       }
+    } else {
+      this.expandCollapsed(standardId);
     }
   }, 50),
   _findStandardForFilter(_id) {
