@@ -54,7 +54,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
         return ncs.concat(risks);
         break;
       case ActionTypes.PREVENTATIVE_ACTION:
-        return ncs;
+        return ncs.concat(risks);
         break;
       case ActionTypes.RISK_CONTROL:
         return risks;
