@@ -320,11 +320,7 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 		}
 	}));
 
-	const query = { organizationId };
-	const notViewedQuery = makeQuery();
-	if (notViewedQuery.length) {
-		_(query).extend({ $or: notViewedQuery });
-	}
+	const query = { organizationId, $or };
 
 	return new Counter(counterName, Messages.find(query));
 });
