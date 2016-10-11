@@ -1,6 +1,5 @@
 import { Template } from 'meteor/templating';
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers.js';
-let p1, p2;
 
 Template.StandardsLayout.viewmodel({
   mixin: ['organization', 'standard'],
@@ -18,17 +17,9 @@ Template.StandardsLayout.viewmodel({
       ];
 
       this._subHandlers(_subHandlers);
-
-      p1 = performance.now();
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    },
-    function() {
-      if (this.isReady()) {
-          p2 = performance.now();
-          console.log(p2 - p1);
-      }
     }
   ]
 });
