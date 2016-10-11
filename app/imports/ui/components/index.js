@@ -17,3 +17,4 @@ import './standard-subcards';
 import './discussion';
 import './notifications';
 import './problems';
+import './uploads';
