@@ -359,17 +359,17 @@ const RiskFilters = {
 const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',
-  3: 'department/sector',
+  3: 'department',
   4: 'deleted'
 };
 
 const WorkInboxFilters = {
-  1: 'My current work',
-  2: 'Team current work',
-  3: 'My completed work',
-  4: 'Team completed work',
-  5: 'My deleted work',
-  6: 'Team deleted work'
+  1: 'my current',
+  2: 'team current',
+  3: 'my completed',
+  4: 'team completed',
+  5: 'my deleted',
+  6: 'team deleted'
 };
 
 const DocumentTypes = {
