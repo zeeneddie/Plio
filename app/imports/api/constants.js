@@ -166,7 +166,7 @@ const PhoneTypes = {
 };
 
 const getDefaultGuideline = (type, problemType) => (
-  `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
+  `Please go to Organization Settings to define what a ${type} ${problemType} means in your organization.`);
 
 const defaultRiskScoringGuideline = 'Please go to Organization settings and provide a brief summary of how Risks should be scored in your organization.';
 
@@ -543,6 +543,18 @@ const riskScoreTypes = {
   }
 };
 
+const StringLimits = {
+  abbreviation: {
+    min: 1,
+    max: 4
+  },
+  title: {
+    min: 1,
+    max: 80
+  }
+};
+
+
 const SystemName = 'Plio';
 
 const RCAMaxCauses = 5;
@@ -600,5 +612,6 @@ export {
   riskScoreTypes,
   RCAMaxCauses,
   DEFAULT_POLLING_INTERVAL_FOR_COUNTER,
-  DocumentTitles
+  DocumentTitles,
+  StringLimits
 };

@@ -7,7 +7,11 @@ import OrganizationService from './organization-service';
 import { Organizations } from './organizations';
 import InvitationService from './invitation-service';
 
-import { OrganizationEditableFields, OrganizationCurrencySchema } from './organization-schema';
+import { 
+  OrganizationEditableFields, 
+  OrganizationCurrencySchema,
+  UserSettingsSchema 
+} from './organization-schema';
 import {
   WorkflowTypes, NCTypes, UserRoles,
   UserMembership, ProblemGuidelineTypes, RKTypes, InvitationStatuses
@@ -459,5 +463,22 @@ export const cancelOrganizationTransfer = new Method({
 
   run({ organizationId }) {
     return OrganizationService.cancelTransfer({ organizationId });
+  }
+});
+
+export const updateUserSettings = new Method({
+  name: 'Organizations.updateUserSettings',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    UserSettingsSchema
+  ]).validator(),
+
+  run({ organizationId, ...args }) {
+    return OrganizationService.updateUserSettings({ 
+      userId: this.userId,
+      organizationId, 
+      ...args 
+    });
   }
 });
