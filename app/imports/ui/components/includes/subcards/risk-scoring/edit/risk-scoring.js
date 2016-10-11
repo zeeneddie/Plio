@@ -54,7 +54,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   tableData() {
     return {
       xHeading: 'Probability',
-      yHeading: 'Impacts',
+      yHeading: 'Impact',
       data: [
         {
           _id: 1,
