@@ -6,6 +6,7 @@ import property from 'lodash.property';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+let p1, p2;
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -14,33 +15,14 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
-    // hack to get around infinite redirect loop
-    template.autorun(() => {
-      const standardId = this.standardId();
-      const orgSerialNumber = this.organizationSerialNumber();
-      const list = this.list;
-      const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
-      const {
-        result:contains,
-        first:defaultStandard
-      } = this._findStandardForFilter(standardId);
+    p1 = performance.now();
+    const standardId = this.standardId();
+    const orgSerialNumber = this.organizationSerialNumber();
+    const {
+      result:contains,
+      first:defaultStandard
+    } = this._findStandardForFilter(standardId);
 
-      const data = {
-        contains,
-        defaultStandard,
-        standardId,
-        orgSerialNumber
-      };
-
-      shouldUpdate && this.watcher(data);
-    });
-  },
-  watcher: _.debounce(function({
-    contains,
-    defaultStandard,
-    standardId,
-    orgSerialNumber
-  }) {
     if (!contains) {
       if (defaultStandard) {
         const { _id } = defaultStandard;
@@ -52,20 +34,18 @@ Template.StandardsList.viewmodel({
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };
         FlowRouter.go('standards', params, queryParams);
       }
-    } else {
-      this.expandCollapsed(standardId);
     }
-  }, 50),
+
+    console.log(performance.now() - p1);
+  },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
-    const { types, sections, standardsDeleted, activeStandardFilterId } = inspire(
-      ['types', 'sections', 'standardsDeleted', 'activeStandardFilterId'],
-      this
-    );
+    const activeStandardFilterId = this.activeStandardFilterId();
 
     switch(activeStandardFilterId) {
       case 1:
+        const sections = this.sections();
         const mappedSections = flattenMapStandards(sections);
         return {
           result: finder(mappedSections),
@@ -73,6 +53,7 @@ Template.StandardsList.viewmodel({
         }
         break;
       case 2:
+        const types = this.types();
         const mappedTypes = flattenMap(property('items'), types);
         const mappedTypesSections = flattenMapStandards(mappedTypes);
         return {
@@ -90,6 +71,7 @@ Template.StandardsList.viewmodel({
         };
         break;
       case 3:
+        const standardsDeleted = this.standardsDeleted();
         return {
           result: finder(standardsDeleted),
           first: _.first(standardsDeleted)
