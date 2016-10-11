@@ -13,16 +13,12 @@ import { UserRoles, UserMembership } from '../constants.js';
 import Method from '../method.js';
 import { withUserId, chain, mapArgsTo } from '../helpers.js';
 import {
-  checkOrgMembership,
-  exists,
   USR_EnsureUpdatingHimselfChecker,
   USR_EnsureCanChangeRolesChecker,
   USR_EnsureIsNotOrgOwnerChecker
 } from '../checkers.js';
 
 const { compose } = _;
-
-const checkOrganizationExistance = exists(Organizations);
 
 const ensureUpdatingHimself = withUserId(USR_EnsureUpdatingHimselfChecker);
 
@@ -37,29 +33,6 @@ export const remove = new Method({
 
   run({}) {
     return UserService.remove({ _id: this.userId });
-  }
-});
-
-export const selectOrganization = new Method({
-  name: 'Users.selectOrganization',
-
-  validate: new SimpleSchema({
-    selectedOrganizationSerialNumber: {
-      type: Number
-    }
-  }).validator(),
-
-  check(checker) {
-    const mapper = ({ selectedOrganizationSerialNumber:serialNumber }) => ({ serialNumber });
-    const _checkMembership = ({ _id }) => checkOrgMembership(this.userId, _id);
-
-    return compose(checker, compose)(_checkMembership, checkOrganizationExistance(mapper));
-  },
-
-  run({ selectedOrganizationSerialNumber }) {
-    return UserService.update(this.userId, {
-      selectedOrganizationSerialNumber
-    });
   }
 });
 

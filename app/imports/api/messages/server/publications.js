@@ -313,7 +313,7 @@ Meteor.publish('messagesNotViewedCountTotal', function(counterName, organization
 		};
 	});
 
-	const makeQuery = () => viewedByData.map(({ viewedUpTo, discussionId }) => ({
+	const $or = viewedByData.map(({ viewedUpTo, discussionId }) => ({
 		discussionId,
 		createdAt: {
 			$gt: getNewerDate(viewedUpTo, currentOrgUserJoinedAt)
