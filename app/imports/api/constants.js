@@ -54,6 +54,12 @@ const ProblemTypes = {
   RISK: 'risk'
 };
 
+const DocumentTitles = {
+  STANDARD: 'Standard',
+  NC: 'Non-conformity',
+  RISK: 'Risk'
+}
+
 const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
@@ -593,5 +599,6 @@ export {
   AnalysisTitles,
   riskScoreTypes,
   RCAMaxCauses,
-  DEFAULT_POLLING_INTERVAL_FOR_COUNTER
+  DEFAULT_POLLING_INTERVAL_FOR_COUNTER,
+  DocumentTitles
 };
