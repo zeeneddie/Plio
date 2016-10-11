@@ -21,9 +21,9 @@ class InvitationSender {
   }
 
   _findExistingUser() {
-    let existingUser = Meteor.users.findOne({'emails.address': this._userEmail});
+    let existingUser = Meteor.users.findOne({ 'emails': { 'address': this._userEmail, 'verified': true } });
 
-    if (existingUser) {
+    if (existingUser && !existingUser.invitationId) {
       //check if user already invited
       let isOrgMember = Organizations.findOne({
         _id: this._organizationId,
@@ -120,6 +120,8 @@ class InvitationSender {
   _sendNewUserInvite(userIdToInvite, emailSubject, basicNotificationData) {
     let sender = Meteor.user();
     let invitationExpirationInHours = InvitationSender.getInvitationExpirationTime();
+    const receiver = Meteor.users.findOne({ _id: userIdToInvite });
+    const invitationId = receiver && receiver.invitationId || this._invitationId;
 
     // send invitation
     let templateData = Object.assign({
@@ -132,7 +134,7 @@ class InvitationSender {
       },
       button: {
         label: 'Accept the invitation',
-        url: NotificationSender.getAbsoluteUrl(`accept-invitation/${this._invitationId}`)
+        url: NotificationSender.getAbsoluteUrl(`accept-invitation/${invitationId}`)
       },
       footerText: `This invitation expires on ${moment().add(invitationExpirationInHours, 'hours').format('MMMM Do YYYY')}.`
     }, basicNotificationData);
@@ -168,8 +170,7 @@ class InvitationSender {
         $addToSet: {
           users: {
             userId: userIdToInvite,
-            role: UserMembership.ORG_MEMBER,
-            isRemoved: false
+            role: UserMembership.ORG_MEMBER
           }
         }
       });
@@ -200,8 +201,14 @@ class InvitationSender {
       this._inviteUser(userIdToInvite, false);
       return 1;
     } else {
-      this._inviteUser(userIdToInvite, true);
-      return 2;
+      const userToInvite = Meteor.users.findOne({ _id: userIdToInvite });
+      if (userToInvite && userToInvite.invitationId) {
+        this._inviteUser(userIdToInvite, false);
+        return 1;
+      } else {
+        this._inviteUser(userIdToInvite, true);
+        return 2;
+      }
     }
   }
 

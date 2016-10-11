@@ -10,9 +10,11 @@
     "aws-sdk": "^2.4.3",
     "bcrypt": "^0.8.7",
     "clipboard": "^1.5.12",
+    "core-js": "^2.4.1",
     "deep-diff": "^0.3.4",
     "fibers": "^1.0.13",
     "handlebars": "^4.0.5",
+    "invariant": "^2.2.1",
     "lodash": "^4.15.0",
     "lodash.curry": "^4.1.1",
     "lodash.flip": "^4.2.1",
@@ -25,7 +27,7 @@
     "path": "^0.12.7",
     "pluralize": "^2.0.0",
     "quill": "^0.20.1",
-    "react": "^15.3.1",
+    "react": "^15.3.2",
     "react-dom": "^15.3.1",
     "react-komposer": "git://github.com/damonmaria/react-komposer.git#shouldResubscribe-option",
     "react-redux": "^4.4.5",
@@ -33,6 +35,7 @@
     "redux": "^3.6.0",
     "redux-batched-actions": "^0.1.3",
     "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "warning": "^3.0.0"
   }
 }
