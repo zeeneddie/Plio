@@ -128,11 +128,10 @@ export default class NotificationSender {
   /**
    * Sends email to specified recipients
    */
-  sendEmail(args) {
+  sendEmail({ isReportEnabled } = {}) {
     const recipients = this._options.recipients || [];
     const templateName = this._options.templateName;
     let html = this._renderTemplateWithData(templateName);
-    const isReportEnabled = args && args.isReportEnabled;
 
     this._sendEmailBasic({ recipients, html, isReportEnabled});
 
