@@ -18,13 +18,12 @@
       <textarea class="form-control" rows="3"
           {{b "value: text, attr: { placeholder: placeholder }"}}></textarea>
     </div>
-    <button type="button" class="btn btn-primary pull-left" {{b "click: complete"}}>
+    <button type="button" class="btn btn-success margin-right pull-left" {{b "click: complete"}}>
       <span {{b "text: buttonSuccessText"}}></span>
     </button>
     {{#if hasFailFn}}
       <button type="button" class="btn btn-danger pull-left"
           {{b "click: fail"}}>
-        <i class="fa fa-times margin-right"></i>
         <span {{b "text: buttonFailText"}}></span>
       </button>
     {{/if}}

@@ -80,7 +80,6 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       () => {
         const callback = (err) => {
           if (err) {
-            console.log('err', err);
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
             swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
