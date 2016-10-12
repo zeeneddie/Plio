@@ -1,5 +1,4 @@
 import { Template } from 'meteor/templating';
-import { Random } from 'meteor/random';
 
 import { setNotifications, setNotificationSound } from '/imports/api/users/methods.js';
 import Sounds from '/imports/api/sounds.js';

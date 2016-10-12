@@ -1,7 +1,7 @@
 import { NonConformities } from '../non-conformities/non-conformities.js';
 import { Risks } from '../risks/risks.js';
 import { Actions } from './actions.js';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '../constants.js';
+import { ProblemTypes, ActionTypes, WorkflowTypes, AnalysisTitles } from '../constants.js';
 import { checkAndThrow } from '../helpers.js';
 import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
 import {
@@ -33,21 +33,32 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
   const NCsIds = _.pluck(linkedToByType[ProblemTypes.NC], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
-  const docWithUncompletedAnalysis = NonConformities.findOne({
-    _id: { $in: NCsIds },
-    workflowType: WorkflowTypes.SIX_STEP,
-    'analysis.status': 0 // Not completed
-  }) || Risks.findOne({
+  let docWithUncompletedAnalysis, analysisTitle;
+
+  docWithUncompletedAnalysis = Risks.findOne({
     _id: { $in: risksIds },
     workflowType: WorkflowTypes.SIX_STEP,
     'analysis.status': 0 // Not completed
   });
 
   if (docWithUncompletedAnalysis) {
+    analysisTitle = AnalysisTitles.riskAnalysis;
+  } else {
+    docWithUncompletedAnalysis = NonConformities.findOne({
+      _id: { $in: NCsIds },
+      workflowType: WorkflowTypes.SIX_STEP,
+      'analysis.status': 0 // Not completed
+    });
+    analysisTitle = AnalysisTitles.rootCauseAnalysis;
+  }
+
+
+
+  if (docWithUncompletedAnalysis) {
     const { sequentialId, title } = docWithUncompletedAnalysis;
     throw new Meteor.Error(
       400,
-      `Root cause analysis for ${sequentialId} "${title}" must be completed first`
+      `${analysisTitle} for ${sequentialId} "${title}" must be completed first`
     );
   }
 };
@@ -62,10 +73,6 @@ export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
 
       return NonConformities;
     } else if (Object.is(documentType, ProblemTypes.RISK)) {
-      if (Object.is(action.type, ActionTypes.PREVENTATIVE_ACTION)) {
-        throw ACT_PA_CANNOT_BE_LINKED_TO_RISK;
-      }
-
       return Risks;
     }
   })());

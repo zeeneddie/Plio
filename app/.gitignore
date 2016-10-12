@@ -3,4 +3,5 @@
 node_modules/
 settings-local.json
 settings-production.json
+settings-staging.json
 npm-debug.log

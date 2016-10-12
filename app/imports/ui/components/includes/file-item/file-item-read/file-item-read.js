@@ -1,10 +1,13 @@
+import { Template } from 'meteor/templating';
+import { Tracker } from 'meteor/tracker';
+
 import { terminateUploading } from '/imports/api/files/methods.js';
 
 Template.FileItem_Read.viewmodel({
   mixin: 'uploader',
   file: {},
-  autorun() {
-    const { createdBy, progress, _id } = Object.assign({}, this.file());
+  onRendered() {
+    const { createdBy, progress, _id, status } = Object.assign({}, this.file());
 
     if (createdBy === Meteor.userId()) {
       const uploadData = this.uploadData(_id);

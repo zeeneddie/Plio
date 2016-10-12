@@ -1,8 +1,10 @@
 <template name="Subcards_RootCauseAnalysis_Read">
-  <div class="card-block card-subheading">
-    <h4 class="card-title">Root cause analysis</h4>
-  </div>
-  <div class="list-group">
+  {{#if title}}
+    <div class="card-block card-subheading">
+      <h4 class="card-title">{{title}}</h4>
+    </div>
+  {{/if}}
+  <div {{b "class: { 'list-group': title }"}}>
     {{#each causesData}}
       {{#if text}}
         <div class="list-group-item">

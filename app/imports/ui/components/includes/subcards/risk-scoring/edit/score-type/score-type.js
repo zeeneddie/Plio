@@ -8,6 +8,18 @@ Template.RiskScoring_ScoreType_Edit.viewmodel({
   label: 'Score type',
   placeholder: 'Score type',
   disabled: false,
+
+  autorun() {
+    if (this.scoreTypeId() !== this.templateInstance.data.scoreTypeId) {
+      Tracker.nonreactive(() => this.update());
+    }
+  },
+  onCreated() {
+    if (!this.scoreTypeId()) {
+      const defaultType = _.first(Object.assign([], this.types()));
+      defaultType && this.scoreTypeId(defaultType.id);
+    }
+  },
   types() {
     return _.values(riskScoreTypes);
   },

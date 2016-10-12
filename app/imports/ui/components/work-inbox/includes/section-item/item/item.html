@@ -4,12 +4,14 @@
       {{b "class: 'label-'+getClassByStatus(status)"}}></span>
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading pull-left">
-        <span {{b "text: getTypeText(this)"}}></span>
-        <span class="label label-primary" {{b "if: isNew"}}>New</span>
+        <span>{{this.linkedDocument.title}}</span>
+        {{#if isNew}}
+          <span class="label label-primary">New</span>
+        {{/if}}
       </h4>
-      <p class="list-group-item-text pull-right" {{b "text: getUserText(this)"}}></p>
-      <p class="list-group-item-text pull-left" {{b "text: this.linkedDocument.sequentialId + ' - ' + this.linkedDocument.title"}}></p>
-      <p class="list-group-item-text pull-right" {{b "text: getDate(this)"}}></p>
+      <p class="list-group-item-text pull-right">{{getUserText this}}</p>
+      <p class="list-group-item-text pull-left">{{this.linkedDocument.sequentialId}} - {{getTypeText this}}</p>
+      <p class="list-group-item-text pull-right">{{getDate this}}</p>
     </div>
   {{/ListItemLink}}
 </template>
