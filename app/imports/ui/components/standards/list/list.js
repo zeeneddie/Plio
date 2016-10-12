@@ -6,7 +6,6 @@ import property from 'lodash.property';
 import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
-let p1, p2;
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -15,7 +14,6 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
-    p1 = performance.now();
     const standardId = this.standardId();
     const orgSerialNumber = this.organizationSerialNumber();
     const {
@@ -35,8 +33,6 @@ Template.StandardsList.viewmodel({
         FlowRouter.go('standards', params, queryParams);
       }
     }
-
-    console.log(performance.now() - p1);
   },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
@@ -165,7 +161,7 @@ Template.StandardsList.viewmodel({
       return withStandards;
     })());
 
-    return withUncategorized;
+    return withStandards;
   },
 
   types() {
