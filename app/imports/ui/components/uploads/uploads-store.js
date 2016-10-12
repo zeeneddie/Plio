@@ -18,7 +18,7 @@ export default UploadsStore = {
     this._setUpProgressUpdating(fileId, uploader);
   },
 
-  terminateUploading(fileId) {
+  terminateUploading(fileId, cb) {
     const uploader = this.getUploader(fileId);
     if (uploader) {
       uploader.xhr && uploader.xhr.abort();
@@ -27,7 +27,7 @@ export default UploadsStore = {
 
     this._clearProgressUpdateInterval(fileId);
 
-    terminateUploading.call({ _id: fileId });
+    terminateUploading.call({ _id: fileId }, cb);
   },
 
   removeUploader(fileId) {

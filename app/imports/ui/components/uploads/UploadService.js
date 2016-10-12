@@ -25,6 +25,8 @@ export default class UploadService {
     this.maxFileSize = maxFileSize;
     this.fileData = fileData;
     this.hooks = hooks;
+
+    this._fileSubscriptions = {};
   }
 
   upload(file) {
@@ -69,10 +71,19 @@ export default class UploadService {
       return;
     }
 
-    const afterInsertHook = this.hooks.afterInsert;
-    afterInsertHook && afterInsertHook(fileId);
+    // we need to make sure that file document is available on the client,
+    // because we may read some properties of that document and call methods
+    // during upload process
+    const handle = Meteor.subscribe('fileById', fileId, {
+      onReady: () => {
+        const afterInsertHook = this.hooks.afterInsert;
+        afterInsertHook && afterInsertHook(fileId);
 
-    this._upload(file, fileId);
+        this._upload(file, fileId);
+      }
+    });
+
+    this._fileSubscriptions[fileId] = handle;
   }
 
   _upload(file, fileId) {
@@ -89,7 +100,9 @@ export default class UploadService {
     if (err) {
       toastr.error(err.reason || err);
 
-      UploadsStore.terminateUploading(fileId);
+      UploadsStore.terminateUploading(fileId, () => {
+        this._stopSubscription(fileId);
+      });
       return;
     }
 
@@ -104,7 +117,17 @@ export default class UploadService {
 
     updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
       UploadsStore.removeUploader(fileId);
+
+      // if file document is needed after UploadService finished its job,
+      // it must be delivered to the client by another publication
+      this._stopSubscription(fileId);
     });
+  }
+
+  _stopSubscription(fileId) {
+    const fileSub = this._fileSubscriptions[fileId];
+    fileSub && fileSub.stop();
+    delete this._fileSubscriptions[fileId];
   }
 
 }
