@@ -3,9 +3,51 @@ import { Meteor } from 'meteor/meteor';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { WorkItems } from '../work-items.js';
 import { isOrgMember } from '../../checkers.js';
-import { WorkItemsListProjection } from '/imports/api/constants.js';
+import {
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
+} from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
+import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
+const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => {
+  const makeQuery = (organizationId) => ({
+    organizationId,
+    isDeleted: { $in: [null, false] }
+  });
+  const makeOptions = (projection) => ({
+    fields: projection
+  });
+
+  return [
+    {
+      find({ _id:organizationId }) {
+        const query = { organizationId, isDeleted };
+
+        return WorkItems.find(query, makeOptions(WorkItemsListProjection));
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return Actions.find(makeQuery(organizationId), makeOptions(ActionsListProjection));
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return NonConformities.find(makeQuery(organizationId), makeOptions(NonConformitiesListProjection));
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return Risks.find(makeQuery(organizationId), makeOptions(RisksListProjection));
+      }
+    }
+  ]
+};
+
+Meteor.publishComposite('workInboxLayout', getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub));
 
 Meteor.publish('workItemsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   const userId = this.userId;

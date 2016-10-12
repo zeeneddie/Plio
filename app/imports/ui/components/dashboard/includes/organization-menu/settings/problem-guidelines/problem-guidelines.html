@@ -2,17 +2,20 @@
   {{#Subcards_Wrapper _lText=label}}
     <div class="card-block">
       {{> OrgSettings_ProblemGuideline
-          type="minor"
+          documentType=documentType
+          magnitude="minor"
           text=minor
           onChange=onChangeCb}}
 
       {{> OrgSettings_ProblemGuideline
-          type="major"
+          documentType=documentType
+          magnitude="major"
           text=major
           onChange=onChangeCb}}
 
       {{> OrgSettings_ProblemGuideline
-          type="critical"
+          documentType=documentType
+          magnitude="critical"
           text=critical
           onChange=onChangeCb}}
     </div>
