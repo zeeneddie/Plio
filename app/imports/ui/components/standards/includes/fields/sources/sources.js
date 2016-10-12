@@ -64,7 +64,7 @@ Template.ESSources.viewmodel({
 
       if (url && !this.IsValidUrl(url)) {
         ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
-        
+
         return;
       } else {
         sourceDoc.url = url;
@@ -118,17 +118,17 @@ Template.ESSources.viewmodel({
       this.docxRenderInProgress('');
     }, 5000);
   },
-  addFileFn() {
-    return this.addFile.bind(this);
+  afterInsertFn() {
+    return this.afterInsert.bind(this);
   },
-  addFile({ fileId }, cb) {
+  afterInsert(fileId, cb) {
     this.sourceFileId(fileId);
     this.update(null, cb);
   },
   afterUploadCb() {
     return this.afterUpload.bind(this);
   },
-  afterUpload({ fileId, url }) {
+  afterUpload(fileId, url) {
     this.renderDocx(url);
     this.update();
   },

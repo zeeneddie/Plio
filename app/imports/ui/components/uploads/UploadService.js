@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Slingshot } from 'meteor/edgee:slingshot';
 
 import {
@@ -8,13 +9,21 @@ import {
 import UploadsStore from './uploads-store.js';
 
 
+const defaultMaxFileSize = Meteor.settings.public.otherFilesMaxSize;
+
 export default class UploadService {
 
-  constructor(slingshotDirective, slingshotContext, maxFileSize, organizationId, hooks={}) {
+  constructor({
+    slingshotDirective,
+    slingshotContext={},
+    maxFileSize=defaultMaxFileSize,
+    fileData={},
+    hooks={}
+  }) {
     this.slingshotDirective = slingshotDirective;
     this.slingshotContext = slingshotContext;
     this.maxFileSize = maxFileSize;
-    this.organizationId = organizationId;
+    this.fileData = fileData;
     this.hooks = hooks;
   }
 
@@ -25,7 +34,7 @@ export default class UploadService {
 
     if (file.size > this.maxFileSize) {
       toastr.error(
-        `${file.name} size exceeds the allowed maximum of ${maxSize/1024/1024} MB`
+        `${file.name} size exceeds the allowed maximum of ${this.maxFileSize/1024/1024} MB`
       );
       return;
     }
@@ -50,7 +59,7 @@ export default class UploadService {
     insertFile.call({
       name,
       extension: name.split('.').pop().toLowerCase(),
-      organizationId: this.organizationId
+      organizationId: this.fileData.organizationId
     }, this._afterInsert.bind(this, file));
   }
 
@@ -71,15 +80,13 @@ export default class UploadService {
       this.slingshotDirective, this.slingshotContext
     );
 
-    this._setUpProgressUpdating(fileId, uploader);
-    UploadsStore.addUploadData(fileId, uploader);
+    UploadsStore.addUploader(fileId, uploader);
 
     uploader.send(file, this._afterUpload.bind(this, fileId));
   }
 
   _afterUpload(fileId, err, url) {
     if (err) {
-      console.log(err);
       toastr.error(err.reason || err);
 
       UploadsStore.terminateUploading(fileId);
@@ -96,27 +103,8 @@ export default class UploadService {
     updateUrl.call({ _id: fileId, url });
 
     updateProgress.call({ _id: fileId, progress: 1 }, (err, res) => {
-      UploadsStore.removeUploadData(fileId);
+      UploadsStore.removeUploader(fileId);
     });
-  }
-
-  _setUpProgressUpdating(fileId, uploader) {
-    const progressInterval = Meteor.setInterval(() => {
-      const progress = uploader.progress();
-
-      if (!progress && progress != 0 || progress === 1) {
-        Meteor.clearInterval(progressInterval);
-      } else {
-        updateProgress.call({ _id: fileId, progress }, (err, res) => {
-          if (err) {
-            Meteor.clearInterval(progressInterval);
-            UploadsStore.terminateUploading(fileId);
-
-            throw err;
-          }
-        });
-      }
-    }, 1500);
   }
 
 }

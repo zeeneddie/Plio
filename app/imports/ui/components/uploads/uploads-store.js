@@ -1,38 +1,63 @@
-import { terminateUploading } from '/imports/api/files/methods';
+import { Meteor } from 'meteor/meteor';
+
+import { updateProgress, terminateUploading } from '/imports/api/files/methods';
 
 
 export default UploadsStore = {
 
-  _uploads: [],
+  _uploaders: {},
 
-  uploadData(fileId) { // find the file with fileId is being uploaded
-    return _(this._uploads).find(data => data.fileId === fileId);
+  _progressUpdateIntervals: {},
+
+  getUploader(fileId) {
+    return this._uploaders[fileId];
   },
 
-  addUploadData(fileId, uploader) {
-    this._uploads.push({ fileId, uploader });
+  addUploader(fileId, uploader) {
+    this._uploaders[fileId] = uploader;
+    this._setUpProgressUpdating(fileId, uploader);
   },
 
   terminateUploading(fileId) {
-    const uploadData = this.uploadData(fileId);
-    const uploader = uploadData && uploadData.uploader;
+    const uploader = this.getUploader(fileId);
     if (uploader) {
       uploader.xhr && uploader.xhr.abort();
-      this.removeUploadData(fileId);
+      this.removeUploader(fileId);
     }
+
+    this._clearProgressUpdateInterval(fileId);
 
     terminateUploading.call({ _id: fileId });
   },
 
-  removeUploadData(fileId) {
-    const uploads = this._uploads;
+  removeUploader(fileId) {
+    delete this._uploaders[fileId];
+  },
 
-    for (let i = 0; i < uploads.length; i++) {
-      if (uploads[i].fileId === fileId) {
-        uploads.splice(i, 1);
-        break;
+  _setUpProgressUpdating(fileId, uploader) {
+    const progressInterval = Meteor.setInterval(() => {
+      const progress = uploader.progress();
+
+      if (!progress && progress != 0 || progress === 1) {
+        Meteor.clearInterval(progressInterval);
+      } else {
+        updateProgress.call({ _id: fileId, progress }, (err, res) => {
+          if (err) {
+            Meteor.clearInterval(progressInterval);
+            UploadsStore.terminateUploading(fileId);
+
+            throw err;
+          }
+        });
       }
-    }
+    }, 1500);
+
+    this._progressUpdateIntervals[fileId] = progressInterval;
+  },
+
+  _clearProgressUpdateInterval(fileId) {
+    Meteor.clearInterval(this._progressUpdateIntervals[fileId]);
+    delete this._progressUpdateIntervals[fileId];
   }
 
 };

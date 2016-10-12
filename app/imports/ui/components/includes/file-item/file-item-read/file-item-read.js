@@ -1,16 +1,15 @@
 import { terminateUploading } from '/imports/api/files/methods.js';
+import UploadsStore from '/imports/ui/components/uploads/uploads-store.js';
 
 Template.FileItem_Read.viewmodel({
-  //mixin: 'uploader',
   file: {},
   autorun() {
-    const { createdBy, progress, _id } = Object.assign({}, this.file());
-
+    const { createdBy, progress, status, _id } = Object.assign({}, this.file());
     if (createdBy === Meteor.userId()) {
-      /*const uploadData = this.uploadData(_id);
-      if (progress < 1 && progress > 0 && !uploadData) {
-        this.terminateUploading(_id);
-      }*/
+      const uploader = UploadsStore.getUploader(_id);
+      if (progress < 1 && progress > 0 && !uploader && (status !== 'failed')) {
+        UploadsStore.terminateUploading(_id);
+      }
     }
   },
   styles() {

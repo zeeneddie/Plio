@@ -2,23 +2,29 @@ import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
-Template.DiscussionFileUploader.viewmodel({
-  mixin: ['uploader', 'modal', 'organization', 'notifications'],
+import UploadService from '/imports/ui/components/uploads/UploadService';
 
+Template.DiscussionFileUploader.viewmodel({
+  mixin: ['modal', 'organization', 'notifications'],
   attachmentFiles: [],
   afterUpload: null,
-  getData() {
-    const data = {
-      files: this.attachmentFiles(),
-      maxSize: Meteor.settings.public.discussionFilesMaxSize,
-      beforeUpload: () => {
-        this.playNewMessageSound();
-        this.attachmentFiles([]);
-        this.fileInput.val(null);
-      },
-      afterUpload: this.afterUpload
-    };
+  upload() {
+    const uploadService = new UploadService({
+      slingshotDirective: this.slingshotDirective(),
+      slingshotContext: this.metaContext(),
+      maxFileSize: Meteor.settings.public.discussionFilesMaxSize,
+      fileData: { organizationId: this.organizationId() },
+      hooks: {
+        beforeInsert: () => {
+          this.playNewMessageSound();
+          this.attachmentFiles([]);
+          this.fileInput.val(null);
+        },
+        afterInsert: this.afterInsert,
+        afterUpload: this.afterUpload
+      }
+    });
 
-    return data;
+    _(this.attachmentFiles()).each(file => uploadService.upload(file));
   }
 });

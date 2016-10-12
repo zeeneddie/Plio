@@ -113,20 +113,19 @@ Template.CreateStandard.viewmodel({
 
     const cb = (_id, open) => {
       if (sourceFile && fileId) {
-        const uploadService = new UploadService(
-          'standardFiles',
-          {
+        const uploadService = new UploadService({
+          slingshotDirective: 'standardFiles',
+          slingshotContext: {
             standardId: _id,
             organizationId: this.organizationId()
           },
-          Meteor.settings.public.otherFilesMaxSize,
-          this.organizationId(),
-          {
+          maxFileSize: Meteor.settings.public.otherFilesMaxSize,
+          hooks: {
             afterUpload: (fileId, url) => {
               this._launchDocxRendering(url, sourceFile.name, _id);
             }
           }
-        );
+        });
 
         uploadService.uploadExisting(fileId, sourceFile);
       }

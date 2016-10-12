@@ -25,7 +25,7 @@
       {{else}}
         <div>
           {{> FileUploader
-              addFile=addFileFn
+              afterInsert=afterInsertFn
               afterUpload=afterUploadCb
               slingshotDirective='standardFiles'
               metaContext=uploaderMetaContext}}
