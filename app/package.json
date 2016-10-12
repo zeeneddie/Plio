@@ -4,7 +4,8 @@
   "scripts": {
     "start": "meteor run --settings settings-local.json",
     "debug": "meteor debug --settings settings-local.json",
-    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-production.json"
+    "deploy": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy app.pliohub.com --settings settings-production.json",
+    "deploy-staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.pliohub.com --settings settings-staging.json"
   },
   "dependencies": {
     "aws-sdk": "^2.4.3",
