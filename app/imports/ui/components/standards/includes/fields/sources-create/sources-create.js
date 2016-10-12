@@ -1,6 +1,12 @@
 import { Template } from 'meteor/templating';
 
 
+const addProtocol = (url) => {
+  if (url.search(/^https?\:\/\//) === -1) {
+    return `http://${url}`;
+  }
+};
+
 Template.ESSources_Create.viewmodel({
   mixin: ['urlRegex', 'modal'],
   sourceType: 'attachment',
@@ -40,10 +46,10 @@ Template.ESSources_Create.viewmodel({
         sourceData = { sourceFile: this.sourceFile() };
         break;
       case 'url':
-        sourceData = { sourceUrl: this.sourceUrl() };
+        sourceData = { sourceUrl: addProtocol(this.sourceUrl()) };
         break;
       case 'video':
-        sourceData = { sourceVideoUrl: this.sourceVideoUrl() };
+        sourceData = { sourceVideoUrl: addProtocol(this.sourceVideoUrl()) };
         break;
       default:
         sourceData = {};

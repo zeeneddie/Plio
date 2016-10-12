@@ -172,4 +172,17 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   }
 }]);
 
+const invalidUrlMessage = 'The source file url link is not valid';
+
+StandardsSchema.messages({
+  'regEx source1.url': [{
+    exp: SimpleSchema.RegEx.Url,
+    msg: invalidUrlMessage
+  }],
+  'regEx source2.url': [{
+    exp: SimpleSchema.RegEx.Url,
+    msg: invalidUrlMessage
+  }],
+});
+
 export { StandardsSchema, StandardsUpdateSchema };

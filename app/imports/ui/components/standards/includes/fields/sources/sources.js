@@ -7,10 +7,10 @@ Template.ESSources.viewmodel({
   mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
-      this.sourceType('url');
+      this.sourceType('attachment');
     }
   },
-  sourceType: 'url',
+  sourceType: 'attachment',
   sourceUrl: '',
   sourceFileId: '',
   docxRenderInProgress: null,

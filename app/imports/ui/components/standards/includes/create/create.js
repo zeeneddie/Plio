@@ -113,21 +113,7 @@ Template.CreateStandard.viewmodel({
 
     const cb = (_id, open) => {
       if (sourceFile && fileId) {
-        const uploadService = new UploadService({
-          slingshotDirective: 'standardFiles',
-          slingshotContext: {
-            standardId: _id,
-            organizationId: this.organizationId()
-          },
-          maxFileSize: Meteor.settings.public.otherFilesMaxSize,
-          hooks: {
-            afterUpload: (fileId, url) => {
-              this._launchDocxRendering(url, sourceFile.name, _id);
-            }
-          }
-        });
-
-        uploadService.uploadExisting(fileId, sourceFile);
+        this._uploadFile(sourceFile, fileId, _id);
       }
 
       this.isActiveStandardFilter('deleted')
@@ -142,6 +128,27 @@ Template.CreateStandard.viewmodel({
     };
 
     invoke(this.card, 'insert', insert, standardArgs, cb);
+  },
+  _uploadFile(file, fileId, standardId) {
+    const uploadService = new UploadService({
+      slingshotDirective: 'standardFiles',
+      slingshotContext: {
+        standardId,
+        organizationId: this.organizationId()
+      },
+      maxFileSize: Meteor.settings.public.otherFilesMaxSize,
+      hooks: {
+        afterUpload: (fileId, url) => {
+          const fileName = file.name;
+          const extension = fileName.split('.').pop().toLowerCase();
+          if (extension === 'docx') {
+            this._launchDocxRendering(url, fileName, standardId);
+          }
+        }
+      }
+    });
+
+    uploadService.uploadExisting(fileId, file);
   },
   _launchDocxRendering(fileUrl, fileName, standardId) {
     Meteor.call('Mammoth.convertDocxToHtml', {
