@@ -24,8 +24,6 @@ Template.StandardsList.viewmodel({
       first:defaultStandard
     } = this._findStandardForFilter(standardId);
 
-    console.log(contains, defaultStandard);
-
     if (!contains) {
       if (defaultStandard) {
         const { _id } = defaultStandard;

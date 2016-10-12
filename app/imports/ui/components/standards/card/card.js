@@ -9,13 +9,13 @@ import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
+import { inspire } from '/imports/api/helpers';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'window',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   _subHandlers: [],
   isReady: false,
-
   onCreated(template) {
     template.autorun(() => {
       const _id = this._id();
@@ -42,6 +42,38 @@ Template.Standards_Card_Read.viewmodel({
   closeAllOnCollapse: false,
   isFullScreenMode: false,
   isDiscussionOpened: false,
+  headerArgs() {
+    const {
+      organizationId,
+      isReady,
+      hasDocxAttachment,
+      isDiscussionOpened,
+      standard,
+      pathToDiscussion,
+      messagesNotViewedCount
+    } = inspire([
+      'isReady', 'hasDocxAttachment', 'isDiscussionOpened',
+      'standard', 'pathToDiscussion', 'messagesNotViewedCount',
+      'organizationId'
+    ], this);
+
+    const hasAccess = this.canCreateAndEditStandards(organizationId);
+    const hasFullAccess = isOrgOwner(standard);
+
+    return {
+      isReady,
+      hasDocxAttachment,
+      isDiscussionOpened,
+      pathToDiscussion,
+      messagesNotViewedCount,
+      hasAccess,
+      hasFullAccess,
+      toggleScreenMode: this.toggleScreenMode.bind(this),
+      openEditModal: this.openEditStandardModal.bind(this),
+      restore: () => this.restore(standard),
+      delete: () => this.delete(standard)
+    };
+  },
   ActionTypes() {
     return ActionTypes;
   },
