@@ -1,5 +1,5 @@
 import { terminateUploading } from '/imports/api/files/methods.js';
-import UploadsStore from '/imports/ui/components/uploads/uploads-store.js';
+import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
 
 Template.FileItem_Read.viewmodel({
   file: {},

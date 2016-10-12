@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 import { ReactiveArray } from 'meteor/manuel:reactivearray';
 
-import UploadService from '/imports/ui/components/uploads/UploadService';
+import UploadService from '/imports/ui/utils/uploads/UploadService';
 
 Template.DiscussionFileUploader.viewmodel({
   mixin: ['modal', 'organization', 'notifications'],

@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { Files } from '/imports/api/files/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
-import UploadsStore from '/imports/ui/components/uploads/uploads-store.js';
+import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
 
 
 Template.FileUploader_Wrapper.viewmodel({

@@ -7,7 +7,7 @@ import { addedToNotifyList } from '/imports/api/standards/methods.js';
 import Utils from '/imports/core/utils.js';
 import { setModalError, inspire } from '/imports/api/helpers.js';
 import { insert as insertFile } from '/imports/api/files/methods.js';
-import UploadService from '/imports/ui/components/uploads/UploadService';
+import UploadService from '/imports/ui/utils/uploads/UploadService';
 
 
 Template.CreateStandard.viewmodel({
