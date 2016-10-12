@@ -10,6 +10,7 @@ import { NonConformities } from '/imports/api/non-conformities/non-conformities.
 import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { Departments } from '/imports/api/departments/departments';
 import Counter from '../../counter/server.js';
 import { StandardsListProjection } from '/imports/api/constants.js';
 import get from 'lodash.get';
@@ -17,7 +18,7 @@ import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
 import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections';
 import { StandardTypes } from '../../standards-types/standards-types';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
+import { getPublishCompositeOrganizationUsers, explainMongoQuery } from '../../helpers';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -73,6 +74,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
   return {
     find() {
       const userId = this.userId;
+
       if (!userId || !isOrgMember(userId, organizationId)) {
         return this.ready();
       }
@@ -82,41 +84,57 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
         organizationId
       });
     },
-    children: [{
-      find(standard) {
-        return getStandardFiles(standard);
-      }
-    }, {
-      find({ _id }) {
-        return LessonsLearned.find({ documentId: _id });
-      }
-    }, {
-      find({ _id }) {
-        return NonConformities.find({ standardsIds: _id });
-      },
-      children: [{
-        find(nc) {
-          return Actions.find({ 'linkedTo.documentId': nc._id });
-        },
-      }, {
-        find(nc) {
-          return WorkItems.find({ 'linkedDoc._id': nc._id });
+    children: [
+      {
+        find({ organizationId }) {
+          return Departments.find({ organizationId });
         }
-      }]
-    }, {
-      find({ _id }) {
-        return Risks.find({ standardsIds: _id });
       },
-      children: [{
-        find(risk) {
-          return Actions.find({ 'linkedTo.documentId': risk._id });
-        },
-      }, {
-        find(risk) {
-          return WorkItems.find({ 'linkedDoc._id': risk._id });
+      {
+        find(standard) {
+          return getStandardFiles(standard);
         }
-      }]
-    }]
+      },
+      {
+        find({ _id }) {
+          return LessonsLearned.find({ documentId: _id });
+        }
+      },
+      {
+        find({ _id }) {
+          return NonConformities.find({ standardsIds: _id });
+        },
+        children: [
+          {
+            find(nc) {
+              return Actions.find({ 'linkedTo.documentId': nc._id });
+            },
+          },
+          {
+            find(nc) {
+              return WorkItems.find({ 'linkedDoc._id': nc._id });
+            }
+          }
+        ]
+      },
+      {
+        find({ _id }) {
+          return Risks.find({ standardsIds: _id });
+        },
+        children: [
+          {
+            find(risk) {
+              return Actions.find({ 'linkedTo.documentId': risk._id });
+            },
+          },
+          {
+            find(risk) {
+              return WorkItems.find({ 'linkedDoc._id': risk._id });
+            }
+          }
+        ]
+      }
+    ]
   }
 });
 
@@ -148,7 +166,7 @@ Meteor.publish('standardsNotViewedCount', function(counterName, organizationId) 
     isDeleted: { $in: [false, null] }
   };
 
-  if(currentOrgUserJoinedAt){
+  if (currentOrgUserJoinedAt) {
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 

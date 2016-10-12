@@ -72,19 +72,25 @@
                 {{> Subcards_Notify_Read users=this}}
               {{/with}}
 
-              {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
+              {{#if isReady}}
+                {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
-              {{> Subcards_Actions_Read
-                  type=ActionTypes.CORRECTIVE_ACTION
-                  standardId=this._id}}
+                {{> Subcards_Actions_Read
+                    type=ActionTypes.CORRECTIVE_ACTION
+                    standardId=this._id}}
 
-              {{> Subcards_Actions_Read
-                  type=ActionTypes.PREVENTATIVE_ACTION
-                  standardId=this._id}}
+                {{> Subcards_Actions_Read
+                    type=ActionTypes.PREVENTATIVE_ACTION
+                    standardId=this._id}}
 
-              {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
+                {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
 
-              {{> Subcards_LessonsLearned_Read documentId=this._id}}
+                {{> Subcards_LessonsLearned_Read documentId=this._id}}
+              {{else}}
+                <div class="m-t-3">
+                  {{> PreloaderPage size=1}}
+                </div>
+              {{/if}}
             </div>
 
             {{> SourceWordDocument source=source1}}

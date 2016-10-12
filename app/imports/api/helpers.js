@@ -371,6 +371,20 @@ const getPublishCompositeOrganizationUsers = (fn) => {
   }
 };
 
+const explainMongoQuery = (collection, query = {}, options = {}) => {
+  let results = collection.rawCollection().find(query, _.omit(options, 'sort', 'limit'));
+
+  if (options.sort) {
+    results = results.sort(options.sort);
+  }
+
+  if (options.limit) {
+    results = results.limit(options.limit);
+  }
+
+  return results.explain().then(res => console.log(JSON.stringify(res, null, 2)));
+}
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -423,5 +437,6 @@ export {
   sortArrayByTitlePrefix,
   getNewerDate,
   getPublishCompositeOrganizationUsersObject,
-  getPublishCompositeOrganizationUsers
+  getPublishCompositeOrganizationUsers,
+  explainMongoQuery
 };

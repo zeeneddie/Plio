@@ -1,5 +1,5 @@
 <template name="Subcards_Actions_Read">
-  <div {{b "if: actions.length > 0"}}>
+  {{#if actions.count}}
     <div class="card-block card-subheading">
       <h4 class="card-title" {{b "text: _getNameByType(type) + 's'"}}></h4>
     </div>
@@ -14,5 +14,5 @@
         {{/each}}
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>

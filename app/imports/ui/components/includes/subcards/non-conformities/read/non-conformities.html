@@ -1,18 +1,20 @@
 <template name="Subcards_NonConformities_Read">
-  <div {{b "if: NCs.count > 0"}}>
-    <div class="card-block card-subheading">
-      <h4 class="card-title">Non-conformities</h4>
-    </div>
-    <div class="list-group">
-      <div class="list-group-item">
-        {{#each NCs}}
-          <a href="{{pathFor 'nonconformity' orgSerialNumber=organizationSerialNumber nonconformityId=_id}}" class="btn btn-secondary btn-inline pointer">
-            <strong {{b "text: this.sequentialId"}}></strong>
-            <span {{b "text: this.title"}}></span>
-            <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
-          </a>
-        {{/each}}
+  {{#if NCs.count}}
+    <div>
+      <div class="card-block card-subheading">
+        <h4 class="card-title">Non-conformities</h4>
+      </div>
+      <div class="list-group">
+        <div class="list-group-item">
+          {{#each NCs}}
+            <a href="{{pathFor 'nonconformity' orgSerialNumber=organizationSerialNumber nonconformityId=_id}}" class="btn btn-secondary btn-inline pointer">
+              <strong {{b "text: this.sequentialId"}}></strong>
+              <span {{b "text: this.title"}}></span>
+              <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
+            </a>
+          {{/each}}
+        </div>
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>
