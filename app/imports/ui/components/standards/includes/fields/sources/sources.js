@@ -4,7 +4,7 @@ import { Files } from '/imports/api/files/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
-  mixin: ['uploader', 'urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
+  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
       this.sourceType('url');
@@ -137,7 +137,7 @@ Template.ESSources.viewmodel({
   },
   removeAttachment() {
     const file = this.file();
-    const isFileUploading = !file.isUploaded();
+    const isFileUploading = !file.isUploaded() && !file.isFailed();
 
     let warningMsg = 'This attachment will be removed';
     let buttonText = 'Remove';
@@ -154,7 +154,9 @@ Template.ESSources.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      this.terminateUploading(this.sourceFileId());
+      if (isFileUploading) {
+        UploadsStore.terminateUploading(this.sourceFileId());
+      }
 
       const options = {
         $unset: {
