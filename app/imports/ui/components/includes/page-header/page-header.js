@@ -56,11 +56,15 @@ import get from 'lodash.get';
        filters,
        isActiveFilter,
        onSelectFilter: (value) => {
-         if (_.isFunction(onSelectFilter)) return onSelectFilter(value);
+         const onSelect = () => {
+           FlowRouter.setQueryParams({ filter: value });
+           this.searchText('');
+           this.expandCollapsed(idToExpand);
+         };
 
-         FlowRouter.setQueryParams({ filter: value });
-         this.searchText('');
-         this.expandCollapsed(idToExpand);
+         if (_.isFunction(onSelectFilter)) return onSelectFilter(value, onSelect);
+
+         onSelect();
        },
        onNavigate: (e) => {
          e.preventDefault();

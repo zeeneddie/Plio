@@ -14,12 +14,17 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
+    this.handleRoute();
+  },
+  handleRoute() {
     const standardId = this.standardId();
     const orgSerialNumber = this.organizationSerialNumber();
     const {
       result:contains,
       first:defaultStandard
     } = this._findStandardForFilter(standardId);
+
+    console.log(contains, defaultStandard);
 
     if (!contains) {
       if (defaultStandard) {
