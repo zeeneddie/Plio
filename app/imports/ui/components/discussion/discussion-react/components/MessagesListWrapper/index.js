@@ -167,12 +167,12 @@ export default class MessagesListWrapper extends React.Component {
       const actions = ((() => {
         const _at = FlowRouter.getQueryParam('at');
         const setSortDir = setSort(sort);
-        const incFollowingLimitBy50 = setFollowingLimit(followingLimit + 50);
-        const incPriorLimitBy50 = setPriorLimit(priorLimit + 50);
+        const incFollowingLimit = setFollowingLimit(followingLimit + 25);
+        const incPriorLimit = setPriorLimit(priorLimit + 25);
 
         const _actions = _at
-          ? [setSortDir, sortDir > 0 ? incFollowingLimitBy50 : incPriorLimitBy50]
-          : [setSortDir, incFollowingLimitBy50];
+          ? [setSortDir, sortDir > 0 ? incFollowingLimit : incPriorLimit]
+          : [setSortDir, incFollowingLimit];
 
         return _actions;
       })());
