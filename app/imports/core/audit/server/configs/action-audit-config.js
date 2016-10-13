@@ -43,7 +43,7 @@ const getNotificationReceivers = ({ linkedTo, ownerId }, user) => {
 
   _.each(
     [
-      { collection: NonConformities, type: ProblemTypes.NC },
+      { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
       { collection: Risks, type: ProblemTypes.RISK }
     ],
     ({ collection, type }) => getIds(collection, type)
@@ -68,7 +68,7 @@ const getReceivers = function({ newDoc, user }) {
 
 const getLinkedDocAuditConfig = (documentType) => {
   return {
-    [ProblemTypes.NC]: NCAuditConfig,
+    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
     [ProblemTypes.RISK]: RiskAuditConfig
   }[documentType];
 };
