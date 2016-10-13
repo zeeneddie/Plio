@@ -1,6 +1,7 @@
 .meteor/dev_bundle
 .meteor/local
 node_modules/
+mup.js
 mup.json
 settings.json
 settings-local.json
