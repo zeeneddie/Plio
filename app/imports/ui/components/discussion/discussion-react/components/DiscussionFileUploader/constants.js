@@ -2,7 +2,7 @@ import { insert } from '/imports/api/messages/methods';
 import { handleMethodResult } from '/imports/api/helpers';
 
 export const addFile = ({ disabled, discussionId, organizationId }) => {
-  return ({ fileId }, cb) => {
+  return (fileId, cb) => {
     if (disabled) return;
 
     insert.call({

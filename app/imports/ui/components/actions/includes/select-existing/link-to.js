@@ -13,7 +13,7 @@ Template.Actions_LinkTo.viewmodel({
     return this._getDocsIds();
   },
   NCsIds() {
-    return this._getDocsIds(ProblemTypes.NC);
+    return this._getDocsIds(ProblemTypes.NON_CONFORMITY);
   },
   risksIds() {
     return this._getDocsIds(ProblemTypes.RISK);
@@ -52,7 +52,7 @@ Template.Actions_LinkTo.viewmodel({
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NC, ...args };
+      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args };
     });
   },
   risksDocs() {
