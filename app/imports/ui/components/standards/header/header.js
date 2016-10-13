@@ -26,7 +26,6 @@ Template.StandardsHeader.viewmodel({
   onSelectFilter(value, onSelect) {
     const list = Object.assign({}, ViewModel.findOne('StandardsList'));
 
-    console.log('called');
     onSelect();
 
     if (list) {
