@@ -33,7 +33,7 @@ export default LessonAuditConfig = {
   onCreated: {
     logs: [
       {
-        message: '{{docDesc}} added: "{{title}}"',
+        message: '{{{docDesc}}} added: "{{{title}}}"',
         logData: getLogData
       }
     ],
@@ -55,11 +55,11 @@ export default LessonAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              '{{docDesc}} created date set to "{{newValue}}"',
+              '{{{docDesc}}} created date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{docDesc}} created date changed from "{{oldValue}}" to "{{newValue}}"',
+              '{{{docDesc}}} created date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{docDesc}} created date removed'
+              '{{{docDesc}}} created date removed'
           },
           logData: getLogData
         }
@@ -83,9 +83,9 @@ export default LessonAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: '{{docDesc}} notes set',
-            [FIELD_CHANGED]: '{{docDesc}} notes changed',
-            [FIELD_REMOVED]: '{{docDesc}} notes removed'
+            [FIELD_ADDED]: '{{{docDesc}}} notes set',
+            [FIELD_CHANGED]: '{{{docDesc}}} notes changed',
+            [FIELD_REMOVED]: '{{{docDesc}}} notes removed'
           },
           logData: getLogData
         }
@@ -103,11 +103,11 @@ export default LessonAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              '{{docDesc}} owner set to {{newValue}}',
+              '{{{docDesc}}} owner set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{docDesc}} owner changed from {{oldValue}} to {{newValue}}',
+              '{{{docDesc}}} owner changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{docDesc}} owner removed'
+              '{{{docDesc}}} owner removed'
           },
           logData: getLogData
         }
@@ -130,9 +130,9 @@ export default LessonAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: '{{docDesc}} title set to "{{newValue}}"',
-            [FIELD_CHANGED]: '{{docDesc}} title changed from "{{oldValue}}" to "{{newValue}}"',
-            [FIELD_REMOVED]: '{{docDesc}} title removed'
+            [FIELD_ADDED]: '{{{docDesc}}} title set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: '{{{docDesc}}} title changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+            [FIELD_REMOVED]: '{{{docDesc}}} title removed'
           },
           logData: getLogData
         }
@@ -154,7 +154,7 @@ export default LessonAuditConfig = {
   onRemoved: {
     logs: [
       {
-        message: '{{docDesc}} removed: "{{title}}"',
+        message: '{{{docDesc}}} removed: "{{{title}}}"',
         logData: getLogData
       }
     ],

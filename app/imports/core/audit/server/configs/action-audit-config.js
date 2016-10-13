@@ -43,7 +43,7 @@ const getNotificationReceivers = ({ linkedTo, ownerId }, user) => {
 
   _.each(
     [
-      { collection: NonConformities, type: ProblemTypes.NC },
+      { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
       { collection: Risks, type: ProblemTypes.RISK }
     ],
     ({ collection, type }) => getIds(collection, type)
@@ -68,7 +68,7 @@ const getReceivers = function({ newDoc, user }) {
 
 const getLinkedDocAuditConfig = (documentType) => {
   return {
-    [ProblemTypes.NC]: NCAuditConfig,
+    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
     [ProblemTypes.RISK]: RiskAuditConfig
   }[documentType];
 };
@@ -121,7 +121,7 @@ export default ActionAuditConfig = {
     ],
     notifications: [
       {
-        text: '{{userName}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
+        text: '{{{userName}}} created action {{{docDesc}}} for {{{linkedDocDesc}}}',
         data({ newDoc, user }) {
           const auditConfig = this;
           const docDesc = auditConfig.docDescription(newDoc);
@@ -170,9 +170,9 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Completion date set to "{{newValue}}"',
+              'Completion date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Completion date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Completion date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Completion date removed'
           }
@@ -185,11 +185,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completion date of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set completion date of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed completion date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed completion date of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed completion date of {{{docDesc}}}'
+              '{{{userName}}} removed completion date of {{{docDesc}}}'
           }
         }
       ],
@@ -217,9 +217,9 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Completed by set to {{newValue}}',
+              'Completed by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Completed by changed from {{oldValue}} to {{newValue}}',
+              'Completed by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Completed by removed'
           }
@@ -232,11 +232,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completed by of {{{docDesc}}} to {{newValue}}',
+              '{{{userName}}} set completed by of {{{docDesc}}} to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed completed by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{{userName}}} changed completed by of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed completed by of {{{docDesc}}}'
+              '{{{userName}}} removed completed by of {{{docDesc}}}'
           }
         }
       ],
@@ -275,11 +275,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completion comments of {{{docDesc}}}',
+              '{{{userName}}} set completion comments of {{{docDesc}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed completion comments of {{{docDesc}}}',
+              '{{{userName}}} changed completion comments of {{{docDesc}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed completion comments of {{{docDesc}}}'
+              '{{{userName}}} removed completion comments of {{{docDesc}}}'
           }
         }
       ],
@@ -303,9 +303,9 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Completion target date set to "{{newValue}}"',
+              'Completion target date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Completion target date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Completion target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Completion target date removed'
           }
@@ -315,11 +315,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set completion target date of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set completion target date of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed completion target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed completion target date of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed completion target date of {{{docDesc}}}'
+              '{{{userName}}} removed completion target date of {{{docDesc}}}'
           }
         }
       ],
@@ -348,7 +348,7 @@ export default ActionAuditConfig = {
           message: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
-                'Action completed{{#if comments}}: {{comments}}{{/if}}' +
+                'Action completed{{#if comments}}: {{{comments}}}{{/if}}' +
               '{{else}}' +
                 'Action completion canceled' +
               '{{/if}}'
@@ -363,10 +363,10 @@ export default ActionAuditConfig = {
           text: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
-                '{{userName}} completed {{{docDesc}}}' +
-                '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+                '{{{userName}}} completed {{{docDesc}}}' +
+                '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
               '{{else}}' +
-                '{{userName}} canceled completion of {{{docDesc}}}' +
+                '{{{userName}}} canceled completion of {{{docDesc}}}' +
               '{{/if}}'
           }
         }
@@ -395,9 +395,9 @@ export default ActionAuditConfig = {
             [FIELD_CHANGED]:
               '{{#if verified}}' +
                 '{{#if verifiedAsEffective}}' +
-                  'Action verified as effective{{#if comments}}: {{comments}}{{/if}}' +
+                  'Action verified as effective{{#if comments}}: {{{comments}}}{{/if}}' +
                 '{{else}}' +
-                  'Action failed verification{{#if comments}}: {{comments}}{{/if}}' +
+                  'Action failed verification{{#if comments}}: {{{comments}}}{{/if}}' +
                 '{{/if}}' +
               '{{else}}' +
                 'Action verification canceled' +
@@ -414,14 +414,14 @@ export default ActionAuditConfig = {
             [FIELD_CHANGED]:
               '{{#if verified}}' +
                 '{{#if verifiedAsEffective}}' +
-                  '{{userName}} verified {{{docDesc}}} as effective' +
-                  '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+                  '{{{userName}}} verified {{{docDesc}}} as effective' +
+                  '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
                 '{{else}}' +
-                  '{{userName}} failed verification of {{{docDesc}}}' +
-                  '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+                  '{{{userName}}} failed verification of {{{docDesc}}}' +
+                  '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
                 '{{/if}}' +
               '{{else}}' +
-                '{{userName}} canceled verification of {{{docDesc}}}' +
+                '{{{userName}}} canceled verification of {{{docDesc}}}' +
               '{{/if}}'
           }
         }
@@ -474,8 +474,8 @@ export default ActionAuditConfig = {
       notifications: [
         {
           text: {
-            [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
-            [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
+            [ITEM_ADDED]: '{{{userName}}} linked {{{docDesc}}} to {{{linkedDocDesc}}}',
+            [ITEM_REMOVED]: '{{{userName}}} unlinked {{{docDesc}}} from {{{linkedDocDesc}}}'
           }
         }
       ],
@@ -500,8 +500,8 @@ export default ActionAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Plan in place set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Plan in place changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Plan in place set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Plan in place changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Plan in place removed'
           }
         }
@@ -510,11 +510,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set plan in place of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set plan in place of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed plan in place of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed plan in place of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed plan in place of {{{docDesc}}}'
+              '{{{userName}}} removed plan in place of {{{docDesc}}}'
           }
         }
       ],
@@ -537,8 +537,8 @@ export default ActionAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Status set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Status changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Status set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Status removed'
           }
         }
@@ -547,9 +547,9 @@ export default ActionAuditConfig = {
         /*{
           template: {
             [FIELD_ADDED]:
-              'Status of {{{docDesc}}} was set to "{{newValue}}"',
+              'Status of {{{docDesc}}} was set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Status of {{{docDesc}}} was changed from "{{oldValue}}" to "{{newValue}}"',
+              'Status of {{{docDesc}}} was changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Status of {{{docDesc}}} removed'
           },
@@ -580,9 +580,9 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'To be completed by set to {{newValue}}',
+              'To be completed by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'To be completed by changed from {{oldValue}} to {{newValue}}',
+              'To be completed by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'To be completed by removed'
           }
@@ -592,11 +592,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set to be completed by of {{{docDesc}}} to {{newValue}}',
+              '{{{userName}}} set to be completed by of {{{docDesc}}} to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed to be completed by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{{userName}}} changed to be completed by of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed to be completed by of {{{docDesc}}}'
+              '{{{userName}}} removed to be completed by of {{{docDesc}}}'
           }
         }
       ],
@@ -626,9 +626,9 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'To be verified by set to {{newValue}}',
+              'To be verified by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'To be verified by changed from {{oldValue}} to {{newValue}}',
+              'To be verified by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'To be verified by removed'
           }
@@ -638,11 +638,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set to be verified by of {{{docDesc}}} to {{newValue}}',
+              '{{{userName}}} set to be verified by of {{{docDesc}}} to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed to be verified by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{{userName}}} changed to be verified by of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed to be verified by of {{{docDesc}}}'
+              '{{{userName}}} removed to be verified by of {{{docDesc}}}'
           }
         }
       ],
@@ -687,11 +687,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verification comments of {{{docDesc}}}',
+              '{{{userName}}} set verification comments of {{{docDesc}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed verification comments of {{{docDesc}}}',
+              '{{{userName}}} changed verification comments of {{{docDesc}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed verification comments of {{{docDesc}}}'
+              '{{{userName}}} removed verification comments of {{{docDesc}}}'
           }
         }
       ],
@@ -712,9 +712,9 @@ export default ActionAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Verification target date set to "{{newValue}}"',
+              'Verification target date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Verification target date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Verification target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Verification target date removed'
           }
@@ -724,11 +724,11 @@ export default ActionAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verification target date of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set verification target date of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed verification target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed verification target date of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed verification target date of {{{docDesc}}}'
+              '{{{userName}}} removed verification target date of {{{docDesc}}}'
           }
         }
       ],
@@ -756,9 +756,9 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Verification date set to "{{newValue}}"',
+              'Verification date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Verification date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Verification date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Verification date removed'
           }
@@ -771,11 +771,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verification date of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set verification date of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed verification date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed verification date of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed verification date of {{{docDesc}}}'
+              '{{{userName}}} removed verification date of {{{docDesc}}}'
           }
         }
       ],
@@ -803,9 +803,9 @@ export default ActionAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Verified by set to {{newValue}}',
+              'Verified by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Verified by changed from {{oldValue}} to {{newValue}}',
+              'Verified by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Verified by removed'
           }
@@ -818,11 +818,11 @@ export default ActionAuditConfig = {
           },
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set verified by of {{{docDesc}}} to {{newValue}}',
+              '{{{userName}}} set verified by of {{{docDesc}}} to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed verified by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{{userName}}} changed verified by of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed verified by of {{{docDesc}}}'
+              '{{{userName}}} removed verified by of {{{docDesc}}}'
           }
         }
       ],

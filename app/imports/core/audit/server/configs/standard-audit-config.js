@@ -53,8 +53,8 @@ export default StandardAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Issue number set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Issue number changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Issue number set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Issue number changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Issue number removed'
           }
         }
@@ -63,11 +63,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set issue number of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set issue number of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed issue number of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed issue number of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed issue number of {{{docDesc}}}'
+              '{{{userName}}} removed issue number of {{{docDesc}}}'
           }
         }
       ],
@@ -90,8 +90,8 @@ export default StandardAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Owner set to {{newValue}}',
-            [FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
+            [FIELD_ADDED]: 'Owner set to {{{newValue}}}',
+            [FIELD_CHANGED]: 'Owner changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]: 'Owner removed'
           }
         }
@@ -100,11 +100,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
+              '{{{userName}}} set owner of {{{docDesc}}} to {{{newValue}}}',
             [FIELD_CHANGED]:
-              '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+              '{{{userName}}} changed owner of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
-              '{{userName}} removed owner of {{{docDesc}}}'
+              '{{{userName}}} removed owner of {{{docDesc}}}'
           }
         }
       ],
@@ -136,9 +136,9 @@ export default StandardAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Standards section set to "{{newValue}}"',
+              'Standards section set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Standards section changed from "{{oldValue}}" to "{{newValue}}"',
+              'Standards section changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Standards section removed'
           }
@@ -148,11 +148,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set standards section of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set standards section of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed standards section of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed standards section of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed standards section of {{{docDesc}}}'
+              '{{{userName}}} removed standards section of {{{docDesc}}}'
           }
         }
       ],
@@ -180,8 +180,8 @@ export default StandardAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Status set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Status changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Status set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Status removed'
           }
         }
@@ -190,11 +190,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set status of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set status of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed status of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed status of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed status of {{{docDesc}}}'
+              '{{{userName}}} removed status of {{{docDesc}}}'
           }
         }
       ],
@@ -217,8 +217,8 @@ export default StandardAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Type set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Type changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Type set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Type changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Type removed'
           }
         }
@@ -227,11 +227,11 @@ export default StandardAuditConfig = {
         {
           text: {
             [FIELD_ADDED]:
-              '{{userName}} set type of {{{docDesc}}} to "{{newValue}}"',
+              '{{{userName}}} set type of {{{docDesc}}} to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{userName}} changed type of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+              '{{{userName}}} changed type of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{userName}} removed type of {{{docDesc}}}'
+              '{{{userName}}} removed type of {{{docDesc}}}'
           }
         }
       ],
