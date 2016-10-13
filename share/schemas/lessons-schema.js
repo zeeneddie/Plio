@@ -26,6 +26,7 @@ const RequiredSchema = new SimpleSchema({
   },
   owner: {
     type: String,
+    label: 'Created by',
     regEx: SimpleSchema.RegEx.Id
   }
 });
