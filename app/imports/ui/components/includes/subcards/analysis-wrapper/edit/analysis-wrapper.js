@@ -4,7 +4,7 @@ import curry from 'lodash.curry';
 
 import { AnalysisStatuses } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 import { P_IsAnalysisOwner } from '/imports/api/checkers.js';
 
 Template.Subcards_AnalysisWrapper_Edit.viewmodel({
