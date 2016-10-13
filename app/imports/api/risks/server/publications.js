@@ -3,10 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { Standards } from '/imports/share/collections/standards.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers.js';
 import { Files } from '/imports/share/collections/files.js';
 import { RisksListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
+import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
 const getRiskFiles = (risk) => {
   let fileIds = risk.fileIds || [];
@@ -15,6 +17,24 @@ const getRiskFiles = (risk) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
+
+const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
+  {
+    find({ _id:organizationId }) {
+      return RiskTypes.find({ organizationId });
+    }
+  },
+  {
+    find({ _id:organizationId }) {
+      const query = { organizationId, isDeleted };
+      const options = { fields: RisksListProjection };
+
+      return Risks.find(query, options);
+    }
+  }
+];
+
+Meteor.publishComposite('risksLayout', getPublishCompositeOrganizationUsers(getRisksLayoutPub));
 
 Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {

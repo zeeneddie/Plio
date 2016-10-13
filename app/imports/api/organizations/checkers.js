@@ -24,7 +24,8 @@ import {
   isOrgOwner,
   isOrgMember
 } from '../checkers.js';
-import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
+import { checkAndThrow } from '../helpers.js';
+
 
 export const ORG_EnsureCanChange = (userId, organizationId) => {
   return checkAndThrow(!canChangeOrgSettings(userId, organizationId), ORG_CANNOT_CHANGE_SETTINGS);
@@ -36,7 +37,7 @@ export const ORG_EnsureCanChangeChecker = ({ userId }, doc) => {
   return doc;
 };
 
-export const ORG_EnsureCanChangeCheckerCurried = withUserId(curry(ORG_EnsureCanChangeChecker));
+export const ORG_EnsureCanChangeCheckerCurried = userId => curry(ORG_EnsureCanChangeChecker)({ userId });
 
 export const ORG_EnsureCanInvite = (userId, organizationId) => {
   return checkAndThrow(!canInviteUsers(userId, organizationId), ORG_CANNOT_INVITE_USERS);

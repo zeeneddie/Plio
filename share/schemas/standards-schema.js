@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { StandardStatuses } from '../constants.js';
+import { StandardStatuses, StringLimits } from '../constants.js';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
@@ -98,7 +98,8 @@ const StandardsSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      max: 80
+      min: StringLimits.title.min,
+      max: StringLimits.title.max
     },
     typeId: {
       type: String,
@@ -130,6 +131,8 @@ const StandardsSchema = new SimpleSchema([
 const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   title: {
     type: String,
+    min: StringLimits.title.min,
+    max: StringLimits.title.max,
     optional: true
   },
   typeId: {

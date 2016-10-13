@@ -4,38 +4,55 @@ import { OrgCurrencies,  WorkflowTypes, UserMembership } from '../constants.js';
 import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
 
-const orgUserSchema = new SimpleSchema({
-  userId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id
-  },
-  role: {
-    type: String,
-    allowedValues: _.values(UserMembership)
-  },
-  isRemoved: {
+const UserSettingsSchema = new SimpleSchema({
+  sendDailyRecap: {
     type: Boolean,
-    defaultValue: false,
-    optional: true
-  },
-  joinedAt: {
-    autoValue(){
-      if(!this.isSet){
-        return new Date();
+    autoValue() {
+      if (!this.isSet) {
+        return true;
       }
-    },
-    type: Date,
-  },
-  removedBy: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
-  },
-  removedAt: {
-    type: Date,
-    optional: true
+    }
   }
 });
+
+const OrgUserSchema = new SimpleSchema([
+  {
+    userId: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id
+    },
+    role: {
+      type: String,
+      allowedValues: _.values(UserMembership)
+    },
+    joinedAt: {
+      autoValue() {
+        if (!this.isSet) {
+          return new Date();
+        }
+      },
+      type: Date
+    },
+    isRemoved: {
+      type: Boolean,
+      autoValue() {
+        if (!this.isSet) {
+          return false;
+        }
+      }
+    },
+    removedAt: {
+      type: Date,
+      optional: true
+    },
+    removedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    }
+  },
+  UserSettingsSchema
+]);
 
 const problemWorkflowSchema = new SimpleSchema({
   workflowType: {
@@ -159,8 +176,9 @@ const OrganizationSchema = new SimpleSchema([
       min: 0
     },
     users: {
-      type: [orgUserSchema],
-      minCount: 1
+      type: [OrgUserSchema],
+      minCount: 1,
+      defaultValue: []
     },
     transfer: {
       type: transferSchema,
@@ -169,4 +187,9 @@ const OrganizationSchema = new SimpleSchema([
   }
 ]);
 
-export { OrganizationEditableFields, OrganizationSchema, OrganizationCurrencySchema };
+export { 
+  OrganizationEditableFields, 
+  OrganizationSchema, 
+  OrganizationCurrencySchema,
+  UserSettingsSchema
+};

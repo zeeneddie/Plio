@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
+import { StringLimits } from '/imports/share/constants.js';
 
 
 export const StandardsTypeSchema = new SimpleSchema([
@@ -10,8 +11,8 @@ export const StandardsTypeSchema = new SimpleSchema([
     title: {
       type: String,
       label: 'Standard type title',
-      min: 1,
-      max: 80
+      min: StringLimits.title.min,
+      max: StringLimits.title.max
     },
     abbreviation: {
       type: String,

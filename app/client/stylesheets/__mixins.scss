@@ -212,7 +212,7 @@
 @mixin pretty-buttons($color, $background, $text-shadow: none) {
 
   color: $color;
-  @include gradient-vertical(lighten($background, 5%), darken($background, 5%), 0%, 100%);
+  @include gradient-vertical(lighten($background, 10%), darken($background, 10%), 0%, 100%);
   border-color: darken($background, 10%);
   border-bottom-color: darken($background, 20%);
   text-shadow: $text-shadow;
@@ -222,8 +222,8 @@
   &:focus,
   &:active,
   &.active {
-    &:not(.btn-checkbox) {
-      @include gradient-vertical(darken($background, 0), darken($background, 10%), 0%, 100%);
+    &:not(.btn-checkbox):not(.disabled):not([disabled]) {
+      @include gradient-vertical(lighten($background, 5%), darken($background, 15%), 0%, 100%);
       border-color: darken($background, 20%);
       color: $color;
     }

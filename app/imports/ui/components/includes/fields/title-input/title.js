@@ -1,12 +1,15 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
+import { StringLimits } from '/imports/share/constants.js';
+
 const defaults = {
   label: 'Title',
   value: '',
   placeholder: 'Title',
   className: 'form-control',
-  withFocusCheck: true
+  withFocusCheck: true,
+  maxLength: StringLimits.title.max
 };
 
 Template.TitleInput.viewmodel({
@@ -17,7 +20,8 @@ Template.TitleInput.viewmodel({
       value = defaults.value,
       className = defaults.className,
       placeholder = defaults.placeholder,
-      withFocusCheck = defaults.withFocusCheck
+      withFocusCheck = defaults.withFocusCheck,
+      maxLength = defaults.maxLength
     } = this.data();
 
     const { onFocusOut = () => {} } = this.templateInstance.data;
@@ -48,6 +52,7 @@ Template.TitleInput.viewmodel({
       value,
       className,
       placeholder,
+      maxLength,
       onFocusOut: e => withFocusCheck
         ? this.callWithFocusCheck(e, () => handler(e))
         : handler(e)

@@ -8,7 +8,7 @@ import {
   getNotifySchema,
   ViewedBySchema
 } from './schemas.js';
-import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes } from '../constants.js';
+import { ActionTypes, ActionPlanOptions, ActionStatuses, ProblemTypes, StringLimits } from '../constants.js';
 
 
 const checkDate = function() {
@@ -36,8 +36,8 @@ const RequiredSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: 1,
-      max: 80
+      min: StringLimits.title.min,
+      max: StringLimits.title.max
     },
     type: {
       type: String,

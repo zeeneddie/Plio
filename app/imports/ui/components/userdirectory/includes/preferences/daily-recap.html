@@ -1,0 +1,32 @@
+<template name="UserPreferences_DailyRecap">
+  <div class="card-block card-block-collapse-toggle"
+      {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <h4 class="card-title pull-xs-left" >
+      Daily recap email
+    </h4>
+    <h4 class="card-title pull-xs-right text-muted" {{b "text: orgsCount"}}>
+    </h4>
+  </div>
+
+  <div class="card-block-collapse collapse" id="daily-recaps" {{b "ref: collapse"}}>
+    <div class="card-block">
+      <p class="pull-xs-left">
+        Send me a Daily Recap email for the following organization(s):
+      </p>
+      {{#each orgsData}}
+        <div class="form-group row">
+          <div class="col-xs-12">
+            <button type="button" class="btn btn-checkbox btn-secondary"
+                data-toggle="button" autocomplete="off"
+                {{b "attr: {aria-pressed: this.sendDailyRecap}, class: {active: this.sendDailyRecap}, click: updateDailyRecapSetting"}}>
+              <i class="ms-Icon ms-Icon--check"></i>
+            </button>
+            <label class="btn-checkbox-label">
+              {{orgName}}
+            </label>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</template>

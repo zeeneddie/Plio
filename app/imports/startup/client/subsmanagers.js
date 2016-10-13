@@ -16,6 +16,9 @@ const DiscussionSubs = new SubsManager({
 const MessageSubs = new SubsManager({
   expireIn: 10
 });
+const DocumentLayoutSubs = new SubsManager({
+  expireIn: 10
+});
 const DocumentCardSubs = new SubsManager({
   expireIn: 10
 });
@@ -33,6 +36,7 @@ export {
   WorkItemSubs,
   DiscussionSubs,
   MessageSubs,
+  DocumentLayoutSubs,
   DocumentCardSubs,
   DocumentsListSubs,
   OrgSettingsDocSubs

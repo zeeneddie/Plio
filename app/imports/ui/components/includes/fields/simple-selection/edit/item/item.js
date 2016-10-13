@@ -1,4 +1,6 @@
 import { Template } from 'meteor/templating';
+
+import { StringLimits } from '/imports/share/constants.js';
 import get from 'lodash.get';
 
 Template.SimpleSelection_Edit_Item.viewmodel({
@@ -6,6 +8,8 @@ Template.SimpleSelection_Edit_Item.viewmodel({
   placeholder: '',
   showAbbreviation: false,
   requireAbbreviation: false,
+  abbreviationMaxLength: StringLimits.abbreviation.max,
+
   onChange() {},
   onFocusOut(e) {
     const data = prop => ({

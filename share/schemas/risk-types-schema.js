@@ -1,20 +1,21 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
+import { StringLimits } from '/imports/share/constants.js';
 
 
 const EditableFields = new SimpleSchema({
   title: {
     type: String,
     label: 'Risk type label',
-    min: 1,
-    max: 80
+    min: StringLimits.title.min,
+    max: StringLimits.title.max
   },
   abbreviation: {
     type: String,
     label: 'Risk type abbreviation',
-    min: 1,
-    max: 4,
+    min: StringLimits.abbreviation.min,
+    max: StringLimits.abbreviation.max,
     optional: true
   }
 });

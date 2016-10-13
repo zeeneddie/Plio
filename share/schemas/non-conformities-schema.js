@@ -4,7 +4,7 @@ import {
   BaseEntitySchema, BaseProblemsRequiredSchema, BaseProblemsOptionalSchema,
   ImprovementPlanSchema, FileIdsSchema
 } from './schemas.js';
-import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes } from '../constants.js';
+import { ProblemsStatuses, RCAMaxCauses, WorkflowTypes, StringLimits } from '../constants.js';
 
 
 const RequiredSchema = BaseProblemsRequiredSchema;
@@ -89,8 +89,8 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: 1,
-      max: 80,
+      min: StringLimits.title.min,
+      max: StringLimits.title.max,
       optional: true
     },
     identifiedBy: {

@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
+import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { Standards } from '/imports/share/collections/standards.js';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember, isOrgMemberBySelector } from '../../checkers.js';
 import { Files } from '/imports/share/collections/files.js';
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -13,6 +13,11 @@ import { WorkItems } from '/imports/share/collections/work-items.js';
 import Counter from '../../counter/server.js';
 import { StandardsListProjection } from '/imports/api/constants.js';
 import get from 'lodash.get';
+import property from 'lodash.property';
+import { check, Match } from 'meteor/check';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -23,6 +28,30 @@ const getStandardFiles = (standard) => {
 
   return Files.find({ _id: { $in: fileIds } });
 };
+
+const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
+  const pubs = [
+    {
+      find({ _id:organizationId }) {
+        return StandardsBookSections.find({ organizationId });
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return StandardTypes.find({ organizationId });
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return Standards.find({ organizationId, isDeleted });
+      }
+    }
+  ];
+
+  return pubs;
+};
+
+Meteor.publishComposite('standardsLayout', getPublishCompositeOrganizationUsers(getStandardsLayoutPub));
 
 Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {

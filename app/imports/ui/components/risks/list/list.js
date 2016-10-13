@@ -33,6 +33,8 @@ Template.Risks_List.viewmodel({
             this.goToRisks();
           }, 0);
         }
+      } else {
+        this.expandCollapsed(riskId);
       }
     }
   },

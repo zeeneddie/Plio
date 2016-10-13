@@ -50,8 +50,8 @@ const onPropsChange = (props, onData) => {
     dispatch,
     sort = { createdAt: -1 },
     at = null,
-    priorLimit = 50,
-    followingLimit = 50,
+    priorLimit = 25,
+    followingLimit = 25,
     resetCompleted = false
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };

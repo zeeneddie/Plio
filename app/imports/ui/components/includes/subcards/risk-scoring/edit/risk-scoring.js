@@ -54,7 +54,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   tableData() {
     return {
       xHeading: 'Probability',
-      yHeading: 'Impacts',
+      yHeading: 'Impact',
       data: [
         {
           _id: 1,
@@ -122,7 +122,6 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
   remove(viewmodel, cb = () => {}) {
     const { score = {} } = viewmodel.data();
     const { _id } = score;
-
     if (!_id) {
       viewmodel.destroy();
     } else {
@@ -140,7 +139,7 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
             if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
           };
 
-          this.onRemove({ score }, chain(showSuccess, cb));
+          this.onRemove({ score }, showSuccess);
         }
       );
     }

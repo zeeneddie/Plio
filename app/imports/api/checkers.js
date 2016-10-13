@@ -98,11 +98,9 @@ export const isOrgOwner = (userId, organizationId) => {
   });
 };
 
-export const isOrgMember = (userId, organizationId) => {
-  if (!userIdOrgIdTester(userId, organizationId)) return false;
-
+export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.find({
-    _id: organizationId,
+    ...selector,
     users: {
       $elemMatch: {
         userId,
@@ -112,6 +110,12 @@ export const isOrgMember = (userId, organizationId) => {
       }
     }
   });
+};
+
+export const isOrgMember = (userId, organizationId) => {
+  if (!userIdOrgIdTester(userId, organizationId)) return false;
+
+  return isOrgMemberBySelector(userId, { _id: organizationId })
 };
 
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }, args = {}) => {
