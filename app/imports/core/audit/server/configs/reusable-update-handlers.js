@@ -66,7 +66,7 @@ export const fileIdsField = {
   field: 'fileIds',
   logConfig: {
     message: {
-      [ITEM_ADDED]: 'File "{{name}}" added',
+      [ITEM_ADDED]: 'File "{{{name}}}" added',
       [ITEM_REMOVED]: 'File removed'
     }
   },
