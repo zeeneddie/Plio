@@ -327,7 +327,7 @@ export default {
   _refreshLinkedDocStatus(documentId, documentType) {
     Meteor.isServer && Meteor.defer(() => {
       const workflowConstructors = {
-        [ProblemTypes.NC]: NCWorkflow,
+        [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
         [ProblemTypes.RISK]: RiskWorkflow
       };
 

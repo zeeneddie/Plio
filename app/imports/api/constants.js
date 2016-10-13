@@ -50,7 +50,7 @@ const ReviewStatuses = {
 };
 
 const ProblemTypes = {
-  NC: 'non-conformity',
+  NON_CONFORMITY: 'non-conformity',
   RISK: 'risk'
 };
 
@@ -253,9 +253,9 @@ const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NC),
-    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NC),
-    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NC)
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NON_CONFORMITY),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NON_CONFORMITY),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NON_CONFORMITY)
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),
@@ -374,8 +374,8 @@ const WorkInboxFilters = {
 
 const DocumentTypes = {
   STANDARD: 'standard',
-  NON_CONFORMITY: ProblemTypes.NC,
-  RISK: ProblemTypes.RISK
+  ...ProblemTypes,
+  ...ActionTypes
 };
 
 const ActionDocumentTypes = {
