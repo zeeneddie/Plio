@@ -12,7 +12,13 @@ import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 import { Departments } from '/imports/api/departments/departments';
 import Counter from '../../counter/server.js';
-import { StandardsListProjection } from '/imports/api/constants.js';
+import {
+  StandardsListProjection,
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
+} from '/imports/api/constants.js';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
@@ -64,11 +70,14 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
 
       return Standards.find({
         organizationId,
-        isDeleted: isDeleted
+        isDeleted
       }, { fields: StandardsListProjection });
     }
   }
 });
+
+const extendProblemsFields = projection =>
+  Object.assign({}, projection, { standardsIds: 1 });
 
 Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
   return {
@@ -82,6 +91,8 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
       return Standards.find({
         _id,
         organizationId
+      }, {
+        fields: StandardsListProjection
       });
     },
     children: [
@@ -109,34 +120,46 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
       },
       {
         find({ _id }) {
-          return NonConformities.find({ standardsIds: _id });
+          return NonConformities.find({ standardsIds: _id }, {
+            fields: extendProblemsFields(NonConformitiesListProjection)
+          });
         },
         children: [
           {
             find(nc) {
-              return Actions.find({ 'linkedTo.documentId': nc._id });
+              return Actions.find({ 'linkedTo.documentId': nc._id }, {
+                fields: ActionsListProjection
+              });
             },
           },
           {
             find(nc) {
-              return WorkItems.find({ 'linkedDoc._id': nc._id });
+              return WorkItems.find({ 'linkedDoc._id': nc._id }, {
+                fields: WorkItemsListProjection
+              });
             }
           }
         ]
       },
       {
         find({ _id }) {
-          return Risks.find({ standardsIds: _id });
+          return Risks.find({ standardsIds: _id }, {
+            fields: extendProblemsFields(RisksListProjection)
+          });
         },
         children: [
           {
             find(risk) {
-              return Actions.find({ 'linkedTo.documentId': risk._id });
+              return Actions.find({ 'linkedTo.documentId': risk._id }, {
+                fields: ActionsListProjection
+              });
             },
           },
           {
             find(risk) {
-              return WorkItems.find({ 'linkedDoc._id': risk._id });
+              return WorkItems.find({ 'linkedDoc._id': risk._id }, {
+                fields: WorkItemsListProjection
+              });
             }
           }
         ]

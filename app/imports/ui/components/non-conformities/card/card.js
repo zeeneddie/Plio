@@ -10,9 +10,8 @@ import { restore, remove } from '/imports/api/non-conformities/methods.js';
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
-  _subHandlers: [],
   isReady: false,
-
+  _subHandlers: [],
   onCreated(template) {
     template.autorun(() => {
       const _id = this._id();

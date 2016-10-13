@@ -8,7 +8,12 @@ import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
 import { isOrgMember } from '../../checkers.js';
-import { NonConformitiesListProjection } from '/imports/api/constants.js';
+import {
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
+} from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
@@ -66,29 +71,35 @@ Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) 
 
       return NonConformities.find({ _id, organizationId });
     },
-    children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
-    }, {
-      find(nc) {
-        return Standards.find({ _id: nc.standardsIds }, {
-          fileds: { title: 1 }
-        });
-      }
-    }, {
-      find({ _id }) {
-        return LessonsLearned.find({ documentId: _id });
-      }
-    }, {
-      find({ _id }) {
-        return Actions.find({ 'linkedTo.documentId': _id });
-      }
-    }, {
-      find({ _id }) {
-        return Occurrences.find({ nonConformityId: _id });
-      }
-    }]
+    children: [
+      {
+        find(nc) {
+          return getNCOtherFiles(nc);
+        }
+      },
+      {
+        find(nc) {
+          return Standards.find({ _id: nc.standardsIds }, {
+            fileds: { title: 1 }
+          });
+        }
+      },
+      {
+        find({ _id }) {
+          return LessonsLearned.find({ documentId: _id });
+        }
+      },
+      {
+        find({ _id }) {
+          return Actions.find({ 'linkedTo.documentId': _id });
+        }
+      },
+      {
+        find({ _id }) {
+          return Occurrences.find({ nonConformityId: _id });
+        }
+      },
+    ]
   }
 });
 
