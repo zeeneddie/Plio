@@ -5,6 +5,7 @@ import { Tracker } from 'meteor/tracker';
 import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
 import { UncategorizedTypeSection } from '/imports/api/constants.js';
+import { handleMethodResult } from '/imports/api/helpers';
 
 Template.Standards_Item_Read.viewmodel({
   share: 'window',
@@ -27,11 +28,17 @@ Template.Standards_Item_Read.viewmodel({
 
       if (!_id) return;
 
-      template.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + _id, _id);
-
       if (_id === standardId && this.isNew()) {
         Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
       }
+    });
+
+    template.autorun(() => {
+      const _id = this._id();
+
+      if (!_id) return;
+
+      template.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + _id, _id);
     });
   },
   linkArgs() {
@@ -57,28 +64,16 @@ Template.Standards_Item_Read.viewmodel({
     return this.standardType() && this.standardType().title || UncategorizedTypeSection.title;
   },
   isNew() {
-    //return this.viewedBy && !this.viewedBy().find(_id => _id === Meteor.userId());
-
-    const filter = { _id: this._id() };
-    const options = { fields: { createdAt: 1, viewedBy: 1 } };
-    const doc = this._getStandardByQuery(filter, options);
     const userId = Meteor.userId();
 
-    return doc && this.isNewDoc({ doc, userId });
+    return this.isNewDoc({ doc: this.data(), userId });
   },
   unreadMessagesCount() {
     return this.counter.get('standard-messages-not-viewed-count-' + this._id());
   },
-  select() {
-    if ($(window).width() < 768) {
-      this.width($(window).width());
-    }
-
-    FlowRouter.setParams({ standardId: this._id() });
-  },
   updateViewedBy(cb) {
     const _id = this._id();
 
-    updateViewedBy.call({ _id }, cb);
+    updateViewedBy.call({ _id }, handleMethodResult(cb));
   }
 });

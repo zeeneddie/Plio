@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { DiscussionSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { DiscussionSubs, OrgSettingsDocSubs, DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 
@@ -7,6 +7,7 @@ Template.StandardsPage.viewmodel({
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
   _subHandlers: [],
   isReady: false,
+  isDiscussionReady: false,
   isDiscussionOpened: false,
   autorun: [
     function() {
@@ -18,13 +19,12 @@ Template.StandardsPage.viewmodel({
       if (!standardId || !organizationId) return;
 
       let _subHandlers = [
-        OrgSettingsDocSubs.subscribe('departments', organizationId)
+        DocumentCardSubs.subscribe('standardCard', { _id: standardId, organizationId })
       ];
 
       if (this.isDiscussionOpened()) {
-        _subHandlers = _subHandlers.concat([
-          DiscussionSubs.subscribe('discussionsByStandardId', standardId),
-        ]);
+        const discussionHandle = DiscussionSubs.subscribe('discussionsByStandardId', standardId);
+        this.isDiscussionReady(discussionHandle.ready());
       }
 
       this._subHandlers(_subHandlers);

@@ -42,6 +42,16 @@ Template.StandardsList.viewmodel({
     standardId,
     orgSerialNumber
   }) {
+    this.handleRoute();
+  },
+  handleRoute() {
+    const standardId = this.standardId();
+    const orgSerialNumber = this.organizationSerialNumber();
+    const {
+      result:contains,
+      first:defaultStandard
+    } = this._findStandardForFilter(standardId);
+
     if (!contains) {
       if (defaultStandard) {
         const { _id } = defaultStandard;
@@ -53,20 +63,16 @@ Template.StandardsList.viewmodel({
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };
         FlowRouter.go('standards', params, queryParams);
       }
-    } else {
-      this.expandCollapsed(standardId);
     }
   },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
-    const { types, sections, standardsDeleted, activeStandardFilterId } = inspire(
-      ['types', 'sections', 'standardsDeleted', 'activeStandardFilterId'],
-      this
-    );
+    const activeStandardFilterId = this.activeStandardFilterId();
 
     switch(activeStandardFilterId) {
       case 1:
+        const sections = this.sections();
         const mappedSections = flattenMapStandards(sections);
         return {
           result: finder(mappedSections),
@@ -74,6 +80,7 @@ Template.StandardsList.viewmodel({
         }
         break;
       case 2:
+        const types = this.types();
         const mappedTypes = flattenMap(property('items'), types);
         const mappedTypesSections = flattenMapStandards(mappedTypes);
         return {
@@ -91,6 +98,7 @@ Template.StandardsList.viewmodel({
         };
         break;
       case 3:
+        const standardsDeleted = this.standardsDeleted();
         return {
           result: finder(standardsDeleted),
           first: _.first(standardsDeleted)
@@ -184,7 +192,7 @@ Template.StandardsList.viewmodel({
       return withStandards;
     })());
 
-    return withUncategorized;
+    return withStandards;
   },
 
   types() {

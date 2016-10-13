@@ -1,12 +1,15 @@
-import { Departments } from '/imports/api/departments/departments.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { Messages } from '/imports/api/messages/messages.js';
+import { Departments } from '/imports/api/departments/departments';
+import { LessonsLearned } from '/imports/api/lessons/lessons';
+import { Organizations } from '/imports/api/organizations/organizations';
+import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections';
+import { StandardTypes } from '/imports/api/standards-types/standards-types';
+import { Standards } from '/imports/api/standards/standards';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities';
+import { Occurrences } from '/imports/api/occurrences/occurrences';
+import { Messages } from '/imports/api/messages/messages';
+import { Actions } from '/imports/api/actions/actions';
+import { WorkItems } from '/imports/api/work-items/work-items';
+import { Discussions } from '/imports/api/discussions/discussions';
 
 
 // indexes for Departments
@@ -18,6 +21,10 @@ Departments._ensureIndex({
 // indexes for LessonsLearned
 LessonsLearned._ensureIndex({
   organizationId: 1
+});
+
+LessonsLearned._ensureIndex({
+  documentId: 1
 });
 
 
@@ -65,6 +72,17 @@ Standards._ensureIndex({
 });
 
 Standards._ensureIndex({
+  viewedBy: 1
+});
+
+Standards._ensureIndex({
+  organizationId: 1,
+  isDeleted: 1
+});
+
+Standards._ensureIndex({
+  organizationId: 1,
+  isDeleted: 1,
   viewedBy: 1
 });
 
@@ -160,6 +178,33 @@ Risks._ensureIndex({
 Risks._ensureIndex({
   sequentialId: 1,
   title: 1
+});
+
+// Actions indexes
+
+Actions._ensureIndex({
+  organizationId: 1
+});
+
+Actions._ensureIndex({
+  'linkedTo.documentId': 1
+});
+
+// Work Items indexes
+
+WorkItems._ensureIndex({
+  organizationId: 1
+});
+
+WorkItems._ensureIndex({
+  'linkedDoc._id': 1
+});
+
+// Discussions indexes
+
+Discussions._ensureIndex({
+  linkedTo: 1,
+  documentType: 1
 });
 
 // Messages indexes
