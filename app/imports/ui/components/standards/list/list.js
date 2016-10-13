@@ -164,7 +164,7 @@ Template.StandardsList.viewmodel({
       return withStandards;
     })());
 
-    return withStandards;
+    return withUncategorized;
   },
 
   types() {
