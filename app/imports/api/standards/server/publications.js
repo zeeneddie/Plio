@@ -93,7 +93,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
               $in: departmentsIds
             }
           };
-          
+
           return Departments.find(query);
         }
       },

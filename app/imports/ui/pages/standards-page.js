@@ -7,6 +7,7 @@ Template.StandardsPage.viewmodel({
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
   _subHandlers: [],
   isReady: false,
+  isDiscussionReady: false,
   isDiscussionOpened: false,
   autorun: [
     function() {
@@ -22,9 +23,8 @@ Template.StandardsPage.viewmodel({
       ];
 
       if (this.isDiscussionOpened()) {
-        _subHandlers = _subHandlers.concat([
-          DiscussionSubs.subscribe('discussionsByStandardId', standardId),
-        ]);
+        const discussionHandle = DiscussionSubs.subscribe('discussionsByStandardId', standardId);
+        this.isDiscussionReady(discussionHandle.ready());
       }
 
       this._subHandlers(_subHandlers);

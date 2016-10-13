@@ -12,8 +12,6 @@ export const ACT_CANNOT_SET_EXECUTOR_FOR_VERIFIED = new E(400, 'Cannot set verif
 
 export const ACT_RK_CANNOT_BE_LINKED_TO_NC = new E(400, 'Risk control cannot be linked to a non-conformity');
 
-export const ACT_PA_CANNOT_BE_LINKED_TO_RISK = new E(400, 'Preventative action cannot be linked to a risk');
-
 export const ACT_ALREADY_LINKED = new E(400, 'This action is already linked to a specified document');
 
 export const ACT_NOT_LINKED = new E(400, 'This action is not linked to a specified document');

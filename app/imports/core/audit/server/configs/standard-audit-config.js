@@ -240,8 +240,8 @@ export default StandardAuditConfig = {
         const { newValue, oldValue } = typeId;
 
         const getStandardTypeName = (_id) => {
-          const { name } = StandardTypes.findOne({ _id }) || {};
-          return name;
+          const { title } = StandardTypes.findOne({ _id }) || {};
+          return title;
         };
 
         return {

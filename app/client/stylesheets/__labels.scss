@@ -20,6 +20,9 @@
   &-info {
     background: $light-blue-color;
   }
+  &-yellow {
+    background: $yellow-color;
+  }
 
   &-standard {
     $label-standard-size: 36px;
@@ -103,4 +106,25 @@
   margin-right: 12px;
   font-weight: normal;
   //font-family: $SegoeUILight;
+}
+
+.text {
+  &-success {
+    color: $green-color;
+  }
+  &-warning {
+    color: $amber-color;
+  }
+  &-danger {
+    color: $red-color;
+  }
+  &-primary {
+    color: $blue-color;
+  }
+  &-info {
+    color: $light-blue-color;
+  }
+  &-yellow {
+    color: $yellow-color;
+  }
 }

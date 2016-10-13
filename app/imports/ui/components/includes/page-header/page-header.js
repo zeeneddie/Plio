@@ -6,6 +6,7 @@ import get from 'lodash.get';
  * @param {string} header - The main header text without words after '-'
  * @param {string} idToExpand - id of the document we want to expand after filter switch
  * @param {string} prependWith - prepend dropdown items with
+ * @param [number] prependIndexes - indexes to which prepend value of 'prependWith'. If not provided prepends to all items.
  * @param {object} filters - filters to display
  */
  Template.PageHeader.viewmodel({
@@ -14,14 +15,16 @@ import get from 'lodash.get';
    header: '',
    filters: [],
    prependWith: '',
+   prependIndexes: [],
    idToExpand: '',
    isActiveFilter() {},
    headerArgs() {
     const {
       idToExpand,
-      header:text,
+      header,
       filters:filtersData,
-      prependWith = ''
+      prependWith = '',
+      prependIndexes = []
     } = this.data();
     const {
       /**
@@ -43,13 +46,16 @@ import get from 'lodash.get';
       isActiveFilter = () => {}
     } = this.templateInstance.data;
 
-    const filters = Object.keys(filtersData).map(key => ({
+    const filters = Object.keys(filtersData).map((key, i) => ({
       value: key,
-      text: `${prependWith} ${filtersData[key]}`.trim()
+      text: `
+        ${header} -
+        ${(!prependIndexes.length || prependIndexes.includes(i)) ? prependWith : ''}
+        ${filtersData[key]}
+      `.trim()
     }));
     const activeFilter = filters.find(({ value }) => isActiveFilter(value));
-    const header = `${text}`;
-    const currentFilterLabel = `- ${prependWith} ${get(activeFilter, 'text').replace('by', '')}`;
+    const currentFilterLabel = activeFilter.text.replace(`${header}`, '');
     return {
        header,
        currentFilterLabel,
