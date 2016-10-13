@@ -371,7 +371,7 @@ const getPublishCompositeOrganizationUsers = (fn) => {
   }
 };
 
-const explainMongoQuery = (collection, query = {}, options = {}) => {
+const explainMongoQuery = (collection, query = {}, options = {}, verbose = 'queryPlanner', prettyPrint = true) => {
   let results = collection.rawCollection().find(query, _.omit(options, 'sort', 'limit'));
 
   if (options.sort) {
@@ -382,7 +382,7 @@ const explainMongoQuery = (collection, query = {}, options = {}) => {
     results = results.limit(options.limit);
   }
 
-  return results.explain().then(res => console.log(JSON.stringify(res, null, 2)));
+  return results.explain(verbose).then(res => console.log(JSON.stringify(res, null, 2).substr(0, 5000)));
 }
 
 export {

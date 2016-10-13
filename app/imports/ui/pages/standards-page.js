@@ -18,16 +18,21 @@ Template.StandardsPage.viewmodel({
 
       if (!standardId || !organizationId) return;
 
-      let _subHandlers = [
+      const _subHandlers = [
         DocumentCardSubs.subscribe('standardCard', { _id: standardId, organizationId })
       ];
+
+      this._subHandlers(_subHandlers);
+    },
+    function() {
+      const standardId = this.standardId();
+
+      if (!standardId) return;
 
       if (this.isDiscussionOpened()) {
         const discussionHandle = DiscussionSubs.subscribe('discussionsByStandardId', standardId);
         this.isDiscussionReady(discussionHandle.ready());
       }
-
-      this._subHandlers(_subHandlers);
     },
     function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
