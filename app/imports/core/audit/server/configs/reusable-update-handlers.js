@@ -19,8 +19,8 @@ export const departmentsIdsField = {
   },
   notificationConfig: {
     text: {
-      [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{departmentDesc}}}',
-      [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{departmentDesc}}}'
+      [ITEM_ADDED]: '{{{userName}}} linked {{{docDesc}}} to {{{departmentDesc}}}',
+      [ITEM_REMOVED]: '{{{userName}}} unlinked {{{docDesc}}} from {{{departmentDesc}}}'
     }
   },
   data({ diffs: { departmentsIds }, newDoc, user }) {
@@ -47,9 +47,9 @@ export const descriptionField = {
   },
   notificationConfig: {
     text: {
-      [FIELD_ADDED]: '{{userName}} set description of {{{docDesc}}}',
-      [FIELD_CHANGED]: '{{userName}} changed description of {{{docDesc}}}',
-      [FIELD_REMOVED]: '{{userName}} removed description of {{{docDesc}}}'
+      [FIELD_ADDED]: '{{{userName}}} set description of {{{docDesc}}}',
+      [FIELD_CHANGED]: '{{{userName}}} changed description of {{{docDesc}}}',
+      [FIELD_REMOVED]: '{{{userName}}} removed description of {{{docDesc}}}'
     }
   },
   data({ diffs: { description }, newDoc, user }) {
@@ -72,8 +72,8 @@ export const fileIdsField = {
   },
   notificationConfig: {
     text: {
-      [ITEM_ADDED]: '{{userName}} added file "{{name}}" to {{{docDesc}}}',
-      [ITEM_REMOVED]: '{{userName}} removed file from {{{docDesc}}}'
+      [ITEM_ADDED]: '{{{userName}}} added file "{{{name}}}" to {{{docDesc}}}',
+      [ITEM_REMOVED]: '{{{userName}}} removed file from {{{docDesc}}}'
     }
   },
   data({ diffs: { fileIds }, newDoc, user }) {
@@ -101,11 +101,11 @@ export const IPDesiredOutcomeField = {
   notificationConfig: {
     text: {
       [FIELD_ADDED]:
-        '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}}',
+        '{{{userName}}} set improvement plan\'s statement of desired outcome of {{{docDesc}}}',
       [FIELD_CHANGED]:
-        '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}}',
+        '{{{userName}}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}}',
       [FIELD_REMOVED]:
-        '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}}'
+        '{{{userName}}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}}'
     }
   },
   data({ newDoc, user }) {
@@ -122,14 +122,14 @@ export const IPFileIdsField = {
   field: 'improvementPlan.fileIds',
   logConfig: {
     message: {
-      [ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
+      [ITEM_ADDED]: 'Improvement plan file "{{{name}}}" added',
       [ITEM_REMOVED]: 'Improvement plan file removed'
     }
   },
   notificationConfig: {
     text: {
-      [ITEM_ADDED]: '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}}',
-      [ITEM_REMOVED]: '{{userName}} removed file from improvement plan of {{{docDesc}}}'
+      [ITEM_ADDED]: '{{{userName}}} added file "{{{name}}}" to improvement plan of {{{docDesc}}}',
+      [ITEM_REMOVED]: '{{{userName}}} removed file from improvement plan of {{{docDesc}}}'
     }
   },
   data({ diffs, newDoc, user }) {
@@ -150,9 +150,9 @@ export const IPOwnerField = {
   logConfig: {
     message: {
       [FIELD_ADDED]:
-        'Improvement plan owner set to {{newValue}}',
+        'Improvement plan owner set to {{{newValue}}}',
       [FIELD_CHANGED]:
-        'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
+        'Improvement plan owner changed from {{{oldValue}}} to {{{newValue}}}',
       [FIELD_REMOVED]:
         'Improvement plan owner removed'
     }
@@ -160,11 +160,11 @@ export const IPOwnerField = {
   notificationConfig: {
     text: {
       [FIELD_ADDED]:
-        '{{userName}} set improvement plan\'s owner of {{{docDesc}}} to {{newValue}}',
+        '{{{userName}}} set improvement plan\'s owner of {{{docDesc}}} to {{{newValue}}}',
       [FIELD_CHANGED]:
-        '{{userName}} changed improvement plan\'s owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+        '{{{userName}}} changed improvement plan\'s owner of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
       [FIELD_REMOVED]:
-        '{{userName}} removed improvement plan\'s owner of {{{docDesc}}}'
+        '{{{userName}}} removed improvement plan\'s owner of {{{docDesc}}}'
     }
   },
   data({ diffs, newDoc, user }) {
@@ -184,16 +184,16 @@ export const IPReviewDatesField = {
   field: 'improvementPlan.reviewDates',
   logConfig: {
     message: {
-      [ITEM_ADDED]: 'Improvement plan review date added: "{{date}}"',
-      [ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"'
+      [ITEM_ADDED]: 'Improvement plan review date added: "{{{date}}}"',
+      [ITEM_REMOVED]: 'Improvement plan review date removed: "{{{date}}}"'
     }
   },
   notificationConfig: {
     text: {
       [ITEM_ADDED]:
-        '{{userName}} added improvement plan\'s review date for {{{docDesc}}}: "{{date}}"',
+        '{{{userName}}} added improvement plan\'s review date for {{{docDesc}}}: "{{{date}}}"',
       [ITEM_REMOVED]:
-        '{{userName}} removed improvement plan\'s review date for {{{docDesc}}}: "{{date}}"'
+        '{{{userName}}} removed improvement plan\'s review date for {{{docDesc}}}: "{{{date}}}"'
     }
   },
   data({ diffs, newDoc, user }) {
@@ -214,13 +214,13 @@ export const IPReviewDateField = {
   logConfig: {
     message: {
       [FIELD_CHANGED]:
-        'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+        'Improvement plan review date changed from "{{{oldValue}}}" to "{{{newValue}}}"'
     }
   },
   notificationConfig: {
     text: {
       [FIELD_CHANGED]:
-        '{{userName}} changed improvement plan\'s review date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+        '{{{userName}}} changed improvement plan\'s review date of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"'
     }
   },
   data({ diffs, newDoc, user }) {
@@ -242,9 +242,9 @@ export const IPTargetDateField = {
   logConfig: {
     message: {
       [FIELD_ADDED]:
-        'Improvement plan target date for desired outcome set to "{{newValue}}"',
+        'Improvement plan target date for desired outcome set to "{{{newValue}}}"',
       [FIELD_CHANGED]:
-        'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
+        'Improvement plan target date for desired outcome changed from "{{{oldValue}}}" to "{{{newValue}}}"',
       [FIELD_REMOVED]:
         'Improvement plan target date for desired outcome removed'
     }
@@ -252,11 +252,11 @@ export const IPTargetDateField = {
   notificationConfig: {
     text: {
       [FIELD_ADDED]:
-        '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} to "{{newValue}}"',
+        '{{{userName}}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} to "{{{newValue}}}"',
       [FIELD_CHANGED]:
-        '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+        '{{{userName}}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
       [FIELD_REMOVED]:
-        '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}}'
+        '{{{userName}}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}}'
     }
   },
   data({ diffs, newDoc, user }) {
@@ -290,11 +290,11 @@ export const isDeletedField = {
     },
     text: {
       [ChangesKinds.FIELD_CHANGED]:
-        '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+        '{{{userName}}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
     },
     title: {
       [ChangesKinds.FIELD_CHANGED]:
-        '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+        '{{{userName}}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
     }
   },
   data({ diffs: { isDeleted }, newDoc, user }) {
@@ -319,9 +319,9 @@ export const notesField = {
   },
   notificationConfig: {
     text: {
-      [FIELD_ADDED]: '{{userName}} set notes of {{{docDesc}}}',
-      [FIELD_CHANGED]: '{{userName}} changed notes of {{{docDesc}}}',
-      [FIELD_REMOVED]: '{{userName}} removed notes of {{{docDesc}}}'
+      [FIELD_ADDED]: '{{{userName}}} set notes of {{{docDesc}}}',
+      [FIELD_CHANGED]: '{{{userName}}} changed notes of {{{docDesc}}}',
+      [FIELD_REMOVED]: '{{{userName}}} removed notes of {{{docDesc}}}'
     }
   },
   data({ diffs: { notes }, newDoc, user }) {
@@ -338,23 +338,23 @@ export const notifyField = {
   field: 'notify',
   logConfig: {
     message: {
-      [ITEM_ADDED]: '{{item}} was added to notification list',
-      [ITEM_REMOVED]: '{{item}} was removed from notification list'
+      [ITEM_ADDED]: '{{{item}}} was added to notification list',
+      [ITEM_REMOVED]: '{{{item}}} was removed from notification list'
     }
   },
   notificationConfig: {
     text: {
       [ITEM_ADDED]:
-        '{{userName}} added {{item}} to the notification list of {{{docDesc}}}',
+        '{{{userName}}} added {{{item}}} to the notification list of {{{docDesc}}}',
       [ITEM_REMOVED]:
-        '{{userName}} removed {{item}} from the notification list of {{{docDesc}}}'
+        '{{{userName}}} removed {{{item}}} from the notification list of {{{docDesc}}}'
     }
   },
   personalNotificationConfig: {
     shouldSendNotification({ diffs: { notify: { kind } } }) {
       return kind === ITEM_ADDED;
     },
-    text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+    text: '{{{userName}}} added you to the notification list of {{{docDesc}}}',
     title: 'You have been added to the notification list',
     emailTemplateData({ newDoc }) {
       return {
@@ -386,19 +386,19 @@ export const ownerIdField = {
   field: 'ownerId',
   logConfig: {
     message: {
-      [FIELD_ADDED]: 'Owner set to {{newValue}}',
-      [FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
+      [FIELD_ADDED]: 'Owner set to {{{newValue}}}',
+      [FIELD_CHANGED]: 'Owner changed from {{{oldValue}}} to {{{newValue}}}',
       [FIELD_REMOVED]: 'Owner removed'
     }
   },
   notificationConfig: {
     text: {
       [FIELD_ADDED]:
-        '{{userName}} set owner of {{{docDesc}}} to {{newValue}}',
+        '{{{userName}}} set owner of {{{docDesc}}} to {{{newValue}}}',
       [FIELD_CHANGED]:
-        '{{userName}} changed owner of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+        '{{{userName}}} changed owner of {{{docDesc}}} from {{{oldValue}}} to {{{newValue}}}',
       [FIELD_REMOVED]:
-        '{{userName}} removed owner of {{{docDesc}}}'
+        '{{{userName}}} removed owner of {{{docDesc}}}'
     }
   },
   data({ diffs: { ownerId }, newDoc, user }) {
@@ -418,19 +418,19 @@ export const titleField = {
   field: 'title',
   logConfig: {
     message: {
-      [FIELD_ADDED]: 'Title set to "{{newValue}}"',
-      [FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
+      [FIELD_ADDED]: 'Title set to "{{{newValue}}}"',
+      [FIELD_CHANGED]: 'Title changed from "{{{oldValue}}}" to "{{{newValue}}}"',
       [FIELD_REMOVED]: 'Title removed'
     }
   },
   notificationConfig: {
     text: {
       [FIELD_ADDED]:
-        '{{userName}} set title of {{{docDesc}}} to "{{newValue}}"',
+        '{{{userName}}} set title of {{{docDesc}}} to "{{{newValue}}}"',
       [FIELD_CHANGED]:
-        '{{userName}} changed title of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+        '{{{userName}}} changed title of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
       [FIELD_REMOVED]:
-        '{{userName}} removed title of {{{docDesc}}}'
+        '{{{userName}}} removed title of {{{docDesc}}}'
     }
   },
   data({ diffs: { title }, newDoc, oldDoc, user }) {

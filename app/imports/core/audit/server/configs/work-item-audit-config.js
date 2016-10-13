@@ -67,7 +67,7 @@ const notifications = [
     shouldSendNotification({ newDoc: { type } }) {
       return type === COMPLETE_ACTION;
     },
-    text: '{{userName}} assigned you to complete {{{docDesc}}}',
+    text: '{{{userName}}} assigned you to complete {{{docDesc}}}',
     title: 'You have been assigned to complete an action',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData
@@ -76,7 +76,7 @@ const notifications = [
     shouldSendNotification({ newDoc: { type } }) {
       return type === VERIFY_ACTION;
     },
-    text: '{{userName}} assigned you to verify {{{docDesc}}}',
+    text: '{{{userName}}} assigned you to verify {{{docDesc}}}',
     title: 'You have been assigned to verify an action',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData
@@ -85,7 +85,7 @@ const notifications = [
     shouldSendNotification({ newDoc: { type } }) {
       return type === COMPLETE_ANALYSIS;
     },
-    text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}}',
+    text: '{{{userName}}} assigned you to do a root cause analysis of {{{docDesc}}}',
     title: 'You have been assigned to do a root cause analysis',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData
@@ -94,7 +94,7 @@ const notifications = [
     shouldSendNotification({ newDoc: { type } }) {
       return type === COMPLETE_UPDATE_OF_STANDARDS;
     },
-    text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}}',
+    text: '{{{userName}}} assigned you to do an update of standards related to {{{docDesc}}}',
     title: 'You have been assigned to do an update of standards',
     sendBoth: true,
     emailTemplateData: getEmailTemplateData
