@@ -13,7 +13,7 @@ export default _.extend({}, ProblemsService, {
 
   _abbr: 'NC',
 
-  _docType: ProblemTypes.NC,
+  _docType: ProblemTypes.NON_CONFORMITY,
 
   _getDoc(_id) {
     const NC = this.collection.findOne({ _id });

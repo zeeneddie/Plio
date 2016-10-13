@@ -99,7 +99,7 @@ export const isOrgOwner = (userId, organizationId) => {
 };
 
 export const isOrgMemberBySelector = (userId, selector) => {
-  return !!Organizations.find({
+  return !!Organizations.findOne({
     ...selector,
     users: {
       $elemMatch: {

@@ -4,13 +4,13 @@ import { Files } from '/imports/share/collections/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
-  mixin: ['uploader', 'urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
+  mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
-      this.sourceType('url');
+      this.sourceType('attachment');
     }
   },
-  sourceType: 'url',
+  sourceType: 'attachment',
   sourceUrl: '',
   sourceFileId: '',
   docxRenderInProgress: null,
@@ -118,17 +118,17 @@ Template.ESSources.viewmodel({
       this.docxRenderInProgress('');
     }, 5000);
   },
-  addFileFn() {
-    return this.addFile.bind(this);
+  afterInsertFn() {
+    return this.afterInsert.bind(this);
   },
-  addFile({ fileId }, cb) {
+  afterInsert(fileId, cb) {
     this.sourceFileId(fileId);
     this.update(null, cb);
   },
   afterUploadCb() {
     return this.afterUpload.bind(this);
   },
-  afterUpload({ fileId, url }) {
+  afterUpload(fileId, url) {
     this.renderDocx(url);
     this.update();
   },
@@ -137,7 +137,7 @@ Template.ESSources.viewmodel({
   },
   removeAttachment() {
     const file = this.file();
-    const isFileUploading = !file.isUploaded();
+    const isFileUploading = !file.isUploaded() && !file.isFailed();
 
     let warningMsg = 'This attachment will be removed';
     let buttonText = 'Remove';
@@ -154,7 +154,9 @@ Template.ESSources.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      this.terminateUploading(this.sourceFileId());
+      if (isFileUploading) {
+        UploadsStore.terminateUploading(this.sourceFileId());
+      }
 
       const options = {
         $unset: {

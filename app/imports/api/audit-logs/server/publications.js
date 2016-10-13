@@ -3,19 +3,16 @@ import { Meteor } from 'meteor/meteor';
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { SystemName } from '/imports/share/constants.js';
 import { isOrgMember } from '../../checkers.js';
-import { getCollectionByName } from '/imports/share/helpers.js';
+import { getCollectionByDocType } from '/imports/share/helpers.js';
 import Counter from '../../counter/server.js';
 
 
-const checkSubsArgs = (userId, documentId) => {
+const checkSubsArgs = (userId, documentId, documentType) => {
   if (!userId) {
     return false;
   }
 
-  const randomLog = AuditLogs.findOne({ documentId });
-  const collectionName = randomLog && randomLog.collection;
-
-  const docCollection = getCollectionByName(collectionName);
+  const docCollection = getCollectionByDocType(documentType);
   const doc = docCollection && docCollection.findOne({ _id: documentId });
   const { organizationId } = doc || {};
 
@@ -26,8 +23,8 @@ const checkSubsArgs = (userId, documentId) => {
   return true;
 };
 
-Meteor.publish('auditLogs', function(documentId, skip=0, limit=10) {
-  if (!checkSubsArgs(this.userId, documentId)) {
+Meteor.publish('auditLogs', function(documentId, documentType, skip=0, limit=10) {
+  if (!checkSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 
@@ -40,16 +37,16 @@ Meteor.publish('auditLogs', function(documentId, skip=0, limit=10) {
   });
 });
 
-Meteor.publish('documentLogsCount', function(counterName, documentId) {
-  if (!checkSubsArgs(this.userId, documentId)) {
+Meteor.publish('documentLogsCount', function(counterName, documentId, documentType) {
+  if (!checkSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 
   return new Counter(counterName, AuditLogs.find({ documentId }));
 });
 
-Meteor.publish('lastUserLog', function(documentId) {
-  if (!checkSubsArgs(this.userId, documentId)) {
+Meteor.publish('lastUserLog', function(documentId, documentType) {
+  if (!checkSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 

@@ -8,6 +8,7 @@ import { SystemName } from '/imports/share/constants.js';
 Template.CardChangelog.viewmodel({
   mixin: ['collapse', 'counter', 'date', 'user'],
   documentId: null,
+  documentType: '',
   limit: 10,
   areLogsLoaded: false,
   loadingLogs: false,
@@ -27,7 +28,9 @@ Template.CardChangelog.viewmodel({
     }
   ],
   onCreated(template) {
-    template.autorun(() => template.subscribe('lastUserLog', this.documentId()));
+    template.autorun(() => {
+      template.subscribe('lastUserLog', this.documentId(), this.documentType());
+    });
   },
   resetProps() {
     this.collapsed(true);
@@ -60,11 +63,14 @@ Template.CardChangelog.viewmodel({
       this.loadingLogs(true);
 
       const documentId = this.documentId();
+      const documentType = this.documentType();
       const tpl = this.templateInstance;
 
-      tpl.subscribe('documentLogsCount', `document-logs-count-${documentId}`, documentId);
+      tpl.subscribe(
+        'documentLogsCount', `document-logs-count-${documentId}`, documentId, documentType
+      );
 
-      tpl.subscribe('auditLogs', documentId, {
+      tpl.subscribe('auditLogs', documentId, documentType, {
         onReady: () => {
           this.loadingLogs(false);
           this.areLogsLoaded(true);
@@ -103,7 +109,7 @@ Template.CardChangelog.viewmodel({
       this.loadingAllLogs(true);
       const tpl = this.templateInstance;
 
-      tpl.subscribe('auditLogs', this.documentId(), this.limit(), 0, {
+      tpl.subscribe('auditLogs', this.documentId(), this.documentType(), this.limit(), 0, {
         onReady: () => {
           this.loadingAllLogs(false);
           this.areAllLogsLoaded(true);

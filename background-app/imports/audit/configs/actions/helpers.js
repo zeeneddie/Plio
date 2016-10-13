@@ -32,7 +32,7 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
 
   _.each(
     [
-      { collection: NonConformities, type: ProblemTypes.NC },
+      { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
       { collection: Risks, type: ProblemTypes.RISK }
     ],
     ({ collection, type }) => getIds(collection, type)
@@ -53,7 +53,7 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
 
 export const getLinkedDocAuditConfig = (documentType) => {
   return {
-    [ProblemTypes.NC]: NCAuditConfig,
+    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
     [ProblemTypes.RISK]: RiskAuditConfig
   }[documentType];
 };

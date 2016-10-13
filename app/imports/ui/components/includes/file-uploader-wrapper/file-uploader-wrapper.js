@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Files } from '/imports/share/collections/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
+import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
 
 Template.FileUploader_Wrapper.viewmodel({
   mixin: 'organization',
@@ -9,11 +10,10 @@ Template.FileUploader_Wrapper.viewmodel({
   uploader() {
     return this.child('FileUploader');
   },
-  addFileFn() {
-    return this.addFile.bind(this);
+  afterInsertFn() {
+    return this.afterInsert.bind(this);
   },
-  addFile({ fileId }, cb) {
-
+  afterInsert(fileId, cb) {
     // if (this.files() && this.files().length) {
     const options = {
       $push: {
@@ -31,11 +31,9 @@ Template.FileUploader_Wrapper.viewmodel({
   removeFileFn() {
     return this.removeFile.bind(this)
   },
-  removeFile(viewmodel) {
-    const { _id, url } = viewmodel;
-    const fileUploader = this.uploader();
-
-    const isFileUploading = !viewmodel.isUploaded();
+  removeFile(file) {
+    const { _id, url } = file;
+    const isFileUploading = !file.isUploaded() && !file.isFailed();
 
     let warningMsg = 'This file will be removed';
     let buttonText = 'Remove';
@@ -52,8 +50,8 @@ Template.FileUploader_Wrapper.viewmodel({
       confirmButtonText: buttonText,
       closeOnConfirm: true
     }, () => {
-      if (isFileUploading && fileUploader) {
-        fileUploader.terminateUploading(_id);
+      if (isFileUploading) {
+        UploadsStore.terminateUploading(_id);
       }
 
       const options = {

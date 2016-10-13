@@ -53,7 +53,7 @@ Meteor.publishComposite('actionCard', function({ _id, organizationId }) {
     }, {
       find({ linkedTo }) {
         const NCIds = _.map(_.where(linkedTo, {
-          documentType: ProblemTypes.NC
+          documentType: ProblemTypes.NON_CONFORMITY
         }), (lt) => {
           return lt.documentId;
         });

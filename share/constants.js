@@ -154,12 +154,6 @@ export const DocChangesKinds = {
   DOC_REMOVED: 3
 };
 
-export const DocumentTypes = {
-  STANDARD: 'standard',
-  NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
-};
-
 export const InvitationStatuses = {
   failed: 0,
   invited: 1,
@@ -208,8 +202,13 @@ export const ProblemsStatuses = {
 };
 
 export const ProblemTypes = {
-  NC: 'non-conformity',
+  NON_CONFORMITY: 'non-conformity',
   RISK: 'risk'
+};
+
+export const DocumentTypes = {
+  ...ProblemTypes,
+  ...ActionTypes
 };
 
 export const ReviewStatuses = {
@@ -424,9 +423,9 @@ export const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NC),
-    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NC),
-    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NC)
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NON_CONFORMITY),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NON_CONFORMITY),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NON_CONFORMITY)
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),

@@ -24,7 +24,7 @@ Template.Subcards_Actions_Read.viewmodel({
       query = {
         ...query,
         $or: [
-          { 'linkedTo.documentId': { $in: NCsIds }, 'linkedTo.documentType': ProblemTypes.NC },
+          { 'linkedTo.documentId': { $in: NCsIds }, 'linkedTo.documentType': ProblemTypes.NON_CONFORMITY },
           { 'linkedTo.documentId': { $in: risksIds }, 'linkedTo.documentType': ProblemTypes.RISK }
         ]
       };

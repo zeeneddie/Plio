@@ -32,7 +32,7 @@ export const ACT_CheckEverything = function ACT_CheckEverything(_id) {
 export const ACT_LinkedDocsChecker = (linkedTo) => {
   const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
 
-  const NCsIds = _.pluck(linkedToByType[ProblemTypes.NC], 'documentId');
+  const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
   let docWithUncompletedAnalysis, analysisTitle;
@@ -68,7 +68,7 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
 
 export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   const collection = ((() => {
-    if (Object.is(documentType, ProblemTypes.NC)) {
+    if (Object.is(documentType, ProblemTypes.NON_CONFORMITY)) {
       if (Object.is(action.type, ActionTypes.RISK_CONTROL)) {
         throw ACT_RK_CANNOT_BE_LINKED_TO_NC;
       }

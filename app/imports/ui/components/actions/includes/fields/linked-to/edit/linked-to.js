@@ -34,7 +34,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return array.map(({ sequentialId, title, ...args }) => ({ docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
   },
   getDocs(query, options) {
-    const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NC);
+    const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NON_CONFORMITY);
     const risks = this.mapDocs(this._getRisksByQuery(query, options), ProblemTypes.RISK);
     return [ncs, risks];
   },

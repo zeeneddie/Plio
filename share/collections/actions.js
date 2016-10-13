@@ -27,7 +27,7 @@ const getLinkedDocsIds = (linkedDocs, docType) => {
 
 Actions.helpers({
   getLinkedNCsIds() {
-    return getLinkedDocsIds(this.linkedTo, ProblemTypes.NC);
+    return getLinkedDocsIds(this.linkedTo, ProblemTypes.NON_CONFORMITY);
   },
   getLinkedNCs() {
     return NonConformities.find({
