@@ -32,7 +32,7 @@ export const getCollectionByName = (colName) => {
   return collections[colName];
 };
 
-const getCollectionByDocType = (docType) => {
+export const getCollectionByDocType = (docType) => {
   switch(docType) {
     case DocumentTypes.STANDARD:
       return Standards;
