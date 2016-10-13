@@ -24,9 +24,9 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_ADDED]:
-              'Approx cost per occurrence set to "{{newValue}}"',
+              'Approx cost per occurrence set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Approx cost per occurrence changed from "{{oldValue}}" to "{{newValue}}"',
+              'Approx cost per occurrence changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Approx cost per occurrence removed'
           }
@@ -47,9 +47,9 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_ADDED]:
-              'Help desk ref added: ID - {{text}}, URL: {{url}}',
+              'Help desk ref added: ID - {{{text}}}, URL: {{{url}}}',
             [FIELD_REMOVED]:
-              'Help desk ref removed: ID - {{text}}, URL: {{url}}'
+              'Help desk ref removed: ID - {{{text}}}, URL: {{{url}}}'
           }
         }
       ],
@@ -70,7 +70,7 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_CHANGED]:
-              'Help desk ref ID changed from "{{oldValue}}" to "{{newValue}}"'
+              'Help desk ref ID changed from "{{{oldValue}}}" to "{{{newValue}}}"'
           }
         }
       ],
@@ -91,7 +91,7 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_CHANGED]:
-              'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"'
+              'Help desk ref URL changed from "{{{oldValue}}}" to "{{{newValue}}}"'
           }
         }
       ],

@@ -33,8 +33,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [FIELD_CHANGED]:
-              `{{userName}} changed workflow type for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `{{{userName}}} changed workflow type for ${label} ` +
+              `from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}}`
           }
         }
       ],
@@ -61,8 +61,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `{{{userName}}} changed default step time for ${label} ` +
+              `from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}}`
           }
         }
       ],
@@ -90,8 +90,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `{{{userName}}} changed default step time for ${label} ` +
+              `from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}}`
           }
         }
       ],
@@ -124,8 +124,8 @@ const getRemindersConfig = (field, label) => {
           {
             text: {
               [FIELD_CHANGED]:
-                `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+                `{{{userName}}} changed ${reminderLabel} for ${label} ` +
+                `from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}}`
             }
           }
         ],
@@ -153,8 +153,8 @@ const getRemindersConfig = (field, label) => {
           {
             text: {
               [FIELD_CHANGED]:
-                `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+                `{{{userName}}} changed ${reminderLabel} for ${label} ` +
+                `from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}}`
             }
           }
         ],
@@ -191,7 +191,7 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
     notifications: [
       {
         text: {
-          [FIELD_CHANGED]: `{{userName}} changed guidelines for ${label} in {{{docDesc}}}`
+          [FIELD_CHANGED]: `{{{userName}}} changed guidelines for ${label} in {{{docDesc}}}`
         }
       }
     ],
@@ -223,7 +223,7 @@ export default OrgAuditConfig = {
         {
           text: {
             [FIELD_CHANGED]:
-              '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+              '{{{userName}}} changed name of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"'
           }
         }
       ],
@@ -248,7 +248,7 @@ export default OrgAuditConfig = {
         {
           text: {
             [FIELD_CHANGED]:
-              '{{userName}} changed timezone of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+              '{{{userName}}} changed timezone of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"'
           }
         }
       ],
@@ -273,7 +273,7 @@ export default OrgAuditConfig = {
         {
           text: {
             [FIELD_CHANGED]:
-              '{{userName}} changed currency of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+              '{{{userName}}} changed currency of {{{docDesc}}} from "{{{oldValue}}}" to "{{{newValue}}}"'
           }
         }
       ],
@@ -329,7 +329,7 @@ export default OrgAuditConfig = {
       notifications: [
         {
           text: {
-            [FIELD_CHANGED]: '{{userName}} changed risk scoring guidelines in {{{docDesc}}}'
+            [FIELD_CHANGED]: '{{{userName}}} changed risk scoring guidelines in {{{docDesc}}}'
           }
         }
       ],
