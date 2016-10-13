@@ -58,9 +58,11 @@
                   </div>
                 </div>
 
-                {{#with departmentsIds}}
-                  {{> Departments_Read departmentsIds=this}}
-                {{/with}}
+                {{#if isReady}}
+                  {{#with departmentsIds}}
+                    {{> Departments_Read departmentsIds=this}}
+                  {{/with}}
+                {{/if}}
 
                 {{> SCSource source=this.source1 id=1}}
 

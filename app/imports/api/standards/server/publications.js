@@ -86,8 +86,15 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
     },
     children: [
       {
-        find({ organizationId }) {
-          return Departments.find({ organizationId });
+        find({ organizationId, departmentsIds = [] }) {
+          const query = {
+            organizationId,
+            _id: {
+              $in: departmentsIds
+            }
+          };
+          
+          return Departments.find(query);
         }
       },
       {
