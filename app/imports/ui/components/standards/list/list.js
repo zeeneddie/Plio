@@ -14,6 +14,7 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
+
     // hack to get around infinite redirect loop
     template.autorun(() => {
       const standardId = this.standardId();
@@ -35,7 +36,7 @@ Template.StandardsList.viewmodel({
       shouldUpdate && this.watcher(data);
     });
   },
-  watcher: _.debounce(function({
+  watcher: function({
     contains,
     defaultStandard,
     standardId,
@@ -45,8 +46,8 @@ Template.StandardsList.viewmodel({
       if (defaultStandard) {
         const { _id } = defaultStandard;
 
-        this.goToStandard(_id);
         this.expandCollapsed(_id);
+        this.goToStandard(_id);
       } else {
         const params = { orgSerialNumber };
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };
@@ -55,7 +56,7 @@ Template.StandardsList.viewmodel({
     } else {
       this.expandCollapsed(standardId);
     }
-  }, 50),
+  },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
