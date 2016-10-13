@@ -14,6 +14,34 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered(template) {
+
+    // hack to get around infinite redirect loop
+    template.autorun(() => {
+      const standardId = this.standardId();
+      const orgSerialNumber = this.organizationSerialNumber();
+      const list = this.list;
+      const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
+      const {
+        result:contains,
+        first:defaultStandard
+      } = this._findStandardForFilter(standardId);
+
+      const data = {
+        contains,
+        defaultStandard,
+        standardId,
+        orgSerialNumber
+      };
+
+      shouldUpdate && this.watcher(data);
+    });
+  },
+  watcher: function({
+    contains,
+    defaultStandard,
+    standardId,
+    orgSerialNumber
+  }) {
     this.handleRoute();
   },
   handleRoute() {
@@ -28,8 +56,8 @@ Template.StandardsList.viewmodel({
       if (defaultStandard) {
         const { _id } = defaultStandard;
 
-        this.goToStandard(_id);
         this.expandCollapsed(_id);
+        this.goToStandard(_id);
       } else {
         const params = { orgSerialNumber };
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };

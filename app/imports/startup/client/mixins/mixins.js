@@ -78,7 +78,7 @@ export default {
       const vms = ViewModel.find('ListItem', viewmodel => viewmodel.collapsed() && this.findRecursive(viewmodel, _id));
 
       return this.expandCollapseItems(vms, { complete: cb });
-    }, 200),
+    }, 100),
     findRecursive(viewmodel, _id) {
       if (_.isArray(_id)) {
         return viewmodel && _.some(viewmodel.children(), vm => ( vm._id && _.contains(_id, vm._id()) || this.findRecursive(vm, _id) ));
