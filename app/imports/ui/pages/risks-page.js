@@ -1,13 +1,18 @@
 import { Template } from 'meteor/templating';
 
 import { Risks } from '/imports/api/risks/risks.js';
-import { DocumentsListSubs } from '/imports/startup/client/subsmanagers.js';
+import { DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Risks_Page.viewmodel({
   mixin: ['risk', 'organization'],
   autorun() {
+    const organizationId = this.organizationId();
+
     this.templateInstance.subscribe('riskImprovementPlan', this.riskId());
-    DocumentsListSubs.subscribe('workItemsList', this.organizationId());
+    DocumentsListSubs.subscribe('workItemsList', organizationId);
+    DocumentsListSubs.subscribe('standardsList', organizationId);
+    DocumentsListSubs.subscribe('nonConformitiesList', organizationId);
+    OrgSettingsDocSubs.subscribe('departments', organizationId);
   },
   listArgs() {
     return {

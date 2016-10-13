@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { selectOrganization } from '/imports/api/users/methods.js';
+import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.Organization_Menu_Item.viewmodel({
   mixin: 'router',
@@ -13,12 +14,7 @@ Template.Organization_Menu_Item.viewmodel({
 
     const selectedOrganizationSerialNumber = this.serialNumber();
 
-    selectOrganization.call({ selectedOrganizationSerialNumber }, (err) => {
-      if (err) {
-        console.log(err);
-        swal('Oops... Something went wrong', err.reason, 'error');
-      }
-    });
+    localStorage.setItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`, selectedOrganizationSerialNumber);
 
     this.goToDashboard(selectedOrganizationSerialNumber);
   }

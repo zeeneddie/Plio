@@ -700,6 +700,7 @@ export default {
       switch(status) {
         case 1:
         case 4:
+          return 'yellow';
         case 8:
         case 9:
           return 'success';

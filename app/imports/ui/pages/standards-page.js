@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { CountSubs, DiscussionSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
+import { DiscussionSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 import { Discussions } from '/imports/api/discussions/discussions.js';
 
@@ -14,20 +14,18 @@ Template.StandardsPage.viewmodel({
       const organizationId = this.organizationId();
       const standardId = this.standardId();
       const discussionId = Object.assign({}, this.discussion())._id;
-      let _subHandlers = [];
 
       if (!standardId || !organizationId) return;
+
+      let _subHandlers = [
+        OrgSettingsDocSubs.subscribe('departments', organizationId)
+      ];
 
       if (this.isDiscussionOpened()) {
         _subHandlers = _subHandlers.concat([
           DiscussionSubs.subscribe('discussionsByStandardId', standardId),
         ]);
       }
-      // else {
-      //   _subHandlers = [
-      //    CountSubs.subscribe('messagesNotViewedCount', 'standard-messages-not-viewed-count-' + standardId, standardId)
-      //  ];
-      // }
 
       this._subHandlers(_subHandlers);
     },

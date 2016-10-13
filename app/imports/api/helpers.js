@@ -4,7 +4,7 @@ import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
 import Handlebars from 'handlebars';
-
+import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 
 import { CollectionNames, DocumentTypes } from './constants.js';
@@ -14,6 +14,8 @@ import { Risks } from './risks/risks.js';
 import { Standards } from './standards/standards.js';
 import { Organizations } from './organizations/organizations.js';
 import { ProblemMagnitudes } from '/imports/api/constants.js';
+import { getUserOrganizations } from './organizations/utils';
+import { isOrgMemberBySelector } from './checkers';
 
 const { compose } = _;
 
@@ -330,6 +332,45 @@ const sortArrayByTitlePrefix = (arr) => {
 
 const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 
+const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
+  find() {
+    return getUserOrganizations(userId, selector);
+  },
+  children: [
+    {
+      find({ users = [] }) {
+        const userIds = users.map(property('userId'));
+
+        return Meteor.users.find({ _id: { $in: userIds } });
+      }
+    }
+  ]
+});
+
+const getPublishCompositeOrganizationUsers = (fn) => {
+  return function(serialNumber, isDeleted = { $in: [null, false] }) {
+    check(serialNumber, Number);
+    check(isDeleted, Match.OneOf(Boolean, {
+      $in: Array
+    }));
+
+    const userId = this.userId;
+
+    if (!userId || !isOrgMemberBySelector(userId, { serialNumber })) {
+      return this.ready();
+    }
+
+    const pubObj = getPublishCompositeOrganizationUsersObject(userId, { serialNumber });
+
+    return Object.assign({}, pubObj, {
+      children: [
+        ...pubObj.children,
+        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))()
+      ]
+    });
+  }
+};
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -381,4 +422,6 @@ export {
   getTitlePrefix,
   sortArrayByTitlePrefix,
   getNewerDate,
+  getPublishCompositeOrganizationUsersObject,
+  getPublishCompositeOrganizationUsers
 };
