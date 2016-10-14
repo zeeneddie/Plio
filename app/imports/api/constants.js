@@ -499,6 +499,7 @@ const NonConformitiesListProjection = {
   sequentialId: 1,
   title: 1,
   cost: 1,
+  ref: 1,
   createdAt: 1,
   identifiedAt: 1,
   magnitude: 1,
@@ -523,6 +524,21 @@ const WorkItemsListProjection = {
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1
+};
+
+const StandardsBookSectionsListProjection = {
+  organizationId: 1,
+  title: 1
+};
+
+const StandardTypesListProjection = {
+  organizationId: 1,
+  title: 1
+};
+
+const DepartmentsListProjection = {
+  organizationId: 1,
+  name: 1
 };
 
 const AnalysisTitles = {
@@ -607,6 +623,9 @@ export {
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection,
+  StandardsBookSectionsListProjection,
+  StandardTypesListProjection,
+  DepartmentsListProjection,
   AnalysisTitles,
   riskScoreTypes,
   RCAMaxCauses,

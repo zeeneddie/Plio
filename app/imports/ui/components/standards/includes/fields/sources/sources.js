@@ -87,7 +87,7 @@ Template.ESSources.viewmodel({
     check(url, String);
 
     const file = this.file();
-    const isDocx = file.extension === 'docx';
+    const isDocx = file && file.extension === 'docx';
 
     if (isDocx) {
       this.docxRenderInProgress(true);

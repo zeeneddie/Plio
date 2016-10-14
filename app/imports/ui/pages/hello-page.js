@@ -29,7 +29,9 @@ Template.HelloPage.viewmodel({
             }
           }
         } else {
-          FlowRouter.go('signIn');
+          FlowRouter.withReplaceState(() => {
+            FlowRouter.go('signIn');
+          });
         }
       }
     });

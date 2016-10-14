@@ -13,7 +13,7 @@ Template.StandardsList.viewmodel({
     counter: 'counter'
   }],
   hideRTextOnExpand: true,
-  onRendered(template) {
+  onRendered() {
     this.handleRoute();
   },
   handleRoute() {

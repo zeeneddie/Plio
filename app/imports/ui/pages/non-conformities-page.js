@@ -10,7 +10,7 @@ Template.NC_Page.viewmodel({
     const template = this.templateInstance;
     const NCIds = extractIds(this._getNCsByQuery());
     const organizationId = this.organizationId();
-    
+
     template.subscribe('occurrencesByNCIds', NCIds);
     DocumentsListSubs.subscribe('workItemsList', organizationId);
     DocumentsListSubs.subscribe('standardsList', organizationId);
