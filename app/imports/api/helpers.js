@@ -94,20 +94,23 @@ const getCollectionByName = (colName) => {
 };
 
 const getCollectionByDocType = (docType) => {
-  const { STANDARD, NON_CONFORMITY, RISK } = DocumentTypes;
   switch(docType) {
-    case STANDARD:
+    case DocumentTypes.STANDARD:
       return Standards;
-      break;
-    case NON_CONFORMITY:
+
+    case DocumentTypes.NON_CONFORMITY:
       return NonConformities;
-      break;
-    case RISK:
+
+    case DocumentTypes.RISK:
       return Risks;
-      break;
+
+    case DocumentTypes.CORRECTIVE_ACTION:
+    case DocumentTypes.PREVENTATIVE_ACTION:
+    case DocumentTypes.RISK_CONTROL:
+      return Actions;
+
     default:
       return undefined;
-      break;
   }
 };
 

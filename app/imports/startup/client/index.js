@@ -1,3 +1,4 @@
+import '/imports/ui/utils';
 import './useraccounts.js';
 import './routes.js';
 import './userpresence.js';

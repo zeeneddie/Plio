@@ -42,8 +42,8 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Review date set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Review date changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Review date set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Review date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Review date removed'
           }
         }
@@ -66,8 +66,8 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Review executor set to {{newValue}}',
-            [FIELD_CHANGED]: 'Review executor changed from {{oldValue}} to {{newValue}}',
+            [FIELD_ADDED]: 'Review executor set to {{{newValue}}}',
+            [FIELD_CHANGED]: 'Review executor changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]: 'Review executor removed'
           }
         }
@@ -103,9 +103,9 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_ADDED]:
-              'Risk evaluation treatment decision set to "{{newValue}}"',
+              'Risk evaluation treatment decision set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
+              'Risk evaluation treatment decision changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Risk evaluation treatment decision removed'
           }
@@ -145,9 +145,9 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [FIELD_ADDED]:
-              'Risk evaluation treatment priority set to "{{newValue}}"',
+              'Risk evaluation treatment priority set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Risk evaluation treatment priority changed from "{{oldValue}}" to "{{newValue}}"',
+              'Risk evaluation treatment priority changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Risk evaluation treatment priority removed'
           }
@@ -170,9 +170,9 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
         {
           message: {
             [ITEM_ADDED]:
-              'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
+              'Risk score added: value - {{{value}}}, scored by {{{userName}}} on {{{date}}}',
             [ITEM_REMOVED]:
-              'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
+              'Risk score removed: value - {{{value}}}, scored by {{{userName}}} on {{{date}}}'
           }
         }
       ],
@@ -195,8 +195,8 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Risk type set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Risk type changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Risk type set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Risk type changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Risk type removed'
           }
         }

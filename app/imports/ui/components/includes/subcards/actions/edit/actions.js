@@ -127,7 +127,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       _.extend(query, {
         $or: [{
           'linkedTo.documentId': { $in: NCsIds },
-          'linkedTo.documentType': ProblemTypes.NC
+          'linkedTo.documentType': ProblemTypes.NON_CONFORMITY
         }, {
           'linkedTo.documentId': { $in: risksIds },
           'linkedTo.documentType': ProblemTypes.RISK

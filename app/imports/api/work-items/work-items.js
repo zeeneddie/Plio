@@ -17,7 +17,7 @@ WorkItems.helpers({
     const { LINKED_TYPES } = WorkItemsStore;
 
     const collections = {
-      [LINKED_TYPES.NC]: NonConformities,
+      [LINKED_TYPES.NON_CONFORMITY]: NonConformities,
       [LINKED_TYPES.RISK]: Risks,
       [LINKED_TYPES.CORRECTIVE_ACTION]: Actions,
       [LINKED_TYPES.PREVENTATIVE_ACTION]: Actions,

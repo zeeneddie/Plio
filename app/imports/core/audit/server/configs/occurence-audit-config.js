@@ -31,7 +31,7 @@ export default OccurenceAuditConfig = {
   onCreated: {
     logs: [
       {
-        message: '{{docDesc}} added: date - {{date}}',
+        message: '{{{docDesc}}} added: date - {{{date}}}',
         logData: getLogData
       }
     ],
@@ -54,11 +54,11 @@ export default OccurenceAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              '{{docDesc}} date set to "{{newValue}}"',
+              '{{{docDesc}}} date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              '{{docDesc}} date changed from "{{oldValue}}" to "{{newValue}}"',
+              '{{{docDesc}}} date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
-              '{{docDesc}} date removed'
+              '{{{docDesc}}} date removed'
           },
           logData: getLogData
         }
@@ -82,9 +82,9 @@ export default OccurenceAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: '{{docDesc}} description set',
-            [FIELD_CHANGED]: '{{docDesc}} description changed',
-            [FIELD_REMOVED]: '{{docDesc}} description removed'
+            [FIELD_ADDED]: '{{{docDesc}}} description set',
+            [FIELD_CHANGED]: '{{{docDesc}}} description changed',
+            [FIELD_REMOVED]: '{{{docDesc}}} description removed'
           },
           logData: getLogData
         }
@@ -100,7 +100,7 @@ export default OccurenceAuditConfig = {
   onRemoved: {
     logs: [
       {
-        message: '{{docDesc}} removed: date - {{date}}',
+        message: '{{{docDesc}}} removed: date - {{{date}}}',
         logData: getLogData
       }
     ],
