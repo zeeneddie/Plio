@@ -34,7 +34,9 @@ AccountsTemplates.configureRoute('verifyEmail', {
   template: 'VerifyEmailPage',
   contentRegion: 'content',
   redirect() {
-    FlowRouter.go('hello');
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('hello');
+    });
     toastr.success('Email verified! Thanks!');
   }
 });
@@ -90,7 +92,9 @@ FlowRouter.route('/sign-out', {
     if (targetURL) {
       FlowRouter.go(targetURL);
     } else {
-      FlowRouter.go('hello');
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('hello');
+      });
     }
   }
 });
@@ -252,7 +256,9 @@ function redirectHandler() {
   if (targetURL) {
     FlowRouter.go(targetURL);
   } else {
-    FlowRouter.go('hello');
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('hello');
+    });
   }
 }
 
