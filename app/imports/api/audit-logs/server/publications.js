@@ -2,12 +2,12 @@ import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { SystemName } from '/imports/share/constants.js';
-import { isOrgMember } from '../../checkers.js';
+import { isOrgMember, canChangeOrgSettings } from '../../checkers.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
 import Counter from '../../counter/server.js';
 
 
-const checkSubsArgs = (userId, documentId, documentType) => {
+const checkDocSubsArgs = (userId, documentId, documentType) => {
   if (!userId) {
     return false;
   }
@@ -23,8 +23,8 @@ const checkSubsArgs = (userId, documentId, documentType) => {
   return true;
 };
 
-Meteor.publish('auditLogs', function(documentId, documentType, skip=0, limit=10) {
-  if (!checkSubsArgs(this.userId, documentId, documentType)) {
+Meteor.publish('docAuditLogs', function(documentId, documentType, skip=0, limit=10) {
+  if (!checkDocSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 
@@ -37,21 +37,65 @@ Meteor.publish('auditLogs', function(documentId, documentType, skip=0, limit=10)
   });
 });
 
-Meteor.publish('documentLogsCount', function(counterName, documentId, documentType) {
-  if (!checkSubsArgs(this.userId, documentId, documentType)) {
+Meteor.publish('docLogsCount', function(counterName, documentId, documentType) {
+  if (!checkDocSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 
   return new Counter(counterName, AuditLogs.find({ documentId }));
 });
 
-Meteor.publish('lastUserLog', function(documentId, documentType) {
-  if (!checkSubsArgs(this.userId, documentId, documentType)) {
+Meteor.publish('docLastUserLog', function(documentId, documentType) {
+  if (!checkDocSubsArgs(this.userId, documentId, documentType)) {
     return this.ready();
   }
 
   return AuditLogs.find({
     documentId,
+    executor: { $ne: SystemName }
+  }, {
+    limit: 1,
+    sort: { date: -1 }
+  });
+});
+
+const checkOrgSubsArgs = (userId, organizationId) => {
+  if (!userId || !canChangeOrgSettings(userId, organizationId)) {
+    return false;
+  }
+
+  return true;
+};
+
+Meteor.publish('orgAuditLogs', function(organizationId, skip=0, limit=10) {
+  if (!checkOrgSubsArgs(this.userId, organizationId)) {
+    return this.ready();
+  }
+
+  return AuditLogs.find({
+    documentId: organizationId
+  }, {
+    skip,
+    limit,
+    sort: { date: -1 }
+  });
+});
+
+Meteor.publish('orgLogsCount', function(counterName, organizationId) {
+  if (!checkOrgSubsArgs(this.userId, organizationId)) {
+    return this.ready();
+  }
+
+  return new Counter(counterName, AuditLogs.find({ documentId: organizationId }));
+});
+
+Meteor.publish('orgLastUserLog', function(organizationId) {
+  if (!checkOrgSubsArgs(this.userId, organizationId)) {
+    return this.ready();
+  }
+
+  return AuditLogs.find({
+    documentId: organizationId,
     executor: { $ne: SystemName }
   }, {
     limit: 1,

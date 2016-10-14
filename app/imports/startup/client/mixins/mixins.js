@@ -14,7 +14,7 @@ import { WorkItems } from '/imports/share/collections/work-items.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import invoke from 'lodash.invoke';
 import {
-  DocumentTypes, UserRoles, ProblemGuidelineTypes,
+  DocumentTypes, UserRoles, ProblemMagnitudes,
   ProblemsStatuses, OrgCurrencies, ActionStatuses,
   ActionTypes, ReviewStatuses, WorkItemsStore,
   riskScoreTypes
@@ -642,7 +642,7 @@ export default {
   magnitude: {
     _magnitude() {
       this.load({ mixin: 'utils' });
-      return _.values(ProblemGuidelineTypes).map(type => ({ name: this.capitalize(type), value: type }) );
+      return _.values(ProblemMagnitudes).map(type => ({ name: this.capitalize(type), value: type }) );
     }
   },
   currency: {

@@ -329,6 +329,8 @@ export default class DocChangeHandler {
       pushTitle = this._getDefaultNotificationTitle();
     }
 
+    console.log(emailText);
+
     const notification = {
       recipients: receivers,
       templateName: emailTemplateName || DEFAULT_EMAIL_TEMPLATE,

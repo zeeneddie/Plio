@@ -1,6 +1,7 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
+import { capitalize } from '/imports/share/helpers.js';
 
 
 const getRemindersConfig = (field, label) => {
@@ -8,7 +9,15 @@ const getRemindersConfig = (field, label) => {
     return [
       {
         field: `reminders.${field}.${reminderType}.timeValue`,
-        logs: [],
+        logs: [
+          {
+            message: {
+              [ChangesKinds.FIELD_CHANGED]:
+                `${capitalize(reminderLabel)} for ${label} ` +
+                `changed from "{{oldValue}}" to "{{newValue}}"`,
+            }
+          }
+        ],
         notifications: [
           {
             text: {
@@ -37,7 +46,15 @@ const getRemindersConfig = (field, label) => {
 
       {
         field: `reminders.${field}.${reminderType}.timeUnit`,
-        logs: [],
+        logs: [
+          {
+            message: {
+              [ChangesKinds.FIELD_CHANGED]:
+                `${capitalize(reminderLabel)} for ${label} changed ` +
+                `from "{{oldValue}}" to "{{newValue}}"`,
+            }
+          }
+        ],
         notifications: [
           {
             text: {
