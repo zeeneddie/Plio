@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import curry from 'lodash.curry';
 
 import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
 import { Organizations } from '/imports/api/organizations/organizations.js';
@@ -17,7 +18,10 @@ import {
   ActionsListProjection,
   NonConformitiesListProjection,
   RisksListProjection,
-  WorkItemsListProjection
+  WorkItemsListProjection,
+  StandardsBookSectionsListProjection,
+  StandardTypesListProjection,
+  DepartmentsListProjection
 } from '/imports/api/constants.js';
 import get from 'lodash.get';
 import property from 'lodash.property';
@@ -37,20 +41,38 @@ const getStandardFiles = (standard) => {
 };
 
 const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
+  const standardsFields = {
+    title: 1,
+    sectionId: 1,
+    typeId: 1,
+    organizationId: 1,
+    nestingLevel: 1,
+    ...(() => _.isObject(isDeleted)
+      ? null
+      : { isDeleted: 1, deletedAt: 1, deletedBy: 1 }
+    )()
+  };
+
   const pubs = [
     {
       find({ _id:organizationId }) {
-        return StandardsBookSections.find({ organizationId });
+        return StandardsBookSections.find({ organizationId }, {
+          fields: StandardsBookSectionsListProjection
+        });
       }
     },
     {
       find({ _id:organizationId }) {
-        return StandardTypes.find({ organizationId });
+        return StandardTypes.find({ organizationId }, {
+          fields: StandardTypesListProjection
+        });
       }
     },
     {
       find({ _id:organizationId }) {
-        return Standards.find({ organizationId, isDeleted });
+        return Standards.find({ organizationId, isDeleted }, {
+          fields: standardsFields
+        });
       }
     }
   ];
@@ -64,6 +86,7 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
   return {
     find() {
       const userId = this.userId;
+
       if (!userId || !isOrgMember(userId, organizationId)) {
         return this.ready();
       }
@@ -76,10 +99,60 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
   }
 });
 
-const extendProblemsFields = projection =>
-  Object.assign({}, projection, { standardsIds: 1 });
-
 Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
+  const problemsFields = {
+    organizationId: 1,
+    sequentialId: 1,
+    serialNumber: 1,
+    title: 1,
+    standardsIds: 1,
+    status: 1
+  };
+
+  const actionsFields = {
+    ..._.omit(problemsFields, 'standardsIds'),
+    linkedTo: 1,
+    type: 1
+  };
+
+  const WKFields = {
+    linkedDoc: 1,
+    isCompleted: 1,
+    assigneeId: 1
+  };
+
+  const makeQuery = query => ({ ...query, isDeleted: { $in: [null, false] } });
+  const makeOptions = fields => ({ fields });
+
+  const getCursorByQueryAndFields = curry((collection, query, fields) =>
+    collection.find(makeQuery(query), makeOptions(fields)));
+
+  const getProblems = collection => ({ _id: standardsIds }) =>
+    getCursorByQueryAndFields(collection, { standardsIds }, problemsFields);
+
+  const getActions = ({ _id }) =>
+    getCursorByQueryAndFields(Actions, { 'linkedTo.documentId': _id }, actionsFields);
+
+  const getWorkItems = ({ _id }) =>
+    getCursorByQueryAndFields(WorkItems, { 'linkedDoc._id': _id  }, WKFields);
+
+  const createProblemsTree = (collection) => ({
+    find: getProblems(collection),
+    children: [
+      {
+        find: getActions,
+        children: [
+          {
+            find: getWorkItems
+          }
+        ]
+      },
+      {
+        find: getWorkItems
+      }
+    ]
+  });
+
   return {
     find() {
       const userId = this.userId;
@@ -91,8 +164,6 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
       return Standards.find({
         _id,
         organizationId
-      }, {
-        fields: StandardsListProjection
       });
     },
     children: [
@@ -104,8 +175,9 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
               $in: departmentsIds
             }
           };
+          const options = makeOptions(DepartmentsListProjection);
 
-          return Departments.find(query);
+          return Departments.find(query, options);
         }
       },
       {
@@ -118,52 +190,8 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
           return LessonsLearned.find({ documentId: _id });
         }
       },
-      {
-        find({ _id }) {
-          return NonConformities.find({ standardsIds: _id }, {
-            fields: extendProblemsFields(NonConformitiesListProjection)
-          });
-        },
-        children: [
-          {
-            find(nc) {
-              return Actions.find({ 'linkedTo.documentId': nc._id }, {
-                fields: ActionsListProjection
-              });
-            },
-          },
-          {
-            find(nc) {
-              return WorkItems.find({ 'linkedDoc._id': nc._id }, {
-                fields: WorkItemsListProjection
-              });
-            }
-          }
-        ]
-      },
-      {
-        find({ _id }) {
-          return Risks.find({ standardsIds: _id }, {
-            fields: extendProblemsFields(RisksListProjection)
-          });
-        },
-        children: [
-          {
-            find(risk) {
-              return Actions.find({ 'linkedTo.documentId': risk._id }, {
-                fields: ActionsListProjection
-              });
-            },
-          },
-          {
-            find(risk) {
-              return WorkItems.find({ 'linkedDoc._id': risk._id }, {
-                fields: WorkItemsListProjection
-              });
-            }
-          }
-        ]
-      }
+      createProblemsTree(NonConformities),
+      createProblemsTree(Risks)
     ]
   }
 });

@@ -526,6 +526,21 @@ const WorkItemsListProjection = {
   deletedBy: 1
 };
 
+const StandardsBookSectionsListProjection = {
+  organizationId: 1,
+  title: 1
+};
+
+const StandardTypesListProjection = {
+  organizationId: 1,
+  title: 1
+};
+
+const DepartmentsListProjection = {
+  organizationId: 1,
+  name: 1
+};
+
 const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis'
@@ -608,6 +623,9 @@ export {
   NonConformitiesListProjection,
   RisksListProjection,
   WorkItemsListProjection,
+  StandardsBookSectionsListProjection,
+  StandardTypesListProjection,
+  DepartmentsListProjection,
   AnalysisTitles,
   riskScoreTypes,
   RCAMaxCauses,

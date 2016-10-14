@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ProblemTypes } from '/imports/api/constants.js';
+import { ProblemTypes } from '/imports/api/constants';
+import { extractIds } from '/imports/api/helpers';
 
 Template.Subcards_Actions_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'actionStatus', 'nonconformity', 'risk', 'utils'],
@@ -10,7 +11,7 @@ Template.Subcards_Actions_Read.viewmodel({
   standardId: '',
   actions() {
     const { type, documentId, standardId } = this.data();
-    let query = { type };
+    let query = { type, isDeleted: { $in: [null, false] } };
     const options = { sort: { serialNumber: 1 } };
 
     if (documentId) {
@@ -18,8 +19,8 @@ Template.Subcards_Actions_Read.viewmodel({
     } else if (standardId) {
       const pQuery = { standardsIds: standardId };
 
-      const NCsIds = this._getNCsByQuery(pQuery).map(({ _id }) => _id);
-      const risksIds = this._getRisksByQuery(pQuery).map(({ _id }) => _id);
+      const NCsIds = extractIds(this._getNCsByQuery(pQuery));
+      const risksIds = extractIds(this._getRisksByQuery(pQuery));
 
       query = {
         ...query,
@@ -30,7 +31,9 @@ Template.Subcards_Actions_Read.viewmodel({
       };
     }
 
-    return this._getActionsByQuery(query, options).map((action) => {
+    const actions = this._getActionsByQuery(query, options).fetch();
+
+    return actions.map((action) => {
       const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': action._id });
       const href = !workItem ? '#' : ((() => {
         const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: workItem._id };

@@ -343,8 +343,10 @@ const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
     {
       find({ users = [] }) {
         const userIds = users.map(property('userId'));
+        const query = { _id: { $in: userIds } };
+        const options = { profile: 1 };
 
-        return Meteor.users.find({ _id: { $in: userIds } });
+        return Meteor.users.find(query, options);
       }
     }
   ]
