@@ -50,7 +50,7 @@ export default ProblemAuditConfig = {
     ],
     notifications: [
       {
-        text: '{{userName}} created {{{docDesc}}} for {{{standardDesc}}}',
+        text: '{{{userName}}} created {{{docDesc}}} for {{{standardDesc}}}',
         data({ newDoc, user }) {
           const auditConfig = this;
           const docDesc = auditConfig.docDescription(newDoc);
@@ -88,9 +88,9 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis date set to "{{newValue}}"',
+              'Root cause analysis date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Root cause analysis date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Root cause analysis date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Root cause analysis date removed'
           }
@@ -117,9 +117,9 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis completed by set to {{newValue}}',
+              'Root cause analysis completed by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
+              'Root cause analysis completed by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Root cause analysis completed by removed'
           }
@@ -159,9 +159,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis executor set to {{newValue}}',
+              'Root cause analysis executor set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Root cause analysis executor changed from {{oldValue}} to {{newValue}}',
+              'Root cause analysis executor changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Root cause analysis executor removed'
           }
@@ -188,7 +188,7 @@ export default ProblemAuditConfig = {
           message: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
-                'Root cause analysis completed{{#if comments}}: {{comments}}{{/if}}' +
+                'Root cause analysis completed{{#if comments}}: {{{comments}}}{{/if}}' +
               '{{else}}' +
                 'Root cause analysis canceled' +
               '{{/if}}'
@@ -213,9 +213,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Root cause analysis target date set to "{{newValue}}"',
+              'Root cause analysis target date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Root cause analysis target date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Root cause analysis target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Root cause analysis target date removed'
           }
@@ -240,9 +240,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Identified at set to "{{newValue}}"',
+              'Identified at set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
+              'Identified at changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Identified at removed'
           }
@@ -266,9 +266,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Identified by set to {{newValue}}',
+              'Identified by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Identified by changed from {{oldValue}} to {{newValue}}',
+              'Identified by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Identified by removed'
           }
@@ -291,9 +291,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Magnitude set to "{{newValue}}"',
+              'Magnitude set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Magnitude changed from "{{oldValue}}" to "{{newValue}}"',
+              'Magnitude changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Magnitude removed'
           }
@@ -340,8 +340,8 @@ export default ProblemAuditConfig = {
       notifications: [
         {
           text: {
-            [ITEM_ADDED]: '{{userName}} linked {{{docDesc}}} to {{{standardDesc}}}',
-            [ITEM_REMOVED]: '{{userName}} unlinked {{{docDesc}}} from {{{standardDesc}}}'
+            [ITEM_ADDED]: '{{{userName}}} linked {{{docDesc}}} to {{{standardDesc}}}',
+            [ITEM_REMOVED]: '{{{userName}}} unlinked {{{docDesc}}} from {{{standardDesc}}}'
           }
         }
       ],
@@ -370,8 +370,8 @@ export default ProblemAuditConfig = {
       logs: [
         {
           message: {
-            [FIELD_ADDED]: 'Status set to "{{newValue}}"',
-            [FIELD_CHANGED]: 'Status changed from "{{oldValue}}" to "{{newValue}}"',
+            [FIELD_ADDED]: 'Status set to "{{{newValue}}}"',
+            [FIELD_CHANGED]: 'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]: 'Status removed'
           }
         }
@@ -381,7 +381,7 @@ export default ProblemAuditConfig = {
           shouldSendNotification({ diffs: { status: { newValue } } }) {
             return (newValue === 18) || (newValue === 19);
           },
-          text: 'Status of {{{docDesc}}} was changed to "{{newValue}}"',
+          text: 'Status of {{{docDesc}}} was changed to "{{{newValue}}}"',
           title: '{{{docDesc}}} closed',
           data({ diffs: { status }, newDoc }) {
             const auditConfig = this;
@@ -423,9 +423,9 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Update of standards date set to "{{newValue}}"',
+              'Update of standards date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Update of standards date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Update of standards date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Update of standards date removed'
           }
@@ -453,9 +453,9 @@ export default ProblemAuditConfig = {
           },
           message: {
             [FIELD_ADDED]:
-              'Update of standards completed by set to {{newValue}}',
+              'Update of standards completed by set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Update of standards completed by changed from {{oldValue}} to {{newValue}}',
+              'Update of standards completed by changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Update of standards completed by removed'
           }
@@ -495,9 +495,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Update of standards executor set to {{newValue}}',
+              'Update of standards executor set to {{{newValue}}}',
             [FIELD_CHANGED]:
-              'Update of standards executor changed from {{oldValue}} to {{newValue}}',
+              'Update of standards executor changed from {{{oldValue}}} to {{{newValue}}}',
             [FIELD_REMOVED]:
               'Update of standards executor removed'
           }
@@ -525,7 +525,7 @@ export default ProblemAuditConfig = {
           message: {
             [FIELD_CHANGED]:
               '{{#if completed}}' +
-                'Update of standards completed{{#if comments}}: {{comments}}{{/if}}' +
+                'Update of standards completed{{#if comments}}: {{{comments}}}{{/if}}' +
               '{{else}}' +
                 'Update of standards canceled' +
               '{{/if}}'
@@ -550,9 +550,9 @@ export default ProblemAuditConfig = {
         {
           message: {
             [FIELD_ADDED]:
-              'Update of standards target date set to "{{newValue}}"',
+              'Update of standards target date set to "{{{newValue}}}"',
             [FIELD_CHANGED]:
-              'Update of standards target date changed from "{{oldValue}}" to "{{newValue}}"',
+              'Update of standards target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             [FIELD_REMOVED]:
               'Update of standards target date removed'
           }

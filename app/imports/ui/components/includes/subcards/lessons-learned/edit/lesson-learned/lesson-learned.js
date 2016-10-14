@@ -9,7 +9,7 @@ Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
   title: '',
   date: new Date(),
-  owner() { return Meteor.userId() },
+  owner: Meteor.userId(),
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',
@@ -38,7 +38,7 @@ Template.Subcards_LessonLearned.viewmodel({
     };
   },
   selectArgs() {
-    const { owner:value } = this.data();
+    const { owner: value } = this.data();
 
     return {
       value,

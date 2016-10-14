@@ -10,7 +10,7 @@ const DiscussionFileUploader = (props) => {
     <Blaze
       template="DiscussionFileUploader"
       className="input-group-btn file-uploader"
-      addFile={(...args) => props.onAddFile(...args)}
+      afterInsert={(...args) => props.onAddFile(...args)}
       metaContext={props.uploaderMetaContext}
       slingshotDirective={props.slingshotDirective}/>
   )

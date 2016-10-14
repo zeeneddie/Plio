@@ -8,7 +8,7 @@
             _id=linkedDocId}}
       {{/if}}
 
-      {{#if isDocType LINKED_TYPES.NC}}
+      {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
         {{> WorkInbox_QAPanel_Read doc=workItem}}
         {{> NC_Card_Read
             isReadOnly=workItem.isDeleted
