@@ -61,7 +61,8 @@ export default class RecapSender {
 
     this._updateExecutorsMap = {};
 
-    this._recapData = [];
+    this._docsData = [];
+    this._orgData = null;
   }
 
   _processLogs() {
@@ -72,7 +73,8 @@ export default class RecapSender {
       CollectionNames.STANDARDS,
       CollectionNames.NCS,
       CollectionNames.RISKS,
-      CollectionNames.ACTIONS
+      CollectionNames.ACTIONS,
+      CollectionNames.ORGANIZATIONS
     ];
 
     const query = {
@@ -100,7 +102,8 @@ export default class RecapSender {
     const templateData = {
       organizationName: this._organization.name,
       title: emailSubject,
-      recapData: this._recapData
+      docsData: this._docsData,
+      orgData: this._orgData
     };
 
     new NotificationSender({
@@ -126,7 +129,8 @@ export default class RecapSender {
       ...getDocsIds(Standards),
       ...getDocsIds(NonConformities),
       ...getDocsIds(Risks),
-      ...getDocsIds(Actions)
+      ...getDocsIds(Actions),
+      organizationId
     ];
   }
 
@@ -167,7 +171,7 @@ export default class RecapSender {
       [CollectionNames.ACTIONS]: this._actionsIds
     }[collection];
 
-    set.add(documentId);
+    set && set.add(documentId);
   }
 
   _getEmailSubject() {
@@ -190,26 +194,32 @@ export default class RecapSender {
     const { serialNumber } = this._organization;
     const mainAppUrl = Meteor.settings.mainApp.url;
 
-    this._makeCollectionData(
-      Standards, this._standardsIds, 'standard',
-      doc => doc.title,
-      doc => Meteor.absoluteUrl(`${serialNumber}/standards/${doc._id}`, {
+    this._makeDocsData({
+      collection: Standards,
+      idsSet: this._standardsIds,
+      docName: 'standard',
+      descFn: doc => doc.title,
+      urlFn: doc => Meteor.absoluteUrl(`${serialNumber}/standards/${doc._id}`, {
         rootUrl: mainAppUrl
       })
-    );
+    });
 
-    this._makeCollectionData(
-      NonConformities, this._ncsIds, 'non-conformity',
-      doc => `${doc.sequentialId} "${doc.title}"`,
-      doc => Meteor.absoluteUrl(`${serialNumber}/non-conformities/${doc._id}`, {
+    this._makeDocsData({
+      collection: NonConformities,
+      idsSet: this._ncsIds,
+      docName: 'non-conformity',
+      descFn: doc => `${doc.sequentialId} "${doc.title}"`,
+      urlFn: doc => Meteor.absoluteUrl(`${serialNumber}/non-conformities/${doc._id}`, {
         rootUrl: mainAppUrl
       })
-    );
+    });
 
-    this._makeCollectionData(
-      Actions, this._actionsIds, 'action',
-      doc => `${doc.sequentialId} "${doc.title}"`,
-      (doc) => {
+    this._makeDocsData({
+      collection: Actions,
+      idsSet: this._actionsIds,
+      docName: 'action',
+      descFn: doc => `${doc.sequentialId} "${doc.title}"`,
+      urlFn: (doc) => {
         const workItem = WorkItems.findOne({
           'linkedDoc._id': doc._id
         }, {
@@ -222,18 +232,22 @@ export default class RecapSender {
           });
         }
       }
-    );
+    });
 
-    this._makeCollectionData(
-      Risks, this._risksIds, 'risk',
-      doc => `${doc.sequentialId} "${doc.title}"`,
-      doc => Meteor.absoluteUrl(`${serialNumber}/risks/${doc._id}`, {
+    this._makeDocsData({
+      collection: Risks,
+      idsSet: this._risksIds,
+      docName: 'risk',
+      descFn: doc => `${doc.sequentialId} "${doc.title}"`,
+      urlFn: doc => Meteor.absoluteUrl(`${serialNumber}/risks/${doc._id}`, {
         rootUrl: mainAppUrl
       })
-    );
+    });
+
+    this._makeOrgData();
   }
 
-  _makeCollectionData(collection, idsSet, docName, descFn, urlFn) {
+  _makeDocsData({ collection, idsSet, docName, descFn, urlFn }) {
     const docsIds = Array.from(idsSet);
 
     const docsLength = docsIds.length;
@@ -259,7 +273,21 @@ export default class RecapSender {
 
     docsData = _(docsData).sortBy('desc');
 
-    this._recapData.push({ title, docs: docsData });
+    this._docsData.push({ title, docs: docsData });
+  }
+
+  _makeOrgData() {
+    const orgLogs = this._logsMap[this._organizationId];
+    if (!orgLogs) {
+      return;
+    }
+
+    const title = 'Organization settings were updated:';
+
+    this._orgData = {
+      title,
+      logs: orgLogs
+    };
   }
 
 }

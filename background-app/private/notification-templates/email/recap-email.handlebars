@@ -12,7 +12,7 @@
           <table width="100%" border="0" cellpadding="0" cellspacing="0">
             <tr>
               <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;">
-                {{#each recapData}}
+                {{#each docsData}}
                   <p style="margin-top: 40px;">{{title}}</p>
 
                   {{#each docs}}
@@ -42,6 +42,27 @@
                     </table>
                   {{/each}}
                 {{/each}}
+
+                {{#with orgData}}
+                  <p style="margin-top: 40px;">{{title}}</p>
+
+                  <table width="100%" border="0" cellpadding="0" cellspacing="0" style: "border: 1px solid #ddd; border-bottom: none;">
+                    <thead>
+                      <tr>
+                        <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">User</th>
+                        <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">Change summary</th>
+                        <th align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #EEEEEE; padding:10px; padding-right:0; font-weight: normal; color: #252525; border-bottom: 1px solid #DDDDDD;">Time</th>
+                      </tr>
+                    </thead>
+                    {{#each logs}}
+                      <tr>
+                        <td width="20%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{executor}}</td>
+                        <td width="55%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{message}}</td>
+                        <td width="25%" align="left" bgcolor="#FFFFFF" style="font-family: Verdana, Geneva, Helvetica, Arial, sans-serif; font-size: 12px; color: #252525; padding:10px; padding-right:0; border-bottom: 1px solid #DDDDDD;">{{date}}</td>
+                      </tr>
+                    {{/each}}
+                  </table>
+                {{/with}}
               </td>
             </tr>
           </table>
