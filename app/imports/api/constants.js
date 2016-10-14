@@ -31,7 +31,7 @@ export const StandardFilters = {
   3: 'deleted'
 };
 
-const WorkInboxFilters = {
+export const WorkInboxFilters = {
   1: 'my current',
   2: 'team current',
   3: 'my completed',
