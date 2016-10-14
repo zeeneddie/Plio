@@ -499,6 +499,7 @@ const NonConformitiesListProjection = {
   sequentialId: 1,
   title: 1,
   cost: 1,
+  ref: 1,
   createdAt: 1,
   identifiedAt: 1,
   magnitude: 1,

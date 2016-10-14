@@ -64,7 +64,7 @@ Template.ESSources.viewmodel({
 
       if (url && !this.IsValidUrl(url)) {
         ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
-        
+
         return;
       } else {
         sourceDoc.url = url;
@@ -87,7 +87,7 @@ Template.ESSources.viewmodel({
     check(url, String);
 
     const file = this.file();
-    const isDocx = file.extension === 'docx';
+    const isDocx = file && file.extension === 'docx';
 
     if (isDocx) {
       this.docxRenderInProgress(true);

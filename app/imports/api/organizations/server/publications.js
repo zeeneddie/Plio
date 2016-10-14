@@ -15,6 +15,13 @@ import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 import { getUserOrganizations } from '../utils.js';
 import { isOrgMember } from '../../checkers';
+import {
+  StandardsListProjection,
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection,
+  WorkItemsListProjection
+} from '/imports/api/constants.js';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
