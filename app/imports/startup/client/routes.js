@@ -84,6 +84,15 @@ FlowRouter.route('/hello', {
   }
 });
 
+FlowRouter.route('/maintenance', {
+  name: 'maintenance',
+  action(params) {
+    BlazeLayout.render('TransitionalLayout', {
+      content: 'MaintenancePage'
+    });
+  }
+});
+
 FlowRouter.route('/sign-out', {
   name: 'signOut',
   action(params) {
@@ -263,6 +272,9 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
+  redirect('maintenance');
+  return;
+  
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, { b: context.path });
