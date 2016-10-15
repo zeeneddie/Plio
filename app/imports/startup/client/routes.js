@@ -84,14 +84,15 @@ FlowRouter.route('/hello', {
   }
 });
 
-FlowRouter.route('/maintenance', {
-  name: 'maintenance',
-  action(params) {
-    BlazeLayout.render('TransitionalLayout', {
-      content: 'MaintenancePage'
-    });
-  }
-});
+// Uncomment this code to enable maintenance page
+// FlowRouter.route('/maintenance', {
+//   name: 'maintenance',
+//   action(params) {
+//     BlazeLayout.render('TransitionalLayout', {
+//       content: 'MaintenancePage'
+//     });
+//   }
+// });
 
 FlowRouter.route('/sign-out', {
   name: 'signOut',
