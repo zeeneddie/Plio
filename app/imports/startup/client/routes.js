@@ -272,9 +272,9 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
-  redirect('maintenance');
-  return;
-  
+
+  // Redirect to maintenance route can be here.
+  // redirect('maintenance'); return;
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, { b: context.path });
