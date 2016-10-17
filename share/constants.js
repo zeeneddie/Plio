@@ -207,6 +207,7 @@ export const ProblemTypes = {
 };
 
 export const DocumentTypes = {
+  STANDARD: 'standard',
   ...ProblemTypes,
   ...ActionTypes
 };
