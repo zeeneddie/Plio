@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { RiskTypes } from '../risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import { isOrgMember } from '../../checkers.js';
 
 

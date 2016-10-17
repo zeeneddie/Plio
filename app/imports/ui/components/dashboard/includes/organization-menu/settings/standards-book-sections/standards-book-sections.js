@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 
 import {
   StandardsBookSections
-} from '/imports/api/standards-book-sections/standards-book-sections.js';
+} from '/imports/share/collections/standards-book-sections.js';
 import {
   insert, update, remove
 } from '/imports/api/standards-book-sections/methods.js';

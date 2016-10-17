@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { terminateUploading } from '/imports/api/files/methods.js';
-import NotificationSender from '/imports/core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 Template.body.viewmodel({
   share: ['uploader'],

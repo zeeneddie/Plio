@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Tracker } from 'meteor/tracker';
 
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { updateViewedBy } from '/imports/api/standards/methods.js';
 import { UncategorizedTypeSection } from '/imports/api/constants.js';
 

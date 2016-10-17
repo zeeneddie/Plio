@@ -3,12 +3,12 @@ import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
 import { Roles } from 'meteor/alanning:roles';
 
-import { Organizations } from './organizations.js';
-import { OrgMemberRoles, UserMembership } from '../constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { OrgMemberRoles, UserMembership } from '/imports/share/constants.js';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
 
 import OrgNotificationsSender from './org-notifications-sender.js';
-import Utils from '/imports/core/utils';
-import NotificationSender from '/imports/core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 class InvitationSender {
@@ -51,7 +51,7 @@ class InvitationSender {
       email: this._userEmail,
       password: randomPassword,
       profile: {
-        avatar: Utils.getRandomAvatarUrl(),
+        avatar: getRandomAvatarUrl(),
         // We need to temporary set firstName and lastName,
         // because these fields are required by the schema.
         // When we use Accounts.createUser,
@@ -237,7 +237,7 @@ export default InvitationService = {
 
     let invitedUser = Meteor.users.findOne({invitationId: invitationId});
 
-    userData.initials = Utils.generateUserInitials(userData);
+    userData.initials = generateUserInitials(userData);
 
     if (invitedUser) {
       Accounts.setPassword(invitedUser._id, password);

@@ -1,4 +1,4 @@
-import { Notifications } from './notifications.js';
+import { Notifications } from '/imports/share/collections/notifications.js';
 
 export default {
   collection: Notifications,

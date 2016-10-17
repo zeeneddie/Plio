@@ -1,5 +1,5 @@
-import { Standards } from './standards.js';
-import { LessonsLearned } from '../lessons/lessons.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { canChangeStandards } from '../checkers.js';
 import BaseEntityService from '../base-entity-service.js';
 

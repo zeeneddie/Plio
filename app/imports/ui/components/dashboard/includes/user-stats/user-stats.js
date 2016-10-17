@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 
 Template.Dashboard_UserStats.viewmodel({

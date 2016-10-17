@@ -7,8 +7,8 @@ import { withProps, lifecycle, shallowEqual } from 'recompose';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
-import { Messages } from '/imports/api/messages/messages';
-import { Discussions } from '/imports/api/discussions/discussions';
+import { Messages } from '/imports/share/collections/messages';
+import { Discussions } from '/imports/share/collections/discussions';
 import {
   setMessages,
   setLoading,

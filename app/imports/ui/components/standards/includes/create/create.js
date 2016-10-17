@@ -4,7 +4,6 @@ import get from 'lodash.get';
 
 import { insert } from '/imports/api/standards/methods.js';
 import { addedToNotifyList } from '/imports/api/standards/methods.js';
-import Utils from '/imports/core/utils.js';
 import { setModalError, inspire } from '/imports/api/helpers.js';
 import { insert as insertFile } from '/imports/api/files/methods.js';
 import UploadService from '/imports/ui/utils/uploads/UploadService';

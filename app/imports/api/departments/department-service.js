@@ -1,4 +1,4 @@
-import { Departments } from './departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 
 
 export default DepartmentService = {

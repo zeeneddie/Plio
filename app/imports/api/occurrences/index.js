@@ -1,5 +1,4 @@
 import './server/publications.js';
-import './occurrences.js';
-import './occurrences-schema.js';
+import './checkers.js';
 import './occurrences-service.js';
 import './methods.js';
