@@ -29,7 +29,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
   _getMethodByType({ type, docType }) {
     const byDocType = ([NCMethod, riskMethod]) => {
       switch(docType) {
-        case LINKED_TYPES.NC:
+        case LINKED_TYPES.NON_CONFORMITY:
           return NCMethod;
           break;
         case LINKED_TYPES.RISK:

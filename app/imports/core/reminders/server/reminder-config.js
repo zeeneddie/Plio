@@ -15,7 +15,6 @@ const ReminderTypes = {
 };
 
 const ReminderDocTypes = {
-  ...ActionTypes,
   ...DocumentTypes
 };
 
@@ -31,7 +30,7 @@ const getStandardName = doc => `"${doc.title}"`;
 
 const getProblemDesc = (docType) => {
   return {
-    [ReminderDocTypes.NC]: 'non-conformity',
+    [ReminderDocTypes.NON_CONFORMITY]: 'non-conformity',
     [ReminderDocTypes.RISK]: 'risk'
   }[docType];
 };
@@ -48,7 +47,7 @@ const getStandardDesc = () => 'standard';
 
 const getProblemUrl = ({ doc, docType, org }) => {
   const path = {
-    [ReminderDocTypes.NC]: 'non-conformities',
+    [ReminderDocTypes.NON_CONFORMITY]: 'non-conformities',
     [ReminderDocTypes.RISK]: 'risks'
   }[docType];
 
@@ -76,7 +75,7 @@ const getStandardUrl = ({ doc, org }) => {
 
 const getDocDesc = (docType) => {
   switch (docType) {
-    case ReminderDocTypes.NC:
+    case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
       return getProblemDesc(docType);
     case ReminderDocTypes.CORRECTIVE_ACTION:
@@ -90,7 +89,7 @@ const getDocDesc = (docType) => {
 
 const getDocName = (doc, docType) => {
   switch (docType) {
-    case ReminderDocTypes.NC:
+    case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
       return getProblemName(doc);
     case ReminderDocTypes.CORRECTIVE_ACTION:
@@ -104,7 +103,7 @@ const getDocName = (doc, docType) => {
 
 const getDocUrl = ({ docType, ...rest }) => {
   switch (docType) {
-    case ReminderDocTypes.NC:
+    case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
       return getProblemUrl({ docType, ...rest });
     case ReminderDocTypes.CORRECTIVE_ACTION:
