@@ -144,8 +144,6 @@ export const getC = curry((path, obj) => get(obj, path));
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
-      throw err;
-      console.log('err', err)
       toastr.error(err.reason);
     }
     if (_.isFunction(cb)) {
