@@ -22,6 +22,8 @@ const helpers = {
   some: (...values) => values.some(value => !!value),
   pick: (obj, ...keys) => _.pick(obj, ...keys),
   omit: (obj, ...keys) => _.omit(obj, keys),
+  gt: (val1, val2) => val1 > val2,
+  lt: (val1, val2) => val1 < val2
 };
 
 Object.keys(helpers).forEach(key => Template.registerHelper(key, cutSpacebarsKw(helpers[key])));
