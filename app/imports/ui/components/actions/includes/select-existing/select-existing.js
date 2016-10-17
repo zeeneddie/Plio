@@ -27,7 +27,7 @@ Template.Actions_SelectExisting.viewmodel({
       });
     }
 
-    return Actions.find(query, {
+    const actions = Actions.find(query, {
       sort: {
         sequentialId: 1
       }
@@ -36,6 +36,8 @@ Template.Actions_SelectExisting.viewmodel({
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return { _id, html, title: fullTitle, ...args };
     });
+
+    return actions;
   },
   dropdownAddActionData() {
     return {

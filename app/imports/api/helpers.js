@@ -376,7 +376,12 @@ const getPublishCompositeOrganizationUsers = (fn) => {
   }
 };
 
-const explainMongoQuery = (collection, query = {}, options = {}, verbose = 'queryPlanner', prettyPrint = true) => {
+const explainMongoQuery = (
+  collection,
+  query = {},
+  options = {},
+  verbose = 'queryPlanner'
+) => {
   let results = collection.rawCollection().find(query, _.omit(options, 'sort', 'limit'));
 
   if (options.sort) {
@@ -389,6 +394,11 @@ const explainMongoQuery = (collection, query = {}, options = {}, verbose = 'quer
 
   return results.explain(verbose).then(res => console.log(JSON.stringify(res, null, 2).substr(0, 5000)));
 }
+
+const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
+const makeOptionsFields = fields => fields ? ({ fields }) : ({});
+const getCursorOfNonDeletedWithFields = curry((query, fields, collection) =>
+  collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
 
 export {
   getDocumentCollectionByType,
@@ -443,5 +453,8 @@ export {
   getNewerDate,
   getPublishCompositeOrganizationUsersObject,
   getPublishCompositeOrganizationUsers,
-  explainMongoQuery
+  explainMongoQuery,
+  makeQueryNonDeleted,
+  makeOptionsFields,
+  getCursorOfNonDeletedWithFields
 };

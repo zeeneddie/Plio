@@ -14,14 +14,6 @@ import { Risks } from '/imports/api/risks/risks.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { WorkItems } from '/imports/api/work-items/work-items.js';
 import { getUserOrganizations } from '../utils.js';
-import { isOrgMember } from '../../checkers';
-import {
-  StandardsListProjection,
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-  WorkItemsListProjection
-} from '/imports/api/constants.js';
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -104,29 +96,4 @@ Meteor.publish('transferredOrganization', function(transferId) {
     throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
     return this.ready();
   }
-});
-
-// SUBSCRIBE ONLY IF YOU KNOW WHAT YOU'RE DOING. A LOT OF DATA.
-Meteor.publish('GLOBAL_DEPS', function(organizationId) {
-  const userId = this.userId;
-
-  if (!userId || !isOrgMember(userId, organizationId)) {
-    return this.ready();
-  }
-
-  const standards = Standards.find({ organizationId });
-  const departments = Departments.find({ organizationId });
-  const NCs = NonConformities.find({ organizationId });
-  const risks = Risks.find({ organizationId });
-  const actions = Actions.find({ organizationId });
-  const workItems = WorkItems.find({ organizationId });
-
-  return [
-    standards,
-    departments,
-    NCs,
-    risks,
-    actions,
-    workItems
-  ];
 });
