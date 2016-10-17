@@ -194,7 +194,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
   }
 });
 
-Meteor.publish('standardsDeps', function({ _id, organizationId }) {
+Meteor.publish('standardsDeps', function(organizationId) {
   const problemsFields = {
     organizationId: 1,
     title: 1,
@@ -217,7 +217,7 @@ Meteor.publish('standardsDeps', function({ _id, organizationId }) {
     type: 1,
     linkedTo: 1
   };
-  
+
   const getCursor = getCursorOfNonDeletedWithFields({ organizationId });
   const actions = getCursorOfNonDeletedWithFields(actionsQuery, actionsFields, Actions);
   const ncs = getCursor(problemsFields, NonConformities);

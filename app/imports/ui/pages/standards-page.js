@@ -21,7 +21,7 @@ Template.StandardsPage.viewmodel({
         DocumentCardSubs.subscribe('standardCard', { organizationId, _id: standardId }, {
           onReady() {
             // subscribe to the rest of the documents needed in modal in the background
-            BackgroundSubs.subscribe('standardsDeps', { organizationId, _id: standardId });
+            BackgroundSubs.subscribe('standardsDeps', organizationId);
           }
         })
       ];
