@@ -166,7 +166,6 @@ Template.StandardsList.viewmodel({
 
     return withUncategorized;
   },
-
   types() {
     const organizationId = this.organizationId();
     // Standard types for this organization
