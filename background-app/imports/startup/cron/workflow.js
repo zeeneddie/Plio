@@ -1,5 +1,5 @@
-import moment from 'moment-timezone';
-
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { getTimezones } from './helpers';
 import WorkflowUpdater from '/imports/workflow/WorkflowUpdater.js';
 
 
@@ -11,9 +11,7 @@ SyncedCron.add({
   },
 
   job() {
-    const timezones = _(moment.tz.names()).filter((name) => {
-      return moment().tz(name).hours() === 0;
-    });
+    const timezones = getTimezones('00:00');
 
     Organizations.find({
       timezone: { $in: timezones }
