@@ -1,3 +1,6 @@
+import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
+
 export default {
   // Notifications document can be passed as an argument
   // _id is used as notification tag if there's no tag argument passed
@@ -34,4 +37,4 @@ export default {
       invoke(sound, 'play');
     }
   }
-}
+};
