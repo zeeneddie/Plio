@@ -7,23 +7,31 @@ import { Files } from '/imports/api/files/files.js';
 import { LessonsLearned } from '/imports/api/lessons/lessons.js';
 import { Actions } from '/imports/api/actions/actions.js';
 import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Departments } from '/imports/api/departments/departments';
 import { isOrgMember } from '../../checkers.js';
 import {
   ActionsListProjection,
   NonConformitiesListProjection,
   RisksListProjection,
-  WorkItemsListProjection
+  WorkItemsListProjection,
+  DepartmentsListProjection,
+  ActionTypes
 } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 import {
   getPublishCompositeOrganizationUsers,
   getCursorOfNonDeletedWithFields,
-  toObjFind
+  toObjFind,
+  makeOptionsFields
 } from '../../helpers';
 import get from 'lodash.get';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
-import { getActionsCursorByLinkedDoc } from '../../actions/utils';
+import {
+  getActionsCursorByLinkedDoc,
+  getActionsWithLimitedFields
+} from '../../actions/utils';
 import { getStandardCursorByIds } from '../../standards/utils';
+import { getProblemsWithLimitedFields } from '../../problems/utils';
 
 
 const getNCOtherFiles = (nc) => {
@@ -40,15 +48,17 @@ const getNCOtherFiles = (nc) => {
   return Files.find({ _id: { $in: fileIds } });
 };
 
-const getNCLayoutPub = (userId, serialNumber, isDeleted) => [
-  {
-    find({ _id:organizationId }) {
-      const query = { organizationId, isDeleted };
-      const options = { fields: NonConformitiesListProjection };
-      return NonConformities.find(query, options);
+const getNCLayoutPub = (userId, serialNumber, isDeleted) => {
+  return [
+    {
+      find({ _id:organizationId }) {
+        const query = { organizationId, isDeleted };
+        const options = { fields: NonConformitiesListProjection };
+        return NonConformities.find(query, options);
+      }
     }
-  }
-];
+  ]
+};
 
 Meteor.publishComposite('nonConformitiesLayout', getPublishCompositeOrganizationUsers(getNCLayoutPub));
 
@@ -87,6 +97,44 @@ Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
   };
 });
 
+Meteor.publish('nonConformitiesDeps', function(organizationId) {
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const actionsQuery = {
+    organizationId,
+    type: {
+      $in: [
+        ActionTypes.CORRECTIVE_ACTION,
+        ActionTypes.PREVENTATIVE_ACTION
+      ]
+    }
+  };
+
+  const standardsFields = {
+    title: 1,
+    status: 1,
+    organizationId: 1
+  }
+
+  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const occurrences = Occurrences.find({ organizationId });
+  const actions = getActionsWithLimitedFields(actionsQuery);
+  const risks = getProblemsWithLimitedFields({ organizationId }, Risks);
+  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
+
+  return [
+    departments,
+    occurrences,
+    actions,
+    risks,
+    standards
+  ];
+});
+
 Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isDeleted = { $in: [null, false] }) {
   return {
     find() {
@@ -101,9 +149,7 @@ Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isD
       return NonConformities.find({ standardsIds: standardId, isDeleted });
     },
     children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
+      find: getNCOtherFiles
     }]
   }
 });
@@ -128,9 +174,7 @@ Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
       return NonConformities.find(query);
     },
     children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
+      find: getNCOtherFiles
     }]
   }
 });
