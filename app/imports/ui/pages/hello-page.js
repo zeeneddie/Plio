@@ -3,9 +3,9 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { remove } from '/imports/api/users/methods.js';
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 
 Template.HelloPage.viewmodel({

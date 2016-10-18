@@ -1,23 +1,27 @@
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '/imports/api/messages/messages.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import invoke from 'lodash.invoke';
 import {
-  DocumentTypes, UserRoles, StandardFilters, RiskFilters,
-  NonConformityFilters, ProblemGuidelineTypes, ProblemsStatuses,
-  OrgCurrencies, ActionStatuses, WorkInboxFilters,
-  ActionTypes, ReviewStatuses, WorkItemsStore, riskScoreTypes
+  DocumentTypes, UserRoles, ProblemGuidelineTypes,
+  ProblemsStatuses, OrgCurrencies, ActionStatuses,
+  ActionTypes, ReviewStatuses, WorkItemsStore,
+  riskScoreTypes
+} from '/imports/share/constants.js';
+import {
+  NonConformityFilters, StandardFilters,
+  RiskFilters, WorkInboxFilters
 } from '/imports/api/constants.js';
 import { insert as insertFile, updateUrl, updateProgress, terminateUploading } from '/imports/api/files/methods.js'
 import Counter from '/imports/api/counter/client.js';

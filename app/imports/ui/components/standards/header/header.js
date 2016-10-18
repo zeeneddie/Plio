@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
 

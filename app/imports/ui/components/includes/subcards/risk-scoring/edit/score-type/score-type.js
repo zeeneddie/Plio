@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { riskScoreTypes } from '/imports/api/constants.js';
+import { riskScoreTypes } from '/imports/share/constants.js';
 
 Template.RiskScoring_ScoreType_Edit.viewmodel({
   mixin: 'utils',

@@ -5,11 +5,14 @@ import get from 'lodash.get';
 import property from 'lodash.property';
 import curry from 'lodash.curry';
 
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { ProblemGuidelineTypes, ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, inspire, findById,
   lengthItems, flattenMapItems
 } from '/imports/api/helpers.js';
+
 
 Template.NC_List.viewmodel({
   mixin: [

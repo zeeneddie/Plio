@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],

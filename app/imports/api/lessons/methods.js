@@ -2,9 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import LessonsService from './lessons-service.js';
-import { LessonsSchema, RequiredSchema } from './lessons-schema.js';
-import { LessonsLearned } from './lessons.js';
-import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '../schemas.js';
+import { LessonsSchema, RequiredSchema } from '/imports/share/schemas/lessons-schema.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { IdSchema, DocumentIdSchema, DocumentTypeSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
 
 const organizationIdSchema = new SimpleSchema({

@@ -1,7 +1,7 @@
 import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from '/imports/api/organizations/organization-service.js';
-import { OrgOwnerRoles } from '/imports/api/constants.js';
+import { OrgOwnerRoles } from '/imports/share/constants.js';
 
 
 function postSignUpHook(userId, info) {

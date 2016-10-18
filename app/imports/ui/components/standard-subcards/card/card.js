@@ -1,9 +1,10 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { UserRolesNames } from '../../../../api/constants.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { UserRolesNames } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+
 
 Template.SS_Card_Read.viewmodel({
   share: 'window',

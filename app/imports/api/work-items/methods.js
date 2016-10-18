@@ -3,10 +3,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { CheckedMethod } from '../method.js';
 import WorkItemService from './work-item-service.js';
-import { WorkItemsSchema } from './work-item-schema.js';
-import { WorkItems } from './work-items.js';
-import { IdSchema } from '../schemas.js';
-import { inject } from '../helpers.js';
+import { WorkItemsSchema } from '/imports/share/schemas/work-item-schema.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { IdSchema } from '/imports/share/schemas/schemas.js';
+import { inject } from '/imports/api/helpers.js';
 import { onRemoveChecker, WI_OnRestoreChecker } from '../checkers.js';
 
 const injectWI = inject(WorkItems);

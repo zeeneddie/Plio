@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { AuditLogs } from '../audit-logs.js';
-import { SystemName } from '../../constants.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { SystemName } from '/imports/share/constants.js';
 import { isOrgMember } from '../../checkers.js';
-import { getCollectionByDocType } from '../../helpers.js';
+import { getCollectionByDocType } from '/imports/share/helpers.js';
 import Counter from '../../counter/server.js';
 
 

@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import NotificationSender from '../../core/NotificationSender';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 export default class UserNotificationsSender {
@@ -15,10 +15,9 @@ export default class UserNotificationsSender {
 
   passwordReset() {
     const emailSubject = `Password reset`;
-    const secondaryText = `Your password was successfully changed`;
+    const secondaryText = `Your password was successfully reset`;
 
     const templateData = {
-      organizationName: this._orgName,
       title: emailSubject,
       secondaryText
     };

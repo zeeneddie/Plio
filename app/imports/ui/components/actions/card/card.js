@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/actions/methods.js';
 

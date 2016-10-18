@@ -14,8 +14,8 @@ import {
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
-import { UserUpdateProfileSchema } from '/imports/api/users/user-schema.js';
-import { UserRoles } from '/imports/api/constants.js';
+import { UserUpdateProfileSchema } from '/imports/share/schemas/user-schema.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 
 Template.UserDirectory_Card_Edit.viewmodel({

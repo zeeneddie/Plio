@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 Template.NC_Cost_Edit.viewmodel({
   mixin: 'organization',
