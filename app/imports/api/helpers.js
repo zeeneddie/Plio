@@ -74,7 +74,7 @@ const getTzTargetDate = (targetDate, timezone) => {
 const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
-      toastr.error(err.reason);
+      toastr.error(err.reason || err);
     }
     if (_.isFunction(cb)) {
       cb(err, res);
