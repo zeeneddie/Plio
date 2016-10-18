@@ -16,7 +16,8 @@ import invoke from 'lodash.invoke';
 import {
   DocumentTypes, UserRoles, ProblemGuidelineTypes,
   ProblemsStatuses, OrgCurrencies, ActionStatuses,
-  ActionTypes, ReviewStatuses, WorkItemsStore
+  ActionTypes, ReviewStatuses, WorkItemsStore,
+  riskScoreTypes
 } from '/imports/share/constants.js';
 import {
   NonConformityFilters, StandardFilters,
@@ -110,49 +111,6 @@ export default {
       };
 
       return item.toggleCollapse(cb);
-    }
-  },
-  modal: {
-    modal: {
-      instance() {
-        return ViewModel.findOne('ModalWindow');
-      },
-      open(data) {
-        Blaze.renderWithData(Template.ModalWindow, data, document.body);
-      },
-      close() {
-        this.instance() && this.instance().modal.modal('hide');
-      },
-      isSaving(val) {
-        const instance = this.instance();
-
-        if (val !== undefined) {
-          instance && instance.isSaving(val);
-        }
-
-        return instance && instance.isSaving();
-      },
-      isWaiting(val) {
-        const instance = this.instance();
-
-        if (val !== undefined) {
-          instance.isWaiting(val);
-        }
-
-        return instance.isWaiting();
-      },
-      setError(err) {
-        return this.instance() && this.instance().setError(err);
-      },
-      clearError() {
-        return this.instance() && this.instance().clearError();
-      },
-      callMethod(method, args, cb) {
-        return this.instance() && this.instance().callMethod(method, args, cb);
-      },
-      handleMethodResult(cb) {
-        return this.instance() && this.instance().handleMethodResult(cb);
-      }
     }
   },
   search: {
@@ -419,41 +377,57 @@ export default {
   router: {
     goToDashboard(orgSerialNumber) {
       const params = { orgSerialNumber };
-      FlowRouter.go('dashboardPage', params);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('dashboardPage', params);
+      });
     },
     goToStandard(standardId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
       const queryParams = !!withQueryParams ? { filter: this.activeStandardFilterId() } : {};
-      FlowRouter.go('standard', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('standard', params, queryParams);
+      });
     },
     goToNC(nonconformityId, withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
       const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
-      FlowRouter.go('nonconformity', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('nonconformity', params, queryParams);
+      });
     },
     goToNCs(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
-      FlowRouter.go('nonconformities', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('nonconformities', params, queryParams);
+      });
     },
     goToWorkItem(workItemId, queryParams = { filter: this.activeWorkInboxFilterId() }) {
       const params = { workItemId, orgSerialNumber: this.organizationSerialNumber() };
-      FlowRouter.go('workInboxItem', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('workInboxItem', params, queryParams);
+      });
     },
     goToWorkInbox(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { filter: this.activeWorkInboxFilterId() } : {};
-      FlowRouter.go('workInbox', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('workInbox', params, queryParams);
+      });
     },
     goToRisk(riskId, withQueryParams = true) {
       const params = { riskId, orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
-      FlowRouter.go('risk', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('risk', params, queryParams);
+      });
     },
     goToRisks(withQueryParams = true) {
       const params = { orgSerialNumber: this.organizationSerialNumber() };
       const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
-      FlowRouter.go('risks', params, queryParams);
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('risks', params, queryParams);
+      });
     }
   },
   mobile: {
@@ -746,6 +720,7 @@ export default {
       switch(status) {
         case 1:
         case 4:
+          return 'yellow';
         case 8:
         case 9:
           return 'success';
@@ -838,6 +813,30 @@ export default {
     }
   },
   riskScore: {
+    sortScores(scores, direction) {
+      return Array.from(scores || []).sort(({ scoredAt: sc1 }, { scoredAt: sc2 }) => {
+        if (direction === -1) {
+          return sc2 - sc1;
+        } else {
+          return sc1 - sc2;
+        }
+      });
+    },
+    getPrimaryScore(scores) {
+      return _.find(scores, (score) => {
+        return score && score.scoreTypeId === riskScoreTypes.residual.id
+      }) || _.find(scores, (score) => {
+        return score && score.scoreTypeId === riskScoreTypes.inherent.id
+      }) || {};
+    },
+    getScoreTypeAdjLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.adj;
+    },
+    getScoreTypeLabel(scoreTypeId) {
+      const riskScoreType = riskScoreTypes[scoreTypeId];
+      return riskScoreType && riskScoreType.label;
+    },
     getNameByScore(score) {
       if (score >= 0 && score < 20) {
         return 'Very low';
@@ -881,43 +880,6 @@ export default {
         default:
           return '';
           break;
-      }
-    }
-  },
-  notifications: {
-    // Notifications document can be passed as an argument
-    // _id is used as notification tag if there's no tag argument passed
-    // Only title is required
-    sendNotification({ _id, title, body, tag, icon, url, silent = true, timeout = 4000 }) {
-      const notificationSound = document.getElementById('notification-sound');
-
-      if (notificationSound) {
-        notificationSound.currentTime = 0;
-        notificationSound.play();
-      }
-      let notification = new Notification(title, {
-        body,
-        tag: tag || _id,
-        icon: icon || '/p-logo-square.png',
-        silent
-      });
-
-      if (url) {
-        notification.onclick = function () {
-          window.open(url);
-        };
-      }
-
-      Meteor.setTimeout(() => {
-        notification.close();
-      }, timeout);
-    },
-    playNewMessageSound() {
-      const $sound = document.getElementById('message-sound');
-
-      if ($sound) {
-        $sound.currentTime = 0;
-        invoke($sound, 'play');
       }
     }
   },
@@ -1039,6 +1001,8 @@ export default {
 
           uploader.send(file, (err, url) => {
             if (err) {
+              console.log(err);
+              toastr.error(err.reason);
 
               this.terminateUploading(fileId);
               return;

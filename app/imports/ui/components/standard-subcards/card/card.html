@@ -3,12 +3,13 @@
     {{#Card_Read
       cardTitle="Standard subcards"
       doc=NC
+      docType="non-conformity"
       onOpenEditModal=onOpenEditModalCb}}
 
       {{! NON-CONFORMITIES SUBCARDS}}
 
       {{#with NC}}
-        {{> Subcards_RootCauseAnalysis_Read
+        {{> Subcards_AnalysisWrapper_Read
           analysis=this.analysis
           updateOfStandards=this.updateOfStandards}}
         {{#with notify}}

@@ -18,7 +18,7 @@ Template.Actions_LinkedTo_Read.viewmodel({
         };
       };
     };
-    const NCs = this._getNCsByQuery(query, options).map(mapToDocType(ProblemTypes.NC));
+    const NCs = this._getNCsByQuery(query, options).map(mapToDocType(ProblemTypes.NON_CONFORMITY));
     const risks = this._getRisksByQuery(query, options).map(mapToDocType(ProblemTypes.RISK));
     return NCs.concat(risks);
   },
@@ -28,7 +28,7 @@ Template.Actions_LinkedTo_Read.viewmodel({
     };
 
     switch(documentType) {
-      case ProblemTypes.NC:
+      case ProblemTypes.NON_CONFORMITY:
         return getRoute('nonconformity', { nonconformityId: _id });
         break;
       case ProblemTypes.RISK:

@@ -6,7 +6,7 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 
 Template.Risks_Item.viewmodel({
   share: 'window',
-  mixin: ['risk', 'date', 'riskScore', 'organization'],
+  mixin: ['risk', 'date', 'riskScore', 'organization', 'problemsStatus'],
   onCreated(template) {
     template.autorun((computation) => {
       if (this._id() === this.riskId() && this.isNew()) {
@@ -21,9 +21,14 @@ Template.Risks_Item.viewmodel({
   sequentialId: '',
   type: '',
   status: '',
+  scores: '',
   title: '',
-  score: '',
+  primaryScore: '',
   viewedBy: [],
+  primaryScore() {
+    const scoresSorted = this.sortScores(this.scores(), -1);
+    return this.getPrimaryScore(scoresSorted);
+  },
   linkArgs() {
     const _id = this._id();
     return {

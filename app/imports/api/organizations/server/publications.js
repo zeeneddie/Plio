@@ -9,6 +9,8 @@ import {
 } from '/imports/share/collections/standards-book-sections.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { getUserOrganizations } from '../utils.js';
+
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -42,23 +44,6 @@ Meteor.publish('invitationInfo', function (invitationId) {
     })
   ];
 });
-
-const getUserOrganizations = (userId, orgSelector = {}, options = {}) => {
-  const selector = {
-    users: {
-      $elemMatch: {
-        userId,
-        isRemoved: false,
-        removedBy: { $exists: false },
-        removedAt: { $exists: false }
-      }
-    }
-  };
-
-  _.extend(selector, orgSelector);
-
-  return Organizations.find(selector, options);
-};
 
 Meteor.publish('currentUserOrganizations', function() {
   if (this.userId) {

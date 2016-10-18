@@ -17,23 +17,21 @@ Template.HelloPage.viewmodel({
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
           if (Organizations.find({ 'users.userId': currentUser._id })) {
-            // if the user is an owner of organization go to that organization no matter what
-            const ownerOrg = Organizations.findOne({ 'users': { $elemMatch: { userId: currentUser._id, role: 'owner' } } });
-            if (!!ownerOrg) {
-              this.goToDashboard(ownerOrg.serialNumber);
+            const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+            const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
+            const orgExists = !!Organizations.findOne({ serialNumber });
+
+            if (serialNumber && orgExists) {
+              this.goToDashboard(serialNumber);
             } else {
-              const { selectedOrganizationSerialNumber } = currentUser;
-              const orgExists = !!Organizations.findOne({ serialNumber: selectedOrganizationSerialNumber });
-              if (selectedOrganizationSerialNumber && orgExists) {
-                this.goToDashboard(selectedOrganizationSerialNumber);
-              } else {
-                const org = Organizations.findOne({ 'users.userId': currentUser._id });
-                !!org && this.goToDashboard(org.serialNumber);
-              }
+              const org = Organizations.findOne({ 'users.userId': currentUser._id });
+              !!org && this.goToDashboard(org.serialNumber);
             }
           }
         } else {
-          FlowRouter.go('signIn');
+          FlowRouter.withReplaceState(() => {
+            FlowRouter.go('signIn');
+          });
         }
       }
     });

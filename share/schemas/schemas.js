@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 
 import {
   TimeUnits, DocumentTypes, AnalysisStatuses,
-  ReviewStatuses, SystemName
+  ReviewStatuses, SystemName, StringLimits
 } from '../constants.js';
 
 
@@ -308,8 +308,8 @@ export const BaseProblemsRequiredSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: 1,
-      max: 40
+      min: StringLimits.title.min,
+      max: StringLimits.title.max
     },
     identifiedBy: {
       type: String,

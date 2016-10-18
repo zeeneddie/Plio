@@ -2,7 +2,9 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { ProblemTypes, ActionTypes, WorkflowTypes } from '/imports/share/constants.js';
-import { checkAndThrow } from '/imports/api/helpers.js';
+import { AnalysisTitles } from '../constants.js';
+import { checkAndThrow } from '../helpers.js';
+
 import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
 import {
   INVALID_DOC_TYPE,
@@ -30,24 +32,35 @@ export const ACT_CheckEverything = function ACT_CheckEverything(_id) {
 export const ACT_LinkedDocsChecker = (linkedTo) => {
   const linkedToByType = _.groupBy(linkedTo, doc => doc.documentType);
 
-  const NCsIds = _.pluck(linkedToByType[ProblemTypes.NC], 'documentId');
+  const NCsIds = _.pluck(linkedToByType[ProblemTypes.NON_CONFORMITY], 'documentId');
   const risksIds = _.pluck(linkedToByType[ProblemTypes.RISK], 'documentId');
 
-  const docWithUncompletedAnalysis = NonConformities.findOne({
-    _id: { $in: NCsIds },
-    workflowType: WorkflowTypes.SIX_STEP,
-    'analysis.status': 0 // Not completed
-  }) || Risks.findOne({
+  let docWithUncompletedAnalysis, analysisTitle;
+
+  docWithUncompletedAnalysis = Risks.findOne({
     _id: { $in: risksIds },
     workflowType: WorkflowTypes.SIX_STEP,
     'analysis.status': 0 // Not completed
   });
 
   if (docWithUncompletedAnalysis) {
+    analysisTitle = AnalysisTitles.riskAnalysis;
+  } else {
+    docWithUncompletedAnalysis = NonConformities.findOne({
+      _id: { $in: NCsIds },
+      workflowType: WorkflowTypes.SIX_STEP,
+      'analysis.status': 0 // Not completed
+    });
+    analysisTitle = AnalysisTitles.rootCauseAnalysis;
+  }
+
+
+
+  if (docWithUncompletedAnalysis) {
     const { sequentialId, title } = docWithUncompletedAnalysis;
     throw new Meteor.Error(
       400,
-      `Root cause analysis for ${sequentialId} "${title}" must be completed first`
+      `${analysisTitle} for ${sequentialId} "${title}" must be completed first`
     );
   }
 };
@@ -55,17 +68,13 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
 
 export const ACT_OnLinkChecker = ({ documentId, documentType }, action) => {
   const collection = ((() => {
-    if (Object.is(documentType, ProblemTypes.NC)) {
+    if (Object.is(documentType, ProblemTypes.NON_CONFORMITY)) {
       if (Object.is(action.type, ActionTypes.RISK_CONTROL)) {
         throw ACT_RK_CANNOT_BE_LINKED_TO_NC;
       }
 
       return NonConformities;
     } else if (Object.is(documentType, ProblemTypes.RISK)) {
-      if (Object.is(action.type, ActionTypes.PREVENTATIVE_ACTION)) {
-        throw ACT_PA_CANNOT_BE_LINKED_TO_RISK;
-      }
-
       return Risks;
     }
   })());

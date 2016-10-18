@@ -6,11 +6,12 @@
           isDiscussionOpened=isDiscussionOpened
           messagesNotViewedCount=messagesNotViewedCount}}
     {{else}}
-      {{> StandardsList}}
+      {{> StandardsList ""}}
     {{/if}}
   {{else}}
     {{#if isDiscussionOpened}}
       {{> Discussion_Card
+          organizationId=organizationId
           discussionId=discussion._id
           linkedTo=standardId
           isReady=isReady

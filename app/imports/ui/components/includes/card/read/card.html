@@ -16,7 +16,6 @@
                 {{/if}}
               {{else}}
                 <a class="btn btn-primary" {{b "click: openModal"}}>
-                  <i class="fa fa-pencil"></i>
                   Edit
                 </a>
               {{/if}}
@@ -30,7 +29,7 @@
 
       {{> Template.contentBlock}}
 
-      {{> CardChangelog document=this}}
+      {{> CardChangelog document=this documentType=docType}}
     </div>
   {{/with}}
 </template>

@@ -3,17 +3,25 @@ export const AnalysisTitles = {
   riskAnalysis: 'Initial risk analysis'
 };
 
+export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
+
+const DocumentTitles = {
+  STANDARD: 'Standard',
+  NC: 'Non-conformity',
+  RISK: 'Risk'
+};
+
 export const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',
-  3: 'department/sector',
+  3: 'department',
   4: 'deleted'
 };
 
 export const RiskFilters = {
   1: 'type',
   2: 'status',
-  3: 'department/sector',
+  3: 'department',
   4: 'deleted'
 };
 
@@ -24,12 +32,12 @@ export const StandardFilters = {
 };
 
 export const WorkInboxFilters = {
-  1: 'My current work',
-  2: 'Team current work',
-  3: 'My completed work',
-  4: 'Team completed work',
-  5: 'My deleted work',
-  6: 'Team deleted work'
+  1: 'my current',
+  2: 'team current',
+  3: 'my completed',
+  4: 'team completed',
+  5: 'my deleted',
+  6: 'team deleted'
 };
 
 export const UncategorizedTypeSection = {
@@ -63,6 +71,7 @@ export const RisksListProjection = {
   title: 1,
   identifiedAt: 1,
   typeId: 1,
+  scores: 1,
   departmentsIds: 1,
   status: 1,
   viewedBy: 1,

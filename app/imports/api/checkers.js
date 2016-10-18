@@ -29,6 +29,8 @@ export * from './occurrences/checkers.js';
 
 export * from './users/checkers.js';
 
+export * from './discussions/checkers.js';
+
 export const isMobileRes = () => {
   const width = $(window).width();
   return width < 768 && width;
@@ -96,11 +98,9 @@ export const isOrgOwner = (userId, organizationId) => {
   });
 };
 
-export const isOrgMember = (userId, organizationId) => {
-  if (!userIdOrgIdTester(userId, organizationId)) return false;
-
-  return !!Organizations.find({
-    _id: organizationId,
+export const isOrgMemberBySelector = (userId, selector) => {
+  return !!Organizations.findOne({
+    ...selector,
     users: {
       $elemMatch: {
         userId,
@@ -110,6 +110,12 @@ export const isOrgMember = (userId, organizationId) => {
       }
     }
   });
+};
+
+export const isOrgMember = (userId, organizationId) => {
+  if (!userIdOrgIdTester(userId, organizationId)) return false;
+
+  return isOrgMemberBySelector(userId, { _id: organizationId })
 };
 
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }, args = {}) => {

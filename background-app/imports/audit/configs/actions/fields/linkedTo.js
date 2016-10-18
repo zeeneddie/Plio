@@ -69,7 +69,7 @@ export default {
         const { documentId, documentType } = linkedTo.item;
 
         const workflowConstructor = {
-          [ProblemTypes.NC]: NCWorkflow,
+          [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
           [ProblemTypes.RISK]: RiskWorkflow
         }[documentType];
 

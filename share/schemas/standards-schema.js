@@ -1,6 +1,6 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { StandardStatuses } from '../constants.js';
+import { StandardStatuses, StringLimits } from '../constants.js';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
@@ -87,6 +87,13 @@ const optionalFields = new SimpleSchema([
     improvementPlan: {
       type: ImprovementPlanSchema,
       optional: true
+    },
+    issueNumber: {
+      type: Number,
+      min: 1,
+      max: 1000,
+      defaultValue: 1,
+      optional: true
     }
   }
 ]);
@@ -97,7 +104,9 @@ const StandardsSchema = new SimpleSchema([
   OrganizationIdSchema,
   {
     title: {
-      type: String
+      type: String,
+      min: StringLimits.title.min,
+      max: StringLimits.title.max
     },
     typeId: {
       type: String,
@@ -114,11 +123,6 @@ const StandardsSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    issueNumber: {
-      type: Number,
-      min: 1,
-      max: 1000
-    },
     status: {
       type: String,
       allowedValues: _.keys(StandardStatuses)
@@ -129,6 +133,8 @@ const StandardsSchema = new SimpleSchema([
 const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
   title: {
     type: String,
+    min: StringLimits.title.min,
+    max: StringLimits.title.max,
     optional: true
   },
   typeId: {
@@ -168,5 +174,18 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
     optional: true
   }
 }]);
+
+const invalidUrlMessage = 'The source file url link is not valid';
+
+StandardsSchema.messages({
+  'regEx source1.url': [{
+    exp: SimpleSchema.RegEx.Url,
+    msg: invalidUrlMessage
+  }],
+  'regEx source2.url': [{
+    exp: SimpleSchema.RegEx.Url,
+    msg: invalidUrlMessage
+  }],
+});
 
 export { StandardsSchema, StandardsUpdateSchema };

@@ -31,12 +31,15 @@ export default {
 	bulkUpdateViewedBy({ discussionId, userId }) {
 		const user = Meteor.users.findOne({ _id: userId });
 
-		return this.collection.update({
-			discussionId,
-			createdAt: { $gte: user.createdAt }
-		}, {
-			$addToSet: { viewedBy: userId }
-		}, { multi: true });
+		return Meteor.isServer && Meteor.defer(() => {
+			return this.collection.update({
+				discussionId,
+				createdAt: { $gte: user.createdAt },
+				viewedBy: { $ne: userId }
+			}, {
+				$addToSet: { viewedBy: userId }
+			}, { multi: true });
+		});
 	},
 
 	bulkUpdateViewedByTotal({ organizationId, userId }) {
@@ -44,7 +47,8 @@ export default {
 
 		return this.collection.update({
 			organizationId,
-			createdAt: { $gte: user.createdAt }
+			createdAt: { $gte: user.createdAt },
+			viewedBy: { $ne: userId }
 		}, {
 			$addToSet: { viewedBy: userId }
 		}, { multi: true });

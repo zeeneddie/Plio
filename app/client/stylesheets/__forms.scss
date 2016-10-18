@@ -136,6 +136,15 @@ select {
     padding: 0;
     margin-top: 0;
 
+    .dropdown-divider:first-child {
+      display: none;
+    }
+
+    button {
+      margin-left: 4px;
+      margin-bottom: 0 !important;
+    }
+
     &-full {
       left: 0;
       right: 0;
@@ -143,6 +152,10 @@ select {
   }
   &-item {
     padding: 10px 15px;
+
+    & > strong, & > span {
+      vertical-align: middle;
+    }
 
     &.indent {
       padding-left: 30px;
@@ -274,7 +287,7 @@ input:focus ~ .clear-field {
 
   .dropdown-menu {
     left: 0;
-    max-height: 289px;
+    max-height: 494px;
     overflow-y: scroll;
   }
 }
@@ -454,7 +467,7 @@ fieldset[disabled] {
   width: 100%;
   display: inline-block;
   position: relative;
-  
+
   // Safari progress bar invisible border fix
   padding-left: 0.0158rem;
   .file-item-read {
@@ -463,6 +476,7 @@ fieldset[disabled] {
   }
   .btn-icon {
     margin-bottom: 0;
+    min-height: 34px;
   }
   .btn.file-label {
     position: relative;

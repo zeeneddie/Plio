@@ -4,9 +4,8 @@ import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
 import Handlebars from 'handlebars';
-
+import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
 
 import {
   AvatarPlaceholders,
@@ -20,6 +19,9 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
+import { getUserOrganizations } from './organizations/utils';
+import { isOrgMemberBySelector } from './checkers';
+
 
 const { compose } = _;
 
@@ -74,6 +76,22 @@ export const inspire = curry((props, instance, ...args) =>
 
 export const invokeId = instance => invoke(instance, '_id');
 
+export const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+
+export const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
+
+export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+
+export const $isScrolledElementVisible = (el, container) => {
+  const containerTop = $(container).offset().top;
+  const containerBottom = containerTop + $(container).height();
+  const elPosition = $(el).position();
+  const elemTop = elPosition && elPosition.top;
+  const elemBottom = elPosition && elemTop + $(el).height();
+
+  return ((elemBottom < containerBottom) && (elemTop >= containerTop));
+};
+
 export const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
 
 export const findById = curry((_id, array) =>
@@ -85,20 +103,43 @@ export const propItems = property('items');
 
 export const lengthItems = compose(length, propItems);
 
+export const propMessages = property('messages');
+
+export const lengthMessages = compose(length, propMessages);
+
 export const flattenMapItems = flattenMap(propItems);
 
-export const $isScrolledToBottom = (div = $()) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
 
-export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
 
-export const $isScrolledElementVisible = (el, container) => {
-  const containerTop = $(container).offset().top;
-  const containerBottom = containerTop + $(container).height();
-  const elPosition = $(el).position();
-  const elemTop = elPosition && elPosition.top;
-  const elemBottom = elPosition && elemTop + $(el).height();
-  return ((elemBottom < containerBottom) && (elemTop > containerTop));
-};
+// useful with recompose's withProps:
+// const transformer = transsoc({
+//   'userAvatar': getUserAvatar,
+//   'pathToMessage': getMessagePath
+// });
+// withProps(transformer)(Component);
+// > {
+//   pathToMessage: '/98/standards/Mc7jjwYJ9gXPkibS8/discussion?at=jBwoZSJ3S4xkzvpdY',
+//   userAvatar: 'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png'
+// }
+// Object<key: path, value: func> -> obj -> obj
+export const transsoc = curry((transformations, obj) => {
+  const keys = Object.keys(Object.assign({}, transformations));
+  const result = keys.map(key => assoc(key, transformations[key](obj), obj));
+
+  return _.pick(flattenObjects(result), ...keys);
+})
+
+export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+
+export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
+
+export const pickFromDiscussion = pickFrom('discussion');
+
+export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+
+export const getC = curry((path, obj) => get(obj, path));
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {
@@ -138,4 +179,45 @@ export const sortArrayByTitlePrefix = (arr) => {
       return -1;
     }
   });
+};
+
+export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
+
+export const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
+  find() {
+    return getUserOrganizations(userId, selector);
+  },
+  children: [
+    {
+      find({ users = [] }) {
+        const userIds = users.map(property('userId'));
+
+        return Meteor.users.find({ _id: { $in: userIds } });
+      }
+    }
+  ]
+});
+
+export const getPublishCompositeOrganizationUsers = (fn) => {
+  return function(serialNumber, isDeleted = { $in: [null, false] }) {
+    check(serialNumber, Number);
+    check(isDeleted, Match.OneOf(Boolean, {
+      $in: Array
+    }));
+
+    const userId = this.userId;
+
+    if (!userId || !isOrgMemberBySelector(userId, { serialNumber })) {
+      return this.ready();
+    }
+
+    const pubObj = getPublishCompositeOrganizationUsersObject(userId, { serialNumber });
+
+    return Object.assign({}, pubObj, {
+      children: [
+        ...pubObj.children,
+        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))()
+      ]
+    });
+  }
 };

@@ -1,6 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
+
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
@@ -33,7 +34,9 @@ AccountsTemplates.configureRoute('verifyEmail', {
   template: 'VerifyEmailPage',
   contentRegion: 'content',
   redirect() {
-    FlowRouter.go('hello');
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('hello');
+    });
     toastr.success('Email verified! Thanks!');
   }
 });
@@ -81,6 +84,16 @@ FlowRouter.route('/hello', {
   }
 });
 
+// Uncomment this code to enable maintenance page
+// FlowRouter.route('/maintenance', {
+//   name: 'maintenance',
+//   action(params) {
+//     BlazeLayout.render('TransitionalLayout', {
+//       content: 'MaintenancePage'
+//     });
+//   }
+// });
+
 FlowRouter.route('/sign-out', {
   name: 'signOut',
   action(params) {
@@ -89,7 +102,9 @@ FlowRouter.route('/sign-out', {
     if (targetURL) {
       FlowRouter.go(targetURL);
     } else {
-      FlowRouter.go('hello');
+      FlowRouter.withReplaceState(() => {
+        FlowRouter.go('hello');
+      });
     }
   }
 });
@@ -251,11 +266,16 @@ function redirectHandler() {
   if (targetURL) {
     FlowRouter.go(targetURL);
   } else {
-    FlowRouter.go('hello');
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('hello');
+    });
   }
 }
 
 function checkLoggedIn(context, redirect) {
+
+  // Redirect to maintenance route can be here.
+  // redirect('maintenance'); return;
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, { b: context.path });

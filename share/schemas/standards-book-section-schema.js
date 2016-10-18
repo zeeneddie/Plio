@@ -1,12 +1,14 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import { BaseEntitySchema, OrganizationIdSchema } from './schemas.js';
+import { StringLimits } from '/imports/share/constants.js';
 
 
 const StandardsBookSectionEditableFields = new SimpleSchema({
   title: {
     type: String,
-    min: 1
+    min: StringLimits.title.min,
+    max: StringLimits.title.max
   }
 });
 

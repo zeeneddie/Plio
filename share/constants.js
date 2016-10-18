@@ -72,16 +72,25 @@ export const CollectionNames = {
 
 export const DefaultRiskTypes = [
   {
-    title: 'Industrial accident',
-    abbreviation: 'IND'
+    title: 'Credit risk'
   },
   {
-    title: 'Strike or stoppage',
-    abbreviation: 'STR'
+    title: 'Liquidity risk'
   },
   {
-    title: 'Technical failure',
-    abbreviation: 'TFA'
+    title: 'Market risk'
+  },
+  {
+    title: 'Operational risk'
+  },
+  {
+    title: 'Regulatory risk'
+  },
+  {
+    title: 'Reputational risk'
+  },
+  {
+    title: 'Infosecurity risk'
   }
 ];
 
@@ -97,7 +106,7 @@ export const DefaultStandardSections = [
   }
 ];
 
-const DefaultStandardTypes = [
+export const DefaultStandardTypes = [
   {
     title: 'Process',
     abbreviation: 'PRO'
@@ -143,12 +152,6 @@ export const DocChangesKinds = {
   DOC_CREATED: 1,
   DOC_UPDATED: 2,
   DOC_REMOVED: 3
-};
-
-export const DocumentTypes = {
-  STANDARD: 'standard',
-  NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
 };
 
 export const InvitationStatuses = {
@@ -199,8 +202,14 @@ export const ProblemsStatuses = {
 };
 
 export const ProblemTypes = {
-  NC: 'non-conformity',
+  NON_CONFORMITY: 'non-conformity',
   RISK: 'risk'
+};
+
+export const DocumentTypes = {
+  STANDARD: 'standard',
+  ...ProblemTypes,
+  ...ActionTypes
 };
 
 export const ReviewStatuses = {
@@ -208,6 +217,8 @@ export const ReviewStatuses = {
   1: 'Awaiting review',
   2: 'Up-to-date'
 };
+
+export const RCAMaxCauses = 5;
 
 export const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
@@ -222,9 +233,33 @@ export const RiskEvaluationPriorities = {
   'high': 'High'
 };
 
+export const riskScoreTypes = {
+  inherent: {
+    id: 'inherent',
+    label: 'Inherent risk',
+    adj: 'Inherent'
+  },
+  residual: {
+    id: 'residual',
+    label: 'Residual risk',
+    adj: 'Residual'
+  }
+};
+
 export const StandardStatuses = {
   'issued': 'Issued',
   'draft': 'Draft'
+};
+
+export const StringLimits = {
+  abbreviation: {
+    min: 1,
+    max: 4
+  },
+  title: {
+    min: 1,
+    max: 80
+  }
 };
 
 export const SystemName = 'Plio';
@@ -302,7 +337,9 @@ export const OrgCurrencies = {
 };
 
 const getDefaultGuideline = (type, problemType) => (
-  `Please go to Org Settings to define what a ${type} ${problemType} means in your organization.`);
+  `Please go to Organization Settings to define what a ${type} ${problemType} means in your organization.`);
+
+const defaultRiskScoringGuideline = 'Please go to Organization settings and provide a brief summary of how Risks should be scored in your organization.';
 
 export const OrganizationDefaults = {
   workflowDefaults: {
@@ -314,7 +351,7 @@ export const OrganizationDefaults = {
       }
     },
     majorProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
         timeUnit: TimeUnits.DAYS
@@ -387,14 +424,14 @@ export const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NC),
-    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NC),
-    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NC)
+    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NON_CONFORMITY),
+    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NON_CONFORMITY),
+    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NON_CONFORMITY)
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),
     major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
     critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
   },
-  rkScoringGuidelines: getDefaultGuideline('Risk scoring')
+  rkScoringGuidelines: defaultRiskScoringGuideline
 };

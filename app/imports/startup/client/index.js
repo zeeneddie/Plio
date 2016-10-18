@@ -1,3 +1,4 @@
+import '/imports/ui/utils';
 import './useraccounts.js';
 import './routes.js';
 import './userpresence.js';
@@ -10,3 +11,4 @@ import './subsmanagers.js';
 import './polyfills';
 import './blaze-helpers.js';
 import './mixins';
+import './jquery-plugins.js';

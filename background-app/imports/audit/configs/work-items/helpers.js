@@ -22,7 +22,7 @@ export const getLinkedDoc = (workItem) => {
     [ActionTypes.CORRECTIVE_ACTION]: Actions,
     [ActionTypes.PREVENTATIVE_ACTION]: Actions,
     [ActionTypes.RISK_CONTROL]: Actions,
-    [ProblemTypes.NC]: NonConformities,
+    [ProblemTypes.NON_CONFORMITY]: NonConformities,
     [ProblemTypes.RISK]: Risks
   }[type];
 
@@ -34,7 +34,7 @@ export const getLinkedDocAuditConfig = (workItem) => {
     [ActionTypes.CORRECTIVE_ACTION]: ActionAuditConfig,
     [ActionTypes.PREVENTATIVE_ACTION]: ActionAuditConfig,
     [ActionTypes.RISK_CONTROL]: ActionAuditConfig,
-    [ProblemTypes.NC]: NCAuditConfig,
+    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
     [ProblemTypes.RISK]: RiskAuditConfig
   }[workItem.linkedDoc.type];
 };

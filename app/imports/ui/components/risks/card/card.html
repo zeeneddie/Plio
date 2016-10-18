@@ -6,6 +6,7 @@
           isReadOnly=isReadOnly
           cardTitle="Risk"
           doc=this
+          docType="risk"
           isReady=isReady
           onRestore=onRestoreCb
           onDelete=onDeleteCb
@@ -75,7 +76,7 @@
 
           </div>
 
-          {{> Subcards_RootCauseAnalysis_Read
+          {{> Subcards_AnalysisWrapper_Read
               analysis=this.analysis
               updateOfStandards=this.updateOfStandards
               RCALabel=RiskRCALabel
@@ -98,7 +99,7 @@
               documentId=this._id}}
 
           {{> Subcards_Actions_Read
-              type=ActionTypes.RISK_CONTROL
+              type=ActionTypes.PREVENTATIVE_ACTION
               documentId=this._id}}
 
           {{> Subcards_LessonsLearned_Read documentId=this._id}}

@@ -11,5 +11,10 @@ NonConformities.after.remove((userId, doc) => {
     fileIds = fileIds.concat(improvementPlanFileIds);
   }
 
+  const rcaFileIds = get(doc, 'rootCauseAnalysis.fileIds');
+  if (!!rcaFileIds) {
+    fileIds = fileIds.concat(rcaFileIds);
+  }
+
   FilesService.bulkRemove({ fileIds });
 });

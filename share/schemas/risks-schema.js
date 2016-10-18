@@ -12,7 +12,8 @@ import {
   ProblemsStatuses,
   RiskEvaluationPriorities,
   RiskEvaluationDecisions,
-  WorkflowTypes
+  WorkflowTypes,
+  StringLimits
 } from '../constants.js';
 
 
@@ -41,6 +42,11 @@ const RiskScoreSchema = new SimpleSchema({
     type: Number,
     min: 1,
     max: 100
+  },
+  scoreTypeId: {
+    type: String,
+    label: 'Score type',
+    max: 40
   },
   scoredBy: {
     type: String,
@@ -132,8 +138,8 @@ const RisksUpdateSchema = new SimpleSchema([
   {
     title: {
       type: String,
-      min: 1,
-      max: 40,
+      min: StringLimits.title.min,
+      max: StringLimits.title.max,
       optional: true
     },
     identifiedBy: {

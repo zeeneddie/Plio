@@ -61,10 +61,9 @@ export default OrganizationService = {
       });
     });
 
-    _.each(DefaultRiskTypes, ({ title, abbreviation }) => {
+    _.each(DefaultRiskTypes, ({ title }) => {
       RisksTypeService.insert({
         title,
-        abbreviation,
         organizationId,
         createdBy: ownerId
       });
@@ -227,6 +226,20 @@ export default OrganizationService = {
       _id: organizationId,
     }, {
       $unset: { transfer: '' }
+    });
+  },
+
+  updateUserSettings({ organizationId, userId, ...args }) {
+    const modifier = {};
+    _(args).each((val, key) => {
+      _(modifier).extend({ [`users.$.${key}`]: val });
+    });
+
+    return this.collection.update({
+      _id: organizationId,
+      'users.userId': userId
+    }, {
+      $set: { ...modifier }
     });
   }
 };

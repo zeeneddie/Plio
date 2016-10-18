@@ -63,7 +63,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       _title,
       operation: this.getOperationText({ type }),
       typeText: this.getTypeText({ type, linkedDoc }),
-      doc: { type, ...args },
+      doc: { type, linkedDoc, ...args },
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });
@@ -72,7 +72,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `The work item "${this.capitalize(type)}" will be restored!`,
+        text: `The work item "${this.capitalize(type || '')}" will be restored!`,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Restore',

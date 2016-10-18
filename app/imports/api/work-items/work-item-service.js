@@ -238,7 +238,7 @@ export default {
 
   _getProblemDoc(docId, docType) {
     const collections = {
-      [ProblemTypes.NC]: NonConformities,
+      [ProblemTypes.NON_CONFORMITY]: NonConformities,
       [ProblemTypes.RISK]: Risks
     };
 
