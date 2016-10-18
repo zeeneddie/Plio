@@ -11,17 +11,11 @@ import {
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
 
-import { NonConformities } from '/imports/share/collections/non-conformities';
-
-
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
   name: '',
   currency: '',
   timezone: '',
-  onCreated() {
-    this.templateInstance.subscribe('nonConformityCard', 'fNcP9ifXiqK6MqYoC', 'KwKXz5RefrE5hjWJ2');
-  },
   autorun() {
     const org = this.organization();
     if (org) {
@@ -68,8 +62,5 @@ Template.OrgSettings.viewmodel({
   },
   setRKGuidelineMethod() {
     return setRKGuideline;
-  },
-  nc() {
-    return NonConformities.findOne({ _id: 'fNcP9ifXiqK6MqYoC' });
   }
 });
