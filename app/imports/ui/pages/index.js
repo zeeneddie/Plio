@@ -26,3 +26,4 @@ import './work-inbox-page.html';
 import './work-inbox-page.js';
 import './standard-subcards-page.html';
 import './standard-subcards-page.js';
+import './maintenance-page.html';

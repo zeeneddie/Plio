@@ -1,11 +1,10 @@
-import moment from 'moment-timezone';
-
 import { Organizations } from '/imports/share/collections/organizations.js';
+import { getTimezones } from './helpers';
 import ReminderSender from '/imports/reminders/ReminderSender.js';
 
 
 // send reminders at 05:00
-const REMINDERS_SENDING_HOUR = 5;
+const REMINDERS_SENDING_TIME = '05:00';
 
 SyncedCron.add({
   name: 'Send reminders',
@@ -15,9 +14,7 @@ SyncedCron.add({
   },
 
   job() {
-    const timezones = _(moment.tz.names()).filter((name) => {
-      return moment().tz(name).hours() === REMINDERS_SENDING_HOUR;
-    });
+    const timezones = getTimezones(REMINDERS_SENDING_TIME);
 
     Organizations.find({
       timezone: { $in: timezones }

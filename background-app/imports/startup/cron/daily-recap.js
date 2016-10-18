@@ -1,11 +1,10 @@
-import moment from 'moment-timezone';
-
 import { Organizations } from '/imports/share/collections/organizations.js';
+import { getTimezones } from './helpers';
 import RecapSender from '/imports/recaps/RecapSender.js';
 
 
 // send recaps at 05:00
-const RECAP_SENDING_HOUR = 5;
+const RECAP_SENDING_TIME = '05:00';
 
 SyncedCron.add({
   name: 'Send daily recap emails',
@@ -15,9 +14,7 @@ SyncedCron.add({
   },
 
   job() {
-    const timezones = _(moment.tz.names()).filter((name) => {
-      return moment().tz(name).hours() === RECAP_SENDING_HOUR;
-    });
+    const timezones = getTimezones(RECAP_SENDING_TIME);
 
     Organizations.find({
       timezone: { $in: timezones }
