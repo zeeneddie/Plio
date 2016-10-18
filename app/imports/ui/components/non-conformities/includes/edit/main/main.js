@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes } from '/imports/api/constants.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 
 

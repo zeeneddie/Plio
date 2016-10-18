@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { Risks } from '../risks.js';
-import { RiskTypes } from '../../risk-types/risk-types';
-import { Standards } from '/imports/api/standards/standards.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
 import { isOrgMember } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import { RisksListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
 import { getPublishCompositeOrganizationUsers } from '../../helpers';

@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 
 Template.Risks_Type_Edit.viewmodel({
   mixin: ['organization', 'collapsing', 'risk'],

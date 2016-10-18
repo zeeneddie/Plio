@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { LessonsLearned } from '../lessons.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { isOrgMember } from '../../checkers.js';
 
 

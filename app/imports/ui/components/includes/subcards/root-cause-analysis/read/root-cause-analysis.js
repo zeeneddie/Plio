@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
-import { Files } from '/imports/api/files/files.js';
-import { RCAMaxCauses } from '/imports/api/constants.js';
+import { Files } from '/imports/share/collections/files.js';
+import { RCAMaxCauses } from '/imports/share/constants.js';
 
 Template.Subcards_RootCauseAnalysis_Read.viewmodel({
   mixin: [],

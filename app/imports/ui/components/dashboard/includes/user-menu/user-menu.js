@@ -4,8 +4,8 @@ import { UserPresence } from 'meteor/konecty:user-presence';
 import { Roles } from 'meteor/alanning:roles';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UserRoles } from '/imports/api/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { UserRoles } from '/imports/share/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
 import { flattenObjects } from '/imports/api/helpers.js';
 

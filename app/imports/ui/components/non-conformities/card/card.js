@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { ActionTypes } from '/imports/api/constants.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
 

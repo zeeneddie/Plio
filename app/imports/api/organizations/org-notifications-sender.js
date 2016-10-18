@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Organizations } from '../organizations/organizations.js';
-import NotificationSender from '/imports/core/NotificationSender';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 export default class OrgNotificationsSender {
@@ -134,6 +134,10 @@ export default class OrgNotificationsSender {
   }
 
   userRemoved(userId, removedBy) {
+    if (this._orgOwnerId === removedBy) {
+      return;
+    }
+
     const user = Meteor.users.findOne({ _id: userId });
     const userName = user.fullNameOrEmail();
 

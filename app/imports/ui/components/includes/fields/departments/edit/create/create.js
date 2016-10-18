@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 import { insert } from '/imports/api/departments/methods.js';
 
 Template.Departments_Create.viewmodel({

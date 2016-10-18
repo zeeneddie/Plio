@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { check } from 'meteor/check';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({

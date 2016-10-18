@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Organizations } from '../../api/organizations/organizations';
+
+import { Organizations } from '/imports/share/collections/organizations';
 import { acceptInvitation } from '../../api/organizations/methods';
-import Utils from '/imports/core/utils';
+import { showError } from '/imports/api/helpers.js';
 
 
 Template.AcceptInvitationPage.viewmodel({
@@ -58,14 +59,14 @@ Template.AcceptInvitationPage.viewmodel({
 
       acceptInvitation.call(args, (err, res) => {
         if (err) {
-          Utils.showError(err.reason);
+          showError(err.reason);
           AccountsTemplates.setDisabled(false);
         } else {
           this._loginUserWithPassword(userEmail, userData, orgSerialNumber);
         }
       });
     } else {
-      Utils.showError('Passwords should match');
+      showError('Passwords should match');
       AccountsTemplates.setDisabled(false);
     }
   },
@@ -73,7 +74,7 @@ Template.AcceptInvitationPage.viewmodel({
   _loginUserWithPassword(email, userData, orgSerialNumber){
     Meteor.loginWithPassword({email}, userData.password, (err) => {
       if (err) {
-        Utils.showError(err.reason);
+        showError(err.reason);
       } else {
         this.goToDashboard(orgSerialNumber.toString());
       }

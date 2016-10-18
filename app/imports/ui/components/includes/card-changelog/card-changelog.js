@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 
-import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { SystemName } from '/imports/api/constants.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { SystemName } from '/imports/share/constants.js';
 
 
 Template.CardChangelog.viewmodel({

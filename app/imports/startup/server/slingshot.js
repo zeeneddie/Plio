@@ -1,9 +1,8 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Random } from 'meteor/random';
 
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { isOrgMember } from '/imports/api/checkers.js';
-import Utils from '/imports/core/utils';
 
 
 const configureSlingshot = () => {
@@ -220,6 +219,6 @@ const configureSlingshot = () => {
   });
 };
 
-// if (Utils.isProduction()) {
+// if (Meteor.isProduction) {
   configureSlingshot();
 // }

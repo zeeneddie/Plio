@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 
 
 Template.Actions_PlanInPlace.viewmodel({

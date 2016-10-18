@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { StringLimits } from '/imports/api/constants.js';
+import { StringLimits } from '/imports/share/constants.js';
 
 const defaults = {
   label: 'Title',

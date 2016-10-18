@@ -4,25 +4,25 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
-import { Organizations } from './organizations';
+import { Organizations } from '/imports/share/collections/organizations';
 import InvitationService from './invitation-service';
 
-import { 
-  OrganizationEditableFields, 
+import {
+  OrganizationEditableFields,
   OrganizationCurrencySchema,
-  UserSettingsSchema 
-} from './organization-schema';
+  UserSettingsSchema
+} from '/imports/share/schemas/organization-schema';
 import {
   WorkflowTypes, NCTypes, UserRoles,
   UserMembership, ProblemGuidelineTypes, RKTypes, InvitationStatuses
-} from '../constants';
+} from '/imports/share/constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
   UserIdSchema, TimezoneSchema
-} from '../schemas';
+} from '/imports/share/schemas/schemas';
 import Method, { CheckedMethod } from '../method.js';
-import { chain } from '../helpers.js';
+import { chain } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
   checkDocExistance,
@@ -475,10 +475,10 @@ export const updateUserSettings = new Method({
   ]).validator(),
 
   run({ organizationId, ...args }) {
-    return OrganizationService.updateUserSettings({ 
+    return OrganizationService.updateUserSettings({
       userId: this.userId,
-      organizationId, 
-      ...args 
+      organizationId,
+      ...args
     });
   }
 });
