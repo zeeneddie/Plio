@@ -39,6 +39,10 @@ const RequiredSchema = new SimpleSchema([
       min: StringLimits.title.min,
       max: StringLimits.title.max
     },
+    description: {
+      type: String,
+      optional: true
+    },
     type: {
       type: String,
       allowedValues: _.values(ActionTypes)
