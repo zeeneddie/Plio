@@ -5,12 +5,27 @@ import { getReceivers } from '../helpers.js';
 
 export default {
   field: 'timezone',
-  logs: [],
+  logs: [
+    {
+      message: {
+        [ChangesKinds.FIELD_ADDED]:
+          'Timezone set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Timezone changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Timezone removed'
+      }
+    }
+  ],
   notifications: [
     {
       text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set timezone of {{{docDesc}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed timezone of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+          '{{userName}} changed timezone of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed timezone of {{{docDesc}}}'
       }
     }
   ],
