@@ -400,6 +400,8 @@ const makeOptionsFields = fields => fields ? ({ fields }) : ({});
 const getCursorOfNonDeletedWithFields = curry((query, fields, collection) =>
   collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
 
+const toObjFind = find => ({ find });
+
 export {
   getDocumentCollectionByType,
   compareDates,
@@ -456,5 +458,6 @@ export {
   explainMongoQuery,
   makeQueryNonDeleted,
   makeOptionsFields,
-  getCursorOfNonDeletedWithFields
+  getCursorOfNonDeletedWithFields,
+  toObjFind
 };

@@ -15,9 +15,15 @@ import {
   WorkItemsListProjection
 } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
-
+import {
+  getPublishCompositeOrganizationUsers,
+  getCursorOfNonDeletedWithFields,
+  toObjFind
+} from '../../helpers';
 import get from 'lodash.get';
+import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getActionsCursorByLinkedDoc } from '../../actions/utils';
+import { getStandardCursorByIds } from '../../standards/utils';
 
 
 const getNCOtherFiles = (nc) => {
@@ -61,46 +67,24 @@ Meteor.publishComposite('nonConformitiesList', function (organizationId, isDelet
   }
 });
 
-Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
+  const userId = this.userId;
 
-      return NonConformities.find({ _id, organizationId });
-    },
-    children: [
-      {
-        find(nc) {
-          return getNCOtherFiles(nc);
-        }
-      },
-      {
-        find(nc) {
-          return Standards.find({ _id: nc.standardsIds }, {
-            fileds: { title: 1 }
-          });
-        }
-      },
-      {
-        find({ _id }) {
-          return LessonsLearned.find({ documentId: _id });
-        }
-      },
-      {
-        find({ _id }) {
-          return Actions.find({ 'linkedTo.documentId': _id });
-        }
-      },
-      {
-        find({ _id }) {
-          return Occurrences.find({ nonConformityId: _id });
-        }
-      },
-    ]
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
   }
+
+  return {
+    ...toObjFind(() => NonConformities.find({ _id, organizationId })),
+    children: [
+      getDepartmentsCursorByIds,
+      getNCOtherFiles,
+      getStandardCursorByIds({ title: 1 }),
+      ({ _id: documentId }) => LessonsLearned.find({ documentId }),
+      getActionsCursorByLinkedDoc({}),
+      ({ _id: nonConformityId }) => Occurrences.find({ nonConformityId }),
+    ].map(toObjFind)
+  };
 });
 
 Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isDeleted = { $in: [null, false] }) {

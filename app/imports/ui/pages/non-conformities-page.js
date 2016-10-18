@@ -1,22 +1,34 @@
 import { Template } from 'meteor/templating';
 
-import { extractIds } from '/imports/api/helpers.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { extractIds } from '/imports/api/helpers';
+import { NonConformities } from '/imports/api/non-conformities/non-conformities';
+import { DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers';
 
 Template.NC_Page.viewmodel({
   mixin: ['nonconformity', 'organization'],
-  autorun() {
-    const template = this.templateInstance;
-    const NCIds = extractIds(this._getNCsByQuery());
-    const organizationId = this.organizationId();
+  _subHandlers: [],
+  isReady: false,
+  autorun: [
+    function() {
+      const organizationId = this.organizationId();
+      const NCId = this.NCId();
 
-    template.subscribe('occurrencesByNCIds', NCIds);
-    DocumentsListSubs.subscribe('workItemsList', organizationId);
-    DocumentsListSubs.subscribe('standardsList', organizationId);
-    DocumentsListSubs.subscribe('risksList', organizationId);
-    OrgSettingsDocSubs.subscribe('departments', organizationId);
-  },
+      if (!organizationId || !NCId) return;
+
+      const _subHandlers = [
+        DocumentCardSubs.subscribe('nonConformityCard', { organizationId, _id: NCId }, {
+          onReady() {
+            
+          }
+        })
+      ];
+
+      this._subHandlers(_subHandlers);
+    },
+    function() {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
+    }
+  ],
   listArgs() {
     return {
       collection: NonConformities,

@@ -32,8 +32,13 @@ import { StandardTypes } from '../../standards-types/standards-types';
 import {
   getPublishCompositeOrganizationUsers,
   makeOptionsFields,
-  getCursorOfNonDeletedWithFields
+  getCursorOfNonDeletedWithFields,
+  toObjFind
 } from '../../helpers';
+import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
+import { getWorkItemsCursorByIdsWithLimitedFields } from '../../work-items/utils';
+import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -105,103 +110,29 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
 });
 
 Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
-  const problemsFields = {
-    organizationId: 1,
-    sequentialId: 1,
-    serialNumber: 1,
-    title: 1,
-    standardsIds: 1,
-    status: 1
-  };
+  const userId = this.userId;
 
-  const actionsFields = {
-    ..._.omit(problemsFields, 'standardsIds'),
-    linkedTo: 1,
-    type: 1
-  };
-
-  const WKFields = {
-    linkedDoc: 1,
-    isCompleted: 1,
-    assigneeId: 1
-  };
-
-  const getProblems = collection => ({ _id: standardsIds }) =>
-    getCursorOfNonDeletedWithFields({ standardsIds }, {}, collection);
-
-  const getActions = ({ _id }) =>
-    getCursorOfNonDeletedWithFields({ 'linkedTo.documentId': _id }, {}, Actions);
-
-  const getWorkItems = ({ _id }) =>
-    getCursorOfNonDeletedWithFields({ 'linkedDoc._id': _id  }, WKFields, WorkItems);
-
-  const createProblemsTree = (collection) => ({
-    find: getProblems(collection),
-    children: [
-      {
-        find: getActions,
-        children: [
-          {
-            find: getWorkItems
-          }
-        ]
-      },
-      {
-        find: getWorkItems
-      }
-    ]
-  });
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
 
   return {
     find() {
-      const userId = this.userId;
-
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
       return Standards.find({
         _id,
         organizationId
       });
     },
     children: [
-      {
-        find({ organizationId, departmentsIds = [] }) {
-          const query = {
-            organizationId,
-            _id: {
-              $in: departmentsIds
-            }
-          };
-          const options = makeOptionsFields(DepartmentsListProjection);
-
-          return Departments.find(query, options);
-        }
-      },
-      {
-        find(standard) {
-          return getStandardFiles(standard);
-        }
-      },
-      {
-        find({ _id }) {
-          return LessonsLearned.find({ documentId: _id });
-        }
-      },
-      createProblemsTree(NonConformities)
-    ]
+      getDepartmentsCursorByIds,
+      getStandardFiles,
+      ({ _id }) => LessonsLearned.find({ documentId: _id })
+    ].map(toObjFind)
+     .concat(createProblemsTree(NonConformities))
   }
 });
 
 Meteor.publish('standardsDeps', function(organizationId) {
-  const problemsFields = {
-    organizationId: 1,
-    title: 1,
-    sequentialId: 1,
-    standardsIds: 1
-  };
-
   const actionsQuery = {
     organizationId,
     type: {
@@ -211,24 +142,26 @@ Meteor.publish('standardsDeps', function(organizationId) {
       ]
     }
   };
-
-  const actionsFields = {
-    ..._.omit(problemsFields, 'standardsIds'),
-    type: 1,
-    linkedTo: 1
+  const standardsFields = {
+    viewedBy: 1,
+    createdAt: 1,
+    createdBy: 1
   };
 
-  const getCursor = getCursorOfNonDeletedWithFields({ organizationId });
-  const actions = getCursorOfNonDeletedWithFields(actionsQuery, actionsFields, Actions);
-  const ncs = getCursor(problemsFields, NonConformities);
-  const risks = getCursor(problemsFields, Risks);
-  const departments = getCursor(DepartmentsListProjection, Departments);
+  const getProblems = getProblemsWithLimitedFields({ organizationId });
+
+  const actions = getActionsWithLimitedFields(actionsQuery);
+  const ncs = getProblems(NonConformities);
+  const risks = getProblems(Risks);
+  const departments = getCursorOfNonDeletedWithFields({ organizationId }, DepartmentsListProjection, Departments);
+  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
 
   return [
     actions,
     ncs,
     risks,
-    departments
+    departments,
+    standards
   ];
 });
 
