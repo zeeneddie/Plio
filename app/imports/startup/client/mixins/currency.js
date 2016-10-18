@@ -1,4 +1,4 @@
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 export default {
   getCurrencySymbol(currency) {

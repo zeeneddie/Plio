@@ -1,7 +1,8 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { WorkInboxFilters, ActionTypes } from '/imports/api/constants.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { WorkInboxFilters } from '/imports/api/constants.js';
 
 export default {
   currentWorkItem(){

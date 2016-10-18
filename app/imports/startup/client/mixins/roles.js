@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
-import { UserRoles } from '/imports/api/constants.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 export default {
   canInviteUsers(organizationId) {

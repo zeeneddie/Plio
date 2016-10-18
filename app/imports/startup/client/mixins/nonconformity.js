@@ -1,5 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { NonConformityFilters } from '/imports/api/constants.js';
 
 export default {

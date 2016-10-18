@@ -1,4 +1,4 @@
-import { ActionStatuses } from '/imports/api/constants.js';
+import { ActionStatuses } from '/imports/share/constants.js';
 
 export default {
   getStatusName(status) {

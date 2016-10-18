@@ -1,4 +1,4 @@
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 
 export default {
   _getDepartmentsByQuery(filter = {}, options = { sort: { name: 1 } }) {

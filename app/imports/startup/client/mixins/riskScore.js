@@ -1,4 +1,4 @@
-import { riskScoreTypes } from '/imports/api/constants.js';
+import { riskScoreTypes } from '/imports/share/constants.js';
 
 export default {
   sortScores(scores, direction) {

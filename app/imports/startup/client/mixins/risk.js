@@ -1,5 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Risks } from '/imports/api/risks/risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import { RiskFilters } from '/imports/api/constants.js';
 
 export default {

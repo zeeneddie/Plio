@@ -1,6 +1,6 @@
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { DocumentTypes } from '/imports/api/constants.js';
-import { Messages } from '/imports/api/messages/messages.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { DocumentTypes } from '/imports/share/constants.js';
+import { Messages } from '/imports/share/collections/messages.js';
 
 export default {
   discussionHasMessages(discussionId) {

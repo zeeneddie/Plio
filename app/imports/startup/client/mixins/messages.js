@@ -1,4 +1,4 @@
-import { Messages } from '/imports/api/messages/messages.js';
+import { Messages } from '/imports/share/collections/messages.js';
 
 export default {
   _getMessages({ query, options }){

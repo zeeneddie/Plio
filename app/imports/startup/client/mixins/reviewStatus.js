@@ -1,4 +1,4 @@
-import { ReviewStatuses } from '/imports/api/constants.js';
+import { ReviewStatuses } from '/imports/share/constants.js';
 
 export default {
   getStatusName(status) {

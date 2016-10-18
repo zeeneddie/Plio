@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Standards } from '/imports/api/standards/standards.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { StandardFilters } from '/imports/api/constants.js';
 
 export default {

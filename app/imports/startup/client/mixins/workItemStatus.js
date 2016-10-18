@@ -1,4 +1,4 @@
-import { WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItemsStore } from '/imports/share/constants.js';
 
 export default {
   getStatusName(status) {

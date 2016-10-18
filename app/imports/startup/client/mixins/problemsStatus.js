@@ -1,4 +1,4 @@
-import { ProblemsStatuses } from '/imports/api/constants.js';
+import { ProblemsStatuses } from '/imports/share/constants.js';
 
 export default {
   getStatusName(status) {

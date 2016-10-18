@@ -1,4 +1,4 @@
-import { ProblemGuidelineTypes} from '/imports/api/constants.js';
+import { ProblemGuidelineTypes} from '/imports/share/constants.js';
 
 export default {
   _magnitude() {

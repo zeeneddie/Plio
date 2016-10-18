@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Match } from 'meteor/check';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 
 export default {
