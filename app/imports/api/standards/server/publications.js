@@ -22,11 +22,11 @@ import {
   StandardsBookSectionsListProjection,
   StandardTypesListProjection,
   DepartmentsListProjection,
-  ActionTypes
 } from '/imports/api/constants';
+import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
 import property from 'lodash.property';
-import { check, Match } from 'meteor/check';
+import { check, Match } from 'meteor/check'; 
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import {

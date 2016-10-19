@@ -1,5 +1,5 @@
 import { getCursorOfNonDeletedWithFields } from '../helpers';
-import { Actions } from './actions';
+import { Actions } from '/imports/share/collections/actions';
 
 export const getActionsCursorByLinkedDoc = (fields) => ({ _id }) =>
   getCursorOfNonDeletedWithFields({ 'linkedTo.documentId': _id }, fields, Actions);

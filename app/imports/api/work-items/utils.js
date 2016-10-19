@@ -1,5 +1,5 @@
 import { getCursorOfNonDeletedWithFields } from '../helpers';
-import { WorkItems } from './work-items';
+import { WorkItems } from '/imports/share/collections/work-items';
 
 export const getWorkItemsCursorByIds = (fields) => ({ _id } = {}) =>
   getCursorOfNonDeletedWithFields({ 'linkedDoc._id': _id }, fields, WorkItems);

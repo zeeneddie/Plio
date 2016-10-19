@@ -11,9 +11,9 @@ import { Departments } from '/imports/share/collections/departments';
 import { isOrgMember } from '../../checkers.js';
 import {
   NonConformitiesListProjection,
-  DepartmentsListProjection,
-  ActionTypes
+  DepartmentsListProjection
 } from '/imports/api/constants.js';
+import { ActionTypes } from '/imports/share/constants';
 import Counter from '../../counter/server.js';
 import {
   getPublishCompositeOrganizationUsers,

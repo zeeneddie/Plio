@@ -1,6 +1,6 @@
 import { makeOptionsFields } from '../helpers';
 import { DepartmentsListProjection } from '../constants';
-import { Departments } from './departments';
+import { Departments } from '/imports/share/collections/departments';
 
 export const getDepartmentsCursorByIds = ({ organizationId, departmentsIds = [] }) => {
   const query = {
