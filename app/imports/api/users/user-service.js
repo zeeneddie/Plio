@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { Accounts } from 'meteor/accounts-base';
 
 
 export default {
@@ -34,11 +35,15 @@ export default {
   },
 
   updateEmail(_id, email) {
-    return this.collection.update({ _id }, {
-      $set: {
-        'emails.0.address': email
-      }
-    });
+    if (!Meteor.isServer) {
+      return;
+    }
+
+    const user = this.collection.findOne({ _id });
+    const currEmail = user.email();
+
+    Accounts.addEmail(_id, email, true);
+    Accounts.removeEmail(_id, currEmail);
   },
 
   updatePhoneNumber({ userId, _id, number, type }) {

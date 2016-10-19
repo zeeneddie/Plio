@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.IP_ReviewDate_Edits.viewmodel({

@@ -1,19 +1,16 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Organizations } from '../organizations.js';
-import { Departments } from '../../departments/departments.js';
-import { StandardTypes } from '../../standards-types/standards-types.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import {
   StandardsBookSections
-} from '../../standards-book-sections/standards-book-sections.js';
-import { Standards } from '../../standards/standards.js';
-import { LessonsLearned } from '../../lessons/lessons.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
+} from '/imports/share/collections/standards-book-sections.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { getUserOrganizations } from '../utils.js';
+
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -45,7 +42,7 @@ Meteor.publish('invitationInfo', function (invitationId) {
       limit: 1,
       fields: {name: 1, serialNumber: 1}
     })
-  ]
+  ];
 });
 
 Meteor.publish('currentUserOrganizations', function() {

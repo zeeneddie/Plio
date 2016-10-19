@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { StandardStatuses } from '/imports/api/constants.js';
+import { StandardStatuses } from '/imports/share/constants.js';
 
 Template.ESStatus.viewmodel({
   status: 'issued',

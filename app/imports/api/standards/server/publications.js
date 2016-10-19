@@ -1,18 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import curry from 'lodash.curry';
 
-import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Standards } from '../standards.js';
-import { isOrgMember, isOrgMemberBySelector } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { Departments } from '/imports/api/departments/departments';
-import Counter from '../../counter/server.js';
+import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils';
+import { Organizations } from '/imports/share/collections/organizations';
+import { Standards } from '/imports/share/collections/standards';
+import { isOrgMember, isOrgMemberBySelector } from '../../checkers';
+import { Files } from '/imports/share/collections/files';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { Departments } from '/imports/share/collections/departments';
+import Counter from '../../counter/server';
 import {
   StandardsListProjection,
   ActionsListProjection,
@@ -23,12 +23,12 @@ import {
   StandardTypesListProjection,
   DepartmentsListProjection,
   ActionTypes
-} from '/imports/api/constants.js';
+} from '/imports/api/constants';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
-import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections';
-import { StandardTypes } from '../../standards-types/standards-types';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
   getPublishCompositeOrganizationUsers,
   makeOptionsFields,

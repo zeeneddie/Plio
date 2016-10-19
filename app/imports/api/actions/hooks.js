@@ -1,4 +1,4 @@
-import { Actions } from './actions.js';
+import { Actions } from '/imports/share/collections/actions.js';
 import FilesService from '../files/files-service.js';
 
 Actions.after.remove((userId, doc) => {

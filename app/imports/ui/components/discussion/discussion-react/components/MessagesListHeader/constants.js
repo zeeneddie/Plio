@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { getFormattedDate } from '/imports/api/helpers.js';
+import { getFormattedDate } from '/imports/share/helpers.js';
 export const getStartedByText = ({ discussion: { startedBy } = {} }) =>
   invoke(Meteor.users.findOne({ _id: startedBy }), 'fullNameOrEmail');
 

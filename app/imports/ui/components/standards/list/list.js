@@ -3,9 +3,10 @@ import invoke from 'lodash.invoke';
 import get from 'lodash.get';
 import property from 'lodash.property';
 
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+
 
 Template.StandardsList.viewmodel({
   share: 'search',

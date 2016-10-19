@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 
-import { extractIds } from '/imports/api/helpers';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities';
-import { DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers';
+import { extractIds } from '/imports/api/helpers.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
+
 
 Template.NC_Page.viewmodel({
   mixin: ['nonconformity', 'organization'],

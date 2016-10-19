@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <table class="layout layout--no-gutter" style="border-spacing:0;background:#ffffff;margin:0;padding:0;border:0;border-collapse:collapse;text-align:left;width:100%">
+    <tbody>
+      <tr>
+        {{#with avatar}}
+          <td width="45" valign="middle" style="font-size:15px;line-height:19px;font-family:&quot;Helvetica Neue&quot;,helvetica,arial,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0;padding:0;background:#ffffff;text-align:left;width:45px;vertical-align:middle">
+            <img alt="{{alt}}" src="{{url}}" style="border-radius:100px;vertical-align:middle;width:45px;min-height:45px;min-height:45px;max-height:45px;padding:0!important;border:0!important;padding:1px;border:1px solid #cccccc" title="{{title}}">
+          </td>
+        {{/with}}
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+          <p>{{text}}</p>
+        </td>
+      </tr>
+      <tr>
+        {{#if avatar}}
+          <td></td>
+        {{/if}}
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+          {{#with button}}
+            <p style="margin:0 0 19px">
+              <a href="{{this.url}}">{{this.label}}</a>
+            </p>
+          {{/with}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

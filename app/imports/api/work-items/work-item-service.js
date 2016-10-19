@@ -1,13 +1,9 @@
-import { Actions } from '../actions/actions.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import { WorkItems } from './work-items.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
 import BaseEntityService from '../base-entity-service.js';
-import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '../constants.js';
-
-if (Meteor.isServer) {
-  import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
-}
+import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
 
 const {
@@ -173,8 +169,6 @@ export default {
           _id: docId
         }
       });
-
-      this._refreshStatus(newId);
     } else {
       this.collection.update({ _id }, {
         $set: { assigneeId: userId }
@@ -209,13 +203,6 @@ export default {
       isCompleted: true
     }, {
       $set: { isCompleted: false }
-    });
-  },
-
-  _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflow = new WorkItemWorkflow(_id);
-      workflow.refreshStatus();
     });
   },
 

@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations';
+import { Organizations } from '/imports/share/collections/organizations';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Roles } from 'meteor/alanning:roles';
 
-import { UserRoles } from '/imports/api/constants.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 Template.UserDirectory_List.viewmodel({
   share: ['search', 'window'],

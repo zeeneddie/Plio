@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Actions } from '/imports/api/actions/actions.js';
+import { Actions } from '/imports/share/collections/actions.js';
 
 
 Template.Actions_SelectExisting.viewmodel({

@@ -1,18 +1,18 @@
-import { Departments } from '/imports/api/departments/departments';
-import { LessonsLearned } from '/imports/api/lessons/lessons';
-import { Organizations } from '/imports/api/organizations/organizations';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections';
-import { StandardTypes } from '/imports/api/standards-types/standards-types';
-import { Standards } from '/imports/api/standards/standards';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities';
-import { Occurrences } from '/imports/api/occurrences/occurrences';
-import { Messages } from '/imports/api/messages/messages';
-import { Actions } from '/imports/api/actions/actions';
-import { WorkItems } from '/imports/api/work-items/work-items';
-import { Discussions } from '/imports/api/discussions/discussions';
-import { AuditLogs } from '/imports/api/audit-logs/audit-logs';
-import { Notifications } from '/imports/api/notifications/notifications';
-import { RiskTypes } from '/imports/api/risk-types/risk-types';
+import { Departments } from '/imports/share/collections/departments.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { Discussions } from '/imports/share/collections/discussions';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { Notifications } from '/imports/share/collections/notifications';
+import { RiskTypes } from '/imports/share/collections/risk-types';
 
 
 // indexes for Departments
