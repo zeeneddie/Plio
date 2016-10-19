@@ -24,7 +24,7 @@ export default {
         [ChangesKinds.FIELD_ADDED]:
           '{{userName}} set currency of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed currency of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
+          '{{userName}} changed currency of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
           '{{userName}} removed currency of {{{docDesc}}} {{{docName}}}'
       }
