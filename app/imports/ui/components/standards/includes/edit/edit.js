@@ -17,7 +17,7 @@ Template.EditStandard.viewmodel({
   updateViewedBy() {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    Meteor.defer(() => updateViewedBy.call({ _id }));
   },
   standard() {
     const _id = this._id && this._id();

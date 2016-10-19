@@ -18,7 +18,7 @@ Template.Subcards_LessonLearned.viewmodel({
     const userId = Meteor.userId();
 
     if (doc && !isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
   titleArgs() {
