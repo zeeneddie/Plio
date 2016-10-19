@@ -19,6 +19,7 @@ import {
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { AnalysisTitles } from '/imports/api/constants.js';
 
 Template.Risk_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData'],
@@ -43,7 +44,8 @@ Template.Risk_Card_Edit_Main.viewmodel({
       updateOfStandards,
       magnitude,
       methodRefs: this.methodRefs,
-      ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod)
+      ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod),
+      RCALabel: AnalysisTitles.riskAnalysis
     };
   },
   methodRefs() {
