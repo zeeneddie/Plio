@@ -53,7 +53,6 @@ Template.Departments_Edit.viewmodel({
     };
 
     this.parent().update({ options }, () => {
-      console.log(Tracker.currentComputation)
       // Need a timeout to wait on render
       Meteor.setTimeout(() => {
         this.expandCollapsed(_id, () => {
