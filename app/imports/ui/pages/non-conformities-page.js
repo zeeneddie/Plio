@@ -15,8 +15,7 @@ Template.NC_Page.viewmodel({
       const NCId = this.NCId();
 
       if (!organizationId || !NCId) return;
-      const p1 = performance.now();
-
+      
       const _subHandlers = [
         DocumentCardSubs.subscribe('nonConformityCard', { organizationId, _id: NCId }, {
           onReady() {

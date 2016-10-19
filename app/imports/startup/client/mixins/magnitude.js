@@ -1,9 +1,9 @@
-import { ProblemMagnitudes} from '/imports/share/constants.js';
+import { ProblemMagnitudes} from '/imports/share/constants';
+import { capitalize } from '/imports/share/helpers';
 
 export default {
   _magnitude() {
-    this.load({ mixin: 'utils' });
     return _.values(ProblemMagnitudes)
-      .map(type => ({ name: this.capitalize(type), value: type }));
+      .map(type => ({ name: capitalize(type), value: type }));
   }
 };

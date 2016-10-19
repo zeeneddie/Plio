@@ -24,9 +24,9 @@ Template.StandardsHeader.viewmodel({
     return this._getStandardByQuery({ _id: this.standardId() });
   },
   onSelectFilter(value, onSelect) {
-    const list = Object.assign({}, ViewModel.findOne('StandardsList'));
-
     onSelect();
+
+    const list = Object.assign({}, ViewModel.findOne('StandardsList'));
 
     if (list) {
       invoke(list, 'handleRoute');

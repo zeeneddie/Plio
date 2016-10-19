@@ -52,7 +52,12 @@ const getNCLayoutPub = (userId, serialNumber, isDeleted) => {
         const query = { organizationId, isDeleted };
         const options = { fields: NonConformitiesListProjection };
         return NonConformities.find(query, options);
-      }
+      },
+      children: [
+        {
+          find: getDepartmentsCursorByIds
+        }
+      ]
     }
   ]
 };
@@ -204,7 +209,7 @@ Meteor.publish('nonConformitiesNotViewedCount', function(counterName, organizati
     isDeleted: { $in: [false, null] }
   };
 
-  if(currentOrgUserJoinedAt){
+  if (currentOrgUserJoinedAt){
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 
