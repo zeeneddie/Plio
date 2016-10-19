@@ -6,6 +6,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/non-conformities/methods.js';
+import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
@@ -62,6 +63,7 @@ Template.NC_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
+      guideHtml: NonConformitiesHelp.nonConformity,
       _id: this.NC() && this.NC()._id
     });
   },

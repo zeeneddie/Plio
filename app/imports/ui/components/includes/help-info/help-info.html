@@ -1,0 +1,11 @@
+<template name="HelpInfo">
+  <button type="button" class="btn btn-link btn-icon guidance-panel-open"
+    {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <i class="fa fa-question-circle"></i>
+  </button>
+  <div class="collapse" {{b "ref: collapse"}}>
+    <div class="card-block">
+      <div {{b "html: guideHtml"}}></div>
+    </div>
+  </div>
+</template>
