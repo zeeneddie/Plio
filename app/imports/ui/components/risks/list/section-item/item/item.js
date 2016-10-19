@@ -57,6 +57,6 @@ Template.Risks_Item.viewmodel({
   updateViewedBy(cb) {
     const _id = this._id();
 
-    updateViewedBy.call({ _id }, cb);
+    Meteor.defer(() => updateViewedBy.call({ _id }, cb));
   }
 });

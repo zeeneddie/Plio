@@ -74,6 +74,6 @@ Template.Standards_Item_Read.viewmodel({
   updateViewedBy(cb) {
     const _id = this._id();
 
-    updateViewedBy.call({ _id }, handleMethodResult(cb));
+    Meteor.defer(() => updateViewedBy.call({ _id }, handleMethodResult(cb)));
   }
 });

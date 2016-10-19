@@ -73,6 +73,6 @@ Template.NC_Item.viewmodel({
   updateViewedBy() {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    Meteor.defer(() => updateViewedBy.call({ _id }));
   }
 });
