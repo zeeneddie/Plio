@@ -14,7 +14,7 @@ import {
 } from '/imports/share/schemas/organization-schema';
 import {
   WorkflowTypes, NCTypes, UserRoles,
-  UserMembership, ProblemGuidelineTypes, RKTypes, InvitationStatuses
+  UserMembership, ProblemMagnitudes, RKTypes, InvitationStatuses
 } from '/imports/share/constants';
 import {
   IdSchema, TimePeriodSchema,
@@ -43,7 +43,7 @@ const nameSchema = new SimpleSchema({
 const problemGuidelineTypeSchema = new SimpleSchema({
   type: {
     type: String,
-    allowedValues: _.values(ProblemGuidelineTypes)
+    allowedValues: _.values(ProblemMagnitudes)
   }
 });
 

@@ -7,6 +7,7 @@ import { Actions } from './collections/actions.js';
 import { NonConformities } from './collections/non-conformities.js';
 import { Risks } from './collections/risks.js';
 import { Standards } from './collections/standards.js';
+import { Organizations } from './collections/organizations';
 
 
 export const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
@@ -26,7 +27,8 @@ export const getCollectionByName = (colName) => {
     [CollectionNames.ACTIONS]: Actions,
     [CollectionNames.NCS]: NonConformities,
     [CollectionNames.RISKS]: Risks,
-    [CollectionNames.STANDARDS]: Standards
+    [CollectionNames.STANDARDS]: Standards,
+    [CollectionNames.ORGANIZATIONS]: Organizations
   };
 
   return collections[colName];

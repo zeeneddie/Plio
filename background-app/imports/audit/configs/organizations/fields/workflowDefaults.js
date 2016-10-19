@@ -7,7 +7,15 @@ const getWorkflowDefaultsConfig = (field, label) => {
   return [
     {
       field: `workflowDefaults.${field}.workflowType`,
-      logs: [],
+      logs: [
+        {
+          message: {
+            [ChangesKinds.FIELD_CHANGED]:
+              `Workflow type for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
+      ],
       notifications: [
         {
           text: {
@@ -36,7 +44,15 @@ const getWorkflowDefaultsConfig = (field, label) => {
 
     {
       field: `workflowDefaults.${field}.stepTime.timeUnit`,
-      logs: [],
+      logs: [
+        {
+          message: {
+            [ChangesKinds.FIELD_CHANGED]:
+              `Default step time for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
+      ],
       notifications: [
         {
           text: {
@@ -66,7 +82,15 @@ const getWorkflowDefaultsConfig = (field, label) => {
 
     {
       field: `workflowDefaults.${field}.stepTime.timeValue`,
-      logs: [],
+      logs: [
+        {
+          message: {
+            [ChangesKinds.FIELD_CHANGED]:
+              `Default step time for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
+      ],
       notifications: [
         {
           text: {

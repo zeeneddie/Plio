@@ -6,12 +6,27 @@ import { getReceivers } from '../helpers.js';
 const getGuidelinesConfig = (field, guidelineType, label) => {
   return {
     field: `${field}.${guidelineType}`,
-    logs: [],
+    logs: [
+      {
+        message: {
+          [ChangesKinds.FIELD_ADDED]:
+            `Guidelines for ${label} set`,
+          [ChangesKinds.FIELD_CHANGED]:
+            `Guidelines for ${label} changed`,
+          [ChangesKinds.FIELD_REMOVED]:
+            `Guidelines for ${label} removed`
+        }
+      }
+    ],
     notifications: [
       {
         text: {
+          [ChangesKinds.FIELD_ADDED]:
+            `{{userName}} set guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
           [ChangesKinds.FIELD_CHANGED]:
-            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
+            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
+          [ChangesKinds.FIELD_REMOVED]:
+            `{{userName}} removed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
         }
       }
     ],

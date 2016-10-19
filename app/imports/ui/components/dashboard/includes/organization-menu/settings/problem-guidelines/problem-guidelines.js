@@ -15,7 +15,7 @@ Template.OrgSettings_ProblemGuidelines.viewmodel({
     return this.onChange.bind(this);
   },
   onChange(viewModel) {
-    const type = viewModel.templateInstance.data.type;
+    const type = viewModel.templateInstance.data.magnitude;
     const { text } = viewModel.getData();
     const _id = this.organizationId();
 
