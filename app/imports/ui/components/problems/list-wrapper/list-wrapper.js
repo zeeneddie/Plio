@@ -13,6 +13,15 @@ Template.Problems_ListWrapper.viewmodel({
       ...inspire(['statuses', 'departments', 'deleted', '_getSearchQuery', '_getSearchOptions'], this)
     };
   },
+  _getMainQuery() {
+    return {
+      ...this._getSearchQuery(),
+      organizationId: this.organizationId(),
+      isDeleted: {
+        $in: [null, false]
+      }
+    };
+  },
   _getSearchQuery() {
      return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
    },
@@ -23,7 +32,7 @@ Template.Problems_ListWrapper.viewmodel({
   },
   statuses() {
     const mapper = (status) => {
-      const query = { status, ...this._getSearchQuery() };
+      const query = { ...this._getMainQuery(), status };
       const items = this.collection().find(query, this._getSearchOptions()).fetch();
 
       return { status, items };
@@ -34,10 +43,7 @@ Template.Problems_ListWrapper.viewmodel({
   },
   departments() {
     const organizationId = this.organizationId();
-    const mainQuery = {
-      organizationId,
-      ...this._getSearchQuery()
-    };
+    const mainQuery = this._getMainQuery();
 
     const mapper = (department) => {
       const query = {
@@ -78,7 +84,7 @@ Template.Problems_ListWrapper.viewmodel({
       .filter(lengthItems);
   },
   deleted() {
-    const query = { ...this._getSearchQuery(), isDeleted: true };
+    const query = { ...this._getMainQuery(), isDeleted: true };
     const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
     return this.collection().find(query, options).fetch();
   }
