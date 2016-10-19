@@ -1,2 +1,2 @@
-//import './edit';
+import './edit';
 import './read';
