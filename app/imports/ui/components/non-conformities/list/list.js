@@ -20,7 +20,7 @@ Template.NC_List.viewmodel({
     'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
   ],
   onRendered() {
-    this.handleRoute();
+    Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {
     const NCId = this.NCId();

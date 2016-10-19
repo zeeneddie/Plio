@@ -15,7 +15,7 @@ Template.StandardsList.viewmodel({
   }],
   hideRTextOnExpand: true,
   onRendered() {
-    this.handleRoute();
+    Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {
     const standardId = this.standardId();
