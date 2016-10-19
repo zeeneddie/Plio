@@ -5,11 +5,26 @@ import { getReceivers } from '../helpers.js';
 
 export default {
   field: 'name',
-  logs: [],
+  logs: [
+    {
+      message: {
+        [ChangesKinds.FIELD_ADDED]:
+          'Name set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Name changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Name removed'
+      }
+    }
+  ],
   notifications: [
     {
       text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
           '{{userName}} changed name of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
       }
     }

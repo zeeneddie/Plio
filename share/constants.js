@@ -166,12 +166,6 @@ export const PhoneTypes = {
   MOBILE: 'Mobile'
 };
 
-export const ProblemGuidelineTypes = {
-  MINOR: 'minor',
-  MAJOR: 'major',
-  CRITICAL: 'critical'
-};
-
 export const ProblemMagnitudes = {
   MINOR: 'minor',
   MAJOR: 'major',
@@ -424,14 +418,14 @@ export const OrganizationDefaults = {
     }
   },
   ncGuidelines: {
-    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.NON_CONFORMITY),
-    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.NON_CONFORMITY),
-    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.NON_CONFORMITY)
+    minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.NON_CONFORMITY),
+    major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY)
   },
   rkGuidelines: {
-    minor: getDefaultGuideline(ProblemGuidelineTypes.MINOR, ProblemTypes.RISK),
-    major: getDefaultGuideline(ProblemGuidelineTypes.MAJOR, ProblemTypes.RISK),
-    critical: getDefaultGuideline(ProblemGuidelineTypes.CRITICAL, ProblemTypes.RISK)
+    minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),
+    major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.RISK),
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK)
   },
   rkScoringGuidelines: defaultRiskScoringGuideline
 };
