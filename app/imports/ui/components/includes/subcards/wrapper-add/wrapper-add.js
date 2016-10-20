@@ -10,7 +10,7 @@ import { inspire } from '/imports/api/helpers.js';
    renderContentOnInitial: true,
    addText: 'Add a new document',
    wrapperArgs() {
-     return this.data(['_lText', '_rText', 'renderContentOnInitial']);
+     return this.data(['_lText', '_rText', 'renderContentOnInitial', 'helpText']);
    },
    add() {
     this.onAdd(this.addForm.bind(this));

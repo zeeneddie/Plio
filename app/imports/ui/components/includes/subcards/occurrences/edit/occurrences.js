@@ -16,6 +16,7 @@ Template.Subcards_Occurrences_Edit.viewmodel({
       renderContentOnInitial: !(items.length > 15),
       _lText: 'Occurrences',
       _rText: items.length,
+      helpText: 'owowowowowowowowo wowowo wo owo',
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this)
     };
