@@ -53,13 +53,13 @@ Template.Departments_Edit.viewmodel({
     };
 
     this.parent().update({ options }, () => {
-      // Need a timeout to wait on render
-      Meteor.setTimeout(() => {
+      // need an afterFlush to wait on render
+      Tracker.afterFlush(() => {
         this.expandCollapsed(_id, () => {
           const listItems = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, _id));
           listItems.map(vm => vm.toggleCollapse());
         });
-      }, 1000);
+      });
     });
   },
   onRemoveCb() {

@@ -26,11 +26,13 @@ Template.StandardsHeader.viewmodel({
   onSelectFilter(value, onSelect) {
     onSelect();
 
-    const list = Object.assign({}, ViewModel.findOne('StandardsList'));
+    Tracker.afterFlush(() => {
+      const list = Object.assign({}, ViewModel.findOne('StandardsList'));
 
-    if (list) {
-      invoke(list, 'handleRoute');
-    }
+      if (list) {
+        invoke(list, 'handleRoute');
+      }
+    });
   },
   onNavigate(e) {
     const mobileWidth = isMobileRes();

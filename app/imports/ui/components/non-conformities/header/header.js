@@ -19,12 +19,14 @@ Template.NC_Header.viewmodel({
   onSelectFilter(value, onSelect) {
     onSelect();
 
-    Meteor.defer(() => {
-      const list = Object.assign({}, ViewModel.findOne('NC_List'));
+    Tracker.afterFlush(() => {
+      Meteor.defer(() => {
+        const list = Object.assign({}, ViewModel.findOne('NC_List'));
 
-      if (list) {
-        invoke(list, 'handleRoute');
-      }
+        if (list) {
+          invoke(list, 'handleRoute');
+        }
+      });
     });
   },
 });
