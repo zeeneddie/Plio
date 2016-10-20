@@ -18,7 +18,7 @@ Template.Risks_Page.viewmodel({
       const _subHandlers = [
         DocumentCardSubs.subscribe('riskCard', { organizationId, _id: riskId }, {
           onReady() {
-            console.log('ready');
+            BackgroundSubs.subscribe('risksDeps', organizationId);
           }
         })
       ];

@@ -1,19 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { Standards } from '/imports/share/collections/standards.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
+import { Risks } from '/imports/share/collections/risks';
+import { Standards } from '/imports/share/collections/standards';
 import { RiskTypes } from '/imports/share/collections/risk-types';
-import { isOrgMember } from '../../checkers.js';
-import { Files } from '/imports/share/collections/files.js';
-import { RisksListProjection } from '/imports/api/constants.js';
-import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers, toObjFind } from '../../helpers';
+import { isOrgMember } from '../../checkers';
+import { Files } from '/imports/share/collections/files';
+import { Departments } from '/imports/share/collections/departments';
+import { RisksListProjection, DepartmentsListProjection } from '/imports/api/constants';
+import Counter from '../../counter/server';
+import {
+  getPublishCompositeOrganizationUsers,
+  toObjFind,
+  makeOptionsFields,
+  getCursorOfNonDeletedWithFields
+} from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getStandardsCursorByIds } from '../../standards/utils';
 import { getLessonsCursorByDocumentId } from '../../lessons/utils';
-import { getActionsCursorByLinkedDoc } from '../../actions/utils';
-import { createProblemsTree } from '../../problems/utils';
+import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
+import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
+import { ActionTypes } from '/imports/share/constants';
 
 const getRiskFiles = (risk) => {
   let fileIds = risk.fileIds || [];
@@ -85,6 +92,42 @@ Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
   return publishTree;
 });
 
+Meteor.publish('risksDeps', function(organizationId) {
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const actionsQuery = {
+    organizationId,
+    type: {
+      $in: [
+        ActionTypes.CORRECTIVE_ACTION,
+        ActionTypes.PREVENTATIVE_ACTION
+      ]
+    }
+  };
+
+  const standardsFields = {
+    title: 1,
+    status: 1,
+    organizationId: 1
+  };
+
+  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const actions = getActionsWithLimitedFields(actionsQuery);
+  const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
+  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
+
+  return [
+    departments,
+    actions,
+    NCs,
+    standards
+  ]
+});
+
 Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
   return {
     find() {
@@ -98,11 +141,11 @@ Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { 
 
       return Risks.find({ standardId, isDeleted });
     },
-    children: [{
-      find(risk) {
-        return getRiskFiles(risk);
+    children: [
+      {
+        find: getRiskFiles
       }
-    }]
+    ]
   }
 });
 
