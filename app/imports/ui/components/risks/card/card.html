@@ -8,9 +8,9 @@
           doc=this
           docType="risk"
           isReady=isReady
-          onRestore=onRestoreCb
-          onDelete=onDeleteCb
-          onOpenEditModal=onOpenEditModalCb}}
+          onRestore=(callback 'restore')
+          onDelete=(callback 'delete')
+          onOpenEditModal=(callback 'openEditModal')}}
 
           <div class="list-group">
 
@@ -30,7 +30,9 @@
               </div>
             {{/if}}
 
-            {{> Fields_Standards_Read standardsIds=this.standardsIds}}
+            {{#if isReady}}
+              {{> Fields_Standards_Read standardsIds=this.standardsIds}}
+            {{/if}}
 
             <div class="row">
               <div class="col-sm-6">
@@ -66,13 +68,15 @@
               {{/with}}
             </div>
 
-            <div class="row">
-              <div class="col-sm-12">
-                {{#with departmentsIds}}
-                  {{> Departments_Read departmentsIds=this}}
-                {{/with}}
+            {{#if isReady}}
+              <div class="row">
+                <div class="col-sm-12">
+                  {{#with departmentsIds}}
+                    {{> Departments_Read departmentsIds=this}}
+                  {{/with}}
+                </div>
               </div>
-            </div>
+            {{/if}}
 
           </div>
 
@@ -94,17 +98,23 @@
               improvementPlan=this.improvementPlan
               label="Treatment plan"}}
 
-          {{> Subcards_Actions_Read
-              type=ActionTypes.CORRECTIVE_ACTION
-              documentId=this._id}}
+          {{#if isReady}}
+            {{> Subcards_Actions_Read
+                type=ActionTypes.CORRECTIVE_ACTION
+                documentId=this._id}}
 
-          {{> Subcards_Actions_Read
-              type=ActionTypes.PREVENTATIVE_ACTION
-              documentId=this._id}}
+            {{> Subcards_Actions_Read
+                type=ActionTypes.PREVENTATIVE_ACTION
+                documentId=this._id}}
 
-          {{> Subcards_LessonsLearned_Read documentId=this._id}}
+            {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+            {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+          {{else}}
+            <div class="m-t-3">
+              {{> PreloaderPage size=1}}
+            </div>
+          {{/if}}
         {{/Card_Read}}
       {{else}}
         {{> PreloaderPage}}

@@ -37,18 +37,12 @@ Template.NC_Card_Read.viewmodel({
     const currency = this.organization() && this.organization().currency;
     return currency ? this.getCurrencySymbol(currency) + cost : '';
   },
-  onOpenEditModalCb() {
-    return this.openEditModal.bind(this);
-  },
   openEditModal() {
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
       _id: this.NC() && this.NC()._id
     });
-  },
-  onRestoreCb() {
-    return this.restore.bind(this);
   },
   restore({ _id, isDeleted, title }, cb = () => {}) {
     if (!isDeleted) return;
@@ -64,9 +58,6 @@ Template.NC_Card_Read.viewmodel({
     };
 
     restore.call({ _id }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
   },
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;

@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import {
   update,

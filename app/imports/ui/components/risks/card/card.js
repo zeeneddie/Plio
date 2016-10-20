@@ -9,7 +9,6 @@ import { restore, remove } from '/imports/api/risks/methods.js';
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
-  _subHandlers: [],
   isReady: false,
   RiskRCALabel: AnalysisTitles.riskAnalysis,
   ActionTypes() {
@@ -31,18 +30,12 @@ Template.Risks_Card_Read.viewmodel({
     const type = RiskTypes.findOne({ _id: risk.typeId });
     return type || UncategorizedTypeSection;
   },
-  onOpenEditModalCb() {
-    return this.openEditModal.bind(this);
-  },
   openEditModal() {
     this.modal().open({
       _title: 'Risk',
       template: 'Risks_Card_Edit',
       _id: this.risk() && this.risk()._id
     });
-  },
-  onRestoreCb() {
-    return this.restore.bind(this);
   },
   restore({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
@@ -58,9 +51,6 @@ Template.Risks_Card_Read.viewmodel({
     };
 
     restore.call({ _id }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
   },
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;

@@ -12,9 +12,8 @@ Template.registerHelper('callback', function(param, obj) {
   return () => obj[param].bind(instance);
 });
 
-Template.registerHelper('log', console.log);
-
 const helpers = {
+  log: console.log,
   not: val => !val,
   eq: (val1, val2) => Object.is(val1, val2),
   or: (...values) => values.reduce((prev, cur) => prev || cur),

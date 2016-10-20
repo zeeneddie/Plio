@@ -44,12 +44,9 @@ Template.NC_Item.viewmodel({
     };
   },
   isNew() {
-    const filter = { _id: this._id() };
-    const options = { fields: { createdAt: 1, viewedBy: 1 } };
-    const doc = this._getNCByQuery(filter, options);
     const userId = Meteor.userId();
 
-    return doc && this.isNewDoc({ doc, userId });
+    return this.isNewDoc({ userId, doc: this.data() });
   },
   renderTitle() {
     const count = this.occurrences().count();
