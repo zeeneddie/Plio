@@ -99,6 +99,16 @@ export const isOrgOwner = (userId, organizationId) => {
   });
 };
 
+export const isPlioUser = (userId) => {
+  const adminOrg = Organizations.findOne({ isAdminOrg: true });
+
+  if(adminOrg === undefined) {
+    return false;
+  }
+
+  return _.find(adminOrg.users, user => user.userId === userId) !== undefined;
+}
+
 export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.findOne({
     ...selector,

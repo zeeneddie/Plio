@@ -17,6 +17,19 @@
             {{b "click: openOrgSettings"}}>
             Organization settings
           </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item org-settings-modal-link"
+            {{b "click: openCustomersSettings"}}>
+            Plio customers
+          </a>
+        {{/if}}
+
+        {{#if isPlioUser}}
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item org-settings-modal-link"
+              {{b "click: openCustomersSettings"}}>
+              Plio customers
+          </a>
         {{/if}}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item pointer" {{b "click: openCreateNewOrgModal"}}>Create new Plio organization</a>
