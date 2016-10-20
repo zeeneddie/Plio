@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set risk scoring guidelines in {{{docDesc}}}',
+          '{{userName}} set risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed risk scoring guidelines in {{{docDesc}}}',
+          '{{userName}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed risk scoring guidelines in {{{docDesc}}}'
+          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -34,6 +34,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

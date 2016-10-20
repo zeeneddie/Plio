@@ -24,11 +24,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}'
       },
       title: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}}'
+          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -37,6 +37,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       deleted: () => isDeleted.newValue
     };

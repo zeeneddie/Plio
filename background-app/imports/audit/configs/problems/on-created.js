@@ -9,10 +9,10 @@ export default {
       message: 'Document created',
     },
     {
-      message: '{{{docDesc}}} was linked to this document',
+      message: '{{{docName}}} was linked to this document',
       data({ newDoc }) {
         return _(newDoc.standardsIds.length).times(() => {
-          return { docDesc: this.docDescription(newDoc) };
+          return { docName: this.docName(newDoc) };
         });
       },
       logData({ newDoc: { standardsIds } }) {
@@ -27,10 +27,11 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} for {{{standardDesc}}}',
+      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
       data({ newDoc, user }) {
         const auditConfig = this;
         const docDesc = auditConfig.docDescription(newDoc);
+        const docName = auditConfig.docName(newDoc);
         const userName = getUserFullNameOrEmail(user);
 
         const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
@@ -38,7 +39,9 @@ export default {
         return standards.map((standard) => {
           return {
             standardDesc: StandardAuditConfig.docDescription(standard),
+            standardName: StandardAuditConfig.docName(standard),
             docDesc,
+            docName,
             userName
           };
         });

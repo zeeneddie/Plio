@@ -22,11 +22,11 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
       {
         text: {
           [ChangesKinds.FIELD_ADDED]:
-            `{{userName}} set guidelines for ${label} in {{{docDesc}}}`,
+            `{{userName}} set guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
           [ChangesKinds.FIELD_CHANGED]:
-            `{{userName}} changed guidelines for ${label} in {{{docDesc}}}`,
+            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
           [ChangesKinds.FIELD_REMOVED]:
-            `{{userName}} removed guidelines for ${label} in {{{docDesc}}}`
+            `{{userName}} removed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
         }
       }
     ],
@@ -35,6 +35,7 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
 
       return {
         docDesc: () => auditConfig.docDescription(newDoc),
+        docName: () => auditConfig.docName(newDoc),
         userName: () => getUserFullNameOrEmail(user)
       };
     },

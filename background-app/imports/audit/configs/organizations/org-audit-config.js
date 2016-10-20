@@ -36,8 +36,12 @@ export default OrgAuditConfig = {
     return _id;
   },
 
-  docDescription({ name }) {
-    return `"${name}" organization`;
+  docDescription(doc) {
+    return 'organization';
+  },
+
+  docName({ name }) {
+    return `"${name}"`;
   },
 
   docOrgId({ _id }) {

@@ -38,6 +38,13 @@ export default WorkItemAuditConfig = {
     return linkedDocAuditConfig.docDescription(linkedDoc);
   },
 
+  docName(doc) {
+    const linkedDoc = getLinkedDoc(doc);
+    const linkedDocAuditConfig = getLinkedDocAuditConfig(doc);
+
+    return linkedDocAuditConfig.docName(linkedDoc);
+  },
+
   docOrgId({ organizationId }) {
     return organizationId;
   },

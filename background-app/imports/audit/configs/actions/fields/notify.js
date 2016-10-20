@@ -16,16 +16,16 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added {{item}} to the notification list of {{{docDesc}}}',
+          '{{userName}} added {{item}} to the notification list of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed {{item}} from the notification list of {{{docDesc}}}'
+          '{{userName}} removed {{item}} from the notification list of {{{docDesc}}} {{{docName}}}'
       }
     },
     {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
         return kind === ITEM_ADDED;
       },
-      text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+      text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',
       emailTemplateData({ newDoc }) {
         return {
@@ -48,6 +48,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       item: () => getUserFullNameOrEmail(notify.item)
     };
