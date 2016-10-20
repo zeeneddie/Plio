@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} date set to "{{newValue}}"',
+          '{{{docName}}} date set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} date changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} date removed'
+          '{{{docName}}} date removed'
       },
       logData: getLogData
     }
@@ -25,7 +25,7 @@ export default {
     const orgId = () => auditConfig.docOrgId(newDoc);
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };

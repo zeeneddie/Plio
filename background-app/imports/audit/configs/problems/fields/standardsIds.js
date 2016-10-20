@@ -9,19 +9,19 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{standardDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{standardDesc}}}'
+        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{standardName}}}',
+        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{standardName}}}'
       }
     },
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{{docDesc}}} was linked to this document',
-        [ChangesKinds.ITEM_REMOVED]: '{{{docDesc}}} was unlinked from this document'
+        [ChangesKinds.ITEM_ADDED]: '{{{docName}}} was linked to this document',
+        [ChangesKinds.ITEM_REMOVED]: '{{{docName}}} was unlinked from this document'
       },
       data({ newDoc }) {
         const auditConfig = this;
 
-        return { docDesc: () => auditConfig.docDescription(newDoc) };
+        return { docName: () => auditConfig.docName(newDoc) };
       },
       logData({ diffs: { standardsIds } }) {
         const { item:standardId } = standardsIds;
@@ -37,20 +37,22 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} to {{{standardDesc}}}',
+          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{standardDesc}}} {{{standardName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} from {{{standardDesc}}}'
+          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{standardDesc}}} {{{standardName}}}'
       }
     }
   ],
   data({ diffs: { standardsIds }, newDoc, user }) {
     const auditConfig = this;
     const { item:standardId } = standardsIds;
-    const standard = () => Standards.findOne({ _id: standardId });
+    const standard = Standards.findOne({ _id: standardId });
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
-      standardDesc: () => StandardAuditConfig.docDescription(standard()),
+      docName: () => auditConfig.docName(newDoc),
+      standardDesc: () => StandardAuditConfig.docDescription(standard),
+      standardName: () => StandardAuditConfig.docName(standard),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

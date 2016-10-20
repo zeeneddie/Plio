@@ -21,7 +21,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
               `{{userName}} changed workflow type for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
           }
         }
       ],
@@ -33,6 +33,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
 
         return {
           docDesc: () => auditConfig.docDescription(newDoc),
+          docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => newValue,
           oldValue: () => oldValue
@@ -57,7 +58,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
               `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
           }
         }
       ],
@@ -70,6 +71,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
 
         return {
           docDesc: () => auditConfig.docDescription(newDoc),
+          docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${timeVal} ${newValue}`,
           oldValue: () => `${timeVal} ${oldValue}`
@@ -94,7 +96,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
               `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}}`
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
           }
         }
       ],
@@ -107,6 +109,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
 
         return {
           docDesc: () => auditConfig.docDescription(newDoc),
+          docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${newValue} ${timeUnit}`,
           oldValue: () => `${oldValue} ${timeUnit}`

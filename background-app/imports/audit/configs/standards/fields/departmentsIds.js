@@ -20,9 +20,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} to {{{departmentDesc}}}',
+          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} from {{{departmentDesc}}}'
+          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}'
       }
     }
   ],
@@ -33,6 +33,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       departmentDesc: () => `${department().name} department`,
       userName: () => getUserFullNameOrEmail(user)
     };
