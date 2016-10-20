@@ -27,8 +27,12 @@ import {
   getActionsCursorByLinkedDoc,
   getActionsWithLimitedFields
 } from '../../actions/utils';
-import { getStandardCursorByIds } from '../../standards/utils';
-import { getProblemsWithLimitedFields } from '../../problems/utils';
+import { getStandardsCursorByIds } from '../../standards/utils';
+import {
+  createProblemsTree,
+  getProblemsWithLimitedFields
+} from '../../problems/utils';
+import { getLessonsCursorByDocumentId } from '../../lessons/utils';
 
 
 const getNCOtherFiles = (nc) => {
@@ -86,17 +90,23 @@ Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
     return this.ready();
   }
 
-  return {
-    ...toObjFind(() => NonConformities.find({ _id, organizationId })),
+  const tree = createProblemsTree(() => NonConformities.find({ _id, organizationId }));
+
+  const cursorGetters = [
+    getNCOtherFiles,
+    getLessonsCursorByDocumentId,
+    getStandardsCursorByIds({ title: 1 }),
+    ({ _id: nonConformityId }) => Occurrences.find({ nonConformityId }),
+  ];
+
+  const publishTree = Object.assign({}, tree, {
     children: [
-      getDepartmentsCursorByIds,
-      getNCOtherFiles,
-      getStandardCursorByIds({ title: 1 }),
-      ({ _id: documentId }) => LessonsLearned.find({ documentId }),
-      getActionsCursorByLinkedDoc({}),
-      ({ _id: nonConformityId }) => Occurrences.find({ nonConformityId }),
-    ].map(toObjFind)
-  };
+      ...tree.children,
+      ...cursorGetters.map(toObjFind)
+    ]
+  });
+
+  return publishTree;
 });
 
 Meteor.publish('nonConformitiesDeps', function(organizationId) {

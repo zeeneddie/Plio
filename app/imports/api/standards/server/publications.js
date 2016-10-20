@@ -26,7 +26,7 @@ import {
 import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
 import property from 'lodash.property';
-import { check, Match } from 'meteor/check'; 
+import { check, Match } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
@@ -38,7 +38,11 @@ import {
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
 import { getWorkItemsCursorByIdsWithLimitedFields } from '../../work-items/utils';
-import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
+import {
+  getProblemsByStandardIds,
+  createProblemsTree,
+  getProblemsWithLimitedFields
+} from '../../problems/utils';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -128,7 +132,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
       getStandardFiles,
       ({ _id }) => LessonsLearned.find({ documentId: _id })
     ].map(toObjFind)
-     .concat(createProblemsTree(NonConformities))
+     .concat(createProblemsTree(getProblemsByStandardIds(NonConformities)))
   }
 });
 

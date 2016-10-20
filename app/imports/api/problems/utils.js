@@ -6,8 +6,8 @@ import curry from 'lodash.curry';
 export const getProblemsByStandardIds = collection => ({ _id: standardsIds }) =>
   getCursorOfNonDeletedWithFields({ standardsIds }, {}, collection);
 
-export const createProblemsTree = (collection) => ({
-  find: getProblemsByStandardIds(collection),
+export const createProblemsTree = (getInitial) => ({
+  find: getInitial,
   children: [
     {
       find: getActionsCursorByLinkedDoc({}),

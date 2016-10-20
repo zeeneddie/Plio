@@ -12,22 +12,6 @@ Template.Risks_Card_Read.viewmodel({
   _subHandlers: [],
   isReady: false,
   RiskRCALabel: AnalysisTitles.riskAnalysis,
-
-  onCreated(template) {
-    template.autorun(() => {
-      const _id = this._id();
-      const organizationId = this.organizationId();
-      const _subHandlers = [];
-      if (_id && organizationId) {
-        _subHandlers.push(DocumentCardSubs.subscribe('riskCard', { _id, organizationId }));
-        this._subHandlers(_subHandlers);
-      }
-    });
-
-    template.autorun(() => {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    });
-  },
   ActionTypes() {
     return ActionTypes;
   },

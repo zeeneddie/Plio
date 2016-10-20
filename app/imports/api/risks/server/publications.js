@@ -8,7 +8,12 @@ import { isOrgMember } from '../../checkers.js';
 import { Files } from '/imports/share/collections/files.js';
 import { RisksListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
+import { getPublishCompositeOrganizationUsers, toObjFind } from '../../helpers';
+import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getStandardsCursorByIds } from '../../standards/utils';
+import { getLessonsCursorByDocumentId } from '../../lessons/utils';
+import { getActionsCursorByLinkedDoc } from '../../actions/utils';
+import { createProblemsTree } from '../../problems/utils';
 
 const getRiskFiles = (risk) => {
   let fileIds = risk.fileIds || [];
@@ -30,7 +35,12 @@ const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
       const options = { fields: RisksListProjection };
 
       return Risks.find(query, options);
-    }
+    },
+    children: [
+      {
+        find: getDepartmentsCursorByIds
+      }
+    ]
   }
 ];
 
@@ -51,36 +61,28 @@ Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in:
   }
 });
 
-Meteor.publishComposite('riskCard', function ({ _id, organizationId }) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
+  const userId = this.userId;
 
-      return Risks.find({ _id, organizationId });
-    },
-    children: [{
-      find(risk) {
-        return getRiskFiles(risk);
-      }
-    }, {
-      find(risk) {
-        return Standards.find({ _id: risk.standardsIds }, {
-          fileds: { title: 1 }
-        });
-      }
-    }, {
-      find({ _id }) {
-        return LessonsLearned.find({ documentId: _id });
-      }
-    }, {
-      find({ _id }) {
-        return Actions.find({ 'linkedTo.documentId': _id });
-      }
-    }]
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
   }
+
+  const tree = createProblemsTree(() => Risks.find({ _id, organizationId }));
+  const cursorGetters = [
+    getRiskFiles,
+    getLessonsCursorByDocumentId,
+    getStandardsCursorByIds({ title: 1 }),
+  ];
+
+  const publishTree = Object.assign({}, tree, {
+    children: [
+      ...tree.children,
+      ...cursorGetters.map(toObjFind)
+    ]
+  });
+
+  return publishTree;
 });
 
 Meteor.publishComposite('risksByStandardId', function(standardId, isDeleted = { $in: [null, false] }) {
