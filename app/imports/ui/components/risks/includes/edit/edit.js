@@ -29,7 +29,7 @@ import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.Risks_Card_Edit.viewmodel({
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router', 'collapsing'],
   RiskRCALabel: AnalysisTitles.riskAnalysis,
 
   risk() {
@@ -103,9 +103,27 @@ Template.Risks_Card_Edit.viewmodel({
           swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
 
           this.modal().close();
+
+          this.redirect();
         });
       }
     );
+  },
+  redirect() {
+    const list = Object.assign({}, ViewModel.findOne('Risks_List'));
+
+    if (list) {
+      const { first } = Object.assign({}, invoke(list, '_findRiskForFilter'));
+
+      if (first) {
+        const { _id } = first;
+
+        Meteor.setTimeout(() => {
+          this.goToRisk(_id);
+          this.expandCollapsed(_id);
+        });
+      }
+    }
   },
   showRootCauseAnalysis() {
     return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);

@@ -23,9 +23,7 @@ Template.NC_Header.viewmodel({
       Meteor.defer(() => {
         const list = Object.assign({}, ViewModel.findOne('NC_List'));
 
-        if (list) {
-          invoke(list, 'handleRoute');
-        }
+        !!list && invoke(list, 'handleRoute');
       });
     });
   },
