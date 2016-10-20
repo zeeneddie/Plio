@@ -69,7 +69,7 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
     if (doc.areStandardsUpdated() && !action.verified()) {
@@ -90,9 +90,6 @@ export default {
   },
 
   unlinkDocument({ _id, documentId, documentType }) {
-    const oldAction = this.collection.findOne({ _id });
-    const oldWorkflow = oldAction.getWorkflowType();
-
     const ret = this.collection.update({
       _id
     }, {
@@ -104,8 +101,7 @@ export default {
     const newAction = this.collection.findOne({ _id });
     const newWorkflow = newAction.getWorkflowType();
 
-    if ((newWorkflow !== oldWorkflow)
-          && (newWorkflow === WorkflowTypes.THREE_STEP)) {
+    if (newWorkflow === WorkflowTypes.THREE_STEP) {
       this.collection.update({ _id }, {
         $unset: {
           toBeVerifiedBy: '',
@@ -113,7 +109,7 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
     return ret;
@@ -281,11 +277,27 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    return this._service.remove({ _id, deletedBy });
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
   },
 
   restore({ _id }) {
-    return this._service.restore({ _id });
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.restore({ _id, onRestore });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   }
 
 };
