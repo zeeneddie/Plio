@@ -16,33 +16,27 @@ Template.Risks_List.viewmodel({
     'organization', 'modal', 'risk', 'problemsStatus',
     'collapsing', 'router', 'utils'
   ],
-  autorun() {
-    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const riskId = this.riskId();
-      const { result:contains, first:defaultDoc } = this._findRiskForFilter(riskId);
+  onRendered() {
+    Meteor.defer(() => this.handleRoute());
+  },
+  handleRoute() {
+    const riskId = this.riskId();
+    const { result:contains, first:defaultDoc } = this._findRiskForFilter(riskId);
 
-      if (!contains) {
-        if (defaultDoc) {
-          const { _id } = defaultDoc;
-          Meteor.setTimeout(() => {
-            this.goToRisk(_id);
-            this.expandCollapsed(_id);
-          }, 0);
-        } else {
-          Meteor.setTimeout(() => {
-            this.goToRisks();
-          }, 0);
-        }
+    if (!contains) {
+      if (defaultDoc) {
+        const { _id } = defaultDoc;
+
+        Meteor.setTimeout(() => {
+          this.goToRisk(_id);
+          this.expandCollapsed(_id);
+        }, 0);
       } else {
-        this.expandCollapsed(riskId);
+        Meteor.setTimeout(() => this.goToRisks(), 0);
       }
     }
   },
   _findRiskForFilter(_id) {
-    const { types, statuses, departments, deleted } = inspire(
-      ['types', 'statuses', 'departments', 'deleted'],
-      this
-    );
     const finder = findById(_id);
     const results = curry((transformer, array) => {
       const items = transformer(array);
@@ -56,15 +50,19 @@ Template.Risks_List.viewmodel({
 
     switch(this.activeRiskFilterId()) {
       case 1:
+        const types = this.types();
         return resulstsFromItems(types);
         break;
       case 2:
+        const statuses = this.statuses();
         return resulstsFromItems(statuses);
         break;
       case 3:
+        const departments = this.departments();
         return resulstsFromItems(departments);
         break;
       case 4:
+        const deleted = this.deleted();
         return results(_.identity, deleted);
         break;
       default:
