@@ -208,6 +208,8 @@ $font_2: sans-serif;
 .modal .quill {
   &.ql-expanded {
     position: absolute;
+    overflow: hidden;
+
     .rich-text-controls {
       border-top: none;
       .btn {
