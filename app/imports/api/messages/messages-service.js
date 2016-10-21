@@ -1,4 +1,4 @@
-import { Messages } from './messages.js';
+import { Messages } from '/imports/share/collections/messages.js';
 
 export default {
 	collection: Messages,

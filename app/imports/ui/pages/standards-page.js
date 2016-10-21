@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { DiscussionSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
 
 Template.StandardsPage.viewmodel({
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],

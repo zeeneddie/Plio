@@ -1,12 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { NonConformities } from '../non-conformities.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { Files } from '/imports/api/files/files.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Files } from '/imports/share/collections/files.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { isOrgMember } from '../../checkers.js';
 import { NonConformitiesListProjection } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';

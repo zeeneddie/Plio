@@ -1,4 +1,4 @@
-import { Organizations } from './organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 /**
  * Get the date of joining the user to the organisation:

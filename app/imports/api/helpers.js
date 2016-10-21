@@ -7,169 +7,57 @@ import Handlebars from 'handlebars';
 import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 
-import { CollectionNames, DocumentTypes } from './constants.js';
-import { Actions } from './actions/actions.js';
-import { NonConformities } from './non-conformities/non-conformities.js';
-import { Risks } from './risks/risks.js';
-import { Standards } from './standards/standards.js';
-import { Organizations } from './organizations/organizations.js';
-import { ProblemMagnitudes } from '/imports/api/constants.js';
+import {
+  AvatarPlaceholders,
+  CollectionNames,
+  DocumentTypes,
+  ProblemMagnitudes
+} from '/imports/share/constants.js';
+import { getCollectionByDocType } from '/imports/share/helpers.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
 
+
 const { compose } = _;
 
-const getDocumentCollectionByType = (type) => {
-  if (type === DocumentTypes.NON_CONFORMITY) {
-    return NonConformities;
-  } else if (type === DocumentTypes.RISK) {
-    return Risks;
-  } else if (type === DocumentTypes.STANDARD) {
-    return Standards;
-  }
+export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
-  return false;
-};
+export const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
 
-const compareDates = (date1, date2) => {
-  if (!_.isDate(date1)) {
-    throw new Error(
-      'First argument of "compareDates" function must be of type Date'
-    );
-  }
+export const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
 
-  if (!_.isDate(date2)) {
-    throw new Error(
-      'Second argument of "compareDates" function must be of type Date'
-    );
-  }
+export const inject = anything => fn => fn(anything);
 
-  const utcDate1 = new Date(
-    date1.getTime() + (date1.getTimezoneOffset() * 60000)
-  );
+export const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
 
-  const utcDate2 = new Date(
-    date2.getTime() + (date2.getTimezoneOffset() * 60000)
-  );
+export const withUserId = fn => userId => fn({ userId });
 
-  if (utcDate1 > utcDate2) {
-    return 1;
-  } else if (utcDate1 === utcDate2) {
-    return 0;
-  } else if (utcDate1 < utcDate2) {
-    return -1;
-  }
-};
+export const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
 
-const getFormattedDate = (date, stringFormat) => {
-  return moment(date).format(stringFormat);
-};
-
-const getTzTargetDate = (targetDate, timezone) => {
-  return targetDate && moment.tz([
-    targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate()
-  ], timezone).toDate();
-};
-
-const handleMethodResult = (cb) => {
-  return (err, res) => {
-    if (err) {
-      toastr.error(err.reason);
-    }
-    if (_.isFunction(cb)) {
-      cb(err, res);
-    }
-  };
-};
-
-const getCollectionByName = (colName) => {
-  const collections = {
-    [CollectionNames.ACTIONS]: Actions,
-    [CollectionNames.NCS]: NonConformities,
-    [CollectionNames.RISKS]: Risks,
-    [CollectionNames.STANDARDS]: Standards
-  };
-
-  return collections[colName];
-};
-
-const getCollectionByDocType = (docType) => {
-  switch(docType) {
-    case DocumentTypes.STANDARD:
-      return Standards;
-
-    case DocumentTypes.NON_CONFORMITY:
-      return NonConformities;
-
-    case DocumentTypes.RISK:
-      return Risks;
-
-    case DocumentTypes.CORRECTIVE_ACTION:
-    case DocumentTypes.PREVENTATIVE_ACTION:
-    case DocumentTypes.RISK_CONTROL:
-      return Actions;
-
-    default:
-      return undefined;
-  }
-};
-
-export const getCollectionNameByDocType = (docType) => {
-  return {
-    [DocumentTypes.STANDARD]: CollectionNames.STANDARDS,
-    [DocumentTypes.NON_CONFORMITY]: CollectionNames.NCS,
-    [DocumentTypes.RISK]: CollectionNames.RISKS
-  }[docType];
-};
-
-export const getLinkedDoc = (documentId, documentType) => {
-  const collection = getCollectionByDocType(documentType);
-  return collection.findOne({ _id: documentId });
-};
-
-const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
-
-const chain = (...fns) => (...args) => fns.map(fn => fn(...args));
-
-const chainCheckers = (...fns) => args => doc => fns.map(fn => fn(args, doc));
-
-const inject = anything => fn => fn(anything);
-
-const injectCurry = (anything, fn) => compose(inject(anything), curry)(fn);
-
-const withUserId = fn => userId => fn({ userId });
-
-const mapArgsTo = (fn, mapper) => (...args) => fn(mapper(...args));
-
-const checkAndThrow = (predicate, error = '') => {
+export const checkAndThrow = (predicate, error = '') => {
   if (predicate) throw error;
 
   return true;
 };
 
-const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+export const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
-const deepExtend = (dest, src) => {
-  _(src).each((val, key) => {
-    if (_(val).isObject() && _(dest[key]).isObject()) {
-      deepExtend(dest[key], val);
-    } else {
-      dest[key] = val;
-    }
-  });
-};
+export const extractIds = (collection = []) => collection.map(property('_id'));
 
-const extractIds = (collection = []) => collection.map(property('_id'));
+export const not = expression => !expression;
 
-const not = expression => !expression;
-
-const mapByIndex = (value = {}, index = 0, arr = []) =>
+export const mapByIndex = (value = {}, index = 0, arr = []) =>
   Object.assign([], arr, { [index]: { ...arr[index], ...value } });
 
-const mapValues = curry((mapper, obj) =>
+export const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
 
-const inspire = curry((props, instance, ...args) =>
+export const inspire = curry((props, instance, ...args) =>
   flattenObjects(props.map((key, i) =>
     ({ [key]: invoke(instance, key, ...((arr = []) => arr[i] || [])(args)) }))));
 
@@ -186,15 +74,15 @@ const inspire = curry((props, instance, ...args) =>
 //
 // > { hello: 'world !! 1', today: 'is friday  wohoooooo!' }
 
-const invokeId = instance => invoke(instance, '_id');
+export const invokeId = instance => invoke(instance, '_id');
 
-const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+export const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
-const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
+export const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
 
-const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
+export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
-const $isScrolledElementVisible = (el, container) => {
+export const $isScrolledElementVisible = (el, container) => {
   const containerTop = $(container).offset().top;
   const containerBottom = containerTop + $(container).height();
   const elPosition = $(el).position();
@@ -202,57 +90,28 @@ const $isScrolledElementVisible = (el, container) => {
   const elemBottom = elPosition && elemTop + $(el).height();
 
   return ((elemBottom < containerBottom) && (elemTop >= containerTop));
-}
+};
 
-const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
+export const flattenMap = curry((mapper, array) => _.flatten(Object.assign([], array).map(mapper)));
 
-const findById = curry((_id, array) =>
+export const findById = curry((_id, array) =>
   Object.assign([], array).find((item = {}) => Object.is(item._id, _id)));
 
-const length = (array = []) => array.length;
+export const length = (array = []) => array.length;
 
-const propItems = property('items');
+export const propItems = property('items');
 
-const lengthItems = compose(length, propItems);
+export const lengthItems = compose(length, propItems);
 
-const propMessages = property('messages');
+export const propMessages = property('messages');
 
-const lengthMessages = compose(length, propMessages);
+export const lengthMessages = compose(length, propMessages);
 
-const flattenMapItems = flattenMap(propItems);
+export const flattenMapItems = flattenMap(propItems);
 
-const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
-  let magnitude = ProblemMagnitudes.MINOR;
+export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
 
-  // Select the highest magnitude among all linked documents
-  _.each(linkedTo, ({ documentId, documentType }) => {
-    const collection = getDocumentCollectionByType(documentType);
-    const doc = collection.findOne({ _id: documentId });
-    if (magnitude === ProblemMagnitudes.CRITICAL) {
-      return;
-    }
-
-    if (doc.magnitude === ProblemMagnitudes.MINOR) {
-      return;
-    }
-
-    magnitude = doc.magnitude;
-  });
-
-  const workflowStepTime = organization.workflowStepTime(magnitude);
-  const { timeValue, timeUnit } = workflowStepTime;
-  const date = moment()
-      .tz(organization.timezone)
-      .startOf('day')
-      .add(timeValue, timeUnit)
-      .toDate();
-
-  return date;
-}
-
-const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
-
-const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
+export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
 
 // useful with recompose's withProps:
 // const transformer = transsoc({
@@ -265,51 +124,40 @@ const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));
 //   userAvatar: 'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/2.png'
 // }
 // Object<key: path, value: func> -> obj -> obj
-const transsoc = curry((transformations, obj) => {
+export const transsoc = curry((transformations, obj) => {
   const keys = Object.keys(Object.assign({}, transformations));
   const result = keys.map(key => assoc(key, transformations[key](obj), obj));
 
   return _.pick(flattenObjects(result), ...keys);
 })
 
-const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
 
-const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
+export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
-const pickFromDiscussion = pickFrom('discussion');
+export const pickFromDiscussion = pickFrom('discussion');
 
-const omitC = curry((keys, obj) => _.omit(obj, ...keys));
+export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
-const getC = curry((path, obj) => get(obj, path));
+export const getC = curry((path, obj) => get(obj, path));
 
-const renderTemplate = (template, data = {}) => {
-  const compiledTemplate = Handlebars.compile(template);
-  return compiledTemplate(data);
+export const handleMethodResult = (cb) => {
+  return (err, res) => {
+    if (err) {
+      toastr.error(err.reason);
+    }
+    if (_.isFunction(cb)) {
+      cb(err, res);
+    }
+  };
 };
 
-const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
-
-const getTitlePrefix = (title) => {
-  let titlePrefix;
-  const matchedPrefixArray = title.match(/^[\d\.]+/g);
-
-  if (matchedPrefixArray && matchedPrefixArray.length) {
-    const stringPrefix = matchedPrefixArray[0];
-
-    // Convert 1.2.3.4 to 1.2345 for sorting purposes
-    const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
-      return b + c.replace(/\./g, '');
-    });
-    titlePrefix = parseFloat(stringPrefixFloat) || title;
-  } else {
-    titlePrefix = title;
-  }
-
-  return titlePrefix;
+export const showError = (errorMsg) => {
+  toastr.error(errorMsg);
 };
 
 // 1, 1.2, 3, 10.3, a, b, c
-const sortArrayByTitlePrefix = (arr) => {
+export const sortArrayByTitlePrefix = (arr) => {
   return arr.sort(function (a, b) {
     a = a.titlePrefix;
     b = b.titlePrefix;
@@ -333,9 +181,9 @@ const sortArrayByTitlePrefix = (arr) => {
   });
 };
 
-const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
+export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 
-const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
+export const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
   find() {
     return getUserOrganizations(userId, selector);
   },
@@ -350,7 +198,7 @@ const getPublishCompositeOrganizationUsersObject = (userId, selector) => ({
   ]
 });
 
-const getPublishCompositeOrganizationUsers = (fn) => {
+export const getPublishCompositeOrganizationUsers = (fn) => {
   return function(serialNumber, isDeleted = { $in: [null, false] }) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, {
@@ -372,59 +220,4 @@ const getPublishCompositeOrganizationUsers = (fn) => {
       ]
     });
   }
-};
-
-export {
-  getDocumentCollectionByType,
-  compareDates,
-  getCollectionByName,
-  getFormattedDate,
-  getTzTargetDate,
-  handleMethodResult,
-  getCollectionByDocType,
-  chain,
-  chainCheckers,
-  checkAndThrow,
-  inject,
-  injectCurry,
-  renderTemplate,
-  withUserId,
-  mapArgsTo,
-  flattenObjects,
-  deepExtend,
-  extractIds,
-  not,
-  mapByIndex,
-  mapValues,
-  inspire,
-  setModalError,
-  invokeId,
-  $isScrolledToBottom,
-  $isAlmostScrolledToBottom,
-  $scrollToBottom,
-  $isScrolledElementVisible,
-  getWorkflowDefaultStepDate,
-  assoc,
-  invokeC,
-  transsoc,
-  pickC,
-  capitalize,
-  flattenMap,
-  findById,
-  length,
-  propItems,
-  lengthItems,
-  flattenMapItems,
-  getWorkflowDefaultStepDate,
-  propMessages,
-  lengthMessages,
-  pickFrom,
-  pickFromDiscussion,
-  omitC,
-  getC,
-  getTitlePrefix,
-  sortArrayByTitlePrefix,
-  getNewerDate,
-  getPublishCompositeOrganizationUsersObject,
-  getPublishCompositeOrganizationUsers
 };

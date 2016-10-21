@@ -1,9 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Standards } from './standards.js';
-import { Organizations } from '../organizations/organizations.js';
-import NotificationSender from '/imports/core/NotificationSender';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 export default class StandardsNotificationsSender {

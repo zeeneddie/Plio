@@ -1,4 +1,4 @@
-import { Risks } from './risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import FilesService from '../files/files-service.js';
 
 Risks.after.remove((userId, doc) => {

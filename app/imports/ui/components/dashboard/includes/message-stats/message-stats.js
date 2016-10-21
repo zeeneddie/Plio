@@ -2,10 +2,11 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { moment } from 'meteor/momentjs:moment';
 import { Template } from 'meteor/templating';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
-import { Messages } from '/imports/api/messages/messages.js';
-import { Files } from '/imports/api/files/files.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Files } from '/imports/share/collections/files.js';
+import { bulkUpdateViewedByTotal } from '/imports/api/messages/methods.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { CountSubs, MessageSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
 import { updateViewedByOrganization } from '/imports/api/discussions/methods.js';

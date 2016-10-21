@@ -5,7 +5,7 @@ import {
   USR_CANNOT_CHANGE_ROLES,
   USR_CANNOT_CHANGE_ORG_OWNER_ROLES
  } from '../errors.js';
-import { checkAndThrow, withUserId } from '../helpers.js';
+import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
 import { canChangeRoles, isOrgOwner } from '../checkers.js';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {

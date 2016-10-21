@@ -1,4 +1,4 @@
-import { TimeUnits } from '/imports/api/constants.js';
+import { TimeUnits } from '/imports/share/constants.js';
 
 
 Template.TimePicker.viewmodel({
