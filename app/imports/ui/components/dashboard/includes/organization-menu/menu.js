@@ -10,12 +10,14 @@ import { isPlioUser } from '/imports/api/checkers.js';
 Template.Organization_Menu.viewmodel({
   mixin: ['modal', 'organization', 'roles'],
 
-  isPlioUser,
   autorun() {
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organizations() {
     return Organizations.find({ 'users.userId': Meteor.userId() });
+  },
+  haveCustomerAccess() {
+    return isPlioUser(Meteor.userId());
   },
   openOrgSettings(e) {
     e.preventDefault();

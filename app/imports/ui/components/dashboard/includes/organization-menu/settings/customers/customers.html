@@ -1,32 +1,37 @@
 <template name="CustomersSettings">
-    {{#each organizations}}
-        {{#Subcards_Wrapper _lText=this.name}}
-            <div class="card-block" id="root-cause-analysis">
-                {{#FormField label="Owner:"}}
-                    <span class="label text-default">
-                        {{this.owner.name}}
-                    </span>
-                {{/FormField}}
+    {{#if organizations.length}}
+        {{#each organizations}}
+            {{#Subcards_Wrapper _lText=this.name}}
+                <div class="card-block" id="root-cause-analysis">
+                    {{#FormField label="Owner:"}}
+                        <span class="label text-default">
+                            {{this.owner.name}}
+                        </span>
+                    {{/FormField}}
 
-                {{#FormField label="Email:"}}
-                    <span class="label text-default">
-                        {{this.owner.email}}
-                    </span>
-                {{/FormField}}
+                    {{#FormField label="Email:"}}
+                        <span class="label text-default">
+                            {{this.owner.email}}
+                        </span>
+                    {{/FormField}}
 
-                {{#FormField label="Created:"}}
-                    <span class="label text-default">
-                        {{renderDate this.createdAt}}
-                    </span>
-                {{/FormField}}
+                    {{#FormField label="Created:"}}
+                        <span class="label text-default">
+                            {{renderDate this.createdAt}}
+                        </span>
+                    {{/FormField}}
 
-                {{#FormField label="Users:"}}
-                    <span class="label text-default">
-                        {{this.countUsers}}
-                    </span>
-                {{/FormField}}
-            </div>
-        {{/Subcards_Wrapper}}
-    {{/each}}
-
+                    {{#FormField label="Users:"}}
+                        <span class="label text-default">
+                            {{this.countUsers}}
+                        </span>
+                    {{/FormField}}
+                </div>
+            {{/Subcards_Wrapper}}
+        {{/each}}
+    {{else}}
+        <div class="content-cards-inner flex scroll">
+            {{> PreloaderPage}}
+        </div>
+    {{/if}}
 </template>
