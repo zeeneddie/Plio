@@ -1,8 +1,8 @@
-import { getCursorOfNonDeletedWithFields } from '../helpers';
+import { getCursorNonDeleted } from '../helpers';
 import { Actions } from '/imports/share/collections/actions';
 
 export const getActionsCursorByLinkedDoc = (fields) => ({ _id }) =>
-  getCursorOfNonDeletedWithFields({ 'linkedTo.documentId': _id }, fields, Actions);
+  getCursorNonDeleted({ 'linkedTo.documentId': _id }, fields, Actions);
 
 export const getActionsWithLimitedFields = (query) => {
   const fields = {
@@ -13,5 +13,5 @@ export const getActionsWithLimitedFields = (query) => {
     linkedTo: 1
   };
 
-  return getCursorOfNonDeletedWithFields(query, fields, Actions);
+  return getCursorNonDeleted(query, fields, Actions);
 };

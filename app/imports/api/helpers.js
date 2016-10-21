@@ -244,7 +244,7 @@ export const explainMongoQuery = (
 
 export const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
 export const makeOptionsFields = fields => fields ? ({ fields }) : ({});
-export const getCursorOfNonDeletedWithFields = curry((query, fields, collection) =>
+export const getCursorNonDeleted = curry((query, fields, collection) =>
   collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
 
 export const toObjFind = find => ({ find });

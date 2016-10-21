@@ -1,5 +1,5 @@
-import { getCursorOfNonDeletedWithFields } from '../helpers';
+import { getCursorNonDeleted } from '../helpers';
 import { Standards } from '/imports/share/collections/standards';
 
 export const getStandardsCursorByIds = (fields) => ({ standardsIds:_id }) =>
-  getCursorOfNonDeletedWithFields({ _id }, fields, Standards);
+  getCursorNonDeleted({ _id }, fields, Standards);

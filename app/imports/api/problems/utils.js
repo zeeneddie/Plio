@@ -1,10 +1,10 @@
-import { getCursorOfNonDeletedWithFields } from '../helpers';
+import { getCursorNonDeleted } from '../helpers';
 import { getActionsCursorByLinkedDoc } from '../actions/utils';
 import { getWorkItemsCursorByIdsWithLimitedFields } from '../work-items/utils';
 import curry from 'lodash.curry';
 
 export const getProblemsByStandardIds = collection => ({ _id: standardsIds }) =>
-  getCursorOfNonDeletedWithFields({ standardsIds }, {}, collection);
+  getCursorNonDeleted({ standardsIds }, {}, collection);
 
 export const createProblemsTree = (getInitial) => ({
   find: getInitial,
@@ -31,5 +31,5 @@ export const getProblemsWithLimitedFields = curry((query, collection) => {
     standardsIds: 1
   };
 
-  return getCursorOfNonDeletedWithFields(query, fields, collection);
+  return getCursorNonDeleted(query, fields, collection);
 });

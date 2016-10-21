@@ -32,7 +32,7 @@ import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
   getPublishCompositeOrganizationUsers,
   makeOptionsFields,
-  getCursorOfNonDeletedWithFields,
+  getCursorNonDeleted,
   toObjFind
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
@@ -158,7 +158,7 @@ Meteor.publish('standardsDeps', function(organizationId) {
   const ncs = getProblems(NonConformities);
   const risks = getProblems(Risks);
   const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
-  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
+  const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
 
   return [
     actions,

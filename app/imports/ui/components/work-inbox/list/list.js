@@ -187,6 +187,11 @@ Template.WorkInbox_List.viewmodel({
       };
     };
 
+    console.log({
+      my: getObj(myItems),
+      team: getObj(teamItems)
+    })
+
     return {
       my: getObj(myItems),
       team: getObj(teamItems)

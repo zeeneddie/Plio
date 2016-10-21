@@ -8,6 +8,7 @@ import { LessonsLearned } from '/imports/share/collections/lessons';
 import { Actions } from '/imports/share/collections/actions';
 import { Occurrences } from '/imports/share/collections/occurrences';
 import { Departments } from '/imports/share/collections/departments';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { isOrgMember } from '../../checkers.js';
 import {
   NonConformitiesListProjection,
@@ -17,7 +18,7 @@ import { ActionTypes } from '/imports/share/constants';
 import Counter from '../../counter/server.js';
 import {
   getPublishCompositeOrganizationUsers,
-  getCursorOfNonDeletedWithFields,
+  getCursorNonDeleted,
   toObjFind,
   makeOptionsFields
 } from '../../helpers';
@@ -136,7 +137,7 @@ Meteor.publish('nonConformitiesDeps', function(organizationId) {
   const occurrences = Occurrences.find({ organizationId });
   const actions = getActionsWithLimitedFields(actionsQuery);
   const risks = getProblemsWithLimitedFields({ organizationId }, Risks);
-  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
+  const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
 
   return [
     departments,

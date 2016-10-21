@@ -10,7 +10,11 @@ import {
   WorkItemsListProjection
 } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
+import {
+  getPublishCompositeOrganizationUsers,
+  getCursorNonDeleted,
+  makeOptionsFields
+} from '../../helpers';
 
 const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => {
   const makeQuery = (organizationId) => ({
@@ -26,22 +30,22 @@ const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => {
       find({ _id:organizationId }) {
         const query = { organizationId, isDeleted };
 
-        return WorkItems.find(query, makeOptions(WorkItemsListProjection));
+        return WorkItems.find(query);
       }
     },
     {
       find({ _id:organizationId }) {
-        return Actions.find(makeQuery(organizationId), makeOptions(ActionsListProjection));
+        return Actions.find(makeQuery(organizationId));
       }
     },
     {
       find({ _id:organizationId }) {
-        return NonConformities.find(makeQuery(organizationId), makeOptions(NonConformitiesListProjection));
+        return NonConformities.find(makeQuery(organizationId));
       }
     },
     {
       find({ _id:organizationId }) {
-        return Risks.find(makeQuery(organizationId), makeOptions(RisksListProjection));
+        return Risks.find(makeQuery(organizationId));
       }
     }
   ]

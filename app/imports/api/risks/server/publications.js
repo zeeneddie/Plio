@@ -13,7 +13,7 @@ import {
   getPublishCompositeOrganizationUsers,
   toObjFind,
   makeOptionsFields,
-  getCursorOfNonDeletedWithFields
+  getCursorNonDeleted
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import { getStandardsCursorByIds } from '../../standards/utils';
@@ -118,7 +118,7 @@ Meteor.publish('risksDeps', function(organizationId) {
   const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
   const actions = getActionsWithLimitedFields(actionsQuery);
   const NCs = getProblemsWithLimitedFields({ organizationId }, NonConformities);
-  const standards = getCursorOfNonDeletedWithFields({ organizationId }, standardsFields, Standards);
+  const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
 
   return [
     departments,
