@@ -41,8 +41,16 @@ export default {
     return this._service.remove({ _id, deletedBy });
   },
 
-  restore({ _id }) {
-    return this._service.restore({ _id });
+  restore({ _id, query }) {
+    return this._service.restore({ _id, query });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   },
 
   actionCreated(actionId) {
@@ -99,14 +107,12 @@ export default {
     this._dateUpdated(actionId, date, VERIFY_ACTION);
   },
 
-  actionWorkflowChanged(actionId, workflowType) {
-    if (workflowType === WorkflowTypes.THREE_STEP) {
-      this.collection.remove({
-        'linkedDoc._id': actionId,
-        type: WorkItemsStore.TYPES.VERIFY_ACTION,
-        isCompleted: false
-      });
-    }
+  actionWorkflowSetToThreeStep(actionId) {
+    this.collection.remove({
+      'linkedDoc._id': actionId,
+      type: WorkItemsStore.TYPES.VERIFY_ACTION,
+      isCompleted: false
+    });
   },
 
   analysisCompleted(docId, docType) {

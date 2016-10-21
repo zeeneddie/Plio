@@ -1,7 +1,11 @@
 import { Standards } from '/imports/share/collections/standards.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { canChangeStandards } from '../checkers.js';
 import BaseEntityService from '../base-entity-service.js';
+import NonConformityService from '../non-conformities/non-conformities-service';
+import RiskService from '../risks/risks-service';
 
 
 export default {
@@ -34,5 +38,27 @@ export default {
 
   restore({ _id }) {
     this._service.restore({ _id });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  unlinkProblemDocs({ _id }) {
+    const query = { standardsIds: _id };
+
+    NonConformities.find(query).forEach((nc) => {
+      NonConformityService.unlinkStandard({
+        _id: nc._id,
+        standardId: _id,
+      });
+    });
+
+    Risks.find(query).forEach((risk) => {
+      RiskService.unlinkStandard({
+        _id: risk._id,
+        standardId: _id
+      });
+    });
   }
 };
