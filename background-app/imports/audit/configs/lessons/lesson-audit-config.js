@@ -33,7 +33,11 @@ export default LessonAuditConfig = {
     return _id;
   },
 
-  docDescription({ serialNumber }) {
+  docDescription(doc) {
+    return 'lesson learned';
+  },
+
+  docName({ serialNumber }) {
     return `LL${serialNumber}`;
   },
 

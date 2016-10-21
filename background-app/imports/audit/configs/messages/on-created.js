@@ -18,21 +18,19 @@ export default {
         '{{userName}}' +
         '{{#if isFile}} uploaded new file for ' +
         '{{else}} added new message to {{/if}}' +
-        'the discussion of {{{docDesc}}}',
+        'the discussion of {{{docDesc}}} {{{docName}}}',
       title: 'New message in discussion',
       data({ newDoc: { discussionId, type }, user }) {
         const isFile = type === 'file';
-
-        const getStandardDesc = () => {
-          return StandardAuditConfig.docDescription(
-            getDiscussionStandard(discussionId)
-          );
-        };
+        const standard = getDiscussionStandard(discussionId);
+        const docDesc = StandardAuditConfig.docDescription(standard);
+        const docName = StandardAuditConfig.docName(standard);
 
         return {
-          docDesc: getStandardDesc,
-          isFile: () => isFile,
-          userName: () => getUserFullNameOrEmail(user)
+          docDesc,
+          docName,
+          isFile,
+          userName: getUserFullNameOrEmail(user)
         };
       },
       emailTemplateData({ newDoc }) {

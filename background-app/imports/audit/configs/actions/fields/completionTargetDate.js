@@ -22,11 +22,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion target date of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set completion target date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion target date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed completion target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion target date of {{{docDesc}}}'
+          '{{userName}} removed completion target date of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -37,6 +37,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())

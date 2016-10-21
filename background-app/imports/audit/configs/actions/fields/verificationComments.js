@@ -24,11 +24,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification comments of {{{docDesc}}}',
+          '{{userName}} set verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification comments of {{{docDesc}}}',
+          '{{userName}} changed verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification comments of {{{docDesc}}}'
+          '{{userName}} removed verification comments of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -37,6 +37,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
     };
   },

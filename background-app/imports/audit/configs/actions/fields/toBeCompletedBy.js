@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set to be completed by of {{{docDesc}}} to {{newValue}}',
+          '{{userName}} set to be completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed to be completed by of {{{docDesc}}} from {{oldValue}} to {{newValue}}',
+          '{{userName}} changed to be completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed to be completed by of {{{docDesc}}}'
+          '{{userName}} removed to be completed by of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -35,6 +35,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
       oldValue: () => getUserFullNameOrEmail(oldValue)

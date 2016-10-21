@@ -24,7 +24,11 @@ export default MessageAuditConfig = {
     return _id;
   },
 
-  docDescription({ message }) {
+  docDescription(doc) {
+    return 'message';
+  },
+
+  docName({ message }) {
     return message;
   },
 

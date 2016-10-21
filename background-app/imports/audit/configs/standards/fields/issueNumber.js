@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set issue number of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set issue number of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed issue number of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed issue number of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed issue number of {{{docDesc}}}'
+          '{{userName}} removed issue number of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -35,6 +35,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
       oldValue: () => oldValue

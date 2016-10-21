@@ -58,10 +58,21 @@ export const getLinkedDocAuditConfig = (documentType) => {
   }[documentType];
 };
 
-export const getLinkedDocName = (documentId, documentType) => {
+const getLinkedDoc = (documentId, documentType) => {
   const collection = getCollectionByDocType(documentType);
-  const doc = collection.findOne({ _id: documentId });
+  return collection.findOne({ _id: documentId });
+};
+
+export const getLinkedDocDescription = (documentId, documentType) => {
+  const doc = getLinkedDoc(documentId, documentType);
   const docAuditConfig = getLinkedDocAuditConfig(documentType);
 
   return docAuditConfig.docDescription(doc);
+};
+
+export const getLinkedDocName = (documentId, documentType) => {
+  const doc = getLinkedDoc(documentId, documentType);
+  const docAuditConfig = getLinkedDocAuditConfig(documentType);
+
+  return docAuditConfig.docName(doc);
 };

@@ -22,11 +22,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set currency of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set currency of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed currency of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed currency of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed currency of {{{docDesc}}}'
+          '{{userName}} removed currency of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -36,6 +36,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => OrgCurrencies[newValue],
       oldValue: () => OrgCurrencies[oldValue]

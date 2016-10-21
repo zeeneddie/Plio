@@ -17,8 +17,10 @@ export default {
   notifications: [
     {
       text: {
-        [ChangesKinds.ITEM_ADDED]: '{{userName}} added file "{{name}}" to {{{docDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: '{{userName}} removed file from {{{docDesc}}}'
+        [ChangesKinds.ITEM_ADDED]:
+          '{{userName}} added file "{{name}}" to {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{userName}} removed file from {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -30,6 +32,7 @@ export default {
     return {
       name: () => name,
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

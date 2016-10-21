@@ -5,7 +5,11 @@ import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/share/helpers.js';
+import {
+  getCollectionByDocType,
+  getWorkflowDefaultStepDate,
+  generateSerialNumber
+} from '/imports/share/helpers.js';
 
 
 export default {
@@ -69,6 +73,8 @@ export default {
     }
 
     if (doc.areStandardsUpdated() && !action.verified()) {
+      const docCollection = getCollectionByDocType(documentType);
+
       docCollection.update({ _id: documentId }, {
         $set: {
           'updateOfStandards.status': 0, // Not completed
