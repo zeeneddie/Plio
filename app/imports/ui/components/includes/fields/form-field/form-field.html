@@ -1,12 +1,12 @@
 <template name="FormField">
   <div class="form-group row" {{b "class: { has-danger: isInvalid }"}}>
     <label class="form-control-label col-xs-12 col-sm-{{calcLabelCol}}">
-      {{label}}
       {{#if helpText}}
         <button type="button" class="btn btn-link btn-collapse" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
           <i class="fa fa-question-circle"></i>
         </button>
       {{/if}}
+      <span>{{label}}</span>
     </label>
     <div class="col-xs-12 col-sm-{{sm}}">
       {{> Template.contentBlock}}

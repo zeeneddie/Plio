@@ -26,7 +26,7 @@ Template.ModalWindow.viewmodel({
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
   // closeCaptionOnUpload: 'Uploading...',
-  guideHtml: 'No help message yet',
+  helpText: 'No help message yet',
   closeAfterCall: false,
 
   submitCaptionText() {

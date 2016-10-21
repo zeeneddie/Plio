@@ -9,12 +9,8 @@ Template.FormField.viewmodel({
   closeHelpPanel(e) {
     const $a = this.templateInstance.$(e.currentTarget);
 
-    $a
-      this.templateInstance.$('.guidance-panel')
-      .collapse('hide');
+    this.templateInstance.$('.guidance-panel').collapse('hide');
 
-    $a
-      this.templateInstance.$('.guidance-panel-open')
-      .addClass('collapsed');
+    this.templateInstance.$('.btn-collapse').addClass('collapsed');
   }
 });

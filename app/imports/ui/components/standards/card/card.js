@@ -123,7 +123,7 @@ Template.Standards_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
-      guideHtml: StandardsHelp.standard,
+      helpText: StandardsHelp.standard,
       _id: get(this.standard(), '_id')
     });
   }, 1000),
