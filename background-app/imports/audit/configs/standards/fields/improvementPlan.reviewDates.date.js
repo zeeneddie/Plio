@@ -17,7 +17,7 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s review date of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"'
+          '{{userName}} changed improvement plan\'s review date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
       }
     }
   ],
@@ -28,6 +28,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())

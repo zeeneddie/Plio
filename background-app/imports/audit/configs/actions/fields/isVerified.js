@@ -34,14 +34,14 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +
             '{{#if verifiedAsEffective}}' +
-              '{{userName}} verified {{{docDesc}}} as effective' +
+              '{{userName}} verified {{{docDesc}}} {{{docName}}} as effective' +
               '{{#if comments}} with following comments: {{comments}}{{/if}}' +
             '{{else}}' +
-              '{{userName}} failed verification of {{{docDesc}}}' +
+              '{{userName}} failed verification of {{{docDesc}}} {{{docName}}}' +
               '{{#if comments}} with following comments: {{comments}}{{/if}}' +
             '{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled verification of {{{docDesc}}}' +
+            '{{userName}} canceled verification of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}'
       }
     }
@@ -52,6 +52,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       verified: () => isVerified.newValue,
       verifiedAsEffective: () => isVerifiedAsEffective && isVerifiedAsEffective.newValue,
       comments: () => verificationComments && verificationComments.newValue,

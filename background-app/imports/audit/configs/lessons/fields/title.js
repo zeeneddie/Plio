@@ -23,7 +23,7 @@ export default {
     const { newValue, oldValue } = title;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       newValue: () => newValue,
       oldValue: () => oldValue
     };

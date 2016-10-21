@@ -17,7 +17,7 @@ export default {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
         return kind === ChangesKinds.ITEM_ADDED;
       },
-      text: '{{userName}} added you to the notification list of {{{docDesc}}}',
+      text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',
       emailTemplateData({ newDoc }) {
         return {
@@ -40,6 +40,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       item: () => getUserFullNameOrEmail(notify.item)
     };

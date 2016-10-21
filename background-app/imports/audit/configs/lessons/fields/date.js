@@ -25,7 +25,7 @@ export default {
     const orgId = () => auditConfig.docOrgId(newDoc);
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };

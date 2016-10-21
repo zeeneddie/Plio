@@ -18,11 +18,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set description of {{{docDesc}}}',
+          '{{userName}} set description of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed description of {{{docDesc}}}',
+          '{{userName}} changed description of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed description of {{{docDesc}}}'
+          '{{userName}} removed description of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -31,6 +31,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
     };
   },
