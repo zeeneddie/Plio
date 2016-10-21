@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { StandardTypes } from '../standards-types.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { isOrgMember } from '../../checkers.js';
 
 

@@ -3,7 +3,8 @@ import { Autolinker } from 'meteor/konecty:autolinker';
 import React from 'react';
 
 import modal from '/imports/startup/client/mixins/modal';
-import { invokeC, getFormattedDate, handleMethodResult } from '/imports/api/helpers';
+import { getFormattedDate } from '/imports/share/helpers';
+import { invokeC, handleMethodResult } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 import { remove as removeMessage } from '/imports/api/messages/methods';
 import { setAt } from '/client/redux/actions/discussionActions';

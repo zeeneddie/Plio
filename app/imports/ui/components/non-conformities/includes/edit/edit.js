@@ -5,7 +5,7 @@ import {
   update,
   remove
 } from '/imports/api/non-conformities/methods.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.NC_Card_Edit.viewmodel({

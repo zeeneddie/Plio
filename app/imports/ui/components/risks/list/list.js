@@ -2,11 +2,14 @@ import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 import curry from 'lodash.curry';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, findById, lengthItems,
   flattenMapItems, inspire
 } from '/imports/api/helpers.js';
+
 
 Template.Risks_List.viewmodel({
   mixin: [

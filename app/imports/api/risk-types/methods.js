@@ -2,12 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import RiskTypesService from './risk-types-service.js';
-import { RiskTypesSchema, EditableFields } from './risk-types-schema.js';
-import { RiskTypes } from './risk-types.js';
-import { IdSchema, OrganizationIdSchema } from '../schemas.js';
-import { UserRoles } from '../constants';
+import { RiskTypesSchema, EditableFields } from '/imports/share/schemas/risk-types-schema.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
+import { UserRoles } from '/imports/share/constants';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '../helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

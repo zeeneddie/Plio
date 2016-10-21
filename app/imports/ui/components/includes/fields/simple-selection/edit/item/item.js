@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { StringLimits } from '/imports/api/constants.js';
+import { StringLimits } from '/imports/share/constants.js';
 import get from 'lodash.get';
 
 Template.SimpleSelection_Edit_Item.viewmodel({

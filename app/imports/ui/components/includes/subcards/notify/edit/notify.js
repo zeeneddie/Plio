@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { addedToNotifyList } from '/imports/api/standards/methods.js';
-import Utils from '/imports/core/utils.js';
+import { showError } from '/imports/api/helpers.js';
 
 Template.Subcards_Notify_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
@@ -49,7 +49,7 @@ Template.Subcards_Notify_Edit.viewmodel({
           userId
         }, (err, res) => {
           if (err) {
-            Utils.showError(
+            showError(
               'Failed to send email to the user that was added to standard\'s notify list'
             );
           }

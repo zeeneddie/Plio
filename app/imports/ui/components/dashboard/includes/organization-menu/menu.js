@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 
 Template.Organization_Menu.viewmodel({

@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 import {
   insert, update, remove
 } from '/imports/api/non-conformities/methods.js';
-import { getTzTargetDate } from '/imports/api/helpers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 import { inspire } from '/imports/api/helpers.js';
 
 

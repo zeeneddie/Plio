@@ -1,4 +1,4 @@
-import { Notifications } from '/imports/api/notifications/notifications.js';
+import { Notifications } from '/imports/share/collections/notifications.js';
 
 SyncedCron.add({
   name: 'Remove expired notifications',

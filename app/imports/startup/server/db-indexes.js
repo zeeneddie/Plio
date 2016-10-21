@@ -1,12 +1,12 @@
-import { Departments } from '/imports/api/departments/departments.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { Standards } from '/imports/api/standards/standards.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
-import { Messages } from '/imports/api/messages/messages.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { Messages } from '/imports/share/collections/messages.js';
 
 
 // indexes for Departments
