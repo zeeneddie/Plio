@@ -6,21 +6,7 @@ import {
   remove,
   updateViewedBy,
   insertScore,
-  removeScore,
-  completeAnalysis,
-  undoAnalysis,
-  setAnalysisDate,
-  updateStandards,
-  undoStandardsUpdate,
-  setStandardsUpdateDate,
-  setAnalysisExecutor,
-  setStandardsUpdateExecutor,
-  setAnalysisCompletedBy,
-  setAnalysisCompletedDate,
-  setAnalysisComments,
-  setStandardsUpdateCompletedBy,
-  setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  removeScore
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
@@ -47,24 +33,6 @@ Template.Risks_Card_Edit.viewmodel({
       organizationId: this.organizationId(),
       riskId: this._id()
     };
-  },
-  getMethodRefs() {
-    return () => ({
-      setAnalysisExecutor,
-      setAnalysisDate,
-      completeAnalysis,
-      undoAnalysis,
-      setStandardsUpdateExecutor,
-      setStandardsUpdateDate,
-      updateStandards,
-      undoStandardsUpdate,
-      setAnalysisCompletedBy,
-      setAnalysisCompletedDate,
-      setAnalysisComments,
-      setStandardsUpdateCompletedBy,
-      setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
-    });
   },
   onUpdateCb() {
     return this.update.bind(this);
@@ -106,9 +74,6 @@ Template.Risks_Card_Edit.viewmodel({
         });
       }
     );
-  },
-  showRootCauseAnalysis() {
-    return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);
   },
   onInsertScoreCb() {
     return this.insertScore.bind(this);

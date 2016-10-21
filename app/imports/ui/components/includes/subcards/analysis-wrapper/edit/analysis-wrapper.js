@@ -43,7 +43,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
       this.modal().callMethod(method, { _id, [key]: executor }, cb));
     const setDate = curry((key, method) => ({ date }, cb) =>
       this.modal().callMethod(method, { _id, [key]: getTzTargetDate(date, timezone) }, cb));
-    const undo = method => cb =>
+    const undo = method => (args, cb) =>
       this.modal().callMethod(method, { _id }, cb);
 
     const {

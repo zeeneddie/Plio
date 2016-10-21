@@ -270,7 +270,7 @@ export const DeletedSchema = new SimpleSchema({
   },
   deletedBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    regEx: dbChangeExecutor,
     optional: true
   },
   deletedAt: {
