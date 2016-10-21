@@ -38,5 +38,9 @@
 
       {{> Risks_Type_Edit _id=this._id typeId=this.typeId}}
     </div>
+
+    {{#if showRootCauseAnalysis}}
+      {{> Subcards_AnalysisWrapper_Edit (RCAArgs this)}}
+    {{/if}}
   {{/with}}
 </template>

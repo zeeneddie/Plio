@@ -18,6 +18,8 @@ import { check, Match } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { getPublishCompositeOrganizationUsers } from '../../helpers';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -44,6 +46,11 @@ const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
     {
       find({ _id:organizationId }) {
         return Standards.find({ organizationId, isDeleted });
+      }
+    },
+    {
+      find({ _id:organizationId }) {
+        return RiskTypes.find({ organizationId });
       }
     }
   ];
