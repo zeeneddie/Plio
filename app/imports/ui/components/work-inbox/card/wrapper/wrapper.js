@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { WorkItemsStore } from '/imports/api/constants.js';
+import { WorkItemsStore } from '/imports/share/constants.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
 

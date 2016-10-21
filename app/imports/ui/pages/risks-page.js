@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { Risks } from '/imports/api/risks/risks.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import { DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+
 
 Template.Risks_Page.viewmodel({
   mixin: ['risk', 'organization'],

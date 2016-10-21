@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { Occurrences } from '/imports/api/occurrences/occurrences.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 import { invokeId } from '/imports/api/helpers.js';
 

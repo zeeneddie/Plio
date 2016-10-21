@@ -1,8 +1,9 @@
-import { Discussions } from './discussions';
-import { Messages } from '../messages/messages';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages';
 import { getUserViewedByData } from './helpers.js';
 import { getJoinUserToOrganizationDate } from '../organizations/utils.js';
 import { getNewerDate, lengthMessages, compareDates } from '../helpers.js';
+
 
 export default {
 	collection: Discussions,

@@ -84,6 +84,16 @@ FlowRouter.route('/hello', {
   }
 });
 
+// Uncomment this code to enable maintenance page
+// FlowRouter.route('/maintenance', {
+//   name: 'maintenance',
+//   action(params) {
+//     BlazeLayout.render('TransitionalLayout', {
+//       content: 'MaintenancePage'
+//     });
+//   }
+// });
+
 FlowRouter.route('/sign-out', {
   name: 'signOut',
   action(params) {
@@ -263,6 +273,9 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
+
+  // Redirect to maintenance route can be here.
+  // redirect('maintenance'); return;
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, { b: context.path });

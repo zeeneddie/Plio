@@ -1,5 +1,5 @@
-import { Occurrences } from './occurrences.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 
 export default {
   collection: Occurrences,

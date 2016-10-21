@@ -7,6 +7,9 @@
           sequentialId=this.sequentialId
           label="Title"}}
 
+      {{> DescriptionTextBox
+          description=this.description}}
+
       {{> Actions_LinkedTo_Edit
           _id=this._id
           isEditable=isLinkedToEditable

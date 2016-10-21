@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { ProblemsStatuses } from '/imports/api/constants.js';
+import { ProblemsStatuses } from '/imports/share/constants.js';
 import { lengthItems, inspire } from '/imports/api/helpers.js';
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 
 Template.Problems_ListWrapper.viewmodel({
   share: 'search',

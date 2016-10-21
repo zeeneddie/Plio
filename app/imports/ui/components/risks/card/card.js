@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { ActionTypes, UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants.js';
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
 

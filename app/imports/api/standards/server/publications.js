@@ -1,22 +1,22 @@
 import { Meteor } from 'meteor/meteor';
 
 import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Standards } from '../standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { isOrgMember, isOrgMemberBySelector } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { Files } from '/imports/share/collections/files.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
 import Counter from '../../counter/server.js';
 import { StandardsListProjection } from '/imports/api/constants.js';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
-import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections';
-import { StandardTypes } from '../../standards-types/standards-types';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
 import { getPublishCompositeOrganizationUsers } from '../../helpers';
 
 const getStandardFiles = (standard) => {

@@ -1,12 +1,12 @@
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Departments } from '/imports/api/departments/departments.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
   StandardsBookSections
-} from '/imports/api/standards-book-sections/standards-book-sections.js';
+} from '/imports/share/collections/standards-book-sections.js';
 
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 

@@ -1,4 +1,4 @@
-import { PhoneTypes } from '/imports/api/constants.js';
+import { PhoneTypes } from '/imports/share/constants.js';
 
 
 Template.UserEdit_PhoneNumber.viewmodel({

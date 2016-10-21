@@ -1,13 +1,13 @@
 import { Accounts } from 'meteor/accounts-base';
-import Utils from '/imports/core/utils';
+import { getRandomAvatarUrl, generateUserInitials } from '/imports/share/helpers.js';
 import UserNotificationsSender from '/imports/api/users/user-notifications-sender.js';
 
 
 function onCreateUser(options, user) {
   if (options.profile) {
     user.profile = options.profile;
-    user.profile.avatar = Utils.getRandomAvatarUrl();
-    user.profile.initials = Utils.generateUserInitials(options.profile);
+    user.profile.avatar = getRandomAvatarUrl();
+    user.profile.initials = generateUserInitials(options.profile);
   }
 
   return user;
@@ -29,7 +29,7 @@ const resetPassword = Meteor.server.method_handlers['resetPassword'];
 Meteor.server.method_handlers['resetPassword'] = function(...args) {
   const res = resetPassword.call(this, ...args);
 
-  Meteor.defer(() => new UserNotificationsSender(res.userId).passwordReset());
+  Meteor.defer(() => new UserNotificationsSender(res.id).passwordReset());
 
   return res;
 };

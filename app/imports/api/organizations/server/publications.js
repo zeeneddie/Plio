@@ -1,9 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Organizations } from '../organizations.js';
-import { UserMembership } from '/imports/api/constants.js';
+
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import {
+  StandardsBookSections
+} from '/imports/share/collections/standards-book-sections.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { getUserOrganizations } from '../utils.js';
 import { isPlioUser } from '../../checkers.js';
+
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -35,7 +43,7 @@ Meteor.publish('invitationInfo', function (invitationId) {
       limit: 1,
       fields: {name: 1, serialNumber: 1}
     })
-  ]
+  ];
 });
 
 Meteor.publish('currentUserOrganizations', function() {

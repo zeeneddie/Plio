@@ -1,12 +1,12 @@
 import { Template } from 'meteor/templating';
 import { moment } from 'meteor/momentjs:moment';
 
-import { AuditLogs } from '/imports/api/audit-logs/audit-logs.js';
-import { SystemName } from '/imports/api/constants.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs.js';
+import { SystemName } from '/imports/share/constants.js';
 
 
 Template.CardChangelog.viewmodel({
-  mixin: ['collapse', 'counter', 'date', 'user'],
+  mixin: ['collapse', 'date', 'user'],
   documentId: null,
   documentType: '',
   limit: 10,
@@ -27,11 +27,6 @@ Template.CardChangelog.viewmodel({
       }
     }
   ],
-  onCreated(template) {
-    template.autorun(() => {
-      template.subscribe('lastUserLog', this.documentId(), this.documentType());
-    });
-  },
   resetProps() {
     this.collapsed(true);
     this.areLogsLoaded(false);
@@ -62,20 +57,10 @@ Template.CardChangelog.viewmodel({
     } else {
       this.loadingLogs(true);
 
-      const documentId = this.documentId();
-      const documentType = this.documentType();
-      const tpl = this.templateInstance;
-
-      tpl.subscribe(
-        'documentLogsCount', `document-logs-count-${documentId}`, documentId, documentType
-      );
-
-      tpl.subscribe('auditLogs', documentId, documentType, {
-        onReady: () => {
-          this.loadingLogs(false);
-          this.areLogsLoaded(true);
-          this.toggleCollapse();
-        }
+      this.parent().subscribeForFirstLogs(() => {
+        this.loadingLogs(false);
+        this.areLogsLoaded(true);
+        this.toggleCollapse();
       });
     }
   },
@@ -88,6 +73,9 @@ Template.CardChangelog.viewmodel({
 
     return AuditLogs.find({ documentId: this.documentId() }, options);
   },
+  logsLength() {
+    return this.parent().logsLength();
+  },
   getUser(userId) {
     if (userId === SystemName) {
       return userId;
@@ -99,22 +87,16 @@ Template.CardChangelog.viewmodel({
   getPrettyDate(dateObj) {
     return this.renderDate(dateObj, 'DD MMM YYYY, h:mm A');
   },
-  logsLength() {
-    return this.get(`document-logs-count-${this.documentId()}`);
-  },
   loadAllLogs() {
     if (this.areAllLogsLoaded()) {
       this.showAllLogs(true);
     } else {
       this.loadingAllLogs(true);
-      const tpl = this.templateInstance;
 
-      tpl.subscribe('auditLogs', this.documentId(), this.documentType(), this.limit(), 0, {
-        onReady: () => {
-          this.loadingAllLogs(false);
-          this.areAllLogsLoaded(true);
-          this.showAllLogs(true);
-        }
+      this.parent().subscribeForAllLogs(this.limit(), () => {
+        this.loadingAllLogs(false);
+        this.areAllLogsLoaded(true);
+        this.showAllLogs(true);
       });
     }
   },
