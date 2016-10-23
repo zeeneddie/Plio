@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { generateSerialNumber } from '/imports/share/helpers.js';
+import ActionService from '../actions/action-service';
 import WorkItemService from '../work-items/work-item-service.js';
 import { WorkItemsStore } from '/imports/share/constants.js';
 
@@ -205,10 +206,43 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    return this._service.remove({ _id, deletedBy });
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
   },
 
   restore({ _id }) {
-    return this._service.restore({ _id });
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.restore({ _id, onRestore });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  unlinkStandard({ _id, standardId }) {
+    this.collection.update({ _id }, {
+      $pull: { standardsIds: standardId }
+    });
+  },
+
+  unlinkActions({ _id }) {
+    const query = {
+      'linkedTo.documentId': _id,
+      'linkedTo.documentType': this._docType
+    };
+
+    Actions.find(query).forEach((action) => {
+      ActionService.unlinkDocument({
+        _id: action._id,
+        documentId: _id,
+        documentType: this._docType
+      });
+    });
   }
 };

@@ -6,6 +6,8 @@ import { setModalError, inspire } from '/imports/api/helpers.js';
 
 Template.Risks_Create.viewmodel({
   mixin: ['organization', 'router', 'getChildrenData'],
+  isStandardsEditable: true,
+  standardsIds: [],
   RKGuidelines() {
     return this.organization() && this.organization().rkGuidelines;
   },
