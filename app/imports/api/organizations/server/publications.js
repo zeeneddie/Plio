@@ -9,7 +9,9 @@ import {
 } from '/imports/share/collections/standards-book-sections.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { UserMembership } from '/imports/share/constants.js';
 import { getUserOrganizations } from '../utils.js';
+import { isPlioUser } from '../../checkers.js';
 
 
 Meteor.publish('invitationInfo', function (invitationId) {
@@ -93,4 +95,34 @@ Meteor.publish('transferredOrganization', function(transferId) {
     throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
     return this.ready();
   }
+});
+
+Meteor.publishComposite('organizationsInfo', {
+  find() {
+    const userId = this.userId;
+
+    if (userId && isPlioUser(userId)) {
+      return Organizations.find({}, {
+        fields: {
+          name: 1,
+          users: 1,
+          createdAt: 1,
+        }
+      });
+    }
+
+    throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user');
+  },
+
+  children: [{
+      find(organization) {
+        const owner = _.find(organization.users, ({ role }) => {
+          return role === UserMembership.ORG_OWNER;
+        });
+
+        return Meteor
+          .users
+          .find({ _id: owner.userId });
+      }
+  }],
 });

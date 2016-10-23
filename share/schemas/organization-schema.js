@@ -149,6 +149,10 @@ const OrganizationEditableFields = {
     type: String,
     optional: true
   },
+  isOrgAdmin: {
+    type: Boolean,
+    optional: true
+  },
   ...OrganizationCurrencySchema,
   ...TimezoneSchema.schema()
 };
