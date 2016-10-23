@@ -21,7 +21,7 @@ Template.CustomersSettings.viewmodel({
     }
   ],
   organizations() {
-    const organizations = Organizations.find().fetch();
+    const organizations = Organizations.find({}, { sort: { createdAt: 1 } }).fetch();
 
     return organizations.map(({ name, users, createdAt }) => {
       const owner = _.find(users, ({ role }) => {
