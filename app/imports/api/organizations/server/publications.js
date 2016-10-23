@@ -9,6 +9,7 @@ import {
 } from '/imports/share/collections/standards-book-sections.js';
 import { Standards } from '/imports/share/collections/standards.js';
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { UserMembership } from '/imports/share/constants.js';
 import { getUserOrganizations } from '../utils.js';
 import { isPlioUser } from '../../checkers.js';
 

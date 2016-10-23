@@ -1,14 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { UserMembership } from '/imports/api/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { UserMembership } from '/imports/share/constants.js';
 
 Template.CustomersSettings.viewmodel({
   mixin: ['date'],
+  _subHandlers: [],
+  isReady: false,
 
+  autorun: [
+    function() {
+      const _subHandlers = [
+        this.templateInstance.subscribe('organizationsInfo')
+      ];
+
+      this._subHandlers(_subHandlers);
+    },
+    function() {
+      this.isReady(this._subHandlers().every(handle => handle.ready()));
+    }
+  ],
   organizations() {
-    Meteor.subscribe('organizationsInfo');
-
     const organizations = Organizations.find().fetch();
 
     return organizations.map(({ name, users, createdAt }) => {
