@@ -21,14 +21,7 @@ import { getLessonsCursorByDocumentId } from '../../lessons/utils';
 import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
 import { createProblemsTree, getProblemsWithLimitedFields } from '../../problems/utils';
 import { ActionTypes } from '/imports/share/constants';
-
-const getRiskFiles = (risk) => {
-  let fileIds = risk.fileIds || [];
-  const IPFileIds = risk.improvementPlan && risk.improvementPlan.fileIds || [];
-  fileIds = fileIds.concat(IPFileIds);
-
-  return Files.find({ _id: { $in: fileIds } });
-};
+import { getRiskFiles, createRiskCardPublicationTree } from '../utils';
 
 const getRisksLayoutPub = (userId, serialNumber, isDeleted) => [
   {
@@ -75,21 +68,7 @@ Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
     return this.ready();
   }
 
-  const tree = createProblemsTree(() => Risks.find({ _id, organizationId }));
-  const cursorGetters = [
-    getRiskFiles,
-    getLessonsCursorByDocumentId,
-    getStandardsCursorByIds({ title: 1 }),
-  ];
-
-  const publishTree = Object.assign({}, tree, {
-    children: [
-      ...tree.children,
-      ...cursorGetters.map(toObjFind)
-    ]
-  });
-
-  return publishTree;
+  return createRiskCardPublicationTree(() => ({ _id, organizationId }));
 });
 
 Meteor.publish('risksDeps', function(organizationId) {

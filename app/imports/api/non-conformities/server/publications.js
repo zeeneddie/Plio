@@ -19,36 +19,20 @@ import Counter from '../../counter/server.js';
 import {
   getPublishCompositeOrganizationUsers,
   getCursorNonDeleted,
-  toObjFind,
   makeOptionsFields
 } from '../../helpers';
 import get from 'lodash.get';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
 import {
-  getActionsCursorByLinkedDoc,
   getActionsWithLimitedFields
 } from '../../actions/utils';
-import { getStandardsCursorByIds } from '../../standards/utils';
 import {
-  createProblemsTree,
   getProblemsWithLimitedFields
 } from '../../problems/utils';
-import { getLessonsCursorByDocumentId } from '../../lessons/utils';
-
-
-const getNCOtherFiles = (nc) => {
-  let fileIds = nc.fileIds || [];
-  const improvementPlanFileIds = get(nc, 'improvementPlan.fileIds');
-  if (!!improvementPlanFileIds) {
-    fileIds = fileIds.concat(improvementPlanFileIds);
-  }
-  const rcaFileIds = get(nc, 'rootCauseAnalysis.fileIds');
-  if (!!rcaFileIds) {
-    fileIds = fileIds.concat(rcaFileIds);
-  }
-
-  return Files.find({ _id: { $in: fileIds } });
-};
+import {
+  createNonConformityCardPublicationTree,
+  getNCOtherFiles
+} from '../../non-conformities/utils';
 
 const getNCLayoutPub = (userId, serialNumber, isDeleted) => {
   return [
@@ -91,23 +75,7 @@ Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
     return this.ready();
   }
 
-  const tree = createProblemsTree(() => NonConformities.find({ _id, organizationId }));
-
-  const cursorGetters = [
-    getNCOtherFiles,
-    getLessonsCursorByDocumentId,
-    getStandardsCursorByIds({ title: 1 }),
-    ({ _id: nonConformityId }) => Occurrences.find({ nonConformityId }),
-  ];
-
-  const publishTree = Object.assign({}, tree, {
-    children: [
-      ...tree.children,
-      ...cursorGetters.map(toObjFind)
-    ]
-  });
-
-  return publishTree;
+  return createNonConformityCardPublicationTree(() => ({ _id, organizationId }));
 });
 
 Meteor.publish('nonConformitiesDeps', function(organizationId) {

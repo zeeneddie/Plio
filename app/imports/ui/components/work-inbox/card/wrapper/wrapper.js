@@ -11,16 +11,27 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   mixin: ['workInbox', 'organization', 'utils'],
 
   onCreated(template) {
-    template.autorun(() => {
-      const _id = this._id();
-      const organizationId = this.organizationId();
-      if (_id && organizationId) {
-        DocumentCardSubs.subscribe('workItemCard', { _id, organizationId });
-      }
-    });
+    // template.autorun(() => {
+    //   const _id = this._id();
+    //   const organizationId = this.organizationId();
+    //   if (_id && organizationId) {
+    //     DocumentCardSubs.subscribe('workItemCard', { _id, organizationId });
+    //   }
+    // });
   },
   onRendered() {
     this.isRendered(true);
+  },
+  cardArgs() {
+    const workItem = Object.assign({}, this.workItem());
+    const isReady = this.isReady();
+    const isReadOnly = workItem.isDeleted;
+    const { linkedDoc: { _id } = {} } = workItem;
+    return {
+      _id,
+      isReady,
+      isReadOnly
+    };
   },
   isDocType(...args) {
     const { linkedDoc: { type } = {} } = this.workItem() || {};

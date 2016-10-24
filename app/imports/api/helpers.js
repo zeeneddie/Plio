@@ -11,7 +11,10 @@ import {
   AvatarPlaceholders,
   CollectionNames,
   DocumentTypes,
-  ProblemMagnitudes
+  ProblemMagnitudes,
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection
 } from '/imports/share/constants.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
@@ -248,3 +251,21 @@ export const getCursorNonDeleted = curry((query, fields, collection) =>
   collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
 
 export const toObjFind = find => ({ find });
+
+// You can add here more if you need
+export const getRequiredFieldsByCollection = (collection) => {
+  switch(collection) {
+    case Actions:
+      return ActionsListProjection;
+      break;
+    case NonConformities:
+      return NonConformitiesListProjection;
+      break;
+    case Risks:
+      return RisksListProjection;
+      break;
+    default:
+      return {};
+      break;
+  }
+};

@@ -86,7 +86,7 @@ Template.WorkInbox_List.viewmodel({
     const [current, completed, deleted] = [2, 4, 6];
 
     const assignees = Object.assign({}, this.assignees());
-    const getFirst = _.compose(_.first, this.getTeamItems).bind(this);
+    const getFirst = _.compose(_.first, this.getTeamItems, _.first).bind(this);
 
     switch(this.activeWorkInboxFilterId()) {
       case current:
@@ -186,11 +186,6 @@ Template.WorkInbox_List.viewmodel({
         deleted: sortItems(byDeleted(items, isDel(true)))
       };
     };
-
-    console.log({
-      my: getObj(myItems),
-      team: getObj(teamItems)
-    })
 
     return {
       my: getObj(myItems),
