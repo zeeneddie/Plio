@@ -46,6 +46,7 @@ AccountsTemplates.configureRoute('forgotPwd', {
   name: 'forgotPwd',
   path: '/forgot-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
@@ -55,6 +56,7 @@ AccountsTemplates.configureRoute('resetPwd', {
   name: 'resetPwd',
   path: '/reset-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
