@@ -212,11 +212,14 @@ $font_2: sans-serif;
 
     .rich-text-controls {
       border-top: none;
-      .btn {
-        border: 1px solid;
-        border-color: #e6e6e6;
-        border-bottom-color: #cccccc;
-      }
+    }
+  }
+
+  .rich-text-controls {
+    .btn {
+      border: 1px solid;
+      border-color: #e6e6e6;
+      border-bottom-color: #cccccc;
     }
   }
 }
