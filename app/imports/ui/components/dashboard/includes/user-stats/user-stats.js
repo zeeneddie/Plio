@@ -13,7 +13,9 @@ Template.Dashboard_UserStats.viewmodel({
       return;
     }
 
-    const orgUserIds = org.users.map(user => user.userId);
+    const orgUserIds = org.users
+      .filter(user => !user.isRemoved)
+      .map(user => user.userId);
 
     return Meteor.users.find(
       { _id: { $in: orgUserIds }, status: { $in: ['online', 'away'] } },
