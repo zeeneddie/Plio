@@ -2,7 +2,9 @@
   {{#Card_Create ref="card"}}
     {{> NC_Title_Edit label="Risk name"}}
 
-    {{> Fields_Standards_Edit}}
+    {{> Fields_Standards_Edit
+        isEditable=isStandardsEditable
+        standardsIds=standardsIds}}
 
     {{> NC_IdentifiedBy_Edit}}
 

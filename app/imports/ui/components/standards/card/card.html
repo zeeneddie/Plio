@@ -117,6 +117,8 @@
 
               {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
+              {{> Subcards_Risks_Read _query=_getRisksQuery}}
+
               {{> Subcards_Actions_Read
                   type=ActionTypes.CORRECTIVE_ACTION
                   standardId=this._id}}
@@ -134,7 +136,7 @@
 
             {{> SourceWordDocument source=source2}}
 
-            {{> CardChangelog document=this documentType="standard"}}
+            {{> CardDocChangelog document=this documentType="standard"}}
           </div>
         </div>
       {{else}}

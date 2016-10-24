@@ -25,7 +25,7 @@ Template.NC_Ref_Edit.viewmodel({
         url = `http://${url}`;
       }
 
-      if (!this.IsValidUrl(url)) {
+      if (!this.isValidUrl(url)) {
         ViewModel.findOne('ModalWindow').setError('Url is not valid!');
         return;
       }

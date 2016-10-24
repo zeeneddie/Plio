@@ -1,15 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { Organizations } from '../organizations.js';
-import { Departments } from '../../departments/departments.js';
-import { StandardTypes } from '../../standards-types/standards-types.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Departments } from '/imports/share/collections/departments.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import {
   StandardsBookSections
-} from '../../standards-book-sections/standards-book-sections.js';
-import { Standards } from '../../standards/standards.js';
-import { LessonsLearned } from '../../lessons/lessons.js';
+} from '/imports/share/collections/standards-book-sections.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { UserMembership } from '/imports/share/constants.js';
 import { getUserOrganizations } from '../utils.js';
+import { isPlioUser } from '../../checkers.js';
+
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -41,7 +44,7 @@ Meteor.publish('invitationInfo', function (invitationId) {
       limit: 1,
       fields: {name: 1, serialNumber: 1}
     })
-  ]
+  ];
 });
 
 Meteor.publish('currentUserOrganizations', function() {
@@ -92,4 +95,34 @@ Meteor.publish('transferredOrganization', function(transferId) {
     throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
     return this.ready();
   }
+});
+
+Meteor.publishComposite('organizationsInfo', {
+  find() {
+    const userId = this.userId;
+
+    if (userId && isPlioUser(userId)) {
+      return Organizations.find({}, {
+        fields: {
+          name: 1,
+          users: 1,
+          createdAt: 1,
+        }
+      });
+    }
+
+    throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user');
+  },
+
+  children: [{
+      find(organization) {
+        const owner = _.find(organization.users, ({ role }) => {
+          return role === UserMembership.ORG_OWNER;
+        });
+
+        return Meteor
+          .users
+          .find({ _id: owner.userId });
+      }
+  }],
 });

@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 
 Template.Subcards_LessonsLearned_Read.viewmodel({
   documentId: '',

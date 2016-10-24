@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import DiscussionContainer from './containers/DiscussionContainer';
 import store from '/client/redux/store';
-import { Messages } from '/imports/api/messages/messages';
+import { Messages } from '/imports/share/collections/messages';
 import Container from './containers/MessagesListWrapperContainer';
 
 Template.Discussion_React.viewmodel({

@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { insert, update, remove } from '/imports/api/lessons/methods.js';
 import { inspire } from '/imports/api/helpers.js';
 

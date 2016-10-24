@@ -2,8 +2,9 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionDocumentTypes, WorkItemsStore, WorkInboxFilters } from '/imports/api/constants.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
+import { ActionDocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
+import { WorkInboxFilters } from '/imports/api/constants.js';
 const { TYPES } = WorkItemsStore;
 
 Template.WorkInbox_List.viewmodel({

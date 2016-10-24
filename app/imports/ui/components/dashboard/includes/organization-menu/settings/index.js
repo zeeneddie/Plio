@@ -1,4 +1,5 @@
 import './departments';
+import './customers';
 import './org-currency';
 import './org-name';
 import './org-timezone';

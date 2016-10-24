@@ -1,14 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { MessagesSchema } from './messages-schema.js';
-import { Messages } from './messages.js';
+import { MessagesSchema } from '/imports/share/schemas/messages-schema.js';
+import { Messages } from '/imports/share/collections/messages.js';
 import MessagesService from './messages-service.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
-import { Discussions } from '../discussions/discussions.js';
-import { IdSchema, UserIdSchema, DiscussionIdSchema, optionsSchema, OrganizationIdSchema } from '../schemas.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import {
+  IdSchema, UserIdSchema,
+  DiscussionIdSchema, optionsSchema,
+  OrganizationIdSchema
+} from '/imports/share/schemas/schemas.js';
 import { checkDocExistance, checkOrgMembership } from '../checkers.js';
-import { getCollectionByDocType } from '../helpers.js';
+import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { CANNOT_CREATE_MESSAGE_FOR_DELETED, ONLY_OWNER_CAN_UPDATE } from '../errors.js';
 
 const onInsertCheck = ({ discussionId }) => {

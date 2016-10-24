@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { RiskEvaluationDecisions } from '/imports/api/constants.js';
+import { RiskEvaluationDecisions } from '/imports/share/constants.js';
 
 Template.RiskEvaluation_Decision_Edit.viewmodel({
   decision: '',

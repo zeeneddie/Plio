@@ -1,3 +1,6 @@
 import './server/publications.js';
-import './user-service.js';
+import './checkers.js';
+import './errors.js';
 import './methods.js';
+import './user-notifications-sender.js';
+import './user-service.js';

@@ -26,6 +26,10 @@ Template.ESSources_Create.viewmodel({
   isSourceType(sourceType) {
     return this.sourceType() === sourceType;
   },
+  isDocxFile() {
+    const { name } = this.sourceFile() || {};
+    return name && (name.split('.').pop().toLowerCase() === 'docx');
+  },
   changeType(e) {
     const { id } = Blaze.getData(e.target);
     this.sourceType(id);

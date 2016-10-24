@@ -1,4 +1,4 @@
-import { LessonsLearned } from './lessons.js';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 
 export default {
   collection: LessonsLearned,

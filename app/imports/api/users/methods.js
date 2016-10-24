@@ -6,12 +6,12 @@ import { Accounts } from 'meteor/accounts-base'
 import { Roles } from 'meteor/alanning:roles';
 
 import UserService from './user-service.js';
-import { UserProfileSchema, PhoneNumberSchema } from './user-schema.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { IdSchema, UserIdSchema } from '../schemas.js';
-import { UserRoles, UserMembership } from '../constants.js';
+import { UserProfileSchema, PhoneNumberSchema } from '/imports/share/schemas/user-schema.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { IdSchema, UserIdSchema } from '/imports/share/schemas/schemas.js';
+import { UserRoles, UserMembership } from '/imports/share/constants.js';
 import Method from '../method.js';
-import { withUserId, chain, mapArgsTo } from '../helpers.js';
+import { withUserId, chain, mapArgsTo } from '/imports/api/helpers.js';
 import {
   USR_EnsureUpdatingHimselfChecker,
   USR_EnsureCanChangeRolesChecker,
