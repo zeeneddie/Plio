@@ -27,11 +27,13 @@ Template.StandardsHeader.viewmodel({
     onSelect();
 
     Tracker.afterFlush(() => {
-      const list = Object.assign({}, ViewModel.findOne('StandardsList'));
+      Meteor.defer(() => {
+        const list = Object.assign({}, ViewModel.findOne('StandardsList'));
 
-      if (list) {
-        invoke(list, 'handleRoute');
-      }
+        if (list) {
+          invoke(list, 'handleRoute');
+        }
+      });
     });
   },
   onNavigate(e) {

@@ -3,10 +3,7 @@
     {{#if workItemId}}
       {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
         {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> Actions_Card_Read
-            isReadOnly=workItem.isDeleted
-            _id=linkedDocId
-            isReady=isReady}}
+        {{> Actions_Card_Read (cardArgs)}}
       {{/if}}
 
       {{#if isDocType LINKED_TYPES.NON_CONFORMITY}}
@@ -16,10 +13,7 @@
 
       {{#if isDocType LINKED_TYPES.RISK}}
         {{> WorkInbox_QAPanel_Read doc=workItem}}
-        {{> Risks_Card_Read
-            isReadOnly=workItem.isDeleted
-            _id=linkedDocId
-            isReady=isReady}}
+        {{> Risks_Card_Read (cardArgs)}}
       {{/if}}
     {{else}}
       <div class="content-cards-inner flex scroll">

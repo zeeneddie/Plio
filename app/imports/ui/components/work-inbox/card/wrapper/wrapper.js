@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
 
 import { WorkItemsStore } from '/imports/share/constants.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
@@ -9,16 +10,6 @@ const { LINKED_TYPES } = WorkItemsStore;
 Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   isRendered: false,
   mixin: ['workInbox', 'organization', 'utils'],
-
-  onCreated(template) {
-    // template.autorun(() => {
-    //   const _id = this._id();
-    //   const organizationId = this.organizationId();
-    //   if (_id && organizationId) {
-    //     DocumentCardSubs.subscribe('workItemCard', { _id, organizationId });
-    //   }
-    // });
-  },
   onRendered() {
     this.isRendered(true);
   },
@@ -44,7 +35,6 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
     return this._getWorkItemByQuery({ _id: this._id() });
   },
   linkedDocId() {
-    const { linkedDoc: { _id } = {} } = this.workItem() || {};
-    return _id;
+    return get('linkedDoc._id', this.workItem());
   }
 });

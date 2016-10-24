@@ -55,17 +55,7 @@ Template.Risks_Card_Read.viewmodel({
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
-    const callback = (err) => {
-      cb(err, () => {
-        const risks = this._getRisksByQuery({});
-
-        if (risks.count() > 0) {
-          Meteor.setTimeout(() => {
-            this.goToRisks();
-          }, 0);
-        }
-      });
-    };
+    const callback = (err) => cb(err, () => this.handleRouteRisks());
 
     remove.call({ _id }, callback);
   }

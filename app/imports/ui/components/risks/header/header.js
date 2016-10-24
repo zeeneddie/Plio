@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 import { RiskFilters } from '/imports/api/constants.js';
 
 Template.Risks_Header.viewmodel({
-  mixin: 'risk',
+  mixin: ['risk', 'router'],
   headerArgs() {
     return {
       idToExpand: this.riskId(),
@@ -18,12 +18,6 @@ Template.Risks_Header.viewmodel({
   onSelectFilter(value, onSelect) {
     onSelect();
 
-    Tracker.afterFlush(() => {
-      Meteor.defer(() => {
-        const list = Object.assign({}, ViewModel.findOne('Risks_List'));
-
-        !!list && invoke(list, 'handleRoute');
-      });
-    });
+    Tracker.afterFlush(() => this.handleRouteRisks());
   }
 });

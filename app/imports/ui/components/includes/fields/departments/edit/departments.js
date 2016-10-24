@@ -57,7 +57,7 @@ Template.Departments_Edit.viewmodel({
       Tracker.afterFlush(() => {
         this.expandCollapsed(_id, () => {
           const listItems = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, _id));
-          listItems.map(vm => vm.toggleCollapse());
+          listItems && listItems.map(vm => vm.toggleCollapse());
         });
       });
     });
