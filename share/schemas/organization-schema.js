@@ -103,18 +103,6 @@ const remindersSchema = new SimpleSchema({
   }
 });
 
-const guidelinesSchema = new SimpleSchema({
-  minor: {
-    type: String
-  },
-  major: {
-    type: String
-  },
-  critical: {
-    type: String
-  }
-});
-
 const OrganizationCurrencySchema = {
   currency: {
     type: String,
@@ -122,6 +110,36 @@ const OrganizationCurrencySchema = {
     optional: true
   }
 };
+
+const ncGuidelinesSchema = new SimpleSchema({
+  minor: {
+    type: String,
+    label: 'Guideline for classifying a minor non-conformity'
+  },
+  major: {
+    type: String,
+    label: 'Guideline for classifying a major non-conformity'
+  },
+  critical: {
+    type: String,
+    label: 'Guideline for classifying a critical non-conformity'
+  }
+});
+
+const rkGuidelinesSchema = new SimpleSchema({
+  minor: {
+    type: String,
+    label: 'Guideline for initial categorization of a minor risk'
+  },
+  major: {
+    type: String,
+    label: 'Guideline for initial categorization of a major risk'
+  },
+  critical: {
+    type: String,
+    label: 'Guideline for initial categorization of a critical risk'
+  }
+});
 
 const OrganizationEditableFields = {
   name: {
@@ -138,15 +156,16 @@ const OrganizationEditableFields = {
     optional: true
   },
   ncGuidelines: {
-    type: guidelinesSchema,
+    type: ncGuidelinesSchema,
     optional: true
   },
   rkGuidelines: {
-    type: guidelinesSchema,
+    type: rkGuidelinesSchema,
     optional: true
   },
   rkScoringGuidelines: {
     type: String,
+    label: 'Risk scoring guidelines text',
     optional: true
   },
   isOrgAdmin: {
@@ -191,9 +210,9 @@ const OrganizationSchema = new SimpleSchema([
   }
 ]);
 
-export { 
-  OrganizationEditableFields, 
-  OrganizationSchema, 
+export {
+  OrganizationEditableFields,
+  OrganizationSchema,
   OrganizationCurrencySchema,
   UserSettingsSchema
 };

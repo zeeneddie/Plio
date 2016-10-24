@@ -18,7 +18,7 @@ Template.OrgSettings_ProblemGuideline.viewmodel({
     const prev = this.templateInstance.data.text;
     const text = this.text();
 
-    return text && text !== prev;
+    return text !== prev;
   },
   onFocusOut(e) {
     if (this.isChanged()) {

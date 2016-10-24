@@ -19,7 +19,7 @@ Template.ModalWindow.viewmodel({
     const oldOnpopstate = window.onpopstate;
     window.onpopstate = (e) => {
       this.close();
-      _.isFunction(oldOnpopstate) && oldOnpopstate();
+      _.isFunction(oldOnpopstate) && oldOnpopstate(e);
       window.onpopstate = oldOnpopstate;
     };
   },
