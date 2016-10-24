@@ -13,10 +13,7 @@ import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js'
 import { ONLY_OWNER_CAN_UPDATE } from '/imports/api/errors.js';
 
 const onUpdateCheck = ({ _id, userId }) => {
-	const { createdBy, organizationId } = checkDocExistance(Files, { _id });
-	if (userId !== createdBy) {
-		throw ONLY_OWNER_CAN_UPDATE;
-	}
+	const { organizationId } = checkDocExistance(Files, { _id });
 
   checkOrgMembership(userId, organizationId);
 	return true;
