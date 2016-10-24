@@ -5,6 +5,7 @@ import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  isInitialized: false,
   onCreated() {
     // variables that don't need to be reactive
     this.savingStateTimeout = 500;
@@ -14,6 +15,13 @@ Template.ModalWindow.viewmodel({
   onRendered(template) {
     this.modal.modal('show');
     this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
+
+    const oldOnpopstate = window.onpopstate;
+    window.onpopstate = (e) => {
+      this.close();
+      _.isFunction(oldOnpopstate) && oldOnpopstate();
+      window.onpopstate = oldOnpopstate;
+    };
   },
   variation: '',
   isSaving: false,
