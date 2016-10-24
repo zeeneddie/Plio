@@ -14,89 +14,88 @@
 
           <div class="list-group">
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Non-conformity name</p>
-              <h4 class="list-group-item-heading">
-                <span {{b "text: this.title"}}></span>
-                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default">
-                  {{getStatusName this.status}}
-                  {{#if this.workflowType}}
-                    <span class="display-on-parent-hover">({{this.workflowType}} workflow)</span>
-                  {{/if}}
-                </span>
-              </h4>
-            </div>
+            {{#Fields_ListGroupItem_Read
+              label="Non conformity name"}}
+              <span {{b "text: this.title"}}></span>
+              <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+              <span class="label text-default">
+                {{getStatusName this.status}}
+                {{#if this.workflowType}}
+                  <span class="display-on-parent-hover">({{this.workflowType}} workflow)</span>
+                {{/if}}
+              </span>
+            {{/Fields_ListGroupItem_Read}}
 
-            {{#if this.description}}
-              <div class="list-group-item">
-                <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-              </div>
-            {{/if}}
+            {{#with this.description}}
+              {{> Fields_ListGroupItem_Read
+                  label="Description"
+                  text=this}}
+            {{/with}}
 
             {{#if isReady}}
               {{> Fields_Standards_Read standardsIds=this.standardsIds}}
             {{/if}}
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Identified by</p>
-                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.identifiedBy)"}}></h4>
+              {{#with this.identifiedBy}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Identified by"
+                      text=(userNameOrEmail this)}}
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Date identified</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.identifiedAt)"}}></h4>
+              {{/with}}
+              {{#with this.identifiedAt}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Date identified"
+                      text=(renderDate this)}}
                 </div>
-              </div>
+              {{/with}}
             </div>
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Magnitude</p>
-                  <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
+              {{#with this.magnitude}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Magnitude"
+                      text=(capitalize this)}}
                 </div>
-              </div>
+              {{/with}}
               {{#with this.ref}}
                 {{#if this.text}}
                   <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Help desk ref</p>
-                      <h4 class="list-group-item-heading">
-                        {{#if this.url}}
-                          <a class="pointer" {{b "attr: { href: this.url }"}}>{{this.text}}</a>
-                        {{else}}
-                          <span>{{this.text}}</span>
-                        {{/if}}
-                      </h4>
-                    </div>
+                    {{#Fields_ListGroupItem_Read
+                      label="Help desk ref"}}
+                      {{#if this.url}}
+                        <a class="pointer" {{b "attr: { href: this.url }"}}>{{this.text}}</a>
+                      {{else}}
+                        <span>{{this.text}}</span>
+                      {{/if}}
+                    {{/Fields_ListGroupItem_Read}}
                   </div>
                 {{/if}}
               {{/with}}
             </div>
 
-            <div class="row">
-              <div class="col-sm-12">
-                <div class="list-group-item" {{b "if: this.cost"}}>
-                  <p class="list-group-item-text">Approx cost per occurrence</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderCost(this.cost)"}}></h4>
+            {{#with this.cost}}
+              <div class="row">
+                <div class="col-sm-12">
+                  {{> Fields_ListGroupItem_Read
+                      label="Approx cost per occurrence"
+                      text=(renderCost this)}}
                 </div>
               </div>
-            </div>
+            {{/with}}
 
-            <div class="row">
-              <div class="col-sm-12">
-                {{#if isReady}}
+            {{#if isReady}}
+              <div class="row">
+                <div class="col-sm-12">
                   {{#with departmentsIds}}
                     {{> Departments_Read departmentsIds=this}}
                   {{/with}}
-                {{/if}}
+                </div>
               </div>
-            </div>
+            {{/if}}
 
           </div>
 

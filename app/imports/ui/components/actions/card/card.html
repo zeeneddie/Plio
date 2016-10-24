@@ -11,44 +11,44 @@
           onOpenEditModal=onOpenEditModalCb}}
 
           <div class="list-group">
+            {{#Fields_ListGroupItem_Read
+              label="Title"}}
+              <span {{b "text: this.title"}}></span>
+              <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+              <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+            {{/Fields_ListGroupItem_Read}}
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Title</p>
-              <h4 class="list-group-item-heading">
-                <span {{b "text: this.title"}}></span>
-                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
-              </h4>
-            </div>
-
-            {{> Fields_ListGroupItem_Read
-                label="Description"
-                text=this.description}}
+            {{#with description}}
+              {{> Fields_ListGroupItem_Read
+                  label="Description"
+                  text=this}}
+            {{/with}}
 
             {{> Actions_LinkedTo_Read linkedTo=this.linkedTo}}
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Created date</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.createdAt)"}}></h4>
+              {{#with this.createdAt}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Created date"
+                      text=(renderDate this)}}
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Owner</p>
-                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.ownerId)"}}></h4>
+              {{/with}}
+              {{#with this.ownerId}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Owner"
+                      text=(userFullNameOrEmail this)}}
                 </div>
-              </div>
+              {{/with}}
             </div>
 
-            {{#if this.planInPlace}}
-              <div class="list-group-item">
-                <p class="list-group-item-text">Plan in place?</p>
-                <h4 class="list-group-item-heading"
-                  {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
-              </div>
-            {{/if}}
+            {{#with this.planInPlace}}
+              {{> Fields_ListGroupItem_Read
+                  label="Plan in place?"
+                  text=this
+                  className=(getClassForPlanInPlace this)}}
+            {{/with}}
           </div>
 
           <div class="list-group">

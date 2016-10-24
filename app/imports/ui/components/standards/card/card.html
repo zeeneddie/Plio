@@ -20,20 +20,20 @@
             <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
-                {{#if this.description}}
+                {{#with this.description}}
                   {{> Fields_ListGroupItem_Read
                       label="Description"
-                      text=this.description}}
-                {{/if}}
+                      text=this}}
+                {{/with}}
 
                 <div class="row">
-                  {{#if this.issueNumber}}
+                  {{#with this.issueNumber}}
                     <div class="col-sm-6">
                       {{> Fields_ListGroupItem_Read
                           label="Issue number"
-                          text=this.issueNumber}}
+                          text=this}}
                     </div>
-                  {{/if}}
+                  {{/with}}
                   {{#with section}}
                     <div class="col-sm-6">
                       {{> Fields_ListGroupItem_Read
@@ -51,11 +51,13 @@
                           text=this.title}}
                     </div>
                   {{/with}}
-                  <div class="col-sm-6">
-                    {{> Fields_ListGroupItem_Read
-                        label="Owner"
-                        text=(userNameOrEmail this.owner)}}
-                  </div>
+                  {{#with owner}}
+                    <div class="col-sm-6">
+                      {{> Fields_ListGroupItem_Read
+                          label="Owner"
+                          text=(userNameOrEmail this)}}
+                    </div>
+                  {{/with}}
                 </div>
 
                 {{#if isReady}}
