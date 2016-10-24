@@ -22,6 +22,7 @@ $font_2: sans-serif;
 
     .editor-container {
       height: 100%;
+      padding-top: 54px;
     }
   }
 
@@ -208,10 +209,16 @@ $font_2: sans-serif;
 .modal .quill {
   &.ql-expanded {
     position: absolute;
-    overflow: hidden;
+    overflow-x: scroll;
 
     .rich-text-controls {
       border-top: none;
+      background-color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
     }
   }
 
