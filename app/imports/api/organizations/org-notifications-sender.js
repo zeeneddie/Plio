@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-
+import { moment } from 'meteor/momentjs:moment';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
@@ -12,6 +12,26 @@ export default class OrgNotificationsSender {
     });
     this._orgName = this._organization.name;
     this._orgOwnerId = this._organization.ownerId();
+  }
+
+  orgCreated() {
+    const ownerDetail = Meteor.users.findOne({ _id: this._orgOwnerId })
+    const { firstName, lastName } = ownerDetail.profile;
+
+    const emailSubject = `New Plio organization created`;
+    const secondaryText = `Owner: ${firstName} ${lastName}; ` +
+      `Email: ${_.first(ownerDetail.emails).address}; ` +
+      `Created: ${moment(this._organization.createdAt).format('DD MMM YYYY')}`;
+
+    new NotificationSender({
+      recipients: Meteor.userId(),
+      emailSubject,
+      templateData: {
+        secondaryText,
+        title: emailSubject,
+      },
+      templateName: 'personalEmail',
+    }).sendEmail();
   }
 
   transferCreated(newOwnerId, transferId, inviterId) {
