@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+
 import { Actions } from '/imports/share/collections/actions.js';
 import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
@@ -30,6 +32,9 @@ Meteor.publishComposite('actionsList', function(organizationId, isDeleted = { $i
 });
 
 Meteor.publishComposite('actionCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

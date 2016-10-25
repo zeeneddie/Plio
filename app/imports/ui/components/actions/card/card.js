@@ -11,7 +11,7 @@ Template.Actions_Card_Read.viewmodel({
     return this._getActionByQuery({ _id: this._id() });
   },
   getActionTitle() {
-    return this._getNameByType(this.action() && this.action().type);
+    return this._getNameByType(get(this.action(), 'type'));
   },
   getClassForPlanInPlace(plan) {
     switch(plan) {

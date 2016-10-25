@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import { Risks } from '/imports/share/collections/risks';
@@ -62,6 +63,9 @@ Meteor.publishComposite('risksList', function(organizationId, isDeleted = { $in:
 });
 
 Meteor.publishComposite('riskCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

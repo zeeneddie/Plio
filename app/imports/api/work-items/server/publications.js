@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import { WorkItems } from '/imports/share/collections/work-items';
@@ -63,6 +64,9 @@ Meteor.publish('workItemsList', function(organizationId, isDeleted = { $in: [nul
 });
 
 Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+  
   return {
     find() {
       const userId = this.userId;
@@ -93,6 +97,8 @@ const createRelativeCardPublicationTree = (collection) => {
 };
 
 Meteor.publishComposite('workInboxCard', function({ _id, organizationId }) {
+  check()
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

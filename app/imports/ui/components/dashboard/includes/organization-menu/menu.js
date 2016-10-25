@@ -12,7 +12,7 @@ Template.Organization_Menu.viewmodel({
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organizations() {
-    return Organizations.find({ 'users.userId': Meteor.userId() });
+    return Organizations.find();
   },
   openOrgSettings(e) {
     e.preventDefault();

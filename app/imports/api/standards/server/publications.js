@@ -114,6 +114,9 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
 });
 
 Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {

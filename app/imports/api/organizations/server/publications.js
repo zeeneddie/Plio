@@ -50,8 +50,7 @@ Meteor.publish('currentUserOrganizations', function() {
     return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
-        serialNumber: 1,
-        users: 1
+        serialNumber: 1
       }
     });
   } else {

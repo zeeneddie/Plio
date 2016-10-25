@@ -7,12 +7,15 @@ import { UserSubs, CountSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
+  isReady: false,
+  _subHandlers: [],
   autorun: [
     function() {
       const template = this.templateInstance;
       const organizationId = this.organizationId();
+      const { users } = this.organization();
 
-      this._subHandlers([
+      let _subHandlers = [
         CountSubs.subscribe('standardsCount', 'standards-count-' + organizationId, organizationId),
         CountSubs.subscribe('standardsNotViewedCount', 'standards-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('nonConformitiesCount', 'non-conformities-count-' + organizationId, organizationId),
@@ -20,16 +23,21 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('workItemsCount', 'work-items-count-' + organizationId, organizationId),
         CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count-' + organizationId, organizationId),
-        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId),
-        UserSubs.subscribe('organizationUsers', this.organization().users.map(property('userId')))
-      ]);
+        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId)
+      ];
+
+      if (users && users.length) {
+        _subHandlers = _subHandlers.concat([
+          UserSubs.subscribe('organizationUsers', users.map(property('userId')))
+        ]);
+      }
+
+      this._subHandlers(_subHandlers);
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],
-  isReady: false,
-  _subHandlers: [],
   _renderMetrics(pluralizeWord = '', totalCount = 0) {
 
     // Workaround for https://github.com/blakeembrey/pluralize/pull/12

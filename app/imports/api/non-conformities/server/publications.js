@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
 import { NonConformities } from '/imports/share/collections/non-conformities';
@@ -69,6 +70,9 @@ Meteor.publishComposite('nonConformitiesList', function (organizationId, isDelet
 });
 
 Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+  
   const userId = this.userId;
 
   if (!userId || !isOrgMember(userId, organizationId)) {
