@@ -49,6 +49,10 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
 ];
 
+export const PlioS3Logos = {
+  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
+}
+
 export const CollectionNames = {
   ACTIONS: 'Actions',
   AUDIT_LOGS: 'AuditLogs',
@@ -429,3 +433,10 @@ export const OrganizationDefaults = {
   },
   rkScoringGuidelines: defaultRiskScoringGuideline
 };
+
+
+export const EmailsForPlioReporting = [
+  'roman.valihura@gmail.com',
+  // 'james.ives@pliohub.com',
+  // 'steve.ives@pliohub.com',
+];

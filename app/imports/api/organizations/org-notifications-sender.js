@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { moment } from 'meteor/momentjs:moment';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';
-import { EmailsForPlioReporting } from '/imports/share/constants';
+import { EmailsForPlioReporting, PlioS3Logos } from '/imports/share/constants';
 
 
 export default class OrgNotificationsSender {
@@ -29,7 +29,11 @@ export default class OrgNotificationsSender {
       emailSubject,
       templateData: {
         secondaryText,
-        title: emailSubject,
+        title: this._orgName,
+        avatar: {
+          alt: 'Plio',
+          url: PlioS3Logos.square,
+        },
       },
       templateName: 'personalEmail',
     }).sendEmail();
