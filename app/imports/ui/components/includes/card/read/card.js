@@ -9,7 +9,7 @@ Template.Card_Read.viewmodel({
   isReadOnly: false,
   isDeleteBtnShown: false,
   isReady: false,
-  
+
   isOrgOwner({ organizationId }) {
     return isOrgOwner(Meteor.userId(), organizationId);
   },
