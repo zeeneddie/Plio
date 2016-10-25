@@ -1,6 +1,6 @@
 <template name="Risks_Card_Read">
   <div class="content-cards-inner flex scroll" {{b "class: { content: !risk }"}}>
-    {{#if risks.length}}
+    {{#if showCard}}
       {{#with risk}}
         {{#Card_Read
           isReadOnly=isReadOnly

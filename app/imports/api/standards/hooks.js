@@ -4,6 +4,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 import DiscussionsService from '../discussions/discussions-service.js';
 import { DocumentTypes } from '/imports/share/constants.js';
 import FilesService from '../files/files-service.js';
+import StandardService from './standards-service.js';
 
 import get from 'lodash.get';
 
@@ -36,4 +37,5 @@ Standards.after.remove((userId, doc) => {
     FilesService.bulkRemove({ fileIds });
   })();
 
+  StandardService.unlinkProblemDocs({ _id: doc._id });
 });

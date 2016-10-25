@@ -117,6 +117,9 @@ Template.Standards_Card_Read.viewmodel({
   _getNCsQuery() {
     return { standardsIds: get(this.standard(), '_id') };
   },
+  _getRisksQuery() {
+    return { standardsIds: get(this.standard(), '_id') };
+  },
   pathToDiscussion() {
     const params = {
       orgSerialNumber: this.organizationSerialNumber(),

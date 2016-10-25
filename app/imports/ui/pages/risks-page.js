@@ -34,5 +34,13 @@ Template.Risks_Page.viewmodel({
       collection: Risks,
       template: 'Risks_List'
     };
+  },
+  cardArgs() {
+    const isReady = this.isReady();
+    const risk = Risks.findOne({ _id: this.riskId() });
+    return {
+      risk,
+      isReady
+    };
   }
 });

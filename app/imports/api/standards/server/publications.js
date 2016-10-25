@@ -29,6 +29,7 @@ import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
   getPublishCompositeOrganizationUsers,
   makeOptionsFields,
@@ -162,19 +163,21 @@ Meteor.publish('standardsDeps', function(organizationId) {
   const risks = getProblems(Risks);
   const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
+  const riskTypes = RiskTypes.find({ organizationId });
 
   return [
     actions,
     ncs,
     risks,
     departments,
-    standards
+    standards,
+    riskTypes
   ];
 });
 
 Meteor.publish('standardsCount', function (counterName, organizationId) {
   const userId = this.userId;
-  
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }

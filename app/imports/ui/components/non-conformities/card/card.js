@@ -11,6 +11,9 @@ Template.NC_Card_Read.viewmodel({
   mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
   isReadOnly: false,
   isReady: false,
+  showCard() {
+    return this.NCs().length;
+  },
   ActionTypes() {
     return ActionTypes;
   },

@@ -11,6 +11,9 @@ Template.Risks_Card_Read.viewmodel({
   isReadOnly: false,
   isReady: false,
   RiskRCALabel: AnalysisTitles.riskAnalysis,
+  showCard() {
+    return this.risks().length;
+  },
   ActionTypes() {
     return ActionTypes;
   },

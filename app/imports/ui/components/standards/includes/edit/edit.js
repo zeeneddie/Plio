@@ -26,6 +26,9 @@ Template.EditStandard.viewmodel({
   _getNCsQuery() {
     return { standardsIds: this._id && this._id() };
   },
+  _getRisksQuery() {
+    return { standardsIds: this._id && this._id() };
+  },
   onUpdateNotifyUserCb() {
     return this.onUpdateNotifyUser.bind(this);
   },

@@ -21,7 +21,8 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
     return {
       _id,
       isReady,
-      isReadOnly
+      isReadOnly,
+      showCard: true
     };
   },
   isDocType(...args) {

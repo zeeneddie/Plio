@@ -20,6 +20,13 @@
           </div>
           {{> DeleteButton smallIcon=true onClick=removeFileFn}}
         </div>
+        <p class="no-margin">
+          {{#if isDocxFile}}
+            File will be uploaded and rendered as HTML when you click on the Save button
+          {{else}}
+            File will be uploaded when you click on the Save button
+          {{/if}}
+        </p>
       {{else}}
         <div>
           <span class="btn btn-primary btn-file">

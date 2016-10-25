@@ -18,27 +18,31 @@ Template.WorkInbox_List.viewmodel({
     'utils', { STATUSES: 'workItemStatus' }
   ],
   onRendered(template) {
-    template.autorun(() => this.handleRoute());
-  },
-  handleRoute() {
-    const workItemId = this.workItemId();
-    const {
-      result:contains,
-      first:defaultDoc
-    } = this._findWorkItemForFilter(workItemId);
+    template.autorun((computation) => {
+      const workItemId = this.workItemId();
+      const {
+        result:contains,
+        first:defaultDoc,
+        array
+      } = this._findWorkItemForFilter(workItemId);
 
-    if (!contains) {
-      if (defaultDoc) {
-        const { _id } = defaultDoc;
+      if (!contains) {
+        if (defaultDoc) {
+          const { _id } = defaultDoc;
 
-        this.goToWorkItem(_id);
-        this.expandCollapsed(_id);
-      } else {
-        this.goToWorkInbox();
+          Meteor.setTimeout(() => {
+            this.goToWorkItem(_id);
+            this.expandCollapsed(_id);
+          }, 0);
+        } else {
+          const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
+          
+          if (routeName !== 'workInbox') {
+            Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+          }
+        }
       }
-    } else {
-      this.expandCollapsed(workItemId);
-    }
+    });
   },
   _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
     const { my = {}, team = {} } = Object.assign({}, this.items());

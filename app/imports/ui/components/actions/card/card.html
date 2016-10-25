@@ -1,6 +1,6 @@
 <template name="Actions_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if actions.count}}
+    {{#if showCard}}
       {{#with action}}
         {{#Card_Read
           isReadOnly=isReadOnly

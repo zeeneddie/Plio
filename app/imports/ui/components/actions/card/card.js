@@ -7,6 +7,9 @@ import { ActionPlanOptions } from '/imports/share/constants.js';
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   isReadOnly: false,
+  showCard() {
+    return this.actions().length;
+  },
   action() {
     return this._getActionByQuery({ _id: this._id() });
   },
@@ -36,7 +39,7 @@ Template.Actions_Card_Read.viewmodel({
   },
   actions() {
     const organizationId = this.organizationId();
-    return this._getActionsByQuery({ organizationId });
+    return this._getActionsByQuery({ organizationId }).fetch();
   },
   openEditModal() {
     const _title = this.getActionTitle();

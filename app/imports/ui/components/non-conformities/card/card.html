@@ -1,6 +1,6 @@
 <template name="NC_Card_Read">
   <div class="content-cards-inner flex scroll" {{b "class: { content: !NC }"}}>
-    {{#if NCs.length}}
+    {{#if showCard}}
       {{#with NC}}
         {{#Card_Read
           isReadOnly=isReadOnly

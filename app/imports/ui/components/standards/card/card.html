@@ -83,6 +83,12 @@
                     type=ActionTypes.CORRECTIVE_ACTION
                     standardId=this._id}}
 
+                {{> Subcards_Risks_Read _query=_getRisksQuery}}
+
+                {{> Subcards_Actions_Read
+                    type=ActionTypes.CORRECTIVE_ACTION
+                    standardId=this._id}}
+
                 {{> Subcards_Actions_Read
                     type=ActionTypes.PREVENTATIVE_ACTION
                     standardId=this._id}}
