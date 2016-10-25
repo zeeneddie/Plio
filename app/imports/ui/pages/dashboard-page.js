@@ -13,9 +13,8 @@ Template.Dashboard_Page.viewmodel({
     function() {
       const template = this.templateInstance;
       const organizationId = this.organizationId();
-      const { users } = this.organization();
 
-      let _subHandlers = [
+      this._subHandlers([
         CountSubs.subscribe('standardsCount', 'standards-count-' + organizationId, organizationId),
         CountSubs.subscribe('standardsNotViewedCount', 'standards-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('nonConformitiesCount', 'non-conformities-count-' + organizationId, organizationId),
@@ -24,15 +23,9 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId)
-      ];
+      ]);
 
-      if (users && users.length) {
-        _subHandlers = _subHandlers.concat([
-          UserSubs.subscribe('organizationUsers', users.map(property('userId')))
-        ]);
-      }
-
-      this._subHandlers(_subHandlers);
+      BackgroundSubs.subscribe('organizationDeps', this.organizationId());
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));

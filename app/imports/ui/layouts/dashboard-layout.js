@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
-import { OrgSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
 
 
 Template.Dashboard_Layout.viewmodel({
@@ -14,19 +14,8 @@ Template.Dashboard_Layout.viewmodel({
     },
     function() {
       this._subHandlers([
-        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber(), {
-          onReady: () => this.initBackgroundSubs()
-        })
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber())
       ]);
     }
-  ],
-  initBackgroundSubs() {
-    const organizationId = this.organizationId();
-
-    // We need to fetch and cache these documents in background to decrease the loading time of other screens
-    OrgSettingsDocSubs.subscribe('standards-book-sections', organizationId);
-    OrgSettingsDocSubs.subscribe('standards-types', organizationId);
-    OrgSettingsDocSubs.subscribe('riskTypes', organizationId);
-    OrgSettingsDocSubs.subscribe('departments', organizationId);
-  }
+  ]
 });

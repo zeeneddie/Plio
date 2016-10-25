@@ -174,6 +174,7 @@ Meteor.publish('standardsDeps', function(organizationId) {
 
 Meteor.publish('standardsCount', function (counterName, organizationId) {
   const userId = this.userId;
+  
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
