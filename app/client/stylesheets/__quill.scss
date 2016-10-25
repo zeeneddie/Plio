@@ -11,7 +11,7 @@ $font_2: sans-serif;
 
   &.ql-expanded {
     position: fixed;
-    top: 0;
+    top: 55px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -208,9 +208,6 @@ $font_2: sans-serif;
 
 .modal .quill {
   &.ql-expanded {
-    position: absolute;
-    overflow-x: scroll;
-
     .rich-text-controls {
       border-top: none;
       background-color: #fff;
