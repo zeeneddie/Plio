@@ -30,6 +30,7 @@ export default class OrgNotificationsSender {
       templateData: {
         secondaryText,
         title: this._orgName,
+        organizationName: this._orgName,
         avatar: {
           alt: 'Plio',
           url: PlioS3Logos.square,
