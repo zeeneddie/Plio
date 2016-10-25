@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { moment } from 'meteor/momentjs:moment';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';
+import { EmailsForPlioReporting } from '/imports/share/constants';
 
 
 export default class OrgNotificationsSender {
@@ -24,7 +25,7 @@ export default class OrgNotificationsSender {
       `Created: ${moment(this._organization.createdAt).format('DD MMM YYYY')}`;
 
     new NotificationSender({
-      recipients: Meteor.userId(),
+      recipients: EmailsForPlioReporting,
       emailSubject,
       templateData: {
         secondaryText,
