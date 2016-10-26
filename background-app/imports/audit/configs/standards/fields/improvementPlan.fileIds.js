@@ -18,9 +18,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}}',
+          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from improvement plan of {{{docDesc}}}'
+          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -32,6 +32,7 @@ export default {
     return {
       name: () => file().name,
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

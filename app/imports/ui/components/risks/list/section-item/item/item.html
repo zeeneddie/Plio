@@ -8,7 +8,9 @@
     <div class="list-group-item-content">
       <h4 class="list-group-item-heading">
         <span {{b "text: title"}}></span>
-        <span class="label label-primary" {{b "if: isNew"}}>New</span>
+        {{#if isNew}}
+          <span class="label label-primary">New</span>
+        {{/if}}
       </h4>
       {{#if isActiveRiskFilter 2}}
         <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>

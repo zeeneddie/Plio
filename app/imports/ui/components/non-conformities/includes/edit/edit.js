@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import {
   update,
@@ -9,7 +10,7 @@ import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.NC_Card_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
+  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
@@ -64,8 +65,26 @@ Template.NC_Card_Edit.viewmodel({
           swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
 
           this.modal().close();
+
+          this.redirect();
         });
       }
     );
   },
+  redirect() {
+    const list = Object.assign({}, ViewModel.findOne('NC_List'));
+
+    if (list) {
+      const { first } = Object.assign({}, invoke(list, '_findNCForFilter'));
+
+      if (!!first) {
+        const { _id } = first;
+
+        Meteor.setTimeout(() => {
+          this.goToNC(_id);
+          this.expandCollapsed(_id);
+        }, 0);
+      }
+    }
+  }
 });

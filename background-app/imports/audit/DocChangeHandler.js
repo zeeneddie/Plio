@@ -44,6 +44,7 @@ export default class DocChangeHandler {
 
     this._docId = auditConfig.docId(doc);
     this._docDesc = auditConfig.docDescription(doc);
+    this._docName = auditConfig.docName(doc);
     this._docUrl = auditConfig.docUrl(doc);
 
     this._docOrgId = auditConfig.docOrgId(doc);
@@ -363,8 +364,9 @@ export default class DocChangeHandler {
     }[this._docChangeKind];
     const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
     const docDesc = this._docDesc;
+    const docName = this._docName;
 
-    return `${userName} ${action} ${docDesc}`;
+    return `${userName} ${action} ${docDesc} ${docName}`;
   }
 
   _saveLogs() {

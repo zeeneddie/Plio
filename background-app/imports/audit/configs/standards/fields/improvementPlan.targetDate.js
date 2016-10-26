@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}}'
+          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -36,6 +36,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
       oldValue: () => getPrettyOrgDate(oldValue, orgId())

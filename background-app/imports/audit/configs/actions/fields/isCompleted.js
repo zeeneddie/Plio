@@ -29,10 +29,10 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{userName}} completed {{{docDesc}}}' +
+            '{{userName}} completed {{{docDesc}}} {{{docName}}}' +
             '{{#if comments}} with following comments: {{comments}}{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled completion of {{{docDesc}}}' +
+            '{{userName}} canceled completion of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}'
       }
     }
@@ -42,6 +42,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       completed: () => isCompleted.newValue,
       comments: () => completionComments && completionComments.newValue,
       userName: () => getUserFullNameOrEmail(user)

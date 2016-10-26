@@ -16,17 +16,15 @@ Template.HelloPage.viewmodel({
       const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
-          if (Organizations.find({ 'users.userId': currentUser._id })) {
-            const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
-            const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
-            const orgExists = !!Organizations.findOne({ serialNumber });
+          const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+          const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
+          const orgExists = !!Organizations.findOne({ serialNumber });
 
-            if (serialNumber && orgExists) {
-              this.goToDashboard(serialNumber);
-            } else {
-              const org = Organizations.findOne({ 'users.userId': currentUser._id });
-              !!org && this.goToDashboard(org.serialNumber);
-            }
+          if (serialNumber && orgExists) {
+            this.goToDashboard(serialNumber);
+          } else {
+            const org = Organizations.findOne();
+            !!org && this.goToDashboard(org.serialNumber);
           }
         } else {
           FlowRouter.withReplaceState(() => {

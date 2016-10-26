@@ -1,5 +1,5 @@
 import { Actions } from '/imports/share/collections/actions.js';
-import { CollectionNames } from '/imports/share/constants.js';
+import { ActionTypes, CollectionNames } from '/imports/share/constants.js';
 
 import onCreated from './on-created.js';
 import onRemoved from './on-removed.js';
@@ -65,7 +65,15 @@ export default ActionAuditConfig = {
     return _id;
   },
 
-  docDescription({ sequentialId, title }) {
+  docDescription({ type }) {
+    return {
+      [ActionTypes.CORRECTIVE_ACTION]: 'corrective action',
+      [ActionTypes.PREVENTATIVE_ACTION]: 'preventative action',
+      [ActionTypes.RISK_CONTROL]: 'risk control'
+    }[type];
+  },
+
+  docName({ sequentialId, title }) {
     return `${sequentialId} "${title}"`;
   },
 

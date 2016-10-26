@@ -33,7 +33,15 @@ export default {
 
     const sequentialId = `${NC.sequentialId}-${serialNumber}`;
 
-    return this.collection.insert({ ...args, nonConformityId, serialNumber, sequentialId });
+    const { organizationId } = NC;
+
+    return this.collection.insert({
+      ...args,
+      nonConformityId,
+      serialNumber,
+      sequentialId,
+      organizationId
+    });
   },
 
   update({ _id, ...args }) {

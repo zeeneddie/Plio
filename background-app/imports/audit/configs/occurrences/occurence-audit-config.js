@@ -29,7 +29,11 @@ export default OccurenceAuditConfig = {
     return _id;
   },
 
-  docDescription({ sequentialId }) {
+  docDescription(doc) {
+    return 'occurrence';
+  },
+
+  docName({ sequentialId }) {
     return sequentialId;
   },
 

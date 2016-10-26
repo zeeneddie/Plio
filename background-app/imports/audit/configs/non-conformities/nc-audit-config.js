@@ -40,6 +40,10 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
     refUrl
   ],
 
+  docDescription(doc) {
+    return 'non-conformity';
+  },
+
   docUrl({ _id, organizationId }) {
     const { serialNumber } = Organizations.findOne({ _id: organizationId });
     return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${_id}`, {

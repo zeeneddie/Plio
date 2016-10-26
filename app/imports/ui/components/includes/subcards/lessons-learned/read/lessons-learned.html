@@ -1,5 +1,5 @@
 <template name="Subcards_LessonsLearned_Read">
-  <div {{b "if: lessons.count > 0"}}>
+  {{#if LessonsLearned.count}}
     <div class="card-block card-subheading">
       <h4 class="card-title">Lessons learned</h4>
     </div>
@@ -10,5 +10,5 @@
         {{/each}}
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>

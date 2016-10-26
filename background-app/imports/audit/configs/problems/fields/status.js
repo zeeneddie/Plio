@@ -1,4 +1,5 @@
 import { ProblemsStatuses } from '/imports/share/constants.js';
+import { capitalize } from '/imports/share/helpers.js';
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
@@ -23,13 +24,15 @@ export default {
         // 19 - Closed - action(s) verified, standard(s) reviewed
         return (newValue === 18) || (newValue === 19);
       },
-      text: 'Status of {{{docDesc}}} was changed to "{{newValue}}"',
-      title: '{{{docDesc}}} closed',
+      text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{newValue}}"',
+      title: '{{{docDescCapitalized}}} {{{docName}}} closed',
       data({ diffs: { status }, newDoc }) {
         const auditConfig = this;
 
         return {
+          docDescCapitalized: () => capitalize(auditConfig.docDescription(newDoc)),
           docDesc: () => auditConfig.docDescription(newDoc),
+          docName: () => auditConfig.docName(newDoc),
           newValue: () => ProblemsStatuses[status.newValue]
         };
       },

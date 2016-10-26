@@ -4,7 +4,7 @@ import { getLogData } from './helpers.js';
 export default {
   logs: [
     {
-      message: '{{docDesc}} removed: "{{title}}"',
+      message: '{{{docName}}} removed: "{{title}}"',
       logData: getLogData
     }
   ],
@@ -13,7 +13,7 @@ export default {
     const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(oldDoc),
+      docName: () => auditConfig.docName(oldDoc),
       title: () => oldDoc.title
     };
   }

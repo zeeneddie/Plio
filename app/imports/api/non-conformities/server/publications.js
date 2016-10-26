@@ -1,43 +1,56 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
 import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { Files } from '/imports/share/collections/files.js';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Standards } from '/imports/share/collections/standards';
+import { Files } from '/imports/share/collections/files';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { Actions } from '/imports/share/collections/actions';
+import { Occurrences } from '/imports/share/collections/occurrences';
+import { Departments } from '/imports/share/collections/departments';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { isOrgMember } from '../../checkers.js';
-import { NonConformitiesListProjection } from '/imports/api/constants.js';
+import {
+  NonConformitiesListProjection,
+  DepartmentsListProjection
+} from '/imports/api/constants.js';
+import { ActionTypes } from '/imports/share/constants';
 import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
-
+import {
+  getPublishCompositeOrganizationUsers,
+  getCursorNonDeleted,
+  makeOptionsFields
+} from '../../helpers';
 import get from 'lodash.get';
+import { getDepartmentsCursorByIds } from '../../departments/utils';
+import {
+  getActionsWithLimitedFields
+} from '../../actions/utils';
+import {
+  getProblemsWithLimitedFields
+} from '../../problems/utils';
+import {
+  createNonConformityCardPublicationTree,
+  getNCOtherFiles
+} from '../../non-conformities/utils';
 
-
-const getNCOtherFiles = (nc) => {
-  let fileIds = nc.fileIds || [];
-  const improvementPlanFileIds = get(nc, 'improvementPlan.fileIds');
-  if (!!improvementPlanFileIds) {
-    fileIds = fileIds.concat(improvementPlanFileIds);
-  }
-  const rcaFileIds = get(nc, 'rootCauseAnalysis.fileIds');
-  if (!!rcaFileIds) {
-    fileIds = fileIds.concat(rcaFileIds);
-  }
-
-  return Files.find({ _id: { $in: fileIds } });
-};
-
-const getNCLayoutPub = (userId, serialNumber, isDeleted) => [
-  {
-    find({ _id:organizationId }) {
-      const query = { organizationId, isDeleted };
-      const options = { fields: NonConformitiesListProjection };
-      return NonConformities.find(query, options);
+const getNCLayoutPub = (userId, serialNumber, isDeleted) => {
+  return [
+    {
+      find({ _id:organizationId }) {
+        const query = { organizationId, isDeleted };
+        const options = { fields: NonConformitiesListProjection };
+        return NonConformities.find(query, options);
+      },
+      children: [
+        {
+          find: getDepartmentsCursorByIds
+        }
+      ]
     }
-  }
-];
+  ]
+};
 
 Meteor.publishComposite('nonConformitiesLayout', getPublishCompositeOrganizationUsers(getNCLayoutPub));
 
@@ -56,40 +69,55 @@ Meteor.publishComposite('nonConformitiesList', function (organizationId, isDelet
   }
 });
 
-Meteor.publishComposite('nonConformityCard', function ({ _id, organizationId }) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+Meteor.publishComposite('nonConformityCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+  
+  const userId = this.userId;
 
-      return NonConformities.find({ _id, organizationId });
-    },
-    children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
-    }, {
-      find(nc) {
-        return Standards.find({ _id: nc.standardsIds }, {
-          fileds: { title: 1 }
-        });
-      }
-    }, {
-      find({ _id }) {
-        return LessonsLearned.find({ documentId: _id });
-      }
-    }, {
-      find({ _id }) {
-        return Actions.find({ 'linkedTo.documentId': _id });
-      }
-    }, {
-      find({ _id }) {
-        return Occurrences.find({ nonConformityId: _id });
-      }
-    }]
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
   }
+
+  return createNonConformityCardPublicationTree(() => ({ _id, organizationId }));
+});
+
+Meteor.publish('nonConformitiesDeps', function(organizationId) {
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const actionsQuery = {
+    organizationId,
+    type: {
+      $in: [
+        ActionTypes.CORRECTIVE_ACTION,
+        ActionTypes.PREVENTATIVE_ACTION
+      ]
+    }
+  };
+
+  const standardsFields = {
+    title: 1,
+    status: 1,
+    organizationId: 1
+  }
+
+  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const occurrences = Occurrences.find({ organizationId });
+  const actions = getActionsWithLimitedFields(actionsQuery);
+  const risks = getProblemsWithLimitedFields({ organizationId }, Risks);
+  const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
+
+  return [
+    departments,
+    occurrences,
+    actions,
+    risks,
+    standards
+  ];
 });
 
 Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isDeleted = { $in: [null, false] }) {
@@ -106,9 +134,7 @@ Meteor.publishComposite('nonConformitiesByStandardId', function (standardId, isD
       return NonConformities.find({ standardsIds: standardId, isDeleted });
     },
     children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
+      find: getNCOtherFiles
     }]
   }
 });
@@ -133,9 +159,7 @@ Meteor.publishComposite('nonConformitiesByIds', function (ids = []) {
       return NonConformities.find(query);
     },
     children: [{
-      find(nc) {
-        return getNCOtherFiles(nc);
-      }
+      find: getNCOtherFiles
     }]
   }
 });
@@ -168,7 +192,7 @@ Meteor.publish('nonConformitiesNotViewedCount', function(counterName, organizati
     isDeleted: { $in: [false, null] }
   };
 
-  if(currentOrgUserJoinedAt){
+  if (currentOrgUserJoinedAt){
     query.createdAt = { $gt: currentOrgUserJoinedAt };
   }
 

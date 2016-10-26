@@ -18,11 +18,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set title of {{{docDesc}}} to "{{newValue}}"',
+          '{{userName}} set title of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed title of {{{docDesc}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{userName}} changed title of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed title of {{{docDesc}}}'
+          '{{userName}} removed title of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -30,7 +30,8 @@ export default {
     const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(oldDoc),
+      docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(oldDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => title.newValue,
       oldValue: () => title.oldValue

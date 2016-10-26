@@ -19,9 +19,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added improvement plan\'s review date for {{{docDesc}}}: "{{date}}"',
+          '{{userName}} added improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed improvement plan\'s review date for {{{docDesc}}}: "{{date}}"'
+          '{{userName}} removed improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"'
       }
     }
   ],
@@ -32,6 +32,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       date: () => getPrettyOrgDate(date, orgId())
     };

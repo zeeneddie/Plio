@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}}',
+          '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}}',
+          '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}}'
+          '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}'
       }
     }
   ],
@@ -34,6 +34,7 @@ export default {
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
+      docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user)
     };
   },

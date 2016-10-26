@@ -7,9 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: '{{docDesc}} description set',
-        [ChangesKinds.FIELD_CHANGED]: '{{docDesc}} description changed',
-        [ChangesKinds.FIELD_REMOVED]: '{{docDesc}} description removed'
+        [ChangesKinds.FIELD_ADDED]: '{{{docName}}} description set',
+        [ChangesKinds.FIELD_CHANGED]: '{{{docName}}} description changed',
+        [ChangesKinds.FIELD_REMOVED]: '{{{docName}}} description removed'
       },
       logData: getLogData
     }
@@ -17,6 +17,6 @@ export default {
   notifications: [],
   data({ newDoc }) {
     const auditConfig = this;
-    return { docDesc: () => auditConfig.docDescription(newDoc), };
+    return { docName: () => auditConfig.docName(newDoc) };
   }
 };

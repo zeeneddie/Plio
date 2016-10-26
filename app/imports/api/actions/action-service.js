@@ -5,7 +5,11 @@ import { Risks } from '/imports/share/collections/risks.js';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate, generateSerialNumber } from '/imports/share/helpers.js';
+import {
+  getCollectionByDocType,
+  getWorkflowDefaultStepDate,
+  generateSerialNumber
+} from '/imports/share/helpers.js';
 
 
 export default {
@@ -65,10 +69,12 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
     if (doc.areStandardsUpdated() && !action.verified()) {
+      const docCollection = getCollectionByDocType(documentType);
+
       docCollection.update({ _id: documentId }, {
         $set: {
           'updateOfStandards.status': 0, // Not completed
@@ -84,9 +90,6 @@ export default {
   },
 
   unlinkDocument({ _id, documentId, documentType }) {
-    const oldAction = this.collection.findOne({ _id });
-    const oldWorkflow = oldAction.getWorkflowType();
-
     const ret = this.collection.update({
       _id
     }, {
@@ -98,8 +101,7 @@ export default {
     const newAction = this.collection.findOne({ _id });
     const newWorkflow = newAction.getWorkflowType();
 
-    if ((newWorkflow !== oldWorkflow)
-          && (newWorkflow === WorkflowTypes.THREE_STEP)) {
+    if (newWorkflow === WorkflowTypes.THREE_STEP) {
       this.collection.update({ _id }, {
         $unset: {
           toBeVerifiedBy: '',
@@ -107,7 +109,7 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
     return ret;
@@ -275,11 +277,27 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    return this._service.remove({ _id, deletedBy });
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
   },
 
   restore({ _id }) {
-    return this._service.restore({ _id });
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.restore({ _id, onRestore });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   }
 
 };
