@@ -51,7 +51,7 @@ Template.UserDirectory_Page.viewmodel({
       { ...searchUsers }
     ];
 
-    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1, 'emails.0.address': 1 }});
 
     const result = _.pluck(cursor.fetch(), '_id');
 
