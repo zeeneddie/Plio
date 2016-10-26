@@ -436,7 +436,6 @@ export const OrganizationDefaults = {
 
 
 export const EmailsForPlioReporting = [
-  'mike@jssolutionsdev.com'
-  // 'james.ives@pliohub.com',
-  // 'steve.ives@pliohub.com',
+  'james.ives@pliohub.com',
+  'steve.ives@pliohub.com',
 ];
