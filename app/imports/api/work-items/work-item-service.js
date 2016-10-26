@@ -10,7 +10,7 @@ const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_STANDARDS
+  COMPLETE_UPDATE_OF_DOCUMENTS
 } = WorkItemsStore.TYPES;
 
 export default {
@@ -124,17 +124,17 @@ export default {
 
     this.collection.remove({
       'linkedDoc._id': docId,
-      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
+      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS,
       isCompleted: false
     });
   },
 
   standardsUpdated(docId, docType) {
-    this._completed(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._completed(docId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   standardsUpdateCanceled(docId, docType) {
-    this._canceled(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._canceled(docId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   analysisUserUpdated(docId, docType, userId) {
@@ -146,11 +146,11 @@ export default {
   },
 
   updateOfStandardsUserUpdated(docId, docType, userId) {
-    this._userUpdated(docId, userId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._userUpdated(docId, userId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   updateOfStandardsDateUpdated(docId, docType, date) {
-    this._dateUpdated(docId, date, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._dateUpdated(docId, date, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   _userUpdated(docId, userId, workItemType, docType) {
@@ -221,7 +221,7 @@ export default {
 
       if (workItemType === COMPLETE_ANALYSIS) {
         targetDate = doc.analysis.targetDate;
-      } else if (workItemType === COMPLETE_UPDATE_OF_STANDARDS) {
+      } else if (workItemType === COMPLETE_UPDATE_OF_DOCUMENTS) {
         targetDate = doc.updateOfStandards.targetDate;
       }
     } else {

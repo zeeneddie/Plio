@@ -51,7 +51,7 @@ Template.WorkInbox_QAPanel_Edit_Complete.viewmodel({
       case TYPES.COMPLETE_ANALYSIS:
         return byDocType([NCCompleteAnalysis, RKCompleteAnalysis]);
         break;
-      case TYPES.COMPLETE_UPDATE_OF_STANDARDS:
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
         return byDocType([NCCompleteStandards, RKCompleteStandards]);
         break;
       default:

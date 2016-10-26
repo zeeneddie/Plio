@@ -23,7 +23,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
     const chooseOne = this.chooseOne(isCompleted);
-    const typeText = this.getTypeText({ type, linkedDoc });
+    const typeText = this.getLinkedDocTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
 
@@ -35,18 +35,6 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     }
 
     return desc;
-  },
-  getTypeText({ type, linkedDoc }) {
-    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
-      if (linkedDoc) {
-        if (linkedDoc.type === ProblemTypes.RISK) {
-          return this.capitalize(AnalysisTitles.riskAnalysis);
-        } else {
-          return this.capitalize(AnalysisTitles.rootCauseAnalysis);
-        }
-      }
-    }
-    return this.capitalize(type.substr(type.indexOf(' ') + 1));
   },
   getOperationText({ type }) {
     switch(type) {
@@ -62,7 +50,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),
-      typeText: this.getTypeText({ type, linkedDoc }),
+      typeText: this.getLinkedDocTypeText({ type, linkedDoc }),
       doc: { type, linkedDoc, ...args },
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
