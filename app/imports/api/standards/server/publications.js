@@ -137,6 +137,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
       ({ _id }) => LessonsLearned.find({ documentId: _id })
     ].map(toObjFind)
      .concat(createProblemsTree(getProblemsByStandardIds(NonConformities)))
+     .concat(createProblemsTree(getProblemsByStandardIds(Risks)))
   }
 });
 

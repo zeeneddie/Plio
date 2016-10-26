@@ -79,10 +79,6 @@
               {{#if isReady}}
                 {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
-                {{> Subcards_Actions_Read
-                    type=ActionTypes.CORRECTIVE_ACTION
-                    standardId=this._id}}
-
                 {{> Subcards_Risks_Read _query=_getRisksQuery}}
 
                 {{> Subcards_Actions_Read
