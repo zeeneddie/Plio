@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { WorkflowTypes } from '/imports/api/constants.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 
 
@@ -29,7 +29,7 @@ Template.NC_Card_Edit_Main.viewmodel({
     const userId = Meteor.userId();
 
     if (!isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
   isStandardsEditable: true,

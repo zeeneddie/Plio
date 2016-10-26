@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Notifications } from '../notifications.js';
+import { Notifications } from '/imports/share/collections/notifications.js';
 
 Meteor.publish(null, function() {
   const userId = this.userId;

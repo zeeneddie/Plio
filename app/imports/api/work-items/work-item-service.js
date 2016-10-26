@@ -1,13 +1,9 @@
-import { Actions } from '../actions/actions.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import { WorkItems } from './work-items.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { WorkItems } from '/imports/share/collections/work-items.js';
 import BaseEntityService from '../base-entity-service.js';
-import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '../constants.js';
-
-if (Meteor.isServer) {
-  import WorkItemWorkflow from '/imports/core/workflow/server/WorkItemWorkflow.js';
-}
+import { ProblemTypes, WorkItemsStore, WorkflowTypes } from '/imports/share/constants.js';
 
 
 const {
@@ -45,8 +41,16 @@ export default {
     return this._service.remove({ _id, deletedBy });
   },
 
-  restore({ _id }) {
-    return this._service.restore({ _id });
+  restore({ _id, query }) {
+    return this._service.restore({ _id, query });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   },
 
   actionCreated(actionId) {
@@ -103,14 +107,12 @@ export default {
     this._dateUpdated(actionId, date, VERIFY_ACTION);
   },
 
-  actionWorkflowChanged(actionId, workflowType) {
-    if (workflowType === WorkflowTypes.THREE_STEP) {
-      this.collection.remove({
-        'linkedDoc._id': actionId,
-        type: WorkItemsStore.TYPES.VERIFY_ACTION,
-        isCompleted: false
-      });
-    }
+  actionWorkflowSetToThreeStep(actionId) {
+    this.collection.remove({
+      'linkedDoc._id': actionId,
+      type: WorkItemsStore.TYPES.VERIFY_ACTION,
+      isCompleted: false
+    });
   },
 
   analysisCompleted(docId, docType) {
@@ -173,8 +175,6 @@ export default {
           _id: docId
         }
       });
-
-      this._refreshStatus(newId);
     } else {
       this.collection.update({ _id }, {
         $set: { assigneeId: userId }
@@ -209,13 +209,6 @@ export default {
       isCompleted: true
     }, {
       $set: { isCompleted: false }
-    });
-  },
-
-  _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflow = new WorkItemWorkflow(_id);
-      workflow.refreshStatus();
     });
   },
 

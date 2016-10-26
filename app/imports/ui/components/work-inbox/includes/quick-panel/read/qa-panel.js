@@ -2,7 +2,8 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { WorkItemsStore, AnalysisTitles, ProblemTypes } from '/imports/api/constants.js';
+import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
+import { AnalysisTitles } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
 
 const { TYPES } = WorkItemsStore;

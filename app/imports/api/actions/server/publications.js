@@ -1,19 +1,17 @@
 import { Meteor } from 'meteor/meteor';
-import { Actions } from '../actions.js';
-import { Files } from '/imports/api/files/files.js';
+import { check } from 'meteor/check';
+
+import { Actions } from '/imports/share/collections/actions.js';
+import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import {
   ActionsListProjection,
-  ProblemTypes,
   NonConformitiesListProjection,
   RisksListProjection
 } from '/imports/api/constants.js';
 import Counter from '../../counter/server.js';
-
-const getActionFiles = (action) => {
-  const fileIds = action.fileIds || [];
-  return Files.find({ _id: { $in: fileIds } });
-};
+import { getActionFiles, createActionCardPublicationTree } from '../utils';
 
 Meteor.publishComposite('actionsList', function(organizationId, isDeleted = { $in: [null, false] }) {
   return {
@@ -34,48 +32,16 @@ Meteor.publishComposite('actionsList', function(organizationId, isDeleted = { $i
 });
 
 Meteor.publishComposite('actionCard', function({ _id, organizationId }) {
-  return {
-    find() {
-      const userId = this.userId;
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
+  check(_id, String);
+  check(organizationId, String);
 
-      return Actions.find({
-        _id,
-        organizationId
-      });
-    },
-    children: [{
-      find(action) {
-        return getActionFiles(action);
-      }
-    }, {
-      find({ linkedTo }) {
-        const NCIds = _.map(_.where(linkedTo, {
-          documentType: ProblemTypes.NON_CONFORMITY
-        }), (lt) => {
-          return lt.documentId;
-        });
+  const userId = this.userId;
 
-        return NonConformities.find({ _id: { $in: NCIds }, organizationId }, {
-          fields: _.extend(NonConformitiesListProjection, { workflowType: 1 })
-        });
-      }
-    }, {
-      find({ linkedTo }) {
-        const riskIds = _.map(_.where(linkedTo, {
-          documentType: ProblemTypes.RISK
-        }), (lt) => {
-          return lt.documentId;
-        });
-
-        return Risks.find({ _id: { $in: riskIds }, organizationId }, {
-          fields: _.extend(RisksListProjection, { workflowType: 1 })
-        });
-      }
-    }]
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
   }
+
+  return createActionCardPublicationTree(() => ({ _id, organizationId }));
 });
 
 Meteor.publishComposite('actionsByIds', function(ids = []) {
@@ -102,7 +68,7 @@ Meteor.publishComposite('actionsByIds', function(ids = []) {
         return getActionFiles(action);
       }
     }]
-  }
+  };
 });
 
 Meteor.publish('actionsCount', function(counterName, organizationId) {

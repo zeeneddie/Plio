@@ -1,29 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Organizations } from '../organizations/organizations.js';
-import { Actions } from '../actions/actions.js';
-import Utils from '/imports/core/utils.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { generateSerialNumber } from '/imports/share/helpers.js';
+import ActionService from '../actions/action-service';
 import WorkItemService from '../work-items/work-item-service.js';
-import { WorkItemsStore } from '../constants.js';
+import { WorkItemsStore } from '/imports/share/constants.js';
 
 export default {
 
   insert({ organizationId, magnitude, ...args }) {
     const organization = Organizations.findOne({ _id: organizationId });
 
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+    const serialNumber = generateSerialNumber(this.collection, { organizationId });
     const sequentialId = `${this._abbr}${serialNumber}`;
 
     const workflowType = organization.workflowType(magnitude);
 
-    const _id = this.collection.insert({
+    return this.collection.insert({
       organizationId, serialNumber, sequentialId,
       workflowType, magnitude, ...args
     });
-
-    this._refreshStatus(_id);
-
-    return _id;
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -47,8 +44,6 @@ export default {
 
     WorkItemService.analysisUserUpdated(_id, this._docType, executor);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -62,8 +57,6 @@ export default {
 
     WorkItemService.analysisDateUpdated(_id, this._docType, targetDate);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -71,33 +64,21 @@ export default {
     const query = { _id };
     const options = { $set: { 'analysis.completedBy': completedBy } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
 
   setAnalysisCompletedDate({ _id, completedAt }) {
     const query = { _id };
     const options = { $set: { 'analysis.completedAt': completedAt } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
 
   setAnalysisComments({ _id, completionComments }) {
     const query = { _id };
     const options = { $set: { 'analysis.completionComments': completionComments } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
 
   completeAnalysis({ _id, completionComments, userId }) {
@@ -113,8 +94,6 @@ export default {
     });
 
     WorkItemService.analysisCompleted(_id, this._docType);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -135,8 +114,6 @@ export default {
 
     WorkItemService.analysisCanceled(_id, this._docType);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -153,8 +130,6 @@ export default {
     });
 
     WorkItemService.standardsUpdated(_id, this._docType);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -175,8 +150,6 @@ export default {
 
     WorkItemService.standardsUpdateCanceled(_id, this._docType);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -190,8 +163,6 @@ export default {
 
     WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, executor);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -204,8 +175,6 @@ export default {
       $set: { 'updateOfStandards.targetDate': targetDate }
     });
 
-    this._refreshStatus(_id);
-
     WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
 
     return ret;
@@ -215,53 +184,65 @@ export default {
     const query = { _id };
     const options = { $set: { 'updateOfStandards.completedBy': completedBy } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
 
   setStandardsUpdateCompletedDate({ _id, completedAt }) {
     const query = { _id };
     const options = { $set: { 'updateOfStandards.completedAt': completedAt } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
 
   setStandardsUpdateComments({ _id, completionComments }) {
     const query = { _id };
     const options = { $set: { 'updateOfStandards.completionComments': completionComments } };
 
-    const ret = this.collection.update(query, options);
-
-    this._refreshStatus(_id);
-
-    return ret;
+    return this.collection.update(query, options);
   },
-
 
   updateViewedBy({ _id, viewedBy }) {
     return this._service.updateViewedBy({ _id, viewedBy });
   },
 
   remove({ _id, deletedBy }) {
-    const ret = this._service.remove({ _id, deletedBy });
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
 
-    this._refreshStatus(_id);
-
-    return ret;
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
   },
 
   restore({ _id }) {
-    const ret = this._service.restore({ _id });
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
 
-    this._refreshStatus(_id);
+    return this._service.restore({ _id, onRestore });
+  },
 
-    return ret;
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  unlinkStandard({ _id, standardId }) {
+    this.collection.update({ _id }, {
+      $pull: { standardsIds: standardId }
+    });
+  },
+
+  unlinkActions({ _id }) {
+    const query = {
+      'linkedTo.documentId': _id,
+      'linkedTo.documentType': this._docType
+    };
+
+    Actions.find(query).forEach((action) => {
+      ActionService.unlinkDocument({
+        _id: action._id,
+        documentId: _id,
+        documentType: this._docType
+      });
+    });
   }
 };

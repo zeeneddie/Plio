@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 import { insert } from '/imports/api/actions/methods.js';
-import { getWorkflowDefaultStepDate } from '/imports/api/helpers.js';
+import { getWorkflowDefaultStepDate } from '/imports/share/helpers.js';
 
 Template.Actions_CreateSubcard.viewmodel({
   mixin: ['getChildrenData', 'organization'],

@@ -1,50 +1,54 @@
 import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
 
-import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils.js';
-import { WorkItems } from '../work-items.js';
-import { isOrgMember } from '../../checkers.js';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { Departments } from '/imports/share/collections/departments';
+import { Standards } from '/imports/share/collections/standards';
+import { Actions } from '/imports/share/collections/actions';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { isOrgMember } from '../../checkers';
 import {
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-  WorkItemsListProjection
-} from '/imports/api/constants.js';
-import Counter from '../../counter/server.js';
-import { getPublishCompositeOrganizationUsers } from '../../helpers';
+  WorkItemsListProjection,
+  DepartmentsListProjection
+} from '/imports/api/constants';
+import Counter from '../../counter/server';
+import {
+  getPublishCompositeOrganizationUsers,
+  getCursorNonDeleted,
+  makeOptionsFields,
+  getRequiredFieldsByCollection,
+  getC
+} from '../../helpers';
+import { getCollectionByDocType } from '/imports/share/helpers';
+import { createNonConformityCardPublicationTree } from '../../non-conformities/utils';
+import { createRiskCardPublicationTree } from '../../risks/utils';
+import { createActionCardPublicationTree } from '../../actions/utils';
+import { getProblemsWithLimitedFields } from '../../problems/utils';
 
 const getWorkInboxLayoutPub = (userId, serialNumber, isDeleted) => {
-  const makeQuery = (organizationId) => ({
-    organizationId,
-    isDeleted: { $in: [null, false] }
-  });
-  const makeOptions = (projection) => ({
-    fields: projection
-  });
-
   return [
     {
       find({ _id:organizationId }) {
         const query = { organizationId, isDeleted };
 
-        return WorkItems.find(query, makeOptions(WorkItemsListProjection));
-      }
-    },
-    {
-      find({ _id:organizationId }) {
-        return Actions.find(makeQuery(organizationId), makeOptions(ActionsListProjection));
-      }
-    },
-    {
-      find({ _id:organizationId }) {
-        return NonConformities.find(makeQuery(organizationId), makeOptions(NonConformitiesListProjection));
-      }
-    },
-    {
-      find({ _id:organizationId }) {
-        return Risks.find(makeQuery(organizationId), makeOptions(RisksListProjection));
-      }
+        return WorkItems.find(query, makeOptionsFields(WorkItemsListProjection));
+      },
+      children: [
+        {
+          find({ organizationId, linkedDoc: { _id, type } = {} }) {
+            const collection = getCollectionByDocType(type);
+            const query = { _id, organizationId };
+            const fields = getRequiredFieldsByCollection(collection);
+
+            return getCursorNonDeleted(query, fields, collection);
+          }
+        }
+      ]
     }
-  ]
+  ];
 };
 
 Meteor.publishComposite('workInboxLayout', getPublishCompositeOrganizationUsers(getWorkInboxLayoutPub));
@@ -60,6 +64,9 @@ Meteor.publish('workItemsList', function(organizationId, isDeleted = { $in: [nul
 });
 
 Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
+  check(_id, String);
+  check(organizationId, String);
+  
   return {
     find() {
       const userId = this.userId;
@@ -69,6 +76,76 @@ Meteor.publishComposite('workItemCard', function({ _id, organizationId }) {
       return WorkItems.find({ _id, organizationId });
     }
   }
+});
+
+const createRelativeCardPublicationTree = (collection) => {
+  const getQuery = getC('linkedDoc._id');
+
+  switch(collection) {
+    case NonConformities:
+      return createNonConformityCardPublicationTree(getQuery);
+      break;
+    case Risks:
+      return createRiskCardPublicationTree(getQuery);
+      break;
+    case Actions:
+      return createActionCardPublicationTree(getQuery);
+    default:
+      return [];
+      break;
+  }
+};
+
+Meteor.publishComposite('workInboxCard', function({ _id, organizationId }) {
+  check()
+
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const WKCursor = WorkItems.find({ _id, organizationId });
+  const {
+    linkedDoc: {
+      type:docType
+    } = {}
+  } = Object.assign({}, _.first(WKCursor.fetch()));
+  const collection = getCollectionByDocType(docType);
+
+  return {
+    find() {
+      return WKCursor;
+    },
+    children: [
+      createRelativeCardPublicationTree(collection)
+    ]
+  };
+});
+
+Meteor.publish('workInboxDeps', function(organizationId) {
+  const query = { organizationId };
+  const standardsFields = {
+    title: 1,
+    status: 1,
+    organizationId: 1
+  };
+
+  const getProblems = getProblemsWithLimitedFields(query);
+
+  const departments = Departments.find(query, makeOptionsFields(DepartmentsListProjection));
+  const standards = getCursorNonDeleted(query, standardsFields, Standards);
+  const riskTypes = RiskTypes.find(query);
+  const NCs = getProblems(NonConformities);
+  const risks = getProblems(Risks);
+
+  return [
+    departments,
+    standards,
+    NCs,
+    risks,
+    riskTypes
+  ];
 });
 
 Meteor.publish('workItemsOverdue', function(organizationId, limit) {

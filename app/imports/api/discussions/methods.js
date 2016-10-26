@@ -1,10 +1,10 @@
 import Method, { CheckedMethod } from '../method';
-import { ViewedBySchema } from './discussions-schema';
+import { ViewedBySchema } from '/imports/share/schemas/discussions-schema';
 import DiscussionsService from './discussions-service';
-import { idSchemaDoc } from '../schemas';
+import { idSchemaDoc } from '/imports/share/schemas/schemas';
 import { inject, chain } from '../helpers';
-import { Discussions } from './discussions';
-import { Organizations } from '../organizations/organizations';
+import { Discussions } from '/imports/share/collections/discussions';
+import { Organizations } from '/imports/share/collections/organizations';
 import {
   DSC_OnUpdateViewedByChecker,
   checkDocExistance,

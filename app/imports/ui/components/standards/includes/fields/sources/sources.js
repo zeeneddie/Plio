@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import { check } from 'meteor/check';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
@@ -62,7 +62,7 @@ Template.ESSources.viewmodel({
         url = `http://${url}`;
       }
 
-      if (url && !this.IsValidUrl(url)) {
+      if (url && !this.isValidUrl(url)) {
         ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
 
         return;

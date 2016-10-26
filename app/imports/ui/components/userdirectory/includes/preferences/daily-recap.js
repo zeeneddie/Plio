@@ -1,7 +1,7 @@
 import { Blaze } from 'meteor/blaze';
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { updateUserSettings } from '/imports/api/organizations/methods.js';
 
 

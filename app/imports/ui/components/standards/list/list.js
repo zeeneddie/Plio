@@ -3,9 +3,17 @@ import invoke from 'lodash.invoke';
 import get from 'lodash.get';
 import property from 'lodash.property';
 
-import { StandardsBookSections } from '/imports/api/standards-book-sections/standards-book-sections.js';
-import { StandardTypes } from '/imports/api/standards-types/standards-types.js';
-import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import {
+  extractIds,
+  flattenMap,
+  inspire,
+  findById,
+  sortArrayByTitlePrefix,
+  propEq,
+  not
+} from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -13,8 +21,8 @@ Template.StandardsList.viewmodel({
     counter: 'counter'
   }],
   hideRTextOnExpand: true,
-  onRendered() {
-    this.handleRoute();
+  onCreated() {
+    Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {
     const standardId = this.standardId();
@@ -41,15 +49,17 @@ Template.StandardsList.viewmodel({
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
     const activeStandardFilterId = this.activeStandardFilterId();
+    const results = (items) => ({
+      result: findById(_id, items),
+      first: _.first(items),
+      array: items
+    });
 
     switch(activeStandardFilterId) {
       case 1:
         const sections = this.sections();
         const mappedSections = flattenMapStandards(sections);
-        return {
-          result: finder(mappedSections),
-          first: _.first(mappedSections)
-        }
+        return results(mappedSections);
         break;
       case 2:
         const types = this.types();
@@ -66,15 +76,16 @@ Template.StandardsList.viewmodel({
             }
 
             return firstMappedType;
+          })(),
+          array: (() => {
+            const uncategorizedItems = mappedTypes.filter(_.compose(not, property('standards')));
+            return _.compact(mappedTypesSections.concat(uncategorizedItems));
           })()
         };
         break;
       case 3:
         const standardsDeleted = this.standardsDeleted();
-        return {
-          result: finder(standardsDeleted),
-          first: _.first(standardsDeleted)
-        }
+        return results(standardsDeleted);
         break;
       default:
         return {};
@@ -114,59 +125,67 @@ Template.StandardsList.viewmodel({
       return sortArrayByTitlePrefix(_sections);
     })());
 
-    /**
-     * Filter the sections which fit the search query and have the standards
-     * connected
-    */
-    const filtered = sections.filter(({ _id: sectionId }) => {
-      const query = ((() => {
-        const _query = { sectionId, ...mainQuery };
-        return typeId ? { ..._query, typeId } : _query;
-      })());
-      return this._getStandardsByQuery(query).count() > 0;
-    });
+    const reducer = (prev, cur) => {
+      const query = {
+        sectionId: cur._id,
+        ...mainQuery,
+        ...(() => typeId ? { typeId } : null)()
+      };
 
-    // Add appropriate standards to the filtered sections
-    const withStandards = filtered.map((section) => {
-      const standards = this._getStandardsByQuery(mainQuery)
-        .fetch()
-        .filter((standard) => {
-          return Object.is(section._id, standard.sectionId) &&
-                 (typeId ? Object.is(typeId, standard.typeId) : true);
-        });
+      /**
+       * Filter the sections which fit the search query and have the standards
+       * connected
+      **/
 
-      sortArrayByTitlePrefix(standards);
+      if (this._getStandardsByQuery(query).count()) {
+        // Add appropriate standards to the filtered sections
+        const withStandards = ((() => {
+          const standards = this._getStandardsByQuery(mainQuery)
+            .fetch()
+            .filter((standard) => {
+              return Object.is(cur._id, standard.sectionId) &&
+                     (typeId ? Object.is(typeId, standard.typeId) : true);
+            });
 
-      return Object.assign({}, section, {
-        standards,
-        ...this._getTotalUnreadMessagesHtml(standards)
-      });
-    });
+          sortArrayByTitlePrefix(standards);
 
-    /**
-     * Adding "Uncategorized" section: only for standards grouped by sections
-    */
-    const withUncategorized = ((() => {
-      const predicate = standard => !sections.filter(({ _id }) => Object.is(_id, standard.sectionId)).length;
-      const query = typeId ? { typeId, ...mainQuery } : mainQuery;
-      const standards = this._getStandardsByQuery(query).fetch().filter(predicate);
+          return Object.assign({}, cur, {
+            standards,
+            ...this._getTotalUnreadMessagesHtml(standards)
+          });
+        })());
 
-      if (standards.length) {
-        return withStandards.concat({
-          organizationId,
-          standards,
-          _id: `StandardsBookSections.Uncategorized:${typeId || ''}`, // We need a fake id here for searching purposes
-          title: 'Uncategorized',
-          ...this._getTotalUnreadMessagesHtml(standards)
-        });
+        /**
+         * Adding "Uncategorized" section: only for standards grouped by sections
+        */
+        const withUncategorized = ((() => {
+          const predicate = standard => !sections.filter(({ _id }) => Object.is(_id, standard.sectionId)).length;
+          const query = typeId ? { typeId, ...mainQuery } : mainQuery;
+          const standards = this._getStandardsByQuery(query).fetch().filter(predicate);
+
+          if (standards.length) {
+            return withStandards.concat({
+              organizationId,
+              standards,
+              _id: `StandardsBookSections.Uncategorized:${typeId || ''}`, // We need a fake id here for searching purposes
+              title: 'Uncategorized',
+              ...this._getTotalUnreadMessagesHtml(standards)
+            });
+          }
+
+          return withStandards;
+        })());
+
+        return prev.concat(withUncategorized);
       }
 
-      return withStandards;
-    })());
+      return prev;
+    };
 
-    return withUncategorized;
+    const result = sections.reduce(reducer, []);
+
+    return result;
   },
-
   types() {
     const organizationId = this.organizationId();
     // Standard types for this organization
@@ -238,17 +257,7 @@ Template.StandardsList.viewmodel({
     });
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveStandardFilter(3)) {
-        return Object.assign([], this.standardsDeleted());
-      }
-
-      const sections = Object.assign([], this.sections());
-      const standards = _.flatten(sections.map(property('standards')));
-      const standardsIds = extractIds(standards);
-
-      return standardsIds;
-    };
+    return (value) => extractIds(this._findStandardForFilter().array)
   },
   onModalOpen() {
     return () =>

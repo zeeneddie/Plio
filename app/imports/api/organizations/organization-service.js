@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 
-import { Organizations } from './organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import StandardsBookSectionService from '../standards-book-sections/standards-book-section-service.js';
 import StandardsTypeService from '../standards-types/standards-type-service.js';
 import RisksTypeService from '../risk-types/risk-types-service.js';
@@ -15,15 +15,15 @@ import {
   OrgMemberRoles,
   UserMembership,
   UserRoles
-} from '../constants.js';
-import Utils from '../../core/utils.js';
+} from '/imports/share/constants.js';
+import { generateSerialNumber } from '/imports/share/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
 
 export default OrganizationService = {
   collection: Organizations,
 
   insert({ name, timezone, currency, ownerId }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, {}, 100);
+    const serialNumber = generateSerialNumber(this.collection, {}, 100);
 
     const { workflowDefaults, reminders, ncGuidelines, rkGuidelines, rkScoringGuidelines } = OrganizationDefaults;
 
@@ -70,6 +70,8 @@ export default OrganizationService = {
     });
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
+    
+    new OrgNotificationsSender(organizationId).orgCreated();
 
     return organizationId;
   },

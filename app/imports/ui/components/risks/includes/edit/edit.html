@@ -3,18 +3,7 @@
     <div class="relative">
       {{#with risk}}
         {{> Risk_Card_Edit_Main
-            risk=this
-            methodRefs=getMethodRefs}}
-
-        {{#if showRootCauseAnalysis}}
-          {{> Subcards_AnalysisWrapper_Edit
-              _id=this._id
-              analysis=this.analysis
-              updateOfStandards=this.updateOfStandards
-              magnitude=this.magnitude
-              methodRefs=getMethodRefs
-              RCALabel=RiskRCALabel}}
-        {{/if}}
+            risk=this}}
 
         {{> Subcards_Notify_Edit
             doc=this

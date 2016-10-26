@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { StandardsBookSections } from '../standards-book-sections.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
 import { isOrgMember } from '../../checkers.js';
 
 

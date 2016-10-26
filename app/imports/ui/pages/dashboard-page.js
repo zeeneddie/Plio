@@ -2,11 +2,13 @@ import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
 import property from 'lodash.property';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { UserSubs, CountSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.Dashboard_Page.viewmodel({
   mixin: ['organization', { 'counter': 'counter' }],
+  isReady: false,
+  _subHandlers: [],
   autorun: [
     function() {
       const template = this.templateInstance;
@@ -20,16 +22,15 @@ Template.Dashboard_Page.viewmodel({
         CountSubs.subscribe('workItemsCount', 'work-items-count-' + organizationId, organizationId),
         CountSubs.subscribe('workItemsNotViewedCount', 'work-items-not-viewed-count-' + organizationId, organizationId),
         CountSubs.subscribe('risksCount', 'risks-count-' + organizationId, organizationId),
-        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId),
-        UserSubs.subscribe('organizationUsers', this.organization().users.map(property('userId')))
+        CountSubs.subscribe('risksNotViewedCount', 'risks-not-viewed-count-' + organizationId, organizationId)
       ]);
+
+      BackgroundSubs.subscribe('organizationDeps', this.organizationId());
     },
     function() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],
-  isReady: false,
-  _subHandlers: [],
   _renderMetrics(pluralizeWord = '', totalCount = 0) {
 
     // Workaround for https://github.com/blakeembrey/pluralize/pull/12

@@ -1,37 +1,20 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import get from 'lodash.get';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
-import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
-import { restore, remove } from '/imports/api/actions/methods.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
   isReadOnly: false,
-  _subHandlers: [],
-  isReady: false,
-
-  onCreated(template) {
-    template.autorun(() => {
-      const _id = this._id();
-      const organizationId = this.organizationId();
-      const _subHandlers = [];
-
-      if (_id && organizationId) {
-        _subHandlers.push(DocumentCardSubs.subscribe('actionCard', { _id, organizationId }));
-        this._subHandlers(_subHandlers);
-      }
-    });
-
-    template.autorun(() => {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    });
+  showCard() {
+    return this.actions().length;
   },
   action() {
     return this._getActionByQuery({ _id: this._id() });
   },
   getActionTitle() {
-    return this._getNameByType(this.action() && this.action().type);
+    return this._getNameByType(get(this.action(), 'type'));
   },
   getClassForPlanInPlace(plan) {
     switch(plan) {
@@ -49,20 +32,21 @@ Template.Actions_Card_Read.viewmodel({
         break;
     }
   },
+  getVerifiedDateLabel({ isVerifiedAsEffective } = {}) {
+    return isVerifiedAsEffective
+      ? 'Verified as effective date'
+      : 'Assessed as ineffective date';
+  },
   actions() {
-    const list = ViewModel.findOne('ActionsList');
-    const query = list && list._getQueryForFilter();
-    return this._getActionsByQuery(query);
+    const organizationId = this.organizationId();
+    return this._getActionsByQuery({ organizationId }).fetch();
   },
-  onOpenEditModalCb() {
-    return this.openEditActionModal.bind(this);
-  },
-  openEditActionModal() {
+  openEditModal() {
     const _title = this.getActionTitle();
     this.modal().open({
       _title,
       template: 'Actions_Edit',
-      _id: this.action() && this.action()._id
+      _id: get(this.action(), '_id')
     });
   }
 });

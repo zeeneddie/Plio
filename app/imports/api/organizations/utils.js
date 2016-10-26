@@ -1,4 +1,4 @@
-import { Organizations } from './organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 /**
  * Get the date of joining the user to the organisation:
@@ -27,10 +27,9 @@ export const getUserOrganizations = (userId, orgSelector = {}, options = {}) => 
         removedBy: { $exists: false },
         removedAt: { $exists: false }
       }
-    }
+    },
+    ...orgSelector
   };
-
-  _.extend(selector, orgSelector);
 
   return Organizations.find(selector, options);
 };

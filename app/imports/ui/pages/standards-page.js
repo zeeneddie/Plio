@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
-import { DiscussionSubs, OrgSettingsDocSubs, DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
+import { DiscussionSubs, DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
 
-import { Discussions } from '/imports/api/discussions/discussions.js';
+import { Discussions } from '/imports/share/collections/discussions.js';
 
 Template.StandardsPage.viewmodel({
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
@@ -15,13 +15,14 @@ Template.StandardsPage.viewmodel({
       const organizationId = this.organizationId();
       const standardId = this.standardId();
       const discussionId = Object.assign({}, this.discussion())._id;
+
       if (!standardId || !organizationId) return;
 
       const _subHandlers = [
         DocumentCardSubs.subscribe('standardCard', { organizationId, _id: standardId }, {
           onReady() {
             // subscribe to the rest of the documents needed in modal in the background
-            BackgroundSubs.subscribe('GLOBAL_DEPS', organizationId);
+            BackgroundSubs.subscribe('standardsDeps', organizationId);
           }
         })
       ];

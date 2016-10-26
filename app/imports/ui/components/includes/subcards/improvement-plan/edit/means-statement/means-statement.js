@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { Files } from '/imports/api/files/files.js';
+import { Files } from '/imports/share/collections/files.js';
 
 Template.IP_MeansStatement_Edit.viewmodel({
   mixin: 'organization',

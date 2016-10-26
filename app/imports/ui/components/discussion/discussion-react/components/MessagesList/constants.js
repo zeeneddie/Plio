@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
 import ReactDOM from 'react-dom';
 
-import { getFormattedDate } from '/imports/api/helpers.js';
+import { getFormattedDate } from '/imports/share/helpers.js';
 
 const isMessageSelected = (props, at) => Object.is(props._id, at);
 

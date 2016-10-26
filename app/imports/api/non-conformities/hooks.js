@@ -1,5 +1,7 @@
-import { NonConformities } from './non-conformities.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import NonConformityService from './non-conformities-service';
 import FilesService from '../files/files-service.js';
+import WorkItemService from '../work-items/work-item-service';
 
 import get from 'lodash.get';
 
@@ -17,4 +19,8 @@ NonConformities.after.remove((userId, doc) => {
   }
 
   FilesService.bulkRemove({ fileIds });
+
+  NonConformityService.unlinkActions({ _id: doc._id });
+
+  WorkItemService.removePermanently({ query: { 'linkedDoc._id': doc._id } });
 });

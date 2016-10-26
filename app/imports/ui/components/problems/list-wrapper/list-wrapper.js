@@ -1,8 +1,8 @@
 import { Template } from 'meteor/templating';
 
-import { ProblemsStatuses } from '/imports/api/constants.js';
+import { ProblemsStatuses } from '/imports/share/constants.js';
 import { lengthItems, inspire } from '/imports/api/helpers.js';
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 
 Template.Problems_ListWrapper.viewmodel({
   share: 'search',
@@ -11,6 +11,15 @@ Template.Problems_ListWrapper.viewmodel({
   listArgs() {
     return {
       ...inspire(['statuses', 'departments', 'deleted', '_getSearchQuery', '_getSearchOptions'], this)
+    };
+  },
+  _getMainQuery() {
+    return {
+      ...this._getSearchQuery(),
+      organizationId: this.organizationId(),
+      isDeleted: {
+        $in: [null, false]
+      }
     };
   },
   _getSearchQuery() {
@@ -23,7 +32,7 @@ Template.Problems_ListWrapper.viewmodel({
   },
   statuses() {
     const mapper = (status) => {
-      const query = { status, ...this._getSearchQuery() };
+      const query = { ...this._getMainQuery(), status };
       const items = this.collection().find(query, this._getSearchOptions()).fetch();
 
       return { status, items };
@@ -34,10 +43,7 @@ Template.Problems_ListWrapper.viewmodel({
   },
   departments() {
     const organizationId = this.organizationId();
-    const mainQuery = {
-      organizationId,
-      ...this._getSearchQuery()
-    };
+    const mainQuery = this._getMainQuery();
 
     const mapper = (department) => {
       const query = {
@@ -78,7 +84,7 @@ Template.Problems_ListWrapper.viewmodel({
       .filter(lengthItems);
   },
   deleted() {
-    const query = { ...this._getSearchQuery(), isDeleted: true };
+    const query = { ...this._getMainQuery(), isDeleted: true };
     const options = this._getSearchOptions({ sort: { deletedAt: -1 } });
     return this.collection().find(query, options).fetch();
   }

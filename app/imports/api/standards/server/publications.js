@@ -1,18 +1,18 @@
 import { Meteor } from 'meteor/meteor';
 import curry from 'lodash.curry';
 
-import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { Standards } from '../standards.js';
-import { isOrgMember, isOrgMemberBySelector } from '../../checkers.js';
-import { Files } from '/imports/api/files/files.js';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { Actions } from '/imports/api/actions/actions.js';
-import { WorkItems } from '/imports/api/work-items/work-items.js';
-import { Departments } from '/imports/api/departments/departments';
-import Counter from '../../counter/server.js';
+import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils';
+import { Organizations } from '/imports/share/collections/organizations';
+import { Standards } from '/imports/share/collections/standards';
+import { isOrgMember, isOrgMemberBySelector } from '../../checkers';
+import { Files } from '/imports/share/collections/files';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { Departments } from '/imports/share/collections/departments';
+import Counter from '../../counter/server';
 import {
   StandardsListProjection,
   ActionsListProjection,
@@ -21,14 +21,29 @@ import {
   WorkItemsListProjection,
   StandardsBookSectionsListProjection,
   StandardTypesListProjection,
-  DepartmentsListProjection
-} from '/imports/api/constants.js';
+  DepartmentsListProjection,
+} from '/imports/api/constants';
+import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import { check, Match } from 'meteor/check';
-import { StandardsBookSections } from '../../standards-book-sections/standards-book-sections';
-import { StandardTypes } from '../../standards-types/standards-types';
-import { getPublishCompositeOrganizationUsers, explainMongoQuery } from '../../helpers';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import {
+  getPublishCompositeOrganizationUsers,
+  makeOptionsFields,
+  getCursorNonDeleted,
+  toObjFind
+} from '../../helpers';
+import { getDepartmentsCursorByIds } from '../../departments/utils';
+import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
+import { getWorkItemsCursorByIdsWithLimitedFields } from '../../work-items/utils';
+import {
+  getProblemsByStandardIds,
+  createProblemsTree,
+  getProblemsWithLimitedFields
+} from '../../problems/utils';
 
 const getStandardFiles = (standard) => {
   const fileIds = standard.improvementPlan && standard.improvementPlan.fileIds || [];
@@ -100,104 +115,70 @@ Meteor.publishComposite('standardsList', function(organizationId, isDeleted = { 
 });
 
 Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
-  const problemsFields = {
-    organizationId: 1,
-    sequentialId: 1,
-    serialNumber: 1,
-    title: 1,
-    standardsIds: 1,
-    status: 1
-  };
+  check(_id, String);
+  check(organizationId, String);
 
-  const actionsFields = {
-    ..._.omit(problemsFields, 'standardsIds'),
-    linkedTo: 1,
-    type: 1
-  };
+  const userId = this.userId;
 
-  const WKFields = {
-    linkedDoc: 1,
-    isCompleted: 1,
-    assigneeId: 1
-  };
-
-  const makeQuery = query => ({ ...query, isDeleted: { $in: [null, false] } });
-  const makeOptions = fields => ({ fields });
-
-  const getCursorByQueryAndFields = curry((collection, query, fields) =>
-    collection.find(makeQuery(query), makeOptions(fields)));
-
-  const getProblems = collection => ({ _id: standardsIds }) =>
-    getCursorByQueryAndFields(collection, { standardsIds }, problemsFields);
-
-  const getActions = ({ _id }) =>
-    getCursorByQueryAndFields(Actions, { 'linkedTo.documentId': _id }, actionsFields);
-
-  const getWorkItems = ({ _id }) =>
-    getCursorByQueryAndFields(WorkItems, { 'linkedDoc._id': _id  }, WKFields);
-
-  const createProblemsTree = (collection) => ({
-    find: getProblems(collection),
-    children: [
-      {
-        find: getActions,
-        children: [
-          {
-            find: getWorkItems
-          }
-        ]
-      },
-      {
-        find: getWorkItems
-      }
-    ]
-  });
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
 
   return {
     find() {
-      const userId = this.userId;
-
-      if (!userId || !isOrgMember(userId, organizationId)) {
-        return this.ready();
-      }
-
       return Standards.find({
         _id,
         organizationId
       });
     },
     children: [
-      {
-        find({ organizationId, departmentsIds = [] }) {
-          const query = {
-            organizationId,
-            _id: {
-              $in: departmentsIds
-            }
-          };
-          const options = makeOptions(DepartmentsListProjection);
-
-          return Departments.find(query, options);
-        }
-      },
-      {
-        find(standard) {
-          return getStandardFiles(standard);
-        }
-      },
-      {
-        find({ _id }) {
-          return LessonsLearned.find({ documentId: _id });
-        }
-      },
-      createProblemsTree(NonConformities),
-      createProblemsTree(Risks)
-    ]
+      getDepartmentsCursorByIds,
+      getStandardFiles,
+      ({ _id }) => LessonsLearned.find({ documentId: _id })
+    ].map(toObjFind)
+     .concat(createProblemsTree(getProblemsByStandardIds(NonConformities)))
+     .concat(createProblemsTree(getProblemsByStandardIds(Risks)))
   }
+});
+
+Meteor.publish('standardsDeps', function(organizationId) {
+  const actionsQuery = {
+    organizationId,
+    type: {
+      $in: [
+        ActionTypes.CORRECTIVE_ACTION,
+        ActionTypes.PREVENTATIVE_ACTION
+      ]
+    }
+  };
+  const standardsFields = {
+    viewedBy: 1,
+    createdAt: 1,
+    createdBy: 1
+  };
+
+  const getProblems = getProblemsWithLimitedFields({ organizationId });
+
+  const actions = getActionsWithLimitedFields(actionsQuery);
+  const ncs = getProblems(NonConformities);
+  const risks = getProblems(Risks);
+  const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
+  const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
+  const riskTypes = RiskTypes.find({ organizationId });
+
+  return [
+    actions,
+    ncs,
+    risks,
+    departments,
+    standards,
+    riskTypes
+  ];
 });
 
 Meteor.publish('standardsCount', function (counterName, organizationId) {
   const userId = this.userId;
+
   if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }

@@ -4,7 +4,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { Random } from 'meteor/random';
 import invoke from 'lodash.invoke';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 import {
   updateProfile,
@@ -16,8 +16,8 @@ import {
 } from '/imports/api/users/methods.js';
 import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
-import { UserUpdateProfileSchema } from '/imports/api/users/user-schema.js';
-import { UserRoles } from '/imports/api/constants.js';
+import { UserUpdateProfileSchema } from '/imports/share/schemas/user-schema.js';
+import { UserRoles } from '/imports/share/constants.js';
 
 
 Template.Users_Subcards.viewmodel({

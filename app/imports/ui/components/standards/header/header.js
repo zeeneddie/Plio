@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
 
@@ -24,13 +24,17 @@ Template.StandardsHeader.viewmodel({
     return this._getStandardByQuery({ _id: this.standardId() });
   },
   onSelectFilter(value, onSelect) {
-    const list = Object.assign({}, ViewModel.findOne('StandardsList'));
-
     onSelect();
 
-    if (list) {
-      invoke(list, 'handleRoute');
-    }
+    Tracker.afterFlush(() => {
+      Meteor.defer(() => {
+        const list = Object.assign({}, ViewModel.findOne('StandardsList'));
+
+        if (list) {
+          invoke(list, 'handleRoute');
+        }
+      });
+    });
   },
   onNavigate(e) {
     const mobileWidth = isMobileRes();

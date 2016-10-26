@@ -17,13 +17,16 @@ Template.EditStandard.viewmodel({
   updateViewedBy() {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    Meteor.defer(() => updateViewedBy.call({ _id }));
   },
   standard() {
     const _id = this._id && this._id();
     return this._getStandardByQuery({ _id });
   },
   _getNCsQuery() {
+    return { standardsIds: this._id && this._id() };
+  },
+  _getRisksQuery() {
     return { standardsIds: this._id && this._id() };
   },
   onUpdateNotifyUserCb() {

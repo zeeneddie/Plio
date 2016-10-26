@@ -1,4 +1,4 @@
-import { RiskTypes } from './risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 
 
 export default {

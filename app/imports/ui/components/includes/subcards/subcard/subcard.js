@@ -41,18 +41,21 @@ Template.Subcard.viewmodel({
 
       if (!err) {
         this.destroy();
-        const newSubcard = ViewModel.findOne(
-          'Subcard', vm => vm._id && vm._id() === res
-        );
 
-        if (newSubcard) {
-          newSubcard.toggleCollapse(null, 250);
-          newSubcard.subcard.closest('.modal').animate({
-            scrollTop: newSubcard.subcard.position().top + 70
-          }, 500, 'swing');
-        } else if ($parentFirstNode.length) {
-          $parentFirstNode.closest('.modal').scrollTop($parentFirstNode.position().top + 20);
-        }
+        Tracker.afterFlush(() => {
+          const newSubcard = ViewModel.findOne(
+            'Subcard', vm => vm._id && vm._id() === res
+          );
+
+          if (newSubcard) {
+            newSubcard.toggleCollapse(null, 250);
+            newSubcard.subcard.closest('.modal').animate({
+              scrollTop: newSubcard.subcard.position().top + 70
+            }, 500, 'swing');
+          } else if ($parentFirstNode.length) {
+            $parentFirstNode.closest('.modal').scrollTop($parentFirstNode.position().top + 20);
+          }
+        });
       }
     };
 

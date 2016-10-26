@@ -1,6 +1,6 @@
 import MessagesService from '/imports/api/messages/messages-service.js';
-import { Discussions } from '/imports/api/discussions/discussions.js'
-import { Messages } from '/imports/api/messages/messages.js'
+import { Discussions } from '/imports/share/collections/discussions.js'
+import { Messages } from '/imports/share/collections/messages.js'
 
 export const insertMessageFixtures = (limit = 1000) => {
   const standardId = 'Zty4NCagWvrcuLYoy';

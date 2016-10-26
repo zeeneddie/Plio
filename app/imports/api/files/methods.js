@@ -2,17 +2,16 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import FilesService from './files-service.js';
-import { Files } from './files.js';
-import { FileIdsSchema, RequiredSchema } from './files-schema.js';
-import { IdSchema, DocumentIdSchema, OrganizationIdSchema, UrlSchema, ProgressSchema, ErrorSchema } from '../schemas.js';
+import { Files } from '/imports/share/collections/files.js';
+import { RequiredSchema } from '/imports/share/schemas/files-schema.js';
+import {
+  IdSchema, UrlSchema,
+  ProgressSchema, ErrorSchema
+} from '/imports/share/schemas/schemas.js';
 import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js';
-import { ONLY_OWNER_CAN_UPDATE } from '/imports/api/errors.js';
 
 const onUpdateCheck = ({ _id, userId }) => {
-	const { createdBy, organizationId } = checkDocExistance(Files, { _id });
-	if (userId !== createdBy) {
-		throw ONLY_OWNER_CAN_UPDATE;
-	}
+	const { organizationId } = checkDocExistance(Files, { _id });
 
   checkOrgMembership(userId, organizationId);
 	return true;

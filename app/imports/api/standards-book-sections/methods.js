@@ -4,11 +4,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import StandardsBookSectionService from './standards-book-section-service.js';
 import {
   StandardsBookSectionSchema
-} from './standards-book-section-schema.js';
-import { StandardsBookSections } from './standards-book-sections.js';
-import { IdSchema, OrganizationIdSchema } from '../schemas.js';
+} from '/imports/share/schemas/standards-book-section-schema.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { IdSchema, OrganizationIdSchema } from '/imports/share/schemas/schemas.js';
 import Method, { CheckedMethod } from '../method.js';
-import { inject } from '../helpers.js';
+import { inject } from '/imports/api/helpers.js';
 import {
   ORG_EnsureCanChangeChecker,
   ORG_EnsureCanChangeCheckerCurried

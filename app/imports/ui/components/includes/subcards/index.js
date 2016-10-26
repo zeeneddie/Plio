@@ -11,6 +11,7 @@ import './risk-evaluation';
 import './root-cause-analysis';
 import './notes';
 import './review';
+import './risks';
 import './wrapper';
 import './subcard';
 import './wrapper-add';

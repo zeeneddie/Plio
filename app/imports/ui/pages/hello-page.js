@@ -3,9 +3,9 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { remove } from '/imports/api/users/methods.js';
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 
 Template.HelloPage.viewmodel({
@@ -16,17 +16,15 @@ Template.HelloPage.viewmodel({
       const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
-          if (Organizations.find({ 'users.userId': currentUser._id })) {
-            const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
-            const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
-            const orgExists = !!Organizations.findOne({ serialNumber });
+          const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+          const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
+          const orgExists = !!Organizations.findOne({ serialNumber });
 
-            if (serialNumber && orgExists) {
-              this.goToDashboard(serialNumber);
-            } else {
-              const org = Organizations.findOne({ 'users.userId': currentUser._id });
-              !!org && this.goToDashboard(org.serialNumber);
-            }
+          if (serialNumber && orgExists) {
+            this.goToDashboard(serialNumber);
+          } else {
+            const org = Organizations.findOne();
+            !!org && this.goToDashboard(org.serialNumber);
           }
         } else {
           FlowRouter.withReplaceState(() => {

@@ -46,6 +46,7 @@ AccountsTemplates.configureRoute('forgotPwd', {
   name: 'forgotPwd',
   path: '/forgot-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
@@ -55,6 +56,7 @@ AccountsTemplates.configureRoute('resetPwd', {
   name: 'resetPwd',
   path: '/reset-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
@@ -83,6 +85,16 @@ FlowRouter.route('/hello', {
     });
   }
 });
+
+// Uncomment this code to enable maintenance page
+// FlowRouter.route('/maintenance', {
+//   name: 'maintenance',
+//   action(params) {
+//     BlazeLayout.render('TransitionalLayout', {
+//       content: 'MaintenancePage'
+//     });
+//   }
+// });
 
 FlowRouter.route('/sign-out', {
   name: 'signOut',
@@ -263,6 +275,9 @@ function redirectHandler() {
 }
 
 function checkLoggedIn(context, redirect) {
+
+  // Redirect to maintenance route can be here.
+  // redirect('maintenance'); return;
   if (!Meteor.loggingIn()) {
     if (!Meteor.user()) {
       redirect('signIn', {}, { b: context.path });

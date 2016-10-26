@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 
-import { ActionUndoTimeInHours } from '/imports/api/constants.js';
+import { ActionUndoTimeInHours } from '/imports/share/constants.js';
 
 
 Template.Actions_VerifiedBy.viewmodel({

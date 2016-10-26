@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Files } from '../files.js';
+import { Files } from '/imports/share/collections/files.js';
 import { isOrgMember } from '../../checkers.js';
 
 

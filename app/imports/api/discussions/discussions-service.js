@@ -1,8 +1,9 @@
-import { Discussions } from './discussions';
-import { Messages } from '../messages/messages';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages';
 import { getUserViewedByData } from './helpers.js';
 import { getJoinUserToOrganizationDate } from '../organizations/utils.js';
 import { getNewerDate, lengthMessages, compareDates } from '../helpers.js';
+
 
 export default {
 	collection: Discussions,
@@ -66,9 +67,11 @@ export default {
 
 		const discussions = this.collection.find({ organizationId }).fetch();
 
-		const mapped = discussions.map((discussion) => {
+		discussions.map((discussion) => {
 			const { _id:discussionId } = discussion;
-			const { viewedUpTo } = Object.assign({}, getUserViewedByData(userId, discussion));
+			const {
+				viewedUpTo = discussion.createdAt
+			} = Object.assign({}, getUserViewedByData(userId, discussion));
 			const query = {
 				organizationId,
 				discussionId,
@@ -76,26 +79,17 @@ export default {
 					$gt: getNewerDate(currentOrgUserJoinedAt, viewedUpTo)
 				}
 			};
-			const messages = Messages.find(query).fetch();
+			const options = { sort: { createdAt: -1 }, limit: 1 };
+			const lastMessage = Messages.findOne(query, options);
 
-			return {
-				messages,
-				viewedUpTo,
-				_id: discussionId
-			};
-		});
-
-		const filtered = mapped.filter(lengthMessages);
-
-		return filtered.map(({ _id, messages, viewedUpTo }) => {
-			const lastMessage = Object.assign({}, _.last(messages));
-
-			if (compareDates(viewedUpTo, lastMessage.createdAt) === -1) {
-				return this.updateViewedByDiscussion({
-					_id,
-					userId,
-					messageId: lastMessage._id
-				});
+			if (lastMessage) {
+				if (compareDates(viewedUpTo, lastMessage.createdAt) === -1) {
+					return this.updateViewedByDiscussion({
+						userId,
+						_id: discussionId,
+						messageId: lastMessage._id
+					});
+				}
 			}
 		});
 	}

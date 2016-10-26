@@ -3,9 +3,8 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 
-import { UserRoles } from './constants';
-import { Organizations } from './organizations/organizations.js';
-import { AnalysisStatuses, UserMembership } from './constants.js';
+import { AnalysisStatuses, UserMembership, UserRoles } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import {
   NOT_AN_ORG_MEMBER,
   DOC_NOT_FOUND,
@@ -99,6 +98,16 @@ export const isOrgOwner = (userId, organizationId) => {
   });
 };
 
+export const isPlioUser = (userId) => {
+  const adminOrg = Organizations.findOne({ isAdminOrg: true });
+
+  if(adminOrg === undefined) {
+    return false;
+  }
+
+  return _.find(adminOrg.users, user => user.userId === userId) !== undefined;
+}
+
 export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.findOne({
     ...selector,
@@ -117,33 +126,6 @@ export const isOrgMember = (userId, organizationId) => {
   if (!userIdOrgIdTester(userId, organizationId)) return false;
 
   return isOrgMemberBySelector(userId, { _id: organizationId })
-};
-
-const checkTargetDate = (targetDate, timezone) => {
-  if (!targetDate) {
-    return false;
-  }
-
-  timezone = timezone || moment.tz.guess();
-
-  const tzNow = moment(new Date()).tz(timezone);
-  const tzTargetDate = moment(targetDate).tz(timezone);
-
-  if (tzNow.isAfter(tzTargetDate, 'day')) {
-    return 1;
-  } else if (tzNow.isSame(tzTargetDate, 'day')) {
-    return 0;
-  } else if (tzNow.isBefore(tzTargetDate, 'day')) {
-    return -1;
-  }
-};
-
-export const isDueToday = (targetDate, timezone) => {
-  return checkTargetDate(targetDate, timezone) === 0;
-};
-
-export const isOverdue = (targetDate, timezone) => {
-  return checkTargetDate(targetDate, timezone) === 1;
 };
 
 export const checkAnalysis = ({ analysis = {}, updateOfStandards = {}, ...rest }, args = {}) => {

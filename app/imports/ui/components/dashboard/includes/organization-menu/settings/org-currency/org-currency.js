@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { OrgCurrencies } from '/imports/api/constants.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
 
 
 Template.OrgSettings_OrgCurrency.viewmodel({
@@ -18,7 +18,7 @@ Template.OrgSettings_OrgCurrency.viewmodel({
     if (currency === this.templateInstance.data.currency) {
       return;
     }
-    
+
     this.currency(currency);
 
     this.parent().updateCurrency && this.parent().updateCurrency({ e, currency });

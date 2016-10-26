@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 
 Template.Risks_Type_Edit.viewmodel({
   mixin: ['organization', 'collapsing', 'risk'],
@@ -33,10 +33,9 @@ Template.Risks_Type_Edit.viewmodel({
       ViewModel.findOne('ModalWindow').setError('Type is required!');
     }
 
-    this.parent().update({ typeId }, (err) => {
-      Tracker.flush();
-      this.expandCollapsed(this.riskId());
-    });
+    this.parent().update({ typeId }, (err) =>
+      Tracker.afterFlush(() =>
+        this.expandCollapsed(this.riskId())));
   },
   getData() {
     const { typeId } = this.data();

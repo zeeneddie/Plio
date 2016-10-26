@@ -1,18 +1,15 @@
-import { Actions } from './actions.js';
-import { Organizations } from '/imports/api/organizations/organizations.js';
-import { ProblemTypes, WorkflowTypes } from '../constants.js';
-import { NonConformities } from '../non-conformities/non-conformities.js';
-import { Risks } from '../risks/risks.js';
-import Utils from '/imports/core/utils.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ProblemTypes, WorkflowTypes } from '/imports/share/constants.js';
 import BaseEntityService from '../base-entity-service.js';
 import WorkItemService from '../work-items/work-item-service.js';
-import { getWorkflowDefaultStepDate } from '/imports/api/helpers.js';
-
-if (Meteor.isServer) {
-  import ActionWorkflow from '/imports/core/workflow/server/ActionWorkflow.js';
-  import NCWorkflow from '/imports/core/workflow/server/NCWorkflow.js';
-  import RiskWorkflow from '/imports/core/workflow/server/RiskWorkflow.js';
-}
+import {
+  getCollectionByDocType,
+  getWorkflowDefaultStepDate,
+  generateSerialNumber
+} from '/imports/share/helpers.js';
 
 
 export default {
@@ -24,7 +21,7 @@ export default {
     organizationId, type, linkedTo,
     completionTargetDate, toBeCompletedBy, ...args
   }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId, type });
+    const serialNumber = generateSerialNumber(this.collection, { organizationId, type });
 
     const sequentialId = `${type}${serialNumber}`;
 
@@ -35,8 +32,6 @@ export default {
     });
 
     WorkItemService.actionCreated(actionId);
-
-    this._refreshStatus(actionId);
 
     return actionId;
   },
@@ -74,10 +69,12 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
 
     if (doc.areStandardsUpdated() && !action.verified()) {
+      const docCollection = getCollectionByDocType(documentType);
+
       docCollection.update({ _id: documentId }, {
         $set: {
           'updateOfStandards.status': 0, // Not completed
@@ -89,16 +86,10 @@ export default {
       });
     }
 
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
-
     return ret;
   },
 
   unlinkDocument({ _id, documentId, documentType }) {
-    const oldAction = this.collection.findOne({ _id });
-    const oldWorkflow = oldAction.getWorkflowType();
-
     const ret = this.collection.update({
       _id
     }, {
@@ -110,8 +101,7 @@ export default {
     const newAction = this.collection.findOne({ _id });
     const newWorkflow = newAction.getWorkflowType();
 
-    if ((newWorkflow !== oldWorkflow)
-          && (newWorkflow === WorkflowTypes.THREE_STEP)) {
+    if (newWorkflow === WorkflowTypes.THREE_STEP) {
       this.collection.update({ _id }, {
         $unset: {
           toBeVerifiedBy: '',
@@ -119,11 +109,8 @@ export default {
         }
       });
 
-      WorkItemService.actionWorkflowChanged(_id, newWorkflow);
+      WorkItemService.actionWorkflowSetToThreeStep(_id);
     }
-
-    this._refreshLinkedDocStatus(documentId, documentType);
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -146,8 +133,6 @@ export default {
 
     WorkItemService.actionCompleted(_id);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -169,8 +154,6 @@ export default {
 
     WorkItemService.actionCompletionCanceled(_id);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -188,8 +171,6 @@ export default {
     });
 
     WorkItemService.actionVerified(_id);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -240,8 +221,6 @@ export default {
 
     WorkItemService.actionVerificationCanceled(_id);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -253,8 +232,6 @@ export default {
     });
 
     WorkItemService.actionCompletionDateUpdated(_id, targetDate);
-
-    this._refreshStatus(_id);
 
     return ret;
   },
@@ -280,8 +257,6 @@ export default {
 
     WorkItemService.actionVerificationDateUpdated(_id, targetDate);
 
-    this._refreshStatus(_id);
-
     return ret;
   },
 
@@ -302,36 +277,27 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    const ret = this._service.remove({ _id, deletedBy });
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
 
-    this._refreshStatus(_id);
-
-    return ret;
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
   },
 
   restore({ _id }) {
-    const ret = this._service.restore({ _id });
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
 
-    this._refreshStatus(_id);
-
-    return ret;
+    return this._service.restore({ _id, onRestore });
   },
 
-  _refreshStatus(_id) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflow = new ActionWorkflow(_id);
-      workflow.refreshStatus();
-    });
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
   },
 
-  _refreshLinkedDocStatus(documentId, documentType) {
-    Meteor.isServer && Meteor.defer(() => {
-      const workflowConstructors = {
-        [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
-        [ProblemTypes.RISK]: RiskWorkflow
-      };
-
-      new workflowConstructors[documentType](documentId).refreshStatus();
-    });
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   }
+
 };
