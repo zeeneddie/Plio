@@ -145,7 +145,9 @@ const DepartmentsListProjection = {
 
 const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
-  riskAnalysis: 'Initial risk analysis'
+  riskAnalysis: 'Initial risk analysis',
+  updateOfStandards: 'Update of standard(s)',
+  updateOfRiskRecord: 'Update of risk record'
 };
 
 const riskScoreTypes = {
