@@ -153,6 +153,8 @@ Meteor.publish('standardsDeps', function(organizationId) {
   };
   const standardsFields = {
     viewedBy: 1,
+    issueNumber: 1,
+    status: 1,
     createdAt: 1,
     createdBy: 1
   };
