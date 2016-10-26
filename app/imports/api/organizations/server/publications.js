@@ -18,6 +18,9 @@ import {
   StandardTypesListProjection
 } from '../../constants';
 import { makeOptionsFields } from '../../helpers';
+import { UserMembership } from '/imports/share/constants';
+import { isPlioUser } from '../../checkers';
+
 
 Meteor.publish('invitationInfo', function (invitationId) {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
@@ -125,4 +128,34 @@ Meteor.publish('organizationDeps', function(organizationId) {
     riskTypes,
     users
   ];
+});
+
+Meteor.publishComposite('organizationsInfo', {
+  find() {
+    const userId = this.userId;
+
+    if (userId && isPlioUser(userId)) {
+      return Organizations.find({}, {
+        fields: {
+          name: 1,
+          users: 1,
+          createdAt: 1,
+        }
+      });
+    }
+
+    throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user');
+  },
+
+  children: [{
+      find(organization) {
+        const owner = _.find(organization.users, ({ role }) => {
+          return role === UserMembership.ORG_OWNER;
+        });
+
+        return Meteor
+          .users
+          .find({ _id: owner.userId });
+      }
+  }],
 });

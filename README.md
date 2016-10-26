@@ -52,7 +52,12 @@ This means that someone added a new npm module and you need to install it.
 
 `meteor -p 2000`
 
+
 #DEVELOPMENT
+
+## UI prototype
+The latest ui prototype:
+[http://ui2.isometrica.io/ui1-3/index.html](http://ui2.isometrica.io/ui1-3/index.html)
 
 ## Contribution process
 
@@ -80,7 +85,7 @@ This approach allows to avoid old code appearing in merged version.
 
 ## Style Guide
 
-* [Javascript Style Guide by Airbnb](https://github.com/airbnb/javascript) - **this style guide is ought to be complied with.** Style guide violators will be punished.
+* [Javascript Style Guide by Airbnb](https://github.com/airbnb/javascript) - **this style guide must be complied with for any code contributions.**
 
 ### General recomendations:
 * Use variable's names that makes sense.

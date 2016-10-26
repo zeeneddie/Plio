@@ -5,10 +5,12 @@
         <div class="card-block card-heading modal-window-heading">
           <div class="card-heading-buttons"
             {{b "unless: isVariation('simple'), class: { pull-xs-left: !isVariation('save'), pull-xs-right: isVariation('save') }"}}>
-            <button type="button" class="btn btn-link btn-icon guidance-panel-open"
-              {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-              <i class="fa fa-question-circle"></i>
-            </button>
+            {{#if helpText}}
+              <button type="button" class="btn btn-link btn-icon guidance-panel-open"
+                {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+                <i class="fa fa-question-circle"></i>
+              </button>
+            {{/if}}
             <button type="button" class="btn btn-primary submit-modal-button"
               {{b "if: isVariation('save'), click: child.save, disable: isSaving, class: { disabled: isSaving }"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && isVariation('save')"}}></i>

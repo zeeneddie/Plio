@@ -70,6 +70,8 @@ export default OrganizationService = {
     });
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
+    
+    new OrgNotificationsSender(organizationId).orgCreated();
 
     return organizationId;
   },

@@ -18,6 +18,10 @@
       }
     }
 
+    &.ql-expanded {
+      overflow: hidden;
+    }
+
     > .card {
       border: 0;
 
