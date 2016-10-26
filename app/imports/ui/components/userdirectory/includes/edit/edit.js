@@ -117,6 +117,8 @@ Template.UserDirectory_Card_Edit.viewmodel({
     const userId = this.userId();
     const _id = Random.id();
 
+    if(_.isEmpty(number)) return;
+
     this.modal().callMethod(addPhoneNumber, { _id, userId, number, type }, cb);
   },
   removePhoneNumber(viewModel, cb) {
