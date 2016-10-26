@@ -19,7 +19,7 @@ Template.NC_List.viewmodel({
     'collapsing', 'organization', 'modal', 'magnitude',
     'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
   ],
-  onRendered() {
+  onCreated() {
     Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {

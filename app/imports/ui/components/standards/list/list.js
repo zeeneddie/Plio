@@ -15,14 +15,13 @@ import {
   not
 } from '/imports/api/helpers.js';
 
-
 Template.StandardsList.viewmodel({
   share: 'search',
   mixin: ['modal', 'search', 'organization', 'standard', 'collapsing', 'roles', 'router', 'utils', {
     counter: 'counter'
   }],
   hideRTextOnExpand: true,
-  onRendered() {
+  onCreated() {
     Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {

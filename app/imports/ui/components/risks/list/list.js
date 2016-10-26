@@ -16,7 +16,7 @@ Template.Risks_List.viewmodel({
     'organization', 'modal', 'risk', 'problemsStatus',
     'collapsing', 'router', 'utils'
   ],
-  onRendered() {
+  onCreated() {
     Meteor.defer(() => this.handleRoute());
   },
   handleRoute() {
