@@ -8,7 +8,7 @@ export default {
       return ViewModel.findOne('ModalWindow');
     },
     open(data) {
-      if(!!this.instance()) return;
+      if(!!ViewModel.findOne('ModalWindow')) return;
 
       Blaze.renderWithData(Template.ModalWindow, data, document.body);
     },

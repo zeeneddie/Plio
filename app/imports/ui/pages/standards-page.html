@@ -3,6 +3,7 @@
     {{#if isDiscussionOpened}}
       {{> Standards_Card_Read
           _id=standardId
+          isReady=isReady
           isDiscussionOpened=isDiscussionOpened
           messagesNotViewedCount=messagesNotViewedCount}}
     {{else}}
@@ -14,11 +15,12 @@
           organizationId=organizationId
           discussionId=discussion._id
           linkedTo=standardId
-          isReady=isReady
+          isReady=isDiscussionReady
           standard=standard}}
     {{else}}
       {{> Standards_Card_Read
           _id=standardId
+          isReady=isReady
           isDiscussionOpened=isDiscussionOpened
           messagesNotViewedCount=messagesNotViewedCount}}
     {{/if}}

@@ -1,17 +1,25 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { check } from 'meteor/check';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { Departments } from '/imports/share/collections/departments.js';
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { Organizations } from '/imports/share/collections/organizations';
+import { Departments } from '/imports/share/collections/departments';
+import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
   StandardsBookSections
-} from '/imports/share/collections/standards-book-sections.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { LessonsLearned } from '/imports/share/collections/lessons.js';
-import { UserMembership } from '/imports/share/constants.js';
-import { getUserOrganizations } from '../utils.js';
-import { isPlioUser } from '../../checkers.js';
+} from '/imports/share/collections/standards-book-sections';
+import { Standards } from '/imports/share/collections/standards';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { getUserOrganizations } from '../utils';
+import { isOrgMember } from '../../checkers';
+import {
+  StandardsBookSectionsListProjection,
+  StandardTypesListProjection
+} from '../../constants';
+import { makeOptionsFields } from '../../helpers';
+import { UserMembership } from '/imports/share/constants';
+import { isPlioUser } from '../../checkers';
 
 
 Meteor.publish('invitationInfo', function (invitationId) {
@@ -52,8 +60,7 @@ Meteor.publish('currentUserOrganizations', function() {
     return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
-        serialNumber: 1,
-        users: 1
+        serialNumber: 1
       }
     });
   } else {
@@ -95,6 +102,32 @@ Meteor.publish('transferredOrganization', function(transferId) {
     throw new Meteor.Error(404, 'An invitation to transfer the organization is not found');
     return this.ready();
   }
+});
+
+Meteor.publish('organizationDeps', function(organizationId) {
+  check(organizationId, String);
+
+  const userId = this.userId;
+
+  if (!userId || !isOrgMember(userId, organizationId)) {
+    return this.ready();
+  }
+
+  const organization = Organizations.findOne({ _id: organizationId });
+  const userIds = _.pluck(organization.users, 'userId');
+  const query = { organizationId };
+
+  const standardsBookSections = StandardsBookSections.find(query, makeOptionsFields(StandardsBookSectionsListProjection));
+  const standardsTypes = StandardTypes.find(query, makeOptionsFields(StandardTypesListProjection));
+  const riskTypes = RiskTypes.find(query);
+  const users = Meteor.users.find({ _id: { $in: userIds } });
+
+  return [
+    standardsBookSections,
+    standardsTypes,
+    riskTypes,
+    users
+  ];
 });
 
 Meteor.publishComposite('organizationsInfo', {

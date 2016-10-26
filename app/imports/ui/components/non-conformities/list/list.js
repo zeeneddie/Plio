@@ -19,34 +19,29 @@ Template.NC_List.viewmodel({
     'collapsing', 'organization', 'modal', 'magnitude',
     'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
   ],
-  autorun() {
-    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const NCId = this.NCId();
-      const { result:contains, first:defaultDoc } = this._findNCForFilter(NCId);
+  onCreated() {
+    Meteor.defer(() => this.handleRoute());
+  },
+  handleRoute() {
+    const NCId = this.NCId();
+    const { result:contains, first:defaultDoc } = this._findNCForFilter(NCId);
 
-      if (!contains) {
-        if (defaultDoc) {
-          const { _id } = defaultDoc;
+    if (!contains) {
+      if (defaultDoc) {
+        const { _id } = defaultDoc;
 
-          Meteor.setTimeout(() => {
-            this.goToNC(_id);
-            this.expandCollapsed(_id);
-          }, 0);
-        } else {
-          Meteor.setTimeout(() => {
-            this.goToNCs();
-          }, 0);
-        }
+        Meteor.setTimeout(() => {
+          this.goToNC(_id);
+          this.expandCollapsed(_id);
+        }, 0);
       } else {
-        this.expandCollapsed(NCId);
+        Meteor.setTimeout(() => {
+          this.goToNCs();
+        }, 0);
       }
     }
   },
   _findNCForFilter(_id) {
-    const { magnitude, statuses, departments, deleted } = inspire(
-      ['magnitude', 'statuses', 'departments', 'deleted'],
-      this
-    );
     const finder = findById(_id);
     const results = curry((transformer, array) => {
       const items = transformer(array);
@@ -60,15 +55,19 @@ Template.NC_List.viewmodel({
 
     switch(this.activeNCFilterId()) {
       case 1:
+        const magnitude = this.magnitude();
         return resulstsFromItems(magnitude);
         break;
       case 2:
+        const statuses = this.statuses();
         return resulstsFromItems(statuses);
         break;
       case 3:
+        const departments = this.departments();
         return resulstsFromItems(departments);
         break;
       case 4:
+        const deleted = this.deleted();
         return results(_.identity, deleted);
         break;
       default:

@@ -12,15 +12,17 @@ Template.registerHelper('callback', function(param, obj) {
   return () => obj[param].bind(instance);
 });
 
-Template.registerHelper('log', console.log);
-
 const helpers = {
+  log: console.log,
   not: val => !val,
   eq: (val1, val2) => Object.is(val1, val2),
+  or: (...values) => values.reduce((prev, cur) => prev || cur),
   every: (...values) => values.every(value => !!value),
   some: (...values) => values.some(value => !!value),
   pick: (obj, ...keys) => _.pick(obj, ...keys),
-  omit: (obj, ...keys) => _.omit(obj, keys)
+  omit: (obj, ...keys) => _.omit(obj, keys),
+  gt: (val1, val2) => val1 > val2,
+  lt: (val1, val2) => val1 < val2
 };
 
 Object.keys(helpers).forEach(key => Template.registerHelper(key, cutSpacebarsKw(helpers[key])));

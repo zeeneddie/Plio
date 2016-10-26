@@ -1,0 +1,43 @@
+<template name="Standards_Card_Read_Header">
+  <div class="card-block card-heading">
+    <div class="card-heading-buttons pull-xs-right">
+      {{#if isReady}}
+        {{#if hasDocxAttachment}}
+          <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+          </a>
+        {{/if}}
+        {{#unless isDiscussionOpened}}
+          <a class="btn btn-secondary"
+            {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
+            Discuss
+            {{#if messagesNotViewedCount}}
+              <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+            {{/if}}
+          </a>
+        {{/unless}}
+        {{#if hasAccess}}
+          {{#if isDeleted}}
+            <a class="btn btn-secondary" {{b "click: restore"}}>
+              Restore
+            </a>
+            {{#if hasFullAccess}}
+              <a class="btn btn-primary" {{b "click: delete"}}>
+                Delete
+              </a>
+            {{/if}}
+          {{else}}
+            <a class="btn btn-primary" {{b "click: openEditModal"}}>
+              <i class="fa fa-pencil"></i>
+              Edit
+            </a>
+          {{/if}}
+        {{/if}}
+      {{else}}
+        {{> PreloaderButton}}
+      {{/if}}
+    </div>
+    <h3 class="card-title">
+      Compliance standard
+    </h3>
+  </div>
+</template>
