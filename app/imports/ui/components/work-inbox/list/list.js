@@ -19,26 +19,29 @@ Template.WorkInbox_List.viewmodel({
   ],
   onRendered(template) {
     template.autorun((computation) => {
-      const workItemId = this.workItemId();
-      const {
-        result:contains,
-        first:defaultDoc,
-        array
-      } = this._findWorkItemForFilter(workItemId);
+      const list = this.list;
 
-      if (!contains) {
-        if (defaultDoc) {
-          const { _id } = defaultDoc;
+      if (!list.focused() && !list.animating() && !list.searchText()) {
+        const workItemId = this.workItemId();
+        const {
+          result:contains,
+          first:defaultDoc
+        } = this._findWorkItemForFilter(workItemId);
 
-          Meteor.setTimeout(() => {
-            this.goToWorkItem(_id);
-            this.expandCollapsed(_id);
-          }, 0);
-        } else {
-          const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
-          
-          if (routeName !== 'workInbox') {
-            Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+        if (!contains) {
+          if (defaultDoc) {
+            const { _id } = defaultDoc;
+
+            Meteor.setTimeout(() => {
+              this.goToWorkItem(_id);
+              this.expandCollapsed(_id);
+            }, 0);
+          } else {
+            const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
+
+            if (routeName !== 'workInbox') {
+              Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+            }
           }
         }
       }
@@ -165,26 +168,7 @@ Template.WorkInbox_List.viewmodel({
     };
   },
   onSearchInputValue() {
-    return (value) => {
-      const { my: { current, completed, deleted } = {} } = Object.assign({}, this.items());
-
-      // My current work items
-      if (this.isActiveWorkInboxFilter(1)) {
-        return current;
-
-      // My completed work items
-      } else if (this.isActiveWorkInboxFilter(3)) {
-        return completed;
-
-      // My deleted work items
-      } else if (this.isActiveWorkInboxFilter(5)) {
-        return deleted;
-      }
-
-      const sections = ViewModel.find('WorkInbox_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.items && extractIds(vm.items()));
-      return _.flatten(ids);
-    };
+    return (value) => extractIds(this._findWorkItemForFilter().array)
   },
   onModalOpen() {
     return () =>

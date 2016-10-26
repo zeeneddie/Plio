@@ -5,7 +5,15 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+import {
+  extractIds,
+  flattenMap,
+  inspire,
+  findById,
+  sortArrayByTitlePrefix,
+  propEq,
+  not
+} from '/imports/api/helpers.js';
 
 
 Template.StandardsList.viewmodel({
@@ -42,15 +50,17 @@ Template.StandardsList.viewmodel({
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
     const activeStandardFilterId = this.activeStandardFilterId();
+    const results = (items) => ({
+      result: findById(_id, items),
+      first: _.first(items),
+      array: items
+    });
 
     switch(activeStandardFilterId) {
       case 1:
         const sections = this.sections();
         const mappedSections = flattenMapStandards(sections);
-        return {
-          result: finder(mappedSections),
-          first: _.first(mappedSections)
-        }
+        return results(mappedSections);
         break;
       case 2:
         const types = this.types();
@@ -67,15 +77,16 @@ Template.StandardsList.viewmodel({
             }
 
             return firstMappedType;
+          })(),
+          array: (() => {
+            const uncategorizedItems = mappedTypes.filter(_.compose(not, property('standards')));
+            return _.compact(mappedTypesSections.concat(uncategorizedItems));
           })()
         };
         break;
       case 3:
         const standardsDeleted = this.standardsDeleted();
-        return {
-          result: finder(standardsDeleted),
-          first: _.first(standardsDeleted)
-        }
+        return results(standardsDeleted);
         break;
       default:
         return {};
@@ -247,17 +258,7 @@ Template.StandardsList.viewmodel({
     });
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveStandardFilter(3)) {
-        return Object.assign([], this.standardsDeleted());
-      }
-
-      const sections = Object.assign([], this.sections());
-      const standards = _.flatten(sections.map(property('standards')));
-      const standardsIds = extractIds(standards);
-
-      return standardsIds;
-    };
+    return (value) => extractIds(this._findStandardForFilter().array)
   },
   onModalOpen() {
     return () =>
