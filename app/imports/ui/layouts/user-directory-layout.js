@@ -3,7 +3,6 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 
 
 Template.UserDirectory_Layout.viewmodel({
-  share: 'organization',
   mixin: 'organization',
   isReady: false,
   _subHandlers: [],
