@@ -15,6 +15,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   placeholder: 'Linked to',
   type: '',
   isDeleteButtonVisible() {
+    return true;
     return !this._id || get(this.linkedDocs(), 'length') > 1;
   },
   value() {
@@ -107,18 +108,6 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
     const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
-
-    // if we are viewing subcard show error in subcard, otherwise in modal
-    if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.VMFindParent('Subcard', this.parent());
-
-      if (!subcard) {
-        ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
-      } else {
-        subcard.setError && subcard.setError('An action must be linked to at least one document');
-      }
-      return;
-    }
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
