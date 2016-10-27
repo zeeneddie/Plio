@@ -8,10 +8,12 @@
           {{/each}}
         </div>
       {{/if}}
+    {{#unless isEditOnly}}
       <div class="card new-cards" {{b "ref: forms"}}></div>
       <div class="text-xs-center">
         <button type="button" class="btn btn-link" {{b "text: addText, click: add"}}></button>
       </div>
+    {{/unless}}
     </div>
   {{/Subcards_Wrapper}}
 </template>

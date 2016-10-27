@@ -41,8 +41,9 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   items() {
     const searchQuery = this.searchObject('value', [{ name: 'sequentialId' }, { name: 'title' }]);
     let query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
-    if (this.standardId()) {
-      query = { ...query, standardsIds: this.standardId() };
+    const standardId = this.standardId();
+    if (standardId) {
+      query = { ...query, standardsIds: standardId };
     }
     const options = { sort: { serialNumber: 1 } };
     const [ncs, risks] = this.getDocs(query, options);
