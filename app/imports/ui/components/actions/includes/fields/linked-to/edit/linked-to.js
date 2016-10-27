@@ -14,10 +14,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   isEditable: false,
   placeholder: 'Linked to',
   type: '',
-  isDeleteButtonVisible() {
-    return true;
-    return !this._id || get(this.linkedDocs(), 'length') > 1;
-  },
+  isDeleteButtonVisible: true,
   value() {
     return invoke(this.child('Select_Multi'), 'value');
   },
