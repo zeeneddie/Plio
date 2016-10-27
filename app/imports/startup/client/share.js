@@ -5,7 +5,8 @@ ViewModel.share({
     width: null
   },
   search: {
-    searchText: ''
+    searchText: '',
+    precise: false
   },
   uploader: {
     uploads: new ReactiveArray

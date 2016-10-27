@@ -35,6 +35,23 @@ Template.List_Read.viewmodel({
     const findListItems = predicate => ViewModel.find('ListItem', vm => predicate(vm));
 
     const onInputValue = (value) => {
+      const doubleQuotes = '"';
+      const singleQuotes = '\'';
+      const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
+      const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
+      const singleQuotesIndexes = getQuotesIndexes(singleQuotes);
+      const isPrecise = (quotesIndexes) =>
+        quotesIndexes.length > 1
+        && quotesIndexes.every(idx => idx !== -1);
+
+      this.precise(false);
+
+      if (isPrecise(doubleQuotesIndexes) || isPrecise(singleQuotesIndexes)) {
+        this.precise(true);
+
+        Tracker.flush();
+      }
+
       const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
 
       this.searchResultsNumber(ids.length);
@@ -49,6 +66,8 @@ Template.List_Read.viewmodel({
     };
 
     const onInputEmpty = () => {
+      this.precise(false);
+
       const vms = findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
 
       this.animating(true);

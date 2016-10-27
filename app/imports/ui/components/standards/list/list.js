@@ -93,6 +93,12 @@ Template.StandardsList.viewmodel({
     };
   },
   _getSearchQuery() {
+    if (this.precise()) {
+      return {
+        title: this.searchText().replace(/"|'/g, '')
+      };
+    }
+
     return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
   },
   totalUnreadMessagesToHtml(totalUnreadMessages) {
@@ -125,66 +131,57 @@ Template.StandardsList.viewmodel({
       return sortArrayByTitlePrefix(_sections);
     })());
 
-    const reducer = (prev, cur) => {
-      const query = {
-        sectionId: cur._id,
-        ...mainQuery,
-        ...(() => typeId ? { typeId } : null)()
-      };
+    /**
+     * Filter the sections which fit the search query and have the standards
+     * connected
+    */
+    const filtered = sections.filter(({ _id: sectionId }) => {
+      const query = ((() => {
+        const _query = { sectionId, ...mainQuery };
+        return typeId ? { ..._query, typeId } : _query;
+      })());
+      return this._getStandardsByQuery(query).count() > 0;
+    });
 
-      /**
-       * Filter the sections which fit the search query and have the standards
-       * connected
-      **/
+    // Add appropriate standards to the filtered sections
+    const withStandards = filtered.map((section) => {
+      const standards = this._getStandardsByQuery(mainQuery)
+        .fetch()
+        .filter((standard) => {
+          return Object.is(section._id, standard.sectionId) &&
+                 (typeId ? Object.is(typeId, standard.typeId) : true);
+        });
 
-      if (this._getStandardsByQuery(query).count()) {
-        // Add appropriate standards to the filtered sections
-        const withStandards = ((() => {
-          const standards = this._getStandardsByQuery(mainQuery)
-            .fetch()
-            .filter((standard) => {
-              return Object.is(cur._id, standard.sectionId) &&
-                     (typeId ? Object.is(typeId, standard.typeId) : true);
-            });
+      sortArrayByTitlePrefix(standards);
 
-          sortArrayByTitlePrefix(standards);
+      return Object.assign({}, section, {
+        standards,
+        ...this._getTotalUnreadMessagesHtml(standards)
+      });
+    });
 
-          return Object.assign({}, cur, {
-            standards,
-            ...this._getTotalUnreadMessagesHtml(standards)
-          });
-        })());
+    /**
+     * Adding "Uncategorized" section: only for standards grouped by sections
+    */
+    const withUncategorized = ((() => {
+      const predicate = standard => !sections.filter(({ _id }) => Object.is(_id, standard.sectionId)).length;
+      const query = typeId ? { typeId, ...mainQuery } : mainQuery;
+      const standards = this._getStandardsByQuery(query).fetch().filter(predicate);
 
-        /**
-         * Adding "Uncategorized" section: only for standards grouped by sections
-        */
-        const withUncategorized = ((() => {
-          const predicate = standard => !sections.filter(({ _id }) => Object.is(_id, standard.sectionId)).length;
-          const query = typeId ? { typeId, ...mainQuery } : mainQuery;
-          const standards = this._getStandardsByQuery(query).fetch().filter(predicate);
-
-          if (standards.length) {
-            return withStandards.concat({
-              organizationId,
-              standards,
-              _id: `StandardsBookSections.Uncategorized:${typeId || ''}`, // We need a fake id here for searching purposes
-              title: 'Uncategorized',
-              ...this._getTotalUnreadMessagesHtml(standards)
-            });
-          }
-
-          return withStandards;
-        })());
-
-        return prev.concat(withUncategorized);
+      if (standards.length) {
+        return withStandards.concat({
+          organizationId,
+          standards,
+          _id: `StandardsBookSections.Uncategorized:${typeId || ''}`, // We need a fake id here for searching purposes
+          title: 'Uncategorized',
+          ...this._getTotalUnreadMessagesHtml(standards)
+        });
       }
 
-      return prev;
-    };
+      return withStandards;
+    })());
 
-    const result = sections.reduce(reducer, []);
-
-    return result;
+    return withUncategorized;
   },
   types() {
     const organizationId = this.organizationId();
@@ -257,7 +254,10 @@ Template.StandardsList.viewmodel({
     });
   },
   onSearchInputValue() {
-    return (value) => extractIds(this._findStandardForFilter().array)
+    return (value) => {
+      const result = extractIds(this._findStandardForFilter().array);
+      return result;
+    }
   },
   onModalOpen() {
     return () =>
