@@ -23,67 +23,74 @@ Template.List_Read.viewmodel({
   },
   onModalOpen() {},
   onSearchInputValue(value) {},
-  onHandleSearchInput(value) {
-
-    const expand = (vms = [], onComplete = () => {}) => {
-      this.expandCollapseItems(vms, {
-        expandNotExpandable: true,
-        complete: () => onComplete()
-      });
-    };
-
-    const findListItems = predicate => ViewModel.find('ListItem', vm => predicate(vm));
-
-    const onInputValue = (value) => {
-      const doubleQuotes = '"';
-      const singleQuotes = '\'';
-      const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
-      const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-      const singleQuotesIndexes = getQuotesIndexes(singleQuotes);
-      const isPrecise = (quotesIndexes) =>
-        quotesIndexes.length > 1
-        && quotesIndexes.every(idx => idx !== -1);
-
-      this.precise(false);
-
-      if (isPrecise(doubleQuotesIndexes) || isPrecise(singleQuotesIndexes)) {
-        this.precise(true);
-
-        Tracker.flush();
-      }
-
-      const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
-
-      this.searchResultsNumber(ids.length);
-
-      const vms = findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
-
-      if (vms && vms.length) {
-        this.animating(true);
-
-        expand(this._transform().onValue(vms), () => this.onSearchCompleted());
-      }
-    };
-
-    const onInputEmpty = () => {
-      this.precise(false);
-
-      const vms = findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
-
-      this.animating(true);
-
-      if (vms && vms.length) {
-        expand(this._transform().onEmpty(vms), () => this.expandCurrent());
-      } else {
-        this.expandCurrent();
-      }
-    };
+  onHandleSearchInput: _.debounce(function(e) {
+    const value = e.target.value;
 
     if (value) {
-      onInputValue(value);
+      this.onInputValue(value);
     } else {
-      onInputEmpty();
+      this.onInputEmpty();
     }
+  }, 500),
+  onInputValue(value) {
+    const doubleQuotes = '"';
+    const singleQuotes = '\'';
+    const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
+    const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
+    const singleQuotesIndexes = getQuotesIndexes(singleQuotes);
+    const isPrecise = (quotesIndexes) =>
+      quotesIndexes.length > 1
+      && quotesIndexes.every(idx => idx !== -1);
+
+    this.precise(false);
+
+    if (isPrecise(doubleQuotesIndexes) || isPrecise(singleQuotesIndexes)) {
+      this.precise(true);
+
+      const newValue = value.replace(/"|'/g, '');
+
+      this.searchText(newValue);
+    } else {
+      this.searchText(value);
+    }
+
+    Tracker.flush();
+
+    const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
+
+    this.searchResultsNumber(ids.length);
+
+    const vms = this.findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
+
+    if (vms && vms.length) {
+      this.animating(true);
+
+      this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted());
+    }
+  },
+  onInputEmpty() {
+    this.searchText('');
+
+    this.precise(false);
+
+    const vms = this.findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
+
+    this.animating(true);
+
+    if (vms && vms.length) {
+      this.expandAllFound(this._transform().onEmpty(vms), () => this.expandCurrent());
+    } else {
+      this.expandCurrent();
+    }
+  },
+  findListItems(predicate) {
+    return ViewModel.find('ListItem', vm => predicate(vm));
+  },
+  expandAllFound(vms = [], complete = () => {}) {
+    this.expandCollapseItems(vms, {
+      complete,
+      expandNotExpandable: true
+    });
   },
   expandCurrent() {
     this.expandCollapsed(this._id(), () => {
