@@ -17,8 +17,8 @@ Template.List_Read.viewmodel({
   // can be overwritten by passing this function from parent component as prop
   _transform() {
     return {
-      onValue(vms) { return vms },
-      onEmpty(vms) { return vms }
+      onValue: _.identity,
+      onEmpty: _.identity
     }
   },
   onModalOpen() {},
@@ -42,12 +42,14 @@ Template.List_Read.viewmodel({
       quotesIndexes.length > 1
       && quotesIndexes.every(idx => idx !== -1);
 
-    this.precise(false);
+    this.isPrecise(false);
 
     if (isPrecise(doubleQuotesIndexes) || isPrecise(singleQuotesIndexes)) {
-      this.precise(true);
+      this.isPrecise(true);
 
-      const newValue = value.replace(/"|'/g, '');
+      const newValue = value.replace(/^\d\.+|"|'/g, '').trim();
+
+      console.log(newValue);
 
       this.searchText(newValue);
     } else {
@@ -60,18 +62,20 @@ Template.List_Read.viewmodel({
 
     this.searchResultsNumber(ids.length);
 
-    const vms = this.findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
+    Meteor.setTimeout(() => {
+      const vms = this.findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
 
-    if (vms && vms.length) {
-      this.animating(true);
+      if (vms && vms.length) {
+        this.animating(true);
 
-      this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted());
-    }
+        this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted());
+      }
+    }, 0);
   },
   onInputEmpty() {
     this.searchText('');
 
-    this.precise(false);
+    this.isPrecise(false);
 
     const vms = this.findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
 
@@ -84,12 +88,12 @@ Template.List_Read.viewmodel({
     }
   },
   findListItems(predicate) {
-    return ViewModel.find('ListItem', vm => predicate(vm));
+    return ViewModel.find('ListItem', predicate);
   },
   expandAllFound(vms = [], complete = () => {}) {
     this.expandCollapseItems(vms, {
       complete,
-      expandNotExpandable: true
+      forceExpand: true
     });
   },
   expandCurrent() {

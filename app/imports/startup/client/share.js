@@ -6,7 +6,7 @@ ViewModel.share({
   },
   search: {
     searchText: '',
-    precise: false
+    isPrecise: false
   },
   uploader: {
     uploads: new ReactiveArray

@@ -93,13 +93,9 @@ Template.StandardsList.viewmodel({
     };
   },
   _getSearchQuery() {
-    if (this.precise()) {
-      return {
-        title: this.searchText().replace(/"|'/g, '')
-      };
-    }
-
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
+    const fields = [{ name: 'title' }, { name: 'description' }, { name: 'status' }];
+    
+    return this.searchObject('searchText', fields, this.isPrecise());
   },
   totalUnreadMessagesToHtml(totalUnreadMessages) {
     return totalUnreadMessages ? `<i class="fa fa-comments margin-right"></i>
