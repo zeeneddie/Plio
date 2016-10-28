@@ -4,15 +4,19 @@ export default {
   searchObject(prop, fields, precise = false) {
     const searchObject = {};
 
-    if (this[prop]()) {
-      const words = this[prop]().trim().split(' ');
+    const value = (this[prop] && this[prop]() || '').trim();
+
+    if (value) {
       let r;
+
       try {
+        console.log(value);
         r = precise
-          ? new RegExp(`^${this[prop]().trim()}$`, 'i')
-          : new RegExp(`.*(${words.join(' ')}).*`, 'i');
+          ? new RegExp(`(\d\.?)*${value}$`, 'i')
+          : new RegExp(`.*(${value}).*`, 'i');
       } catch (err) {
       } // ignore errors
+
       if (_.isArray(fields)) {
         fields = _.map(fields, (field) => {
           const obj = {};

@@ -34,34 +34,34 @@ Template.List_Read.viewmodel({
   }, 500),
   onInputValue(value) {
     const doubleQuotes = '"';
-    const singleQuotes = '\'';
     const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
     const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-    const singleQuotesIndexes = getQuotesIndexes(singleQuotes);
     const isPrecise = (quotesIndexes) =>
       quotesIndexes.length > 1
       && quotesIndexes.every(idx => idx !== -1);
 
-    this.isPrecise(false);
+    // check if the value has " and if it does search precisely otherwise search normally
 
-    if (isPrecise(doubleQuotesIndexes) || isPrecise(singleQuotesIndexes)) {
+    if (isPrecise(doubleQuotesIndexes)) {
       this.isPrecise(true);
 
-      const newValue = value.replace(/^\d\.+|"|'/g, '').trim();
-
-      console.log(newValue);
+      // remove these characters
+      let newValue = value.replace(/"/g, '').trim();
 
       this.searchText(newValue);
     } else {
+      this.isPrecise(false);
       this.searchText(value);
     }
 
+    // force reactive updates
     Tracker.flush();
 
     const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
 
     this.searchResultsNumber(ids.length);
 
+    // hack to wait on render
     Meteor.setTimeout(() => {
       const vms = this.findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
 
@@ -74,8 +74,7 @@ Template.List_Read.viewmodel({
   },
   onInputEmpty() {
     this.searchText('');
-
-    this.isPrecise(false);
+    this.searchInput.val('');
 
     const vms = this.findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
 
@@ -103,6 +102,6 @@ Template.List_Read.viewmodel({
   },
   onSearchCompleted() {
     this.animating(false);
-    Meteor.setTimeout(() => this.focused(true), 500);
+    Tracker.afterFlush(() => this.focused(true));
   }
 });

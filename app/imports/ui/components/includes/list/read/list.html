@@ -2,9 +2,9 @@
   <div class="card">
     <div class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField field="searchText"}}
+        {{#ClearableField clearFn='onInputEmpty'}}
           <input type="text" class="form-control" placeholder="Search..."
-            {{b "focus: focused, disable: animating, input: onHandleSearchInput"}} />
+            {{b "ref: searchInput, focus: focused, disable: animating, input: onHandleSearchInput"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
