@@ -8,6 +8,7 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { UserRoles } from '/imports/share/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
 import { flattenObjects } from '/imports/api/helpers.js';
+import { MyPreferencesHelp } from '/imports/api/help-messages.js';
 
 const STATUSES = [
   {
@@ -148,6 +149,7 @@ Template.UserMenu.viewmodel({
     this.modal().open({
       template: 'UserPreferences',
       _title: 'My preferences',
+      helpText: MyPreferencesHelp.myPreferences,
       userId: Meteor.userId()
     });
   }

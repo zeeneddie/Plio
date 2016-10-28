@@ -1,6 +1,6 @@
 <template name="OrgSettings_OrgName">
   {{#FormField label="Org name"}}
-    {{#ClearableField field="name"}}
+    {{#ClearableField field="name" helpText=helpText}}
       <input {{b "value: name, focusout: update"}} type="text"
           class="form-control" placeholder="Org name" />
     {{/ClearableField}}

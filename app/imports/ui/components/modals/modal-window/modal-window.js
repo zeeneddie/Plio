@@ -20,7 +20,6 @@ Template.ModalWindow.viewmodel({
   isWaiting: false,
   // uploadsCount: 0,
   error: '',
-  moreInfoLink: '#',
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
   closeCaption: 'Close',

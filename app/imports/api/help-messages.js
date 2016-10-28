@@ -1,3 +1,5 @@
+import { UserRoles } from '/imports/share/constants.js';
+
 const StandardsHelp = {
   standard: `A compliance standard is a document that sets standards for how you do things (policies, processes, etc) in your organization.  To add a compliance standard into Plio, just fill in the card details, and link to a source file which may be a Word document, a URL link to a web document or a video.`
 };
@@ -15,6 +17,10 @@ const RisksHelp = {
   riskScoringScoreType: `Indicate whether you scoring the inherent risk (which is the level of risk that existed before you treated the risk) or the residual risk (the reduced level of risk that you are expecting after you treat the risk).`,
   riskEvaluationTreatmentDecision: `Indicate how you plan to deal with this risk; Tolerate - you are just going to live with the risk; Treat - you are going to act to reduce the risk; Transfer - you are going to pass the risk on to a 3rd party; Terminate - you are going to stop the business activity which has created this risk`,
   reviewStatus: `Risks should be reviewed at least annually. Indicate when you last reviewed this risk.`
+};
+
+const WorkInboxHelp = {
+  workInbox: `The Work inbox is a single place in Plio to view all work actions that are created in the system.  With the View selector in the header bar, you can view both your own actions and your co-workers actions.  To deal with an action just click on the button in the To Do panel at the top of the card, or edit the card to re-assign or modify the work item.`,
 };
 
 const OrganizationSettingsHelp = {
@@ -38,12 +44,12 @@ const MyPreferencesHelp = {
 
 const UserProfileHelp = {
   userProfile: `The user profile card lets you add your user profile picture and edit your contact details.  It's also where (if you have been given admin rights) you can give other users additional system powers and editing permissions.`,
-  superpowersCreateEditStandards: `Indicate whether this user can create and edit compliance standards documents`,
-  superpowersViewAllTeamActions: `Indicate whether this user can view all his team's actions in the Work inbox, or just his own actions`,
-  superpowersInviteUsers: `Indicate whether this user can invite other users to join your Plio organization`,
-  superpowersDeleteUsers: `Indicate whether this user can delete other users from your Plio organization`,
-  superpowersEditUserSuperpowers: `Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)`,
-  superpowersChangeOrganizationSettings: `Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)`
+  [UserRoles.CREATE_UPDATE_DELETE_STANDARDS]: `Indicate whether this user can create and edit compliance standards documents`,
+  [UserRoles.VIEW_TEAM_ACTIONS]: `Indicate whether this user can view all his team's actions in the Work inbox, or just his own actions`,
+  [UserRoles.INVITE_USERS]: `Indicate whether this user can invite other users to join your Plio organization`,
+  [UserRoles.DELETE_USERS]: `Indicate whether this user can delete other users from your Plio organization`,
+  [UserRoles.EDIT_USER_ROLES]: `Indicate whether this user can edit the User Superpowers section in the User profile (you should only grant this power to very few, highly trusted users)`,
+  [UserRoles.CHANGE_ORG_SETTINGS]: `Indicate whether this user can edit the Organization settings (you should only grant this power to very few, highly trusted users)`,
 };
 
 export {
@@ -51,6 +57,7 @@ export {
   NonConformitiesHelp,
   RisksHelp,
   OrganizationSettingsHelp,
+  WorkInboxHelp,
   MyPreferencesHelp,
   UserProfileHelp
 };

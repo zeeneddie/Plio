@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
 import { ActionPlanOptions } from '/imports/share/constants.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/actions/methods.js';
@@ -61,6 +62,7 @@ Template.Actions_Card_Read.viewmodel({
     const _title = this.getActionTitle();
     this.modal().open({
       _title,
+      helpText: WorkInboxHelp.workInbox,
       template: 'Actions_Edit',
       _id: this.action() && this.action()._id
     });
