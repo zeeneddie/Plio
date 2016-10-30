@@ -4,16 +4,17 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 Template.List_Read.viewmodel({
   share: 'search',
   mixin: ['search', 'collapsing'],
+  _id: '',
+  focused: false,
+  animating: false,
+  isModalButtonVisible: true,
+  modalButtonText: 'Add',
   onCreated() {
     this.searchText('');
   },
   onRendered() {
     this.expandCollapsed(this._id());
   },
-  _id: '',
-  focused: false,
-  animating: false,
-  isModalButtonVisible: true,
   // can be overwritten by passing this function from parent component as prop
   _transform() {
     return {
