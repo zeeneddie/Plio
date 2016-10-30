@@ -1,11 +1,12 @@
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { ProblemTypes, ActionTypes, WorkflowTypes } from '/imports/share/constants.js';
-import { AnalysisTitles } from '../constants.js';
-import { checkAndThrow } from '../helpers.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { Actions } from '/imports/share/collections/actions';
+import { ProblemTypes, ActionTypes, WorkflowTypes } from '/imports/share/constants';
+import { AnalysisTitles } from '../constants';
+import { checkAndThrow } from '../helpers';
+import { capitalize } from '/imports/share/helpers';
 
-import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers.js';
+import { checkDocAndMembership, checkDocAndMembershipAndMore } from '../checkers';
 import {
   INVALID_DOC_TYPE,
   DOC_NOT_FOUND,
@@ -18,8 +19,9 @@ import {
   ACT_CANNOT_COMPLETE,
   ACT_COMPLETION_CANNOT_BE_UNDONE,
   ACT_CANNOT_VERIFY,
-  ACT_VERIFICATION_CANNOT_BE_UNDONE
-} from '../errors.js';
+  ACT_VERIFICATION_CANNOT_BE_UNDONE,
+  ACT_ANALYSIS_MUST_BE_COMPLETED
+} from '../errors';
 
 export const ACT_Check = function ACT_Check(_id) {
   return checkDocAndMembership(Actions, _id, this.userId);
@@ -58,10 +60,10 @@ export const ACT_LinkedDocsChecker = (linkedTo) => {
 
   if (docWithUncompletedAnalysis) {
     const { sequentialId, title } = docWithUncompletedAnalysis;
-    throw new Meteor.Error(
-      400,
-      `${analysisTitle} for ${sequentialId} "${title}" must be completed first`
-    );
+
+    analysisTitle = capitalize(analysisTitle.replace('Complete ', ''));
+
+    throw ACT_ANALYSIS_MUST_BE_COMPLETED(title, sequentialId, analysisTitle);
   }
 };
 
