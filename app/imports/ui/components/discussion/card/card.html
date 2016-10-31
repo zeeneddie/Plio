@@ -1,9 +1,9 @@
 <template name="Discussion_Card">
 	{{#if isReady}}
 		{{#if (every discussionId organizationId)}}
-			{{> Discussion_React
-					discussionId=discussionId
+			{{> Discussion_Card_Inner
 					organizationId=organizationId
+					discussionId=discussionId
 					standard=standard}}
 		{{/if}}
 	{{else}}

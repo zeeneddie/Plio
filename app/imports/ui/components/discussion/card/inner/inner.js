@@ -1,15 +1,15 @@
-import './discussion-react.html';
-
+import { Template } from 'meteor/templating';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import DiscussionContainer from './containers/DiscussionContainer';
 import store from '/client/redux/store';
-import { Messages } from '/imports/share/collections/messages';
-import Container from './containers/MessagesListWrapperContainer';
+import DiscussionContainer from '/imports/ui/react/discussion/containers/DiscussionContainer';
 
-Template.Discussion_React.viewmodel({
+Template.Discussion_Card_Inner.viewmodel({
+  standard: '',
+  discussionId: '',
+  organizationId: '',
   onRendered(template) {
     const { discussionId, organizationId, standard } = template.data;
 
@@ -19,10 +19,10 @@ Template.Discussion_React.viewmodel({
                              organizationId={organizationId}
                              standard={standard} />
       </Provider>,
-      template.$('#discussion')[0]
+      _.first(this.discussionDOMContainer)
     );
   },
   onDestroyed(template) {
-    ReactDOM.unmountComponentAtNode(template.$('#discussion')[0]);
+    ReactDOM.unmountComponentAtNode(_.first(this.discussionDOMContainer));
   }
 });
