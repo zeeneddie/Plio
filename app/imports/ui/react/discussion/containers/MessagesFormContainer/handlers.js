@@ -1,16 +1,14 @@
-import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { insert } from '/imports/api/messages/methods';
-import { handleMethodResult } from '/imports/api/helpers';
-import { reset } from '/client/redux/actions/discussionActions';
+import { reset, submit as submitMessage } from '/client/redux/actions/discussionActions';
 
 const MESSAGES_LENGTH_LIMIT_BEFORE_RESET = 100;
 
-// Handlers
-
 export const submit = ({
-  discussionId, organizationId, dispatch, messages, disabled
+  discussionId,
+  organizationId,
+  disabled,
+  dispatch
 }) => {
   return (e) => {
     e.preventDefault();
@@ -25,18 +23,22 @@ export const submit = ({
 
     messageInput.value = '';
 
-    insert.call({
-      organizationId,
-      discussionId,
-      text: sanitizeHtml(value),
-      type: 'text'
-    }, handleMethodResult((err, _id) => {
+    const callback = (dispatch, getState) => (err, _id) => {
       if (err) return;
+
+      const { messages } = getState().discussion;
 
       if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_LENGTH_LIMIT_BEFORE_RESET) {
         FlowRouter.setQueryParams({ at: null });
         dispatch(reset());
       }
-    }));
+    };
+
+    dispatch(submitMessage({
+      organizationId,
+      discussionId,
+      text: value,
+      type: 'text'
+    }, callback));
   }
 }

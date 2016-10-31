@@ -2,7 +2,7 @@ import React from 'react';
 import Blaze from 'meteor/blaze-react-component';
 import { compose, withHandlers, withProps } from 'recompose';
 
-import { addFile } from './constants';
+import { addFile } from './handlers';
 import { transsoc, pickC } from '/imports/api/helpers';
 
 const DiscussionFileUploader = (props) => {

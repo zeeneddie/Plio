@@ -2,12 +2,9 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Autolinker } from 'meteor/konecty:autolinker';
 import React from 'react';
 
-import modal from '/imports/startup/client/mixins/modal';
 import { getFormattedDate } from '/imports/share/helpers';
-import { invokeC, handleMethodResult } from '/imports/api/helpers';
+import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
-import { remove as removeMessage } from '/imports/api/messages/methods';
-import { setAt } from '/client/redux/actions/discussionActions';
 
 import FileItemRead from '../FileItemRead';
 
@@ -16,17 +13,6 @@ import FileItemRead from '../FileItemRead';
 export const invokeUser = path => obj => invokeC(path, obj.user);
 
 export const isAuthor = props => Object.is(Meteor.userId(), props.createdBy);
-
-export const setAtWithRouter = (val, props) => {
-  FlowRouter.setQueryParams({ at: val });
-  props.dispatch(setAt(val));
-}
-
-export const clearAtWithRouter = (props) => {
-  if (props.isSelected) {
-    setAtWithRouter(null, props);
-  }
-}
 
 // Prop creators
 
@@ -85,43 +71,4 @@ export const getClassName = (props) => {
   const selected = props.isSelected ? 'selected' : '';
 
   return `${first} ${selected}`;
-};
-
-
-// Handlers
-
-export const openUserDetails = (props) => {
-  return (e) => {
-    e.preventDefault();
-
-    modal.modal.open({
-      template: 'UserDirectory_Card_Read_Inner',
-      _title: 'User details',
-      user: props.user
-    });
-  };
-}
-
-export const select = props => e => props.dispatch(setAt(props._id));
-
-export const deselect = props => e => clearAtWithRouter(props);
-
-export const remove = (props) => {
-  return (e) => {
-    if (!isAuthor(props)) return;
-
-    swal({
-      title: 'Are you sure you want to delete this message?',
-      text: 'This cannot be undone.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Remove',
-      closeOnConfirm: true
-    },
-    () => {
-      const cb = (err, res) => !err && clearAtWithRouter(props);
-
-      return removeMessage.call({ _id: props._id }, handleMethodResult(cb));
-    });
-  };
 };

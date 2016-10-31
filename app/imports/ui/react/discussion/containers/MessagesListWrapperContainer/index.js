@@ -13,13 +13,13 @@ import {
   setMessages,
   setLoading,
   setLastMessageId,
-  setResetCompleted
+  setResetCompleted,
+  markMessagesAsRead
 } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import notifications from '/imports/startup/client/mixins/notifications';
 import { pickFromDiscussion, pickC, omitC } from '/imports/api/helpers';
 import { LastDiscussionMessage } from '/client/collections';
-import { markMessagesAsRead } from './constants.js';
 
 const getDiscussionState = () => getState('discussion');
 
@@ -73,11 +73,8 @@ const onPropsChange = (props, onData) => {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
-    let lastMessageId;
-
-    Tracker.nonreactive(() => {
-      lastMessageId = get(LastDiscussionMessage.findOne(), 'lastMessageId');
-    });
+    let lastMessageId = Tracker.nonreactive(() =>
+      get(LastDiscussionMessage.findOne(), 'lastMessageId'));
 
     const actions = [
       setLoading(false),
@@ -116,19 +113,18 @@ export default composeAll(
   lifecycle({
     componentWillMount() {
       const getLastMessage = () => Object.assign({}, _.last(this.props.messages));
+      const readMessages = () =>
+        this.props.dispatch(markMessagesAsRead(this.props.discussion, getLastMessage()));
 
-      markMessagesAsRead(this.props.discussion, getLastMessage());
+      readMessages();
 
       // run observer and interval that returns a cleanup function
 
-      intervalCleanup = interval(() => markMessagesAsRead(this.props.discussion, getLastMessage()));
+      intervalCleanup = interval(() => readMessages());
 
       observerCleanup = observer();
     }
   }),
-  withProps(props =>
-    ({ discussion: Discussions.findOne({ _id: props.discussionId }) })),
-  withProps(props => ({})),
   composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
   connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted']))
 )(MessagesListWrapper);

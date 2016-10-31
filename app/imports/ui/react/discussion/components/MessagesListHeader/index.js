@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStartedAtText, getStartedByText } from './constants';
+import { getStartedAtText, getStartedByText } from './helpers';
 import { mapProps } from 'recompose';
 import { transsoc } from '/imports/api/helpers.js';
 

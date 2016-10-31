@@ -2,14 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, withProps } from 'recompose';
 
-import { pickFromDiscussion } from '/imports/api/helpers';
 import MessagesForm from '../../components/MessagesForm';
-import { submit } from './constants.js';
-
-const mapStateToProps = pickFromDiscussion(['messages']);
+import { submit } from './handlers';
 
 export default compose(
-  connect(mapStateToProps),
+  connect(),
   withProps((props) => ({
     disabled: props.standard.isDeleted
   })),

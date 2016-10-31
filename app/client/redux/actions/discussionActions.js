@@ -1,3 +1,6 @@
+import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+
 import {
   SET_MESSAGES,
   SET_LOADING,
@@ -10,8 +13,10 @@ import {
   SET_INITIAL_DATA_LOADED,
   SET_RESET_COMPLETED
 } from './types';
-
 import { initialState } from '../reducers/discussionReducer';
+import { handleMethodResult } from '/imports/api/helpers';
+import { insert } from '/imports/api/messages/methods';
+import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
 
 export function setMessages(messages) {
   return {
@@ -73,5 +78,40 @@ export function setResetCompleted(bool) {
   return {
     type: SET_RESET_COMPLETED,
     payload: bool
+  }
+}
+
+export const submit = ({
+  organizationId,
+  discussionId,
+  text,
+  fileId,
+  type
+}, callback = () => {}) => {
+  return (dispatch, getState) => {
+    return insert.call({
+      organizationId,
+      discussionId,
+      type,
+      fileId,
+      text: sanitizeHtml(text),
+    }, handleMethodResult(callback(dispatch, getState)));
+  }
+}
+
+export const markMessagesAsRead = (discussion, message) => {
+  return (dispatch) => {
+    const { _id:discussionId, viewedBy = [] } = discussion;
+    const { _id:messageId, createdAt = null } = message;
+    const { viewedUpTo = null } = Object.assign({}, viewedBy.find(fields =>
+        Object.is(fields.userId, Meteor.userId())));
+
+    // mark messages as read if the last message is actually a new one
+    if (viewedUpTo < message.createdAt) {
+      return updateViewedByDiscussion.call({
+        messageId,
+        _id: discussionId
+      });
+    }
   }
 }

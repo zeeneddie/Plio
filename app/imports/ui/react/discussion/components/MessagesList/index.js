@@ -2,7 +2,7 @@ import React from 'react';
 import { withProps } from 'recompose';
 
 import MessageWrapper from '../MessageWrapper';
-import { transformMessages } from './constants.js';
+import { transformMessages } from './helpers.js';
 import { transsoc } from '/imports/api/helpers.js';
 
 const MessagesList = (props) => (

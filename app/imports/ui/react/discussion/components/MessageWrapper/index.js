@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import invoke from 'lodash.invoke';
 
-import { transsoc } from '/imports/api/helpers.js';
+import { transsoc } from '/imports/api/helpers';
 import Message from '../Message';
 
 import {
@@ -14,12 +14,15 @@ import {
   getMessageTime,
   getMessageContents,
   getPathToMessageToCopy,
-  getClassName,
+  getClassName
+} from './helpers';
+
+import {
   openUserDetails,
   select,
   deselect,
   remove
-} from './constants.js';
+} from './handlers';
 
 export default compose(
   lifecycle({
