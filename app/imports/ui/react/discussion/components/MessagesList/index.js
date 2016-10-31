@@ -1,11 +1,11 @@
 import React from 'react';
 
-import MessageWrapper from '../MessageWrapper';
+import MessageContainer from '../../containers/MessageContainer';
 
 const MessagesList = (props) => (
   <div>
     {props.messages.map(message =>
-      <MessageWrapper
+      <MessageContainer
         key={message._id}
         at={props.at}
         dispatch={props.dispatch}
