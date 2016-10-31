@@ -51,6 +51,11 @@
         guidelines=rkScoringGuidelines
         organizationId=organizationId}}
 
+    {{#if showDangerZone}}
+      {{> OrgSettings_DangerZone
+          organizationId=organizationId}}
+    {{/if}}
+
     {{> CardOrgChangelog organization=organization}}
 
 </template>

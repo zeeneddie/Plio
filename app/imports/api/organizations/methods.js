@@ -33,8 +33,11 @@ import {
   ORG_EnsureCanDeleteUsers,
   ORG_EnsureIsOwner,
   ORG_OnTransferCreateChecker,
-  ORG_OnTransferChecker
+  ORG_OnTransferChecker,
+  ORG_EnsureCanDelete
 } from '../checkers.js';
+import { USR_CheckPassword } from '/imports/api/users/checkers';
+
 
 const nameSchema = new SimpleSchema({
   name: { type: String }
@@ -480,5 +483,35 @@ export const updateUserSettings = new Method({
       organizationId,
       ...args
     });
+  }
+});
+
+export const deleteOrganization = new Method({
+  name: 'Organizations.deleteOrganization',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    // org owner's password encoded with SHA256
+    {
+      ownerPassword: {
+        type: String,
+        regEx: /^[A-Fa-f0-9]{64}$/
+      }
+    }
+  ]).validator(),
+
+  check(checker) {
+    return checker(chain(
+      ({ organizationId }) => ORG_EnsureCanDelete(this.userId, organizationId),
+      ({ ownerPassword }) => USR_CheckPassword(this.userId, ownerPassword)
+    ));
+  },
+
+  run({ organizationId }) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    return OrganizationService.deleteOrganization({ organizationId });
   }
 });

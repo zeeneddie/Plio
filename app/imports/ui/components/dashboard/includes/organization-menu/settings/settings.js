@@ -7,7 +7,7 @@ import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
   StandardsBookSections
 } from '/imports/share/collections/standards-book-sections.js';
-
+import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
 
@@ -62,5 +62,8 @@ Template.OrgSettings.viewmodel({
   },
   setRKGuidelineMethod() {
     return setRKGuideline;
+  },
+  showDangerZone() {
+    return isOrgOwner(Meteor.userId(), this.organizationId());
   }
 });
