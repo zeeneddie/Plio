@@ -29,6 +29,11 @@
         border-radius: 4px 4px 0 0;
 
         .card-title {
+          max-width: 67%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding-left: 34%;
           text-align: center !important;
           font-family: $font-semibold;
         }
