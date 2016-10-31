@@ -1,9 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import modal from '/imports/startup/client/mixins/modal';
-import { setAt } from '/client/redux/actions/discussionActions';
-import { remove as removeMessage } from '/imports/api/messages/methods';
-import { handleMethodResult } from '/imports/api/helpers';
+import { setAt, removeMessage } from '/client/redux/actions/discussionActions';
 
 const setAtWithRouter = (val, props) => {
   FlowRouter.setQueryParams({ at: val });
@@ -32,22 +30,5 @@ export const select = props => e => props.dispatch(setAt(props._id));
 
 export const deselect = props => e => clearAtWithRouter(props);
 
-export const remove = (props) => {
-  return (e) => {
-    if (!isAuthor(props)) return;
-
-    swal({
-      title: 'Are you sure you want to delete this message?',
-      text: 'This cannot be undone.',
-      type: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Remove',
-      closeOnConfirm: true
-    },
-    () => {
-      const cb = (err, res) => !err && clearAtWithRouter(props);
-
-      return removeMessage.call({ _id: props._id }, handleMethodResult(cb));
-    });
-  };
-};
+export const remove = props => e =>
+  props.dispatch(removeMessage(props, (dispatch) => (err, res) => !err && clearAtWithRouter(props)));

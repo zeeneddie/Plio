@@ -3,10 +3,9 @@ import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import invoke from 'lodash.invoke';
 
 import { transsoc } from '/imports/api/helpers';
-import Message from '../Message';
-
+import Message from '../../components/Message';
+import { isAuthor } from '/imports/api/messages/helpers';
 import {
-  isAuthor,
   getMessagePath,
   getUserAvatar,
   getUserFirstName,

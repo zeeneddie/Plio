@@ -6,13 +6,11 @@ import { getFormattedDate } from '/imports/share/helpers';
 import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 
-import FileItemRead from '../FileItemRead';
+import FileItemReadContainer from '../../containers/FileItemReadContainer';
 
 // Helpers
 
 export const invokeUser = path => obj => invokeC(path, obj.user);
-
-export const isAuthor = props => Object.is(Meteor.userId(), props.createdBy);
 
 // Prop creators
 
@@ -43,7 +41,7 @@ export const getMessageContents = (props) => {
       return <span dangerouslySetInnerHTML={createMarkup()}></span>;
       break;
     case 'file':
-      return <FileItemRead {...props} />;
+      return <FileItemReadContainer {...props} />;
       break;
     default:
       return props.text;

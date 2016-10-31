@@ -2,6 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import MessagesList from '../../components/MessagesList';
-import { pickFromDiscussion } from '/imports/api/helpers.js';
+import { compose, withProps } from 'recompose';
+import { transformMessages } from './helpers.js';
+import { transsoc, pickFromDiscussion } from '/imports/api/helpers.js';
 
-export default connect(pickFromDiscussion(['at']))(MessagesList);
+export default compose(
+  connect(pickFromDiscussion(['at'])),
+  withProps(transsoc({
+    messages: transformMessages
+  }))
+)(MessagesList);

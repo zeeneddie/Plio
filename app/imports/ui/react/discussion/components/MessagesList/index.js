@@ -1,9 +1,6 @@
 import React from 'react';
-import { withProps } from 'recompose';
 
 import MessageWrapper from '../MessageWrapper';
-import { transformMessages } from './helpers.js';
-import { transsoc } from '/imports/api/helpers.js';
 
 const MessagesList = (props) => (
   <div>
@@ -16,6 +13,4 @@ const MessagesList = (props) => (
   </div>
 );
 
-export default withProps(transsoc({
-  messages: transformMessages
-}))(MessagesList);
+export default MessagesList;

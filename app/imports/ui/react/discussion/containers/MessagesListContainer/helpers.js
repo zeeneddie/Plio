@@ -1,42 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import get from 'lodash.get';
-import ReactDOM from 'react-dom';
 
-import { getFormattedDate } from '/imports/share/helpers.js';
-
-const isMessageSelected = (props, at) => Object.is(props._id, at);
-
-const getUser = (_id) => {
-  const query = { _id };
-  const options = {
-    fields: {
-      profile: 1,
-      emails: 1,
-      roles: 1
-    }
-  };
-
-  return Meteor.users.findOne(query, options);
-};
-
-const getDate = date => {
-  const format = 'MMMM Do, YYYY';
-  return date ? getFormattedDate(date, format) : null;
-};
-
-const scrollToSelectedMessage = (component) => {
-  const $chat = $('.chat-content');
-  const $message = $(ReactDOM.findDOMNode(component));
-  const msgOffset = $message.offset().top;
-
-  // center the linked message in the chat box
-  const elHeight = $message.height();
-  const chatHeight = $chat.height();
-
-  const offset = msgOffset - ((chatHeight / 2) - (elHeight / 2));
-
-  $chat.scrollTop(offset);
-};
+import {
+  isMessageSelected,
+  getUser,
+  getDate,
+  scrollToSelectedMessage
+} from '/imports/api/messages/helpers';
 
 export const transformMessages = ({ discussion, messages, at }) => {
   const messagesMapped = messages.map((message, i, arr) => {

@@ -1,7 +1,4 @@
 import React from 'react';
-import { getStartedAtText, getStartedByText } from './helpers';
-import { mapProps } from 'recompose';
-import { transsoc } from '/imports/api/helpers.js';
 
 const MessagesListHeader = ({ startedAt, startedBy }) => (
   <div className="chat-item chat-item-start">
@@ -14,7 +11,4 @@ const MessagesListHeader = ({ startedAt, startedBy }) => (
   </div>
 );
 
-export default mapProps(transsoc({
-  startedBy: getStartedByText,
-  startedAt: getStartedAtText
-}))(MessagesListHeader);
+export default MessagesListHeader;

@@ -8,7 +8,7 @@ import { shallowEqual } from 'recompose';
 
 import InfiniteLoader from '/imports/ui/react/components/InfiniteLoader';
 import MessagesListContainer from '../../containers/MessagesListContainer';
-import MessagesListHeader from '../MessagesListHeader';
+import MessagesListHeaderContainer from '../../containers/MessagesListHeaderContainer';
 import { handleMouseWheel, wheelDirection } from '/client/lib/scroll';
 import {
   setSort,
@@ -104,7 +104,7 @@ export default class MessagesListWrapper extends React.Component {
     return (
       <div className="chat-content scroll" ref="chat">
         <div className="chat-messages">
-          {discussion.isStarted && <MessagesListHeader discussion={discussion}/>}
+          {discussion.isStarted && <MessagesListHeaderContainer discussion={discussion}/>}
 
           <InfiniteLoader
             loading={this.props.loading}

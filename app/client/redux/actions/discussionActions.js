@@ -15,8 +15,9 @@ import {
 } from './types';
 import { initialState } from '../reducers/discussionReducer';
 import { handleMethodResult } from '/imports/api/helpers';
-import { insert } from '/imports/api/messages/methods';
+import { insert, remove } from '/imports/api/messages/methods';
 import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
+import { isAuthor } from '/imports/api/messages/helpers';
 
 export function setMessages(messages) {
   return {
@@ -115,3 +116,17 @@ export const markMessagesAsRead = (discussion, message) => {
     }
   }
 }
+
+export const removeMessage = (message, cb = () => {}) => (dispatch, getState) => {
+  if (!isAuthor(message)) return;
+
+  swal({
+    title: 'Are you sure you want to delete this message?',
+    text: 'This cannot be undone.',
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Remove',
+    closeOnConfirm: true
+  },
+  () => remove.call({ _id: message._id }, handleMethodResult(cb(dispatch, getState))));
+};

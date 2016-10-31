@@ -1,9 +1,5 @@
 import React from 'react';
 import Blaze from 'meteor/blaze-react-component';
-import { compose, withHandlers, withProps } from 'recompose';
-
-import { addFile } from './handlers';
-import { transsoc, pickC } from '/imports/api/helpers';
 
 const DiscussionFileUploader = (props) => {
   return (
@@ -16,12 +12,4 @@ const DiscussionFileUploader = (props) => {
   )
 };
 
-export default compose(
-  withHandlers({
-    onAddFile: addFile
-  }),
-  withProps(transsoc({
-    uploaderMetaContext: pickC(['organizationId', 'discussionId']),
-    slingshotDirective: () => 'discussionFiles'
-  }))
-)(DiscussionFileUploader);
+export default DiscussionFileUploader;
