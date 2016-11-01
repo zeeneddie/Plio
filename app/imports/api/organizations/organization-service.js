@@ -19,6 +19,7 @@ import {
 import { generateSerialNumber } from '/imports/share/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
 import { Actions } from '/imports/share/collections/actions';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Departments } from '/imports/share/collections/departments';
 import { Discussions } from '/imports/share/collections/discussions';
 import { Files } from '/imports/share/collections/files';
@@ -261,8 +262,20 @@ export default OrganizationService = {
   },
 
   deleteOrganization({ organizationId }) {
+    const organization = this.collection.findOne({ _id: organizationId }, {
+      fields: { 'users.userId': 1 }
+    });
+
+    const orgUsersIds = _(organization.users).pluck('userId');
+    Roles.removeUsersFromRoles(
+      orgUsersIds,
+      _.union(OrgOwnerRoles, OrgMemberRoles),
+      organizationId
+    );
+
     const collections = [
       Actions,
+      AuditLogs,
       Departments,
       Discussions,
       Files,

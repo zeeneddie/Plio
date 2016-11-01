@@ -66,7 +66,6 @@ export default class RecapSender {
   }
 
   _processLogs() {
-    const allDocsIds = this._getAllDocsIds();
     const { startDate, endDate } = this._getLogDates();
 
     const docsCollections = [
@@ -78,7 +77,7 @@ export default class RecapSender {
     ];
 
     const query = {
-      documentId: { $in: allDocsIds },
+      organizationId: this._organization._id,
       collection: { $in: docsCollections },
       date: {
         $gt: startDate,
@@ -112,26 +111,6 @@ export default class RecapSender {
       emailSubject,
       templateData
     }).sendEmail({ isReportEnabled: true });
-  }
-
-  _getAllDocsIds() {
-    const { _id:organizationId } = this._organization;
-
-    const getDocsIds = (collection) => {
-      return collection.find({
-        organizationId
-      }, {
-        fields: { _id: 1 }
-      }).map(({ _id }) => _id);
-    };
-
-    return [
-      ...getDocsIds(Standards),
-      ...getDocsIds(NonConformities),
-      ...getDocsIds(Risks),
-      ...getDocsIds(Actions),
-      organizationId
-    ];
   }
 
   _getLogDates() {

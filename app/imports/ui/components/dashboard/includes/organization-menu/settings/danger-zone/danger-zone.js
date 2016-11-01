@@ -11,7 +11,11 @@ Template.OrgSettings_DangerZone.viewmodel({
   label: 'Danger zone',
   organizationId: '',
   organization() {
-    return Organizations.findOne({ _id: this.organizationId() });
+    return Organizations.findOne({
+      _id: this.organizationId()
+    }, {
+      fields: { name: 1 }
+    });
   },
   deleteOrganization() {
     this._showDeleteOrgWarning();
@@ -30,7 +34,8 @@ Template.OrgSettings_DangerZone.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Delete',
-      closeOnConfirm: false
+      closeOnConfirm: false,
+      confirmButtonClass: 'btn-md btn-danger'
     };
 
     swal(swalWarningParams, () => {
@@ -52,6 +57,11 @@ Template.OrgSettings_DangerZone.viewmodel({
     };
 
     swal(swalInputParams, (ownerPassword) => {
+      if (!ownerPassword) {
+        swal.showInputError('Password can not be empty');
+        return false;
+      }
+
       this._deleteOrganization(ownerPassword);
     });
   },
