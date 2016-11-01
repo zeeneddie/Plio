@@ -31,6 +31,7 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       disabled,
+      query: { _id: { $ne: this.ownerId() } },
       onUpdate: (viewmodel) => {
         const { selected:ownerId } = viewmodel.getData();
 
