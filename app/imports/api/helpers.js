@@ -109,6 +109,10 @@ export const propMessages = property('messages');
 
 export const lengthMessages = compose(length, propMessages);
 
+export const propStandards = property('standards');
+
+export const lengthStandards = compose(length, propStandards);
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
@@ -138,6 +142,8 @@ export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
 export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
 export const pickFromDiscussion = pickFrom('discussion');
+
+export const pickFromStandards = pickFrom('standards');
 
 export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 

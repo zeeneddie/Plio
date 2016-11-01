@@ -2,13 +2,15 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import React from 'react';
 import { mount, withOptions } from 'react-mounter';
+import { Provider } from 'react-redux';
+
+import store from '/client/redux/store';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import StandardsLayoutContainer from '/imports/ui/react/standards/containers/StandardsLayoutContainer';
-import StandardsPage from '/imports/ui/react/standards/components/StandardsPage';
 import StandardsLayout from '/imports/ui/react/standards/components/StandardsLayout';
 
 const mount2 = withOptions({
@@ -145,7 +147,11 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
     mount2(StandardsLayout, {
-      content: <StandardsLayoutContainer />
+      content: (
+        <Provider store={store}>
+          <StandardsLayoutContainer />
+        </Provider>
+      )
     });
   }
 });
@@ -154,8 +160,12 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
+    mount2(StandardsLayout, {
+      content: (
+        <Provider store={store}>
+          <StandardsLayoutContainer />
+        </Provider>
+      )
     });
   }
 });

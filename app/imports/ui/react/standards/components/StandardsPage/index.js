@@ -2,7 +2,7 @@ import React from 'react';
 
 import Page from '../../../components/Page';
 import NotFoundPage from '../../../components/NotFoundPage';
-import StandardsLHS from '../StandardsLHS';
+import StandardsLHSContainer from '../../containers/StandardsLHSContainer';
 
 const StandardsPage = (props) => {
   let content;
@@ -10,7 +10,7 @@ const StandardsPage = (props) => {
   if (props.organization) {
     content = (
       <Page>
-        <StandardsLHS {...props}/>
+        <StandardsLHSContainer {...props}/>
         <div>World Hello</div>
       </Page>
     );
