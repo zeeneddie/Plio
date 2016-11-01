@@ -152,12 +152,14 @@ Template.Users_Subcards.viewmodel({
   },
   orgOwnerLabel() {
     const userId = this.UserId();
+    const user = this.user();
+    const firstNameOrEmail = user && user.firstName() || 'This user';
     const organization = this.organization();
 
     if (userId && organization) {
       const orgName = organization.name;
       if (userId === organization.ownerId()) {
-        return `Organization owner for organization "${orgName}"`;
+        return `${firstNameOrEmail} is the organization owner for organization ${orgName} and has the full set of superpowers`;
       }
     }
   },

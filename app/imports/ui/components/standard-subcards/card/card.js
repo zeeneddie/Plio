@@ -57,11 +57,11 @@ Template.SS_Card_Read.viewmodel({
   orgOwnerLabel() {
     const userId = this.UserId();
     const organization = this.organization();
-
+    const user = this.user();
     if (userId && organization) {
       const orgName = organization.name;
       if (userId === organization.ownerId()) {
-        return `Organization owner for organization "${orgName}"`;
+        return `Organization owner for organization "${orgName} and has the full set of superpowers"`;
       }
     }
   },
