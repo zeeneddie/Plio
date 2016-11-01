@@ -1,19 +1,21 @@
 <template name="Subcards_Wrapper_Add">
-  {{#Subcards_Wrapper (wrapperArgs)}}
-    <div class="card-block">
-      {{#if items.length}}
-        <div class="card">
-          {{#each items}}
-            {{> Subcard (getSubcardArgs this)}}
-          {{/each}}
+  {{#if isVisible}}
+    {{#Subcards_Wrapper (wrapperArgs)}}
+      <div class="card-block">
+        {{#if items.length}}
+          <div class="card">
+            {{#each items}}
+              {{> Subcard (getSubcardArgs this)}}
+            {{/each}}
+          </div>
+        {{/if}}
+      {{#unless isEditOnly}}
+        <div class="card new-cards" {{b "ref: forms"}}></div>
+        <div class="text-xs-center">
+          <button type="button" class="btn btn-link" {{b "text: addText, click: add"}}></button>
         </div>
-      {{/if}}
-    {{#unless isEditOnly}}
-      <div class="card new-cards" {{b "ref: forms"}}></div>
-      <div class="text-xs-center">
-        <button type="button" class="btn btn-link" {{b "text: addText, click: add"}}></button>
+      {{/unless}}
       </div>
-    {{/unless}}
-    </div>
-  {{/Subcards_Wrapper}}
+    {{/Subcards_Wrapper}}
+  {{/if}}
 </template>
