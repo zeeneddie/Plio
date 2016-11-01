@@ -26,12 +26,16 @@ Template.OrgSettings_OrgTransfer.viewmodel({
 
     const disabled = !this.isInputEnabled();
 
+    const { users:orgMembersData } = this.organization() || {};
+    const allMembersIds = _(orgMembersData).pluck('userId');
+    const membersIds = _(allMembersIds).filter(userId => userId !== this.ownerId());
+
     return {
       value,
       placeholder,
       selectFirstIfNoSelected,
       disabled,
-      query: { _id: { $ne: this.ownerId() } },
+      query: { _id: { $in: membersIds } },
       onUpdate: (viewmodel) => {
         const { selected:ownerId } = viewmodel.getData();
 
