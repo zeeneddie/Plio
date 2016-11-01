@@ -8,13 +8,18 @@ import { isOrgOwner } from '/imports/api/checkers.js';
 
 Template.OrgSettings_OrgTransfer.viewmodel({
   mixin: ['organization', 'user', 'date', 'utils'],
-  inputText: '',
+  isTransferMode: false,
+  newOwnerId: '',
+  placeholder: 'Select new organization owner',
+  selectFirstIfNoSelected: false,
   ownerId() { return Meteor.userId() },
-  placeholder: 'Org owner',
-  selectFirstIfNoSelected: true,
+  owner() {
+    const owner = Meteor.users.findOne({ _id: this.ownerId() });
+    return owner ? owner.fullNameOrEmail() : '';
+  },
   selectArgs() {
     const {
-      ownerId:value,
+      newOwnerId:value,
       placeholder,
       selectFirstIfNoSelected
     } = this.data();
@@ -26,16 +31,17 @@ Template.OrgSettings_OrgTransfer.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       disabled,
+      query: { _id: { $ne: this.ownerId() } },
       onUpdate: (viewmodel) => {
         const { selected:ownerId } = viewmodel.getData();
 
-        return this.ownerId(ownerId);
+        return this.newOwnerId(ownerId);
       }
     };
   },
   transferOrg(e) {
     e.stopPropagation();
-    this.parent().transferOrg(this.ownerId());
+    this.parent().transferOrg(this.newOwnerId());
   },
   isOrgOwner() {
     return isOrgOwner(Meteor.userId(), this.organizationId());
@@ -43,12 +49,12 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   isInputEnabled() {
     return this.isOrgOwner() && !this.invitationSent();
   },
-  isButtonEnabled() {
+  isTransferButtonEnabled() {
     return _.every([
       this.isOrgOwner(),
-      !!this.ownerId(),
+      !!this.newOwnerId(),
       !this.invitationSent(),
-      this.ownerId() !== this.templateInstance.data.ownerId
+      this.newOwnerId() !== this.ownerId()
     ]);
   },
   transfer() {
