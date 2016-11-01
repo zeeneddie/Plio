@@ -17,7 +17,7 @@ import { initialState } from '../reducers/discussionReducer';
 import { handleMethodResult } from '/imports/api/helpers';
 import { insert, remove } from '/imports/api/messages/methods';
 import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
-import { isAuthor } from '/imports/api/messages/helpers';
+import { isAuthor } from '/imports/ui/react/discussion/helpers';
 
 export function setMessages(messages) {
   return {

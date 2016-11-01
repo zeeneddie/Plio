@@ -147,6 +147,10 @@ export const equals = curry((val1, val2) => _.isEqual(val1, val2));
 
 export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
 
+export const T = () => true;
+
+export const F = () => false;
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

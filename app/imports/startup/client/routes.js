@@ -1,10 +1,19 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-
+import React from 'react';
+import { mount, withOptions } from 'react-mounter';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
+
+import StandardsLayoutContainer from '/imports/ui/react/standards/containers/StandardsLayoutContainer';
+import StandardsPage from '/imports/ui/react/standards/components/StandardsPage';
+import StandardsLayout from '/imports/ui/react/standards/components/StandardsLayout';
+
+const mount2 = withOptions({
+  rootId: '__blaze-root'
+}, mount);
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -135,8 +144,8 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
+    mount2(StandardsLayout, {
+      content: <StandardsLayoutContainer />
     });
   }
 });
