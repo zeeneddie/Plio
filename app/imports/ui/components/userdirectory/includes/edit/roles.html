@@ -27,6 +27,9 @@
       {{/each}}
       <p class="list-group-item-text" {{b "if: orgOwnerLabel, text: orgOwnerLabel"}}>
       </p>
+      {{#unless isEditable}}
+        <div class="list-group-item-text">These superpowers can only be edited by an administrator</div>
+      {{/unless}}
     </div>
   </div>
 </template>
