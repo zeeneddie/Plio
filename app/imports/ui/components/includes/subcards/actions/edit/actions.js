@@ -41,6 +41,7 @@ const getMethods = (instance) => {
 Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
+  isEditOnly: false,
   wrapperArgs() {
     const items = Object.assign([], invoke(this.actions(), 'fetch'));
 
@@ -49,7 +50,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this),
-      ...inspire(['addText', '_lText', '_rText'], this)
+      ...inspire(['addText', '_lText', '_rText', 'isEditOnly'], this)
     };
   },
   getSubcardArgs(doc) {

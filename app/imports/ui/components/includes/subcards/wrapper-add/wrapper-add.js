@@ -9,6 +9,7 @@ import { inspire } from '/imports/api/helpers.js';
    _rText: '',
    renderContentOnInitial: true,
    addText: 'Add a new document',
+   isEditOnly: false,
    wrapperArgs() {
      return this.data(['_lText', '_rText', 'renderContentOnInitial']);
    },
