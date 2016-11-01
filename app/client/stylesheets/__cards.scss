@@ -91,6 +91,13 @@
         }
       }
     }
+
+    .card-title {
+      max-width: calc(100% - 150px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .card-content {
