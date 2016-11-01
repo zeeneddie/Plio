@@ -18,83 +18,54 @@ Template.List_Read.viewmodel({
   // can be overwritten by passing this function from parent component as prop
   _transform() {
     return {
-      onValue: _.identity,
-      onEmpty: _.identity
+      onValue(vms) { return vms },
+      onEmpty(vms) { return vms }
     }
   },
   onModalOpen() {},
   onSearchInputValue(value) {},
-  onHandleSearchInput: _.debounce(function(e) {
-    const value = e.target.value;
+  onHandleSearchInput(value) {
 
-    if (value) {
-      this.onInputValue(value);
-    } else {
-      this.onInputEmpty();
-    }
-  }, 500),
-  onInputValue(value) {
-    const doubleQuotes = '"';
-    const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
-    const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-    const isPrecise = (quotesIndexes) =>
-      quotesIndexes.length > 1
-      && quotesIndexes.every(idx => idx !== -1);
+    const expand = (vms = [], onComplete = () => {}) => {
+      this.expandCollapseItems(vms, {
+        expandNotExpandable: true,
+        complete: () => onComplete()
+      });
+    };
 
-    // check if the value has " and if it does search precisely otherwise search normally
+    const findListItems = predicate => ViewModel.find('ListItem', vm => predicate(vm));
 
-    if (isPrecise(doubleQuotesIndexes)) {
-      this.isPrecise(true);
+    const onInputValue = (value) => {
+      const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
 
-      // remove these characters
-      let newValue = value.replace(/"/g, '').trim();
+      this.searchResultsNumber(ids.length);
 
-      this.searchText(newValue);
-    } else {
-      this.isPrecise(false);
-      this.searchText(value);
-    }
-
-    // force reactive updates
-    Tracker.flush();
-
-    const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
-
-    this.searchResultsNumber(ids.length);
-
-    // hack to wait on render
-    Meteor.setTimeout(() => {
-      const vms = this.findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
+      const vms = findListItems(vm => vm.collapsed() && this.findRecursive(vm, ids));
 
       if (vms && vms.length) {
         this.animating(true);
 
-        this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted());
+        expand(this._transform().onValue(vms), () => this.onSearchCompleted());
       }
-    }, 0);
-  },
-  onInputEmpty() {
-    this.searchText('');
-    this.searchInput.val('');
+    };
 
-    const vms = this.findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
+    const onInputEmpty = () => {
+      const vms = findListItems(vm => !vm.collapsed() && !this.findRecursive(vm, this._id()));
 
-    this.animating(true);
+      this.animating(true);
 
-    if (vms && vms.length) {
-      this.expandAllFound(this._transform().onEmpty(vms), () => this.expandCurrent());
+      if (vms && vms.length) {
+        expand(this._transform().onEmpty(vms), () => this.expandCurrent());
+      } else {
+        this.expandCurrent();
+      }
+    };
+
+    if (value) {
+      onInputValue(value);
     } else {
-      this.expandCurrent();
+      onInputEmpty();
     }
-  },
-  findListItems(predicate) {
-    return ViewModel.find('ListItem', predicate);
-  },
-  expandAllFound(vms = [], complete = () => {}) {
-    this.expandCollapseItems(vms, {
-      complete,
-      forceExpand: true
-    });
   },
   expandCurrent() {
     this.expandCollapsed(this._id(), () => {
@@ -103,6 +74,6 @@ Template.List_Read.viewmodel({
   },
   onSearchCompleted() {
     this.animating(false);
-    Tracker.afterFlush(() => this.focused(true));
+    Meteor.setTimeout(() => this.focused(true), 500);
   }
 });

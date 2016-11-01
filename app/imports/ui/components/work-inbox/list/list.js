@@ -17,33 +17,35 @@ Template.WorkInbox_List.viewmodel({
     'user', 'nonconformity', 'risk',
     'utils', { STATUSES: 'workItemStatus' }
   ],
-  autorun() {
-    const list = this.list;
+  onRendered(template) {
+    template.autorun((computation) => {
+      const list = this.list;
 
-    if (list && !list.focused() && !list.animating() && !list.searchText()) {
-      const workItemId = this.workItemId();
-      const {
-        result:contains,
-        first:defaultDoc
-      } = this._findWorkItemForFilter(workItemId);
+      if (!list.focused() && !list.animating() && !list.searchText()) {
+        const workItemId = this.workItemId();
+        const {
+          result:contains,
+          first:defaultDoc
+        } = this._findWorkItemForFilter(workItemId);
 
-      if (!contains) {
-        if (defaultDoc) {
-          const { _id } = defaultDoc;
+        if (!contains) {
+          if (defaultDoc) {
+            const { _id } = defaultDoc;
 
-          Meteor.setTimeout(() => {
-            this.goToWorkItem(_id);
-            this.expandCollapsed(_id);
-          }, 0);
-        } else {
-          const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
+            Meteor.setTimeout(() => {
+              this.goToWorkItem(_id);
+              this.expandCollapsed(_id);
+            }, 0);
+          } else {
+            const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
 
-          if (routeName !== 'workInbox') {
-            Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+            if (routeName !== 'workInbox') {
+              Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+            }
           }
         }
       }
-    }
+    });
   },
   _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
     const { my = {}, team = {} } = Object.assign({}, this.items());
@@ -91,8 +93,7 @@ Template.WorkInbox_List.viewmodel({
     return _(workItems)
       .map(item => ({ linkedDocument: item.getLinkedDoc(), ...item }))
       .filter((item) => {
-        const searchFields = [{ name: 'title' }, { name: 'sequentialId' }, { name: 'type' }];
-        const searchQuery = this.searchObject('searchText', searchFields, this.isPrecise());
+        const searchQuery = this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }, { name: 'type' }]);
 
         if (_.keys(searchQuery).length) {
           const [{ title }, { sequentialId }, { type }] = searchQuery.$or;
