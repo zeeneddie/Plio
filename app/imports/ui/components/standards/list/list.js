@@ -93,7 +93,9 @@ Template.StandardsList.viewmodel({
     };
   },
   _getSearchQuery() {
-    return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
+    const fields = [{ name: 'title' }, { name: 'description' }, { name: 'status' }];
+    
+    return this.searchObject('searchText', fields, this.isPrecise());
   },
   totalUnreadMessagesToHtml(totalUnreadMessages) {
     return totalUnreadMessages ? `<i class="fa fa-comments margin-right"></i>
@@ -248,7 +250,10 @@ Template.StandardsList.viewmodel({
     });
   },
   onSearchInputValue() {
-    return (value) => extractIds(this._findStandardForFilter().array)
+    return (value) => {
+      const result = extractIds(this._findStandardForFilter().array);
+      return result;
+    }
   },
   onModalOpen() {
     return () =>
