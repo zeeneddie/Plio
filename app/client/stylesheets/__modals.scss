@@ -151,15 +151,15 @@
   }
 }
 
-.cancel-org-transfer {
-  .label.text-default {
+.org-transfer {
+  .cancel, .cancel-transfer {
+    padding-right: 0;
+  }
+
+  .invitation-info {
     white-space: normal;
     text-align: left;
     display: block;
-  }
-
-  .btn.btn-link {
-    margin: 0;
-    padding: 0;
+    padding-bottom: 0;
   }
 }

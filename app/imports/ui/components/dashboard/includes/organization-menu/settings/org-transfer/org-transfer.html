@@ -1,41 +1,49 @@
 <template name="OrgSettings_OrgTransfer">
   {{#FormField label="Org owner"}}
-    <div {{b "class: { input-group: !isTransferMode, form-group-flex: isTransferMode }"}}>
-      <input type="text" class="form-control" disabled=""
-          {{b "value: owner, class: { form-group-flex-flex: isTransferMode }"}} />
-      {{#if isTransferMode}}
-        <button type="button" class="btn btn-link" {{b "toggle: isTransferMode"}}>
-          Cancel
-        </button>
+    <div class="org-transfer">
+      {{#if isOrgOwner}}
+
+        <div {{b "class: { input-group: !isTransferMode && !invitationSent, form-group-flex: isTransferMode || invitationSent }"}}>
+          <input type="text" class="form-control" disabled=""
+              {{b "value: owner, class: { form-group-flex-flex: isTransferMode || invitationSent }"}} />
+
+          {{#if invitationSent}}
+            <a class="btn btn-link cancel-transfer" {{b "click: cancelOrgTransfer"}}>
+              Cancel transfer
+            </a>
+          {{else}}
+            {{#if isTransferMode}}
+              <button type="button" class="btn btn-link cancel" {{b "toggle: isTransferMode"}}>
+                Cancel
+              </button>
+            {{else}}
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-primary no-margin"
+                    {{b "toggle: isTransferMode"}}>
+                  Transfer
+                </button>
+              </span>
+            {{/if}}
+          {{/if}}
+        </div>
+
+        {{#if invitationSent}}
+          <span class="label text-default invitation-info" {{b "text: invitationSentText"}}>
+          </span>
+        {{else}} {{#if isTransferMode}}
+          <div class="form-group margin-top margin-bottom-none">
+            {{> Select_Member (selectArgs)}}
+
+            <button type="button" class="btn btn-primary margin-top margin-bottom-none"
+                {{b "enable: isTransferButtonEnabled, click: transferOrg"}}>
+              Transfer
+            </button>
+          </div>
+        {{/if}} {{/if}}
+
       {{else}}
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-primary no-margin"
-              {{b "toggle: isTransferMode"}}>
-            Transfer
-          </button>
-        </span>
+        <input type="text" class="form-control" disabled="" {{b "value: owner"}} />
       {{/if}}
     </div>
-
-    {{#if isTransferMode}}
-      {{#unless invitationSent}}
-        <div class="form-group margin-top margin-bottom-none">
-          {{> Select_Member (selectArgs)}}
-
-          <button type="button" class="btn btn-primary margin-top margin-bottom-none"
-              {{b "enable: isTransferButtonEnabled, click: transferOrg"}}>
-            Transfer
-          </button>
-        </div>
-      {{else}}
-        <div class="cancel-org-transfer">
-          <span class="label text-default" {{b "text: invitationSentText"}}>
-          </span>
-          <a class="btn btn-link" {{b "click: cancelOrgTransfer"}}>
-            Cancel transfer
-          </a>
-        </div>
-      {{/unless}}
-    {{/if}}
   {{/FormField}}
 </template>
