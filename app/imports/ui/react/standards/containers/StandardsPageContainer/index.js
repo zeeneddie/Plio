@@ -4,13 +4,19 @@ import { mapProps, compose, lifecycle } from 'recompose';
 import get from 'lodash.get';
 
 import StandardsPage from '../../components/StandardsPage';
-import { lengthStandards } from '/imports/api/helpers';
+import { lengthStandards, propEq } from '/imports/api/helpers';
 import { setSections } from '/client/redux/actions/standardsActions';
+import { UncategorizedTypeSection } from '/imports/api/constants';
 
 const propsMapper = (props) => {
   const mapper = (section, i) => {
     const filter = standard => Object.is(section._id, standard.sectionId);
-    const standards = props.standards.filter(filter);
+    const standards = props.standards
+      .filter(filter)
+      .map((standard) => {
+        const type = props.types.find(propEq('_id', standard.typeId)) || UncategorizedTypeSection;
+        return { ...standard, type };
+      });
 
     return Object.assign({}, section, {
       standards,

@@ -2,6 +2,7 @@ import React from 'react';
 
 import LHS from '../../../components/LHS';
 import LHSListItem from '../../../components/LHSListItem';
+import StandardsLHSListItemContainer from '../../containers/StandardsLHSListItemContainer';
 
 const StandardsLHS = (props) => (
   <LHS>
@@ -13,9 +14,18 @@ const StandardsLHS = (props) => (
         collapsed={section.collapsed}
         onCollapseShown={props.onCollapseShown}
         onCollapseHidden={props.onCollapseHidden}>
-        {section.standards.map((standard) => (
-          <li key={standard._id}>{standard.title}</li>
-        ))}
+
+        <div className="list-group">
+          {section.standards.map((standard) => (
+            <StandardsLHSListItemContainer
+              key={standard._id}
+              type={standard.type}
+              section={section}
+              orgSerialNumber={props.orgSerialNumber}
+              {...standard}/>
+          ))}
+        </div>
+
       </LHSListItem>
     ))}
   </LHS>

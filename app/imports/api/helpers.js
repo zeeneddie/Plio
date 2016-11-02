@@ -25,7 +25,7 @@ import { Organizations } from '/imports/share/collections/organizations.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
 
-const { compose } = _;
+export const { compose } = _;
 
 export const setModalError = error => invoke(ViewModel.findOne('ModalWindow'), 'setError', error);
 
