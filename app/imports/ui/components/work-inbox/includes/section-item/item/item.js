@@ -33,9 +33,6 @@ Template.WorkInbox_Item.viewmodel({
       })()
     };
   },
-  getTypeText({ type }) {
-    return this.capitalize(type);
-  },
   getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
     return date ? this.renderDate(date) : '';

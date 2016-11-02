@@ -27,6 +27,11 @@ export default {
 
     return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
   },
+
+  isOrgAdmin() {
+    return this.organization() && this.organization().isOrgAdmin;
+  },
+
   organization() {
     const serialNumber = this.organizationSerialNumber();
     return Organizations.findOne({ serialNumber });

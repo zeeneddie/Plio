@@ -8,7 +8,7 @@ import { capitalize } from '/imports/share/helpers.js';
 
 const ReminderTypes = {
   COMPLETE_ANALYSIS: 1,
-  COMPLETE_UPDATE_OF_STANDARDS: 2,
+  COMPLETE_UPDATE_OF_DOCUMENTS: 2,
   COMPLETE_ACTION: 3,
   VERIFY_ACTION: 4,
   REVIEW_IMPROVEMENT_PLAN: 5
@@ -165,7 +165,7 @@ const ReminderConfig = {
     url: getProblemUrl
   },
 
-  [ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS]: {
+  [ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS]: {
     title: {
       beforeDue:
         'Update of standards related to {{problemDesc}} {{{problemName}}} is {{diff}} before due',

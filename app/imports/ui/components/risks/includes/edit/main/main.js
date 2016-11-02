@@ -44,8 +44,9 @@ Template.Risk_Card_Edit_Main.viewmodel({
       updateOfStandards,
       magnitude,
       methodRefs: this.methodRefs,
+      RCALabel: AnalysisTitles.riskAnalysis,
+      UOSLabel: AnalysisTitles.updateOfRiskRecord,
       ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod),
-      RCALabel: AnalysisTitles.riskAnalysis
     };
   },
   methodRefs() {

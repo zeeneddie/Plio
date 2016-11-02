@@ -425,7 +425,15 @@ export const ReviewSchema = ((() => {
     },
     reviewedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: function() {
+        const value = this.value;
+        if (!_(value).isDate()) {
+          return 'badDate';
+        }
+
+        return moment(value).isBefore(new Date()) ? true : 'badDate';
+      }
     },
     reviewedBy: {
       type: String,

@@ -24,7 +24,7 @@
 
   .navbar-title {
     .dropdown-toggle {
-       &::after, .text-muted,  {
+       &::after, .text-muted  {
         -moz-transition: color 0.4s ease;
         -o-transition: color 0.4s ease;
         -webkit-transition: color 0.4s ease;
@@ -140,6 +140,9 @@
       border-top: 0;
       padding: 0;
 
+      overflow: auto;
+      max-height: calc(100vh - #{$navbar-height-branded});
+
       @media (max-width: 767px) {
         width: auto !important;
         left: 0 !important;
@@ -148,6 +151,7 @@
         border-left: 0;
         border-right: 0;
         border-radius: 0;
+        max-height: calc(100vh - #{$navbar-height-standard});
       }
     }
 

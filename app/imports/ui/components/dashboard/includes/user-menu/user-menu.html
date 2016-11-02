@@ -35,9 +35,11 @@
             {{/if}}
           {{/if}}
 
-          {{#Link (linkArgs.standardSubcards)}}
-            Standard subcards
-          {{/Link}}
+          {{#if isOrgAdmin}}
+              {{#Link (linkArgs.standardSubcards)}}
+                Standard subcards
+              {{/Link}}
+          {{/if}}
 
           {{#Link (linkArgs.logout)}}
             Logout
