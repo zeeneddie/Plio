@@ -6,7 +6,10 @@
 .form-control {
   color: #333;
   min-height: 34px;
-
+  &.datepicker[readonly]:not([disabled]):not(.disabled) {
+    background-color: #fff;
+    cursor: pointer;
+  }
   &:disabled {
     color: black;
   }
