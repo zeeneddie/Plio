@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 
@@ -8,8 +9,11 @@ import {
   USR_CANNOT_CHANGE_ROLES,
   USR_CANNOT_CHANGE_ORG_OWNER_ROLES,
   USR_NOT_EXIST,
-  USR_INCORRECT_PASSWORD
+  USR_INCORRECT_PASSWORD,
+  ACCESS_DENIED
  } from '../errors.js';
+import { UserMembership } from '/imports/share/constants';
+import { Organizations } from '/imports/share/collections/organizations';
 import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
 import { canChangeRoles, isOrgOwner } from '../checkers.js';
 
@@ -37,7 +41,7 @@ export const USR_EnsureIsNotOrgOwnerChecker = (doc) => {
   return doc;
 };
 
-export const USR_CheckPassword = (userId, password) => {
+export const USR_EnsurePasswordIsValid = (userId, password) => {
   if (Meteor.isClient) {
     return false;
   }
@@ -54,4 +58,25 @@ export const USR_CheckPassword = (userId, password) => {
   });
 
   checkAndThrow(!!checkPasswordResult.error, USR_INCORRECT_PASSWORD);
+};
+
+export const USR_EnsureIsAdmin = (userId) => {
+  if (!SimpleSchema.RegEx.Id.test(userId)) {
+    return false;
+  }
+
+  const isAdmin = !!Organizations.findOne({
+    isAdminOrg: true,
+    users: {
+      $elemMatch: {
+        userId,
+        role: UserMembership.ORG_OWNER,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  });
+
+  checkAndThrow(!isAdmin, ACCESS_DENIED);
 };

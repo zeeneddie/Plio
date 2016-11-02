@@ -15,7 +15,8 @@ import {
   ORG_USER_SHOULD_HAVE_VERIFIED_EMAIL,
   ORG_USER_NOT_ACCEPTED_INVITATION,
   ORG_TRANSFER_CANCELED_COMPLETED,
-  ORG_USER_ALREADY_DELETED
+  ORG_USER_ALREADY_DELETED,
+  ORG_CAN_NOT_BE_DELETED
 } from '../errors.js';
 import {
   canChangeOrgSettings,
@@ -132,4 +133,14 @@ export const ORG_OnTransferChecker = (userToTransferId, transferId) => {
   ORG_EnsureCanTransfer(userToTransferId, organization.ownerId(), organization._id);
 
   return organization;
+};
+
+export const ORG_EnsureCanBeDeleted = (organizationId) => {
+  const { isAdminOrg } = Organizations.findOne({
+    _id: organizationId
+  }, {
+    fields: { isAdminOrg: 1 }
+  }) || {};
+
+  checkAndThrow(isAdminOrg === true, ORG_CAN_NOT_BE_DELETED);
 };

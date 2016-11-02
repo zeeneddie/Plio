@@ -34,9 +34,11 @@ import {
   ORG_EnsureIsOwner,
   ORG_OnTransferCreateChecker,
   ORG_OnTransferChecker,
-  ORG_EnsureCanDelete
+  ORG_EnsureCanDelete,
+  ORG_EnsureCanBeDeleted,
+  USR_EnsureIsAdmin
 } from '../checkers.js';
-import { USR_CheckPassword } from '/imports/api/users/checkers';
+import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
 
 
 const nameSchema = new SimpleSchema({
@@ -501,9 +503,49 @@ export const deleteOrganization = new Method({
   ]).validator(),
 
   check(checker) {
+    if (this.isSimulation) {
+      return;
+    }
+
     return checker(chain(
       ({ organizationId }) => ORG_EnsureCanDelete(this.userId, organizationId),
-      ({ ownerPassword }) => USR_CheckPassword(this.userId, ownerPassword)
+      ({ ownerPassword }) => USR_EnsurePasswordIsValid(this.userId, ownerPassword),
+      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId)
+    ));
+  },
+
+  run({ organizationId }) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    return OrganizationService.deleteOrganization({ organizationId });
+  }
+});
+
+export const deleteCustomerOrganization = new Method({
+  name: 'Organizations.deleteCustomerOrganization',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      // Plio Ltd. owner's password encoded with SHA256
+      adminPassword: {
+        type: String,
+        regEx: /^[A-Fa-f0-9]{64}$/
+      }
+    }
+  ]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) {
+      return;
+    }
+
+    return checker(chain(
+      () => USR_EnsureIsAdmin(this.userId),
+      ({ adminPassword }) => USR_EnsurePasswordIsValid(this.userId, adminPassword),
+      ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId)
     ));
   },
 

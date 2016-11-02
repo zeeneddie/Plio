@@ -25,3 +25,5 @@ export const ORG_USER_NOT_ACCEPTED_INVITATION = new Meteor.Error(400, 'The targe
 export const ORG_TRANSFER_CANCELED_COMPLETED = new Meteor.Error(400, 'Current organization owner canceled transfer or it is already completed');
 
 export const ORG_ALREADY_EXISTS = name => new Meteor.Error(400, `Organization "${name}" already exists`);
+
+export const ORG_CAN_NOT_BE_DELETED = new Meteor.Error(400, 'Organization can not be deleted');
