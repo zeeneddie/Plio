@@ -140,7 +140,7 @@
       border-top: 0;
       padding: 0;
       overflow: auto;
-      max-height: calc(100vh - #{$navbar-height-branded});
+      max-height: calc(100vh - #{$navbar-height-standard});
 
       @media (max-width: 767px) {
         width: auto !important;
