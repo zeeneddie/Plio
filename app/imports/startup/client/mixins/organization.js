@@ -34,7 +34,6 @@ export default {
 
   organization() {
     const serialNumber = this.organizationSerialNumber();
-    console.log(Organizations.findOne({ serialNumber }));
     return Organizations.findOne({ serialNumber });
   },
   organizationId() {
