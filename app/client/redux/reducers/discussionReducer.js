@@ -7,10 +7,12 @@ import {
   SET_LAST_MESSAGE_ID,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
-  SET_RESET_COMPLETED
+  SET_RESET_COMPLETED,
+  SET_DISCUSSION
 } from '../actions/types';
 
 export const initialState = {
+  discusssion: null,
   messages: [],
   loading: false,
   sort: { createdAt: -1 },
@@ -23,6 +25,9 @@ export const initialState = {
 
 export default function reducer(state=initialState, action) {
   switch (action.type) {
+    case SET_DISCUSSION:
+      return { ...state, discussion: action.payload };
+      break;
     case SET_MESSAGES:
       return { ...state, messages: action.payload };
       break;

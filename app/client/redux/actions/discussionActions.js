@@ -11,13 +11,21 @@ import {
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
   SET_INITIAL_DATA_LOADED,
-  SET_RESET_COMPLETED
+  SET_RESET_COMPLETED,
+  SET_DISCUSSION
 } from './types';
 import { initialState } from '../reducers/discussionReducer';
 import { handleMethodResult } from '/imports/api/helpers';
 import { insert, remove } from '/imports/api/messages/methods';
 import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
 import { isAuthor } from '/imports/api/messages/helpers';
+
+export function setDiscussion(discussion) {
+  return {
+    type: SET_DISCUSSION,
+    payload: discussion
+  }
+}
 
 export function setMessages(messages) {
   return {

@@ -1,9 +1,9 @@
 import React from 'react';
-import { composeAll, composeWithTracker } from 'react-komposer';
+import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
-import { withProps, lifecycle, shallowEqual } from 'recompose';
+import { compose, withProps, lifecycle, shallowEqual } from 'recompose';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
@@ -14,7 +14,8 @@ import {
   setLoading,
   setLastMessageId,
   setResetCompleted,
-  markMessagesAsRead
+  markMessagesAsRead,
+  setDiscussion
 } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import notifications from '/imports/startup/client/mixins/notifications';
@@ -58,8 +59,12 @@ const onPropsChange = (props, onData) => {
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
+  const discussion = Discussions.findOne({ _id: discussionId });
 
-  dispatch(setLoading(true));
+  dispatch(batchActions([
+    setDiscussion(discussion),
+    setLoading(true)
+  ]));
 
   const state = getDiscussionState();
 
@@ -76,7 +81,7 @@ const onPropsChange = (props, onData) => {
     let lastMessageId = Tracker.nonreactive(() =>
       get(LastDiscussionMessage.findOne(), 'lastMessageId'));
 
-    const actions = [
+    let actions = [
       setLoading(false),
       setLastMessageId(lastMessageId),
       setMessages(messages)
@@ -109,22 +114,27 @@ const shouldResubscribe = (props, nextProps) => {
           !shallowEqual(omitProps(props), omitProps(nextProps));
 }
 
-export default composeAll(
+const readMessages = (props) => {
+  const getLastMessage = () => Object.assign({}, _.last(props.messages));
+
+  props.dispatch(markMessagesAsRead(props.discussion, getLastMessage()))
+};
+
+export default compose(
+  connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted'])),
+  composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
   lifecycle({
     componentWillMount() {
-      const getLastMessage = () => Object.assign({}, _.last(this.props.messages));
-      const readMessages = () =>
-        this.props.dispatch(markMessagesAsRead(this.props.discussion, getLastMessage()));
-
-      readMessages();
+      readMessages(this.props);
 
       // run observer and interval that returns a cleanup function
 
-      intervalCleanup = interval(() => readMessages());
+      intervalCleanup = interval(() => readMessages(this.props));
 
       observerCleanup = observer();
+    },
+    componentWillUnmount() {
+      readMessages(this.props);
     }
-  }),
-  composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
-  connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted']))
+  })
 )(MessagesListWrapper);
