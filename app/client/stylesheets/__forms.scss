@@ -168,6 +168,13 @@ select {
   }
   &-item {
     padding: 10px 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    & > .btn {
+      margin-right: 0.375rem;
+      margin-left: -0.375rem;
+    }
 
     & > strong, & > span {
       vertical-align: middle;
