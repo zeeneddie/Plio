@@ -1,5 +1,5 @@
 <template name="Review_Status">
-  {{#FormField label=label}}
+  {{#FormField label=label helpText=helpText}}
     <span class="label text-default">
       <i class="fa fa-circle margin-right" {{b "class: 'text-'+getClassByStatus(status)"}}></i>
       <span {{b "text: getStatusName(status)"}}></span>

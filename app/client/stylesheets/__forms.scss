@@ -1,6 +1,3 @@
-
-
-
 /* Inputs */
 
 .form-control {
@@ -17,6 +14,7 @@
     .card-block {
       padding: 12px 0 0 0;
       border-bottom: none;
+      border-top: none;
 
       .guidance-panel-close {
         margin: 0;
@@ -34,13 +32,6 @@
 .form-control-label {
   font-weight: normal;
   font-family: $font-semibold;
-
-  .btn-collapse {
-    padding: 0;
-    margin: -2px 6px 0 0 !important;
-    font-size: 24px;
-    line-height: 22px;
-  }
 
   span {
     vertical-align: top;
@@ -610,6 +601,41 @@ input[disabled], textarea[disabled] {
 
 input[type="number"] {
   min-width: 60px;
+}
+
+// Help messages
+.help-info {
+  .guidance-panel {
+    .card-block {
+      padding-top: 0;
+      border-bottom: none;
+      border-top: none;
+    }
+  }
+
+  .guidance-panel-close {
+    margin: 0;
+  }
+
+  .help-icon {
+    padding: 0 0 1.32rem 1.32rem;
+    margin: 0 !important;
+  }
+}
+
+.form-group > .form-control-label > .help-icon {
+  float: left;
+}
+
+.quill + .help-info {
+  margin-top: 1.32rem;
+}
+
+.help-icon {
+  padding: 0;
+  margin: -2px 6px 0 0 !important;
+  font-size: 24px;
+  line-height: 22px;
 }
 
 .stripes {

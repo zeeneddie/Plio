@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-
+import { RisksHelp } from '/imports/api/help-messages';
 import { chain } from '/imports/api/helpers.js';
 
 Template.Subcards_RiskEvaluation_Edit.viewmodel({
@@ -12,6 +12,7 @@ Template.Subcards_RiskEvaluation_Edit.viewmodel({
   prevLossExp: '',
   priority: '',
   decision: '',
+  decisionFieldHelp: RisksHelp.riskEvaluationTreatmentDecision,
   update({ ...args }, cb = () => {}) {
     const data = this.data();
     const _args = _.keys(args)

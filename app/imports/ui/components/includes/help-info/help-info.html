@@ -1,15 +1,17 @@
 <template name="HelpInfo">
-  <button type="button" class="btn btn-link btn-collapse" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-    <i class="fa fa-question-circle"></i>
-  </button>
-  <div class="collapse guidance-panel" {{b "ref: collapse"}}>
-    <div class="card-block">
-      <div>{{helpText}}</div>
-      <div class="btn-group">
-        <a class="btn btn-link guidance-panel-close pointer"
-            {{b "click: closeHelpPanel"}}>
-          Close
-        </a>
+  <div class="help-info">
+    <button type="button" class="btn btn-link help-icon btn-collapse" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+      <i class="fa fa-question-circle"></i>
+    </button>
+    <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+      <div class="card-block">
+        <div>{{helpText}}</div>
+        <div class="btn-group">
+          <a class="btn btn-link guidance-panel-close pointer"
+              {{b "click: closeHelpPanel"}}>
+            Close
+          </a>
+        </div>
       </div>
     </div>
   </div>

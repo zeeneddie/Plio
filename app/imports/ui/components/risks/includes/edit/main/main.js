@@ -20,9 +20,13 @@ import {
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
+import { RisksHelp } from '/imports/api/help-messages';
 
 Template.Risk_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData'],
+  standardFieldHelp: RisksHelp.standards,
+  departmentsFieldHelp: RisksHelp.departments,
+
   onRendered(template) {
     const doc = template.data.risk;
     const userId = Meteor.userId();
