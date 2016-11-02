@@ -1,38 +1,43 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { compose, withState, withHandlers, lifecycle, withPropsOnChange } from 'recompose';
-
-import { not, T, F } from '/imports/api/helpers';
 
 class LHSListItem extends React.Component {
   constructor(props) {
     super(props);
+
+    const { collapsed = true } = props;
+
+    this.state = { collapsed };
 
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onCollapseShown = props.onCollapseShown.bind(this);
     this.onCollapseHidden = props.onCollapseHidden.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !!(
-      !this.props.collapsed && nextProps.collapsed ||
-      this.props.collapsed && !nextProps.collapsed
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.shouldCollapse(nextProps) || !!(
+      (this.state.collapsed && !nextState.collapsed) ||
+      (!this.state.collapsed && nextState.collapsed)
     );
   }
 
   componentWillReceiveProps(nextProps) {
-    if ((!this.props.collapsed && nextProps.collapsed) ||
-        (this.props.collapsed && !nextProps.collapsed)) {
+    if (this.shouldCollapse(nextProps)) {
       this.toggleCollapse();
     }
   }
 
   componentDidMount() {
+    const { item } = this.props;
+
     const collapse = $(this.collapse);
 
-    collapse.on('shown.bs.collapse', e => this.onCollapseShown(e, this));
+    const toggleCollapseState = (fn) => this.setState({
+      collapsed: !this.state.collapsed
+    }, fn);
 
-    collapse.on('hidden.bs.collapse', this.onCollapseHidden);
+    collapse.on('shown.bs.collapse', e => toggleCollapseState(() => this.onCollapseShown(e, item, this.state.collapsed)));
+
+    collapse.on('hidden.bs.collapse', e => toggleCollapseState(() => this.onCollapseHidden(e, item, this.state.collapsed)));
   }
 
   render() {
@@ -43,7 +48,7 @@ class LHSListItem extends React.Component {
            list-group-subheading
            list-group-toggle
            pointer
-           ${this.props.collapsed && 'collapsed'}`}
+           ${this.state.collapsed && 'collapsed'}`}
            onClick={this.toggleCollapse}>
           <h4 className="list-group-item-heading pull-left">{this.props.lText}</h4>
           {this.props.rText && (
@@ -53,13 +58,20 @@ class LHSListItem extends React.Component {
           )}
         </a>
         <div
-          className={`list-group-collapse collapse ${!this.props.collapsed && 'in'}`}
+          className={`list-group-collapse collapse ${!this.state.collapsed && 'in'}`}
           ref={c => this.collapse = c}>
           <div className="list-group">
             {this.props.children}
           </div>
         </div>
       </div>
+    );
+  }
+
+  shouldCollapse(nextProps) {
+    return !!(
+      (this.state.collapsed && !nextProps.collapsed) ||
+      (!this.state.collapsed && nextProps.collapsed)
     );
   }
 

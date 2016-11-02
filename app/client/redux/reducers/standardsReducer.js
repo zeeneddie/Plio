@@ -1,3 +1,5 @@
+import { mapByIndex, assoc } from '/imports/api/helpers';
+
 import {
   SET_SECTIONS,
   SET_STANDARDS,
@@ -5,6 +7,7 @@ import {
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
+  TOGGLE_SECTION_COLLAPSED
 } from '../actions/types';
 
 const initialState = {
@@ -21,6 +24,14 @@ export default function reducer(state=initialState, action) {
     case SET_SECTIONS:
       return { ...state, sections: action.payload };
       break;
+    case TOGGLE_SECTION_COLLAPSED:
+      const section = state.sections[action.payload];
+      const sections = mapByIndex(
+        assoc('collapsed', !section.collapsed, section),
+        action.payload,
+        state.sections
+      );
+      return { ...state, sections };
     case SET_STANDARDS:
       return { ...state, standards: action.payload };
       break;

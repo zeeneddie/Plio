@@ -8,6 +8,7 @@ const StandardsLHS = (props) => (
     {props.sections.map((section) => (
       <LHSListItem
         key={section._id}
+        item={section}
         lText={section.title}
         collapsed={section.collapsed}
         onCollapseShown={props.onCollapseShown}
