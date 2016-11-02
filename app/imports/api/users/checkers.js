@@ -42,7 +42,7 @@ export const USR_EnsureIsNotOrgOwnerChecker = (doc) => {
 };
 
 export const USR_EnsurePasswordIsValid = (userId, password) => {
-  if (Meteor.isClient) {
+  if (!Meteor.isServer) {
     return false;
   }
 
