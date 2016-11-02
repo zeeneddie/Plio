@@ -5,5 +5,6 @@ Template.TextBox.viewmodel({
   className: '',
   placeholder: 'Text',
   rows: 3,
-  onFocusOut() {}
+  onFocusOut() {},
+  onChange() {},
 });

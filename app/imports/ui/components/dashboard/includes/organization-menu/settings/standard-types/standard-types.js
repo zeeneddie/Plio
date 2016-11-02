@@ -3,6 +3,7 @@ import invoke from 'lodash.invoke';
 
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { insert, update, remove } from '/imports/api/standard-types/methods.js';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_StandardTypes.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -13,6 +14,7 @@ Template.OrgSettings_StandardTypes.viewmodel({
   _rText() {
     return invoke(this.standardsTypes(), 'count');
   },
+  helpText: OrganizationSettingsHelp.standardTypes,
   placeholder: 'Standard type',
   standardsTypesMapped() {
     return this.standardsTypes() && this.standardsTypes().map(({ name, ...args }) => ({ ...args, title: name }));

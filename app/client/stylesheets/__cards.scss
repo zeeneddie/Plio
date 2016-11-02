@@ -109,6 +109,13 @@
     font-size: 18px;
     font-weight: normal;
     font-family: $font-semibold;
+
+    .btn-collapse {
+      font-size: 20px;
+      padding: 0;
+      vertical-align: text-bottom;
+      line-height: 20px;
+    }
   }
 
   &-block {

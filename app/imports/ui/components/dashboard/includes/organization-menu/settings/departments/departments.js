@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 import { Departments } from '/imports/share/collections/departments.js';
 import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
-
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_Departments.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -17,6 +17,7 @@ Template.OrgSettings_Departments.viewmodel({
   },
   placeholder: 'Department/sector',
   departments: '',
+  helpText: OrganizationSettingsHelp.departments,
   departmentsMapped() {
     return this.departments() && this.departments().map(({ name, ...args }) => ({ ...args, title: name }));
   },

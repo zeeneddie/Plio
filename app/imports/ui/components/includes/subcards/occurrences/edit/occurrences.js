@@ -4,6 +4,7 @@ import invoke from 'lodash.invoke';
 import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 import { invokeId } from '/imports/api/helpers.js';
+import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.Subcards_Occurrences_Edit.viewmodel({
   mixin: ['modal', 'date', 'organization', 'nonconformity'],

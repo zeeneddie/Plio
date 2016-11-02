@@ -18,7 +18,7 @@ import { inspire } from '/imports/api/helpers.js';
      return true;
    },
    wrapperArgs() {
-     return this.data(['_lText', '_rText', 'renderContentOnInitial']);
+     return this.data(['_lText', '_rText', 'renderContentOnInitial', 'helpText']);
    },
    add() {
     this.onAdd(this.addForm.bind(this));

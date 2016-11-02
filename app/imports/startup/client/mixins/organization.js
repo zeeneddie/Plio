@@ -28,8 +28,8 @@ export default {
     return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
   },
 
-  isOrgAdmin() {
-    return this.organization() && this.organization().isOrgAdmin;
+  isAdminOrg() {
+    return this.organization() && this.organization().isAdminOrg;
   },
 
   organization() {
