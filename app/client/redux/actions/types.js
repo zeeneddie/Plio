@@ -34,6 +34,8 @@ export const SET_STANDARD_ID = 'SET_STANDARD_ID';
 
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
+export const CLOSE_COLLAPSIBLES = 'CLOSE_COLLAPSIBLES';
+
 // Organizations types
 
 export const SET_ORG = 'SET_ORG';

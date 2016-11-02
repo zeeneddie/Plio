@@ -4,20 +4,16 @@ class LHSListItem extends React.Component {
   constructor(props) {
     super(props);
 
-    const { collapsed = true } = props;
-
-    this.state = { collapsed };
-
     this.toggleCollapse = this.toggleCollapse.bind(this);
-    this.onCollapseShown = props.onCollapseShown.bind(this);
-    this.onCollapseHidden = props.onCollapseHidden.bind(this);
+    this.onToggleCollapse = props.onToggleCollapse.bind(this);
+    this.onCollapseShow = props.onCollapseShow && props.onCollapseShow.bind(this);
+    this.onCollapseShown = props.onCollapseShown && props.onCollapseShown.bind(this);
+    this.onCollapseHide = props.onCollapseHide && props.onCollapseHide.bind(this);
+    this.onCollapseHidden = props.onCollapseHidden && props.onCollapseHidden.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.shouldCollapse(nextProps) || !!(
-      (this.state.collapsed && !nextState.collapsed) ||
-      (!this.state.collapsed && nextState.collapsed)
-    );
+    return this.shouldCollapse(nextProps);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -27,17 +23,19 @@ class LHSListItem extends React.Component {
   }
 
   componentDidMount() {
-    const { item } = this.props;
-
     const collapse = $(this.collapse);
 
-    const toggleCollapseState = (fn) => this.setState({
-      collapsed: !this.state.collapsed
-    }, fn);
+    if (!this.props.collapsed) {
+      this.onToggleCollapse(null, this.props);
+    }
 
-    collapse.on('shown.bs.collapse', e => toggleCollapseState(() => this.onCollapseShown(e, item, this.state.collapsed)));
+    collapse.on('show.bs.collapse', e => this.onCollapseShow);
 
-    collapse.on('hidden.bs.collapse', e => toggleCollapseState(() => this.onCollapseHidden(e, item, this.state.collapsed)));
+    collapse.on('shown.bs.collapse', this.onCollapseShown);
+
+    collapse.on('hide.bs.collapse', this.onCollapseHide);
+
+    collapse.on('hidden.bs.collapse', this.onCollapseHidden);
   }
 
   render() {
@@ -48,8 +46,8 @@ class LHSListItem extends React.Component {
            list-group-subheading
            list-group-toggle
            pointer
-           ${this.state.collapsed && 'collapsed'}`}
-           onClick={this.toggleCollapse}>
+           ${this.props.collapsed && 'collapsed'}`}
+           onClick={e => this.onToggleCollapse(e, this.props)}>
           <h4 className="list-group-item-heading pull-left">{this.props.lText}</h4>
           {this.props.rText && (
             <p className="list-group-item-text text-danger pull-right">
@@ -58,7 +56,7 @@ class LHSListItem extends React.Component {
           )}
         </a>
         <div
-          className={`list-group-collapse collapse ${!this.state.collapsed && 'in'}`}
+          className={`list-group-collapse collapse`}
           ref={c => this.collapse = c}>
           <div className="list-group">
             {this.props.children}
@@ -70,8 +68,8 @@ class LHSListItem extends React.Component {
 
   shouldCollapse(nextProps) {
     return !!(
-      (this.state.collapsed && !nextProps.collapsed) ||
-      (!this.state.collapsed && nextProps.collapsed)
+      (this.props.collapsed && !nextProps.collapsed) ||
+      (!this.props.collapsed && nextProps.collapsed)
     );
   }
 

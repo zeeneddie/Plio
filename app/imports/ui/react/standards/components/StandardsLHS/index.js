@@ -12,8 +12,8 @@ const StandardsLHS = (props) => (
         item={section}
         lText={section.title}
         collapsed={section.collapsed}
-        onCollapseShown={props.onCollapseShown}
-        onCollapseHidden={props.onCollapseHidden}>
+        onCollapseShow={props.onCollapseShow}
+        onToggleCollapse={props.onToggleCollapse}>
 
         <div className="list-group">
           {section.standards.map((standard) => (

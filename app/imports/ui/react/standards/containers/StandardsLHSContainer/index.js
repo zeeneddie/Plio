@@ -4,16 +4,14 @@ import { compose, withHandlers } from 'recompose';
 
 import { pickFromStandards, propEq, mapByIndex, assoc } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
-import { toggleSectionCollapsed } from '/client/redux/actions/standardsActions';
+import { toggleSectionCollapsed, closeCollapsibles } from '/client/redux/actions/standardsActions';
 
 const mapStateToProps = pickFromStandards(['sections']);
 
-const collapse = ({ dispatch, sections }) => (e, section, collapsed) => {
-  const index = sections.findIndex(propEq('_id', section._id));
+const onToggleCollapse = ({ dispatch, sections }) => (e, props) => {
+  const index = sections.findIndex(propEq('_id', props.item._id));
 
   if (index === -1) return;
-
-  if (sections[index].collapsed === collapsed) return;
 
   dispatch(toggleSectionCollapsed(index, true));
 };
@@ -21,7 +19,6 @@ const collapse = ({ dispatch, sections }) => (e, section, collapsed) => {
 export default compose(
   connect(mapStateToProps),
   withHandlers({
-    onCollapseShown: collapse,
-    onCollapseHidden: collapse
+    onToggleCollapse
   })
 )(StandardsLHS);

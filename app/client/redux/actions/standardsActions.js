@@ -5,7 +5,8 @@ import {
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
-  TOGGLE_SECTION_COLLAPSED
+  TOGGLE_SECTION_COLLAPSED,
+  CLOSE_COLLAPSIBLES
 } from './types';
 
 export function setSections(payload) {
@@ -22,6 +23,13 @@ export function toggleSectionCollapsed(index, shouldCloseOthers = false) {
       shouldCloseOthers
     },
     type: TOGGLE_SECTION_COLLAPSED
+  }
+}
+
+export function closeCollapsibles(payload) {
+  return {
+    payload,
+    type: CLOSE_COLLAPSIBLES
   }
 }
 

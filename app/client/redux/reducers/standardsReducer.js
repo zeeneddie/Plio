@@ -7,7 +7,8 @@ import {
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
-  TOGGLE_SECTION_COLLAPSED
+  TOGGLE_SECTION_COLLAPSED,
+  CLOSE_COLLAPSIBLES
 } from '../actions/types';
 
 const initialState = {
@@ -48,6 +49,10 @@ export default function reducer(state=initialState, action) {
       break;
     case TOGGLE_SECTION_COLLAPSED:
       return toggleSection(state, action);
+      break;
+    case CLOSE_COLLAPSIBLES:
+      return { ...state, sections: state.sections.map((section, i) =>
+        i === action.payload ? section : { ...section, collapsed: true }) };
       break;
     case SET_STANDARDS:
       return { ...state, standards: action.payload };
