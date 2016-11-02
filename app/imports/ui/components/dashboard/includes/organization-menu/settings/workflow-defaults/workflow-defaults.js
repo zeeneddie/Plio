@@ -1,11 +1,13 @@
 import { Template } from 'meteor/templating';
 
 import { setWorkflowDefaults } from '/imports/api/organizations/methods.js';
-
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_WorkflowDefaults.viewmodel({
   mixin: 'modal',
   _lText: 'Workflow steps',
+  helpText: OrganizationSettingsHelp.workflowSteps,
+  
   onWorkflowTypeChangeCb() {
     return this.onWorkflowTypeChange.bind(this);
   },

@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
 
 const { TYPES } = WorkItemsStore;
 
@@ -47,11 +48,27 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
   },
   openQAModal({ type, linkedDoc, ...args }) {
     const _title = this.capitalize(type);
+    const helpText = ((type) => {
+      switch (type) {
+        case TYPES.COMPLETE_ACTION:
+          return WorkInboxHelp.completeActionHelp;
+        case TYPES.VERIFY_ACTION:
+          return WorkInboxHelp.verifyActionHelp;
+        case TYPES.COMPLETE_ANALYSIS:
+          return WorkInboxHelp.completeAnalysisHelp;
+        case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+          return WorkInboxHelp.updateDocumentHelp;
+        default:
+          return;
+      }
+    })(type);
+    
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),
       typeText: this.getLinkedDocTypeText({ type, linkedDoc }),
       doc: { type, linkedDoc, ...args },
+      helpText: helpText,
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });

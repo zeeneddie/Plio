@@ -19,5 +19,8 @@
         {{> Template.contentBlock}}
       {{/unless}}
     {{/if}}
+    {{#if helpText}}
+      {{> HelpInfo helpText=helpText}}
+    {{/if}}
   </div>
 </template>

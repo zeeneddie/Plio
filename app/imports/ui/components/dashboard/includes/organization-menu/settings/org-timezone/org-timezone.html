@@ -1,5 +1,5 @@
 <template name="OrgSettings_OrgTimezone">
-  {{#FormField label="Org timezone"}}
+  {{#FormField label="Org timezone" helpText=helpText}}
     <select class="form-control c-select"
       {{b "change: update, options: timezones, optionsValue: value, optionsText: name, value: timezone"}}>
     </select>

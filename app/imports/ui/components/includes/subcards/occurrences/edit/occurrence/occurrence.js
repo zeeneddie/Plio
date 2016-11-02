@@ -1,10 +1,12 @@
 import { Template } from 'meteor/templating';
 import { updateViewedBy } from '/imports/api/occurrences/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.Subcards_Occurrence.viewmodel({
   date: new Date(),
   description: '',
+  helpText: NonConformitiesHelp.occurences,
   onRendered(templateInstance) {
     const doc = templateInstance.data.doc;
     const userId = Meteor.userId();

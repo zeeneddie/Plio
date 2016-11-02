@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import get from 'lodash.get';
 
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
 import { ActionPlanOptions } from '/imports/share/constants.js';
 
 Template.Actions_Card_Read.viewmodel({
@@ -45,6 +46,7 @@ Template.Actions_Card_Read.viewmodel({
     const _title = this.getActionTitle();
     this.modal().open({
       _title,
+      helpText: WorkInboxHelp.workInbox,
       template: 'Actions_Edit',
       _id: get(this.action(), '_id')
     });

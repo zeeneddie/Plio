@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_ProblemGuidelines.viewmodel({
   mixin: 'modal',
@@ -8,6 +9,7 @@ Template.OrgSettings_ProblemGuidelines.viewmodel({
   label: '',
   method: '',
   guidelines: '',
+  helpText: OrganizationSettingsHelp.nonConformityGuidelines,
   autorun() {
     this.load(this.guidelines());
   },
