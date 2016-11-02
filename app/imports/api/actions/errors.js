@@ -23,3 +23,6 @@ export const ACT_COMPLETION_CANNOT_BE_UNDONE = new E(400, 'Completion of this ac
 export const ACT_CANNOT_VERIFY = new E(400, 'This action cannot be verified');
 
 export const ACT_VERIFICATION_CANNOT_BE_UNDONE = new E(400, 'Verification of this action cannot be undone');
+
+export const ACT_ANALYSIS_MUST_BE_COMPLETED = (title, sequentialId, analysisTitle) =>
+  new E(400, `${analysisTitle} for ${sequentialId} "${title}" must be completed first`);

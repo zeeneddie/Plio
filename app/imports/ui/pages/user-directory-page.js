@@ -8,9 +8,6 @@ import { UserSubs } from '/imports/startup/client/subsmanagers.js';
 Template.UserDirectory_Page.viewmodel({
   share: 'search',
   mixin: ['search', 'organization'],
-  onCreated() {
-    this.searchText('');
-  },
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
     if (userIds && userIds.length) {

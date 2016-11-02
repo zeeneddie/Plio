@@ -25,8 +25,12 @@
           </div>
         </div>
       {{/each}}
-      <p class="list-group-item-text" {{b "if: orgOwnerLabel, text: orgOwnerLabel"}}>
-      </p>
+
+      {{#if orgOwnerLabel}}
+        <p class="list-group-item-text" {{b "text: orgOwnerLabel"}}></p>
+      {{else}}
+        <p class="list-group-item-text">These superpowers can only be edited by an administrator</p>
+      {{/if}}
     </div>
   </div>
 </template>
