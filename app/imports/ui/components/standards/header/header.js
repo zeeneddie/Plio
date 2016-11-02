@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 import { Standards } from '/imports/share/collections/standards.js';
 import { StandardFilters } from '/imports/api/constants.js';
@@ -15,11 +16,25 @@ Template.StandardsHeader.viewmodel({
       prependWith: 'by',
       prependIndexes: [0, 1],
       filters: StandardFilters,
-      isActiveFilter: this.isActiveStandardFilter.bind(this)
+      isActiveFilter: this.isActiveStandardFilter.bind(this),
+      onSelectFilter: this.onSelectFilter.bind(this)
     };
   },
   standard() {
     return this._getStandardByQuery({ _id: this.standardId() });
+  },
+  onSelectFilter(value, onSelect) {
+    onSelect();
+
+    Tracker.afterFlush(() => {
+      Meteor.defer(() => {
+        const list = Object.assign({}, ViewModel.findOne('StandardsList'));
+
+        if (list) {
+          invoke(list, 'handleRoute');
+        }
+      });
+    });
   },
   onNavigate(e) {
     const mobileWidth = isMobileRes();

@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { DiscussionSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { DiscussionSubs, DocumentCardSubs, BackgroundSubs } from '/imports/startup/client/subsmanagers.js';
 
 import { Discussions } from '/imports/share/collections/discussions.js';
 
@@ -7,6 +7,7 @@ Template.StandardsPage.viewmodel({
   mixin: ['discussions', 'mobile', 'organization', 'standard', { 'counter': 'counter' }],
   _subHandlers: [],
   isReady: false,
+  isDiscussionReady: false,
   isDiscussionOpened: false,
   autorun: [
     function() {
@@ -17,17 +18,26 @@ Template.StandardsPage.viewmodel({
 
       if (!standardId || !organizationId) return;
 
-      let _subHandlers = [
-        OrgSettingsDocSubs.subscribe('departments', organizationId)
+      const _subHandlers = [
+        DocumentCardSubs.subscribe('standardCard', { organizationId, _id: standardId }, {
+          onReady() {
+            // subscribe to the rest of the documents needed in modal in the background
+            BackgroundSubs.subscribe('standardsDeps', organizationId);
+          }
+        })
       ];
 
-      if (this.isDiscussionOpened()) {
-        _subHandlers = _subHandlers.concat([
-          DiscussionSubs.subscribe('discussionsByStandardId', standardId),
-        ]);
-      }
-
       this._subHandlers(_subHandlers);
+    },
+    function() {
+      const standardId = this.standardId();
+
+      if (!standardId) return;
+
+      if (this.isDiscussionOpened()) {
+        const discussionHandle = DiscussionSubs.subscribe('discussionsByStandardId', standardId);
+        this.isDiscussionReady(discussionHandle.ready());
+      }
     },
     function () {
       this.isReady(this._subHandlers().every(handle => handle.ready()));

@@ -1,11 +1,13 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
+import property from 'lodash.property';
 
-import { ActionDocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import { WorkInboxFilters } from '/imports/api/constants.js';
+import { ActionDocumentTypes, WorkItemsStore } from '/imports/share/constants';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { WorkInboxFilters } from '/imports/api/constants';
 const { TYPES } = WorkItemsStore;
+import { findById, extractIds } from '/imports/api/helpers';
 
 Template.WorkInbox_List.viewmodel({
   share: 'search',
@@ -15,98 +17,72 @@ Template.WorkInbox_List.viewmodel({
     'user', 'nonconformity', 'risk',
     'utils', { STATUSES: 'workItemStatus' }
   ],
-  autorun() {
-    if (!this.list.focused() && !this.list.animating() && !this.list.searchText()) {
-      const queriedId = this.queriedWorkItemId();
+  onRendered(template) {
+    template.autorun((computation) => {
+      const list = this.list;
 
-      if (queriedId) {
-        // find filter that covers queried work item
-        const filter = _(_(WorkInboxFilters).keys()).find((filterId) => {
-          const items = Object.assign([], this._getItemsByFilter(parseInt(filterId)));
-          return !!items.find(({ _id }) => _id === queriedId);
-        });
-
-        if (filter) {
-          Meteor.setTimeout(() => {
-            this.goToWorkItem(queriedId, { filter });
-            this.expandCollapsed(queriedId);
-          }, 0);
-        }
-      } else {
+      if (!list.focused() && !list.animating() && !list.searchText()) {
         const workItemId = this.workItemId();
-        const items = Object.assign([], this._getItemsByFilter());
-        const contains = items.find(({ _id }) => _id === workItemId);
+        const {
+          result:contains,
+          first:defaultDoc
+        } = this._findWorkItemForFilter(workItemId);
 
         if (!contains) {
-          const { _id } = Object.assign({}, this._getFirstItemByFilter()); // get _id of the first element if it exists
+          if (defaultDoc) {
+            const { _id } = defaultDoc;
 
-          if (_id) {
             Meteor.setTimeout(() => {
               this.goToWorkItem(_id);
               this.expandCollapsed(_id);
             }, 0);
           } else {
-            Meteor.setTimeout(() => {
-              this.goToWorkInbox();
-            }, 0);
+            const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
+
+            if (routeName !== 'workInbox') {
+              Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+            }
           }
         }
       }
-    }
+    });
   },
-  _getItemsByFilter(filter) {
+  _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
     const { my = {}, team = {} } = Object.assign({}, this.items());
-    filter = filter || this.activeWorkInboxFilterId();
+
+    const results = (items) => ({
+      result: findById(_id, items),
+      first: _.first(items),
+      array: items
+    });
 
     switch(filter) {
       case 1:
-        return my.current;
+        return results(my.current);
         break;
       case 2:
-        return team.current;
+        return results(team.current);
         break;
       case 3:
-        return my.completed;
+        return results(my.completed);
         break;
       case 4:
-        return team.completed;
+        return results(team.completed);
         break;
       case 5:
-        return my.deleted;
+        return results(my.deleted);
         break;
       case 6:
-        return team.deleted;
+        return results(team.deleted);
         break;
       default:
         return {};
-        break;
-    };
-  },
-  _getFirstItemByFilter() {
-    const [current, completed, deleted] = [2, 4, 6];
-
-    const assignees = Object.assign({}, this.assignees());
-    const getFirst = _.compose(_.first, this.getTeamItems).bind(this);
-
-    switch(this.activeWorkInboxFilterId()) {
-      case current:
-        return getFirst(_.first(assignees.current), 'current');
-        break;
-      case completed:
-        return getFirst(_.first(assignees.completed), 'completed');
-        break;
-      case deleted:
-        return getFirst(_.first(assignees.deleted), 'deleted');
-        break;
-      default:
-        const currentItems = Object.assign([], this._getItemsByFilter());
-        return _.first(currentItems);
         break;
     }
   },
   getPendingItems(_query = {}) {
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
-        .map(prop => this[prop]().map(({ _id }) => _id))
+        .map(prop => extractIds(this[prop]()))
         .reduce((prev, cur) => [...prev, ...cur]);
 
     const workItems = this._getWorkItemsByQuery({
@@ -131,26 +107,25 @@ Template.WorkInbox_List.viewmodel({
       });
   },
   assignees() {
-    const getIds = query => this.getPendingItems(query);
+    const getItems = query => this.getPendingItems(query);
     const byStatus = (array, predicate) => (
       array.filter(({ assigneeId, status }) => assigneeId !== Meteor.userId() && predicate(status))
     );
-    const extractIds = array => array.map(({ assigneeId }) => assigneeId);
     const sortByFirstName = (array) => {
       const query = {
         _id: {
-          $in: [...(() => array.map(({ assigneeId }) => assigneeId))()]
+          $in: [...(() => array.map(property('assigneeId')))()]
         }
       };
       const options = { sort: { 'profile.firstName': 1 } };
       const users = Meteor.users.find(query, options);
-      const ids = users.map(({ _id }) => _id);
+      const ids = extractIds(users);
       return ids;
     };
 
-    const current = sortByFirstName(byStatus(getIds(), status => this.STATUSES.IN_PROGRESS().includes(status)));
-    const completed = sortByFirstName(byStatus(getIds(), status => this.STATUSES.COMPLETED() === status));
-    const deleted = sortByFirstName(byStatus(getIds({ isDeleted: true }), status => true));
+    const current = sortByFirstName(byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status)));
+    const completed = sortByFirstName(byStatus(getItems(), status => this.STATUSES.COMPLETED() === status));
+    const deleted = sortByFirstName(byStatus(getItems({ isDeleted: true }), status => true));
 
     return {
       current,
@@ -192,31 +167,8 @@ Template.WorkInbox_List.viewmodel({
       team: getObj(teamItems)
     };
   },
-  linkedDocId() {
-    const { linkedDoc: { _id } = {} } = Object.assign({}, this._getWorkItemByQuery({ _id: this.workItemId() }));
-    return _id;
-  },
   onSearchInputValue() {
-    return (value) => {
-      const { my: { current, completed, deleted } = {} } = Object.assign({}, this.items());
-
-      // My current work items
-      if (this.isActiveWorkInboxFilter(1)) {
-        return current;
-
-      // My completed work items
-      } else if (this.isActiveWorkInboxFilter(3)) {
-        return completed;
-
-      // My deleted work items
-      } else if (this.isActiveWorkInboxFilter(5)) {
-        return deleted;
-      }
-
-      const sections = ViewModel.find('WorkInbox_SectionItem');
-      const ids = this.toArray(sections).map(vm => vm.items && vm.items().map(({ _id }) => _id));
-      return _.flatten(ids);
-    };
+    return (value) => extractIds(this._findWorkItemForFilter().array)
   },
   onModalOpen() {
     return () =>

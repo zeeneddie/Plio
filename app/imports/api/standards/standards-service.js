@@ -29,15 +29,15 @@ export default {
   },
 
   updateViewedBy({ _id, userId:viewedBy }) {
-    this._service.updateViewedBy({ _id, viewedBy });
+    return this._service.updateViewedBy({ _id, viewedBy });
   },
 
   remove({ _id, deletedBy }) {
-    this._service.remove({ _id, deletedBy });
+    return this._service.remove({ _id, deletedBy });
   },
 
   restore({ _id }) {
-    this._service.restore({ _id });
+    return this._service.restore({ _id });
   },
 
   removePermanently({ _id, query }) {

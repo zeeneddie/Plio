@@ -10,5 +10,7 @@ import './password.html';
 import './password.js';
 import './roles.html';
 import './roles.js';
+import './role.html';
+import './role.js';
 import './edit.html';
 import './edit.js';

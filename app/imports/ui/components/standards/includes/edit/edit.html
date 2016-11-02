@@ -53,17 +53,9 @@
           _id=this._id
           _query=_getRisksQuery}}
 
-      {{> Subcards_Actions_Edit
-          type="CA"
-          standardId=standard._id}}
+      {{> Subcards_Actions_Edit (getActionsArgs 'CA')}}
 
-      {{> Subcards_Actions_Edit
-          type="PA"
-          standardId=standard._id}}
-
-      {{> Subcards_Actions_Edit
-          type="RC"
-          standardId=standard._id}}
+      {{> Subcards_Actions_Edit (getActionsArgs 'PA')}}
 
       {{> Subcards_ImprovementPlan_Edit
           improvementPlan=standard.improvementPlan}}

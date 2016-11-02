@@ -5,6 +5,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
 
 const { TYPES } = WorkItemsStore;
 
@@ -23,7 +24,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
     const chooseOne = this.chooseOne(isCompleted);
-    const typeText = this.getTypeText({ type, linkedDoc });
+    const typeText = this.getLinkedDocTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
 
@@ -36,18 +37,6 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
 
     return desc;
   },
-  getTypeText({ type, linkedDoc }) {
-    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
-      if (linkedDoc) {
-        if (linkedDoc.type === ProblemTypes.RISK) {
-          return this.capitalize(AnalysisTitles.riskAnalysis);
-        } else {
-          return this.capitalize(AnalysisTitles.rootCauseAnalysis);
-        }
-      }
-    }
-    return this.capitalize(type.substr(type.indexOf(' ') + 1));
-  },
   getOperationText({ type }) {
     switch(type) {
       case TYPES.VERIFY_ACTION:
@@ -59,11 +48,27 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
   },
   openQAModal({ type, linkedDoc, ...args }) {
     const _title = this.capitalize(type);
+    const helpText = ((type) => {
+      switch (type) {
+        case TYPES.COMPLETE_ACTION:
+          return WorkInboxHelp.completeActionHelp;
+        case TYPES.VERIFY_ACTION:
+          return WorkInboxHelp.verifyActionHelp;
+        case TYPES.COMPLETE_ANALYSIS:
+          return WorkInboxHelp.completeAnalysisHelp;
+        case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+          return WorkInboxHelp.updateDocumentHelp;
+        default:
+          return;
+      }
+    })(type);
+    
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),
-      typeText: this.getTypeText({ type, linkedDoc }),
+      typeText: this.getLinkedDocTypeText({ type, linkedDoc }),
       doc: { type, linkedDoc, ...args },
+      helpText: helpText,
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });

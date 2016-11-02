@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import {
   update,
@@ -15,7 +16,7 @@ import { getTzTargetDate } from '/imports/share/helpers.js';
 
 
 Template.Risks_Card_Edit.viewmodel({
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],
   RiskRCALabel: AnalysisTitles.riskAnalysis,
 
   risk() {
@@ -71,6 +72,8 @@ Template.Risks_Card_Edit.viewmodel({
           swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
 
           this.modal().close();
+
+          this.handleRouteRisks();
         });
       }
     );

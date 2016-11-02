@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { OrgSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
+import { UserSubs, OrgSubs, DocumentsListSubs, OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.StandardSubcardsLayout.viewmodel({
   mixin: ['organization', 'nonconformity'],

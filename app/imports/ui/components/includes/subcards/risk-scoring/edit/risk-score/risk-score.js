@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-
+import { RisksHelp } from '/imports/api/help-messages';
 import { mapByIndex } from '/imports/api/helpers.js';
 
 Template.Subcards_RiskScore.viewmodel({
@@ -9,6 +9,7 @@ Template.Subcards_RiskScore.viewmodel({
   score: '',
   guidePanelCollapsed: true,
   guideHtml: '',
+  riskSocringFieldHelp: RisksHelp.riskScoringScoreType,
   tableDataWithGuidelines() {
     const { tableData = {} } = this.data();
     const { data = [] } = tableData;

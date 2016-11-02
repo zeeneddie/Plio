@@ -11,7 +11,10 @@ import {
   AvatarPlaceholders,
   CollectionNames,
   DocumentTypes,
-  ProblemMagnitudes
+  ProblemMagnitudes,
+  ActionsListProjection,
+  NonConformitiesListProjection,
+  RisksListProjection
 } from '/imports/share/constants.js';
 import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
@@ -21,7 +24,6 @@ import { Standards } from '/imports/share/collections/standards.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
-
 
 const { compose } = _;
 
@@ -141,6 +143,10 @@ export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
 export const getC = curry((path, obj) => get(obj, path));
 
+export const equals = curry((val1, val2) => _.isEqual(val1, val2));
+
+export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
@@ -191,8 +197,10 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
     {
       find({ users = [] }) {
         const userIds = users.map(property('userId'));
+        const query = { _id: { $in: userIds } };
+        const options = { profile: 1 };
 
-        return Meteor.users.find({ _id: { $in: userIds } });
+        return Meteor.users.find(query, options);
       }
     }
   ]
@@ -219,5 +227,79 @@ export const getPublishCompositeOrganizationUsers = (fn) => {
         ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))()
       ]
     });
+  }
+};
+
+export const explainMongoQuery = (
+  collection,
+  query = {},
+  options = {},
+  verbose = 'queryPlanner'
+) => {
+  let results = collection.rawCollection().find(query, _.omit(options, 'sort', 'limit'));
+
+  if (options.sort) {
+    results = results.sort(options.sort);
+  }
+
+  if (options.limit) {
+    results = results.limit(options.limit);
+  }
+
+  return results.explain(verbose).then(res => console.log(JSON.stringify(res, null, 2).substr(0, 5000)));
+}
+
+export const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
+export const makeOptionsFields = fields => fields ? ({ fields }) : ({});
+export const getCursorNonDeleted = curry((query, fields, collection) =>
+  collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
+
+export const toObjFind = find => ({ find });
+
+// You can add here more if you need
+export const getRequiredFieldsByCollection = (collection) => {
+  switch(collection) {
+    case Actions:
+      return ActionsListProjection;
+      break;
+    case NonConformities:
+      return NonConformitiesListProjection;
+      break;
+    case Risks:
+      return RisksListProjection;
+      break;
+    default:
+      return {};
+      break;
+  }
+};
+
+export const compareDates = (date1, date2) => {
+  if (!_.isDate(date1)) {
+    throw new Error(
+      'First argument of "compareDates" function must be of type Date'
+    );
+  }
+
+  if (!_.isDate(date2)) {
+    throw new Error(
+      'Second argument of "compareDates" function must be of type Date'
+    );
+  }
+
+  const utcDate1 = new Date(
+    date1.getTime() + (date1.getTimezoneOffset() * 60000)
+  );
+
+  const utcDate2 = new Date(
+    date2.getTime() + (date2.getTimezoneOffset() * 60000)
+  );
+
+  if (utcDate1 > utcDate2) {
+    return 1;
+  } else if (utcDate1 === utcDate2) {
+    return 0;
+  } else if (utcDate1 < utcDate2) {
+    return -1;
   }
 };

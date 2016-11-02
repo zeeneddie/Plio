@@ -4,7 +4,7 @@ import { Blaze } from 'meteor/blaze';
 import { canChangeOrgSettings } from '/imports/api/checkers.js';
 
 Template.Departments_Edit.viewmodel({
-  mixin: ['search', 'organization', 'department'],
+  mixin: ['search', 'organization', 'department', 'collapsing'],
   label: 'Department/sector(s)',
   placeholder: 'Department/sector',
   selectFirstIfNoSelected: false,
@@ -42,7 +42,9 @@ Template.Departments_Edit.viewmodel({
     this.callUpdate(selectedItemId, selected, '$addToSet');
   },
   callUpdate(selectedItemId, selected, option) {
-    if (!this._id) return;
+    const _id = this._id && this._id();
+
+    if (!_id) return;
 
     const options = {
       [`${option}`]: {
@@ -50,7 +52,15 @@ Template.Departments_Edit.viewmodel({
       }
     };
 
-    this.parent().update({ options });
+    this.parent().update({ options }, () => {
+      // need an afterFlush to wait on render
+      Tracker.afterFlush(() => {
+        this.expandCollapsed(_id, () => {
+          const listItems = ViewModel.find('ListItem', vm => !vm.collapsed() && !this.findRecursive(vm, _id));
+          listItems && listItems.map(vm => vm.toggleCollapse());
+        });
+      });
+    });
   },
   onRemoveCb() {
     return this.remove.bind(this);

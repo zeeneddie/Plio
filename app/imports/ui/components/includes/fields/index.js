@@ -15,3 +15,4 @@ import './textbox-field';
 import './description';
 import './select-member';
 import './select-members';
+import './list-group-item';

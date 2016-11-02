@@ -5,8 +5,15 @@ import property from 'lodash.property';
 
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { extractIds, flattenMap, inspire, findById, sortArrayByTitlePrefix } from '/imports/api/helpers.js';
-
+import {
+  extractIds,
+  flattenMap,
+  inspire,
+  findById,
+  sortArrayByTitlePrefix,
+  propEq,
+  not
+} from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
   share: 'search',
@@ -14,34 +21,17 @@ Template.StandardsList.viewmodel({
     counter: 'counter'
   }],
   hideRTextOnExpand: true,
-  onRendered(template) {
-    // hack to get around infinite redirect loop
-    template.autorun(() => {
-      const standardId = this.standardId();
-      const orgSerialNumber = this.organizationSerialNumber();
-      const list = this.list;
-      const shouldUpdate = list && !list.focused() && !list.animating() && !list.searchText();
-      const {
-        result:contains,
-        first:defaultStandard
-      } = this._findStandardForFilter(standardId);
-
-      const data = {
-        contains,
-        defaultStandard,
-        standardId,
-        orgSerialNumber
-      };
-
-      shouldUpdate && this.watcher(data);
-    });
+  onCreated() {
+    Meteor.defer(() => this.handleRoute());
   },
-  watcher: _.debounce(function({
-    contains,
-    defaultStandard,
-    standardId,
-    orgSerialNumber
-  }) {
+  handleRoute() {
+    const standardId = this.standardId();
+    const orgSerialNumber = this.organizationSerialNumber();
+    const {
+      result:contains,
+      first:defaultStandard
+    } = this._findStandardForFilter(standardId);
+
     if (!contains) {
       if (defaultStandard) {
         const { _id } = defaultStandard;
@@ -53,27 +43,26 @@ Template.StandardsList.viewmodel({
         const queryParams = { filter: FlowRouter.getQueryParam('filter') };
         FlowRouter.go('standards', params, queryParams);
       }
-    } else {
-      this.expandCollapsed(standardId);
     }
-  }, 50),
+  },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
     const flattenMapStandards = flattenMap(property('standards'));
-    const { types, sections, standardsDeleted, activeStandardFilterId } = inspire(
-      ['types', 'sections', 'standardsDeleted', 'activeStandardFilterId'],
-      this
-    );
+    const activeStandardFilterId = this.activeStandardFilterId();
+    const results = (items) => ({
+      result: findById(_id, items),
+      first: _.first(items),
+      array: items
+    });
 
     switch(activeStandardFilterId) {
       case 1:
+        const sections = this.sections();
         const mappedSections = flattenMapStandards(sections);
-        return {
-          result: finder(mappedSections),
-          first: _.first(mappedSections)
-        }
+        return results(mappedSections);
         break;
       case 2:
+        const types = this.types();
         const mappedTypes = flattenMap(property('items'), types);
         const mappedTypesSections = flattenMapStandards(mappedTypes);
         return {
@@ -87,14 +76,16 @@ Template.StandardsList.viewmodel({
             }
 
             return firstMappedType;
+          })(),
+          array: (() => {
+            const uncategorizedItems = mappedTypes.filter(_.compose(not, property('standards')));
+            return _.compact(mappedTypesSections.concat(uncategorizedItems));
           })()
         };
         break;
       case 3:
-        return {
-          result: finder(standardsDeleted),
-          first: _.first(standardsDeleted)
-        }
+        const standardsDeleted = this.standardsDeleted();
+        return results(standardsDeleted);
         break;
       default:
         return {};
@@ -186,7 +177,6 @@ Template.StandardsList.viewmodel({
 
     return withUncategorized;
   },
-
   types() {
     const organizationId = this.organizationId();
     // Standard types for this organization
@@ -258,17 +248,7 @@ Template.StandardsList.viewmodel({
     });
   },
   onSearchInputValue() {
-    return (value) => {
-      if (this.isActiveStandardFilter(3)) {
-        return Object.assign([], this.standardsDeleted());
-      }
-
-      const sections = Object.assign([], this.sections());
-      const standards = _.flatten(sections.map(property('standards')));
-      const standardsIds = extractIds(standards);
-
-      return standardsIds;
-    };
+    return (value) => extractIds(this._findStandardForFilter().array)
   },
   onModalOpen() {
     return () =>

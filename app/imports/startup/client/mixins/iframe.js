@@ -5,6 +5,6 @@ export default {
   onRendered() {
     Meteor.setTimeout(() => {
       this.isIframeReady(true);
-    }, 300);
+    }, 1000);
   }
 }

@@ -25,15 +25,15 @@ export default class BaseEntityService {
     if (isDeleted) {
       return this.collection.remove(query);
     } else {
-      const options = {
+      const modifier = {
         $set: {
-          isDeleted: true,
           deletedBy,
+          isDeleted: true,
           deletedAt: new Date()
         }
       };
 
-      const ret = this.collection.update(query, options);
+      const ret = this.collection.update(query, modifier);
 
       if (Meteor.isServer && _(onSoftDelete).isFunction()) {
         Meteor.defer(onSoftDelete);

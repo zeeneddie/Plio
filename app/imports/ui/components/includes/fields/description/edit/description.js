@@ -8,8 +8,12 @@ Template.DescriptionTextBox.viewmodel({
 
     return {
       value,
-      onFocusOut: (e, { value:description }) =>
+      onFocusOut: (e, { value:description }) => {
         invoke(this.parent(), 'update', { description })
+      },
+      onChange: (value) =>  {
+        this.description(value);
+      }
     };
   },
   getData() {

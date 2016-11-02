@@ -29,7 +29,7 @@ Template.NC_Card_Edit_Main.viewmodel({
     const userId = Meteor.userId();
 
     if (!isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
   isStandardsEditable: true,

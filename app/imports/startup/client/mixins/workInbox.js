@@ -3,16 +3,41 @@ import { Actions } from '/imports/share/collections/actions.js';
 import { ActionTypes } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { WorkInboxFilters } from '/imports/api/constants.js';
+import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
+import { AnalysisTitles } from '/imports/api/constants.js';
+import { capitalize } from '/imports/share/helpers';
 
 export default {
+  getTypeText({ type, linkedDoc }) {
+    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
+      if (linkedDoc) {
+        if (linkedDoc.type === ProblemTypes.RISK) {
+          return capitalize(AnalysisTitles.riskAnalysis);
+        } else {
+          return capitalize(AnalysisTitles.rootCauseAnalysis);
+        }
+      }
+    } else if (type === WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS) {
+      if (linkedDoc) {
+        if (linkedDoc.type === ProblemTypes.RISK) {
+          return capitalize(AnalysisTitles.updateOfRiskRecord);
+        } else {
+          return capitalize(AnalysisTitles.updateOfStandards);
+        }
+      }
+    }
+    
+    return capitalize(type);
+  },
+  getLinkedDocTypeText({ type, linkedDoc }) {
+    const typeText = this.getTypeText({ type, linkedDoc });
+    return capitalize(typeText.substr(typeText.indexOf(' ') + 1));
+  },
   currentWorkItem(){
     return WorkItems.findOne({ _id: this.workItemId() });
   },
   workItemId() {
     return FlowRouter.getParam('workItemId');
-  },
-  queriedWorkItemId() {
-    return FlowRouter.getQueryParam('id');
   },
   isActiveWorkInboxFilter(filterId) {
     return this.activeWorkInboxFilterId() === parseInt(filterId, 10);

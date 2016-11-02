@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
-
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import {
   insert,
@@ -19,6 +19,11 @@ Template.OrgSettings_MainSettings.viewmodel({
   timezone: '',
   ownerId() { return Meteor.userId() },
   isEditable: false,
+  nameFieldHelp: OrganizationSettingsHelp.organizationName,
+  ownerFieldHelp: OrganizationSettingsHelp.organizationOwner,
+  timezoneFieldHelp: OrganizationSettingsHelp.timeZone,
+  currencyFieldHelp: OrganizationSettingsHelp.defaultCurrency,
+
   updateName({ e, name }) {
     if (!this.isEditable()) return;
 

@@ -125,6 +125,12 @@
       }
     }
   }
+
+  &.btn-checkbox.active[disabled] {
+    i {
+      color: $light-blue-color;
+    }
+  }
 }
 
 /*

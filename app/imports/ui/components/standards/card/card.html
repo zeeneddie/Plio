@@ -3,46 +3,9 @@
     {{#if standards.count}}
       {{#with standard}}
         <div class="card standard-details">
-          <div class="card-block card-heading">
-            <div class="card-heading-buttons pull-xs-right">
-              {{#if isReady}}
-                {{#if hasDocxAttachment}}
-                  <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
-                  </a>
-                {{/if}}
-                {{#unless isDiscussionOpened}}
-                  <a class="btn btn-secondary"
-                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
-    								Discuss
-                    {{#if messagesNotViewedCount}}
-    								  <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
-                    {{/if}}
-    							</a>
-                {{/unless}}
-                {{#if canCreateAndEditStandards organizationId}}
-                  {{#if isDeleted}}
-                    <a class="btn btn-secondary" {{b "click: restore(this)"}}>
-                      Restore
-                    </a>
-                    {{#if isOrgOwner this}}
-                      <a class="btn btn-primary" {{b "click: delete(this)"}}>
-                        Delete
-                      </a>
-                    {{/if}}
-                  {{else}}
-                    <a class="btn btn-primary" {{b "click: openEditStandardModal"}}>
-                      Edit
-                    </a>
-                  {{/if}}
-                {{/if}}
-              {{else}}
-                {{> PreloaderButton}}
-              {{/if}}
-            </div>
-            <h3 class="card-title">
-              Compliance standard
-            </h3>
-          </div>
+
+          {{> Standards_Card_Read_Header (headerArgs)}}
+
           <div class="content-list">
             <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <h4 class="list-group-item-heading pull-left">
@@ -57,28 +20,25 @@
             <div class="list-group-collapse collapse" {{b "ref: collapse, class: { in: !collapsed }"}}>
               <div class="list-group">
 
-                {{#if this.description}}
-                  <div class="list-group-item">
-                    <p class="list-group-item-text">Description</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-                  </div>
-                {{/if}}
+                {{#with this.description}}
+                  {{> Fields_ListGroupItem_Read
+                      label="Description"
+                      text=this}}
+                {{/with}}
 
                 <div class="row">
-                  {{#if this.issueNumber}}
+                  {{#with this.issueNumber}}
                     <div class="col-sm-6">
-                      <div class="list-group-item">
-                        <p class="list-group-item-text">Issue number</p>
-                        <h4 class="list-group-item-heading" {{b "text: this.issueNumber"}}></h4>
-                      </div>
+                      {{> Fields_ListGroupItem_Read
+                          label="Issue number"
+                          text=this}}
                     </div>
-                  {{/if}}
+                  {{/with}}
                   {{#with section}}
                     <div class="col-sm-6">
-                      <div class="list-group-item">
-                        <p class="list-group-item-text">Section</p>
-                        <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                      </div>
+                      {{> Fields_ListGroupItem_Read
+                          label="Section"
+                          text=this.title}}
                     </div>
                   {{/with}}
                 </div>
@@ -86,24 +46,25 @@
                 <div class="row">
                   {{#with type}}
                     <div class="col-sm-6">
-                      <div class="list-group-item">
-                        <p class="list-group-item-text">Type</p>
-                          <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                      </div>
+                      {{> Fields_ListGroupItem_Read
+                          label="Type"
+                          text=this.title}}
                     </div>
                   {{/with}}
-                  <div class="col-sm-6">
-                    <div class="list-group-item">
-                      <p class="list-group-item-text">Owner</p>
-                      <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.owner)"}}></h4>
+                  {{#with owner}}
+                    <div class="col-sm-6">
+                      {{> Fields_ListGroupItem_Read
+                          label="Owner"
+                          text=(userNameOrEmail this)}}
                     </div>
-                  </div>
-
+                  {{/with}}
                 </div>
 
-                {{#with departmentsIds}}
-                  {{> Departments_Read departmentsIds=this}}
-                {{/with}}
+                {{#if isReady}}
+                  {{#with departmentsIds}}
+                    {{> Departments_Read departmentsIds=this}}
+                  {{/with}}
+                {{/if}}
 
                 {{> SCSource source=this.source1 id=1}}
 
@@ -115,21 +76,27 @@
                 {{> Subcards_Notify_Read users=this}}
               {{/with}}
 
-              {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
+              {{#if isReady}}
+                {{> Subcards_NonConformities_Read _query=_getNCsQuery}}
 
-              {{> Subcards_Risks_Read _query=_getRisksQuery}}
+                {{> Subcards_Risks_Read _query=_getRisksQuery}}
 
-              {{> Subcards_Actions_Read
-                  type=ActionTypes.CORRECTIVE_ACTION
-                  standardId=this._id}}
+                {{> Subcards_Actions_Read
+                    type=ActionTypes.CORRECTIVE_ACTION
+                    standardId=this._id}}
 
-              {{> Subcards_Actions_Read
-                  type=ActionTypes.PREVENTATIVE_ACTION
-                  standardId=this._id}}
+                {{> Subcards_Actions_Read
+                    type=ActionTypes.PREVENTATIVE_ACTION
+                    standardId=this._id}}
 
-              {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
+                {{> Subcards_ImprovementPlan_Read improvementPlan=this.improvementPlan}}
 
-              {{> Subcards_LessonsLearned_Read documentId=this._id}}
+                {{> Subcards_LessonsLearned_Read documentId=this._id}}
+              {{else}}
+                <div class="m-t-3">
+                  {{> PreloaderPage size=1}}
+                </div>
+              {{/if}}
             </div>
 
             {{> SourceWordDocument source=source1}}

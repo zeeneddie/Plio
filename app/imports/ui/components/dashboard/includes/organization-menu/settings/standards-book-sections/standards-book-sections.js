@@ -8,7 +8,7 @@ import {
 import {
   insert, update, remove
 } from '/imports/api/standards-book-sections/methods.js';
-
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -20,6 +20,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
     return invoke(this.standardsBookSections(), 'count');
   },
   placeholder: 'Title',
+  helpText: OrganizationSettingsHelp.standardSections,
   onChangeCb() {
     return this.onChange.bind(this);
   },

@@ -18,7 +18,10 @@ Template.TextBoxField.viewmodel({
       placeholder = defaults.placeholder,
       rows = defaults.rows
     } = this.data();
-    const { onFocusOut = () => {} } = this.templateInstance.data;
+    const {
+      onFocusOut = () => {},
+      onChange = () => {},
+    } = this.templateInstance.data;
 
     return {
       value,
@@ -26,6 +29,7 @@ Template.TextBoxField.viewmodel({
       className,
       placeholder,
       rows,
+      onChange,
       onFocusOut: e =>
         this.callWithFocusCheck(e, () => {
           const val = e.target.value;

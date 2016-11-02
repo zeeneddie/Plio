@@ -9,7 +9,9 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
+import { StandardsHelp } from '/imports/api/help-messages.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
+import { inspire } from '/imports/api/helpers';
 
 
 Template.Standards_Card_Read.viewmodel({
@@ -17,21 +19,8 @@ Template.Standards_Card_Read.viewmodel({
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   _subHandlers: [],
   isReady: false,
-
   onCreated(template) {
-    template.autorun(() => {
-      const _id = this._id();
-      const organizationId = this.organizationId();
-      const _subHandlers = [];
-      if (_id && organizationId) {
-        _subHandlers.push(DocumentCardSubs.subscribe('standardCard', { _id, organizationId }));
-        this._subHandlers(_subHandlers);
-      }
-    });
-
-    template.autorun(() => {
-      this.isReady(this._subHandlers().every(handle => handle.ready()));
-    });
+    this.collapsed(false);
   },
   onRendered(template) {
     template.autorun(() => {
@@ -44,6 +33,38 @@ Template.Standards_Card_Read.viewmodel({
   closeAllOnCollapse: false,
   isFullScreenMode: false,
   isDiscussionOpened: false,
+  headerArgs() {
+    const {
+      organizationId,
+      isReady,
+      hasDocxAttachment,
+      isDiscussionOpened,
+      standard,
+      pathToDiscussion,
+      messagesNotViewedCount
+    } = inspire([
+      'isReady', 'hasDocxAttachment', 'isDiscussionOpened',
+      'standard', 'pathToDiscussion', 'messagesNotViewedCount',
+      'organizationId'
+    ], this);
+
+    const hasAccess = this.canCreateAndEditStandards(organizationId);
+    const hasFullAccess = isOrgOwner(standard);
+
+    return {
+      isReady,
+      hasDocxAttachment,
+      isDiscussionOpened,
+      pathToDiscussion,
+      messagesNotViewedCount,
+      hasAccess,
+      hasFullAccess,
+      toggleScreenMode: this.toggleScreenMode.bind(this),
+      openEditModal: this.openEditStandardModal.bind(this),
+      restore: () => this.restore(standard),
+      delete: () => this.delete(standard)
+    };
+  },
   ActionTypes() {
     return ActionTypes;
   },
@@ -125,6 +146,7 @@ Template.Standards_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
+      helpText: StandardsHelp.standard,
       _id: get(this.standard(), '_id')
     });
   }, 1000),

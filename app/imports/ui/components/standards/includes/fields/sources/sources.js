@@ -30,7 +30,8 @@ Template.ESSources.viewmodel({
       ]);
     } else {
       return _.every([
-        type && url,
+        type,
+        (!sourceUrl && url) || (sourceUrl && !url) || (sourceUrl && url),
         (type !== sourceType) || (url !== sourceUrl)
       ]);
     }
@@ -58,7 +59,7 @@ Template.ESSources.viewmodel({
     if (type === 'attachment') {
       sourceDoc.fileId = fileId;
     } else {
-      if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
+      if (url && (url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
         url = `http://${url}`;
       }
 
@@ -71,23 +72,25 @@ Template.ESSources.viewmodel({
       }
     }
 
-    const query = {
-      [`source${this.id()}`]: sourceDoc
-    };
-
-    const updateFn = () => this.parent().update(query, cb);
+    const query = { [`source${this.id()}`]: sourceDoc };
 
     if (type === 'attachment') {
-      updateFn();
+      this.parent().update(query, cb);
     } else {
-      this.callWithFocusCheck(e, updateFn);
+      this.callWithFocusCheck(e, () => {
+        if (url) {
+          this.parent().update(query, cb);
+        } else {
+          this._removeSourceFile();
+        }
+      });
     }
   },
   renderDocx(url) {
     check(url, String);
 
     const file = this.file();
-    const isDocx = file.extension === 'docx';
+    const isDocx = file && file.extension === 'docx';
 
     if (isDocx) {
       this.docxRenderInProgress(true);
@@ -158,24 +161,8 @@ Template.ESSources.viewmodel({
         UploadsStore.terminateUploading(this.sourceFileId());
       }
 
-      const options = {
-        $unset: {
-          [`source${this.id()}`]: ''
-        }
-      };
-
       removeFile.call({ _id: file._id });
-
-      this.parent().update({ options }, (err) =>  {
-        if (!err && this.id() === 1) {
-          const options = {
-            $rename: {
-              source2: 'source1'
-            }
-          };
-          this.parent().update({ options });
-        }
-      });
+      this._removeSourceFile();
     });
   },
   uploaderMetaContext() {
@@ -183,6 +170,20 @@ Template.ESSources.viewmodel({
       organizationId: this.organizationId(),
       standardId: this.parent().standardId()
     };
+  },
+  _removeSourceFile() {
+    const options = {
+      $unset: { [`source${this.id()}`]: '' }
+    };
+
+    this.parent().update({ options }, (err) => {
+      if (!err && this.id() === 1) {
+        const options = {
+          $rename: { source2: 'source1' }
+        };
+        this.parent().update({ options });
+      }
+    });
   },
   getData() {
     const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension } = this.data();

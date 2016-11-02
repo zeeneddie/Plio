@@ -33,9 +33,6 @@ Template.WorkInbox_Item.viewmodel({
       })()
     };
   },
-  getTypeText({ type }) {
-    return this.capitalize(type);
-  },
   getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
     return date ? this.renderDate(date) : '';
@@ -51,9 +48,6 @@ Template.WorkInbox_Item.viewmodel({
     return FlowRouter.path('workInboxItem', params, queryParams);
   },
   isNew() {
-    /*const { viewedBy = [] } = this.data();
-    return !viewedBy.find(_id => _id === Meteor.userId());*/
-
     const filter = { _id: this._id() };
     const options = { fields: { createdAt: 1, viewedBy: 1 } };
     const doc = this._getWorkItemByQuery(filter, options);
@@ -64,6 +58,6 @@ Template.WorkInbox_Item.viewmodel({
   updateViewedBy() {
     const { _id } = this.data();
 
-    updateViewedBy.call({ _id });
+    Meteor.defer(() => updateViewedBy.call({ _id }));
   }
 });

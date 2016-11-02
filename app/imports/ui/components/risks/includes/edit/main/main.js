@@ -20,15 +20,19 @@ import {
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
+import { RisksHelp } from '/imports/api/help-messages';
 
 Template.Risk_Card_Edit_Main.viewmodel({
   mixin: ['organization', 'getChildrenData'],
+  standardFieldHelp: RisksHelp.standards,
+  departmentsFieldHelp: RisksHelp.departments,
+
   onRendered(template) {
     const doc = template.data.risk;
     const userId = Meteor.userId();
 
     if (doc && !isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
   RKGuidelines() {
@@ -44,8 +48,9 @@ Template.Risk_Card_Edit_Main.viewmodel({
       updateOfStandards,
       magnitude,
       methodRefs: this.methodRefs,
+      RCALabel: AnalysisTitles.riskAnalysis,
+      UOSLabel: AnalysisTitles.updateOfRiskRecord,
       ...(fn => fn ? { callMethod: fn } : undefined)(this.callMethod),
-      RCALabel: AnalysisTitles.riskAnalysis
     };
   },
   methodRefs() {

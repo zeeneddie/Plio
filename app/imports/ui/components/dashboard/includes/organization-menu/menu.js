@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { isPlioUser } from '/imports/api/checkers.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { OrgCurrencies } from '/imports/share/constants.js';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 
 Template.Organization_Menu.viewmodel({
@@ -14,7 +15,7 @@ Template.Organization_Menu.viewmodel({
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organizations() {
-    return Organizations.find({ 'users.userId': Meteor.userId() });
+    return Organizations.find();
   },
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());
@@ -25,6 +26,7 @@ Template.Organization_Menu.viewmodel({
     this.modal().open({
       template: 'OrgSettings',
       _title: 'Organization settings',
+      helpText: OrganizationSettingsHelp.organizationSettings,
       organizationId: this.organization()._id
     });
   },
