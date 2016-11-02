@@ -25,3 +25,23 @@
 //     console.log(`Work item ${workItem._id} has been removed`);
 //   }
 // });
+
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { Organizations } from '/imports/share/collections/organizations';
+import { CollectionNames, SystemName } from '/imports/share/constants';
+
+
+Organizations.find({}).forEach((org) => {
+  const orgLogsCount = AuditLogs.find({ documentId: org._id }).count();
+
+  if (!orgLogsCount) {
+    AuditLogs.insert({
+      organizationId: org._id,
+      date: new Date(),
+      executor: SystemName,
+      collection: CollectionNames.ORGANIZATIONS,
+      documentId: org._id,
+      message: 'Organization created'
+    });
+  }
+});
