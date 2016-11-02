@@ -168,7 +168,7 @@ const OrganizationEditableFields = {
     label: 'Risk scoring guidelines text',
     optional: true
   },
-  isOrgAdmin: {
+  isAdminOrg: {
     type: Boolean,
     optional: true
   },
