@@ -20,7 +20,10 @@ const RisksHelp = {
 };
 
 const WorkInboxHelp = {
-  workInbox: `The Work inbox is a single place in Plio to view all work actions that are created in the system.  With the View selector in the header bar, you can view both your own actions and your co-workers actions.  To deal with an action just click on the button in the To Do panel at the top of the card, or edit the card to re-assign or modify the work item.`,
+  completeActionHelp: `Click on the Complete button to indicate completion of this action. Optionally you can enter any relevant completion comments.`,
+  verifyActionHelp: `Click on the Verify button to indicate verification of this action. Optionally you can enter any relevant verification comments.`,
+  completeAnalysisHelp: `Click on the Complete button to indicate completion of this analysis. Optionally you can enter any relevant completion comments.`,
+  updateDocumentHelp: `Click on the Update button to indicate that the relevant standard(s) or risk record(s) has been updated. Optionally you can enter any relevant update comments.`
 };
 
 const OrganizationSettingsHelp = {

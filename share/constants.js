@@ -295,7 +295,7 @@ export const WorkItemsStore = {
     COMPLETE_ACTION: 'complete action',
     VERIFY_ACTION: 'verify action',
     COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_STANDARDS: 'complete update of standards'
+    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents'
   },
   LINKED_TYPES: {
     ...ActionTypes,

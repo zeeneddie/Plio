@@ -3,8 +3,7 @@ import { UserRolesNames } from '/imports/share/constants.js';
 import { UserProfileHelp } from '/imports/api/help-messages.js';
 
 Template.UserDirectory_Card_Read.viewmodel({
-  share: 'window',
-  mixin: ['user', 'organization', 'modal', 'mobile'],
+  mixin: ['user', 'organization', 'modal'],
 
   openEditUserModal(e) {
     e.preventDefault();

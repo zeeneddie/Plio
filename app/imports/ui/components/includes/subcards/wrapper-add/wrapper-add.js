@@ -7,8 +7,16 @@ import { inspire } from '/imports/api/helpers.js';
    mixin: 'addForm',
    _lText: '',
    _rText: '',
+   items: '',
    renderContentOnInitial: true,
    addText: 'Add a new document',
+   isEditOnly: false,
+   isVisible() {
+     if (this.isEditOnly()) {
+       return this.items && !!this.items.length;
+     }
+     return true;
+   },
    wrapperArgs() {
      return this.data(['_lText', '_rText', 'renderContentOnInitial', 'helpText']);
    },

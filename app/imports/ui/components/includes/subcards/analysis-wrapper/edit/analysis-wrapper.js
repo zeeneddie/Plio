@@ -22,7 +22,7 @@ Template.Subcards_AnalysisWrapper_Edit.viewmodel({
     }
   },
   RCALabel: AnalysisTitles.rootCauseAnalysis,
-  UOSLabel: 'Update of standard(s)',
+  UOSLabel: AnalysisTitles.updateOfStandards,
   magnitude: '',
   analysis: '',
   updateOfStandards: '',

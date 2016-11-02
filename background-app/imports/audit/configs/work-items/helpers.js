@@ -12,7 +12,7 @@ const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_STANDARDS
+  COMPLETE_UPDATE_OF_DOCUMENTS
 } = WorkItemsStore.TYPES;
 
 export const getLinkedDoc = (workItem) => {
@@ -93,7 +93,7 @@ export const getNotifications = () => {
     },
     {
       shouldSendNotification({ newDoc: { type } }) {
-        return type === COMPLETE_UPDATE_OF_STANDARDS;
+        return type === COMPLETE_UPDATE_OF_DOCUMENTS;
       },
       text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}} {{{docName}}}',
       title: 'You have been assigned to do an update of standards',

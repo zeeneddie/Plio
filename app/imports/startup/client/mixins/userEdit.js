@@ -21,9 +21,9 @@ export default {
     }
 
     if (withFocusCheck) {
-      updateFn();
-    } else {
       this.callWithFocusCheck(e, updateFn);
+    } else {
+      updateFn();
     }
   }
 };

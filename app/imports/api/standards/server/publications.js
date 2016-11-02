@@ -159,19 +159,13 @@ Meteor.publish('standardsDeps', function(organizationId) {
     createdBy: 1
   };
 
-  const getProblems = getProblemsWithLimitedFields({ organizationId });
-
   const actions = getActionsWithLimitedFields(actionsQuery);
-  const ncs = getProblems(NonConformities);
-  const risks = getProblems(Risks);
   const departments = Departments.find({ organizationId }, makeOptionsFields(DepartmentsListProjection));
   const standards = getCursorNonDeleted({ organizationId }, standardsFields, Standards);
   const riskTypes = RiskTypes.find({ organizationId });
 
   return [
     actions,
-    ncs,
-    risks,
     departments,
     standards,
     riskTypes

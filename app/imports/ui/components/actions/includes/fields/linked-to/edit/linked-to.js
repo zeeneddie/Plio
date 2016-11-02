@@ -14,9 +14,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   isEditable: false,
   placeholder: 'Linked to',
   type: '',
-  isDeleteButtonVisible() {
-    return !this._id || get(this.linkedDocs(), 'length') > 1;
-  },
+  isDeleteButtonVisible: true,
   value() {
     return invoke(this.child('Select_Multi'), 'value');
   },
@@ -41,8 +39,9 @@ Template.Actions_LinkedTo_Edit.viewmodel({
   items() {
     const searchQuery = this.searchObject('value', [{ name: 'sequentialId' }, { name: 'title' }]);
     let query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
-    if (this.standardId()) {
-      query = { ...query, standardsIds: this.standardId() };
+    const standardId = this.standardId();
+    if (standardId) {
+      query = { ...query, standardsIds: standardId };
     }
     const options = { sort: { serialNumber: 1 } };
     const [ncs, risks] = this.getDocs(query, options);
@@ -107,18 +106,6 @@ Template.Actions_LinkedTo_Edit.viewmodel({
 
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
     const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
-
-    // if we are viewing subcard show error in subcard, otherwise in modal
-    if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.VMFindParent('Subcard', this.parent());
-
-      if (!subcard) {
-        ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
-      } else {
-        subcard.setError && subcard.setError('An action must be linked to at least one document');
-      }
-      return;
-    }
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
