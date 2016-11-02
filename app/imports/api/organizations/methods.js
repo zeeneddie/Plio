@@ -36,7 +36,7 @@ import {
   ORG_OnTransferChecker,
   ORG_EnsureCanDelete,
   ORG_EnsureCanBeDeleted,
-  USR_EnsureIsAdmin
+  USR_EnsureIsPlioAdmin
 } from '../checkers.js';
 import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
 
@@ -543,7 +543,7 @@ export const deleteCustomerOrganization = new Method({
     }
 
     return checker(chain(
-      () => USR_EnsureIsAdmin(this.userId),
+      () => USR_EnsureIsPlioAdmin(this.userId),
       ({ adminPassword }) => USR_EnsurePasswordIsValid(this.userId, adminPassword),
       ({ organizationId }) => ORG_EnsureCanBeDeleted(organizationId)
     ));

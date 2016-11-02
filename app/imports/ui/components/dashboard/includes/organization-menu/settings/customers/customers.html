@@ -27,11 +27,11 @@
             </span>
           {{/FormField}}
 
-          {{#if isOrgOwner}}
+          {{#if isPlioAdmin}}
             {{#FormField}}
               {{> OrgDeletion
-                organizationId=this._id
-                deleteOrganization=deleteOrganizationFn}}
+                  organizationId=this._id
+                  deleteOrganization=deleteOrganizationFn}}
             {{/FormField}}
           {{/if}}
         </div>

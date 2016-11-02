@@ -18,13 +18,5 @@ Template.OrgSettings_OrgDeletion.viewmodel({
   },
   beforeDeleteFn() {
     return this.beforeDelete.bind(this);
-  },
-  afterDelete(err) {
-    if (!err) {
-      FlowRouter.go('home');
-    }
-  },
-  afterDeleteFn() {
-    return this.afterDelete.bind(this);
   }
 });

@@ -1,10 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { UserMembership } from '/imports/share/constants.js';
 import { deleteCustomerOrganization } from '/imports/api/organizations/methods';
-import { isOrgOwner } from '/imports/api/checkers';
+import { isPlioAdmin } from '/imports/api/checkers';
 
 
 Template.CustomersSettings.viewmodel({
@@ -24,8 +25,8 @@ Template.CustomersSettings.viewmodel({
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     }
   ],
-  isOrgOwner() {
-    return isOrgOwner(Meteor.userId(), this.organizationId());
+  isPlioAdmin() {
+    return isPlioAdmin(Meteor.userId());
   },
   organizations() {
     const organizations = Organizations.find({

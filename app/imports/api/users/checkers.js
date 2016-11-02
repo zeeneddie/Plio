@@ -15,7 +15,7 @@ import {
 import { UserMembership } from '/imports/share/constants';
 import { Organizations } from '/imports/share/collections/organizations';
 import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
-import { canChangeRoles, isOrgOwner } from '../checkers.js';
+import { canChangeRoles, isOrgOwner, isPlioAdmin } from '../checkers.js';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {
   const predicate = Object.is(userId, doc._id);
@@ -60,23 +60,6 @@ export const USR_EnsurePasswordIsValid = (userId, password) => {
   checkAndThrow(!!checkPasswordResult.error, USR_INCORRECT_PASSWORD);
 };
 
-export const USR_EnsureIsAdmin = (userId) => {
-  if (!SimpleSchema.RegEx.Id.test(userId)) {
-    return false;
-  }
-
-  const isAdmin = !!Organizations.findOne({
-    isAdminOrg: true,
-    users: {
-      $elemMatch: {
-        userId,
-        role: UserMembership.ORG_OWNER,
-        isRemoved: false,
-        removedBy: { $exists: false },
-        removedAt: { $exists: false }
-      }
-    }
-  });
-
-  checkAndThrow(!isAdmin, ACCESS_DENIED);
+export const USR_EnsureIsPlioAdmin = (userId) => {
+  checkAndThrow(!isPlioAdmin(userId), ACCESS_DENIED);
 };
