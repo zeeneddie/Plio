@@ -168,10 +168,6 @@ const OrganizationEditableFields = {
     label: 'Risk scoring guidelines text',
     optional: true
   },
-  isAdminOrg: {
-    type: Boolean,
-    optional: true
-  },
   ...OrganizationCurrencySchema,
   ...TimezoneSchema.schema()
 };
