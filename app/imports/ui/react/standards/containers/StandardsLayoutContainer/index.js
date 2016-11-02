@@ -1,10 +1,7 @@
 import React from 'react';
-import { compose } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import property from 'lodash.property';
 import get from 'lodash.get';
-import { batchActions } from 'redux-batched-actions';
-import { connect } from 'react-redux';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -15,25 +12,13 @@ import {
   DocumentCardSubs,
   BackgroundSubs
 } from '/imports/startup/client/subsmanagers';
-import {
-  setSections,
-  setStandards,
-  setTypes,
-  setStandard,
-  setStandardId,
-  setIsCardReady,
-} from '/client/redux/actions/standardsActions';
-import {
-  setOrg,
-  setOrgId,
-  setOrgSerialNumber
-} from '/client/redux/actions/organizationsActions';
 import PreloaderPage from '../../../components/PreloaderPage';
 import StandardsPageContainer from '../../containers/StandardsPageContainer';
 
-const onPropsChange = ({ content, dispatch }, onData) => {
+const onPropsChange = ({ content }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const standardId = FlowRouter.getParam('standardId');
+  const filter = FlowRouter.getQueryParam('filter');
   const layoutSubscription = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber);
 
   if (layoutSubscription.ready()) {
@@ -61,21 +46,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       return true;
     })();
 
-    const actions = [
-      setOrg(organization),
-      setOrgId(organizationId),
-      setOrgSerialNumber(serialNumber),
-      setTypes(types),
-      setStandards(standards),
-      setStandard(standard),
-      setStandardId(standardId),
-      setIsCardReady(isCardReady)
-    ];
-
-    dispatch(batchActions(actions));
-
     onData(null, {
-      dispatch,
       organization,
       content,
       sections,
@@ -89,7 +60,5 @@ const onPropsChange = ({ content, dispatch }, onData) => {
   }
 };
 
-export default compose(
-  connect(),
-  composeWithTracker(onPropsChange, PreloaderPage)
-)(StandardsPageContainer);
+
+export default composeWithTracker(onPropsChange, PreloaderPage)(StandardsPageContainer);

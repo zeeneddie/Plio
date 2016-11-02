@@ -41,3 +41,7 @@ export const SET_ORG = 'SET_ORG';
 export const SET_ORG_SERIAL_NUMBER = 'SET_ORG_SERIAL_NUMBER';
 
 export const SET_ORG_ID = 'SET_ORG_ID';
+
+// global
+
+export const SET_FILTER = 'SET_FILTER';

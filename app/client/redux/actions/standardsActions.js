@@ -15,9 +15,12 @@ export function setSections(payload) {
   }
 }
 
-export function toggleSectionCollapsed(index) {
+export function toggleSectionCollapsed(index, shouldCloseOthers = false) {
   return {
-    payload: index,
+    payload: {
+      index,
+      shouldCloseOthers
+    },
     type: TOGGLE_SECTION_COLLAPSED
   }
 }

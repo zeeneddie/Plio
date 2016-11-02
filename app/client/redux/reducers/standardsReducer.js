@@ -19,19 +19,36 @@ const initialState = {
   isCardReady: false,
 };
 
+const toggleSection = (state, action) => {
+  const { index, shouldCloseOthers } = action.payload;
+  const section = state.sections[index];
+  let sections;
+
+  if (shouldCloseOthers) {
+    sections = state.sections.map((section, i) => {
+      return i === index
+        ? { ...section, collapsed: !section.collapsed }
+        : { ...section, collapsed: true };
+    });
+  } else {
+    sections = mapByIndex(
+      assoc('collapsed', !section.collapsed, section),
+      index,
+      state.sections
+    );
+  }
+
+  return { ...state, sections };
+};
+
 export default function reducer(state=initialState, action) {
   switch(action.type) {
     case SET_SECTIONS:
       return { ...state, sections: action.payload };
       break;
     case TOGGLE_SECTION_COLLAPSED:
-      const section = state.sections[action.payload];
-      const sections = mapByIndex(
-        assoc('collapsed', !section.collapsed, section),
-        action.payload,
-        state.sections
-      );
-      return { ...state, sections };
+      return toggleSection(state, action);
+      break;
     case SET_STANDARDS:
       return { ...state, standards: action.payload };
       break;

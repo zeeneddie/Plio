@@ -15,7 +15,7 @@ const collapse = ({ dispatch, sections }) => (e, section, collapsed) => {
 
   if (sections[index].collapsed === collapsed) return;
 
-  dispatch(toggleSectionCollapsed(index));
+  dispatch(toggleSectionCollapsed(index, true));
 };
 
 export default compose(

@@ -2,11 +2,28 @@ import React from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { mapProps, compose, lifecycle } from 'recompose';
 import get from 'lodash.get';
+import { batchActions } from 'redux-batched-actions';
+import { connect } from 'react-redux';
 
 import StandardsPage from '../../components/StandardsPage';
 import { lengthStandards, propEq } from '/imports/api/helpers';
-import { setSections } from '/client/redux/actions/standardsActions';
 import { UncategorizedTypeSection } from '/imports/api/constants';
+import {
+  setSections,
+  setStandards,
+  setTypes,
+  setStandard,
+  setStandardId,
+  setIsCardReady,
+} from '/client/redux/actions/standardsActions';
+import {
+  setOrg,
+  setOrgId,
+  setOrgSerialNumber
+} from '/client/redux/actions/organizationsActions';
+import {
+  setFilter
+} from '/client/redux/actions/globalActions';
 
 const propsMapper = (props) => {
   const mapper = (section, i) => {
@@ -34,9 +51,23 @@ const propsMapper = (props) => {
 
 export default compose(
   mapProps(propsMapper),
+  connect(),
   lifecycle({
-    componentWillReceiveProps({ sections = [] }) {
-      this.props.dispatch(setSections(sections));
+    componentWillReceiveProps(props) {
+      const actions = [
+        setOrg(props.organization),
+        setOrgId(props.organizationId),
+        setOrgSerialNumber(props.serialNumber),
+        setTypes(props.types),
+        setStandards(props.standards),
+        setStandard(props.standard),
+        setStandardId(props.standardId),
+        setIsCardReady(props.isCardReady),
+        setFilter(props.filter),
+        setSections(props.sections)
+      ];
+
+      props.dispatch(batchActions(actions));
     },
 
     componentWillMount() {
