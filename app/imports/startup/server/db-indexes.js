@@ -38,6 +38,8 @@ Organizations._ensureIndex({
 
 Organizations._ensureIndex({
   name: 1
+}, {
+  unique: true
 });
 
 Organizations._ensureIndex({
