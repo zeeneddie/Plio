@@ -1,7 +1,8 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { CountSubs, WorkItemSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
+import { CountSubs, WorkItemSubs } from '/imports/startup/client/subsmanagers';
+import { WorkItemsStore } from '/imports/share/constants';
 
 Template.Dashboard_WorkItemStats.viewmodel({
   mixin: ['utils', 'organization', 'workInbox', {

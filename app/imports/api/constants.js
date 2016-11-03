@@ -1,6 +1,6 @@
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 
-const DocumentTitles = {
+export const DocumentTitles = {
   STANDARD: 'Standard',
   NC: 'Non-conformity',
   RISK: 'Risk'
@@ -128,26 +128,32 @@ export const WorkItemsListProjection = {
   deletedBy: 1
 };
 
-const StandardsBookSectionsListProjection = {
+export const StandardsBookSectionsListProjection = {
   organizationId: 1,
   title: 1
 };
 
-const StandardTypesListProjection = {
+export const StandardTypesListProjection = {
   organizationId: 1,
   title: 1
 };
 
-const DepartmentsListProjection = {
+export const DepartmentsListProjection = {
   organizationId: 1,
   name: 1
 };
 
-const AnalysisTitles = {
-  rootCauseAnalysis: 'Complete root cause analysis',
-  riskAnalysis: 'Complete initial risk analysis',
-  updateOfStandards: 'Complete update of standard(s)',
-  updateOfRiskRecord: 'Complete update of risk record'
+export const AnalysisTitles = {
+  rootCauseAnalysis: 'Root cause analysis',
+  riskAnalysis: 'Initial risk analysis',
+  updateOfStandards: 'Update of standard(s)',
+  updateOfRiskRecord: 'Update of risk record'
+};
+
+export const ActionTitles = {
+  CA: 'Corrective action',
+  PA: 'Preventative action',
+  RK: 'Risk control'
 };
 
 const riskScoreTypes = {
@@ -177,27 +183,3 @@ const StringLimits = {
 const SystemName = 'Plio';
 
 const RCAMaxCauses = 5;
-
-export {
-  StandardFilters,
-  RiskFilters,
-  NonConformityFilters,
-  WorkInboxFilters,
-  TruncatedStringLengths,
-  SystemName,
-  UncategorizedTypeSection,
-  StandardsListProjection,
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-  WorkItemsListProjection,
-  StandardsBookSectionsListProjection,
-  StandardTypesListProjection,
-  DepartmentsListProjection,
-  AnalysisTitles,
-  riskScoreTypes,
-  RCAMaxCauses,
-  DEFAULT_POLLING_INTERVAL_FOR_COUNTER,
-  DocumentTitles,
-  StringLimits
-};
