@@ -25,7 +25,7 @@
   "timezone": "Europe/London",
   "currency": "GBP",
   "createdAt": {"$date": 1459508400000},
-  "createdAt": "SecondaryUser",
+  "createdBy": "Plio",
   "updatedAt": null,
   "updatedBy": null,
   "isDeleted": false,
