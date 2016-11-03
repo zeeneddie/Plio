@@ -1,2 +1,4 @@
 **/.meteor
 **/node_modules
+**/lib
+**/packages
