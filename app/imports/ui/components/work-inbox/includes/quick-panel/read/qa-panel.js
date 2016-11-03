@@ -19,10 +19,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     switch (type) {
       case TYPES.VERIFY_ACTION:
         return 'Verify';
+        break;
       case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
        return 'Update completed';
+       break;
       default:
        return 'Complete';
+       break;
     }
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
@@ -45,8 +48,12 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
       case TYPES.VERIFY_ACTION:
         return 'verified';
         break;
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+        return 'completed';
+        break;
       default:
         return `${this.lowercase(this.getButtonText({ type }))}d`;
+        break;
     }
   },
   openQAModal({ type, linkedDoc, ...args }) {
