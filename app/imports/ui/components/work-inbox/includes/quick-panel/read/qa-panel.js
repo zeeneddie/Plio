@@ -16,10 +16,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     return Meteor.userId() === assigneeId;
   },
   getButtonText({ type }) {
-    if (type === TYPES.VERIFY_ACTION) {
-      return 'Verify';
-    } else {
-      return 'Complete';
+    switch (type) {
+      case TYPES.VERIFY_ACTION:
+        return 'Verify';
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+       return 'Update completed';
+      default:
+       return 'Complete';
     }
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {

@@ -7,7 +7,7 @@ import get from 'lodash.get';
 import reducer from "./reducers";
 
 const middlewares = [
-  logger(),
+  // logger(),
   thunk
 ]
 
