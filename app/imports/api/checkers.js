@@ -108,6 +108,25 @@ export const isPlioUser = (userId) => {
   return _.find(adminOrg.users, user => user.userId === userId) !== undefined;
 }
 
+export const isPlioAdmin = (userId) => {
+  if (!SimpleSchema.RegEx.Id.test(userId)) {
+    return false;
+  }
+
+  return !!Organizations.findOne({
+    isAdminOrg: true,
+    users: {
+      $elemMatch: {
+        userId,
+        role: UserMembership.ORG_OWNER,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  });
+}
+
 export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.findOne({
     ...selector,

@@ -18,6 +18,22 @@ import {
 } from '/imports/share/constants.js';
 import { generateSerialNumber } from '/imports/share/helpers.js';
 import OrgNotificationsSender from './org-notifications-sender.js';
+import { Actions } from '/imports/share/collections/actions';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { Departments } from '/imports/share/collections/departments';
+import { Discussions } from '/imports/share/collections/discussions';
+import { Files } from '/imports/share/collections/files';
+import { LessonsLearned } from '/imports/share/collections/lessons';
+import { Messages } from '/imports/share/collections/messages';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Occurrences } from '/imports/share/collections/occurrences';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { Risks } from '/imports/share/collections/risks';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import { Standards } from '/imports/share/collections/standards';
+import { WorkItems } from '/imports/share/collections/work-items';
+
 
 export default OrganizationService = {
   collection: Organizations,
@@ -70,7 +86,7 @@ export default OrganizationService = {
     });
 
     Roles.addUsersToRoles(ownerId, OrgOwnerRoles, organizationId);
-    
+
     new OrgNotificationsSender(organizationId).orgCreated();
 
     return organizationId;
@@ -243,5 +259,40 @@ export default OrganizationService = {
     }, {
       $set: { ...modifier }
     });
+  },
+
+  deleteOrganization({ organizationId }) {
+    const organization = this.collection.findOne({ _id: organizationId }, {
+      fields: { 'users.userId': 1 }
+    });
+
+    const orgUsersIds = _(organization.users).pluck('userId');
+    Roles.removeUsersFromRoles(
+      orgUsersIds,
+      _.union(OrgOwnerRoles, OrgMemberRoles),
+      organizationId
+    );
+
+    const collections = [
+      Actions,
+      AuditLogs,
+      Departments,
+      Discussions,
+      Files,
+      LessonsLearned,
+      Messages,
+      NonConformities,
+      Occurrences,
+      RiskTypes,
+      Risks,
+      StandardsBookSections,
+      StandardTypes,
+      Standards,
+      WorkItems
+    ];
+
+    _(collections).each(coll => coll.direct.remove({ organizationId }));
+
+    return this.collection.remove({ _id: organizationId });
   }
 };

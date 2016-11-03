@@ -527,7 +527,7 @@ var resetInputError = function resetInputError(event) {
   (0, _handleDom.removeClass)($errorIcon, 'show');
 
   var $errorContainer = $modal.querySelector('.form-group');
-  (0, _handleDom.removeClass)($errorContainer, 'has-error');
+  (0, _handleDom.removeClass)($errorContainer, 'has-danger');
 };
 
 /*
@@ -1120,7 +1120,7 @@ sweetAlert.showInputError = _swal.showInputError = function (errorMessage) {
   (0, _handleDom.addClass)($errorIcon, 'show');
 
   var $errorContainer = modal.querySelector('.form-group');
-  (0, _handleDom.addClass)($errorContainer, 'has-error');
+  (0, _handleDom.addClass)($errorContainer, 'has-danger');
 
   $errorContainer.querySelector('.sa-help-text').innerHTML = errorMessage;
 
@@ -1146,7 +1146,7 @@ sweetAlert.resetInputError = _swal.resetInputError = function (event) {
   (0, _handleDom.removeClass)($errorIcon, 'show');
 
   var $errorContainer = $modal.querySelector('.form-group');
-  (0, _handleDom.removeClass)($errorContainer, 'has-error');
+  (0, _handleDom.removeClass)($errorContainer, 'has-danger');
 };
 
 /*

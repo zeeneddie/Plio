@@ -247,7 +247,7 @@ sweetAlert.showInputError = swal.showInputError = function(errorMessage) {
   addClass($errorIcon, 'show');
 
   var $errorContainer = modal.querySelector('.form-group');
-  addClass($errorContainer, 'has-error');
+  addClass($errorContainer, 'has-danger');
 
   $errorContainer.querySelector('.sa-help-text').innerHTML = errorMessage;
 
@@ -274,7 +274,7 @@ sweetAlert.resetInputError = swal.resetInputError = function(event) {
   removeClass($errorIcon, 'show');
 
   var $errorContainer = $modal.querySelector('.form-group');
-  removeClass($errorContainer, 'has-error');
+  removeClass($errorContainer, 'has-danger');
 };
 
 /*

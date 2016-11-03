@@ -7,7 +7,7 @@ import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
   StandardsBookSections
 } from '/imports/share/collections/standards-book-sections.js';
-
+import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
 
@@ -40,27 +40,36 @@ Template.OrgSettings.viewmodel({
     return RiskTypes.find(query);
   },
   ownerId() {
-    return this.organization().ownerId();
+    const organization = this.organization();
+    return organization ? organization.ownerId() : '';
   },
   workflowDefaults() {
-    return this.organization().workflowDefaults;
+    const { workflowDefaults } = this.organization() || {};
+    return workflowDefaults;
   },
   reminders() {
-    return this.organization().reminders;
+    const { reminders } = this.organization() || {};
+    return reminders;
   },
   NCGuidelines() {
-    return this.organization().ncGuidelines;
+    const { ncGuidelines } = this.organization() || {};
+    return ncGuidelines;
   },
   RKGuidelines() {
-    return this.organization().rkGuidelines;
+    const { rkGuidelines } = this.organization() || {};
+    return rkGuidelines;
   },
   rkScoringGuidelines() {
-    return this.organization().rkScoringGuidelines;
+    const { rkScoringGuidelines } = this.organization() || {};
+    return rkScoringGuidelines;
   },
   setNCGuidelineMethod() {
     return setNCGuideline;
   },
   setRKGuidelineMethod() {
     return setRKGuideline;
+  },
+  showDangerZone() {
+    return isOrgOwner(Meteor.userId(), this.organizationId());
   }
 });
