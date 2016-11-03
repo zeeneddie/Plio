@@ -14,6 +14,9 @@ import { setSearchText } from '/client/redux/actions/globalActions';
 import _search_ from '/imports/startup/client/mixins/search';
 import { Standards } from '/imports/share/collections/standards';
 
+// TODO: Because section is collapsed on component mount it is buggy when searching. Need to provide an additional parameter 'shouldCollapseOnMount' which will tell the component if it needs to collapse.
+// BUG: for some reason when searching for items in already opened collapse they do not filter
+
 const mapStateToProps = ({
   standards: { sections, sectionsFiltered },
   global: { searchText }
@@ -63,5 +66,5 @@ export default compose(
     searchResultsText: props.searchText
       ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
       : ''
-  })),
+  }))
 )(StandardsLHS);

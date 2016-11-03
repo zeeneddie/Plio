@@ -25,7 +25,7 @@ class LHSListItem extends React.Component {
   componentDidMount() {
     const collapse = $(this.collapse);
 
-    if (this.props.collapseOnMount && !this.props.collapsed) {
+    if (!this.props.collapsed) {
       this.onToggleCollapse(null, this.props);
     }
 
