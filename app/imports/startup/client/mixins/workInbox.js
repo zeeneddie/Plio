@@ -1,37 +1,60 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Actions } from '/imports/share/collections/actions.js';
-import { ActionTypes } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { WorkInboxFilters } from '/imports/api/constants.js';
-import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
-import { AnalysisTitles } from '/imports/api/constants.js';
-import { capitalize } from '/imports/share/helpers';
+import {
+  WorkItemsStore,
+  ProblemTypes,
+  ActionTypes
+} from '/imports/share/constants.js';
+import { AnalysisTitles, ActionTitles } from '/imports/api/constants.js';
+import { capitalize, lowercase } from '/imports/share/helpers';
+
+const {
+  riskAnalysis,
+  rootCauseAnalysis,
+  updateOfRiskRecord,
+  updateOfStandards
+} = AnalysisTitles;
 
 export default {
   getTypeText({ type, linkedDoc }) {
-    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
-      if (linkedDoc) {
-        if (linkedDoc.type === ProblemTypes.RISK) {
-          return capitalize(AnalysisTitles.riskAnalysis);
-        } else {
-          return capitalize(AnalysisTitles.rootCauseAnalysis);
-        }
+    const result = (function() {
+      let title;
+      const COMPLETE = 'Complete';
+      const VERIFY = 'Verify';
+      const getText = (action, text) => `${action} ${lowercase(text)}`;
+      switch(linkedDoc && type) {
+        case WorkItemsStore.TYPES.COMPLETE_ANALYSIS:
+          title = linkedDoc.type === ProblemTypes.RISK
+            ? riskAnalysis
+            : rootCauseAnalysis;
+          return getText(COMPLETE, title);
+          break;
+        case WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+          title = linkedDoc.type === ProblemTypes.RISK
+            ? updateOfRiskRecord
+            : updateOfStandards;
+          return getText(COMPLETE, title);
+          break;
+        case WorkItemsStore.TYPES.COMPLETE_ACTION:
+          title = ActionTitles[linkedDoc.type];
+          return getText(COMPLETE, title);
+          break;
+        case WorkItemsStore.TYPES.VERIFY_ACTION:
+          title = ActionTitles[linkedDoc.type];
+          return getText(VERIFY, title);
+          break;
+        default:
+          return type;
+          break;
       }
-    } else if (type === WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS) {
-      if (linkedDoc) {
-        if (linkedDoc.type === ProblemTypes.RISK) {
-          return capitalize(AnalysisTitles.updateOfRiskRecord);
-        } else {
-          return capitalize(AnalysisTitles.updateOfStandards);
-        }
-      }
-    }
-    
-    return capitalize(type);
+    })();
+
+    return result;
   },
   getLinkedDocTypeText({ type, linkedDoc }) {
-    const typeText = this.getTypeText({ type, linkedDoc });
-    return capitalize(typeText.substr(typeText.indexOf(' ') + 1));
+    return capitalize(this.getTypeText({ type, linkedDoc }).replace(/^(complete|verify)\s/i, ''));
   },
   currentWorkItem(){
     return WorkItems.findOne({ _id: this.workItemId() });

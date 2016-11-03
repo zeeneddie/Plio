@@ -47,7 +47,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     }
   },
   openQAModal({ type, linkedDoc, ...args }) {
-    const _title = this.capitalize(type);
+    const _title = this.getTypeText({ type, linkedDoc });
     const helpText = ((type) => {
       switch (type) {
         case TYPES.COMPLETE_ACTION:
@@ -62,13 +62,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           return;
       }
     })(type);
-    
+
     this.modal().open({
       _title,
+      helpText,
       operation: this.getOperationText({ type }),
       typeText: this.getLinkedDocTypeText({ type, linkedDoc }),
       doc: { type, linkedDoc, ...args },
-      helpText: helpText,
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
     });

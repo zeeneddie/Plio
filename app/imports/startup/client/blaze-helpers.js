@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { capitalize } from '/imports/share/helpers';
 
 const cutSpacebarsKw = fn => (...args) => _.last(args) instanceof Spacebars.kw
   ? fn(...Array.prototype.slice.call(args, 0, args.length - 1))
@@ -13,6 +14,7 @@ Template.registerHelper('callback', function(param, obj) {
 });
 
 const helpers = {
+  capitalize,
   log: console.log,
   not: val => !val,
   eq: (val1, val2) => Object.is(val1, val2),
