@@ -1,14 +1,22 @@
 import { createStore, applyMiddleware } from "redux";
 import { enableBatching } from 'redux-batched-actions';
+import get from 'lodash.get';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-import get from 'lodash.get';
+import throttleActions from 'redux-throttle';
 
 import reducer from "./reducers";
 
+const defaultWait = 300;
+const defaultThrottleOption = {
+  leading: true,
+  trailing: true
+};
+
 const middlewares = [
+  thunk,
   logger(),
-  thunk
+  throttleActions(defaultWait, defaultThrottleOption)
 ]
 
 const store = createStore(

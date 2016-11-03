@@ -22,7 +22,10 @@ export function toggleSectionCollapsed(index, shouldCloseOthers = false) {
       index,
       shouldCloseOthers
     },
-    type: TOGGLE_SECTION_COLLAPSED
+    type: TOGGLE_SECTION_COLLAPSED,
+    meta: {
+      throttle: 400
+    }
   }
 }
 

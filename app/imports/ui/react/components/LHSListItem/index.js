@@ -29,7 +29,7 @@ class LHSListItem extends React.Component {
       this.onToggleCollapse(null, this.props);
     }
 
-    collapse.on('show.bs.collapse', e => this.onCollapseShow);
+    collapse.on('show.bs.collapse', this.onCollapseShow);
 
     collapse.on('shown.bs.collapse', this.onCollapseShown);
 
