@@ -16,10 +16,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     return Meteor.userId() === assigneeId;
   },
   getButtonText({ type }) {
-    if (type === TYPES.VERIFY_ACTION) {
-      return 'Verify';
-    } else {
-      return 'Complete';
+    switch (type) {
+      case TYPES.VERIFY_ACTION:
+        return 'Verify';
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+       return 'Update completed';
+      default:
+       return 'Complete';
     }
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
@@ -47,7 +50,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     }
   },
   openQAModal({ type, linkedDoc, ...args }) {
-    const _title = this.capitalize(type);
+    const _title = this.getTypeText({ type, linkedDoc });
     const helpText = ((type) => {
       switch (type) {
         case TYPES.COMPLETE_ACTION:
@@ -62,7 +65,7 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           return;
       }
     })(type);
-    
+
     this.modal().open({
       _title,
       operation: this.getOperationText({ type }),
