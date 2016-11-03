@@ -75,5 +75,13 @@ Template.CustomersSettings.viewmodel({
   },
   deleteOrganizationFn() {
     return this.deleteOrganization.bind(this);
+  },
+  afterDelete(err, res, organizationId) {
+    if (!err && (organizationId === this.organizationId())) {
+      FlowRouter.go('hello');
+    }
+  },
+  afterDeleteFn() {
+    return this.afterDelete.bind(this);
   }
 });

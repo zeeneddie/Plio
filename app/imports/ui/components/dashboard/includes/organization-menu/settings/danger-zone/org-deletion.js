@@ -13,10 +13,13 @@ Template.OrgSettings_OrgDeletion.viewmodel({
   deleteOrganizationFn() {
     return this.deleteOrganization.bind(this);
   },
-  beforeDelete() {
-    this.modal().close();
+  afterDelete(err) {
+    if (!err) {
+      this.modal().close();
+      FlowRouter.go('hello');
+    }
   },
-  beforeDeleteFn() {
-    return this.beforeDelete.bind(this);
+  afterDeleteFn() {
+    return this.afterDelete.bind(this);
   }
 });

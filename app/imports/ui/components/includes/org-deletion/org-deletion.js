@@ -63,10 +63,11 @@ Template.OrgDeletion.viewmodel({
   },
   _deleteOrganization(password) {
     const { name:orgName } = this.organization() || {};
+    const organizationId = this.organizationId();
     password = SHA256(password);
 
     this.deleteOrganization({
-      organizationId: this.organizationId(),
+      organizationId,
       password
     }, (err, res) => {
       if (err) {
@@ -75,7 +76,7 @@ Template.OrgDeletion.viewmodel({
         swal('Success', `Organization ${orgName} has been deleted`, 'success');
       }
 
-      this.afterDelete && this.afterDelete(err, res);
+      this.afterDelete && this.afterDelete(err, res, organizationId);
     });
   }
 });

@@ -31,7 +31,8 @@
             {{#FormField}}
               {{> OrgDeletion
                   organizationId=this._id
-                  deleteOrganization=deleteOrganizationFn}}
+                  deleteOrganization=deleteOrganizationFn
+                  afterDelete=afterDeleteFn}}
             {{/FormField}}
           {{/if}}
         </div>
