@@ -34,7 +34,7 @@ const StandardsLHSListItem = (props) => (
           </p>
         )}
         <p className="list-group-item-text pull-left">
-          {props.type.title}
+          {props.type && props.type.title}
         </p>
         {props.isDeleted && (
           <p className="list-group-item-text pull-right">

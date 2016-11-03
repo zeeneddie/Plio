@@ -115,6 +115,8 @@ export const lengthStandards = compose(length, propStandards);
 
 export const flattenMapItems = flattenMap(propItems);
 
+export const flattenMapStandards = flattenMap(propStandards);
+
 export const assoc = curry((prop, val, obj) => Object.assign({}, obj, { [prop]: val }));
 
 export const invokeC = curry((path, obj, ...args) => invoke(obj, path, ...args));

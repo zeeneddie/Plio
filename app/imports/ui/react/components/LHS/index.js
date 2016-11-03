@@ -17,15 +17,15 @@ const LHS = ({
           className="form-control"
           placeholder="Search..."
           disabled={animating}
-          value={searchText}
-          onFocus={e => onFocus(e)}
-          onChange={e => onChange(e)} />
+          defaultValue={searchText}
+          onFocus={onFocus}
+          onChange={onChange} />
         <i className="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
       {onModalButtonClick && (
         <button
           className="btn btn-primary"
-          onClick={e => onModalButtonClick(e)}>
+          onClick={onModalButtonClick}>
           <i className="fa fa-plus"></i>
           <span>Add</span>
         </button>

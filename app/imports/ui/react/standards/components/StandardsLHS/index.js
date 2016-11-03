@@ -5,7 +5,10 @@ import LHSListItem from '../../../components/LHSListItem';
 import StandardsLHSListItemContainer from '../../containers/StandardsLHSListItemContainer';
 
 const StandardsLHS = (props) => (
-  <LHS>
+  <LHS
+    searchText={props.searchText}
+    searchResultsText={props.searchResultsText}
+    onChange={props.onSearchTextChange}>
     {props.sections.map((section) => (
       <LHSListItem
         key={section._id}
@@ -16,14 +19,16 @@ const StandardsLHS = (props) => (
         onToggleCollapse={props.onToggleCollapse}>
 
         <div className="list-group">
-          {section.standards.map((standard) => (
-            <StandardsLHSListItemContainer
-              key={standard._id}
-              type={standard.type}
-              section={section}
-              orgSerialNumber={props.orgSerialNumber}
-              {...standard}/>
-          ))}
+          {section.standards.map((standard) => {
+            return (
+              <StandardsLHSListItemContainer
+                key={standard._id}
+                type={standard.type}
+                section={section}
+                orgSerialNumber={props.orgSerialNumber}
+                {...standard}/>
+            )
+          })}
         </div>
 
       </LHSListItem>

@@ -1,22 +1,23 @@
 import {
-  SET_SECTIONS,
+  INIT_SECTIONS,
   SET_STANDARDS,
   SET_TYPES,
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
   TOGGLE_SECTION_COLLAPSED,
-  CLOSE_COLLAPSIBLES
+  SET_FILTERED_STANDARDS,
+  SET_FILTERED_SECTIONS
 } from './types';
 
-export function setSections(payload) {
+export function initSections(payload) {
   return {
     payload,
-    type: SET_SECTIONS
+    type: INIT_SECTIONS
   }
 }
 
-export function toggleSectionCollapsed(index, shouldCloseOthers = false) {
+export function toggleSectionCollapsed(index, shouldCloseOthers = true) {
   return {
     payload: {
       index,
@@ -26,13 +27,6 @@ export function toggleSectionCollapsed(index, shouldCloseOthers = false) {
     meta: {
       throttle: 400
     }
-  }
-}
-
-export function closeCollapsibles(payload) {
-  return {
-    payload,
-    type: CLOSE_COLLAPSIBLES
   }
 }
 
@@ -68,5 +62,19 @@ export function setIsCardReady(payload) {
   return {
     payload,
     type: SET_IS_CARD_READY
+  }
+}
+
+export function setFilteredStandards(payload) {
+  return {
+    payload,
+    type: SET_FILTERED_STANDARDS
+  }
+}
+
+export function setFilteredSections(payload) {
+  return {
+    payload,
+    type: SET_FILTERED_SECTIONS
   }
 }

@@ -20,7 +20,7 @@ export const SET_RESET_COMPLETED = 'SET_RESET_COMPLETED';
 
 // Standards types
 
-export const SET_SECTIONS = 'SET_SECTIONS';
+export const INIT_SECTIONS = 'INIT_SECTIONS';
 
 export const TOGGLE_SECTION_COLLAPSED = 'TOGGLE_SECTION_COLLAPSED';
 
@@ -34,7 +34,9 @@ export const SET_STANDARD_ID = 'SET_STANDARD_ID';
 
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
-export const CLOSE_COLLAPSIBLES = 'CLOSE_COLLAPSIBLES';
+export const SET_FILTERED_STANDARDS = 'SET_FILTERED_STANDARDS';
+
+export const SET_FILTERED_SECTIONS = 'SET_FILTERED_SECTIONS';
 
 // Organizations types
 
@@ -47,3 +49,5 @@ export const SET_ORG_ID = 'SET_ORG_ID';
 // global
 
 export const SET_FILTER = 'SET_FILTER';
+
+export const SET_SEARCH_TEXT = 'SET_SEARCH_TEXT';

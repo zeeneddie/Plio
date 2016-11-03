@@ -1,11 +1,17 @@
+import invoke from 'lodash.invoke';
+
 export default {
   searchResultsNumber: 0,
 
   searchObject(prop, fields) {
+    return this.searchQuery(invoke(this, prop), fields);
+  },
+
+  searchQuery(value, fields) {
     const searchObject = {};
 
-    if (this[prop]()) {
-      const words = this[prop]().trim().split(' ');
+    if (value) {
+      const words = value.trim().split(' ');
       let r;
       try {
         r = new RegExp(`.*(${words.join(' ')}).*`, 'i');

@@ -25,7 +25,7 @@ class LHSListItem extends React.Component {
   componentDidMount() {
     const collapse = $(this.collapse);
 
-    if (!this.props.collapsed) {
+    if (this.props.collapseOnMount && !this.props.collapsed) {
       this.onToggleCollapse(null, this.props);
     }
 
@@ -56,7 +56,7 @@ class LHSListItem extends React.Component {
           )}
         </a>
         <div
-          className={`list-group-collapse collapse`}
+          className="list-group-collapse collapse"
           ref={c => this.collapse = c}>
           <div className="list-group">
             {this.props.children}

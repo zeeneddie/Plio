@@ -12,7 +12,8 @@ import {
   findById,
   sortArrayByTitlePrefix,
   propEq,
-  not
+  not,
+  flattenMapStandards
 } from '/imports/api/helpers.js';
 
 Template.StandardsList.viewmodel({
@@ -47,7 +48,6 @@ Template.StandardsList.viewmodel({
   },
   _findStandardForFilter(_id) {
     const finder = findById(_id);
-    const flattenMapStandards = flattenMap(property('standards'));
     const activeStandardFilterId = this.activeStandardFilterId();
     const results = (items) => ({
       result: findById(_id, items),

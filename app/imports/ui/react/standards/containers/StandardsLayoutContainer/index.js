@@ -2,6 +2,9 @@ import React from 'react';
 import { composeWithTracker } from 'react-komposer';
 import property from 'lodash.property';
 import get from 'lodash.get';
+import { compose, lifecycle } from 'recompose';
+import { connect } from 'react-redux';
+import { batchActions } from 'redux-batched-actions';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -13,9 +16,26 @@ import {
   BackgroundSubs
 } from '/imports/startup/client/subsmanagers';
 import PreloaderPage from '../../../components/PreloaderPage';
-import StandardsPageContainer from '../../containers/StandardsPageContainer';
+import StandardsPage from '../../components/StandardsPage';
+import {
+  initSections,
+  setStandards,
+  setTypes,
+  setStandard,
+  setStandardId,
+  setIsCardReady
+} from '/client/redux/actions/standardsActions';
+import {
+  setOrg,
+  setOrgId,
+  setOrgSerialNumber
+} from '/client/redux/actions/organizationsActions';
+import {
+  setFilter
+} from '/client/redux/actions/globalActions';
+import { getState } from '/client/redux/store';
 
-const onPropsChange = ({ content }, onData) => {
+const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const standardId = FlowRouter.getParam('standardId');
   const filter = FlowRouter.getQueryParam('filter');
@@ -46,19 +66,44 @@ const onPropsChange = ({ content }, onData) => {
       return true;
     })();
 
+    const actions = [
+      setOrg(organization),
+      setOrgId(organizationId),
+      setOrgSerialNumber(serialNumber),
+      setTypes(types),
+      setStandards(standards),
+      setStandard(standard),
+      setStandardId(standardId),
+      setIsCardReady(isCardReady),
+      setFilter(filter),
+      initSections(sections)
+    ];
+
+    dispatch(batchActions(actions));
+
     onData(null, {
-      organization,
       content,
-      sections,
-      types,
-      standards,
-      standard,
-      standardId,
-      isCardReady,
-      orgSerialNumber: serialNumber
+      ...getState('standards'),
+      ...getState('organizations'),
+      ...getState('global')
     });
   }
 };
 
 
-export default composeWithTracker(onPropsChange, PreloaderPage)(StandardsPageContainer);
+export default compose(
+  connect(),
+  composeWithTracker(onPropsChange, PreloaderPage),
+  lifecycle({
+    componentWillMount() {
+      if (FlowRouter.getRouteName() !== 'standard') {
+        const { orgSerialNumber } = this.props;
+
+        FlowRouter.go('standard', {
+          orgSerialNumber,
+          standardId: get(this.props, 'sections[0].standards[0]._id')
+        });
+      }
+    }
+  })
+)(StandardsPage);
