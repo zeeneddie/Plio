@@ -10,16 +10,10 @@ Template.OrgSettings_OrgDeletion.viewmodel({
   deleteOrganization({ organizationId, password }, cb) {
     deleteOrganization.call({ organizationId, ownerPassword: password }, cb);
   },
-  deleteOrganizationFn() {
-    return this.deleteOrganization.bind(this);
-  },
   afterDelete(err) {
     if (!err) {
       this.modal().close();
       FlowRouter.go('hello');
     }
-  },
-  afterDeleteFn() {
-    return this.afterDelete.bind(this);
   }
 });
