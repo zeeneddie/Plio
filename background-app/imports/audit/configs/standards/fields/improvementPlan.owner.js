@@ -1,5 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
 
 
@@ -26,6 +26,31 @@ export default {
           '{{userName}} changed improvement plan\'s owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
           '{{userName}} removed improvement plan\'s owner of {{{docDesc}}} {{{docName}}}'
+      }
+    },
+    {
+      shouldSendNotification({ diffs }) {
+        const { kind:changeKind } = diffs['improvementPlan.owner'] || {};
+
+        return (changeKind === ChangesKinds.FIELD_ADDED)
+            || (changeKind === ChangesKinds.FIELD_CHANGED);
+      },
+      text: '{{{userName}}} selected you as improvement plan owner for {{{docDesc}}} {{{docName}}}',
+      title: 'You have been selected as improvement plan owner',
+      sendBoth: true,
+      emailTemplateData({ newDoc }) {
+        return {
+          button: {
+            label: 'View standard',
+            url: this.docUrl(newDoc)
+          }
+        };
+      },
+      receivers({ diffs, user }) {
+        const userId = getUserId(user);
+        const { newValue:newOwnerId } = diffs['improvementPlan.owner'] || {};
+
+        return (newOwnerId && (userId !== newOwnerId)) ? [newOwnerId] : [];
       }
     }
   ],

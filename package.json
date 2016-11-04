@@ -1,0 +1,19 @@
+{
+  "name": "plio-dev-toolsgit",
+  "private": true,
+  "scripts": {
+    "lint-app": "./node_modules/.bin/eslint app",
+    "lint-background-app": "./node_modules/.bin/eslint background"
+  },
+  "devDependencies": {
+    "eslint": "^2.13.1",
+    "babel-eslint": "^6.1.2",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-config-meteor": "0.0.9",
+    "eslint-import-resolver-meteor": "^0.3.3",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^1.5.5",
+    "eslint-plugin-meteor": "^3.6.0",
+    "eslint-plugin-react": "^5.2.2"
+  }
+}
