@@ -63,7 +63,7 @@ The latest ui prototype:
 
 In order to contribute to this repository you should follow next steps:
 
-1. Run in root dir cloned repository `npm run install` for install dev dependencies.
+1. Run in root dir of cloned repository `npm run install` for install dev dependencies.
 2. Choose unassigned card from Trello's "Backlog" or take already assigned to you card.
 3. Move your card into "In progress" column.
 4. Create new branch based on `devel`. Give you branch name that makes sense. Include the id of the task if there is any (like `PL2-org-settings`).
