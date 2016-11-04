@@ -1,4 +1,9 @@
 .modal {
+  &, .form-control, .btn {
+    @media (min-width: 600px) {
+      font-size: 15px;
+    }
+  }
   .relative {
     .card {
       position: inherit;

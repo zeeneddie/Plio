@@ -421,6 +421,8 @@ input:focus ~ .clear-field {
 .form-group-buttons {
   .btn, .btn-group {
     margin-right: 3px;
+    display: block;
+    overflow: auto;
   }
 
   .btn-group .btn {
