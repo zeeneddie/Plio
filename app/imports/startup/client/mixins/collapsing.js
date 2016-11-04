@@ -25,7 +25,7 @@ export default {
     }
   },
   // Recursive function to expand items one after another
-  expandCollapseItems(array = [], { index = 0, complete = () => {}, expandNotExpandable = false } = {}) {
+  expandCollapseItems(array = [], { index = 0, complete = () => {}, forceExpand = false } = {}) {
     if (array.length === 0 && _.isFunction(complete)) return complete();
 
     if (index >= array.length) return;
@@ -34,14 +34,14 @@ export default {
 
     const closeAllOnCollapse = item.closeAllOnCollapse.value; // nonreactive value
 
-    !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
+    !!forceExpand && !!closeAllOnCollapse && item.closeAllOnCollapse(false);
 
     const cb = () => {
-      !!expandNotExpandable && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
+      !!forceExpand && !!closeAllOnCollapse && item.closeAllOnCollapse(true);
 
       if (index === array.length - 1 && _.isFunction(complete)) complete();
 
-      return this.expandCollapseItems(array, { index: index + 1, complete, expandNotExpandable });
+      return this.expandCollapseItems(array, { index: index + 1, complete, forceExpand });
     };
 
     return item.toggleCollapse(cb);
