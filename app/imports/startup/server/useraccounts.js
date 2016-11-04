@@ -2,7 +2,7 @@ import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from '/imports/api/organizations/organization-service.js';
 import { OrgOwnerRoles } from '/imports/share/constants.js';
-
+import { ORG_EnsureNameIsUnique } from '/imports/api/checkers';
 
 function postSignUpHook(userId, info) {
   const orgName = info.profile.organizationName || 'My Organization';
@@ -10,6 +10,8 @@ function postSignUpHook(userId, info) {
 
   let orgId;
   try {
+    ORG_EnsureNameIsUnique({ name: orgName });
+
     orgId = OrganizationService.insert({
       name: orgName,
       timezone: orgTimezone,
