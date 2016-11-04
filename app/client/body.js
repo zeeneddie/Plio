@@ -1,6 +1,8 @@
 import { Template } from 'meteor/templating';
-import { terminateUploading } from '/imports/api/files/methods.js';
-import NotificationSender from '/imports/share/utils/NotificationSender';
+import { Meteor } from 'meteor/meteor';
+import { Mongo } from 'meteor/mongo';
+import { Random } from 'meteor/random';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.body.viewmodel({
   share: ['uploader'],
@@ -32,17 +34,17 @@ Template.body.viewmodel({
       }
     });
 
-		this.lastMessage().find().observe({
-			changed: (newDoc, oldDoc) => {
+    this.lastMessage().find().observe({
+      changed: (newDoc) => {
         if (compare(key) && !Object.is(FlowRouter.getRouteName(), 'standardDiscussion')) {
           const {
             _id,
             createdBy,
-            userFullNameOrEmail:title,
-            text:body,
-            userAvatar:icon,
-            route = {}
-          } = newDoc;
+            userFullNameOrEmail: title,
+            text: body,
+            userAvatar: icon,
+            route = {},
+           } = newDoc;
 
           if (createdBy === Meteor.userId()) return;
 
@@ -51,20 +53,22 @@ Template.body.viewmodel({
             title,
             body,
             icon,
-            url: FlowRouter.url(route.name, route.params, route.query)
+            url: FlowRouter.url(route.name, route.params, route.query),
           });
         }
-			}
-		});
-	},
+      },
+    });
+  },
   onRendered() {
     window.onbeforeunload = () => {
       if (this.uploads() && this.uploads().length) {
-        toastr.warning('File uploading is in progress');
+        window.toastr.warning('File uploading is in progress');
         return true;
       }
+
+      return undefined;
     };
 
     this.notifyOnIncomeMessages();
-  }
+  },
 });
