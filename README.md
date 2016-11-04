@@ -63,16 +63,17 @@ The latest ui prototype:
 
 In order to contribute to this repository you should follow next steps:
 
-1. Choose unassigned card from Trello's "Backlog" or take already assigned to you card.
-2. Move your card into "In progress" column.
-3. Create new branch based on `devel`. Give you branch name that makes sense. Include the id of the task if there is any (like `PL2-org-settings`).
-4. Start working on your task. If you don't know how to do something, then google it. If you stuck on something for more that 15 minutes, ask your colleagues for help.
-5. When card is finished, review your code and refactor complex/hard to understand parts of it (usually long functions or lines of code).
-6. Test all features that was changed/edited/improved by you. Fix all bugs you found. Next, run `./lint.sh` and fix all linter errors.
-7. If there are new commits on `devel` merge `devel` to your branch using `--no-ff` flag (see "Merging" section for details).
-8. Create pull to `devel`. The name of PR (Pull Request) should contain the id and short description. It should be simple but not ambiguous. Put your pull request's url into related card's description.
-9. Move your card into Trello's "Review" column. Someone of your collegues will review\* it. If your pull request was merged go to step #10. If your pull request is closed you should review comments in pull request go to step #1. If you don't understand any comment on your pull request, ask reviewer about it.
-10. Congratulations! Your task is done! Go to step 1.
+1. Run in root dir cloned repository `npm run install` for install dev dependencies.
+2. Choose unassigned card from Trello's "Backlog" or take already assigned to you card.
+3. Move your card into "In progress" column.
+4. Create new branch based on `devel`. Give you branch name that makes sense. Include the id of the task if there is any (like `PL2-org-settings`).
+5. Start working on your task. If you don't know how to do something, then google it. If you stuck on something for more that 15 minutes, ask your colleagues for help.
+6. When card is finished, review your code and refactor complex/hard to understand parts of it (usually long functions or lines of code).
+7. Test all features that was changed/edited/improved by you. Fix all bugs you found. Next, run `npm run lint app` or `npm run lint background-app` and fix all linter errors.
+8. If there are new commits on `devel` merge `devel` to your branch using `--no-ff` flag (see "Merging" section for details).
+9. Create pull to `devel`. The name of PR (Pull Request) should contain the id and short description. It should be simple but not ambiguous. Put your pull request's url into related card's description.
+10. Move your card into Trello's "Review" column. Someone of your collegues will review\* it. If your pull request was merged go to step #10. If your pull request is closed you should review comments in pull request go to step #1. If you don't understand any comment on your pull request, ask reviewer about it.
+11. Congratulations! Your task is done! Go to step 1.
 
 \* All pull requests should be __reviewed__ by other team member before merging with `devel`.
 
