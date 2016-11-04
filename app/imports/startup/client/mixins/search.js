@@ -10,10 +10,16 @@ export default {
       let r;
 
       try {
-        console.log(value);
-        r = precise
-          ? new RegExp(`(\d\.?)*${value}$`, 'i')
-          : new RegExp(`.*(${value}).*`, 'i');
+        if (precise) {
+          r = new RegExp(`.*(${value}).*`, 'i');
+        } else {
+          r = value.split(' ')
+              .filter(word => !!word)
+              .map(word => `(?=.*\\b.*${word}.*\\b)`)
+              .join('');
+
+          r = new RegExp(`^${r}.*$`, 'i');
+        }
       } catch (err) {
       } // ignore errors
 
