@@ -1,6 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { getReceiversForIPReviewDate } from '../helpers';
 
 
 export default {
@@ -17,7 +17,7 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s review date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
+          '{{userName}} changed improvement plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
       }
     }
   ],
@@ -34,5 +34,7 @@ export default {
       oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceiversForIPReviewDate({ newDoc, user });
+  }
 };

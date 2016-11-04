@@ -7,3 +7,18 @@ export const getReceivers = function({ newDoc, user }) {
 
   return (owner !== userId) ? [owner]: [];
 };
+
+export const getReceiversForIPReviewDate = function({ newDoc, user }) {
+  const { owner:standardOwnerId } = newDoc;
+  const { owner:IPOwnerId } = newDoc.improvementPlan;
+  const userId = getUserId(user);
+
+  const receivers = new Set();
+  _([standardOwnerId, IPOwnerId]).each((_id) => {
+    if (_id && (_id !== userId)) {
+      receivers.add(_id);
+    }
+  });
+
+  return Array.from(receivers);
+};
