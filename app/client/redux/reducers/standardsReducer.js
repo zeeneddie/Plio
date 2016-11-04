@@ -3,6 +3,7 @@ import { UncategorizedTypeSection } from '/imports/api/constants';
 
 import {
   INIT_SECTIONS,
+  SET_SECTIONS,
   SET_STANDARDS,
   SET_TYPES,
   SET_STANDARD,
@@ -28,6 +29,8 @@ export default function reducer(state=initialState, action) {
   switch(action.type) {
     case INIT_SECTIONS:
       return mapSections(state, action.payload);
+    case SET_SECTIONS:
+      return { ...state, sections: action.payload };
     case TOGGLE_SECTION_COLLAPSED:
       return toggleSection(state, action);
     case SET_STANDARDS:

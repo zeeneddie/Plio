@@ -1,10 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps } from 'recompose';
+import { compose, withHandlers, mapProps, withProps, withState } from 'recompose';
 import { batchActions } from 'redux-batched-actions';
 import property from 'lodash.property';
 
-import { propEq, lengthStandards, extractIds, flattenMapStandards } from '/imports/api/helpers';
+import {
+  propEq,
+  lengthStandards,
+  extractIds,
+  flattenMapStandards,
+  not,
+  assoc
+} from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
 import {
   toggleSectionCollapsed,
@@ -13,9 +20,6 @@ import {
 import { setSearchText } from '/client/redux/actions/globalActions';
 import _search_ from '/imports/startup/client/mixins/search';
 import { Standards } from '/imports/share/collections/standards';
-
-// TODO: Because section is collapsed on component mount it is buggy when searching. Need to provide an additional parameter 'shouldCollapseOnMount' which will tell the component if it needs to collapse.
-// BUG: for some reason when searching for items in already opened collapse they do not filter
 
 const mapStateToProps = ({
   standards: { sections, sectionsFiltered },
@@ -45,6 +49,9 @@ const onSearchTextChange = _.debounce(({ dispatch, sections }, value) => {
     standards: section.standards.filter(standard => extractIds(standards).includes(standard._id))
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
+  const otherSections = sections
+    .filter(({ _id }) => !extractIds(newSections).includes(_id))
+    .map(assoc('collapsed', true));
 
   const actions = [
     setSearchText(value),
@@ -57,7 +64,7 @@ const onSearchTextChange = _.debounce(({ dispatch, sections }, value) => {
 export default compose(
   withHandlers({
     onToggleCollapse,
-    onSearchTextChange: props => e => onSearchTextChange(props, e.target.value)
+    onSearchTextChange: props => e => onSearchTextChange(props, e.target.value),
   }),
   connect(mapStateToProps),
   mapProps(props => ({
@@ -66,5 +73,13 @@ export default compose(
     searchResultsText: props.searchText
       ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
       : ''
+  })),
+  withProps(ownProps => ({
+    shouldUpdate: (props, nextProps) => {
+      const getChildrenCount = ({ children }) =>
+        React.Children.map(children, ({ props }) => React.Children.count(props.children))[0];
+
+      return getChildrenCount(props) !== getChildrenCount(nextProps);
+    }
   }))
 )(StandardsLHS);

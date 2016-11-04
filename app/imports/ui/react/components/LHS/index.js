@@ -35,7 +35,7 @@ const LHS = ({
     <div className="list-group list-group-accordion">
       {children}
 
-      {searchText && (
+      {searchResultsText && (
         <div className="list-group-item list-group-subheading search-results-meta text-muted">{searchResultsText}</div>
       )}
     </div>

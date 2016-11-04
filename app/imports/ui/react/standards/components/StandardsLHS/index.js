@@ -9,26 +9,25 @@ const StandardsLHS = (props) => (
     searchText={props.searchText}
     searchResultsText={props.searchResultsText}
     onChange={props.onSearchTextChange}>
-    {props.sections.map((section) => (
+    {props.sections.map(section => (
       <LHSListItem
         key={section._id}
         item={section}
         lText={section.title}
         collapsed={section.collapsed}
-        onCollapseShow={props.onCollapseShow}
+        shouldUpdate={props.shouldUpdate}
+        shouldCollapseOnMount={!props.isCollapsedOnMount}
+        onMount={props.onMount}
         onToggleCollapse={props.onToggleCollapse}>
 
         <div className="list-group">
-          {section.standards.map((standard) => {
-            return (
-              <StandardsLHSListItemContainer
-                key={standard._id}
-                type={standard.type}
-                section={section}
-                orgSerialNumber={props.orgSerialNumber}
-                {...standard}/>
-            )
-          })}
+          {section.standards.map(standard => (
+            <StandardsLHSListItemContainer
+              key={standard._id}
+              section={section}
+              orgSerialNumber={props.orgSerialNumber}
+              {...standard}/>
+          ))}
         </div>
 
       </LHSListItem>

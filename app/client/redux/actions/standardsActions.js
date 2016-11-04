@@ -1,5 +1,6 @@
 import {
   INIT_SECTIONS,
+  SET_SECTIONS,
   SET_STANDARDS,
   SET_TYPES,
   SET_STANDARD,
@@ -14,6 +15,13 @@ export function initSections(payload) {
   return {
     payload,
     type: INIT_SECTIONS
+  }
+}
+
+export function setSections(payload) {
+  return {
+    payload,
+    type: SET_SECTIONS
   }
 }
 

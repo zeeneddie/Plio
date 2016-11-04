@@ -6,14 +6,15 @@ class LHSListItem extends React.Component {
 
     this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onToggleCollapse = props.onToggleCollapse.bind(this);
+    this.onMount = props.onMount && props.onMount.bind(this);
     this.onCollapseShow = props.onCollapseShow && props.onCollapseShow.bind(this);
     this.onCollapseShown = props.onCollapseShown && props.onCollapseShown.bind(this);
     this.onCollapseHide = props.onCollapseHide && props.onCollapseHide.bind(this);
     this.onCollapseHidden = props.onCollapseHidden && props.onCollapseHidden.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.shouldCollapse(nextProps);
+  shouldComponentUpdate(nextProps) {
+    return this.shouldCollapse(nextProps) || (!this.props.shouldUpdate || this.props.shouldUpdate(this.props, nextProps));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -25,8 +26,8 @@ class LHSListItem extends React.Component {
   componentDidMount() {
     const collapse = $(this.collapse);
 
-    if (!this.props.collapsed) {
-      this.onToggleCollapse(null, this.props);
+    if (this.props.shouldCollapseOnMount && !this.props.collapsed) {
+      this.toggleCollapse(null, this.props);
     }
 
     collapse.on('show.bs.collapse', this.onCollapseShow);
