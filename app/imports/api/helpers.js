@@ -113,6 +113,10 @@ export const propStandards = property('standards');
 
 export const lengthStandards = compose(length, propStandards);
 
+export const propSections = property('sections');
+
+export const lengthSections = compose(length, propSections);
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);

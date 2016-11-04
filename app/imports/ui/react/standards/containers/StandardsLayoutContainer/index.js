@@ -19,11 +19,12 @@ import PreloaderPage from '../../../components/PreloaderPage';
 import StandardsPage from '../../components/StandardsPage';
 import {
   initSections,
+  initTypes,
   setStandards,
   setTypes,
   setStandard,
   setStandardId,
-  setIsCardReady
+  setIsCardReady,
 } from '/client/redux/actions/standardsActions';
 import {
   setOrg,
@@ -38,7 +39,7 @@ import { getState } from '/client/redux/store';
 const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const standardId = FlowRouter.getParam('standardId');
-  const filter = FlowRouter.getQueryParam('filter');
+  const filter = parseInt(FlowRouter.getQueryParam('filter'), 10);
   const layoutSubscription = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber);
 
   if (layoutSubscription.ready()) {
@@ -76,16 +77,16 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setStandardId(standardId),
       setIsCardReady(isCardReady),
       setFilter(filter),
-      initSections(sections)
+      initSections(sections),
+      initTypes(types),
     ];
 
     dispatch(batchActions(actions));
 
     onData(null, {
       content,
-      ...getState('standards'),
-      ...getState('organizations'),
-      ...getState('global')
+      organization,
+      orgSerialNumber: serialNumber
     });
   }
 };

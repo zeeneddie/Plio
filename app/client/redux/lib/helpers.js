@@ -2,30 +2,22 @@ import {
   assoc,
   mapByIndex,
   propEq,
-  lengthStandards
+  lengthStandards,
+  lengthSections
 } from '/imports/api/helpers';
 
-export const toggleSection = (state, action) => {
-  const { index, shouldCloseOthers } = action.payload;
-  const section = state.sections[index];
-  let sections;
-
+export const collapse = (collapsed, index, items, shouldCloseOthers = true) => {
   if (shouldCloseOthers) {
-    sections = state.sections.map((section, i) => {
-      return i === index
-        ? { ...section, collapsed: !section.collapsed }
-        : { ...section, collapsed: true };
+    return items.map((item, i) => {
+      return i === index ? { ...item, collapsed } : { ...item, collapsed: true };
     });
-  } else {
-    sections = mapByIndex(
-      assoc('collapsed', !section.collapsed, section),
-      index,
-      state.sections
-    );
   }
 
-  return { ...state, sections };
-};
+  return mapByIndex({ collapsed }, index, items);
+}
+
+export const toggleCollapse = (index, items, shouldCloseOthers = true) =>
+  collapse(!items[index].collapsed, index, items, shouldCloseOthers);
 
 export const mapSections = (state, sections) => {
   const {
@@ -42,16 +34,29 @@ export const mapSections = (state, sections) => {
         return { ...standard, type };
       });
 
-
     return {
       ...section,
+      collapsed: !ownStandards.find(propEq('_id', standardId)),
       standards: ownStandards,
-      collapsed: !ownStandards.find(propEq('_id', standardId))
     };
   };
 
-  return {
-    ...state,
-    sections: sections.map(mapper).filter(lengthStandards)
-  };
+  return sections.map(mapper).filter(lengthStandards);
+};
+
+export const mapTypes = (state, types) => {
+  return types.map((type) => {
+    const sections = state.sections.map((section) => {
+      const standards = section.standards.filter((standard) => {
+        return standard.typeId === type._id &&
+               standard.sectionId === section._id;
+      });
+
+      return { ...section, standards };
+    }).filter(lengthStandards);
+
+    const collapsed = !sections.find(propEq('collapsed', false));
+
+    return {...type, sections, collapsed };
+  }).filter(lengthSections);
 };

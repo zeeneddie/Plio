@@ -22,11 +22,26 @@ import _search_ from '/imports/startup/client/mixins/search';
 import { Standards } from '/imports/share/collections/standards';
 
 const mapStateToProps = ({
-  standards: { sections, sectionsFiltered },
-  global: { searchText }
-}) => ({ sections, sectionsFiltered, searchText });
+  standards: {
+    sections,
+    types,
+    sectionsFiltered,
+    standardId
+  },
+  global: { searchText, filter },
+  organizations: { orgSerialNumber }
+}) => ({
+  sections,
+  types,
+  sectionsFiltered,
+  searchText,
+  orgSerialNumber,
+  filter
+});
 
-const onToggleCollapse = ({ dispatch, sections }) => (e, props) => {
+const onToggleCollapse = ({ dispatch, sections, ...args }) => (e, props) => {
+  console.log(props);
+
   const index = sections.findIndex(propEq('_id', props.item._id));
 
   if (index === -1) return;
@@ -62,24 +77,16 @@ const onSearchTextChange = _.debounce(({ dispatch, sections }, value) => {
 }, 400);
 
 export default compose(
+  connect(mapStateToProps),
   withHandlers({
     onToggleCollapse,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target.value),
   }),
-  connect(mapStateToProps),
   mapProps(props => ({
     ...props,
     sections: props.searchText ? props.sectionsFiltered : props.sections,
     searchResultsText: props.searchText
       ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
       : ''
-  })),
-  withProps(ownProps => ({
-    shouldUpdate: (props, nextProps) => {
-      const getChildrenCount = ({ children }) =>
-        React.Children.map(children, ({ props }) => React.Children.count(props.children))[0];
-
-      return getChildrenCount(props) !== getChildrenCount(nextProps);
-    }
   }))
 )(StandardsLHS);

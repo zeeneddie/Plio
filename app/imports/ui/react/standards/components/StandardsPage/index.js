@@ -6,7 +6,7 @@ import StandardsLHSContainer from '../../containers/StandardsLHSContainer';
 
 const StandardsPage = props => props.organization ? (
   <Page>
-    <StandardsLHSContainer {...props}/>
+    <StandardsLHSContainer/>
     <div>World Hello</div>
   </Page>
 ) : (

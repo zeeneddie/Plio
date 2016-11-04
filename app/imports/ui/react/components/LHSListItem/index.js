@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallowEqual } from 'recompose';
 
 class LHSListItem extends React.Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class LHSListItem extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.shouldCollapse(nextProps) || (!this.props.shouldUpdate || this.props.shouldUpdate(this.props, nextProps));
+    return !shallowEqual(this.props, nextProps);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -1,10 +1,16 @@
-import { toggleSection, mapSections } from '../lib/helpers';
 import { UncategorizedTypeSection } from '/imports/api/constants';
+import {
+  toggleCollapse,
+  collapse,
+  mapSections,
+  mapTypes
+} from '../lib/helpers';
 
 import {
   INIT_SECTIONS,
   SET_SECTIONS,
   SET_STANDARDS,
+  INIT_TYPES,
   SET_TYPES,
   SET_STANDARD,
   SET_STANDARD_ID,
@@ -12,6 +18,7 @@ import {
   TOGGLE_SECTION_COLLAPSED,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
+  EXPAND_SECTION,
 } from '../actions/types';
 
 const initialState = {
@@ -28,13 +35,32 @@ const initialState = {
 export default function reducer(state=initialState, action) {
   switch(action.type) {
     case INIT_SECTIONS:
-      return mapSections(state, action.payload);
+      return { ...state, sections: mapSections(state, action.payload) };
     case SET_SECTIONS:
       return { ...state, sections: action.payload };
     case TOGGLE_SECTION_COLLAPSED:
-      return toggleSection(state, action);
+      return {
+        ...state,
+        sections: toggleCollapse(
+          action.payload.index,
+          state.sections,
+          action.payload.shouldCloseOthers
+        )
+      };
+    case EXPAND_SECTION:
+      return {
+        ...state,
+        sections: collapse(
+          false,
+          action.payload.index,
+          state.sections,
+          action.payload.shouldCloseOthers
+        )
+      }
     case SET_STANDARDS:
       return { ...state, standards: action.payload };
+    case INIT_TYPES:
+      return { ...state, types: mapTypes(state, action.payload) };
     case SET_TYPES:
       return { ...state, types: action.payload };
     case SET_STANDARD:

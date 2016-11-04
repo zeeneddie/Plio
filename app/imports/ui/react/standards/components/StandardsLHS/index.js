@@ -3,36 +3,43 @@ import React from 'react';
 import LHS from '../../../components/LHS';
 import LHSListItem from '../../../components/LHSListItem';
 import StandardsLHSListItemContainer from '../../containers/StandardsLHSListItemContainer';
+import StandardsLHSSectionList from '../StandardsLHSSectionList';
+import StandardsLHSTypeList from '../StandardsLHSTypeList';
 
-const StandardsLHS = (props) => (
-  <LHS
-    searchText={props.searchText}
-    searchResultsText={props.searchResultsText}
-    onChange={props.onSearchTextChange}>
-    {props.sections.map(section => (
-      <LHSListItem
-        key={section._id}
-        item={section}
-        lText={section.title}
-        collapsed={section.collapsed}
-        shouldUpdate={props.shouldUpdate}
-        shouldCollapseOnMount={!props.isCollapsedOnMount}
-        onMount={props.onMount}
-        onToggleCollapse={props.onToggleCollapse}>
+const StandardsLHS = (props) => {
+  let content;
 
-        <div className="list-group">
-          {section.standards.map(standard => (
-            <StandardsLHSListItemContainer
-              key={standard._id}
-              section={section}
-              orgSerialNumber={props.orgSerialNumber}
-              {...standard}/>
-          ))}
-        </div>
+  switch(props.filter) {
+    case 1:
+      content = (
+        <StandardsLHSSectionList
+          sections={props.sections}
+          shouldCollapseOnMount={true}
+          onToggleCollapse={props.onToggleCollapse}
+          orgSerialNumber={props.orgSerialNumber}/>
+      );
+      break;
+    case 2:
+      content = (
+        <StandardsLHSTypeList
+          types={props.types}
+          shouldCollapseOnMount={true}
+          orgSerialNumber={props.orgSerialNumber}
+          onToggleCollapse={props.onToggleCollapse}/>
+      );
+      break;
+    default:
+      content = props.children;
+  }
 
-      </LHSListItem>
-    ))}
-  </LHS>
-);
+  return (
+    <LHS
+      searchText={props.searchText}
+      searchResultsText={props.searchResultsText}
+      onChange={props.onSearchTextChange}>
+      {content}
+    </LHS>
+  );
+};
 
 export default StandardsLHS;
