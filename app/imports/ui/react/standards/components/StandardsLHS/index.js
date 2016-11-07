@@ -1,15 +1,13 @@
 import React from 'react';
 
 import LHS from '../../../components/LHS';
-import LHSListItem from '../../../components/LHSListItem';
-import StandardsLHSListItemContainer from '../../containers/StandardsLHSListItemContainer';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import StandardsLHSTypeList from '../StandardsLHSTypeList';
 
 const StandardsLHS = (props) => {
   let content;
 
-  switch(props.filter) {
+  switch (props.filter) {
     case 1:
     default:
       content = (
@@ -18,7 +16,8 @@ const StandardsLHS = (props) => {
           sections={props.sections}
           shouldCollapseOnMount={true}
           orgSerialNumber={props.orgSerialNumber}
-          onToggleCollapse={props.onToggleCollapse}/>
+          onToggleCollapse={props.onSectionToggleCollapse}
+        />
       );
       break;
     case 2:
@@ -28,7 +27,9 @@ const StandardsLHS = (props) => {
           types={props.types}
           shouldCollapseOnMount={true}
           orgSerialNumber={props.orgSerialNumber}
-          onToggleCollapse={props.onToggleCollapse}/>
+          onTypeToggleCollapse={props.onTypeToggleCollapse}
+          onSectionToggleCollapse={props.onSectionToggleCollapse}
+        />
       );
       break;
   }
@@ -37,7 +38,8 @@ const StandardsLHS = (props) => {
     <LHS
       searchText={props.searchText}
       searchResultsText={props.searchResultsText}
-      onChange={props.onSearchTextChange}>
+      onChange={props.onSearchTextChange}
+    >
       {content}
     </LHS>
   );

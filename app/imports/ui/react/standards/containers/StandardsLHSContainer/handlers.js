@@ -7,7 +7,7 @@ import {
   extractIds,
   compose
 } from '/imports/api/helpers';
-import { createSectionItem } from '../../helpers';
+import { createSectionItem, createTypeItem } from '../../helpers';
 import { Standards } from '/imports/share/collections/standards';
 import _search_ from '/imports/startup/client/mixins/search';
 import { setFilteredSections } from '/client/redux/actions/standardsActions';
@@ -19,8 +19,12 @@ import {
 } from '/client/redux/actions/globalActions';
 import { CollectionNames } from '/imports/share/constants';
 
-export const onToggleCollapse = ({ dispatch }) => (e, { key, type } = {}) =>
-  dispatch(toggleCollapsed(createSectionItem(key), { type }));
+const onToggle = fn => ({ dispatch }) => (e, { key, type } = {}) =>
+  dispatch(toggleCollapsed(fn(key), { type }));
+
+export const onSectionToggleCollapse = onToggle(createSectionItem);
+
+export const onTypeToggleCollapse = onToggle(createTypeItem);
 
 export const onSearchTextChange = _.debounce(({ dispatch, sections, standardId }, value) => {
   const fields = [

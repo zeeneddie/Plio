@@ -1,8 +1,9 @@
 import React from 'react';
 import { compose, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
-import { pickFromStandards } from '/imports/api/helpers';
 import { getSubNestingClassName } from '../../helpers';
 import StandardsLHSListItem from '../../components/StandardsLHSListItem';
 import _organization_ from '/imports/startup/client/mixins/organization';
@@ -13,23 +14,28 @@ import { setStandardId } from '/client/redux/actions/standardsActions';
 // TODO: updateViewedBy support
 // TODO: unreadMessagesCount support
 
+const mapStateToProps = ({
+  standards: { standardId },
+  global: { filter },
+}) => ({ standardId, filter });
+
 export default compose(
-  connect(pickFromStandards(['standardId'])),
+  connect(mapStateToProps),
   withHandlers({
     onClick: props => handler => {
       props.dispatch(setStandardId(props._id));
 
       handler({ standardId: props._id });
-    }
+    },
   }),
   withProps((props) => {
     const href = (() => {
       const params = {
         standardId: props._id,
-        orgSerialNumber: props.orgSerialNumber
+        orgSerialNumber: props.orgSerialNumber,
       };
       const queryParams = {
-        filter: 1 // TODO: change to the actual filter
+        filter: props.filter, // TODO: change to the actual filter
       };
 
       return FlowRouter.path('standard', params, queryParams);
@@ -47,7 +53,7 @@ export default compose(
       isNew,
       deletedByText,
       deletedAtText,
-      isActive
+      isActive,
     };
   })
-)(StandardsLHSListItem)
+)(StandardsLHSListItem);

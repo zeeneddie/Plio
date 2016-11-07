@@ -1,20 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, withProps, withState } from 'recompose';
+import { compose, withHandlers, mapProps } from 'recompose';
 
 import { flattenMapStandards } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
-import { onToggleCollapse, onSearchTextChange } from './handlers';
+import { onSectionToggleCollapse, onTypeToggleCollapse, onSearchTextChange } from './handlers';
 
 const mapStateToProps = ({
   standards: {
     sections,
     types,
     sectionsFiltered,
-    standardId
+    standardId,
   },
   global: { searchText, filter, collapsed },
-  organizations: { orgSerialNumber }
+  organizations: { orgSerialNumber },
 }) => ({
   sections,
   types,
@@ -23,13 +23,14 @@ const mapStateToProps = ({
   orgSerialNumber,
   filter,
   collapsed,
-  standardId
+  standardId,
 });
 
 export default compose(
   connect(mapStateToProps),
   withHandlers({
-    onToggleCollapse,
+    onSectionToggleCollapse,
+    onTypeToggleCollapse,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target.value),
   }),
   mapProps(props => ({
@@ -37,6 +38,6 @@ export default compose(
     sections: props.searchText ? props.sectionsFiltered : props.sections,
     searchResultsText: props.searchText
       ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
-      : ''
+      : '',
   }))
 )(StandardsLHS);

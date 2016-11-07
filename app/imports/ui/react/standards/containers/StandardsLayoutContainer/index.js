@@ -1,10 +1,10 @@
-import React from 'react';
 import { composeWithTracker } from 'react-komposer';
-import property from 'lodash.property';
 import get from 'lodash.get';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { _ } from 'meteor/underscore';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -13,7 +13,7 @@ import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
   DocumentLayoutSubs,
   DocumentCardSubs,
-  BackgroundSubs
+  BackgroundSubs,
 } from '/imports/startup/client/subsmanagers';
 import PreloaderPage from '../../../components/PreloaderPage';
 import StandardsPage from '../../components/StandardsPage';
@@ -29,14 +29,15 @@ import {
 import {
   setOrg,
   setOrgId,
-  setOrgSerialNumber
+  setOrgSerialNumber,
 } from '/client/redux/actions/organizationsActions';
 import {
   setFilter,
-  addCollapsed
+  addCollapsed,
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
-import { createSectionItem } from '../../helpers';
+import { createSectionItem, createTypeItem } from '../../helpers';
+import { pickFromStandards } from '/imports/api/helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
@@ -56,21 +57,21 @@ const onPropsChange = ({ content, dispatch }, onData) => {
     const standards = Standards.find(query, options).fetch();
     const standard = Standards.findOne({ _id: standardId });
 
-    const isCardReady = (function() {
+    const isCardReady = ((() => {
       if (standardId) {
         const subArgs = { organizationId, _id: standardId };
 
         const cardSubscription = DocumentCardSubs.subscribe('standardCard', subArgs, {
           onReady() {
-            BackgroundSubs.subscribe('standardsDeps', organizationId)
-          }
+            BackgroundSubs.subscribe('standardsDeps', organizationId);
+          },
         });
 
         return cardSubscription.ready();
       }
 
       return true;
-    })();
+    })());
 
     const actions = [
       setOrg(organization),
@@ -83,7 +84,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setIsCardReady(isCardReady),
       setFilter(filter),
       initSections(sections),
-      initTypes(types)
+      initTypes(types),
     ];
 
     dispatch(batchActions(actions));
@@ -92,7 +93,8 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       content,
       organization,
       orgSerialNumber: serialNumber,
-      sections: getState('standards').sections,
+      ..._.pick(getState('standards'), 'sections', 'types'),
+      ..._.pick(getState('global'), 'filter'),
     });
   }
 };
@@ -107,16 +109,29 @@ export default compose(
         const { orgSerialNumber } = this.props;
         const params = {
           orgSerialNumber,
-          standardId: get(this.props, 'sections[0].standards[0]._id')
+          standardId: get(this.props, 'sections[0].standards[0]._id'),
         };
 
         FlowRouter.go('standard', params);
       }
     },
     componentDidMount() {
-      const key = get(this.props, 'sections[0]._id');
+      switch (this.props.filter) {
+        case 1:
+        default:
+          const key = get(this.props, 'sections[0]._id');
 
-      this.props.dispatch(addCollapsed(createSectionItem(key)));
-    }
+          this.props.dispatch(addCollapsed(createSectionItem(key)));
+          break;
+        case 2: {
+          const typeKey = get(this.props, 'types[0]._id');
+          const sectionKey = get(this.props, 'types[0].sections[0]._id');
+
+          this.props.dispatch(addCollapsed(createTypeItem(typeKey)));
+          this.props.dispatch(addCollapsed(createSectionItem(sectionKey)));
+          break;
+        }
+      }
+    },
   })
 )(StandardsPage);
