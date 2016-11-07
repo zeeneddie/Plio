@@ -20,7 +20,7 @@ export const mapSections = (state, sections) => {
       });
 
     return {
-      ...section
+      ...section,
       standards: ownStandards
     };
   };
