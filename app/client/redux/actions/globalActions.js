@@ -50,3 +50,17 @@ export function toggleCollapsed(payload, close) {
       : dispatch(addCollapsed(payload, close));
   }
 }
+
+export function collapseMulti(actions, wait = 400) {
+  return (dispatch) => {
+    const start = (i) => {
+      if (i === actions.length) return;
+
+      dispatch(actions[i]);
+
+      Meteor.setTimeout(() => start(i + 1), wait);
+    };
+
+    start(0);
+  }
+}

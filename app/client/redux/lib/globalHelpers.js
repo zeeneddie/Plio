@@ -7,7 +7,7 @@ export const addCollapsed = (collapsed, payload) => {
     ? collapsed.filter(compose(not, compareProps(payload.close))).concat(withoutClose)
     : collapsed.concat(withoutClose);
 
-  return _.uniq(result, false, (el, i, array) => array.find(equals(el)));
+  return _.uniq(result, true, (el, i, array) => array.find(equals(el)));
 }
 
 export const removeCollapsed = (collapsed, payload) => {
