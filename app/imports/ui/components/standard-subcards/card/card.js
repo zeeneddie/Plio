@@ -9,12 +9,13 @@ import { Occurrences } from '/imports/share/collections/occurrences.js';
 Template.SS_Card_Read.viewmodel({
   share: 'window',
   mixin: ['modal', 'nonconformity', 'standard', 'risk', 'workInbox', 'user', 'mobile'],
+  isReady: true,
   autorun() {
     this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
   },
   // NC from fixture: "Inquiry not recorded"
   NCId: "P98SExuNHZ4y8bhjc",
-  organizationId: "KwKXz5RefrE5hjWJ2",
+  organizationId: "LPw4vBKEb2YNvA6qy",
   // Standard from fixture: "3. Inquiry handling"
   StandardId: "4hecb3Gzvg5dPp7rD",
   // Risk from fixture: "Explosion of binder"
