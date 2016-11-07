@@ -9,6 +9,15 @@ Template.List_Read.viewmodel({
   animating: false,
   isModalButtonVisible: true,
   modalButtonText: 'Add',
+  events: {
+    'keypress input': (event, templateInstance) => {
+      if (event.key === 'Enter') {
+        templateInstance
+          .viewmodel
+          .onHandleSearchInput(event.target.value);
+      }
+    },
+  },
   onCreated() {
     this.searchText('');
   },
