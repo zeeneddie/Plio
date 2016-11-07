@@ -57,3 +57,7 @@ export const SET_ORG_ID = 'SET_ORG_ID';
 export const SET_FILTER = 'SET_FILTER';
 
 export const SET_SEARCH_TEXT = 'SET_SEARCH_TEXT';
+
+export const ADD_COLLAPSED = 'ADD_COLLAPSED';
+
+export const REMOVE_COLLAPSED = 'REMOVE_COLLAPSED';

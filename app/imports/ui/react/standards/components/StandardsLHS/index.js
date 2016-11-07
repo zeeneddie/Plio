@@ -11,6 +11,7 @@ const StandardsLHS = (props) => {
 
   switch(props.filter) {
     case 1:
+    default:
       content = (
         <StandardsLHSSectionList
           sections={props.sections}
@@ -28,8 +29,6 @@ const StandardsLHS = (props) => {
           onToggleCollapse={props.onToggleCollapse}/>
       );
       break;
-    default:
-      content = props.children;
   }
 
   return (

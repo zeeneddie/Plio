@@ -1,3 +1,5 @@
+import get from 'lodash.get';
+
 import {
   assoc,
   mapByIndex,
@@ -17,7 +19,7 @@ export const collapse = (collapsed, index, items, shouldCloseOthers = true) => {
 }
 
 export const toggleCollapse = (index, items, shouldCloseOthers = true) =>
-  collapse(!items[index].collapsed, index, items, shouldCloseOthers);
+  collapse(!get(items[index], 'collapsed'), index, items, shouldCloseOthers);
 
 export const mapSections = (state, sections) => {
   const {
@@ -57,6 +59,6 @@ export const mapTypes = (state, types) => {
 
     const collapsed = !sections.find(propEq('collapsed', false));
 
-    return {...type, sections, collapsed };
+    return { ...type, sections, collapsed };
   }).filter(lengthSections);
 };

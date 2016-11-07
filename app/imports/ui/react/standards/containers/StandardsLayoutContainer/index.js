@@ -46,9 +46,12 @@ const onPropsChange = ({ content, dispatch }, onData) => {
     const organization = Organizations.findOne({ serialNumber });
     const organizationId = get(organization, '_id');
 
-    const sections = StandardsBookSections.find({ organizationId }, { sort: { title: 1 } }).fetch();
-    const types = StandardTypes.find({ organizationId }, { sort: { title: 1 } }).fetch();
-    const standards = Standards.find({ organizationId }, { sort: { title: 1 } }).fetch();
+    const query = { organizationId };
+    const options = { sort: { title: 1 } };
+
+    const sections = StandardsBookSections.find(query, options).fetch();
+    const types = StandardTypes.find(query, options).fetch();
+    const standards = Standards.find(query, options).fetch();
     const standard = Standards.findOne({ _id: standardId });
 
     const isCardReady = (function() {
@@ -86,7 +89,8 @@ const onPropsChange = ({ content, dispatch }, onData) => {
     onData(null, {
       content,
       organization,
-      orgSerialNumber: serialNumber
+      orgSerialNumber: serialNumber,
+      sections: getState('standards').sections,
     });
   }
 };
@@ -99,11 +103,12 @@ export default compose(
     componentWillMount() {
       if (FlowRouter.getRouteName() !== 'standard') {
         const { orgSerialNumber } = this.props;
-
-        FlowRouter.go('standard', {
+        const params = {
           orgSerialNumber,
           standardId: get(this.props, 'sections[0].standards[0]._id')
-        });
+        };
+
+        FlowRouter.go('standard', params);
       }
     }
   })
