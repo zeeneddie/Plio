@@ -429,7 +429,7 @@ export const ReviewSchema = ((() => {
       custom: function() {
         const value = this.value;
         if (!_(value).isDate()) {
-          return 'badDate';
+          return;
         }
 
         return moment(value).isBefore(new Date()) ? true : 'badDate';
