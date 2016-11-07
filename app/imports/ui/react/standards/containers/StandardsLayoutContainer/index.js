@@ -32,9 +32,11 @@ import {
   setOrgSerialNumber
 } from '/client/redux/actions/organizationsActions';
 import {
-  setFilter
+  setFilter,
+  addCollapsed
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
+import { createSectionItem } from '../../helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
@@ -81,7 +83,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setIsCardReady(isCardReady),
       setFilter(filter),
       initSections(sections),
-      initTypes(types),
+      initTypes(types)
     ];
 
     dispatch(batchActions(actions));
@@ -110,6 +112,11 @@ export default compose(
 
         FlowRouter.go('standard', params);
       }
+    },
+    componentDidMount() {
+      const key = get(this.props, 'sections[0]._id');
+
+      this.props.dispatch(addCollapsed(createSectionItem(key)));
     }
   })
 )(StandardsPage);

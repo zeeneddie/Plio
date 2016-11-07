@@ -17,9 +17,10 @@ import {
   toggleSectionCollapsed,
   setFilteredSections
 } from '/client/redux/actions/standardsActions';
-import { setSearchText } from '/client/redux/actions/globalActions';
+import { setSearchText, toggleCollapsed, addCollapsed } from '/client/redux/actions/globalActions';
 import _search_ from '/imports/startup/client/mixins/search';
 import { Standards } from '/imports/share/collections/standards';
+import { createSectionItem } from '../../helpers';
 
 const mapStateToProps = ({
   standards: {
@@ -28,7 +29,7 @@ const mapStateToProps = ({
     sectionsFiltered,
     standardId
   },
-  global: { searchText, filter },
+  global: { searchText, filter, collapsed },
   organizations: { orgSerialNumber }
 }) => ({
   sections,
@@ -36,20 +37,15 @@ const mapStateToProps = ({
   sectionsFiltered,
   searchText,
   orgSerialNumber,
-  filter
+  filter,
+  collapsed,
+  standardId
 });
 
-const onToggleCollapse = ({ dispatch, sections, ...args }) => (e, props) => {
-  console.log(props);
+const onToggleCollapse = ({ dispatch }) => (e, { key, type } = {}) =>
+  dispatch(toggleCollapsed(createSectionItem(key), { type }));
 
-  const index = sections.findIndex(propEq('_id', props.item._id));
-
-  if (index === -1) return;
-
-  dispatch(toggleSectionCollapsed(index));
-};
-
-const onSearchTextChange = _.debounce(({ dispatch, sections }, value) => {
+const onSearchTextChange = _.debounce(({ dispatch, sections, standardId }, value) => {
   const fields = [
     { name: 'title' },
     { name: 'description' },
@@ -64,13 +60,15 @@ const onSearchTextChange = _.debounce(({ dispatch, sections }, value) => {
     standards: section.standards.filter(standard => extractIds(standards).includes(standard._id))
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
-  const otherSections = sections
-    .filter(({ _id }) => !extractIds(newSections).includes(_id))
-    .map(assoc('collapsed', true));
+  const current = sections.find(section => section.standards.find(propEq('_id', standardId)));
+  const collapses = !!value
+    ? newSections.map(section => addCollapsed(createSectionItem(section._id)))
+    : [addCollapsed(createSectionItem(current._id), { type: 'StandardsBookSections' })];
 
   const actions = [
     setSearchText(value),
-    setFilteredSections(newSections)
+    setFilteredSections(newSections),
+    ...collapses
   ];
 
   dispatch(batchActions(actions));

@@ -4,7 +4,7 @@ import {
   collapse,
   mapSections,
   mapTypes
-} from '../lib/helpers';
+} from '../lib/standardsHelpers';
 
 import {
   INIT_SECTIONS,

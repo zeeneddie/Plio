@@ -2,15 +2,16 @@ import React from 'react';
 
 import LHSListItem from '../../../components/LHSListItem';
 import StandardsLHSStandardList from '../StandardsLHSStandardList';
+import { createSectionItem } from '../../helpers';
 
 const StandardsLHSSectionList = (props) => (
   <div>
     {props.sections.map(section => (
         <LHSListItem
           key={section._id}
-          item={section}
+          collapsed={props.collapsed}
+          item={createSectionItem(section._id)}
           lText={section.title}
-          collapsed={section.collapsed}
           shouldCollapseOnMount={props.shouldCollapseOnMount}
           onToggleCollapse={props.onToggleCollapse}>
 

@@ -1,6 +1,10 @@
 import React from 'react';
 import { shallowEqual } from 'recompose';
 
+import { propEq } from '/imports/api/helpers';
+
+const isCollapsed = props => !props.collapsed.find(propEq('key', props.item.key));
+
 class LHSListItem extends React.Component {
   constructor(props) {
     super(props);
@@ -27,8 +31,8 @@ class LHSListItem extends React.Component {
   componentDidMount() {
     const collapse = $(this.collapse);
 
-    if (this.props.shouldCollapseOnMount && !this.props.collapsed) {
-      this.toggleCollapse(null, this.props);
+    if (this.props.shouldCollapseOnMount && !isCollapsed(this.props)) {
+      this.toggleCollapse();
     }
 
     collapse.on('show.bs.collapse', this.onCollapseShow);
@@ -48,8 +52,8 @@ class LHSListItem extends React.Component {
            list-group-subheading
            list-group-toggle
            pointer
-           ${this.props.collapsed && 'collapsed'}`}
-           onClick={e => this.onToggleCollapse(e, this.props)}>
+           ${isCollapsed(this.props) && 'collapsed'}`}
+           onClick={e => this.onToggleCollapse(e, this.props.item)}>
           <h4 className="list-group-item-heading pull-left">{this.props.lText}</h4>
           {this.props.rText && (
             <p className="list-group-item-text text-danger pull-right">
@@ -69,9 +73,9 @@ class LHSListItem extends React.Component {
   }
 
   shouldCollapse(nextProps) {
-    return !!(
-      (this.props.collapsed && !nextProps.collapsed) ||
-      (!this.props.collapsed && nextProps.collapsed)
+    return (
+      !isCollapsed(this.props) && isCollapsed(nextProps) ||
+      isCollapsed(this.props) && !isCollapsed(nextProps)
     );
   }
 

@@ -163,6 +163,13 @@ export const T = () => true;
 
 export const F = () => false;
 
+/**
+ * Picks properties of the passed object from the next object and compares them
+ * Example: compareProps({ a: 1, b: 2 })({ c: 1, a: 1, b: 2 }) => true
+ */
+
+export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
