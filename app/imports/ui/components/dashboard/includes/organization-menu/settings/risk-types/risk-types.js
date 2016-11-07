@@ -3,6 +3,7 @@ import invoke from 'lodash.invoke';
 
 import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/risk-types/methods.js';
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_RisksTypes.viewmodel({
   mixin: ['modal', 'addForm', 'utils'],
@@ -14,6 +15,7 @@ Template.OrgSettings_RisksTypes.viewmodel({
     return invoke(this.riskTypes(), 'count');
   },
   placeholder: 'Title',
+  helpText: OrganizationSettingsHelp.riskTypes,
   riskTypes: [],
   onChangeCb() {
     return this.onChange.bind(this);

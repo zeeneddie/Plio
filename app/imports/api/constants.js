@@ -1,6 +1,6 @@
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 
-const DocumentTitles = {
+export const DocumentTitles = {
   STANDARD: 'Standard',
   NC: 'Non-conformity',
   RISK: 'Risk'
@@ -144,10 +144,16 @@ export const DepartmentsListProjection = {
 };
 
 export const AnalysisTitles = {
-  rootCauseAnalysis: 'Complete root cause analysis',
-  riskAnalysis: 'Complete initial risk analysis',
-  updateOfStandards: 'Complete update of standard(s)',
-  updateOfRiskRecord: 'Complete update of risk record'
+  rootCauseAnalysis: 'Root cause analysis',
+  riskAnalysis: 'Initial risk analysis',
+  updateOfStandards: 'Update of standard(s)',
+  updateOfRiskRecord: 'Update of risk record'
+};
+
+export const ActionTitles = {
+  CA: 'Corrective action',
+  PA: 'Preventative action',
+  RK: 'Risk control'
 };
 
 export const riskScoreTypes = {
@@ -174,6 +180,6 @@ export const StringLimits = {
   }
 };
 
-export const SystemName = 'Plio';
+const SystemName = 'Plio';
 
-export const RCAMaxCauses = 5;
+const RCAMaxCauses = 5;

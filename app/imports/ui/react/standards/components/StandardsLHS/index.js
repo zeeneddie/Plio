@@ -17,13 +17,14 @@ const StandardsLHS = (props) => {
           collapsed={props.collapsed}
           sections={props.sections}
           shouldCollapseOnMount={true}
-          onToggleCollapse={props.onToggleCollapse}
-          orgSerialNumber={props.orgSerialNumber}/>
+          orgSerialNumber={props.orgSerialNumber}
+          onToggleCollapse={props.onToggleCollapse}/>
       );
       break;
     case 2:
       content = (
         <StandardsLHSTypeList
+          collapsed={props.collapsed}
           types={props.types}
           shouldCollapseOnMount={true}
           orgSerialNumber={props.orgSerialNumber}

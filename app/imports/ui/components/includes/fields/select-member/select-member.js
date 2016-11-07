@@ -3,7 +3,8 @@ import { Template } from 'meteor/templating';
 const defaults = {
   placeholder: 'Select',
   selectFirstIfNoSelected: true,
-  disabled: false
+  disabled: false,
+  query: ''
 };
 
 Template.Select_Member.viewmodel({
@@ -24,7 +25,7 @@ Template.Select_Member.viewmodel({
       placeholder,
       selectFirstIfNoSelected,
       disabled,
-      items: this._members(),
+      items: this._members(this.query() || {}),
       onUpdate: (viewmodel) => {
         const { selected:value } = viewmodel.getData();
 

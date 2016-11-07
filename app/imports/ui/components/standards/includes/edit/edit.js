@@ -1,11 +1,13 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
+import get from 'lodash.get';
 
 import { update, remove, updateViewedBy } from '/imports/api/standards/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
 
 Template.EditStandard.viewmodel({
   mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
+  areActionsIsEditOnly: true,
   onRendered() {
     const doc = this._getStandardByQuery({ _id: this.standardId() });
     const userId = Meteor.userId();
@@ -22,6 +24,13 @@ Template.EditStandard.viewmodel({
   standard() {
     const _id = this._id && this._id();
     return this._getStandardByQuery({ _id });
+  },
+  getActionsArgs(type) {
+    return {
+      type,
+      standardId: get(this.standard(), '_id'),
+      isEditOnly: this.areActionsIsEditOnly(),
+    };
   },
   _getNCsQuery() {
     return { standardsIds: this._id && this._id() };

@@ -9,6 +9,7 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/standards/methods.js';
+import { StandardsHelp } from '/imports/api/help-messages.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 import { inspire } from '/imports/api/helpers';
 
@@ -145,6 +146,7 @@ Template.Standards_Card_Read.viewmodel({
     this.modal().open({
       _title: 'Compliance standard',
       template: 'EditStandard',
+      helpText: StandardsHelp.standard,
       _id: get(this.standard(), '_id')
     });
   }, 1000),

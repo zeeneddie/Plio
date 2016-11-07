@@ -25,3 +25,37 @@
 //     console.log(`Work item ${workItem._id} has been removed`);
 //   }
 // });
+
+import { Meteor } from 'meteor/meteor';
+import { Migrations } from 'meteor/percolate:migrations';
+
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { Organizations } from '/imports/share/collections/organizations';
+import { CollectionNames, SystemName } from '/imports/share/constants';
+
+
+Migrations.add({
+  version: 1,
+  name: 'Adds log entry about org creation for orgs with no logs',
+  up() {
+    Organizations.find({}).forEach((org) => {
+      const orgLogsCount = AuditLogs.find({ documentId: org._id }).count();
+
+      if (!orgLogsCount) {
+        AuditLogs.insert({
+          organizationId: org._id,
+          date: new Date(),
+          executor: SystemName,
+          collection: CollectionNames.ORGANIZATIONS,
+          documentId: org._id,
+          message: 'Organization created'
+        });
+      }
+    });
+  },
+  down() { }
+});
+
+Meteor.startup(() => {
+  Migrations.migrateTo('latest');
+});

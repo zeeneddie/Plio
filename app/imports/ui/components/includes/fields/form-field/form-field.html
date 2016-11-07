@@ -1,10 +1,28 @@
 <template name="FormField">
   <div class="form-group row" {{b "class: { has-danger: isInvalid }"}}>
     <label class="form-control-label col-xs-12 col-sm-{{calcLabelCol}}">
-      {{label}}
+      {{#if helpText}}
+        <button type="button" class="btn btn-link help-icon btn-collapse" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+          <i class="fa fa-question-circle"></i>
+        </button>
+      {{/if}}
+      <span>{{label}}</span>
     </label>
     <div class="col-xs-12 col-sm-{{sm}}">
       {{> Template.contentBlock}}
+      {{#if helpText}}
+        <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+          <div class="card-block">
+            <div>{{helpText}}</div>
+            <div class="btn-group">
+              <a class="btn btn-link guidance-panel-close pointer"
+                  {{b "click: closeHelpPanel"}}>
+                Close
+              </a>
+            </div>
+          </div>
+        </div>
+      {{/if}}
     </div>
   </div>
 </template>

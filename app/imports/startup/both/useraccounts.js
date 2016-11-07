@@ -9,7 +9,7 @@ AccountsTemplates.configure({
   homeRoutePath: '/',
   texts: {
     errors: {
-      loginForbidden: 'Incorrect login details - please try again'
-    }
-  }
+      loginForbidden: 'Incorrect login details - please try again',
+    },
+  },
 });

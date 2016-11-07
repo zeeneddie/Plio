@@ -1,18 +1,25 @@
 import { Template } from 'meteor/templating';
+import { Spacebars } from 'meteor/spacebars';
+import { _ } from 'meteor/underscore';
+import { capitalize } from '/imports/share/helpers';
 
-const cutSpacebarsKw = fn => (...args) => _.last(args) instanceof Spacebars.kw
-  ? fn(...Array.prototype.slice.call(args, 0, args.length - 1))
-  : fn(...args);
+const cutSpacebarsKw = fn => (...args) => {
+  if (_.last(args) instanceof Spacebars.kw) {
+    return fn(...Array.prototype.slice.call(args, 0, args.length - 1));
+  }
+  
+  return fn(...args);
+};
 
-Template.registerHelper('callback', function(param, obj) {
+Template.registerHelper('callback', (param, obj) => {
   const instance = Template.instance().viewmodel || Template.instance().data;
+  const view = obj instanceof Spacebars.kw ? instance : obj;
 
-  if (obj instanceof Spacebars.kw) obj = instance;
-
-  return () => obj[param].bind(instance);
+  return () => view[param].bind(instance);
 });
 
 const helpers = {
+  capitalize,
   log: console.log,
   not: val => !val,
   eq: (val1, val2) => Object.is(val1, val2),
@@ -22,7 +29,7 @@ const helpers = {
   pick: (obj, ...keys) => _.pick(obj, ...keys),
   omit: (obj, ...keys) => _.omit(obj, keys),
   gt: (val1, val2) => val1 > val2,
-  lt: (val1, val2) => val1 < val2
+  lt: (val1, val2) => val1 < val2,
 };
 
 Object.keys(helpers).forEach(key => Template.registerHelper(key, cutSpacebarsKw(helpers[key])));

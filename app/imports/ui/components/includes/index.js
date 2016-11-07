@@ -23,3 +23,5 @@ import './header';
 import './page-header';
 import './page';
 import './card-create';
+import './org-deletion';
+import './help-info';

@@ -10,7 +10,7 @@ const StandardsLHSTypeList = (props) => (
         key={type._id}
         item={type}
         lText={type.title}
-        collapsed={type.collapsed}
+        collapsed={props.collapsed}
         shouldCollapseOnMount={props.shouldCollapseOnMount}
         onToggleCollapse={() => {}}>
 

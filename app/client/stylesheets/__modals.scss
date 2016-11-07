@@ -1,4 +1,9 @@
 .modal {
+  &, .form-control, .btn {
+    @media (min-width: 600px) {
+      font-size: 15px;
+    }
+  }
   .relative {
     .card {
       position: inherit;
@@ -29,6 +34,11 @@
         border-radius: 4px 4px 0 0;
 
         .card-title {
+          max-width: calc(100% - 200px);
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin: 0 auto;
           text-align: center !important;
           font-family: $font-semibold;
         }
@@ -151,15 +161,15 @@
   }
 }
 
-.cancel-org-transfer {
-  .label.text-default {
+.org-transfer {
+  .cancel, .cancel-transfer {
+    padding-right: 0;
+  }
+
+  .invitation-info {
     white-space: normal;
     text-align: left;
     display: block;
-  }
-
-  .btn.btn-link {
-    margin: 0;
-    padding: 0;
+    padding-bottom: 0;
   }
 }

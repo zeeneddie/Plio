@@ -76,7 +76,7 @@ var openModal = function(callback) {
     var timerCallback = callback;
     $modal.timeout = setTimeout(function() {
       var doneFunctionExists = ((timerCallback || null) && $modal.getAttribute('data-has-done-function') === 'true');
-      if (doneFunctionExists) { 
+      if (doneFunctionExists) {
         timerCallback(null);
       }
       else {
@@ -115,7 +115,7 @@ var resetInputError = function(event) {
   removeClass($errorIcon, 'show');
 
   var $errorContainer = $modal.querySelector('.form-group');
-  removeClass($errorContainer, 'has-error');
+  removeClass($errorContainer, 'has-danger');
 };
 
 
@@ -128,7 +128,7 @@ var fixVerticalPosition = function() {
 };
 
 
-export { 
+export {
   sweetAlertInitialize,
   getModal,
   getOverlay,

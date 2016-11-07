@@ -18,6 +18,8 @@ export const SET_FOLLOWING_LIMIT = 'SET_FOLLOWING_LIMIT';
 
 export const SET_RESET_COMPLETED = 'SET_RESET_COMPLETED';
 
+export const SET_DISCUSSION = 'SET_DISCUSSION';
+
 // Standards types
 
 export const INIT_SECTIONS = 'INIT_SECTIONS';

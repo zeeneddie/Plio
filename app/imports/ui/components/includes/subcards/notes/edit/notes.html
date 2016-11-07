@@ -1,5 +1,5 @@
 <template name="Subcards_Notes_Edit">
-  {{#Subcards_Wrapper _lText=label _rText=getTextIndicator}}
+  {{#Subcards_Wrapper _lText=label _rText=getTextIndicator helpText=helpText}}
     {{#QuillEditor onUpdate=onUpdateCb}}
       <div {{b "html: notes"}}></div>
     {{/QuillEditor}}

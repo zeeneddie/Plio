@@ -5,6 +5,7 @@ import { UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
 import { restore, remove } from '/imports/api/risks/methods.js';
+import { RisksHelp } from '/imports/api/help-messages.js';
 
 Template.Risks_Card_Read.viewmodel({
   mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
@@ -37,6 +38,7 @@ Template.Risks_Card_Read.viewmodel({
   openEditModal() {
     this.modal().open({
       _title: 'Risk',
+      helpText: RisksHelp.risk,
       template: 'Risks_Card_Edit',
       _id: this.risk() && this.risk()._id
     });

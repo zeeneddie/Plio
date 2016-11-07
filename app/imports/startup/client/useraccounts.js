@@ -56,7 +56,15 @@ AccountsTemplates.addField({
   }
 });
 
-AccountsTemplates.addField(email);
+AccountsTemplates.addField({
+  _id: 'email',
+  type: 'email',
+  required: true,
+  displayName: "email",
+  re: /.+@(.+){2,}\.(?!con)(.+){2,}/,
+  errStr: 'Invalid email',
+});
+
 AccountsTemplates.addField(password);
 
 AccountsTemplates.addField({

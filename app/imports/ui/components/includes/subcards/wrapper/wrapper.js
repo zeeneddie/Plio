@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
 Template.Subcards_Wrapper.viewmodel({
-  mixin: 'collapse',
+  mixin: ['collapse'],
   renderContentOnInitial: true,
   _lText: '',
   _rText: '',

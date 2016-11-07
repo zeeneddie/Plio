@@ -1,17 +1,17 @@
 <template name="OrgSettings_MainSettings">
   <div class="card-block">
-    {{> OrgSettings_OrgName name=name}}
+    {{> OrgSettings_OrgName name=name helpText=nameFieldHelp}}
 
     {{#if isEditable}}
-      {{> OrgSettings_OrgTransfer ownerId=ownerId}}
+      {{> OrgSettings_OrgTransfer ownerId=ownerId helpText=ownerFieldHelp}}
     {{else}}
-      {{#FormField label="Org owner"}}
+      {{#FormField label="Org owner" helpText=ownerFieldHelp}}
         <input type="text" class="form-control" disabled {{b "value: ownerName"}} />
       {{/FormField}}
     {{/if}}
 
-    {{> OrgSettings_OrgTimezone timezone=timezone}}
+    {{> OrgSettings_OrgTimezone timezone=timezone helpText=timezoneFieldHelp}}
 
-    {{> OrgSettings_OrgCurrency currency=currency}}
+    {{> OrgSettings_OrgCurrency currency=currency helpText=currencyFieldHelp}}
   </div>
 </template>

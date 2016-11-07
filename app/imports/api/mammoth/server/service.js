@@ -46,6 +46,7 @@ export default {
       if (!_.contains([
         'application/vnd.openxmlformats',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'binary/octet-stream'
       ], result.headers['content-type'])) {
         return fut.return(new Meteor.Error('TypeError', `Invalid content type - ${result.headers['content-type']}`));
       }
@@ -73,7 +74,7 @@ export default {
               </body>
             </html>
           `;
-          
+
           const params = {
             Bucket: bucketName,
             ACL: acl,
@@ -81,7 +82,7 @@ export default {
             Body: htmlString,
             ContentType: 'text/html; charset=UTF-8'
           };
-      
+
           const uploader = s3.upload(params, (error, data) => {
             if (error) {
               fut.return(new Meteor.Error(error.message));

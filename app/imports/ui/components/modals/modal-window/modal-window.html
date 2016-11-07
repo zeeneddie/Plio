@@ -18,7 +18,7 @@
             </button>
           </div>
 
-          <h4 class="card-title text-xs-center" {{b "text: _title"}}></h4>
+          <h4 class="card-title" {{b "text: _title"}}></h4>
 
           <div class="card-heading-buttons"
             {{b "class: { pull-xs-left: isVariation('save'), pull-xs-right: !isVariation('save')  }"}}>
@@ -33,14 +33,12 @@
         <!--help panel-->
         <div class="collapse guidance-panel" {{b "ref: collapse"}}>
           <div class="card-block">
-            <div {{b "html: guideHtml"}}>
-            </div>
+            <div>{{helpText}}</div>
             <div class="btn-group">
               <a class="btn btn-link guidance-panel-close pointer"
                 {{b "click: toggleCollapse"}}>
                 <span>Close</span>
               </a>
-              <a {{b "attr: { href: moreInfoLink }"}} class="btn btn-link">More info</a>
             </div>
           </div>
         </div>

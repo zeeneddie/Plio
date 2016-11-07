@@ -18,7 +18,13 @@ export default OrgAuditConfig = {
 
   collectionName: CollectionNames.ORGANIZATIONS,
 
-  onCreated: { },
+  onCreated: {
+    logs: [
+      {
+        message: 'Organization created',
+      }
+    ],
+  },
 
   updateHandlers: [
     name,
