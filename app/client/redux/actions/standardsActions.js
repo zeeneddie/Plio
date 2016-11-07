@@ -9,10 +9,8 @@ import {
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
-  TOGGLE_SECTION_COLLAPSED,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
-  EXPAND_SECTION,
 } from './types';
 
 export function initSections(payload) {
@@ -26,45 +24,6 @@ export function setSections(payload) {
   return {
     payload,
     type: SET_SECTIONS
-  }
-}
-
-export function toggleSectionCollapsed(index, shouldCloseOthers = true) {
-  return {
-    payload: {
-      index,
-      shouldCloseOthers
-    },
-    type: TOGGLE_SECTION_COLLAPSED,
-    meta: {
-      throttle: 400
-    }
-  }
-}
-
-export function expandSection(index, shouldCloseOthers = true) {
-  return {
-    payload: {
-      index,
-      shouldCloseOthers
-    },
-    type: EXPAND_SECTION,
-    meta: {
-      throttle: 400
-    }
-  }
-}
-
-export function expandSelectedSection(shouldCloseOthers = true) {
-  return (dispatch, getState) => {
-    const {
-      standards: { sections, standardId }
-    } = getState();
-
-    const index = sections.findIndex(({ standards }) =>
-      standards.find(propEq('_id', standardId)));
-
-    return dispatch(expandSection(index, shouldCloseOthers));
   }
 }
 

@@ -1,7 +1,5 @@
 import { UncategorizedTypeSection } from '/imports/api/constants';
 import {
-  toggleCollapse,
-  collapse,
   mapSections,
   mapTypes
 } from '../lib/standardsHelpers';
@@ -15,10 +13,8 @@ import {
   SET_STANDARD,
   SET_STANDARD_ID,
   SET_IS_CARD_READY,
-  TOGGLE_SECTION_COLLAPSED,
   SET_FILTERED_STANDARDS,
-  SET_FILTERED_SECTIONS,
-  EXPAND_SECTION,
+  SET_FILTERED_SECTIONS
 } from '../actions/types';
 
 const initialState = {
@@ -38,25 +34,6 @@ export default function reducer(state=initialState, action) {
       return { ...state, sections: mapSections(state, action.payload) };
     case SET_SECTIONS:
       return { ...state, sections: action.payload };
-    case TOGGLE_SECTION_COLLAPSED:
-      return {
-        ...state,
-        sections: toggleCollapse(
-          action.payload.index,
-          state.sections,
-          action.payload.shouldCloseOthers
-        )
-      };
-    case EXPAND_SECTION:
-      return {
-        ...state,
-        sections: collapse(
-          false,
-          action.payload.index,
-          state.sections,
-          action.payload.shouldCloseOthers
-        )
-      }
     case SET_STANDARDS:
       return { ...state, standards: action.payload };
     case INIT_TYPES:

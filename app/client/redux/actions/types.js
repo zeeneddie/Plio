@@ -24,8 +24,6 @@ export const INIT_SECTIONS = 'INIT_SECTIONS';
 
 export const SET_SECTIONS = 'SET_SECTIONS';
 
-export const TOGGLE_SECTION_COLLAPSED = 'TOGGLE_SECTION_COLLAPSED';
-
 export const SET_STANDARDS = 'SET_STANDARDS';
 
 export const INIT_TYPES = 'INIT_TYPES';
@@ -41,8 +39,6 @@ export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 export const SET_FILTERED_STANDARDS = 'SET_FILTERED_STANDARDS';
 
 export const SET_FILTERED_SECTIONS = 'SET_FILTERED_SECTIONS';
-
-export const EXPAND_SECTION = 'EXPAND_SECTION';
 
 // Organizations types
 

@@ -1,25 +1,8 @@
-import get from 'lodash.get';
-
 import {
-  assoc,
-  mapByIndex,
   propEq,
   lengthStandards,
   lengthSections
 } from '/imports/api/helpers';
-
-export const collapse = (collapsed, index, items, shouldCloseOthers = true) => {
-  if (shouldCloseOthers) {
-    return items.map((item, i) => {
-      return i === index ? { ...item, collapsed } : { ...item, collapsed: true };
-    });
-  }
-
-  return mapByIndex({ collapsed }, index, items);
-}
-
-export const toggleCollapse = (index, items, shouldCloseOthers = true) =>
-  collapse(!get(items[index], 'collapsed'), index, items, shouldCloseOthers);
 
 export const mapSections = (state, sections) => {
   const {
@@ -37,9 +20,8 @@ export const mapSections = (state, sections) => {
       });
 
     return {
-      ...section,
-      collapsed: !ownStandards.find(propEq('_id', standardId)),
-      standards: ownStandards,
+      ...section
+      standards: ownStandards
     };
   };
 
@@ -57,8 +39,6 @@ export const mapTypes = (state, types) => {
       return { ...section, standards };
     }).filter(lengthStandards);
 
-    const collapsed = !sections.find(propEq('collapsed', false));
-
-    return { ...type, sections, collapsed };
+    return { ...type, sections };
   }).filter(lengthSections);
 };

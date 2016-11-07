@@ -47,10 +47,12 @@ export const onSearchTextChange = _.debounce(({ dispatch, sections, standardId }
   dispatch(batchActions(actions));
 
   if (value) {
+    // expand sections with found items one by one
     dispatch(collapseMulti(
       newSections.map(compose(addCollapsed, createSectionItem, property('_id')))
     ));
   } else {
+    // expand section with currently selected standard and close others
     dispatch(addCollapsed(
       createSectionItem(current._id),
       { type: CollectionNames.STANDARD_BOOK_SECTIONS }
