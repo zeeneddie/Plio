@@ -33,7 +33,7 @@
     line-height: 22px;
 
     &.pull-xs-left {
-      width: calc(100% - 150px);
+      max-width: calc(100% - 30px);
     }
 
     .text-muted {

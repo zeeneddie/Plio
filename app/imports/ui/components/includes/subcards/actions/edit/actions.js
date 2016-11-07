@@ -50,6 +50,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this),
+      textToReplaceAddButton: 'To add an action here, first add it to the relevant non-conformity or risk',
       ...inspire(['addText', '_lText', '_rText', 'isEditOnly'], this)
     };
   },

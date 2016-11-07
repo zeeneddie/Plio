@@ -17,6 +17,7 @@ Template.Standards_Item_Read.viewmodel({
   typeId: '',
   owner: '',
   issueNumber: '',
+  subNestingClassName: '',
   status: 'issued',
   nestingLevel: 1,
   viewedBy: [],
@@ -43,9 +44,11 @@ Template.Standards_Item_Read.viewmodel({
   },
   linkArgs() {
     const _id = this._id();
+    
     return {
       isActive: Object.is(this.standardId(), _id),
       onClick: handler => handler({ standardId: _id }),
+      className: this.subNestingClassName(),
       href: (() => {
         const params = {
           standardId: _id,

@@ -14,8 +14,10 @@
       {{else}}
         {{#if unreadMessagesCount}}
           <p class="list-group-item-text pull-right text-danger">
-            <i class="fa fa-comments"></i>
-            <span {{b "text: unreadMessagesCount"}}></span>
+            <div class="chat-indicator">
+              <i class="fa fa-comment"></i>
+              <span class="label label-danger" {{b "text: unreadMessagesCount"}}></span>
+            </div>
           </p>
         {{/if}}
       {{/if}}

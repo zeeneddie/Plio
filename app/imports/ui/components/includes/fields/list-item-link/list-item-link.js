@@ -6,11 +6,11 @@ import { isMobileRes } from '/imports/api/checkers.js';
 Template.ListItemLink.viewmodel({
   share: 'window',
   linkArgs() {
-    const { isActive, href, onClick } = this.templateInstance.data;
+    const { isActive, href, onClick, className } = this.templateInstance.data;
     const active = isActive ? 'active' : '';
-    const className = `list-group-item ${active}`;
+    const finalClassName = `list-group-item ${className} ${active}`;
     return {
-      className,
+      className: finalClassName,
       href,
       onClick: (e) => {
         _.isFunction(onClick) && onClick((params) => {

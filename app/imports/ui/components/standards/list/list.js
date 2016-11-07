@@ -96,8 +96,10 @@ Template.StandardsList.viewmodel({
     return this.searchObject('searchText', [{ name: 'title' }, { name: 'description' }, { name: 'status' }]);
   },
   totalUnreadMessagesToHtml(totalUnreadMessages) {
-    return totalUnreadMessages ? `<i class="fa fa-comments margin-right"></i>
-                                  <span>${totalUnreadMessages}</span>`
+    return totalUnreadMessages ? `<div class="chat-indicator">
+                                    <i class="fa fa-comment"></i>
+                                    <span class="label label-danger">${totalUnreadMessages}</span>
+                                  </div>`
                                : '';
   },
   _getTotalUnreadMessagesHtml(standards) {

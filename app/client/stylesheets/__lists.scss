@@ -3,6 +3,8 @@ $variable-padding: .75rem;
 
 .list-group {
   &-item {
+    margin-bottom: -1px;
+
     &-heading {
       font-size: 18px;
       font-family: $font-semilight;
@@ -124,6 +126,10 @@ $variable-padding: .75rem;
         color: #fff !important;
       }
 
+      .chat-indicator {
+        color: #ddd;
+      }
+
       &.active {
         background: $blue-color;
 
@@ -131,14 +137,13 @@ $variable-padding: .75rem;
           color: white !important;
           overflow: hidden;
           text-overflow: ellipsis;
-          line-height: 1.6rem;
         }
 
         .list-group-item-text {
           color: lighten($blue-color, 40%);
         }
 
-        .list-group-item-text.text-danger {
+        .list-group-item-text.text-danger, .chat-indicator {
           color: lighten($blue-color, 40%) !important;
         }
       }
@@ -150,16 +155,18 @@ $variable-padding: .75rem;
     margin-bottom: -1px;
   }
 
-  .sub .list-group-item {
-    padding-left: $fixed-padding + ($variable-padding * 1) !important;
-  }
+  .list-group-item {
+    &.sub {
+      padding-left: $fixed-padding + ($variable-padding * 1) !important;
+    }
 
-  .subsub .list-group-item {
-    padding-left: $fixed-padding + ($variable-padding * 2) !important;
-  }
+    &.subsub {
+      padding-left: $fixed-padding + ($variable-padding * 2) !important;
+    }
 
-  .subsubsub .list-group-item {
-    padding-left: $fixed-padding + ($variable-padding * 3) !important;
+    &.subsubsub {
+      padding-left: $fixed-padding + ($variable-padding * 3) !important;
+    }
   }
 
   .list-group-subheading {
