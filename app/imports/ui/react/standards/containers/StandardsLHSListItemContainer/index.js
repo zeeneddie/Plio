@@ -1,8 +1,6 @@
-import React from 'react';
 import { compose, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Meteor } from 'meteor/meteor';
 
 import { getSubNestingClassName } from '../../helpers';
 import StandardsLHSListItem from '../../components/StandardsLHSListItem';
@@ -10,14 +8,15 @@ import _organization_ from '/imports/startup/client/mixins/organization';
 import _user_ from '/imports/startup/client/mixins/user';
 import _date_ from '/imports/startup/client/mixins/date';
 import { setStandardId } from '/client/redux/actions/standardsActions';
+import { updateViewedBy } from '/imports/api/standards/methods';
+import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 
-// TODO: updateViewedBy support
 // TODO: unreadMessagesCount support
 
 const mapStateToProps = ({
   standards: { standardId },
-  global: { filter },
-}) => ({ standardId, filter });
+  global: { filter, userId },
+}) => ({ standardId, filter, userId });
 
 export default compose(
   connect(mapStateToProps),
@@ -35,14 +34,13 @@ export default compose(
         orgSerialNumber: props.orgSerialNumber,
       };
       const queryParams = {
-        filter: props.filter || 1, // TODO: change to the actual filter
+        filter: props.filter || 1,
       };
 
       return FlowRouter.path('standard', params, queryParams);
     })();
     const className = getSubNestingClassName(props);
-    // TODO: make userId reactive
-    const isNew = _organization_.isNewDoc({ doc: props, userId: Meteor.userId() });
+    const isNew = _organization_.isNewDoc({ doc: props, userId: props.userId });
     const deletedByText = _user_.userNameOrEmail(props.deletedBy);
     const deletedAtText = _date_.renderDate(props.deletedAt);
     const isActive = props.standardId === props._id;
@@ -55,5 +53,6 @@ export default compose(
       deletedAtText,
       isActive,
     };
-  })
+  }),
+  withUpdateViewedBy(updateViewedBy)
 )(StandardsLHSListItem);

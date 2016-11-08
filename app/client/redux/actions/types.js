@@ -61,3 +61,5 @@ export const ADD_COLLAPSED = 'ADD_COLLAPSED';
 export const REMOVE_COLLAPSED = 'REMOVE_COLLAPSED';
 
 export const TOGGLE_COLLAPSED = 'TOGGLE_COLLAPSED';
+
+export const SET_USER_ID = 'SET_USER_ID';

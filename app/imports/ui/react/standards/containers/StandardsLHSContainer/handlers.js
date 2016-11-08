@@ -1,11 +1,12 @@
 import { batchActions } from 'redux-batched-actions';
 import property from 'lodash.property';
+import { _ } from 'meteor/underscore';
 
 import {
   propEq,
   lengthStandards,
   extractIds,
-  compose
+  compose,
 } from '/imports/api/helpers';
 import { createSectionItem, createTypeItem } from '../../helpers';
 import { Standards } from '/imports/share/collections/standards';
@@ -15,7 +16,7 @@ import {
   setSearchText,
   toggleCollapsed,
   addCollapsed,
-  collapseMulti
+  collapseMulti,
 } from '/client/redux/actions/globalActions';
 import { CollectionNames } from '/imports/share/constants';
 
@@ -30,7 +31,7 @@ export const onSearchTextChange = _.debounce(({ dispatch, sections, standardId }
   const fields = [
     { name: 'title' },
     { name: 'description' },
-    { name: 'status' }
+    { name: 'status' },
   ];
   const query = _search_.searchQuery(value, fields);
   const options = { sort: { title: 1 }, fields: { _id: 1 } };
@@ -38,7 +39,7 @@ export const onSearchTextChange = _.debounce(({ dispatch, sections, standardId }
   const mapper = section => ({
     ...section,
     collapsed: false,
-    standards: section.standards.filter(standard => extractIds(standards).includes(standard._id))
+    standards: section.standards.filter(standard => extractIds(standards).includes(standard._id)),
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
   const current = sections.find(section => section.standards.find(propEq('_id', standardId)));

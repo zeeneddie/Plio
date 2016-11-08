@@ -1,44 +1,53 @@
-import { equals } from '/imports/api/helpers';
+import { Meteor } from 'meteor/meteor';
 
+import { equals } from '/imports/api/helpers';
 import {
+  SET_USER_ID,
   SET_FILTER,
   SET_SEARCH_TEXT,
   ADD_COLLAPSED,
-  REMOVE_COLLAPSED
+  REMOVE_COLLAPSED,
 } from './types';
+
+export function setUserId(payload) {
+  return {
+    payload,
+    type: SET_USER_ID,
+  };
+}
 
 export function setFilter(payload) {
   return {
     payload,
-    type: SET_FILTER
-  }
+    type: SET_FILTER,
+  };
 }
 
 export function setSearchText(payload) {
   return {
     payload,
-    type: SET_SEARCH_TEXT
-  }
+    type: SET_SEARCH_TEXT,
+  };
 }
 
 export function addCollapsed(payload, close) {
   return {
     payload: {
       ...payload,
-      close
+      close,
     },
     type: ADD_COLLAPSED,
     meta: {
-      throttle: 400
-    }
-  }
+      throttle: 400,
+    },
+  };
 }
 
 export function removeCollapsed(payload) {
   return {
     payload,
-    type: REMOVE_COLLAPSED
-  }
+    type: REMOVE_COLLAPSED,
+  };
 }
 
 export function toggleCollapsed(payload, close) {
@@ -48,7 +57,7 @@ export function toggleCollapsed(payload, close) {
     return collapsed
       ? dispatch(removeCollapsed(payload))
       : dispatch(addCollapsed(payload, close));
-  }
+  };
 }
 
 export function collapseMulti(actions, wait = 400) {
@@ -62,5 +71,5 @@ export function collapseMulti(actions, wait = 400) {
     };
 
     start(0);
-  }
+  };
 }

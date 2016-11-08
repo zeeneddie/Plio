@@ -1,11 +1,11 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
-import property from 'lodash.property';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -35,6 +35,7 @@ import {
 import {
   setFilter,
   addCollapsed,
+  setUserId,
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
 import {
@@ -46,6 +47,7 @@ import {
 import { find, getId } from '/imports/api/helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
+  const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
   const standardId = FlowRouter.getParam('standardId');
@@ -80,6 +82,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
     })());
 
     const actions = [
+      setUserId(userId),
       setOrg(organization),
       setOrgId(organizationId),
       setOrgSerialNumber(serialNumber),

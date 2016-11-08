@@ -1,4 +1,3 @@
-import { equals } from '/imports/api/helpers';
 import { addCollapsed, removeCollapsed } from '../lib/globalHelpers';
 
 import {
@@ -6,17 +5,20 @@ import {
   SET_SEARCH_TEXT,
   ADD_COLLAPSED,
   REMOVE_COLLAPSED,
-  TOGGLE_COLLAPSED
+  SET_USER_ID,
 } from '../actions/types';
 
 const initialState = {
+  userId: null,
   filter: 1,
   searchText: '',
-  collapsed: []
+  collapsed: [],
 };
 
-export default function(state=initialState, action) {
-  switch(action.type) {
+export default function (state = initialState, action) {
+  switch (action.type) {
+    case SET_USER_ID:
+      return { ...state, userId: action.payload };
     case SET_FILTER:
       return { ...state, filter: action.payload };
     case SET_SEARCH_TEXT:
