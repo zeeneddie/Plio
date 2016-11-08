@@ -18,7 +18,7 @@ const mapStateToProps = ({
     typesFiltered,
     standardId,
   },
-  global: { searchText, filter, collapsed },
+  global: { searchText, filter, collapsed, animating },
   organizations: { orgSerialNumber },
 }) => ({
   sections,
@@ -30,6 +30,7 @@ const mapStateToProps = ({
   collapsed,
   standardId,
   typesFiltered,
+  animating,
 });
 
 export default compose(
@@ -38,10 +39,11 @@ export default compose(
     onSectionToggleCollapse,
     onTypeToggleCollapse,
     onClear,
-    onSearchTextChange: props => e => onSearchTextChange(props, e.target.value),
+    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps(props => ({
     ...props,
+    shouldCollapseOnMount: true,
     sections: props.searchText ? props.sectionsFiltered : props.sections,
     types: props.searchText ? props.typesFiltered : props.types,
     searchResultsText: props.searchText

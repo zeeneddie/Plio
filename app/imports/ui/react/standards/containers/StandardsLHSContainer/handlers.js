@@ -26,6 +26,7 @@ import {
   toggleCollapsed,
   collapseMulti,
   addCollapsed,
+  setAnimating,
 } from '/client/redux/actions/globalActions';
 import { CollectionNames } from '/imports/share/constants';
 import { mapTypes } from '/client/redux/lib/standardsHelpers';
@@ -44,7 +45,8 @@ export const onSearchTextChange = _.debounce(({
   standardId,
   filter,
   collapsed,
- }, value) => {
+}, target) => {
+  const value = target.value;
   const fields = [
     { name: 'title' },
     { name: 'description' },
@@ -64,9 +66,15 @@ export const onSearchTextChange = _.debounce(({
     setSearchText(value),
     setFilteredSections(newSections),
     setFilteredTypes(newTypes),
+    setAnimating(true),
   ];
 
   dispatch(batchActions(actions));
+
+  const finish = () => {
+    dispatch(setAnimating(false));
+    target.focus();
+  };
 
   if (value) {
     const filterCollapsed = array => array.filter(({ _id }) =>
@@ -78,7 +86,7 @@ export const onSearchTextChange = _.debounce(({
       ? sectionsToCollapse
       : typesToCollapse.concat(sectionsToCollapse);
 
-    dispatch(collapseMulti(itemsToCollapse));
+    dispatch(collapseMulti(itemsToCollapse)).then(finish);
   } else {
     // expand section and types with currently selected standard and close others
     const selectedType = types.find(findSelectedSection(standardId));
@@ -93,10 +101,12 @@ export const onSearchTextChange = _.debounce(({
     const sectionToCollapse = addCollapsed(addClose(selectedSectionItem));
 
     if (filter === 1) {
-      return dispatch(sectionToCollapse);
+      dispatch(sectionToCollapse);
+      finish();
     }
 
-    dispatch(collapseMulti([typeToCollapse, sectionToCollapse]));
+    dispatch(collapseMulti([typeToCollapse, sectionToCollapse]))
+      .then(finish);
   }
 }, 400);
 
@@ -108,5 +118,5 @@ export const onClear = props => input => () => {
 
   props.dispatch(setSearchText(''));
 
-  onSearchTextChange(props, '');
+  onSearchTextChange(props, input);
 };

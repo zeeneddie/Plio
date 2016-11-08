@@ -14,7 +14,7 @@ const StandardsLHS = (props) => {
         <StandardsLHSSectionList
           collapsed={props.collapsed}
           sections={props.sections}
-          shouldCollapseOnMount={true}
+          shouldCollapseOnMount={props.shouldCollapseOnMount}
           orgSerialNumber={props.orgSerialNumber}
           onToggleCollapse={props.onSectionToggleCollapse}
         />
@@ -25,7 +25,7 @@ const StandardsLHS = (props) => {
         <StandardsLHSTypeList
           collapsed={props.collapsed}
           types={props.types}
-          shouldCollapseOnMount={true}
+          shouldCollapseOnMount={props.shouldCollapseOnMount}
           orgSerialNumber={props.orgSerialNumber}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
@@ -36,6 +36,7 @@ const StandardsLHS = (props) => {
 
   return (
     <LHSContainer
+      animating={props.animating}
       searchText={props.searchText}
       searchResultsText={props.searchResultsText}
       onChange={props.onSearchTextChange}

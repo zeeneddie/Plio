@@ -37,7 +37,10 @@ const LHS = ({
               onChange={onChange}
             />
           </ClearableField>
-          {/* <i className="small-loader fa fa-circle-o-notch fa-spin"></i> */}
+          
+          {animating && (
+            <i className="small-loader fa fa-circle-o-notch fa-spin"></i>
+          )}
         </div>
         {onModalButtonClick && (
           <button

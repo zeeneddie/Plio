@@ -8,6 +8,7 @@ import {
   SET_SEARCH_TEXT,
   ADD_COLLAPSED,
   REMOVE_COLLAPSED,
+  SET_ANIMATING,
 } from './types';
 
 export function setUserId(payload) {
@@ -59,16 +60,24 @@ export function toggleCollapsed(payload) {
   };
 }
 
-export function collapseMulti(actions, wait = 400) {
-  return (dispatch) => {
-    const start = (i) => {
-      if (i === actions.length) return;
-
-      dispatch(actions[i]);
-
-      Meteor.setTimeout(() => start(i + 1), wait);
-    };
-
-    start(0);
+export function setAnimating(payload) {
+  return {
+    payload,
+    type: SET_ANIMATING,
   };
+}
+
+export function collapseMulti(actions, wait = 400) {
+  return (dispatch, getState) =>
+    new Promise((resolve) => {
+      const start = (i) => {
+        if (i === actions.length) return resolve(dispatch, getState);
+
+        dispatch(actions[i]);
+
+        return Meteor.setTimeout(() => start(i + 1), wait);
+      };
+
+      start(0);
+    });
 }

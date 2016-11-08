@@ -6,6 +6,7 @@ import {
   ADD_COLLAPSED,
   REMOVE_COLLAPSED,
   SET_USER_ID,
+  SET_ANIMATING,
 } from '../actions/types';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
   filter: 1,
   searchText: '',
   collapsed: [],
+  animating: false,
 };
 
 export default function (state = initialState, action) {
@@ -27,6 +29,8 @@ export default function (state = initialState, action) {
       return { ...state, collapsed: addCollapsed(state.collapsed, action.payload) };
     case REMOVE_COLLAPSED:
       return { ...state, collapsed: removeCollapsed(state.collapsed, action.payload) };
+    case SET_ANIMATING:
+      return { ...state, animating: action.payload };
     default:
       return state;
   }
