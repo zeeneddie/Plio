@@ -54,7 +54,7 @@ $variable-padding: .75rem;
         font-family: 'FontAwesome';
         position: absolute;
         left: .8rem;
-        top: -1px;
+        top: 0;
         color: #999;
         font-size: 14px;
         line-height: 34px;
@@ -127,7 +127,7 @@ $variable-padding: .75rem;
       }
 
       .chat-indicator {
-        color: #ddd;
+        color: #ccc;
       }
 
       &.active {
@@ -172,6 +172,9 @@ $variable-padding: .75rem;
   .list-group-subheading {
     background: #f5f5f5;
 
+    .chat-indicator {
+      color: #aaa;
+    }
     .list-group-item-heading {
       margin: 0;
       font-size: 16px;
