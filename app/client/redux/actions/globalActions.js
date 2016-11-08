@@ -32,7 +32,6 @@ export function setSearchText(payload) {
 }
 
 export function addCollapsed(payload) {
-  console.log(payload);
   return {
     payload,
     type: ADD_COLLAPSED,

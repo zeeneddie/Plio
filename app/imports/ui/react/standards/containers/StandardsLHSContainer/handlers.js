@@ -5,6 +5,7 @@ import {
   lengthStandards,
   extractIds,
   getId,
+  propEq,
 } from '/imports/api/helpers';
 import {
   createSectionItem,
@@ -36,7 +37,14 @@ export const onSectionToggleCollapse = onToggle(createSectionItem);
 
 export const onTypeToggleCollapse = onToggle(createTypeItem);
 
-export const onSearchTextChange = _.debounce(({ dispatch, sections, types, standardId }, value) => {
+export const onSearchTextChange = _.debounce(({
+  dispatch,
+  sections,
+  types,
+  standardId,
+  filter,
+  collapsed,
+ }, value) => {
   const fields = [
     { name: 'title' },
     { name: 'description' },
@@ -61,14 +69,20 @@ export const onSearchTextChange = _.debounce(({ dispatch, sections, types, stand
   dispatch(batchActions(actions));
 
   if (value) {
+    const filterCollapsed = array => array.filter(({ _id }) =>
+      !collapsed.find(propEq('key', _id)));
     // expand sections and types with found items one by one
-    const typesToCollapse = newTypes.map(addCollapsedType);
-    const sectionsToCollapse = newSections.map(addCollapsedSection);
-    dispatch(collapseMulti(typesToCollapse.concat(sectionsToCollapse)));
+    const typesToCollapse = filterCollapsed(newTypes).map(addCollapsedType);
+    const sectionsToCollapse = filterCollapsed(newSections).map(addCollapsedSection);
+    const itemsToCollapse = filter === 1
+      ? sectionsToCollapse
+      : typesToCollapse.concat(sectionsToCollapse);
+
+    dispatch(collapseMulti(itemsToCollapse));
   } else {
     // expand section and types with currently selected standard and close others
     const selectedType = types.find(findSelectedSection(standardId));
-    const selectedSection = [...selectedType.sections].find(findSelectedStandard(standardId));
+    const selectedSection = sections.find(findSelectedStandard(standardId));
     const selectedTypeItem = createTypeItem(getId(selectedType));
     const selectedSectionItem = createSectionItem(getId(selectedSection));
     const addClose = item => ({
@@ -77,6 +91,10 @@ export const onSearchTextChange = _.debounce(({ dispatch, sections, types, stand
     });
     const typeToCollapse = addCollapsed(addClose(selectedTypeItem));
     const sectionToCollapse = addCollapsed(addClose(selectedSectionItem));
+
+    if (filter === 1) {
+      return dispatch(sectionToCollapse);
+    }
 
     dispatch(collapseMulti([typeToCollapse, sectionToCollapse]));
   }
