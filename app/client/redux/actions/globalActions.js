@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { equals } from '/imports/api/helpers';
 import {
@@ -30,12 +31,10 @@ export function setSearchText(payload) {
   };
 }
 
-export function addCollapsed(payload, close) {
+export function addCollapsed(payload) {
+  console.log(payload);
   return {
-    payload: {
-      ...payload,
-      close,
-    },
+    payload,
     type: ADD_COLLAPSED,
     meta: {
       throttle: 400,
@@ -50,13 +49,14 @@ export function removeCollapsed(payload) {
   };
 }
 
-export function toggleCollapsed(payload, close) {
+export function toggleCollapsed(payload) {
   return (dispatch, getState) => {
-    const collapsed = getState().global.collapsed.find(equals(payload));
+    const withoutClose = _.omit(payload, 'close');
+    const collapsed = getState().global.collapsed.find(equals(withoutClose));
 
     return collapsed
-      ? dispatch(removeCollapsed(payload))
-      : dispatch(addCollapsed(payload, close));
+      ? dispatch(removeCollapsed(withoutClose))
+      : dispatch(addCollapsed(payload));
   };
 }
 

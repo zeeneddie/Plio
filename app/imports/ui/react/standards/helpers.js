@@ -1,5 +1,6 @@
 import { CollectionNames } from '/imports/share/constants';
-import { compose, find, propStandards, propSections, propEqId } from '/imports/api/helpers';
+import { compose, find, propStandards, propSections, propEqId, propId } from '/imports/api/helpers';
+import { addCollapsed } from '/client/redux/actions/globalActions';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
@@ -19,3 +20,7 @@ export const findSelectedStandard = standardId =>
 
 export const findSelectedSection = standardId =>
   compose(find(findSelectedStandard(standardId)), propSections);
+
+export const addCollapsedType = compose(addCollapsed, createTypeItem, propId);
+
+export const addCollapsedSection = compose(addCollapsed, createSectionItem, propId);

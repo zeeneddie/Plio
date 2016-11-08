@@ -165,6 +165,8 @@ export const F = () => false;
 
 export const find = curry((transformation, array) => array.find(transformation));
 
+export const propId = property('_id');
+
 /**
  * Picks properties of the passed object from the next object and compares them
  * Example: compareProps({ a: 1, b: 2 })({ c: 1, a: 1, b: 2 }) => true

@@ -11,6 +11,7 @@ const mapStateToProps = ({
     sections,
     types,
     sectionsFiltered,
+    typesFiltered,
     standardId,
   },
   global: { searchText, filter, collapsed },
@@ -24,6 +25,7 @@ const mapStateToProps = ({
   filter,
   collapsed,
   standardId,
+  typesFiltered,
 });
 
 export default compose(
@@ -36,6 +38,7 @@ export default compose(
   mapProps(props => ({
     ...props,
     sections: props.searchText ? props.sectionsFiltered : props.sections,
+    types: props.searchText ? props.typesFiltered : props.types,
     searchResultsText: props.searchText
       ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
       : '',

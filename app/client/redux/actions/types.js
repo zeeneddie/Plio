@@ -42,6 +42,8 @@ export const SET_FILTERED_STANDARDS = 'SET_FILTERED_STANDARDS';
 
 export const SET_FILTERED_SECTIONS = 'SET_FILTERED_SECTIONS';
 
+export const SET_FILTERED_TYPES = 'SET_FILTERED_TYPES';
+
 // Organizations types
 
 export const SET_ORG = 'SET_ORG';
