@@ -35,7 +35,7 @@ export default compose(
         orgSerialNumber: props.orgSerialNumber,
       };
       const queryParams = {
-        filter: props.filter, // TODO: change to the actual filter
+        filter: props.filter || 1, // TODO: change to the actual filter
       };
 
       return FlowRouter.path('standard', params, queryParams);

@@ -1,27 +1,20 @@
-import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 import get from 'lodash.get';
 import property from 'lodash.property';
 import invoke from 'lodash.invoke';
-import Handlebars from 'handlebars';
 import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import {
-  AvatarPlaceholders,
-  CollectionNames,
-  DocumentTypes,
-  ProblemMagnitudes,
   ActionsListProjection,
   NonConformitiesListProjection,
-  RisksListProjection
+  RisksListProjection,
 } from '/imports/share/constants.js';
-import { getCollectionByDocType } from '/imports/share/helpers.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { Risks } from '/imports/share/collections/risks.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
 
@@ -47,7 +40,8 @@ export const checkAndThrow = (predicate, error = '') => {
   return true;
 };
 
-export const flattenObjects = (collection = []) => collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
+export const flattenObjects = (collection = []) =>
+  collection.reduce((prev, cur) => ({ ...prev, ...cur }), {});
 
 export const extractIds = (collection = []) => collection.map(property('_id'));
 
@@ -78,9 +72,11 @@ export const inspire = curry((props, instance, ...args) =>
 
 export const invokeId = instance => invoke(instance, '_id');
 
-export const $isScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
+export const $isScrolledToBottom = (div) =>
+  div.scrollTop() + div.innerHeight() >= div.prop('scrollHeight');
 
-export const $isAlmostScrolledToBottom = (div) => div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
+export const $isAlmostScrolledToBottom = (div) =>
+  div.scrollTop() + div.innerHeight() + 100 >= div.prop('scrollHeight');
 
 export const $scrollToBottom = (div = $()) => div.scrollTop(div.prop('scrollHeight'));
 
@@ -141,7 +137,7 @@ export const transsoc = curry((transformations, obj) => {
   const result = keys.map(key => assoc(key, transformations[key](obj), obj));
 
   return _.pick(flattenObjects(result), ...keys);
-})
+});
 
 export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
 
@@ -155,13 +151,19 @@ export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 
 export const getC = curry((path, obj) => get(obj, path));
 
+export const getId = getC('_id');
+
 export const equals = curry((val1, val2) => _.isEqual(val1, val2));
 
 export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
 
+export const propEqId = propEq('_id');
+
 export const T = () => true;
 
 export const F = () => false;
+
+export const find = curry((transformation, array) => array.find(transformation));
 
 /**
  * Picks properties of the passed object from the next object and compares them
@@ -224,13 +226,13 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
         const options = { profile: 1 };
 
         return Meteor.users.find(query, options);
-      }
-    }
-  ]
+      },
+    },
+  ],
 });
 
-export const getPublishCompositeOrganizationUsers = (fn) => {
-  return function(serialNumber, isDeleted = { $in: [null, false] }) {
+export const getPublishCompositeOrganizationUsers = (fn) =>
+  function(serialNumber, isDeleted = { $in: [null, false] }) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, {
       $in: Array
@@ -247,11 +249,10 @@ export const getPublishCompositeOrganizationUsers = (fn) => {
     return Object.assign({}, pubObj, {
       children: [
         ...pubObj.children,
-        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))()
-      ]
+        ...(() => _.isFunction(fn) && fn.call(this, userId, serialNumber, isDeleted))(),
+      ],
     });
-  }
-};
+  };
 
 export const explainMongoQuery = (
   collection,
@@ -269,31 +270,28 @@ export const explainMongoQuery = (
     results = results.limit(options.limit);
   }
 
-  return results.explain(verbose).then(res => console.log(JSON.stringify(res, null, 2).substr(0, 5000)));
-}
+  return results.explain(verbose).then(res =>
+    console.log(JSON.stringify(res, null, 2).substr(0, 5000)));
+};
 
 export const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
 export const makeOptionsFields = fields => fields ? ({ fields }) : ({});
 export const getCursorNonDeleted = curry((query, fields, collection) =>
-  collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)))
+  collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)));
 
-export const toObjFind = find => ({ find });
+export const toObjFind = value => ({ find: value });
 
 // You can add here more if you need
 export const getRequiredFieldsByCollection = (collection) => {
-  switch(collection) {
+  switch (collection) {
     case Actions:
       return ActionsListProjection;
-      break;
     case NonConformities:
       return NonConformitiesListProjection;
-      break;
     case Risks:
       return RisksListProjection;
-      break;
     default:
       return {};
-      break;
   }
 };
 

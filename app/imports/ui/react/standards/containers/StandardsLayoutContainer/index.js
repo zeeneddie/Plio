@@ -1,5 +1,6 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
+import property from 'lodash.property';
 import { compose, lifecycle } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
@@ -36,13 +37,18 @@ import {
   addCollapsed,
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
-import { createSectionItem, createTypeItem } from '../../helpers';
-import { pickFromStandards } from '/imports/api/helpers';
+import {
+  createSectionItem,
+  createTypeItem,
+  findSelectedStandard,
+  findSelectedSection,
+} from '../../helpers';
+import { find, getId } from '/imports/api/helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+  const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
   const standardId = FlowRouter.getParam('standardId');
-  const filter = parseInt(FlowRouter.getQueryParam('filter'), 10);
   const layoutSubscription = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber);
 
   if (layoutSubscription.ready()) {
@@ -93,7 +99,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       content,
       organization,
       orgSerialNumber: serialNumber,
-      ..._.pick(getState('standards'), 'sections', 'types'),
+      ..._.pick(getState('standards'), 'sections', 'types', 'standardId'),
       ..._.pick(getState('global'), 'filter'),
     });
   }
@@ -116,16 +122,26 @@ export default compose(
       }
     },
     componentDidMount() {
-      switch (this.props.filter) {
+      const { standardId, filter } = this.props;
+      const findStandard = findSelectedStandard(standardId);
+      switch (filter) {
         case 1:
-        default:
-          const key = get(this.props, 'sections[0]._id');
+        default: {
+          const key = standardId
+            ? getId(find(findStandard, this.props.sections))
+            : get(this.props, 'sections[0]._id');
 
           this.props.dispatch(addCollapsed(createSectionItem(key)));
           break;
+        }
         case 2: {
-          const typeKey = get(this.props, 'types[0]._id');
-          const sectionKey = get(this.props, 'types[0].sections[0]._id');
+          const selectedType = find(findSelectedSection(standardId), this.props.types);
+          const typeKey = standardId
+            ? getId(selectedType)
+            : get(this.props, 'types[0]._id');
+          const sectionKey = standardId
+            ? getId(find(findStandard, get(selectedType, 'sections')))
+            : get(this.props, 'types[0].sections[0]._id');
 
           this.props.dispatch(addCollapsed(createTypeItem(typeKey)));
           this.props.dispatch(addCollapsed(createSectionItem(sectionKey)));
