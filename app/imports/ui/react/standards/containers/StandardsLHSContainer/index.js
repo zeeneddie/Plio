@@ -1,10 +1,14 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps } from 'recompose';
 
 import { flattenMapStandards } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
-import { onSectionToggleCollapse, onTypeToggleCollapse, onSearchTextChange } from './handlers';
+import {
+  onSectionToggleCollapse,
+  onTypeToggleCollapse,
+  onSearchTextChange,
+  onClear,
+} from './handlers';
 
 const mapStateToProps = ({
   standards: {
@@ -33,6 +37,7 @@ export default compose(
   withHandlers({
     onSectionToggleCollapse,
     onTypeToggleCollapse,
+    onClear,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target.value),
   }),
   mapProps(props => ({

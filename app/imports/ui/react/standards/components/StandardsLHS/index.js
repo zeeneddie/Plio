@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LHS from '../../../components/LHS';
+import LHSContainer from '../../../containers/LHSContainer';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import StandardsLHSTypeList from '../StandardsLHSTypeList';
 
@@ -35,13 +35,14 @@ const StandardsLHS = (props) => {
   }
 
   return (
-    <LHS
+    <LHSContainer
       searchText={props.searchText}
       searchResultsText={props.searchResultsText}
       onChange={props.onSearchTextChange}
+      onClear={props.onClear}
     >
       {content}
-    </LHS>
+    </LHSContainer>
   );
 };
 
