@@ -6,5 +6,7 @@ Template.TextBox.viewmodel({
   placeholder: 'Text',
   rows: 3,
   onFocusOut() {},
-  onChange() {},
+  getData() {
+    return { value: this.value() };
+  },
 });

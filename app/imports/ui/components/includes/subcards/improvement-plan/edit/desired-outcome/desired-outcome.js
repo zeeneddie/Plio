@@ -4,11 +4,12 @@ Template.IP_DesiredOutcome_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
   desiredOutcome: '',
   update(e) {
+    const { desiredOutcome } = this.getData();
+    if (desiredOutcome === this.templateInstance.data.desiredOutcome) {
+      return;
+    }
+
     this.callWithFocusCheck(e, () => {
-      const { desiredOutcome } = this.getData();
-
-      if (desiredOutcome === this.templateInstance.data.desiredOutcome) return;
-
       this.parent().desiredOutcome(desiredOutcome);
       this.parent().update({ 'improvementPlan.desiredOutcome': desiredOutcome });
     });
@@ -16,5 +17,5 @@ Template.IP_DesiredOutcome_Edit.viewmodel({
   getData() {
     const { desiredOutcome } = this.data();
     return { desiredOutcome };
-  }
-})
+  },
+});
