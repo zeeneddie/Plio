@@ -67,7 +67,7 @@ export function setAnimating(payload) {
   };
 }
 
-export function collapseMulti(actions, wait = 400) {
+export function chainActions(actions, wait = 400) {
   return (dispatch, getState) =>
     new Promise((resolve) => {
       const start = (i) => {

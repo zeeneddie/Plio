@@ -39,6 +39,7 @@ import {
   setFilter,
   addCollapsed,
   setUserId,
+  chainActions,
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
 import {
@@ -48,7 +49,7 @@ import {
   findSelectedSection,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { find, getId, propEqId, flattenMapStandards } from '/imports/api/helpers';
+import { find, getId } from '/imports/api/helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
   const userId = Meteor.userId();
@@ -143,31 +144,31 @@ export default compose(
       }
     },
     componentDidMount() {
-      const { standardId, filter } = this.props;
-      const findStandard = findSelectedStandard(standardId);
+      const { filter } = this.props;
+      const {
+        containedIn,
+        defaultContainedIn,
+        selected: selectedStandard,
+      } = getSelectedAndDefaultStandardByFilter(this.props);
+      const parentItem = selectedStandard ? containedIn : defaultContainedIn;
+      const topLevelKey = getId(parentItem);
+
       switch (filter) {
         case 1:
         default: {
-          const key = standardId
-            ? getId(find(findStandard, this.props.sections))
-            : get(this.props, 'sections[0]._id');
-
-          this.props.dispatch(addCollapsed(createSectionItem(key)));
+          const sectionItem = createSectionItem(topLevelKey);
+          this.props.dispatch(addCollapsed(sectionItem));
           break;
         }
         case 2: {
-          const selectedType = find(findSelectedSection(standardId), this.props.types);
-          const typeKey = standardId
-            ? getId(selectedType)
-            : get(this.props, 'types[0]._id');
-          const sectionKey = standardId
-            ? getId(find(findStandard, get(selectedType, 'sections')))
-            : get(this.props, 'types[0].sections[0]._id');
-
-          this.props.dispatch(addCollapsed(createTypeItem(typeKey)));
-          this.props.dispatch(addCollapsed(createSectionItem(sectionKey)));
+          const secondLevelKey = getId(get(parentItem, 'children[0]'));
+          const typeItem = createTypeItem(topLevelKey);
+          const sectionItem = createSectionItem(secondLevelKey);
+          this.props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
           break;
         }
+        case 3:
+          return;
       }
     },
   })

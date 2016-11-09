@@ -25,7 +25,7 @@ import {
 import {
   setSearchText,
   toggleCollapsed,
-  collapseMulti,
+  chainActions,
   addCollapsed,
   setAnimating,
 } from '/client/redux/actions/globalActions';
@@ -95,7 +95,7 @@ export const onSearchTextChange = _.debounce(({
       ? sectionsToCollapse
       : typesToCollapse.concat(sectionsToCollapse);
 
-    dispatch(collapseMulti(itemsToCollapse)).then(finish);
+    dispatch(chainActions(itemsToCollapse)).then(finish);
   } else {
     // expand section and types with currently selected standard and close others
     const selectedType = types.find(findSelectedSection(standardId));
@@ -114,7 +114,7 @@ export const onSearchTextChange = _.debounce(({
       finish();
     }
 
-    dispatch(collapseMulti([typeToCollapse, sectionToCollapse]))
+    dispatch(chainActions([typeToCollapse, sectionToCollapse]))
       .then(finish);
   }
 }, 400);

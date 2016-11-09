@@ -1,3 +1,5 @@
+import { _ } from 'meteor/underscore';
+
 import { CollectionNames } from '/imports/share/constants';
 import {
   compose,
@@ -46,14 +48,21 @@ export const getSelectedAndDefaultStandardByFilter = ({
         containedIn,
         selected: findStandard(containedIn),
         default: getC('sections[0].standards[0]', { sections }),
+        defaultContainedIn: _.first(sections),
       };
     }
     case 2: {
       const containedIn = types.find(findSection);
       return {
-        containedIn,
+        containedIn: { ...containedIn, children: [{ ...findSection(containedIn) }] },
         selected: findStandard(findSection(containedIn)),
         default: getC('types[0].sections[0].standards[0]', { types }),
+        defaultContainedIn: {
+          ..._.first(types),
+          children: [
+            { ...getC('types[0].sections[0]', { types }) },
+          ],
+        },
       };
     }
     case 3: {
@@ -63,6 +72,7 @@ export const getSelectedAndDefaultStandardByFilter = ({
         containedIn,
         selected: findStandard(containedIn),
         default: getC('standards[0]', containedIn),
+        defaultContainedIn: containedIn,
       };
     }
     default: {
@@ -71,6 +81,7 @@ export const getSelectedAndDefaultStandardByFilter = ({
         containedIn,
         selected: null,
         default: getC('standards[0]', containedIn),
+        defaultContainedIn: containedIn,
       };
     }
   }
