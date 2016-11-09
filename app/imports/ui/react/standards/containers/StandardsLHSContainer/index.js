@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps } from 'recompose';
+import { compose, withHandlers, mapProps, withProps } from 'recompose';
 
-import { flattenMapStandards } from '/imports/api/helpers';
+import { flattenMapStandards, propEq } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
 import {
   onSectionToggleCollapse,
@@ -17,10 +17,14 @@ const mapStateToProps = ({
     sectionsFiltered,
     typesFiltered,
     standardId,
+    standards,
+    standardsFiltered,
   },
   global: { searchText, filter, collapsed, animating },
   organizations: { orgSerialNumber },
 }) => ({
+  standards,
+  standardsFiltered,
   sections,
   types,
   sectionsFiltered,
@@ -35,19 +39,28 @@ const mapStateToProps = ({
 
 export default compose(
   connect(mapStateToProps),
+  withProps(props => ({ collapseOnSearch: props.filter !== 3 })),
   withHandlers({
     onSectionToggleCollapse,
     onTypeToggleCollapse,
     onClear,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
-  mapProps(props => ({
-    ...props,
-    shouldCollapseOnMount: true,
-    sections: props.searchText ? props.sectionsFiltered : props.sections,
-    types: props.searchText ? props.typesFiltered : props.types,
-    searchResultsText: props.searchText
-      ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
-      : '',
-  }))
+  mapProps(props => {
+    const standardsBySearchText = props.searchText ? props.standardsFiltered : props.standards;
+    const standards = props.filter === 3
+      ? standardsBySearchText.filter(propEq('isDeleted', true))
+      : standardsBySearchText;
+
+    return {
+      ...props,
+      standards,
+      shouldCollapseOnMount: true,
+      sections: props.searchText ? props.sectionsFiltered : props.sections,
+      types: props.searchText ? props.typesFiltered : props.types,
+      searchResultsText: props.searchText
+        ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
+        : '',
+    };
+  })
 )(StandardsLHS);

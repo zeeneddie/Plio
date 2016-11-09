@@ -3,6 +3,7 @@ import React from 'react';
 import LHSContainer from '../../../containers/LHSContainer';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import StandardsLHSTypeList from '../StandardsLHSTypeList';
+import StandardsLHSStandardList from '../StandardsLHSStandardList';
 
 const StandardsLHS = (props) => {
   let content;
@@ -30,6 +31,16 @@ const StandardsLHS = (props) => {
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
         />
+      );
+      break;
+    case 3:
+      content = (
+        <div className="list-group">
+          <StandardsLHSStandardList
+            standards={props.standards}
+            orgSerialNumber={props.orgSerialNumber}
+          />
+        </div>
       );
       break;
   }

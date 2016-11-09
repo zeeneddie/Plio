@@ -26,11 +26,17 @@ export const INIT_SECTIONS = 'INIT_SECTIONS';
 
 export const SET_SECTIONS = 'SET_SECTIONS';
 
+export const SET_ALL_SECTIONS = 'SET_ALL_SECTIONS';
+
 export const SET_STANDARDS = 'SET_STANDARDS';
 
 export const INIT_TYPES = 'INIT_TYPES';
 
 export const SET_TYPES = 'SET_TYPES';
+
+export const SET_ALL_TYPES = 'SET_ALL_TYPES';
+
+export const INIT_STANDARDS = 'INIT_STANDARDS';
 
 export const SET_STANDARD = 'SET_STANDARD';
 

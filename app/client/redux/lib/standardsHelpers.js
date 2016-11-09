@@ -4,7 +4,7 @@ import {
   lengthSections
 } from '/imports/api/helpers';
 
-export const mapSections = (state, sections) => {
+export const initSections = (state, sections) => {
   const {
     standards,
     types,
@@ -28,7 +28,7 @@ export const mapSections = (state, sections) => {
   return sections.map(mapper).filter(lengthStandards);
 };
 
-export const mapTypes = (state, types) => {
+export const initTypes = (state, types) => {
   return types.map((type) => {
     const sections = state.sections.map((section) => {
       const standards = section.standards.filter((standard) => {
@@ -42,3 +42,15 @@ export const mapTypes = (state, types) => {
     return { ...type, sections };
   }).filter(lengthSections);
 };
+
+export const initStandards = (state, standards) =>
+  standards.map((standard) => {
+    const section = state.sections.find(propEq('_id', standard.sectionId));
+    const type = state.types.find(propEq('_id', standard.typeId));
+
+    return {
+      ...standard,
+      section,
+      type,
+    };
+  });

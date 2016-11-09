@@ -20,6 +20,7 @@ import _search_ from '/imports/startup/client/mixins/search';
 import {
   setFilteredSections,
   setFilteredTypes,
+  setFilteredStandards,
 } from '/client/redux/actions/standardsActions';
 import {
   setSearchText,
@@ -28,8 +29,7 @@ import {
   addCollapsed,
   setAnimating,
 } from '/client/redux/actions/globalActions';
-import { CollectionNames } from '/imports/share/constants';
-import { mapTypes } from '/client/redux/lib/standardsHelpers';
+import { initTypes, initStandards } from '/client/redux/lib/standardsHelpers';
 
 const onToggle = fn => ({ dispatch }) => (e, { key, type } = {}) =>
   dispatch(toggleCollapsed({ ...fn(key), close: { type } }));
@@ -45,6 +45,7 @@ export const onSearchTextChange = _.debounce(({
   standardId,
   filter,
   collapsed,
+  collapseOnSearch,
 }, target) => {
   const value = target.value;
   const fields = [
@@ -53,23 +54,28 @@ export const onSearchTextChange = _.debounce(({
     { name: 'status' },
   ];
   const query = _search_.searchQuery(value, fields);
-  const options = { sort: { title: 1 }, fields: { _id: 1 } };
+  const options = { sort: { title: 1 } };
   const standards = Standards.find(query, options).fetch();
   const mapper = section => ({
     ...section,
     standards: section.standards.filter(standard => extractIds(standards).includes(standard._id)),
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
-  const newTypes = mapTypes({ sections: newSections }, types);
+  const newTypes = initTypes({ sections: newSections }, types);
+  const newStandards = initStandards({ sections, types }, standards);
 
-  const actions = [
+  let actions = [
     setSearchText(value),
     setFilteredSections(newSections),
     setFilteredTypes(newTypes),
-    setAnimating(true),
+    setFilteredStandards(newStandards),
   ];
 
+  if (collapseOnSearch) actions = actions.concat(setAnimating(true));
+
   dispatch(batchActions(actions));
+
+  if (!collapseOnSearch) return;
 
   const finish = () => {
     dispatch(setAnimating(false));

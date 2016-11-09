@@ -26,6 +26,9 @@ import {
   setStandard,
   setStandardId,
   setIsCardReady,
+  initStandards,
+  setAllSections,
+  setAllTypes,
 } from '/client/redux/actions/standardsActions';
 import {
   setOrg,
@@ -51,9 +54,12 @@ const onPropsChange = ({ content, dispatch }, onData) => {
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
   const standardId = FlowRouter.getParam('standardId');
-  const layoutSubscription = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber);
+  const isDeleted = filter === 3
+          ? true
+          : { $in: [null, false] };
+  const layoutSub = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber, isDeleted);
 
-  if (layoutSubscription.ready()) {
+  if (layoutSub.ready()) {
     const organization = Organizations.findOne({ serialNumber });
     const organizationId = get(organization, '_id');
 
@@ -86,7 +92,8 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setOrg(organization),
       setOrgId(organizationId),
       setOrgSerialNumber(serialNumber),
-      setTypes(types),
+      setAllSections(sections),
+      setAllTypes(types),
       setStandards(standards),
       setStandard(standard),
       setStandardId(standardId),
@@ -94,6 +101,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setFilter(filter),
       initSections(sections),
       initTypes(types),
+      initStandards(standards),
     ];
 
     dispatch(batchActions(actions));
@@ -120,8 +128,9 @@ export default compose(
           orgSerialNumber,
           standardId: get(this.props, 'sections[0].standards[0]._id'),
         };
+        const queryParams = { filter: 1 };
 
-        FlowRouter.go('standard', params);
+        FlowRouter.go('standard', params, queryParams);
       }
     },
     componentDidMount() {

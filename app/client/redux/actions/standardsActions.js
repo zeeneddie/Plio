@@ -10,6 +10,9 @@ import {
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
   SET_FILTERED_TYPES,
+  INIT_STANDARDS,
+  SET_ALL_SECTIONS,
+  SET_ALL_TYPES,
 } from './types';
 
 export function initSections(payload) {
@@ -23,6 +26,20 @@ export function setSections(payload) {
   return {
     payload,
     type: SET_SECTIONS,
+  };
+}
+
+export function setAllSections(payload) {
+  return {
+    payload,
+    type: SET_ALL_SECTIONS,
+  };
+}
+
+export function initStandards(payload) {
+  return {
+    payload,
+    type: INIT_STANDARDS,
   };
 }
 
@@ -44,6 +61,13 @@ export function setTypes(payload) {
   return {
     payload,
     type: SET_TYPES,
+  };
+}
+
+export function setAllTypes(payload) {
+  return {
+    payload,
+    type: SET_ALL_TYPES,
   };
 }
 
