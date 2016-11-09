@@ -11,13 +11,10 @@ Template.DescriptionTextBox.viewmodel({
       onFocusOut: (e, { value:description }) => {
         invoke(this.parent(), 'update', { description })
       },
-      onChange: (value) =>  {
-        this.description(value);
-      }
     };
   },
   getData() {
-    const { description } = this.data();
+    const { value:description } = this.child('TextBoxField').getData() || {};
     return { description };
   }
 });

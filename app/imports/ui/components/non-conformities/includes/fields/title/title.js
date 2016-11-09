@@ -7,7 +7,7 @@ Template.NC_Title_Edit.viewmodel({
   sequentialId: '',
   titleArgs() {
     const { label, title:value, sequentialId:addon } = this.data();
-    const withFocusCheck = this._id ? true : false;
+    const withFocusCheck = !!this._id;
 
     return {
       label,
@@ -20,11 +20,11 @@ Template.NC_Title_Edit.viewmodel({
         if (!this._id) return;
 
         invoke(this.parent(), 'update', { title });
-      }
+      },
     };
   },
   getData() {
     const { title } = this.data();
     return { title };
-  }
+  },
 });
