@@ -242,6 +242,7 @@ select {
 	position: absolute;
 	right: 15px;
 	top: 0;
+  bottom: 0;
   visibility: hidden;
 	font-size: 21px;
 	line-height: 1;
@@ -280,14 +281,15 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
+  line-height: 34px;
 
   &.focused > .clear-field {
     visibility: visible;
   }
 
   .clear-field {
-    top: 1px;
     right: 2px;
+    line-height: 22px;
   }
 
   input[type="text"],

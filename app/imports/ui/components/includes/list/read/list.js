@@ -14,7 +14,7 @@ Template.List_Read.viewmodel({
       if (event.key === 'Enter') {
         templateInstance
           .viewmodel
-          .onHandleSearchInput(event.target.value);
+          .handleSearchInput(event.target.value);
       }
     },
   },
@@ -24,6 +24,7 @@ Template.List_Read.viewmodel({
   onRendered() {
     this.expandCollapsed(this._id());
   },
+  
   // can be overwritten by passing this function from parent component as prop
   _transform() {
     return {
@@ -33,15 +34,18 @@ Template.List_Read.viewmodel({
   },
   onModalOpen() {},
   onSearchInputValue(value) {},
-  onHandleSearchInput: _.debounce(function(e) {
-    const value = e.target.value;
-
+  handleSearchInput(value) {
     if (value) {
       this.onInputValue(value);
     } else {
       this.onInputEmpty();
     }
-  }, 500),
+  },
+  onHandleSearchInput: _.debounce(function(e) {
+    const value = e.target.value;
+
+    this.handleSearchInput(value);
+  }, 1000),
   onInputValue(value) {
     const doubleQuotes = '"';
     const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
@@ -113,5 +117,5 @@ Template.List_Read.viewmodel({
   onSearchCompleted() {
     this.animating(false);
     Tracker.afterFlush(() => this.focused(true));
-  }
+  },
 });

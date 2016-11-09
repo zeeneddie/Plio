@@ -1,6 +1,9 @@
 .modal {
-  &, .form-control, .btn:not(.help-icon) {
-    @media (min-width: 600px) {
+  @media (min-width: 600px) {
+    .clearable-field-container .clear-field {
+      top: 2px;
+    }
+    &, .form-control, .btn:not(.help-icon) {
       font-size: 15px;
     }
   }
@@ -36,7 +39,7 @@
         .card-title {
           max-width: calc(100% - 200px);
           white-space: nowrap;
-          overflow: hidden;
+          overflow-x: hidden;
           text-overflow: ellipsis;
           margin: 0 auto;
           text-align: center !important;
