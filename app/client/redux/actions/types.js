@@ -40,8 +40,6 @@ export const INIT_STANDARDS = 'INIT_STANDARDS';
 
 export const SET_STANDARD = 'SET_STANDARD';
 
-export const SET_STANDARD_ID = 'SET_STANDARD_ID';
-
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
 export const SET_FILTERED_STANDARDS = 'SET_FILTERED_STANDARDS';
@@ -73,3 +71,5 @@ export const TOGGLE_COLLAPSED = 'TOGGLE_COLLAPSED';
 export const SET_USER_ID = 'SET_USER_ID';
 
 export const SET_ANIMATING = 'SET_ANIMATING';
+
+export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';

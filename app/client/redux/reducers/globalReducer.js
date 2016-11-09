@@ -7,6 +7,7 @@ import {
   REMOVE_COLLAPSED,
   SET_USER_ID,
   SET_ANIMATING,
+  SET_URL_ITEM_ID,
 } from '../actions/types';
 
 const initialState = {
@@ -15,6 +16,7 @@ const initialState = {
   searchText: '',
   collapsed: [],
   animating: false,
+  urlItemId: null,
 };
 
 export default function (state = initialState, action) {
@@ -31,6 +33,8 @@ export default function (state = initialState, action) {
       return { ...state, collapsed: removeCollapsed(state.collapsed, action.payload) };
     case SET_ANIMATING:
       return { ...state, animating: action.payload };
+    case SET_URL_ITEM_ID:
+      return { ...state, urlItemId: action.payload };
     default:
       return state;
   }

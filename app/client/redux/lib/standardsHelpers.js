@@ -5,21 +5,20 @@ import {
   lengthStandards,
   lengthSections,
   compose,
-  not
+  not,
 } from '/imports/api/helpers';
 
 export const initSections = (state, sections) => {
   const {
     standards,
     types,
-    standardId
   } = state;
 
   const mapper = (section) => {
     const ownStandards = standards
       .filter((standard) => {
         return !standard.isDeleted &&
-               standard.sectionId === section._id
+               standard.sectionId === section._id;
       })
       .map((standard) => {
         const type = types.find(propEqId(standard.typeId)) || UncategorizedTypeSection;
@@ -28,7 +27,7 @@ export const initSections = (state, sections) => {
 
     return {
       ...section,
-      standards: ownStandards
+      standards: ownStandards,
     };
   };
 

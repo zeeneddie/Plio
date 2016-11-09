@@ -37,10 +37,10 @@ export const addCollapsedType = compose(addCollapsed, createTypeItem, propId);
 export const addCollapsedSection = compose(addCollapsed, createSectionItem, propId);
 
 export const getSelectedAndDefaultStandardByFilter = ({
-  sections, types, standards, filter, standardId,
+  sections, types, standards, filter, urlItemId,
 }) => {
-  const findStandard = findSelectedStandard(standardId);
-  const findSection = findSelectedSection(standardId);
+  const findStandard = findSelectedStandard(urlItemId);
+  const findSection = findSelectedSection(urlItemId);
   switch (filter) {
     case 1: {
       const containedIn = sections.find(findStandard);

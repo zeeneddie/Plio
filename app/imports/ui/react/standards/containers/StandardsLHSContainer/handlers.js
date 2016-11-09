@@ -43,7 +43,7 @@ export const onSearchTextChange = _.debounce(({
   sections,
   types,
   standards,
-  standardId,
+  urlItemId,
   filter,
   collapsed,
   collapseOnSearch,
@@ -98,8 +98,8 @@ export const onSearchTextChange = _.debounce(({
     dispatch(chainActions(itemsToCollapse)).then(finish);
   } else {
     // expand section and types with currently selected standard and close others
-    const selectedType = types.find(findSelectedSection(standardId));
-    const selectedSection = sections.find(findSelectedStandard(standardId));
+    const selectedType = types.find(findSelectedSection(urlItemId));
+    const selectedSection = sections.find(findSelectedStandard(urlItemId));
     const selectedTypeItem = createTypeItem(getId(selectedType));
     const selectedSectionItem = createSectionItem(getId(selectedSection));
     const addClose = item => ({
@@ -108,6 +108,7 @@ export const onSearchTextChange = _.debounce(({
     });
     const typeToCollapse = addCollapsed(addClose(selectedTypeItem));
     const sectionToCollapse = addCollapsed(addClose(selectedSectionItem));
+    console.log(selectedType, selectedSection, urlItemId)
 
     if (filter === 1) {
       dispatch(sectionToCollapse);

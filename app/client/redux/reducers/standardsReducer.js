@@ -14,7 +14,6 @@ import {
   SET_TYPES,
   INIT_STANDARDS,
   SET_STANDARD,
-  SET_STANDARD_ID,
   SET_IS_CARD_READY,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
@@ -33,7 +32,6 @@ const initialState = {
   standards: [],
   standardsFiltered: [],
   standard: null,
-  standardId: null,
   isCardReady: false,
 };
 
@@ -62,8 +60,6 @@ export default function reducer(state = initialState, action) {
       }, action.payload) };
     case SET_STANDARD:
       return { ...state, standard: action.payload };
-    case SET_STANDARD_ID:
-      return { ...state, standardId: action.payload };
     case SET_IS_CARD_READY:
       return { ...state, isCardReady: action.payload };
     case SET_FILTERED_STANDARDS:

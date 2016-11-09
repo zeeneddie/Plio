@@ -22,9 +22,7 @@ import {
   initSections,
   initTypes,
   setStandards,
-  setTypes,
   setStandard,
-  setStandardId,
   setIsCardReady,
   initStandards,
   setAllSections,
@@ -40,13 +38,12 @@ import {
   addCollapsed,
   setUserId,
   chainActions,
+  setUrlItemId,
 } from '/client/redux/actions/globalActions';
 import { getState } from '/client/redux/store';
 import {
   createSectionItem,
   createTypeItem,
-  findSelectedStandard,
-  findSelectedSection,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
 import { find, getId } from '/imports/api/helpers';
@@ -55,7 +52,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
   const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
-  const standardId = FlowRouter.getParam('standardId');
+  const urlItemId = FlowRouter.getParam('urlItemId');
   const isDeleted = filter === 3
           ? true
           : { $in: [null, false] };
@@ -71,11 +68,11 @@ const onPropsChange = ({ content, dispatch }, onData) => {
     const sections = StandardsBookSections.find(query, options).fetch();
     const types = StandardTypes.find(query, options).fetch();
     const standards = Standards.find(query, options).fetch();
-    const standard = Standards.findOne({ _id: standardId });
+    const standard = Standards.findOne({ _id: urlItemId });
 
     const isCardReady = ((() => {
-      if (standardId) {
-        const subArgs = { organizationId, _id: standardId };
+      if (urlItemId) {
+        const subArgs = { organizationId, _id: urlItemId };
 
         const cardSubscription = DocumentCardSubs.subscribe('standardCard', subArgs, {
           onReady() {
@@ -98,7 +95,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setAllTypes(types),
       setStandards(standards),
       setStandard(standard),
-      setStandardId(standardId),
+      setUrlItemId(urlItemId),
       setIsCardReady(isCardReady),
       setFilter(filter),
       initSections(sections),
@@ -112,7 +109,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       content,
       organization,
       orgSerialNumber: serialNumber,
-      ..._.pick(getState('standards'), 'sections', 'types', 'standards', 'standardId'),
+      ..._.pick(getState('standards'), 'sections', 'types', 'standards', 'urlItemId'),
       ..._.pick(getState('global'), 'filter'),
     });
   }
@@ -124,19 +121,19 @@ export default compose(
   composeWithTracker(onPropsChange, PreloaderPage),
   lifecycle({
     componentWillMount() {
-      const { sections, types, standards, filter, standardId, orgSerialNumber } = this.props;
+      const { sections, types, standards, filter, urlItemId, orgSerialNumber } = this.props;
       const {
         selected: selectedStandard,
         default: defaultStandard,
       } = getSelectedAndDefaultStandardByFilter({
-        sections, types, standards, filter, standardId,
+        sections, types, standards, filter, urlItemId,
       });
       const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
 
       if (shouldRedirect && defaultStandard) {
         const params = {
           orgSerialNumber,
-          standardId: get(defaultStandard, '_id'),
+          urlItemId: get(defaultStandard, '_id'),
         };
         const queryParams = { filter };
 

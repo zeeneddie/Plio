@@ -9,6 +9,7 @@ import {
   ADD_COLLAPSED,
   REMOVE_COLLAPSED,
   SET_ANIMATING,
+  SET_URL_ITEM_ID,
 } from './types';
 
 export function setUserId(payload) {
@@ -64,6 +65,13 @@ export function setAnimating(payload) {
   return {
     payload,
     type: SET_ANIMATING,
+  };
+}
+
+export function setUrlItemId(payload) {
+  return {
+    payload,
+    type: SET_URL_ITEM_ID,
   };
 }
 

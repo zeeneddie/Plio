@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, withProps } from 'recompose';
 import property from 'lodash.property';
 
-import { flattenMapStandards, propEq, not } from '/imports/api/helpers';
+import { propEq, not } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
 import {
   onSectionToggleCollapse,
@@ -17,11 +17,16 @@ const mapStateToProps = ({
     types,
     sectionsFiltered,
     typesFiltered,
-    standardId,
     standards,
     standardsFiltered,
   },
-  global: { searchText, filter, collapsed, animating },
+  global: {
+    searchText,
+    filter,
+    collapsed,
+    animating,
+    urlItemId,
+  },
   organizations: { orgSerialNumber },
 }) => ({
   standards,
@@ -33,7 +38,7 @@ const mapStateToProps = ({
   orgSerialNumber,
   filter,
   collapsed,
-  standardId,
+  urlItemId,
   typesFiltered,
   animating,
 });

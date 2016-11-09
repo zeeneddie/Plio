@@ -5,7 +5,6 @@ import {
   INIT_TYPES,
   SET_TYPES,
   SET_STANDARD,
-  SET_STANDARD_ID,
   SET_IS_CARD_READY,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
@@ -75,13 +74,6 @@ export function setStandard(payload) {
   return {
     payload,
     type: SET_STANDARD,
-  };
-}
-
-export function setStandardId(payload) {
-  return {
-    payload,
-    type: SET_STANDARD_ID,
   };
 }
 

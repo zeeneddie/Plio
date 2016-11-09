@@ -156,7 +156,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
@@ -170,7 +170,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
