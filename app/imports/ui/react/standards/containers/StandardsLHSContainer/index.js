@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, withProps } from 'recompose';
+import property from 'lodash.property';
 
-import { flattenMapStandards, propEq } from '/imports/api/helpers';
+import { flattenMapStandards, propEq, not } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
 import {
   onSectionToggleCollapse,
@@ -50,7 +51,7 @@ export default compose(
     const standardsBySearchText = props.searchText ? props.standardsFiltered : props.standards;
     const standards = props.filter === 3
       ? standardsBySearchText.filter(propEq('isDeleted', true))
-      : standardsBySearchText;
+      : standardsBySearchText.filter(compose(not, property('isDeleted')));
 
     return {
       ...props,
