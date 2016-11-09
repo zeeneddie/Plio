@@ -46,8 +46,9 @@ import {
   createTypeItem,
   findSelectedStandard,
   findSelectedSection,
+  getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { find, getId } from '/imports/api/helpers';
+import { find, getId, propEqId, flattenMapStandards } from '/imports/api/helpers';
 
 const onPropsChange = ({ content, dispatch }, onData) => {
   const userId = Meteor.userId();
@@ -110,7 +111,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       content,
       organization,
       orgSerialNumber: serialNumber,
-      ..._.pick(getState('standards'), 'sections', 'types', 'standardId'),
+      ..._.pick(getState('standards'), 'sections', 'types', 'standards', 'standardId'),
       ..._.pick(getState('global'), 'filter'),
     });
   }
@@ -122,13 +123,21 @@ export default compose(
   composeWithTracker(onPropsChange, PreloaderPage),
   lifecycle({
     componentWillMount() {
-      if (FlowRouter.getRouteName() !== 'standard') {
-        const { orgSerialNumber } = this.props;
+      const { sections, types, standards, filter, standardId, orgSerialNumber } = this.props;
+      const {
+        selected: selectedStandard,
+        default: defaultStandard,
+      } = getSelectedAndDefaultStandardByFilter({
+        sections, types, standards, filter, standardId,
+      });
+      const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
+
+      if (shouldRedirect && defaultStandard) {
         const params = {
           orgSerialNumber,
-          standardId: get(this.props, 'sections[0].standards[0]._id'),
+          standardId: get(defaultStandard, '_id'),
         };
-        const queryParams = { filter: 1 };
+        const queryParams = { filter };
 
         FlowRouter.go('standard', params, queryParams);
       }

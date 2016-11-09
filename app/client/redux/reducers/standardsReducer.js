@@ -56,7 +56,10 @@ export default function reducer(state = initialState, action) {
     case SET_ALL_TYPES:
       return { ...state, allTypes: action.payload };
     case INIT_STANDARDS:
-      return { ...state, standards: initStandards(state, action.payload) };
+      return { ...state, standards: initStandards({
+        sections: state.allSections,
+        types: state.allTypes,
+      }, action.payload) };
     case SET_STANDARD:
       return { ...state, standard: action.payload };
     case SET_STANDARD_ID:

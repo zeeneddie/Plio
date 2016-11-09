@@ -48,10 +48,10 @@ export default compose(
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps(props => {
-    const standardsBySearchText = props.searchText ? props.standardsFiltered : props.standards;
+    const standardsOrFiltered = props.searchText ? props.standardsFiltered : props.standards;
     const standards = props.filter === 3
-      ? standardsBySearchText.filter(propEq('isDeleted', true))
-      : standardsBySearchText.filter(compose(not, property('isDeleted')));
+      ? standardsOrFiltered.filter(propEq('isDeleted', true))
+      : standardsOrFiltered.filter(compose(not, property('isDeleted')));
 
     return {
       ...props,
@@ -60,7 +60,7 @@ export default compose(
       sections: props.searchText ? props.sectionsFiltered : props.sections,
       types: props.searchText ? props.typesFiltered : props.types,
       searchResultsText: props.searchText
-        ? `${flattenMapStandards(props.sectionsFiltered).length} matching results`
+        ? `${standards.length} matching results`
         : '',
     };
   })

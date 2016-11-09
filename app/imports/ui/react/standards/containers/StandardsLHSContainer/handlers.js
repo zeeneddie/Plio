@@ -42,6 +42,7 @@ export const onSearchTextChange = _.debounce(({
   dispatch,
   sections,
   types,
+  standards,
   standardId,
   filter,
   collapsed,
@@ -55,14 +56,16 @@ export const onSearchTextChange = _.debounce(({
   ];
   const query = _search_.searchQuery(value, fields);
   const options = { sort: { title: 1 } };
-  const standards = Standards.find(query, options).fetch();
+  const standardsFound = Standards.find(query, options).fetch();
   const mapper = section => ({
     ...section,
-    standards: section.standards.filter(standard => extractIds(standards).includes(standard._id)),
+    standards: section.standards.filter(standard =>
+        extractIds(standardsFound).includes(standard._id)),
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
   const newTypes = initTypes({ sections: newSections }, types);
-  const newStandards = initStandards({ sections, types }, standards);
+  const newStandards = standards.filter(standard =>
+    extractIds(standardsFound).includes(standard._id));
 
   let actions = [
     setSearchText(value),

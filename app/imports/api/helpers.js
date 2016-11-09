@@ -163,7 +163,7 @@ export const T = () => true;
 
 export const F = () => false;
 
-export const find = curry((transformation, array) => array.find(transformation));
+export const find = curry((transformation, array) => Object.assign([], array).find(transformation));
 
 export const propId = property('_id');
 

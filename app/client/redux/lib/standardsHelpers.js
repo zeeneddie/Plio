@@ -1,7 +1,11 @@
+import property from 'lodash.property';
+
 import {
-  propEq,
+  propEqId,
   lengthStandards,
-  lengthSections
+  lengthSections,
+  compose,
+  not
 } from '/imports/api/helpers';
 
 export const initSections = (state, sections) => {
@@ -13,9 +17,12 @@ export const initSections = (state, sections) => {
 
   const mapper = (section) => {
     const ownStandards = standards
-      .filter(propEq('sectionId', section._id))
+      .filter((standard) => {
+        return !standard.isDeleted &&
+               standard.sectionId === section._id
+      })
       .map((standard) => {
-        const type = types.find(propEq('_id', standard.typeId)) || UncategorizedTypeSection;
+        const type = types.find(propEqId(standard.typeId)) || UncategorizedTypeSection;
         return { ...standard, type };
       });
 
@@ -32,7 +39,8 @@ export const initTypes = (state, types) => {
   return types.map((type) => {
     const sections = state.sections.map((section) => {
       const standards = section.standards.filter((standard) => {
-        return standard.typeId === type._id &&
+        return !standard.isDeleted &&
+               standard.typeId === type._id &&
                standard.sectionId === section._id;
       });
 
@@ -45,8 +53,8 @@ export const initTypes = (state, types) => {
 
 export const initStandards = (state, standards) =>
   standards.map((standard) => {
-    const section = state.sections.find(propEq('_id', standard.sectionId));
-    const type = state.types.find(propEq('_id', standard.typeId));
+    const section = state.sections.find(propEqId(standard.sectionId));
+    const type = state.types.find(propEqId(standard.typeId));
 
     return {
       ...standard,
