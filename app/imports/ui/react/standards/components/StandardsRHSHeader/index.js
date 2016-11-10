@@ -1,9 +1,10 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import PreloaderButton from '../../../../components/PreloaderButton';
-import ToggleExpandButton from '../../../../components/ToggleExpandButton';
-import DiscussButton from '../../../../components/DiscussButton';
+import PreloaderButton from '../../../components/PreloaderButton';
+import ToggleExpandButton from '../../../components/ToggleExpandButton';
+import DiscussButton from '../../../components/DiscussButton';
+import EditButton from '../../../components/EditButton';
 
 const StandardsRHSHeader = (props) => (
   <div className="card-block card-heading">
@@ -26,7 +27,7 @@ const StandardsRHSHeader = (props) => (
             <div>
               {props.isDeleted ? (
                 <div>
-                  <a className="btn btn-secondary" onCLick={props.onRestore}>
+                  <a className="btn btn-secondary" onClick={props.onRestore}>
                     {props.names.restore}
                   </a>
                   <div>
@@ -38,7 +39,7 @@ const StandardsRHSHeader = (props) => (
                   </div>
                 </div>
               ) : (
-                <a className="btn btn-primary" click={props.onModalOpen}>
+                <a className="btn btn-primary" onClick={props.onModalOpen}>
                   <i className="fa fa-pencil"></i>
                   {props.names.edit}
                 </a>

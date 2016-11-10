@@ -1,6 +1,6 @@
 import { PropTypes } from 'react';
 
-import { default as headerPropTypes } from './StandardsRHSHeader/propTypes';
+import { default as headerPropTypes } from '../StandardsRHSHeader/propTypes';
 
 export default {
   isFullScreenMode: PropTypes.bool,

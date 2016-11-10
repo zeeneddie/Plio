@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import StandardsRHSHeader from './StandardsRHSHeader';
+import StandardsRHSHeader from '../StandardsRHSHeader';
 import propTypes from './propTypes';
 
 const StandardsRHS = (props) => (
