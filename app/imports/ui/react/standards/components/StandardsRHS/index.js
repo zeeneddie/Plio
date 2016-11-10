@@ -2,6 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import StandardsRHSHeader from '../StandardsRHSHeader';
+import CollapseContainer from '../../../containers/CollapseContainer';
 import propTypes from './propTypes';
 
 const StandardsRHS = (props) => (
@@ -31,13 +32,7 @@ const StandardsRHS = (props) => (
       />
 
       <div className="content-list">
-        <a
-          onClick={props.toggleCollapse}
-          className={cx(
-            'list-group-item list-group-subheading list-group-toggle pointer',
-            { collapsed: props.collapsed },
-          )}
-        >
+        <CollapseContainer collapsed={props.hasDocxAttachment}>
           <h4 className="list-group-item-heading pull-left">
             <span>{props.standard.title}</span>
             {props.standard.status === 'draft' && (
@@ -47,16 +42,8 @@ const StandardsRHS = (props) => (
               </span>
             )}
           </h4>
-        </a>
-
-        <div
-          className={cx(
-            'list-group-collapse collapse',
-            { in: !props.collapsed }
-          )}
-        >
           Hello World
-        </div>
+        </CollapseContainer>
       </div>
     </div>
   </div>

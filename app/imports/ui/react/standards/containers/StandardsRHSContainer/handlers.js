@@ -8,6 +8,7 @@ import { StandardsHelp } from '/imports/api/help-messages';
 import { getId } from '/imports/api/helpers';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
+import { isOrgOwner } from '/imports/api/checkers';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -91,8 +92,10 @@ export const onDelete = ({
     title,
     isDeleted,
   } = {},
+  userId,
+  organizationId,
 }) => () => {
-  if (!isDeleted) return;
+  if (!isDeleted || !isOrgOwner(userId, organizationId)) return;
 
   const options = {
     text: `The standard "${title}" will be deleted permanently!`,
