@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
 import StandardsRHSHeader from './StandardsRHSHeader';
+import propTypes from './propTypes';
 
 const StandardsRHS = (props) => (
   <div
@@ -51,12 +52,6 @@ const StandardsRHS = (props) => (
   </div>
 );
 
-StandardsRHS.propTypes = {
-  isFullScreenMode: PropTypes.bool,
-  standard: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool,
-  toggleCollapse: PropTypes.func,
-  isCardReady: PropTypes.bool,
-};
+StandardsRHS.propTypes = propTypes;
 
 export default StandardsRHS;

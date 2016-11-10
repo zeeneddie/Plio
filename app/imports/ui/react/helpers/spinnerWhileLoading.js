@@ -1,12 +1,10 @@
-import React from 'react';
+import { _ } from 'meteor/underscore';
 import { branch, renderComponent } from 'recompose';
 
-import PreloaderPage from '../components/PreloaderPage';
-
-const spinnerWhileLoading = hasLoaded => branch(
-  hasLoaded,
+const spinnerWhileLoading = (loading, loader) => branch(
+  loading,
+  renderComponent(loader),
   _.identity,
-  renderComponent(PreloaderPage)
 );
 
 export default spinnerWhileLoading;

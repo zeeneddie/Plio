@@ -7,8 +7,8 @@ import StandardsRHSContainer from '../../containers/StandardsRHSContainer';
 
 const StandardsPage = (props) => props.organization ? (
   <Page>
-    <StandardsLHSContainer/>
-    <StandardsRHSContainer/>
+    <StandardsLHSContainer />
+    <StandardsRHSContainer />
   </Page>
 ) : (
   <NotFoundPage

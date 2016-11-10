@@ -1,35 +1,30 @@
 import React from 'react';
 
+import propTypes from './propTypes';
+import PreloaderButton from '../../../../components/PreloaderButton';
+import ToggleExpandButton from '../../../../components/ToggleExpandButton';
+import DiscussButton from '../../../../components/DiscussButton';
+
 const StandardsRHSHeader = (props) => (
   <div className="card-block card-heading">
     <div className="card-heading-buttons pull-xs-right">
       {props.isReady ? (
         <div>
           {props.hasDocxAttachment && (
-            <a
-              className="btn btn-secondary toggle-expand-btn"
-              onClick={props.onToggleScreenMode}
-            ></a>
+            <ToggleExpandButton onClick={props.onToggleScreenMode} />
           )}
           {!props.isDiscussionOpened && (
-            <a
-              className="btn btn-secondary"
+            <DiscussButton
               onClick={props.onDiscussionOpen}
-              href={props.pathToDiscussion}
-            >
-              {props.messagesNotViewedCount && (
-                <span
-                  className="label label-danger label-chat-count"
-                >
-                  {props.messagesNotViewedCount}
-                </span>
-              )}
-              {props.names.discuss}
-            </a>
+              href={''}
+              // href={props.pathToDiscussion}
+              title={props.names.discuss}
+              // TODO: unreadMessagesCount={}
+            />
           )}
           {props.hasAccess && (
             <div>
-              {props.standard.isDeleted ? (
+              {props.isDeleted ? (
                 <div>
                   <a className="btn btn-secondary" onCLick={props.onRestore}>
                     {props.names.restore}
@@ -52,7 +47,7 @@ const StandardsRHSHeader = (props) => (
           )}
         </div>
       ) : (
-        <div>Loading...</div>
+        <PreloaderButton />
       )}
     </div>
     <h3 className="card-title">
@@ -60,5 +55,7 @@ const StandardsRHSHeader = (props) => (
     </h3>
   </div>
 );
+
+StandardsRHSHeader.propTypes = propTypes;
 
 export default StandardsRHSHeader;
