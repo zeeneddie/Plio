@@ -35,9 +35,11 @@
 
       > .card-heading {
         border-radius: 4px 4px 0 0;
+        max-height: 56px;
 
         .card-title {
           max-width: calc(100% - 200px);
+          line-height: 21px;
           white-space: nowrap;
           overflow-x: hidden;
           text-overflow: ellipsis;
