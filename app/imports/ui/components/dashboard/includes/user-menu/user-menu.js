@@ -57,9 +57,6 @@ Template.UserMenu.viewmodel({
       inviteUsers: {
         onClick: this.onInviteClick.bind(this)
       },
-      standardSubcards: {
-        href: getPath('standardSubcardsPage')
-      },
       logout: {
         onClick: this.logout.bind(this)
       }

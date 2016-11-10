@@ -253,16 +253,6 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/standard-subcards', {
-  name: 'standardSubcardsPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardSubcardsLayout', {
-      content: 'StandardSubcardsPage'
-    });
-  }
-});
-
 function redirectHandler() {
   const targetURL = FlowRouter.getQueryParam('b');
   if (targetURL) {
