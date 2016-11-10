@@ -7,7 +7,7 @@ export const insertMessageFixtures = (limit = 1000) => {
   const discussion = Discussions.findOne({ linkedTo: standardId });
   const discussionId = discussion && discussion._id;
 
-  if (Messages.find({ discussionId }).count() === 0) {
+  if (discussionId && Messages.find({ discussionId }).count() === 0) {
     for (let i = 0; i < limit; i++) {
       MessagesService.insert({
         discussionId,
