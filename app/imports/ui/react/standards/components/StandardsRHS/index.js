@@ -18,6 +18,16 @@ const StandardsRHS = (props) => (
       <StandardsRHSHeader
         isReady={props.isCardReady}
         names={props.names.headerNames}
+        isDeleted={props.standard.isDeleted}
+        pathToDiscussion={props.pathToDiscussion}
+        hasDocxAttachment={props.hasDocxAttachment}
+        hasAccess={props.hasAccess}
+        hasFullAccess={props.hasFullAccess}
+        onToggleScreenMode={props.onToggleScreenMode}
+        onModalOpen={props.onModalOpen}
+        onDiscussionOpen={props.onDiscussionOpen}
+        onRestore={props.onRestore}
+        onDelete={props.onDelete}
       />
 
       <div className="content-list">

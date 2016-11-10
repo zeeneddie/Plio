@@ -1,4 +1,5 @@
 import { _ } from 'meteor/underscore';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { CollectionNames } from '/imports/share/constants';
 import {
@@ -85,4 +86,11 @@ export const getSelectedAndDefaultStandardByFilter = ({
       };
     }
   }
+};
+
+export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {
+  const params = { orgSerialNumber, urlItemId };
+  const queryParams = { filter };
+
+  return FlowRouter.path('standardDiscussion', params, queryParams);
 };

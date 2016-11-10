@@ -12,6 +12,7 @@ import {
   INIT_STANDARDS,
   SET_ALL_SECTIONS,
   SET_ALL_TYPES,
+  SET_IS_FULL_SCREEN_MODE,
 } from './types';
 
 export function initSections(payload) {
@@ -102,5 +103,12 @@ export function setFilteredTypes(payload) {
   return {
     payload,
     type: SET_FILTERED_TYPES,
+  };
+}
+
+export function setIsFullScreenMode(payload) {
+  return {
+    payload,
+    type: SET_IS_FULL_SCREEN_MODE,
   };
 }

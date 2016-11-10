@@ -167,6 +167,10 @@ export const find = curry((transformation, array) => Object.assign([], array).fi
 
 export const propId = property('_id');
 
+export const every = curry((fns, value) => fns.every(fn => fn(value)));
+
+export const some = curry((fns, value) => fns.some(fn => fn(value)));
+
 /**
  * Picks properties of the passed object from the next object and compares them
  * Example: compareProps({ a: 1, b: 2 })({ c: 1, a: 1, b: 2 }) => true

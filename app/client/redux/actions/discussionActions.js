@@ -16,6 +16,7 @@ import {
   SET_FOLLOWING_LIMIT,
   SET_RESET_COMPLETED,
   SET_DISCUSSION,
+  SET_IS_DISCUSSION_OPENED,
 } from './types';
 
 export function setDiscussion(discussion) {
@@ -85,6 +86,13 @@ export function setResetCompleted(bool) {
   return {
     type: SET_RESET_COMPLETED,
     payload: bool,
+  };
+}
+
+export function setIsDiscussionOpened(payload) {
+  return {
+    payload,
+    type: SET_IS_DISCUSSION_OPENED,
   };
 }
 

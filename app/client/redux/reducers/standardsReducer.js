@@ -20,6 +20,7 @@ import {
   SET_FILTERED_TYPES,
   SET_ALL_SECTIONS,
   SET_ALL_TYPES,
+  SET_IS_FULL_SCREEN_MODE,
 } from '../actions/types';
 
 const initialState = {
@@ -33,6 +34,7 @@ const initialState = {
   standardsFiltered: [],
   standard: null,
   isCardReady: false,
+  isFullScreenMode: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -68,6 +70,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, sectionsFiltered: action.payload };
     case SET_FILTERED_TYPES:
       return { ...state, typesFiltered: action.payload };
+    case SET_IS_FULL_SCREEN_MODE:
+      return { ...state, isFullScreenMode: action.payload };
     default:
       return state;
   }

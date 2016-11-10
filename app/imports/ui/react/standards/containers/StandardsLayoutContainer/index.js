@@ -40,15 +40,20 @@ import {
   chainActions,
   setUrlItemId,
 } from '/client/redux/actions/globalActions';
+import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import {
   createSectionItem,
   createTypeItem,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { find, getId } from '/imports/api/helpers';
+import { getId } from '/imports/api/helpers';
 
-const onPropsChange = ({ content, dispatch }, onData) => {
+const onPropsChange = ({
+  content,
+  dispatch,
+  isDiscussionOpened = false,
+}, onData) => {
   const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
@@ -91,6 +96,7 @@ const onPropsChange = ({ content, dispatch }, onData) => {
       setOrg(organization),
       setOrgId(organizationId),
       setOrgSerialNumber(serialNumber),
+      setIsDiscussionOpened(isDiscussionOpened),
       setAllSections(sections),
       setAllTypes(types),
       setStandards(standards),

@@ -9,6 +9,7 @@ import {
   SET_FOLLOWING_LIMIT,
   SET_RESET_COMPLETED,
   SET_DISCUSSION,
+  SET_IS_DISCUSSION_OPENED,
 } from '../actions/types';
 
 export const initialState = {
@@ -21,6 +22,7 @@ export const initialState = {
   priorLimit: 50,
   followingLimit: 50,
   resetCompleted: false,
+  isDiscussionOpened: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -43,6 +45,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, lastMessageId: action.payload };
     case SET_RESET_COMPLETED:
       return { ...state, resetCompleted: action.payload };
+    case SET_IS_DISCUSSION_OPENED:
+      return { ...state, isDiscussionOpened: action.payload };
     case RESET:
       return { ...state, ...action.payload };
     default:
