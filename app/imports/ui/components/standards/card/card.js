@@ -144,7 +144,7 @@ Template.Standards_Card_Read.viewmodel({
     if (ViewModel.findOne('ModalWindow')) return;
 
     this.modal().open({
-      _title: 'Compliance standard',
+      _title: 'Standard',
       template: 'EditStandard',
       helpText: StandardsHelp.standard,
       _id: get(this.standard(), '_id')
