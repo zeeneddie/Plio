@@ -141,11 +141,18 @@ export const transsoc = curry((transformations, obj) => {
 
 export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
 
+// pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
+export const pickDeep = curry((paths, obj) =>
+  flattenObjects(paths.map(path =>
+    ({ [path.replace(/.*\./g, '')]: get(obj, path) }))));
+
 export const pickFrom = curry((prop, props) => compose(pickC(props), property(prop)));
 
 export const pickFromDiscussion = pickFrom('discussion');
 
 export const pickFromStandards = pickFrom('standards');
+
+export const pickFromCollections = pickFrom('collections');
 
 export const omitC = curry((keys, obj) => _.omit(obj, ...keys));
 

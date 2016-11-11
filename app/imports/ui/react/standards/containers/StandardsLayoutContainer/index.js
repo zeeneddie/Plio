@@ -9,6 +9,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
+import { Departments } from '/imports/share/collections/departments';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import {
@@ -40,6 +41,7 @@ import {
   chainActions,
   setUrlItemId,
 } from '/client/redux/actions/globalActions';
+import { setDepartments } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import {
@@ -79,17 +81,19 @@ const onPropsChange = ({
       if (urlItemId) {
         const subArgs = { organizationId, _id: urlItemId };
 
-        const cardSubscription = DocumentCardSubs.subscribe('standardCard', subArgs, {
-          onReady() {
-            BackgroundSubs.subscribe('standardsDeps', organizationId);
-          },
-        });
-
-        return cardSubscription.ready();
+        return DocumentCardSubs.subscribe('standardCard', subArgs).ready();
       }
 
       return true;
     })());
+
+    if (isCardReady) {
+      if (BackgroundSubs.subscribe('standardsDeps', organizationId).ready()) {
+        const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
+
+        dispatch(setDepartments(departments));
+      }
+    }
 
     const actions = [
       setUserId(userId),

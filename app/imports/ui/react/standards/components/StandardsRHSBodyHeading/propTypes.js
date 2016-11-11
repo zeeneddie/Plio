@@ -2,8 +2,8 @@ import { PropTypes } from 'react';
 
 export default {
   standard: PropTypes.shape({
-    status: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    status: PropTypes.string,
+    title: PropTypes.string,
     issueNumber: PropTypes.number,
   }).isRequired,
 };

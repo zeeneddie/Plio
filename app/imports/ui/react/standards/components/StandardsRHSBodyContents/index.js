@@ -3,12 +3,14 @@ import React from 'react';
 import propTypes from './propTypes';
 import _user_ from '/imports/startup/client/mixins/user';
 import createReadFields from '../../../helpers/createReadFields';
+import FieldReadDepartmentsContainer from '../../../containers/FieldReadDepartmentsContainer';
 
 const StandardsRHSBodyContents = ({
   standard: {
     description,
     issueNumber,
     owner,
+    departmentsIds = [],
     section = {},
     type = {},
   } = {},
@@ -16,7 +18,7 @@ const StandardsRHSBodyContents = ({
   const wrap = 'col-md-6';
   const data = [
     { label: 'Description', text: description },
-    { label: 'Issue number', text: null, wrap },
+    { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Section', text: section.title, wrap },
     { label: 'Type', text: type.title, wrap },
     { label: 'Owner', text: _user_.userNameOrEmail(owner), wrap },
@@ -36,6 +38,8 @@ const StandardsRHSBodyContents = ({
         {fields.type}
         {fields.owner}
       </div>
+
+      <FieldReadDepartmentsContainer departmentsIds={departmentsIds} />
     </div>
   );
 };
