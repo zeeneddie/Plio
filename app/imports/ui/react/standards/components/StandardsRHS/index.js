@@ -2,7 +2,8 @@ import React from 'react';
 import cx from 'classnames';
 
 import StandardsRHSHeader from '../StandardsRHSHeader';
-import Collapse from '../../../components/Collapse';
+import PreloaderPage from '../../../components/PreloaderPage';
+import StandardsRHSBodyContainer from '../../containers/StandardsRHSBodyContainer';
 import propTypes from './propTypes';
 
 const StandardsRHS = (props) => (
@@ -31,23 +32,14 @@ const StandardsRHS = (props) => (
         onDelete={props.onDelete}
       />
 
-      <div className="content-list">
-        <Collapse
-          collapsed={props.collapsed}
-          onToggleCollapse={props.onToggleCollapse}
-        >
-          <h4 className="list-group-item-heading pull-left">
-            <span>{props.standard.title}</span>
-            {props.standard.status === 'draft' && (
-              <span className="label label-danger">
-                <span>{`Issue ${props.standard.issueNumber}`}</span>
-                <span>Draft</span>
-              </span>
-            )}
-          </h4>
-          {'Hello world'.repeat(200)}
-        </Collapse>
-      </div>
+      {props.isCardReady ? (
+        <StandardsRHSBodyContainer
+          standard={props.standard}
+          collapsed={props.hasDocxAttachment}
+        />
+      ) : (
+        <PreloaderPage />
+      )}
     </div>
   </div>
 );

@@ -25,8 +25,12 @@ export default class Collapse extends React.Component {
 
   componentDidMount() {
     const collapse = $(this.collapse);
+    const {
+      shouldCollapseOnMount = true,
+      collapsed = true,
+    } = this.props;
 
-    if (this.props.shouldCollapseOnMount && !this.props.collapsed) {
+    if (shouldCollapseOnMount && !collapsed) {
       collapse.collapse('show');
     }
 
@@ -57,11 +61,12 @@ export default class Collapse extends React.Component {
       classNames: {
         head = 'list-group-item list-group-subheading list-group-toggle pointer',
         body = 'list-group-collapse collapse',
+        wrapper = '',
       } = {},
     } = this.props;
 
     return (
-      <div>
+      <div className={wrapper}>
         <a
           onClick={this.onToggleCollapse}
           className={cx(head, { collapsed })}

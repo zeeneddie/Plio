@@ -5,7 +5,6 @@ import { default as headerPropTypes } from '../StandardsRHSHeader/propTypes';
 export default {
   isFullScreenMode: PropTypes.bool,
   standard: PropTypes.object.isRequired,
-  collapsed: PropTypes.bool,
   isCardReady: PropTypes.bool,
   names: PropTypes.shape({
     headerNames: headerPropTypes.names,
@@ -16,5 +15,4 @@ export default {
   onToggleScreenMode: PropTypes.func.isRequired,
   onRestore: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onToggleCollapse: PropTypes.func.isRequired,
 };

@@ -1,7 +1,7 @@
-import { compose, withProps, withHandlers, withState } from 'recompose';
+import { compose, withProps, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
-import { propEq, some, getC, not } from '/imports/api/helpers';
+import { propEq, some, getC } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import {
@@ -61,13 +61,11 @@ export default compose(
       },
     };
   }),
-  withState('collapsed', 'setCollapsed', props => props.hasDocxAttachment),
   withHandlers({
     onToggleScreenMode,
     onDiscussionOpen,
     onModalOpen,
     onRestore,
     onDelete,
-    onToggleCollapse: props => () => props.setCollapsed(not),
   }),
 )(StandardsRHS);

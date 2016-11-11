@@ -6,6 +6,7 @@ export default {
   classNames: PropTypes.shape({
     head: PropTypes.string,
     body: PropTypes.string,
+    wrapper: PropTypes.string,
   }),
   children: PropTypes.node,
   onCollapseShow: PropTypes.func,

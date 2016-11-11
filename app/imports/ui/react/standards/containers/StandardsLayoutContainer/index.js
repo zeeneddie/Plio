@@ -115,8 +115,8 @@ const onPropsChange = ({
       content,
       organization,
       orgSerialNumber: serialNumber,
-      ..._.pick(getState('standards'), 'sections', 'types', 'standards', 'urlItemId'),
-      ..._.pick(getState('global'), 'filter'),
+      ..._.pick(getState('standards'), 'sections', 'types', 'standards'),
+      ..._.pick(getState('global'), 'filter', 'urlItemId'),
     });
   }
 };
@@ -127,13 +127,11 @@ export default compose(
   composeWithTracker(onPropsChange, PreloaderPage),
   lifecycle({
     componentWillMount() {
-      const { sections, types, standards, filter, urlItemId, orgSerialNumber } = this.props;
+      const { filter, orgSerialNumber } = this.props;
       const {
         selected: selectedStandard,
         default: defaultStandard,
-      } = getSelectedAndDefaultStandardByFilter({
-        sections, types, standards, filter, urlItemId,
-      });
+      } = getSelectedAndDefaultStandardByFilter(this.props);
       const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
 
       if (shouldRedirect && defaultStandard) {
