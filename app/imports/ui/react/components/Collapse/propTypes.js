@@ -8,4 +8,8 @@ export default {
     body: PropTypes.string,
   }),
   children: PropTypes.node,
+  onCollapseShow: PropTypes.func,
+  onCollapseShown: PropTypes.func,
+  onCollapseHide: PropTypes.func,
+  onCollapseHidden: PropTypes.func,
 };

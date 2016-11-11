@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import StandardsRHSHeader from '../StandardsRHSHeader';
-import CollapseContainer from '../../../containers/CollapseContainer';
+import Collapse from '../../../components/Collapse';
 import propTypes from './propTypes';
 
 const StandardsRHS = (props) => (
@@ -32,7 +32,10 @@ const StandardsRHS = (props) => (
       />
 
       <div className="content-list">
-        <CollapseContainer collapsed={props.hasDocxAttachment}>
+        <Collapse
+          collapsed={props.collapsed}
+          onToggleCollapse={props.onToggleCollapse}
+        >
           <h4 className="list-group-item-heading pull-left">
             <span>{props.standard.title}</span>
             {props.standard.status === 'draft' && (
@@ -42,8 +45,8 @@ const StandardsRHS = (props) => (
               </span>
             )}
           </h4>
-          Hello World
-        </CollapseContainer>
+          {'Hello world'.repeat(200)}
+        </Collapse>
       </div>
     </div>
   </div>
