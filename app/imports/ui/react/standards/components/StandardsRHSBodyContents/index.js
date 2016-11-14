@@ -1,11 +1,12 @@
 import React from 'react';
 
 import propTypes from './propTypes';
+import { propEqId } from '/imports/api/helpers';
 import _user_ from '/imports/startup/client/mixins/user';
 import createReadFields from '../../../helpers/createReadFields';
 import FieldReadDepartmentsContainer from '../../../containers/FieldReadDepartmentsContainer';
 import SourceRead from '../../../components/SourceRead';
-import { propEq } from '/imports/api/helpers';
+import NotifyRead from '../../../components/NotifyRead';
 
 const StandardsRHSBodyContents = ({
   description,
@@ -14,6 +15,7 @@ const StandardsRHSBodyContents = ({
   departmentsIds = [],
   source1,
   source2,
+  notify,
   section = {},
   type = {},
   files = [],
@@ -29,36 +31,39 @@ const StandardsRHSBodyContents = ({
   const fields = createReadFields(data);
 
   return (
-    <div className="list-group">
-      {fields.description}
+    <div>
+      <div className="list-group">
+        {fields.description}
 
-      <div className="row">
-        {fields.issueNumber}
-        {fields.section}
+        <div className="row">
+          {fields.issueNumber}
+          {fields.section}
+        </div>
+
+        <div className="row">
+          {fields.type}
+          {fields.owner}
+        </div>
+
+        <FieldReadDepartmentsContainer departmentsIds={departmentsIds} />
+
+        {source1 && (
+          <SourceRead
+            {...source1}
+            id={1}
+            file={files.find(propEqId(source1.fileId))}
+          />
+        )}
+
+        {source2 && (
+          <SourceRead
+            {...source2}
+            id={2}
+            file={files.find(propEqId(source2.fileId))}
+          />
+        )}
       </div>
-
-      <div className="row">
-        {fields.type}
-        {fields.owner}
-      </div>
-
-      <FieldReadDepartmentsContainer departmentsIds={departmentsIds} />
-
-      {source1 && (
-        <SourceRead
-          {...source1}
-          id={1}
-          file={files.find(propEq('_id', source1.fileId))}
-        />
-      )}
-
-      {source2 && (
-        <SourceRead
-          {...source2}
-          id={2}
-          file={files.find(propEq('_id', source2.fileId))}
-        />
-      )}
+      {notify && (<NotifyRead users={[...notify]} />)}
     </div>
   );
 };
