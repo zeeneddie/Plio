@@ -13,6 +13,9 @@ import { Departments } from '/imports/share/collections/departments';
 import { Files } from '/imports/share/collections/files';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { Actions } from '/imports/share/collections/actions';
 import {
   DocumentLayoutSubs,
   DocumentCardSubs,
@@ -45,6 +48,9 @@ import {
 import {
   setDepartments,
   setFiles,
+  setNCs,
+  setRisks,
+  setActions,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
@@ -94,13 +100,19 @@ const onPropsChange = ({
     if (isCardReady) {
       if (BackgroundSubs.subscribe('standardsDeps', organizationId).ready()) {
         const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
-        const files = Files.find({ organizationId }, { sort: { updatedAt: -1 } }).fetch();
-        const actions = [
+        const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
+        const ncs = NonConformities.find(query, options).fetch();
+        const risks = Risks.find(query, options).fetch();
+        const actions = Actions.find(query, options).fetch();
+        const reduxActions = [
           setDepartments(departments),
           setFiles(files),
+          setNCs(ncs),
+          setRisks(risks),
+          setActions(actions),
         ];
 
-        dispatch(batchActions(actions));
+        dispatch(batchActions(reduxActions));
       }
     }
 

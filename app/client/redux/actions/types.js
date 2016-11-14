@@ -83,3 +83,9 @@ export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
 
 export const SET_FILES = 'SET_FILES';
+
+export const SET_NCS = 'SET_NCS';
+
+export const SET_RISKS = 'SET_RISKS';
+
+export const SET_ACTIONS = 'SET_ACTIONS';

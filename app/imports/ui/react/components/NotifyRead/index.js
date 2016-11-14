@@ -1,5 +1,6 @@
 import React from 'react';
 
+import propTypes from './propTypes';
 import FieldRead from '../FieldRead';
 import FieldReadBlock from '../FieldReadBlock';
 import _user_ from '/imports/startup/client/mixins/user';
@@ -11,5 +12,7 @@ const NotifyRead = ({ users }) => (
     </FieldRead>
   </FieldReadBlock>
 );
+
+NotifyRead.propTypes = propTypes;
 
 export default NotifyRead;

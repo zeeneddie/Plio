@@ -15,6 +15,7 @@ const StandardsRHSBody = (props) => (
     <StandardsRHSBodyContents
       {...props.standard}
       files={props.files}
+      orgSerialNumber={props.orgSerialNumber}
     />
   </Collapse>
 );
