@@ -36,6 +36,7 @@ const StandardsRHS = (props) => (
         <StandardsRHSBodyContainer
           standard={props.standard}
           collapsed={props.hasDocxAttachment}
+          files={props.files}
         />
       ) : (
         <PreloaderPage />

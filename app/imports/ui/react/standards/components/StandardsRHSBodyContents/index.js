@@ -4,16 +4,19 @@ import propTypes from './propTypes';
 import _user_ from '/imports/startup/client/mixins/user';
 import createReadFields from '../../../helpers/createReadFields';
 import FieldReadDepartmentsContainer from '../../../containers/FieldReadDepartmentsContainer';
+import SourceRead from '../../../components/SourceRead';
+import { propEq } from '/imports/api/helpers';
 
 const StandardsRHSBodyContents = ({
-  standard: {
-    description,
-    issueNumber,
-    owner,
-    departmentsIds = [],
-    section = {},
-    type = {},
-  } = {},
+  description,
+  issueNumber,
+  owner,
+  departmentsIds = [],
+  source1,
+  source2,
+  section = {},
+  type = {},
+  files = [],
 }) => {
   const wrap = 'col-md-6';
   const data = [
@@ -40,6 +43,22 @@ const StandardsRHSBodyContents = ({
       </div>
 
       <FieldReadDepartmentsContainer departmentsIds={departmentsIds} />
+
+      {source1 && (
+        <SourceRead
+          {...source1}
+          id={1}
+          file={files.find(propEq('_id', source1.fileId))}
+        />
+      )}
+
+      {source2 && (
+        <SourceRead
+          {...source2}
+          id={2}
+          file={files.find(propEq('_id', source2.fileId))}
+        />
+      )}
     </div>
   );
 };

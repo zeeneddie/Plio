@@ -1,4 +1,4 @@
-import { compose, withProps, withHandlers } from 'recompose';
+import { compose, withProps, withHandlers, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import { propEq, some, getC } from '/imports/api/helpers';
@@ -25,6 +25,7 @@ const mapStateToProps = ({
   },
   organizations: { organizationId },
   discussion: { isDiscussionOpened },
+  collections: { files },
 }) => ({
   standards,
   urlItemId,
@@ -33,6 +34,7 @@ const mapStateToProps = ({
   organizationId,
   userId,
   isFullScreenMode,
+  files,
 });
 
 export default compose(
@@ -59,6 +61,16 @@ export default compose(
           delete: 'Delete',
         },
       },
+    };
+  }),
+  mapProps(props => {
+    const files = props.files.filter(({ _id }) =>
+      props.standards.find(({ source1 = {}, source2 = {} }) =>
+        Object.is(source1.fileId, _id) || Object.is(source2.fileId, _id)));
+
+    return {
+      ...props,
+      files,
     };
   }),
   withHandlers({

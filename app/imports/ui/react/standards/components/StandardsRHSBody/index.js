@@ -11,8 +11,11 @@ const StandardsRHSBody = (props) => (
     collapsed={props.collapsed}
     onToggleCollapse={props.onToggleCollapse}
   >
-    <StandardsRHSBodyHeading standard={props.standard} />
-    <StandardsRHSBodyContents standard={props.standard} />
+    <StandardsRHSBodyHeading {...props.standard} />
+    <StandardsRHSBodyContents
+      {...props.standard}
+      files={props.files}
+    />
   </Collapse>
 );
 

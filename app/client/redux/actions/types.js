@@ -81,3 +81,5 @@ export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';
 // collections
 
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
+
+export const SET_FILES = 'SET_FILES';
