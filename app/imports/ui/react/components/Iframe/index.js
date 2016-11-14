@@ -1,9 +1,11 @@
 import React from 'react';
 
+import propTypes from './propTypes';
+
 const Iframe = ({
   width = 560,
   height = 315,
-  allowFullScreen = 1,
+  allowFullScreen = true,
   src = null,
   frameBorder = 0,
 }) => (
@@ -19,5 +21,7 @@ const Iframe = ({
     </iframe>
   </div>
 );
+
+Iframe.propTypes = propTypes;
 
 export default Iframe;
