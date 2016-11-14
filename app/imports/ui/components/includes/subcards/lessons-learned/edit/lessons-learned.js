@@ -3,7 +3,7 @@ import invoke from 'lodash.invoke';
 
 import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { insert, update, remove } from '/imports/api/lessons/methods.js';
-import { inspire } from '/imports/api/helpers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const getLinks = instance => instance.data(['linkedTo', 'linkedToId']);
 
@@ -92,7 +92,13 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
         () => {
           const cb = () => {
             viewmodel.destroy();
-            swal('Removed!', `The lesson "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The lesson "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           };
 
           this.modal().callMethod(remove, { _id }, cb);

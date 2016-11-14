@@ -4,6 +4,7 @@ import get from 'lodash.get';
 
 import { update, remove, updateViewedBy } from '/imports/api/standards/methods.js';
 import { isViewed } from '/imports/api/checkers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.EditStandard.viewmodel({
   mixin: ['organization', 'standard', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
@@ -75,7 +76,13 @@ Template.EditStandard.viewmodel({
             return;
           };
 
-          swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+          swal({
+            title: 'Removed!',
+            text: `The standard "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
 

@@ -6,7 +6,7 @@ import {
 } from '/imports/api/risks/methods.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { inspire } from '/imports/api/helpers.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Subcards_Risks_Edit.viewmodel({
   mixin: ['risk', 'organization', 'modal'],
@@ -100,7 +100,13 @@ Template.Subcards_Risks_Edit.viewmodel({
 
             viewmodel.destroy();
 
-            swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The risk "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           };
 
           this.modal().callMethod(remove, { _id }, cb);
