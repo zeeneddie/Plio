@@ -6,7 +6,7 @@ import { _ } from 'meteor/underscore';
 
 import propTypes from './propTypes';
 
-@pure()
+@pure
 export default class Collapse extends React.Component {
   static get propTypes() {
     return propTypes;

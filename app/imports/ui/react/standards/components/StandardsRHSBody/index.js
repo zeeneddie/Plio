@@ -16,6 +16,9 @@ const StandardsRHSBody = (props) => (
       {...props.standard}
       files={props.files}
       orgSerialNumber={props.orgSerialNumber}
+      ncs={props.ncs}
+      risks={props.risks}
+      actions={props.actions}
     />
   </Collapse>
 );

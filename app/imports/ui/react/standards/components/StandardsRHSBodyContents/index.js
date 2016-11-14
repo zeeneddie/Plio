@@ -7,6 +7,7 @@ import createReadFields from '../../../helpers/createReadFields';
 import FieldReadDepartmentsContainer from '../../../containers/FieldReadDepartmentsContainer';
 import SourceRead from '../../../components/SourceRead';
 import NotifyRead from '../../../components/NotifyRead';
+import NCsRead from '../../../components/NCsRead';
 
 const StandardsRHSBodyContents = ({
   description,
@@ -16,6 +17,10 @@ const StandardsRHSBodyContents = ({
   source1,
   source2,
   notify,
+  orgSerialNumber,
+  ncs = [],
+  risks = [],
+  actions = [],
   section = {},
   type = {},
   files = [],
@@ -47,23 +52,24 @@ const StandardsRHSBodyContents = ({
 
         <FieldReadDepartmentsContainer departmentsIds={departmentsIds} />
 
-        {source1 && (
+        {source1 ? (
           <SourceRead
             {...source1}
             id={1}
             file={files.find(propEqId(source1.fileId))}
           />
-        )}
+        ) : null}
 
-        {source2 && (
+        {source2 ? (
           <SourceRead
             {...source2}
             id={2}
             file={files.find(propEqId(source2.fileId))}
           />
-        )}
+        ) : null}
       </div>
-      {notify && (<NotifyRead users={[...notify]} />)}
+      {notify ? (<NotifyRead users={[...notify]} />) : null}
+      {ncs.length ? (<NCsRead ncs={ncs} orgSerialNumber={orgSerialNumber} />) : null}
     </div>
   );
 };

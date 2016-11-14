@@ -1,27 +1,18 @@
 import React from 'react';
-import cx from 'classnames';
+import { withProps } from 'recompose';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
+import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
 import propTypes from './propTypes';
 import FieldRead from '../FieldRead';
 import FieldReadBlock from '../FieldReadBlock';
+import FieldReadLinkItem from '../FieldReadLinkItem';
 
 const NCsRead = ({ ncs }) => (
   <FieldReadBlock label="Non-conformities">
     <FieldRead>
-      {ncs.map(({ title, sequentialId, href, indicator }) => (
-        <a
-          href={href}
-          className="btn btn-secondary btn-inline pointer"
-        >
-          <strong>{sequentialId}</strong>
-          <span>{title}</span>
-          <i
-            className={cx(
-              'fa fa-circle margin-left',
-              `text-${indicator}`
-            )}
-          ></i>
-        </a>
+      {ncs.map((nc) => (
+        <FieldReadLinkItem key={nc._id} {...nc} />
       ))}
     </FieldRead>
   </FieldReadBlock>
@@ -29,4 +20,20 @@ const NCsRead = ({ ncs }) => (
 
 NCsRead.propTypes = propTypes;
 
-export default NCsRead;
+export default withProps((props) => {
+  const ncs = props.ncs
+    .map(nc => ({
+      ...nc,
+      indicator: _problemsStatus_.getClassByStatus(nc.status),
+      href: FlowRouter.path(
+        'nonconformity',
+        { orgSerialNumber: props.orgSerialNumber, nonconformityId: nc._id },
+        { filter: 1 }
+      ),
+    }));
+
+  return {
+    ...props,
+    ncs,
+  };
+})(NCsRead);

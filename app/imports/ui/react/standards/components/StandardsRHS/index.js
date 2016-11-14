@@ -38,6 +38,9 @@ const StandardsRHS = (props) => (
           collapsed={props.hasDocxAttachment}
           files={props.files}
           orgSerialNumber={props.orgSerialNumber}
+          ncs={props.ncs}
+          risks={props.risks}
+          actions={props.actions}
         />
       ) : (
         <PreloaderPage />

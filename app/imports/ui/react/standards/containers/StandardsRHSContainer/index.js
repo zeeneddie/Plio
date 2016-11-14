@@ -69,6 +69,7 @@ export default compose(
     };
   }),
   mapProps(props => {
+    // filter all documents to those linked to the standard
     const files = props.files.filter(({ _id }) =>
       props.standards.find(({ source1 = {}, source2 = {} }) =>
         Object.is(source1.fileId, _id) || Object.is(source2.fileId, _id)));
