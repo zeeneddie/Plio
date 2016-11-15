@@ -5,15 +5,14 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 import { Standards } from '/imports/share/collections/standards.js'
 import { isOrgMember } from '../../checkers.js';
 
-Meteor.publish('discussionsByStandardId', function(standardId) {
+Meteor.publish('discussionsByDocId', function({ docId, organizationId }) {
   const userId = this.userId;
-  const standard = Standards.findOne({ _id: standardId });
 
-  if (standard && !userId || !isOrgMember(userId, get(standard, 'organizationId'))) {
+  if (!userId || !isOrgMember(userId, organizationId)) {
     return this.ready();
   }
 
-  const query = { documentType: 'standard', linkedTo: standardId };
+  const query = { linkedTo: docId, organizationId };
   const options = {
     fields: {
       _id: 1,

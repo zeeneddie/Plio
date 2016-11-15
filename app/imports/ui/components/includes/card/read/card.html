@@ -5,6 +5,17 @@
         {{#unless isReadOnly}}
           <div class="card-heading-buttons pull-xs-right">
             {{#if isReady}}
+              {{#if hasDiscussion}}
+                {{#unless isDiscussionOpened}}
+                  <a class="btn btn-secondary"
+                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
+                    Discuss
+                    {{#if messagesNotViewedCount}}
+                      <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+                    {{/if}}
+                  </a>
+                {{/unless}}
+              {{/if}}
               {{#if this.isDeleted}}
                 <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                   Restore

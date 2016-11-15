@@ -132,7 +132,7 @@ Template.Standards_Card_Read.viewmodel({
   onDiscussionOpen(e) {
     e.preventDefault();
 
-    const mobileWidth = isMobileRes()
+    const mobileWidth = isMobileRes();
 
     if (mobileWidth) {
       this.width(mobileWidth);

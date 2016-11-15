@@ -163,6 +163,18 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'nonConformityDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NC_Layout', {
+      content: 'NC_Page',
+      isDiscussionOpened: true
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
