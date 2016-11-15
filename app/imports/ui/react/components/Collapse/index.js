@@ -6,7 +6,7 @@ import { _ } from 'meteor/underscore';
 
 import propTypes from './propTypes';
 
-@pure()
+@pure
 export default class Collapse extends React.Component {
   static get propTypes() {
     return propTypes;
@@ -24,14 +24,12 @@ export default class Collapse extends React.Component {
   }
 
   componentDidMount() {
-    const collapse = $(this.collapse);
-    const {
-      shouldCollapseOnMount = true,
-      collapsed = true,
-    } = this.props;
+    const { collapsed = true } = this.props;
 
-    if (shouldCollapseOnMount && !collapsed) {
-      collapse.collapse('show');
+    const collapse = $(this.collapse);
+
+    if (!collapsed) {
+      collapse.addClass('in');
     }
 
     collapse.on('show.bs.collapse', this.onCollapseShow);

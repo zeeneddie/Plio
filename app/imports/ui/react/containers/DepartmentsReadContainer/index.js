@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose, mapProps, setPropTypes } from 'recompose';
 import { PropTypes } from 'react';
 
-import FieldReadDepartments from '../../components/FieldReadDepartments';
+import DepartmentsRead from '../../components/DepartmentsRead';
 import { pickFromCollections } from '/imports/api/helpers';
 
 const mapStateToProps = pickFromCollections(['departments']);
@@ -17,4 +17,4 @@ export default compose(
     departments: props.departments.filter(department =>
       props.departmentsIds.includes(department._id)),
   })),
-)(FieldReadDepartments);
+)(DepartmentsRead);

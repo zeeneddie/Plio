@@ -10,8 +10,13 @@ import { Meteor } from 'meteor/meteor';
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
 import { Departments } from '/imports/share/collections/departments';
+import { Files } from '/imports/share/collections/files';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkItems } from '/imports/share/collections/work-items';
 import {
   DocumentLayoutSubs,
   DocumentCardSubs,
@@ -41,7 +46,14 @@ import {
   chainActions,
   setUrlItemId,
 } from '/client/redux/actions/globalActions';
-import { setDepartments } from '/client/redux/actions/collectionsActions';
+import {
+  setDepartments,
+  setFiles,
+  setNCs,
+  setRisks,
+  setActions,
+  setWorkItems,
+} from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import {
@@ -89,9 +101,23 @@ const onPropsChange = ({
 
     if (isCardReady) {
       if (BackgroundSubs.subscribe('standardsDeps', organizationId).ready()) {
+        const pOptions = { sort: { serialNumber: 1 } };
         const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
+        const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
+        const ncs = NonConformities.find(query, pOptions).fetch();
+        const risks = Risks.find(query, pOptions).fetch();
+        const actions = Actions.find(query, pOptions).fetch();
+        const workItems = WorkItems.find(query, pOptions).fetch();
+        const reduxActions = [
+          setDepartments(departments),
+          setFiles(files),
+          setNCs(ncs),
+          setRisks(risks),
+          setActions(actions),
+          setWorkItems(workItems),
+        ];
 
-        dispatch(setDepartments(departments));
+        dispatch(batchActions(reduxActions));
       }
     }
 

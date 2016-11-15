@@ -1,7 +1,6 @@
 import { PropTypes } from 'react';
 
 export default {
+  departments: PropTypes.arrayOf(PropTypes.object).isRequired,
   label: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.node,
 };

@@ -5,7 +5,7 @@ import propTypes from './propTypes';
 import Collapse from '../../../components/Collapse';
 import StandardsRHSBodyHeading from '../StandardsRHSBodyHeading';
 import StandardsRHSBodyContents from '../StandardsRHSBodyContents';
-import ChangelogContainer from '/imports/ui/react/changelog/containers/ChangelogContainer';
+import ChangelogContainer from '../../../changelog/containers/ChangelogContainer';
 
 const StandardsRHSBody = (props) => (
   <Collapse
@@ -13,9 +13,17 @@ const StandardsRHSBody = (props) => (
     collapsed={props.collapsed}
     onToggleCollapse={props.onToggleCollapse}
   >
-    <StandardsRHSBodyHeading standard={props.standard} />
+    <StandardsRHSBodyHeading {...props.standard} />
     <div>
-      <StandardsRHSBodyContents standard={props.standard} />
+      <StandardsRHSBodyContents
+        {...props.standard}
+        files={props.files}
+        orgSerialNumber={props.orgSerialNumber}
+        ncs={props.ncs}
+        risks={props.risks}
+        actions={props.actions}
+        workItems={props.workItems}
+      />
       <ChangelogContainer
         documentId={props.standard ? props.standard._id : ''}
         collection={CollectionNames.STANDARDS}
