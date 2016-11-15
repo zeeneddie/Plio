@@ -17,7 +17,7 @@ const getMenuItems = () => (
         href={`?filter=${filter}`}
         value={filterWithPrepend}
       >
-        Standard - {filterWithPrepend}
+        Standards - {filterWithPrepend}
       </Dropdown.Item>
     );
   })
@@ -28,7 +28,7 @@ const StandardsLayout = (props) => (
     <Header>
       <Dropdown className="navbar-title">
         <Dropdown.Title>
-          Standard <span className="text-muted">- @value</span>
+          Standards <span className="text-muted">- @value</span>
         </Dropdown.Title>
         <Dropdown.Menu>
           {getMenuItems()}
