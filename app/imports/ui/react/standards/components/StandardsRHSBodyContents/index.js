@@ -2,7 +2,7 @@ import React from 'react';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import propTypes from './propTypes';
-import { propEq, propEqId } from '/imports/api/helpers';
+import { propEqId } from '/imports/api/helpers';
 import _user_ from '/imports/startup/client/mixins/user';
 import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
 import _actionStatus_ from '/imports/startup/client/mixins/actionStatus';
@@ -13,6 +13,7 @@ import DepartmentsReadContainer from '../../../containers/DepartmentsReadContain
 import SourceRead from '../../../components/SourceRead';
 import NotifyRead from '../../../components/NotifyRead';
 import FieldReadLinkItemList from '../../../components/FieldReadLinkItemList';
+import IPRead from '../../../components/IPRead';
 
 const StandardsRHSBodyContents = ({
   description,
@@ -22,6 +23,7 @@ const StandardsRHSBodyContents = ({
   source1,
   source2,
   notify,
+  improvementPlan,
   orgSerialNumber,
   ncs = [],
   risks = [],
@@ -87,7 +89,9 @@ const StandardsRHSBodyContents = ({
           {fields.owner}
         </div>
 
-        {departmentsIds.length && (<DepartmentsReadContainer departmentsIds={departmentsIds} />)}
+        {departmentsIds.length ? (
+          <DepartmentsReadContainer departmentsIds={departmentsIds} />
+        ) : null}
 
         {source1 ? (
           <SourceRead
@@ -137,6 +141,13 @@ const StandardsRHSBodyContents = ({
           label="Preventative actions"
           items={actionsByType[ActionTypes.PREVENTATIVE_ACTION]}
           orgSerialNumber={orgSerialNumber}
+        />
+      ) : null}
+
+      {improvementPlan ? (
+        <IPRead
+          label="Improvement Plan"
+          {...improvementPlan}
         />
       ) : null}
 

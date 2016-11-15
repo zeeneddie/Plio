@@ -1,6 +1,6 @@
 import React from 'react';
-import Blaze from 'meteor/blaze-react-component';
 
+import FileItemRead from '../FileItemRead';
 import Iframe from '../Iframe';
 import propTypes from './propTypes';
 import getVideoSource from '../../helpers/getVideoSource';
@@ -27,12 +27,12 @@ const SourceRead = ({ id, type, url, file }) => {
     case 'attachment':
       content = file ? (
         <h4 className="list-group-item-heading">
-          <Blaze template="FileItem_Read" file={file} />
+          <FileItemRead file={file} />
         </h4>
       ) : null;
       break;
     case 'video':
-      content = (<Iframe src={getVideoSource(url)} />);
+      content = (<Iframe src={getVideoSource(url)} className="video" />);
       break;
     default:
       content = null;

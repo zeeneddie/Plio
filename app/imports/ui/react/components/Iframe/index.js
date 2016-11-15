@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 
 import propTypes from './propTypes';
 
@@ -8,8 +9,9 @@ const Iframe = ({
   allowFullScreen = true,
   src = null,
   frameBorder = 0,
+  className = '',
 }) => (
-  <div className="iframe-wrapper video">
+  <div className={cx(className, 'iframe-wrapper')}>
     <div className="iframe-placeholder"></div>
     <iframe
       width={width}
