@@ -424,7 +424,7 @@ input:focus ~ .clear-field {
 .form-group-buttons {
   .btn, .btn-group {
     margin-right: 3px;
-    display: block;
+    display: inline-block;
     overflow: auto;
   }
 
