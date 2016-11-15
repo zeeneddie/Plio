@@ -1,31 +1,31 @@
 import React, { PropTypes } from 'react';
 import { Item } from './Item';
+import { mapProps } from 'recompose';
 
-const Menu = (props) => {
-  const { children, activeItemIndex, onChange } = props;
-
-  const mappedChildren = React.Children.map(children, (child, index) => {
-    const isActive = activeItemIndex === index;
+const enhance = mapProps(props => ({
+  ...props,
+  children: React.Children.map(props.children, (child, index) => {
+    const isActive = props.activeItemIndex === index;
 
     return React.cloneElement(child, {
       active: isActive,
       onClick: () => {
-        onChange(index);
+        props.onChange(index);
       },
     });
-  });
+  }),
+}));
 
-  return (
-    <div className="dropdown-menu">
-      {mappedChildren}
-    </div>
-  );
-};
+const Menu = enhance(({ children }) => (
+  <div className="dropdown-menu">
+    {children}
+  </div>
+));
 
 Menu.propTypes = {
   children: PropTypes.arrayOf(Item),
   onChange: PropTypes.func,
-  activeItemIndex: PropTypes.bool,
+  activeItemIndex: PropTypes.number,
 };
 
 Menu.Item = Item;

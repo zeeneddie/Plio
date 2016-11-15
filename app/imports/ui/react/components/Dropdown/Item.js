@@ -10,6 +10,6 @@ export const Item = ({ pointer = false, active = false, children, ...other }) =>
 Item.propTypes = {
   pointer: PropTypes.bool,
   active: PropTypes.bool,
-  children: PropTypes.array,
+  children: PropTypes.node,
   onClick: PropTypes.func,
 };

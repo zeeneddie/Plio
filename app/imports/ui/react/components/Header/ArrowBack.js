@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
+import { _ } from 'meteor/underscore';
 
 const pullMap = {
   left: 'pull-xs-left',
@@ -15,8 +16,10 @@ export const ArrowBack = ({ pull, href = '#', onClick, ...other }) => (
         className="nav-link pointer"
         href={href}
         onClick={(e) => {
-          e.preventDefault();
-          onClick();
+          if (_.isFunction(onClick)) {
+            e.preventDefault();
+            onClick();
+          }
         }}
       >
         <i className="fa fa-angle-left" />

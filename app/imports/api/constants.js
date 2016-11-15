@@ -21,9 +21,9 @@ export const RiskFilters = {
 };
 
 export const StandardFilters = {
-  1: 'section',
-  2: 'type',
-  3: 'deleted'
+  1: { name: 'section', prepend: 'by' },
+  2: { name: 'type', prepend: 'by' },
+  3: { name: 'deleted', prepend: '' },
 };
 
 export const WorkInboxFilters = {

@@ -2,19 +2,25 @@ import React from 'react';
 import { StandardFilters } from '/imports/api/constants';
 import Header from '../../../components/Header';
 import Dropdown from '../../../components/Dropdown';
-import goToDashboard from '../../../helpers/goToDashboard';
+import { goToDashboard } from '../../../helpers/routeHelpers';
+import { _ } from 'meteor/underscore';
+import cx from 'classnames';
 
 const getMenuItems = () => (
-  _.map(StandardFilters, (filterName, filter) =>
-    <Dropdown.Item
-      pointer
-      key={`standard-filter${filter}`}
-      href={`?filter=${filter}`}
-      value={filterName}
-    >
-      Standard - by {filterName}
-    </Dropdown.Item>
-  )
+  _.map(StandardFilters, (filterParam, filter) => {
+    const filterWithPrepend = cx(filterParam.prepend, filterParam.name);
+
+    return (
+      <Dropdown.Item
+        pointer
+        key={`standard-filter${filter}`}
+        href={`?filter=${filter}`}
+        value={filterWithPrepend}
+      >
+        Standard - {filterWithPrepend}
+      </Dropdown.Item>
+    );
+  })
 );
 
 const StandardsLayout = (props) => (
@@ -22,7 +28,7 @@ const StandardsLayout = (props) => (
     <Header>
       <Dropdown className="navbar-title">
         <Dropdown.Title>
-          Standard <span className="text-muted">- by @value</span>
+          Standard <span className="text-muted">- @value</span>
         </Dropdown.Title>
         <Dropdown.Menu>
           {getMenuItems()}

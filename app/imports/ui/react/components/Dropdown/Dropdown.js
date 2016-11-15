@@ -1,51 +1,53 @@
 import React, { PropTypes } from 'react';
+import { _ } from 'meteor/underscore';
 import { Item } from './Item';
 import { Menu } from './Menu';
 import { Title } from './Title';
-import { withState } from 'recompose';
+import { withState, mapProps, compose } from 'recompose';
 import cx from 'classnames';
-import lodashGet from 'lodash.get';
+import get from 'lodash.get';
 
-const getMenuValue = (menu, index) => lodashGet(menu, `props.children[${index}].props.value`);
+const getMenuValue = (menu, index) => get(menu, `props.children[${index}].props.value`);
 
-const enhance = withState('activeItemIndex', 'setActiveItemIndex', 0);
-const Dropdown = enhance((props) => {
-  const { children, className, activeItemIndex, setActiveItemIndex } = props;
-  const dropdownMenu = _.findWhere(children, { type: Menu });
+const enhance = compose(
+  withState('activeItemIndex', 'setActiveItemIndex', 0),
+  mapProps(props => ({
+    ...props,
+    children: React.Children.map(props.children, child => {
+      switch (child.type) {
+        case Menu:
+          return React.cloneElement(child, {
+            activeItemIndex: props.activeItemIndex,
+            onChange: props.setActiveItemIndex,
+          });
 
-  if (_.isUndefined(dropdownMenu)) throw new Error('Dropdown menu section is missing');
+        case Title:
+          return React.cloneElement(child, {
+            dropdownValue: getMenuValue(
+              _.findWhere(props.children, { type: Menu }),
+              props.activeItemIndex
+            ),
+          });
 
-  const menuValue = getMenuValue(dropdownMenu, activeItemIndex);
+        default:
+          return child;
+      }
+    }),
+  })),
+);
 
-  const mappedChild = React.Children.map(children, child => {
-    switch (child.type) {
-      case Menu:
-        return React.cloneElement(child, {
-          activeItemIndex,
-          onChange: setActiveItemIndex,
-        });
-
-      case Title:
-        return React.cloneElement(child, {
-          dropdownValue: menuValue,
-        });
-
-      default:
-        return child;
-    }
-  });
-
-  return (
-    <div className={cx('dropdown', className)}>
-      {mappedChild}
-    </div>
-  );
-});
+const Dropdown = enhance(({ children, className }) => (
+  <div className={cx('dropdown', className)}>
+    {children}
+  </div>
+));
 
 Dropdown.propTypes = {
   children: PropTypes.arrayOf(Item),
   className: PropTypes.string,
   onChange: PropTypes.func,
+  activeItemIndex: PropTypes.number,
+  setActiveItemIndex: PropTypes.func,
 };
 
 Dropdown.Item = Item;
