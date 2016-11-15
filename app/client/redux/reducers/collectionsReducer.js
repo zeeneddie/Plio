@@ -5,6 +5,7 @@ import {
   SET_RISKS,
   SET_ACTIONS,
   SET_WORK_ITEMS,
+  SET_LESSONS_LEARNED,
 } from '../actions/types';
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   risks: [],
   actions: [],
   workItems: [],
+  lessons: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -24,6 +26,7 @@ export default function reducer(state = initialState, action) {
     case SET_RISKS:
     case SET_ACTIONS:
     case SET_WORK_ITEMS:
+    case SET_LESSONS_LEARNED:
       return { ...state, ...action.payload };
     default:
       return state;

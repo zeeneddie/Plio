@@ -30,8 +30,8 @@ const StandardsRHSBodyContents = ({
   actions = [],
   section = {},
   type = {},
-  files = [],
   workItems = [],
+  lessons = [],
 }) => {
   const wrap = 'col-md-6';
   const data = [
@@ -73,6 +73,7 @@ const StandardsRHSBodyContents = ({
     };
   });
   const actionsByType = _workInbox_._splitActionsByType(actionsMapped);
+  const lessonsMapped = lessons.map(ll => ({ ...ll, sequentialId: `LL${ll.serialNumber}` }));
 
   return (
     <div>
@@ -94,19 +95,11 @@ const StandardsRHSBodyContents = ({
         ) : null}
 
         {source1 ? (
-          <SourceRead
-            {...source1}
-            id={1}
-            file={files.find(propEqId(source1.fileId))}
-          />
+          <SourceRead {...source1} id={1} />
         ) : null}
 
         {source2 ? (
-          <SourceRead
-            {...source2}
-            id={2}
-            file={files.find(propEqId(source2.fileId))}
-          />
+          <SourceRead {...source2} id={2} />
         ) : null}
       </div>
 
@@ -148,6 +141,14 @@ const StandardsRHSBodyContents = ({
         <IPRead
           label="Improvement Plan"
           {...improvementPlan}
+        />
+      ) : null}
+
+      {lessons.length ? (
+        <FieldReadLinkItemList
+          label="Lessons learned"
+          items={lessonsMapped}
+          orgSerialNumber={orgSerialNumber}
         />
       ) : null}
 

@@ -8,14 +8,18 @@ const FieldReadLinkItem = ({ href, indicator, title, sequentialId }) => (
     href={href}
     className="btn btn-secondary btn-inline pointer"
   >
-    <strong>{sequentialId} </strong>
+    {sequentialId && (<strong>{sequentialId} </strong>)}
+
     <span>{title}</span>
-    <i
-      className={cx(
-        'fa fa-circle margin-left',
-        `text-${indicator}`
-      )}
-    ></i>
+
+    {indicator && (
+      <i
+        className={cx(
+          'fa fa-circle margin-left',
+          `text-${indicator}`
+        )}
+      ></i>
+    )}
   </a>
 );
 
