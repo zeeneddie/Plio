@@ -614,8 +614,6 @@ input[disabled], textarea[disabled] {
 }
 
 .input-group .form-control {
-  height: 100%;
-
   &:only-child {
     border-top-left-radius: .25rem;
     border-bottom-left-radius: .25rem;
@@ -643,6 +641,10 @@ input[type="number"] {
   .help-icon {
     padding: 0 0 1.32rem 1.32rem;
     margin: 0 !important;
+
+    > i {
+      color: #aaa;
+    }
   }
 }
 
