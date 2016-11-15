@@ -324,6 +324,10 @@
     position: relative;
     padding-right: 40px;
 
+    .modal & {
+      border-top: 1px solid #e5e5e5;
+    }
+
     &:not(.collapsed) {
       border-radius: 0;
       border-bottom: 1px solid #ddd;
