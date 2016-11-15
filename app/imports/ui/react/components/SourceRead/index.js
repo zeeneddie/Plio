@@ -2,6 +2,7 @@ import React from 'react';
 
 import FileItemRead from '../FileItemRead';
 import Iframe from '../Iframe';
+import IframeWrapper from '../IframeWrapper';
 import propTypes from './propTypes';
 import getVideoSource from '../../helpers/getVideoSource';
 
@@ -32,7 +33,11 @@ const SourceRead = ({ id, type, url, file }) => {
       ) : null;
       break;
     case 'video':
-      content = (<Iframe src={getVideoSource(url)} className="video" />);
+      content = (
+        <IframeWrapper className="video">
+          <Iframe src={getVideoSource(url)} />
+        </IframeWrapper>
+      );
       break;
     default:
       content = null;

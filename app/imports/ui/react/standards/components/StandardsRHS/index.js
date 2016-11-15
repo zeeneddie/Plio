@@ -42,6 +42,7 @@ const StandardsRHS = (props) => (
           risks={props.risks}
           actions={props.actions}
           workItems={props.workItems}
+          lessons={props.lessons}
         />
       ) : (
         <div className="m-t-3">

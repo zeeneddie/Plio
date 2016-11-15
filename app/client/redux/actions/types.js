@@ -119,3 +119,5 @@ export const SET_RISKS = 'SET_RISKS';
 export const SET_ACTIONS = 'SET_ACTIONS';
 
 export const SET_WORK_ITEMS = 'SET_WORK_ITEMS';
+
+export const SET_LESSONS_LEARNED = 'SET_LESSONS_LEARNED';

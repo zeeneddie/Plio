@@ -17,6 +17,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Actions } from '/imports/share/collections/actions';
 import { WorkItems } from '/imports/share/collections/work-items';
+import { LessonsLearned } from '/imports/share/collections/lessons';
 import {
   DocumentLayoutSubs,
   DocumentCardSubs,
@@ -53,6 +54,7 @@ import {
   setRisks,
   setActions,
   setWorkItems,
+  setLessons,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
@@ -108,6 +110,7 @@ const onPropsChange = ({
         const risks = Risks.find(query, pOptions).fetch();
         const actions = Actions.find(query, pOptions).fetch();
         const workItems = WorkItems.find(query, pOptions).fetch();
+        const lessons = LessonsLearned.find(query, pOptions).fetch();
         const reduxActions = [
           setDepartments(departments),
           setFiles(files),
@@ -115,6 +118,7 @@ const onPropsChange = ({
           setRisks(risks),
           setActions(actions),
           setWorkItems(workItems),
+          setLessons(lessons),
         ];
 
         dispatch(batchActions(reduxActions));

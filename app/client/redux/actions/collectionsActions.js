@@ -5,6 +5,7 @@ import {
   SET_RISKS,
   SET_ACTIONS,
   SET_WORK_ITEMS,
+  SET_LESSONS_LEARNED,
 } from './types';
 
 export function setDepartments(departments) {
@@ -46,5 +47,12 @@ export function setWorkItems(workItems) {
   return {
     type: SET_WORK_ITEMS,
     payload: { workItems },
+  };
+}
+
+export function setLessons(lessons) {
+  return {
+    type: SET_LESSONS_LEARNED,
+    payload: { lessons },
   };
 }

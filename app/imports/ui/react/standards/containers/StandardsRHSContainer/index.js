@@ -1,7 +1,7 @@
 import { compose, withProps, withHandlers, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 
-import { propEq, some, getC, propEqId } from '/imports/api/helpers';
+import { propEq, some, getC, propEqId, every } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import {
@@ -12,21 +12,14 @@ import {
   onDelete,
 } from './handlers';
 import { getPathToDiscussion } from '../../helpers';
-import { ProblemTypes } from '/imports/share/constants';
+import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
-  standards: {
-    standards,
-    isCardReady,
-    isFullScreenMode,
-  },
-  global: {
-    urlItemId,
-    userId,
-  },
+  standards: { standards, isCardReady, isFullScreenMode },
+  global: { urlItemId, userId },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
-  collections: { files, ncs, risks, actions, workItems },
+  collections: { files, ncs, risks, actions, workItems, lessons },
 }) => ({
   standards,
   urlItemId,
@@ -41,6 +34,7 @@ const mapStateToProps = ({
   risks,
   actions,
   workItems,
+  lessons,
 });
 
 export default compose(
@@ -70,7 +64,7 @@ export default compose(
     };
   }),
   mapProps(props => {
-    // filter all documents to those linked to the standard
+    // filter all documents to those linked to the standard and map new values to some of them
     const files = props.files.filter(({ _id }) =>
       props.standards.find(({ source1 = {}, source2 = {} }) =>
         Object.is(source1.fileId, _id) || Object.is(source2.fileId, _id)));
@@ -82,6 +76,22 @@ export default compose(
       !isDeleted && linkedTo.find(({ documentId, documentType }) =>
         (documentType === ProblemTypes.NON_CONFORMITY || documentType === ProblemTypes.RISK) &&
         [...ncs].concat(risks).find(propEqId(documentId))));
+    const lessons = props.lessons.filter(
+      every([
+        propEq('documentId', props.standard._id),
+        propEq('documentType', DocumentTypes.STANDARD),
+      ]),
+    );
+    const getFileId = getC('fileId');
+    const source1 = props.standard.source1 && {
+      ...props.standard.source1,
+      file: files.find(propEqId(getFileId(props.standard.source1))),
+    };
+    const source2 = props.standard.source2 && {
+      ...props.standard.source2,
+      file: files.find(propEqId(getFileId(props.standard.source2))),
+    };
+    const standard = { ...props.standard, source1, source2 };
 
     return {
       ...props,
@@ -89,6 +99,8 @@ export default compose(
       ncs,
       risks,
       actions,
+      lessons,
+      standard,
     };
   }),
   withHandlers({
