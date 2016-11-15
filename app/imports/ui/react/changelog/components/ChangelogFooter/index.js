@@ -9,12 +9,12 @@ const ChangelogFooter = (props) => (
         className="btn btn-secondary pointer"
         onClick={props.onViewRecentClick}
       >
-        View 10 recent changes
+        View {props.lastLogsLimit} recent changes
       </a>
     ) : (
       <a
         className={`btn btn-secondary pointer
-          ${(props.logsCount <= 10) ? 'not-visible' : ''}`}
+          ${(props.logsCount <= props.lastLogsLimit) ? 'not-visible' : ''}`}
         onClick={props.onViewAllClick}
       >
         View all changes ({props.logsCount} total)

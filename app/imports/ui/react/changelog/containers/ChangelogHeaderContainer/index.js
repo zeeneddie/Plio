@@ -20,6 +20,10 @@ import propTypes from './propTypes';
 
 const onPropsChange = (props, onData) => {
   const { dispatch, documentId, collection } = props;
+  if (!documentId) {
+    onData(null, props);
+    return;
+  }
 
   const docCollection = getCollectionByName(collection);
   const doc = docCollection && docCollection.findOne({ _id: documentId });
@@ -47,7 +51,7 @@ const onPropsChange = (props, onData) => {
 
   onData(null, props);
 
-  return () => sub.stop();
+  return () => sub && sub.stop();
 };
 
 const mapStateToProps = (state) => {

@@ -12,20 +12,20 @@ import {
   setLastLogsLoaded,
   setLoadingAllLogs,
   setAllLogsLoaded,
-  setChangelogDocumentId,
-  setChangelogDocumentCollection,
+  setChangelogDocumentData,
   setShowAll,
 } from '/client/redux/actions/changelogActions';
+import { lastLogsLimit } from '../../constants';
 import Changelog from '../../components/Changelog';
 import propTypes from './propTypes';
 
 const onPropsChange = (props, onData) => {
   const { dispatch, documentId, collection } = props;
 
-  dispatch(batchActions([
-    setChangelogDocumentId(documentId),
-    setChangelogDocumentCollection(collection)
-  ]));
+  dispatch(setChangelogDocumentData({
+    documentId,
+    collection,
+  }));
 
   onData(null, props);
 };
@@ -88,6 +88,8 @@ const _ChangelogContainer = Component => class extends React.Component {
           setShowAll(true)
         ]))
       });
+    } else {
+      dispatch(setShowAll(true));
     }
   }
 
@@ -117,7 +119,7 @@ const _ChangelogContainer = Component => class extends React.Component {
       'auditLogs',
       this.props.documentId,
       this.props.collection,
-      10, // skip
+      lastLogsLimit, // skip
       0, // limit
       options
     );

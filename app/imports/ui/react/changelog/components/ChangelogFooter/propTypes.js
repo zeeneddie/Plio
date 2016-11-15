@@ -6,6 +6,7 @@ export default {
   isAllLogsLoaded: PropTypes.bool,
   isLoadingLogsCount: PropTypes.bool,
   showAll: PropTypes.bool,
+  lastLogsLimit: PropTypes.number,
   onViewAllClick: PropTypes.func,
   onViewRecentClick: PropTypes.func,
 };
