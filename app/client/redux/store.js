@@ -15,7 +15,7 @@ const defaultThrottleOption = {
 
 const middlewares = [
   thunk,
-  //logger(),
+  logger(),
   throttleActions(defaultWait, defaultThrottleOption)
 ];
 
