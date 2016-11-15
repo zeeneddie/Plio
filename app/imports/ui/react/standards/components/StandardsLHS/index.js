@@ -15,7 +15,6 @@ const StandardsLHS = (props) => {
         <StandardsLHSSectionList
           collapsed={props.collapsed}
           sections={props.sections}
-          shouldCollapseOnMount={props.shouldCollapseOnMount}
           orgSerialNumber={props.orgSerialNumber}
           onToggleCollapse={props.onSectionToggleCollapse}
         />
@@ -26,7 +25,6 @@ const StandardsLHS = (props) => {
         <StandardsLHSTypeList
           collapsed={props.collapsed}
           types={props.types}
-          shouldCollapseOnMount={props.shouldCollapseOnMount}
           orgSerialNumber={props.orgSerialNumber}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}

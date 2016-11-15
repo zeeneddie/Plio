@@ -44,7 +44,9 @@ const StandardsRHS = (props) => (
           workItems={props.workItems}
         />
       ) : (
-        <PreloaderPage />
+        <div className="m-t-3">
+          <PreloaderPage size={2} />
+        </div>
       )}
     </div>
   </div>

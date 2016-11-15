@@ -61,7 +61,6 @@ export default compose(
     return {
       ...props,
       standards,
-      shouldCollapseOnMount: true,
       sections: props.searchText ? props.sectionsFiltered : props.sections,
       types: props.searchText ? props.typesFiltered : props.types,
       searchResultsText: props.searchText
