@@ -26,7 +26,7 @@ const mapStateToProps = ({
   },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
-  collections: { files, ncs, risks, actions },
+  collections: { files, ncs, risks, actions, workItems },
 }) => ({
   standards,
   urlItemId,
@@ -40,6 +40,7 @@ const mapStateToProps = ({
   ncs,
   risks,
   actions,
+  workItems,
 });
 
 export default compose(

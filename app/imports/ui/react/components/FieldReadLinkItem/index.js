@@ -8,7 +8,7 @@ const FieldReadLinkItem = ({ href, indicator, title, sequentialId }) => (
     href={href}
     className="btn btn-secondary btn-inline pointer"
   >
-    <strong>{sequentialId}</strong>
+    <strong>{sequentialId} </strong>
     <span>{title}</span>
     <i
       className={cx(

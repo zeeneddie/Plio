@@ -4,6 +4,7 @@ import {
   SET_NCS,
   SET_RISKS,
   SET_ACTIONS,
+  SET_WORK_ITEMS,
 } from './types';
 
 export function setDepartments(departments) {
@@ -38,5 +39,12 @@ export function setActions(actions) {
   return {
     type: SET_ACTIONS,
     payload: { actions },
+  };
+}
+
+export function setWorkItems(workItems) {
+  return {
+    type: SET_WORK_ITEMS,
+    payload: { workItems },
   };
 }

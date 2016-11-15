@@ -89,3 +89,5 @@ export const SET_NCS = 'SET_NCS';
 export const SET_RISKS = 'SET_RISKS';
 
 export const SET_ACTIONS = 'SET_ACTIONS';
+
+export const SET_WORK_ITEMS = 'SET_WORK_ITEMS';

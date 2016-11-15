@@ -19,6 +19,7 @@ const StandardsRHSBody = (props) => (
       ncs={props.ncs}
       risks={props.risks}
       actions={props.actions}
+      workItems={props.workItems}
     />
   </Collapse>
 );
