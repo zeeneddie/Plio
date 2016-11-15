@@ -6,7 +6,7 @@ import {
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { inspire } from '/imports/api/helpers.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Subcards_NonConformities_Edit.viewmodel({
   mixin: ['nonconformity', 'organization', 'modal'],
@@ -100,7 +100,13 @@ Template.Subcards_NonConformities_Edit.viewmodel({
 
             viewmodel.destroy();
 
-            swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The non-conformity "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           };
 
           this.modal().callMethod(remove, { _id }, cb);

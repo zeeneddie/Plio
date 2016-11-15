@@ -12,7 +12,7 @@ import { restore, remove } from '/imports/api/standards/methods.js';
 import { StandardsHelp } from '/imports/api/help-messages.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 import { inspire } from '/imports/api/helpers';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'window',
@@ -167,7 +167,13 @@ Template.Standards_Card_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
+            swal({
+              title: 'Restored!',
+              text: `The standard "${title}" was restored successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             FlowRouter.setQueryParams({ filter: 1 });
             Meteor.setTimeout(() => {
@@ -196,7 +202,13 @@ Template.Standards_Card_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The standard "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             const query = {};
             const options = { sort: { deletedAt: -1 } };

@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 import { inspire, chain } from '/imports/api/helpers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const getTableData = instance => inspire(['tableData', 'guideHtml'], instance);
 
@@ -136,7 +137,15 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
         },
         () => {
           const showSuccess = (err) => {
-            if (!err) swal('Removed!', `Risk score was removed successfully.`, 'success');
+            if (!err) {
+              swal({
+                title: 'Removed!',
+                text: `Risk score was removed successfully.`,
+                type: 'success',
+                timer: ALERT_AUTOHIDE_TIME,
+                showConfirmButton: false,
+              });
+            }
           };
 
           this.onRemove({ score }, showSuccess);
