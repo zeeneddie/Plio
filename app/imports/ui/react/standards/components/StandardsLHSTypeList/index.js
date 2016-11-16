@@ -12,7 +12,6 @@ const StandardsLHSTypeList = (props) => (
         item={createTypeItem(type._id)}
         lText={type.title}
         collapsed={props.collapsed}
-        shouldCollapseOnMount={props.shouldCollapseOnMount}
         onToggleCollapse={props.onTypeToggleCollapse}
       >
 
@@ -20,7 +19,6 @@ const StandardsLHSTypeList = (props) => (
           <StandardsLHSSectionList
             collapsed={props.collapsed}
             sections={type.sections}
-            shouldCollapseOnMount={true}
             onToggleCollapse={props.onSectionToggleCollapse}
             orgSerialNumber={props.orgSerialNumber}
           />

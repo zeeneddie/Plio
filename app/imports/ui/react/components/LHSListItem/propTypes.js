@@ -9,7 +9,6 @@ export default {
   item,
   collapsed: PropTypes.arrayOf(item).isRequired,
   onToggleCollapse: PropTypes.func.isRequired,
-  shouldCollapseOnMount: PropTypes.bool,
   children: PropTypes.node,
   lText: PropTypes.string.isRequired,
   rText: PropTypes.string,

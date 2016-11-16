@@ -11,7 +11,7 @@ const createKey = (label) => {
 };
 
 const mapFields = fields => fields.map(({ label, text, wrap }) => {
-  const field = <FieldRead label={label}>{text}</FieldRead>;
+  const field = <FieldRead label={label}><span>{text}</span></FieldRead>;
   return text ? ({
     [createKey(label)]: wrap ? (
       <div className={wrap}>

@@ -36,9 +36,18 @@ const StandardsRHS = (props) => (
         <StandardsRHSBodyContainer
           standard={props.standard}
           collapsed={props.hasDocxAttachment}
+          files={props.files}
+          orgSerialNumber={props.orgSerialNumber}
+          ncs={props.ncs}
+          risks={props.risks}
+          actions={props.actions}
+          workItems={props.workItems}
+          lessons={props.lessons}
         />
       ) : (
-        <PreloaderPage />
+        <div className="m-t-3">
+          <PreloaderPage size={2} />
+        </div>
       )}
     </div>
   </div>

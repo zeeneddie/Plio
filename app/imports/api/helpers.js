@@ -184,7 +184,7 @@ export const some = curry((fns, value) => fns.some(fn => fn(value)));
  */
 
 export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
-
+ 
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

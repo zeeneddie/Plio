@@ -12,7 +12,6 @@ const StandardsLHSSectionList = (props) => (
           collapsed={props.collapsed}
           item={createSectionItem(section._id)}
           lText={section.title}
-          shouldCollapseOnMount={props.shouldCollapseOnMount}
           onToggleCollapse={props.onToggleCollapse}>
 
           <div className="list-group">

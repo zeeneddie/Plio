@@ -10,7 +10,6 @@ const LHSListItem = (props) => (
   <Collapse
     collapsed={isCollapsed(props)}
     onToggleCollapse={e => props.onToggleCollapse(e, props.item)}
-    shouldCollapseOnMount={props.shouldCollapseOnMount}
   >
     <div>
       <h4 className="list-group-item-heading pull-left">{props.lText}</h4>

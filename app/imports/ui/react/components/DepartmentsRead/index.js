@@ -1,18 +1,21 @@
 import React from 'react';
 import property from 'lodash.property';
 
+import propTypes from './propTypes';
 import FieldRead from '../FieldRead';
 
 const renderDepartments = departments =>
   departments.map(property('name')).join(', ');
 
-const FieldReadDepartments = ({
+const DepartmentsRead = ({
   departments = [],
   label = 'Departments',
-}) => departments.length ? (
+}) => (
   <FieldRead label={label}>
     {renderDepartments(departments)}
   </FieldRead>
-) : null;
+);
 
-export default FieldReadDepartments;
+DepartmentsRead.propTypes = propTypes;
+
+export default DepartmentsRead;

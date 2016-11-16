@@ -60,6 +60,34 @@ export const SET_ORG_SERIAL_NUMBER = 'SET_ORG_SERIAL_NUMBER';
 
 export const SET_ORG_ID = 'SET_ORG_ID';
 
+// Changelog
+
+export const SET_LOADING_LAST_HUMAN_LOG = 'SET_LOADING_LAST_HUMAN_LOG';
+
+export const SET_LOADING_LAST_LOGS = 'SET_LOADING_LAST_LOGS';
+
+export const SET_LAST_LOGS_LOADED = 'SET_LAST_LOGS_LOADED';
+
+export const SET_LOADING_ALL_LOGS = 'SET_LOADING_ALL_LOGS';
+
+export const SET_ALL_LOGS_LOADED = 'SET_ALL_LOGS_LOADED';
+
+export const SET_LOADING_LOGS_COUNT = 'SET_LOADING_LOGS_COUNT';
+
+export const SET_LOGS_COUNT = 'SET_LOGS_COUNT';
+
+export const SET_LOGS = 'SET_LOGS';
+
+export const SET_LAST_HUMAN_LOG = 'SET_LAST_HUMAN_LOG';
+
+export const SET_CHANGELOG_DOCUMENT_DATA = 'SET_CHANGELOG_DOCUMENT_DATA';
+
+export const SET_CHANGELOG_DOCUMENT = 'SET_CHANGELOG_DOCUMENT';
+
+export const SET_CHANGELOG_COLLAPSED = 'SET_CHANGELOG_COLLAPSED';
+
+export const SET_SHOW_ALL = 'SET_SHOW_ALL';
+
 // global
 
 export const SET_FILTER = 'SET_FILTER';
@@ -81,3 +109,15 @@ export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';
 // collections
 
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
+
+export const SET_FILES = 'SET_FILES';
+
+export const SET_NCS = 'SET_NCS';
+
+export const SET_RISKS = 'SET_RISKS';
+
+export const SET_ACTIONS = 'SET_ACTIONS';
+
+export const SET_WORK_ITEMS = 'SET_WORK_ITEMS';
+
+export const SET_LESSONS_LEARNED = 'SET_LESSONS_LEARNED';
