@@ -2,7 +2,9 @@ import React from 'react';
 
 import LHSItem from '../../../components/LHSItem';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
+import StandardsLHSStandardList from '../StandardsLHSStandardList';
 import { createTypeItem } from '../../helpers';
+import { lengthStandards } from '/imports/api/helpers';
 
 const StandardsLHSTypeList = (props) => (
   <div>
@@ -14,16 +16,21 @@ const StandardsLHSTypeList = (props) => (
         collapsed={props.collapsed}
         onToggleCollapse={props.onTypeToggleCollapse}
       >
-
         <div className="sub">
-          <StandardsLHSSectionList
-            collapsed={props.collapsed}
-            sections={type.sections}
-            onToggleCollapse={props.onSectionToggleCollapse}
-            orgSerialNumber={props.orgSerialNumber}
-          />
+          {lengthStandards(type) ? (
+            <StandardsLHSStandardList
+              standards={type.standards}
+              orgSerialNumber={props.orgSerialNumber}
+            />
+          ) : (
+            <StandardsLHSSectionList
+              collapsed={props.collapsed}
+              sections={type.sections}
+              onToggleCollapse={props.onSectionToggleCollapse}
+              orgSerialNumber={props.orgSerialNumber}
+            />
+          )}
         </div>
-
       </LHSItem>
     ))}
   </div>

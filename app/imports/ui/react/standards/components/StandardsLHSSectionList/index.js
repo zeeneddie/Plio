@@ -12,13 +12,15 @@ const StandardsLHSSectionList = (props) => (
           collapsed={props.collapsed}
           item={createSectionItem(section._id)}
           lText={section.title}
-          onToggleCollapse={props.onToggleCollapse}>
+          onToggleCollapse={props.onToggleCollapse}
+        >
 
           <div className="list-group">
             <StandardsLHSStandardList
               standards={section.standards}
               section={section}
-              orgSerialNumber={props.orgSerialNumber}/>
+              orgSerialNumber={props.orgSerialNumber}
+            />
           </div>
 
         </LHSItem>

@@ -138,11 +138,13 @@ const onPropsChange = ({
       setIsCardReady(isCardReady),
       setFilter(filter),
       initSections({ sections, types, standards }),
-      initTypes({ types, sections: getState('standards').sections }),
+      // initTypes({ types, sections: getState('standards').sections }),
       initStandards({ types, sections, standards }),
     ];
 
     dispatch(batchActions(actions));
+
+    dispatch(initTypes({ types, sections: getState('standards').sections }))
 
     onData(null, {
       content,
@@ -198,7 +200,12 @@ export default compose(
           const secondLevelKey = getId(get(parentItem, 'children[0]'));
           const typeItem = createTypeItem(topLevelKey);
           const sectionItem = createSectionItem(secondLevelKey);
-          this.props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+          // Uncategorized type will not have second level key
+          if (secondLevelKey) {
+            this.props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+          } else {
+            this.props.dispatch(addCollapsed(typeItem));
+          }
           break;
         }
         case 3:
