@@ -28,15 +28,11 @@ export const INIT_SECTIONS = 'INIT_SECTIONS';
 
 export const SET_SECTIONS = 'SET_SECTIONS';
 
-export const SET_ALL_SECTIONS = 'SET_ALL_SECTIONS';
-
 export const SET_STANDARDS = 'SET_STANDARDS';
 
 export const INIT_TYPES = 'INIT_TYPES';
 
 export const SET_TYPES = 'SET_TYPES';
-
-export const SET_ALL_TYPES = 'SET_ALL_TYPES';
 
 export const INIT_STANDARDS = 'INIT_STANDARDS';
 
@@ -119,3 +115,7 @@ export const SET_RISKS = 'SET_RISKS';
 export const SET_ACTIONS = 'SET_ACTIONS';
 
 export const SET_WORK_ITEMS = 'SET_WORK_ITEMS';
+
+export const SET_STANDARD_BOOK_SECTIONS = 'SET_STANDARD_BOOK_SECTIONS';
+
+export const SET_STANDARD_TYPES = 'SET_STANDARD_TYPES';

@@ -8,12 +8,7 @@ import {
   not,
 } from '/imports/api/helpers';
 
-export const initSections = (state, sections) => {
-  const {
-    standards,
-    types,
-  } = state;
-
+export const initSections = ({ types, sections, standards }) => {
   const mapper = (section) => {
     const ownStandards = standards
       .filter((standard) => {
@@ -34,9 +29,9 @@ export const initSections = (state, sections) => {
   return sections.map(mapper).filter(lengthStandards);
 };
 
-export const initTypes = (state, types) => {
+export const initTypes = ({ sections, types }) => {
   return types.map((type) => {
-    const sections = state.sections.map((section) => {
+    const ownSections = sections.map((section) => {
       const standards = section.standards.filter((standard) => {
         return !standard.isDeleted &&
                standard.typeId === type._id &&
@@ -46,14 +41,14 @@ export const initTypes = (state, types) => {
       return { ...section, standards };
     }).filter(lengthStandards);
 
-    return { ...type, sections };
+    return { ...type, sections: ownSections };
   }).filter(lengthSections);
 };
 
-export const initStandards = (state, standards) =>
+export const initStandards = ({ sections, types, standards }) =>
   standards.map((standard) => {
-    const section = state.sections.find(propEqId(standard.sectionId));
-    const type = state.types.find(propEqId(standard.typeId));
+    const section = sections.find(propEqId(standard.sectionId));
+    const type = types.find(propEqId(standard.typeId));
 
     return {
       ...standard,

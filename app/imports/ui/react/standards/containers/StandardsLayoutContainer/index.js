@@ -31,8 +31,6 @@ import {
   setStandard,
   setIsCardReady,
   initStandards,
-  setAllSections,
-  setAllTypes,
 } from '/client/redux/actions/standardsActions';
 import {
   setOrg,
@@ -53,6 +51,8 @@ import {
   setRisks,
   setActions,
   setWorkItems,
+  setStandardBookSections,
+  setStandardTypes,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
@@ -127,16 +127,15 @@ const onPropsChange = ({
       setOrgId(organizationId),
       setOrgSerialNumber(serialNumber),
       setIsDiscussionOpened(isDiscussionOpened),
-      setAllSections(sections),
-      setAllTypes(types),
-      setStandards(standards),
+      setStandardBookSections(sections),
+      setStandardTypes(types),
       setStandard(standard),
       setUrlItemId(urlItemId),
       setIsCardReady(isCardReady),
       setFilter(filter),
-      initSections(sections),
-      initTypes(types),
-      initStandards(standards),
+      initSections({ sections, types, standards }),
+      initTypes({ types, sections: getState('standards').sections }),
+      initStandards({ types, sections, standards }),
     ];
 
     dispatch(batchActions(actions));
