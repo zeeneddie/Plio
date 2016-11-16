@@ -1,13 +1,13 @@
 import React from 'react';
 
-import LHSListItem from '../../../components/LHSListItem';
+import LHSItem from '../../../components/LHSItem';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import { createTypeItem } from '../../helpers';
 
 const StandardsLHSTypeList = (props) => (
   <div>
     {props.types.map(type => (
-      <LHSListItem
+      <LHSItem
         key={type._id}
         item={createTypeItem(type._id)}
         lText={type.title}
@@ -24,7 +24,7 @@ const StandardsLHSTypeList = (props) => (
           />
         </div>
 
-      </LHSListItem>
+      </LHSItem>
     ))}
   </div>
 );

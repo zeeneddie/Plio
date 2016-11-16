@@ -17,6 +17,7 @@ import {
 } from '../../helpers';
 import { Standards } from '/imports/share/collections/standards';
 import _search_ from '/imports/startup/client/mixins/search';
+import _modal_ from '/imports/startup/client/mixins/modal';
 import {
   setFilteredSections,
   setFilteredTypes,
@@ -129,3 +130,9 @@ export const onClear = props => input => () => {
 
   onSearchTextChange(props, input);
 };
+
+export const onModalOpen = () => () => _modal_.modal.open({
+  _title: 'Compliance standard',
+  template: 'CreateStandard',
+  variation: 'save',
+});

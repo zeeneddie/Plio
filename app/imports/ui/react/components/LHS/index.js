@@ -1,6 +1,8 @@
 import React from 'react';
 
+import propTypes from './propTypes';
 import ClearableField from '../ClearableField';
+import AddButton from '../AddButton';
 
 const LHS = ({
   animating = false,
@@ -37,19 +39,13 @@ const LHS = ({
               onChange={onChange}
             />
           </ClearableField>
-          
+
           {animating && (
             <i className="small-loader fa fa-circle-o-notch fa-spin"></i>
           )}
         </div>
         {onModalButtonClick && (
-          <button
-            className="btn btn-primary"
-            onClick={onModalButtonClick}
-          >
-            <i className="fa fa-plus"></i>
-            <span>Add</span>
-          </button>
+          <AddButton onClick={onModalButtonClick} />
         )}
       </div>
 
@@ -67,5 +63,7 @@ const LHS = ({
     </div>
   );
 };
+
+LHS.propTypes = propTypes;
 
 export default LHS;

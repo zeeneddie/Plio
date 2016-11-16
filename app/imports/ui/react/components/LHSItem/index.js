@@ -6,7 +6,7 @@ import propTypes from './propTypes';
 
 const isCollapsed = props => !props.collapsed.find(propEq('key', props.item.key));
 
-const LHSListItem = (props) => (
+const LHSItem = (props) => (
   <Collapse
     collapsed={isCollapsed(props)}
     onToggleCollapse={e => props.onToggleCollapse(e, props.item)}
@@ -25,6 +25,6 @@ const LHSListItem = (props) => (
   </Collapse>
 );
 
-LHSListItem.propTypes = propTypes;
+LHSItem.propTypes = propTypes;
 
-export default LHSListItem;
+export default LHSItem;
