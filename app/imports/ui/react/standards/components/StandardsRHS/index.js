@@ -35,7 +35,7 @@ const StandardsRHS = (props) => (
       {props.isCardReady ? (
         <StandardsRHSBodyContainer
           standard={props.standard}
-          collapsed={props.hasDocxAttachment}
+          hasDocxAttachment={props.hasDocxAttachment}
           files={props.files}
           orgSerialNumber={props.orgSerialNumber}
           ncs={props.ncs}

@@ -11,7 +11,7 @@ const StandardsRHSHeader = (props) => {
     <ToggleExpandButton onClick={props.onToggleScreenMode} />
   ) : null;
 
-  const discussionButton = props.isDiscussionOpened ? (
+  const discussionButton = !props.isDiscussionOpened ? (
     <DiscussButton
       onClick={props.onDiscussionOpen}
       href={props.pathToDiscussion}
@@ -28,13 +28,11 @@ const StandardsRHSHeader = (props) => {
 
   const deleteButton = props.hasAccess
     && props.isDeleted
-    && props.hasFullAccess
-    ? (
+    && props.hasFullAccess ? (
       <a className="btn btn-primary" onClick={props.onDelete}>
         {props.names.delete}
       </a>
-    )
-    : null;
+    ) : null;
 
   const editButton = !props.isDeleted ? (
     <EditButton
