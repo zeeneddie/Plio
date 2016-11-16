@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { CollectionNames } from '/imports/share/constants';
 import { getC } from '/imports/api/helpers';
 import propTypes from './propTypes';
 import Collapse from '../../../components/Collapse';
@@ -7,6 +8,7 @@ import StandardsRHSBodyHeading from '../StandardsRHSBodyHeading';
 import StandardsRHSBodyContents from '../StandardsRHSBodyContents';
 import SourceWordDocument from '../../../components/SourceWordDocument';
 import SourceRead from '../../../components/SourceRead';
+import ChangelogContainer from '../../../changelog/containers/ChangelogContainer';
 
 const StandardsRHSBody = (props) => (
   <div className="content-list">
@@ -36,6 +38,10 @@ const StandardsRHSBody = (props) => (
         <SourceRead id={2} {...props.standard.source2} />
       </SourceWordDocument>
     )}
+    <ChangelogContainer
+      documentId={props.standard ? props.standard._id : ''}
+      collection={CollectionNames.STANDARDS}
+    />
   </div>
 );
 
