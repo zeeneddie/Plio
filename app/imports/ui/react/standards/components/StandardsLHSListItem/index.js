@@ -1,5 +1,6 @@
 import React from 'react';
 
+import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
 
@@ -58,5 +59,7 @@ const StandardsLHSListItem = ({
     </ListItem>
   </ListItemLink>
 );
+
+StandardsLHSListItem.propTypes = propTypes;
 
 export default StandardsLHSListItem;

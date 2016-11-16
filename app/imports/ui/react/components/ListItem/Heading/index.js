@@ -1,15 +1,14 @@
 import React from 'react';
+import cx from 'classnames';
 
-const ListItemHeading = ({ title, isNew, children }) => (
-  <h4 className="list-group-item-heading pull-xs-left">
-    <span>{title}</span>
+import propTypes from '../propTypes';
 
-    {isNew && (
-      <span className="label label-primary">New</span>
-    )}
-
+const ListItemHeading = ({ className, children }) => (
+  <h4 className={cx(className, 'list-group-item-heading pull-xs-left')}>
     {children}
   </h4>
 );
+
+ListItemHeading.propTypes = propTypes;
 
 export default ListItemHeading;
