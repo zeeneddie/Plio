@@ -1,5 +1,4 @@
 <template name="OrgSettings">
-
     {{> OrgSettings_MainSettings
         name=name
         ownerId=ownerId
@@ -7,6 +6,10 @@
         timezone=timezone
         organizationId=organizationId
         isEditable=true}}
+
+    <div>
+      {{> React component=Subcard title="Hello world" loading=true children="I'm content"}}
+    </div>
 
     {{> OrgSettings_Departments
         departments=departments

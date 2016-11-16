@@ -1,0 +1,6 @@
+{
+  "globalDependencies": {
+    "classnames": "registry:dt/classnames#0.0.0+20160316155526",
+    "recompose": "registry:dt/recompose#0.20.2+20160930120758"
+  }
+}
