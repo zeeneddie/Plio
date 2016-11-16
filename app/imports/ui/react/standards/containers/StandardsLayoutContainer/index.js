@@ -155,56 +155,68 @@ const onPropsChange = ({
   }
 };
 
+const redirectByFilter = (props) => {
+  const { filter, orgSerialNumber } = props;
+  const {
+    selected: selectedStandard,
+    default: defaultStandard,
+  } = getSelectedAndDefaultStandardByFilter(props);
+  const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
+
+  if (shouldRedirect && defaultStandard) {
+    const params = {
+      orgSerialNumber,
+      urlItemId: get(defaultStandard, '_id'),
+    };
+    const queryParams = { filter };
+
+    FlowRouter.go('standard', params, queryParams);
+  }
+};
+
+const openStandardByFilter = (props) => {
+  const { filter } = props;
+  const {
+    containedIn,
+    defaultContainedIn,
+    selected: selectedStandard,
+  } = getSelectedAndDefaultStandardByFilter(props);
+  const parentItem = selectedStandard ? containedIn : defaultContainedIn;
+  const topLevelKey = getId(parentItem);
+
+  switch (filter) {
+    case 1:
+    default: {
+      const sectionItem = createSectionItem(topLevelKey);
+      props.dispatch(addCollapsed(sectionItem));
+      break;
+    }
+    case 2: {
+      const secondLevelKey = getId(get(parentItem, 'children[0]'));
+      const typeItem = createTypeItem(topLevelKey);
+      const sectionItem = createSectionItem(secondLevelKey);
+      props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+      break;
+    }
+    case 3:
+      return;
+  }
+};
+
 
 export default compose(
   connect(),
   composeWithTracker(onPropsChange, PreloaderPage),
   lifecycle({
     componentWillMount() {
-      const { filter, orgSerialNumber } = this.props;
-      const {
-        selected: selectedStandard,
-        default: defaultStandard,
-      } = getSelectedAndDefaultStandardByFilter(this.props);
-      const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
-
-      if (shouldRedirect && defaultStandard) {
-        const params = {
-          orgSerialNumber,
-          urlItemId: get(defaultStandard, '_id'),
-        };
-        const queryParams = { filter };
-
-        FlowRouter.go('standard', params, queryParams);
-      }
+      redirectByFilter(this.props);
     },
     componentDidMount() {
-      const { filter } = this.props;
-      const {
-        containedIn,
-        defaultContainedIn,
-        selected: selectedStandard,
-      } = getSelectedAndDefaultStandardByFilter(this.props);
-      const parentItem = selectedStandard ? containedIn : defaultContainedIn;
-      const topLevelKey = getId(parentItem);
-
-      switch (filter) {
-        case 1:
-        default: {
-          const sectionItem = createSectionItem(topLevelKey);
-          this.props.dispatch(addCollapsed(sectionItem));
-          break;
-        }
-        case 2: {
-          const secondLevelKey = getId(get(parentItem, 'children[0]'));
-          const typeItem = createTypeItem(topLevelKey);
-          const sectionItem = createSectionItem(secondLevelKey);
-          this.props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
-          break;
-        }
-        case 3:
-          return;
-      }
+      openStandardByFilter(this.props);
+    },
+    componentWillUpdate(nextProps) {
+      redirectByFilter(nextProps);
+      openStandardByFilter(nextProps);
     },
   })
 )(StandardsPage);
