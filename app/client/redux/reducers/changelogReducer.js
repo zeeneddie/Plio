@@ -34,35 +34,20 @@ export const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_LOADING_LAST_HUMAN_LOG:
-      return { ...state, isLoadingLastHumanLog: action.payload };
     case SET_LOADING_LAST_LOGS:
-      return { ...state, isLoadingLastLogs: action.payload };
     case SET_LAST_LOGS_LOADED:
-      return { ...state, isLastLogsLoaded: action.payload };
     case SET_LOADING_ALL_LOGS:
-      return { ...state, isLoadingAllLogs: action.payload };
     case SET_ALL_LOGS_LOADED:
-      return { ...state, isAllLogsLoaded: action.payload };
     case SET_LOADING_LOGS_COUNT:
-      return { ...state, isLoadingLogsCount: action.payload };
     case SET_LOGS_COUNT:
-      return { ...state, logsCount: action.payload };
     case SET_CHANGELOG_COLLAPSED:
-      return { ...state, isChangelogCollapsed: action.payload };
     case SET_LOGS:
-      return { ...state, logs: action.payload };
     case SET_LAST_HUMAN_LOG:
-      return { ...state, lastHumanLog: action.payload };
-    case SET_CHANGELOG_DOCUMENT_DATA:
-      return {
-        ...initialState,
-        changelogDocumentId: action.payload.documentId,
-        changelogDocumentCollection: action.payload.collection,
-      };
     case SET_CHANGELOG_DOCUMENT:
-      return { ...state, changelogDocument: action.payload };
     case SET_SHOW_ALL:
-      return { ...state, showAll: action.payload };
+      return { ...state, ...action.payload };
+    case SET_CHANGELOG_DOCUMENT_DATA:
+      return { ...initialState, ...action.payload };
     default:
       return state;
   }

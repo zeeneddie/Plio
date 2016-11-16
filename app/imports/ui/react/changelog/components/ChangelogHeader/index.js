@@ -1,12 +1,16 @@
 import React from 'react';
+import cx from 'classnames';
 
 import propTypes from './propTypes';
 
 const ChangelogHeader = (props) => (
   <div
-    className={`card-footer card-changelog-toggle
-      ${props.isChangelogCollapsed ? 'collapsed' : ''}
-      ${(props.isLoadingLastHumanLog || props.isLoadingLastLogs) ? 'waiting' : '' }`}
+    className={cx({
+      'card-footer': true,
+      'card-changelog-toggle': true,
+      'collapsed': props.isChangelogCollapsed,
+      'waiting': props.isLoadingLastHumanLog || props.isLoadingLastLogs,
+    })}
   >
     <div className="row">
       <div className="col-xs-6">
