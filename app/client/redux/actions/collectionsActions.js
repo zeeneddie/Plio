@@ -5,6 +5,8 @@ import {
   SET_RISKS,
   SET_ACTIONS,
   SET_WORK_ITEMS,
+  SET_STANDARD_BOOK_SECTIONS,
+  SET_STANDARD_TYPES,
   SET_LESSONS_LEARNED,
 } from './types';
 
@@ -47,6 +49,20 @@ export function setWorkItems(workItems) {
   return {
     type: SET_WORK_ITEMS,
     payload: { workItems },
+  };
+}
+
+export function setStandardBookSections(standardBookSections) {
+  return {
+    type: SET_STANDARD_BOOK_SECTIONS,
+    payload: { standardBookSections },
+  };
+}
+
+export function setStandardTypes(standardTypes) {
+  return {
+    type: SET_STANDARD_TYPES,
+    payload: { standardTypes },
   };
 }
 

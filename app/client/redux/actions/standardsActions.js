@@ -10,105 +10,89 @@ import {
   SET_FILTERED_SECTIONS,
   SET_FILTERED_TYPES,
   INIT_STANDARDS,
-  SET_ALL_SECTIONS,
-  SET_ALL_TYPES,
   SET_IS_FULL_SCREEN_MODE,
 } from './types';
 
-export function initSections(payload) {
+export function initSections({ sections, types, standards }) {
   return {
-    payload,
+    payload: { sections, types, standards },
     type: INIT_SECTIONS,
   };
 }
 
-export function setSections(payload) {
+export function setSections(sections) {
   return {
-    payload,
+    payload: { sections },
     type: SET_SECTIONS,
   };
 }
 
-export function setAllSections(payload) {
+export function initStandards({ types, sections, standards }) {
   return {
-    payload,
-    type: SET_ALL_SECTIONS,
-  };
-}
-
-export function initStandards(payload) {
-  return {
-    payload,
+    payload: { types, sections, standards },
     type: INIT_STANDARDS,
   };
 }
 
-export function setStandards(payload) {
+export function setStandards(standards) {
   return {
-    payload,
+    payload: { standards },
     type: SET_STANDARDS,
   };
 }
 
-export function initTypes(payload) {
+export function initTypes({ sections, types }) {
   return {
-    payload,
+    payload: { sections, types },
     type: INIT_TYPES,
   };
 }
 
-export function setTypes(payload) {
+export function setTypes(types) {
   return {
-    payload,
+    payload: { types },
     type: SET_TYPES,
   };
 }
 
-export function setAllTypes(payload) {
+export function setStandard(standard) {
   return {
-    payload,
-    type: SET_ALL_TYPES,
-  };
-}
-
-export function setStandard(payload) {
-  return {
-    payload,
+    payload: { standard },
     type: SET_STANDARD,
   };
 }
 
-export function setIsCardReady(payload) {
+export function setIsCardReady(isCardReady) {
   return {
-    payload,
+    payload: { isCardReady },
     type: SET_IS_CARD_READY,
   };
 }
 
-export function setFilteredStandards(payload) {
+export function setFilteredStandards(standardsFiltered) {
   return {
-    payload,
+    payload: { standardsFiltered },
     type: SET_FILTERED_STANDARDS,
   };
 }
 
-export function setFilteredSections(payload) {
+export function setFilteredSections(sectionsFiltered) {
   return {
-    payload,
+    payload: { sectionsFiltered },
     type: SET_FILTERED_SECTIONS,
   };
 }
 
-export function setFilteredTypes(payload) {
+export function setFilteredTypes(typesFiltered) {
   return {
-    payload,
+    payload: { typesFiltered },
     type: SET_FILTERED_TYPES,
   };
 }
 
-export function setIsFullScreenMode(payload) {
+export function setIsFullScreenMode(isFullScreenMode) {
   return {
-    payload,
+    payload: { isFullScreenMode },
     type: SET_IS_FULL_SCREEN_MODE,
   };
 }

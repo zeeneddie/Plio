@@ -17,6 +17,7 @@ import {
 } from '../../helpers';
 import { Standards } from '/imports/share/collections/standards';
 import _search_ from '/imports/startup/client/mixins/search';
+import _modal_ from '/imports/startup/client/mixins/modal';
 import {
   setFilteredSections,
   setFilteredTypes,
@@ -29,7 +30,7 @@ import {
   addCollapsed,
   setAnimating,
 } from '/client/redux/actions/globalActions';
-import { initTypes, initStandards } from '/client/redux/lib/standardsHelpers';
+import { initTypes } from '/client/redux/lib/standardsHelpers';
 
 const onToggle = fn => ({ dispatch }) => (e, { key, type } = {}) =>
   dispatch(toggleCollapsed({ ...fn(key), close: { type } }));
@@ -63,7 +64,7 @@ export const onSearchTextChange = _.debounce(({
         extractIds(standardsFound).includes(standard._id)),
   });
   const newSections = sections.map(mapper).filter(lengthStandards);
-  const newTypes = initTypes({ sections: newSections }, types);
+  const newTypes = initTypes({ sections: newSections, types });
   const newStandards = standards.filter(standard =>
     extractIds(standardsFound).includes(standard._id));
 
@@ -108,7 +109,6 @@ export const onSearchTextChange = _.debounce(({
     });
     const typeToCollapse = addCollapsed(addClose(selectedTypeItem));
     const sectionToCollapse = addCollapsed(addClose(selectedSectionItem));
-    console.log(selectedType, selectedSection, urlItemId)
 
     if (filter === 1) {
       dispatch(sectionToCollapse);
@@ -130,3 +130,9 @@ export const onClear = props => input => () => {
 
   onSearchTextChange(props, input);
 };
+
+export const onModalOpen = () => () => _modal_.modal.open({
+  _title: 'Compliance standard',
+  template: 'CreateStandard',
+  variation: 'save',
+});

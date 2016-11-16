@@ -42,8 +42,7 @@ export default class Collapse extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    if (this.props.collapsed && !nextProps.collapsed ||
-        !this.props.collapsed && nextProps.collapsed) {
+    if (this.props.collapsed !== nextProps.collapsed) {
       this.toggleCollapse();
     }
   }

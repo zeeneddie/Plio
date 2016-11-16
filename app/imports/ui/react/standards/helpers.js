@@ -53,11 +53,13 @@ export const getSelectedAndDefaultStandardByFilter = ({
       };
     }
     case 2: {
-      const containedIn = types.find(findSection);
+      //                  for normal types           for uncategorized type
+      const containedIn = types.find(findSection) || types.find(findStandard);
       return {
         containedIn: { ...containedIn, children: [{ ...findSection(containedIn) }] },
-        selected: findStandard(findSection(containedIn)),
-        default: getC('types[0].sections[0].standards[0]', { types }),
+        selected: findStandard(containedIn) || findStandard(findSection(containedIn)),
+        default: getC('types[0].sections[0].standards[0]', { types }) ||
+                 getC('types[0].standards[0]'),
         defaultContainedIn: {
           ..._.first(types),
           children: [

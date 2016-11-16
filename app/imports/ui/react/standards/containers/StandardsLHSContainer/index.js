@@ -9,6 +9,7 @@ import {
   onTypeToggleCollapse,
   onSearchTextChange,
   onClear,
+  onModalOpen,
 } from './handlers';
 
 const mapStateToProps = ({
@@ -50,6 +51,7 @@ export default compose(
     onSectionToggleCollapse,
     onTypeToggleCollapse,
     onClear,
+    onModalOpen,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps(props => {

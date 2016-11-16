@@ -32,8 +32,6 @@ import {
   setStandard,
   setIsCardReady,
   initStandards,
-  setAllSections,
-  setAllTypes,
 } from '/client/redux/actions/standardsActions';
 import {
   setOrg,
@@ -54,6 +52,8 @@ import {
   setRisks,
   setActions,
   setWorkItems,
+  setStandardBookSections,
+  setStandardTypes,
   setLessons,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
@@ -131,19 +131,20 @@ const onPropsChange = ({
       setOrgId(organizationId),
       setOrgSerialNumber(serialNumber),
       setIsDiscussionOpened(isDiscussionOpened),
-      setAllSections(sections),
-      setAllTypes(types),
-      setStandards(standards),
+      setStandardBookSections(sections),
+      setStandardTypes(types),
       setStandard(standard),
       setUrlItemId(urlItemId),
       setIsCardReady(isCardReady),
       setFilter(filter),
-      initSections(sections),
-      initTypes(types),
-      initStandards(standards),
+      initSections({ sections, types, standards }),
+      // initTypes({ types, sections: getState('standards').sections }),
+      initStandards({ types, sections, standards }),
     ];
 
     dispatch(batchActions(actions));
+
+    dispatch(initTypes({ types, sections: getState('standards').sections }))
 
     onData(null, {
       content,
@@ -195,7 +196,12 @@ const openStandardByFilter = (props) => {
       const secondLevelKey = getId(get(parentItem, 'children[0]'));
       const typeItem = createTypeItem(topLevelKey);
       const sectionItem = createSectionItem(secondLevelKey);
-      props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+      // Uncategorized type will not have second level key
+      if (secondLevelKey) {
+        props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+      } else {
+        props.dispatch(addCollapsed(typeItem));
+      }
       break;
     }
     case 3:
