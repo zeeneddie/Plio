@@ -44,7 +44,7 @@ Template.Standards_Item_Read.viewmodel({
   },
   linkArgs() {
     const _id = this._id();
-    
+
     return {
       isActive: Object.is(this.standardId(), _id),
       onClick: handler => handler({ standardId: _id }),

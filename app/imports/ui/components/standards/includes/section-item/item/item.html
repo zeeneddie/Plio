@@ -1,7 +1,7 @@
 <template name="Standards_Item_Read">
   {{#ListItemLink (linkArgs)}}
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading pull-xs-left">
+      <h4 class="list-group-item-heading pull-left">
         <span {{b "text: this.title"}}></span>
         <span class="label label-primary" {{b "if: isNew"}}>New</span>
         <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
@@ -12,14 +12,7 @@
       {{#if this.isDeleted}}
         <p class="list-group-item-text pull-right" {{b "text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
       {{else}}
-        {{#if unreadMessagesCount}}
-          <p class="list-group-item-text pull-right text-danger">
-            <div class="chat-indicator">
-              <i class="fa fa-comment"></i>
-              <span class="label label-danger" {{b "text: unreadMessagesCount"}}></span>
-            </div>
-          </p>
-        {{/if}}
+        {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
       {{/if}}
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
       {{#if this.isDeleted}}

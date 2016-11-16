@@ -7,7 +7,9 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'nonconformity', 'currency', 'organization', 'problemsStatus'],
+  mixin: ['date', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
+    counter: 'counter'
+  }],
   onCreated(template) {
     const currency = this.organization() && this.organization().currency;
     this.load({ currency });
@@ -16,6 +18,14 @@ Template.NC_Item.viewmodel({
       if (this._id() === this.NCId() && this.isNew()) {
         Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
       }
+    });
+
+    template.autorun(() => {
+      const _id = this._id();
+
+      if (!_id) return;
+
+      template.subscribe('messagesNotViewedCount', 'nc-messages-not-viewed-count-' + _id, _id);
     });
   },
   _id: '',

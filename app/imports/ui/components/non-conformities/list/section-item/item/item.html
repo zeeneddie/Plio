@@ -12,6 +12,7 @@
       {{#if occurrences.count}}
         <p class="list-group-item-text text-danger pull-right" {{b "text: totalCost"}}></p>
       {{/if}}
+      {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}} 
       <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>
       <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
     </div>

@@ -1,0 +1,10 @@
+<template name="MessagesCounter">
+  {{#if unreadMessagesCount}}
+    <p class="list-group-item-text pull-{{pull}} text-danger">
+      <div class="chat-indicator">
+        <i class="fa fa-comment"></i>
+        <span class="label label-danger" {{b "text: unreadMessagesCount"}}></span>
+      </div>
+    </p>
+  {{/if}}
+</template>

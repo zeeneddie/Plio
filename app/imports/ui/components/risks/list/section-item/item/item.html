@@ -6,12 +6,13 @@
       {{/if}}
     {{/unless}}
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading">
+      <h4 class="list-group-item-heading pull-left">
         <span {{b "text: title"}}></span>
         {{#if isNew}}
           <span class="label label-primary">New</span>
         {{/if}}
       </h4>
+      {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
       {{#if isActiveRiskFilter 2}}
         <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>
       {{else}}

@@ -175,6 +175,18 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'riskDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page',
+      isDiscussionOpened: true
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],

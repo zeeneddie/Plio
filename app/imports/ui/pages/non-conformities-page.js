@@ -7,7 +7,7 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 
 
 Template.NC_Page.viewmodel({
-  mixin: ['discussions', 'nonconformity', 'organization'],
+  mixin: ['discussions', 'mobile', 'nonconformity', 'organization', { 'counter': 'counter' }],
   _subHandlers: [],
   isReady: false,
   isDiscussionReady: false,
@@ -55,6 +55,9 @@ Template.NC_Page.viewmodel({
 
     return { left, right };
   },
+  NC() {
+    return this._getNCByQuery({ _id: this.NCId() });
+  },
   discussion() {
     return Object.assign({}, Discussions.findOne({ linkedTo: this.NCId(), isPrimary: true }));
   },
@@ -63,5 +66,9 @@ Template.NC_Page.viewmodel({
       collection: NonConformities,
       template: 'NC_List'
     };
+  },
+  messagesNotViewedCount() {
+    const count = this.counter.get('nc-messages-not-viewed-count-' + this.NCId());
+    return count;
   }
 });

@@ -52,7 +52,7 @@ Template.NC_Card_Read.viewmodel({
   pathToDiscussion() {
     const params = {
       orgSerialNumber: this.organizationSerialNumber(),
-      standardId: this.NCId()
+      nonconformityId: this.NCId()
     };
     const queryParams = { filter: this.activeNCFilterId() };
     return FlowRouter.path('nonConformityDiscussion', params, queryParams);
