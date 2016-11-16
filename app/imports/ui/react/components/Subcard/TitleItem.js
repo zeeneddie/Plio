@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { withState } from 'recompose';
 import cx from 'classnames';
 import { PullMap } from '/imports/api/constants';
 import { _ } from 'meteor/underscore';

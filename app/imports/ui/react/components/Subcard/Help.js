@@ -6,6 +6,7 @@ const Help = ({ children }) => {
   
   return (
     <div className="help-info" onClick={() => $(collapsed).collapse('toggle')}>
+      {/* TODO: Replace to button component after merge with rewrite on react*/}
       <button type="button" className="btn btn-link help-icon btn-collapse collapsed">
         <i className="fa fa-question-circle" />
       </button>
