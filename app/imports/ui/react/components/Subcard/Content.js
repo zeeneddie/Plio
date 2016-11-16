@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 const Content = ({ children }) => (
-  <div className="card-block-collapse collapse">
+  <div className="card-block">
     {children}
   </div>
 );

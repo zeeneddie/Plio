@@ -8,6 +8,6 @@ const Content = ({ children }) => (
 
 Content.propTypes = {
   children: PropTypes.node,
-}
+};
 
 export default Content;

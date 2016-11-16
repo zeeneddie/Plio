@@ -10,7 +10,7 @@ import {
 import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
-import Subcard from '/imports/ui/react/components/Subcard';
+import Subcard from '/imports/ui/react/organization-settings/HomeTitlesSubcard';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',

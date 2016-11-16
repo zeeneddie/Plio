@@ -1,16 +1,26 @@
 import React from 'react';
+import { $ } from 'meteor/jquery';
 import { withState } from 'recompose';
 import cx from 'classnames';
-import $ from 'meteor/jquery';
+import curry from 'lodash.curry';
 import Preloader from '../Preloader';
+import getChildrenByType from '../../helpers/getChildrenByType';
 
 import Title from './Title';
 import TitleItem from './TitleItem';
+import Content from './Content';
+import Help from './Help';
 
 const enhance = withState('collapsed', 'setCollapsed', true);
 
-const Subcard = enhance(({ children, collapsed, setCollapsed, title, loading, muted = null }) => {
+const Subcard = enhance(({ children, collapsed, setCollapsed, loading }) => {
   let cardBlock;
+  
+  const getChild = curry(getChildrenByType)(children);
+  
+  const title = getChild(Title);
+  const content = getChild(Content);
+  const help = getChild(Help);
 
   const toggleCollapse = () => {
     $(cardBlock).collapse(!collapsed ? 'hide' : 'show');
@@ -23,20 +33,21 @@ const Subcard = enhance(({ children, collapsed, setCollapsed, title, loading, mu
         className={cx('card-block', 'card-block-collapse-toggle', { collapsed })}
         onClick={toggleCollapse}
       >
-        <h4 className="card-title pull-xs-left">{title}</h4>
-        <h4 className="card-title pull-xs-right">
-          {
-            (loading)
-              ? <Preloader className="margin-bottom" />
-              : <span className="text-muted">{muted}</span>
-          }
-        </h4>
+        {(loading) ? (
+          <Title>
+            <TitleItem pull="right">
+              <Preloader className="margin-bottom" />
+            </TitleItem>
+          </Title>
+        ) : null}
+        {title}
       </div>
       <div
         ref={cardBlockRef => { cardBlock = cardBlockRef; }}
         className="card-block-collapse collapse"
       >
-        {children}
+        {content}
+        {help}
       </div>
     </div>
   );
@@ -44,5 +55,7 @@ const Subcard = enhance(({ children, collapsed, setCollapsed, title, loading, mu
 
 Subcard.Title = Title;
 Subcard.TitleItem = TitleItem;
+Subcard.Content = Content;
+Subcard.Help = Help;
 
 export default Subcard;
