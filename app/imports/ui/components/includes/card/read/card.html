@@ -1,10 +1,14 @@
 <template name="Card_Read">
   {{#with doc}}
-    <div class="card">
+    <div class="card {{className}}">
       <div class="card-block card-heading">
         {{#unless isReadOnly}}
           <div class="card-heading-buttons pull-xs-right">
             {{#if isReady}}
+              {{#if isExpandable}}
+                <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                </a>
+              {{/if}}
               {{#if hasDiscussion}}
                 {{#unless isDiscussionOpened}}
                   <a class="btn btn-secondary"

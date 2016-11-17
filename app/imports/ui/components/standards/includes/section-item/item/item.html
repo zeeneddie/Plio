@@ -1,19 +1,23 @@
 <template name="Standards_Item_Read">
   {{#ListItemLink (linkArgs)}}
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading pull-left">
-        <span {{b "text: this.title"}}></span>
-        <span class="label label-primary" {{b "if: isNew"}}>New</span>
-        <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
-          <span {{b "text: 'Issue ' + this.issueNumber"}}></span>
-          <span>Draft</span>
-        </span>
-      </h4>
-      {{#if this.isDeleted}}
-        <p class="list-group-item-text pull-right" {{b "text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
-      {{else}}
-        {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
-      {{/if}}
+      <div class="flexbox-row">
+        <h4 class="list-group-item-heading pull-left">
+          <span {{b "text: this.title"}}></span>
+          <span class="label label-primary" {{b "if: isNew"}}>New</span>
+          <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
+            <span {{b "text: 'Issue ' + this.issueNumber"}}></span>
+            <span>Draft</span>
+          </span>
+        </h4>
+        <div class="flex">
+          {{#if this.isDeleted}}
+            <p class="list-group-item-text pull-right" {{b "text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
+          {{else}}
+            {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
+          {{/if}}
+        </div>
+      </div>
       <p class="list-group-item-text pull-left" {{b "text: typeName"}}></p>
       {{#if this.isDeleted}}
         <p class="list-group-item-text pull-right" {{b "text: renderDate(this.deletedAt)"}}></p>

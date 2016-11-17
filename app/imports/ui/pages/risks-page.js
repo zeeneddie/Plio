@@ -80,7 +80,6 @@ Template.Risks_Page.viewmodel({
   },
   messagesNotViewedCount() {
     const count = this.counter.get('risk-messages-not-viewed-count-' + this.riskId());
-    console.log('count', count);
     return count;
   },
 });

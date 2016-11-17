@@ -31,6 +31,9 @@ import { Migrations } from 'meteor/percolate:migrations';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { CollectionNames, SystemName } from '/imports/share/constants';
 
 
@@ -53,7 +56,18 @@ Migrations.add({
       }
     });
   },
-  down() { }
+  down() { },
+});
+
+Migrations.add({
+  version: 2,
+  name: 'Adds discussions to documents with no discussions',
+  up() {
+    Risks.find({}).forEach((risk) => {
+      
+    });
+  },
+  down() { },
 });
 
 Meteor.startup(() => {

@@ -75,6 +75,9 @@ Template.NC_Item.viewmodel({
 
     return symbol + count * this.cost();
   },
+  unreadMessagesCount() {
+    return this.counter.get('nc-messages-not-viewed-count-' + this._id());
+  },
   updateViewedBy() {
     const _id = this._id();
 

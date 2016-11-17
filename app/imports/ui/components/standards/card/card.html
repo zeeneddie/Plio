@@ -2,9 +2,23 @@
   <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode, content: !standard }"}}>
     {{#if standards.count}}
       {{#with standard}}
-        <div class="card standard-details">
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Standard"
+          doc=this
+          docType="standard"
+          className="standard-details"
+          isExpandable=hasDocxAttachment
+          isReady=isReady
+          hasDiscussion=true
+          isDiscussionOpened=isDiscussionOpened
+          pathToDiscussion=pathToDiscussion
+          messagesNotViewedCount=messagesNotViewedCount
+          onRestore=(callback 'restore')
+          onDelete=(callback 'delete')
+          onOpenEditModal=(callback 'openEditModal')}}
 
-          {{> Standards_Card_Read_Header (headerArgs)}}
+          <!-- {{> Standards_Card_Read_Header (headerArgs)}} -->
 
           <div class="content-list">
             <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
@@ -105,7 +119,7 @@
 
             {{> CardDocChangelog document=this documentType="standard"}}
           </div>
-        </div>
+        {{/Card_Read}}
       {{else}}
         {{> PreloaderPage}}
       {{/with}}
