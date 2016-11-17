@@ -77,6 +77,7 @@ const onPropsChange = ({
   const isDeleted = filter === 3
           ? true
           : { $in: [null, false] };
+
   const layoutSub = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber, isDeleted);
 
   if (layoutSub.ready()) {
