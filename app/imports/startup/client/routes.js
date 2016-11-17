@@ -10,8 +10,7 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import StandardsLayoutContainer from '/imports/ui/react/standards/containers/StandardsLayoutContainer';
-import StandardsLayout from '/imports/ui/react/standards/components/StandardsLayout';
+import StandardsDataLoader from '/imports/ui/react/standards/containers/StandardsDataLoader';
 
 const mount2 = withOptions({
   rootId: '__blaze-root'
@@ -145,29 +144,25 @@ FlowRouter.route('/transfer-organization/:transferId', {
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    mount2(StandardsLayout, {
-      content: (
-        <Provider store={store}>
-          <StandardsLayoutContainer />
-        </Provider>
-      )
-    });
-  }
+  action() {
+    mount2(() => (
+      <Provider store={store}>
+        <StandardsDataLoader />
+      </Provider>
+    ));
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    mount2(StandardsLayout, {
-      content: (
-        <Provider store={store}>
-          <StandardsLayoutContainer />
-        </Provider>
-      )
-    });
-  }
+  action() {
+    mount2(() => (
+      <Provider store={store}>
+        <StandardsDataLoader />
+      </Provider>
+    ));
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
