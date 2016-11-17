@@ -1,38 +1,39 @@
 import React from 'react';
 import cx from 'classnames';
 
-import StandardsRHSHeader from '../StandardsRHSHeader';
-import PreloaderPage from '../../../components/PreloaderPage';
-import StandardsRHSBodyContainer from '../../containers/StandardsRHSBodyContainer';
 import propTypes from './propTypes';
+import StandardsRHSHeaderButtons from '../StandardsRHSHeaderButtons';
+import StandardsRHSBodyContainer from '../../containers/StandardsRHSBodyContainer';
+import RHS from '../../../components/RHS';
 
 const StandardsRHS = (props) => (
-  <div
-    className={cx(
-      'content-cards-inner flex expandable',
-      {
-        expanded: props.isFullScreenMode,
-        content: !props.standard,
-      }
-    )}
+  <RHS
+    classname={cx('expandable', {
+      expanded: props.isFullScreenMode,
+      content: !props.standard,
+    })}
   >
-    <div className="card standard-details">
-      <StandardsRHSHeader
+    <RHS.Card className="standard-details">
+      <RHS.Header
+        title={props.names.headerNames.header}
         isReady={props.isCardReady}
-        names={props.names.headerNames}
-        isDeleted={props.standard.isDeleted}
-        pathToDiscussion={props.pathToDiscussion}
-        hasDocxAttachment={props.hasDocxAttachment}
-        hasAccess={props.hasAccess}
-        hasFullAccess={props.hasFullAccess}
-        onToggleScreenMode={props.onToggleScreenMode}
-        onModalOpen={props.onModalOpen}
-        onDiscussionOpen={props.onDiscussionOpen}
-        onRestore={props.onRestore}
-        onDelete={props.onDelete}
-      />
+      >
+        <StandardsRHSHeaderButtons
+          names={props.names.headerNames}
+          isDeleted={props.standard.isDeleted}
+          pathToDiscussion={props.pathToDiscussion}
+          hasDocxAttachment={props.hasDocxAttachment}
+          hasAccess={props.hasAccess}
+          hasFullAccess={props.hasFullAccess}
+          onToggleScreenMode={props.onToggleScreenMode}
+          onModalOpen={props.onModalOpen}
+          onDiscussionOpen={props.onDiscussionOpen}
+          onRestore={props.onRestore}
+          onDelete={props.onDelete}
+        />
+      </RHS.Header>
 
-      {props.isCardReady ? (
+      <RHS.Body isReady={props.isCardReady}>
         <StandardsRHSBodyContainer
           standard={props.standard}
           hasDocxAttachment={props.hasDocxAttachment}
@@ -44,13 +45,9 @@ const StandardsRHS = (props) => (
           workItems={props.workItems}
           lessons={props.lessons}
         />
-      ) : (
-        <div className="m-t-3">
-          <PreloaderPage size={2} />
-        </div>
-      )}
-    </div>
-  </div>
+      </RHS.Body>
+    </RHS.Card>
+  </RHS>
 );
 
 StandardsRHS.propTypes = propTypes;
