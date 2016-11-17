@@ -1,6 +1,6 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
-import { compose, lifecycle } from 'recompose';
+import { compose, lifecycle, shouldUpdate, shallowEqual } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -63,7 +63,7 @@ import {
   createTypeItem,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { getId } from '/imports/api/helpers';
+import { getId, pickC } from '/imports/api/helpers';
 
 const onPropsChange = ({
   content,
@@ -138,17 +138,17 @@ const onPropsChange = ({
       setIsCardReady(isCardReady),
       setFilter(filter),
       initSections({ sections, types, standards }),
-      // initTypes({ types, sections: getState('standards').sections }),
       initStandards({ types, sections, standards }),
     ];
 
     dispatch(batchActions(actions));
 
-    dispatch(initTypes({ types, sections: getState('standards').sections }))
+    dispatch(initTypes({ types, sections: getState('standards').sections }));
 
     onData(null, {
       content,
       organization,
+      standard,
       orgSerialNumber: serialNumber,
       ..._.pick(getState('standards'), 'sections', 'types', 'standards'),
       ..._.pick(getState('global'), 'filter', 'urlItemId'),
@@ -189,18 +189,20 @@ const openStandardByFilter = (props) => {
     case 1:
     default: {
       const sectionItem = createSectionItem(topLevelKey);
-      props.dispatch(addCollapsed(sectionItem));
+      props.dispatch(addCollapsed({ ...sectionItem, close: { type: sectionItem.type } }));
       break;
     }
     case 2: {
       const secondLevelKey = getId(get(parentItem, 'children[0]'));
       const typeItem = createTypeItem(topLevelKey);
       const sectionItem = createSectionItem(secondLevelKey);
-      // Uncategorized type will not have second level key
+      const typeItemWithClose = { ...typeItem, close: { type: typeItem.type } };
+      const sectionItemWithClose = { ...sectionItem, close: { type: sectionItem.type } };
+      // Uncategorized type do not have a second level key
       if (secondLevelKey) {
-        props.dispatch(chainActions([typeItem, sectionItem].map(addCollapsed)));
+        props.dispatch(chainActions([typeItemWithClose, sectionItemWithClose].map(addCollapsed)));
       } else {
-        props.dispatch(addCollapsed(typeItem));
+        props.dispatch(addCollapsed(typeItemWithClose));
       }
       break;
     }
@@ -209,10 +211,22 @@ const openStandardByFilter = (props) => {
   }
 };
 
+const shouldUpdateForProps = (props, nextProps) => {
+  const pickKeys = pickC(['isDeleted', 'sectionId', 'typeId']);
+
+  return !!(
+    (typeof props.organization !== typeof nextProps.organization) ||
+    (props.orgSerialNumber !== nextProps.orgSerialNumber) ||
+    (props.filter !== nextProps.filter) ||
+    (typeof props.standard !== typeof nextProps.standard) ||
+    !shallowEqual(pickKeys(props.standard), pickKeys(nextProps.standard))
+  );
+};
 
 export default compose(
   connect(),
   composeWithTracker(onPropsChange, PreloaderPage),
+  shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
       redirectByFilter(this.props);
@@ -220,9 +234,30 @@ export default compose(
     componentDidMount() {
       openStandardByFilter(this.props);
     },
+    componentWillReceiveProps(nextProps) {
+      const pickKeys = pickC(['isDeleted']);
+      /**
+       * Redirect(maybe) when:
+       * the selected standard is deleted
+       * the filter is changed
+       */
+      if (this.props.filter !== nextProps.filter ||
+          !shallowEqual(pickKeys(this.props.standard), pickKeys(nextProps.standard))) {
+        redirectByFilter(nextProps);
+      }
+    },
     componentWillUpdate(nextProps) {
-      redirectByFilter(nextProps);
-      openStandardByFilter(nextProps);
+      /**
+       * Collapse(maybe) when:
+       * changes organization
+       * changes orgSerialNumber
+       * changes filter
+       * changes selected standard
+       * the current selected standard's section or type id is different than the next.
+       */
+      if (shouldUpdateForProps(this.props, nextProps)) {
+        openStandardByFilter(nextProps);
+      }
     },
   })
 )(StandardsPage);

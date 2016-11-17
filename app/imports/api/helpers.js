@@ -139,7 +139,7 @@ export const transsoc = curry((transformations, obj) => {
   return _.pick(flattenObjects(result), ...keys);
 });
 
-export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
 
 // pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
 export const pickDeep = curry((paths, obj) =>
@@ -184,7 +184,7 @@ export const some = curry((fns, value) => fns.some(fn => fn(value)));
  */
 
 export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
- 
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
