@@ -32,7 +32,6 @@ fortawesome:fontawesome
 arillo:flow-router-helpers
 konecty:user-presence
 zimme:active-route
-#trsdln:modals
 manuel:viewmodel
 mdg:validation-error
 mdg:validated-method
@@ -42,17 +41,14 @@ aldeed:collection2
 reywood:publish-composite
 ostrio:meteor-root
 dburles:collection-helpers
-#3stack:country-codes
 alanning:roles
 edgee:slingshot
-#momentjs:moment
 rajit:bootstrap3-datepicker
 browser-policy@1.0.9
 matb33:collection-hooks
 manuel:reactivearray
 percolate:synced-cron
 force-ssl@1.0.12
-#peerlibrary:aws-sdk
 plio:bootstrap-sweetalert
 meteorhacks:subs-manager
 konecty:autolinker
