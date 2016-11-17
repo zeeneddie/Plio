@@ -24,11 +24,11 @@ import {
   BackgroundSubs,
 } from '/imports/startup/client/subsmanagers';
 import PreloaderPage from '../../../components/PreloaderPage';
+import StandardsLayout from '../../components/StandardsLayout';
 import StandardsPage from '../../components/StandardsPage';
 import {
   initSections,
   initTypes,
-  setStandards,
   setStandard,
   setIsCardReady,
   initStandards,
@@ -66,10 +66,11 @@ import {
 import { getId, pickC } from '/imports/api/helpers';
 
 const onPropsChange = ({
-  content,
   dispatch,
   isDiscussionOpened = false,
 }, onData) => {
+  onData(null, { loading: true });
+
   const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
@@ -146,9 +147,9 @@ const onPropsChange = ({
     dispatch(initTypes({ types, sections: getState('standards').sections }));
 
     onData(null, {
-      content,
       organization,
       standard,
+      loading: false,
       orgSerialNumber: serialNumber,
       ..._.pick(getState('standards'), 'sections', 'types', 'standards'),
       ..._.pick(getState('global'), 'filter', 'urlItemId'),
@@ -260,4 +261,4 @@ export default compose(
       }
     },
   })
-)(StandardsPage);
+)(StandardsLayout);

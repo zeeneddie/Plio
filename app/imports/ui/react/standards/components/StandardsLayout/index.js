@@ -1,10 +1,13 @@
 import React from 'react';
+import cx from 'classnames';
+import { _ } from 'meteor/underscore';
+
 import { StandardFilters } from '/imports/api/constants';
+import { goToDashboard } from '../../../helpers/routeHelpers';
 import Header from '../../../components/Header';
 import Dropdown from '../../../components/Dropdown';
-import { goToDashboard } from '../../../helpers/routeHelpers';
-import { _ } from 'meteor/underscore';
-import cx from 'classnames';
+import StandardsPage from '../StandardsPage';
+import PreloaderPage from '../../../components/PreloaderPage';
 
 const getMenuItems = () => (
   _.map(StandardFilters, (filterParam, filter) => {
@@ -38,7 +41,11 @@ const StandardsLayout = (props) => (
     </Header>
     <div className="content">
       <div className="container-fluid">
-        {props.content}
+        {props.loading ? (
+          <PreloaderPage />
+        ) : (
+          <StandardsPage {...props} />
+        )}
       </div>
     </div>
   </div>
