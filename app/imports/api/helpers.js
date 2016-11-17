@@ -184,7 +184,7 @@ export const some = curry((fns, value) => fns.some(fn => fn(value)));
  */
 
 export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
- 
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {
@@ -336,4 +336,16 @@ export const compareDates = (date1, date2) => {
   } else if (utcDate1 < utcDate2) {
     return -1;
   }
+};
+
+export const diff = (o1, o2) => {
+  const result = { ...o1 };
+  for (const [key, value] of Object.entries(o2)) {
+    if (_.isEqual(result[key], value)) {
+      delete result[key];
+    } else if (!result.hasOwnProperty(key)) {
+      result[key] = value;
+    }
+  }
+  return result;
 };

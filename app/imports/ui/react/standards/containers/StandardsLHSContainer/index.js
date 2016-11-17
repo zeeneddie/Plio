@@ -47,6 +47,7 @@ const mapStateToProps = ({
 });
 
 export default compose(
+  pure,
   connect(mapStateToProps),
   withProps(props => ({ collapseOnSearch: props.filter !== 3 })),
   withHandlers({
@@ -72,5 +73,4 @@ export default compose(
         : '',
     };
   }),
-  pure,
 )(StandardsLHS);

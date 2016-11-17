@@ -13,7 +13,8 @@ const StandardsPage = (props) => props.organization ? (
 ) : (
   <NotFoundPage
     subject="organization"
-    subjectId={props.orgSerialNumber} />
+    subjectId={props.orgSerialNumber}
+  />
 );
 
 export default StandardsPage;
