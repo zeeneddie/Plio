@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, withProps } from 'recompose';
+import { compose, withHandlers, mapProps, withProps, pure } from 'recompose';
 import property from 'lodash.property';
 
 import { propEq, not } from '/imports/api/helpers';
@@ -27,6 +27,7 @@ const mapStateToProps = ({
     collapsed,
     animating,
     urlItemId,
+    userId,
   },
   organizations: { orgSerialNumber },
 }) => ({
@@ -42,6 +43,7 @@ const mapStateToProps = ({
   urlItemId,
   typesFiltered,
   animating,
+  userId,
 });
 
 export default compose(
@@ -69,5 +71,6 @@ export default compose(
         ? `${standards.length} matching results`
         : '',
     };
-  })
+  }),
+  pure,
 )(StandardsLHS);

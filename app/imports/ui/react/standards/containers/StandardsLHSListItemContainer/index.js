@@ -1,6 +1,7 @@
-import { compose, withHandlers, withProps } from 'recompose';
-import { connect } from 'react-redux';
+import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { connect } from 'react-redux';
+import { _ } from 'meteor/underscore';
 
 import { getSubNestingClassName } from '../../helpers';
 import StandardsLHSListItem from '../../components/StandardsLHSListItem';
@@ -10,15 +11,12 @@ import _date_ from '/imports/startup/client/mixins/date';
 import { setUrlItemId } from '/client/redux/actions/globalActions';
 import { updateViewedBy } from '/imports/api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
+import { omitC } from '/imports/api/helpers';
 
 // TODO: unreadMessagesCount support
 
-const mapStateToProps = ({
-  global: { filter, userId, urlItemId },
-}) => ({ urlItemId, filter, userId });
-
 export default compose(
-  connect(mapStateToProps),
+  connect(),
   withHandlers({
     onClick: props => handler => {
       props.dispatch(setUrlItemId(props._id));
@@ -53,5 +51,10 @@ export default compose(
       isActive,
     };
   }),
-  withUpdateViewedBy(updateViewedBy)
+  withUpdateViewedBy(updateViewedBy),
+  shouldUpdate((props, nextProps) => {
+    const omitKeys = omitC(['urlItemId', 'section', 'type']);
+
+    return !_.isEqual(omitKeys(props), omitKeys(nextProps));
+  }),
 )(StandardsLHSListItem);

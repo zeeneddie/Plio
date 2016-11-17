@@ -20,6 +20,9 @@ const StandardsLHSSectionList = (props) => (
               standards={section.standards}
               section={section}
               orgSerialNumber={props.orgSerialNumber}
+              userId={props.userId}
+              filter={props.filter}
+              urlItemId={props.urlItemId}
             />
           </div>
 
