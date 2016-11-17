@@ -8,7 +8,7 @@ import RHS from '../../../components/RHS';
 
 const StandardsRHS = (props) => (
   <RHS
-    classname={cx('expandable', {
+    className={cx('expandable', {
       expanded: props.isFullScreenMode,
       content: !props.standard,
     })}
