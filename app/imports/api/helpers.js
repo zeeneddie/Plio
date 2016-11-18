@@ -337,3 +337,15 @@ export const compareDates = (date1, date2) => {
     return -1;
   }
 };
+
+export const diff = (o1, o2) => {
+  const result = { ...o1 };
+  for (const [key, value] of Object.entries(o2)) {
+    if (_.isEqual(result[key], value)) {
+      delete result[key];
+    } else if (!result.hasOwnProperty(key)) {
+      result[key] = value;
+    }
+  }
+  return result;
+};

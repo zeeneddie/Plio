@@ -22,19 +22,15 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case SET_USER_ID:
-      return { ...state, userId: action.payload };
     case SET_FILTER:
-      return { ...state, filter: action.payload };
     case SET_SEARCH_TEXT:
-      return { ...state, searchText: action.payload };
+    case SET_ANIMATING:
+    case SET_URL_ITEM_ID:
+      return { ...state, ...action.payload };
     case ADD_COLLAPSED:
       return { ...state, collapsed: addCollapsed(state.collapsed, action.payload) };
     case REMOVE_COLLAPSED:
       return { ...state, collapsed: removeCollapsed(state.collapsed, action.payload) };
-    case SET_ANIMATING:
-      return { ...state, animating: action.payload };
-    case SET_URL_ITEM_ID:
-      return { ...state, urlItemId: action.payload };
     default:
       return state;
   }

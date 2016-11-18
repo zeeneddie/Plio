@@ -15,13 +15,14 @@ const StandardsLHSSectionList = (props) => (
           onToggleCollapse={props.onToggleCollapse}
         >
 
-          <div className="list-group">
             <StandardsLHSStandardList
               standards={section.standards}
               section={section}
               orgSerialNumber={props.orgSerialNumber}
+              userId={props.userId}
+              filter={props.filter}
+              urlItemId={props.urlItemId}
             />
-          </div>
 
         </LHSItem>
       ))}

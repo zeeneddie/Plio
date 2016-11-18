@@ -9,7 +9,7 @@ import SourceWordDocument from '../../../components/SourceWordDocument';
 import SourceRead from '../../../components/SourceRead';
 
 const StandardsRHSBody = (props) => (
-  <div className="content-list">
+  <div>
     <Collapse
       collapsed={props.collapsed}
       onToggleCollapse={props.onToggleCollapse}

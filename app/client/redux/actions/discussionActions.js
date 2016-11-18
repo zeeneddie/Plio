@@ -22,35 +22,35 @@ import {
 export function setDiscussion(discussion) {
   return {
     type: SET_DISCUSSION,
-    payload: discussion,
+    payload: { discussion },
   };
 }
 
 export function setMessages(messages) {
   return {
     type: SET_MESSAGES,
-    payload: messages,
+    payload: { messages },
   };
 }
 
-export function setLoading(bool) {
+export function setLoading(loading) {
   return {
     type: SET_LOADING,
-    payload: bool,
+    payload: { loading },
   };
 }
 
 export function setSort(sort) {
   return {
     type: SET_SORT,
-    payload: sort,
+    payload: { sort },
   };
 }
 
 export function setAt(at) {
   return {
     type: SET_AT,
-    payload: at,
+    payload: { at },
   };
 }
 
@@ -61,37 +61,37 @@ export function reset() {
   };
 }
 
-export function setLastMessageId(id) {
+export function setLastMessageId(lastMessageId) {
   return {
     type: SET_LAST_MESSAGE_ID,
-    payload: id,
+    payload: { lastMessageId },
   };
 }
 
-export function setPriorLimit(limit) {
+export function setPriorLimit(priorLimit) {
   return {
     type: SET_PRIOR_LIMIT,
-    payload: limit,
+    payload: { priorLimit },
   };
 }
 
-export function setFollowingLimit(limit) {
+export function setFollowingLimit(followingLimit) {
   return {
     type: SET_FOLLOWING_LIMIT,
-    payload: limit,
+    payload: { followingLimit },
   };
 }
 
-export function setResetCompleted(bool) {
+export function setResetCompleted(resetCompleted) {
   return {
     type: SET_RESET_COMPLETED,
-    payload: bool,
+    payload: { resetCompleted },
   };
 }
 
-export function setIsDiscussionOpened(payload) {
+export function setIsDiscussionOpened(isDiscussionOpened) {
   return {
-    payload,
+    payload: { isDiscussionOpened },
     type: SET_IS_DISCUSSION_OPENED,
   };
 }

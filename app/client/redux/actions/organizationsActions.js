@@ -1,26 +1,26 @@
 import {
   SET_ORG,
   SET_ORG_ID,
-  SET_ORG_SERIAL_NUMBER
+  SET_ORG_SERIAL_NUMBER,
 } from './types';
 
-export function setOrg(payload) {
+export function setOrg(organization) {
   return {
-    payload,
-    type: SET_ORG
-  }
+    payload: { organization },
+    type: SET_ORG,
+  };
 }
 
-export function setOrgId(payload) {
+export function setOrgId(organizationId) {
   return {
-    payload,
-    type: SET_ORG_ID
-  }
+    payload: { organizationId },
+    type: SET_ORG_ID,
+  };
 }
 
-export function setOrgSerialNumber(payload) {
+export function setOrgSerialNumber(orgSerialNumber) {
   return {
-    payload,
-    type: SET_ORG_SERIAL_NUMBER
-  }
+    payload: { orgSerialNumber },
+    type: SET_ORG_SERIAL_NUMBER,
+  };
 }

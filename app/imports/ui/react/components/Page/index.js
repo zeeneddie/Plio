@@ -1,32 +1,30 @@
 import React from 'react';
+import cx from 'classnames';
+
+import propTypes from './propTypes';
 
 const defaults = {
   classNames: {
     lhs: 'content-list scroll',
-    rhs: 'content-cards hidden-sm-down scroll'
+    rhs: 'content-cards scroll',
   },
-
-  styles: {
-    lhs: null,
-    rhs: {
-      display: 'block !important'
-    }
-  }
 };
 
 const Page = ({
   classNames = defaults.classNames,
-  styles = defaults.styles,
-  children
+  displayRHS = true,
+  children,
 }) => (
   <div className="row">
-    <div className={classNames.lhs} style={styles.lhs}>
+    <div className={cx(classNames.lhs, { 'hidden-sm-down': displayRHS })}>
       {children[0]}
     </div>
-    <div className={classNames.rhs} style={styles.rhs}>
+    <div className={cx(classNames.rhs, { 'hidden-sm-down': !displayRHS })}>
       {children[1]}
     </div>
   </div>
 );
+
+Page.propTypes = propTypes;
 
 export default Page;

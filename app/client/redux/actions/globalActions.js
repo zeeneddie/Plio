@@ -12,24 +12,38 @@ import {
   SET_URL_ITEM_ID,
 } from './types';
 
-export function setUserId(payload) {
+export function setUserId(userId) {
   return {
-    payload,
+    payload: { userId },
     type: SET_USER_ID,
   };
 }
 
-export function setFilter(payload) {
+export function setFilter(filter) {
   return {
-    payload,
+    payload: { filter },
     type: SET_FILTER,
   };
 }
 
-export function setSearchText(payload) {
+export function setSearchText(searchText) {
   return {
-    payload,
+    payload: { searchText },
     type: SET_SEARCH_TEXT,
+  };
+}
+
+export function setAnimating(animating) {
+  return {
+    payload: { animating },
+    type: SET_ANIMATING,
+  };
+}
+
+export function setUrlItemId(urlItemId) {
+  return {
+    payload: { urlItemId },
+    type: SET_URL_ITEM_ID,
   };
 }
 
@@ -58,20 +72,6 @@ export function toggleCollapsed(payload) {
     return collapsed
       ? dispatch(removeCollapsed(withoutClose))
       : dispatch(addCollapsed(payload));
-  };
-}
-
-export function setAnimating(payload) {
-  return {
-    payload,
-    type: SET_ANIMATING,
-  };
-}
-
-export function setUrlItemId(payload) {
-  return {
-    payload,
-    type: SET_URL_ITEM_ID,
   };
 }
 

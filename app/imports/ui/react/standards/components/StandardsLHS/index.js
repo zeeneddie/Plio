@@ -18,6 +18,9 @@ const StandardsLHS = (props) => {
           sections={props.sections}
           orgSerialNumber={props.orgSerialNumber}
           onToggleCollapse={props.onSectionToggleCollapse}
+          userId={props.userId}
+          filter={props.filter}
+          urlItemId={props.urlItemId}
         />
       );
       break;
@@ -29,6 +32,9 @@ const StandardsLHS = (props) => {
           orgSerialNumber={props.orgSerialNumber}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
+          userId={props.userId}
+          filter={props.filter}
+          urlItemId={props.urlItemId}
         />
       );
       break;
@@ -38,6 +44,9 @@ const StandardsLHS = (props) => {
           <StandardsLHSStandardList
             standards={props.standards}
             orgSerialNumber={props.orgSerialNumber}
+            userId={props.userId}
+            filter={props.filter}
+            urlItemId={props.urlItemId}
           />
         </div>
       );
