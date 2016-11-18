@@ -7,13 +7,12 @@ import { DocumentTypes } from '/imports/share/constants.js';
 import WorkItemService from '../work-items/work-item-service.js';
 
 Risks.after.insert((userId, { _id, organizationId }) => {
-  const id = DiscussionsService.insert({
+  DiscussionsService.insert({
     organizationId,
     documentType: DocumentTypes.RISK,
     linkedTo: _id,
     isPrimary: true,
   });
-  console.log('Discussion created!', id);
 });
 
 Risks.after.remove((userId, doc) => {
