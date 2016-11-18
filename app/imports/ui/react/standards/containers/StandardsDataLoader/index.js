@@ -1,6 +1,6 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
-import { compose, lifecycle, shouldUpdate, shallowEqual } from 'recompose';
+import { compose, lifecycle, shouldUpdate, shallowEqual, withProps } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -23,9 +23,7 @@ import {
   DocumentCardSubs,
   BackgroundSubs,
 } from '/imports/startup/client/subsmanagers';
-import PreloaderPage from '../../../components/PreloaderPage';
 import StandardsLayout from '../../components/StandardsLayout';
-import StandardsPage from '../../components/StandardsPage';
 import {
   initSections,
   initTypes,
@@ -69,8 +67,6 @@ const onPropsChange = ({
   dispatch,
   isDiscussionOpened = false,
 }, onData) => {
-  onData(null, { loading: true });
-
   const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
@@ -227,7 +223,12 @@ const shouldUpdateForProps = (props, nextProps) => {
 
 export default compose(
   connect(),
-  composeWithTracker(onPropsChange, PreloaderPage),
+  // initial props
+  withProps(() => ({
+    loading: true,
+    filter: FlowRouter.getQueryParam('filter'),
+  })),
+  composeWithTracker(onPropsChange, StandardsLayout),
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
