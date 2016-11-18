@@ -1,6 +1,6 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
-import { compose, lifecycle, shouldUpdate, shallowEqual, withProps } from 'recompose';
+import { compose, lifecycle, shouldUpdate, shallowEqual, defaultProps } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -61,7 +61,7 @@ import {
   createTypeItem,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { getId, pickC } from '/imports/api/helpers';
+import { getId, pickC, getC, hasC, propEqId } from '/imports/api/helpers';
 
 const onPropsChange = ({
   dispatch,
@@ -90,7 +90,7 @@ const onPropsChange = ({
     const standard = Standards.findOne({ _id: urlItemId });
 
     const isCardReady = ((() => {
-      if (urlItemId) {
+      if (standard) {
         const subArgs = { organizationId, _id: urlItemId };
 
         return DocumentCardSubs.subscribe('standardCard', subArgs).ready();
@@ -160,16 +160,19 @@ const redirectByFilter = (props) => {
     selected: selectedStandard,
     default: defaultStandard,
   } = getSelectedAndDefaultStandardByFilter(props);
-  const shouldRedirect = FlowRouter.getRouteName() !== 'standard' || !selectedStandard;
+  const shouldRedirect = FlowRouter.getRouteName() === 'standards' || !selectedStandard;
 
-  if (shouldRedirect && defaultStandard) {
-    const params = {
-      orgSerialNumber,
-      urlItemId: get(defaultStandard, '_id'),
-    };
+  if (shouldRedirect) {
     const queryParams = { filter };
-
-    FlowRouter.go('standard', params, queryParams);
+    if (defaultStandard) {
+      const params = {
+        orgSerialNumber,
+        urlItemId: get(defaultStandard, '_id'),
+      };
+      FlowRouter.go('standard', params, queryParams);
+    } else {
+      FlowRouter.go('standards', { orgSerialNumber }, queryParams);
+    }
   }
 };
 
@@ -209,25 +212,35 @@ const openStandardByFilter = (props) => {
   }
 };
 
-const shouldUpdateForProps = (props, nextProps) => {
-  const pickKeys = pickC(['isDeleted', 'sectionId', 'typeId']);
+const isSameStandard = (props, nextProps) => propEqId(props.standard, nextProps.standard);
 
-  return !!(
-    (typeof props.organization !== typeof nextProps.organization) ||
-    (props.orgSerialNumber !== nextProps.orgSerialNumber) ||
-    (props.filter !== nextProps.filter) ||
-    (typeof props.standard !== typeof nextProps.standard) ||
-    !shallowEqual(pickKeys(props.standard), pickKeys(nextProps.standard))
+const shouldUpdateForStandard = (props, nextProps) => {
+  const pickKeys = pickC(['sectionId', 'typeId']);
+  const hasIsDeleted = hasC('isDeleted');
+  const getIsDeleted = getC('isDeleted');
+
+  return (
+    isSameStandard(props, nextProps) &&
+    !shallowEqual(pickKeys(props.standard), pickKeys(nextProps.standard)) ||
+    ((hasIsDeleted(props.standard) && hasIsDeleted(nextProps.standard)) &&
+      getIsDeleted(props.standard) !== getIsDeleted(nextProps.standard))
   );
 };
+
+const shouldUpdateForProps = (props, nextProps) => !!(
+  typeof props.organization !== typeof nextProps.organization ||
+  props.orgSerialNumber !== nextProps.orgSerialNumber ||
+  props.filter !== nextProps.filter ||
+  typeof props.standard !== typeof nextProps.standard ||
+  shouldUpdateForStandard(props, nextProps)
+);
+
+// TODO: handle restore logic
 
 export default compose(
   connect(),
   // initial props
-  withProps(() => ({
-    loading: true,
-    filter: FlowRouter.getQueryParam('filter'),
-  })),
+  defaultProps({ loading: true }),
   composeWithTracker(onPropsChange, StandardsLayout),
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
@@ -237,30 +250,19 @@ export default compose(
     componentDidMount() {
       openStandardByFilter(this.props);
     },
+    /**
+     * Collapse(maybe) and redirect(maybe) when:
+     * changes organization
+     * changes orgSerialNumber
+     * changes filter
+     * the current selected standard's section or type id is different than the next.
+     * the current standard is deleted or restored
+     */
     componentWillReceiveProps(nextProps) {
-      const pickKeys = pickC(['isDeleted']);
-      /**
-       * Redirect(maybe) when:
-       * the selected standard is deleted
-       * the filter is changed
-       */
-      if (this.props.filter !== nextProps.filter ||
-          !shallowEqual(pickKeys(this.props.standard), pickKeys(nextProps.standard))) {
-        redirectByFilter(nextProps);
-      }
+      redirectByFilter(nextProps);
     },
     componentWillUpdate(nextProps) {
-      /**
-       * Collapse(maybe) when:
-       * changes organization
-       * changes orgSerialNumber
-       * changes filter
-       * changes selected standard
-       * the current selected standard's section or type id is different than the next.
-       */
-      if (shouldUpdateForProps(this.props, nextProps)) {
-        openStandardByFilter(nextProps);
-      }
+      openStandardByFilter(nextProps);
     },
   })
 )(StandardsLayout);

@@ -178,6 +178,8 @@ export const every = curry((fns, value) => fns.every(fn => fn(value)));
 
 export const some = curry((fns, value) => fns.some(fn => fn(value)));
 
+export const hasC = curry((key, obj) => _.has(Object.assign({}, obj), key));
+
 /**
  * Picks properties of the passed object from the next object and compares them
  * Example: compareProps({ a: 1, b: 2 })({ c: 1, a: 1, b: 2 }) => true

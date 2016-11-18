@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { StandardFilters } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
@@ -12,6 +13,7 @@ import PreloaderPage from '../../../components/PreloaderPage';
 const getMenuItems = ({ filter }) => (
   _.map(StandardFilters, ({ prepend, name }, key) => {
     const filterWithPrepend = cx(prepend, name);
+    const urlFilter = filter || FlowRouter.getQueryParam('filter');
 
     return (
       <Dropdown.Item
@@ -19,7 +21,7 @@ const getMenuItems = ({ filter }) => (
         key={`standard-filter${key}`}
         href={`?filter=${key}`}
         value={filterWithPrepend}
-        active={parseInt(key, 10) === filter}
+        active={parseInt(key, 10) === parseInt(urlFilter, 10)}
       >
         Standards - {filterWithPrepend}
       </Dropdown.Item>
