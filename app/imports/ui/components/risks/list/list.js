@@ -14,7 +14,9 @@ import {
 Template.Risks_List.viewmodel({
   mixin: [
     'organization', 'modal', 'risk', 'problemsStatus',
-    'collapsing', 'router', 'utils'
+    'collapsing', 'router', 'utils', {
+      counter: 'counter'
+    }
   ],
   onCreated() {
     Meteor.defer(() => this.handleRoute());
@@ -83,7 +85,8 @@ Template.Risks_List.viewmodel({
 
       return {
         ...type,
-        items
+        items,
+        unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     };
 
@@ -102,7 +105,8 @@ Template.Risks_List.viewmodel({
         organizationId,
         items,
         _id: 'Risks.types.uncategorized',
-        title: 'Uncategorized'
+        title: 'Uncategorized',
+        unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     })());
 
@@ -113,6 +117,14 @@ Template.Risks_List.viewmodel({
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
+  },
+  _getTotalUnreadMessages(risks) {
+    const riskIds = extractIds(risks);
+    const totalUnreadMessages = riskIds.reduce((prev, cur) => {
+      return prev + this.counter.get('risk-messages-not-viewed-count-' + cur);
+    }, 0);
+
+    return totalUnreadMessages;
   },
   onModalOpen() {
     return () =>

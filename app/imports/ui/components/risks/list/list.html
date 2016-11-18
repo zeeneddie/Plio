@@ -10,7 +10,8 @@
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount}}
         {{/each}}
       {{/if}}
 
@@ -19,7 +20,8 @@
           {{> ListItem
               template="Risks_SectionItem"
               title=(getStatusName this.status)
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount}}
         {{/each}}
       {{/if}}
 
@@ -29,7 +31,8 @@
               template="Risks_SectionItem"
               title=this.name
               closeAllOnCollapse=false
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount}}
         {{/each}}
       {{/if}}
 

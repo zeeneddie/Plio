@@ -94,27 +94,16 @@ Template.StandardsList.viewmodel({
   },
   _getSearchQuery() {
     const fields = [{ name: 'title' }, { name: 'description' }, { name: 'status' }];
-    
+
     return this.searchObject('searchText', fields, this.isPrecise());
   },
-  totalUnreadMessagesToHtml(totalUnreadMessages) {
-    return totalUnreadMessages ? `<div class="chat-indicator">
-                                    <i class="fa fa-comment"></i>
-                                    <span class="label label-danger">${totalUnreadMessages}</span>
-                                  </div>`
-                               : '';
-  },
-  _getTotalUnreadMessagesHtml(standards) {
+  _getTotalUnreadMessages(standards) {
     const standardsIds = extractIds(standards);
     const totalUnreadMessages = standardsIds.reduce((prev, cur) => {
       return prev + this.counter.get('standard-messages-not-viewed-count-' + cur);
     }, 0);
-    const totalUnreadMessagesHtml = this.totalUnreadMessagesToHtml(totalUnreadMessages);
 
-    return {
-      totalUnreadMessages,
-      totalUnreadMessagesHtml
-    };
+    return totalUnreadMessages;
   },
   sections(typeId) {
     const organizationId = this.organizationId();
@@ -154,7 +143,7 @@ Template.StandardsList.viewmodel({
 
       return Object.assign({}, section, {
         standards,
-        ...this._getTotalUnreadMessagesHtml(standards)
+        unreadMessagesCount: this._getTotalUnreadMessages(standards),
       });
     });
 
@@ -172,7 +161,7 @@ Template.StandardsList.viewmodel({
           standards,
           _id: `StandardsBookSections.Uncategorized:${typeId || ''}`, // We need a fake id here for searching purposes
           title: 'Uncategorized',
-          ...this._getTotalUnreadMessagesHtml(standards)
+          unreadMessagesCount: this._getTotalUnreadMessages(standards),
         });
       }
 
@@ -193,15 +182,13 @@ Template.StandardsList.viewmodel({
     // Type objects with sections
     const withSections = types.map((type) => {
       const sections = this.sections(type._id);
-      const totalUnreadMessages = sections.reduce((prev, cur) => prev + cur.totalUnreadMessages, 0);
-      const totalUnreadMessagesHtml = this.totalUnreadMessagesToHtml(totalUnreadMessages);
+      const unreadMessagesCount = sections.reduce((prev, cur) => prev + cur.totalUnreadMessages, 0);
       const items = sections;
 
       return Object.assign({}, type, {
         items,
         sections,
-        totalUnreadMessages,
-        totalUnreadMessagesHtml,
+        unreadMessagesCount,
         typeTemplate: 'StandardTypeItem'
       });
     });
@@ -224,7 +211,7 @@ Template.StandardsList.viewmodel({
           items: standards,
           title: 'Uncategorized',
           typeTemplate: 'StandardSectionItem',
-          ...this._getTotalUnreadMessagesHtml(standards)
+          unreadMessagesCount: this._getTotalUnreadMessages(standards),
         });
       }
 

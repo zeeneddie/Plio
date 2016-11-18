@@ -7,17 +7,17 @@ import store from '/client/redux/store';
 import DiscussionContainer from '/imports/ui/react/discussion/containers/DiscussionContainer';
 
 Template.Discussion_Card_Inner.viewmodel({
-  standard: '',
+  doc: '',
   discussionId: '',
   organizationId: '',
   onRendered(template) {
-    const { discussionId, organizationId, standard } = template.data;
+    const { discussionId, organizationId, doc } = template.data;
 
     ReactDOM.render(
       <Provider store={store}>
         <DiscussionContainer discussionId={discussionId}
                              organizationId={organizationId}
-                             standard={standard} />
+                             doc={doc} />
       </Provider>,
       _.first(this.discussionDOMContainer)
     );

@@ -31,8 +31,11 @@ import { Migrations } from 'meteor/percolate:migrations';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { Organizations } from '/imports/share/collections/organizations';
-import { CollectionNames, SystemName } from '/imports/share/constants';
-
+import { Discussions } from '/imports/share/collections/discussions.js';
+import DiscussionsService from '/imports/api/discussions/discussions-service.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { DocumentTypes, CollectionNames, SystemName } from '/imports/share/constants';
 
 Migrations.add({
   version: 1,
@@ -53,7 +56,40 @@ Migrations.add({
       }
     });
   },
-  down() { }
+  down() { },
+});
+
+Migrations.add({
+  version: 2,
+  name: 'Adds discussions to documents with no discussions',
+  up() {
+    Risks.find({}).forEach((risk) => {
+      if (!Discussions.findOne({ linkedTo: risk._id })) {
+        DiscussionsService.insert({
+          organizationId: risk.organizationId,
+          documentType: DocumentTypes.RISK,
+          linkedTo: risk._id,
+          isPrimary: true,
+        });
+
+        console.log(`Discussion for ${risk._id} risk is created!`);
+      }
+    });
+
+    NonConformities.find({}).forEach((nc) => {
+      if (!Discussions.findOne({ linkedTo: nc._id })) {
+        DiscussionsService.insert({
+          organizationId: nc.organizationId,
+          documentType: DocumentTypes.NON_CONFORMITY,
+          linkedTo: nc._id,
+          isPrimary: true,
+        });
+
+        console.log(`Discussion for ${nc._id} non-conformity is created!`);
+      }
+    });
+  },
+  down() { },
 });
 
 Meteor.startup(() => {

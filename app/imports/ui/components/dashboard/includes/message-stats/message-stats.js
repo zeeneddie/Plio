@@ -116,6 +116,18 @@ Template.Dashboard_MessageStats.viewmodel({
           { orgSerialNumber, standardId: linkedTo },
           { at: message._id }
         );
+      } else if (discussion.documentType === 'non-conformity') {
+        url = FlowRouter.path(
+          'nonConformityDiscussion',
+          { orgSerialNumber, nonconformityId: linkedTo },
+          { at: message._id }
+        );
+      } else if (discussion.documentType === 'risk') {
+        url = FlowRouter.path(
+          'riskDiscussion',
+          { orgSerialNumber, riskId: linkedTo },
+          { at: message._id }
+        );
       }
 
       _.extend(messageData, {

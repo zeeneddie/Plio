@@ -30,12 +30,13 @@ Template.StandardsPage.viewmodel({
       this._subHandlers(_subHandlers);
     },
     function() {
-      const standardId = this.standardId();
+      const docId = this.standardId();
+      const organizationId = this.organizationId();
 
-      if (!standardId) return;
+      if (!docId) return;
 
       if (this.isDiscussionOpened()) {
-        const discussionHandle = DiscussionSubs.subscribe('discussionsByStandardId', standardId);
+        const discussionHandle = DiscussionSubs.subscribe('discussionsByDocId', { docId, organizationId });
         this.isDiscussionReady(discussionHandle.ready());
       }
     },

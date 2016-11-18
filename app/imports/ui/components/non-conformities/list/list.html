@@ -13,6 +13,7 @@
               title=this.name
               magnitude=this.value
               hideRTextOnExpand=true
+              unreadMessagesCount=this.unreadMessagesCount
               rText=(calculateTotalCost this.items)}}
         {{/each}}
       {{/if}}
@@ -24,6 +25,7 @@
               items=this.items
               title=(getStatusName this.status)
               hideRTextOnExpand=true
+              unreadMessagesCount=this.unreadMessagesCount
               rText=(calculateTotalCost this.items)}}
         {{/each}}
       {{/if}}
@@ -36,6 +38,7 @@
               title=this.name
               closeAllOnCollapse=false
               hideRTextOnExpand=true
+              unreadMessagesCount=this.unreadMessagesCount
               rText=(calculateTotalCost this.items)}}
         {{/each}}
       {{/if}}

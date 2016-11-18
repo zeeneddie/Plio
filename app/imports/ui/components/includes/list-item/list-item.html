@@ -1,6 +1,9 @@
 <template name="ListItem">
   <a class="list-group-item list-group-subheading list-group-toggle pointer collapsed" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
     <h4 class="list-group-item-heading pull-left" {{b "text: this.title"}}></h4>
+    {{#if collapsed}}
+      {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
+    {{/if}}
     <p class="list-group-item-text text-danger pull-right" {{b "if: isRTextDisplayed, html: this.rText"}}></p>
   </a>
   <div class="list-group-collapse collapse" {{b "ref: collapse"}}>

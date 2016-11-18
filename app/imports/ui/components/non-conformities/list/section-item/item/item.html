@@ -3,12 +3,17 @@
     <!-- <span class="label label-status-indicator"
       {{b "class: { label-warning: this.magnitude === 'minor' || this.magnitude === 'major', label-danger: this.magnitude === 'critical' }"}}></span> -->
     <div class="list-group-item-content">
-      <h4 class="list-group-item-heading pull-left">
-        <span {{b "text: renderTitle"}}></span>
-        {{#if isNew}}
-          <span class="label label-primary">New</span>
-        {{/if}}
-      </h4>
+      <div class="flexbox-row">
+        <h4 class="list-group-item-heading pull-left">
+          <span {{b "text: renderTitle"}}></span>
+          {{#if isNew}}
+            <span class="label label-primary">New</span>
+          {{/if}}
+        </h4>
+        <div class="flex">
+          {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
+        </div>
+      </div>
       {{#if occurrences.count}}
         <p class="list-group-item-text text-danger pull-right" {{b "text: totalCost"}}></p>
       {{/if}}
