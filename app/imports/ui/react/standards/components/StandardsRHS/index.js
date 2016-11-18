@@ -19,6 +19,7 @@ const StandardsRHS = (props) => (
         isReady={props.isCardReady}
       >
         <StandardsRHSHeaderButtons
+          isDiscussionOpened={props.isDiscussionOpened}
           names={props.names.headerNames}
           isDeleted={props.standard.isDeleted}
           pathToDiscussion={props.pathToDiscussion}

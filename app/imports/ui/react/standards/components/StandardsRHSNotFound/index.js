@@ -6,8 +6,6 @@ import RHS from '../../../components/RHS';
 const StandardsRHSNotFound = ({ filter }) => {
   let text;
 
-  console.warn(filter);
-
   switch (filter) {
     case 3:
       text = 'There are no deleted standards yet!';

@@ -18,46 +18,48 @@ const StandardsLHSListItem = ({
   isNew,
   type = {},
 }) => (
-  <ListItemLink
-    isActive={isActive}
-    onClick={onClick}
-    href={href}
-  >
-    <ListItem className={className}>
-      <ListItem.Heading>
-        <span>{title}</span>
+  <div className={className}>
+    <ListItemLink
+      isActive={isActive}
+      onClick={onClick}
+      href={href}
+    >
+      <ListItem>
+        <ListItem.Heading>
+          <span>{title}</span>
 
-        {isNew && (
-          <span className="label label-primary">New</span>
-        )}
+          {isNew && (
+            <span className="label label-primary">New</span>
+          )}
 
-        {status === 'draft' && (
-          <span className="label label-danger">
-            {`Issue ${issueNumber} Draft`}
-          </span>
+          {status === 'draft' && (
+            <span className="label label-danger">
+              {`Issue ${issueNumber} Draft`}
+            </span>
+          )}
+        </ListItem.Heading>
+        {isDeleted && (
+          <ListItem.RightText>
+            {`Deleted by ${deletedByText}`}
+          </ListItem.RightText>
         )}
-      </ListItem.Heading>
-      {isDeleted && (
-        <ListItem.RightText>
-          {`Deleted by ${deletedByText}`}
-        </ListItem.RightText>
-      )}
-      {unreadMessagesCount && (
-        <ListItem.RightText className="text-danger">
-          <i className="fa fa-comments"></i>
-          {unreadMessagesCount}
-        </ListItem.RightText>
-      )}
-      <ListItem.LeftText>
-        {type.title}
-      </ListItem.LeftText>
-      {isDeleted && (
-        <ListItem.RightText>
-          {deletedAtText}
-        </ListItem.RightText>
-      )}
-    </ListItem>
-  </ListItemLink>
+        {unreadMessagesCount && (
+          <ListItem.RightText className="text-danger">
+            <i className="fa fa-comments"></i>
+            {unreadMessagesCount}
+          </ListItem.RightText>
+        )}
+        <ListItem.LeftText>
+          {type.title}
+        </ListItem.LeftText>
+        {isDeleted && (
+          <ListItem.RightText>
+            {deletedAtText}
+          </ListItem.RightText>
+        )}
+      </ListItem>
+    </ListItemLink>
+  </div>
 );
 
 StandardsLHSListItem.propTypes = propTypes;

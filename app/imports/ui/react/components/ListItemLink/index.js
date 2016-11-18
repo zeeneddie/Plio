@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types, no-unused-expressions */
 
 import React from 'react';
+import cx from 'classnames';
 import { compose, withHandlers, withProps, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -24,7 +25,7 @@ export default compose(
   setPropTypes(propTypes),
   connect(),
   withProps(transsoc({
-    className: props => `list-group-item ${props.isActive && 'active'}`,
+    className: props => cx('list-group-item', props.className, { active: props.isActive }),
   })),
   withHandlers({
     onHandleClick: ({ onClick, dispatch }) => () => {

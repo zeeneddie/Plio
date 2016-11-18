@@ -3,7 +3,7 @@ import React from 'react';
 import StandardsLHSListItemContainer from '../../containers/StandardsLHSListItemContainer';
 
 const StandardsLHSStandardList = (props) => (
-  <div>
+  <div className="list-group">
     {props.standards.map(standard => (
       <StandardsLHSListItemContainer
         key={standard._id}
@@ -12,7 +12,8 @@ const StandardsLHSStandardList = (props) => (
         userId={props.userId}
         filter={props.filter}
         urlItemId={props.urlItemId}
-        {...standard}/>
+        {...standard}
+      />
     ))}
   </div>
 );
