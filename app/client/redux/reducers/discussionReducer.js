@@ -28,25 +28,15 @@ export const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_DISCUSSION:
-      return { ...state, discussion: action.payload };
     case SET_MESSAGES:
-      return { ...state, messages: action.payload };
     case SET_LOADING:
-      return { ...state, loading: action.payload };
     case SET_PRIOR_LIMIT:
-      return { ...state, priorLimit: action.payload };
     case SET_FOLLOWING_LIMIT:
-      return { ...state, followingLimit: action.payload };
     case SET_SORT:
-      return { ...state, sort: action.payload };
     case SET_AT:
-      return { ...state, at: action.payload };
     case SET_LAST_MESSAGE_ID:
-      return { ...state, lastMessageId: action.payload };
     case SET_RESET_COMPLETED:
-      return { ...state, resetCompleted: action.payload };
     case SET_IS_DISCUSSION_OPENED:
-      return { ...state, isDiscussionOpened: action.payload };
     case RESET:
       return { ...state, ...action.payload };
     default:
