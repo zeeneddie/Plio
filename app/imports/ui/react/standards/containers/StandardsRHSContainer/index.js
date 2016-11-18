@@ -1,9 +1,11 @@
-import { compose, withProps, withHandlers, mapProps } from 'recompose';
+import { compose, withProps, withHandlers, mapProps, branch, renderComponent } from 'recompose';
 import { connect } from 'react-redux';
+import { _ } from 'meteor/underscore';
 
 import { propEq, some, getC, propEqId, every } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
+import StandardsRHSNotFound from '../../components/StandardsRHSNotFound';
 import {
   onToggleScreenMode,
   onDiscussionOpen,
@@ -16,7 +18,7 @@ import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
   standards: { standards, isCardReady, isFullScreenMode },
-  global: { urlItemId, userId },
+  global: { urlItemId, userId, filter },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
   collections: { files, ncs, risks, actions, workItems, lessons },
@@ -35,12 +37,20 @@ const mapStateToProps = ({
   actions,
   workItems,
   lessons,
+  filter,
 });
+
+const getSelectedStandard = props => props.standards.find(propEqId(props.urlItemId));
 
 export default compose(
   connect(mapStateToProps),
+  branch(
+    getSelectedStandard,
+    _.identity,
+    renderComponent(StandardsRHSNotFound),
+  ),
   withProps(props => {
-    const standard = { ...props.standards.find(propEq('_id', props.urlItemId)) };
+    const standard = { ...getSelectedStandard(props) };
     const hasDocxAttachment = some([getC('source1.htmlUrl'), getC('source2.htmlUrl')], standard);
     const hasAccess = canChangeStandards(props.userId, props.organizationId);
     const hasFullAccess = isOrgOwner(props.userId, props.organizationId);

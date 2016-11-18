@@ -1,20 +1,14 @@
 import {
-  SET_ORG,
-  SET_ORG_ID,
-  SET_ORG_SERIAL_NUMBER,
+  SET_WINDOW_WIDTH,
 } from '../actions/types';
 
 const initialState = {
-  organization: null,
-  organizationId: null,
-  orgSerialNumber: null,
+  width: null,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case SET_ORG:
-    case SET_ORG_ID:
-    case SET_ORG_SERIAL_NUMBER:
+    case SET_WINDOW_WIDTH:
       return { ...state, ...action.payload };
     default:
       return state;

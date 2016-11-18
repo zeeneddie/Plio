@@ -1,12 +1,11 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import PreloaderButton from '../../../components/PreloaderButton';
 import ToggleExpandButton from '../../../components/ToggleExpandButton';
 import DiscussButton from '../../../components/DiscussButton';
 import EditButton from '../../../components/EditButton';
 
-const StandardsRHSHeader = (props) => {
+const StandardsRHSHeaderButtons = (props) => {
   const toggleExpandButton = props.hasDocxAttachment ? (
     <ToggleExpandButton onClick={props.onToggleScreenMode} />
   ) : null;
@@ -41,30 +40,17 @@ const StandardsRHSHeader = (props) => {
     />
   ) : null;
 
-
-
   return (
-    <div className="card-block card-heading">
-      {props.isReady ? (
-        <div className="card-heading-buttons pull-xs-right">
-          {toggleExpandButton}
-          {discussionButton}
-          {restoreButton}
-          {deleteButton}
-          {editButton}
-        </div>
-      ) : (
-        <div className="card-heading-buttons pull-xs-right">
-          <PreloaderButton />
-        </div>
-      )}
-      <h3 className="card-title">
-        {props.names.header}
-      </h3>
+    <div>
+      {toggleExpandButton}
+      {discussionButton}
+      {restoreButton}
+      {deleteButton}
+      {editButton}
     </div>
   );
 };
 
-StandardsRHSHeader.propTypes = propTypes;
+StandardsRHSHeaderButtons.propTypes = propTypes;
 
-export default StandardsRHSHeader;
+export default StandardsRHSHeaderButtons;

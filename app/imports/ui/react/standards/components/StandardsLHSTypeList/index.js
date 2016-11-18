@@ -21,6 +21,9 @@ const StandardsLHSTypeList = (props) => (
             <StandardsLHSStandardList
               standards={type.standards}
               orgSerialNumber={props.orgSerialNumber}
+              userId={props.userId}
+              filter={props.filter}
+              urlItemId={props.urlItemId}
             />
           ) : (
             <StandardsLHSSectionList
@@ -28,6 +31,9 @@ const StandardsLHSTypeList = (props) => (
               sections={type.sections}
               onToggleCollapse={props.onSectionToggleCollapse}
               orgSerialNumber={props.orgSerialNumber}
+              userId={props.userId}
+              filter={props.filter}
+              urlItemId={props.urlItemId}
             />
           )}
         </div>
