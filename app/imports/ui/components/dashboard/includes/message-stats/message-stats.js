@@ -1,5 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { moment } from 'meteor/momentjs:moment';
+import moment from 'moment-timezone';
 import { Template } from 'meteor/templating';
 
 import { Discussions } from '/imports/share/collections/discussions.js';

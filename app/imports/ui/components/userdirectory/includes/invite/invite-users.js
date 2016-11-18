@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import pluralize from 'pluralize';
+import moment from 'moment-timezone';
 
 import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
