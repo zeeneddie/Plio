@@ -3,27 +3,27 @@ export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const DocumentTitles = {
   STANDARD: 'Standard',
   NC: 'Non-conformity',
-  RISK: 'Risk'
+  RISK: 'Risk',
 };
 
 export const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',
   3: 'department',
-  4: 'deleted'
+  4: 'deleted',
 };
 
 export const RiskFilters = {
   1: 'type',
   2: 'status',
   3: 'department',
-  4: 'deleted'
+  4: 'deleted',
 };
 
 export const StandardFilters = {
   1: 'section',
   2: 'type',
-  3: 'deleted'
+  3: 'deleted',
 };
 
 export const WorkInboxFilters = {
@@ -32,17 +32,17 @@ export const WorkInboxFilters = {
   3: 'my completed',
   4: 'team completed',
   5: 'my deleted',
-  6: 'team deleted'
+  6: 'team deleted',
 };
 
 export const UncategorizedTypeSection = {
   _id: 'uncategorized',
   title: 'Uncategorized',
-  abbreviation: 'UNC'
+  abbreviation: 'UNC',
 };
 
 export const TruncatedStringLengths = {
-  c40: 40
+  c40: 40,
 };
 
 export const StandardsListProjection = {
@@ -56,7 +56,7 @@ export const StandardsListProjection = {
   owner: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const RisksListProjection = {
@@ -73,7 +73,7 @@ export const RisksListProjection = {
   createdAt: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const ActionsListProjection = {
@@ -92,7 +92,7 @@ export const ActionsListProjection = {
   createdAt: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const NonConformitiesListProjection = {
@@ -110,7 +110,7 @@ export const NonConformitiesListProjection = {
   viewedBy: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const WorkItemsListProjection = {
@@ -125,61 +125,59 @@ export const WorkItemsListProjection = {
   isCompleted: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const StandardsBookSectionsListProjection = {
   organizationId: 1,
-  title: 1
+  title: 1,
 };
 
 export const StandardTypesListProjection = {
   organizationId: 1,
-  title: 1
+  title: 1,
 };
 
 export const DepartmentsListProjection = {
   organizationId: 1,
-  name: 1
+  name: 1,
 };
 
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
   updateOfStandards: 'Update of standard(s)',
-  updateOfRiskRecord: 'Update of risk record'
+  updateOfRiskRecord: 'Update of risk record',
 };
 
 export const ActionTitles = {
   CA: 'Corrective action',
   PA: 'Preventative action',
-  RK: 'Risk control'
+  RK: 'Risk control',
 };
 
 export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
     label: 'Inherent risk',
-    adj: 'Inherent'
+    adj: 'Inherent',
   },
   residual: {
     id: 'residual',
     label: 'Residual risk',
-    adj: 'Residual'
-  }
+    adj: 'Residual',
+  },
 };
 
 export const StringLimits = {
   abbreviation: {
     min: 1,
-    max: 4
+    max: 4,
   },
   title: {
     min: 1,
-    max: 80
-  }
+    max: 80,
+  },
 };
 
-const SystemName = 'Plio';
-
-const RCAMaxCauses = 5;
+export const MOBILE_BREAKPOINT = 768;

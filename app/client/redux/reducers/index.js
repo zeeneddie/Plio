@@ -5,6 +5,8 @@ import standards from './standardsReducer';
 import organizations from './organizationsReducer';
 import global from './globalReducer';
 import collections from './collectionsReducer';
+import window from './windowReducer';
+import mobile from './mobileReducer';
 
 export default combineReducers({
   discussion,
@@ -12,4 +14,6 @@ export default combineReducers({
   organizations,
   global,
   collections,
+  window,
+  mobile,
 });
