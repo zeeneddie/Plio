@@ -1,8 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
+import { _ } from 'meteor/underscore';
 
 import { RisksSchema } from '../schemas/risks-schema.js';
-import { CollectionNames } from '../constants.js';
+import { CollectionNames, riskScoreTypes } from '../constants.js';
 import { WorkItems } from './work-items.js';
 
 
@@ -28,7 +29,17 @@ Risks.helpers({
   },
   getWorkItems() {
     return WorkItems.find({ 'linkedDoc._id': this._id }).fetch();
-  }
+  },
+  getScore() {
+    const scores = Array.from(this.scores || []);
+    scores.sort((score1, score2) => score1.scoredAt - score2.scoredAt);
+
+    const residual = _(scores).find(score => (
+      score.scoreTypeId === riskScoreTypes.residual.id
+    ));
+
+    return residual || scores[scores.length - 1];
+  },
 });
 
 

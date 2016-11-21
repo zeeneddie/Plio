@@ -6,7 +6,7 @@
     onSearchInputValue=onSearchInputValue}}
 
       {{#if isActiveRiskFilter 1}}
-        {{#each types}}
+        {{#each risksByTypes}}
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
@@ -16,7 +16,7 @@
       {{/if}}
 
       {{#if isActiveRiskFilter 2}}
-        {{#each statuses}}
+        {{#each risksByStatuses}}
           {{> ListItem
               template="Risks_SectionItem"
               title=(getStatusName this.status)
@@ -26,7 +26,7 @@
       {{/if}}
 
       {{#if isActiveRiskFilter 3}}
-        {{#each departments}}
+        {{#each risksByDepartments}}
           {{> ListItem
               template="Risks_SectionItem"
               title=this.name

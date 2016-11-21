@@ -11,6 +11,27 @@ import {
 } from '/imports/api/helpers.js';
 
 
+const getSortedItems = (items, compareFn) => {
+  return Array.from(items || []).sort(compareFn);
+};
+
+const compareByScore = (risk1, risk2) => {
+  const score1 = risk1.getScore();
+  const score2 = risk2.getScore();
+  const { value:scoreVal1 } = score1 || {};
+  const { value:scoreVal2 } = score2 || {};
+
+  if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
+    return scoreVal1 < scoreVal2;
+  } else if (score1 && !score2) {
+    return -1;
+  } else if (!score1 && score2) {
+    return 1;
+  }
+
+  return risk1.serialNumber > risk2.serialNumber;
+};
+
 Template.Risks_List.viewmodel({
   mixin: [
     'organization', 'modal', 'risk', 'problemsStatus',
@@ -114,6 +135,27 @@ Template.Risks_List.viewmodel({
       .map(mapper)
       .concat(uncategorized)
       .filter(lengthItems);
+  },
+  risksByDepartments() {
+    return this.departments().map((dept) => {
+      return Object.assign({}, dept, {
+        items: getSortedItems(dept.items, compareByScore)
+      });
+    });
+  },
+  risksByStatuses() {
+    return this.statuses().map((status) => {
+      return Object.assign({}, status, {
+        items: getSortedItems(status.items, compareByScore)
+      });
+    });
+  },
+  risksByTypes() {
+    return this.types().map((type) => {
+      return Object.assign({}, type, {
+        items: getSortedItems(type.items, compareByScore)
+      });
+    });
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
