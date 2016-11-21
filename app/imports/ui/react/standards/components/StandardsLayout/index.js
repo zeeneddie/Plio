@@ -3,15 +3,15 @@ import cx from 'classnames';
 import { _ } from 'meteor/underscore';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { StandardFilters } from '/imports/api/constants';
-import { goToDashboard } from '../../../helpers/routeHelpers';
+import propTypes from './propTypes';
 import Header from '../../../components/Header';
 import Dropdown from '../../../components/Dropdown';
+import StandardsPage from '../StandardsPage';
+import PreloaderPage from '../../../components/PreloaderPage';
 
-const getMenuItems = ({ filter }) => (
-  _.map(StandardFilters, ({ prepend, name }, key) => {
+const getMenuItems = ({ filters, filter }) => (
+  _.map(filters, ({ prepend, name }, key) => {
     const filterWithPrepend = cx(prepend, name);
-    const urlFilter = filter || FlowRouter.getQueryParam('filter');
 
     return (
       <Dropdown.Item
@@ -19,7 +19,7 @@ const getMenuItems = ({ filter }) => (
         key={`standard-filter${key}`}
         href={`?filter=${key}`}
         value={filterWithPrepend}
-        active={parseInt(key, 10) === parseInt(urlFilter, 10)}
+        active={parseInt(key, 10) === parseInt(filter, 10)}
       >
         Standards - {filterWithPrepend}
       </Dropdown.Item>
@@ -30,7 +30,11 @@ const getMenuItems = ({ filter }) => (
 const StandardsLayout = (props) => (
   <div>
     <Header>
-      <Dropdown className="navbar-title">
+      <Dropdown
+        className="navbar-title"
+        activeItemIndex={props.filter - 1}
+        onChange={props.onHandleFilterChange}
+      >
         <Dropdown.Title>
           Standards <span className="text-muted">- @value</span>
         </Dropdown.Title>
@@ -38,14 +42,20 @@ const StandardsLayout = (props) => (
           {getMenuItems(props)}
         </Dropdown.Menu>
       </Dropdown>
-      <Header.ArrowBack pull="left" onClick={goToDashboard} />
+      <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
     </Header>
     <div className="content">
       <div className="container-fluid">
-        {props.content}
+        {props.loading ? (
+          <PreloaderPage />
+        ) : (
+          <StandardsPage {...props} />
+        )}
       </div>
     </div>
   </div>
 );
+
+StandardsLayout.propTypes = propTypes;
 
 export default StandardsLayout;

@@ -6,6 +6,7 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
+import { shallowEqual } from 'recompose';
 
 import {
   ActionsListProjection,
@@ -139,7 +140,7 @@ export const transsoc = curry((transformations, obj) => {
   return _.pick(flattenObjects(result), ...keys);
 });
 
-export const pickC = curry((keys, obj) => _.pick(obj, ...keys));
+export const pickC = curry((keys, obj) => _.pick(Object.assign({}, obj), ...keys));
 
 // pickDeep(['a.b.c'])({ a: { b: { c: 123 }}}) => { c: 123 }
 export const pickDeep = curry((paths, obj) =>
@@ -177,6 +178,10 @@ export const propId = property('_id');
 export const every = curry((fns, value) => fns.every(fn => fn(value)));
 
 export const some = curry((fns, value) => fns.some(fn => fn(value)));
+
+export const hasC = curry((key, obj) => _.has(Object.assign({}, obj), key));
+
+export const shallowCompare = compose(not, shallowEqual);
 
 /**
  * Picks properties of the passed object from the next object and compares them
