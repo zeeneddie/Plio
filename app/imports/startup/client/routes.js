@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import React from 'react';
+import ReactDOM from 'react-dom';
 import { mount, withOptions } from 'react-mounter';
 
 import '/imports/ui/components';
@@ -10,7 +10,7 @@ import '/imports/ui/pages';
 import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
 
 const mount2 = withOptions({
-  rootId: '__blaze-root'
+  rootId: '__blaze-root',
 }, mount);
 
 AccountsTemplates.configureRoute('signIn', {

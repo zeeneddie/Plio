@@ -1,6 +1,14 @@
 import { composeWithTracker } from 'react-komposer';
 import get from 'lodash.get';
-import { compose, lifecycle, shouldUpdate, shallowEqual, defaultProps } from 'recompose';
+import {
+  compose,
+  lifecycle,
+  shouldUpdate,
+  shallowEqual,
+  defaultProps,
+  withHandlers,
+  withProps,
+} from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
@@ -55,18 +63,22 @@ import {
   setLessons,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
+import { setShowCard } from '/client/redux/actions/mobileActions';
 import { getState } from '/client/redux/store';
 import {
   createSectionItem,
   createTypeItem,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { getId, pickC, getC, hasC, propEqId } from '/imports/api/helpers';
+import { getId, pickC, getC, hasC, omitC, propEqId, pickDeep, shallowCompare } from '/imports/api/helpers';
+import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
+import { goToDashboard } from '../../../helpers/routeHelpers';
 
 const onPropsChange = ({
   dispatch,
   isDiscussionOpened = false,
 }, onData) => {
+  let subscriptions = [];
   const userId = Meteor.userId();
   const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
@@ -76,6 +88,8 @@ const onPropsChange = ({
           : { $in: [null, false] };
 
   const layoutSub = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber, isDeleted);
+
+  subscriptions = subscriptions.concat(layoutSub);
 
   if (layoutSub.ready()) {
     const organization = Organizations.findOne({ serialNumber });
@@ -93,14 +107,22 @@ const onPropsChange = ({
       if (standard) {
         const subArgs = { organizationId, _id: urlItemId };
 
-        return DocumentCardSubs.subscribe('standardCard', subArgs).ready();
+        const cardSub = DocumentCardSubs.subscribe('standardCard', subArgs);
+
+        subscriptions = subscriptions.concat(cardSub);
+
+        return cardSub.ready();
       }
 
       return true;
     })());
 
     if (isCardReady) {
-      if (BackgroundSubs.subscribe('standardsDeps', organizationId).ready()) {
+      const backgroundSub = BackgroundSubs.subscribe('standardsDeps', organizationId);
+
+      subscriptions = subscriptions.concat(backgroundSub);
+
+      if (backgroundSub.ready()) {
         const pOptions = { sort: { serialNumber: 1 } };
         const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
         const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
@@ -152,6 +174,8 @@ const onPropsChange = ({
       ..._.pick(getState('global'), 'filter', 'urlItemId'),
     });
   }
+
+  return () => subscriptions.every(sub => typeof sub === 'function' && sub.stop());
 };
 
 const redirectByFilter = (props) => {
@@ -235,13 +259,36 @@ const shouldUpdateForProps = (props, nextProps) => !!(
   shouldUpdateForStandard(props, nextProps)
 );
 
-// TODO: handle restore logic
+const withoutProps = omitC(['width', 'showCard']);
+const shouldResubscribe = (props, nextProps) =>
+  shallowCompare(withoutProps(props), withoutProps(nextProps));
 
 export default compose(
-  connect(),
+  connect(pickDeep(['window.width', 'mobile.showCard'])),
   // initial props
-  defaultProps({ loading: true }),
-  composeWithTracker(onPropsChange, StandardsLayout),
+  defaultProps({ loading: true, filters: StandardFilters }),
+  withProps(() => ({
+    filter: parseInt(FlowRouter.getQueryParam('filter'), 10) || 1,
+  })),
+  withHandlers({
+    onHandleFilterChange: props => index => {
+      const filter = parseInt(Object.keys(props.filters)[index], 10);
+      props.dispatch(setFilter(filter));
+    },
+    onHandleReturn: (props) => () => {
+      if (props.width <= MOBILE_BREAKPOINT) {
+        if (props.isDiscussionOpened && !props.showCard) {
+          return props.dispatch(setShowCard(true));
+          // redirect to standard
+        } else if (!props.isDiscussionOpened && props.showCard) {
+          return props.dispatch(setShowCard(false));
+        }
+      }
+
+      return goToDashboard();
+    },
+  }),
+  composeWithTracker(onPropsChange, StandardsLayout, null, { shouldResubscribe }),
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
@@ -264,5 +311,5 @@ export default compose(
     componentWillUpdate(nextProps) {
       openStandardByFilter(nextProps);
     },
-  })
+  }),
 )(StandardsLayout);

@@ -6,6 +6,7 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
+import { shallowEqual } from 'recompose';
 
 import {
   ActionsListProjection,
@@ -179,6 +180,8 @@ export const every = curry((fns, value) => fns.every(fn => fn(value)));
 export const some = curry((fns, value) => fns.some(fn => fn(value)));
 
 export const hasC = curry((key, obj) => _.has(Object.assign({}, obj), key));
+
+export const shallowCompare = compose(not, shallowEqual);
 
 /**
  * Picks properties of the passed object from the next object and compares them

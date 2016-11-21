@@ -1,31 +1,20 @@
 import React, { PropTypes } from 'react';
 import { Item } from './Item';
-import { mapProps, compose, lifecycle } from 'recompose';
+import { mapProps } from 'recompose';
 
-const enhance = compose(
-  lifecycle({
-    componentWillMount() {
-      const defaultActive = this.props.children.findIndex(child => child.props.active);
+const enhance = mapProps(props => ({
+  ...props,
+  children: React.Children.map(props.children, (child, index) => {
+    const isActive = props.activeItemIndex === index;
 
-      if (defaultActive !== -1 && this.props.active !== defaultActive) {
-        this.props.onChange(defaultActive);
-      }
-    },
+    return React.cloneElement(child, {
+      active: isActive,
+      onClick: () => {
+        props.onChange(index);
+      },
+    });
   }),
-  mapProps(props => ({
-    ...props,
-    children: React.Children.map(props.children, (child, index) => {
-      const isActive = props.activeItemIndex === index;
-
-      return React.cloneElement(child, {
-        active: isActive,
-        onClick: () => {
-          props.onChange(index);
-        },
-      });
-    }),
-  }))
-);
+}));
 
 const Menu = enhance(({ children }) => (
   <div className="dropdown-menu">
