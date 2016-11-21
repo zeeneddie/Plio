@@ -6,6 +6,7 @@ import {
   extractIds,
   getId,
   propEq,
+  propEqId,
 } from '/imports/api/helpers';
 import {
   createSectionItem,
@@ -58,18 +59,20 @@ export const onSearchTextChange = _.debounce(({
   const query = _search_.searchQuery(value, fields);
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
-  const newStandards = standards.filter(({ _id }) => extractIds(standardsFound).includes(_id));
   const newSections = initSections({
     sections,
     types,
-    standards: newStandards });
+    standards: standards.filter(standard => standardsFound.find(propEqId(standard._id))),
+  });
   const newTypes = initTypes({ sections: newSections, types });
+  const newStandards = standards.filter(standard =>
+    extractIds(standardsFound).includes(standard._id));
 
   let actions = [
     setSearchText(value),
-    setFilteredSections(newSections),
-    setFilteredTypes(newTypes),
-    setFilteredStandards(newStandards),
+    setFilteredSections(extractIds(newSections)),
+    setFilteredTypes(extractIds(newTypes)),
+    setFilteredStandards(extractIds(newStandards)),
   ];
 
   if (collapseOnSearch) actions = actions.concat(setAnimating(true));

@@ -11,6 +11,7 @@ import {
   onClear,
   onModalOpen,
 } from './handlers';
+import { initSections, initTypes } from '/client/redux/lib/standardsHelpers';
 
 const mapStateToProps = ({
   standards: {
@@ -58,16 +59,24 @@ export default compose(
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps(props => {
-    const standardsOrFiltered = props.searchText ? props.standardsFiltered : props.standards;
-    const standards = props.filter === 3
-      ? standardsOrFiltered.filter(propEq('isDeleted', true))
-      : standardsOrFiltered.filter(compose(not, property('isDeleted')));
+    let standards = props.searchText
+      ? props.standards.filter(standard => props.standardsFiltered.includes(standard._id))
+      : props.standards;
+    standards = props.filter === 3
+      ? standards.filter(propEq('isDeleted', true))
+      : standards.filter(compose(not, property('isDeleted')));
+    const sections = props.searchText
+      ? initSections({ standards, sections: props.sections, types: props.types })
+      : props.sections;
+    const types = props.searchText
+      ? initTypes({ sections, types: props.types })
+      : props.types;
 
     return {
       ...props,
       standards,
-      sections: props.searchText ? props.sectionsFiltered : props.sections,
-      types: props.searchText ? props.typesFiltered : props.types,
+      sections,
+      types,
       searchResultsText: props.searchText
         ? `${standards.length} matching results`
         : '',
