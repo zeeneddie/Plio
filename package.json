@@ -16,5 +16,7 @@
     "eslint-plugin-meteor": "^3.6.0",
     "eslint-plugin-react": "^5.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-mounter": "git+https://github.com/kadirahq/react-mounter.git"
+  }
 }

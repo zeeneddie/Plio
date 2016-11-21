@@ -1,13 +1,23 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import ReactDOM from 'react-dom';
 import { mount, withOptions } from 'react-mounter';
+import { withOptions } from 'react-mounter';
+import { mounter } from 'react-mounter/dist/client';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
+
+function mount(layoutClass, regions, options = {}) {
+  const additionalOptions = {
+    rootId: regions && regions.rootId || options.rootId || 'react-root',
+    rootProps: options.rootProps || {},
+  };
+
+  mounter(layoutClass, regions, { ...options, ...additionalOptions });
+}
 
 const mount2 = withOptions({
   rootId: '__blaze-root',
