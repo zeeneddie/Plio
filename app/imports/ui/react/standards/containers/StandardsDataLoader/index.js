@@ -64,7 +64,7 @@ import {
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
-import { setStandardMessagesNotViewedCount } from '/client/redux/actions/countersActions';
+import { setStandardMessagesNotViewedCountMap } from '/client/redux/actions/countersActions';
 import { getState } from '/client/redux/store';
 import {
   createSectionItem,
@@ -158,6 +158,7 @@ const onPropsChange = ({
     }
 
     let reduxActions = [];
+    let unreadMessagesCountMap;
     const unreadMessagesCountSubs = standards.map(({ _id }) => Meteor.subscribe(
       'messagesNotViewedCount',
       `standard-messages-not-viewed-count-${_id}`,
@@ -165,15 +166,17 @@ const onPropsChange = ({
     ));
 
     if (unreadMessagesCountSubs.every(sub => sub.ready())) {
-      const unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
+      unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
         ...map,
         [_id]: _counter_.get(`standard-messages-not-viewed-count-${_id}`),
       }), {});
 
-      reduxActions = reduxActions.concat(setStandardMessagesNotViewedCount(unreadMessagesCountMap));
+      reduxActions = reduxActions.concat(
+        setStandardMessagesNotViewedCountMap(unreadMessagesCountMap)
+      );
     }
 
-    reduxActions = [
+    reduxActions = reduxActions.concat([
       setUserId(userId),
       setOrg(organization),
       setOrgId(organizationId),
@@ -185,12 +188,16 @@ const onPropsChange = ({
       setUrlItemId(urlItemId),
       setIsCardReady(isCardReady),
       setFilter(filter),
-      initSections({ sections, types, standards }),
-      initStandards({ types, sections, standards }),
-    ];
+      initStandards({ types, sections, standards, unreadMessagesCountMap }),
+    ]);
 
     dispatch(batchActions(reduxActions));
-
+    dispatch(initSections({
+      sections,
+      types,
+      unreadMessagesCountMap,
+      standards: getState('standards').standards,
+    }));
     dispatch(initTypes({ types, sections: getState('standards').sections }));
 
     onData(null, {

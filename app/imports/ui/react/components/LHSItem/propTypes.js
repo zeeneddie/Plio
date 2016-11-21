@@ -11,5 +11,6 @@ export default {
   onToggleCollapse: PropTypes.func.isRequired,
   children: PropTypes.node,
   lText: PropTypes.string.isRequired,
-  rText: PropTypes.string,
+  rText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  hideRTextOnExpand: PropTypes.bool,
 };

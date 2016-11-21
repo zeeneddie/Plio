@@ -30,7 +30,7 @@ import {
   addCollapsed,
   setAnimating,
 } from '/client/redux/actions/globalActions';
-import { initTypes } from '/client/redux/lib/standardsHelpers';
+import { initTypes, initSections } from '/client/redux/lib/standardsHelpers';
 
 const onToggle = fn => ({ dispatch }) => (e, { key, type } = {}) =>
   dispatch(toggleCollapsed({ ...fn(key), close: { type } }));
@@ -58,15 +58,12 @@ export const onSearchTextChange = _.debounce(({
   const query = _search_.searchQuery(value, fields);
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
-  const mapper = section => ({
-    ...section,
-    standards: section.standards.filter(standard =>
-        extractIds(standardsFound).includes(standard._id)),
-  });
-  const newSections = sections.map(mapper).filter(lengthStandards);
+  const newStandards = standards.filter(({ _id }) => extractIds(standardsFound).includes(_id));
+  const newSections = initSections({
+    sections,
+    types,
+    standards: newStandards });
   const newTypes = initTypes({ sections: newSections, types });
-  const newStandards = standards.filter(standard =>
-    extractIds(standardsFound).includes(standard._id));
 
   let actions = [
     setSearchText(value),

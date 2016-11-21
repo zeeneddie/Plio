@@ -3,6 +3,7 @@ import React from 'react';
 import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
+import MessagesCount from '../../../components/MessagesCount';
 
 const StandardsLHSListItem = ({
   isActive,
@@ -43,10 +44,9 @@ const StandardsLHSListItem = ({
             {`Deleted by ${deletedByText}`}
           </ListItem.RightText>
         )}
-        {unreadMessagesCount && (
+        {!!unreadMessagesCount && !isDeleted && (
           <ListItem.RightText className="text-danger">
-            <i className="fa fa-comments"></i>
-            {unreadMessagesCount}
+            <MessagesCount count={unreadMessagesCount} />
           </ListItem.RightText>
         )}
         <ListItem.LeftText>

@@ -12,7 +12,6 @@ import { updateViewedBy } from '/imports/api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 import { pickC } from '/imports/api/helpers';
 
-// TODO: unreadMessagesCount support
 export default compose(
   shouldUpdate((props, nextProps) => {
     const pickKeys = pickC([
