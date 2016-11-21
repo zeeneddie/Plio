@@ -10,14 +10,17 @@ import reducer from './reducers';
 const defaultWait = 300;
 const defaultThrottleOption = {
   leading: true,
-  trailing: true
+  trailing: true,
 };
 
-const middlewares = [
+let middlewares = [
   thunk,
-  logger(),
-  throttleActions(defaultWait, defaultThrottleOption)
+  throttleActions(defaultWait, defaultThrottleOption),
 ];
+
+if (process.NODE_ENV !== 'production') {
+  middlewares = middlewares.concat([logger()]);
+}
 
 const store = createStore(
   enableBatching(reducer),

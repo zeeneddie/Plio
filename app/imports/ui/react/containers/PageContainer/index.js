@@ -16,11 +16,11 @@ export default compose(
       const getWidth = () => $window.width();
       const setNewWidth = () =>
         this.props.dispatch(setWindowWidth(getWidth()));
-      const setNewWidthDebounced = _.throttle(setNewWidth, 500);
+      const setNewWidthThrottled = _.throttle(setNewWidth, 500);
 
       setNewWidth();
 
-      $window.on('resize', setNewWidthDebounced);
+      $window.on('resize', setNewWidthThrottled);
     },
   }),
   mapProps(({ width, showCard, ...props }) => ({

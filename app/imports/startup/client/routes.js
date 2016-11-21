@@ -1,20 +1,16 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import React from 'react';
+import ReactDOM from 'react-dom';
 import { mount, withOptions } from 'react-mounter';
-import { Provider } from 'react-redux';
-
-import store from '/client/redux/store';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import StandardsLayoutContainer from '/imports/ui/react/standards/containers/StandardsLayoutContainer';
-import StandardsLayout from '/imports/ui/react/standards/components/StandardsLayout';
+import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
 
 const mount2 = withOptions({
-  rootId: '__blaze-root'
+  rootId: '__blaze-root',
 }, mount);
 
 AccountsTemplates.configureRoute('signIn', {
@@ -145,29 +141,17 @@ FlowRouter.route('/transfer-organization/:transferId', {
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    mount2(StandardsLayout, {
-      content: (
-        <Provider store={store}>
-          <StandardsLayoutContainer />
-        </Provider>
-      )
-    });
-  }
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    mount2(StandardsLayout, {
-      content: (
-        <Provider store={store}>
-          <StandardsLayoutContainer />
-        </Provider>
-      )
-    });
-  }
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
