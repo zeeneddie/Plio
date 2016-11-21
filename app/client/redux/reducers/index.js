@@ -7,6 +7,7 @@ import global from './globalReducer';
 import collections from './collectionsReducer';
 import window from './windowReducer';
 import mobile from './mobileReducer';
+import counters from './countersReducer';
 
 export default combineReducers({
   discussion,
@@ -16,4 +17,5 @@ export default combineReducers({
   collections,
   window,
   mobile,
+  counters,
 });
