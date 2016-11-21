@@ -1,6 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-import { mount, withOptions } from 'react-mounter';
 import { withOptions } from 'react-mounter';
 import { mounter } from 'react-mounter/dist/client';
 

@@ -305,9 +305,6 @@ export default compose(
      * the current selected standard's section or type id is different than the next.
      * the current standard is deleted or restored
      */
-    componentWillReceiveProps(nextProps) {
-      redirectByFilter(nextProps);
-    },
     componentWillUpdate(nextProps) {
       openStandardByFilter(nextProps);
     },
