@@ -64,15 +64,27 @@ import {
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
+import { setStandardMessagesNotViewedCount } from '/client/redux/actions/countersActions';
 import { getState } from '/client/redux/store';
 import {
   createSectionItem,
   createTypeItem,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
-import { getId, pickC, getC, hasC, omitC, propEqId, pickDeep, shallowCompare } from '/imports/api/helpers';
+import {
+  getId,
+  pickC,
+  getC,
+  hasC,
+  omitC,
+  propEqId,
+  pickDeep,
+  shallowCompare,
+  flattenObjects,
+} from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
+import _counter_ from '/imports/startup/client/mixins/counter';
 
 const onPropsChange = ({
   dispatch,
@@ -145,7 +157,23 @@ const onPropsChange = ({
       }
     }
 
-    const actions = [
+    let reduxActions = [];
+    const unreadMessagesCountSubs = standards.map(({ _id }) => Meteor.subscribe(
+      'messagesNotViewedCount',
+      `standard-messages-not-viewed-count-${_id}`,
+      _id
+    ));
+
+    if (unreadMessagesCountSubs.every(sub => sub.ready())) {
+      const unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
+        ...map,
+        [_id]: _counter_.get(`standard-messages-not-viewed-count-${_id}`),
+      }), {});
+
+      reduxActions = reduxActions.concat(setStandardMessagesNotViewedCount(unreadMessagesCountMap));
+    }
+
+    reduxActions = [
       setUserId(userId),
       setOrg(organization),
       setOrgId(organizationId),
@@ -161,7 +189,7 @@ const onPropsChange = ({
       initStandards({ types, sections, standards }),
     ];
 
-    dispatch(batchActions(actions));
+    dispatch(batchActions(reduxActions));
 
     dispatch(initTypes({ types, sections: getState('standards').sections }));
 
