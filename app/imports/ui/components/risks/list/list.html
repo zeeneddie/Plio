@@ -21,7 +21,8 @@
               template="Risks_SectionItem"
               title=(getStatusName this.status)
               items=this.items
-              unreadMessagesCount=this.unreadMessagesCount}}
+              unreadMessagesCount=this.unreadMessagesCount
+              rText=(getStatusBadge this.status)}}
         {{/each}}
       {{/if}}
 

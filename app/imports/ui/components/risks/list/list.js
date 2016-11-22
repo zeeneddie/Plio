@@ -7,30 +7,10 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, findById, lengthItems,
-  flattenMapItems, inspire
+  flattenMapItems, inspire, getSortedItems,
+  compareRisksByScore, compareStatusesByPriority,
 } from '/imports/api/helpers.js';
 
-
-const getSortedItems = (items, compareFn) => {
-  return Array.from(items || []).sort(compareFn);
-};
-
-const compareByScore = (risk1, risk2) => {
-  const score1 = risk1.getScore();
-  const score2 = risk2.getScore();
-  const { value:scoreVal1 } = score1 || {};
-  const { value:scoreVal2 } = score2 || {};
-
-  if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
-    return scoreVal1 < scoreVal2;
-  } else if (score1 && !score2) {
-    return -1;
-  } else if (!score1 && score2) {
-    return 1;
-  }
-
-  return risk1.serialNumber > risk2.serialNumber;
-};
 
 Template.Risks_List.viewmodel({
   mixin: [
@@ -139,23 +119,30 @@ Template.Risks_List.viewmodel({
   risksByDepartments() {
     return this.departments().map((dept) => {
       return Object.assign({}, dept, {
-        items: getSortedItems(dept.items, compareByScore)
+        items: getSortedItems(dept.items, compareRisksByScore)
       });
     });
   },
   risksByStatuses() {
-    return this.statuses().map((status) => {
+    const statuses = getSortedItems(this.statuses(), (statusData1, statusData2) => {
+      return compareStatusesByPriority(statusData1.status, statusData2.status);
+    });
+
+    return statuses.map((status) => {
       return Object.assign({}, status, {
-        items: getSortedItems(status.items, compareByScore)
+        items: getSortedItems(status.items, compareRisksByScore)
       });
     });
   },
   risksByTypes() {
     return this.types().map((type) => {
       return Object.assign({}, type, {
-        items: getSortedItems(type.items, compareByScore)
+        items: getSortedItems(type.items, compareRisksByScore)
       });
     });
+  },
+  getStatusBadge(status) {
+    return `<i class="fa fa-circle margin-right text-${this.getClassByStatus(status)}"></i>`;
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
