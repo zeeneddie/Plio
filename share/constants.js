@@ -179,10 +179,10 @@ export const ProblemMagnitudes = {
 export const ProblemsStatuses = {
   1: 'Open - just reported',
   2: 'Open - just reported, awaiting analysis',
-  3: 'Open - just reported, awaiting creation of an action',
+  3: 'Open - just reported, action(s) to be added',
   4: 'Open - analysis due today',
   5: 'Open - analysis overdue',
-  6: 'Open - analysis completed, action needs to be created',
+  6: 'Open - analysis completed, action(s) need to be added',
   7: 'Open - analysis completed, action(s) in place',
   8: 'Open - action(s) due today',
   9: 'Open - action(s) overdue',
