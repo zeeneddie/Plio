@@ -1,6 +1,6 @@
 import {
   SET_MESSAGES,
-  SET_LOADING,
+  SET_DISCUSSION_LOADING,
   SET_SORT,
   SET_AT,
   RESET,
@@ -29,7 +29,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_DISCUSSION:
     case SET_MESSAGES:
-    case SET_LOADING:
+    case SET_DISCUSSION_LOADING:
     case SET_PRIOR_LIMIT:
     case SET_FOLLOWING_LIMIT:
     case SET_SORT:

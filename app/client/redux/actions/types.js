@@ -2,7 +2,7 @@
 
 export const SET_MESSAGES = 'SET_MESSAGES';
 
-export const SET_LOADING = 'SET_LOADING';
+export const SET_DISCUSSION_LOADING = 'SET_DISCUSSION_LOADING';
 
 export const SET_SORT = 'SET_SORT';
 
@@ -73,6 +73,8 @@ export const SET_USER_ID = 'SET_USER_ID';
 export const SET_ANIMATING = 'SET_ANIMATING';
 
 export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';
+
+export const SET_DATA_LOADING = 'SET_DATA_LOADING';
 
 // collections
 
