@@ -308,7 +308,6 @@ export default compose(
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
-      console.log(this.props);
       redirectByFilter(this.props);
     },
     componentDidMount() {
