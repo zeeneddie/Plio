@@ -10,7 +10,7 @@ const { LINKED_TYPES } = WorkItemsStore;
 
 Template.WorkInbox_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'workInbox', 'organization', 'user', 'utils', 'workItemStatus', 'documentStatus'],
+  mixin: ['date', 'workInbox', 'organization', 'user', 'utils', 'workItemStatus'],
   onCreated(template) {
     template.autorun((computation) => {
       const { _id } = this.data();

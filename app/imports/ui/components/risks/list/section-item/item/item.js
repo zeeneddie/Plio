@@ -6,7 +6,7 @@ import { updateViewedBy } from '/imports/api/risks/methods.js';
 
 Template.Risks_Item.viewmodel({
   share: 'window',
-  mixin: ['risk', 'date', 'riskScore', 'organization', 'problemsStatus', {
+  mixin: ['risk', 'user', 'date', 'riskScore', 'organization', 'problemsStatus', {
     counter: 'counter'
   }],
   onCreated(template) {
@@ -53,6 +53,11 @@ Template.Risks_Item.viewmodel({
         return FlowRouter.path('risk', params, queryParams);
       })()
     };
+  },
+  getUserText({ isDeleted, createdBy, deletedBy }) {
+    return isDeleted
+            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
+            : '';
   },
   isNew() {
     const userId = Meteor.userId();

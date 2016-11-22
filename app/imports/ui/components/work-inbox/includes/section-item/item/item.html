@@ -1,5 +1,7 @@
 <template name="WorkInbox_Item">
   {{#ListItemLink (linkArgs)}}
+    <span class="label label-status-indicator"
+      {{b "class: 'label-' + getClassByStatus(status)"}}></span>
     <div class="list-group-item-content">
       <div class="flexbox-row">
         <h4 class="list-group-item-heading pull-left">

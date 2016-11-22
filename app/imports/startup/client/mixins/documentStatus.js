@@ -10,7 +10,7 @@ export default {
     } else if (type === ProblemTypes.RISK || type === ProblemTypes.NON_CONFORMITY) {
       return problemsStatus.getClassByStatus('status');
     } else {
-      return '';
+      return 'default';
     }
   }
 };
