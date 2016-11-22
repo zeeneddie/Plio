@@ -50,6 +50,7 @@ import {
   setUserId,
   chainActions,
   setUrlItemId,
+  setSearchText,
 } from '/client/redux/actions/globalActions';
 import {
   setDepartments,
@@ -308,13 +309,18 @@ export default compose(
   withHandlers({
     onHandleFilterChange: props => index => {
       const filter = parseInt(Object.keys(props.filters)[index], 10);
-      props.dispatch(setFilter(filter));
+      const actions = [
+        setSearchText(''),
+        setFilter(filter),
+      ];
+
+      props.dispatch(batchActions(actions));
     },
     onHandleReturn: (props) => () => {
       if (props.width <= MOBILE_BREAKPOINT) {
         if (props.isDiscussionOpened && !props.showCard) {
           return props.dispatch(setShowCard(true));
-          // redirect to standard
+          // redirect to the standard
         } else if (!props.isDiscussionOpened && props.showCard) {
           return props.dispatch(setShowCard(false));
         }

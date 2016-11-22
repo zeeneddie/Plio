@@ -1,8 +1,10 @@
 import React from 'react';
+import cx from 'classnames';
 
 import propTypes from './propTypes';
 import ClearableField from '../ClearableField';
 import AddButton from '../AddButton';
+import TextInput from '../../forms/components/TextInput';
 
 const LHS = ({
   animating = false,
@@ -21,22 +23,28 @@ const LHS = ({
   return (
     <div className="card">
       <div className="search-form">
-        <div className={`form-group row with-loader ${animating ? 'loading' : ''}`}>
+        <div
+          className={cx(
+            'form-group',
+            'row',
+            'with-loader',
+            { loading: animating }
+          )}
+        >
           <ClearableField
             onClick={e => onClear && onClear(searchInput)(e)}
             animating={animating}
             isFocused={isFocused}
           >
-            <input
-              ref={input => (searchInput = input)}
-              type="text"
+            <TextInput
+              value={searchText}
+              onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              disabled={animating}
+              reference={input => (searchInput = input)}
               className="form-control"
               placeholder="Search..."
-              disabled={animating}
-              defaultValue={searchText}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              onChange={onChange}
             />
           </ClearableField>
 

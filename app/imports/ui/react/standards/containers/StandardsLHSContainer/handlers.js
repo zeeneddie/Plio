@@ -123,7 +123,6 @@ export const onSearchTextChange = _.debounce(({
 export const onClear = props => input => () => {
   if (!props.searchText) return;
 
-  input.value = '';
   input.focus();
 
   props.dispatch(setSearchText(''));

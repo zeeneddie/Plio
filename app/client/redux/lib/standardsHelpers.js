@@ -54,8 +54,6 @@ export const initSections = ({ types, sections, standards }) => {
 };
 
 export const initTypes = ({ sections, types }) => {
-  const getTotalUnreadMessagesCount = (array = []) =>
-    array.reduce((prev, cur) => prev + cur.unreadMessagesCount, 0);
   const uncategorizedStandards = flattenMapStandards(sections)
     .filter(standard => !types.find(propEqId(standard.typeId)));
   const uncategorizedType = {
