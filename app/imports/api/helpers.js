@@ -344,14 +344,14 @@ export const compareRisksByScore = (risk1, risk2) => {
   const { value:scoreVal2 } = score2 || {};
 
   if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
-    return scoreVal1 < scoreVal2;
+    return scoreVal2 - scoreVal1;
   } else if (score1 && !score2) {
     return -1;
   } else if (!score1 && score2) {
     return 1;
   }
 
-  return risk1.serialNumber > risk2.serialNumber;
+  return risk1.serialNumber - risk2.serialNumber;
 };
 
 export const compareStatusesByPriority = (() => {
@@ -370,9 +370,9 @@ export const compareStatusesByPriority = (() => {
     const priority2 = getPriority(status2);
 
     if (priority1 !== priority2) {
-      return priority1 < priority2;
+      return priority2 - priority1;
     } else {
-      return status1 < status2;
+      return status2 - status1;
     }
   };
 })();

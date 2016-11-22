@@ -32,13 +32,12 @@ Risks.helpers({
   },
   getScore() {
     const scores = Array.from(this.scores || []);
-    scores.sort((score1, score2) => score1.scoredAt - score2.scoredAt);
+    scores.sort((score1, score2) => score2.scoredAt - score1.scoredAt);
 
-    const residual = _(scores).find(score => (
-      score.scoreTypeId === riskScoreTypes.residual.id
-    ));
+    const getScoreByType = type => _(scores).find(s => s.scoreTypeId === type);
 
-    return residual || scores[scores.length - 1];
+    return getScoreByType(riskScoreTypes.residual.id)
+      || getScoreByType(riskScoreTypes.inherent.id);
   },
 });
 
