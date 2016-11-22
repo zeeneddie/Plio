@@ -7,7 +7,8 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, findById, lengthItems,
-  flattenMapItems, inspire
+  flattenMapItems, inspire, getSortedItems,
+  compareRisksByScore, compareStatusesByPriority,
 } from '/imports/api/helpers.js';
 
 
@@ -114,6 +115,34 @@ Template.Risks_List.viewmodel({
       .map(mapper)
       .concat(uncategorized)
       .filter(lengthItems);
+  },
+  risksByDepartments() {
+    return this.departments().map((dept) => {
+      return Object.assign({}, dept, {
+        items: getSortedItems(dept.items, compareRisksByScore)
+      });
+    });
+  },
+  risksByStatuses() {
+    const statuses = getSortedItems(this.statuses(), (statusData1, statusData2) => {
+      return compareStatusesByPriority(statusData1.status, statusData2.status);
+    });
+
+    return statuses.map((status) => {
+      return Object.assign({}, status, {
+        items: getSortedItems(status.items, compareRisksByScore)
+      });
+    });
+  },
+  risksByTypes() {
+    return this.types().map((type) => {
+      return Object.assign({}, type, {
+        items: getSortedItems(type.items, compareRisksByScore)
+      });
+    });
+  },
+  getStatusBadge(status) {
+    return `<i class="fa fa-circle margin-right text-${this.getClassByStatus(status)}"></i>`;
   },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
