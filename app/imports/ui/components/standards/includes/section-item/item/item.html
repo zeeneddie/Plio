@@ -14,7 +14,7 @@
           {{#if this.isDeleted}}
             <p class="list-group-item-text pull-right" {{b "text: 'Deleted by: ' + userNameOrEmail(this.deletedBy)"}}></p>
           {{else}}
-            {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
+            {{> MessagesCounter isHidden=this.isDeleted unreadMessagesCount=unreadMessagesCount pull="right"}}
           {{/if}}
         </div>
       </div>

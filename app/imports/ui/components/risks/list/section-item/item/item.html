@@ -12,7 +12,8 @@
           {{/if}}
         </h4>
         <div class="flex">
-          {{> MessagesCounter unreadMessagesCount=unreadMessagesCount pull="right"}}
+          <p class="list-group-item-text pull-right">{{getUserText this}}</p>
+          {{> MessagesCounter isHidden=this.isDeleted unreadMessagesCount=unreadMessagesCount pull="right"}}
         </div>
       </div>
       {{#if isActiveRiskFilter 2}}

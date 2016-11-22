@@ -39,8 +39,10 @@ import userEdit from './userEdit';
 import utils from './utils';
 import workInbox from './workInbox';
 import workItemStatus from './workItemStatus';
+import documentStatus from './documentStatus';
 
 ViewModel.mixin({
+  documentStatus,
   actionStatus,
   addForm,
   callWithFocusCheck,

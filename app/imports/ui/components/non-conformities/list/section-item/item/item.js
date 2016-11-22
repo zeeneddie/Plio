@@ -7,7 +7,7 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
+  mixin: ['date', 'user', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
     counter: 'counter'
   }],
   onCreated(template) {
@@ -74,6 +74,11 @@ Template.NC_Item.viewmodel({
     if (!this.cost()) return symbol + 0;
 
     return symbol + count * this.cost();
+  },
+  getUserText({ isDeleted, createdBy, deletedBy }) {
+    return isDeleted
+            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
+            : '';
   },
   unreadMessagesCount() {
     return this.counter.get('nc-messages-not-viewed-count-' + this._id());
