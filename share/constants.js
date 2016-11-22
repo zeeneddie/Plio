@@ -356,7 +356,7 @@ export const OrganizationDefaults = {
       }
     },
     criticalProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 3,
         timeUnit: TimeUnits.DAYS
@@ -402,7 +402,7 @@ export const OrganizationDefaults = {
         timeUnit: TimeUnits.DAYS
       },
       until: {
-        timeValue: 3,
+        timeValue: 6,
         timeUnit: TimeUnits.DAYS
       }
     },
