@@ -2,7 +2,7 @@
 
 export const SET_MESSAGES = 'SET_MESSAGES';
 
-export const SET_LOADING = 'SET_LOADING';
+export const SET_DISCUSSION_LOADING = 'SET_DISCUSSION_LOADING';
 
 export const SET_SORT = 'SET_SORT';
 
@@ -74,6 +74,8 @@ export const SET_ANIMATING = 'SET_ANIMATING';
 
 export const SET_URL_ITEM_ID = 'SET_URL_ITEM_ID';
 
+export const SET_DATA_LOADING = 'SET_DATA_LOADING';
+
 // collections
 
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
@@ -102,3 +104,7 @@ export const SET_WINDOW_WIDTH = 'SET_WINDOW_WIDTH';
 // Mobile
 
 export const SET_MOBILE_SHOW_CARD = 'SET_MOBILE_SHOW_CARD';
+
+// Counters
+
+export const SET_STANDARD_MESSAGES_NOT_VIEWED_COUNT_MAP = 'SET_STANDARD_MESSAGES_NOT_VIEWED_COUNT_MAP';

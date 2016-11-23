@@ -4,6 +4,6 @@ export default {
   filters: PropTypes.object.isRequired,
   filter: PropTypes.number.isRequired,
   loading: PropTypes.bool,
-  onHandleFilterChange: PropTypes.func.isRequired,
-  onHandleReturn: PropTypes.func.isRequired,
+  onHandleFilterChange: PropTypes.func,
+  onHandleReturn: PropTypes.func,
 };

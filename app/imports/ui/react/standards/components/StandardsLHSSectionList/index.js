@@ -2,6 +2,7 @@ import React from 'react';
 
 import LHSItem from '../../../components/LHSItem';
 import StandardsLHSStandardList from '../StandardsLHSStandardList';
+import MessagesCount from '../../../components/MessagesCount';
 import { createSectionItem } from '../../helpers';
 
 const StandardsLHSSectionList = (props) => (
@@ -12,6 +13,10 @@ const StandardsLHSSectionList = (props) => (
           collapsed={props.collapsed}
           item={createSectionItem(section._id)}
           lText={section.title}
+          rText={section.unreadMessagesCount && (
+            <MessagesCount count={section.unreadMessagesCount} />
+          )}
+          hideRTextOnCollapse
           onToggleCollapse={props.onToggleCollapse}
         >
 

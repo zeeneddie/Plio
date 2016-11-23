@@ -14,12 +14,12 @@ const DiscussButton = ({
     onClick={onClick}
     href={href}
   >
-    {unreadMessagesCount && (
+    {title}
+    {!!unreadMessagesCount && (
       <UnreadMessagesLabel
         unreadMessagesCount={unreadMessagesCount}
       />
     )}
-    {title}
   </a>
 );
 

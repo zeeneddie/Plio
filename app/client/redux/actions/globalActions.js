@@ -10,6 +10,7 @@ import {
   REMOVE_COLLAPSED,
   SET_ANIMATING,
   SET_URL_ITEM_ID,
+  SET_DATA_LOADING,
 } from './types';
 
 export function setUserId(userId) {
@@ -44,6 +45,13 @@ export function setUrlItemId(urlItemId) {
   return {
     payload: { urlItemId },
     type: SET_URL_ITEM_ID,
+  };
+}
+
+export function setDataLoading(dataLoading) {
+  return {
+    type: SET_DATA_LOADING,
+    payload: { dataLoading },
   };
 }
 

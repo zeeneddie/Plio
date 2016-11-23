@@ -8,6 +8,7 @@ import {
   SET_STANDARD_BOOK_SECTIONS,
   SET_STANDARD_TYPES,
   SET_LESSONS_LEARNED,
+  SET_STANDARDS,
 } from '../actions/types';
 
 const initialState = {
@@ -33,6 +34,7 @@ export default function reducer(state = initialState, action) {
     case SET_STANDARD_BOOK_SECTIONS:
     case SET_STANDARD_TYPES:
     case SET_LESSONS_LEARNED:
+    case SET_STANDARDS:
       return { ...state, ...action.payload };
     default:
       return state;

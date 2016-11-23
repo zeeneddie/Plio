@@ -190,6 +190,8 @@ export const shallowCompare = compose(not, shallowEqual);
 
 export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
 
+export const includes = curry((value, array) => Object.assign([], array).includes(value));
+
 export const handleMethodResult = (cb) => {
   return (err, res) => {
     if (err) {

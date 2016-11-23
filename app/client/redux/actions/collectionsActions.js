@@ -7,6 +7,7 @@ import {
   SET_WORK_ITEMS,
   SET_STANDARD_BOOK_SECTIONS,
   SET_STANDARD_TYPES,
+  SET_STANDARDS,
   SET_LESSONS_LEARNED,
 } from './types';
 
@@ -63,6 +64,13 @@ export function setStandardTypes(standardTypes) {
   return {
     type: SET_STANDARD_TYPES,
     payload: { standardTypes },
+  };
+}
+
+export function setStandards(standards) {
+  return {
+    type: SET_STANDARDS,
+    payload: { standards },
   };
 }
 
