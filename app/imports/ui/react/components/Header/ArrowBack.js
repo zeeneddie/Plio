@@ -1,15 +1,10 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
-
-const pullMap = {
-  left: 'pull-xs-left',
-  right: 'pull-xs-right',
-  center: 'pull-xs-center',
-};
+import { PullMap } from '/imports/api/constants';
 
 export const ArrowBack = ({ pull, href = '#', onClick, ...other }) => (
-  <ul className={cx('nav', 'navbar-nav', pullMap[pull])}>
+  <ul className={cx('nav', 'navbar-nav', PullMap[pull])}>
     <li className="nav-item">
       <a
         {...other}
@@ -30,6 +25,6 @@ export const ArrowBack = ({ pull, href = '#', onClick, ...other }) => (
 
 ArrowBack.propTypes = {
   href: PropTypes.string,
-  pull: PropTypes.oneOf(['right', 'left', 'center']),
+  pull: PropTypes.oneOf(_.keys(PullMap)),
   onClick: PropTypes.func,
 };

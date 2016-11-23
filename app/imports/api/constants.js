@@ -180,4 +180,16 @@ export const StringLimits = {
   },
 };
 
+export const PullMap = {
+  left: 'pull-xs-left',
+  right: 'pull-xs-right',
+  center: 'pull-xs-center',
+};
+
+export const TextAlignMap = {
+  left: 'text-xs-left',
+  right: 'text-xs-right',
+  center: 'text-xs-center',
+};
+
 export const MOBILE_BREAKPOINT = 768;
