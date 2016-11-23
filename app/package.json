@@ -42,8 +42,5 @@
     "redux-throttle": "^0.1.1",
     "redux-thunk": "^2.1.0",
     "warning": "^3.0.0"
-  },
-  "devDependencies": {
-    "babel-plugin-transform-decorators-legacy": "^1.3.4"
   }
 }

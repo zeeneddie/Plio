@@ -8,11 +8,9 @@ const Header = ({ children, ...other }) => (
 );
 
 Header.propTypes = {
-  children: PropTypes.any,
+  children: PropTypes.node,
 };
 
 Header.ArrowBack = ArrowBack;
 
 export default Header;
-
-

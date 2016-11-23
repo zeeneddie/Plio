@@ -13,6 +13,7 @@ import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -251,15 +252,12 @@ const loadDeps = ({ dispatch, organizationId }, onData) => {
 export default compose(
   connect(),
   // initial props
-  defaultProps({ loading: true, filters: StandardFilters }),
-  withProps(() => ({
-    filter: parseInt(FlowRouter.getQueryParam('filter'), 10) || 1,
-  })),
+  defaultProps({ filters: StandardFilters }),
   composeWithTracker(loadInitialData, null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.isDiscussionOpened !== nextProps.isDiscussionOpened,
   }),
-  composeWithTracker(loadLayoutData, StandardsLayout, null, {
+  composeWithTracker(loadLayoutData, withProps({ loading: true })(StandardsLayout), null, {
     shouldResubscribe: (props, nextProps) =>
       props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
   }),
@@ -301,10 +299,8 @@ export default compose(
     'standards.types',
     'global.urlItemId',
     'global.filter',
-    'global.dataLoading',
   ])),
   withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
-  mapProps(({ dataLoading, ...props }) => ({ ...props, loading: dataLoading })),
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
@@ -348,6 +344,9 @@ export default compose(
           return props.dispatch(setShowCard(false));
         }
       }
+
+      // remove when dashboard is written in react
+      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
       return goToDashboard();
     },
