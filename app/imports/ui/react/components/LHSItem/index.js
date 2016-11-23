@@ -13,8 +13,10 @@ const LHSItem = (props) => (
   >
     <div>
       <h4 className="list-group-item-heading pull-left">{props.lText}</h4>
-      {props.rText && (
-        <p className="list-group-item-text text-danger pull-right">
+      {!!props.rText && (isCollapsed(props) && !props.hideRTextOnExpand) && (
+        <p
+          className="list-group-item-text text-danger pull-right"
+        >
           {props.rText}
         </p>
       )}

@@ -9,6 +9,8 @@ import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
 
+BlazeLayout.setRoot('#app');
+
 function mount(layoutClass, regions, options = {}) {
   const additionalOptions = {
     rootId: regions && regions.rootId || options.rootId || 'react-root',
@@ -19,7 +21,7 @@ function mount(layoutClass, regions, options = {}) {
 }
 
 const mount2 = withOptions({
-  rootId: '__blaze-root',
+  rootId: 'app',
 }, mount);
 
 AccountsTemplates.configureRoute('signIn', {
@@ -149,7 +151,7 @@ FlowRouter.route('/transfer-organization/:transferId', {
 
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action() {
     mount2(StandardsProvider);
   },
@@ -157,7 +159,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
 
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action() {
     mount2(StandardsProvider);
   },
@@ -177,7 +179,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action(params) {
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page'

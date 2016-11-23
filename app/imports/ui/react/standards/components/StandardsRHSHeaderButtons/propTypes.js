@@ -12,6 +12,7 @@ export default {
   hasDocxAttachment: PropTypes.bool,
   isDiscussionOpened: PropTypes.bool,
   isDeleted: PropTypes.bool,
+  unreadMessagesCount: PropTypes.number,
   hasAccess: PropTypes.bool,
   hasFullAccess: PropTypes.bool,
   onToggleScreenMode: PropTypes.func,

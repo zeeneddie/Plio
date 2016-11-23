@@ -15,7 +15,7 @@ const StandardsRHSHeaderButtons = (props) => {
       onClick={props.onDiscussionOpen}
       href={props.pathToDiscussion}
       title={props.names.discuss}
-      // TODO: unreadMessagesCount={}
+      unreadMessagesCount={props.unreadMessagesCount}
     />
   ) : null;
 

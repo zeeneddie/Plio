@@ -7,7 +7,7 @@ import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
 import { isAuthor } from '/imports/ui/react/discussion/helpers';
 import {
   SET_MESSAGES,
-  SET_LOADING,
+  SET_DISCUSSION_LOADING,
   SET_SORT,
   SET_AT,
   RESET,
@@ -35,7 +35,7 @@ export function setMessages(messages) {
 
 export function setLoading(loading) {
   return {
-    type: SET_LOADING,
+    type: SET_DISCUSSION_LOADING,
     payload: { loading },
   };
 }

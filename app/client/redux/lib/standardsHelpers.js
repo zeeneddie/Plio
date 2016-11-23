@@ -13,6 +13,9 @@ import {
   flattenMapStandards,
 } from '/imports/api/helpers';
 
+const getTotalUnreadMessagesCount = (array = []) =>
+  array.reduce((prev, { unreadMessagesCount = 0 }) => prev + unreadMessagesCount, 0);
+
 export const initSections = ({ types, sections, standards }) => {
   const standardsWithType = standards.map((standard) => {
     const type = types.find(propEqId(standard.typeId)) ||
@@ -25,9 +28,11 @@ export const initSections = ({ types, sections, standards }) => {
         return !standard.isDeleted &&
                standard.sectionId === section._id;
       });
+    const unreadMessagesCount = getTotalUnreadMessagesCount(ownStandards);
 
     return {
       ...section,
+      unreadMessagesCount,
       standards: ownStandards,
     };
   };
@@ -40,6 +45,7 @@ export const initSections = ({ types, sections, standards }) => {
     title: 'Uncategorized',
     standards: uncategorizedStandards,
     organizationId: getC('organizationId', standards[0]),
+    unreadMessagesCount: getTotalUnreadMessagesCount(uncategorizedStandards),
   };
 
   return sectionsWithStandards
@@ -54,6 +60,7 @@ export const initTypes = ({ sections, types }) => {
     _id: 'StandardTypes.Uncategorized',
     title: 'Uncategorized',
     standards: uncategorizedStandards,
+    unreadMessagesCount: getTotalUnreadMessagesCount(uncategorizedStandards),
   };
 
   const result = types.map((type) => {
@@ -63,10 +70,14 @@ export const initTypes = ({ sections, types }) => {
                standard.typeId === type._id;
       });
 
-      return { ...section, standards };
+      const unreadMessagesCount = getTotalUnreadMessagesCount(standards);
+
+      return { ...section, unreadMessagesCount, standards };
     }).filter(lengthStandards);
 
-    return { ...type, sections: ownSections };
+    const unreadMessagesCount = getTotalUnreadMessagesCount(ownSections);
+
+    return { ...type, unreadMessagesCount, sections: ownSections };
   }).filter(lengthSections);
 
   return lengthStandards(uncategorizedType)
@@ -74,7 +85,7 @@ export const initTypes = ({ sections, types }) => {
     : result;
 };
 
-export const initStandards = ({ sections, types, standards }) =>
+export const initStandards = ({ sections, types, standards, unreadMessagesCountMap = {} }) =>
   standards.map((standard) => {
     const section = sections.find(propEqId(standard.sectionId));
     const type = types.find(propEqId(standard.typeId));
@@ -83,5 +94,6 @@ export const initStandards = ({ sections, types, standards }) =>
       ...standard,
       section,
       type,
+      unreadMessagesCount: unreadMessagesCountMap[standard._id] || 0,
     };
   });

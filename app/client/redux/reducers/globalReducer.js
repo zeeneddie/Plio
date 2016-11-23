@@ -8,6 +8,7 @@ import {
   SET_USER_ID,
   SET_ANIMATING,
   SET_URL_ITEM_ID,
+  SET_DATA_LOADING,
 } from '../actions/types';
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
   collapsed: [],
   animating: false,
   urlItemId: null,
+  dataLoading: false,
 };
 
 export default function (state = initialState, action) {
@@ -26,6 +28,7 @@ export default function (state = initialState, action) {
     case SET_SEARCH_TEXT:
     case SET_ANIMATING:
     case SET_URL_ITEM_ID:
+    case SET_DATA_LOADING:
       return { ...state, ...action.payload };
     case ADD_COLLAPSED:
       return { ...state, collapsed: addCollapsed(state.collapsed, action.payload) };

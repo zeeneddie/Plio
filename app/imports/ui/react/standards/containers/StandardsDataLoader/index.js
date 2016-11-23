@@ -1,19 +1,19 @@
 import { composeWithTracker } from 'react-komposer';
-import get from 'lodash.get';
 import {
   compose,
   lifecycle,
   shouldUpdate,
-  shallowEqual,
   defaultProps,
   withHandlers,
   withProps,
+  mapProps,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
 
 import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
@@ -35,7 +35,6 @@ import StandardsLayout from '../../components/StandardsLayout';
 import {
   initSections,
   initTypes,
-  setStandard,
   setIsCardReady,
   initStandards,
 } from '/client/redux/actions/standardsActions';
@@ -46,10 +45,10 @@ import {
 } from '/client/redux/actions/organizationsActions';
 import {
   setFilter,
-  addCollapsed,
   setUserId,
-  chainActions,
   setUrlItemId,
+  setSearchText,
+  setDataLoading,
 } from '/client/redux/actions/globalActions';
 import {
   setDepartments,
@@ -60,263 +59,248 @@ import {
   setWorkItems,
   setStandardBookSections,
   setStandardTypes,
+  setStandards,
   setLessons,
 } from '/client/redux/actions/collectionsActions';
 import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
-import { setStandardMessagesNotViewedCount } from '/client/redux/actions/countersActions';
+import { setStandardMessagesNotViewedCountMap } from '/client/redux/actions/countersActions';
 import { getState } from '/client/redux/store';
 import {
-  createSectionItem,
-  createTypeItem,
-  getSelectedAndDefaultStandardByFilter,
-} from '../../helpers';
-import {
   getId,
-  pickC,
-  getC,
-  hasC,
-  omitC,
   propEqId,
   pickDeep,
   shallowCompare,
-  flattenObjects,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
 import _counter_ from '/imports/startup/client/mixins/counter';
+import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
+import { findSelectedStandard } from '../../helpers';
 
-const onPropsChange = ({
+const loadInitialData = ({
   dispatch,
   isDiscussionOpened = false,
 }, onData) => {
-  let subscriptions = [];
   const userId = Meteor.userId();
-  const serialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
+  const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
   const urlItemId = FlowRouter.getParam('urlItemId');
+
+  const actions = [
+    setUserId(userId),
+    setOrgSerialNumber(orgSerialNumber),
+    setFilter(filter),
+    setUrlItemId(urlItemId),
+    setIsDiscussionOpened(isDiscussionOpened),
+  ];
+
+  dispatch(batchActions(actions));
+
+  onData(null, { orgSerialNumber, filter, dispatch });
+};
+
+const loadLayoutData = ({
+  dispatch,
+  filter,
+  orgSerialNumber,
+}, onData) => {
   const isDeleted = filter === 3
           ? true
           : { $in: [null, false] };
 
-  const layoutSub = DocumentLayoutSubs.subscribe('standardsLayout', serialNumber, isDeleted);
+  const subscription = DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
 
-  subscriptions = subscriptions.concat(layoutSub);
-
-  if (layoutSub.ready()) {
-    const organization = Organizations.findOne({ serialNumber });
-    const organizationId = get(organization, '_id');
-
-    const query = { organizationId };
-    const options = { sort: { title: 1 } };
-
-    const sections = StandardsBookSections.find(query, options).fetch();
-    const types = StandardTypes.find(query, options).fetch();
-    const standards = Standards.find(query, options).fetch();
-    const standard = Standards.findOne({ _id: urlItemId });
-
-    const isCardReady = ((() => {
-      if (standard) {
-        const subArgs = { organizationId, _id: urlItemId };
-
-        const cardSub = DocumentCardSubs.subscribe('standardCard', subArgs);
-
-        subscriptions = subscriptions.concat(cardSub);
-
-        return cardSub.ready();
-      }
-
-      return true;
-    })());
-
-    if (isCardReady) {
-      const backgroundSub = BackgroundSubs.subscribe('standardsDeps', organizationId);
-
-      subscriptions = subscriptions.concat(backgroundSub);
-
-      if (backgroundSub.ready()) {
-        const pOptions = { sort: { serialNumber: 1 } };
-        const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
-        const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
-        const ncs = NonConformities.find(query, pOptions).fetch();
-        const risks = Risks.find(query, pOptions).fetch();
-        const actions = Actions.find(query, pOptions).fetch();
-        const workItems = WorkItems.find(query, pOptions).fetch();
-        const lessons = LessonsLearned.find(query, pOptions).fetch();
-        const reduxActions = [
-          setDepartments(departments),
-          setFiles(files),
-          setNCs(ncs),
-          setRisks(risks),
-          setActions(actions),
-          setWorkItems(workItems),
-          setLessons(lessons),
-        ];
-
-        dispatch(batchActions(reduxActions));
-      }
-    }
-
-    let reduxActions = [];
-    const unreadMessagesCountSubs = standards.map(({ _id }) => Meteor.subscribe(
-      'messagesNotViewedCount',
-      `standard-messages-not-viewed-count-${_id}`,
-      _id
-    ));
-
-    if (unreadMessagesCountSubs.every(sub => sub.ready())) {
-      const unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
-        ...map,
-        [_id]: _counter_.get(`standard-messages-not-viewed-count-${_id}`),
-      }), {});
-
-      reduxActions = reduxActions.concat(setStandardMessagesNotViewedCount(unreadMessagesCountMap));
-    }
-
-    reduxActions = [
-      setUserId(userId),
+  if (subscription.ready()) {
+    const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
+    const organizationId = getId(organization);
+    const actions = [
       setOrg(organization),
       setOrgId(organizationId),
-      setOrgSerialNumber(serialNumber),
-      setIsDiscussionOpened(isDiscussionOpened),
-      setStandardBookSections(sections),
-      setStandardTypes(types),
-      setStandard(standard),
-      setUrlItemId(urlItemId),
-      setIsCardReady(isCardReady),
-      setFilter(filter),
-      initSections({ sections, types, standards }),
-      initStandards({ types, sections, standards }),
+      setDataLoading(false),
+    ];
+
+    dispatch(batchActions(actions));
+
+    onData(null, {});
+  } else {
+    dispatch(setDataLoading(true));
+  }
+
+  return () => typeof subscription === 'function' && subscription.stop();
+};
+
+const loadMainData = ({
+  dispatch,
+  organizationId,
+}, onData) => {
+  const query = { organizationId };
+  const options = { sort: { title: 1 } };
+  const sections = StandardsBookSections.find(query, options).fetch();
+  const types = StandardTypes.find(query, options).fetch();
+  const standards = Standards.find(query, options).fetch();
+  const actions = [
+    setStandardBookSections(sections),
+    setStandardTypes(types),
+    setStandards(standards),
+  ];
+
+  dispatch(batchActions(actions));
+
+  onData(null, {});
+};
+
+const loadCountersData = ({
+  dispatch,
+  standards,
+}, onData) => {
+  const subscriptions = standards.map(({ _id }) => Meteor.subscribe(
+    'messagesNotViewedCount',
+    `standard-messages-not-viewed-count-${_id}`,
+    _id
+  ));
+
+  if (subscriptions.every(subscription => subscription.ready())) {
+    const unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
+      ...map,
+      [_id]: _counter_.get(`standard-messages-not-viewed-count-${_id}`),
+    }), {});
+
+    dispatch(setStandardMessagesNotViewedCountMap(unreadMessagesCountMap));
+  }
+
+  onData(null, {});
+
+  return () => subscriptions.map(subscription => subscription.stop());
+};
+
+const initMainData = ({
+  dispatch,
+  standards,
+  unreadMessagesCountMap = {},
+  standardBookSections: sections,
+  standardTypes: types,
+}, onData) => {
+  dispatch(initStandards({ types, sections, standards, unreadMessagesCountMap }));
+
+  const newStandards = getState('standards').standards;
+
+  dispatch(initSections({ sections, types, standards: newStandards }));
+
+  const newSections = getState('standards').sections;
+
+  dispatch(initTypes({ types, sections: newSections }));
+
+  onData(null, {});
+};
+
+const loadCardData = ({
+  dispatch,
+  standard,
+  organizationId,
+  urlItemId,
+}, onData) => {
+  let subscription;
+  let isCardReady = true;
+
+  if (standard) {
+    const subArgs = { organizationId, _id: urlItemId };
+
+    subscription = DocumentCardSubs.subscribe('standardCard', subArgs);
+
+    isCardReady = subscription.ready();
+  }
+
+  dispatch(setIsCardReady(isCardReady));
+
+  onData(null, {});
+
+  return () => typeof subscription === 'function' && subscription.stop();
+};
+
+const loadDeps = ({ dispatch, organizationId }, onData) => {
+  const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
+
+  if (subscription.ready()) {
+    const query = { organizationId };
+    const pOptions = { sort: { serialNumber: 1 } };
+    const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
+    const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
+    const ncs = NonConformities.find(query, pOptions).fetch();
+    const risks = Risks.find(query, pOptions).fetch();
+    const actions = Actions.find(query, pOptions).fetch();
+    const workItems = WorkItems.find(query, pOptions).fetch();
+    const lessons = LessonsLearned.find(query, pOptions).fetch();
+    const reduxActions = [
+      setDepartments(departments),
+      setFiles(files),
+      setNCs(ncs),
+      setRisks(risks),
+      setActions(actions),
+      setWorkItems(workItems),
+      setLessons(lessons),
     ];
 
     dispatch(batchActions(reduxActions));
-
-    dispatch(initTypes({ types, sections: getState('standards').sections }));
-
-    onData(null, {
-      organization,
-      standard,
-      loading: false,
-      orgSerialNumber: serialNumber,
-      ..._.pick(getState('standards'), 'sections', 'types', 'standards'),
-      ..._.pick(getState('global'), 'filter', 'urlItemId'),
-    });
   }
 
-  return () => subscriptions.every(sub => typeof sub === 'function' && sub.stop());
+  onData(null, {});
+
+  return () => typeof subscription === 'function' && subscription.stop();
 };
-
-const redirectByFilter = (props) => {
-  const { filter, orgSerialNumber } = props;
-  const {
-    selected: selectedStandard,
-    default: defaultStandard,
-  } = getSelectedAndDefaultStandardByFilter(props);
-  const shouldRedirect = FlowRouter.getRouteName() === 'standards' || !selectedStandard;
-
-  if (shouldRedirect) {
-    const queryParams = { filter };
-    if (defaultStandard) {
-      const params = {
-        orgSerialNumber,
-        urlItemId: get(defaultStandard, '_id'),
-      };
-      FlowRouter.go('standard', params, queryParams);
-    } else {
-      FlowRouter.go('standards', { orgSerialNumber }, queryParams);
-    }
-  }
-};
-
-const openStandardByFilter = (props) => {
-  const { filter } = props;
-  const {
-    containedIn,
-    defaultContainedIn,
-    selected: selectedStandard,
-  } = getSelectedAndDefaultStandardByFilter(props);
-  const parentItem = selectedStandard ? containedIn : defaultContainedIn;
-  const topLevelKey = getId(parentItem);
-
-  switch (filter) {
-    case 1:
-    default: {
-      const sectionItem = createSectionItem(topLevelKey);
-      props.dispatch(addCollapsed({ ...sectionItem, close: { type: sectionItem.type } }));
-      break;
-    }
-    case 2: {
-      const secondLevelKey = getId(get(parentItem, 'children[0]'));
-      const typeItem = createTypeItem(topLevelKey);
-      const sectionItem = createSectionItem(secondLevelKey);
-      const typeItemWithClose = { ...typeItem, close: { type: typeItem.type } };
-      const sectionItemWithClose = { ...sectionItem, close: { type: sectionItem.type } };
-      // Uncategorized type do not have a second level key
-      if (secondLevelKey) {
-        props.dispatch(chainActions([typeItemWithClose, sectionItemWithClose].map(addCollapsed)));
-      } else {
-        props.dispatch(addCollapsed(typeItemWithClose));
-      }
-      break;
-    }
-    case 3:
-      return;
-  }
-};
-
-const isSameStandard = (props, nextProps) => propEqId(props.standard, nextProps.standard);
-
-const shouldUpdateForStandard = (props, nextProps) => {
-  const pickKeys = pickC(['sectionId', 'typeId']);
-  const hasIsDeleted = hasC('isDeleted');
-  const getIsDeleted = getC('isDeleted');
-
-  return (
-    isSameStandard(props, nextProps) &&
-    !shallowEqual(pickKeys(props.standard), pickKeys(nextProps.standard)) ||
-    ((hasIsDeleted(props.standard) && hasIsDeleted(nextProps.standard)) &&
-      getIsDeleted(props.standard) !== getIsDeleted(nextProps.standard))
-  );
-};
-
-const shouldUpdateForProps = (props, nextProps) => !!(
-  typeof props.organization !== typeof nextProps.organization ||
-  props.orgSerialNumber !== nextProps.orgSerialNumber ||
-  props.filter !== nextProps.filter ||
-  typeof props.standard !== typeof nextProps.standard ||
-  shouldUpdateForStandard(props, nextProps)
-);
-
-const withoutProps = omitC(['width', 'showCard']);
-const shouldResubscribe = (props, nextProps) =>
-  shallowCompare(withoutProps(props), withoutProps(nextProps));
 
 export default compose(
-  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  connect(),
   // initial props
-  defaultProps({ loading: true, filters: StandardFilters }),
-  withProps(() => ({
-    filter: parseInt(FlowRouter.getQueryParam('filter'), 10) || 1,
-  })),
-  withHandlers({
-    onHandleFilterChange: props => index => {
-      const filter = parseInt(Object.keys(props.filters)[index], 10);
-      props.dispatch(setFilter(filter));
-    },
-    onHandleReturn: (props) => () => {
-      if (props.width <= MOBILE_BREAKPOINT) {
-        if (props.isDiscussionOpened && !props.showCard) {
-          return props.dispatch(setShowCard(true));
-          // redirect to standard
-        } else if (!props.isDiscussionOpened && props.showCard) {
-          return props.dispatch(setShowCard(false));
-        }
-      }
-
-      return goToDashboard();
-    },
+  defaultProps({ filters: StandardFilters }),
+  composeWithTracker(loadInitialData, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.isDiscussionOpened !== nextProps.isDiscussionOpened,
   }),
-  composeWithTracker(onPropsChange, StandardsLayout, null, { shouldResubscribe }),
+  composeWithTracker(loadLayoutData, withProps({ loading: true })(StandardsLayout), null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
+  }),
+  connect(pickDeep(['organizations.organizationId'])),
+  composeWithTracker(loadMainData, null, null, {
+    shouldResubscribe: shallowCompare,
+  }),
+  connect(pickDeep(['collections.standards'])),
+  mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
+  composeWithTracker(loadCountersData, null, null, {
+    shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
+  }),
+  connect(pickDeep([
+    'collections.standardBookSections',
+    'collections.standardTypes',
+    'collections.standards',
+  ])),
+  composeWithTracker(initMainData, null, null, {
+    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
+  }),
+  connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
+  withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
+  composeWithTracker(loadCardData, null, null, {
+    shouldResubscribe: (props, nextProps) => !!(
+      props.organizationId !== nextProps.organizationId ||
+      props.urlItemId !== nextProps.urlItemId ||
+      typeof props.standard !== typeof nextProps.standard
+    ),
+  }),
+  connect(pickDeep(['organizations.organizationId'])),
+  composeWithTracker(loadDeps, null, null, {
+    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
+  }),
+  connect(pickDeep([
+    'organizations.organization',
+    'organizations.orgSerialNumber',
+    'standards.standards',
+    'standards.sections',
+    'standards.types',
+    'global.urlItemId',
+    'global.filter',
+  ])),
+  withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
@@ -333,8 +317,38 @@ export default compose(
      * the current selected standard's section or type id is different than the next.
      * the current standard is deleted or restored
      */
+    componentWillReceiveProps(nextProps) {
+      redirectByFilter(nextProps);
+    },
     componentWillUpdate(nextProps) {
       openStandardByFilter(nextProps);
+    },
+  }),
+  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  withHandlers({
+    onHandleFilterChange: props => index => {
+      const filter = parseInt(Object.keys(props.filters)[index], 10);
+      const actions = [
+        setSearchText(''),
+        setFilter(filter),
+      ];
+
+      props.dispatch(batchActions(actions));
+    },
+    onHandleReturn: (props) => () => {
+      if (props.width <= MOBILE_BREAKPOINT) {
+        if (props.isDiscussionOpened && !props.showCard) {
+          return props.dispatch(setShowCard(true));
+          // redirect to the standard
+        } else if (!props.isDiscussionOpened && props.showCard) {
+          return props.dispatch(setShowCard(false));
+        }
+      }
+
+      // remove when dashboard is written in react
+      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
+
+      return goToDashboard();
     },
   }),
 )(StandardsLayout);
