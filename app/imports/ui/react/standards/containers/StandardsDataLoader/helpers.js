@@ -15,7 +15,6 @@ export const redirectByFilter = (props) => {
     default: defaultStandard,
   } = getSelectedAndDefaultStandardByFilter(props);
   const shouldRedirect = FlowRouter.getRouteName() === 'standards' || !selectedStandard;
-
   if (shouldRedirect) {
     const queryParams = { filter };
     if (defaultStandard) {
