@@ -30,6 +30,7 @@ import {
   DocumentLayoutSubs,
   DocumentCardSubs,
   BackgroundSubs,
+  CountSubs,
 } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
 import {
@@ -156,7 +157,7 @@ const loadCountersData = ({
   dispatch,
   standards,
 }, onData) => {
-  const subscriptions = standards.map(({ _id }) => Meteor.subscribe(
+  const subscriptions = standards.map(({ _id }) => CountSubs.subscribe(
     'messagesNotViewedCount',
     `standard-messages-not-viewed-count-${_id}`,
     _id
@@ -208,7 +209,7 @@ const loadCardData = ({
   if (standard) {
     const subArgs = { organizationId, _id: urlItemId };
 
-    subscription = DocumentCardSubs.subscribe('standardCard', subArgs);
+    subscription = Meteor.subscribe('standardCard', subArgs);
 
     isCardReady = subscription.ready();
   }
@@ -269,9 +270,9 @@ export default compose(
   }),
   connect(pickDeep(['collections.standards'])),
   mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
-  composeWithTracker(testPerformance(loadCountersData), null, null, {
-    shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
-  }),
+  // composeWithTracker(testPerformance(loadCountersData), null, null, {
+  //   shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
+  // }),
   connect(pickDeep([
     'collections.standardBookSections',
     'collections.standardTypes',
@@ -320,14 +321,13 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillReceiveProps(nextProps) {
-      console.log('update');
       redirectByFilter(nextProps);
     },
     componentWillUpdate(nextProps) {
       openStandardByFilter(nextProps);
     },
   }),
-  connect(pickDeep(['window.width', 'mobile.showCard', 'global.dataLoading'])),
+  connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
     onHandleFilterChange: props => index => {
       const filter = parseInt(Object.keys(props.filters)[index], 10);

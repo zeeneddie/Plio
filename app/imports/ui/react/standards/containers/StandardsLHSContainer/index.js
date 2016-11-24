@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, withProps, pure } from 'recompose';
+import { compose, withHandlers, mapProps, withProps, pure, lifecycle } from 'recompose';
 import property from 'lodash.property';
 
 import { propEq, not } from '/imports/api/helpers';
