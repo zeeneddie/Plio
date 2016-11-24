@@ -8,14 +8,14 @@ import throttleActions from 'redux-throttle';
 import reducer from './reducers';
 
 const defaultWait = 300;
-const defaultThrottleOption = {
+const defaultThrottleOptions = {
   leading: true,
   trailing: true,
 };
 
 let middlewares = [
   thunk,
-  throttleActions(defaultWait, defaultThrottleOption),
+  throttleActions(defaultWait, defaultThrottleOptions),
 ];
 
 if (process.NODE_ENV !== 'production') {
