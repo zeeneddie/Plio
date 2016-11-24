@@ -26,13 +26,11 @@ export default {
     return riskScoreType && riskScoreType.label;
   },
   getNameByScore(score) {
-    if (score >= 0 && score < 20) {
-      return 'Very low';
-    } else if (score >= 20 && score < 40) {
+    if (score > 0 && score <= 20) {
       return 'Low';
-    } else if (score >= 40 && score < 60) {
+    } else if (score > 20 && score <= 45) {
       return 'Medium';
-    } else if (score >= 60 && score < 80) {
+    } else if (score > 45 && score <= 66) {
       return 'High';
     } else {
       return 'Very high';
