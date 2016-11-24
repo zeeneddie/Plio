@@ -48,13 +48,41 @@ export const SET_FILTERED_TYPES = 'SET_FILTERED_TYPES';
 
 export const SET_IS_FULL_SCREEN_MODE = 'SET_IS_FULL_SCREEN_MODE';
 
-// Organizations types
+// Organization
 
 export const SET_ORG = 'SET_ORG';
 
 export const SET_ORG_SERIAL_NUMBER = 'SET_ORG_SERIAL_NUMBER';
 
 export const SET_ORG_ID = 'SET_ORG_ID';
+
+// Changelog
+
+export const SET_LOADING_LAST_HUMAN_LOG = 'SET_LOADING_LAST_HUMAN_LOG';
+
+export const SET_LOADING_LAST_LOGS = 'SET_LOADING_LAST_LOGS';
+
+export const SET_LAST_LOGS_LOADED = 'SET_LAST_LOGS_LOADED';
+
+export const SET_LOADING_ALL_LOGS = 'SET_LOADING_ALL_LOGS';
+
+export const SET_ALL_LOGS_LOADED = 'SET_ALL_LOGS_LOADED';
+
+export const SET_LOADING_LOGS_COUNT = 'SET_LOADING_LOGS_COUNT';
+
+export const SET_LOGS_COUNT = 'SET_LOGS_COUNT';
+
+export const SET_LOGS = 'SET_LOGS';
+
+export const SET_LAST_HUMAN_LOG = 'SET_LAST_HUMAN_LOG';
+
+export const SET_CHANGELOG_DOCUMENT_DATA = 'SET_CHANGELOG_DOCUMENT_DATA';
+
+export const SET_CHANGELOG_DOCUMENT = 'SET_CHANGELOG_DOCUMENT';
+
+export const SET_CHANGELOG_COLLAPSED = 'SET_CHANGELOG_COLLAPSED';
+
+export const SET_SHOW_ALL = 'SET_SHOW_ALL';
 
 // global
 

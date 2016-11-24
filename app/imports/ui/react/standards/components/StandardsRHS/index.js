@@ -37,22 +37,21 @@ const StandardsRHS = (props) => {
           />
         </RHS.Header>
 
-        <RHS.Body isReady={props.isCardReady}>
-          <StandardsRHSBodyContainer
-            standard={props.standard}
-            hasDocxAttachment={props.hasDocxAttachment}
-            files={props.files}
-            orgSerialNumber={props.orgSerialNumber}
-            ncs={props.ncs}
-            risks={props.risks}
-            actions={props.actions}
-            workItems={props.workItems}
-            lessons={props.lessons}
-          />
-        </RHS.Body>
-      </RHS.Card>
-    </RHS>
-  );
+      <StandardsRHSBodyContainer
+        isCardReady={props.isCardReady}
+        standard={props.standard}
+        hasDocxAttachment={props.hasDocxAttachment}
+        files={props.files}
+        orgSerialNumber={props.orgSerialNumber}
+        ncs={props.ncs}
+        risks={props.risks}
+        actions={props.actions}
+        workItems={props.workItems}
+        lessons={props.lessons}
+      />
+    </RHS.Card>
+  </RHS>
+);
 
   return props.isDiscussionOpened ? <DiscussionContainer {...props} /> : standardDetail;
 };
