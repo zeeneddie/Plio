@@ -1,4 +1,4 @@
-import { compose, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
+import { compose, mapProps, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
@@ -12,6 +12,7 @@ import {
   setLogsCount,
   setShowAll,
 } from '/client/redux/actions/changelogActions';
+import { pickC } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';
 import propTypes from './propTypes';
@@ -51,10 +52,12 @@ const onViewRecentClick = props => () => props.dispatch(setShowAll(false));
 
 const ChangelogFooterContainer = compose(
   connect(),
+
   composeWithTracker(onPropsChange, null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.documentId !== nextProps.documentId,
   }),
+
   connect(state => _.pick(state.changelog, [
     'logsCount',
     'isLoadingAllLogs',
@@ -62,9 +65,20 @@ const ChangelogFooterContainer = compose(
     'isLoadingLogsCount',
     'showAll',
   ])),
+
+  mapProps(props => Object.assign({}, pickC([
+    'logsCount',
+    'isLoadingAllLogs',
+    'isAllLogsLoaded',
+    'isLoadingLogsCount',
+    'showAll',
+    'onViewAllClick',
+  ])(props), {
+    lastLogsLimit,
+    onViewRecentClick,
+  })),
+
   shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
-  withProps({ lastLogsLimit }),
-  withHandlers({ onViewRecentClick }),
 )(ChangelogFooter);
 
 ChangelogFooterContainer.propTypes = propTypes;

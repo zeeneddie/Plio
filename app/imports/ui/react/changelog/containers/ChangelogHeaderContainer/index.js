@@ -1,4 +1,4 @@
-import { compose, shouldUpdate, shallowEqual } from 'recompose';
+import { compose, mapProps, shouldUpdate, shallowEqual } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
@@ -16,6 +16,7 @@ import {
   setLastHumanLog,
   setLoadingLastHumanLog,
 } from '/client/redux/actions/changelogActions';
+import { pickC } from '/imports/api/helpers';
 import ChangelogHeader from '../../components/ChangelogHeader';
 import propTypes from './propTypes';
 
@@ -100,11 +101,24 @@ const mapStateToProps = (state) => {
 
 const ChangelogHeaderContainer = compose(
   connect(),
+
   composeWithTracker(onPropsChange, null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.documentId !== nextProps.documentId,
   }),
+
   connect(mapStateToProps),
+
+  mapProps(props => pickC([
+    'isChangelogCollapsed',
+    'isLoadingLastHumanLog',
+    'isLoadingLastLogs',
+    'createdBy',
+    'createdAt',
+    'updatedBy',
+    'updatedAt',
+  ])(props)),
+
   shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
 )(ChangelogHeader);
 
