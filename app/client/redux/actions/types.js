@@ -36,8 +36,6 @@ export const SET_TYPES = 'SET_TYPES';
 
 export const INIT_STANDARDS = 'INIT_STANDARDS';
 
-export const SET_STANDARD = 'SET_STANDARD';
-
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
 export const SET_FILTERED_STANDARDS = 'SET_FILTERED_STANDARDS';
