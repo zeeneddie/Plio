@@ -157,7 +157,7 @@ const loadCountersData = ({
   dispatch,
   standards,
 }, onData) => {
-  const subscriptions = standards.map(({ _id }) => CountSubs.subscribe(
+  const subscriptions = standards.map(({ _id }) => Meteor.subscribe(
     'messagesNotViewedCount',
     `standard-messages-not-viewed-count-${_id}`,
     _id
@@ -259,20 +259,26 @@ export default compose(
     shouldResubscribe: (props, nextProps) =>
       props.isDiscussionOpened !== nextProps.isDiscussionOpened,
   }),
+  // We need a key here to force component remount on filter change
   mapProps(props => ({ ...props, key: props.filter })),
-  composeWithTracker(testPerformance(loadLayoutData), withProps({ loading: true })(StandardsLayout), null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-  }),
+  composeWithTracker(
+    testPerformance(loadLayoutData),
+    withProps({ loading: true })(StandardsLayout),
+    null,
+    {
+      shouldResubscribe: (props, nextProps) =>
+        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
+    }
+  ),
   connect(pickDeep(['organizations.organizationId'])),
   composeWithTracker(testPerformance(loadMainData), null, null, {
     shouldResubscribe: shallowCompare,
   }),
   connect(pickDeep(['collections.standards'])),
   mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
-  // composeWithTracker(testPerformance(loadCountersData), null, null, {
-  //   shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
-  // }),
+  composeWithTracker(testPerformance(loadCountersData), null, null, {
+    shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
+  }),
   connect(pickDeep([
     'collections.standardBookSections',
     'collections.standardTypes',
