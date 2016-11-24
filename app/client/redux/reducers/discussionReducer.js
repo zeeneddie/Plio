@@ -13,7 +13,7 @@ import {
 } from '../actions/types';
 
 export const initialState = {
-  discusssion: null,
+  discussion: null,
   messages: [],
   loading: false,
   sort: { createdAt: -1 },

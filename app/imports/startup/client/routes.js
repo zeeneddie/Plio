@@ -168,13 +168,10 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage',
-      isDiscussionOpened: true
-    });
-  }
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber', {
