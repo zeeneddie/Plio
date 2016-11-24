@@ -209,7 +209,7 @@ const loadCardData = ({
   if (standard) {
     const subArgs = { organizationId, _id: urlItemId };
 
-    subscription = Meteor.subscribe('standardCard', subArgs);
+    subscription = DocumentCardSubs.subscribe('standardCard', subArgs);
 
     isCardReady = subscription.ready();
   }

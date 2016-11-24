@@ -48,10 +48,10 @@ const StandardsRHSBody = (props) => (
         <PreloaderPage size={2} />
       </div>
     )}
-    {/* <ChangelogContainer
+    <ChangelogContainer
       documentId={props.standard._id}
       collection={CollectionNames.STANDARDS}
-    /> */}
+    />
   </div>
 );
 
