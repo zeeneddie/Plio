@@ -1,4 +1,4 @@
-import { compose } from 'recompose';
+import { compose, shouldUpdate } from 'recompose';
 import { compose as kompose } from 'react-komposer';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
@@ -18,6 +18,7 @@ import {
 import { lastLogsLimit } from '../../constants';
 import Changelog from '../../components/Changelog';
 import propTypes from './propTypes';
+import { pickC } from '/imports/api/helpers';
 
 const onPropsChange = (props, onData) => {
   const { dispatch, documentId, collection } = props;
@@ -30,7 +31,13 @@ const onPropsChange = (props, onData) => {
   onData(null, props);
 };
 
-const mapStateToProps = state => ({ ...state.changelog });
+const pickProps = pickC([
+  'isChangelogCollapsed',
+  'isLastLogsLoaded',
+  'isAllLogsLoaded',
+]);
+
+const mapStateToProps = state => pickProps(state.changelog);
 
 const _ChangelogContainer = Component => class extends React.Component {
   constructor(props) {
