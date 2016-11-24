@@ -4,7 +4,6 @@ import {
   SET_STANDARDS,
   INIT_TYPES,
   SET_TYPES,
-  SET_STANDARD,
   SET_IS_CARD_READY,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
@@ -52,13 +51,6 @@ export function setTypes(types) {
   return {
     payload: { types },
     type: SET_TYPES,
-  };
-}
-
-export function setStandard(standard) {
-  return {
-    payload: { standard },
-    type: SET_STANDARD,
   };
 }
 
