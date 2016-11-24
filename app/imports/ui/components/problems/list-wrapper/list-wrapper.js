@@ -23,8 +23,10 @@ Template.Problems_ListWrapper.viewmodel({
     };
   },
   _getSearchQuery() {
-     return this.searchObject('searchText', [{ name: 'title' }, { name: 'sequentialId' }]);
-   },
+    const fields = [{ name: 'title' }, { name: 'sequentialId' }];
+    
+    return this.searchObject('searchText', fields, this.isPrecise());
+  },
   _getSearchOptions(defaults = { sort: { createdAt: -1 } }) {
     return this.searchText()
       ? { sort: { sequentialId: 1, title: 1 } }

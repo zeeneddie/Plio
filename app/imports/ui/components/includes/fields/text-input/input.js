@@ -4,5 +4,5 @@ Template.TextInput.viewmodel({
   value: '',
   className: '',
   placeholder: '',
-  onFocusOut() {}
+  onFocusOut() {},
 });

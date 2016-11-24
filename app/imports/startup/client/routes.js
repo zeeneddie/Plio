@@ -178,6 +178,30 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   }
 });
 
+FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'nonConformityDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NC_Layout', {
+      content: 'NC_Page',
+      isDiscussionOpened: true
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'riskDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page',
+      isDiscussionOpened: true
+    });
+  }
+});
+
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
@@ -264,16 +288,6 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action(params) {
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page'
-    });
-  }
-});
-
-FlowRouter.route('/:orgSerialNumber/standard-subcards', {
-  name: 'standardSubcardsPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardSubcardsLayout', {
-      content: 'StandardSubcardsPage'
     });
   }
 });

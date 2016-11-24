@@ -15,7 +15,7 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
   onCreated(template) {
     template.autorun(() => OrgSettingsDocSubs.subscribe('standards-book-sections', this.organizationId()));
   },
-  _lText: 'Compliance standards sections',
+  _lText: 'Standards sections',
   _rText() {
     return invoke(this.standardsBookSections(), 'count');
   },

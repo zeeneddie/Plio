@@ -2,14 +2,28 @@
   <div class="content-cards-inner flex expandable" {{b "class: { expanded: isFullScreenMode, content: !standard }"}}>
     {{#if standards.count}}
       {{#with standard}}
-        <div class="card standard-details">
+        {{#Card_Read
+          isReadOnly=isReadOnly
+          cardTitle="Standard"
+          doc=this
+          docType="standard"
+          className="standard-details"
+          isExpandable=hasDocxAttachment
+          isReady=isReady
+          hasDiscussion=true
+          isDiscussionOpened=isDiscussionOpened
+          pathToDiscussion=pathToDiscussion
+          messagesNotViewedCount=messagesNotViewedCount
+          onRestore=(callback 'restore')
+          onDelete=(callback 'delete')
+          onOpenEditModal=(callback 'openEditModal')}}
 
-          {{> Standards_Card_Read_Header (headerArgs)}}
+          <!-- {{> Standards_Card_Read_Header (headerArgs)}} -->
 
           <div class="content-list">
             <a class="list-group-item list-group-subheading list-group-toggle pointer" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
               <h4 class="list-group-item-heading pull-left">
-                <span {{b "text: this.title"}}></span>
+                <span>{{this.title}}</span>
                 <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
                   <span {{b "text: 'Issue ' + this.issueNumber"}}></span>
                   <span>Draft</span>
@@ -102,10 +116,8 @@
             {{> SourceWordDocument source=source1}}
 
             {{> SourceWordDocument source=source2}}
-
-            {{> CardDocChangelog document=this documentType="standard"}}
           </div>
-        </div>
+        {{/Card_Read}}
       {{else}}
         {{> PreloaderPage}}
       {{/with}}

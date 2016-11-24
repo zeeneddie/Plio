@@ -2,7 +2,7 @@
 
 .form-control {
   color: #333;
-  min-height: 34px;
+  min-height: 35px;
   &.datepicker[readonly]:not([disabled]):not(.disabled) {
     background-color: #fff;
     cursor: pointer;
@@ -242,6 +242,7 @@ select {
 	position: absolute;
 	right: 15px;
 	top: 0;
+  bottom: 0;
   visibility: hidden;
 	font-size: 21px;
 	line-height: 1;
@@ -280,6 +281,7 @@ input:focus ~ .clear-field {
 
 .clearable-field-container {
   position: relative;
+  line-height: 34px;
 
   &.focused > .clear-field {
     visibility: visible;
@@ -287,6 +289,7 @@ input:focus ~ .clear-field {
 
   .clear-field {
     right: 2px;
+    line-height: 22px;
   }
 
   input[type="text"],
@@ -421,12 +424,18 @@ input:focus ~ .clear-field {
 .form-group-buttons {
   .btn, .btn-group {
     margin-right: 3px;
-    display: block;
+    display: inline-block;
     overflow: auto;
   }
 
   .btn-group .btn {
     margin-right: 0;
+
+    &.btn-icon {
+      position: absolute;
+      right: 0px;
+      z-index: 2;
+    }
   }
 }
 
@@ -610,9 +619,11 @@ input[disabled], textarea[disabled] {
   margin-bottom: 0;
 }
 
-.input-group .form-control:only-child {
-  border-top-left-radius: .25rem;
-  border-bottom-left-radius: .25rem;
+.input-group .form-control {
+  &:only-child {
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+  }
 }
 
 input[type="number"] {
@@ -636,6 +647,10 @@ input[type="number"] {
   .help-icon {
     padding: 0 0 1.32rem 1.32rem;
     margin: 0 !important;
+
+    > i {
+      color: #aaa;
+    }
   }
 }
 

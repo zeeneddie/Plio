@@ -12,12 +12,13 @@ import { restore, remove } from '/imports/api/standards/methods.js';
 import { StandardsHelp } from '/imports/api/help-messages.js';
 import { isOrgOwner, isMobileRes } from '/imports/api/checkers.js';
 import { inspire } from '/imports/api/helpers';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Standards_Card_Read.viewmodel({
   share: 'window',
   mixin: ['modal', 'user', 'organization', 'standard', 'date', 'roles', 'router', 'collapsing', 'collapse', 'workInbox'],
   _subHandlers: [],
+  isReadOnly: false,
   isReady: false,
   onCreated(template) {
     this.collapsed(false);
@@ -31,66 +32,12 @@ Template.Standards_Card_Read.viewmodel({
     });
   },
   closeAllOnCollapse: false,
-  isFullScreenMode: false,
   isDiscussionOpened: false,
-  headerArgs() {
-    const {
-      organizationId,
-      isReady,
-      hasDocxAttachment,
-      isDiscussionOpened,
-      standard,
-      pathToDiscussion,
-      messagesNotViewedCount
-    } = inspire([
-      'isReady', 'hasDocxAttachment', 'isDiscussionOpened',
-      'standard', 'pathToDiscussion', 'messagesNotViewedCount',
-      'organizationId'
-    ], this);
-
-    const hasAccess = this.canCreateAndEditStandards(organizationId);
-    const hasFullAccess = isOrgOwner(standard);
-
-    return {
-      isReady,
-      hasDocxAttachment,
-      isDiscussionOpened,
-      pathToDiscussion,
-      messagesNotViewedCount,
-      hasAccess,
-      hasFullAccess,
-      toggleScreenMode: this.toggleScreenMode.bind(this),
-      openEditModal: this.openEditStandardModal.bind(this),
-      restore: () => this.restore(standard),
-      delete: () => this.delete(standard)
-    };
-  },
   ActionTypes() {
     return ActionTypes;
   },
   isOrgOwner({ organizationId } = {}) {
     return isOrgOwner(Meteor.userId(), organizationId);
-  },
-  toggleScreenMode() {
-    const $div = this.templateInstance.$('.content-cards-inner');
-    const offset = $div.offset();
-    if (this.isFullScreenMode()) {
-      this.isFullScreenMode(false);
-
-      setTimeout(() => {
-        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
-      }, 150);
-    } else {
-      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': $(window).width() - (offset.left + $div.outerWidth()), 'bottom': '0', 'left': offset.left });
-
-      setTimeout(() => {
-
-        // Safari workaround
-        $div.css({ 'transition': 'all .15s linear' });
-        this.isFullScreenMode(true);
-      }, 100);
-    }
-
   },
   standards() {
     const isDeleted = this.isActiveStandardFilter(3) ? true : { $in: [null, false] };
@@ -132,7 +79,7 @@ Template.Standards_Card_Read.viewmodel({
   onDiscussionOpen(e) {
     e.preventDefault();
 
-    const mobileWidth = isMobileRes()
+    const mobileWidth = isMobileRes();
 
     if (mobileWidth) {
       this.width(mobileWidth);
@@ -140,11 +87,11 @@ Template.Standards_Card_Read.viewmodel({
 
     return FlowRouter.go(this.pathToDiscussion());
   },
-  openEditStandardModal: _.throttle(function() {
+  openEditModal: _.throttle(function() {
     if (ViewModel.findOne('ModalWindow')) return;
 
     this.modal().open({
-      _title: 'Compliance standard',
+      _title: 'Standard',
       template: 'EditStandard',
       helpText: StandardsHelp.standard,
       _id: get(this.standard(), '_id')
@@ -167,7 +114,13 @@ Template.Standards_Card_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Restored!', `The standard "${title}" was restored successfully.`, 'success');
+            swal({
+              title: 'Restored!',
+              text: `The standard "${title}" was restored successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             FlowRouter.setQueryParams({ filter: 1 });
             Meteor.setTimeout(() => {
@@ -196,7 +149,13 @@ Template.Standards_Card_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Removed!', `The standard "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The standard "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             const query = {};
             const options = { sort: { deletedAt: -1 } };

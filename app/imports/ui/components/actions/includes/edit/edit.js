@@ -1,8 +1,7 @@
 import { Template } from 'meteor/templating';
-import moment from 'moment-timezone';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 import {
-  insert,
   update,
   remove,
   complete,
@@ -128,7 +127,7 @@ Template.Actions_Edit.viewmodel({
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Remove',
-        closeOnConfirm: false
+        closeOnConfirm: false,
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
@@ -137,11 +136,17 @@ Template.Actions_Edit.viewmodel({
             return;
           }
 
-          swal('Removed!', `An action "${title}" was removed successfully.`, 'success');
+          swal({
+            title: 'Removed!',
+            text: `An action "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
         });
       }
     );
-  }
+  },
 });

@@ -17,7 +17,9 @@ import {
 Template.NC_List.viewmodel({
   mixin: [
     'collapsing', 'organization', 'modal', 'magnitude',
-    'nonconformity', 'router', 'utils', 'currency', 'problemsStatus',
+    'nonconformity', 'router', 'utils', 'currency', 'problemsStatus', {
+      counter: 'counter'
+    }
   ],
   onCreated() {
     Meteor.defer(() => this.handleRoute());
@@ -80,7 +82,11 @@ Template.NC_List.viewmodel({
       const query = { magnitude:m.value, ...this._getSearchQuery() };
       const items = this._getNCsByQuery(query, this._getSearchOptions()).fetch();
 
-      return { ...m, items };
+      return {
+        ...m,
+        items,
+        unreadMessagesCount: this._getTotalUnreadMessages(items),
+      };
     };
 
     return this._magnitude().map(mapper).filter(lengthItems);
@@ -98,6 +104,14 @@ Template.NC_List.viewmodel({
   },
   onSearchInputValue() {
     return value => extractIds(this._findNCForFilter().array);
+  },
+  _getTotalUnreadMessages(ncs) {
+    const NCIds = extractIds(ncs);
+    const totalUnreadMessages = NCIds.reduce((prev, cur) => {
+      return prev + this.counter.get('nc-messages-not-viewed-count-' + cur);
+    }, 0);
+
+    return totalUnreadMessages;
   },
   onModalOpen() {
     return () =>

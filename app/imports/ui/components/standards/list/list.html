@@ -12,7 +12,7 @@
         {{> ListItem
             items=this.standards
             template="StandardSectionItem"
-            rText=this.totalUnreadMessagesHtml
+            unreadMessagesCount=this.unreadMessagesCount
             hideRTextOnExpand=hideRTextOnExpand
             title=this.title
             _id=this._id}}
@@ -24,7 +24,7 @@
         {{> ListItem
             items=this.items
             template=this.typeTemplate
-            rText=this.totalUnreadMessagesHtml
+            unreadMessagesCount=this.unreadMessagesCount
             hideRTextOnExpand=hideRTextOnExpand
             title=this.title
             type="standardType"

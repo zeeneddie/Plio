@@ -1,6 +1,9 @@
 .modal {
-  &, .form-control, .btn {
-    @media (min-width: 600px) {
+  @media (min-width: 600px) {
+    .clearable-field-container .clear-field {
+      top: 2px;
+    }
+    &, .form-control, .btn:not(.help-icon) {
       font-size: 15px;
     }
   }
@@ -32,11 +35,13 @@
 
       > .card-heading {
         border-radius: 4px 4px 0 0;
+        max-height: 56px;
 
         .card-title {
           max-width: calc(100% - 200px);
+          line-height: 21px;
           white-space: nowrap;
-          overflow: hidden;
+          overflow-x: hidden;
           text-overflow: ellipsis;
           margin: 0 auto;
           text-align: center !important;

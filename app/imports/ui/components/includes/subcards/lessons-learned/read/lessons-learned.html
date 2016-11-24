@@ -6,7 +6,10 @@
     <div class="list-group">
       <div class="list-group-item">
         {{#each lessons}}
-          <a class="btn btn-secondary btn-inline pointer"><strong {{b "text: 'LL' + this.serialNumber"}}></strong> <span {{b "text: this.title"}}></span></a>
+          <a class="btn btn-secondary btn-inline pointer">
+            <strong>LL{{this.serialNumber}}</strong>
+            <span>{{this.title}}</span>
+          </a>
         {{/each}}
       </div>
     </div>
