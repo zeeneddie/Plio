@@ -11,7 +11,6 @@ import {
   INIT_TYPES,
   SET_TYPES,
   INIT_STANDARDS,
-  SET_STANDARD,
   SET_IS_CARD_READY,
   SET_FILTERED_STANDARDS,
   SET_FILTERED_SECTIONS,
@@ -36,7 +35,6 @@ export default function reducer(state = initialState, action) {
     case SET_SECTIONS:
     case SET_STANDARDS:
     case SET_TYPES:
-    case SET_STANDARD:
     case SET_IS_CARD_READY:
     case SET_FILTERED_STANDARDS:
     case SET_FILTERED_SECTIONS:

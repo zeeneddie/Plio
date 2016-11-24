@@ -356,3 +356,19 @@ export const diff = (o1, o2) => {
   }
   return result;
 };
+
+export const testPerformance = (func) => (...args) => {
+  const type = typeof func;
+
+  if (type !== 'function') throw new Error(`Expected function, got ${type}`);
+
+  const p1 = performance.now();
+
+  const result = func(...args);
+
+  const p2 = performance.now();
+
+  console.log(`Execution time of "${func.name}":`, p2 - p1);
+
+  return result;
+};

@@ -30,6 +30,7 @@ import {
   DocumentLayoutSubs,
   DocumentCardSubs,
   BackgroundSubs,
+  CountSubs,
 } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
 import {
@@ -68,9 +69,9 @@ import { setStandardMessagesNotViewedCountMap } from '/client/redux/actions/coun
 import { getState } from '/client/redux/store';
 import {
   getId,
-  propEqId,
   pickDeep,
   shallowCompare,
+  testPerformance,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
@@ -125,6 +126,8 @@ const loadLayoutData = ({
     onData(null, {});
   } else {
     dispatch(setDataLoading(true));
+
+    onData(null, null);
   }
 
   return () => typeof subscription === 'function' && subscription.stop();
@@ -251,23 +254,29 @@ const loadDeps = ({ dispatch, organizationId }, onData) => {
 
 export default compose(
   connect(),
-  // initial props
   defaultProps({ filters: StandardFilters }),
-  composeWithTracker(loadInitialData, null, null, {
+  composeWithTracker(testPerformance(loadInitialData), null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.isDiscussionOpened !== nextProps.isDiscussionOpened,
   }),
-  composeWithTracker(loadLayoutData, withProps({ loading: true })(StandardsLayout), null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
-  }),
+  // We need a key here to force component remount on filter change
+  mapProps(props => ({ ...props, key: props.filter })),
+  composeWithTracker(
+    testPerformance(loadLayoutData),
+    withProps({ loading: true })(StandardsLayout),
+    null,
+    {
+      shouldResubscribe: (props, nextProps) =>
+        props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
+    }
+  ),
   connect(pickDeep(['organizations.organizationId'])),
-  composeWithTracker(loadMainData, null, null, {
+  composeWithTracker(testPerformance(loadMainData), null, null, {
     shouldResubscribe: shallowCompare,
   }),
   connect(pickDeep(['collections.standards'])),
   mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
-  composeWithTracker(loadCountersData, null, null, {
+  composeWithTracker(testPerformance(loadCountersData), null, null, {
     shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
   }),
   connect(pickDeep([
@@ -275,12 +284,12 @@ export default compose(
     'collections.standardTypes',
     'collections.standards',
   ])),
-  composeWithTracker(initMainData, null, null, {
+  composeWithTracker(testPerformance(initMainData), null, null, {
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
   withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
-  composeWithTracker(loadCardData, null, null, {
+  composeWithTracker(testPerformance(loadCardData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
       props.organizationId !== nextProps.organizationId ||
       props.urlItemId !== nextProps.urlItemId ||
@@ -288,7 +297,7 @@ export default compose(
     ),
   }),
   connect(pickDeep(['organizations.organizationId'])),
-  composeWithTracker(loadDeps, null, null, {
+  composeWithTracker(testPerformance(loadDeps), null, null, {
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
   connect(pickDeep([
