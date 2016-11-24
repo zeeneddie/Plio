@@ -75,7 +75,7 @@ const ChangelogFooterContainer = compose(
     'onViewAllClick',
   ])(props), {
     lastLogsLimit,
-    onViewRecentClick,
+    onViewRecentClick: onViewRecentClick(props),
   })),
 
   shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
