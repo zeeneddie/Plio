@@ -3,7 +3,7 @@
     <div class="list-group-item-content">
       <div class="flexbox-row">
         <h4 class="list-group-item-heading pull-left">
-          <span {{b "text: this.title"}}></span>
+          <span>{{this.title}}</span>
           <span class="label label-primary" {{b "if: isNew"}}>New</span>
           <span class="label label-danger" {{b "if: this.status === 'draft'"}}>
             <span {{b "text: 'Issue ' + this.issueNumber"}}></span>

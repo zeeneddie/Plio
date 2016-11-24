@@ -2,7 +2,7 @@
 
 .form-control {
   color: #333;
-  min-height: 34px;
+  min-height: 35px;
   &.datepicker[readonly]:not([disabled]):not(.disabled) {
     background-color: #fff;
     cursor: pointer;
@@ -430,6 +430,12 @@ input:focus ~ .clear-field {
 
   .btn-group .btn {
     margin-right: 0;
+
+    &.btn-icon {
+      position: absolute;
+      right: 0px;
+      z-index: 2;
+    }
   }
 }
 

@@ -8,8 +8,8 @@
         <div class="list-group-item">
           {{#each NCs}}
             <a href="{{pathFor 'nonconformity' orgSerialNumber=organizationSerialNumber nonconformityId=_id}}" class="btn btn-secondary btn-inline pointer">
-              <strong {{b "text: this.sequentialId"}}></strong>
-              <span {{b "text: this.title"}}></span>
+              <strong>{{this.sequentialId}}</strong>
+              <span>{{this.title}}</span>
               <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
             </a>
           {{/each}}

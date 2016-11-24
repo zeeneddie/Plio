@@ -20,7 +20,7 @@
 
             {{#Fields_ListGroupItem_Read
               label="Risk name"}}
-              <span {{b "text: this.title"}}></span>
+              <span>{{this.title}}</span>
               <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
               <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
             {{/Fields_ListGroupItem_Read}}
