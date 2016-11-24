@@ -25,8 +25,8 @@ export const initialState = {
   isChangelogCollapsed: true,
   logs: [],
   lastHumanLog: null,
-  changelogDocumentId: '',
-  changelogDocumentCollection: '',
+  documentId: '',
+  collection: '',
   changelogDocument: null,
   showAll: false,
 };

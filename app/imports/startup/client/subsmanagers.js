@@ -31,6 +31,9 @@ const OrgSettingsDocSubs = new SubsManager({
 BackgroundSubs = new SubsManager({
   expireIn: 10
 });
+const AuditLogsSubs = new SubsManager({
+  expireIn: 10,
+});
 
 export {
   OrgSubs,
@@ -43,5 +46,6 @@ export {
   DocumentCardSubs,
   DocumentsListSubs,
   OrgSettingsDocSubs,
-  BackgroundSubs
+  BackgroundSubs,
+  AuditLogsSubs,
 };
