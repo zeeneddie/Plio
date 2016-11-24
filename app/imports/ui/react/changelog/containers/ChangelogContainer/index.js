@@ -1,4 +1,4 @@
-import { compose, shouldUpdate, withHandlers } from 'recompose';
+import { compose, mapProps, shouldUpdate, withHandlers } from 'recompose';
 import { compose as kompose } from 'react-komposer';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
@@ -115,11 +115,13 @@ const ChangelogContainer = compose(
     onViewAllClick,
   }),
 
-  connect(state => pickC([
+  mapProps(props => pickC([
     'documentId',
     'collection',
     'isChangelogCollapsed',
-  ])(state.changelog)),
+    'onToggleCollapse',
+    'onViewAllClick',
+  ])(props)),
 
   shouldUpdate((props, nextProps) =>
     (props.documentId !== nextProps.documentId)
