@@ -97,7 +97,10 @@ const onViewAllClick = (props) => () => {
 const ChangelogContainer = compose(
   connect(),
 
-  kompose(onPropsChange),
+  kompose(onPropsChange, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.documentId !== nextProps.documentId,
+  }),
 
   connect(state => pickC([
     'documentId',
@@ -118,11 +121,10 @@ const ChangelogContainer = compose(
     'isChangelogCollapsed',
   ])(state.changelog)),
 
-  shouldUpdate((props, nextProps) => {
-    nextProps = nextProps || {};
-    return (props.documentId !== nextProps.documentId)
-      || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)
-  }),
+  shouldUpdate((props, nextProps) =>
+    (props.documentId !== nextProps.documentId)
+    || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)
+  ),
 )(Changelog);
 
 ChangelogContainer.propTypes = propTypes;

@@ -1,9 +1,10 @@
-import { compose } from 'recompose';
+import { compose, shouldUpdate, shallowEqual } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { LastHumanLogSubs } from '/imports/startup/client/subsmanagers';
 import { SystemName } from '/imports/share/constants';
 import {
   getCollectionByName,
@@ -32,13 +33,13 @@ const onPropsChange = (props, onData) => {
       dispatch(setChangelogDocument(doc));
     }
 
-    subscription = Meteor.subscribe('lastHumanLog', documentId, collection);
+    subscription = LastHumanLogSubs.subscribe('lastHumanLog', documentId, collection);
 
     dispatch(setLoadingLastHumanLog(true));
 
     if (subscription.ready()) {
       const lastHumanLog = AuditLogs.findOne({
-        documentId: doc._id,
+        documentId,
         executor: { $ne: SystemName },
       }, {
         sort: { date: -1 },
@@ -99,8 +100,12 @@ const mapStateToProps = (state) => {
 
 const ChangelogHeaderContainer = compose(
   connect(),
-  composeWithTracker(onPropsChange),
-  connect(mapStateToProps)
+  composeWithTracker(onPropsChange, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.documentId !== nextProps.documentId,
+  }),
+  connect(mapStateToProps),
+  shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
 )(ChangelogHeader);
 
 ChangelogHeaderContainer.propTypes = propTypes;

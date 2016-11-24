@@ -1,10 +1,9 @@
-import { compose } from 'recompose';
+import { compose, shouldUpdate } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { setLogs } from '/client/redux/actions/changelogActions';
-import { getUser } from '/imports/share/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogContent from '../../components/ChangelogContent';
 import propTypes from './propTypes';
@@ -18,11 +17,7 @@ const onPropsChange = (props, onData) => {
     Object.assign(options, { limit: lastLogsLimit });
   }
 
-  const logs = AuditLogs.find(query, options).map(log => (
-    Object.assign({}, log, {
-      user: getUser(log.executor),
-    })
-  ));
+  const logs = AuditLogs.find(query, options).fetch();
 
   dispatch(setLogs(logs));
   onData(null, props);
@@ -30,8 +25,13 @@ const onPropsChange = (props, onData) => {
 
 const ChangelogContentContainer = compose(
   connect(state => ({ showAll: state.changelog.showAll })),
-  composeWithTracker(onPropsChange),
-  connect(state => ({ logs: state.changelog.logs }))
+  composeWithTracker(onPropsChange, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      (props.documentId !== nextProps.documentId)
+      || (props.showAll !== nextProps.showAll),
+  }),
+  connect(state => ({ logs: state.changelog.logs })),
+  shouldUpdate((props, nextProps) => props.logs !== nextProps.logs)
 )(ChangelogContent);
 
 ChangelogContentContainer.propTypes = propTypes;
