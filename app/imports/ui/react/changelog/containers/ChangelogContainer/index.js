@@ -33,16 +33,6 @@ const onPropsChange = (props, onData) => {
   onData(null, props);
 };
 
-const pickProps = pickC([
-  'documentId',
-  'collection',
-  'isChangelogCollapsed',
-  'isLastLogsLoaded',
-  'isAllLogsLoaded',
-]);
-
-const mapStateToProps = state => pickProps(state.changelog);
-
 const onToggleCollapse = (props) => () => {
   const {
     dispatch,
@@ -106,11 +96,32 @@ const onViewAllClick = (props) => () => {
 
 const ChangelogContainer = compose(
   connect(),
+
   kompose(onPropsChange),
-  connect(mapStateToProps),
+
+  connect(state => pickC([
+    'documentId',
+    'collection',
+    'isChangelogCollapsed',
+    'isLastLogsLoaded',
+    'isAllLogsLoaded',
+  ])(state.changelog)),
+
   withHandlers({
     onToggleCollapse,
     onViewAllClick,
+  }),
+
+  connect(state => pickC([
+    'documentId',
+    'collection',
+    'isChangelogCollapsed',
+  ])(state.changelog)),
+
+  shouldUpdate((props, nextProps) => {
+    nextProps = nextProps || {};
+    return (props.documentId !== nextProps.documentId)
+      || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)
   }),
 )(Changelog);
 
