@@ -18,7 +18,6 @@ const StandardsRHSBody = ({ isReady = true, ...props }) => (
         <Collapse
           collapsed={props.collapsed}
           onToggleCollapse={props.onToggleCollapse}
-          initial={props.initialCollapsed}
         >
           <StandardsRHSBodyHeading {...props.standard} />
           <StandardsRHSBodyContents

@@ -1,4 +1,4 @@
-import { composeWithTracker } from 'react-komposer';
+import { composeWithTracker, compose as kompose } from 'react-komposer';
 import {
   compose,
   lifecycle,
@@ -15,7 +15,6 @@ import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
 import ReactDOM from 'react-dom';
 
-import { Organizations } from '/imports/share/collections/organizations';
 import { Standards } from '/imports/share/collections/standards';
 import { Departments } from '/imports/share/collections/departments';
 import { Files } from '/imports/share/collections/files';
@@ -30,7 +29,6 @@ import {
   DocumentLayoutSubs,
   DocumentCardSubs,
   BackgroundSubs,
-  CountSubs,
 } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
 import {
@@ -40,16 +38,8 @@ import {
   initStandards,
 } from '/client/redux/actions/standardsActions';
 import {
-  setOrg,
-  setOrgId,
-  setOrgSerialNumber,
-} from '/client/redux/actions/organizationsActions';
-import {
   setFilter,
-  setUserId,
-  setUrlItemId,
   setSearchText,
-  setDataLoading,
 } from '/client/redux/actions/globalActions';
 import {
   setDepartments,
@@ -63,14 +53,11 @@ import {
   setStandards,
   setLessons,
 } from '/client/redux/actions/collectionsActions';
-import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
 import { setStandardMessagesNotViewedCountMap } from '/client/redux/actions/countersActions';
 import { getState } from '/client/redux/store';
 import {
-  getId,
   pickDeep,
-  shallowCompare,
   testPerformance,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
@@ -78,60 +65,9 @@ import { goToDashboard } from '../../../helpers/routeHelpers';
 import _counter_ from '/imports/startup/client/mixins/counter';
 import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
 import { findSelectedStandard } from '../../helpers';
-
-const loadInitialData = ({
-  dispatch,
-  isDiscussionOpened = false,
-}, onData) => {
-  const userId = Meteor.userId();
-  const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
-  const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
-  const urlItemId = FlowRouter.getParam('urlItemId');
-
-  const actions = [
-    setUserId(userId),
-    setOrgSerialNumber(orgSerialNumber),
-    setFilter(filter),
-    setUrlItemId(urlItemId),
-    setIsDiscussionOpened(isDiscussionOpened),
-  ];
-
-  dispatch(batchActions(actions));
-
-  onData(null, { orgSerialNumber, filter, dispatch });
-};
-
-const loadLayoutData = ({
-  dispatch,
-  filter,
-  orgSerialNumber,
-}, onData) => {
-  const isDeleted = filter === 3
-          ? true
-          : { $in: [null, false] };
-
-  const subscription = DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
-
-  if (subscription.ready()) {
-    const organization = Organizations.findOne({ serialNumber: orgSerialNumber });
-    const organizationId = getId(organization);
-    const actions = [
-      setOrg(organization),
-      setOrgId(organizationId),
-      setDataLoading(false),
-    ];
-
-    dispatch(batchActions(actions));
-
-    onData(null, {});
-  } else {
-    dispatch(setDataLoading(true));
-
-    onData(null, null);
-  }
-
-  return () => typeof subscription === 'function' && subscription.stop();
-};
+import loadInitialData from '../../../loaders/loadInitialData';
+import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
+import loadLayoutData from '../../../loaders/loadLayoutData';
 
 const loadMainData = ({
   dispatch,
@@ -255,13 +191,22 @@ const loadDeps = ({ dispatch, organizationId }, onData) => {
 export default compose(
   connect(),
   defaultProps({ filters: StandardFilters }),
+  kompose(testPerformance(loadIsDiscussionOpened)),
   composeWithTracker(testPerformance(loadInitialData), null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.isDiscussionOpened !== nextProps.isDiscussionOpened,
+    shouldResubscribe: false,
   }),
-  // We need a key here to force component remount on filter change
+  connect(pickDeep([
+    'global.filter',
+    'organizations.orgSerialNumber',
+  ])),
   composeWithTracker(
-    testPerformance(loadLayoutData),
+    testPerformance(loadLayoutData(({ filter, orgSerialNumber }) => {
+      const isDeleted = filter === 3
+              ? true
+              : { $in: [null, false] };
+
+      return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
+    })),
     withProps({ loading: true })(StandardsLayout),
     null,
     {
@@ -271,7 +216,7 @@ export default compose(
   ),
   connect(pickDeep(['organizations.organizationId'])),
   composeWithTracker(testPerformance(loadMainData), null, null, {
-    shouldResubscribe: shallowCompare,
+    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
   connect(pickDeep(['collections.standards'])),
   mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
