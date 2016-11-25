@@ -283,9 +283,7 @@ export default compose(
     'collections.standardTypes',
     'collections.standards',
   ])),
-  composeWithTracker(testPerformance(initMainData), null, null, {
-    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
-  }),
+  composeWithTracker(testPerformance(initMainData)),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
   withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
   composeWithTracker(testPerformance(loadCardData), null, null, {
@@ -340,6 +338,8 @@ export default compose(
         setSearchText(''),
         setFilter(filter),
       ];
+
+      FlowRouter.setQueryParams({ filter });
 
       props.dispatch(batchActions(actions));
     },

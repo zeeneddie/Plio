@@ -1,14 +1,15 @@
 import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
 import { setIsFullScreenMode } from '/client/redux/actions/standardsActions';
-import { setFilter } from '/client/redux/actions/globalActions';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';
 import { getId } from '/imports/api/helpers';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -56,8 +57,6 @@ export const onModalOpen = props => () =>
     _id: getId(props.standard),
   });
 
-export const onDiscussionOpen = props => e => {}; // TODO: mobile
-
 
 export const onRestore = ({
   standard: {
@@ -65,7 +64,6 @@ export const onRestore = ({
     title,
     isDeleted,
   } = {},
-  dispatch,
 }) => () => {
   if (!isDeleted) return;
 
@@ -78,9 +76,10 @@ export const onRestore = ({
 
     swal.success('Restored!', `The standard "${title}" was restored successfully.`);
 
-    FlowRouter.setQueryParams({ filter: 1 });
-    dispatch(setFilter(1));
-    // TODO: redirect to that standard
+    const params = { orgSerialNumber: FlowRouter.getParam('orgSerialNumber'), urlItemId: _id };
+    const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
+
+    Meteor.setTimeout(() => FlowRouter.go('standard', params, queryParams), 0);
   };
 
   swal(options, () => restore.call({ _id }, cb));
@@ -105,7 +104,6 @@ export const onDelete = ({
     if (err) swal.error(err);
 
     swal.success('Deleted!', `The standard "${title}" was removed successfully.`);
-    // TODO: redirect to the first standard
   };
 
   swal(options, () => remove.call({ _id }, cb));

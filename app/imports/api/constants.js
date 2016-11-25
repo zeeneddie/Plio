@@ -27,7 +27,7 @@ export const StandardFilters = {
   3: { name: 'deleted', prepend: '' },
 };
 
-export const STANDARD_FILTERS_MAP = {
+export const STANDARD_FILTER_MAP = {
   SECTION: 1,
   TYPE: 2,
   DELETED: 3,
