@@ -1,6 +1,7 @@
 import { compose, mapProps, shouldUpdate } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
+import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { setLogs } from '/client/redux/actions/changelogActions';
@@ -37,7 +38,7 @@ const ChangelogContentContainer = compose(
 
   mapProps(props => pickC(['logs'])(props)),
 
-  shouldUpdate((props, nextProps) => props.logs !== nextProps.logs)
+  shouldUpdate((props, nextProps) => !_.isEqual(props.logs, nextProps.logs))
 )(ChangelogContent);
 
 ChangelogContentContainer.propTypes = propTypes;

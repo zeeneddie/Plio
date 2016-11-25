@@ -1,9 +1,7 @@
-import { compose, mapProps, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
+import { compose, mapProps, withHandlers, shouldUpdate } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
-import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
 
 import { LogsCountSubs } from '/imports/startup/client/subsmanagers';
 import Counter from '/imports/api/counter/client';
@@ -12,7 +10,7 @@ import {
   setLogsCount,
   setShowAll,
 } from '/client/redux/actions/changelogActions';
-import { pickC } from '/imports/api/helpers';
+import { pickC, shallowCompare } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';
 import propTypes from './propTypes';
@@ -58,27 +56,29 @@ const ChangelogFooterContainer = compose(
       props.documentId !== nextProps.documentId,
   }),
 
-  connect(state => _.pick(state.changelog, [
+  connect(state => pickC([
     'logsCount',
     'isLoadingAllLogs',
     'isAllLogsLoaded',
     'isLoadingLogsCount',
     'showAll',
-  ])),
+  ], state.changelog)),
 
   mapProps(props => Object.assign({}, pickC([
+    'dispatch',
     'logsCount',
     'isLoadingAllLogs',
     'isAllLogsLoaded',
     'isLoadingLogsCount',
     'showAll',
     'onViewAllClick',
-  ])(props), {
+  ], props), {
     lastLogsLimit,
-    onViewRecentClick: onViewRecentClick(props),
   })),
 
-  shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps)),
+  withHandlers({ onViewRecentClick }),
+
+  shouldUpdate(shallowCompare),
 )(ChangelogFooter);
 
 ChangelogFooterContainer.propTypes = propTypes;
