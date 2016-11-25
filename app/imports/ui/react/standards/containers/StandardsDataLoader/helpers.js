@@ -23,9 +23,9 @@ export const redirectByFilter = (props) => {
         orgSerialNumber,
         urlItemId: getId(defaultStandard),
       };
-      Meteor.setTimeout(() => FlowRouter.go('standard', params, queryParams));
+      Meteor.defer(() => FlowRouter.go('standard', params, queryParams));
     } else {
-      Meteor.setTimeout(() => FlowRouter.go('standards', { orgSerialNumber }, queryParams));
+      Meteor.defer(() => FlowRouter.go('standards', { orgSerialNumber }, queryParams));
     }
   }
 };
