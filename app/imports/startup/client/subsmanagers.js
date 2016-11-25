@@ -34,6 +34,18 @@ const BackgroundSubs = new SubsManager({
   expireIn: 10,
 });
 
+const AuditLogsSubs = new SubsManager({
+  expireIn: 10,
+});
+
+const LastHumanLogSubs = new SubsManager({
+  expireIn: 10,
+});
+
+const LogsCountSubs = new SubsManager({
+  expireIn: 10,
+});
+
 export {
   OrgSubs,
   UserSubs,
@@ -46,4 +58,7 @@ export {
   DocumentsListSubs,
   OrgSettingsDocSubs,
   BackgroundSubs,
+  AuditLogsSubs,
+  LastHumanLogSubs,
+  LogsCountSubs,
 };

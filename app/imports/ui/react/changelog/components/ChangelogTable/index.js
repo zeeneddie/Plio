@@ -17,7 +17,7 @@ const ChangelogTable = (props) => (
       {props.logs.map(log => (
         <ChangelogTableRowContainer
           key={log._id}
-          {..._.pick(log, ['date', 'user', 'message'])}
+          {..._.pick(log, ['date', 'executor', 'message'])}
         />
       ))}
     </tbody>
