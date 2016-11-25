@@ -2,8 +2,8 @@
   <button type="submit"
       class="at-btn submit btn btn-primary {{submitDisabled}}"
       id="at-btn" form="at-pwd-form">
-    {{buttonText}}
-    {{#if submitDisabled }}
+      {{buttonText}}
+    {{#if showLoader }}
       <i class="fa fa-spinner fa-spin margin-left"></i>
     {{/if}}
   </button>

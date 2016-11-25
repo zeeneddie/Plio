@@ -14,6 +14,12 @@ atPwdFormBtnHelpers.submitDisabled = () => {
   }
 };
 
+atPwdFormBtnHelpers.showLoader = () => {
+  if (AccountsTemplates.disabled()) {
+    return "disabled";
+  }
+};
+
 Template.atPwdFormBtn.helpers(atPwdFormBtnHelpers);
 
 // bugfix for Edge/IE
