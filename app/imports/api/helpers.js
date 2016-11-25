@@ -114,6 +114,8 @@ export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);
 
+export const propIsDeleted = property('isDeleted');
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);

@@ -13,7 +13,7 @@ import {
   onRestore,
   onDelete,
 } from './handlers';
-import { getPathToDiscussion } from '../../helpers';
+import { getPathToDiscussion, getStandardsByFilter } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
@@ -42,6 +42,7 @@ const mapStateToProps = ({
 
 export default compose(
   connect(mapStateToProps),
+  mapProps(props => ({ ...props, standards: getStandardsByFilter(props) })),
   branch(
     lengthStandards,
     _.identity,

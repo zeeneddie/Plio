@@ -27,6 +27,12 @@ export const StandardFilters = {
   3: { name: 'deleted', prepend: '' },
 };
 
+export const STANDARD_FILTERS_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
+};
+
 export const WorkInboxFilters = {
   1: 'my current',
   2: 'team current',
