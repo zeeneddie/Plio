@@ -4,10 +4,10 @@ import { initialState } from '../reducers/discussionReducer';
 import { handleMethodResult } from '/imports/api/helpers';
 import { insert, remove } from '/imports/api/messages/methods';
 import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
-import { isAuthor } from '/imports/api/messages/helpers';
+import { isAuthor } from '/imports/ui/react/discussion/helpers';
 import {
   SET_MESSAGES,
-  SET_LOADING,
+  SET_DISCUSSION_LOADING,
   SET_SORT,
   SET_AT,
   RESET,
@@ -16,40 +16,41 @@ import {
   SET_FOLLOWING_LIMIT,
   SET_RESET_COMPLETED,
   SET_DISCUSSION,
+  SET_IS_DISCUSSION_OPENED,
 } from './types';
 
 export function setDiscussion(discussion) {
   return {
     type: SET_DISCUSSION,
-    payload: discussion,
+    payload: { discussion },
   };
 }
 
 export function setMessages(messages) {
   return {
     type: SET_MESSAGES,
-    payload: messages,
+    payload: { messages },
   };
 }
 
-export function setLoading(bool) {
+export function setLoading(loading) {
   return {
-    type: SET_LOADING,
-    payload: bool,
+    type: SET_DISCUSSION_LOADING,
+    payload: { loading },
   };
 }
 
 export function setSort(sort) {
   return {
     type: SET_SORT,
-    payload: sort,
+    payload: { sort },
   };
 }
 
 export function setAt(at) {
   return {
     type: SET_AT,
-    payload: at,
+    payload: { at },
   };
 }
 
@@ -60,31 +61,38 @@ export function reset() {
   };
 }
 
-export function setLastMessageId(id) {
+export function setLastMessageId(lastMessageId) {
   return {
     type: SET_LAST_MESSAGE_ID,
-    payload: id,
+    payload: { lastMessageId },
   };
 }
 
-export function setPriorLimit(limit) {
+export function setPriorLimit(priorLimit) {
   return {
     type: SET_PRIOR_LIMIT,
-    payload: limit,
+    payload: { priorLimit },
   };
 }
 
-export function setFollowingLimit(limit) {
+export function setFollowingLimit(followingLimit) {
   return {
     type: SET_FOLLOWING_LIMIT,
-    payload: limit,
+    payload: { followingLimit },
   };
 }
 
-export function setResetCompleted(bool) {
+export function setResetCompleted(resetCompleted) {
   return {
     type: SET_RESET_COMPLETED,
-    payload: bool,
+    payload: { resetCompleted },
+  };
+}
+
+export function setIsDiscussionOpened(isDiscussionOpened) {
+  return {
+    payload: { isDiscussionOpened },
+    type: SET_IS_DISCUSSION_OPENED,
   };
 }
 

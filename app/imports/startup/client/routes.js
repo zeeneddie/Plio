@@ -1,10 +1,29 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-
+import { withOptions } from 'react-mounter';
+import { mounter } from 'react-mounter/dist/client';
+import { Meteor } from 'meteor/meteor';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
+
+import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
+
+BlazeLayout.setRoot('#app');
+
+function mount(layoutClass, regions, options = {}) {
+  const additionalOptions = {
+    rootId: regions && regions.rootId || options.rootId || 'react-root',
+    rootProps: options.rootProps || {},
+  };
+
+  mounter(layoutClass, regions, { ...options, ...additionalOptions });
+}
+
+const mount2 = withOptions({
+  rootId: 'app',
+}, mount);
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -134,24 +153,20 @@ FlowRouter.route('/transfer-organization/:transferId', {
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
-    });
-  }
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
-    });
-  }
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -189,7 +204,7 @@ FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action(params) {
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page'

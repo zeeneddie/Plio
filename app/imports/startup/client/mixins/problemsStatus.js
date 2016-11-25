@@ -6,7 +6,7 @@ export default {
     return ProblemsStatuses[status];
   },
   getShortStatusName(status) {
-    switch(status) {
+    switch (status) {
       case 4:
         return 'awaiting analysis';
       case 11:
@@ -23,5 +23,5 @@ export default {
     };
 
     return cssClasses[getProblemStatusColor(status)] || 'default';
-  }
+  },
 };

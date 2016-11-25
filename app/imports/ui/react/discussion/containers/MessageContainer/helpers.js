@@ -6,7 +6,7 @@ import { getFormattedDate } from '/imports/share/helpers';
 import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 
-import FileItemReadContainer from '../../containers/FileItemReadContainer';
+import FileItemRead from '../../../components/FileItemRead';
 
 // Helpers
 
@@ -20,7 +20,7 @@ export const getMessagePath = (props) => {
   const queryParams = { at: props._id };
 
   return FlowRouter.path(currentRouteName, params, queryParams);
-}
+};
 
 export const getUserAvatar = invokeUser('avatar');
 
@@ -31,7 +31,7 @@ export const getUserFirstName = invokeUser('firstName');
 export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A');
 
 export const getMessageContents = (props) => {
-  switch(props.type) {
+  switch (props.type) {
     case 'text':
       const createMarkup = () => ({
         __html: Autolinker.link(props.text || '', {
@@ -39,15 +39,12 @@ export const getMessageContents = (props) => {
         })
       });
       return <span dangerouslySetInnerHTML={createMarkup()}></span>;
-      break;
     case 'file':
-      return <FileItemReadContainer {...props} />;
-      break;
+      return <FileItemRead {...props} />;
     default:
       return props.text;
-      break;
   }
-}
+};
 
 export const getPathToMessage = (props) => {
   const currentRouteName = FlowRouter.getRouteName();
@@ -55,7 +52,7 @@ export const getPathToMessage = (props) => {
   const queryParams = { at: props._id };
 
   return FlowRouter.path(currentRouteName, params, queryParams);
-}
+};
 
 export const getPathToMessageToCopy = (props) => {
   const path = getPathToMessage(props);

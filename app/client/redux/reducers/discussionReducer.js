@@ -1,6 +1,6 @@
 import {
   SET_MESSAGES,
-  SET_LOADING,
+  SET_DISCUSSION_LOADING,
   SET_SORT,
   SET_AT,
   RESET,
@@ -9,6 +9,7 @@ import {
   SET_FOLLOWING_LIMIT,
   SET_RESET_COMPLETED,
   SET_DISCUSSION,
+  SET_IS_DISCUSSION_OPENED,
 } from '../actions/types';
 
 export const initialState = {
@@ -21,28 +22,21 @@ export const initialState = {
   priorLimit: 50,
   followingLimit: 50,
   resetCompleted: false,
+  isDiscussionOpened: false,
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_DISCUSSION:
-      return { ...state, discussion: action.payload };
     case SET_MESSAGES:
-      return { ...state, messages: action.payload };
-    case SET_LOADING:
-      return { ...state, loading: action.payload };
+    case SET_DISCUSSION_LOADING:
     case SET_PRIOR_LIMIT:
-      return { ...state, priorLimit: action.payload };
     case SET_FOLLOWING_LIMIT:
-      return { ...state, followingLimit: action.payload };
     case SET_SORT:
-      return { ...state, sort: action.payload };
     case SET_AT:
-      return { ...state, at: action.payload };
     case SET_LAST_MESSAGE_ID:
-      return { ...state, lastMessageId: action.payload };
     case SET_RESET_COMPLETED:
-      return { ...state, resetCompleted: action.payload };
+    case SET_IS_DISCUSSION_OPENED:
     case RESET:
       return { ...state, ...action.payload };
     default:

@@ -1,9 +1,14 @@
+import invoke from 'lodash.invoke';
+
 export default {
   searchResultsNumber: 0,
 
-  searchObject(prop, fields, precise = false) {
-    const searchObject = {};
+  searchObject(prop, fields) {
+    return this.searchQuery(invoke(this, prop), fields);
+  },
 
+  searchQuery(prop, fields, precise = false) {
+    const searchObject = {};
     const value = (this[prop] && this[prop]() || '').trim();
 
     if (value) {

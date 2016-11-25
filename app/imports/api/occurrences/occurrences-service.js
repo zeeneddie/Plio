@@ -15,7 +15,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  insert({ ...args, nonConformityId }) {
+  insert({ nonConformityId, ...args }) {
     const lastOccurrence = this.collection.findOne({
       nonConformityId,
       serialNumber: {

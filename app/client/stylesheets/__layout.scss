@@ -10,7 +10,7 @@ body {
   font-family: $font-regular;
 }
 
-#__blaze-root {
+#app {
 	height: 100%;
 	overflow: hidden;
 	font-size: 14px;
@@ -82,7 +82,7 @@ a:focus {
   overflow: hidden;
   position: relative;
   @include flex(1);
-	height: 100%;
+	height: 100vh;
 
 	&:not(.no-flex) {
   	@include flexbox;

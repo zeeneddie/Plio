@@ -4,7 +4,7 @@ import invoke from 'lodash.invoke';
 
 import { transsoc } from '/imports/api/helpers';
 import Message from '../../components/Message';
-import { isAuthor } from '/imports/api/messages/helpers';
+import { isAuthor } from '/imports/ui/react/discussion/helpers';
 import {
   getMessagePath,
   getUserAvatar,
