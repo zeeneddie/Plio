@@ -60,6 +60,7 @@ export const CollectionNames = {
   DEPARTMENTS: 'Departments',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
+  HELPS: 'Helps',
   LESSONS: 'LessonsLearned',
   MESSAGES: 'Messages',
   NCS: 'NonConformities',
@@ -158,6 +159,17 @@ export const DocChangesKinds = {
   DOC_REMOVED: 3
 };
 
+export const HelpSections = {
+  1: 'How to get help',
+  2: 'Getting started',
+  3: 'Creating your Standards manual',
+  4: 'Managing risks',
+  5: 'Managing non-conformities',
+  6: 'Managing workflows',
+  7: 'User management',
+  8: 'FAQs',
+};
+
 export const InvitationStatuses = {
   failed: 0,
   invited: 1,
@@ -242,6 +254,12 @@ export const riskScoreTypes = {
     label: 'Residual risk',
     adj: 'Residual'
   }
+};
+
+export const SourceTypes = {
+  ATTACHMENT: 'attachment',
+  URL: 'url',
+  VIDEO: 'video',
 };
 
 export const StandardStatuses = {
