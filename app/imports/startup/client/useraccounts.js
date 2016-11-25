@@ -40,7 +40,7 @@ AccountsTemplates.addField({
   maxLength: 40,
   transform(value) {
     return value.capitalize();
-  }
+  },
 });
 
 AccountsTemplates.addField({
