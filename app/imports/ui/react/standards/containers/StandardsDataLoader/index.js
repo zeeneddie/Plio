@@ -260,7 +260,6 @@ export default compose(
       props.isDiscussionOpened !== nextProps.isDiscussionOpened,
   }),
   // We need a key here to force component remount on filter change
-  mapProps(props => ({ ...props, key: props.filter })),
   composeWithTracker(
     testPerformance(loadLayoutData),
     withProps({ loading: true })(StandardsLayout),
@@ -271,6 +270,7 @@ export default compose(
     }
   ),
   connect(pickDeep(['organizations.organizationId'])),
+  mapProps(props => ({ ...props, key: props.filter })),
   composeWithTracker(testPerformance(loadMainData), null, null, {
     shouldResubscribe: shallowCompare,
   }),

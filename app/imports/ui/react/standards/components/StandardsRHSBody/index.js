@@ -11,9 +11,9 @@ import SourceRead from '../../../components/SourceRead';
 import PreloaderPage from '../../../components/PreloaderPage';
 import ChangelogContainer from '../../../changelog/containers/ChangelogContainer';
 
-const StandardsRHSBody = (props) => (
+const StandardsRHSBody = ({ isReady = true, ...props }) => (
   <div className="content-list">
-    {props.isCardReady ? (
+    {isReady ? (
       <div>
         <Collapse
           collapsed={props.collapsed}

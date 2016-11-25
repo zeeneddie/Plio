@@ -19,7 +19,7 @@ let middlewares = [
 ];
 
 if (process.NODE_ENV !== 'production') {
-  middlewares = middlewares.concat([logger()]);
+  // middlewares = middlewares.concat([logger()]);
 }
 
 const store = createStore(

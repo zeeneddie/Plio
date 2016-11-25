@@ -16,7 +16,7 @@ const StandardsRHS = (props) => (
     <RHS.Card className="standard-details">
       <RHS.Header
         title={props.names.headerNames.header}
-        isReady={props.isCardReady}
+        isReady={props.isReady}
       >
         <StandardsRHSHeaderButtons
           isDiscussionOpened={props.isDiscussionOpened}
@@ -36,7 +36,7 @@ const StandardsRHS = (props) => (
       </RHS.Header>
 
       <StandardsRHSBodyContainer
-        isCardReady={props.isCardReady}
+        isReady={props.isReady}
         standard={props.standard}
         hasDocxAttachment={props.hasDocxAttachment}
         files={props.files}
