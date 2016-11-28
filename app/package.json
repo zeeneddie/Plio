@@ -32,7 +32,7 @@
     "quill": "^0.20.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-komposer": "git://github.com/damonmaria/react-komposer.git#shouldResubscribe-option",
+    "react-komposer": "git://github.com/JSSolutions/react-komposer.git#shouldResubscribe-option",
     "react-mounter": "^1.2.0",
     "react-redux": "^4.4.5",
     "recompose": "^0.20.2",
