@@ -4,7 +4,7 @@ import { getState } from '/client/redux/store';
 export default function initMainData({
   dispatch,
   standards,
-  unreadMessagesCountMap = {},
+  standardMessagesNotViewedCountMap: unreadMessagesCountMap = {},
   standardBookSections: sections,
   standardTypes: types,
 }, onData) {

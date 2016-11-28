@@ -210,29 +210,23 @@ export const showError = (errorMsg) => {
 };
 
 // 1, 1.2, 3, 10.3, a, b, c
-export const sortArrayByTitlePrefix = (arr) => {
-  return arr.sort(function (a, b) {
-    a = a.titlePrefix;
-    b = b.titlePrefix;
-    if (typeof a === 'number' && typeof b !== 'number') {
-      return -1;
-    }
-    if (typeof b === 'number' && typeof a !== 'number') {
-      return 1;
-    }
-    if (a < b) {
-      return -1;
-    }
-    if (a > b) {
-      return 1;
-    }
-    if (a === b) {
-      return 0;
-    } else {
-      return -1;
-    }
-  });
-};
+export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
+  const at = a.titlePrefix;
+  const bt = b.titlePrefix;
+  if (typeof at === 'number' && typeof bt !== 'number') {
+    return -1;
+  }
+  if (typeof bt === 'number' && typeof at !== 'number') {
+    return 1;
+  }
+  if (at < bt) {
+    return -1;
+  }
+  if (at > bt) {
+    return 1;
+  }
+  return at === bt ? 0 : -1;
+});
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 

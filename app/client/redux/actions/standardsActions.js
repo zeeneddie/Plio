@@ -26,9 +26,9 @@ export function setSections(sections) {
   };
 }
 
-export function initStandards({ types, sections, standards }) {
+export function initStandards({ types, sections, standards, unreadMessagesCountMap }) {
   return {
-    payload: { types, sections, standards },
+    payload: { types, sections, standards, unreadMessagesCountMap },
     type: INIT_STANDARDS,
   };
 }

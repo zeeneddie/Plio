@@ -60,21 +60,13 @@ export const onSearchTextChange = _.debounce(({
   collapsed,
   collapseOnSearch,
 }, target) => {
-  const initialValue = target.value;
-  let value = initialValue;
-  let precise = false;
+  const value = target.value;
   const fields = [
     { name: 'title' },
     { name: 'description' },
     { name: 'status' },
   ];
-
-  if (needToSearchPrecisely(value)) {
-    value = value.replace(/"/g, '');
-    precise = true;
-  }
-
-  const query = _search_.searchQuery(value, fields, precise);
+  const query = _search_.searchQuery(value, fields, needToSearchPrecisely(value));
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
   const newSections = initSections({
@@ -87,7 +79,7 @@ export const onSearchTextChange = _.debounce(({
     extractIds(standardsFound).includes(standard._id));
 
   let actions = [
-    setSearchText(initialValue),
+    setSearchText(value),
     setFilteredSections(extractIds(newSections)),
     setFilteredTypes(extractIds(newTypes)),
     setFilteredStandards(extractIds(newStandards)),
