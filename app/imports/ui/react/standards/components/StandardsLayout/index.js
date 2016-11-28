@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import propTypes from './propTypes';
 import Header from '../../../components/Header';
@@ -27,42 +26,43 @@ const getMenuItems = ({ filters, filter }) => (
   })
 );
 
-const StandardsLayout = (props) => {
-  return (
-    <div>
-      <Header>
-        {props.isDiscussionOpened && props.standard ? (
-          <span className="navbar-title">
-            {props.standard.title} - discussion
-          </span>
-        ) : (
-          <Dropdown
-            className="navbar-title"
-            activeItemIndex={props.filter - 1}
-            onChange={props.onHandleFilterChange}
-          >
-            <Dropdown.Title>
-              Standards <span className="text-muted">- @value</span>
-            </Dropdown.Title>
-            <Dropdown.Menu>
-              {getMenuItems(props)}
-            </Dropdown.Menu>
-          </Dropdown>
-        )}
-        <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
-      </Header>
-      <div className="content">
-        <div className="container-fluid">
-          {props.loading ? (
-            <PreloaderPage />
-          ) : (
-            <StandardsPage {...props} />
+const StandardsLayout = (props) => (
+  <div>
+    <Header>
+      {props.isDiscussionOpened ? (
+        <span className="navbar-title">
+          {cx(
+            props.standard ? `${props.standard.title} - ` : '',
+            'discussion'
           )}
-        </div>
+        </span>
+      ) : (
+        <Dropdown
+          className="navbar-title"
+          activeItemIndex={props.filter - 1}
+          onChange={props.onHandleFilterChange}
+        >
+          <Dropdown.Title>
+            Standards <span className="text-muted">- @value</span>
+          </Dropdown.Title>
+          <Dropdown.Menu>
+            {getMenuItems(props)}
+          </Dropdown.Menu>
+        </Dropdown>
+      )}
+      <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
+    </Header>
+    <div className="content">
+      <div className="container-fluid">
+        {props.loading ? (
+          <PreloaderPage />
+        ) : (
+          <StandardsPage {...props} />
+        )}
       </div>
     </div>
-  );
-}
+  </div>
+);
 
 StandardsLayout.propTypes = propTypes;
 
