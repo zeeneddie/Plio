@@ -6,7 +6,7 @@ import { not } from '/imports/api/helpers';
 import StandardsRHSBody from '../../components/StandardsRHSBody';
 
 const setCollapsed = _.throttle((props) =>
-  props.setCollapsed(() => props.hasDocxAttachment), 600);
+  props.setCollapsed(() => props.hasDocxAttachment), 800);
 
 export default compose(
   pure,

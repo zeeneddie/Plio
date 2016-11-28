@@ -3,6 +3,8 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { withOptions } from 'react-mounter';
 import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
+import { $ } from 'meteor/jquery';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
@@ -203,6 +205,8 @@ FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action(params) {
+    $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
+
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page'
     });

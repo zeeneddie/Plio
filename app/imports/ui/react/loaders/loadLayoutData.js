@@ -30,5 +30,5 @@ export default subscribe => function loadLayoutData({
     onData(null, null);
   }
 
-  return () => typeof subscription === 'function' && subscription.stop();
+  // return () => typeof subscription === 'function' && subscription.stop();
 };
