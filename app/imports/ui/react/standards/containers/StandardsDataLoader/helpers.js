@@ -68,15 +68,15 @@ export const openStandardByFilter = (props) => {
   }
 };
 
-const isSameStandard = (props, nextProps) => propEqId(props.standard, nextProps.standard);
-
 const shouldUpdateForStandard = (props, nextProps) => {
   const pickKeys = pickC(['sectionId', 'typeId']);
   const hasIsDeleted = hasC('isDeleted');
   const getIsDeleted = getC('isDeleted');
 
-  return (
-    isSameStandard(props, nextProps) &&
+  return !!(
+    props.standard &&
+    nextProps.standard &&
+    props.standard._id === nextProps.standard._id &&
     shallowCompare(pickKeys(props.standard), pickKeys(nextProps.standard)) ||
     ((hasIsDeleted(props.standard) && hasIsDeleted(nextProps.standard)) &&
       getIsDeleted(props.standard) !== getIsDeleted(nextProps.standard))
@@ -84,7 +84,6 @@ const shouldUpdateForStandard = (props, nextProps) => {
 };
 
 export const shouldUpdateForProps = (props, nextProps) => !!(
-  props.loading !== nextProps.loading ||
   typeof props.organization !== typeof nextProps.organization ||
   props.orgSerialNumber !== nextProps.orgSerialNumber ||
   props.filter !== nextProps.filter ||

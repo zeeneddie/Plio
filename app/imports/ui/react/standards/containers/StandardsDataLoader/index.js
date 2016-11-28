@@ -24,6 +24,7 @@ import { setShowCard } from '/client/redux/actions/mobileActions';
 import {
   pickDeep,
   testPerformance,
+  flattenMapStandards,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
@@ -107,8 +108,7 @@ export default compose(
     'global.urlItemId',
     'global.filter',
   ])),
-  withStandard,
-  shouldUpdate(shouldUpdateForProps),
+  shouldUpdate(testPerformance(shouldUpdateForProps)),
   lifecycle({
     componentWillMount() {
       Meteor.defer(() => redirectByFilter(this.props));
@@ -124,10 +124,9 @@ export default compose(
      * the current selected standard's section or type id is different than the next.
      * the current standard is deleted or restored
      */
-    componentWillReceiveProps(nextProps) {
-      Meteor.defer(() => redirectByFilter(nextProps));
-    },
     componentWillUpdate(nextProps) {
+      console.log('update')
+      Meteor.defer(() => redirectByFilter(nextProps));
       Meteor.defer(() => openStandardByFilter(nextProps));
     },
   }),
