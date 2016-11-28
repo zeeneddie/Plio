@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
-import ReactDOM from 'react-dom';
+import { Meteor } from 'meteor/meteor';
 
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
@@ -24,6 +24,7 @@ import { setShowCard } from '/client/redux/actions/mobileActions';
 import {
   pickDeep,
   testPerformance,
+  flattenMapStandards,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
@@ -108,14 +109,13 @@ export default compose(
     'global.urlItemId',
     'global.filter',
   ])),
-  withStandard,
-  shouldUpdate(shouldUpdateForProps),
+  shouldUpdate(testPerformance(shouldUpdateForProps)),
   lifecycle({
     componentWillMount() {
-      redirectByFilter(this.props);
+      Meteor.defer(() => redirectByFilter(this.props));
     },
     componentDidMount() {
-      openStandardByFilter(this.props);
+      Meteor.defer(() => openStandardByFilter(this.props));
     },
     /**
      * Collapse(maybe) and redirect(maybe) when:
@@ -125,11 +125,10 @@ export default compose(
      * the current selected standard's section or type id is different than the next.
      * the current standard is deleted or restored
      */
-    componentWillReceiveProps(nextProps) {
-      redirectByFilter(nextProps);
-    },
     componentWillUpdate(nextProps) {
-      openStandardByFilter(nextProps);
+      console.log('update')
+      Meteor.defer(() => redirectByFilter(nextProps));
+      Meteor.defer(() => openStandardByFilter(nextProps));
     },
   }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
@@ -154,9 +153,6 @@ export default compose(
           return props.dispatch(setShowCard(false));
         }
       }
-
-      // remove when dashboard is written in react
-      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
       return goToDashboard();
     },

@@ -12,8 +12,6 @@ import Icon from '../../../components/Icon';
 
 const Discussion = (props) => {
   const documentPath = FlowRouter.current().path.replace('/discussion', '');
-
-  console.log(props)
   
   return !props.discussion ? (
     <PreloaderPage />
