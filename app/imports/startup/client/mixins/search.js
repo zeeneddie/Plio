@@ -11,8 +11,6 @@ export default {
     const searchObject = {};
     const value = `${input}`.trim();
 
-    console.log(value);
-
     if (value) {
       let r;
 
