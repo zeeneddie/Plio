@@ -9,8 +9,11 @@ import Discussion from '../../components/Discussion';
 import { setAt, reset, setDiscussion } from '/client/redux/actions/discussionActions';
 import { Discussions } from '/imports/share/collections/discussions';
 
-const discussionLoad = ({ dispatch, urlItemId }, onData) => {
-  const subscription = DiscussionSubs.subscribe('discussionsByStandardId', urlItemId);
+const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
+  const subscription = DiscussionSubs.subscribe(
+    'discussionsByDocId',
+    { organizationId, docId: urlItemId }
+  );
 
   if (subscription.ready()) {
     const discussion = Discussions.findOne({ linkedTo: urlItemId });

@@ -14,6 +14,11 @@ const StandardsPage = (props) => {
       lhs: 'content-cards scroll',
       rhs: 'content-cards content-cards-flush scroll',
     };
+
+    props = {
+      ...props,
+      doc: props.standard,
+    }
   }
 
   return props.organization ? (
