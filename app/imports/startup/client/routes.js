@@ -154,7 +154,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    Meteor.defer(() => mount2(StandardsProvider));
+    Meteor.defer(() => mount2(StandardsProvider, { isDiscussionOpened: false }));
   },
 });
 
@@ -162,7 +162,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    Meteor.defer(() => mount2(StandardsProvider));
+    Meteor.defer(() => mount2(StandardsProvider, { isDiscussionOpened: false }));
   },
 });
 
@@ -171,7 +171,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   name: 'standardDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action() {
-    mount2(StandardsProvider);
+    mount2(StandardsProvider, { isDiscussionOpened: true });
   },
 });
 

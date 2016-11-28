@@ -81,6 +81,7 @@ const shouldUpdateForStandard = (props, nextProps) => {
 };
 
 export const shouldUpdateForProps = (props, nextProps) => !!(
+  props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
   props.loading !== nextProps.loading ||
   typeof props.organization !== typeof nextProps.organization ||
   props.orgSerialNumber !== nextProps.orgSerialNumber ||

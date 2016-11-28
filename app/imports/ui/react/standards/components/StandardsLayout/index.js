@@ -27,34 +27,42 @@ const getMenuItems = ({ filters, filter }) => (
   })
 );
 
-const StandardsLayout = (props) => (
-  <div>
-    <Header>
-      <Dropdown
-        className="navbar-title"
-        activeItemIndex={props.filter - 1}
-        onChange={props.onHandleFilterChange}
-      >
-        <Dropdown.Title>
-          Standards <span className="text-muted">- @value</span>
-        </Dropdown.Title>
-        <Dropdown.Menu>
-          {getMenuItems(props)}
-        </Dropdown.Menu>
-      </Dropdown>
-      <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
-    </Header>
-    <div className="content">
-      <div className="container-fluid">
-        {props.loading ? (
-          <PreloaderPage />
+const StandardsLayout = (props) => {
+  return (
+    <div>
+      <Header>
+        {props.isDiscussionOpened && props.standard ? (
+          <span className="navbar-title">
+            {props.standard.title} - discussion
+          </span>
         ) : (
-          <StandardsPage {...props} />
+          <Dropdown
+            className="navbar-title"
+            activeItemIndex={props.filter - 1}
+            onChange={props.onHandleFilterChange}
+          >
+            <Dropdown.Title>
+              Standards <span className="text-muted">- @value</span>
+            </Dropdown.Title>
+            <Dropdown.Menu>
+              {getMenuItems(props)}
+            </Dropdown.Menu>
+          </Dropdown>
         )}
+        <Header.ArrowBack pull="left" onClick={props.onHandleReturn} />
+      </Header>
+      <div className="content">
+        <div className="container-fluid">
+          {props.loading ? (
+            <PreloaderPage />
+          ) : (
+            <StandardsPage {...props} />
+          )}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
 StandardsLayout.propTypes = propTypes;
 

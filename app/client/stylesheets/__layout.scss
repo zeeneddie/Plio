@@ -120,7 +120,7 @@ a:focus {
   }
 
   &-cards {
-    height: 100%;
+    height: calc(100vh - #{$navbar-height-standard});
     padding: 0;
 
     &-inner {

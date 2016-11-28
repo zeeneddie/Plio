@@ -78,12 +78,11 @@ import _counter_ from '/imports/startup/client/mixins/counter';
 import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
 import { findSelectedStandard } from '../../helpers';
 
-const loadInitialData = ({ dispatch }, onData) => {
+const loadInitialData = ({ dispatch, isDiscussionOpened }, onData) => {
   const userId = Meteor.userId();
   const orgSerialNumber = parseInt(FlowRouter.getParam('orgSerialNumber'), 10);
   const filter = parseInt(FlowRouter.getQueryParam('filter'), 10) || 1;
   const urlItemId = FlowRouter.getParam('urlItemId');
-  const isDiscussionOpened = FlowRouter.getRouteName() === 'standardDiscussion' ;
 
   const actions = [
     setUserId(userId),

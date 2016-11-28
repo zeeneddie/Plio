@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import store from '/client/redux/store';
 import StandardsDataLoader from '../../containers/StandardsDataLoader';
 
-const StandardsProvider = () => (
+const StandardsProvider = (props) => (
   <Provider store={store}>
-    <StandardsDataLoader />
+    <StandardsDataLoader {...props} />
   </Provider>
 );
 

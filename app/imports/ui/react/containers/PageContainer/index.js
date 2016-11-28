@@ -26,5 +26,6 @@ export default compose(
   mapProps(({ width, showCard, ...props }) => ({
     ...props,
     displayRHS: width <= MOBILE_BREAKPOINT && showCard,
+    children: props.children.filter(child => Boolean(child)),
   })),
 )(Page);

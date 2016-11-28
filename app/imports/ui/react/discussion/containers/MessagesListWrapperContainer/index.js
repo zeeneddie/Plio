@@ -53,16 +53,14 @@ const onPropsChange = (props, onData) => {
     at = null,
     priorLimit = 25,
     followingLimit = 25,
-    resetCompleted = false
+    resetCompleted = false,
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
 
-  dispatch(batchActions([
-    setLoading(true),
-  ]));
+  dispatch(setLoading(true));
 
   const state = getDiscussionState();
 
@@ -131,9 +129,6 @@ export default compose(
     },
     componentWillUnmount() {
       readMessages(this.props);
-    },
-    shouldComponentUpdate(nextProps) {
-      return this.props.discussion !== nextProps.discussion;
     },
   }),
   composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),

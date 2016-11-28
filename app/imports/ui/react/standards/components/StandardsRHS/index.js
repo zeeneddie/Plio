@@ -53,7 +53,7 @@ const StandardsRHS = (props) => {
   </RHS>
 );
 
-  return props.isDiscussionOpened ? <DiscussionContainer {...props} /> : standardDetail;
+  return false ? <DiscussionContainer {...props} /> : standardDetail;
 };
 
 StandardsRHS.propTypes = propTypes;

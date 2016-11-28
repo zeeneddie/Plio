@@ -22,6 +22,9 @@ const mapStateToProps = ({
     standards,
     standardsFiltered,
   },
+  discussion: {
+    isDiscussionOpened,
+  },
   global: {
     searchText,
     filter,
@@ -32,6 +35,7 @@ const mapStateToProps = ({
   },
   organizations: { orgSerialNumber },
 }) => ({
+  isDiscussionOpened,
   standards,
   standardsFiltered,
   sections,
