@@ -12,10 +12,8 @@ import Icon from '../../../components/Icon';
 
 const Discussion = (props) => {
   const documentPath = FlowRouter.current().path.replace('/discussion', '');
-  
-  return !props.discussion ? (
-    <PreloaderPage />
-  ) : (
+
+  return (
     <Wrapper className="content-cards-inner flexbox-column">
       <Wrapper className="card chat">
         <CardHeader className="chat-heading">
@@ -31,7 +29,11 @@ const Discussion = (props) => {
             </CardHeader.Title>
           </Wrapper>
         </CardHeader>
-        <MessagesListWrapperContainer {...props} />
+        {props.discussion ? (
+          <MessagesListWrapperContainer {...props} />
+        ) : (
+          <PreloaderPage />
+        )}
         <MessagesFormContainer {...props}>
           <DiscussionFileUploaderContainer {...props} />
         </MessagesFormContainer>
