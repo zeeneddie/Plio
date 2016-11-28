@@ -114,6 +114,8 @@ export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);
 
+export const propIsDeleted = property('isDeleted');
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);
@@ -356,3 +358,92 @@ export const diff = (o1, o2) => {
   }
   return result;
 };
+
+export const testPerformance = (func) => (...args) => {
+  const type = typeof func;
+
+  if (type !== 'function') throw new Error(`Expected function, got ${type}`);
+
+  const p1 = performance.now();
+
+  const result = func(...args);
+
+  const p2 = performance.now();
+
+  console.log(`Execution time of "${func.name}":`, p2 - p1);
+
+  return result;
+};
+
+export const getProblemStatusColor = (status) => {
+  switch (status) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 6:
+    case 7:
+    case 8:
+    case 10:
+    case 11:
+    case 12:
+    case 14:
+    case 15:
+      return 'amber';
+    case 5:
+    case 9:
+    case 13:
+    case 16:
+    case 17:
+      return 'red';
+    case 18:
+    case 19:
+      return 'green';
+    default:
+      return '';
+  }
+};
+
+export const getSortedItems = (items, compareFn) => {
+  return Array.from(items || []).sort(compareFn);
+};
+
+export const compareRisksByScore = (risk1, risk2) => {
+  const score1 = risk1.getScore();
+  const score2 = risk2.getScore();
+  const { value:scoreVal1 } = score1 || {};
+  const { value:scoreVal2 } = score2 || {};
+
+  if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
+    return scoreVal2 - scoreVal1;
+  } else if (score1 && !score2) {
+    return -1;
+  } else if (!score1 && score2) {
+    return 1;
+  }
+
+  return risk1.serialNumber - risk2.serialNumber;
+};
+
+export const compareStatusesByPriority = (() => {
+  const getPriority = (status) => {
+    const priorities = {
+      red: 3,
+      amber: 2,
+      green: 1,
+    };
+
+    return priorities[getProblemStatusColor(status)] || 0;
+  };
+
+  return (status1, status2) => {
+    const priority1 = getPriority(status1);
+    const priority2 = getPriority(status2);
+
+    if (priority1 !== priority2) {
+      return priority2 - priority1;
+    } else {
+      return status2 - status1;
+    }
+  };
+})();

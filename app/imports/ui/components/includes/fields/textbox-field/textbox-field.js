@@ -1,10 +1,11 @@
 import { Template } from 'meteor/templating';
+
 const defaults = {
   label: 'Description',
   value: '',
   placeholder: 'Description',
   className: 'form-control',
-  rows: 3
+  rows: 3,
 };
 
 Template.TextBoxField.viewmodel({
@@ -16,11 +17,10 @@ Template.TextBoxField.viewmodel({
       label = defaults.label,
       className = defaults.className,
       placeholder = defaults.placeholder,
-      rows = defaults.rows
+      rows = defaults.rows,
     } = this.data();
     const {
       onFocusOut = () => {},
-      onChange = () => {},
     } = this.templateInstance.data;
 
     return {
@@ -29,15 +29,18 @@ Template.TextBoxField.viewmodel({
       className,
       placeholder,
       rows,
-      onChange,
-      onFocusOut: e =>
-        this.callWithFocusCheck(e, () => {
-          const val = e.target.value;
+      onFocusOut: (e) => {
+        const val = e.target.value;
+        if (Object.is(val, value)) {
+          return;
+        }
 
-          if (Object.is(val, value)) return;
-
-          return onFocusOut(e, { value: val });
-        })
+        this.callWithFocusCheck(e, () => onFocusOut(e, { value: val }));
+      },
     };
-  }
+  },
+  getData() {
+    const { value } = this.child('TextBox').getData() || {};
+    return { value };
+  },
 });

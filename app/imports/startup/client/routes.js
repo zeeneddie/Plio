@@ -154,7 +154,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    Meteor.defer(() => mount2(StandardsProvider, { isDiscussionOpened: false }));
+    mount2(StandardsProvider, { isDiscussionOpened: false });
   },
 });
 
@@ -162,7 +162,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    Meteor.defer(() => mount2(StandardsProvider, { isDiscussionOpened: false }));
+    mount2(StandardsProvider, { isDiscussionOpened: false });
   },
 });
 
@@ -173,6 +173,30 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   action() {
     mount2(StandardsProvider, { isDiscussionOpened: true });
   },
+});
+
+FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'nonConformityDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('NC_Layout', {
+      content: 'NC_Page',
+      isDiscussionOpened: true
+    });
+  }
+});
+
+FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'riskDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action(params) {
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page',
+      isDiscussionOpened: true
+    });
+  }
 });
 
 FlowRouter.route('/:orgSerialNumber', {
@@ -261,16 +285,6 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action(params) {
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page'
-    });
-  }
-});
-
-FlowRouter.route('/:orgSerialNumber/standard-subcards', {
-  name: 'standardSubcardsPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardSubcardsLayout', {
-      content: 'StandardSubcardsPage'
     });
   }
 });

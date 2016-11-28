@@ -7,12 +7,8 @@ Template.Discussion_Header.viewmodel({
 	share: 'window',
 	mixin: ['organization', 'standard'],
 	routePath() {
-		const params = {
-			standardId: this.standardId(),
-			orgSerialNumber: this.organizationSerialNumber()
-		};
-		const queryParams = { filter: this.activeStandardFilterId() };
-		return FlowRouter.path('standard', params, queryParams);
+		const currentPath = FlowRouter.current().path;
+		return currentPath.replace('/discussion', '');
 	},
 	onNavigate(e) {
 		e.preventDefault();

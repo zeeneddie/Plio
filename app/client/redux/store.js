@@ -29,4 +29,4 @@ const store = createStore(
 
 export default store;
 
-export const getState = path => !!path ? get(store.getState(), path) : store.getState();
+export const getState = path => (!!path ? get(store.getState(), path) : store.getState());

@@ -2,6 +2,7 @@ import { _ } from 'meteor/underscore';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { CollectionNames } from '/imports/share/constants';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
   compose,
   find,
@@ -11,6 +12,8 @@ import {
   propId,
   propEq,
   getC,
+  not,
+  propIsDeleted,
 } from '/imports/api/helpers';
 import { addCollapsed } from '/client/redux/actions/globalActions';
 
@@ -32,6 +35,12 @@ export const findSelectedStandard = id =>
 
 export const findSelectedSection = id =>
   compose(find(findSelectedStandard(id)), propSections);
+
+export const getStandardsByFilter = ({ filter, standards }) => (
+  filter === STANDARD_FILTER_MAP.DELETED
+    ? standards.filter(propEq('isDeleted', true))
+    : standards.filter(compose(not, propIsDeleted))
+);
 
 export const addCollapsedType = compose(addCollapsed, createTypeItem, propId);
 

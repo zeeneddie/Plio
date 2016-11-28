@@ -1,13 +1,12 @@
-import { compose, shouldUpdate } from 'recompose';
+import { compose, mapProps, shouldUpdate, withHandlers } from 'recompose';
 import { compose as kompose } from 'react-komposer';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
-import React from 'react';
+import { Tracker } from 'meteor/tracker';
 
-import { setChangelogCollapsed } from '/client/redux/actions/changelogActions';
+import { AuditLogsSubs } from '/imports/startup/client/subsmanagers';
 import {
+  setChangelogCollapsed,
   setLoadingLastLogs,
   setLastLogsLoaded,
   setLoadingAllLogs,
@@ -31,117 +30,100 @@ const onPropsChange = (props, onData) => {
   onData(null, props);
 };
 
-const pickProps = pickC([
-  'isChangelogCollapsed',
-  'isLastLogsLoaded',
-  'isAllLogsLoaded',
-]);
+const onToggleCollapse = (props) => () => {
+  const {
+    dispatch,
+    isChangelogCollapsed,
+    isLastLogsLoaded,
+    isAllLogsLoaded,
+    documentId,
+    collection,
+  } = props;
 
-const mapStateToProps = state => pickProps(state.changelog);
+  const toggleCollapse = () => (
+    dispatch(setChangelogCollapsed(!isChangelogCollapsed))
+  );
 
-const _ChangelogContainer = Component => class extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.subs = {};
-    this.onToggleCollapse = this.onToggleCollapse.bind(this);
-    this.onViewAllClick = this.onViewAllClick.bind(this);
+  if (!isChangelogCollapsed || isLastLogsLoaded || isAllLogsLoaded) {
+    toggleCollapse();
+    return;
   }
 
-  componentWillUnmount() {
-    Object.keys(this.subs).map(key => this.subs[key].stop());
-  }
+  dispatch(setLoadingLastLogs(true));
 
-  onToggleCollapse() {
-    const {
-      dispatch,
-      isChangelogCollapsed,
-      isLastLogsLoaded,
-      isAllLogsLoaded,
-    } = this.props;
+  const sub = AuditLogsSubs.subscribe('auditLogs', documentId, collection);
 
-    const toggleCollapse = () => (
-      dispatch(setChangelogCollapsed(!isChangelogCollapsed))
-    );
-
-    if (!isChangelogCollapsed || isLastLogsLoaded || isAllLogsLoaded) {
+  Tracker.autorun((comp) => {
+    if (sub.ready()) {
       toggleCollapse();
-      return;
+
+      dispatch(batchActions([
+        setLoadingLastLogs(false),
+        setLastLogsLoaded(true),
+      ]));
+
+      comp.stop();
     }
+  });
+};
 
-    dispatch(setLoadingLastLogs(true));
+const onViewAllClick = (props) => () => {
+  const { dispatch, isAllLogsLoaded, documentId, collection } = props;
 
-    this._loadLastLogs({
-      onReady: () => {
-        toggleCollapse();
+  if (!isAllLogsLoaded) {
+    dispatch(setLoadingAllLogs(true));
+
+    const sub = AuditLogsSubs.subscribe('auditLogs', documentId, collection, lastLogsLimit, 0);
+
+    Tracker.autorun((comp) => {
+      if (sub.ready()) {
         dispatch(batchActions([
-          setLoadingLastLogs(false),
-          setLastLogsLoaded(true),
-        ]));
-      },
-    });
-  }
-
-  onViewAllClick() {
-    const { dispatch, isAllLogsLoaded } = this.props;
-
-    if (!isAllLogsLoaded) {
-      dispatch(setLoadingAllLogs(true));
-
-      this._loadAllLogs({
-        onReady: () => dispatch(batchActions([
           setLoadingAllLogs(false),
           setAllLogsLoaded(true),
           setShowAll(true),
-        ])),
-      });
-    } else {
-      dispatch(setShowAll(true));
-    }
-  }
+        ]));
 
-  render() {
-    return (
-      <Component
-        {..._.pick(this.props, ['documentId', 'collection', 'isChangelogCollapsed'])}
-        onToggleCollapse={this.onToggleCollapse}
-        onViewAllClick={this.onViewAllClick}
-      />
-    );
-  }
-
-  _loadLastLogs(options) {
-    this._subscribe(
-      'lastLogs',
-      'auditLogs',
-      this.props.documentId,
-      this.props.collection,
-      options
-    );
-  }
-
-  _loadAllLogs(options) {
-    this._subscribe(
-      'allLogs',
-      'auditLogs',
-      this.props.documentId,
-      this.props.collection,
-      lastLogsLimit, // skip
-      0, // limit
-      options
-    );
-  }
-
-  _subscribe(subKey, ...args) {
-    this.subs[subKey] = Meteor.subscribe(...args);
+        comp.stop();
+      }
+    });
+  } else {
+    dispatch(setShowAll(true));
   }
 };
 
 const ChangelogContainer = compose(
   connect(),
-  kompose(onPropsChange),
-  connect(mapStateToProps),
-  _ChangelogContainer
+
+  kompose(onPropsChange, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.documentId !== nextProps.documentId,
+  }),
+
+  connect(state => pickC([
+    'documentId',
+    'collection',
+    'isChangelogCollapsed',
+    'isLastLogsLoaded',
+    'isAllLogsLoaded',
+  ])(state.changelog)),
+
+  withHandlers({
+    onToggleCollapse,
+    onViewAllClick,
+  }),
+
+  mapProps(props => pickC([
+    'documentId',
+    'collection',
+    'isChangelogCollapsed',
+    'onToggleCollapse',
+    'onViewAllClick',
+  ])(props)),
+
+  shouldUpdate((props, nextProps) =>
+    (props.documentId !== nextProps.documentId)
+    || (props.isChangelogCollapsed !== nextProps.isChangelogCollapsed)
+  ),
 )(Changelog);
 
 ChangelogContainer.propTypes = propTypes;

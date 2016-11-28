@@ -121,7 +121,7 @@ Template.CreateStandard.viewmodel({
 
       open({
         _id,
-        _title: 'Compliance standard',
+        _title: 'Standard',
         template: 'EditStandard'
       });
     };

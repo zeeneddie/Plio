@@ -2,8 +2,9 @@
   <div class="form-group form-group-buttons no-margin">
     {{#each selected}}
       <div class="btn-group">
-        <button class="btn btn-secondary" type="button" disabled=""
-            {{b "text: this.title, attr: { title: this.title }"}}></button>
+        <button class="btn btn-secondary" type="button" disabled="" title={{this.title}}>
+          {{this.title}}
+        </button>
         {{#if isDeleteButtonVisible}}
           {{> DeleteButton
               _id=this._id

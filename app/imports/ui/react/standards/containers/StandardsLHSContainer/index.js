@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, withProps, pure } from 'recompose';
-import property from 'lodash.property';
 
-import { propEq, not } from '/imports/api/helpers';
 import StandardsLHS from '../../components/StandardsLHS';
 import {
   onSectionToggleCollapse,
@@ -12,6 +10,7 @@ import {
   onModalOpen,
 } from './handlers';
 import { initSections, initTypes } from '/client/redux/lib/standardsHelpers';
+import { getStandardsByFilter } from '../../helpers';
 
 const mapStateToProps = ({
   standards: {
@@ -66,9 +65,7 @@ export default compose(
     let standards = props.searchText
       ? props.standards.filter(standard => props.standardsFiltered.includes(standard._id))
       : props.standards;
-    standards = props.filter === 3
-      ? standards.filter(propEq('isDeleted', true))
-      : standards.filter(compose(not, property('isDeleted')));
+    standards = getStandardsByFilter({ standards, filter: props.filter });
     const sections = props.searchText
       ? initSections({ standards, sections: props.sections, types: props.types })
       : props.sections;

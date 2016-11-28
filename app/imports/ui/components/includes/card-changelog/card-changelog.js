@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import { moment } from 'meteor/momentjs:moment';
+import moment from 'moment-timezone';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { SystemName } from '/imports/share/constants.js';

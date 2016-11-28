@@ -14,6 +14,8 @@
         <div class="text-xs-center">
           <button type="button" class="btn btn-link" {{b "text: addText, click: add"}}></button>
         </div>
+      {{else}}
+        <p>{{textToReplaceAddButton}}</p>
       {{/unless}}
       </div>
     {{/Subcards_Wrapper}}

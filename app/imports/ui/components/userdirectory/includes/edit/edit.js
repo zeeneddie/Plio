@@ -16,7 +16,7 @@ import { removeUser } from '/imports/api/organizations/methods.js';
 import { assignRole, revokeRole } from '/imports/api/users/methods.js';
 import { UserUpdateProfileSchema } from '/imports/share/schemas/user-schema.js';
 import { UserRoles } from '/imports/share/constants.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.UserDirectory_Card_Edit.viewmodel({
   mixin: ['organization', 'modal'],
@@ -230,7 +230,13 @@ Template.UserDirectory_Card_Edit.viewmodel({
 
           // have to wait some time before opening new sweet alert
           Meteor.setTimeout(() => {
-            swal('Removed', `${fullNameOrEmail} has been removed from this organization`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `${fullNameOrEmail} has been removed from this organization`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           }, 500);
         }
       });

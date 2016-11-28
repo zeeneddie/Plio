@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { moment } from 'meteor/momentjs:moment';
+import moment from 'moment-timezone';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 import { EmailsForPlioReporting, PlioS3Logos } from '/imports/share/constants';

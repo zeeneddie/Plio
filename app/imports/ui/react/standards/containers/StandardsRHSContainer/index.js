@@ -2,7 +2,7 @@ import { compose, withProps, withHandlers, mapProps, branch, renderComponent } f
 import { connect } from 'react-redux';
 import { _ } from 'meteor/underscore';
 
-import { propEq, some, getC, propEqId, every } from '/imports/api/helpers';
+import { propEq, some, getC, propEqId, every, lengthStandards } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import StandardsRHSNotFound from '../../components/StandardsRHSNotFound';
@@ -13,7 +13,7 @@ import {
   onRestore,
   onDelete,
 } from './handlers';
-import { getPathToDiscussion } from '../../helpers';
+import { getPathToDiscussion, getStandardsByFilter } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
@@ -40,17 +40,16 @@ const mapStateToProps = ({
   filter,
 });
 
-const getSelectedStandard = props => props.standards.find(propEqId(props.urlItemId));
-
 export default compose(
   connect(mapStateToProps),
+  mapProps(props => ({ ...props, standards: getStandardsByFilter(props) })),
   branch(
-    getSelectedStandard,
+    lengthStandards,
     _.identity,
     renderComponent(StandardsRHSNotFound),
   ),
   withProps(props => {
-    const standard = { ...getSelectedStandard(props) };
+    const standard = { ...props.standards.find(propEqId(props.urlItemId)) };
     const hasDocxAttachment = some([getC('source1.htmlUrl'), getC('source2.htmlUrl')], standard);
     const hasAccess = canChangeStandards(props.userId, props.organizationId);
     const hasFullAccess = isOrgOwner(props.userId, props.organizationId);
@@ -102,6 +101,11 @@ export default compose(
       file: files.find(propEqId(getFileId(props.standard.source2))),
     };
     const standard = { ...props.standard, source1, source2 };
+    const isReady = !!(
+      props.isCardReady &&
+      props.standards.length &&
+      props.standard._id
+    );
 
     return {
       ...props,
@@ -111,6 +115,7 @@ export default compose(
       actions,
       lessons,
       standard,
+      isReady,
     };
   }),
   withHandlers({

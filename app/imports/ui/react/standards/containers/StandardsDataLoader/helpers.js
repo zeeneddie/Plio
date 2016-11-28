@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Meteor } from 'meteor/meteor';
 
 import { getId, pickC, hasC, getC, propEqId, shallowCompare } from '/imports/api/helpers';
 import {
@@ -22,9 +23,9 @@ export const redirectByFilter = (props) => {
         orgSerialNumber,
         urlItemId: getId(defaultStandard),
       };
-      FlowRouter.go('standard', params, queryParams);
+      Meteor.defer(() => FlowRouter.go('standard', params, queryParams));
     } else {
-      FlowRouter.go('standards', { orgSerialNumber }, queryParams);
+      Meteor.defer(() => FlowRouter.go('standards', { orgSerialNumber }, queryParams));
     }
   }
 };

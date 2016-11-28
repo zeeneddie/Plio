@@ -1,11 +1,7 @@
 <template name="StandardSectionItem">
   <div class="list-group">
     {{#each items}}
-      <div {{b "class: getSubNestingClassName(this)"}}>
-        <div class="span">
-          {{> Standards_Item_Read this}}
-        </div>
-      </div>
+      {{> Standards_Item_Read (getItemParams this)}}
     {{/each}}
   </div>
 </template>

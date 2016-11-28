@@ -2,7 +2,6 @@ import { batchActions } from 'redux-batched-actions';
 import { _ } from 'meteor/underscore';
 
 import {
-  lengthStandards,
   extractIds,
   getId,
   propEq,

@@ -1,9 +1,9 @@
-import { compose } from 'recompose';
+import { compose, mapProps, shouldUpdate } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { LastHumanLogSubs } from '/imports/startup/client/subsmanagers';
 import { SystemName } from '/imports/share/constants';
 import {
   getCollectionByName,
@@ -15,6 +15,7 @@ import {
   setLastHumanLog,
   setLoadingLastHumanLog,
 } from '/client/redux/actions/changelogActions';
+import { pickC, shallowCompare } from '/imports/api/helpers';
 import ChangelogHeader from '../../components/ChangelogHeader';
 import propTypes from './propTypes';
 
@@ -32,13 +33,13 @@ const onPropsChange = (props, onData) => {
       dispatch(setChangelogDocument(doc));
     }
 
-    subscription = Meteor.subscribe('lastHumanLog', documentId, collection);
+    subscription = LastHumanLogSubs.subscribe('lastHumanLog', documentId, collection);
 
     dispatch(setLoadingLastHumanLog(true));
 
     if (subscription.ready()) {
       const lastHumanLog = AuditLogs.findOne({
-        documentId: doc._id,
+        documentId,
         executor: { $ne: SystemName },
       }, {
         sort: { date: -1 },
@@ -90,17 +91,34 @@ const mapStateToProps = (state) => {
   }
 
   return {
+    ...props,
     isChangelogCollapsed,
     isLoadingLastHumanLog,
     isLoadingLastLogs,
-    ...props,
   };
 };
 
 const ChangelogHeaderContainer = compose(
   connect(),
-  composeWithTracker(onPropsChange),
-  connect(mapStateToProps)
+
+  composeWithTracker(onPropsChange, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.documentId !== nextProps.documentId,
+  }),
+
+  connect(mapStateToProps),
+
+  mapProps(props => pickC([
+    'isChangelogCollapsed',
+    'isLoadingLastHumanLog',
+    'isLoadingLastLogs',
+    'createdBy',
+    'createdAt',
+    'updatedBy',
+    'updatedAt',
+  ])(props)),
+
+  shouldUpdate(shallowCompare),
 )(ChangelogHeader);
 
 ChangelogHeaderContainer.propTypes = propTypes;

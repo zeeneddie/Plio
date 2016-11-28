@@ -4,41 +4,39 @@ import cx from 'classnames';
 import propTypes from './propTypes';
 import StandardsRHSHeaderButtons from '../StandardsRHSHeaderButtons';
 import StandardsRHSBodyContainer from '../../containers/StandardsRHSBodyContainer';
-import DiscussionContainer from '../../../discussion/containers/DiscussionContainer';
 import RHS from '../../../components/RHS';
 
-const StandardsRHS = (props) => {
-  const standardDetail = (
-    <RHS
-      className={cx('expandable', {
+const StandardsRHS = (props) => (
+  <RHS
+    className={cx('expandable', {
       expanded: props.isFullScreenMode,
       content: !props.standard,
     })}
-    >
-      <RHS.Card className="standard-details">
-        <RHS.Header
-          title={props.names.headerNames.header}
-          isReady={props.isCardReady}
-        >
-          <StandardsRHSHeaderButtons
-            isDiscussionOpened={props.isDiscussionOpened}
-            names={props.names.headerNames}
-            isDeleted={props.standard.isDeleted}
-            unreadMessagesCount={props.standard.unreadMessagesCount}
-            pathToDiscussion={props.pathToDiscussion}
-            hasDocxAttachment={props.hasDocxAttachment}
-            hasAccess={props.hasAccess}
-            hasFullAccess={props.hasFullAccess}
-            onToggleScreenMode={props.onToggleScreenMode}
-            onModalOpen={props.onModalOpen}
-            onDiscussionOpen={props.onDiscussionOpen}
-            onRestore={props.onRestore}
-            onDelete={props.onDelete}
-          />
-        </RHS.Header>
+  >
+    <RHS.Card className="standard-details">
+      <RHS.Header
+        title={props.names.headerNames.header}
+        isReady={props.isReady}
+      >
+        <StandardsRHSHeaderButtons
+          isDiscussionOpened={props.isDiscussionOpened}
+          names={props.names.headerNames}
+          isDeleted={props.standard.isDeleted}
+          unreadMessagesCount={props.standard.unreadMessagesCount}
+          pathToDiscussion={props.pathToDiscussion}
+          hasDocxAttachment={props.hasDocxAttachment}
+          hasAccess={props.hasAccess}
+          hasFullAccess={props.hasFullAccess}
+          onToggleScreenMode={props.onToggleScreenMode}
+          onModalOpen={props.onModalOpen}
+          onDiscussionOpen={props.onDiscussionOpen}
+          onRestore={props.onRestore}
+          onDelete={props.onDelete}
+        />
+      </RHS.Header>
 
       <StandardsRHSBodyContainer
-        isCardReady={props.isCardReady}
+        isReady={props.isReady}
         standard={props.standard}
         hasDocxAttachment={props.hasDocxAttachment}
         files={props.files}
@@ -52,9 +50,6 @@ const StandardsRHS = (props) => {
     </RHS.Card>
   </RHS>
 );
-
-  return false ? <DiscussionContainer {...props} /> : standardDetail;
-};
 
 StandardsRHS.propTypes = propTypes;
 

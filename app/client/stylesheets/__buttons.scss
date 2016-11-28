@@ -80,7 +80,8 @@
   max-width: 100%;
 
   & > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
-    max-width: calc(100% - 36px);
+    max-width: 100%;
+    padding-right: 46px;
   }
   &-nomargin {
     margin-bottom: 0 !important;

@@ -1,4 +1,5 @@
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
+export const ALERT_AUTOHIDE_TIME = 1500;
 
 export const DocumentTitles = {
   STANDARD: 'Standard',
@@ -24,6 +25,12 @@ export const StandardFilters = {
   1: { name: 'section', prepend: 'by' },
   2: { name: 'type', prepend: 'by' },
   3: { name: 'deleted', prepend: '' },
+};
+
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
 };
 
 export const WorkInboxFilters = {

@@ -4,7 +4,7 @@
       <p class="list-group-item-text">Standard(s)</p>
       <h4 class="list-group-item-heading">
         {{#each standards}}
-          <a class="btn btn-secondary btn-inline" {{b "text: this.title, attr: { href: this.href }"}}></a>
+          <a class="btn btn-secondary btn-inline" href="{{this.href}}">{{this.title}}</a>
         {{/each}}
       </h4>
     </div>

@@ -43,6 +43,14 @@ Template.Risks_Card_Read.viewmodel({
       _id: this.risk() && this.risk()._id
     });
   },
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      riskId: this.riskId(),
+    };
+    const queryParams = { filter: this.activeRiskFilterId() };
+    return FlowRouter.path('riskDiscussion', params, queryParams);
+  },
   restore({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
@@ -64,5 +72,5 @@ Template.Risks_Card_Read.viewmodel({
     const callback = (err) => cb(err, () => this.handleRouteRisks());
 
     remove.call({ _id }, callback);
-  }
+  },
 });
