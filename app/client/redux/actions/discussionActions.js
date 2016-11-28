@@ -57,7 +57,7 @@ export function setAt(at) {
 export function reset() {
   return {
     type: RESET,
-    payload: { ...initialState, resetCompleted: true },
+    payload: { ...initialState, resetCompleted: true, isDiscussionOpened: true },
   };
 }
 

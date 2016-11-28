@@ -27,9 +27,15 @@ const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
 };
 
 export default compose(
-  connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
+  connect(pickDeep([
+    'organizations.organizationId',
+    'global.urlItemId',
+    'discussion.resetCompleted',
+  ])),
   composeWithTracker(discussionLoad, null, null, {
-    shouldResubscribe: (props, nextProps) => props.urlItemId !== nextProps.urlItemId,
+    shouldResubscribe: (props, nextProps) =>
+      props.urlItemId !== nextProps.urlItemId ||
+      nextProps.resetCompleted,
   }),
   connect(pickFromDiscussion(['discussion'])),
   withProps((props) => ({
