@@ -156,7 +156,7 @@ FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    mount2(StandardsProvider, { isDiscussionOpened: false });
+    mount2(StandardsProvider);
   },
 });
 
@@ -164,7 +164,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
-    mount2(StandardsProvider, { isDiscussionOpened: false });
+    mount2(StandardsProvider);
   },
 });
 
