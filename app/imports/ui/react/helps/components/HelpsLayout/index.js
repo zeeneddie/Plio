@@ -3,6 +3,7 @@ import React from 'react';
 import propTypes from './propTypes';
 import Header from '../../../components/Header';
 import PreloaderPage from '../../../components/PreloaderPage';
+import HelpsPageContainer from '../../containers/HelpsPageContainer';
 
 const HelpsLayout = (props) => (
   <div>
@@ -17,7 +18,7 @@ const HelpsLayout = (props) => (
         {props.isLoading ? (
           <PreloaderPage />
         ) : (
-          <div></div>
+          <HelpsPageContainer />
         )}
       </div>
     </div>

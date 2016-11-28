@@ -9,6 +9,7 @@ import {
   SET_STANDARD_TYPES,
   SET_STANDARDS,
   SET_LESSONS_LEARNED,
+  SET_HELPS,
 } from './types';
 
 export function setDepartments(departments) {
@@ -78,5 +79,12 @@ export function setLessons(lessons) {
   return {
     type: SET_LESSONS_LEARNED,
     payload: { lessons },
+  };
+}
+
+export function setHelps(helps) {
+  return {
+    type: SET_HELPS,
+    payload: { helps },
   };
 }

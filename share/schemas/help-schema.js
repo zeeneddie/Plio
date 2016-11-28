@@ -32,9 +32,12 @@ export const HelpSchema = new SimpleSchema([
   DeletedSchema,
   OrganizationIdSchema,
   {
-    section: {
+    title: {
       type: String,
-      allowedValues: _(HelpSections).values(),
+    },
+    section: {
+      type: Number,
+      allowedValues: _(HelpSections).keys().map(val => parseInt(val, 10)),
     },
     source: {
       type: sourceSchema,
