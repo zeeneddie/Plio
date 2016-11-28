@@ -188,6 +188,10 @@ const loadDeps = ({ dispatch, organizationId }, onData) => {
   return () => typeof subscription === 'function' && subscription.stop();
 };
 
+const withStandard = withProps(props => ({
+  standard: findSelectedStandard(props.urlItemId)(props),
+}));
+
 export default compose(
   connect(),
   defaultProps({ filters: StandardFilters }),
@@ -230,7 +234,7 @@ export default compose(
   ])),
   composeWithTracker(testPerformance(initMainData)),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
+  withStandard,
   composeWithTracker(testPerformance(loadCardData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
       props.organizationId !== nextProps.organizationId ||
@@ -251,7 +255,7 @@ export default compose(
     'global.urlItemId',
     'global.filter',
   ])),
-  withProps(props => ({ standard: findSelectedStandard(props.urlItemId)(props) })),
+  withStandard,
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {

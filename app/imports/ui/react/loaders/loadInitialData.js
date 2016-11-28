@@ -20,5 +20,5 @@ export default function loadInitialData({ dispatch }, onData) {
 
   dispatch(batchActions(actions));
 
-  onData(null, { userId, orgSerialNumber, filter, urlItemId });
+  onData(null, {});
 }
