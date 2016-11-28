@@ -10,10 +10,10 @@ AccountsTemplates.configure({
       signIn: 'Login'
     },
     button: {
-      signUp: 'Sign up',
-      signIn: 'Login',
-      changePwd: 'Change password',
-      forgotPwd: 'Email me reset instructions'
+      signUp: 'Sign up/Signing up...',
+      signIn: 'Login/Logging in...',
+      changePwd: 'Change password/Changing password...',
+      forgotPwd: 'Email me reset instructions/Sending email...',
     },
     info: {
       emailSent: 'info.emailSent',
@@ -40,7 +40,7 @@ AccountsTemplates.addField({
   maxLength: 40,
   transform(value) {
     return value.capitalize();
-  }
+  },
 });
 
 AccountsTemplates.addField({
