@@ -7,9 +7,11 @@ export default {
     return this.searchQuery(invoke(this, prop), fields);
   },
 
-  searchQuery(prop, fields, precise = false) {
+  searchQuery(input, fields, precise = false) {
     const searchObject = {};
-    const value = (this[prop] && this[prop]() || '').trim();
+    const value = `${input}`.trim();
+
+    console.log(value);
 
     if (value) {
       let r;
@@ -33,7 +35,7 @@ export default {
           const obj = {};
 
           obj[field.name] = field.subField
-            ? {$elemMatch: {[field.subField]: r}}
+            ? { $elemMatch: { [field.subField]: r } }
             : r;
 
           return obj;
@@ -49,5 +51,5 @@ export default {
 
   searchResultsText() {
     return `${this.searchResultsNumber()} matching results`;
-  }
+  },
 };

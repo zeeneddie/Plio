@@ -19,7 +19,7 @@ let middlewares = [
 ];
 
 if (process.NODE_ENV !== 'production') {
-  // middlewares = middlewares.concat([logger()]);
+  middlewares = middlewares.concat([logger()]);
 }
 
 const store = createStore(
@@ -29,4 +29,4 @@ const store = createStore(
 
 export default store;
 
-export const getState = path => !!path ? get(store.getState(), path) : store.getState();
+export const getState = path => (!!path ? get(store.getState(), path) : store.getState());

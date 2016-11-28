@@ -61,7 +61,7 @@ export default compose(
     let standards = props.searchText
       ? props.standards.filter(standard => props.standardsFiltered.includes(standard._id))
       : props.standards;
-    standards = getStandardsByFilter(props);
+    standards = getStandardsByFilter({ standards, filter: props.filter });
     const sections = props.searchText
       ? initSections({ standards, sections: props.sections, types: props.types })
       : props.sections;
