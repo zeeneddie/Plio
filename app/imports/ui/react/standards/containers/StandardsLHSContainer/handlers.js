@@ -39,6 +39,17 @@ export const onSectionToggleCollapse = onToggle(createSectionItem);
 
 export const onTypeToggleCollapse = onToggle(createTypeItem);
 
+export const needToSearchPrecisely = (value) => {
+  const doubleQuotes = '"';
+  const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
+  const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
+  const isPrecise = (quotesIndexes) =>
+    quotesIndexes.length > 1
+    && quotesIndexes.every(idx => idx !== -1);
+
+  return isPrecise(doubleQuotesIndexes);
+};
+
 export const onSearchTextChange = _.debounce(({
   dispatch,
   sections,
@@ -49,13 +60,21 @@ export const onSearchTextChange = _.debounce(({
   collapsed,
   collapseOnSearch,
 }, target) => {
-  const value = target.value;
+  const initialValue = target.value;
+  let value = initialValue;
+  let precise = false;
   const fields = [
     { name: 'title' },
     { name: 'description' },
     { name: 'status' },
   ];
-  const query = _search_.searchQuery(value, fields);
+
+  if (needToSearchPrecisely(value)) {
+    value = value.replace(/"/g, '');
+    precise = true;
+  }
+
+  const query = _search_.searchQuery(value, fields, precise);
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
   const newSections = initSections({
@@ -68,7 +87,7 @@ export const onSearchTextChange = _.debounce(({
     extractIds(standardsFound).includes(standard._id));
 
   let actions = [
-    setSearchText(value),
+    setSearchText(initialValue),
     setFilteredSections(extractIds(newSections)),
     setFilteredTypes(extractIds(newTypes)),
     setFilteredStandards(extractIds(newStandards)),
