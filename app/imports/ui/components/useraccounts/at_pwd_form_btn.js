@@ -14,7 +14,10 @@ atPwdFormBtnHelpers.submitDisabled = () => {
   }
 };
 
-atPwdFormBtnHelpers.showLoader = () => AccountsTemplates.disabled();
+atPwdFormBtnHelpers.isDisabled = () => AccountsTemplates.disabled();
+atPwdFormBtnHelpers.getButtonLabel = (text) => {
+  return AccountsTemplates.disabled() && text.split('/')[1] || text.split('/')[0];
+};
 
 Template.atPwdFormBtn.helpers(atPwdFormBtnHelpers);
 
