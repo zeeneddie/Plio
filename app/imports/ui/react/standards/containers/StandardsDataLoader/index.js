@@ -12,185 +12,43 @@ import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
-import { Meteor } from 'meteor/meteor';
 import ReactDOM from 'react-dom';
 
-import { Standards } from '/imports/share/collections/standards';
-import { Departments } from '/imports/share/collections/departments';
-import { Files } from '/imports/share/collections/files';
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { NonConformities } from '/imports/share/collections/non-conformities';
-import { Risks } from '/imports/share/collections/risks';
-import { Actions } from '/imports/share/collections/actions';
-import { WorkItems } from '/imports/share/collections/work-items';
-import { LessonsLearned } from '/imports/share/collections/lessons';
-import {
-  DocumentLayoutSubs,
-  DocumentCardSubs,
-  BackgroundSubs,
-} from '/imports/startup/client/subsmanagers';
+import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
-import {
-  initSections,
-  initTypes,
-  setIsCardReady,
-  initStandards,
-} from '/client/redux/actions/standardsActions';
 import {
   setFilter,
   setSearchText,
 } from '/client/redux/actions/globalActions';
-import {
-  setDepartments,
-  setFiles,
-  setNCs,
-  setRisks,
-  setActions,
-  setWorkItems,
-  setStandardBookSections,
-  setStandardTypes,
-  setStandards,
-  setLessons,
-} from '/client/redux/actions/collectionsActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
-import { setStandardMessagesNotViewedCountMap } from '/client/redux/actions/countersActions';
-import { getState } from '/client/redux/store';
 import {
   pickDeep,
   testPerformance,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard } from '../../../helpers/routeHelpers';
-import _counter_ from '/imports/startup/client/mixins/counter';
 import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
 import { findSelectedStandard } from '../../helpers';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
-
-const loadMainData = ({
-  dispatch,
-  organizationId,
-}, onData) => {
-  const query = { organizationId };
-  const options = { sort: { title: 1 } };
-  const sections = StandardsBookSections.find(query, options).fetch();
-  const types = StandardTypes.find(query, options).fetch();
-  const standards = Standards.find(query, options).fetch();
-  const actions = [
-    setStandardBookSections(sections),
-    setStandardTypes(types),
-    setStandards(standards),
-  ];
-
-  dispatch(batchActions(actions));
-
-  onData(null, {});
-};
-
-const loadCountersData = ({
-  dispatch,
-  standards,
-}, onData) => {
-  const subscriptions = standards.map(({ _id }) => Meteor.subscribe(
-    'messagesNotViewedCount',
-    `standard-messages-not-viewed-count-${_id}`,
-    _id
-  ));
-
-  if (subscriptions.every(subscription => subscription.ready())) {
-    const unreadMessagesCountMap = standards.reduce((map, { _id }) => ({
-      ...map,
-      [_id]: _counter_.get(`standard-messages-not-viewed-count-${_id}`),
-    }), {});
-
-    dispatch(setStandardMessagesNotViewedCountMap(unreadMessagesCountMap));
-  }
-
-  onData(null, {});
-
-  return () => subscriptions.map(subscription => subscription.stop());
-};
-
-const initMainData = ({
-  dispatch,
-  standards,
-  unreadMessagesCountMap = {},
-  standardBookSections: sections,
-  standardTypes: types,
-}, onData) => {
-  dispatch(initStandards({ types, sections, standards, unreadMessagesCountMap }));
-
-  const newStandards = getState('standards').standards;
-
-  dispatch(initSections({ sections, types, standards: newStandards }));
-
-  const newSections = getState('standards').sections;
-
-  dispatch(initTypes({ types, sections: newSections }));
-
-  onData(null, {});
-};
-
-const loadCardData = ({
-  dispatch,
-  standard,
-  organizationId,
-  urlItemId,
-}, onData) => {
-  let subscription;
-  let isCardReady = true;
-
-  if (standard) {
-    const subArgs = { organizationId, _id: urlItemId };
-
-    subscription = DocumentCardSubs.subscribe('standardCard', subArgs);
-
-    isCardReady = subscription.ready();
-  }
-
-  dispatch(setIsCardReady(isCardReady));
-
-  onData(null, {});
-
-  return () => typeof subscription === 'function' && subscription.stop();
-};
-
-const loadDeps = ({ dispatch, organizationId }, onData) => {
-  const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
-
-  if (subscription.ready()) {
-    const query = { organizationId };
-    const pOptions = { sort: { serialNumber: 1 } };
-    const departments = Departments.find(query, { sort: { name: 1 } }).fetch();
-    const files = Files.find(query, { sort: { updatedAt: -1 } }).fetch();
-    const ncs = NonConformities.find(query, pOptions).fetch();
-    const risks = Risks.find(query, pOptions).fetch();
-    const actions = Actions.find(query, pOptions).fetch();
-    const workItems = WorkItems.find(query, pOptions).fetch();
-    const lessons = LessonsLearned.find(query, pOptions).fetch();
-    const reduxActions = [
-      setDepartments(departments),
-      setFiles(files),
-      setNCs(ncs),
-      setRisks(risks),
-      setActions(actions),
-      setWorkItems(workItems),
-      setLessons(lessons),
-    ];
-
-    dispatch(batchActions(reduxActions));
-  }
-
-  onData(null, {});
-
-  return () => typeof subscription === 'function' && subscription.stop();
-};
+import loadMainData from '../../loaders/loadMainData';
+import loadCountersData from '../../loaders/loadCountersData';
+import initMainData from '../../loaders/initMainData';
+import loadCardData from '../../loaders/loadCardData';
+import loadDeps from '../../loaders/loadDeps';
 
 const withStandard = withProps(props => ({
   standard: findSelectedStandard(props.urlItemId)(props),
 }));
+
+const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
+  const isDeleted = filter === 3
+          ? true
+          : { $in: [null, false] };
+
+  return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
+});
 
 export default compose(
   connect(),
@@ -204,13 +62,7 @@ export default compose(
     'organizations.orgSerialNumber',
   ])),
   composeWithTracker(
-    testPerformance(loadLayoutData(({ filter, orgSerialNumber }) => {
-      const isDeleted = filter === 3
-              ? true
-              : { $in: [null, false] };
-
-      return DocumentLayoutSubs.subscribe('standardsLayout', orgSerialNumber, isDeleted);
-    })),
+    testPerformance(getLayoutData()),
     withProps({ loading: true })(StandardsLayout),
     null,
     {
