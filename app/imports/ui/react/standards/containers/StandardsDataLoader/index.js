@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
-import ReactDOM from 'react-dom';
+import { Meteor } from 'meteor/meteor';
 
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
@@ -111,10 +111,10 @@ export default compose(
   shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
-      redirectByFilter(this.props);
+      Meteor.defer(() => redirectByFilter(this.props));
     },
     componentDidMount() {
-      openStandardByFilter(this.props);
+      Meteor.defer(() => openStandardByFilter(this.props));
     },
     /**
      * Collapse(maybe) and redirect(maybe) when:
@@ -125,10 +125,10 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillReceiveProps(nextProps) {
-      redirectByFilter(nextProps);
+      Meteor.defer(() => redirectByFilter(nextProps));
     },
     componentWillUpdate(nextProps) {
-      openStandardByFilter(nextProps);
+      Meteor.defer(() => openStandardByFilter(nextProps));
     },
   }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
@@ -153,9 +153,6 @@ export default compose(
           return props.dispatch(setShowCard(false));
         }
       }
-
-      // remove when dashboard is written in react
-      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
       return goToDashboard();
     },

@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { DEFAULT_POLLING_INTERVAL_FOR_COUNTER } from '../constants';
 
 export default class Counter {
@@ -23,5 +24,9 @@ export default class Counter {
     }, this.interval);
 
     sub.onStop(() => Meteor.clearInterval(handler));
+
+    return {
+      stop: sub.onStop.bind(this),
+    };
   }
 }

@@ -1,5 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { goToStandard } from '../../../helpers/routeHelpers';
 
 import { getId, pickC, hasC, getC, propEqId, shallowCompare } from '/imports/api/helpers';
 import {
@@ -23,9 +24,10 @@ export const redirectByFilter = (props) => {
         orgSerialNumber,
         urlItemId: getId(defaultStandard),
       };
-      Meteor.defer(() => FlowRouter.go('standard', params, queryParams));
+      goToStandard(params, queryParams);
     } else {
-      Meteor.defer(() => FlowRouter.go('standards', { orgSerialNumber }, queryParams));
+      FlowRouter.withReplaceState(() =>
+        FlowRouter.go('standards', { orgSerialNumber }, queryParams));
     }
   }
 };
@@ -53,7 +55,7 @@ export const openStandardByFilter = (props) => {
       const sectionItem = createSectionItem(secondLevelKey);
       const typeItemWithClose = { ...typeItem, close: { type: typeItem.type } };
       const sectionItemWithClose = { ...sectionItem, close: { type: sectionItem.type } };
-      // Uncategorized type do not have a second level key
+      // Uncategorized type does not have a second level key
       if (secondLevelKey) {
         props.dispatch(chainActions([typeItemWithClose, sectionItemWithClose].map(addCollapsed)));
       } else {
