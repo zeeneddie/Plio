@@ -29,7 +29,7 @@ export const submit = ({
 
     if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_LENGTH_LIMIT_BEFORE_RESET) {
       FlowRouter.setQueryParams({ at: null });
-      dispatch(reset());
+      dispatch(reset(true));
     }
   };
 

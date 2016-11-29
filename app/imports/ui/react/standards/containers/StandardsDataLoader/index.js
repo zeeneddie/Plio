@@ -27,7 +27,7 @@ import {
   flattenMapStandards,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { goToDashboard } from '../../../helpers/routeHelpers';
+import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
 import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
 import { findSelectedStandard } from '../../helpers';
 import loadInitialData from '../../../loaders/loadInitialData';
@@ -145,9 +145,11 @@ export default compose(
       props.dispatch(batchActions(actions));
     },
     onHandleReturn: (props) => () => {
+      const { orgSerialNumber, urlItemId } = props;
+
       if (props.width <= MOBILE_BREAKPOINT) {
-        if (props.isDiscussionOpened && !props.showCard) {
-          return props.dispatch(setShowCard(true));
+        if (props.isDiscussionOpened) {
+          return goToStandard({ orgSerialNumber, urlItemId });
           // redirect to the standard
         } else if (!props.isDiscussionOpened && props.showCard) {
           return props.dispatch(setShowCard(false));
