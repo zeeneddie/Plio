@@ -11,6 +11,8 @@ import {
   equals,
   getC,
   flattenMapStandards,
+  testPerformance,
+  sortArrayByTitlePrefix,
 } from '/imports/api/helpers';
 
 const getTotalUnreadMessagesCount = (array = []) =>
@@ -22,8 +24,9 @@ export const initSections = ({ types, sections, standards }) => {
                  UncategorizedTypeSection;
     return { ...standard, type };
   });
+  const standardsSorted = sortArrayByTitlePrefix(standardsWithType);
   const mapper = (section) => {
-    const ownStandards = standardsWithType
+    const ownStandards = standardsSorted
       .filter((standard) => {
         return !standard.isDeleted &&
                standard.sectionId === section._id;
@@ -38,7 +41,7 @@ export const initSections = ({ types, sections, standards }) => {
   };
 
   const sectionsWithStandards = sections.map(mapper);
-  const uncategorizedStandards = standardsWithType
+  const uncategorizedStandards = standardsSorted
     .filter(standard => !sections.find(propEqId(standard.sectionId)));
   const uncategorizedSection = {
     _id: 'StandardBookSections.Uncategorized',
@@ -48,7 +51,7 @@ export const initSections = ({ types, sections, standards }) => {
     unreadMessagesCount: getTotalUnreadMessagesCount(uncategorizedStandards),
   };
 
-  return sectionsWithStandards
+  return sortArrayByTitlePrefix(sectionsWithStandards)
     .concat([uncategorizedSection])
     .filter(lengthStandards);
 };
@@ -59,7 +62,7 @@ export const initTypes = ({ sections, types }) => {
   const uncategorizedType = {
     _id: 'StandardTypes.Uncategorized',
     title: 'Uncategorized',
-    standards: uncategorizedStandards,
+    standards: sortArrayByTitlePrefix(uncategorizedStandards),
     unreadMessagesCount: getTotalUnreadMessagesCount(uncategorizedStandards),
   };
 
@@ -72,7 +75,7 @@ export const initTypes = ({ sections, types }) => {
 
       const unreadMessagesCount = getTotalUnreadMessagesCount(standards);
 
-      return { ...section, unreadMessagesCount, standards };
+      return { ...section, unreadMessagesCount, standards: sortArrayByTitlePrefix(standards) };
     }).filter(lengthStandards);
 
     const unreadMessagesCount = getTotalUnreadMessagesCount(ownSections);
@@ -85,7 +88,7 @@ export const initTypes = ({ sections, types }) => {
     : result;
 };
 
-export const initStandards = ({ sections, types, standards, unreadMessagesCountMap = {} }) =>
+export const initStandards = ({ sections, types, standards, unreadMessagesCountMap = {} }) => sortArrayByTitlePrefix(
   standards.map((standard) => {
     const section = sections.find(propEqId(standard.sectionId));
     const type = types.find(propEqId(standard.typeId));
@@ -96,4 +99,5 @@ export const initStandards = ({ sections, types, standards, unreadMessagesCountM
       type,
       unreadMessagesCount: unreadMessagesCountMap[standard._id] || 0,
     };
-  });
+  })
+);
