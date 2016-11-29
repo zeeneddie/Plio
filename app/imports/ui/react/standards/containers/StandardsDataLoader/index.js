@@ -84,6 +84,7 @@ export default compose(
     'collections.standardBookSections',
     'collections.standardTypes',
     'collections.standards',
+    'counters.standardMessagesNotViewedCountMap',
   ])),
   composeWithTracker(testPerformance(initMainData)),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
@@ -126,9 +127,10 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
-      console.log('update')
-      Meteor.defer(() => redirectByFilter(nextProps));
-      Meteor.defer(() => openStandardByFilter(nextProps));
+      Meteor.defer(() => {
+        redirectByFilter(nextProps);
+        openStandardByFilter(nextProps);
+      });
     },
   }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),

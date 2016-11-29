@@ -19,8 +19,6 @@ import { Standards } from '/imports/share/collections/standards';
 import _search_ from '/imports/startup/client/mixins/search';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import {
-  setFilteredSections,
-  setFilteredTypes,
   setFilteredStandards,
 } from '/client/redux/actions/standardsActions';
 import {
@@ -39,6 +37,17 @@ export const onSectionToggleCollapse = onToggle(createSectionItem);
 
 export const onTypeToggleCollapse = onToggle(createTypeItem);
 
+export const needToSearchPrecisely = (value) => {
+  const doubleQuotes = '"';
+  const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
+  const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
+  const isPrecise = (quotesIndexes) =>
+    quotesIndexes.length > 1
+    && quotesIndexes.every(idx => idx !== -1);
+
+  return isPrecise(doubleQuotesIndexes);
+};
+
 export const onSearchTextChange = _.debounce(({
   dispatch,
   sections,
@@ -55,7 +64,7 @@ export const onSearchTextChange = _.debounce(({
     { name: 'description' },
     { name: 'status' },
   ];
-  const query = _search_.searchQuery(value, fields);
+  const query = _search_.searchQuery(value, fields, needToSearchPrecisely(value));
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
   const newSections = initSections({
@@ -69,8 +78,6 @@ export const onSearchTextChange = _.debounce(({
 
   let actions = [
     setSearchText(value),
-    setFilteredSections(extractIds(newSections)),
-    setFilteredTypes(extractIds(newTypes)),
     setFilteredStandards(extractIds(newStandards)),
   ];
 

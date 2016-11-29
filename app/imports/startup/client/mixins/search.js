@@ -9,13 +9,14 @@ export default {
 
   searchQuery(input, fields, precise = false) {
     const searchObject = {};
-    const value = `${input}`.trim();
+    let value = `${input}`.trim();
 
     if (value) {
       let r;
 
       try {
         if (precise) {
+          value = value.replace(/"/g, '');
           r = new RegExp(`.*(${value}).*`, 'i');
         } else {
           r = value.split(' ')

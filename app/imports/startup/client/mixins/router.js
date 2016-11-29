@@ -8,8 +8,8 @@ export default {
       FlowRouter.go('dashboardPage', params);
     });
   },
-  goToStandard(standardId, withQueryParams = true) {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+  goToStandard(urlItemId, withQueryParams = true) {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
     const queryParams = !!withQueryParams ? { filter: this.activeStandardFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('standard', params, queryParams);
