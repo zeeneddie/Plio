@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 
-import PreloaderButton from '../../PreloaderButton';
+import PreloaderButton from '../../Buttons/PreloaderButton';
 
 const RHSHeader = ({ title, isReady = true, children }) => (
   <div className="card-block card-heading">
     <div className="card-heading-buttons pull-xs-right">
-      {isReady ? children : (<PreloaderButton />)}
+      {isReady ? children : (<PreloaderButton>Loading...</PreloaderButton>)}
     </div>
     <h3 className="card-title">
       {title}

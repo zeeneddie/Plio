@@ -6,7 +6,7 @@ import MessagesListWrapperContainer from '../../containers/MessagesListWrapperCo
 import MessagesFormContainer from '../../containers/MessagesFormContainer';
 import DiscussionFileUploaderContainer from '../../containers/DiscussionFileUploaderContainer';
 import CardHeader from '../../../components/CardHeader';
-import Button from '../../../components/Button';
+import Button from '../../../components/Buttons/Button';
 import Wrapper from '../../../components/Wrapper';
 import Icon from '../../../components/Icon';
 
@@ -20,7 +20,7 @@ const Discussion = (props) => {
           <Wrapper className="discussions-hd-top">
             <CardHeader.Item pull="left" className="card-heading-buttons">
               <Button type="secondary" href={documentPath}>
-                <Icon name="angle-left" margin="right" />
+                <Icon names="angle-left" margin="right" size="2" />
                 Back
               </Button>
             </CardHeader.Item>
