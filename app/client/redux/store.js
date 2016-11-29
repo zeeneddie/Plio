@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import { enableBatching } from 'redux-batched-actions';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import get from 'lodash.get';
 import thunk from 'redux-thunk';
 import throttleActions from 'redux-throttle';
@@ -18,9 +17,9 @@ const middlewares = [
   throttleActions(defaultWait, defaultThrottleOptions),
 ];
 
-const processedMiddlewares = process.NODE_ENV !== 'production'
-  ? composeWithDevTools(applyMiddleware(...middlewares))
-  : applyMiddleware(...middlewares);
+const processedMiddlewares = process.NODE_ENV !== 'production' &&
+  require('redux-devtools-extension').composeWithDevTools(applyMiddleware(...middlewares)) ||
+  applyMiddleware(...middlewares);
 
 const store = createStore(
   enableBatching(reducer),
