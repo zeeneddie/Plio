@@ -54,10 +54,10 @@ export function setAt(at) {
   };
 }
 
-export function reset() {
+export function reset(isDiscussionOpened = false) {
   return {
     type: RESET,
-    payload: { ...initialState, resetCompleted: true },
+    payload: { ...initialState, resetCompleted: true, isDiscussionOpened },
   };
 }
 

@@ -1,5 +1,4 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { Meteor } from 'meteor/meteor';
 import { goToStandard } from '../../../helpers/routeHelpers';
 
 import { getId, pickC, hasC, getC, propEqId, shallowCompare } from '/imports/api/helpers';
@@ -84,6 +83,8 @@ const shouldUpdateForStandard = (props, nextProps) => {
 };
 
 export const shouldUpdateForProps = (props, nextProps) => !!(
+  props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
+  props.loading !== nextProps.loading ||
   typeof props.organization !== typeof nextProps.organization ||
   props.orgSerialNumber !== nextProps.orgSerialNumber ||
   props.filter !== nextProps.filter ||

@@ -6,10 +6,10 @@ import DiscussionFileUploader from '../../components/DiscussionFileUploader';
 
 export default compose(
   withHandlers({
-    onAddFile: addFile
+    onAddFile: addFile,
   }),
   withProps(transsoc({
     uploaderMetaContext: pickC(['organizationId', 'discussionId']),
-    slingshotDirective: () => 'discussionFiles'
+    slingshotDirective: () => 'discussionFiles',
   }))
 )(DiscussionFileUploader);
