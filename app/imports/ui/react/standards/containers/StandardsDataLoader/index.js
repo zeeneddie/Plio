@@ -24,7 +24,6 @@ import { setShowCard } from '/client/redux/actions/mobileActions';
 import {
   pickDeep,
   testPerformance,
-  flattenMapStandards,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
@@ -75,10 +74,12 @@ export default compose(
   composeWithTracker(testPerformance(loadMainData), null, null, {
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
-  connect(pickDeep(['collections.standards'])),
+  connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
   mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
   composeWithTracker(testPerformance(loadCountersData), null, null, {
-    shouldResubscribe: (props, nextProps) => !_.isEqual(props.standards, nextProps.standards),
+    shouldResubscribe: (props, nextProps) =>
+      (props.isDiscussionOpened && !nextProps.isDiscussionOpened) ||
+      !_.isEqual(props.standards, nextProps.standards),
   }),
   connect(pickDeep([
     'collections.standardBookSections',
@@ -151,10 +152,9 @@ export default compose(
 
       if (props.width <= MOBILE_BREAKPOINT) {
         props.dispatch(setShowCard(false));
-        
+
         if (props.isDiscussionOpened) {
           return goToStandard({ orgSerialNumber, urlItemId });
-          // redirect to the standard
         } else if (!props.isDiscussionOpened && props.showCard) {
           return true;
         }
