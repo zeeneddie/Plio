@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import propTypes from './propTypes';
 import ClearableField from '../ClearableField';
-import AddButton from '../AddButton';
+import AddButton from '../Buttons/AddButton';
 import TextInput from '../../forms/components/TextInput';
 
 const LHS = ({
@@ -53,7 +53,9 @@ const LHS = ({
           )}
         </div>
         {onModalButtonClick && (
-          <AddButton onClick={onModalButtonClick} />
+          <AddButton onClick={onModalButtonClick}>
+            Add
+          </AddButton>
         )}
       </div>
 

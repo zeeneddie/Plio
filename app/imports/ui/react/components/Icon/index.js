@@ -3,11 +3,12 @@ import { _ } from 'meteor/underscore';
 import cx from 'classnames';
 
 const sizeMap = {
-  1: 'lg',
-  2: 'x2',
-  3: 'x3',
-  4: 'x4',
-  5: 'x5',
+  1: '',
+  2: 'lg',
+  3: 'x2',
+  4: 'x3',
+  5: 'x4',
+  6: 'x5',
 };
 
 const marginMap = {
@@ -15,15 +16,20 @@ const marginMap = {
   right: 'margin-right',
 };
 
-const Icon = ({ name, margin, size = 1 }) => (
-  <i className={cx('fa', `fa-${name}`, `fa-${sizeMap[size]}`, margin && marginMap[margin])} />
-);
+const Icon = ({ margin, size = 1, className, names }) => {
+  const sizeCx = sizeMap[size] && `fa-${sizeMap[size]}`;
+  const marginCx = margin && marginMap[margin];
+  const namesCx = names.split(' ').map(name => `fa-${name}`);
+  return (
+    <i className={cx('fa', ...namesCx, sizeCx, marginCx, className)} />
+  );
+};
 
 Icon.propTypes = {
-  name: PropTypes.string.isRequired,
+  names: PropTypes.string.isRequired,
   margin: PropTypes.oneOf(_.keys(marginMap)),
   size: PropTypes.oneOf(_.keys(sizeMap)),
+  className: PropTypes.string,
 };
 
 export default Icon;
-

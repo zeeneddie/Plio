@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ClearButton from '../ClearButton';
+import ClearButton from '../Buttons/ClearButton';
 import propTypes from './propTypes';
 
 const ClearableField = (props) => (
