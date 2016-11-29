@@ -126,8 +126,11 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
-      Meteor.defer(() => redirectByFilter(nextProps));
-      Meteor.defer(() => openStandardByFilter(nextProps));
+      console.log(this.props, nextProps); 
+      Meteor.defer(() => {
+        redirectByFilter(nextProps);
+        openStandardByFilter(nextProps);
+      });
     },
   }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
