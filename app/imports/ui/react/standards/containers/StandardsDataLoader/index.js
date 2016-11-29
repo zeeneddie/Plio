@@ -151,9 +151,12 @@ export default compose(
 
       if (props.width <= MOBILE_BREAKPOINT) {
         props.dispatch(setShowCard(false));
-
+        
         if (props.isDiscussionOpened) {
           return goToStandard({ orgSerialNumber, urlItemId });
+          // redirect to the standard
+        } else if (!props.isDiscussionOpened && props.showCard) {
+          return true;
         }
       }
 
