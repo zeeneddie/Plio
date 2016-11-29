@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
 import { compose, lifecycle, shallowEqual } from 'recompose';
+import { _ } from 'meteor/underscore';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
@@ -24,7 +25,8 @@ import { LastDiscussionMessage } from '/client/collections';
 
 const getDiscussionState = () => getState('discussion');
 
-let observerCleanup, intervalCleanup;
+let observerCleanup;
+let intervalCleanup;
 
 const observer = () => {
   const handle = LastDiscussionMessage.find().observe({
@@ -117,6 +119,7 @@ const readMessages = (props) => {
 
 export default compose(
   connect(pickFromDiscussion(['at', 'sort', 'priorLimit', 'followingLimit', 'resetCompleted'])),
+  composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
   lifecycle({
     componentWillMount() {
       readMessages(this.props);
@@ -131,5 +134,4 @@ export default compose(
       readMessages(this.props);
     },
   }),
-  composeWithTracker(onPropsChange, PreloaderPage, null, { shouldResubscribe }),
 )(MessagesListWrapper);
