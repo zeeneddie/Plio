@@ -126,7 +126,6 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
-      console.log(this.props, nextProps); 
       Meteor.defer(() => {
         redirectByFilter(nextProps);
         openStandardByFilter(nextProps);

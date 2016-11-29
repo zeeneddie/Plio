@@ -16,8 +16,6 @@ const mapStateToProps = ({
   standards: {
     sections,
     types,
-    sectionsFiltered,
-    typesFiltered,
     standards,
     standardsFiltered,
   },
@@ -35,13 +33,11 @@ const mapStateToProps = ({
   standardsFiltered,
   sections,
   types,
-  sectionsFiltered,
   searchText,
   orgSerialNumber,
   filter,
   collapsed,
   urlItemId,
-  typesFiltered,
   animating,
   userId,
 });

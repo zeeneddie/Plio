@@ -19,8 +19,6 @@ import { Standards } from '/imports/share/collections/standards';
 import _search_ from '/imports/startup/client/mixins/search';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import {
-  setFilteredSections,
-  setFilteredTypes,
   setFilteredStandards,
 } from '/client/redux/actions/standardsActions';
 import {
@@ -80,8 +78,6 @@ export const onSearchTextChange = _.debounce(({
 
   let actions = [
     setSearchText(value),
-    setFilteredSections(extractIds(newSections)),
-    setFilteredTypes(extractIds(newTypes)),
     setFilteredStandards(extractIds(newStandards)),
   ];
 
