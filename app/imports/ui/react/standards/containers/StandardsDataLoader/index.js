@@ -6,12 +6,10 @@ import {
   defaultProps,
   withHandlers,
   withProps,
-  mapProps,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
 
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
@@ -75,11 +73,10 @@ export default compose(
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
   connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
-  mapProps(props => ({ ...props, standards: props.standards.map(({ _id }) => ({ _id })) })),
   composeWithTracker(testPerformance(loadCountersData), null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      (props.isDiscussionOpened && !nextProps.isDiscussionOpened) ||
-      !_.isEqual(props.standards, nextProps.standards),
+    shouldResubscribe: (props, nextProps) => !!(
+      props.isDiscussionOpened && !nextProps.isDiscussionOpened
+    ),
   }),
   connect(pickDeep([
     'collections.standardBookSections',

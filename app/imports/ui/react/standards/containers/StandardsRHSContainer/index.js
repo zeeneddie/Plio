@@ -5,7 +5,6 @@ import { _ } from 'meteor/underscore';
 import { propEq, some, getC, propEqId, every, lengthStandards } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
-import StandardsRHSNotFound from '../../components/StandardsRHSNotFound';
 import {
   onToggleScreenMode,
   onDiscussionOpen,
@@ -46,7 +45,7 @@ export default compose(
   branch(
     lengthStandards,
     _.identity,
-    renderComponent(StandardsRHSNotFound),
+    renderComponent(StandardsRHS.NotFound),
   ),
   withProps(props => {
     const standard = { ...props.standards.find(propEqId(props.urlItemId)) };

@@ -1,6 +1,6 @@
 import { PropTypes } from 'react';
 
-import { default as headerPropTypes } from '../StandardsRHSHeaderButtons/propTypes';
+import { default as headerPropTypes } from './HeaderButtons/propTypes';
 
 export default {
   isFullScreenMode: PropTypes.bool,
