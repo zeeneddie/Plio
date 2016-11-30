@@ -13,8 +13,8 @@ const StandardsLHSListItem = ({
   href,
   className,
   title,
-  issueNumber,
   status,
+  issueNumber,
   isDeleted,
   deletedByText,
   deletedAtText,
@@ -29,29 +29,31 @@ const StandardsLHSListItem = ({
     href={href}
   >
     <ListItem>
-      <ListItem.Heading>
-        <span>{title}</span>
+      <div className="flexbox-row">
+        <ListItem.Heading>
+          <span className="margin-right">{title}</span>
 
-        {isNew && (
-          <Label names="primary">New</Label>
-        )}
+          {isNew && (
+            <Label names="primary">New</Label>
+          )}
 
-        {status === 'draft' && issueNumber && (
-          <LabelDraft issueNumber={issueNumber} />
-        )}
-      </ListItem.Heading>
-
-      {isDeleted && (
-        <ListItem.RightText>
-          {`Deleted by ${deletedByText}`}
-        </ListItem.RightText>
-      )}
-
-      {!!unreadMessagesCount && !isDeleted && (
-        <ListItem.RightText className="text-danger">
-          <MessagesCount count={unreadMessagesCount} />
-        </ListItem.RightText>
-      )}
+          {status === 'draft' && issueNumber && (
+            <LabelDraft issueNumber={issueNumber} />
+          )}
+        </ListItem.Heading>
+        <div className="flex">
+          {isDeleted && (
+            <ListItem.RightText>
+              {`Deleted by ${deletedByText}`}
+            </ListItem.RightText>
+          )}
+          {!!unreadMessagesCount && !isDeleted && (
+            <ListItem.RightText className="text-danger">
+              <MessagesCount count={unreadMessagesCount} />
+            </ListItem.RightText>
+          )}
+        </div>
+      </div>
       <ListItem.LeftText>
         {type.title}
       </ListItem.LeftText>

@@ -9,7 +9,7 @@ import { getId } from '/imports/api/helpers';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -74,7 +74,13 @@ export const onRestore = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal.success('Restored!', `The standard "${title}" was restored successfully.`);
+    swal.success({
+      title: 'Restored!',
+      text: `The standard "${title}" was restored successfully.`,
+      type: 'success',
+      timer: ALERT_AUTOHIDE_TIME,
+      showConfirmButton: false,
+    });
 
     const params = { orgSerialNumber: FlowRouter.getParam('orgSerialNumber'), urlItemId: _id };
     const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };

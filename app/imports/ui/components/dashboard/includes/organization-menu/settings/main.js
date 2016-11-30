@@ -8,9 +8,9 @@ import {
   setTimezone,
   setDefaultCurrency,
   createOrganizationTransfer,
-  cancelOrganizationTransfer
+  cancelOrganizationTransfer,
 } from '/imports/api/organizations/methods.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_MainSettings.viewmodel({
   mixin: ['modal', 'organization', 'callWithFocusCheck', 'user', 'router', 'getChildrenData'],
@@ -72,6 +72,8 @@ Template.OrgSettings_MainSettings.viewmodel({
             title: 'Success',
             text: 'An invitation to transfer ownership was sent successfully',
             type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
           });
         }
       });
