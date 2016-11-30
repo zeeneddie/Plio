@@ -36,7 +36,7 @@ const StandardsLHSListItem = ({
           <Label names="primary">New</Label>
         )}
 
-        {status === 'draft' && (
+        {status === 'draft' && issueNumber && (
           <LabelDraft issueNumber={issueNumber} />
         )}
       </ListItem.Heading>
