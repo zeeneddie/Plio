@@ -15,8 +15,8 @@ export default {
       FlowRouter.go('standard', params, queryParams);
     });
   },
-  goToNC(nonconformityId, withQueryParams = true) {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
+  goToNC(urlItemId, withQueryParams = true) {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
     const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('nonconformity', params, queryParams);

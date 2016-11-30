@@ -42,10 +42,10 @@ Template.NC_Item.viewmodel({
     const _id = this._id();
     return {
       isActive: Object.is(this.NCId(), _id),
-      onClick: handler => handler({ nonconformityId: _id }),
+      onClick: handler => handler({ urlItemId: _id }),
       href: (() => {
         const params = {
-          nonconformityId: _id,
+          urlItemId: _id,
           orgSerialNumber: this.organizationSerialNumber()
         };
         const queryParams = { filter: this.activeNCFilterId() };
