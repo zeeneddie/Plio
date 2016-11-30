@@ -4,6 +4,8 @@ import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
 import MessagesCount from '../../../components/MessagesCount';
+import Label from '../../../components/Labels/Label';
+import LabelDraft from '../../../components/Labels/LabelDraft';
 
 const StandardsLHSListItem = ({
   isActive,
@@ -32,13 +34,11 @@ const StandardsLHSListItem = ({
           <span className="margin-right">{title}</span>
 
           {isNew && (
-            <span className="label label-primary margin-right">New</span>
+            <Label names="primary">New</Label>
           )}
 
-          {status === 'draft' && (
-            <span className="label label-danger margin-right">
-              {`Issue ${issueNumber} Draft`}
-            </span>
+          {status === 'draft' && issueNumber && (
+            <LabelDraft issueNumber={issueNumber} />
           )}
         </ListItem.Heading>
         <div className="flex">

@@ -1,10 +1,9 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import ToggleExpandButton from '../../../components/Buttons/ToggleExpandButton';
-import DiscussButton from '../../../components/Buttons/DiscussButton';
-import EditButton from '../../../components/Buttons/EditButton';
-import Button from '../../../components/Buttons/Button';
+import ToggleExpandButton from '../../../../components/Buttons/ToggleExpandButton';
+import DiscussButton from '../../../../components/Buttons/DiscussButton';
+import Button from '../../../../components/Buttons/Button';
 
 const StandardsRHSHeaderButtons = (props) => {
   const toggleExpandButton = props.hasDocxAttachment ? (
@@ -38,9 +37,9 @@ const StandardsRHSHeaderButtons = (props) => {
   );
 
   const editButton = !props.isDeleted ? (
-    <EditButton onClick={props.onModalOpen} >
+    <Button type="primary" onClick={props.onModalOpen} >
       {props.names.edit}
-    </EditButton>
+    </Button>
   ) : null;
 
   return (

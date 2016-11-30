@@ -62,6 +62,7 @@ const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
     typeId: 1,
     organizationId: 1,
     nestingLevel: 1,
+    status: 1,
     ...(() => _.isObject(isDeleted)
       ? null
       : { isDeleted: 1, deletedAt: 1, deletedBy: 1 }
@@ -154,7 +155,6 @@ Meteor.publish('standardsDeps', function(organizationId) {
   const standardsFields = {
     viewedBy: 1,
     issueNumber: 1,
-    status: 1,
     createdAt: 1,
     createdBy: 1
   };

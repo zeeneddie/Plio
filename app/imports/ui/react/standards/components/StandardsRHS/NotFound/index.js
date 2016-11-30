@@ -1,7 +1,7 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import RHS from '../../../components/RHS';
+import RHS from '../../../../components/RHS';
 
 const StandardsRHSNotFound = ({ filter }) => {
   let text;

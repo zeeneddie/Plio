@@ -1,28 +1,26 @@
 import React from 'react';
+import { mapProps } from 'recompose';
+
 import DiscussionContainer from '../../../discussion/containers/DiscussionContainer';
 import PageContainer from '../../../containers/PageContainer';
 import NotFoundPage from '../../../components/NotFoundPage';
 import StandardsLHSContainer from '../../containers/StandardsLHSContainer';
 import StandardsRHSContainer from '../../containers/StandardsRHSContainer';
 
-
-const StandardsPage = (props) => {
-  let classNames;
-
-  if (props.isDiscussionOpened) {
-    classNames = {
+const enhance = mapProps(props => (
+  props.isDiscussionOpened ? ({
+    ...props,
+    doc: props.standard,
+    classNames: {
       lhs: 'content-cards scroll',
       rhs: 'content-cards content-cards-flush scroll',
-    };
+    },
+  }) : props
+));
 
-    props = {
-      ...props,
-      doc: props.standard,
-    }
-  }
-
-  return props.organization ? (
-    <PageContainer classNames={classNames}>
+const StandardsPage = enhance((props) => (
+  props.organization ? (
+    <PageContainer classNames={props.classNames}>
       {(!props.isDiscussionOpened ? <StandardsLHSContainer /> : null)}
       <StandardsRHSContainer />
       {(props.isDiscussionOpened ? <DiscussionContainer {...props} /> : null)}
@@ -32,7 +30,7 @@ const StandardsPage = (props) => {
       subject="organization"
       subjectId={props.orgSerialNumber}
     />
-  );
-};
+  )
+));
 
 export default StandardsPage;

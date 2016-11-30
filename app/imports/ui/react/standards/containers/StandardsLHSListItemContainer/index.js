@@ -1,4 +1,4 @@
-import { compose, withHandlers, withProps, shouldUpdate, shallowEqual } from 'recompose';
+import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
 
@@ -10,19 +10,25 @@ import _date_ from '/imports/startup/client/mixins/date';
 import { setUrlItemId } from '/client/redux/actions/globalActions';
 import { updateViewedBy } from '/imports/api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
-import { pickC } from '/imports/api/helpers';
+import { pickC, notEquals } from '/imports/api/helpers';
+import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 
 export default compose(
   shouldUpdate((props, nextProps) => {
     const pickKeys = pickC([
-      'title', 'issueNumber', 'isDeleted', 'deletedByText', 'deletedAtText',
+      'title', 'status', 'isDeleted',
       'unreadMessagesCount', 'userId', 'filter',
     ]);
+    const pickKeysDeleted = pickC(['deletedByText', 'deletedAtText']);
     return !!(
       (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
       (props._id === props.urlItemId && props._id !== nextProps.urlItemId) ||
+      (nextProps.status === 'draft' && props.issueNumber !== nextProps.issueNumber) ||
       ((props.type && props.type.title) !== (nextProps.type && nextProps.type.title)) ||
-      !shallowEqual(pickKeys(props), pickKeys(nextProps))
+      notEquals(pickKeys(props), pickKeys(nextProps)) ||
+      (nextProps.filter === STANDARD_FILTER_MAP.DELETED && (
+        notEquals(pickKeysDeleted(props), pickKeysDeleted(nextProps))
+      ))
     );
   }),
   connect(),
