@@ -2,7 +2,7 @@ import React from 'react';
 
 import LHSItem from '../../../components/LHSItem';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
-import StandardsLHSStandardList from '../StandardsLHSStandardList';
+import StandardsLHSStandardListContainer from '../../containers/StandardsLHSStandardListContainer';
 import MessagesCount from '../../../components/MessagesCount';
 import { createTypeItem } from '../../helpers';
 import { lengthStandards } from '/imports/api/helpers';
@@ -23,22 +23,14 @@ const StandardsLHSTypeList = (props) => (
       >
         <div className="sub">
           {lengthStandards(type) ? (
-            <StandardsLHSStandardList
+            <StandardsLHSStandardListContainer
               standards={type.standards}
-              orgSerialNumber={props.orgSerialNumber}
-              userId={props.userId}
-              filter={props.filter}
-              urlItemId={props.urlItemId}
             />
           ) : (
             <StandardsLHSSectionList
               collapsed={props.collapsed}
               sections={type.sections}
               onToggleCollapse={props.onSectionToggleCollapse}
-              orgSerialNumber={props.orgSerialNumber}
-              userId={props.userId}
-              filter={props.filter}
-              urlItemId={props.urlItemId}
             />
           )}
         </div>

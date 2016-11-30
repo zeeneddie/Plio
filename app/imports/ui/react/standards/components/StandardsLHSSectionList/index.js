@@ -1,7 +1,7 @@
 import React from 'react';
 
 import LHSItem from '../../../components/LHSItem';
-import StandardsLHSStandardList from '../StandardsLHSStandardList';
+import StandardsLHSStandardListContainer from '../../containers/StandardsLHSStandardListContainer';
 import MessagesCount from '../../../components/MessagesCount';
 import { createSectionItem } from '../../helpers';
 
@@ -20,14 +20,10 @@ const StandardsLHSSectionList = (props) => (
           onToggleCollapse={props.onToggleCollapse}
         >
 
-            <StandardsLHSStandardList
-              standards={section.standards}
-              section={section}
-              orgSerialNumber={props.orgSerialNumber}
-              userId={props.userId}
-              filter={props.filter}
-              urlItemId={props.urlItemId}
-            />
+          <StandardsLHSStandardListContainer
+            standards={section.standards}
+            section={section}
+          />
 
         </LHSItem>
       ))}

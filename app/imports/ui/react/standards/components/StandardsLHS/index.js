@@ -4,7 +4,7 @@ import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import StandardsLHSTypeList from '../StandardsLHSTypeList';
-import StandardsLHSStandardList from '../StandardsLHSStandardList';
+import StandardsLHSStandardListContainer from '../../containers/StandardsLHSStandardListContainer';
 
 const StandardsLHS = (props) => {
   let content;
@@ -16,11 +16,7 @@ const StandardsLHS = (props) => {
         <StandardsLHSSectionList
           collapsed={props.collapsed}
           sections={props.sections}
-          orgSerialNumber={props.orgSerialNumber}
           onToggleCollapse={props.onSectionToggleCollapse}
-          userId={props.userId}
-          filter={props.filter}
-          urlItemId={props.urlItemId}
         />
       );
       break;
@@ -29,25 +25,15 @@ const StandardsLHS = (props) => {
         <StandardsLHSTypeList
           collapsed={props.collapsed}
           types={props.types}
-          orgSerialNumber={props.orgSerialNumber}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
-          userId={props.userId}
-          filter={props.filter}
-          urlItemId={props.urlItemId}
         />
       );
       break;
     case 3:
       content = (
         <div className="list-group">
-          <StandardsLHSStandardList
-            standards={props.standards}
-            orgSerialNumber={props.orgSerialNumber}
-            userId={props.userId}
-            filter={props.filter}
-            urlItemId={props.urlItemId}
-          />
+          <StandardsLHSStandardListContainer standards={props.standards} />
         </div>
       );
       break;
