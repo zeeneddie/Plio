@@ -119,6 +119,16 @@
     }
   }
 
+  .label {
+    &.margin-left {
+      margin-left: 5px;
+    }
+
+    &.margin-right {
+      margin-right: 5px;
+    }
+  }
+
   &.btn-checkbox.active[disabled] {
     i {
       color: $light-blue-color;

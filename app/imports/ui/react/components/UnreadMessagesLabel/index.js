@@ -4,7 +4,7 @@ import propTypes from './propTypes';
 
 const UnreadMessagesLabel = (props) => (
   <span
-    className="label label-danger label-chat-count"
+    className="label label-danger label-chat-count margin-left"
   >
     {props.unreadMessagesCount}
   </span>

@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
 
 const MessagesCount = ({ count }) => (
-  <span>
-    <i className="fa fa-comments margin-right"></i>
-    <span>{count}</span>
-  </span>
+  <p className="list-group-item-text pull-right text-danger">
+    <div className="chat-indicator">
+      <i className="fa fa-comment"></i>
+      <span className="label label-danger">{count}</span>
+    </div>
+  </p>
 );
 
 MessagesCount.propTypes = {
