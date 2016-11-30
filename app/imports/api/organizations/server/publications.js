@@ -9,7 +9,7 @@ import { StandardsBookSections } from '/imports/share/collections/standards-book
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
 import { StandardsBookSectionsListProjection, StandardTypesListProjection } from '../../constants';
-import { makeOptionsFields, pickNotRemovedUsers } from '../../helpers';
+import { makeOptionsFields } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
 import { isPlioUser, isOrgMember } from '../../checkers';
 
@@ -106,7 +106,7 @@ Meteor.publish('organizationDeps', function(organizationId) {
   }
 
   const organization = Organizations.findOne({ _id: organizationId });
-  const userIds = _.pluck(pickNotRemovedUsers(organization.users), 'userId');
+  const userIds = _.pluck(organization.users, 'userId');
 
   const query = { organizationId };
 
@@ -131,7 +131,7 @@ Meteor.publishComposite('organizationsInfo', {
       return Organizations.find({}, {
         fields: {
           name: 1,
-          users: { $elemMatch: { isRemoved: false } },
+          users: 1,
           createdAt: 1,
         },
       });
