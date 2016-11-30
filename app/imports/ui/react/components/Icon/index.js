@@ -14,6 +14,7 @@ const sizeMap = {
 const marginMap = {
   left: 'margin-left',
   right: 'margin-right',
+  bottom: 'margin-bottom',
 };
 
 const Icon = ({ margin, size = 1, className, names }) => {

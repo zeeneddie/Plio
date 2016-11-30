@@ -8,12 +8,12 @@ import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
 import _actionStatus_ from '/imports/startup/client/mixins/actionStatus';
 import _workInbox_ from '/imports/startup/client/mixins/workInbox';
 import { ActionTypes } from '/imports/share/constants';
-import createReadFields from '../../../helpers/createReadFields';
-import DepartmentsReadContainer from '../../../containers/DepartmentsReadContainer';
-import SourceRead from '../../../components/SourceRead';
-import NotifyRead from '../../../components/NotifyRead';
-import FieldReadLinkItemList from '../../../components/FieldReadLinkItemList';
-import IPRead from '../../../components/IPRead';
+import createReadFields from '../../../../helpers/createReadFields';
+import DepartmentsReadContainer from '../../../../containers/DepartmentsReadContainer';
+import SourceRead from '../../../../components/SourceRead';
+import NotifyRead from '../../../../components/NotifyRead';
+import FieldReadLinkItemList from '../../../../components/FieldReadLinkItemList';
+import IPRead from '../../../../components/IPRead';
 
 const StandardsRHSBodyContents = ({
   description,
