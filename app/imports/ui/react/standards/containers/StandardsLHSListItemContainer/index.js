@@ -61,7 +61,6 @@ export default compose(
     const deletedAtText = _date_.renderDate(props.deletedAt);
     const isActive = props.urlItemId === props._id;
 
-
     return {
       href,
       className,

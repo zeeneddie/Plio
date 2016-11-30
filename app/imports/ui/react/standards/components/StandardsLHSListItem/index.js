@@ -3,7 +3,7 @@ import React from 'react';
 import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
-import MessagesCount from '../../../components/MessagesCount';
+import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import Label from '../../../components/Labels/Label';
 import LabelDraft from '../../../components/Labels/LabelDraft';
 
@@ -49,7 +49,7 @@ const StandardsLHSListItem = ({
           )}
           {!!unreadMessagesCount && !isDeleted && (
             <ListItem.RightText className="text-danger">
-              <MessagesCount count={unreadMessagesCount} />
+              <LabelMessagesCount count={unreadMessagesCount} />
             </ListItem.RightText>
           )}
         </div>

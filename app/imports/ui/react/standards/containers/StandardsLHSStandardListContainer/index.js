@@ -8,7 +8,7 @@ export default compose(
   connect(pickDeep([
     'organizations.organization',
     'organizations.orgSerialNumber',
-    'global.userid',
+    'global.userId',
     'global.filter',
     'global.urlItemId',
   ])),

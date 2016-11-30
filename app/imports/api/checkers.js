@@ -245,5 +245,5 @@ export const isNewDoc = (organization, userId, { createdAt, viewedBy }) => {
 
   if (!joinedAt) return false;
 
-  return viewedBy.includes(userId) && createdAt > joinedAt;
+  return !viewedBy.includes(userId) && createdAt > joinedAt;
 };

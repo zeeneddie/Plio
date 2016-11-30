@@ -24,6 +24,7 @@ const mapStateToProps = ({
     filter,
     collapsed,
     animating,
+    urlItemId,
   },
 }) => ({
   standards,
@@ -34,6 +35,7 @@ const mapStateToProps = ({
   filter,
   collapsed,
   animating,
+  urlItemId,
 });
 
 export default compose(
