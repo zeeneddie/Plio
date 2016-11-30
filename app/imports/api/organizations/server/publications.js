@@ -1,57 +1,49 @@
 import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
 
 import { Organizations } from '/imports/share/collections/organizations';
-import { Departments } from '/imports/share/collections/departments';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import {
-  StandardsBookSections
-} from '/imports/share/collections/standards-book-sections';
-import { Standards } from '/imports/share/collections/standards';
-import { LessonsLearned } from '/imports/share/collections/lessons';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
-import { isOrgMember } from '../../checkers';
-import {
-  StandardsBookSectionsListProjection,
-  StandardTypesListProjection
-} from '../../constants';
-import { makeOptionsFields } from '../../helpers';
+import { StandardsBookSectionsListProjection, StandardTypesListProjection } from '../../constants';
+import { makeOptionsFields, pickNotRemovedUsers } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
-import { isPlioUser } from '../../checkers';
+import { isPlioUser, isOrgMember } from '../../checkers';
 
 
-Meteor.publish('invitationInfo', function (invitationId) {
+Meteor.publish('invitationInfo', (invitationId) => {
   const sendInternalError = (message) => this.error(new Meteor.Error(500, message));
 
   if (!SimpleSchema.RegEx.Id.test(invitationId)) {
     sendInternalError('Incorrect invitation ID!');
-    return;
+    return undefined;
   }
 
   const invitedUserCursor = Meteor.users.find({
-    invitationId: invitationId
+    invitationId,
   }, {
-    fields: { emails: 1, invitationId: 1, invitationOrgId: 1 }
+    fields: { emails: 1, invitationId: 1, invitationOrgId: 1 },
   });
 
   if (invitedUserCursor.count() === 0) {
     sendInternalError('Invitation do not exist');
-    return;
+    return undefined;
   }
 
-  const { _id:invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
+  const { _id: invitedUserId, invitationOrgId } = invitedUserCursor.fetch()[0];
 
   return [
     invitedUserCursor,
     Organizations.find({
       _id: invitationOrgId,
-      'users.userId': invitedUserId
+      'users.userId': invitedUserId,
     }, {
       limit: 1,
-      fields: {name: 1, serialNumber: 1}
-    })
+      fields: { name: 1, serialNumber: 1 },
+    }),
   ];
 });
 
@@ -114,7 +106,8 @@ Meteor.publish('organizationDeps', function(organizationId) {
   }
 
   const organization = Organizations.findOne({ _id: organizationId });
-  const userIds = _.pluck(organization.users, 'userId');
+  const userIds = _.pluck(pickNotRemovedUsers(organization.users), 'userId');
+
   const query = { organizationId };
 
   const standardsBookSections = StandardsBookSections.find(query, makeOptionsFields(StandardsBookSectionsListProjection));
@@ -126,7 +119,7 @@ Meteor.publish('organizationDeps', function(organizationId) {
     standardsBookSections,
     standardsTypes,
     riskTypes,
-    users
+    users,
   ];
 });
 
@@ -138,13 +131,15 @@ Meteor.publishComposite('organizationsInfo', {
       return Organizations.find({}, {
         fields: {
           name: 1,
-          users: 1,
+          users: { $elemMatch: { isRemoved: false } },
           createdAt: 1,
-        }
+        },
       });
     }
 
-    throw new Meteor.Error(403, 'Your account is not authorized for this action. Sign out and login as a proper user');
+    throw new Meteor.Error(403,
+      'Your account is not authorized for this action. Sign out and login as a proper user'
+    );
   },
 
   children: [{

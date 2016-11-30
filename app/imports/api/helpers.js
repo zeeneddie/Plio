@@ -376,3 +376,7 @@ export const compareStatusesByPriority = (() => {
     }
   };
 })();
+
+export const pickNotRemovedUsers = (users) => {
+  return _.where(users, { isRemoved: false });
+}; 
