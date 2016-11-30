@@ -2,6 +2,9 @@
   <button type="submit"
       class="at-btn submit btn btn-primary {{submitDisabled}}"
       id="at-btn" form="at-pwd-form">
-    {{buttonText}}
+      {{#if isDisabled}}
+        <i class="fa fa-spinner fa-spin margin-right"></i>
+      {{/if}}
+      {{getButtonLabel buttonText}}
   </button>
 </template>
