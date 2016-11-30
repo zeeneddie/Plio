@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import UnreadMessagesLabel from '../../UnreadMessagesLabel';
+import LabelUnreadMessages from '../../Labels/LabelUnreadMessages';
 import Button from '../Button';
 
 const DiscussButton = ({
@@ -16,9 +16,9 @@ const DiscussButton = ({
   >
     {children}
     {!!unreadMessagesCount && (
-      <UnreadMessagesLabel
-        unreadMessagesCount={unreadMessagesCount}
-      />
+      <LabelUnreadMessages>
+        {unreadMessagesCount}
+      </LabelUnreadMessages>
     )}
   </Button>
 );

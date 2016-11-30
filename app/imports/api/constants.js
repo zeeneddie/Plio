@@ -199,4 +199,10 @@ export const TextAlignMap = {
   center: 'text-xs-center',
 };
 
+export const MarginMap = {
+  left: 'margin-left',
+  right: 'margin-right',
+  bottom: 'margin-bottom',
+};
+
 export const MOBILE_BREAKPOINT = 768;

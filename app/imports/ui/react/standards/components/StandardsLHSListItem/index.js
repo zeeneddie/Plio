@@ -4,6 +4,8 @@ import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
 import MessagesCount from '../../../components/MessagesCount';
+import Label from '../../../components/Labels/Label';
+import LabelDraft from '../../../components/Labels/LabelDraft';
 
 const StandardsLHSListItem = ({
   isActive,
@@ -12,6 +14,7 @@ const StandardsLHSListItem = ({
   className,
   title,
   issueNumber,
+  status,
   isDeleted,
   deletedByText,
   deletedAtText,
@@ -28,15 +31,11 @@ const StandardsLHSListItem = ({
       <ListItem>
         <ListItem.Heading>
           <span>{title}</span>
-
           {isNew && (
-            <span className="label label-primary">New</span>
+            <Label names="primary">New</Label>
           )}
-
           {status === 'draft' && (
-            <span className="label label-danger">
-              {`Issue ${issueNumber} Draft`}
-            </span>
+            <LabelDraft issueNumber={issueNumber} />
           )}
         </ListItem.Heading>
         {isDeleted && (
