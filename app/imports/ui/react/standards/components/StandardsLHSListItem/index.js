@@ -22,43 +22,46 @@ const StandardsLHSListItem = ({
   isNew,
   type = {},
 }) => (
-  <div className={className}>
-    <ListItemLink
-      isActive={isActive}
-      onClick={onClick}
-      href={href}
-    >
-      <ListItem>
-        <ListItem.Heading>
-          <span>{title}</span>
-          {isNew && (
-            <Label names="primary">New</Label>
-          )}
-          {status === 'draft' && (
-            <LabelDraft issueNumber={issueNumber} />
-          )}
-        </ListItem.Heading>
-        {isDeleted && (
-          <ListItem.RightText>
-            {`Deleted by ${deletedByText}`}
-          </ListItem.RightText>
+  <ListItemLink
+    className={className}
+    isActive={isActive}
+    onClick={onClick}
+    href={href}
+  >
+    <ListItem>
+      <ListItem.Heading>
+        <span>{title}</span>
+
+        {isNew && (
+          <Label names="primary">New</Label>
         )}
-        {!!unreadMessagesCount && !isDeleted && (
-          <ListItem.RightText className="text-danger">
-            <MessagesCount count={unreadMessagesCount} />
-          </ListItem.RightText>
+
+        {status === 'draft' && (
+          <LabelDraft issueNumber={issueNumber} />
         )}
-        <ListItem.LeftText>
-          {type.title}
-        </ListItem.LeftText>
-        {isDeleted && (
-          <ListItem.RightText>
-            {deletedAtText}
-          </ListItem.RightText>
-        )}
-      </ListItem>
-    </ListItemLink>
-  </div>
+      </ListItem.Heading>
+
+      {isDeleted && (
+        <ListItem.RightText>
+          {`Deleted by ${deletedByText}`}
+        </ListItem.RightText>
+      )}
+
+      {!!unreadMessagesCount && !isDeleted && (
+        <ListItem.RightText className="text-danger">
+          <MessagesCount count={unreadMessagesCount} />
+        </ListItem.RightText>
+      )}
+      <ListItem.LeftText>
+        {type.title}
+      </ListItem.LeftText>
+      {isDeleted && (
+        <ListItem.RightText>
+          {deletedAtText}
+        </ListItem.RightText>
+      )}
+    </ListItem>
+  </ListItemLink>
 );
 
 StandardsLHSListItem.propTypes = propTypes;
