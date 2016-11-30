@@ -20,8 +20,8 @@ const Discussion = (props) => {
           <Wrapper className="discussions-hd-top">
             <CardHeader.Item pull="left" className="card-heading-buttons">
               <Button type="secondary" href={documentPath}>
-                <Icon names="angle-left" margin="right" size="2" />
-                Back
+                <Icon names="angle-left" margin="right-2x" size="2" />
+                <span>Back</span>
               </Button>
             </CardHeader.Item>
             <CardHeader.Title>

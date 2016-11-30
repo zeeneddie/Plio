@@ -57,6 +57,7 @@
   @include flex-direction(column);
   cursor: pointer;
   @include transition(box-shadow .3s ease);
+  margin-bottom: 30px;
 
   &:hover, &:focus {
     box-shadow: 0 4px 4px rgba(0,0,0,0.1);

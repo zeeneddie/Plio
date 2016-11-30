@@ -13,7 +13,9 @@ const sizeMap = {
 
 const marginMap = {
   left: 'margin-left',
+  'left-2x': 'margin-left-2x',
   right: 'margin-right',
+  'right-2x': 'margin-right-2x',
 };
 
 const Icon = ({ margin, size = 1, className, names }) => {

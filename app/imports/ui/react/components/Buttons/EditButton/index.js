@@ -5,7 +5,6 @@ import Icon from '../../Icon';
 
 const EditButton = ({ onClick, children }) => (
   <Button type="primary" onClick={onClick}>
-    <Icon names="pencil" className="margin-right" />
     {children}
   </Button>
 );
