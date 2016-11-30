@@ -443,3 +443,10 @@ export const compareStatusesByPriority = (() => {
     }
   };
 })();
+
+export const getUserJoinedAt = (organization = {}, userId) => {
+  const currentUserInOrg = [...organization.users].find(propEq('userId', userId));
+  const joinedAt = getC('joinedAt', currentUserInOrg);
+
+  return joinedAt;
+};

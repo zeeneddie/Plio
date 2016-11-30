@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, withProps, pure } from 'recompose';
+import { compose, withHandlers, mapProps, withProps } from 'recompose';
 
 import StandardsLHS from '../../components/StandardsLHS';
 import {
@@ -19,35 +19,26 @@ const mapStateToProps = ({
     standards,
     standardsFiltered,
   },
-  discussion: {
-    isDiscussionOpened,
-  },
   global: {
     searchText,
     filter,
     collapsed,
     animating,
     urlItemId,
-    userId,
   },
-  organizations: { orgSerialNumber },
 }) => ({
-  isDiscussionOpened,
   standards,
   standardsFiltered,
   sections,
   types,
   searchText,
-  orgSerialNumber,
   filter,
   collapsed,
-  urlItemId,
   animating,
-  userId,
+  urlItemId,
 });
 
 export default compose(
-  pure,
   connect(mapStateToProps),
   withProps(props => ({ collapseOnSearch: props.filter !== 3 })),
   withHandlers({
