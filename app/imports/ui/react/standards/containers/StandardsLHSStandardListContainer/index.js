@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, lifecycle } from 'recompose';
 
 import { pickDeep } from '/imports/api/helpers';
 import StandardsLHSStandardList from '../../components/StandardsLHSStandardList';

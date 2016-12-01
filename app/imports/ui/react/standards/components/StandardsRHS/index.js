@@ -23,7 +23,7 @@ const StandardsRHS = (props) => (
         <HeaderButtons
           isDiscussionOpened={props.isDiscussionOpened}
           names={props.names.headerNames}
-          isDeleted={props.standard.isDeleted}
+          isDeleted={props.standard ? props.standard.isDeleted : false}
           unreadMessagesCount={props.standard.unreadMessagesCount}
           pathToDiscussion={props.pathToDiscussion}
           hasDocxAttachment={props.hasDocxAttachment}

@@ -1,5 +1,6 @@
 import { _ } from 'meteor/underscore';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { withProps } from 'recompose';
 
 import { CollectionNames } from '/imports/share/constants';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
@@ -105,3 +106,7 @@ export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {
 
   return FlowRouter.path('standardDiscussion', params, queryParams);
 };
+
+export const withStandard = withProps(props => ({
+  standard: findSelectedStandard(props.urlItemId)(props),
+}));

@@ -16,7 +16,7 @@ const StandardsRHSContentList = ({ isReady = true, ...props }) => (
       </Wrapper>
     )}
     <ChangelogContainer
-      documentId={props.standard._id}
+      documentId={props.standard ? props.standard._id : ''}
       collection={CollectionNames.STANDARDS}
     />
   </Wrapper>
