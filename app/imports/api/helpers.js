@@ -187,6 +187,11 @@ export const hasC = curry((key, obj) => _.has(Object.assign({}, obj), key));
 
 export const shallowCompare = compose(not, shallowEqual);
 
+export const mapToProps = curry((props, array) => [...array].map(pickC([...props])));
+
+export const compareByProps = curry((props, a, b) =>
+  notEquals(mapToProps(props, a), mapToProps(props, b)));
+
 /**
  * Picks properties of the passed object from the next object and compares them
  * Example: compareProps({ a: 1, b: 2 })({ c: 1, a: 1, b: 2 }) => true

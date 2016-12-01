@@ -6,7 +6,6 @@ import {
   branch,
   renderComponent,
   shouldUpdate,
-  lifecycle,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { _ } from 'meteor/underscore';
@@ -20,8 +19,8 @@ import {
   lengthStandards,
   pickDeep,
   notEquals,
-  diff,
   omitC,
+  compareByProps,
 } from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
@@ -95,16 +94,17 @@ export default compose(
   withStandard,
   shouldUpdate((props, nextProps) => {
     const omitKeys = omitC(['updatedAt']);
+    const compareBySeqId = compareByProps(['title', 'serialNumber']);
     return nextProps.standard && (
-      notEquals(omitKeys(props.standard), omitKeys(nextProps.standard)) ||
       props.userId !== nextProps.userId ||
       props.organizationId !== nextProps.organizationId ||
       props.isFullScreenMode !== nextProps.isFullScreenMode ||
-      props.ncs.length !== nextProps.ncs.length ||
-      props.risks.length !== nextProps.risks.length ||
-      props.actions.length !== nextProps.actions.length ||
-      props.files.length !== nextProps.files.length ||
-      props.lessons.length !== nextProps.lessons.length
+      notEquals(omitKeys(props.standard), omitKeys(nextProps.standard)) ||
+      compareBySeqId(props.ncs, nextProps.ncs) ||
+      compareBySeqId(props.risks, nextProps.risks) ||
+      compareBySeqId(props.actions, nextProps.actions) ||
+      compareBySeqId(props.lessons, nextProps.lessons) ||
+      props.files.length !== nextProps.files.length
     );
   }),
   withProps(props => {
