@@ -23,11 +23,11 @@ export default subscribe => function loadLayoutData({
 
     dispatch(batchActions(actions));
 
-    onData(null, {});
+    onData(null, { loading: false });
   } else {
     dispatch(setDataLoading(true));
 
-    onData(null, null);
+    onData(null, { loading: true });
   }
 
   // return () => typeof subscription === 'function' && subscription.stop();

@@ -6,11 +6,14 @@ import {
   defaultProps,
   withHandlers,
   withProps,
+  branch,
+  renderComponent,
 } from 'recompose';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/StandardsLayout';
@@ -26,7 +29,7 @@ import {
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
 import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
-import { findSelectedStandard } from '../../helpers';
+import { withStandard } from '../../helpers';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
@@ -35,10 +38,6 @@ import loadCountersData from '../../loaders/loadCountersData';
 import initMainData from '../../loaders/initMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
-
-const withStandard = withProps(props => ({
-  standard: findSelectedStandard(props.urlItemId)(props),
-}));
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === 3
@@ -61,12 +60,17 @@ export default compose(
   ])),
   composeWithTracker(
     testPerformance(getLayoutData()),
-    withProps({ loading: true })(StandardsLayout),
+    null,
     null,
     {
       shouldResubscribe: (props, nextProps) =>
         props.orgSerialNumber !== nextProps.orgSerialNumber || props.filter !== nextProps.filter,
     }
+  ),
+  branch(
+    props => props.loading,
+    renderComponent(StandardsLayout),
+    _.identity
   ),
   connect(pickDeep(['organizations.organizationId'])),
   composeWithTracker(testPerformance(loadMainData), null, null, {
@@ -108,7 +112,7 @@ export default compose(
     'global.urlItemId',
     'global.filter',
   ])),
-  shouldUpdate(testPerformance(shouldUpdateForProps)),
+  shouldUpdate(shouldUpdateForProps),
   lifecycle({
     componentWillMount() {
       Meteor.defer(() => {
@@ -125,7 +129,6 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
-      console.log('update');
       Meteor.defer(() => {
         redirectByFilter(nextProps);
         openStandardByFilter(nextProps);

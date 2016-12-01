@@ -1,8 +1,28 @@
-import { compose, withProps, withHandlers, mapProps, branch, renderComponent } from 'recompose';
+import {
+  compose,
+  withProps,
+  withHandlers,
+  mapProps,
+  branch,
+  renderComponent,
+  shouldUpdate,
+  lifecycle,
+} from 'recompose';
 import { connect } from 'react-redux';
 import { _ } from 'meteor/underscore';
 
-import { propEq, some, getC, propEqId, every, lengthStandards } from '/imports/api/helpers';
+import {
+  propEq,
+  some,
+  getC,
+  propEqId,
+  every,
+  lengthStandards,
+  pickDeep,
+  notEquals,
+  diff,
+  omitC,
+} from '/imports/api/helpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import {
@@ -12,7 +32,7 @@ import {
   onRestore,
   onDelete,
 } from './handlers';
-import { getPathToDiscussion, getStandardsByFilter } from '../../helpers';
+import { getPathToDiscussion, getStandardsByFilter, withStandard } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
@@ -40,15 +60,55 @@ const mapStateToProps = ({
 });
 
 export default compose(
-  connect(mapStateToProps),
+  connect(pickDeep([
+    'standards.standards',
+    'standards.isCardReady',
+    'global.urlItemId',
+    'global.filter',
+  ])),
   mapProps(props => ({ ...props, standards: getStandardsByFilter(props) })),
   branch(
     lengthStandards,
     _.identity,
     renderComponent(StandardsRHS.NotFound),
   ),
+  withStandard,
+  withProps(props => ({
+    isReady: !!(props.isCardReady && props.standards.length && props.standard),
+    names: {
+      headerNames: {
+        header: 'Compliance Standard',
+        discuss: 'Discuss',
+        edit: 'Edit',
+        restore: 'Restore',
+        delete: 'Delete',
+      },
+    },
+  })),
+  shouldUpdate((props, nextProps) => props.isReady !== nextProps.isReady),
+  branch(
+    props => props.isReady,
+    _.identity,
+    renderComponent(StandardsRHS),
+  ),
+  connect(mapStateToProps),
+  withStandard,
+  shouldUpdate((props, nextProps) => {
+    const omitKeys = omitC(['updatedAt']);
+    return nextProps.standard && (
+      notEquals(omitKeys(props.standard), omitKeys(nextProps.standard)) ||
+      props.userId !== nextProps.userId ||
+      props.organizationId !== nextProps.organizationId ||
+      props.isFullScreenMode !== nextProps.isFullScreenMode ||
+      props.ncs.length !== nextProps.ncs.length ||
+      props.risks.length !== nextProps.risks.length ||
+      props.actions.length !== nextProps.actions.length ||
+      props.files.length !== nextProps.files.length ||
+      props.lessons.length !== nextProps.lessons.length
+    );
+  }),
   withProps(props => {
-    const standard = { ...props.standards.find(propEqId(props.urlItemId)) };
+    const standard = { ...props.standard };
     const hasDocxAttachment = some([getC('source1.htmlUrl'), getC('source2.htmlUrl')], standard);
     const hasAccess = canChangeStandards(props.userId, props.organizationId);
     const hasFullAccess = isOrgOwner(props.userId, props.organizationId);
@@ -60,15 +120,6 @@ export default compose(
       hasAccess,
       hasFullAccess,
       pathToDiscussion,
-      names: {
-        headerNames: {
-          header: 'Compliance Standard',
-          discuss: 'Discuss',
-          edit: 'Edit',
-          restore: 'Restore',
-          delete: 'Delete',
-        },
-      },
     };
   }),
   mapProps(props => {
@@ -100,11 +151,6 @@ export default compose(
       file: files.find(propEqId(getFileId(props.standard.source2))),
     };
     const standard = { ...props.standard, source1, source2 };
-    const isReady = !!(
-      props.isCardReady &&
-      props.standards.length &&
-      props.standard._id
-    );
 
     return {
       ...props,
@@ -114,7 +160,6 @@ export default compose(
       actions,
       lessons,
       standard,
-      isReady,
     };
   }),
   withHandlers({
