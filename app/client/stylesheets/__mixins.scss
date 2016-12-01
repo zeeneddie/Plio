@@ -169,6 +169,7 @@
   overflow-x: hidden !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  transform: translateZ(0);
 }
 
  @mixin mobile {
