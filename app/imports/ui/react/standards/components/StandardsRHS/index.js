@@ -20,23 +20,21 @@ const StandardsRHS = (props) => (
         title={props.names.headerNames.header}
         isReady={props.isReady}
       >
-        {props.isReady && (
-          <HeaderButtons
-            isDiscussionOpened={props.isDiscussionOpened}
-            names={props.names.headerNames}
-            isDeleted={props.standard.isDeleted}
-            unreadMessagesCount={props.standard.unreadMessagesCount}
-            pathToDiscussion={props.pathToDiscussion}
-            hasDocxAttachment={props.hasDocxAttachment}
-            hasAccess={props.hasAccess}
-            hasFullAccess={props.hasFullAccess}
-            onToggleScreenMode={props.onToggleScreenMode}
-            onModalOpen={props.onModalOpen}
-            onDiscussionOpen={props.onDiscussionOpen}
-            onRestore={props.onRestore}
-            onDelete={props.onDelete}
-          />
-        )}
+        <HeaderButtons
+          isDiscussionOpened={props.isDiscussionOpened}
+          names={props.names.headerNames}
+          isDeleted={props.standard ? props.standard.isDeleted : false}
+          unreadMessagesCount={props.standard.unreadMessagesCount}
+          pathToDiscussion={props.pathToDiscussion}
+          hasDocxAttachment={props.hasDocxAttachment}
+          hasAccess={props.hasAccess}
+          hasFullAccess={props.hasFullAccess}
+          onToggleScreenMode={props.onToggleScreenMode}
+          onModalOpen={props.onModalOpen}
+          onDiscussionOpen={props.onDiscussionOpen}
+          onRestore={props.onRestore}
+          onDelete={props.onDelete}
+        />
       </RHS.Header>
 
       <ContentList
