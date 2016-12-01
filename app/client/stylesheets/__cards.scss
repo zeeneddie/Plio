@@ -158,10 +158,6 @@
 .content-cards {
   @include flex(1);
 
-  &.scroll {
-    transform: translateZ(0);
-  }
-  
   .content-cards-inner {
     position: relative;
     z-index: 101;

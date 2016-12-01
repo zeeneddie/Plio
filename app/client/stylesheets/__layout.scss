@@ -83,7 +83,6 @@ a:focus {
   position: relative;
   @include flex(1);
 	height: 100vh;
-	transform: translateZ(0);
 
 	&:not(.no-flex) {
   	@include flexbox;
