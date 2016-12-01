@@ -9,7 +9,8 @@ import {
   SET_STANDARD_TYPES,
   SET_STANDARDS,
   SET_LESSONS_LEARNED,
-  SET_HELPS,
+  SET_HELP_DOCS,
+  SET_HELP_SECTIONS,
 } from './types';
 
 export function setDepartments(departments) {
@@ -82,9 +83,16 @@ export function setLessons(lessons) {
   };
 }
 
-export function setHelps(helps) {
+export function setHelpDocs(helpDocs) {
   return {
-    type: SET_HELPS,
-    payload: { helps },
+    type: SET_HELP_DOCS,
+    payload: { helpDocs },
+  };
+}
+
+export function setHelpSections(helpSections) {
+  return {
+    type: SET_HELP_SECTIONS,
+    payload: { helpSections },
   };
 }

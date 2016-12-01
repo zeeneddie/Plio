@@ -38,4 +38,4 @@ import '../../api/work-items';
 
 import '../../api/files';
 
-import '../../api/helps';
+import '../../api/help-docs';

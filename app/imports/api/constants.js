@@ -130,8 +130,12 @@ export const WorkItemsListProjection = {
 };
 
 export const HelpsListProjection = {
-  organizationId: 1,
-  section: 1,
+  sectionId: 1,
+  title: 1,
+};
+
+export const HelpSectionProjection = {
+  index: 1,
   title: 1,
 };
 

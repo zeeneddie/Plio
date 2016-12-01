@@ -60,7 +60,8 @@ export const CollectionNames = {
   DEPARTMENTS: 'Departments',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
-  HELPS: 'Helps',
+  HELP_DOCS: 'HelpDocs',
+  HELP_SECTIONS: 'HelpSections',
   LESSONS: 'LessonsLearned',
   MESSAGES: 'Messages',
   NCS: 'NonConformities',
@@ -72,7 +73,7 @@ export const CollectionNames = {
   STANDARD_TYPES: 'StandardTypes',
   STANDARD_BOOK_SECTIONS: 'StandardsBookSections',
   STANDARDS: 'Standards',
-  WORK_ITEMS: 'WorkItems'
+  WORK_ITEMS: 'WorkItems',
 };
 
 export const DefaultRiskTypes = [
@@ -159,16 +160,40 @@ export const DocChangesKinds = {
   DOC_REMOVED: 3
 };
 
-export const HelpSections = {
-  1: 'How to get help',
-  2: 'Getting started',
-  3: 'Creating your Standards manual',
-  4: 'Managing risks',
-  5: 'Managing non-conformities',
-  6: 'Managing workflows',
-  7: 'User management',
-  8: 'FAQs',
-};
+export const DefaultHelpSections = [
+  {
+    index: 1,
+    title: 'How to get help',
+  },
+  {
+    index: 2,
+    title: 'Getting started',
+  },
+  {
+    index: 3,
+    title: 'Creating your Standards manual',
+  },
+  {
+    index: 4,
+    title: 'Managing risks',
+  },
+  {
+    index: 5,
+    title: 'Managing non-conformities',
+  },
+  {
+    index: 6,
+    title: 'Managing workflows',
+  },
+  {
+    index: 7,
+    title: 'User management',
+  },
+  {
+    index: 8,
+    title: 'FAQs',
+  },
+];
 
 export const InvitationStatuses = {
   failed: 0,

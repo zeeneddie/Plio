@@ -9,7 +9,7 @@ import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
-import HelpsProvider from '/imports/ui/react/helps/components/HelpsProvider';
+import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 
 BlazeLayout.setRoot('#app');
 
@@ -149,6 +149,22 @@ FlowRouter.route('/transfer-organization/:transferId', {
       content: 'TransferOrganizationPage'
     });
   }
+});
+
+FlowRouter.route('/help-center', {
+  name: 'helpDocs',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
+  },
+});
+
+FlowRouter.route('/help-center/:helpId', {
+  name: 'helpDoc',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards', {
@@ -291,22 +307,6 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
       content: 'WorkInbox_Page'
     });
   }
-});
-
-FlowRouter.route('/:orgSerialNumber/helps', {
-  name: 'helps',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(HelpsProvider);
-  },
-});
-
-FlowRouter.route('/:orgSerialNumber/helps/:helpId', {
-  name: 'help',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action() {
-    mount2(HelpsProvider);
-  },
 });
 
 function redirectHandler() {

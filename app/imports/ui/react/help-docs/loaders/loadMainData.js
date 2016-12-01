@@ -1,0 +1,26 @@
+import { batchActions } from 'redux-batched-actions';
+
+import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
+import { HelpDocs } from '/imports/share/collections/help-docs';
+import { HelpSections } from '/imports/share/collections/help-sections';
+import { setDataLoading } from '/client/redux/actions/globalActions';
+import { setHelpDocs, setHelpSections } from '/client/redux/actions/collectionsActions';
+
+export default ({ dispatch }, onData) => {
+  const sub = DocumentLayoutSubs.subscribe('helpDocsLayout');
+
+  if (sub.ready()) {
+    const helpDocs = HelpDocs.find().fetch();
+    const helpSections = HelpSections.find().fetch();
+
+    dispatch(batchActions([
+      setHelpDocs(helpDocs),
+      setHelpSections(helpSections),
+      setDataLoading(false),
+    ]));
+  } else {
+    dispatch(setDataLoading(true));
+  }
+
+  onData(null, {});
+};
