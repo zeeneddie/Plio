@@ -11,15 +11,13 @@ import Wrapper from '../../../components/Wrapper';
 import Icon from '../../../components/Icon';
 
 const Discussion = (props) => {
-  const documentPath = FlowRouter.current().path.replace('/discussion', '');
-
   return (
     <Wrapper className="content-cards-inner flexbox-column">
       <Wrapper className="card chat">
         <CardHeader className="chat-heading">
           <Wrapper className="discussions-hd-top">
             <CardHeader.Item pull="left" className="card-heading-buttons">
-              <Button type="secondary" href={documentPath}>
+              <Button type="secondary" href={props.documentPath} onClick={props.onBackArrowClick}>
                 <Icon names="angle-left" margin="right-2x" size="2" />
                 <span>Back</span>
               </Button>
