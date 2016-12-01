@@ -119,7 +119,7 @@ Template.Dashboard_MessageStats.viewmodel({
       } else if (discussion.documentType === 'non-conformity') {
         url = FlowRouter.path(
           'nonConformityDiscussion',
-          { orgSerialNumber, nonconformityId: linkedTo },
+          { orgSerialNumber, urlItemId: linkedTo },
           { at: message._id }
         );
       } else if (discussion.documentType === 'risk') {

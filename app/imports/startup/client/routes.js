@@ -177,7 +177,7 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   },
 });
 
-FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -243,7 +243,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
