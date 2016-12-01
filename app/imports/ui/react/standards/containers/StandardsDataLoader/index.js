@@ -111,10 +111,10 @@ export default compose(
   shouldUpdate(testPerformance(shouldUpdateForProps)),
   lifecycle({
     componentWillMount() {
-      Meteor.defer(() => redirectByFilter(this.props));
-    },
-    componentDidMount() {
-      Meteor.defer(() => openStandardByFilter(this.props));
+      Meteor.defer(() => {
+        redirectByFilter(this.props);
+        openStandardByFilter(this.props);
+      });
     },
     /**
      * Collapse(maybe) and redirect(maybe) when:
@@ -125,6 +125,7 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
+      console.log('update');
       Meteor.defer(() => {
         redirectByFilter(nextProps);
         openStandardByFilter(nextProps);
