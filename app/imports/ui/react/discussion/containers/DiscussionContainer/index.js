@@ -8,7 +8,7 @@ import { pickFromDiscussion, pickDeep } from '/imports/api/helpers';
 import { DiscussionSubs } from '/imports/startup/client/subsmanagers';
 import Discussion from '../../components/Discussion';
 import { setAt, reset, setDiscussion } from '/client/redux/actions/discussionActions';
-import { setShowCard } from '/client/redux/actions/globalActions';
+import { setShowCard } from '/client/redux/actions/mobileActions';
 import { Discussions } from '/imports/share/collections/discussions';
 
 const discussionLoad = ({ dispatch, urlItemId, organizationId }, onData) => {
@@ -48,6 +48,7 @@ export default compose(
     onBackArrowClick: (props) => (e) => {
       e.preventDefault();
       props.dispatch(setShowCard(true));
+      FlowRouter.go(props.documentPath);
     },
   }),
   lifecycle({
