@@ -29,7 +29,7 @@ Template.Actions_LinkedTo_Read.viewmodel({
 
     switch(documentType) {
       case ProblemTypes.NON_CONFORMITY:
-        return getRoute('nonconformity', { nonconformityId: _id });
+        return getRoute('nonconformity', { urlItemId: _id });
         break;
       case ProblemTypes.RISK:
         return getRoute('risk', { riskId: _id });

@@ -47,7 +47,7 @@ const StandardsRHSBodyContents = ({
     indicator: _problemsStatus_.getClassByStatus(nc.status),
     href: FlowRouter.path(
       'nonconformity',
-      { orgSerialNumber, nonconformityId: nc._id },
+      { orgSerialNumber, urlItemId: nc._id },
       { filter: 1 }
     ),
   }));
