@@ -7,7 +7,7 @@
 
         {{> Subcards_Notify_Edit
             doc=this
-            documentType="risk"
+            documentType="Risks"
             onUpdate=onUpdateNotifyUserCb}}
 
         {{> Subcards_RiskScoring_Edit
@@ -27,16 +27,16 @@
         {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="risk"}}
+            documentType="Risks"}}
 
         {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="risk"}}
+            documentType="Risks"}}
 
         {{> Subcards_LessonsLearned_Edit
             documentId=this._id
-            documentType="risk"
+            documentType="Risks"
             linkedTo=this.title
             linkedToId=this.sequentialId}}
 

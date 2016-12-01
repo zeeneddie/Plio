@@ -11,7 +11,7 @@ Template.CardDocChangelog.viewmodel({
   },
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('docLastUserLog', this.documentId(), this.documentType());
+      template.subscribe('lastHumanLog', this.documentId(), this.documentType());
     });
   },
   subscribeForFirstLogs(onReady) {
@@ -20,20 +20,20 @@ Template.CardDocChangelog.viewmodel({
     const tpl = this.templateInstance;
 
     tpl.subscribe(
-      'docLogsCount',
+      'auditLogsCount',
       `doc-logs-count-${documentId}`,
       documentId,
       documentType
     );
 
-    tpl.subscribe('docAuditLogs', documentId, documentType, { onReady });
+    tpl.subscribe('auditLogs', documentId, documentType, { onReady });
   },
   subscribeForAllLogs(skip, onReady) {
     const documentId = this.documentId();
     const documentType = this.documentType();
     const tpl = this.templateInstance;
 
-    tpl.subscribe('docAuditLogs', documentId, documentType, skip, 0, { onReady });
+    tpl.subscribe('auditLogs', documentId, documentType, skip, 0, { onReady });
   },
   logsLength() {
     return this.get(`doc-logs-count-${this.documentId()}`);

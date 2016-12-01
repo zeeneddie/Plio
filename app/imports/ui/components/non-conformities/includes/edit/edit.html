@@ -10,7 +10,7 @@
 
         {{> Subcards_Notify_Edit
             doc=this
-            documentType="non-conformity"
+            documentType="NonConformities"
             onUpdate=onUpdateNotifyUserCb}}
 
         {{> Subcards_Occurrences_Edit
@@ -20,19 +20,19 @@
         {{> Subcards_Actions_Edit
             type="CA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType="NonConformities"}}
 
         {{> Subcards_Actions_Edit
             type="PA"
             documentId=this._id
-            documentType="non-conformity"}}
+            documentType="NonConformities"}}
 
         {{> Subcards_ImprovementPlan_Edit
             improvementPlan=this.improvementPlan}}
 
         {{> Subcards_LessonsLearned_Edit
             documentId=this._id
-            documentType="non-conformity"
+            documentType="NonConformities"
             linkedTo=this.title
             linkedToId=this.sequentialId}}
 
