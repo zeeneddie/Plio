@@ -9,6 +9,10 @@
 
   &-heading {
     min-height: 55px;
+
+    .card-title {
+      max-width: 100%;
+    }
   }
 
   &-message-container:last-of-type {
