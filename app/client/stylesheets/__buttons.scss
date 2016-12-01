@@ -79,10 +79,15 @@
 .btn-group {
   max-width: 100%;
 
+  .btn-icon i {
+    top: 2px;
+  }
+
   &:not([data-toggle="buttons"]) > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
     max-width: 100%;
     padding-right: 46px;
   }
+
   &-nomargin {
     margin-bottom: 0 !important;
 

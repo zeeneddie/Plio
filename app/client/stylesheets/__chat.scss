@@ -23,6 +23,11 @@
   }
 
   &-content {
+
+    &.scroll {
+      transform: translateZ(0);
+    }
+    
     &.loading {
       .chat-item-date {
         display: none;
