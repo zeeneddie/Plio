@@ -371,8 +371,8 @@ export const compareStatusesByPriority = (() => {
 
     if (priority1 !== priority2) {
       return priority2 - priority1;
-    } else {
-      return status2 - status1;
     }
+
+    return status2 - status1;
   };
 })();

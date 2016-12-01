@@ -25,10 +25,10 @@ export const getUserOrganizations = (userId, orgSelector = {}, options = {}) => 
         userId,
         isRemoved: false,
         removedBy: { $exists: false },
-        removedAt: { $exists: false }
-      }
+        removedAt: { $exists: false },
+      },
     },
-    ...orgSelector
+    ...orgSelector,
   };
 
   return Organizations.find(selector, options);
