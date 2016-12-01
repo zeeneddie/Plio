@@ -8,7 +8,7 @@ const StandardsRHSBodyHeading = ({ title, status, issueNumber }) => (
     <h4 className="list-group-item-heading pull-left">
       <span>{title}</span>
       {status === 'draft' && issueNumber && (
-        <LabelDraft issueNumber={issueNumber} />
+        <LabelDraft issueNumber={issueNumber} margin="left" />
       )}
     </h4>
     <div className="flex"></div>

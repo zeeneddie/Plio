@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 
 import Label from '../Label';
 
-const LabelDraft = ({ issueNumber }) => (
-  <Label names="danger">
+const LabelDraft = ({ issueNumber, margin }) => (
+  <Label names="danger" margin={margin}>
     {`Issue ${issueNumber} Draft`}
   </Label>
 );
