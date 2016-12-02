@@ -259,6 +259,9 @@ body.stop-scrolling {
 .sweet-alert .form-group .sa-input-error {
   display: none;
 }
+.sweet-alert .form-group .sa-input-error.show {
+  display: block;
+}
 .sweet-alert.show-input .form-group {
   display: block;
 }

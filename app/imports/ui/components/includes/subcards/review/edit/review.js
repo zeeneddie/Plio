@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { RisksHelp } from '/imports/api/help-messages';
 
 Template.Subcards_Review_Edit.viewmodel({
   autorun() {
@@ -10,6 +11,7 @@ Template.Subcards_Review_Edit.viewmodel({
   reviewedAt: '',
   reviewedBy: '',
   comments: '',
+  statusFieldHelp: RisksHelp.reviewStatus,
   onUpdate() {},
   update({ ...args }, cb) {
     if (_.keys(args).every(key => this.data()[key] === args[key])) return;

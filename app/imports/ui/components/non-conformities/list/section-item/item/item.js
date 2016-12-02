@@ -7,7 +7,9 @@ import { updateViewedBy } from '/imports/api/non-conformities/methods.js';
 
 Template.NC_Item.viewmodel({
   share: 'window',
-  mixin: ['date', 'nonconformity', 'currency', 'organization', 'problemsStatus'],
+  mixin: ['date', 'user', 'nonconformity', 'currency', 'organization', 'problemsStatus', {
+    counter: 'counter'
+  }],
   onCreated(template) {
     const currency = this.organization() && this.organization().currency;
     this.load({ currency });
@@ -16,6 +18,14 @@ Template.NC_Item.viewmodel({
       if (this._id() === this.NCId() && this.isNew()) {
         Tracker.nonreactive(() => this.updateViewedBy(() => computation.stop()));
       }
+    });
+
+    template.autorun(() => {
+      const _id = this._id();
+
+      if (!_id) return;
+
+      template.subscribe('messagesNotViewedCount', 'nc-messages-not-viewed-count-' + _id, _id);
     });
   },
   _id: '',
@@ -32,10 +42,10 @@ Template.NC_Item.viewmodel({
     const _id = this._id();
     return {
       isActive: Object.is(this.NCId(), _id),
-      onClick: handler => handler({ nonconformityId: _id }),
+      onClick: handler => handler({ urlItemId: _id }),
       href: (() => {
         const params = {
-          nonconformityId: _id,
+          urlItemId: _id,
           orgSerialNumber: this.organizationSerialNumber()
         };
         const queryParams = { filter: this.activeNCFilterId() };
@@ -44,14 +54,9 @@ Template.NC_Item.viewmodel({
     };
   },
   isNew() {
-    //return !this.viewedBy().find(_id => _id === Meteor.userId());
-
-    const filter = { _id: this._id() };
-    const options = { fields: { createdAt: 1, viewedBy: 1 } };
-    const doc = this._getNCByQuery(filter, options);
     const userId = Meteor.userId();
 
-    return doc && this.isNewDoc({ doc, userId });
+    return this.isNewDoc({ userId, doc: this.data() });
   },
   renderTitle() {
     const count = this.occurrences().count();
@@ -70,9 +75,17 @@ Template.NC_Item.viewmodel({
 
     return symbol + count * this.cost();
   },
+  getUserText({ isDeleted, createdBy, deletedBy }) {
+    return isDeleted
+            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
+            : '';
+  },
+  unreadMessagesCount() {
+    return this.counter.get('nc-messages-not-viewed-count-' + this._id());
+  },
   updateViewedBy() {
     const _id = this._id();
 
-    updateViewedBy.call({ _id });
+    Meteor.defer(() => updateViewedBy.call({ _id }));
   }
 });

@@ -10,7 +10,7 @@ const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_STANDARDS
+  COMPLETE_UPDATE_OF_DOCUMENTS
 } = WorkItemsStore.TYPES;
 
 export default {
@@ -41,8 +41,16 @@ export default {
     return this._service.remove({ _id, deletedBy });
   },
 
-  restore({ _id }) {
-    return this._service.restore({ _id });
+  restore({ _id, query }) {
+    return this._service.restore({ _id, query });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  removeSoftly({ _id, query }) {
+    return this._service.removeSoftly({ _id, query });
   },
 
   actionCreated(actionId) {
@@ -99,14 +107,12 @@ export default {
     this._dateUpdated(actionId, date, VERIFY_ACTION);
   },
 
-  actionWorkflowChanged(actionId, workflowType) {
-    if (workflowType === WorkflowTypes.THREE_STEP) {
-      this.collection.remove({
-        'linkedDoc._id': actionId,
-        type: WorkItemsStore.TYPES.VERIFY_ACTION,
-        isCompleted: false
-      });
-    }
+  actionWorkflowSetToThreeStep(actionId) {
+    this.collection.remove({
+      'linkedDoc._id': actionId,
+      type: WorkItemsStore.TYPES.VERIFY_ACTION,
+      isCompleted: false
+    });
   },
 
   analysisCompleted(docId, docType) {
@@ -118,17 +124,17 @@ export default {
 
     this.collection.remove({
       'linkedDoc._id': docId,
-      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_STANDARDS,
+      type: WorkItemsStore.TYPES.COMPLETE_UPDATE_OF_DOCUMENTS,
       isCompleted: false
     });
   },
 
   standardsUpdated(docId, docType) {
-    this._completed(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._completed(docId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   standardsUpdateCanceled(docId, docType) {
-    this._canceled(docId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._canceled(docId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   analysisUserUpdated(docId, docType, userId) {
@@ -140,11 +146,11 @@ export default {
   },
 
   updateOfStandardsUserUpdated(docId, docType, userId) {
-    this._userUpdated(docId, userId, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._userUpdated(docId, userId, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   updateOfStandardsDateUpdated(docId, docType, date) {
-    this._dateUpdated(docId, date, COMPLETE_UPDATE_OF_STANDARDS, docType);
+    this._dateUpdated(docId, date, COMPLETE_UPDATE_OF_DOCUMENTS, docType);
   },
 
   _userUpdated(docId, userId, workItemType, docType) {
@@ -215,7 +221,7 @@ export default {
 
       if (workItemType === COMPLETE_ANALYSIS) {
         targetDate = doc.analysis.targetDate;
-      } else if (workItemType === COMPLETE_UPDATE_OF_STANDARDS) {
+      } else if (workItemType === COMPLETE_UPDATE_OF_DOCUMENTS) {
         targetDate = doc.updateOfStandards.targetDate;
       }
     } else {

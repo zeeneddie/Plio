@@ -1,20 +1,42 @@
+import invoke from 'lodash.invoke';
+
 export default {
   searchResultsNumber: 0,
 
   searchObject(prop, fields) {
-    const searchObject = {};
+    return this.searchQuery(invoke(this, prop), fields);
+  },
 
-    if (this[prop]()) {
-      const words = this[prop]().trim().split(' ');
+  searchQuery(input, fields, precise = false) {
+    const searchObject = {};
+    let value = `${input}`.trim();
+
+    if (value) {
       let r;
+
       try {
-        r = new RegExp(`.*(${words.join(' ')}).*`, 'i');
+        if (precise) {
+          value = value.replace(/"/g, '');
+          r = new RegExp(`.*(${value}).*`, 'i');
+        } else {
+          r = value.split(' ')
+              .filter(word => !!word)
+              .map(word => `(?=.*\\b.*${word}.*\\b)`)
+              .join('');
+
+          r = new RegExp(`^${r}.*$`, 'i');
+        }
       } catch (err) {
       } // ignore errors
+
       if (_.isArray(fields)) {
-        fields           = _.map(fields, (field) => {
-          const obj       = {};
-          obj[field.name] = field.subField ? {$elemMatch: {[field.subField]: r}} : r;
+        fields = _.map(fields, (field) => {
+          const obj = {};
+
+          obj[field.name] = field.subField
+            ? { $elemMatch: { [field.subField]: r } }
+            : r;
+
           return obj;
         });
         searchObject.$or = fields;
@@ -28,5 +50,5 @@ export default {
 
   searchResultsText() {
     return `${this.searchResultsNumber()} matching results`;
-  }
+  },
 };

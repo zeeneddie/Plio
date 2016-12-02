@@ -1,7 +1,20 @@
 <template name="Risks_Page">
-  {{#Page}}
-    {{> Problems_ListWrapper (listArgs)}}
+  {{#Page classNames=classNames}}
+    {{#if isDiscussionOpened}}
+      {{> Risks_Card_Read cardArgs}}
+    {{else}}
+      {{> Problems_ListWrapper listArgs}}
+    {{/if}}
   {{else}}
-    {{> Risks_Card_Read _id=riskId}}
+    {{#if isDiscussionOpened}}
+      {{> Discussion_Card
+          organizationId=organizationId
+          discussionId=discussion._id
+          linkedTo=riskId
+          isReady=isDiscussionReady
+          doc=risk}}
+    {{else}}
+      {{> Risks_Card_Read cardArgs}}
+    {{/if}}
   {{/Page}}
 </template>

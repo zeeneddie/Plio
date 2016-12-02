@@ -10,7 +10,7 @@ export default {
    * @param {{ createdAt: Number, viewedBy: [String] }} doc;
    * @param {String} userId - user ID.
    */
-  isNewDoc({ doc, userId }){
+  isNewDoc({ doc, userId }) {
     const dateUserJoinedToOrg = getJoinUserToOrganizationDate({
       organizationId: this.organizationId(), userId
     });
@@ -27,6 +27,11 @@ export default {
 
     return !isDocViewedByUser && doc.createdAt > dateUserJoinedToOrg;
   },
+
+  isAdminOrg() {
+    return this.organization() && this.organization().isAdminOrg;
+  },
+
   organization() {
     const serialNumber = this.organizationSerialNumber();
     return Organizations.findOne({ serialNumber });

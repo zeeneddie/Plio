@@ -2,16 +2,16 @@
   <div class="card">
     <div class="search-form">
       <div class="form-group row with-loader" {{b "class: { loading: animating }"}}>
-        {{#ClearableField field="searchText"}}
+        {{#ClearableField clearFn='onInputEmpty'}}
           <input type="text" class="form-control" placeholder="Search..."
-            {{b "value: searchText, focus: focused, disable: animating, change: onHandleSearchInput, throttle: 500"}} />
+            {{b "ref: searchInput, focus: focused, disable: animating, input: onHandleSearchInput"}} />
         {{/ClearableField}}
         <i class="small-loader fa fa-circle-o-notch fa-spin"></i>
       </div>
       {{#if isModalButtonVisible}}
         <button class="btn btn-primary" {{b "click: onModalOpen"}}>
           <i class="fa fa-plus"></i>
-          <span>Add</span>
+          <span {{b "text: modalButtonText"}}></span>
         </button>
       {{/if}}
     </div>

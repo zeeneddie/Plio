@@ -5,6 +5,8 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const { TYPES } = WorkItemsStore;
 
@@ -15,15 +17,21 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
     return Meteor.userId() === assigneeId;
   },
   getButtonText({ type }) {
-    if (type === TYPES.VERIFY_ACTION) {
-      return 'Verify';
-    } else {
-      return 'Complete';
+    switch (type) {
+      case TYPES.VERIFY_ACTION:
+        return 'Verify';
+        break;
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+       return 'Update completed';
+       break;
+      default:
+       return 'Complete';
+       break;
     }
   },
   getDescription({ type, linkedDoc, assigneeId, targetDate, isCompleted, completedAt }) {
     const chooseOne = this.chooseOne(isCompleted);
-    const typeText = this.getTypeText({ type, linkedDoc });
+    const typeText = this.getLinkedDocTypeText({ type, linkedDoc });
     const operation = this.getOperationText({ type });
     const assignee = this.userNameOrEmail(assigneeId);
 
@@ -36,33 +44,41 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
 
     return desc;
   },
-  getTypeText({ type, linkedDoc }) {
-    if (type === WorkItemsStore.TYPES.COMPLETE_ANALYSIS) {
-      if (linkedDoc) {
-        if (linkedDoc.type === ProblemTypes.RISK) {
-          return this.capitalize(AnalysisTitles.riskAnalysis);
-        } else {
-          return this.capitalize(AnalysisTitles.rootCauseAnalysis);
-        }
-      }
-    }
-    return this.capitalize(type.substr(type.indexOf(' ') + 1));
-  },
   getOperationText({ type }) {
     switch(type) {
       case TYPES.VERIFY_ACTION:
         return 'verified';
         break;
+      case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+        return 'completed';
+        break;
       default:
         return `${this.lowercase(this.getButtonText({ type }))}d`;
+        break;
     }
   },
   openQAModal({ type, linkedDoc, ...args }) {
-    const _title = this.capitalize(type);
+    const _title = this.getTypeText({ type, linkedDoc });
+    const helpText = ((type) => {
+      switch (type) {
+        case TYPES.COMPLETE_ACTION:
+          return WorkInboxHelp.completeActionHelp;
+        case TYPES.VERIFY_ACTION:
+          return WorkInboxHelp.verifyActionHelp;
+        case TYPES.COMPLETE_ANALYSIS:
+          return WorkInboxHelp.completeAnalysisHelp;
+        case TYPES.COMPLETE_UPDATE_OF_DOCUMENTS:
+          return WorkInboxHelp.updateDocumentHelp;
+        default:
+          return;
+      }
+    })(type);
+
     this.modal().open({
       _title,
+      helpText,
       operation: this.getOperationText({ type }),
-      typeText: this.getTypeText({ type, linkedDoc }),
+      typeText: this.getLinkedDocTypeText({ type, linkedDoc }),
       doc: { type, linkedDoc, ...args },
       closeCaption: 'Cancel',
       template: 'WorkInbox_QAPanel_Edit'
@@ -83,7 +99,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
+            swal({
+              title: 'Restored!',
+              text: `The work item "${this.capitalize(type)}" was restored successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
@@ -110,7 +132,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Deleted', `The work item "${this.capitalize(type)}" was deleted successfully.`, 'success');
+            swal({
+              title: 'Deleted!',
+              text: `The work item "${this.capitalize(type)}" was deleted successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           }
         };
 

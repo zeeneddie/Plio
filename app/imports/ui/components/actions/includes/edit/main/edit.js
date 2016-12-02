@@ -12,7 +12,7 @@ Template.Actions_Card_Edit_Main.viewmodel({
     const userId = Meteor.userId();
 
     if (action && !isViewed(action, userId)) {
-      updateViewedBy.call({ _id: action._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: action._id }));
     }
   },
   autorun() {

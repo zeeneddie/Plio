@@ -1,35 +1,22 @@
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import {
   update,
   remove,
   updateViewedBy,
   insertScore,
-  removeScore,
-  completeAnalysis,
-  undoAnalysis,
-  setAnalysisDate,
-  updateStandards,
-  undoStandardsUpdate,
-  setStandardsUpdateDate,
-  setAnalysisExecutor,
-  setStandardsUpdateExecutor,
-  setAnalysisCompletedBy,
-  setAnalysisCompletedDate,
-  setAnalysisComments,
-  setStandardsUpdateCompletedBy,
-  setStandardsUpdateCompletedDate,
-  setStandardsUpdateComments
+  removeScore
 } from '/imports/api/risks/methods.js';
 import { WorkflowTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Risks_Card_Edit.viewmodel({
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils'],
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],
   RiskRCALabel: AnalysisTitles.riskAnalysis,
 
   risk() {
@@ -47,24 +34,6 @@ Template.Risks_Card_Edit.viewmodel({
       organizationId: this.organizationId(),
       riskId: this._id()
     };
-  },
-  getMethodRefs() {
-    return () => ({
-      setAnalysisExecutor,
-      setAnalysisDate,
-      completeAnalysis,
-      undoAnalysis,
-      setStandardsUpdateExecutor,
-      setStandardsUpdateDate,
-      updateStandards,
-      undoStandardsUpdate,
-      setAnalysisCompletedBy,
-      setAnalysisCompletedDate,
-      setAnalysisComments,
-      setStandardsUpdateCompletedBy,
-      setStandardsUpdateCompletedDate,
-      setStandardsUpdateComments
-    });
   },
   onUpdateCb() {
     return this.update.bind(this);
@@ -100,15 +69,21 @@ Template.Risks_Card_Edit.viewmodel({
             swal.close();
             return;
           };
-          swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
+
+          swal({
+            title: 'Removed!',
+            text: `The risk "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
+
+          this.handleRouteRisks();
         });
       }
     );
-  },
-  showRootCauseAnalysis() {
-    return this.risk() && (this.risk().workflowType === WorkflowTypes.SIX_STEP);
   },
   onInsertScoreCb() {
     return this.insertScore.bind(this);

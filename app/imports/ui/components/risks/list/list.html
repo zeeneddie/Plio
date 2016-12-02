@@ -6,30 +6,34 @@
     onSearchInputValue=onSearchInputValue}}
 
       {{#if isActiveRiskFilter 1}}
-        {{#each types}}
+        {{#each risksByTypes}}
           {{> ListItem
               template='Risks_SectionItem'
               title=this.title
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount}}
         {{/each}}
       {{/if}}
 
       {{#if isActiveRiskFilter 2}}
-        {{#each statuses}}
+        {{#each risksByStatuses}}
           {{> ListItem
               template="Risks_SectionItem"
               title=(getStatusName this.status)
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount
+              rText=(getStatusBadge this.status)}}
         {{/each}}
       {{/if}}
 
       {{#if isActiveRiskFilter 3}}
-        {{#each departments}}
+        {{#each risksByDepartments}}
           {{> ListItem
               template="Risks_SectionItem"
               title=this.name
               closeAllOnCollapse=false
-              items=this.items}}
+              items=this.items
+              unreadMessagesCount=this.unreadMessagesCount}}
         {{/each}}
       {{/if}}
 

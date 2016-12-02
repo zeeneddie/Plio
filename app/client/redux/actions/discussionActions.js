@@ -1,77 +1,149 @@
+import { Meteor } from 'meteor/meteor';
+import { sanitizeHtml } from 'meteor/djedi:sanitize-html-client';
+import { initialState } from '../reducers/discussionReducer';
+import { handleMethodResult } from '/imports/api/helpers';
+import { insert, remove } from '/imports/api/messages/methods';
+import { updateViewedByDiscussion } from '/imports/api/discussions/methods';
+import { isAuthor } from '/imports/ui/react/discussion/helpers';
 import {
   SET_MESSAGES,
-  SET_LOADING,
+  SET_DISCUSSION_LOADING,
   SET_SORT,
   SET_AT,
   RESET,
   SET_LAST_MESSAGE_ID,
   SET_PRIOR_LIMIT,
   SET_FOLLOWING_LIMIT,
-  SET_INITIAL_DATA_LOADED,
-  SET_RESET_COMPLETED
+  SET_RESET_COMPLETED,
+  SET_DISCUSSION,
+  SET_IS_DISCUSSION_OPENED,
 } from './types';
 
-import { initialState } from '../reducers/discussionReducer';
+export function setDiscussion(discussion) {
+  return {
+    type: SET_DISCUSSION,
+    payload: { discussion },
+  };
+}
 
 export function setMessages(messages) {
   return {
     type: SET_MESSAGES,
-    payload: messages
-  }
+    payload: { messages },
+  };
 }
 
-export function setLoading(bool) {
+export function setLoading(loading) {
   return {
-    type: SET_LOADING,
-    payload: bool
-  }
+    type: SET_DISCUSSION_LOADING,
+    payload: { loading },
+  };
 }
 
 export function setSort(sort) {
   return {
     type: SET_SORT,
-    payload: sort
-  }
+    payload: { sort },
+  };
 }
 
 export function setAt(at) {
   return {
     type: SET_AT,
-    payload: at
-  }
+    payload: { at },
+  };
 }
 
-export function reset() {
+export function reset(isDiscussionOpened = false) {
   return {
     type: RESET,
-    payload: { ...initialState, resetCompleted: true }
-  }
+    payload: { ...initialState, resetCompleted: true, isDiscussionOpened },
+  };
 }
 
-export function setLastMessageId(id) {
+export function setLastMessageId(lastMessageId) {
   return {
     type: SET_LAST_MESSAGE_ID,
-    payload: id
-  }
+    payload: { lastMessageId },
+  };
 }
 
-export function setPriorLimit(limit) {
+export function setPriorLimit(priorLimit) {
   return {
     type: SET_PRIOR_LIMIT,
-    payload: limit
-  }
+    payload: { priorLimit },
+  };
 }
 
-export function setFollowingLimit(limit) {
+export function setFollowingLimit(followingLimit) {
   return {
     type: SET_FOLLOWING_LIMIT,
-    payload: limit
-  }
+    payload: { followingLimit },
+  };
 }
 
-export function setResetCompleted(bool) {
+export function setResetCompleted(resetCompleted) {
   return {
     type: SET_RESET_COMPLETED,
-    payload: bool
-  }
+    payload: { resetCompleted },
+  };
 }
+
+export function setIsDiscussionOpened(isDiscussionOpened) {
+  return {
+    payload: { isDiscussionOpened },
+    type: SET_IS_DISCUSSION_OPENED,
+  };
+}
+
+export const submit = (
+  { organizationId, discussionId, text, fileId, type },
+  callback = () => {}
+) =>
+  (dispatch, getState) =>
+    insert.call(
+      {
+        organizationId,
+        discussionId,
+        type,
+        fileId,
+        text: sanitizeHtml(text),
+      },
+      handleMethodResult(callback(dispatch, getState))
+    );
+
+
+export const markMessagesAsRead = (discussion, message) =>
+  () => {
+    const { _id: discussionId, viewedBy = [] } = discussion;
+    const { _id: messageId } = message;
+    const { viewedUpTo = null } = Object.assign({}, viewedBy.find(fields =>
+      Object.is(fields.userId, Meteor.userId())));
+
+    // mark messages as read if the last message is actually a new one
+    if (viewedUpTo < message.createdAt) {
+      return updateViewedByDiscussion.call({
+        messageId,
+        _id: discussionId,
+      });
+    }
+
+    return undefined;
+  };
+
+export const removeMessage = (message, cb = () => {}) =>
+  (dispatch, getState) => {
+    if (!isAuthor(message)) return;
+
+    window.swal(
+      {
+        title: 'Are you sure you want to delete this message?',
+        text: 'This cannot be undone.',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: true,
+      },
+      () => remove.call({ _id: message._id }, handleMethodResult(cb(dispatch, getState)))
+    );
+  };

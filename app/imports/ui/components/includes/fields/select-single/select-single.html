@@ -16,12 +16,19 @@
     </div>
     <div class="dropdown-menu dropdown-menu-full">
       {{#each itemsFiltered}}
-        <a class="dropdown-item pointer" {{b "html: itemHtml(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+        <a class="dropdown-item pointer" {{b "text: itemTitle(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
       {{/each}}
+      {{#unless items.length }}
+        <div class="dropdown-item">
+          {{#if showContent}}
+            There are no available items...
+            {{else}}
+            <strong>There are no available items...</strong>
+          {{/if}}
+        </div>
+      {{/unless}}
       {{#if showContent}}
         {{> Template.dynamic template=content data=getContentData}}
-      {{else}}
-        <div class="dropdown-item"><strong>There are no available items...</strong></div>
       {{/if}}
     </div>
   </div>

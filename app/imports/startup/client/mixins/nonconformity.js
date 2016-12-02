@@ -4,7 +4,7 @@ import { NonConformityFilters } from '/imports/api/constants.js';
 
 export default {
   NCId() {
-    return FlowRouter.getParam('nonconformityId');
+    return FlowRouter.getParam('urlItemId');
   },
   isActiveNCFilter(filterId) {
     return this.activeNCFilterId() === parseInt(filterId, 10);

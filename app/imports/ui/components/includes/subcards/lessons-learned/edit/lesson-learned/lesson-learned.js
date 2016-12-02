@@ -9,16 +9,19 @@ Template.Subcards_LessonLearned.viewmodel({
   mixin: ['search', 'user', 'members'],
   title: '',
   date: new Date(),
-  owner: Meteor.userId(),
   notes: '<div></div>',
   linkedTo: '',
   linkedToId: '',
+  owner: '',
+  onCreated() {
+    !this.owner() && this.owner(Meteor.userId());
+  },
   onRendered(templateInstance) {
     const doc = templateInstance.data.document;
     const userId = Meteor.userId();
 
     if (doc && !isViewed(doc, userId)) {
-      updateViewedBy.call({ _id: doc._id });
+      Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
     }
   },
   titleArgs() {

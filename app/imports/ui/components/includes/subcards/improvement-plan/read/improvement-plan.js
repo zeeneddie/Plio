@@ -13,7 +13,7 @@ Template.Subcards_ImprovementPlan_Read.viewmodel({
   reviewDates: [],
   files() {
     const fileIds = this.doc().fileIds || [];
-    return Files.find({ _id: { $in: fileIds } });
+    return Files.find({ _id: { $in: fileIds } }).fetch();
   },
   doc() {
     return this.improvementPlan();

@@ -49,6 +49,10 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
 ];
 
+export const PlioS3Logos = {
+  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
+}
+
 export const CollectionNames = {
   ACTIONS: 'Actions',
   AUDIT_LOGS: 'AuditLogs',
@@ -175,10 +179,10 @@ export const ProblemMagnitudes = {
 export const ProblemsStatuses = {
   1: 'Open - just reported',
   2: 'Open - just reported, awaiting analysis',
-  3: 'Open - just reported, awaiting action',
+  3: 'Open - just reported, action(s) to be added',
   4: 'Open - analysis due today',
   5: 'Open - analysis overdue',
-  6: 'Open - analysis completed, action needed',
+  6: 'Open - analysis completed, action(s) need to be added',
   7: 'Open - analysis completed, action(s) in place',
   8: 'Open - action(s) due today',
   9: 'Open - action(s) overdue',
@@ -291,7 +295,7 @@ export const WorkItemsStore = {
     COMPLETE_ACTION: 'complete action',
     VERIFY_ACTION: 'verify action',
     COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_STANDARDS: 'complete update of standards'
+    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents'
   },
   LINKED_TYPES: {
     ...ActionTypes,
@@ -352,7 +356,7 @@ export const OrganizationDefaults = {
       }
     },
     criticalProblem: {
-      workflowType: WorkflowTypes.SIX_STEP,
+      workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 3,
         timeUnit: TimeUnits.DAYS
@@ -429,3 +433,9 @@ export const OrganizationDefaults = {
   },
   rkScoringGuidelines: defaultRiskScoringGuideline
 };
+
+
+export const EmailsForPlioReporting = [
+  'james.ives@pliohub.com',
+  'steve.ives@pliohub.com',
+];

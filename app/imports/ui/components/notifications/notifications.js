@@ -19,7 +19,7 @@ Template.Notifications.viewmodel({
     Notifications.find().observe({
       added: (doc) => {
         this.sendNotification(doc);
-        updateViewedBy.call({ _id: doc._id });
+        Meteor.defer(() => updateViewedBy.call({ _id: doc._id }));
       }
     });
   },

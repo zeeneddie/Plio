@@ -1,10 +1,31 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { BlazeLayout } from 'meteor/kadira:blaze-layout';
-
+import { withOptions } from 'react-mounter';
+import { mounter } from 'react-mounter/dist/client';
+import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
+import { $ } from 'meteor/jquery';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
+
+import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
+
+BlazeLayout.setRoot('#app');
+
+function mount(layoutClass, regions, options = {}) {
+  const additionalOptions = {
+    rootId: regions && regions.rootId || options.rootId || 'react-root',
+    rootProps: options.rootProps || {},
+  };
+
+  mounter(layoutClass, regions, { ...options, ...additionalOptions });
+}
+
+const mount2 = withOptions({
+  rootId: 'app',
+}, mount);
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -46,6 +67,7 @@ AccountsTemplates.configureRoute('forgotPwd', {
   name: 'forgotPwd',
   path: '/forgot-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
@@ -55,6 +77,7 @@ AccountsTemplates.configureRoute('resetPwd', {
   name: 'resetPwd',
   path: '/reset-password',
   layoutTemplate: 'LoginLayout',
+  redirect: redirectHandler,
   layoutRegions: {},
   contentRegion: 'content'
 });
@@ -132,30 +155,47 @@ FlowRouter.route('/transfer-organization/:transferId', {
 FlowRouter.route('/:orgSerialNumber/standards', {
   name: 'standards',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
-    });
-  }
+  action() {
+    mount2(StandardsProvider);
+  },
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId', {
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
   name: 'standard',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(StandardsProvider);
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
+  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
+  name: 'standardDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
+  action() {
+    mount2(StandardsProvider, { isDiscussionOpened: true });
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'nonConformityDiscussion',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage'
+    BlazeLayout.render('NC_Layout', {
+      content: 'NC_Page',
+      isDiscussionOpened: true
     });
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
-  // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
-  name: 'standardDiscussion',
+FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
+  // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
+  name: 'riskDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage',
+    BlazeLayout.render('Risks_Layout', {
+      content: 'Risks_Page',
       isDiscussionOpened: true
     });
   }
@@ -163,8 +203,10 @@ FlowRouter.route('/:orgSerialNumber/standards/:standardId/discussion', {
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action(params) {
+    $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
+
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page'
     });
@@ -201,7 +243,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {
@@ -247,16 +289,6 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action(params) {
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page'
-    });
-  }
-});
-
-FlowRouter.route('/:orgSerialNumber/standard-subcards', {
-  name: 'standardSubcardsPage',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardSubcardsLayout', {
-      content: 'StandardSubcardsPage'
     });
   }
 });

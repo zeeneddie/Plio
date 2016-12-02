@@ -73,7 +73,7 @@
       <div class="list-group-item">
         {{#each superpowers}}
           <h4 class="list-group-item-heading" {{b "class: { text-muted: !this.flag }"}}>
-            <i class="ms-Icon{{#if flag}} ms-Icon--check text-success{{else}} ms-Icon--x text-danger{{/if}}">
+            <i class="fa{{#if flag}} fa-check text-success{{else}} fa-times text-danger{{/if}}">
             </i>
             {{value}}
           </h4>

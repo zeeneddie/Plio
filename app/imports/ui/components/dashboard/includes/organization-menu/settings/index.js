@@ -1,4 +1,6 @@
+import './customers';
 import './departments';
+import './danger-zone';
 import './org-currency';
 import './org-name';
 import './org-timezone';

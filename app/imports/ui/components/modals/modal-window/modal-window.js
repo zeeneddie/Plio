@@ -1,10 +1,13 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { _ } from 'meteor/underscore';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { handleMethodResult } from '/imports/api/helpers.js';
 
 Template.ModalWindow.viewmodel({
   mixin: 'collapse',
+  isInitialized: false,
   onCreated() {
     // variables that don't need to be reactive
     this.savingStateTimeout = 500;
@@ -13,32 +16,41 @@ Template.ModalWindow.viewmodel({
   },
   onRendered(template) {
     this.modal.modal('show');
-    this.modal.on('hidden.bs.modal', e => Blaze.remove(template.view));
+    this.modal.on('hidden.bs.modal', () => Blaze.remove(template.view));
+
+    const oldOnpopstate = window.onpopstate;
+    window.onpopstate = (e) => {
+      this.close();
+      if (_.isFunction(oldOnpopstate)) {
+        oldOnpopstate(e);
+      }
+      window.onpopstate = oldOnpopstate;
+    };
   },
   variation: '',
   isSaving: false,
   isWaiting: false,
   // uploadsCount: 0,
   error: '',
-  moreInfoLink: '#',
   submitCaption: 'Save',
   submitCaptionOnSave: 'Saving...',
   closeCaption: 'Close',
   closeCaptionOnSave: 'Saving...',
   // closeCaptionOnUpload: 'Uploading...',
-  guideHtml: 'No help message yet',
   closeAfterCall: false,
 
   submitCaptionText() {
-    return this.isSaving() && this.submitCaptionOnSave() ? this.submitCaptionOnSave() : this.submitCaption();
+    return this.isSaving() && this.submitCaptionOnSave()
+      ? this.submitCaptionOnSave()
+      : this.submitCaption();
   },
 
   closeCaptionText() {
     if (this.isSaving() && this.variation() !== 'save') {
       return this.closeCaptionOnSave();
-    } else {
-      return this.closeCaption();
     }
+
+    return this.closeCaption();
   },
 
   isVariation(variation) {
@@ -65,7 +77,6 @@ Template.ModalWindow.viewmodel({
       }
 
       if (err) {
-        console.log(err);
         this.errors.push(err);
         this.closeAfterCall(false);
       }
@@ -112,7 +123,7 @@ Template.ModalWindow.viewmodel({
   closeModal() {
     const subcardsToSave = ViewModel.find((vm) => {
       const _id = vm._id && vm._id();
-      const isSubcard = vm.isSubcard && vm.isSubcard()
+      const isSubcard = vm.isSubcard && vm.isSubcard();
       return !_id && isSubcard;
     });
 
@@ -133,5 +144,5 @@ Template.ModalWindow.viewmodel({
 
   showCloseButtonSpinner() {
     return this.isSaving() && !this.isVariation('save');
-  }
+  },
 });

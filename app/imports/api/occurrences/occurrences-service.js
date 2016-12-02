@@ -15,7 +15,7 @@ export default {
     return this.collection.update(query, options);
   },
 
-  insert({ ...args, nonConformityId }) {
+  insert({ nonConformityId, ...args }) {
     const lastOccurrence = this.collection.findOne({
       nonConformityId,
       serialNumber: {
@@ -33,7 +33,15 @@ export default {
 
     const sequentialId = `${NC.sequentialId}-${serialNumber}`;
 
-    return this.collection.insert({ ...args, nonConformityId, serialNumber, sequentialId });
+    const { organizationId } = NC;
+
+    return this.collection.insert({
+      ...args,
+      nonConformityId,
+      serialNumber,
+      sequentialId,
+      organizationId
+    });
   },
 
   update({ _id, ...args }) {

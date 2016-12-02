@@ -95,7 +95,7 @@ export default class ReminderSender {
 
         if (isAnalysisCompleted) {
           date = doc.updateOfStandards.targetDate;
-          reminderType = ReminderTypes.COMPLETE_UPDATE_OF_STANDARDS;
+          reminderType = ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS;
         } else {
           date = doc.analysis.targetDate;
           reminderType = ReminderTypes.COMPLETE_ANALYSIS;

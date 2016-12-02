@@ -193,6 +193,7 @@ export default class DocChangeHandler {
     const documentId = this._docId;
 
     const log = {
+      organizationId: this._docOrgId,
       date: this._date,
       executor: this._userId,
       collection,

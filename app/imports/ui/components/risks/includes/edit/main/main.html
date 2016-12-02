@@ -16,10 +16,12 @@
 
       {{> Fields_Standards_Edit
           _id=this._id
+          helpText=standardFieldHelp
           standardsIds=this.standardsIds}}
 
       {{> Departments_Edit
           _id=this._id
+          helpText=departmentsFieldHelp
           departmentsIds=this.departmentsIds}}
 
       {{> NC_IdentifiedBy_Edit
@@ -38,5 +40,9 @@
 
       {{> Risks_Type_Edit _id=this._id typeId=this.typeId}}
     </div>
+
+    {{#if showRootCauseAnalysis}}
+      {{> Subcards_AnalysisWrapper_Edit (RCAArgs this)}}
+    {{/if}}
   {{/with}}
 </template>

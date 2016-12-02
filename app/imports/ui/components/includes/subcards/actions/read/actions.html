@@ -1,5 +1,5 @@
 <template name="Subcards_Actions_Read">
-  <div {{b "if: actions.length > 0"}}>
+  {{#if actions.length}}
     <div class="card-block card-subheading">
       <h4 class="card-title" {{b "text: _getNameByType(type) + 's'"}}></h4>
     </div>
@@ -8,11 +8,11 @@
         {{#each actions}}
           <a class="btn btn-secondary btn-inline pointer" {{b "attr: { href: this.href }"}}>
             <strong {{b "text: this.sequentialId"}}></strong>
-            <span {{b "text: this.title"}}></span>
+            <span>{{this.title}}</span>
             <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
           </a>
         {{/each}}
       </div>
     </div>
-  </div>
+  {{/if}}
 </template>

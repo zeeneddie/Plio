@@ -10,10 +10,10 @@ AccountsTemplates.configure({
       signIn: 'Login'
     },
     button: {
-      signUp: 'Sign up',
-      signIn: 'Login',
-      changePwd: 'Change password',
-      forgotPwd: 'Email me reset instructions'
+      signUp: 'Sign up/Signing up...',
+      signIn: 'Login/Logging in...',
+      changePwd: 'Change password/Changing password...',
+      forgotPwd: 'Email me reset instructions/Sending email...',
     },
     info: {
       emailSent: 'info.emailSent',
@@ -40,7 +40,7 @@ AccountsTemplates.addField({
   maxLength: 40,
   transform(value) {
     return value.capitalize();
-  }
+  },
 });
 
 AccountsTemplates.addField({
@@ -56,7 +56,15 @@ AccountsTemplates.addField({
   }
 });
 
-AccountsTemplates.addField(email);
+AccountsTemplates.addField({
+  _id: 'email',
+  type: 'email',
+  required: true,
+  displayName: "email",
+  re: /.+@(.+){2,}\.(?!con)(.+){2,}/,
+  errStr: 'Invalid email',
+});
+
 AccountsTemplates.addField(password);
 
 AccountsTemplates.addField({

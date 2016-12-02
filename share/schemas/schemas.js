@@ -270,7 +270,7 @@ export const DeletedSchema = new SimpleSchema({
   },
   deletedBy: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
+    regEx: dbChangeExecutor,
     optional: true
   },
   deletedAt: {
@@ -425,7 +425,15 @@ export const ReviewSchema = ((() => {
     },
     reviewedAt: {
       type: Date,
-      optional: true
+      optional: true,
+      custom: function() {
+        const value = this.value;
+        if (!_(value).isDate()) {
+          return;
+        }
+
+        return moment(value).isBefore(new Date()) ? true : 'badDate';
+      }
     },
     reviewedBy: {
       type: String,

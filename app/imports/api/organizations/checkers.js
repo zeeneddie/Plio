@@ -7,6 +7,7 @@ import {
   ORG_CANNOT_INVITE_USERS,
   ORG_CANNOT_DELETE_USERS,
   ORG_OWNER_CANNOT_BE_DELETED,
+  ORG_CANNOT_DELETE,
   ORG_CANNOT_UPDATE,
   ORG_ALREADY_ON_TRANSFER,
   ORG_ALREADY_OWNER,
@@ -14,7 +15,8 @@ import {
   ORG_USER_SHOULD_HAVE_VERIFIED_EMAIL,
   ORG_USER_NOT_ACCEPTED_INVITATION,
   ORG_TRANSFER_CANCELED_COMPLETED,
-  ORG_USER_ALREADY_DELETED
+  ORG_USER_ALREADY_DELETED,
+  ORG_CAN_NOT_BE_DELETED
 } from '../errors.js';
 import {
   canChangeOrgSettings,
@@ -92,6 +94,10 @@ export const ORG_EnsureIsOwner = (userId, organizationId) => {
   return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_UPDATE);
 };
 
+export const ORG_EnsureCanDelete = (userId, organizationId) => {
+  return checkAndThrow(!isOrgOwner(userId, organizationId), ORG_CANNOT_DELETE);
+};
+
 export const ORG_EnsureCanTransfer = (userToTransferId, userId, organizationId) => {
   checkAndThrow(Object.is(userToTransferId, userId), ORG_ALREADY_OWNER);
 
@@ -127,4 +133,14 @@ export const ORG_OnTransferChecker = (userToTransferId, transferId) => {
   ORG_EnsureCanTransfer(userToTransferId, organization.ownerId(), organization._id);
 
   return organization;
+};
+
+export const ORG_EnsureCanBeDeleted = (organizationId) => {
+  const { isAdminOrg } = Organizations.findOne({
+    _id: organizationId
+  }, {
+    fields: { isAdminOrg: 1 }
+  }) || {};
+
+  checkAndThrow(isAdminOrg === true, ORG_CAN_NOT_BE_DELETED);
 };

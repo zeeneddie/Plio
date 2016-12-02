@@ -65,6 +65,8 @@ export default {
   },
   triggers: [
     function({ diffs: { linkedTo }, newDoc: { _id } }) {
+      new ActionWorkflow(_id).refreshStatus();
+
       if (linkedTo.kind === ChangesKinds.ITEM_REMOVED) {
         const { documentId, documentType } = linkedTo.item;
 
@@ -75,8 +77,6 @@ export default {
 
         new workflowConstructor(documentId).refreshStatus();
       }
-
-      new ActionWorkflow(_id).refreshStatus();
     }
   ]
 };

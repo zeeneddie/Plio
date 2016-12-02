@@ -1,22 +1,20 @@
 <template name="UserDirectory_Card_Read">
-  <div class="content-cards scroll flexbox-column col-sm-8 hidden-sm-down" {{b "attr: { style: display }"}}>
-    <div class="content-cards-inner flex scroll" {{b "class: { content: !user }"}}>
-      {{#if user}}
-        <div class="card">
-          <div class="card-block card-heading clearfix">
-            <div class="card-heading-buttons pull-xs-right">
-              <a class="btn btn-primary" data-toggle="modal"
-                  data-target="#user-edit-modal" {{b "click: openEditUserModal"}}>
-                Edit
-              </a>
-            </div>
-            <h3 class="card-title">User details</h3>
+  <div class="content-cards-inner flex scroll" {{b "class: { content: !user }"}}>
+    {{#if user}}
+      <div class="card">
+        <div class="card-block card-heading clearfix">
+          <div class="card-heading-buttons pull-xs-right">
+            <a class="btn btn-primary" data-toggle="modal"
+                data-target="#user-edit-modal" {{b "click: openEditUserModal"}}>
+              Edit
+            </a>
           </div>
-          {{> UserDirectory_Card_Read_Inner user=user}}
+          <h3 class="card-title">User details</h3>
         </div>
-      {{else}}
-        {{> PreloaderPage}}
-      {{/if}}
-    </div>
+        {{> UserDirectory_Card_Read_Inner user=user}}
+      </div>
+    {{else}}
+      {{> PreloaderPage}}
+    {{/if}}
   </div>
 </template>

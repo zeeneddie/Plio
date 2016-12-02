@@ -41,15 +41,18 @@ const getMethods = (instance) => {
 Template.Subcards_Actions_Edit.viewmodel({
   mixin: ['modal', 'addForm', 'organization', 'date', 'actionStatus', 'workInbox', 'utils'],
   type: '',
+  isEditOnly: false,
   wrapperArgs() {
     const items = Object.assign([], invoke(this.actions(), 'fetch'));
+    const docType = this.lowercase(this._getNameByType(this.type()));
 
     return {
       items,
       renderContentOnInitial: !(items.length > 5),
       onAdd: this.onAdd.bind(this),
       getSubcardArgs: this.getSubcardArgs.bind(this),
-      ...inspire(['addText', '_lText', '_rText'], this)
+      textToReplaceAddButton: `To add a ${docType}, go to either the Non-conformities or Risks screen and add it to a Non-conformity or Risk record first`,
+      ...inspire(['addText', '_lText', '_rText', 'isEditOnly'], this),
     };
   },
   getSubcardArgs(doc) {

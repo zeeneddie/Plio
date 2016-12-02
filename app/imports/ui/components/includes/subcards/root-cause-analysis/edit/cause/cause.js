@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { _ } from 'meteor/underscore';
 
 
 Template.RCA_Cause_Edit.viewmodel({
@@ -22,46 +23,48 @@ Template.RCA_Cause_Edit.viewmodel({
     this.load({
       index: cause.index,
       text: cause.text,
-      isNew: cause.isNew
+      isNew: cause.isNew,
     });
   },
   label() {
     return `Cause ${this.index()}`;
   },
   update(e) {
-    this.callWithFocusCheck(e, () => {
-      const { index, text } = this.getData();
-      if ((text === this.templateInstance.data.text) || !index) {
-        return;
-      }
+    const { index, text } = this.getData();
+    if ((text === this.templateInstance.data.text) || !index) {
+      return;
+    }
 
-      let args;
-      if (this.isNew()) {
-        if (text) {
-          args = {
-            options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } }
-          };
-        }
+    let args;
+    if (this.isNew()) {
+      if (text) {
+        args = {
+          options: { $addToSet: { 'rootCauseAnalysis.causes': { index, text } } },
+        };
+      }
+    } else {
+      if (text) {
+        args = {
+          query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
+          options: { $set: { 'rootCauseAnalysis.causes.$.text': text } },
+        };
       } else {
-        if (text) {
-          args = {
-            query: { 'rootCauseAnalysis.causes': { $elemMatch: { index } } },
-            options: { $set: { 'rootCauseAnalysis.causes.$.text': text } }
-          };
-        } else {
-          args = {
-            options: { $pull: { 'rootCauseAnalysis.causes': { index } } }
-          };
-        }
+        args = {
+          options: { $pull: { 'rootCauseAnalysis.causes': { index } } },
+        };
       }
+    }
 
-      args && this.parent().update(args);
-    });
+    if (args) {
+      this.callWithFocusCheck(e, () => {
+        this.parent().update(args);
+      });
+    }
   },
   getData() {
     return {
       index: this.index(),
-      text: this.text()
+      text: this.text(),
     };
-  }
-})
+  },
+});

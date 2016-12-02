@@ -63,8 +63,8 @@ Template.Select_Single.viewmodel({
   itemsFiltered() {
     return this.itemsArray().filter(({ _id }) => !this.excludedItems().includes(_id));
   },
-  itemHtml({ html, title }) {
-    return html || title;
+  itemTitle({ title }) {
+    return title;
   },
   select({ _id, title }) {
     this.value(title);

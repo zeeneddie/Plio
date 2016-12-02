@@ -9,7 +9,8 @@ Template.Card_Read.viewmodel({
   isReadOnly: false,
   isDeleteBtnShown: false,
   isReady: false,
-  
+  isFullScreenMode: false,
+
   isOrgOwner({ organizationId }) {
     return isOrgOwner(Meteor.userId(), organizationId);
   },
@@ -26,6 +27,26 @@ Template.Card_Read.viewmodel({
 
     this.onOpenEditModal();
   }, 1000),
+  toggleScreenMode() {
+    const $div = $(this.templateInstance.firstNode).closest('.content-cards-inner');
+    const offset = $div.offset();
+    if (this.parent().isFullScreenMode()) {
+      this.parent().isFullScreenMode(false);
+
+      setTimeout(() => {
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
+      }, 150);
+    } else {
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': $(window).width() - (offset.left + $div.outerWidth()), 'bottom': '0', 'left': offset.left });
+
+      setTimeout(() => {
+
+        // Safari workaround
+        $div.css({ 'transition': 'all .15s linear' });
+        this.parent().isFullScreenMode(true);
+      }, 100);
+    }
+  },
   handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
       console.log(err);

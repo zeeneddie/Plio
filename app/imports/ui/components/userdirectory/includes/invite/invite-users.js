@@ -1,12 +1,13 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import pluralize from 'pluralize';
+import moment from 'moment-timezone';
 
 import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
-  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share compliance standards documents, to record non-conformities and risks and to track actions. See you soon.',
+  welcomeMessage: 'Hi there.\nWe\'ll be using Plio to share standards documents, to record non-conformities and risks and to track actions. See you soon.',
   usersEntries: _.range(0, 4).map((i) => {
     return {avatarIndex: i};
   }),

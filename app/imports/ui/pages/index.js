@@ -1,8 +1,6 @@
 import './dashboard-page.html';
 import './dashboard-page.js';
 import './hello-page.html';
-import './standards-page.html';
-import './standards-page.js';
 import './preloader-page.html';
 import './not-found-page.html';
 import './hello-page.js';
@@ -24,6 +22,4 @@ import './actions-page.html';
 import './actions-page.js';
 import './work-inbox-page.html';
 import './work-inbox-page.js';
-import './standard-subcards-page.html';
-import './standard-subcards-page.js';
 import './maintenance-page.html';

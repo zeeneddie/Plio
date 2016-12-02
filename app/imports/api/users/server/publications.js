@@ -6,7 +6,7 @@ Meteor.publish(null, function() {
 });
 
 Meteor.publish('organizationUsers', function (userIds) {
-  return Meteor.users.find({ _id: {$in: userIds } });
+  return Meteor.users.find({ _id: { $in: userIds } });
 });
 
 Meteor.publish('organizationOnlineUsers', function (userIds) {

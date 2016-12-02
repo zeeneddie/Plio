@@ -1,10 +1,25 @@
 <template name="Card_Read">
   {{#with doc}}
-    <div class="card">
+    <div class="card {{className}}">
       <div class="card-block card-heading">
         {{#unless isReadOnly}}
           <div class="card-heading-buttons pull-xs-right">
             {{#if isReady}}
+              {{#if isExpandable}}
+                <a class="btn btn-secondary toggle-expand-btn" {{b "click: toggleScreenMode"}}>
+                </a>
+              {{/if}}
+              {{#if hasDiscussion}}
+                {{#unless isDiscussionOpened}}
+                  <a class="btn btn-secondary"
+                    {{b "click: onDiscussionOpen, attr: { href: pathToDiscussion }"}}>
+                    Discuss
+                    {{#if messagesNotViewedCount}}
+                      <span class="label label-danger label-chat-count">{{messagesNotViewedCount}}</span>
+                    {{/if}}
+                  </a>
+                {{/unless}}
+              {{/if}}
               {{#if this.isDeleted}}
                 <a class="btn btn-secondary" {{b "click: restore(this)"}}>
                   Restore
@@ -29,7 +44,7 @@
 
       {{> Template.contentBlock}}
 
-      {{> CardDocChangelog document=this documentType=docType}}
+      {{> CardDocChangelog document=this collection=collection}}
     </div>
   {{/with}}
 </template>

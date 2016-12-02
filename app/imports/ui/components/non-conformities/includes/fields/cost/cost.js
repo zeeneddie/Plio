@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { OrgCurrencies } from '/imports/share/constants.js';
+import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.NC_Cost_Edit.viewmodel({
   mixin: 'organization',
@@ -10,6 +11,7 @@ Template.NC_Cost_Edit.viewmodel({
       this.load({ currency });
     }
   },
+  helpMessage: NonConformitiesHelp.costPerOccurance,
   currency: '',
   cost: '',
   update(e) {

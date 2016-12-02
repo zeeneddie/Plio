@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { Random } from 'meteor/random';
 
 import { getTzTargetDate } from '/imports/share/helpers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 
 Template.IP_ReviewDate_Edits.viewmodel({
@@ -92,11 +93,13 @@ Template.IP_ReviewDate_Edits.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal(
-              'Removed!',
-              `Review date "${date}" was removed successfully.`,
-              'success'
-            );
+            swal({
+              title: 'Removed!',
+              text: `Review date "${date}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           }
         };
 

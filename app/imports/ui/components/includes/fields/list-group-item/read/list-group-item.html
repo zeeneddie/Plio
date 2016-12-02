@@ -1,0 +1,12 @@
+<template name="Fields_ListGroupItem_Read">
+  <div class="list-group-item">
+    <p class="list-group-item-text">{{label}}</p>
+    <h4 class="list-group-item-heading {{className}}">
+      {{#if Template.contentBlock}}
+        {{> Template.contentBlock}}
+      {{else}}
+        {{text}}
+      {{/if}}
+    </h4>
+  </div>
+</template>

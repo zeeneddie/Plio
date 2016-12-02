@@ -1,4 +1,4 @@
-import { moment } from 'meteor/momentjs:moment';
+import moment from 'moment-timezone';
 
 export default {
   renderDate(date, format = 'DD MMM YYYY') {

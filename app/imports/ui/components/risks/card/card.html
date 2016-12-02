@@ -1,78 +1,83 @@
 <template name="Risks_Card_Read">
   <div class="content-cards-inner flex scroll" {{b "class: { content: !risk }"}}>
-    {{#if risks.length}}
+    {{#if showCard}}
       {{#with risk}}
         {{#Card_Read
           isReadOnly=isReadOnly
           cardTitle="Risk"
           doc=this
-          docType="risk"
+          collection="Risks"
           isReady=isReady
-          onRestore=onRestoreCb
-          onDelete=onDeleteCb
-          onOpenEditModal=onOpenEditModalCb}}
+          hasDiscussion=true
+          isDiscussionOpened=isDiscussionOpened
+          pathToDiscussion=pathToDiscussion
+          messagesNotViewedCount=messagesNotViewedCount
+          onRestore=(callback 'restore')
+          onDelete=(callback 'delete')
+          onOpenEditModal=(callback 'openEditModal')}}
 
           <div class="list-group">
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Risk name</p>
-              <h4 class="list-group-item-heading">
-                <span {{b "text: this.title"}}></span>
-                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
-              </h4>
-            </div>
+            {{#Fields_ListGroupItem_Read
+              label="Risk name"}}
+              <span>{{this.title}}</span>
+              <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+              <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+            {{/Fields_ListGroupItem_Read}}
 
-            {{#if this.description}}
-              <div class="list-group-item">
-                <p class="list-group-item-text">Description</p>
-                <h4 class="list-group-item-heading" {{b "text: this.description"}}></h4>
-              </div>
+            {{#with this.description}}
+              {{> Fields_ListGroupItem_Read
+                  label="Description"
+                  text=this}}
+            {{/with}}
+
+            {{#if isReady}}
+              {{> Fields_Standards_Read standardsIds=this.standardsIds}}
             {{/if}}
 
-            {{> Fields_Standards_Read standardsIds=this.standardsIds}}
-
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Identified by</p>
-                  <h4 class="list-group-item-heading" {{b "text: userNameOrEmail(this.identifiedBy)"}}></h4>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Date identified</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.identifiedAt)"}}></h4>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              {{#if this.magnitude}}
+              {{#with this.identifiedBy}}
                 <div class="col-sm-6">
-                  <div class="list-group-item">
-                    <p class="list-group-item-text">Initial categorization</p>
-                    <h4 class="list-group-item-heading" {{b "text: capitalize(this.magnitude)"}}></h4>
-                  </div>
+                  {{> Fields_ListGroupItem_Read
+                    label="Identified by"
+                    text=(userNameOrEmail this)}}
                 </div>
-              {{/if}}
-              {{#with type}}
+              {{/with}}
+              {{#with this.identifiedAt}}
                 <div class="col-sm-6">
-                  <div class="list-group-item">
-                    <p class="list-group-item-text">Type</p>
-                    <h4 class="list-group-item-heading" {{b "text: this.title"}}></h4>
-                  </div>
+                  {{> Fields_ListGroupItem_Read
+                      label="Date identified"
+                      text=(renderDate this)}}
                 </div>
               {{/with}}
             </div>
 
             <div class="row">
-              <div class="col-sm-12">
-                {{#with departmentsIds}}
-                  {{> Departments_Read departmentsIds=this}}
-                {{/with}}
-              </div>
+              {{#with this.magnitude}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                    label="Initial categorization"
+                    text=(capitalize this)}}
+                </div>
+              {{/with}}
+              {{#with type}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Type"
+                      text=this.title}}
+                </div>
+              {{/with}}
             </div>
+
+            {{#if isReady}}
+              {{#with departmentsIds}}
+                <div class="row">
+                  <div class="col-sm-12">
+                      {{> Departments_Read departmentsIds=this}}
+                  </div>
+                </div>
+              {{/with}}
+            {{/if}}
 
           </div>
 
@@ -80,7 +85,7 @@
               analysis=this.analysis
               updateOfStandards=this.updateOfStandards
               RCALabel=RiskRCALabel
-          }}
+              UOSLabel=RiskUOSLabel}}
 
           {{#with notify}}
             {{> Subcards_Notify_Read users=this}}
@@ -94,17 +99,23 @@
               improvementPlan=this.improvementPlan
               label="Treatment plan"}}
 
-          {{> Subcards_Actions_Read
-              type=ActionTypes.CORRECTIVE_ACTION
-              documentId=this._id}}
+          {{#if isReady}}
+            {{> Subcards_Actions_Read
+                type=ActionTypes.CORRECTIVE_ACTION
+                documentId=this._id}}
 
-          {{> Subcards_Actions_Read
-              type=ActionTypes.PREVENTATIVE_ACTION
-              documentId=this._id}}
+            {{> Subcards_Actions_Read
+                type=ActionTypes.PREVENTATIVE_ACTION
+                documentId=this._id}}
 
-          {{> Subcards_LessonsLearned_Read documentId=this._id}}
+            {{> Subcards_LessonsLearned_Read documentId=this._id}}
 
-          {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+            {{> Subcards_OtherFiles_Read fileIds=this.fileIds}}
+          {{else}}
+            <div class="m-t-3">
+              {{> PreloaderPage size=1}}
+            </div>
+          {{/if}}
         {{/Card_Read}}
       {{else}}
         {{> PreloaderPage}}

@@ -34,12 +34,14 @@ AuditManager.startAudit();
 
 Changelog.find().observe({
   added: ({ _id, collection, changeKind, newDocument, oldDocument, userId }) => {
-    const auditConfig = AuditConfigs.get(collection);
+    try {
+      const auditConfig = AuditConfigs.get(collection);
 
-    new DocChangeHandler(auditConfig, changeKind, {
-      newDocument, oldDocument, userId
-    }).handleChange();
-
-    Changelog.remove({ _id });
+      new DocChangeHandler(auditConfig, changeKind, {
+        newDocument, oldDocument, userId
+      }).handleChange();
+    } finally {
+      Changelog.remove({ _id });
+    }
   }
 });

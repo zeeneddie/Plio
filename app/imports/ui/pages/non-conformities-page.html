@@ -1,7 +1,28 @@
 <template name="NC_Page">
-  {{#Page}}
-    {{> Problems_ListWrapper (listArgs)}}
+  {{#Page classNames=classNames}}
+    {{#if isDiscussionOpened}}
+      {{> NC_Card_Read
+          _id=NCId
+          isReady=isReady
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{else}}
+      {{> Problems_ListWrapper (listArgs)}}
+    {{/if}}
   {{else}}
-    {{> NC_Card_Read _id=NCId}}
+    {{#if isDiscussionOpened}}
+      {{> Discussion_Card
+          organizationId=organizationId
+          discussionId=discussion._id
+          linkedTo=NCId
+          isReady=isDiscussionReady
+          doc=NC}}
+    {{else}}
+      {{> NC_Card_Read
+          _id=NCId
+          isReady=isReady
+          isDiscussionOpened=isDiscussionOpened
+          messagesNotViewedCount=messagesNotViewedCount}}
+    {{/if}}
   {{/Page}}
 </template>

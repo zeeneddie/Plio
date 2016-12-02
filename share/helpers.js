@@ -2,7 +2,13 @@ import { check } from 'meteor/check';
 import moment from 'moment-timezone';
 import Handlebars from 'handlebars';
 
-import { AvatarPlaceholders, CollectionNames, DocumentTypes, ProblemMagnitudes } from './constants.js';
+import {
+  AvatarPlaceholders,
+  CollectionNames,
+  DocumentTypes,
+  ProblemMagnitudes,
+  SystemName,
+} from './constants.js';
 import { Actions } from './collections/actions.js';
 import { NonConformities } from './collections/non-conformities.js';
 import { Risks } from './collections/risks.js';
@@ -11,6 +17,8 @@ import { Organizations } from './collections/organizations';
 
 
 export const capitalize = str => str.charAt(0).toUpperCase() + str.substring(1);
+
+export const lowercase = str => str.charAt(0).toLowerCase() + str.substring(1);
 
 export const deepExtend = (dest, src) => {
   _(src).each((val, key) => {
@@ -192,4 +200,21 @@ export const isOverdue = (targetDate, timezone) => {
 export const renderTemplate = (template, data = {}) => {
   const compiledTemplate = Handlebars.compile(template);
   return compiledTemplate(data);
+};
+
+export const getUser = (userId) => {
+  return Meteor.users.findOne({ _id: userId });
+};
+
+export const getUserFullNameOrEmail = (userOrId) => {
+  let user = userOrId;
+  if (typeof userOrId === 'string') {
+    if (userOrId === SystemName) {
+      return userOrId;
+    }
+
+    user = getUser(userOrId);
+  }
+
+  return (user && user.fullNameOrEmail()) || '';
 };

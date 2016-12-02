@@ -1,23 +1,27 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
-import get from 'lodash.get';
+import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
 
-import { insert } from '/imports/api/standards/methods.js';
-import { addedToNotifyList } from '/imports/api/standards/methods.js';
-import { setModalError, inspire } from '/imports/api/helpers.js';
-import { insert as insertFile } from '/imports/api/files/methods.js';
+import { insert } from '/imports/api/standards/methods';
+import { setModalError, inspire, pickDeep } from '/imports/api/helpers';
+import { insert as insertFile } from '/imports/api/files/methods';
 import UploadService from '/imports/ui/utils/uploads/UploadService';
+import {
+  openStandardByFilter,
+} from '/imports/ui/react/standards/containers/StandardsDataLoader/helpers';
+import store, { getState } from '/client/redux/store';
 
 
 Template.CreateStandard.viewmodel({
-  mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal'],
+  mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal', 'store'],
   save() {
     const data = this.getChildrenData();
 
     const { sourceType, sourceFile, sourceUrl, sourceVideoUrl } = data;
     const isSourcePresent = _.every([
       sourceType,
-      sourceFile || sourceUrl || sourceVideoUrl
+      sourceFile || sourceUrl || sourceVideoUrl,
     ]);
     if (!isSourcePresent) {
       setModalError(
@@ -69,7 +73,7 @@ Template.CreateStandard.viewmodel({
       this.modal().callMethod(insertFile, {
         name: sourceFile.name,
         extension: sourceFile.name.split('.').pop().toLowerCase(),
-        organizationId: this.organizationId()
+        organizationId: this.organizationId(),
       }, (err, fileId) => {
         if (!err && fileId) {
           this._insertStandard({ ...args, fileId });
@@ -78,14 +82,13 @@ Template.CreateStandard.viewmodel({
     } else {
       this._insertStandard(args);
     }
-
   },
   _insertStandard(args) {
     const {
       title, sectionId, typeId,
       owner, status, nestingLevel,
       sourceType, sourceFile, sourceUrl,
-      sourceVideoUrl, fileId
+      sourceVideoUrl, fileId,
     } = args;
 
     const source1 = { type: sourceType };
@@ -94,7 +97,7 @@ Template.CreateStandard.viewmodel({
     } else {
       const url = {
         url: sourceUrl,
-        video: sourceVideoUrl
+        video: sourceVideoUrl,
       }[sourceType];
       _(source1).extend({ url });
     }
@@ -107,7 +110,7 @@ Template.CreateStandard.viewmodel({
       status,
       nestingLevel,
       source1,
-      ...inspire(['organizationId'], this)
+      ...inspire(['organizationId'], this),
     };
 
     const cb = (_id, open) => {
@@ -119,10 +122,21 @@ Template.CreateStandard.viewmodel({
         ? this.goToStandard(_id, false)
         : this.goToStandard(_id);
 
+      openStandardByFilter({
+        dispatch: this.store().dispatch,
+        ...pickDeep([
+          'standards.standards',
+          'standards.sections',
+          'standards.types',
+          'global.filter',
+          'global.urlItemId',
+        ])(this.getState()),
+      });
+
       open({
         _id,
-        _title: 'Compliance standard',
-        template: 'EditStandard'
+        _title: 'Standard',
+        template: 'EditStandard',
       });
     };
 
@@ -133,18 +147,18 @@ Template.CreateStandard.viewmodel({
       slingshotDirective: 'standardFiles',
       slingshotContext: {
         standardId,
-        organizationId: this.organizationId()
+        organizationId: this.organizationId(),
       },
       maxFileSize: Meteor.settings.public.otherFilesMaxSize,
       hooks: {
-        afterUpload: (fileId, url) => {
+        afterUpload: (__, url) => {
           const fileName = file.name;
           const extension = fileName.split('.').pop().toLowerCase();
           if (extension === 'docx') {
             this._launchDocxRendering(url, fileName, standardId);
           }
-        }
-      }
+        },
+      },
     });
 
     uploadService.uploadExisting(fileId, file);

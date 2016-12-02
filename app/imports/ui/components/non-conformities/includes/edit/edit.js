@@ -1,15 +1,16 @@
 import { Template } from 'meteor/templating';
 import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
 import {
   update,
   remove
 } from '/imports/api/non-conformities/methods.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.NC_Card_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck'],
+  mixin: ['organization', 'nonconformity', 'modal', 'callWithFocusCheck', 'router', 'collapsing'],
   NC() {
     return this._getNCByQuery({ _id: this._id() });
   },
@@ -61,11 +62,35 @@ Template.NC_Card_Edit.viewmodel({
             return;
           };
 
-          swal('Removed!', `The non-conformity "${title}" was removed successfully.`, 'success');
+          swal({
+            title: 'Removed!',
+            text: `The non-conformity "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
+
+          this.redirect();
         });
       }
     );
   },
+  redirect() {
+    const list = Object.assign({}, ViewModel.findOne('NC_List'));
+
+    if (list) {
+      const { first } = Object.assign({}, invoke(list, '_findNCForFilter'));
+
+      if (!!first) {
+        const { _id } = first;
+
+        Meteor.setTimeout(() => {
+          this.goToNC(_id);
+          this.expandCollapsed(_id);
+        }, 0);
+      }
+    }
+  }
 });

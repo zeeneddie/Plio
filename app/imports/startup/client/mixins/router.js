@@ -1,4 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import invoke from 'lodash.invoke';
 
 export default {
   goToDashboard(orgSerialNumber) {
@@ -7,15 +8,15 @@ export default {
       FlowRouter.go('dashboardPage', params);
     });
   },
-  goToStandard(standardId, withQueryParams = true) {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), standardId };
+  goToStandard(urlItemId, withQueryParams = true) {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
     const queryParams = !!withQueryParams ? { filter: this.activeStandardFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('standard', params, queryParams);
     });
   },
-  goToNC(nonconformityId, withQueryParams = true) {
-    const params = { orgSerialNumber: this.organizationSerialNumber(), nonconformityId };
+  goToNC(urlItemId, withQueryParams = true) {
+    const params = { orgSerialNumber: this.organizationSerialNumber(), urlItemId };
     const queryParams = !!withQueryParams ? { filter: this.activeNCFilterId() } : {};
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('nonconformity', params, queryParams);
@@ -41,6 +42,13 @@ export default {
       FlowRouter.go('workInbox', params, queryParams);
     });
   },
+  goToDefaultWorkItem(
+    list = 'WorkInbox_List',
+    getRouteOptions = '_findWorkItemForFilter',
+    redirectHandler = 'goToWorkItem'
+  ) {
+    return redirectToDefaultDocument.call(this, list, getRouteOptions, redirectHandler);
+  },
   goToRisk(riskId, withQueryParams = true) {
     const params = { riskId, orgSerialNumber: this.organizationSerialNumber() };
     const queryParams = !!withQueryParams ? { filter: this.activeRiskFilterId() } : {};
@@ -54,5 +62,20 @@ export default {
     FlowRouter.withReplaceState(() => {
       FlowRouter.go('risks', params, queryParams);
     });
+  },
+  handleRouteRedirect(vmName) {
+    return Meteor.defer(() => invoke(ViewModel.findOne(vmName), 'handleRoute'));
+  },
+  handleRouteRisks() {
+    return this.handleRouteRedirect('Risks_List');
+  },
+  handleRouteWorkInbox() {
+    return this.handleRouteRedirect('WorkInbox_List');
+  },
+  handleRouteNCs() {
+    return this.handleRouteRedirect('NC_List');
+  },
+  handleRouteStandards() {
+    return this.handleRouteRedirect('StandardsList');
   }
 };

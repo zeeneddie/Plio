@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { CountSubs, WorkItemSubs } from '/imports/startup/client/subsmanagers.js';
 import pluralize from 'pluralize';
+import moment from 'moment-timezone';
+import { CountSubs, WorkItemSubs } from '/imports/startup/client/subsmanagers';
+import { WorkItemsStore } from '/imports/share/constants';
 
 Template.Dashboard_WorkItemStats.viewmodel({
   mixin: ['utils', 'organization', 'workInbox', {
@@ -13,7 +15,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
   enableLimit: true,
   limit: 5,
   currentDate: new Date(),
-  
+
   autorun() {
     const isReady = this._subHandlers().every(handler => handler.ready());
 
@@ -80,6 +82,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
   overdueItems() {
     const items = Object.assign([], this.items());
     const docs = items.map((item) => {
+      const linkedDoc = item.linkedDoc;
       const time = `${moment(item.targetDate).from(this.currentDate(), true)} past due`;
       const { title, sequentialId } = Object.assign({}, item.getLinkedDoc());
       const type = item.type;
@@ -92,6 +95,7 @@ Template.Dashboard_WorkItemStats.viewmodel({
       return {
         sequentialId,
         title,
+        linkedDoc,
         type,
         time,
         href

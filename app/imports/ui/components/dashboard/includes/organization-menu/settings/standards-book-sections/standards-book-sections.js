@@ -8,18 +8,19 @@ import {
 import {
   insert, update, remove
 } from '/imports/api/standards-book-sections/methods.js';
-
+import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
 
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
   onCreated(template) {
     template.autorun(() => OrgSettingsDocSubs.subscribe('standards-book-sections', this.organizationId()));
   },
-  _lText: 'Compliance standards sections',
+  _lText: 'Standards sections',
   _rText() {
     return invoke(this.standardsBookSections(), 'count');
   },
   placeholder: 'Title',
+  helpText: OrganizationSettingsHelp.standardSections,
   onChangeCb() {
     return this.onChange.bind(this);
   },

@@ -1,10 +1,10 @@
 <template name="Discussion_Card">
 	{{#if isReady}}
 		{{#if (every discussionId organizationId)}}
-			{{> Discussion_React
-					discussionId=discussionId
+			{{> Discussion_Card_Inner
 					organizationId=organizationId
-					standard=standard}}
+					discussionId=discussionId
+					doc=doc}}
 		{{/if}}
 	{{else}}
 		{{> PreloaderPage ""}}
