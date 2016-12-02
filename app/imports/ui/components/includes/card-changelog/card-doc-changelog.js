@@ -4,36 +4,36 @@ import { Template } from 'meteor/templating';
 Template.CardDocChangelog.viewmodel({
   mixin: 'counter',
   document: null,
-  documentType: '',
+  collection: '',
   documentId() {
     const { _id } = this.document() || {};
     return _id;
   },
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('docLastUserLog', this.documentId(), this.documentType());
+      template.subscribe('lastHumanLog', this.documentId(), this.collection());
     });
   },
   subscribeForFirstLogs(onReady) {
     const documentId = this.documentId();
-    const documentType = this.documentType();
+    const collection = this.collection();
     const tpl = this.templateInstance;
 
     tpl.subscribe(
-      'docLogsCount',
+      'auditLogsCount',
       `doc-logs-count-${documentId}`,
       documentId,
-      documentType
+      collection
     );
 
-    tpl.subscribe('docAuditLogs', documentId, documentType, { onReady });
+    tpl.subscribe('auditLogs', documentId, collection, { onReady });
   },
   subscribeForAllLogs(skip, onReady) {
     const documentId = this.documentId();
-    const documentType = this.documentType();
+    const collection = this.collection();
     const tpl = this.templateInstance;
 
-    tpl.subscribe('docAuditLogs', documentId, documentType, skip, 0, { onReady });
+    tpl.subscribe('auditLogs', documentId, collection, skip, 0, { onReady });
   },
   logsLength() {
     return this.get(`doc-logs-count-${this.documentId()}`);

@@ -29,17 +29,17 @@ const checkSubsArgs = (userId, documentId, collection) => {
   return true;
 };
 
-Meteor.publish('auditLogs', function(documentId, collection, skip=0, limit=10) {
+Meteor.publish('auditLogs', function(documentId, collection, skip = 0, limit = 10) {
   if (!checkSubsArgs(this.userId, documentId, collection)) {
     return this.ready();
   }
 
   return AuditLogs.find({
-    documentId
+    documentId,
   }, {
     skip,
     limit,
-    sort: { date: -1 }
+    sort: { date: -1 },
   });
 });
 
