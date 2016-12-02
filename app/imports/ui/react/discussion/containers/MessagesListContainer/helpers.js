@@ -6,7 +6,7 @@ import {
   getUser,
   getDate,
   scrollToSelectedMessage
-} from '/imports/api/messages/helpers';
+} from '/imports/ui/react/discussion/helpers';
 
 export const transformMessages = ({ discussion, messages, at }) => {
   const messagesMapped = messages.map((message, i, arr) => {

@@ -1,39 +1,41 @@
-import React from 'react';
+import { Meteor } from 'meteor/meteor';
+import { Tracker } from 'meteor/tracker';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import get from 'lodash.get';
-import { compose, withProps, lifecycle, shallowEqual } from 'recompose';
+import { compose, lifecycle, shallowEqual } from 'recompose';
+import { _ } from 'meteor/underscore';
 
 import MessagesListWrapper from '../../components/MessagesListWrapper';
 import PreloaderPage from '/imports/ui/react/components/PreloaderPage';
 import { Messages } from '/imports/share/collections/messages';
-import { Discussions } from '/imports/share/collections/discussions';
+
 import {
   setMessages,
   setLoading,
   setLastMessageId,
   setResetCompleted,
   markMessagesAsRead,
-  setDiscussion
 } from '/client/redux/actions/discussionActions';
 import { getState } from '/client/redux/store';
 import notifications from '/imports/startup/client/mixins/notifications';
-import { pickFromDiscussion, pickC, omitC } from '/imports/api/helpers';
+import { pickFromDiscussion, omitC } from '/imports/api/helpers';
 import { LastDiscussionMessage } from '/client/collections';
 
 const getDiscussionState = () => getState('discussion');
 
-let observerCleanup, intervalCleanup;
+let observerCleanup;
+let intervalCleanup;
 
 const observer = () => {
   const handle = LastDiscussionMessage.find().observe({
-    changed({ lastMessageId, createdBy }) {
+    changed({ createdBy }) {
       if (!Object.is(createdBy, Meteor.userId())) {
         // play new-message sound if the sender is not a current user
         notifications.playNewMessageSound();
       }
-    }
+    },
   });
 
   return () => handle.stop();
@@ -53,18 +55,14 @@ const onPropsChange = (props, onData) => {
     at = null,
     priorLimit = 25,
     followingLimit = 25,
-    resetCompleted = false
+    resetCompleted = false,
   } = props;
   const subOpts = { sort, at, priorLimit, followingLimit };
   const messagesSubscription = Meteor.subscribe('messages', discussionId, subOpts);
   const lastMessageSubscription = Meteor.subscribe('discussionMessagesLast', discussionId);
   const subscriptions = [messagesSubscription, lastMessageSubscription];
-  const discussion = Discussions.findOne({ _id: discussionId });
 
-  dispatch(batchActions([
-    setDiscussion(discussion),
-    setLoading(true)
-  ]));
+  dispatch(setLoading(true));
 
   const state = getDiscussionState();
 
@@ -78,13 +76,13 @@ const onPropsChange = (props, onData) => {
     const query = { discussionId };
     const options = { sort: { createdAt: 1 } };
     const messages = Messages.find(query, options).fetch();
-    let lastMessageId = Tracker.nonreactive(() =>
+    const lastMessageId = Tracker.nonreactive(() =>
       get(LastDiscussionMessage.findOne(), 'lastMessageId'));
 
-    let actions = [
+    const actions = [
       setLoading(false),
       setLastMessageId(lastMessageId),
-      setMessages(messages)
+      setMessages(messages),
     ];
 
     dispatch(batchActions(actions));
@@ -102,9 +100,8 @@ const onPropsChange = (props, onData) => {
     subscriptions.map(stopSubscription);
 
     observerCleanup && observerCleanup();
-
     intervalCleanup && intervalCleanup();
-  }
+  };
 };
 
 const shouldResubscribe = (props, nextProps) => {
@@ -112,12 +109,12 @@ const shouldResubscribe = (props, nextProps) => {
   // we don't want to trigger resubscribe when user selects a message
   return (!props.resetCompleted && nextProps.resetCompleted) ||
           !shallowEqual(omitProps(props), omitProps(nextProps));
-}
+};
 
 const readMessages = (props) => {
   const getLastMessage = () => Object.assign({}, _.last(props.messages));
 
-  props.dispatch(markMessagesAsRead(props.discussion, getLastMessage()))
+  props.dispatch(markMessagesAsRead(props.discussion, getLastMessage()));
 };
 
 export default compose(
@@ -135,6 +132,6 @@ export default compose(
     },
     componentWillUnmount() {
       readMessages(this.props);
-    }
-  })
+    },
+  }),
 )(MessagesListWrapper);

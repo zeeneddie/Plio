@@ -4,27 +4,33 @@ export const ALERT_AUTOHIDE_TIME = 1500;
 export const DocumentTitles = {
   STANDARD: 'Standard',
   NC: 'Non-conformity',
-  RISK: 'Risk'
+  RISK: 'Risk',
 };
 
 export const NonConformityFilters = {
   1: 'magnitude',
   2: 'status',
   3: 'department',
-  4: 'deleted'
+  4: 'deleted',
 };
 
 export const RiskFilters = {
   1: 'type',
   2: 'status',
   3: 'department',
-  4: 'deleted'
+  4: 'deleted',
 };
 
 export const StandardFilters = {
-  1: 'section',
-  2: 'type',
-  3: 'deleted'
+  1: { name: 'section', prepend: 'by' },
+  2: { name: 'type', prepend: 'by' },
+  3: { name: 'deleted', prepend: '' },
+};
+
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
 };
 
 export const WorkInboxFilters = {
@@ -33,17 +39,17 @@ export const WorkInboxFilters = {
   3: 'my completed',
   4: 'team completed',
   5: 'my deleted',
-  6: 'team deleted'
+  6: 'team deleted',
 };
 
 export const UncategorizedTypeSection = {
   _id: 'uncategorized',
   title: 'Uncategorized',
-  abbreviation: 'UNC'
+  abbreviation: 'UNC',
 };
 
 export const TruncatedStringLengths = {
-  c40: 40
+  c40: 40,
 };
 
 export const StandardsListProjection = {
@@ -57,7 +63,7 @@ export const StandardsListProjection = {
   owner: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const RisksListProjection = {
@@ -74,7 +80,7 @@ export const RisksListProjection = {
   createdAt: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const ActionsListProjection = {
@@ -93,7 +99,7 @@ export const ActionsListProjection = {
   createdAt: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const NonConformitiesListProjection = {
@@ -111,7 +117,7 @@ export const NonConformitiesListProjection = {
   viewedBy: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const WorkItemsListProjection = {
@@ -126,61 +132,79 @@ export const WorkItemsListProjection = {
   isCompleted: 1,
   isDeleted: 1,
   deletedAt: 1,
-  deletedBy: 1
+  deletedBy: 1,
 };
 
 export const StandardsBookSectionsListProjection = {
   organizationId: 1,
-  title: 1
+  title: 1,
 };
 
 export const StandardTypesListProjection = {
   organizationId: 1,
-  title: 1
+  title: 1,
 };
 
 export const DepartmentsListProjection = {
   organizationId: 1,
-  name: 1
+  name: 1,
 };
 
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
   updateOfStandards: 'Update of standard(s)',
-  updateOfRiskRecord: 'Update of risk record'
+  updateOfRiskRecord: 'Update of risk record',
 };
 
 export const ActionTitles = {
   CA: 'Corrective action',
   PA: 'Preventative action',
-  RK: 'Risk control'
+  RK: 'Risk control',
 };
 
-const riskScoreTypes = {
+export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
     label: 'Inherent risk',
-    adj: 'Inherent'
+    adj: 'Inherent',
   },
   residual: {
     id: 'residual',
     label: 'Residual risk',
-    adj: 'Residual'
-  }
+    adj: 'Residual',
+  },
 };
 
-const StringLimits = {
+export const StringLimits = {
   abbreviation: {
     min: 1,
-    max: 4
+    max: 4,
   },
   title: {
     min: 1,
-    max: 80
-  }
+    max: 80,
+  },
 };
 
-const SystemName = 'Plio';
+export const PullMap = {
+  left: 'pull-xs-left',
+  right: 'pull-xs-right',
+  center: 'pull-xs-center',
+};
 
-const RCAMaxCauses = 5;
+export const TextAlignMap = {
+  left: 'text-xs-left',
+  right: 'text-xs-right',
+  center: 'text-xs-center',
+};
+
+export const MarginMap = {
+  left: 'margin-left',
+  'left-2x': 'margin-left-2x',
+  right: 'margin-right',
+  'right-2x': 'margin-right-2x',
+  bottom: 'margin-bottom',
+};
+
+export const MOBILE_BREAKPOINT = 768;

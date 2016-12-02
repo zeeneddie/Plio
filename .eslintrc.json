@@ -14,7 +14,8 @@
     "jsx-a11y/rule-name": "off",
     "react/jsx-indent": ["error", 2],
     "react/jsx-indent-props": ["error", 2],
-    "import/no-unresolved": [2, { "ignore": ["meteor"] }]
+    "import/no-unresolved": [2, { "ignore": ["meteor"] }],
+    "global-require": "off"
   },
   "settings": {
     "import/resolver": {

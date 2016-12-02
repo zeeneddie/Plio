@@ -7,7 +7,7 @@
       <div class="list-group">
         <div class="list-group-item">
           {{#each NCs}}
-            <a href="{{pathFor 'nonconformity' orgSerialNumber=organizationSerialNumber nonconformityId=_id}}" class="btn btn-secondary btn-inline pointer">
+            <a href="{{pathFor 'nonconformity' orgSerialNumber=organizationSerialNumber urlItemId=_id}}" class="btn btn-secondary btn-inline pointer">
               <strong>{{this.sequentialId}}</strong>
               <span>{{this.title}}</span>
               <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>

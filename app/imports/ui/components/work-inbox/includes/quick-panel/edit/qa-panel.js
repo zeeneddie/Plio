@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { chain } from '/imports/api/helpers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.WorkInbox_QAPanel_Edit.viewmodel({
   mixin: ['modal', 'utils'],
@@ -13,11 +14,13 @@ Template.WorkInbox_QAPanel_Edit.viewmodel({
 
     const callback = (err) => {
       if (!err) {
-        swal(
-          this.capitalize(this.operation()),
-          `${this.typeText()} was ${this.operation()} successfully.`,
-          'success'
-        );
+        swal({
+          title: this.capitalize(this.operation()),
+          text: `${this.typeText()} was ${this.operation()} successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
 
         this.modal().close();
       }

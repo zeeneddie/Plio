@@ -5,7 +5,7 @@ import { StandardFilters } from '/imports/api/constants.js';
 
 export default {
   standardId() {
-    return FlowRouter.getParam('standardId');
+    return FlowRouter.getParam('urlItemId');
   },
   isActiveStandardFilter(filterId) {
     return this.activeStandardFilterId() === parseInt(filterId, 10);
@@ -26,7 +26,7 @@ export default {
     return StandardFilters[id];
   },
   currentStandard() {
-    const _id =  FlowRouter.getParam('standardId');
+    const _id =  FlowRouter.getParam('urlItemId');
     return Standards.findOne({ _id });
   },
 

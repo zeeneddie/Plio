@@ -1,6 +1,5 @@
 import { Roles } from 'meteor/alanning:roles';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import moment from 'moment-timezone';
 import curry from 'lodash.curry';
 
 import { AnalysisStatuses, UserMembership, UserRoles } from '/imports/share/constants.js';
@@ -11,7 +10,8 @@ import {
   ONLY_ORG_OWNER_CAN_DELETE,
   CANNOT_RESTORE_NOT_DELETED
 } from './errors.js';
-import { chain, checkAndThrow, injectCurry } from './helpers.js';
+import { chain, checkAndThrow, injectCurry, getUserJoinedAt } from './helpers.js';
+import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 
 const { compose } = _;
 
@@ -33,7 +33,7 @@ export * from './discussions/checkers.js';
 
 export const isMobileRes = () => {
   const width = $(window).width();
-  return width < 768 && width;
+  return width <= MOBILE_BREAKPOINT && width;
 };
 
 const userIdOrgIdTester = (userId, organizationId) => _.every([
@@ -237,3 +237,13 @@ export const onRemoveChecker = wrap(({ userId }, doc) => {
 export const onRestoreChecker = wrap((_, doc) => {
   return !doc.isDeleted;
 }, CANNOT_RESTORE_NOT_DELETED);
+
+export const isNewDoc = (organization, userId, { createdAt, viewedBy }) => {
+  if (!organization || !userId || !(viewedBy instanceof Array)) return false;
+
+  const joinedAt = getUserJoinedAt(organization, userId);
+
+  if (!joinedAt) return false;
+
+  return !viewedBy.includes(userId) && createdAt > joinedAt;
+};

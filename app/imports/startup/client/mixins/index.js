@@ -40,6 +40,7 @@ import utils from './utils';
 import workInbox from './workInbox';
 import workItemStatus from './workItemStatus';
 import documentStatus from './documentStatus';
+import store from './store';
 
 ViewModel.mixin({
   documentStatus,
@@ -82,6 +83,7 @@ ViewModel.mixin({
   workInbox,
   workItemStatus,
   vmTraverse,
+  store,
 });
 
 ViewModel.persist = false;

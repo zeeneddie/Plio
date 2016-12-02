@@ -70,7 +70,7 @@
     font-size: 20px;
     line-height: 18px;
     position: relative;
-    top: 2px;
+    top: 1px;
     width: 1.28571429em;
     text-align: center
   }
@@ -79,10 +79,15 @@
 .btn-group {
   max-width: 100%;
 
-  & > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  .btn-icon i {
+    top: 2px;
+  }
+
+  &:not([data-toggle="buttons"]) > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
     max-width: 100%;
     padding-right: 46px;
   }
+
   &-nomargin {
     margin-bottom: 0 !important;
 
@@ -114,16 +119,18 @@
       margin-right: 5px;
     }
 
-    &.ms-Icon {
-      font-size: 19px;
-      position: relative;
-      top: 1px;
+    &.margin-right-2x {
+      margin-right: 10px;
+    }
+  }
 
-      &--caretDown {
-        font-size: 18px;
-        position: relative;
-        top: 2px;
-      }
+  .label {
+    &.margin-left {
+      margin-left: 5px;
+    }
+
+    &.margin-right {
+      margin-right: 5px;
     }
   }
 

@@ -12,7 +12,7 @@ Template.NC_Layout.viewmodel({
         ? true
         : { $in: [null, false] };
       const _subHandlers = [
-        DocumentLayoutSubs.subscribe('nonConformitiesLayout', orgSerialNumber, isDeleted)
+        DocumentLayoutSubs.subscribe('nonConformitiesLayout', orgSerialNumber, isDeleted),
       ];
 
       this._subHandlers(_subHandlers);
