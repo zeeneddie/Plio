@@ -24,7 +24,7 @@ const StandardsRHS = (props) => (
           isDiscussionOpened={props.isDiscussionOpened}
           names={props.names.headerNames}
           isDeleted={props.standard ? props.standard.isDeleted : false}
-          unreadMessagesCount={{props.standard ? props.standard.unreadMessagesCount : 0}
+          unreadMessagesCount={props.standard ? props.standard.unreadMessagesCount : 0}
           pathToDiscussion={props.pathToDiscussion}
           hasDocxAttachment={props.hasDocxAttachment}
           hasAccess={props.hasAccess}

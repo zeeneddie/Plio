@@ -76,12 +76,12 @@ export default compose(
   composeWithTracker(testPerformance(loadMainData), null, null, {
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
   }),
-  connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
-  composeWithTracker(testPerformance(loadCountersData), null, null, {
-    shouldResubscribe: (props, nextProps) => !!(
-      props.isDiscussionOpened && !nextProps.isDiscussionOpened
-    ),
-  }),
+  // connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
+  // composeWithTracker(testPerformance(loadCountersData), null, null, {
+  //   shouldResubscribe: (props, nextProps) => !!(
+  //     props.isDiscussionOpened && !nextProps.isDiscussionOpened
+  //   ),
+  // }),
   connect(pickDeep([
     'collections.standardBookSections',
     'collections.standardTypes',
