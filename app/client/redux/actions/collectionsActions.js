@@ -9,7 +9,11 @@ import {
   SET_STANDARD_TYPES,
   SET_STANDARDS,
   SET_LESSONS_LEARNED,
+  ADD_STANDARD,
+  UPDATE_STANDARD,
+  REMOVE_STANDARD,
 } from './types';
+import { createAction } from './helpers';
 
 export function setDepartments(departments) {
   return {
@@ -80,3 +84,9 @@ export function setLessons(lessons) {
     payload: { lessons },
   };
 }
+
+export const addStandard = createAction(ADD_STANDARD);
+
+export const updateStandard = createAction(UPDATE_STANDARD);
+
+export const removeStandard = createAction(REMOVE_STANDARD);

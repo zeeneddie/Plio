@@ -8,6 +8,8 @@ import {
   SET_FILTERED_STANDARDS,
   INIT_STANDARDS,
   SET_IS_FULL_SCREEN_MODE,
+  SET_STANDARD_DEPS_READY,
+  SET_STANDARDS_INITIALIZING,
 } from './types';
 
 export function initSections({ sections, types, standards }) {
@@ -70,5 +72,19 @@ export function setIsFullScreenMode(isFullScreenMode) {
   return {
     payload: { isFullScreenMode },
     type: SET_IS_FULL_SCREEN_MODE,
+  };
+}
+
+export function setDepsReady(areDepsReady) {
+  return {
+    payload: { areDepsReady },
+    type: SET_STANDARD_DEPS_READY,
+  };
+}
+
+export function setInitializing(initializing) {
+  return {
+    type: SET_STANDARDS_INITIALIZING,
+    payload: { initializing },
   };
 }

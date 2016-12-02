@@ -5,7 +5,6 @@ import {
   shouldUpdate,
   defaultProps,
   withHandlers,
-  withProps,
   branch,
   renderComponent,
 } from 'recompose';
@@ -38,6 +37,13 @@ import loadCountersData from '../../loaders/loadCountersData';
 import initMainData from '../../loaders/initMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
+import { Standards } from '/imports/share/collections/standards';
+import {
+  addStandard,
+  updateStandard,
+  removeStandard,
+} from '/client/redux/actions/collectionsActions';
+import { setInitializing } from '/client/redux/actions/standardsActions';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === 3
@@ -72,9 +78,11 @@ export default compose(
     renderComponent(StandardsLayout),
     _.identity
   ),
-  connect(pickDeep(['organizations.organizationId'])),
+  connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
   composeWithTracker(testPerformance(loadMainData), null, null, {
-    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
+    shouldResubscribe: (props, nextProps) =>
+      props.organizationId !== nextProps.organizationId ||
+      props.initializing !== nextProps.initializing,
   }),
   connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
   composeWithTracker(testPerformance(loadCountersData), null, null, {
@@ -101,6 +109,38 @@ export default compose(
   connect(pickDeep(['organizations.organizationId'])),
   composeWithTracker(testPerformance(loadDeps), null, null, {
     shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
+  }),
+  connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
+  lifecycle({
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.initializing && nextProps.areDepsReady) {
+        const { dispatch, organizationId } = nextProps;
+
+        Meteor.defer(() => {
+          this.handle = Standards.find({ organizationId }).observeChanges({
+            added(_id, fields) {
+              if (this.handle) {
+                console.log('added');
+                dispatch(addStandard({ _id, ...fields }));
+              }
+            },
+            changed(_id, fields) {
+              console.log('changed');
+              dispatch(updateStandard({ _id, ...fields }));
+            },
+            removed(_id) {
+              console.log('removed');
+              dispatch(removeStandard(_id));
+            },
+          });
+        });
+
+        dispatch(setInitializing(false));
+      }
+    },
+    componentWillUnmount() {
+      return typeof this.handle === 'function' && this.handle.stop();
+    },
   }),
   connect(pickDeep([
     'organizations.organization',

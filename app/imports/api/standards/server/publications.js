@@ -1,32 +1,23 @@
 import { Meteor } from 'meteor/meteor';
-import curry from 'lodash.curry';
 
-import { getJoinUserToOrganizationDate, getUserOrganizations } from '/imports/api/organizations/utils';
-import { Organizations } from '/imports/share/collections/organizations';
+import { getJoinUserToOrganizationDate } from '/imports/api/organizations/utils';
 import { Standards } from '/imports/share/collections/standards';
 import { isOrgMember, isOrgMemberBySelector } from '../../checkers';
 import { Files } from '/imports/share/collections/files';
 import { LessonsLearned } from '/imports/share/collections/lessons';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
-import { Actions } from '/imports/share/collections/actions';
-import { WorkItems } from '/imports/share/collections/work-items';
 import { Departments } from '/imports/share/collections/departments';
 import Counter from '../../counter/server';
 import {
   StandardsListProjection,
-  ActionsListProjection,
-  NonConformitiesListProjection,
-  RisksListProjection,
-  WorkItemsListProjection,
   StandardsBookSectionsListProjection,
   StandardTypesListProjection,
   DepartmentsListProjection,
 } from '/imports/api/constants';
 import { ActionTypes } from '/imports/share/constants';
 import get from 'lodash.get';
-import property from 'lodash.property';
-import { check, Match } from 'meteor/check';
+import { check } from 'meteor/check';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
@@ -37,12 +28,10 @@ import {
   toObjFind
 } from '../../helpers';
 import { getDepartmentsCursorByIds } from '../../departments/utils';
-import { getActionsCursorByLinkedDoc, getActionsWithLimitedFields } from '../../actions/utils';
-import { getWorkItemsCursorByIdsWithLimitedFields } from '../../work-items/utils';
+import { getActionsWithLimitedFields } from '../../actions/utils';
 import {
   getProblemsByStandardIds,
   createProblemsTree,
-  getProblemsWithLimitedFields
 } from '../../problems/utils';
 
 const getStandardFiles = (standard) => {
@@ -127,7 +116,7 @@ Meteor.publishComposite('standardCard', function({ _id, organizationId }) {
     find() {
       return Standards.find({
         _id,
-        organizationId
+        organizationId,
       });
     },
     children: [
