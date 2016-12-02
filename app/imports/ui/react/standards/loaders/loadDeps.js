@@ -18,8 +18,9 @@ import {
   setLessons,
 } from '/client/redux/actions/collectionsActions';
 import { setDepsReady } from '/client/redux/actions/standardsActions';
+import loadMainData from './loadMainData';
 
-export default function loadDeps({ dispatch, organizationId }, onData) {
+export default function loadDeps({ dispatch, organizationId, initializing }, onData) {
   const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
 
   if (subscription.ready()) {
@@ -42,6 +43,10 @@ export default function loadDeps({ dispatch, organizationId }, onData) {
       setLessons(lessons),
       setDepsReady(true),
     ];
+
+    if (initializing) {
+      loadMainData({ dispatch, organizationId }, () => null);
+    }
 
     dispatch(batchActions(reduxActions));
   }

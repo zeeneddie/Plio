@@ -12,6 +12,12 @@ import {
   ADD_STANDARD,
   UPDATE_STANDARD,
   REMOVE_STANDARD,
+  ADD_STANDARD_BOOK_SECTION,
+  UPDATE_STANDARD_BOOK_SECTION,
+  REMOVE_STANDARD_BOOK_SECTION,
+  ADD_STANDARD_TYPE,
+  UPDATE_STANDARD_TYPE,
+  REMOVE_STANDARD_TYPE,
 } from './types';
 import { createAction } from './helpers';
 
@@ -90,3 +96,15 @@ export const addStandard = createAction(ADD_STANDARD);
 export const updateStandard = createAction(UPDATE_STANDARD);
 
 export const removeStandard = createAction(REMOVE_STANDARD);
+
+export const addStandardBookSection = createAction(ADD_STANDARD_BOOK_SECTION);
+
+export const updateStandardBookSection = createAction(UPDATE_STANDARD_BOOK_SECTION);
+
+export const removeStandardBookSection = createAction(REMOVE_STANDARD_BOOK_SECTION);
+
+export const addStandardType = createAction(ADD_STANDARD_TYPE);
+
+export const updateStandardType = createAction(UPDATE_STANDARD_TYPE);
+
+export const removeStandardType = createAction(REMOVE_STANDARD_TYPE);

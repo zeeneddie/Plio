@@ -37,13 +37,12 @@ import loadCountersData from '../../loaders/loadCountersData';
 import initMainData from '../../loaders/initMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
-import { Standards } from '/imports/share/collections/standards';
-import {
-  addStandard,
-  updateStandard,
-  removeStandard,
-} from '/client/redux/actions/collectionsActions';
 import { setInitializing } from '/client/redux/actions/standardsActions';
+import {
+  observeStandards,
+  observeStandardBookSections,
+  observeStandardTypes,
+} from '../../observers';
 
 const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
   const isDeleted = filter === 3
@@ -78,12 +77,16 @@ export default compose(
     renderComponent(StandardsLayout),
     _.identity
   ),
-  connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
-  composeWithTracker(testPerformance(loadMainData), null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.organizationId !== nextProps.organizationId ||
-      props.initializing !== nextProps.initializing,
+  connect(pickDeep(['organizations.organizationId'])),
+  lifecycle({
+    componentWillMount() {
+      loadMainData(this.props, () => null);
+    },
   }),
+  // composeWithTracker(testPerformance(loadMainData), null, null, {
+  //   shouldResubscribe: (props, nextProps) =>
+  //     props.organizationId !== nextProps.organizationId,
+  // }),
   connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
   composeWithTracker(testPerformance(loadCountersData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
@@ -106,9 +109,11 @@ export default compose(
       typeof props.standard !== typeof nextProps.standard
     ),
   }),
-  connect(pickDeep(['organizations.organizationId'])),
+  connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
   composeWithTracker(testPerformance(loadDeps), null, null, {
-    shouldResubscribe: (props, nextProps) => props.organizationId !== nextProps.organizationId,
+    shouldResubscribe: (props, nextProps) =>
+      props.organizationId !== nextProps.organizationId ||
+      props.initializing !== nextProps.initializing,
   }),
   connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
   lifecycle({
@@ -117,29 +122,19 @@ export default compose(
         const { dispatch, organizationId } = nextProps;
 
         Meteor.defer(() => {
-          this.handle = Standards.find({ organizationId }).observeChanges({
-            added(_id, fields) {
-              if (this.handle) {
-                console.log('added');
-                dispatch(addStandard({ _id, ...fields }));
-              }
-            },
-            changed(_id, fields) {
-              console.log('changed');
-              dispatch(updateStandard({ _id, ...fields }));
-            },
-            removed(_id) {
-              console.log('removed');
-              dispatch(removeStandard(_id));
-            },
-          });
+          const args = [dispatch, { organizationId }];
+          this.observers = [
+            observeStandards(...args),
+            observeStandardBookSections(...args),
+            observeStandardTypes(...args),
+          ];
         });
 
         dispatch(setInitializing(false));
       }
     },
     componentWillUnmount() {
-      return typeof this.handle === 'function' && this.handle.stop();
+      return this.observers.map(observer => typeof observer === 'function' && observer.stop());
     },
   }),
   connect(pickDeep([
@@ -169,10 +164,8 @@ export default compose(
      * the current standard is deleted or restored
      */
     componentWillUpdate(nextProps) {
-      Meteor.defer(() => {
-        redirectByFilter(nextProps);
-        openStandardByFilter(nextProps);
-      });
+      redirectByFilter(nextProps);
+      openStandardByFilter(nextProps);
     },
   }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
