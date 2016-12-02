@@ -1,5 +1,5 @@
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers';
-import { setIsHelpCardReady } from '/client/redux/actions/helpDocsActions';
+import { setIsCardReady } from '/client/redux/actions/globalActions';
 
 export default ({ urlItemId, dispatch }, onData) => {
   let sub;
@@ -10,7 +10,7 @@ export default ({ urlItemId, dispatch }, onData) => {
     isCardReady = sub.ready();
   }
 
-  dispatch(setIsHelpCardReady(isCardReady));
+  dispatch(setIsCardReady(isCardReady));
 
   onData(null, {});
 };

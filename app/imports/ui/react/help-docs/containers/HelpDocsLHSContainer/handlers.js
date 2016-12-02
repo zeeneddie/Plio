@@ -9,7 +9,7 @@ import {
   addCollapsed,
   chainActions,
 } from '/client/redux/actions/globalActions';
-import { extractIds } from '/imports/api/helpers';
+import { extractIds, propEqId } from '/imports/api/helpers';
 import { setFilteredHelpDocs } from '/client/redux/actions/helpDocsActions';
 import { createHelpSectionItem } from '../../helpers';
 import _search_ from '/imports/startup/client/mixins/search';
@@ -51,7 +51,7 @@ const onChange = _.debounce(({ dispatch, urlItemId }, target) => {
 
     dispatch(chainActions(actions)).then(afterCollapse);
   } else {
-    const selectedHelp = helpDocs.find(help => help._id === urlItemId);
+    const selectedHelp = helpDocs.find(propEqId(urlItemId));
     const sectionItem = createHelpSectionItem(selectedHelp.sectionId);
 
     dispatch(addCollapsed({

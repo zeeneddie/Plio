@@ -36,7 +36,6 @@ import StandardsLayout from '../../components/StandardsLayout';
 import {
   initSections,
   initTypes,
-  setIsCardReady,
   initStandards,
 } from '/client/redux/actions/standardsActions';
 import {
@@ -50,6 +49,7 @@ import {
   setUrlItemId,
   setSearchText,
   setDataLoading,
+  setIsCardReady,
 } from '/client/redux/actions/globalActions';
 import {
   setDepartments,

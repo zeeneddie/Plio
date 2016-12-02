@@ -1,10 +1,11 @@
 import { CollectionNames } from '/imports/share/constants';
+import { propEq } from '/imports/api/helpers';
 
 export const createHelpSectionsData = (helpSections, helpDocs) => {
   return helpSections
     .map(section => ({
       ...section,
-      helpDocs: helpDocs.filter(help => help.sectionId === section._id),
+      helpDocs: helpDocs.filter(propEq('sectionId', section._id)),
     }))
     .filter(section => !!section.helpDocs.length);
 };

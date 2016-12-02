@@ -2,11 +2,12 @@ import React from 'react';
 
 import PageContainer from '../../../containers/PageContainer';
 import HelpDocsLHSContainer from '../../containers/HelpDocsLHSContainer';
+import HelpDocsRHSContainer from '../../containers/HelpDocsRHSContainer';
 
 const HelpDocsPage = () => (
   <PageContainer>
     <HelpDocsLHSContainer />
-    <div>lorem ipsum</div>
+    <HelpDocsRHSContainer />
   </PageContainer>
 );
 

@@ -31,7 +31,7 @@ Meteor.publishComposite('helpCard', function getHelpCardData(helpId) {
 
   return {
     find() {
-      return HelpDocs.find();
+      return HelpDocs.find({ _id: helpId });
     },
     children: [{
       find(help) {

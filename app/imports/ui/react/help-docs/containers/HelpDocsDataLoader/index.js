@@ -7,22 +7,25 @@ import {
 } from 'recompose';
 import { connect } from 'react-redux';
 import { composeWithTracker, compose as kompose } from 'react-komposer';
+import { batchActions } from 'redux-batched-actions';
 import ReactDOM from 'react-dom';
 import get from 'lodash.get';
 
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { setHelpSectionsData } from '/client/redux/actions/helpDocsActions';
+import { Files } from '/imports/share/collections/files';
+import { setFiles } from '/client/redux/actions/collectionsActions';
+import { setHelpSectionsData, setHelpDocsData } from '/client/redux/actions/helpDocsActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
 import { pickC, pickDeep } from '/imports/api/helpers';
 import { goToDashboard } from '../../../helpers/routeHelpers';
-import { createHelpSectionsData } from '../../helpers';
+import { createHelpSectionsData, createHelpDocsData } from '../../helpers';
 import { redirectToHelpDoc, expandHelpSection } from './helpers';
 import loadGlobalData from '../../loaders/loadGlobalData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import HelpDocsLayout from '../../components/HelpDocsLayout';
 
-const initMainData = ({ helpDocs, helpSections, dispatch }, onData) => {
+const initHelpSectionsData = ({ helpDocs, helpSections, dispatch }, onData) => {
   const helpSectionsData = createHelpSectionsData(helpSections, helpDocs);
   dispatch(setHelpSectionsData(helpSectionsData));
 
@@ -41,13 +44,18 @@ export default compose(
     'collections.helpSections',
   ])),
 
-  kompose(initMainData),
+  kompose(initHelpSectionsData),
 
   connect(pickDeep(['global.urlItemId'])),
 
   composeWithTracker(loadCardData, null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.urlItemId !== nextProps.urlItemId,
+  }),
+
+  composeWithTracker((props, onData) => {
+    props.dispatch(setFiles(Files.find().fetch())); // FIXME
+    onData(null, {});
   }),
 
   connect(pickDeep([
@@ -71,10 +79,6 @@ export default compose(
     },
   }),
 
-  mapProps(props => pickC([
-    'dispatch',
-  ])(props)),
-
   connect(pickDeep(['window.width', 'mobile.showCard'])),
 
   withHandlers({
@@ -91,6 +95,12 @@ export default compose(
   }),
 
   connect(state => ({ isLoading: get(state, 'global.dataLoading') })),
+
+  mapProps(props => pickC([
+    'dispatch',
+    'isLoading',
+    'onHandleReturn',
+  ])(props)),
 
   shouldUpdate((props, nextProps) => props.isLoading !== nextProps.isLoading),
 )(HelpDocsLayout);

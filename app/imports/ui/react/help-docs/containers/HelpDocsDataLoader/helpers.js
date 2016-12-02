@@ -1,11 +1,12 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
+import { propEqId } from '/imports/api/helpers';
 import { addCollapsed } from '/client/redux/actions/globalActions';
 import { createHelpSectionItem } from '../../helpers';
 
 export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => {
-  const helpDoc = helpDocs.find(help => help._id === urlItemId);
+  const helpDoc = helpDocs.find(propEqId(urlItemId));
   const shouldRedirect = FlowRouter.getRouteName() === 'helpDocs' || !helpDoc;
 
   if (shouldRedirect && helpSectionsData.length) {
@@ -18,7 +19,7 @@ export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => 
 };
 
 export const expandHelpSection = ({ urlItemId, helpDocs, dispatch }) => {
-  const { sectionId } = helpDocs.find(help => help._id === urlItemId) || {};
+  const { sectionId } = helpDocs.find(propEqId(urlItemId)) || {};
 
   if (sectionId) {
     const sectionItem = createHelpSectionItem(sectionId);

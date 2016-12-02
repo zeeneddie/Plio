@@ -1,7 +1,7 @@
 import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { setIsFullScreenMode } from '/client/redux/actions/standardsActions';
+import { setIsFullScreenMode } from '/client/redux/actions/globalActions';
 import { setFilter } from '/client/redux/actions/globalActions';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';

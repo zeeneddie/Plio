@@ -445,3 +445,7 @@ export const compareStatusesByPriority = (() => {
     }
   };
 })();
+
+export const getSelectedOrgSerialNumber = () => (
+  localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
+);

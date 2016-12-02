@@ -17,8 +17,8 @@ import { getPathToDiscussion } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
-  standards: { standards, isCardReady, isFullScreenMode },
-  global: { urlItemId, userId, filter },
+  standards: { standards },
+  global: { urlItemId, userId, filter, isCardReady, isFullScreenMode },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
   collections: { files, ncs, risks, actions, workItems, lessons },

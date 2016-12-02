@@ -11,6 +11,8 @@ import {
   SET_ANIMATING,
   SET_URL_ITEM_ID,
   SET_DATA_LOADING,
+  SET_IS_CARD_READY,
+  SET_IS_FULL_SCREEN_MODE,
 } from './types';
 
 export function setUserId(userId) {
@@ -52,6 +54,20 @@ export function setDataLoading(dataLoading) {
   return {
     type: SET_DATA_LOADING,
     payload: { dataLoading },
+  };
+}
+
+export function setIsCardReady(isCardReady) {
+  return {
+    payload: { isCardReady },
+    type: SET_IS_CARD_READY,
+  };
+}
+
+export function setIsFullScreenMode(isFullScreenMode) {
+  return {
+    payload: { isFullScreenMode },
+    type: SET_IS_FULL_SCREEN_MODE,
   };
 }
 
