@@ -13,7 +13,7 @@ import { WorkflowTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { isViewed } from '/imports/api/checkers.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Risks_Card_Edit.viewmodel({
   mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],
@@ -69,7 +69,14 @@ Template.Risks_Card_Edit.viewmodel({
             swal.close();
             return;
           };
-          swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
+
+          swal({
+            title: 'Removed!',
+            text: `The risk "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
 

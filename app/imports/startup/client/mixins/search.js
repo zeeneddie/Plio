@@ -1,16 +1,22 @@
+import invoke from 'lodash.invoke';
+
 export default {
   searchResultsNumber: 0,
 
-  searchObject(prop, fields, precise = false) {
-    const searchObject = {};
+  searchObject(prop, fields) {
+    return this.searchQuery(invoke(this, prop), fields);
+  },
 
-    const value = (this[prop] && this[prop]() || '').trim();
+  searchQuery(input, fields, precise = false) {
+    const searchObject = {};
+    let value = `${input}`.trim();
 
     if (value) {
       let r;
 
       try {
         if (precise) {
+          value = value.replace(/"/g, '');
           r = new RegExp(`.*(${value}).*`, 'i');
         } else {
           r = value.split(' ')
@@ -28,7 +34,7 @@ export default {
           const obj = {};
 
           obj[field.name] = field.subField
-            ? {$elemMatch: {[field.subField]: r}}
+            ? { $elemMatch: { [field.subField]: r } }
             : r;
 
           return obj;
@@ -44,5 +50,5 @@ export default {
 
   searchResultsText() {
     return `${this.searchResultsNumber()} matching results`;
-  }
+  },
 };

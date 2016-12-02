@@ -7,14 +7,17 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { ProblemsStatuses } from '/imports/share/constants.js';
 import {
   extractIds, findById, lengthItems,
-  flattenMapItems, inspire
+  flattenMapItems, inspire, getSortedItems,
+  compareRisksByScore, compareStatusesByPriority,
 } from '/imports/api/helpers.js';
 
 
 Template.Risks_List.viewmodel({
   mixin: [
     'organization', 'modal', 'risk', 'problemsStatus',
-    'collapsing', 'router', 'utils'
+    'collapsing', 'router', 'utils', {
+      counter: 'counter'
+    }
   ],
   onCreated() {
     Meteor.defer(() => this.handleRoute());
@@ -83,7 +86,8 @@ Template.Risks_List.viewmodel({
 
       return {
         ...type,
-        items
+        items,
+        unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     };
 
@@ -102,7 +106,8 @@ Template.Risks_List.viewmodel({
         organizationId,
         items,
         _id: 'Risks.types.uncategorized',
-        title: 'Uncategorized'
+        title: 'Uncategorized',
+        unreadMessagesCount: this._getTotalUnreadMessages(items),
       };
     })());
 
@@ -111,8 +116,44 @@ Template.Risks_List.viewmodel({
       .concat(uncategorized)
       .filter(lengthItems);
   },
+  risksByDepartments() {
+    return this.departments().map((dept) => {
+      return Object.assign({}, dept, {
+        items: getSortedItems(dept.items, compareRisksByScore)
+      });
+    });
+  },
+  risksByStatuses() {
+    const statuses = getSortedItems(this.statuses(), (statusData1, statusData2) => {
+      return compareStatusesByPriority(statusData1.status, statusData2.status);
+    });
+
+    return statuses.map((status) => {
+      return Object.assign({}, status, {
+        items: getSortedItems(status.items, compareRisksByScore)
+      });
+    });
+  },
+  risksByTypes() {
+    return this.types().map((type) => {
+      return Object.assign({}, type, {
+        items: getSortedItems(type.items, compareRisksByScore)
+      });
+    });
+  },
+  getStatusBadge(status) {
+    return `<i class="fa fa-circle margin-right text-${this.getClassByStatus(status)}"></i>`;
+  },
   onSearchInputValue() {
     return value => extractIds(this._findRiskForFilter().array);
+  },
+  _getTotalUnreadMessages(risks) {
+    const riskIds = extractIds(risks);
+    const totalUnreadMessages = riskIds.reduce((prev, cur) => {
+      return prev + this.counter.get('risk-messages-not-viewed-count-' + cur);
+    }, 0);
+
+    return totalUnreadMessages;
   },
   onModalOpen() {
     return () =>

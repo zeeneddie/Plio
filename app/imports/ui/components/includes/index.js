@@ -25,3 +25,4 @@ import './page';
 import './card-create';
 import './org-deletion';
 import './help-info';
+import './messages-counter';

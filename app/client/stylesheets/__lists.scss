@@ -7,8 +7,16 @@ $variable-padding: .75rem;
 
     &-heading {
       font-size: 18px;
+      line-height: 21px;
+      word-break: break-word;
       font-family: $font-semilight;
       font-weight: normal;
+    }
+
+    &-content {
+      .flex {
+        margin-left: 10px;
+      }
     }
 
     &-text {
@@ -20,6 +28,10 @@ $variable-padding: .75rem;
 .content-list {
   padding: 0;
   @include hide-scrollbar;
+
+  &.scroll {
+    transform: translateZ(0);
+  }
 
   @media (min-width: 768px) {
     width: 35%;
@@ -85,12 +97,12 @@ $variable-padding: .75rem;
         margin-right: 10px;
 
         &.label-default {
-          visibility: hidden;
+          display: none;
         }
       }
 
       &-content {
-        overflow: hidden;
+        overflow: visible;
       }
 
       .btn-right {
@@ -114,11 +126,8 @@ $variable-padding: .75rem;
 
       &-heading,
       &-text {
-        &.pull-left {
-          clear: left;
-        }
         &.pull-right {
-          clear: right;
+          clear: bottom;
         }
       }
 
@@ -128,6 +137,7 @@ $variable-padding: .75rem;
 
       .chat-indicator {
         color: #ccc;
+        margin-left: 14px;
       }
 
       &.active {

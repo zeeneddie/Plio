@@ -1,4 +1,6 @@
 .modal {
+  transform: translateZ(0);
+
   @media (min-width: 600px) {
     .clearable-field-container .clear-field {
       top: 2px;

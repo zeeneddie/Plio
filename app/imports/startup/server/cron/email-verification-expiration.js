@@ -1,3 +1,5 @@
+import moment from 'moment-timezone';
+
 import InvitationService from '/imports/api/organizations/invitation-service';
 
 SyncedCron.add({

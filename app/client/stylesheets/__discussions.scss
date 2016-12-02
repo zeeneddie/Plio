@@ -46,7 +46,7 @@
 .chat-indicator {
 	position: relative;
 	right: 3px;
-	top: 1px;
+	top: -3px;
 
 	> i {
 		font-size: 21px;
@@ -58,7 +58,7 @@
 		position: absolute;
 		right: -3px;
 		top: 50%;
-		margin-top: -12px;
+		margin-top: -11px;
 		margin-left: -2px;
 		border-radius: 10px;
 		padding: 0.25em 0.5em

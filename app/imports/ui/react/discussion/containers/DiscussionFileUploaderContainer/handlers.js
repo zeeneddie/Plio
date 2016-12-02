@@ -8,7 +8,7 @@ export const addFile = ({ dispatch, disabled, discussionId, organizationId }) =>
       organizationId,
       discussionId,
       fileId,
-      type: 'file'
+      type: 'file',
     }, cb));
-  }
-}
+  };
+};

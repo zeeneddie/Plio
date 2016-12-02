@@ -49,6 +49,14 @@ Template.NC_Card_Read.viewmodel({
       _id: this.NC() && this.NC()._id
     });
   },
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      urlItemId: this.NCId()
+    };
+    const queryParams = { filter: this.activeNCFilterId() };
+    return FlowRouter.path('nonConformityDiscussion', params, queryParams);
+  },
   restore({ _id, isDeleted, title }, cb = () => {}) {
     if (!isDeleted) return;
 

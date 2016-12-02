@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
+import moment from 'moment-timezone';
 
 import { ActionUndoTimeInHours } from '/imports/share/constants.js';
 

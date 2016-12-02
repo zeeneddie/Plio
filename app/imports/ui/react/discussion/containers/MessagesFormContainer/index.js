@@ -8,7 +8,7 @@ import { submit } from './handlers';
 export default compose(
   connect(),
   withProps((props) => ({
-    disabled: props.standard.isDeleted
+    disabled: props.doc.isDeleted
   })),
   withHandlers({
     onSubmit: submit

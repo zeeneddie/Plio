@@ -2,7 +2,7 @@ import React from 'react';
 import { mapProps } from 'recompose';
 
 import MessagesListHeader from '../../components/MessagesListHeader';
-import { getStartedAtText, getStartedByText } from '/imports/api/messages/helpers';
+import { getStartedAtText, getStartedByText } from '/imports/ui/react/discussion/helpers';
 import { transsoc } from '/imports/api/helpers';
 
 export default mapProps(transsoc({

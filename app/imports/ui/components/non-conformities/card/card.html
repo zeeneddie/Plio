@@ -6,8 +6,12 @@
           isReadOnly=isReadOnly
           cardTitle="Non-conformity"
           doc=NC
-          docType="non-conformity"
+          collection="NonConformities"
           isReady=isReady
+          hasDiscussion=true
+          isDiscussionOpened=isDiscussionOpened
+          pathToDiscussion=pathToDiscussion
+          messagesNotViewedCount=messagesNotViewedCount
           onRestore=(callback 'restore')
           onDelete=(callback 'delete')
           onOpenEditModal=(callback 'openEditModal')}}
@@ -16,7 +20,7 @@
 
             {{#Fields_ListGroupItem_Read
               label="Non conformity name"}}
-              <span {{b "text: this.title"}}></span>
+              <span>{{this.title}}</span>
               <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
               <span class="label text-default">
                 {{getStatusName this.status}}

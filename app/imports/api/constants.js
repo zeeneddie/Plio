@@ -1,4 +1,5 @@
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
+export const ALERT_AUTOHIDE_TIME = 1500;
 
 export const DocumentTitles = {
   STANDARD: 'Standard',
@@ -21,9 +22,15 @@ export const RiskFilters = {
 };
 
 export const StandardFilters = {
-  1: 'section',
-  2: 'type',
-  3: 'deleted',
+  1: { name: 'section', prepend: 'by' },
+  2: { name: 'type', prepend: 'by' },
+  3: { name: 'deleted', prepend: '' },
+};
+
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
 };
 
 export const WorkInboxFilters = {
@@ -156,17 +163,11 @@ export const ActionTitles = {
   RK: 'Risk control',
 };
 
-export const PullMap = {
-  left: 'pull-xs-left',
-  right: 'pull-xs-right',
-  center: 'pull-xs-center',
-};
-
-const riskScoreTypes = {
+export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
     label: 'Inherent risk',
-    adj: 'Inherent'
+    adj: 'Inherent',
   },
   residual: {
     id: 'residual',
@@ -175,7 +176,7 @@ const riskScoreTypes = {
   },
 };
 
-const StringLimits = {
+export const StringLimits = {
   abbreviation: {
     min: 1,
     max: 4,
@@ -186,6 +187,24 @@ const StringLimits = {
   },
 };
 
-const SystemName = 'Plio';
+export const PullMap = {
+  left: 'pull-xs-left',
+  right: 'pull-xs-right',
+  center: 'pull-xs-center',
+};
 
-const RCAMaxCauses = 5;
+export const TextAlignMap = {
+  left: 'text-xs-left',
+  right: 'text-xs-right',
+  center: 'text-xs-center',
+};
+
+export const MarginMap = {
+  left: 'margin-left',
+  'left-2x': 'margin-left-2x',
+  right: 'margin-right',
+  'right-2x': 'margin-right-2x',
+  bottom: 'margin-bottom',
+};
+
+export const MOBILE_BREAKPOINT = 768;

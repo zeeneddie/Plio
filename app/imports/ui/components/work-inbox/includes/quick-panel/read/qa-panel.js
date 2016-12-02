@@ -6,6 +6,7 @@ import { WorkItemsStore, ProblemTypes } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';
 import { restore, remove } from '/imports/api/work-items/methods.js';
 import { WorkInboxHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const { TYPES } = WorkItemsStore;
 
@@ -98,7 +99,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Restored', `The work item "${this.capitalize(type)}" was restored successfully.`, 'success');
+            swal({
+              title: 'Restored!',
+              text: `The work item "${this.capitalize(type)}" was restored successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
 
             const queryParams = this._getQueryParams({ isCompleted, assigneeId })(Meteor.userId());
             FlowRouter.setQueryParams(queryParams);
@@ -125,7 +132,13 @@ Template.WorkInbox_QAPanel_Read.viewmodel({
           if (err) {
             swal('Oops... Something went wrong!', err.reason, 'error');
           } else {
-            swal('Deleted', `The work item "${this.capitalize(type)}" was deleted successfully.`, 'success');
+            swal({
+              title: 'Deleted!',
+              text: `The work item "${this.capitalize(type)}" was deleted successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           }
         };
 

@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 import curry from 'lodash.curry';
+import moment from 'moment-timezone';
 
 import { AnalysisStatuses } from '/imports/share/constants.js';
 import { AnalysisTitles } from '/imports/api/constants.js';

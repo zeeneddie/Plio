@@ -1,3 +1,14 @@
 <template name="Risks_Header">
-  {{> PageHeader (headerArgs)}}
+  {{#if isDiscussionOpened}}
+    {{#with risk}}
+      {{#Navbar}}
+        {{#Navbar_Title}}
+          {{this.title}} - discussion
+        {{/Navbar_Title}}
+        {{> Navbar_Arrow onClick=(callback 'onNavigate')}}
+      {{/Navbar}}
+    {{/with}}
+  {{else}}
+    {{> PageHeader (headerArgs)}}
+  {{/if}}
 </template>

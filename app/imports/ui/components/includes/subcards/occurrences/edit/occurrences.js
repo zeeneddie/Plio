@@ -5,6 +5,7 @@ import { Occurrences } from '/imports/share/collections/occurrences.js';
 import { insert, update, remove } from '/imports/api/occurrences/methods.js';
 import { invokeId } from '/imports/api/helpers.js';
 import { NonConformitiesHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Subcards_Occurrences_Edit.viewmodel({
   mixin: ['modal', 'date', 'organization', 'nonconformity'],
@@ -85,7 +86,13 @@ Template.Subcards_Occurrences_Edit.viewmodel({
         () => {
           const cb = (err) => {
             if (!err) {
-              swal('Removed!', `The occurrence "${seq}" was removed successfully.`, 'success')
+              swal({
+                title: 'Removed!',
+                text: `The occurrence "${seq}" was removed successfully.`,
+                type: 'success',
+                timer: ALERT_AUTOHIDE_TIME,
+                showConfirmButton: false,
+              });
             }
           };
 

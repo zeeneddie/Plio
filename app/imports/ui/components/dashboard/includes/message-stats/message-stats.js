@@ -1,5 +1,5 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import { moment } from 'meteor/momentjs:moment';
+import moment from 'moment-timezone';
 import { Template } from 'meteor/templating';
 
 import { Discussions } from '/imports/share/collections/discussions.js';
@@ -114,6 +114,18 @@ Template.Dashboard_MessageStats.viewmodel({
         url = FlowRouter.path(
           'standardDiscussion',
           { orgSerialNumber, standardId: linkedTo },
+          { at: message._id }
+        );
+      } else if (discussion.documentType === 'non-conformity') {
+        url = FlowRouter.path(
+          'nonConformityDiscussion',
+          { orgSerialNumber, urlItemId: linkedTo },
+          { at: message._id }
+        );
+      } else if (discussion.documentType === 'risk') {
+        url = FlowRouter.path(
+          'riskDiscussion',
+          { orgSerialNumber, riskId: linkedTo },
           { at: message._id }
         );
       }
