@@ -103,7 +103,7 @@ Meteor.startup(() => {
     }
   });
 
-  insertMessageFixtures(1000);
+  // insertMessageFixtures(1000);
 
   AuditManager.startAudit();
 });
