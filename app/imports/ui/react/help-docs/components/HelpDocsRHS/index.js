@@ -22,6 +22,7 @@ const HelpDocsRHS = (props) => (
           hasDocxAttachment={props.hasDocxAttachment}
           onToggleScreenMode={props.onToggleScreenMode}
           onModalOpen={props.onModalOpen}
+          userHasChangeAccess={props.userHasChangeAccess}
         />
 
       </RHS.Header>

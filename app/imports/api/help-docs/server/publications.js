@@ -9,6 +9,7 @@ import {
   HelpsListProjection,
   HelpSectionProjection,
 } from '/imports/api/constants';
+import { getUserOrganizations } from '../../organizations/utils';
 
 
 Meteor.publish('helpDocsLayout', function getHelpDocsLayoutData() {
@@ -19,6 +20,15 @@ Meteor.publish('helpDocsLayout', function getHelpDocsLayoutData() {
   return [
     HelpDocs.find({}, { fields: HelpsListProjection }),
     HelpSections.find({}, { fields: HelpSectionProjection }),
+    getUserOrganizations(this.userId, {}, {
+      fields: {
+        isAdminOrg: 1,
+        'users.userId': 1,
+        'users.isRemoved': 1,
+        'users.removedAt': 1,
+        'users.removedBy': 1,
+      },
+    }),
   ];
 });
 

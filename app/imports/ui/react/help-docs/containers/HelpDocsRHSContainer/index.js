@@ -2,6 +2,7 @@ import { compose, mapProps, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 
 import { pickC, pickDeep, propEqId } from '/imports/api/helpers';
+import { canChangeHelpDocs } from '/imports/api/checkers';
 import { onToggleScreenMode } from '../../../standards/containers/StandardsRHSContainer/handlers'; // FIXME
 import HelpDocsRHS from '../../components/HelpDocsRHS';
 
@@ -14,7 +15,6 @@ export default compose(
     'global.isFullScreenMode',
     'global.urlItemId',
     'global.userId',
-    'collections.files',
   ])),
 
   withProps((props) => {
@@ -28,11 +28,14 @@ export default compose(
       hasDocxAttachment = !!helpDoc.source.htmlUrl;
     }
 
+    const userHasChangeAccess = canChangeHelpDocs(props.userId);
+
     return {
       helpDoc,
       helpDocSection,
       file,
       hasDocxAttachment,
+      userHasChangeAccess,
       headerTitle: 'Help card',
     };
   }),
@@ -53,5 +56,6 @@ export default compose(
     'helpDoc',
     'helpDocSection',
     'file',
+    'userHasChangeAccess',
   ])(props)),
 )(HelpDocsRHS);

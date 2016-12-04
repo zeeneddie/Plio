@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-import { compose, mapProps, shouldUpdate, withHandlers } from 'recompose';
+import { compose, mapProps, shouldUpdate, withHandlers, withProps } from 'recompose';
 import { compose as kompose } from 'react-komposer';
 
 import { pickDeep } from '/imports/api/helpers';
+import { canChangeHelpDocs } from '/imports/api/checkers';
 import {
   onClear,
   onModalOpen,
@@ -44,17 +45,23 @@ const HelpDocsLHSContainer = compose(
   }),
 
   connect(pickDeep([
-    'global.urlItemId',
-    'global.collapsed',
     'global.animating',
+    'global.collapsed',
+    'global.urlItemId',
+    'global.userId',
   ])),
 
   withHandlers({
     onClear,
-    onModalOpen,
     onSearchTextChange,
     onToggleCollapse,
   }),
+
+  withProps(props => (
+    canChangeHelpDocs(props.userId) && {
+      onModalOpen: onModalOpen(props),
+    }
+  ))
 )(HelpDocsLHS);
 
 export default HelpDocsLHSContainer;

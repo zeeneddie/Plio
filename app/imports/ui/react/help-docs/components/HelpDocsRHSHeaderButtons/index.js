@@ -10,10 +10,12 @@ const HelpDocsRHSHeaderButtons = (props) => (
       <ToggleExpandButton onClick={props.onToggleScreenMode} />
     ) : ''}
 
-    <EditButton
-      onClick={props.onModalOpen}
-      title="Edit"
-    />
+    {props.userHasChangeAccess ? (
+      <EditButton
+        onClick={props.onModalOpen}
+        title="Edit"
+      />
+    ): ''}
   </div>
 );
 
