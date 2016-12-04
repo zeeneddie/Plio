@@ -1,20 +1,35 @@
-import { compose, mapProps, withHandlers, withProps } from 'recompose';
+import { branch, compose, mapProps, renderComponent, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
+import { _ } from 'meteor/underscore';
 
 import { pickC, pickDeep, propEqId } from '/imports/api/helpers';
 import { canChangeHelpDocs } from '/imports/api/checkers';
 import { onToggleScreenMode } from '../../../standards/containers/StandardsRHSContainer/handlers'; // FIXME
 import HelpDocsRHS from '../../components/HelpDocsRHS';
+import HelpDocsRHSNotFound from '../../components/HelpDocsRHSNotFound';
 
 export default compose(
   connect(pickDeep([
     'collections.helpDocs',
+    'global.userId',
+  ])),
+
+  withProps(props => ({
+    userHasChangeAccess: canChangeHelpDocs(props.userId),
+  })),
+
+  branch(
+    ({ helpDocs }) => !!helpDocs.length,
+    _.identity,
+    renderComponent(HelpDocsRHSNotFound),
+  ),
+
+  connect(pickDeep([
     'collections.helpSections',
     'collections.files',
     'global.isCardReady',
     'global.isFullScreenMode',
     'global.urlItemId',
-    'global.userId',
   ])),
 
   withProps((props) => {
@@ -28,14 +43,12 @@ export default compose(
       hasDocxAttachment = !!helpDoc.source.htmlUrl;
     }
 
-    const userHasChangeAccess = canChangeHelpDocs(props.userId);
-
     return {
+      ...props,
       helpDoc,
       helpDocSection,
       file,
       hasDocxAttachment,
-      userHasChangeAccess,
       headerTitle: 'Help card',
     };
   }),
