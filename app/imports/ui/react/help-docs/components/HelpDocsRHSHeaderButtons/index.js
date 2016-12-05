@@ -1,7 +1,6 @@
 import React from 'react';
 
-import ToggleExpandButton from '../../../components/ToggleExpandButton';
-import EditButton from '../../../components/EditButton';
+import ToggleExpandButton from '../../../components/Buttons/ToggleExpandButton';
 import propTypes from './propTypes';
 
 const HelpDocsRHSHeaderButtons = (props) => (
@@ -11,10 +10,9 @@ const HelpDocsRHSHeaderButtons = (props) => (
     ) : ''}
 
     {props.userHasChangeAccess ? (
-      <EditButton
-        onClick={props.onModalOpen}
-        title="Edit"
-      />
+      <Button type="primary" onClick={props.onModalOpen}>
+        Edit
+      </Button>
     ): ''}
   </div>
 );

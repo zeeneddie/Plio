@@ -22,10 +22,7 @@ const onChange = _.debounce(({ dispatch, urlItemId }, target) => {
   const value = target.value;
   const fields = [{ name: 'title' }];
   const options = { sort: { title: 1 } };
-
-  // emulate viemodel instance to use viewmodel's mixin
-  const context = { searchText: () => value };
-  const query = _search_.searchQuery.call(context, 'searchText', fields);
+  const query = _search_.searchQuery(value, fields);
 
   const helpDocs = HelpDocs.find(query, options).fetch();
 
