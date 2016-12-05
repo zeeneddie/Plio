@@ -3,14 +3,13 @@ import { setIsCardReady } from '/client/redux/actions/standardsActions';
 
 export default function loadCardData({
   dispatch,
-  standard,
   organizationId,
   urlItemId,
 }, onData) {
   let subscription;
   let isCardReady = true;
 
-  if (standard) {
+  if (urlItemId) {
     const subArgs = { organizationId, _id: urlItemId };
 
     subscription = DocumentCardSubs.subscribe('standardCard', subArgs);

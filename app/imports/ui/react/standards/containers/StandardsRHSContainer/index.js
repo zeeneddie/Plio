@@ -35,15 +35,12 @@ import { getPathToDiscussion, getStandardsByFilter, withStandard } from '../../h
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
-  standards: { standards, isCardReady, isFullScreenMode },
-  global: { urlItemId, userId, filter },
+  standards: { isFullScreenMode },
+  global: { urlItemId, filter, userId },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
-  collections: { files, ncs, risks, actions, workItems, lessons },
+  collections: { standards, files, ncs, risks, actions, workItems, lessons },
 }) => ({
-  standards,
-  urlItemId,
-  isCardReady,
   isDiscussionOpened,
   organizationId,
   orgSerialNumber,
@@ -55,12 +52,14 @@ const mapStateToProps = ({
   actions,
   workItems,
   lessons,
+  standards,
+  urlItemId,
   filter,
 });
 
 export default compose(
   connect(pickDeep([
-    'standards.standards',
+    'collections.standards',
     'standards.isCardReady',
     'global.urlItemId',
     'global.filter',
@@ -93,13 +92,13 @@ export default compose(
   connect(mapStateToProps),
   withStandard,
   shouldUpdate((props, nextProps) => {
-    const omitKeys = omitC(['updatedAt']);
+    const omitStandardKeys = omitC(['updatedAt']);
     const compareBySeqId = compareByProps(['title', 'serialNumber']);
     return nextProps.standard && (
       props.userId !== nextProps.userId ||
       props.organizationId !== nextProps.organizationId ||
       props.isFullScreenMode !== nextProps.isFullScreenMode ||
-      notEquals(omitKeys(props.standard), omitKeys(nextProps.standard)) ||
+      notEquals(omitStandardKeys(props.standard), omitStandardKeys(nextProps.standard)) ||
       compareBySeqId(props.ncs, nextProps.ncs) ||
       compareBySeqId(props.risks, nextProps.risks) ||
       compareBySeqId(props.actions, nextProps.actions) ||

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LHSItem from '../../../components/LHSItem';
+import LHSItemContainer from '../../../containers/LHSItemContainer';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
 import StandardsLHSStandardListContainer from '../../containers/StandardsLHSStandardListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
@@ -10,7 +10,7 @@ import { lengthStandards } from '/imports/api/helpers';
 const StandardsLHSTypeList = (props) => (
   <div>
     {props.types.map(type => (
-      <LHSItem
+      <LHSItemContainer
         key={type._id}
         item={createTypeItem(type._id)}
         lText={type.title}
@@ -18,7 +18,6 @@ const StandardsLHSTypeList = (props) => (
           <LabelMessagesCount count={type.unreadMessagesCount} />
         )}
         hideRTextOnCollapse
-        collapsed={props.collapsed}
         onToggleCollapse={props.onTypeToggleCollapse}
       >
         <div className="sub">
@@ -28,13 +27,12 @@ const StandardsLHSTypeList = (props) => (
             />
           ) : (
             <StandardsLHSSectionList
-              collapsed={props.collapsed}
               sections={type.sections}
               onToggleCollapse={props.onSectionToggleCollapse}
             />
           )}
         </div>
-      </LHSItem>
+      </LHSItemContainer>
     ))}
   </div>
 );

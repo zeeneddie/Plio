@@ -48,8 +48,8 @@ export const extractIds = (collection = []) => collection.map(property('_id'));
 
 export const not = expression => !expression;
 
-export const mapByIndex = (value = {}, index = 0, arr = []) =>
-  Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+export const mapByIndex = (obj = {}, index = 0, arr = []) =>
+  Object.assign([], arr, { [index]: { ...arr[index], ...obj } });
 
 export const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));

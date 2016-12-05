@@ -87,26 +87,24 @@ export default compose(
   //   shouldResubscribe: (props, nextProps) =>
   //     props.organizationId !== nextProps.organizationId,
   // }),
-  connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
-  composeWithTracker(testPerformance(loadCountersData), null, null, {
-    shouldResubscribe: (props, nextProps) => !!(
-      props.isDiscussionOpened && !nextProps.isDiscussionOpened
-    ),
-  }),
-  connect(pickDeep([
-    'collections.standardBookSections',
-    'collections.standardTypes',
-    'collections.standards',
-    'counters.standardMessagesNotViewedCountMap',
-  ])),
-  composeWithTracker(testPerformance(initMainData)),
+  // connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
+  // composeWithTracker(testPerformance(loadCountersData), null, null, {
+  //   shouldResubscribe: (props, nextProps) => !!(
+  //     props.isDiscussionOpened && !nextProps.isDiscussionOpened
+  //   ),
+  // }),
+  // connect(pickDeep([
+  //   'collections.standardBookSections',
+  //   'collections.standardTypes',
+  //   'collections.standards',
+  //   'counters.standardMessagesNotViewedCountMap',
+  // ])),
+  // composeWithTracker(testPerformance(initMainData)),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  withStandard,
   composeWithTracker(testPerformance(loadCardData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
       props.organizationId !== nextProps.organizationId ||
-      props.urlItemId !== nextProps.urlItemId ||
-      typeof props.standard !== typeof nextProps.standard
+      props.urlItemId !== nextProps.urlItemId
     ),
   }),
   connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
@@ -140,34 +138,34 @@ export default compose(
   connect(pickDeep([
     'organizations.organization',
     'organizations.orgSerialNumber',
-    'standards.standards',
-    'standards.sections',
-    'standards.types',
+    // 'standards.standards',
+    // 'standards.sections',
+    // 'standards.types',
     'discussion.isDiscussionOpened',
     'global.urlItemId',
     'global.filter',
   ])),
   shouldUpdate(shouldUpdateForProps),
-  lifecycle({
-    componentWillMount() {
-      Meteor.defer(() => {
-        redirectByFilter(this.props);
-        openStandardByFilter(this.props);
-      });
-    },
-    /**
-     * Collapse(maybe) and redirect(maybe) when:
-     * changes organization
-     * changes orgSerialNumber
-     * changes filter
-     * the current selected standard's section or type id is different than the next.
-     * the current standard is deleted or restored
-     */
-    componentWillUpdate(nextProps) {
-      redirectByFilter(nextProps);
-      openStandardByFilter(nextProps);
-    },
-  }),
+  // lifecycle({
+  //   componentWillMount() {
+  //     Meteor.defer(() => {
+  //       redirectByFilter(this.props);
+  //       openStandardByFilter(this.props);
+  //     });
+  //   },
+  //   /**
+  //    * Collapse(maybe) and redirect(maybe) when:
+  //    * changes organization
+  //    * changes orgSerialNumber
+  //    * changes filter
+  //    * the current selected standard's section or type id is different than the next.
+  //    * the current standard is deleted or restored
+  //    */
+  //   componentWillUpdate(nextProps) {
+  //     redirectByFilter(nextProps);
+  //     openStandardByFilter(nextProps);
+  //   },
+  // }),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
     onHandleFilterChange: props => index => {

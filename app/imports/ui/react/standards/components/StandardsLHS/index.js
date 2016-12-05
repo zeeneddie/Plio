@@ -14,7 +14,6 @@ const StandardsLHS = (props) => {
     default:
       content = (
         <StandardsLHSSectionList
-          collapsed={props.collapsed}
           sections={props.sections}
           onToggleCollapse={props.onSectionToggleCollapse}
         />
@@ -23,7 +22,6 @@ const StandardsLHS = (props) => {
     case 2:
       content = (
         <StandardsLHSTypeList
-          collapsed={props.collapsed}
           types={props.types}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
