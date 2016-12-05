@@ -3,6 +3,8 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { withOptions } from 'react-mounter';
 import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
+import { $ } from 'meteor/jquery';
 
 import '/imports/ui/components';
 import '/imports/ui/layouts';
@@ -186,16 +188,13 @@ FlowRouter.route('/:orgSerialNumber/standards/:urlItemId', {
 FlowRouter.route('/:orgSerialNumber/standards/:urlItemId/discussion', {
   // http://localhost:3000/98/standards/Zty4NCagWvrcuLYoy/discussion
   name: 'standardDiscussion',
-  triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
-    BlazeLayout.render('StandardsLayout', {
-      content: 'StandardsPage',
-      isDiscussionOpened: true
-    });
-  }
+  triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
+  action() {
+    mount2(StandardsProvider, { isDiscussionOpened: true });
+  },
 });
 
-FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId/discussion', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
@@ -223,6 +222,8 @@ FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
   action(params) {
+    $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
+
     BlazeLayout.render('Dashboard_Layout', {
       content: 'Dashboard_Page'
     });
@@ -259,7 +260,7 @@ FlowRouter.route('/:orgSerialNumber/non-conformities', {
   }
 });
 
-FlowRouter.route('/:orgSerialNumber/non-conformities/:nonconformityId', {
+FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action(params) {

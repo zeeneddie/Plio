@@ -61,7 +61,6 @@ const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
     sectionId: 1,
     typeId: 1,
     organizationId: 1,
-    nestingLevel: 1,
     ...(() => _.isObject(isDeleted)
       ? null
       : { isDeleted: 1, deletedAt: 1, deletedBy: 1 }
@@ -152,11 +151,12 @@ Meteor.publish('standardsDeps', function(organizationId) {
     }
   };
   const standardsFields = {
+    status: 1,
     viewedBy: 1,
     issueNumber: 1,
-    status: 1,
+    nestingLevel: 1,
     createdAt: 1,
-    createdBy: 1
+    createdBy: 1,
   };
 
   const actions = getActionsWithLimitedFields(actionsQuery);

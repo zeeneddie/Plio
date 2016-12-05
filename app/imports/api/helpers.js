@@ -114,6 +114,8 @@ export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);
 
+export const propIsDeleted = property('isDeleted');
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);
@@ -163,6 +165,8 @@ export const getId = getC('_id');
 
 export const equals = curry((val1, val2) => _.isEqual(val1, val2));
 
+export const notEquals = compose(not, equals);
+
 export const propEq = curry((path, assumption, obj) => equals(get(obj, path), assumption));
 
 export const propEqId = propEq('_id');
@@ -182,6 +186,11 @@ export const some = curry((fns, value) => fns.some(fn => fn(value)));
 export const hasC = curry((key, obj) => _.has(Object.assign({}, obj), key));
 
 export const shallowCompare = compose(not, shallowEqual);
+
+export const mapToProps = curry((props, array) => [...array].map(pickC([...props])));
+
+export const compareByProps = curry((props, a, b) =>
+  notEquals(mapToProps(props, a), mapToProps(props, b)));
 
 /**
  * Picks properties of the passed object from the next object and compares them
@@ -208,29 +217,23 @@ export const showError = (errorMsg) => {
 };
 
 // 1, 1.2, 3, 10.3, a, b, c
-export const sortArrayByTitlePrefix = (arr) => {
-  return arr.sort(function (a, b) {
-    a = a.titlePrefix;
-    b = b.titlePrefix;
-    if (typeof a === 'number' && typeof b !== 'number') {
-      return -1;
-    }
-    if (typeof b === 'number' && typeof a !== 'number') {
-      return 1;
-    }
-    if (a < b) {
-      return -1;
-    }
-    if (a > b) {
-      return 1;
-    }
-    if (a === b) {
-      return 0;
-    } else {
-      return -1;
-    }
-  });
-};
+export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
+  const at = a.titlePrefix;
+  const bt = b.titlePrefix;
+  if (typeof at === 'number' && typeof bt !== 'number') {
+    return -1;
+  }
+  if (typeof bt === 'number' && typeof at !== 'number') {
+    return 1;
+  }
+  if (at < bt) {
+    return -1;
+  }
+  if (at > bt) {
+    return 1;
+  }
+  return at === bt ? 0 : -1;
+});
 
 export const getNewerDate = (...dates) => new Date(Math.max(...dates.map((date = null) => date)));
 
@@ -348,7 +351,7 @@ export const compareDates = (date1, date2) => {
 export const diff = (o1, o2) => {
   const result = { ...o1 };
   for (const [key, value] of Object.entries(o2)) {
-    if (_.isEqual(result[key], value)) {
+    if (equals(result[key], value)) {
       delete result[key];
     } else if (!result.hasOwnProperty(key)) {
       result[key] = value;
@@ -440,12 +443,19 @@ export const compareStatusesByPriority = (() => {
 
     if (priority1 !== priority2) {
       return priority2 - priority1;
-    } else {
-      return status2 - status1;
     }
+
+    return status2 - status1;
   };
 })();
 
 export const getSelectedOrgSerialNumber = () => (
   localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
 );
+
+export const getUserJoinedAt = (organization = {}, userId) => {
+  const currentUserInOrg = [...organization.users].find(propEq('userId', userId));
+  const joinedAt = getC('joinedAt', currentUserInOrg);
+
+  return joinedAt;
+};

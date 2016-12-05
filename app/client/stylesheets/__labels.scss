@@ -64,7 +64,11 @@
   }
 
   &.margin-left {
-    margin-left: 10px;
+    margin-left: 5px;
+  }
+
+  &.margin-right {
+    margin-right: 5px;
   }
 
   &.impact-vlow { background: $green-color; }

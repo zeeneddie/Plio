@@ -2,8 +2,8 @@ import React from 'react';
 
 import LHSItem from '../../../components/LHSItem';
 import StandardsLHSSectionList from '../StandardsLHSSectionList';
-import StandardsLHSStandardList from '../StandardsLHSStandardList';
-import MessagesCount from '../../../components/MessagesCount';
+import StandardsLHSStandardListContainer from '../../containers/StandardsLHSStandardListContainer';
+import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import { createTypeItem } from '../../helpers';
 import { lengthStandards } from '/imports/api/helpers';
 
@@ -15,7 +15,7 @@ const StandardsLHSTypeList = (props) => (
         item={createTypeItem(type._id)}
         lText={type.title}
         rText={type.unreadMessagesCount && (
-          <MessagesCount count={type.unreadMessagesCount} />
+          <LabelMessagesCount count={type.unreadMessagesCount} />
         )}
         hideRTextOnCollapse
         collapsed={props.collapsed}
@@ -23,22 +23,14 @@ const StandardsLHSTypeList = (props) => (
       >
         <div className="sub">
           {lengthStandards(type) ? (
-            <StandardsLHSStandardList
+            <StandardsLHSStandardListContainer
               standards={type.standards}
-              orgSerialNumber={props.orgSerialNumber}
-              userId={props.userId}
-              filter={props.filter}
-              urlItemId={props.urlItemId}
             />
           ) : (
             <StandardsLHSSectionList
               collapsed={props.collapsed}
               sections={type.sections}
               onToggleCollapse={props.onSectionToggleCollapse}
-              orgSerialNumber={props.orgSerialNumber}
-              userId={props.userId}
-              filter={props.filter}
-              urlItemId={props.urlItemId}
             />
           )}
         </div>

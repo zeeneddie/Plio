@@ -5,8 +5,6 @@ import {
   INIT_TYPES,
   SET_TYPES,
   SET_FILTERED_STANDARDS,
-  SET_FILTERED_SECTIONS,
-  SET_FILTERED_TYPES,
   INIT_STANDARDS,
 } from './types';
 
@@ -24,9 +22,9 @@ export function setSections(sections) {
   };
 }
 
-export function initStandards({ types, sections, standards }) {
+export function initStandards({ types, sections, standards, unreadMessagesCountMap }) {
   return {
-    payload: { types, sections, standards },
+    payload: { types, sections, standards, unreadMessagesCountMap },
     type: INIT_STANDARDS,
   };
 }
@@ -56,19 +54,5 @@ export function setFilteredStandards(standardsFiltered) {
   return {
     payload: { standardsFiltered },
     type: SET_FILTERED_STANDARDS,
-  };
-}
-
-export function setFilteredSections(sectionsFiltered) {
-  return {
-    payload: { sectionsFiltered },
-    type: SET_FILTERED_SECTIONS,
-  };
-}
-
-export function setFilteredTypes(typesFiltered) {
-  return {
-    payload: { typesFiltered },
-    type: SET_FILTERED_TYPES,
   };
 }

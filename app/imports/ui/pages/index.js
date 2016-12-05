@@ -1,8 +1,6 @@
 import './dashboard-page.html';
 import './dashboard-page.js';
 import './hello-page.html';
-import './standards-page.html';
-import './standards-page.js';
 import './preloader-page.html';
 import './not-found-page.html';
 import './hello-page.js';

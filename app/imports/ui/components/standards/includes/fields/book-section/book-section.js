@@ -8,11 +8,12 @@ import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.ESBookSection.viewmodel({
   mixin: ['search', 'modal', 'organization', 'collapsing', 'standard'],
-  onCreated() {
+  autorun() {
     const section = ((() => {
       const sections = this.bookSections();
       return sections.length > 0 && sections[0];
     })());
+
     if (!this.selectedBookSectionId() && section) {
       this.selectedBookSectionId(section._id);
     }
@@ -35,7 +36,7 @@ Template.ESBookSection.viewmodel({
     };
     const options = { sort: { title: 1 } };
     const sections = StandardsBookSections.find(query, options).fetch();
-
+  
     return sortArrayByTitlePrefix(sections);
   },
   content() {
@@ -64,7 +65,7 @@ Template.ESBookSection.viewmodel({
     });
   },
   getData() {
-    const { selected:sectionId } = this.child('Select_Single').getData();
+    const { selected: sectionId } = this.child('Select_Single').getData();
     return { sectionId };
   }
 });

@@ -27,6 +27,12 @@ export const StandardFilters = {
   3: { name: 'deleted', prepend: '' },
 };
 
+export const STANDARD_FILTER_MAP = {
+  SECTION: 1,
+  TYPE: 2,
+  DELETED: 3,
+};
+
 export const WorkInboxFilters = {
   1: 'my current',
   2: 'team current',
@@ -189,6 +195,26 @@ export const StringLimits = {
     min: 1,
     max: 80,
   },
+};
+
+export const PullMap = {
+  left: 'pull-xs-left',
+  right: 'pull-xs-right',
+  center: 'pull-xs-center',
+};
+
+export const TextAlignMap = {
+  left: 'text-xs-left',
+  right: 'text-xs-right',
+  center: 'text-xs-center',
+};
+
+export const MarginMap = {
+  left: 'margin-left',
+  'left-2x': 'margin-left-2x',
+  right: 'margin-right',
+  'right-2x': 'margin-right-2x',
+  bottom: 'margin-bottom',
 };
 
 export const MOBILE_BREAKPOINT = 768;

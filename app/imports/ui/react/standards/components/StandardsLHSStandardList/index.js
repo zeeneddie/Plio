@@ -9,6 +9,7 @@ const StandardsLHSStandardList = (props) => (
         key={standard._id}
         section={props.section}
         orgSerialNumber={props.orgSerialNumber}
+        organization={props.organization}
         userId={props.userId}
         filter={props.filter}
         urlItemId={props.urlItemId}

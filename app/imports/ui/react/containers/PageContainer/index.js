@@ -9,7 +9,7 @@ import { pickDeep } from '/imports/api/helpers';
 import Page from '../../components/Page';
 
 export default compose(
-  connect(pickDeep(['window.width', 'mobile.showCard'])),
+  connect(pickDeep(['window.width', 'mobile.showCard', 'discussion.isDiscussionOpened'])),
   lifecycle({
     componentDidMount() {
       const $window = $(window);
@@ -23,8 +23,9 @@ export default compose(
       $window.on('resize', setNewWidthThrottled);
     },
   }),
-  mapProps(({ width, showCard, ...props }) => ({
+  mapProps(({ width, showCard, isDiscussionOpened, ...props }) => ({
     ...props,
-    displayRHS: width <= MOBILE_BREAKPOINT && showCard,
+    displayRHS: width <= MOBILE_BREAKPOINT && (showCard || isDiscussionOpened),
+    children: props.children.filter(child => Boolean(child)),
   })),
 )(Page);

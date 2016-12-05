@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-
+import { CollectionNames } from '/imports/share/constants';
 
 Template.CardOrgChangelog.viewmodel({
   mixin: 'counter',
@@ -10,7 +10,7 @@ Template.CardOrgChangelog.viewmodel({
   },
   onCreated(template) {
     template.autorun(() => {
-      template.subscribe('orgLastUserLog', this.organizationId());
+      template.subscribe('lastHumanLog', this.organizationId(), CollectionNames.ORGANIZATIONS);
     });
   },
   subscribeForFirstLogs(onReady) {
@@ -18,20 +18,21 @@ Template.CardOrgChangelog.viewmodel({
     const tpl = this.templateInstance;
 
     tpl.subscribe(
-      'orgLogsCount',
-      `org-logs-count-${organizationId}`,
-      organizationId
+      'auditLogsCount',
+      `audit-logs-count-${organizationId}`,
+      organizationId,
+      CollectionNames.ORGANIZATIONS,
     );
 
-    tpl.subscribe('orgAuditLogs', organizationId, { onReady });
+    tpl.subscribe('auditLogs', organizationId, { onReady });
   },
   subscribeForAllLogs(skip, onReady) {
     const organizationId = this.organizationId();
     const tpl = this.templateInstance;
 
-    tpl.subscribe('orgAuditLogs', organizationId, skip, 0, { onReady });
+    tpl.subscribe('auditLogs', organizationId, CollectionNames.ORGANIZATIONS, skip, 0, { onReady });
   },
   logsLength() {
-    return this.get(`org-logs-count-${this.organizationId()}`);
+    return this.get(`audit-logs-count-${this.organizationId()}`);
   }
 });
