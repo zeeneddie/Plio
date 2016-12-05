@@ -9,6 +9,12 @@
         {{> HelpDocs_Section_Edit
             sectionId=helpDoc.sectionId
             _id=helpDoc._id}}
+
+        {{> HelpDocs_Source_Edit
+            sourceType=helpDoc.source.type
+            sourceUrl=helpDoc.source.url
+            sourceFileId=helpDoc.source.fileId
+            sourceHtmlUrl=helpDoc.source.htmlUrl}}
       </div>
 
       <div class="card-block text-xs-center">

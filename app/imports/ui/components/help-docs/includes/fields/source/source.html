@@ -1,12 +1,11 @@
-<template name="ESSources">
+<template name="HelpDocs_Source_Edit">
   {{> Sources_Edit
-      label=label
-      id=id
+      label="Source file"
       sourceType=sourceType
       sourceUrl=sourceUrl
       sourceFileId=sourceFileId
       sourceHtmlUrl=sourceHtmlUrl
-      slingshotDirective='standardFiles'
+      slingshotDirective='helpDocFiles'
       metaContext=uploaderMetaContext
       callDocxRender=(callback 'callDocxRender')}}
 </template>

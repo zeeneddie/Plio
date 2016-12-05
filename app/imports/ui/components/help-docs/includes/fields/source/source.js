@@ -1,23 +1,20 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
-Template.ESSources.viewmodel({
-  mixin: ['organization'],
+Template.HelpDocs_Source_Edit.viewmodel({
   update(args, cb) {
     this.parent().update(args, cb);
   },
   uploaderMetaContext() {
     return {
-      organizationId: this.organizationId(),
-      standardId: this.parent().standardId()
+      helpDocId: this.parent()._id(),
     };
   },
   callDocxRender(url, fileObj, cb) {
-    Meteor.call('Mammoth.convertStandardFileToHtml', {
+    Meteor.call('Mammoth.convertHelpDocFileToHtml', {
       fileUrl: url,
       htmlFileName: `${fileObj.name}.html`,
-      source: `source${this.id()}`,
-      standardId: this.parent()._id(),
+      helpDocId: this.parent()._id(),
     }, cb);
   },
 });
