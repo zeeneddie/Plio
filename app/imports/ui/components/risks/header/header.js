@@ -1,5 +1,5 @@
 import { Template } from 'meteor/templating';
-import invoke from 'lodash.invoke';
+import { Tracker } from 'meteor/tracker';
 
 import { RiskFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
@@ -9,11 +9,9 @@ Template.Risks_Header.viewmodel({
   headerArgs() {
     return {
       idToExpand: this.riskId(),
-      header: 'Risks',
-      prependWith: 'by',
       filters: RiskFilters,
       isActiveFilter: this.isActiveRiskFilter.bind(this),
-      onSelectFilter: this.onSelectFilter.bind(this)
+      onSelectFilter: this.onSelectFilter.bind(this),
     };
   },
   risk() {
@@ -26,7 +24,7 @@ Template.Risks_Header.viewmodel({
 
     Tracker.afterFlush(() => this.handleRouteRisks());
   },
-  onNavigate(e) {
+  onNavigate() {
     const mobileWidth = isMobileRes();
     const goToDashboard = () => this.goToDashboard(this.organizationSerialNumber());
 

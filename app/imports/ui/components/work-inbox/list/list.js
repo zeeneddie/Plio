@@ -3,10 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 import property from 'lodash.property';
 
-import { ActionDocumentTypes, WorkItemsStore } from '/imports/share/constants';
-import { WorkItems } from '/imports/share/collections/work-items';
-import { WorkInboxFilters } from '/imports/api/constants';
-const { TYPES } = WorkItemsStore;
 import { findById, extractIds } from '/imports/api/helpers';
 
 Template.WorkInbox_List.viewmodel({
