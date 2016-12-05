@@ -11,7 +11,7 @@ export default ({ dispatch }, onData) => {
 
   if (sub.ready()) {
     const helpDocs = HelpDocs.find().fetch();
-    const helpSections = HelpSections.find().fetch();
+    const helpSections = HelpSections.find({}, { sort: { index: 1 } }).fetch();
 
     dispatch(batchActions([
       setHelpDocs(helpDocs),

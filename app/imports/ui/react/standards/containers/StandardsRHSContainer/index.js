@@ -61,7 +61,7 @@ const mapStateToProps = ({
 export default compose(
   connect(pickDeep([
     'standards.standards',
-    'standards.isCardReady',
+    'global.isCardReady',
     'global.urlItemId',
     'global.filter',
   ])),

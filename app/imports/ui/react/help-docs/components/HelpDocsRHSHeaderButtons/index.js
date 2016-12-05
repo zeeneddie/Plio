@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Button from '../../../components/Buttons/Button';
 import ToggleExpandButton from '../../../components/Buttons/ToggleExpandButton';
 import propTypes from './propTypes';
 

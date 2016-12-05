@@ -1,13 +1,15 @@
+import { Blaze } from 'meteor/blaze';
 import { Template } from 'meteor/templating';
-
+import { _ } from 'meteor/underscore';
 
 const addProtocol = (url) => {
-  if (url.search(/^https?\:\/\//) === -1) {
+  if (url.search(/^https?:\/\//) === -1) {
     return `http://${url}`;
   }
+  return url;
 };
 
-Template.ESSources_Create.viewmodel({
+Template.Sources_Create.viewmodel({
   mixin: ['urlRegex', 'modal'],
   sourceType: 'attachment',
   sourceFile: '',
@@ -16,11 +18,11 @@ Template.ESSources_Create.viewmodel({
   label: 'Source file',
   attachmentTypes() {
     return [{
-      id: 'attachment', label: 'Attachment'
+      id: 'attachment', label: 'Attachment',
     }, {
-      id: 'url', label: 'URL link'
+      id: 'url', label: 'URL link',
     }, {
-      id: 'video', label: 'Video'
+      id: 'video', label: 'Video',
     }];
   },
   isSourceType(sourceType) {
@@ -63,5 +65,5 @@ Template.ESSources_Create.viewmodel({
     _(data).extend(sourceData);
 
     return data;
-  }
+  },
 });

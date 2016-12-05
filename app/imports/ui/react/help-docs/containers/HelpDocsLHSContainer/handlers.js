@@ -12,6 +12,7 @@ import {
 import { extractIds, propEqId } from '/imports/api/helpers';
 import { setFilteredHelpDocs } from '/client/redux/actions/helpDocsActions';
 import { createHelpSectionItem } from '../../helpers';
+import _modal_ from '/imports/startup/client/mixins/modal';
 import _search_ from '/imports/startup/client/mixins/search';
 
 export const onToggleCollapse = (props) => (e, { key, type }) => {
@@ -72,4 +73,8 @@ export const onClear = props => input => () => {
   onChange(props, input);
 };
 
-export const onModalOpen = () => () => alert('modal open');
+export const onModalOpen = () => () => _modal_.modal.open({
+  _title: 'Help document',
+  template: 'HelpDocs_Create',
+  variation: 'save',
+});

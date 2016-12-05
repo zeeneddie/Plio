@@ -94,9 +94,9 @@ Template.ESSources.viewmodel({
 
     if (isDocx) {
       this.docxRenderInProgress(true);
-      Meteor.call('Mammoth.convertDocxToHtml', {
-        url,
-        fileName: file.name + '.html',
+      Meteor.call('Mammoth.convertStandardFileToHtml', {
+        fileUrl: url,
+        htmlFileName: file.name + '.html',
         source: `source${this.id()}`,
         standardId:  this.parent()._id(),
       }, (error, result) => {
