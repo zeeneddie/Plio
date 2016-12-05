@@ -1,0 +1,19 @@
+<template name="HelpDocs_Edit">
+  <div>
+    <div class="relative">
+      <div class="card-block">
+        {{> HelpDocs_Title_Edit
+            title=helpDoc.title
+            _id=helpDoc._id}}
+
+        {{> HelpDocs_Section_Edit
+            sectionId=helpDoc.sectionId
+            _id=helpDoc._id}}
+      </div>
+
+      <div class="card-block text-xs-center">
+        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+      </div>
+    </div>
+  </div>
+</template>

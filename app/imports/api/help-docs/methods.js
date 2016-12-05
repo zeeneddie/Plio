@@ -1,25 +1,21 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidationError } from 'meteor/mdg:validation-error';
 
-import { IdSchema } from '/imports/share/schemas/schemas';
+import { IdSchema, optionsSchema } from '/imports/share/schemas/schemas';
 import { HelpDocSchema } from '/imports/share/schemas/help-doc-schema';
-import { S_EnsureCanChange } from '../standards/checkers';
+import { ensureCanChangeHelpDocs } from './checkers';
 import { CheckedMethod } from '../method';
 import HelpDocService from './help-doc-service';
 
-
-const check = function check(checker) {
-  return checker(
-    ({ organizationId }) => S_EnsureCanChange(this.userId, organizationId)
-  );
-};
 
 export const insert = new CheckedMethod({
   name: 'HelpDocs.insert',
 
   validate: HelpDocSchema.validator(),
 
-  check,
+  check(checker) {
+    return checker(() => ensureCanChangeHelpDocs(this.userId));
+  },
 
   run({ ...args }) {
     return HelpDocService.insert(args);
@@ -33,6 +29,7 @@ export const update = new CheckedMethod({
     const validationContext = new SimpleSchema([
       IdSchema,
       HelpDocSchema,
+      optionsSchema,
     ]).newContext();
 
     for (let key in args) {
@@ -44,7 +41,9 @@ export const update = new CheckedMethod({
     }
   },
 
-  check,
+  check(checker) {
+    return checker(() => ensureCanChangeHelpDocs(this.userId));
+  },
 
   run({ ...args }) {
     return HelpDocService.update(args);
@@ -56,21 +55,11 @@ export const remove = new CheckedMethod({
 
   validate: IdSchema.validator(),
 
-  check,
-
-  run({ _id }) {
-    return HelpDocService.remove({ _id, deletedBy: this.userId });
+  check(checker) {
+    return checker(() => ensureCanChangeHelpDocs(this.userId));
   },
-});
 
-export const restore = new CheckedMethod({
-  name: 'HelpDocs.restore',
-
-  validate: IdSchema.validator(),
-
-  check,
-
-  run({ _id }) {
-    return HelpDocService.restore({ _id });
+  run({ ...args }) {
+    return HelpDocService.remove(args);
   },
 });

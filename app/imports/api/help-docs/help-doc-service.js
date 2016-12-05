@@ -17,11 +17,7 @@ export default HelpDocService = {
   },
 
   remove({ ...args }) {
-    return this._service.remove(args);
-  },
-
-  restore({ ...args }) {
-    return this._service.restore(args);
+    return this.collection.remove(args);
   },
 
 };

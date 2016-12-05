@@ -53,9 +53,9 @@ export const convertStandardFileToHtml = new ValidatedMethod({
 
     this.unblock();
 
-    const { standardFilesDir } = Meteor.settings.AWSS3Bucket;
+    const { standardsFilesDir } = Meteor.settings.AWSS3Bucket;
     const s3Params = {
-      Key: `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${htmlFileName}`,
+      Key: `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${htmlFileName}`,
     };
 
     const afterConvertation = (htmlUrl) => {
@@ -111,9 +111,9 @@ export const convertHelpDocFileToHtml = new ValidatedMethod({
     this.unblock();
 
     const { _id: organizationId } = Organizations.findOne({ isAdminOrg: true });
-    const { helpDocFilesDir } = Meteor.settings.AWSS3Bucket;
+    const { helpDocsFilesDir } = Meteor.settings.AWSS3Bucket;
     const s3Params = {
-      Key: `uploads/${organizationId}/${helpDocFilesDir}/${helpDocId}/${Random.id()}-${htmlFileName}`,
+      Key: `uploads/${organizationId}/${helpDocsFilesDir}/${helpDocId}/${Random.id()}-${htmlFileName}`,
     };
 
     const afterConvertation = (htmlUrl) => {
