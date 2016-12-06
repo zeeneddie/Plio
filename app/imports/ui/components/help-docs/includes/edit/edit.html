@@ -17,6 +17,11 @@
             sourceHtmlUrl=helpDoc.source.htmlUrl}}
       </div>
 
+      {{> Subcards_Notify_Edit
+          doc=helpDoc
+          membersQuery=notifyListMembersQuery
+          onUpdate=(callback 'onUpdateNotifyUser')}}
+
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
       </div>

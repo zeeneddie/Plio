@@ -12,23 +12,54 @@ import {
 import { getUserOrganizations } from '../../organizations/utils';
 
 
-Meteor.publish('helpDocsLayout', function getHelpDocsLayoutData() {
+Meteor.publishComposite('helpDocsLayout', function getHelpDocsLayoutData() {
   if (!this.userId) {
     return this.ready();
   }
 
   return [
-    HelpDocs.find({}, { fields: HelpsListProjection }),
-    HelpSections.find({}, { fields: HelpSectionProjection }),
-    getUserOrganizations(this.userId, {}, {
-      fields: {
-        isAdminOrg: 1,
-        'users.userId': 1,
-        'users.isRemoved': 1,
-        'users.removedAt': 1,
-        'users.removedBy': 1,
+    {
+      find() {
+        return HelpDocs.find({}, { fields: HelpsListProjection });
       },
-    }),
+    },
+    {
+      find() {
+        return HelpSections.find({}, { fields: HelpSectionProjection });
+      },
+    },
+    {
+      find() {
+        return getUserOrganizations(this.userId, {
+          isAdminOrg: true,
+        }, {
+          fields: {
+            isAdminOrg: 1,
+            'users.userId': 1,
+            'users.isRemoved': 1,
+            'users.removedAt': 1,
+            'users.removedBy': 1,
+          },
+        });
+      },
+      children: [{
+        find(org) {
+          const usersIds = org.users
+            .filter(userData => !userData.isRemoved)
+            .map(userData => userData.userId);
+
+          return Meteor.users.find({
+            _id: { $in: usersIds },
+          }, {
+            fields: {
+              'emails.address': 1,
+              'profile.firstName': 1,
+              'profile.lastName': 1,
+            },
+          });
+        },
+      }],
+    },
   ];
 });
 

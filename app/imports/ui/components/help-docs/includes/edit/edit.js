@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import { HelpDocs } from '/imports/share/collections/help-docs';
+import { Organizations } from '/imports/share/collections/organizations';
 import { update, remove } from '/imports/api/help-docs/methods.js';
 
 Template.HelpDocs_Edit.viewmodel({
@@ -50,5 +51,17 @@ Template.HelpDocs_Edit.viewmodel({
         this.modal().close();
       });
     });
-  }
+  },
+  onUpdateNotifyUser({ query, options }, cb) {
+    return this.update({ query, options }, cb);
+  },
+  notifyListMembersQuery() {
+    const { users } = Organizations.findOne({ isAdminOrg: true }) || {};
+
+    const membersIds = users
+      .filter(userData => !userData.isRemoved)
+      .map(userData => userData.userId);
+
+    return { _id: { $in: membersIds } };
+  },
 });

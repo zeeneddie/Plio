@@ -9,7 +9,7 @@ Template.ESSources.viewmodel({
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
-      standardId: this.parent().standardId()
+      standardId: this.parent().standardId(),
     };
   },
   callDocxRender(url, fileObj, cb) {

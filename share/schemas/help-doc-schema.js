@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
-import { BaseEntitySchema } from './schemas';
+import { BaseEntitySchema, getNotifySchema } from './schemas';
 import { SourceTypes } from '../constants';
 
 
@@ -29,6 +29,7 @@ const sourceSchema = new SimpleSchema({
 
 export const HelpDocSchema = new SimpleSchema([
   BaseEntitySchema,
+  getNotifySchema('createdBy'),
   {
     title: {
       type: String,
