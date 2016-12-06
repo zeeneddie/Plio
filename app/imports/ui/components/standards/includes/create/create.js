@@ -9,7 +9,7 @@ import { insert as insertFile } from '/imports/api/files/methods';
 import UploadService from '/imports/ui/utils/uploads/UploadService';
 import {
   openStandardByFilter,
-} from '/imports/ui/react/standards/containers/StandardsDataLoader/helpers';
+} from '/imports/ui/react/standards/containers/DataLoader/helpers';
 import store, { getState } from '/client/redux/store';
 
 

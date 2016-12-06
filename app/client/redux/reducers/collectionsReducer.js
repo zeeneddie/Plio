@@ -19,7 +19,7 @@ import {
   UPDATE_STANDARD_TYPE,
   REMOVE_STANDARD_TYPE,
 } from '../actions/types';
-import { mapByIndex, propEqId } from '/imports/api/helpers';
+import { mapByIndex, propEqId, flattenObjects, omitC } from '/imports/api/helpers';
 
 const initialState = {
   departments: [],
@@ -32,22 +32,42 @@ const initialState = {
   standardBookSections: [],
   standardTypes: [],
   lessons: [],
+  standardsByIds: [],
 };
 
 const findIndexById = (_id, array) => array.findIndex(propEqId(_id));
+const normalizeObject = ({ _id, ...props }) => ({ [_id]: { ...props } });
+const normalize = array => flattenObjects(array.map(normalizeObject));
+const getNormalizedDataKey = prop => `${prop}ByIds`;
 
 export default function reducer(state = initialState, action) {
-  const add = (prop) => ({ ...state, [prop]: state[prop].concat(action.payload) });
+  const add = (prop) => {
+    const normalizedKey = getNormalizedDataKey(prop);
+    return {
+      ...state,
+      [prop]: state[prop].concat(action.payload),
+      [normalizedKey]: { ...state[normalizedKey], ...normalizeObject(action.payload) },
+    };
+  };
   const update = (prop) => {
     const index = findIndexById(action.payload._id, state[prop]);
-    return { ...state, [prop]: mapByIndex(action.payload, index, state[prop]) };
+    const normalizedKey = getNormalizedDataKey(prop);
+    const { _id, ...props } = action.payload;
+    const obj = { [_id]: { ...state[normalizedKey][_id], ...props } };
+    return {
+      ...state,
+      [prop]: mapByIndex(action.payload, index, state[prop]),
+      [normalizedKey]: { ...state[normalizedKey], ...obj },
+    };
   };
   const remove = (prop) => {
     const index = findIndexById(action.payload, state[prop]);
+    const normalizedKey = getNormalizedDataKey(prop);
     return {
       ...state,
       [prop]: state[prop].slice(0, index)
-                                .concat(state[prop].slice(index + 1)),
+                         .concat(state[prop].slice(index + 1)),
+      [normalizedKey]: { ...omitC([action.payload], state[normalizedKey]) },
     };
   };
 
@@ -61,8 +81,13 @@ export default function reducer(state = initialState, action) {
     case SET_STANDARD_BOOK_SECTIONS:
     case SET_STANDARD_TYPES:
     case SET_LESSONS_LEARNED:
-    case SET_STANDARDS:
       return { ...state, ...action.payload };
+    case SET_STANDARDS:
+      return {
+        ...state,
+        ...action.payload,
+        standardsByIds: normalize(action.payload.standards),
+      };
     case ADD_STANDARD:
       return add('standards');
     case UPDATE_STANDARD:
