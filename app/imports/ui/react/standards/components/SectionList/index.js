@@ -1,33 +1,17 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-import LHSItemContainer from '../../../containers/LHSItemContainer';
-import StandardListContainer from '../../containers/StandardListContainer';
-import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
-import { createSectionItem } from '../../helpers';
+import SectionListItemContainer from '../../containers/SectionListItemContainer';
 
-
-const SectionList = (props) => (
+const SectionList = ({ sections, ...props }) => (
   <div>
-    {props.sections.map(section => (
-      <LHSItemContainer
-        key={section._id}
-        item={createSectionItem(section._id)}
-        lText={section.title}
-        rText={section.unreadMessagesCount && (
-          <LabelMessagesCount count={section.unreadMessagesCount} />
-        )}
-        hideRTextOnCollapse
-        onToggleCollapse={props.onToggleCollapse}
-      >
-
-        <StandardListContainer
-          standards={section.standards}
-          section={section}
-        />
-
-      </LHSItemContainer>
-      ))}
+    {sections.map(section => (
+      <SectionListItemContainer key={section._id} {...props} {...section} />
+    ))}
   </div>
 );
+
+SectionList.propTypes = {
+  sections: PropTypes.array.isRequired,
+};
 
 export default SectionList;
