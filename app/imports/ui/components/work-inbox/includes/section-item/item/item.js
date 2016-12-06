@@ -26,18 +26,26 @@ Template.WorkInbox_Item.viewmodel({
       href: (() => {
         const params = {
           workItemId: this._id(),
-          orgSerialNumber: this.organizationSerialNumber()
+          orgSerialNumber: this.organizationSerialNumber(),
         };
         const queryParams = { filter: this.activeWorkInboxFilterId() };
         return FlowRouter.path('workInboxItem', params, queryParams);
-      })()
+      })(),
     };
+  },
+  getTitle({ title, linkedDocument = {} }) {
+    return linkedDocument.title || title || '';
+  },
+  getDescription({ linkedDocument, sequentialId, ...rest }) {
+    return linkedDocument
+      ? `${linkedDocument.sequentialId} - ${this.getTypeText(rest)}`
+      : sequentialId;
   },
   getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
     return date ? this.renderDate(date) : '';
   },
-  getUserText({ isDeleted, createdBy, deletedBy }) {
+  getUserText({ isDeleted, deletedBy }) {
     return isDeleted
             ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
             : '';
@@ -59,5 +67,5 @@ Template.WorkInbox_Item.viewmodel({
     const { _id } = this.data();
 
     Meteor.defer(() => updateViewedBy.call({ _id }));
-  }
+  },
 });

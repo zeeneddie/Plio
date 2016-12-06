@@ -206,11 +206,12 @@ export default {
   },
 
   remove({ _id, deletedBy }) {
-    const onSoftDelete = () => {
-      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
-    };
+    const workQuery = { query: { 'linkedDoc._id': _id } };
+    const onSoftDelete = () => WorkItemService.removeSoftly(workQuery);
+    const onPermanentDelete = () =>
+      WorkItemService.removePermanently(workQuery);
 
-    return this._service.remove({ _id, deletedBy, onSoftDelete });
+    return this._service.remove({ _id, deletedBy, onSoftDelete, onPermanentDelete });
   },
 
   restore({ _id }) {

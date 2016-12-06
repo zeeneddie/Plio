@@ -47,41 +47,34 @@ Template.WorkInbox_List.viewmodel({
     const results = (items) => ({
       result: findById(_id, items),
       first: _.first(items),
-      array: items
+      array: items,
     });
 
-    switch(filter) {
+    switch (filter) {
       case 1:
         return results(my.current);
-        break;
       case 2:
         return results(team.current);
-        break;
       case 3:
         return results(my.completed);
-        break;
       case 4:
         return results(team.completed);
-        break;
       case 5:
         return results(my.deleted);
-        break;
       case 6:
         return results(team.deleted);
-        break;
       default:
         return {};
-        break;
     }
   },
   getPendingItems(_query = {}) {
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
-        .map(prop => extractIds(this[prop]()))
+        .map(prop => extractIds(this[prop](_query.isDeleted ? { isDeleted: true } : {})))
         .reduce((prev, cur) => [...prev, ...cur]);
 
     const workItems = this._getWorkItemsByQuery({
       ..._query,
-      'linkedDoc._id': { $in: linkedDocsIds }
+      'linkedDoc._id': { $in: linkedDocsIds },
     }).fetch();
 
     return _(workItems)
@@ -109,8 +102,8 @@ Template.WorkInbox_List.viewmodel({
     const sortByFirstName = (array) => {
       const query = {
         _id: {
-          $in: [...(() => array.map(property('assigneeId')))()]
-        }
+          $in: [...(() => array.map(property('assigneeId')))()],
+        },
       };
       const options = { sort: { 'profile.firstName': 1 } };
       const users = Meteor.users.find(query, options);
@@ -120,12 +113,13 @@ Template.WorkInbox_List.viewmodel({
 
     const current = sortByFirstName(byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status)));
     const completed = sortByFirstName(byStatus(getItems(), status => this.STATUSES.COMPLETED() === status));
-    const deleted = sortByFirstName(byStatus(getItems({ isDeleted: true }), status => true));
+    // TODO: 
+    const deleted = sortByFirstName(this._getActionsByQuery({ isDeleted: true }).fetch());
 
     return {
       current,
       completed,
-      deleted
+      deleted,
     };
   },
   getTeamItems(userId, prop) {
@@ -153,17 +147,17 @@ Template.WorkInbox_List.viewmodel({
       return {
         current: sortItems(byDeleted(byStatus(items, isInProgress), isDel(false))),
         completed: sortItems(byDeleted(byStatus(items, isCompleted), isDel(false))),
-        deleted: sortItems(byDeleted(items, isDel(true)))
+        deleted: sortItems(this._getActionsByQuery({ isDeleted: true }).fetch()),
       };
     };
 
     return {
       my: getObj(myItems),
-      team: getObj(teamItems)
+      team: getObj(teamItems),
     };
   },
   onSearchInputValue() {
-    return (value) => extractIds(this._findWorkItemForFilter().array)
+    return () => extractIds(this._findWorkItemForFilter().array)
   },
   onModalOpen() {
     return () =>
@@ -172,5 +166,5 @@ Template.WorkInbox_List.viewmodel({
         template: 'Actions_ChooseTypeModal',
         variation: 'simple',
       });
-  }
+  },
 });

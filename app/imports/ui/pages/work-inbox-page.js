@@ -14,11 +14,14 @@ Template.WorkInbox_Page.viewmodel({
     function() {
       const organizationId = this.organizationId();
       const workItemId = this.workItemId();
+      const filter = this.activeWorkInboxFilterId();
 
       if (!organizationId) return;
 
+      const subscriptionName = (filter === 5 || filter === 6) ? 'actionCard' : 'workInboxCard';
+
       const _subHandlers = [
-        DocumentCardSubs.subscribe('workInboxCard', { organizationId, _id: workItemId }, {
+        DocumentCardSubs.subscribe(subscriptionName, { organizationId, _id: workItemId }, {
           onReady() {
             BackgroundSubs.subscribe('workInboxDeps', organizationId);
           }
