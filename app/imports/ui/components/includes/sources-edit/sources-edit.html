@@ -17,16 +17,23 @@
       <i class="fa pull-right margin-top" {{b "class: { 'fa-spinner fa-pulse': docxRenderInProgress, 'fa-align-left': !docxRenderInProgress && sourceHtmlUrl }"}}></i>
     <div {{b "if: sourceType === 'attachment'"}}>
       {{#with file}}
-        {{> FileItem file=this removeFile=removeAttachmentFn}}
-      {{else}}
+        {{> FileItem
+            file=this
+            isReadOnly=isSourceRequired
+            removeFile=removeAttachmentFn}}
+      {{/with}}
+      {{#if showUploader}}
         <div>
           {{> FileUploader
               afterInsert=afterInsertFn
               afterUpload=afterUploadCb
+              fileData=fileData
               slingshotDirective=slingshotDirective
-              metaContext=metaContext}}
+              metaContext=metaContext
+              buttonText=uploaderButtonText
+              buttonIcon=uploaderButtonIcon}}
         </div>
-      {{/with}}
+      {{/if}}
     </div>
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"

@@ -19,7 +19,7 @@ Template.HelpDocs_Title_Edit.viewmodel({
           return;
         }
 
-        invoke(this.parent(), 'update', { title });
+        invoke(this.parent(), 'update', { e, title });
       },
     };
   },

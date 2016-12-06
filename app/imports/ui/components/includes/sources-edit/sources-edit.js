@@ -1,7 +1,12 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
+import { ViewModel } from 'meteor/manuel:viewmodel';
 import { check } from 'meteor/check';
-import { Files } from '/imports/share/collections/files.js';
-import { remove as removeFile } from '/imports/api/files/methods.js';
+import { _ } from 'meteor/underscore';
+
+import { Files } from '/imports/share/collections/files';
+import { remove as removeFile } from '/imports/api/files/methods';
+import UploadsStore from '/imports/ui/utils/uploads/uploads-store';
 
 Template.Sources_Edit.viewmodel({
   mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
@@ -15,6 +20,7 @@ Template.Sources_Edit.viewmodel({
   sourceUrl: '',
   sourceFileId: '',
   docxRenderInProgress: null,
+  isSourceRequired: false,
   file() {
     const fileId = this.sourceFileId();
     return Files.findOne({ _id: fileId });
@@ -26,15 +32,16 @@ Template.Sources_Edit.viewmodel({
     if (type === 'attachment') {
       return _.every([
         type, fileId,
-        (type !== sourceType) || (fileId !== sourceFileId)
-      ]);
-    } else {
-      return _.every([
-        type,
-        (!sourceUrl && url) || (sourceUrl && !url) || (sourceUrl && url),
-        (type !== sourceType) || (url !== sourceUrl)
+        (type !== sourceType) || (fileId !== sourceFileId),
       ]);
     }
+
+    return _.every([
+      type,
+      (!sourceUrl && url) || (sourceUrl && !url) || (sourceUrl && url),
+      ((type !== sourceType) && url && (url !== sourceUrl)) ||
+      ((type === sourceType) && (url !== sourceUrl)),
+    ]);
   },
   changeType(type) {
     this.sourceType(type);
@@ -55,21 +62,20 @@ Template.Sources_Edit.viewmodel({
       return;
     }
 
-    let sourceDoc = { type };
+    const sourceDoc = { type };
     if (type === 'attachment') {
       sourceDoc.fileId = fileId;
     } else {
-      if (url && (url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
+      if (url && (url.search(/^https?:\/\//) === -1) && (type !== 'attachment')) {
         url = `http://${url}`;
       }
 
       if (url && !this.isValidUrl(url)) {
         ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
-
         return;
-      } else {
-        sourceDoc.url = url;
       }
+
+      sourceDoc.url = url;
     }
 
     const query = { [`source${this.id() || ''}`]: sourceDoc };
@@ -80,7 +86,7 @@ Template.Sources_Edit.viewmodel({
       this.callWithFocusCheck(e, () => {
         if (url) {
           this.parent().update(query, cb);
-        } else {
+        } else if (!this.isSourceRequired()) {
           this._removeSourceFile();
         }
       });
@@ -95,7 +101,7 @@ Template.Sources_Edit.viewmodel({
     if (isDocx) {
       this.docxRenderInProgress(true);
 
-      this.callDocxRender(url, file, (error, result) => {
+      this.convertDocxToHtml(url, file, (error, result) => {
         if (error) {
           // HTTP errors
           this.renderDocxError(`Failed to get .docx file: ${error}`);
@@ -151,7 +157,7 @@ Template.Sources_Edit.viewmodel({
       type: 'warning',
       showCancelButton: true,
       confirmButtonText: buttonText,
-      closeOnConfirm: true
+      closeOnConfirm: true,
     }, () => {
       if (isFileUploading) {
         UploadsStore.terminateUploading(this.sourceFileId());
@@ -163,25 +169,28 @@ Template.Sources_Edit.viewmodel({
   },
   _removeSourceFile() {
     const options = {
-      $unset: { [`source${this.id() || ''}`]: '' }
+      $unset: { [`source${this.id() || ''}`]: '' },
     };
 
-    let cb;
-    if (this.id()) {
-      cb = (err) => {
-        if (!err && this.id() === 1) {
-          const options = {
-            $rename: { source2: 'source1' }
-          };
-          this.parent().update({ options });
-        }
-      };
-    }
-
-    this.parent().update({ options }, cb);
+    this.parent().update({ options }, this.removeSourceFileCb);
+  },
+  showUploader() {
+    return this.isSourceRequired() ? true : !this.file();
+  },
+  uploaderButtonText() {
+    return this.file() ? 'Change' : 'Add';
+  },
+  uploaderButtonIcon() {
+    return this.file() ? 'fa fa-pencil-square-o' : 'fa fa-plus';
   },
   getData() {
-    const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension } = this.data();
-    return { type, fileId, url };
-  }
+    const {
+      sourceType: type,
+      sourceFileId: fileId,
+      sourceUrl: url,
+      sourceExtension: extension,
+    } = this.data();
+
+    return { type, fileId, url, extension };
+  },
 });
