@@ -10,30 +10,31 @@ export default {
     return this.activeNCFilterId() === parseInt(filterId, 10);
   },
   activeNCFilterId() {
-    let id = parseInt(FlowRouter.getQueryParam('filter'));
-    if (!NonConformityFilters[id]) {
-      id = 1;
-    }
+    const id = parseInt(FlowRouter.getQueryParam('filter'), 10);
+
+    if (!NonConformityFilters[id]) return 1;
 
     return id;
   },
   getNCFilterLabel(id) {
-    if (!NonConformityFilters[id]) {
-      id = 1;
-    }
+    if (!NonConformityFilters[id]) return NonConformityFilters[1].name;
 
-    return NonConformityFilters[id];
+    return NonConformityFilters[id].name;
   },
   currentNC() {
     const _id = this.NCId();
     return NonConformities.findOne({ _id });
   },
-  _getNCsByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+  _getNCsByQuery({
+    isDeleted = { $in: [null, false] },
+    ...args,
+  } = {},
+  options = { sort: { createdAt: -1 } }) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };
     return NonConformities.find(query, options);
   },
   _getNCByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
     const query = { ...filter, organizationId: this.organizationId() };
     return NonConformities.findOne(query, options);
-  }
+  },
 };

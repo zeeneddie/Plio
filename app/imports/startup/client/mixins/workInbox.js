@@ -61,19 +61,16 @@ export default {
     return this.activeWorkInboxFilterId() === parseInt(filterId, 10);
   },
   activeWorkInboxFilterId() {
-    let id = parseInt(FlowRouter.getQueryParam('filter'), 10);
-    if (!WorkInboxFilters[id]) {
-      id = 1;
-    }
+    const id = parseInt(FlowRouter.getQueryParam('filter'), 10);
+
+    if (!WorkInboxFilters[id]) return 1;
 
     return id;
   },
   getWorkInboxFilterLabel(id) {
-    if (!WorkInboxFilters[id]) {
-      id = 1;
-    }
+    if (!WorkInboxFilters[id]) return WorkInboxFilters[1].name;
 
-    return WorkInboxFilters[id];
+    return WorkInboxFilters[id].name;
   },
   _getWorkItemsByQuery(
     {

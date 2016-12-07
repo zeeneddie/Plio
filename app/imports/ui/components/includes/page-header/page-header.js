@@ -1,30 +1,23 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
-import get from 'lodash.get';
+import { _ } from 'meteor/underscore';
 
 /**
  * @param {string} header - The main header text without words after '-'
  * @param {string} idToExpand - id of the document we want to expand after filter switch
- * @param {string} prependWith - prepend dropdown items with
- * @param [number] prependIndexes - indexes to which prepend value of 'prependWith'. If not provided prepends to all items.
  * @param {object} filters - filters to display
  */
- Template.PageHeader.viewmodel({
-   share: ['search', 'window'],
-   mixin: ['organization', 'collapsing'],
-   header: '',
-   filters: [],
-   prependWith: '',
-   prependIndexes: [],
-   idToExpand: '',
-   isActiveFilter() {},
-   headerArgs() {
+Template.PageHeader.viewmodel({
+  share: ['search', 'window'],
+  mixin: ['organization', 'collapsing'],
+  header: '',
+  filters: [],
+  idToExpand: '',
+  isActiveFilter() {},
+  headerArgs() {
     const {
       idToExpand,
-      header,
-      filters:filtersData,
-      prependWith = '',
-      prependIndexes = []
+      filters: filterMap,
     } = this.data();
     const {
       /**
@@ -43,46 +36,55 @@ import get from 'lodash.get';
        * @param {string} value - id of the current filter
        * @returns {boolean} - result
        */
-      isActiveFilter = () => {}
+      isActiveFilter = () => {},
+      transformHeader = _.identity,
+      transformCurrentFilterLabel = _.identity,
     } = this.templateInstance.data;
 
-    const filters = Object.keys(filtersData).map((key, i) => ({
-      value: key,
-      text: `
-        ${header} -
-        ${(!prependIndexes.length || prependIndexes.includes(i)) ? prependWith : ''}
-        ${filtersData[key]}
-      `.trim()
-    }));
+    const filters = Object.keys(filterMap).map((key) => {
+      const filter = filterMap[key];
+      const { title = '', name = '', prepend = '' } = filter;
+      const header = title ? `${title} - ` : '';
+
+      return {
+        ...filter,
+        header,
+        value: key,
+        text: `${prepend} ${name}`,
+      };
+    });
     const activeFilter = filters.find(({ value }) => isActiveFilter(value));
-    const currentFilterLabel = activeFilter.text.replace(`${header}`, '');
     return {
-       header,
-       currentFilterLabel,
-       filters,
-       isActiveFilter,
-       onSelectFilter: (value) => {
-         const onSelect = () => {
-           FlowRouter.setQueryParams({ filter: value });
-           this.searchText('');
-           this.expandCollapsed(idToExpand);
-         };
+      filters,
+      isActiveFilter,
+      header: transformHeader(activeFilter.header, activeFilter, filters),
+      currentFilterLabel: transformCurrentFilterLabel(activeFilter.text, activeFilter, filters),
+      onSelectFilter: (value) => {
+        const onSelect = () => {
+          FlowRouter.setQueryParams({ filter: value });
+          this.searchText('');
+          this.expandCollapsed(idToExpand);
+        };
 
-         if (_.isFunction(onSelectFilter)) return onSelectFilter(value, onSelect);
+        if (_.isFunction(onSelectFilter)) return onSelectFilter(value, onSelect);
 
-         onSelect();
-       },
-       onNavigate: (e) => {
-         e.preventDefault();
+        onSelect();
 
-         if (_.isFunction(onNavigate)) return onNavigate(e);
+        return this;
+      },
+      onNavigate: (e) => {
+        e.preventDefault();
 
-         if (this.width() && this.width() < 768) {
-           this.width(null);
-         } else {
-           FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
-         }
-       }
-     };
-   }
- });
+        if (_.isFunction(onNavigate)) return onNavigate(e);
+
+        if (this.width() && this.width() < 768) {
+          this.width(null);
+        } else {
+          FlowRouter.go('dashboardPage', { orgSerialNumber: this.organizationSerialNumber() });
+        }
+
+        return this;
+      },
+    };
+  },
+});
