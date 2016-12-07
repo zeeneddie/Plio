@@ -99,10 +99,10 @@ Template.WorkInbox_List.viewmodel({
     const byStatus = (array, predicate) => (
       array.filter(({ assigneeId, status }) => assigneeId !== Meteor.userId() && predicate(status))
     );
-    const sortByFirstName = (array) => {
+    const sortByFirstName = (prop, array) => {
       const query = {
         _id: {
-          $in: [...(() => array.map(property('assigneeId')))()],
+          $in: [...(() => array.map(property(prop)))()],
         },
       };
       const options = { sort: { 'profile.firstName': 1 } };
@@ -111,10 +111,18 @@ Template.WorkInbox_List.viewmodel({
       return ids;
     };
 
-    const current = sortByFirstName(byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status)));
-    const completed = sortByFirstName(byStatus(getItems(), status => this.STATUSES.COMPLETED() === status));
-    // TODO: 
-    const deleted = sortByFirstName(this._getActionsByQuery({ isDeleted: true }).fetch());
+    const deletedActionsQuery = { isDeleted: true, deletedBy: { $ne: Meteor.userId() } };
+    const deletedActions = this._getActionsByQuery(deletedActionsQuery).fetch();
+
+    const current = sortByFirstName(
+      'assigneeId',
+      byStatus(getItems(), status => this.STATUSES.IN_PROGRESS().includes(status))
+    );
+    const completed = sortByFirstName(
+      'assigneeId',
+      byStatus(getItems(), status => this.STATUSES.COMPLETED() === status)
+    );
+    const deleted = sortByFirstName('deletedBy', deletedActions);
 
     return {
       current,
