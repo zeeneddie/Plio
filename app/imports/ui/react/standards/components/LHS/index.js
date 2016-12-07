@@ -5,6 +5,7 @@ import LHSContainer from '../../../containers/LHSContainer';
 import SectionList from '../SectionList';
 import TypeList from '../TypeList';
 import StandardListContainer from '../../containers/StandardListContainer';
+import SectionListContainer from '../../containers/SectionListContainer';
 
 const StandardsLHS = (props) => {
   let content;

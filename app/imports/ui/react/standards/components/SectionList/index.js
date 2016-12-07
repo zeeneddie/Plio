@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 
-import SectionListItemContainer from '../../containers/SectionListItemContainer';
+import SectionListItem from '../SectionListItem';
 
 const SectionList = ({ sections, ...props }) => (
   <div>
     {sections.map(section => (
-      <SectionListItemContainer key={section._id} {...props} {...section} />
+      <SectionListItem key={section._id} section={section} {...props} />
     ))}
   </div>
 );

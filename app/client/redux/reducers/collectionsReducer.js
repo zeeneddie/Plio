@@ -41,6 +41,14 @@ const normalize = array => flattenObjects(array.map(normalizeObject));
 const getNormalizedDataKey = prop => `${prop}ByIds`;
 
 export default function reducer(state = initialState, action) {
+  const set = (prop) => {
+    const normalizedKey = getNormalizedDataKey(prop);
+    return {
+      ...state,
+      ...action.payload,
+      [normalizedKey]: normalize(action.payload[prop]),
+    };
+  };
   const add = (prop) => {
     const normalizedKey = getNormalizedDataKey(prop);
     return {
@@ -81,13 +89,8 @@ export default function reducer(state = initialState, action) {
     case SET_STANDARD_BOOK_SECTIONS:
     case SET_STANDARD_TYPES:
     case SET_LESSONS_LEARNED:
-      return { ...state, ...action.payload };
     case SET_STANDARDS:
-      return {
-        ...state,
-        ...action.payload,
-        standardsByIds: normalize(action.payload.standards),
-      };
+      return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
       return add('standards');
     case UPDATE_STANDARD:

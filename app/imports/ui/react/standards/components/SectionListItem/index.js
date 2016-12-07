@@ -6,22 +6,22 @@ import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import { createSectionItem } from '../../helpers';
 
 const SectionListItem = ({
-  _id, title, unreadMessagesCount, standards, onToggleCollapse, ...props,
+  section, onToggleCollapse,
 }) => (
   <LHSItemContainer
-    key={_id}
-    item={createSectionItem(_id)}
-    lText={title}
-    rText={unreadMessagesCount && (
-      <LabelMessagesCount count={unreadMessagesCount} />
+    key={section._id}
+    item={createSectionItem(section._id)}
+    lText={section.title}
+    rText={!!section.unreadMessagesCount && (
+      <LabelMessagesCount count={section.unreadMessagesCount} />
     )}
     hideRTextOnCollapse
     onToggleCollapse={onToggleCollapse}
   >
 
     <StandardListContainer
-      standards={standards}
-      section={{ _id, title, unreadMessagesCount, standards, ...props }}
+      standards={section.standards}
+      section={section}
     />
 
   </LHSItemContainer>
