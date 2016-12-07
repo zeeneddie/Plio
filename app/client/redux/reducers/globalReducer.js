@@ -10,7 +10,9 @@ import {
   SET_URL_ITEM_ID,
   SET_DATA_LOADING,
   SET_IS_CARD_READY,
+  SET_IS_LAYOUT_READY,
   SET_IS_FULL_SCREEN_MODE,
+  SET_INITIALIZING,
 } from '../actions/types';
 
 const initialState = {
@@ -21,8 +23,10 @@ const initialState = {
   animating: false,
   urlItemId: null,
   dataLoading: false,
+  isLayoutReady: false,
   isCardReady: false,
   isFullScreenMode: false,
+  initializing: true,
 };
 
 export default function (state = initialState, action) {
@@ -34,7 +38,9 @@ export default function (state = initialState, action) {
     case SET_URL_ITEM_ID:
     case SET_DATA_LOADING:
     case SET_IS_CARD_READY:
+    case SET_IS_LAYOUT_READY:
     case SET_IS_FULL_SCREEN_MODE:
+    case SET_INITIALIZING:
       return { ...state, ...action.payload };
     case ADD_COLLAPSED:
       return { ...state, collapsed: addCollapsed(state.collapsed, action.payload) };

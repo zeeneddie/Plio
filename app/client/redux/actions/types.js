@@ -96,7 +96,11 @@ export const SET_DATA_LOADING = 'SET_DATA_LOADING';
 
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
+export const SET_IS_LAYOUT_READY = 'SET_IS_LAYOUT_READY';
+
 export const SET_IS_FULL_SCREEN_MODE = 'SET_IS_FULL_SCREEN_MODE';
+
+export const SET_INITIALIZING = 'SET_INITIALIZING';
 
 // collections
 
@@ -122,6 +126,11 @@ export const SET_HELP_DOCS = 'SET_HELP_DOCS';
 
 export const SET_HELP_SECTIONS = 'SET_HELP_SECTIONS';
 
+export const ADD_ITEM = 'ADD_ITEM';
+
+export const CHANGE_ITEM = 'CHANGE_ITEM';
+
+export const REMOVE_ITEM = 'REMOVE_ITEM';
 
 // window
 

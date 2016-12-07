@@ -14,7 +14,7 @@ export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => 
       helpId: helpSectionsData[0].helpDocs[0]._id,
     };
 
-    Meteor.defer(() => FlowRouter.go('helpDoc', params));
+    FlowRouter.go('helpDoc', params);
   }
 };
 

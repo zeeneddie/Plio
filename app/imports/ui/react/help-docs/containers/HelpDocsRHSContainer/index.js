@@ -4,10 +4,10 @@ import { _ } from 'meteor/underscore';
 
 import { pickC, pickDeep, propEqId } from '/imports/api/helpers';
 import { canChangeHelpDocs } from '/imports/api/checkers';
-import { onToggleScreenMode } from '../../../standards/containers/StandardsRHSContainer/handlers'; // FIXME
 import { onModalOpen } from './handlers';
 import HelpDocsRHS from '../../components/HelpDocsRHS';
 import HelpDocsRHSNotFound from '../../components/HelpDocsRHSNotFound';
+import onToggleScreenMode from '../../../handlers/onToggleScreenMode';
 
 export default compose(
   connect(pickDeep([
