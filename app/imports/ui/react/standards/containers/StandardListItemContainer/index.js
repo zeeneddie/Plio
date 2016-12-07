@@ -10,7 +10,7 @@ import { setUrlItemId } from '/client/redux/actions/globalActions';
 import { updateViewedBy } from '/imports/api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 import { pickC, notEquals } from '/imports/api/helpers';
-import { STANDARD_FILTER_MAP } from '/imports/api/constants';
+import { STANDARD_FILTER_MAP, UncategorizedTypeSection } from '/imports/api/constants';
 import { isNewDoc } from '/imports/api/checkers';
 
 export default compose(
@@ -20,7 +20,14 @@ export default compose(
     (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
     (props._id === props.urlItemId && props._id !== nextProps.urlItemId)
   )),
-  connect((_, { _id }) => state => ({ ...state.collections.standardsByIds[_id] })),
+  connect((_, { _id }) => state => {
+    const standard = state.collections.standardsByIds[_id];
+
+    return {
+      ...standard,
+      type: state.collections.standardTypesByIds[standard.typeId] || UncategorizedTypeSection,
+    };
+  }),
   shouldUpdate((props, nextProps) => {
     const pickKeys = pickC(['title', 'isDeleted', 'unreadMessagesCount', 'userId']);
     const pickKeysDeleted = pickC(['deletedByText', 'deletedAtText']);

@@ -6,6 +6,7 @@ import StandardListContainer from '../../containers/StandardListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import { createTypeItem } from '../../helpers';
 import { lengthStandards } from '/imports/api/helpers';
+import SectionListContainer from '../../containers/SectionListContainer';
 
 const TypeList = (props) => (
   <div>
@@ -21,7 +22,11 @@ const TypeList = (props) => (
         onToggleCollapse={props.onTypeToggleCollapse}
       >
         <div className="sub">
-          {lengthStandards(type) ? (
+          <SectionListContainer
+            onToggleCollapse={props.onSectionToggleCollapse}
+            standards={type.standards}
+          />
+          {/* {lengthStandards(type) ? (
             <StandardListContainer
               standards={type.standards}
             />
@@ -30,7 +35,7 @@ const TypeList = (props) => (
               sections={type.sections}
               onToggleCollapse={props.onSectionToggleCollapse}
             />
-          )}
+          )} */}
         </div>
       </LHSItemContainer>
     ))}

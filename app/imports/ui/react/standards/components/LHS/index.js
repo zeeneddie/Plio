@@ -2,10 +2,9 @@ import React from 'react';
 
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
-import SectionList from '../SectionList';
-import TypeList from '../TypeList';
 import StandardListContainer from '../../containers/StandardListContainer';
 import SectionListContainer from '../../containers/SectionListContainer';
+import TypeListContainer from '../../containers/TypeListContainer';
 
 const StandardsLHS = (props) => {
   let content;
@@ -14,16 +13,16 @@ const StandardsLHS = (props) => {
     case 1:
     default:
       content = (
-        <SectionList
-          sections={props.sections}
+        <SectionListContainer
+          standards={props.standards}
           onToggleCollapse={props.onSectionToggleCollapse}
         />
       );
       break;
     case 2:
       content = (
-        <TypeList
-          types={props.types}
+        <TypeListContainer
+          standards={props.standards}
           onTypeToggleCollapse={props.onTypeToggleCollapse}
           onSectionToggleCollapse={props.onSectionToggleCollapse}
         />
