@@ -2,6 +2,10 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
 import invoke from 'lodash.invoke';
 import property from 'lodash.property';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { Tracker } from 'meteor/tracker';
+import { _ } from 'meteor/underscore';
+import curry from 'lodash.curry';
 
 import { findById, extractIds } from '/imports/api/helpers';
 
@@ -11,7 +15,7 @@ Template.WorkInbox_List.viewmodel({
     'search', 'collapsing', 'organization',
     'modal', 'workInbox', 'router',
     'user', 'nonconformity', 'risk',
-    'utils', { STATUSES: 'workItemStatus' }
+    'utils', { STATUSES: 'workItemStatus' },
   ],
   autorun() {
     const list = this.list;
@@ -19,8 +23,8 @@ Template.WorkInbox_List.viewmodel({
     if (list && !list.focused() && !list.animating() && !list.searchText()) {
       const workItemId = this.workItemId();
       const {
-        result:contains,
-        first:defaultDoc
+        result: contains,
+        first: defaultDoc,
       } = this._findWorkItemForFilter(workItemId);
 
       if (!contains) {
@@ -67,6 +71,11 @@ Template.WorkInbox_List.viewmodel({
         return {};
     }
   },
+  getActionsSearchQuery() {
+    const fields = [{ name: 'title' }, { name: 'sequentialId' }];
+
+    return this.searchObject('searchText', fields, this.isPrecise());
+  },
   getPendingItems(_query = {}) {
     const linkedDocsIds = ['_getNCsByQuery', '_getRisksByQuery', '_getActionsByQuery']
         .map(prop => extractIds(this[prop](_query.isDeleted ? { isDeleted: true } : {})))
@@ -111,7 +120,11 @@ Template.WorkInbox_List.viewmodel({
       return ids;
     };
 
-    const deletedActionsQuery = { isDeleted: true, deletedBy: { $ne: Meteor.userId() } };
+    const deletedActionsQuery = {
+      ...this.getActionsSearchQuery(),
+      isDeleted: true,
+      deletedBy: { $ne: Meteor.userId() },
+    };
     const deletedActions = this._getActionsByQuery(deletedActionsQuery).fetch();
 
     const current = sortByFirstName(
@@ -135,37 +148,39 @@ Template.WorkInbox_List.viewmodel({
     return team[prop];
   },
   items(userId) {
-    const getInitialItems = query => this.getPendingItems(query);
-    const byAssignee = (array, predicate) => array.filter(({ assigneeId }) => predicate(assigneeId));
-    const byStatus = (array, predicate) => array.filter(({ status }) => predicate(status));
-    const byDeleted = (array, predicate) => array.filter(({ isDeleted }) => predicate(isDeleted));
+    const byProp = curry((prop, predicate, array) => array.filter(item => predicate(item[prop])));
+    const byStatus = byProp('status');
     const sortItems = array => (
-      array.sort(({ targetDate:d1 }, { targetDate:d2 }) => d2 - d1)
+      array.sort(({ targetDate: d1 }, { targetDate: d2 }) => d2 - d1)
     );
-
-    const allItems = [...new Set(getInitialItems({}).concat(getInitialItems({ isDeleted: true })))];
-    const myItems = byAssignee(allItems, assigneeId => assigneeId === Meteor.userId());
-    const teamItems = byAssignee(allItems, assigneeId => userId ? assigneeId === userId : assigneeId !== Meteor.userId());
-
     const isInProgress = status => this.STATUSES.IN_PROGRESS().includes(status);
     const isCompleted = status => this.STATUSES.COMPLETED() === status;
-    const isDel = bool => isDeleted => bool ? isDeleted : !isDeleted;
+    const getItems = (userQuery) => {
+      const workItemsQuery = { assigneeId: userQuery, isDeleted: false };
+      const workItems = sortItems(this.getPendingItems(workItemsQuery));
+      const deletedQuery = {
+        ...this.getActionsSearchQuery(),
+        isDeleted: true,
+        deletedBy: userQuery,
+      };
+      const deleted = sortItems(this._getActionsByQuery(deletedQuery).fetch());
+      const current = byStatus(isInProgress, workItems);
+      const completed = byStatus(isCompleted, workItems);
 
-    const getObj = (items) => {
       return {
-        current: sortItems(byDeleted(byStatus(items, isInProgress), isDel(false))),
-        completed: sortItems(byDeleted(byStatus(items, isCompleted), isDel(false))),
-        deleted: sortItems(this._getActionsByQuery({ isDeleted: true }).fetch()),
+        current,
+        completed,
+        deleted,
       };
     };
 
     return {
-      my: getObj(myItems),
-      team: getObj(teamItems),
+      my: getItems(Meteor.userId()),
+      team: getItems(userId || { $ne: Meteor.userId() }),
     };
   },
   onSearchInputValue() {
-    return () => extractIds(this._findWorkItemForFilter().array)
+    return () => extractIds(this._findWorkItemForFilter().array);
   },
   onModalOpen() {
     return () =>
