@@ -1,0 +1,7 @@
+<template name="CustomTitleCreate">
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item pointer" {{b "mousedown: addNewSection"}}>
+        {{> Select_Add_Button value=this.value}}
+        <strong {{b "text: sectionHintText"}}></strong>
+    </a>
+</template>

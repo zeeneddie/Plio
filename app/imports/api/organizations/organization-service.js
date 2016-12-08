@@ -261,6 +261,14 @@ export default OrganizationService = {
     });
   },
 
+  setTitleValue({ organizationId, fieldName, fieldValue }) {
+    return this.collection.update({
+      _id: organizationId,
+    }, {
+      $set: { [`homeScreenTitles.${fieldName}`]: fieldValue },
+    });
+  },
+
   deleteOrganization({ organizationId }) {
     const organization = this.collection.findOne({ _id: organizationId }, {
       fields: { 'users.userId': 1 }
