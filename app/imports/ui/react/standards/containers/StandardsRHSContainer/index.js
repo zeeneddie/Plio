@@ -25,6 +25,7 @@ import {
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import {
+  onToggleScreenMode,
   onDiscussionOpen,
   onModalOpen,
   onRestore,
@@ -32,7 +33,6 @@ import {
 } from './handlers';
 import { getPathToDiscussion, getStandardsByFilter, withStandard } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
-import onToggleScreenMode from '../../../handlers/onToggleScreenMode';
 
 const mapStateToProps = ({
   standards: { standards },

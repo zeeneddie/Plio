@@ -1,6 +1,8 @@
+import { $ } from 'meteor/jquery';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
+import { setIsFullScreenMode } from '/client/redux/actions/globalActions';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';
 import { getId } from '/imports/api/helpers';
@@ -8,6 +10,44 @@ import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
 import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+
+export const onToggleScreenMode = props => e => {
+  const $div = $(e.target).closest('.content-cards-inner');
+  const offset = $div.offset();
+
+  if (props.isFullScreenMode) {
+    props.dispatch(setIsFullScreenMode(false));
+
+    setTimeout(() => {
+      const css = {
+        position: 'inherit',
+        top: 'auto',
+        right: 'auto',
+        bottom: 'auto',
+        left: 'auto',
+        transition: 'none',
+      };
+
+      $div.css(css);
+    }, 150);
+  } else {
+    const css = {
+      position: 'fixed',
+      top: offset.top,
+      right: $(window).width() - (offset.left + $div.outerWidth()),
+      bottom: '0',
+      left: offset.left,
+    };
+    $div.css(css);
+
+    setTimeout(() => {
+      // Safari workaround
+      $div.css({ transition: 'all .15s linear' });
+
+      props.dispatch(setIsFullScreenMode(true));
+    }, 100);
+  }
+};
 
 export const onModalOpen = props => () =>
   modal.modal.open({

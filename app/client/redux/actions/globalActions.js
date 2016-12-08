@@ -12,9 +12,7 @@ import {
   SET_URL_ITEM_ID,
   SET_DATA_LOADING,
   SET_IS_CARD_READY,
-  SET_IS_LAYOUT_READY,
   SET_IS_FULL_SCREEN_MODE,
-  SET_INITIALIZING,
 } from './types';
 
 export function setUserId(userId) {
@@ -66,24 +64,10 @@ export function setIsCardReady(isCardReady) {
   };
 }
 
-export function setIsLayoutReady(isLayoutReady) {
-  return {
-    payload: { isLayoutReady },
-    type: SET_IS_LAYOUT_READY,
-  };
-}
-
 export function setIsFullScreenMode(isFullScreenMode) {
   return {
     payload: { isFullScreenMode },
     type: SET_IS_FULL_SCREEN_MODE,
-  };
-}
-
-export function setInitializing(initializing) {
-  return {
-    payload: { initializing },
-    type: SET_INITIALIZING,
   };
 }
 
