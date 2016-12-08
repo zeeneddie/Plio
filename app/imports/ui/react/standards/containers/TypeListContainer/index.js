@@ -8,9 +8,12 @@ import { lengthStandards, lengthTypes, propEq, notDeleted, propEqId } from '/imp
 import { getState } from '/client/redux/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
-  open,
+  openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
+
+// TODO: the list is not updating if chaging standard's type or section
+// to the one that is not rendered yet
 
 export default compose(
   shouldUpdate((props, nextProps) => !!(lengthStandards(props) !== lengthStandards(nextProps))),
@@ -56,7 +59,7 @@ export default compose(
 
         // if a type contains selected standard open that type otherwise open default type collapse
 
-        open({
+        openStandardByFilter({
           selectedStandard,
           containedIn,
           defaultContainedIn,

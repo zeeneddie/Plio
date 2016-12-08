@@ -16,8 +16,9 @@ import {
   notDeleted,
   getId,
 } from '/imports/api/helpers';
-import { addCollapsed } from '/client/redux/actions/globalActions';
+import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
 import { goToStandard, goToStandards } from '../helpers/routeHelpers';
+import store, { getState } from '/client/redux/store';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
@@ -93,13 +94,13 @@ export const getSelectedAndDefaultStandardByFilter = ({
   }
 };
 
-export const redirect = ({ selectedStandard, defaultStandard }) => !selectedStandard && (
+export const redirectToStandard = ({ selectedStandard, defaultStandard }) => !selectedStandard && (
   defaultStandard
     ? goToStandard({ urlItemId: getId(defaultStandard) })
     : goToStandards()
 );
 
-export const open = ({
+export const openStandardByFilter = ({
   selectedStandard,
   containedIn,
   defaultContainedIn,
@@ -128,6 +129,29 @@ export const open = ({
   }
 
   return result;
+};
+
+export const expandCollapsedStandard = (_id) => {
+  const { collections: { standardsByIds }, global: { filter } } = getState();
+  const standard = { ...standardsByIds[_id] };
+  const sectionItem = createSectionItem(standard.sectionId);
+  const typeItem = createTypeItem(standard.typeId);
+  let action;
+
+  switch (filter) {
+    case STANDARD_FILTER_MAP.SECTION:
+      action = addCollapsed({ ...sectionItem, close: { type: sectionItem.type } });
+      break;
+    case STANDARD_FILTER_MAP.TYPE:
+      action = chainActions(
+        [typeItem, sectionItem].map(item => addCollapsed({ ...item, close: { type: item.type } }))
+      );
+      break;
+    default:
+      return false;
+  }
+
+  return store.dispatch(action);
 };
 
 export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {

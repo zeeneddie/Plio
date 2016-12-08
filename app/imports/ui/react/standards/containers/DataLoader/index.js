@@ -27,14 +27,10 @@ import {
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
-import { redirectByFilter, openStandardByFilter, shouldUpdateForProps } from './helpers';
-import { withStandard } from '../../helpers';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
-import loadCountersData from '../../loaders/loadCountersData';
-import initMainData from '../../loaders/initMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
 import { setInitializing } from '/client/redux/actions/standardsActions';
@@ -83,16 +79,6 @@ export default compose(
       loadMainData(this.props, () => null);
     },
   }),
-  // composeWithTracker(testPerformance(loadMainData), null, null, {
-  //   shouldResubscribe: (props, nextProps) =>
-  //     props.organizationId !== nextProps.organizationId,
-  // }),
-  // connect(pickDeep(['collections.standards', 'discussion.isDiscussionOpened'])),
-  // composeWithTracker(testPerformance(loadCountersData), null, null, {
-  //   shouldResubscribe: (props, nextProps) => !!(
-  //     props.isDiscussionOpened && !nextProps.isDiscussionOpened
-  //   ),
-  // }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
   composeWithTracker(testPerformance(loadCardData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
@@ -138,27 +124,13 @@ export default compose(
     'global.urlItemId',
     'global.filter',
   ])),
-  shouldUpdate(shouldUpdateForProps),
-  // lifecycle({
-  //   componentWillMount() {
-  //     Meteor.defer(() => {
-  //       redirectByFilter(this.props);
-  //       openStandardByFilter(this.props);
-  //     });
-  //   },
-  //   /**
-  //    * Collapse(maybe) and redirect(maybe) when:
-  //    * changes organization
-  //    * changes orgSerialNumber
-  //    * changes filter
-  //    * the current selected standard's section or type id is different than the next.
-  //    * the current standard is deleted or restored
-  //    */
-  //   componentWillUpdate(nextProps) {
-  //     redirectByFilter(nextProps);
-  //     openStandardByFilter(nextProps);
-  //   },
-  // }),
+  shouldUpdate((props, nextProps) => !!(
+    props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
+    props.loading !== nextProps.loading ||
+    typeof props.organization !== typeof nextProps.organization ||
+    props.orgSerialNumber !== nextProps.orgSerialNumber ||
+    props.filter !== nextProps.filter
+  )),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
     onHandleFilterChange: props => index => {

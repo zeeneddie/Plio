@@ -7,11 +7,7 @@ import { insert } from '/imports/api/standards/methods';
 import { setModalError, inspire, pickDeep } from '/imports/api/helpers';
 import { insert as insertFile } from '/imports/api/files/methods';
 import UploadService from '/imports/ui/utils/uploads/UploadService';
-import {
-  openStandardByFilter,
-} from '/imports/ui/react/standards/containers/DataLoader/helpers';
-import store, { getState } from '/client/redux/store';
-
+import { expandCollapsedStandard } from '/imports/ui/react/standards/helpers';
 
 Template.CreateStandard.viewmodel({
   mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal', 'store'],
@@ -122,16 +118,7 @@ Template.CreateStandard.viewmodel({
         ? this.goToStandard(_id, false)
         : this.goToStandard(_id);
 
-      openStandardByFilter({
-        dispatch: this.store().dispatch,
-        ...pickDeep([
-          'standards.standards',
-          'standards.sections',
-          'standards.types',
-          'global.filter',
-          'global.urlItemId',
-        ])(this.getState()),
-      });
+      expandCollapsedStandard(_id);
 
       open({
         _id,

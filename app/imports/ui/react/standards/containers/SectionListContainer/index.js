@@ -17,8 +17,8 @@ import { SECTION_UNCATEGORIZED } from '../../constants';
 import { getState } from '/client/redux/store';
 import {
   getSelectedAndDefaultStandardByFilter,
-  redirect,
-  open,
+  redirectToStandard,
+  openStandardByFilter,
 } from '../../helpers';
 import { CollectionNames } from '/imports/share/constants';
 
@@ -67,8 +67,8 @@ export default compose(
           sections: this.props.sections,
           filter: STANDARD_FILTER_MAP.SECTION,
         });
-        const redirectToStandard = () => redirect({ selectedStandard, defaultStandard });
-        const openSection = () => open({
+        const redirect = () => redirectToStandard({ selectedStandard, defaultStandard });
+        const openSection = () => openStandardByFilter({
           selectedStandard,
           containedIn,
           defaultContainedIn,
@@ -81,15 +81,18 @@ export default compose(
         switch (filter) {
           case STANDARD_FILTER_MAP.SECTION:
           default:
-            redirectToStandard();
+            redirect();
             openSection();
             break;
           case STANDARD_FILTER_MAP.TYPE: {
             const { type, defaultType } = this.props;
+            // find opened type and open a section in its section list
             const openedType = collapsed.find(propEq('type', CollectionNames.STANDARD_TYPES));
             if (openedType && type && type._id === openedType.key) {
+              // check if the current type is the default one
+              // and redirect to default standard if needed
               if (type && defaultType && type._id === defaultType._id) {
-                redirectToStandard();
+                redirect();
               }
               openSection();
             }

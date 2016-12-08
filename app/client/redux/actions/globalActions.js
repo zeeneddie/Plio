@@ -91,7 +91,7 @@ export function chainActions(actions, wait = 400) {
 
         dispatch(actions[i]);
 
-        return Meteor.setTimeout(() => start(i + 1), wait);
+        return setTimeout(() => start(i + 1), wait);
       };
 
       start(0);
