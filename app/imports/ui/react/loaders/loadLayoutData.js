@@ -25,7 +25,9 @@ export default subscribe => function loadLayoutData({
 
     onData(null, { loading: false });
   } else {
-    dispatch(setDataLoading(true));
+    dispatch(batchActions([
+      setDataLoading(true),
+    ]));
 
     onData(null, { loading: true });
   }

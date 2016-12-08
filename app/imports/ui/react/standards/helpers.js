@@ -13,10 +13,11 @@ import {
   propId,
   propEq,
   getC,
-  not,
-  propIsDeleted,
+  notDeleted,
+  getId,
 } from '/imports/api/helpers';
 import { addCollapsed } from '/client/redux/actions/globalActions';
+import { goToStandard, goToStandards } from '../helpers/routeHelpers';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
@@ -40,7 +41,7 @@ export const findSelectedSection = id =>
 export const getStandardsByFilter = ({ filter, standards }) => (
   filter === STANDARD_FILTER_MAP.DELETED
     ? standards.filter(propEq('isDeleted', true))
-    : standards.filter(compose(not, propIsDeleted))
+    : standards.filter(notDeleted)
 );
 
 export const addCollapsedType = compose(addCollapsed, createTypeItem, propId);
@@ -51,40 +52,32 @@ export const getSelectedAndDefaultStandardByFilter = ({
   sections, types, standards, filter, urlItemId,
 }) => {
   const findStandard = findSelectedStandard(urlItemId);
-  const findSection = findSelectedSection(urlItemId);
   switch (filter) {
-    case 1: {
+    case STANDARD_FILTER_MAP.SECTION: {
       const containedIn = sections.find(findStandard);
       return {
         containedIn,
-        selected: findStandard(containedIn),
-        default: getC('sections[0].standards[0]', { sections }),
+        selectedStandard: findStandard(containedIn),
+        defaultStandard: getC('sections[0].standards[0]', { sections }),
         defaultContainedIn: _.first(sections),
       };
     }
-    case 2: {
-      //                  for normal types           for uncategorized type
-      const containedIn = types.find(findSection) || types.find(findStandard);
+    case STANDARD_FILTER_MAP.TYPE: {
+      const containedIn = types.find(findStandard);
       return {
-        containedIn: { ...containedIn, children: [{ ...findSection(containedIn) }] },
-        selected: findStandard(containedIn) || findStandard(findSection(containedIn)),
-        default: getC('types[0].sections[0].standards[0]', { types }) ||
-                 getC('types[0].standards[0]'),
-        defaultContainedIn: {
-          ..._.first(types),
-          children: [
-            { ...getC('types[0].sections[0]', { types }) },
-          ],
-        },
+        containedIn,
+        selectedStandard: findStandard(containedIn),
+        defaultStandard: getC('types[0].standards[0]', { types }),
+        defaultContainedIn: _.first(types),
       };
     }
-    case 3: {
+    case STANDARD_FILTER_MAP.DELETED: {
       const standardsDeleted = standards.filter(propEq('isDeleted', true));
       const containedIn = { standards: standardsDeleted };
       return {
         containedIn,
-        selected: findStandard(containedIn),
-        default: getC('standards[0]', containedIn),
+        selectedStandard: findStandard(containedIn),
+        defaultStandard: getC('standards[0]', containedIn),
         defaultContainedIn: containedIn,
       };
     }
@@ -92,12 +85,49 @@ export const getSelectedAndDefaultStandardByFilter = ({
       const containedIn = { standards };
       return {
         containedIn,
-        selected: null,
-        default: getC('standards[0]', containedIn),
+        selectedStandard: null,
+        defaultStandard: getC('standards[0]', containedIn),
         defaultContainedIn: containedIn,
       };
     }
   }
+};
+
+export const redirect = ({ selectedStandard, defaultStandard }) => !selectedStandard && (
+  defaultStandard
+    ? goToStandard({ urlItemId: getId(defaultStandard) })
+    : goToStandards()
+);
+
+export const open = ({
+  selectedStandard,
+  containedIn,
+  defaultContainedIn,
+  filter,
+  dispatch,
+}) => {
+  const parentItem = selectedStandard ? containedIn : defaultContainedIn;
+  const topLevelKey = getId(parentItem);
+  let result;
+
+  switch (filter) {
+    case 1:
+    default: {
+      const sectionItem = createSectionItem(topLevelKey);
+      result = dispatch(addCollapsed({ ...sectionItem, close: { type: sectionItem.type } }));
+      break;
+    }
+    case 2: {
+      const typeItem = createTypeItem(topLevelKey);
+      result = dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
+      break;
+    }
+    case 3:
+      result = null;
+      break;
+  }
+
+  return result;
 };
 
 export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {

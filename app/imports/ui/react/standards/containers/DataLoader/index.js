@@ -93,13 +93,6 @@ export default compose(
   //     props.isDiscussionOpened && !nextProps.isDiscussionOpened
   //   ),
   // }),
-  // connect(pickDeep([
-  //   'collections.standardBookSections',
-  //   'collections.standardTypes',
-  //   'collections.standards',
-  //   'counters.standardMessagesNotViewedCountMap',
-  // ])),
-  // composeWithTracker(testPerformance(initMainData)),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
   composeWithTracker(testPerformance(loadCardData), null, null, {
     shouldResubscribe: (props, nextProps) => !!(
@@ -114,6 +107,8 @@ export default compose(
       props.initializing !== nextProps.initializing,
   }),
   connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
+  // TODO: when changing filters where layout needs to resubscribe
+  // observers are still running and adding each item from subscription
   lifecycle({
     componentWillReceiveProps(nextProps) {
       if (nextProps.initializing && nextProps.areDepsReady) {
@@ -139,9 +134,6 @@ export default compose(
   connect(pickDeep([
     'organizations.organization',
     'organizations.orgSerialNumber',
-    // 'standards.standards',
-    // 'standards.sections',
-    // 'standards.types',
     'discussion.isDiscussionOpened',
     'global.urlItemId',
     'global.filter',
