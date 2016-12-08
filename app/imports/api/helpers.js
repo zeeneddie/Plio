@@ -120,6 +120,8 @@ export const lengthTypes = compose(length, propTypes);
 
 export const propIsDeleted = property('isDeleted');
 
+export const notDeleted = compose(not, propIsDeleted);
+
 export const flattenMapItems = flattenMap(propItems);
 
 export const flattenMapStandards = flattenMap(propStandards);
