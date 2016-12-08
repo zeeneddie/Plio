@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import pluralize from 'pluralize';
-import moment from 'moment-timezone';
 import invoke from 'lodash.invoke';
+import { _ } from 'meteor/underscore';
 
-import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
+import { ProblemTypes } from '/imports/share/constants.js';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { flattenObjects, inspire } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -16,20 +16,22 @@ import {
   verify,
   undoCompletion,
   undoVerification,
-  linkStandard,
-  unlinkStandard,
   linkDocument,
   unlinkDocument,
   setCompletionDate,
   setCompletionExecutor,
   setVerificationDate,
-  setVerificationExecutor
+  setVerificationExecutor,
 } from '/imports/api/actions/methods.js';
 
 const getLinks = instance => inspire(['documentId', 'documentType'], instance);
 
 const getMethods = (instance) => {
-  const methodsRefs = ['insertFn', 'updateFn', 'removeFn', 'completeFn', 'verifyFn', 'undoCompletionFn', 'undoVerificationFn', 'linkDocumentFn', 'unlinkDocumentFn', 'updateCompletionDateFn', 'updateCompletionExecutorFn', 'updateVerificationDateFn', 'updateVerificationExecutorFn'];
+  const methodsRefs = [
+    'insertFn', 'updateFn', 'removeFn', 'completeFn', 'verifyFn', 'undoCompletionFn',
+    'undoVerificationFn', 'linkDocumentFn', 'unlinkDocumentFn', 'updateCompletionDateFn',
+    'updateCompletionExecutorFn', 'updateVerificationDateFn', 'updateVerificationExecutorFn',
+  ];
 
   const methods = flattenObjects(methodsRefs.map(ref =>
     ({ [ref]: instance[ref.replace('Fn', '')].bind(instance) })));
@@ -65,7 +67,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       _rText: this.rText(doc),
       content: 'Actions_EditSubcard',
       ...getMethods(this),
-      ...inspire(['type', 'standardId'], this)
+      ...inspire(['type', 'standardId'], this),
     };
   },
   addText() {
@@ -80,12 +82,13 @@ Template.Subcards_Actions_Edit.viewmodel({
     const amber = actions.filter(({ status }) => [2, 5].includes(status));
     const red = actions.filter(({ status }) => [3, 6, 7].includes(status));
     const count = array => array.length || '';
-    const generateHtml = (array, color) => count(array)
-      ? `<span class="hidden-xs-down">${count(array)}</span>
-         <i class="fa fa-circle text-${color} margin-left"></i>`
-      :  '';
+    const generateHtml = (array, color) => (count(array)
+      ? `<i class="fa fa-circle text-${color} margin-left"></i>`
+      : '');
 
-    return generateHtml(amber, 'warning') + generateHtml(red, 'danger');
+    return `${generateHtml(amber, 'warning')}
+            ${generateHtml(red, 'danger')}
+            <span class="hidden-xs-down">${count(actions)}</span>`;
   },
   lText({ sequentialId, title }) {
     return `<strong>${sequentialId}</strong> ${title}`;
@@ -94,7 +97,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     let date = (isCompleted && completedAt) ? completedAt : completionTargetDate;
     date = this.renderDate(date);
 
-    let indicatorClass = this.getClassByStatus(status);
+    const indicatorClass = this.getClassByStatus(status);
 
     return `<span class="hidden-xs-down">${date}</span>
            <i class="fa fa-circle text-${indicatorClass} margin-left"></i>`;
@@ -106,7 +109,7 @@ Template.Subcards_Actions_Edit.viewmodel({
   actions() {
     const actionType = this.type();
     const query = {
-      type: actionType
+      type: actionType,
     };
 
     const { documentId, documentType } = getLinks(this);
@@ -115,7 +118,7 @@ Template.Subcards_Actions_Edit.viewmodel({
     if (documentId && documentType) {
       _.extend(query, {
         'linkedTo.documentId': documentId,
-        'linkedTo.documentType': documentType
+        'linkedTo.documentType': documentType,
       });
     } else if (standardId) {
       const NCsIds = _.pluck(
@@ -131,11 +134,11 @@ Template.Subcards_Actions_Edit.viewmodel({
       _.extend(query, {
         $or: [{
           'linkedTo.documentId': { $in: NCsIds },
-          'linkedTo.documentType': ProblemTypes.NON_CONFORMITY
+          'linkedTo.documentType': ProblemTypes.NON_CONFORMITY,
         }, {
           'linkedTo.documentId': { $in: risksIds },
-          'linkedTo.documentType': ProblemTypes.RISK
-        }]
+          'linkedTo.documentType': ProblemTypes.RISK,
+        }],
       });
     }
 
@@ -163,18 +166,19 @@ Template.Subcards_Actions_Edit.viewmodel({
             data = {
               ...data,
               ...links,
-              linkedTo: [links]
+              linkedTo: [links],
             };
           }
 
           return data;
-        })()
+        })(),
       }
     );
   },
   insert({ _id, linkTo, completionTargetDate, ...args }, cb) {
     if (_id) {
-      let documentId, documentType;
+      let documentId;
+      let documentType;
 
       if (_.isObject(linkTo)) {
         documentId = linkTo.documentId;
@@ -185,7 +189,7 @@ Template.Subcards_Actions_Edit.viewmodel({
       }
 
       this.modal().callMethod(linkDocument, {
-        _id, documentId, documentType
+        _id, documentId, documentType,
       }, cb);
     } else {
       const organizationId = this.organizationId();
@@ -197,7 +201,7 @@ Template.Subcards_Actions_Edit.viewmodel({
         organizationId,
         type: this.type(),
         completionTargetDate: tzDate,
-        ...args
+        ...args,
       }, cb);
     }
   },
@@ -259,7 +263,7 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     this.modal().callMethod(setCompletionDate, {
       targetDate: tzDate,
-      ...args
+      ...args,
     }, cb);
   },
   updateCompletionExecutor({ ...args }, cb) {
@@ -271,7 +275,7 @@ Template.Subcards_Actions_Edit.viewmodel({
 
     this.modal().callMethod(setVerificationDate, {
       targetDate: tzDate,
-      ...args
+      ...args,
     }, cb);
   },
   updateVerificationExecutor({ ...args }, cb) {

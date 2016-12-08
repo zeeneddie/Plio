@@ -1,7 +1,7 @@
+import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
 import { SystemName } from '/imports/share/constants';
-
 
 export default class BaseEntityService {
   constructor(collection) {
@@ -30,20 +30,26 @@ export default class BaseEntityService {
     return this.collection.update(query, options);
   }
 
-  remove({ _id, deletedBy, onSoftDelete }) {
+  remove({ _id, deletedBy, onSoftDelete, onPermanentDelete }) {
     const query = { _id };
 
     const { isDeleted } = this.collection.findOne({ _id });
 
     if (isDeleted) {
-      return this.collection.remove(query);
+      const result = this.collection.remove(query);
+
+      if (Meteor.isServer && _(onPermanentDelete).isFunction()) {
+        Meteor.defer(onPermanentDelete);
+      }
+
+      return result;
     } else {
       const modifier = {
         $set: {
           deletedBy,
           isDeleted: true,
-          deletedAt: new Date()
-        }
+          deletedAt: new Date(),
+        },
       };
 
       const ret = this.collection.update(query, modifier);
