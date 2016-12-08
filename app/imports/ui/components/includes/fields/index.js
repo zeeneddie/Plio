@@ -16,3 +16,7 @@ import './description';
 import './select-member';
 import './select-members';
 import './list-group-item';
+import './issue-number';
+import './standard-status';
+import './title';
+import './owner';

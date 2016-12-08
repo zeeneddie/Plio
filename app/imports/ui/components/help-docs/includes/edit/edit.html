@@ -2,12 +2,25 @@
   <div>
     <div class="relative">
       <div class="card-block">
-        {{> HelpDocs_Title_Edit
+        {{> Title_Edit
             title=helpDoc.title
             _id=helpDoc._id}}
 
         {{> HelpDocs_Section_Edit
             sectionId=helpDoc.sectionId
+            _id=helpDoc._id}}
+
+        {{> Owner_Edit
+            ownerId=helpDoc.ownerId
+            membersQuery=membersQuery
+            _id=helpDoc._id}}
+
+        {{> StandardStatus_Edit
+            status=helpDoc.status
+            _id=helpDoc._id}}
+
+        {{> IssueNumber_Edit
+            issueNumber=helpDoc.issueNumber
             _id=helpDoc._id}}
 
         {{> HelpDocs_Source_Edit
@@ -19,7 +32,7 @@
 
       {{> Subcards_Notify_Edit
           doc=helpDoc
-          membersQuery=notifyListMembersQuery
+          membersQuery=membersQuery
           onUpdate=(callback 'onUpdateNotifyUser')}}
 
       <div class="card-block text-xs-center">
