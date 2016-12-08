@@ -10,7 +10,7 @@ export default ({ dispatch }, onData) => {
   const sub = DocumentLayoutSubs.subscribe('helpDocsLayout');
 
   if (sub.ready()) {
-    const helpDocs = HelpDocs.find().fetch();
+    const helpDocs = HelpDocs.find({}, { sort: { title: 1 } }).fetch();
     const helpSections = HelpSections.find({}, { sort: { index: 1 } }).fetch();
 
     dispatch(batchActions([

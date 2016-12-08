@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, mapProps, shouldUpdate, withHandlers, withProps } from 'recompose';
+import { compose, shallowEqual, withHandlers, withProps } from 'recompose';
 import { compose as kompose } from 'react-komposer';
 
 import { pickDeep } from '/imports/api/helpers';
@@ -38,10 +38,7 @@ const HelpDocsLHSContainer = compose(
   ])),
 
   kompose(onSearchTextChanged, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      (props.helpDocsFiltered !== nextProps.helpDocsFiltered) ||
-      (props.helpDocs !== nextProps.helpDocs) ||
-      (props.helpSections !== nextProps.helpSections),
+    shouldResubscribe: (props, nextProps) => !shallowEqual(props, nextProps),
   }),
 
   connect(pickDeep([

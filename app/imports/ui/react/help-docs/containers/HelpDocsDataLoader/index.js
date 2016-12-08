@@ -7,30 +7,17 @@ import {
 } from 'recompose';
 import { connect } from 'react-redux';
 import { composeWithTracker, compose as kompose } from 'react-komposer';
-import { batchActions } from 'redux-batched-actions';
-import ReactDOM from 'react-dom';
 import get from 'lodash.get';
 
-import { MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { Files } from '/imports/share/collections/files';
-import { setFiles } from '/client/redux/actions/collectionsActions';
-import { setHelpSectionsData, setHelpDocsData } from '/client/redux/actions/helpDocsActions';
-import { setShowCard } from '/client/redux/actions/mobileActions';
 import { pickC, pickDeep } from '/imports/api/helpers';
-import { goToDashboard } from '../../../helpers/routeHelpers';
-import { createHelpSectionsData, createHelpDocsData } from '../../helpers';
 import { redirectToHelpDoc, expandHelpSection } from './helpers';
+import { onHandleReturn } from './handlers';
 import loadGlobalData from '../../loaders/loadGlobalData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
+import initHelpSectionsData from '../../loaders/initHelpSectionsData';
+import initFiles from '../../loaders/initFiles';
 import HelpDocsLayout from '../../components/HelpDocsLayout';
-
-const initHelpSectionsData = ({ helpDocs, helpSections, dispatch }, onData) => {
-  const helpSectionsData = createHelpSectionsData(helpSections, helpDocs);
-  dispatch(setHelpSectionsData(helpSectionsData));
-
-  onData(null, {});
-};
 
 export default compose(
   connect(),
@@ -53,9 +40,9 @@ export default compose(
       props.urlItemId !== nextProps.urlItemId,
   }),
 
-  composeWithTracker((props, onData) => {
-    props.dispatch(setFiles(Files.find().fetch())); // FIXME
-    onData(null, {});
+  composeWithTracker(initFiles, null, null, {
+    shouldResubscribe: (props, nextProps) =>
+      props.helpDocs !== nextProps.helpDocs,
   }),
 
   connect(pickDeep([
@@ -82,16 +69,7 @@ export default compose(
   connect(pickDeep(['window.width', 'mobile.showCard'])),
 
   withHandlers({
-    onHandleReturn: (props) => () => {
-      if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
-        return props.dispatch(setShowCard(false));
-      }
-
-      // remove when dashboard is written in react
-      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
-
-      return goToDashboard();
-    },
+    onHandleReturn,
   }),
 
   connect(state => ({ isLoading: get(state, 'global.dataLoading') })),
