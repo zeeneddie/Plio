@@ -23,6 +23,7 @@ const HelpDocsRHSBody = (props) => (
             {...props.helpDoc}
             section={props.helpDocSection}
             file={props.file}
+            owner={props.owner}
           />
         </Collapse>
         {getC('helpDoc.source.htmlUrl', props) && (

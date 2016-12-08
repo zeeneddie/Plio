@@ -49,6 +49,7 @@ export const HelpDocSchema = new SimpleSchema([
     },
     source: {
       type: sourceSchema,
+      optional: true,
     },
   },
 ]);

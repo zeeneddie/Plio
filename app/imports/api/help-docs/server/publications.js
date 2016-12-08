@@ -6,7 +6,7 @@ import { Files } from '/imports/share/collections/files';
 import { HelpDocs } from '/imports/share/collections/help-docs';
 import { HelpSections } from '/imports/share/collections/help-sections';
 import {
-  HelpsListProjection,
+  HelpDocsListProjection,
   HelpSectionProjection,
 } from '/imports/api/constants';
 import { getUserOrganizations } from '../../organizations/utils';
@@ -20,7 +20,7 @@ Meteor.publishComposite('helpDocsLayout', function getHelpDocsLayoutData() {
   return [
     {
       find() {
-        return HelpDocs.find({}, { fields: HelpsListProjection });
+        return HelpDocs.find({}, { fields: HelpDocsListProjection });
       },
     },
     {
