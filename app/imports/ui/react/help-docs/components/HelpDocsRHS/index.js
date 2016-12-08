@@ -35,6 +35,8 @@ const HelpDocsRHS = (props) => (
         hasDocxAttachment={props.hasDocxAttachment}
       />
 
+      <div className="card-footer"></div>
+
     </RHS.Card>
   </RHS>
 );
