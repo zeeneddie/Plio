@@ -11,24 +11,31 @@ Template.WorkInbox_Page.viewmodel({
   _subHandlers: [],
   isReady: false,
   autorun: [
-    function() {
+    function loadCardAndBackgroundData() {
       const organizationId = this.organizationId();
       const workItemId = this.workItemId();
+      const filter = this.activeWorkInboxFilterId();
 
       if (!organizationId) return;
 
-      const _subHandlers = [
-        DocumentCardSubs.subscribe('workInboxCard', { organizationId, _id: workItemId }, {
-          onReady() {
-            BackgroundSubs.subscribe('workInboxDeps', organizationId);
-          }
-        })
-      ];
+      if (workItemId) {
+        const subscriptionName = (filter === 5 || filter === 6) ? 'actionCard' : 'workInboxCard';
 
-      this._subHandlers(_subHandlers);
+        const _subHandlers = [
+          DocumentCardSubs.subscribe(subscriptionName, { organizationId, _id: workItemId }, {
+            onReady() {
+              BackgroundSubs.subscribe('workInboxDeps', organizationId);
+            },
+          }),
+        ];
+
+        this._subHandlers(_subHandlers);
+      } else {
+        BackgroundSubs.subscribe('workInboxDeps', organizationId);
+      }
     },
-    function() {
+    function trackReadyState() {
       this.isReady(this._subHandlers().every(handle => handle.ready()));
-    }
-  ]
+    },
+  ],
 });

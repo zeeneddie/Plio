@@ -15,6 +15,10 @@
         {{> WorkInbox_QAPanel_Read doc=workItem}}
         {{> Risks_Card_Read (cardArgs)}}
       {{/if}}
+
+      {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
+        {{> Actions_Card_Read isReady=isReady _id=workItemId showCard=true}}
+      {{/if}}
     {{else}}
       <div class="content-cards-inner flex scroll">
         <div class="card">
@@ -28,7 +32,7 @@
             {{/if}}
 
             {{#if (some (isActiveWorkInboxFilter 5) (isActiveWorkInboxFilter 6))}}
-              <h5>There are no deleted work items</h5>
+              <h5>There are no deleted actions</h5>
             {{/if}}
           </div>
         </div>
