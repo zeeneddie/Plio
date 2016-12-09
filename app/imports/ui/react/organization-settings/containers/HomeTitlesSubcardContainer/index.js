@@ -13,7 +13,7 @@ import { pickDeep } from '/imports/api/helpers';
 const enhance = compose(
   withProps({ store }),
   withState('collapsed', 'setCollapsed', true),
-  withState('isHelpOpened', 'setIsHelpOpened', true),
+  withState('isHelpCollapsed', 'setIsHelpCollapsed', true),
   composeWithTracker(initMainData),
   connect(pickDeep(['organizations.organization'])),
   withHandlers({
