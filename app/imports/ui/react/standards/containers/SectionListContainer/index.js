@@ -17,6 +17,7 @@ import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
   openStandardByFilter,
+  getSelectedStandardDeletedState,
 } from '../../helpers';
 import { CollectionNames } from '/imports/share/constants';
 
@@ -67,10 +68,7 @@ const redirectAndOpen = (props) => setTimeout(() => {
 
 const mapStateToProps = (state) => ({
   standardBookSections: state.collections.standardBookSections,
-  isSelectedStandardDeleted: getC(
-    'isDeleted',
-    state.collections.standardsByIds[state.global.urlItemId]
-  ),
+  ...getSelectedStandardDeletedState(state),
 });
 
 export default compose(

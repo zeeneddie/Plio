@@ -20,8 +20,8 @@ export default compose(
     (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
     (props._id === props.urlItemId && props._id !== nextProps.urlItemId)
   )),
-  connect((_, { _id }) => state => {
-    const standard = state.collections.standardsByIds[_id];
+  connect((_, { _id }) => (state) => {
+    const standard = { ...state.collections.standardsByIds[_id] };
 
     return {
       ...standard,

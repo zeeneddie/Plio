@@ -8,21 +8,18 @@ import {
   lengthStandards,
   propEq,
   propEqId,
-  getC,
 } from '/imports/api/helpers';
 import { getState } from '/client/redux/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
   openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
+  getSelectedStandardDeletedState,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
   standardTypes: state.collections.standardTypes,
-  isSelectedStandardDeleted: getC(
-    'isDeleted',
-    state.collections.standardsByIds[state.global.urlItemId]
-  ),
+  ...getSelectedStandardDeletedState(state),
 });
 
 const openType = (props) => setTimeout(() => {

@@ -1,3 +1,5 @@
+import { _ } from 'meteor/underscore';
+
 import {
   addStandard,
   updateStandard,
@@ -12,9 +14,10 @@ import {
 import { Standards } from '/imports/share/collections/standards';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import {
-  expandCollapsedStandard,
-} from './helpers';
+import { expandCollapsedStandard } from './helpers';
+import { getState } from '/client/redux/store';
+import { propEq, getId } from '/imports/api/helpers';
+import { goToStandard } from '../helpers/routeHelpers';
 
 export const observeStandards = (dispatch, query, options) => {
   const handle = Standards.find(query, options).observeChanges({
@@ -35,6 +38,9 @@ export const observeStandards = (dispatch, query, options) => {
     removed(_id) {
       console.log('removed');
       dispatch(removeStandard(_id));
+      const standards = getState('collections.standards').filter(propEq('isDeleted', true));
+      const urlItemId = getId(_.first(standards));
+      goToStandard({ urlItemId });
     },
   });
 

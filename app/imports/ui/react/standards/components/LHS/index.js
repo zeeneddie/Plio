@@ -2,9 +2,9 @@ import React from 'react';
 
 import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
-import StandardListContainer from '../../containers/StandardListContainer';
 import SectionListContainer from '../../containers/SectionListContainer';
 import TypeListContainer from '../../containers/TypeListContainer';
+import DeletedStandardListContainer from '../../containers/DeletedStandardListContainer';
 
 const StandardsLHS = (props) => {
   let content;
@@ -31,7 +31,7 @@ const StandardsLHS = (props) => {
     case 3:
       content = (
         <div className="list-group">
-          <StandardListContainer standards={props.standards} />
+          <DeletedStandardListContainer standards={props.standards} />
         </div>
       );
       break;

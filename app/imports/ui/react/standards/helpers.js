@@ -72,25 +72,14 @@ export const getSelectedAndDefaultStandardByFilter = ({
         defaultContainedIn: _.first(types),
       };
     }
-    case STANDARD_FILTER_MAP.DELETED: {
-      const standardsDeleted = standards.filter(propEq('isDeleted', true));
-      const containedIn = { standards: standardsDeleted };
+    case STANDARD_FILTER_MAP.DELETED:
+    default:
       return {
-        containedIn,
-        selectedStandard: findStandard(containedIn),
-        defaultStandard: getC('standards[0]', containedIn),
-        defaultContainedIn: containedIn,
+        selectedStandard: findStandard({ standards }),
+        defaultStandard: getC('standards[0]', { standards }),
+        containedIn: null,
+        defaultContainedIn: null,
       };
-    }
-    default: {
-      const containedIn = { standards };
-      return {
-        containedIn,
-        selectedStandard: null,
-        defaultStandard: getC('standards[0]', containedIn),
-        defaultContainedIn: containedIn,
-      };
-    }
   }
 };
 
@@ -167,3 +156,10 @@ export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {
 export const withStandard = withProps(props => ({
   standard: findSelectedStandard(props.urlItemId)(props),
 }));
+
+export const getSelectedStandardDeletedState = state => ({
+  isSelectedStandardDeleted: getC(
+    'isDeleted',
+    state.collections.standardsByIds[state.global.urlItemId]
+  ),
+});
