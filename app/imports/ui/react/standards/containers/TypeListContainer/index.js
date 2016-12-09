@@ -7,9 +7,8 @@ import { TYPE_UNCATEGORIZED } from '../../constants';
 import {
   lengthStandards,
   propEq,
-  notDeleted,
   propEqId,
-  pickDeep,
+  getC,
 } from '/imports/api/helpers';
 import { getState } from '/client/redux/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
@@ -18,11 +17,40 @@ import {
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
 
+const mapStateToProps = (state) => ({
+  standardTypes: state.collections.standardTypes,
+  isSelectedStandardDeleted: getC(
+    'isDeleted',
+    state.collections.standardsByIds[state.global.urlItemId]
+  ),
+});
+
+const openType = (props) => setTimeout(() => {
+  const urlItemId = getState('global.urlItemId');
+  const {
+    containedIn,
+    defaultContainedIn,
+    selectedStandard,
+  } = getSelectedAndDefaultStandardByFilter({
+    urlItemId,
+    types: props.types,
+    filter: STANDARD_FILTER_MAP.TYPE,
+  });
+
+  // if a type contains selected standard open that type otherwise open default type collapse
+  openStandardByFilter({
+    selectedStandard,
+    containedIn,
+    defaultContainedIn,
+    dispatch: props.dispatch,
+    filter: STANDARD_FILTER_MAP.TYPE,
+  });
+}, 0);
+
 export default compose(
-  connect(pickDeep(['collections.standardTypes'])),
-  mapProps(({ standardTypes, ...props }) => {
+  connect(mapStateToProps),
+  mapProps(({ standardTypes, standards, ...props }) => {
     let types = standardTypes;
-    const standards = props.standards.filter(notDeleted);
     const uncategorized = {
       _id: TYPE_UNCATEGORIZED,
       title: 'Uncategorized',
@@ -44,28 +72,13 @@ export default compose(
   }),
   lifecycle({
     componentWillMount() {
-      return Meteor.defer(() => {
-        const urlItemId = getState('global.urlItemId');
-        const {
-          containedIn,
-          defaultContainedIn,
-          selectedStandard,
-        } = getSelectedAndDefaultStandardByFilter({
-          urlItemId,
-          types: this.props.types,
-          filter: STANDARD_FILTER_MAP.TYPE,
-        });
-
-        // if a type contains selected standard open that type otherwise open default type collapse
-
-        openStandardByFilter({
-          selectedStandard,
-          containedIn,
-          defaultContainedIn,
-          dispatch: this.props.dispatch,
-          filter: STANDARD_FILTER_MAP.TYPE,
-        });
-      });
+      openType(this.props);
+    },
+    // if selected standard is deleted open the default type
+    componentWillReceiveProps(nextProps) {
+      if (!this.props.isSelectedStandardDeleted && nextProps.isSelectedStandardDeleted) {
+        openType(nextProps);
+      }
     },
   }),
 )(TypeList);

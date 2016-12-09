@@ -50,9 +50,10 @@ const getStandardsLayoutPub = function(userId, serialNumber, isDeleted) {
     sectionId: 1,
     typeId: 1,
     organizationId: 1,
+    isDeleted: 1,
     ...(() => _.isObject(isDeleted)
       ? null
-      : { isDeleted: 1, deletedAt: 1, deletedBy: 1 }
+      : { deletedAt: 1, deletedBy: 1 }
     )()
   };
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { compose, withHandlers, mapProps, withProps, shouldUpdate } from 'recompose';
+import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
 
 import StandardsLHS from '../../components/LHS';
 import {
@@ -34,7 +34,14 @@ export default compose(
   connect(mapStateToProps),
   mapProps(props => ({
     ...props,
-    standards: props.standards.map(pickC(['_id', 'sectionId', 'typeId', 'titlePrefix'])),
+    collapseOnSearch: props.filter !== 3,
+    standards: props.standards.map(pickC([
+      '_id',
+      'sectionId',
+      'typeId',
+      'titlePrefix',
+      'isDeleted',
+    ])),
   })),
   shouldUpdate((props, nextProps) => !!(
     props.searchText !== nextProps.searchText ||
@@ -42,7 +49,6 @@ export default compose(
     props.animating !== nextProps.animating ||
     notEquals(props.standards, nextProps.standards)
   )),
-  withProps(props => ({ collapseOnSearch: props.filter !== 3 })),
   withHandlers({
     onSectionToggleCollapse,
     onTypeToggleCollapse,

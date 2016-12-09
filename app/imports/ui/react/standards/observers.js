@@ -12,7 +12,9 @@ import {
 import { Standards } from '/imports/share/collections/standards';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
-import { expandCollapsedStandard } from './helpers';
+import {
+  expandCollapsedStandard,
+} from './helpers';
 
 export const observeStandards = (dispatch, query, options) => {
   const handle = Standards.find(query, options).observeChanges({
@@ -25,6 +27,7 @@ export const observeStandards = (dispatch, query, options) => {
     changed(_id, fields) {
       console.log('changed');
       dispatch(updateStandard({ _id, ...fields }));
+
       if (fields.sectionId || fields.typeId) {
         expandCollapsedStandard(_id);
       }

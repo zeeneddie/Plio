@@ -94,7 +94,10 @@ export const getSelectedAndDefaultStandardByFilter = ({
   }
 };
 
-export const redirectToStandard = ({ selectedStandard, defaultStandard }) => !selectedStandard && (
+export const redirectToStandardOrDefault = ({
+  selectedStandard,
+  defaultStandard,
+}) => !selectedStandard && (
   defaultStandard
     ? goToStandard({ urlItemId: getId(defaultStandard) })
     : goToStandards()
