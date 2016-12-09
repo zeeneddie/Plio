@@ -1,7 +1,7 @@
 import { changeTitle } from '/imports/api/organizations/methods';
 import { _ } from 'meteor/underscore';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps } from 'recompose';
+import { compose, withHandlers, withProps, withState } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 
 import store from '/client/redux/store.js';
@@ -12,6 +12,8 @@ import { pickDeep } from '/imports/api/helpers';
 
 const enhance = compose(
   withProps({ store }),
+  withState('collapsed', 'setCollapsed', true),
+  withState('isHelpOpened', 'setIsHelpOpened', true),
   composeWithTracker(initMainData),
   connect(pickDeep(['organizations.organization'])),
   withHandlers({

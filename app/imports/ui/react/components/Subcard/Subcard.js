@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { $ } from 'meteor/jquery';
-import { withState } from 'recompose';
 import cx from 'classnames';
 import curry from 'lodash.curry';
 import Preloader from '../Preloader';
@@ -11,9 +10,7 @@ import TitleItem from './TitleItem';
 import Content from './Content';
 import Help from './Help';
 
-const enhance = withState('collapsed', 'setCollapsed', true);
-
-const Subcard = enhance(({ children, collapsed, setCollapsed, loading }) => {
+const Subcard = ({ children, collapsed, setCollapsed, loading }) => {
   let cardBlock;
   
   const getChild = curry(getChildrenByType)(children);
@@ -51,7 +48,14 @@ const Subcard = enhance(({ children, collapsed, setCollapsed, loading }) => {
       </div>
     </div>
   );
-});
+};
+
+Subcard.propTypes = {
+  children: PropTypes.node,
+  setCollapsed: PropTypes.func,
+  collapsed: PropTypes.bool,
+  loading: PropTypes.bool,
+};
 
 Subcard.Title = Title;
 Subcard.TitleItem = TitleItem;

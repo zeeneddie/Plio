@@ -16,8 +16,11 @@ const HomeTitlesSubcard = ({
   loading,
   onFieldChangeHandler,
   organization: { homeScreenTitles: titles },
+  isHelpOpened,
+  setIsHelpOpened,
+  ...other,
 }) => (
-  <Subcard loading={loading}>
+  <Subcard loading={loading} {...other}>
     <Subcard.Title>
       <Subcard.TitleItem pull="left">
         Home screen titles
@@ -56,7 +59,7 @@ const HomeTitlesSubcard = ({
       </Form>
     </Subcard.Content>
 
-    <Subcard.Help>
+    <Subcard.Help collapsed={isHelpOpened} setCollapsed={setIsHelpOpened} >
       {OrganizationSettingsHelp.homeScreenTitles}
     </Subcard.Help>
   </Subcard>
@@ -66,6 +69,8 @@ HomeTitlesSubcard.propTypes = {
   loading: PropTypes.bool,
   onFieldChangeHandler: PropTypes.func,
   organization: PropTypes.object,
+  isHelpOpened: PropTypes.bool,
+  setIsHelpOpened: PropTypes.func,
 };
 
 export default HomeTitlesSubcard;
