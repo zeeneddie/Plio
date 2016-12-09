@@ -55,7 +55,7 @@ Template.HelpDocs_Edit.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  notifyListMembersQuery() {
+  membersQuery() {
     const { users } = Organizations.findOne({ isAdminOrg: true }) || {};
 
     const membersIds = users

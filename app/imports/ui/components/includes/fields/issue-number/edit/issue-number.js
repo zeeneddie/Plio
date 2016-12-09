@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
-import { ViewModel } from 'meteor/manuel:viewmodel';
 
-Template.ESIssueNumber.viewmodel({
+Template.IssueNumber_Edit.viewmodel({
   mixin: 'callWithFocusCheck',
   issueNumber: 1,
   update(e) {

@@ -14,7 +14,7 @@ const HelpDocsRHSHeaderButtons = (props) => (
       <Button type="primary" onClick={props.onModalOpen}>
         Edit
       </Button>
-    ): ''}
+    ) : ''}
   </div>
 );
 

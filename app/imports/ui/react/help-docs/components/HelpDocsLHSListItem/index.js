@@ -2,9 +2,10 @@ import React from 'react';
 
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
+import LabelDraft from '../../../components/Labels/LabelDraft';
 import propTypes from './propTypes';
 
-const HelpsLHSListItem = (props) => (
+const HelpDocsLHSListItem = (props) => (
   <ListItemLink
     isActive={props.isActive}
     onClick={props.onClick}
@@ -12,12 +13,16 @@ const HelpsLHSListItem = (props) => (
   >
     <ListItem>
       <ListItem.Heading>
-        <span>{props.title}</span>
+        <span className="margin-right">{props.title}</span>
+
+        {(props.status === 'draft' && props.issueNumber) ? (
+          <LabelDraft issueNumber={props.issueNumber} />
+        ) : ''}
       </ListItem.Heading>
     </ListItem>
   </ListItemLink>
 );
 
-HelpsLHSListItem.propTypes = propTypes;
+HelpDocsLHSListItem.propTypes = propTypes;
 
-export default HelpsLHSListItem;
+export default HelpDocsLHSListItem;

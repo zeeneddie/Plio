@@ -11,11 +11,7 @@ import {
   SET_STANDARDS,
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
-  ADD_ITEM,
-  CHANGE_ITEM,
-  REMOVE_ITEM,
 } from '../actions/types';
-import { addItem, changeItem, removeItem } from '../lib/collectionsHelpers';
 
 const initialState = {
   departments: [],
@@ -46,12 +42,6 @@ export default function reducer(state = initialState, action) {
     case SET_HELP_DOCS:
     case SET_HELP_SECTIONS:
       return { ...state, ...action.payload };
-    case ADD_ITEM:
-      return addItem(state, action.payload);
-    case CHANGE_ITEM:
-      return changeItem(state, action.payload);
-    case REMOVE_ITEM:
-      return removeItem(state, action.payload);
     default:
       return state;
   }

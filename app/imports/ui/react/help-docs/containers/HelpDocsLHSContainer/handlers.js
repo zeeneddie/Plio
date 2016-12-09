@@ -11,7 +11,7 @@ import {
 } from '/client/redux/actions/globalActions';
 import { extractIds, propEqId } from '/imports/api/helpers';
 import { setFilteredHelpDocs } from '/client/redux/actions/helpDocsActions';
-import { createHelpSectionItem } from '../../helpers';
+import { createHelpSectionItem, createHelpSectionsData } from '../../helpers';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import _search_ from '/imports/startup/client/mixins/search';
 
@@ -19,13 +19,14 @@ export const onToggleCollapse = (props) => (e, { key, type }) => {
   props.dispatch(toggleCollapsed({ key, type, close: { type } }));
 };
 
-const onChange = _.debounce(({ dispatch, urlItemId }, target) => {
+const onChange = _.debounce(({ dispatch, helpSections, urlItemId }, target) => {
   const value = target.value;
   const fields = [{ name: 'title' }];
   const options = { sort: { title: 1 } };
   const query = _search_.searchQuery(value, fields);
 
   const helpDocs = HelpDocs.find(query, options).fetch();
+  const helpSectionsData = createHelpSectionsData(helpSections, helpDocs);
 
   dispatch(batchActions([
     setSearchText(value),
@@ -39,12 +40,9 @@ const onChange = _.debounce(({ dispatch, urlItemId }, target) => {
   };
 
   if (value) {
-    const sectionsToExpand = new Set();
-    helpDocs.forEach(help => sectionsToExpand.add(help.sectionId));
-
-    const actions = Array.from(sectionsToExpand).map((sectionId) => {
-      const sectionItem = createHelpSectionItem(sectionId);
-      return addCollapsed({ ...sectionItem, close: { type: sectionItem.type } });
+    const actions = helpSectionsData.map((section) => {
+      const sectionItem = createHelpSectionItem(section._id);
+      return addCollapsed({ ...sectionItem });
     });
 
     dispatch(chainActions(actions)).then(afterCollapse);

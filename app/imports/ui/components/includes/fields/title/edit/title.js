@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
 import invoke from 'lodash.invoke';
 
-Template.HelpDocs_Title_Edit.viewmodel({
+Template.Title_Edit.viewmodel({
   _id: '',
   title: '',
   titleArgs() {

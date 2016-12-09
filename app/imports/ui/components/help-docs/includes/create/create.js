@@ -54,8 +54,8 @@ Template.HelpDocs_Create.viewmodel({
 
   _insertHelpDoc(args) {
     const {
-      title, sectionId, sourceType, sourceFile,
-      sourceUrl, sourceVideoUrl, fileId,
+      title, sectionId, ownerId, status,
+      sourceType, sourceFile, sourceUrl, sourceVideoUrl, fileId,
     } = args;
 
     const source = { type: sourceType };
@@ -73,6 +73,8 @@ Template.HelpDocs_Create.viewmodel({
       title,
       sectionId,
       source,
+      ownerId,
+      status,
     };
 
     const cb = (_id) => {
@@ -121,5 +123,14 @@ Template.HelpDocs_Create.viewmodel({
         }
       }
     });
+  },
+  membersQuery() {
+    const { users } = Organizations.findOne({ isAdminOrg: true }) || {};
+
+    const membersIds = users
+      .filter(userData => !userData.isRemoved)
+      .map(userData => userData.userId);
+
+    return { _id: { $in: membersIds } };
   },
 });

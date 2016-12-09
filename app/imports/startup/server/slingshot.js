@@ -14,7 +14,7 @@ const configureSlingshot = () => {
     standardFilesDir, improvementPlanFilesDir,
     nonConformityFilesDir, riskFilesDir,
     actionFilesDir, rootCauseAnalysisFilesDir,
-    discussionFilesDir, helpDocFilesDir,
+    discussionFilesDir, helpDocsFilesDir,
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -249,7 +249,7 @@ const configureSlingshot = () => {
 
     key(file, { helpDocId }) {
       const { _id: organizationId } = Organizations.findOne({ isAdminOrg: true });
-      return `uploads/${organizationId}/${helpDocFilesDir}/${helpDocId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${helpDocsFilesDir}/${helpDocId}/${Random.id()}-${file.name}`;
     },
   });
 };

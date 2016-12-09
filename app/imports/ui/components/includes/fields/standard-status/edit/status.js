@@ -3,7 +3,7 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 
 import { StandardStatuses } from '/imports/share/constants.js';
 
-Template.ESStatus.viewmodel({
+Template.StandardStatus_Edit.viewmodel({
   status: 'issued',
   statuses() {
     return _.keys(StandardStatuses).map(status => ({ value: status, text: StandardStatuses[status] }) );

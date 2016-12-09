@@ -5,6 +5,7 @@ import { _ } from 'meteor/underscore';
 import { pickC, pickDeep, propEqId } from '/imports/api/helpers';
 import { canChangeHelpDocs } from '/imports/api/checkers';
 import { onModalOpen } from './handlers';
+import { getUser } from '/imports/share/helpers';
 import HelpDocsRHS from '../../components/HelpDocsRHS';
 import HelpDocsRHSNotFound from '../../components/HelpDocsRHSNotFound';
 import onToggleScreenMode from '../../../handlers/onToggleScreenMode';
@@ -37,6 +38,8 @@ export default compose(
     const helpDoc = { ...props.helpDocs.find(propEqId(props.urlItemId)) };
     const helpDocSection = { ...props.helpSections.find(propEqId(helpDoc.sectionId)) };
 
+    const owner = getUser(helpDoc.ownerId);
+
     let hasDocxAttachment = false;
     let file;
     if (helpDoc.source && helpDoc.source.fileId) {
@@ -49,6 +52,7 @@ export default compose(
       helpDoc,
       helpDocSection,
       file,
+      owner,
       hasDocxAttachment,
       headerTitle: 'Help card',
     };
@@ -70,6 +74,7 @@ export default compose(
     'helpDoc',
     'helpDocSection',
     'file',
+    'owner',
     'userHasChangeAccess',
   ])(props)),
 )(HelpDocsRHS);

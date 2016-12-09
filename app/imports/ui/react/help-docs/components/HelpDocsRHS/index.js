@@ -32,6 +32,7 @@ const HelpDocsRHS = (props) => (
         helpDoc={props.helpDoc}
         helpDocSection={props.helpDocSection}
         file={props.file}
+        owner={props.owner}
         hasDocxAttachment={props.hasDocxAttachment}
       />
 

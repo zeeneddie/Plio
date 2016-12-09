@@ -11,9 +11,6 @@ import {
   SET_LESSONS_LEARNED,
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
-  ADD_ITEM,
-  CHANGE_ITEM,
-  REMOVE_ITEM,
 } from './types';
 
 export function setDepartments(departments) {
@@ -97,26 +94,5 @@ export function setHelpSections(helpSections) {
   return {
     type: SET_HELP_SECTIONS,
     payload: { helpSections },
-  };
-}
-
-export function addItem({ collection, item }) {
-  return {
-    type: ADD_ITEM,
-    payload: { collection, item },
-  };
-}
-
-export function changeItem({ collection, item }) {
-  return {
-    type: CHANGE_ITEM,
-    payload: { collection, item },
-  };
-}
-
-export function removeItem({ collection, item }) {
-  return {
-    type: REMOVE_ITEM,
-    payload: { collection, item },
   };
 }

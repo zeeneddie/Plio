@@ -1,4 +1,4 @@
-import { compose, mapProps, shouldUpdate, withHandlers, withProps } from 'recompose';
+import { compose, mapProps, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
 
@@ -28,12 +28,11 @@ const HelpDocsLHSListItemContainer = compose(
     'isActive',
     'onClick',
     'title',
+    'issueNumber',
+    'status',
   ])(props)),
 
-  shouldUpdate((props, nextProps) =>
-    (props.isActive !== nextProps.isActive) ||
-    (props.title !== nextProps.title)
-  )
+  shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps))
 )(HelpDocsLHSListItem);
 
 HelpDocsLHSListItemContainer.propTypes = propTypes;
