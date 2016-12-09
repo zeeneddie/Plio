@@ -26,7 +26,6 @@ export const observeStandards = (dispatch, query, options) => {
       console.log('changed');
       dispatch(updateStandard({ _id, ...fields }));
       if (fields.sectionId || fields.typeId) {
-        console.log('called')
         expandCollapsedStandard(_id);
       }
     },

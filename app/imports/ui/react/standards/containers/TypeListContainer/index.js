@@ -1,10 +1,16 @@
-import { compose, shouldUpdate, lifecycle } from 'recompose';
+import { compose, lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 
 import TypeList from '../../components/TypeList';
 import { TYPE_UNCATEGORIZED } from '../../constants';
-import { lengthStandards, lengthTypes, propEq, notDeleted, propEqId } from '/imports/api/helpers';
+import {
+  lengthStandards,
+  propEq,
+  notDeleted,
+  propEqId,
+  pickDeep,
+} from '/imports/api/helpers';
 import { getState } from '/client/redux/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
@@ -12,13 +18,10 @@ import {
   getSelectedAndDefaultStandardByFilter,
 } from '../../helpers';
 
-// TODO: the list is not updating if chaging standard's type or section
-// to the one that is not rendered yet
-
 export default compose(
-  shouldUpdate((props, nextProps) => !!(lengthStandards(props) !== lengthStandards(nextProps))),
-  connect((state, props) => {
-    let types = state.collections.standardTypes;
+  connect(pickDeep(['collections.standardTypes'])),
+  mapProps(({ standardTypes, ...props }) => {
+    let types = standardTypes;
     const standards = props.standards.filter(notDeleted);
     const uncategorized = {
       _id: TYPE_UNCATEGORIZED,
@@ -37,12 +40,8 @@ export default compose(
 
     types = types.filter(lengthStandards);
 
-    return { types };
+    return { ...props, types };
   }),
-  shouldUpdate((props, nextProps) => !!(
-    lengthTypes(props) !== lengthTypes(nextProps) ||
-    lengthStandards(props) !== lengthStandards(nextProps)
-  )),
   lifecycle({
     componentWillMount() {
       return Meteor.defer(() => {

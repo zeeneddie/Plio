@@ -1,4 +1,4 @@
-import { compose, shouldUpdate, lifecycle } from 'recompose';
+import { compose, shouldUpdate, lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
 import { Meteor } from 'meteor/meteor';
 
@@ -10,6 +10,7 @@ import {
   getC,
   propEqId,
   sortArrayByTitlePrefix,
+  pickDeep,
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
@@ -23,9 +24,9 @@ import {
 import { CollectionNames } from '/imports/share/constants';
 
 export default compose(
-  shouldUpdate((props, nextProps) => !!(lengthStandards(props) !== lengthStandards(nextProps))),
-  connect((state, props) => {
-    let sections = state.collections.standardBookSections;
+  connect(pickDeep(['collections.standardBookSections'])),
+  mapProps(({ standardBookSections, ...props }) => {
+    let sections = standardBookSections;
     const standards = props.standards.filter(notDeleted);
     const uncategorized = {
       _id: SECTION_UNCATEGORIZED,
@@ -47,12 +48,8 @@ export default compose(
 
     sections = sortArrayByTitlePrefix(sections);
 
-    return { sections };
+    return { ...props, sections };
   }),
-  shouldUpdate((props, nextProps) => !!(
-    lengthSections(props) !== lengthSections(nextProps) ||
-    lengthStandards(props) !== lengthStandards(nextProps)
-  )),
   lifecycle({
     componentWillMount() {
       return Meteor.defer(() => {

@@ -10,7 +10,7 @@ import {
   onModalOpen,
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
-import { sortArrayByTitlePrefix } from '/imports/api/helpers';
+import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
 
 const mapStateToProps = ({
   standards: { standardsFiltered },
@@ -32,11 +32,15 @@ const mapStateToProps = ({
 
 export default compose(
   connect(mapStateToProps),
+  mapProps(props => ({
+    ...props,
+    standards: props.standards.map(pickC(['_id', 'sectionId', 'typeId', 'titlePrefix'])),
+  })),
   shouldUpdate((props, nextProps) => !!(
     props.searchText !== nextProps.searchText ||
     props.filter !== nextProps.filter ||
     props.animating !== nextProps.animating ||
-    props.standards.length !== nextProps.standards.length
+    notEquals(props.standards, nextProps.standards)
   )),
   withProps(props => ({ collapseOnSearch: props.filter !== 3 })),
   withHandlers({
