@@ -7,7 +7,8 @@ import { Tracker } from 'meteor/tracker';
 import { _ } from 'meteor/underscore';
 import curry from 'lodash.curry';
 
-import { findById, extractIds } from '/imports/api/helpers';
+import { WorkInboxFilters } from '/imports/api/constants';
+import { findById, extractIds, propEqId } from '/imports/api/helpers';
 
 Template.WorkInbox_List.viewmodel({
   share: 'search',
@@ -21,13 +22,35 @@ Template.WorkInbox_List.viewmodel({
     const list = this.list;
 
     if (list && !list.focused() && !list.animating() && !list.searchText()) {
-      const workItemId = this.workItemId();
-      const {
-        result: contains,
-        first: defaultDoc,
-      } = this._findWorkItemForFilter(workItemId);
+      const queriedId = this.queriedWorkItemId();
 
-      if (!contains) {
+      if (queriedId) {
+        const allItems = this.items();
+
+        const filter = Object.keys(WorkInboxFilters).find((filterId) => {
+          const itemsForFilter = this._getWorkItemsForFilter(
+            allItems, parseInt(filterId, 10)
+          );
+          return !!itemsForFilter.find(propEqId(queriedId));
+        });
+
+        if (filter) {
+          Meteor.defer(() => {
+            this.goToWorkItem(queriedId, { filter });
+            this.expandCollapsed(queriedId);
+          });
+        }
+      } else {
+        const workItemId = this.workItemId();
+        const {
+          result: contains,
+          first: defaultDoc,
+        } = this._findWorkItemForFilter(workItemId);
+
+        if (contains) {
+          return;
+        }
+
         if (defaultDoc) {
           const { _id } = defaultDoc;
 
@@ -46,7 +69,8 @@ Template.WorkInbox_List.viewmodel({
     }
   },
   _findWorkItemForFilter(_id, filter = this.activeWorkInboxFilterId()) {
-    const { my = {}, team = {} } = Object.assign({}, this.items());
+    const allItems = Object.assign({}, this.items());
+    const itemsForFilter = this._getWorkItemsForFilter(allItems, filter);
 
     const results = (items) => ({
       result: findById(_id, items),
@@ -54,19 +78,24 @@ Template.WorkInbox_List.viewmodel({
       array: items,
     });
 
+    return results(itemsForFilter);
+  },
+  _getWorkItemsForFilter(items, filter) {
+    const { my = {}, team = {} } = items || {};
+
     switch (filter) {
       case 1:
-        return results(my.current);
+        return my.current;
       case 2:
-        return results(team.current);
+        return team.current;
       case 3:
-        return results(my.completed);
+        return my.completed;
       case 4:
-        return results(team.completed);
+        return team.completed;
       case 5:
-        return results(my.deleted);
+        return my.deleted;
       case 6:
-        return results(team.deleted);
+        return team.deleted;
       default:
         return {};
     }
