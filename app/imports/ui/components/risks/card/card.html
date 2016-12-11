@@ -118,18 +118,20 @@
           {{/if}}
         {{/Card_Read}}
       {{else}}
-        {{> PreloaderPage}}
+        {{#CardHeading}}
+          {{#if showNotFoundMessage}}
+            <h5>This risk no longer exists in Plio</h5>
+          {{/if}}
+        {{/CardHeading}}
       {{/with}}
     {{else}}
-      <div class="card">
-        <div class="card-block card-heading">
-          {{#if isActiveRiskFilter 4}}
-            <h5>There are no deleted risks yet.</h5>
-          {{else}}
-            <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
-          {{/if}}
-        </div>
-      </div>
+      {{#CardHeading}}
+        {{#if isActiveRiskFilter 4}}
+          <h5>There are no deleted risks yet.</h5>
+        {{else}}
+          <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
+        {{/if}}
+      {{/CardHeading}}
     {{/if}}
   </div>
 </template>

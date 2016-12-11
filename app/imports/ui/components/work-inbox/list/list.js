@@ -34,12 +34,15 @@ Template.WorkInbox_List.viewmodel({
           return !!itemsForFilter.find(propEqId(queriedId));
         });
 
+        let params;
         if (filter) {
-          Meteor.defer(() => {
-            this.goToWorkItem(queriedId, { filter });
-            this.expandCollapsed(queriedId);
-          });
+          params = { filter };
         }
+
+        Meteor.defer(() => {
+          this.goToWorkItem(queriedId, params);
+          this.expandCollapsed(queriedId);
+        });
       } else {
         const workItemId = this.workItemId();
         const {
@@ -51,18 +54,22 @@ Template.WorkInbox_List.viewmodel({
           return;
         }
 
-        if (defaultDoc) {
-          const { _id } = defaultDoc;
-
-          Meteor.setTimeout(() => {
-            this.goToWorkItem(_id);
-            this.expandCollapsed(_id);
-          }, 0);
-        } else {
+        if (!defaultDoc) {
           const routeName = Tracker.nonreactive(() => FlowRouter.getRouteName());
 
           if (routeName !== 'workInbox') {
             Meteor.setTimeout(() => this.goToWorkInbox(), 0);
+          }
+        } else {
+          const allItems = this._getWorkItemsByQuery().fetch();
+
+          if (!workItemId || (workItemId && findById(workItemId, allItems))) {
+            const { _id } = defaultDoc;
+
+            Meteor.setTimeout(() => {
+              this.goToWorkItem(_id);
+              this.expandCollapsed(_id);
+            }, 0);
           }
         }
       }

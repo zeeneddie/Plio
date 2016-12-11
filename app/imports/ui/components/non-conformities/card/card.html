@@ -136,18 +136,20 @@
 
         {{/Card_Read}}
       {{else}}
-        {{> PreloaderPage}}
+        {{#CardHeading}}
+          {{#if showNotFoundMessage}}
+            <h5>This non-conformity no longer exists in Plio</h5>
+          {{/if}}
+        {{/CardHeading}}
       {{/with}}
     {{else}}
-      <div class="card">
-        <div class="card-block card-heading">
-          {{#if isActiveNCFilter 4}}
-            <h5>There are no deleted non-conformities yet.</h5>
-          {{else}}
-            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
-          {{/if}}
-        </div>
-      </div>
+      {{#CardHeading}}
+        {{#if isActiveNCFilter 4}}
+          <h5>There are no deleted non-conformities yet.</h5>
+        {{else}}
+          <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
+        {{/if}}
+      {{/CardHeading}}
     {{/if}}
   </div>
 </template>

@@ -26,16 +26,22 @@ Template.Risks_List.viewmodel({
     const riskId = this.riskId();
     const { result:contains, first:defaultDoc } = this._findRiskForFilter(riskId);
 
-    if (!contains) {
-      if (defaultDoc) {
+    if (contains) {
+      return;
+    }
+
+    if (!defaultDoc) {
+      Meteor.setTimeout(() => this.goToRisks(), 0);
+    } else {
+      const allRisks = this._getRisksByQuery().fetch();
+
+      if (!riskId || (riskId && findById(riskId, allRisks))) {
         const { _id } = defaultDoc;
 
         Meteor.setTimeout(() => {
           this.goToRisk(_id);
           this.expandCollapsed(_id);
         }, 0);
-      } else {
-        Meteor.setTimeout(() => this.goToRisks(), 0);
       }
     }
   },

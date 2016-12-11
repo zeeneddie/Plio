@@ -76,5 +76,8 @@ Template.NC_Card_Read.viewmodel({
     if (!isDeleted) return;
 
     remove.call({ _id }, cb);
-  }
+  },
+  showNotFoundMessage() {
+    return this.isReady() && this.NCId() && !this._id;
+  },
 });
