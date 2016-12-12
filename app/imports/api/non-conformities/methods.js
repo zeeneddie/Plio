@@ -92,7 +92,11 @@ export const setAnalysisExecutor = new CheckedMethod({
   check: checker => injectNC(checker)(P_OnSetAnalysisExecutorChecker),
 
   run({ _id, executor }, doc) {
-    return NonConformitiesService.setAnalysisExecutor({ _id, executor }, doc);
+    return NonConformitiesService.setAnalysisExecutor({
+      _id,
+      executor,
+      assignedBy: this.userId,
+    }, doc);
   }
 });
 
@@ -231,7 +235,11 @@ export const setStandardsUpdateExecutor = new CheckedMethod({
   check: checker => injectNC(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
   run({ _id, executor }, doc) {
-    return NonConformitiesService.setStandardsUpdateExecutor({ _id, executor }, doc);
+    return NonConformitiesService.setStandardsUpdateExecutor({
+      _id,
+      executor,
+      assignedBy: this.userId,
+    }, doc);
   }
 });
 

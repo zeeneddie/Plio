@@ -72,6 +72,11 @@ export default compose(
     renderComponent(StandardsRHS.NotFound),
   ),
   withStandard,
+  branch(
+    ({ isCardReady, urlItemId, standard }) => isCardReady && urlItemId && !standard,
+    renderComponent(StandardsRHS.NotExist),
+    _.identity,
+  ),
   withProps(props => ({
     isReady: !!(props.isCardReady && props.standards.length && props.standard),
     names: {

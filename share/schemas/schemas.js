@@ -362,7 +362,12 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: String,
         regEx: SimpleSchema.RegEx.Id,
         optional: true
-      }
+      },
+      [`${key}.assignedBy`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true,
+      },
     };
   };
 
