@@ -8,18 +8,23 @@ const HelpDocsRHSBodyContents = (props) => {
   const { source, section, file, owner, issueNumber } = props;
 
   const wrap = 'col-md-6';
-  const fields = createReadFields([
+  const fieldsData = [
     { label: 'Section', text: section ? section.title : '' },
-    { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Owner', text: owner ? owner.fullNameOrEmail() : '', wrap },
-  ]);
+  ];
+
+  if (props.userHasChangeAccess) {
+    fieldsData.push({ label: 'Issue number', text: issueNumber, wrap });
+  }
+
+  const fields = createReadFields(fieldsData);
 
   return (
     <div className="list-group">
       {fields.section}
 
       <div className="row">
-        {fields.issueNumber}
+        {props.userHasChangeAccess ? fields.issueNumber : ''}
         {fields.owner}
       </div>
 

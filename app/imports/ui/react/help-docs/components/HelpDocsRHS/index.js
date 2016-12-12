@@ -34,6 +34,7 @@ const HelpDocsRHS = (props) => (
         file={props.file}
         owner={props.owner}
         hasDocxAttachment={props.hasDocxAttachment}
+        userHasChangeAccess={props.userHasChangeAccess}
       />
 
       <div className="card-footer"></div>

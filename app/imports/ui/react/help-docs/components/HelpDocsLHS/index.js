@@ -17,6 +17,7 @@ const HelpDocsLHS = (props) => (
       sections={props.sections}
       collapsed={props.collapsed}
       onToggleCollapse={props.onToggleCollapse}
+      userHasChangeAccess={props.userHasChangeAccess}
     />
   </LHSContainer>
 );

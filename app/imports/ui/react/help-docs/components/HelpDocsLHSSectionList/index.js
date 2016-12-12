@@ -18,6 +18,7 @@ const HelpDocsLHSSectionList = (props) => (
         <HelpDocsLHSHelpList
           helpDocs={section.helpDocs}
           section={section}
+          userHasChangeAccess={props.userHasChangeAccess}
         />
       </LHSItem>
       ))}

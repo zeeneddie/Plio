@@ -15,7 +15,7 @@ const HelpDocsLHSListItem = (props) => (
       <ListItem.Heading>
         <span className="margin-right">{props.title}</span>
 
-        {(props.status === 'draft' && props.issueNumber) ? (
+        {(props.status === 'draft' && props.issueNumber && props.userHasChangeAccess) ? (
           <LabelDraft issueNumber={props.issueNumber} />
         ) : ''}
       </ListItem.Heading>

@@ -18,12 +18,16 @@ const HelpDocsRHSBody = (props) => (
           onToggleCollapse={props.onToggleCollapse}
           initial={props.initialCollapsed}
         >
-          <HelpDocsRHSBodyHeading {...props.helpDoc} />
+          <HelpDocsRHSBodyHeading
+            {...props.helpDoc}
+            userHasChangeAccess={props.userHasChangeAccess}
+          />
           <HelpDocsRHSBodyContents
             {...props.helpDoc}
             section={props.helpDocSection}
             file={props.file}
             owner={props.owner}
+            userHasChangeAccess={props.userHasChangeAccess}
           />
         </Collapse>
         {getC('helpDoc.source.htmlUrl', props) && (

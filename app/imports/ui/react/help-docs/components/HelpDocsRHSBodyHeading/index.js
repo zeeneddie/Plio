@@ -3,13 +3,13 @@ import React from 'react';
 import LabelDraft from '../../../components/Labels/LabelDraft';
 import propTypes from './propTypes';
 
-const HelpDocsRHSBodyHeading = ({ title, status, issueNumber }) => (
+const HelpDocsRHSBodyHeading = (props) => (
   <div className="flexbox-row">
     <h4 className="list-group-item-heading pull-left">
-      <span>{title}</span>
+      <span>{props.title}</span>
 
-      {status === 'draft' && issueNumber ? (
-        <LabelDraft issueNumber={issueNumber} margin="left" />
+      {(props.status === 'draft' && props.issueNumber && props.userHasChangeAccess) ? (
+        <LabelDraft issueNumber={props.issueNumber} margin="left" />
       ) : ''}
     </h4>
   </div>

@@ -9,6 +9,7 @@ const HelpDocsLHSHelpList = (props) => (
       <HelpDocsLHSListItemContainer
         key={help._id}
         section={props.section}
+        userHasChangeAccess={props.userHasChangeAccess}
         {...help}
       />
     ))}

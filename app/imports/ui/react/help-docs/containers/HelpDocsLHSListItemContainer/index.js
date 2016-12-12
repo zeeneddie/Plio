@@ -30,6 +30,7 @@ const HelpDocsLHSListItemContainer = compose(
     'title',
     'issueNumber',
     'status',
+    'userHasChangeAccess',
   ])(props)),
 
   shouldUpdate((props, nextProps) => !shallowEqual(props, nextProps))

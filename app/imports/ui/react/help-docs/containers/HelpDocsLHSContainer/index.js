@@ -54,11 +54,16 @@ const HelpDocsLHSContainer = compose(
     onToggleCollapse,
   }),
 
-  withProps(props => (
-    canChangeHelpDocs(props.userId) && {
-      onModalOpen: onModalOpen(props),
+  withProps((props) => {
+    const userHasChangeAccess = canChangeHelpDocs(props.userId);
+    const newProps = { userHasChangeAccess };
+
+    if (userHasChangeAccess) {
+      Object.assign(newProps, { onModalOpen: onModalOpen(props) });
     }
-  ))
+
+    return newProps;
+  })
 )(HelpDocsLHS);
 
 export default HelpDocsLHSContainer;
