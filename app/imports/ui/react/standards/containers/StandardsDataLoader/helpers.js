@@ -1,7 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { goToStandard } from '../../../helpers/routeHelpers';
 
-import { getId, pickC, hasC, getC, propEqId, shallowCompare } from '/imports/api/helpers';
+import { getId, pickC, hasC, getC, propEqId, shallowCompare, findById } from '/imports/api/helpers';
 import {
   getSelectedAndDefaultStandardByFilter,
   createTypeItem,
@@ -16,17 +16,23 @@ export const redirectByFilter = (props) => {
     default: defaultStandard,
   } = getSelectedAndDefaultStandardByFilter(props);
   const shouldRedirect = FlowRouter.getRouteName() === 'standards' || !selectedStandard;
+
   if (shouldRedirect) {
     const queryParams = { filter };
-    if (defaultStandard) {
-      const params = {
-        orgSerialNumber,
-        urlItemId: getId(defaultStandard),
-      };
-      goToStandard(params, queryParams);
-    } else {
+
+    if (!defaultStandard) {
       FlowRouter.withReplaceState(() =>
         FlowRouter.go('standards', { orgSerialNumber }, queryParams));
+    } else {
+      const { standards, urlItemId } = props;
+
+      if (!urlItemId || (urlItemId && findById(urlItemId, standards))) {
+        const params = {
+          orgSerialNumber,
+          urlItemId: getId(defaultStandard),
+        };
+        goToStandard(params, queryParams);
+      }
     }
   }
 };

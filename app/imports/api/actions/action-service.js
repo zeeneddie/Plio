@@ -236,11 +236,14 @@ export default {
     return ret;
   },
 
-  setCompletionExecutor({ _id, userId }) {
+  setCompletionExecutor({ _id, userId, assignedBy }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { toBeCompletedBy: userId }
+      $set: {
+        toBeCompletedBy: userId,
+        completionAssignedBy: assignedBy,
+      },
     });
 
     WorkItemService.actionCompletionUserUpdated(_id, userId);
@@ -260,11 +263,14 @@ export default {
     return ret;
   },
 
-  setVerificationExecutor({ _id, userId }) {
+  setVerificationExecutor({ _id, userId, assignedBy }) {
     const ret = this.collection.update({
-      _id
+      _id,
     }, {
-      $set: { toBeVerifiedBy: userId }
+      $set: {
+        toBeVerifiedBy: userId,
+        verificationAssignedBy: assignedBy,
+      },
     });
 
     WorkItemService.actionVerificationUserUpdated(_id, userId);
