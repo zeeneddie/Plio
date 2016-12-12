@@ -37,7 +37,9 @@ Template.NC_List.viewmodel({
         this.goToNCs();
       }, 0);
     } else {
-      const allNCs = this._getNCsByQuery().fetch();
+      const allNCs = this._getNCsByQuery({
+        isDeleted: { $in: [true, false] },
+      }).fetch();
 
       if (!NCId || (NCId && findById(NCId, allNCs))) {
         const { _id } = defaultDoc;

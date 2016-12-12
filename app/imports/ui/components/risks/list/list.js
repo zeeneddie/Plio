@@ -33,7 +33,9 @@ Template.Risks_List.viewmodel({
     if (!defaultDoc) {
       Meteor.setTimeout(() => this.goToRisks(), 0);
     } else {
-      const allRisks = this._getRisksByQuery().fetch();
+      const allRisks = this._getRisksByQuery({
+        isDeleted: { $in: [true, false] },
+      }).fetch();
 
       if (!riskId || (riskId && findById(riskId, allRisks))) {
         const { _id } = defaultDoc;
