@@ -136,11 +136,13 @@
 
         {{/Card_Read}}
       {{else}}
-        {{#CardHeading}}
-          {{#if showNotFoundMessage}}
+        {{#unless isReady}}
+          {{> PreloaderPage}}
+        {{else}} {{#if NCId}}
+          {{#CardHeading}}
             <h5>This non-conformity no longer exists in Plio</h5>
-          {{/if}}
-        {{/CardHeading}}
+          {{/CardHeading}}
+        {{/if}} {{/unless}}
       {{/with}}
     {{else}}
       {{#CardHeading}}

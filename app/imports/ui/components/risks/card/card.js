@@ -73,7 +73,4 @@ Template.Risks_Card_Read.viewmodel({
 
     remove.call({ _id }, callback);
   },
-  showNotFoundMessage() {
-    return this.isReady() && this.riskId() && !this._id;
-  },
 });

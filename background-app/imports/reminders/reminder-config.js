@@ -142,13 +142,16 @@ const ReminderConfig = {
     },
     text: {
       beforeDue:
-        'You have been asked by {{{userName}}} to complete a root cause analysis of {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete a root cause analysis of {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
       dueToday:
-        'You have been asked by {{{userName}}} to complete a root cause analysis of {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete a root cause analysis of {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is due today.',
       overdue:
-        'You have been asked by {{{userName}}} to complete a root cause analysis of {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete a root cause analysis of {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.'
     },
     data: ({ doc, docType, date, dateConfig, org }) => {
@@ -177,13 +180,16 @@ const ReminderConfig = {
     },
     text: {
       beforeDue:
-        'You have been asked by {{{userName}}} to complete an update of standards related to {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete an update of standards related to {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
       dueToday:
-        'You have been asked by {{{userName}}} to complete an update of standards related to {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete an update of standards related to {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is due today.',
       overdue:
-        'You have been asked by {{{userName}}} to complete an update of standards related to {{problemDesc}} ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete an update of standards related to {{problemDesc}} ' +
         '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.'
     },
     data: ({ doc, docType, date, org }) => {
@@ -210,14 +216,17 @@ const ReminderConfig = {
     },
     text: {
       beforeDue:
-        'You have been asked by {{{userName}}} to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
         'This action is {{diff}} before due.',
       dueToday:
-        'You have been asked by {{{userName}}} to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
         'This action is due today.',
       overdue:
-        'You have been asked by {{{userName}}} to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
-        ' This action is {{diff}} overdue.'
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is {{diff}} overdue.'
     },
     data: ({ doc, docType, date, org }) => {
       return {
@@ -243,14 +252,17 @@ const ReminderConfig = {
     },
     text: {
       beforeDue:
-        'You have been asked by {{{userName}}} to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
         'This action is {{diff}} before due.',
       dueToday:
-        'You have been asked by {{{userName}}} to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
         'This action is due today.',
       overdue:
-        'You have been asked by {{{userName}}} to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
-        ' This action is {{diff}} overdue.'
+        'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
+        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'This action is {{diff}} overdue.'
     },
     data: ({ doc, docType, date, org }) => {
       return {
@@ -283,7 +295,7 @@ const ReminderConfig = {
         'This action is due today.',
       overdue:
         'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
-        ' This action is {{diff}} overdue.'
+        'This action is {{diff}} overdue.'
     },
     data: ({ doc, docType, date, org }) => {
       return {

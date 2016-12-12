@@ -118,11 +118,13 @@
           {{/if}}
         {{/Card_Read}}
       {{else}}
-        {{#CardHeading}}
-          {{#if showNotFoundMessage}}
+        {{#unless isReady}}
+          {{> PreloaderPage}}
+        {{else}} {{#if riskId}}
+          {{#CardHeading}}
             <h5>This risk no longer exists in Plio</h5>
-          {{/if}}
-        {{/CardHeading}}
+          {{/CardHeading}}
+        {{/if}} {{/unless}}
       {{/with}}
     {{else}}
       {{#CardHeading}}
