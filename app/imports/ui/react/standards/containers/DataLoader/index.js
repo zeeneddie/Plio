@@ -117,13 +117,16 @@ export default compose(
         typeof observer === 'function' && observer.stop());
     },
   }),
-  connect(pickDeep([
-    'organizations.organization',
-    'organizations.orgSerialNumber',
-    'discussion.isDiscussionOpened',
-    'global.urlItemId',
-    'global.filter',
-  ])),
+  connect(state => ({
+    standard: state.collections.standardsByIds[state.global.urlItemId],
+    ...pickDeep([
+      'organizations.organization',
+      'organizations.orgSerialNumber',
+      'discussion.isDiscussionOpened',
+      'global.urlItemId',
+      'global.filter',
+    ])(state),
+  })),
   shouldUpdate((props, nextProps) => !!(
     props.isDiscussionOpened !== nextProps.isDiscussionOpened ||
     props.loading !== nextProps.loading ||

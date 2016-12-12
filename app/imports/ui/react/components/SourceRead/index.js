@@ -1,10 +1,11 @@
 import React from 'react';
 
-import FileItemRead from '../FileItemRead';
+import FileItem from '../../fields/read/components/FileItem';
 import Iframe from '../Iframe';
 import IframeWrapper from '../IframeWrapper';
 import propTypes from './propTypes';
 import getVideoSource from '../../helpers/getVideoSource';
+import { FILE_TYPE_MAP } from '/imports/api/constants';
 
 const getSourceTitle = (id) => {
   if (!id) return '';
@@ -17,7 +18,7 @@ const SourceRead = ({ id, type, url, file }) => {
   let content;
 
   switch (type) {
-    case 'url':
+    case FILE_TYPE_MAP.URL:
       content = (
         <h4 className="list-group-item-heading">
           <i className="fa fa-link margin-right"></i>
@@ -25,14 +26,14 @@ const SourceRead = ({ id, type, url, file }) => {
         </h4>
       );
       break;
-    case 'attachment':
+    case FILE_TYPE_MAP.ATTACHMENT:
       content = file ? (
         <h4 className="list-group-item-heading">
-          <FileItemRead file={file} />
+          <FileItem {...file} />
         </h4>
       ) : null;
       break;
-    case 'video':
+    case FILE_TYPE_MAP.VIDEO:
       content = (
         <IframeWrapper className="video">
           <Iframe src={getVideoSource(url)} />

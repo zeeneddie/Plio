@@ -1,7 +1,7 @@
 import React from 'react';
 
-const MessageContent = (props) => (
-  <p className="chat-item-content" onClick={props.onClick}>{props.contents}</p>
+const MessageContent = ({ onClick, contents }) => (
+  <div className="chat-item-content" onClick={onClick}>{contents}</div>
 );
 
 export default MessageContent;

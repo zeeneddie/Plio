@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 
-import Button from '../Buttons/Button';
 import Icon from '../Icon';
 
 const FileUploader = ({ value, onChange }) => (
-  <Button type="secondary" className="btn-file">
+  <div className="btn btn-secondary btn-file">
     <Icon names="paperclip" size="3" />
     <input
       type="file"
@@ -12,7 +11,7 @@ const FileUploader = ({ value, onChange }) => (
       value={value}
       onChange={e => onChange(e.target.files)}
     />
-  </Button>
+  </div>
 );
 
 FileUploader.propTypes = {

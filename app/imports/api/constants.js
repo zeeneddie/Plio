@@ -208,3 +208,9 @@ export const MarginMap = {
 };
 
 export const MOBILE_BREAKPOINT = 768;
+
+export const FILE_TYPE_MAP = {
+  URL: 'url',
+  ATTACHMENT: 'attachment',
+  VIDEO: 'video',
+};

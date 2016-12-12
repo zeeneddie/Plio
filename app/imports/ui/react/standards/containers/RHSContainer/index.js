@@ -1,6 +1,5 @@
 import {
   compose,
-  withProps,
   withHandlers,
   mapProps,
   branch,
@@ -17,7 +16,6 @@ import {
   propEqId,
   every,
   lengthStandards,
-  pickDeep,
   notEquals,
   omitC,
   compareByProps,
@@ -31,15 +29,27 @@ import {
   onRestore,
   onDelete,
 } from './handlers';
-import { getPathToDiscussion, getStandardsByFilter, withStandard } from '../../helpers';
+import { getPathToDiscussion, getStandardsByFilter } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
-  standards: { isFullScreenMode },
+  standards: { isFullScreenMode, isCardReady },
   global: { urlItemId, filter, userId },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
-  collections: { standards, files, ncs, risks, actions, workItems, lessons },
+  collections: {
+    standards,
+    standardsByIds,
+    standardBookSectionsByIds,
+    standardTypesByIds,
+    files,
+    filesByIds,
+    ncs,
+    risks,
+    actions,
+    workItems,
+    lessons,
+  },
 }) => ({
   isDiscussionOpened,
   organizationId,
@@ -47,6 +57,7 @@ const mapStateToProps = ({
   userId,
   isFullScreenMode,
   files,
+  filesByIds,
   ncs,
   risks,
   actions,
@@ -55,42 +66,53 @@ const mapStateToProps = ({
   standards,
   urlItemId,
   filter,
+  standardsByIds,
+  standardBookSectionsByIds,
+  standardTypesByIds,
+  isCardReady,
 });
 
+// TODO: optimize rhs
 export default compose(
-  connect(pickDeep([
-    'collections.standards',
-    'standards.isCardReady',
-    'global.urlItemId',
-    'global.filter',
-  ])),
-  mapProps(props => ({ ...props, standards: getStandardsByFilter(props) })),
+  connect(mapStateToProps),
+  mapProps(({
+    standardsByIds,
+    standardBookSectionsByIds,
+    standardTypesByIds,
+    isCardReady,
+    ...props,
+  }) => {
+    const standard = standardsByIds[props.urlItemId];
+    return {
+      ...props,
+      standards: getStandardsByFilter(props),
+      standard: {
+        ...standard,
+        section: standardBookSectionsByIds[getC('sectionId', standard)],
+        type: standardTypesByIds[getC('typeId', standard)],
+      },
+      isReady: !!(isCardReady && props.standards.length && standard),
+      names: {
+        headerNames: {
+          header: 'Compliance Standard',
+          discuss: 'Discuss',
+          edit: 'Edit',
+          restore: 'Restore',
+          delete: 'Delete',
+        },
+      },
+    };
+  }),
   branch(
     lengthStandards,
     _.identity,
     renderComponent(StandardsRHS.NotFound),
   ),
-  withStandard,
-  withProps(props => ({
-    isReady: !!(props.isCardReady && props.standards.length && props.standard),
-    names: {
-      headerNames: {
-        header: 'Compliance Standard',
-        discuss: 'Discuss',
-        edit: 'Edit',
-        restore: 'Restore',
-        delete: 'Delete',
-      },
-    },
-  })),
-  shouldUpdate((props, nextProps) => props.isReady !== nextProps.isReady),
   branch(
     props => props.isReady,
     _.identity,
     renderComponent(StandardsRHS),
   ),
-  connect(mapStateToProps),
-  withStandard,
   shouldUpdate((props, nextProps) => {
     const omitStandardKeys = omitC(['updatedAt']);
     const compareBySeqId = compareByProps(['title', 'serialNumber']);
@@ -106,22 +128,12 @@ export default compose(
       props.files.length !== nextProps.files.length
     );
   }),
-  withProps(props => {
-    const standard = { ...props.standard };
+  mapProps((props) => {
+    let standard = { ...props.standard };
     const hasDocxAttachment = some([getC('source1.htmlUrl'), getC('source2.htmlUrl')], standard);
     const hasAccess = canChangeStandards(props.userId, props.organizationId);
     const hasFullAccess = isOrgOwner(props.userId, props.organizationId);
     const pathToDiscussion = getPathToDiscussion(props);
-
-    return {
-      standard,
-      hasDocxAttachment,
-      hasAccess,
-      hasFullAccess,
-      pathToDiscussion,
-    };
-  }),
-  mapProps(props => {
     // filter all documents to those linked to the standard and map new values to some of them
     const files = props.files.filter(({ _id }) =>
       props.standards.find(({ source1 = {}, source2 = {} }) =>
@@ -141,15 +153,18 @@ export default compose(
       ]),
     );
     const getFileId = getC('fileId');
-    const source1 = props.standard.source1 && {
+    const source1 = standard.source1 && {
       ...props.standard.source1,
-      file: files.find(propEqId(getFileId(props.standard.source1))),
+      // file: props.filesByIds[getFileId(standard.source1)],
+      file: files.find(propEqId(getFileId(standard.source1))),
     };
-    const source2 = props.standard.source2 && {
+    const source2 = standard.source2 && {
       ...props.standard.source2,
-      file: files.find(propEqId(getFileId(props.standard.source2))),
+      file: props.filesByIds[getFileId(standard.source2)],
+      // file: files.find(propEqId(getFileId(standard.source2))),
     };
-    const standard = { ...props.standard, source1, source2 };
+
+    standard = { ...props.standard, source1, source2 };
 
     return {
       ...props,
@@ -159,6 +174,10 @@ export default compose(
       actions,
       lessons,
       standard,
+      hasDocxAttachment,
+      hasAccess,
+      hasFullAccess,
+      pathToDiscussion,
     };
   }),
   withHandlers({

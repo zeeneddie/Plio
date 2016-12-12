@@ -6,7 +6,7 @@ import { getFormattedDate } from '/imports/share/helpers';
 import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 
-import FileItemRead from '../../../components/FileItemRead';
+import FileItemContainer from '../../../fields/read/containers/FileItemContainer';
 
 // Helpers
 
@@ -40,7 +40,7 @@ export const getMessageContents = (props) => {
       });
       return <span dangerouslySetInnerHTML={createMarkup()}></span>;
     case 'file':
-      return <FileItemRead {...props} />;
+      return props.fileId && <FileItemContainer _id={props.fileId} />;
     default:
       return props.text;
   }

@@ -439,3 +439,12 @@ export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
   'steve.ives@pliohub.com',
 ];
+
+export const FILE_STATUS_MAP = {
+  UPLOADING: 'uploading',
+  UPLOADED: 'uploaded',
+  TERMINATED: 'terminated',
+  FAILED: 'failed',
+  IN_PROGRESS: 'in-progress',
+  COMPLETED: 'completed',
+};

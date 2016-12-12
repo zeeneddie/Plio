@@ -33,10 +33,19 @@ const initialState = {
   standardTypes: [],
   lessons: [],
   standardsByIds: [],
+  standardBookSectionsByIds: [],
+  standardTypesByIds: [],
+  departmentsByIds: [],
+  filesByIds: [],
+  ncsByIds: [],
+  risksByIds: [],
+  actionsByIds: [],
+  workItemsByIds: [],
+  lessonsByIds: [],
 };
 
 const findIndexById = (_id, array) => array.findIndex(propEqId(_id));
-const normalizeObject = ({ _id, ...props }) => ({ [_id]: { ...props } });
+const normalizeObject = ({ _id, ...props }) => ({ [_id]: { _id, ...props } });
 const normalize = array => flattenObjects(array.map(normalizeObject));
 const getNormalizedDataKey = prop => `${prop}ByIds`;
 
