@@ -4,13 +4,12 @@ import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
 
 import { insert } from '/imports/api/standards/methods';
-import { setModalError, inspire, pickDeep } from '/imports/api/helpers';
+import { setModalError, inspire } from '/imports/api/helpers';
 import { insert as insertFile } from '/imports/api/files/methods';
 import UploadService from '/imports/ui/utils/uploads/UploadService';
-import { expandCollapsedStandard } from '/imports/ui/react/standards/helpers';
 
 Template.CreateStandard.viewmodel({
-  mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal', 'store'],
+  mixin: ['standard', 'numberRegex', 'organization', 'router', 'getChildrenData', 'modal'],
   save() {
     const data = this.getChildrenData();
 
@@ -117,8 +116,6 @@ Template.CreateStandard.viewmodel({
       this.isActiveStandardFilter('deleted')
         ? this.goToStandard(_id, false)
         : this.goToStandard(_id);
-
-      expandCollapsedStandard(_id);
 
       open({
         _id,

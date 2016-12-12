@@ -1,6 +1,5 @@
 import { compose, lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
 
 import {
   propEq,
@@ -11,13 +10,13 @@ import {
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
-import { SECTION_UNCATEGORIZED } from '../../constants';
 import { getState } from '/client/redux/store';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,
   openStandardByFilter,
   getSelectedStandardDeletedState,
+  createUncategorizedSection,
 } from '../../helpers';
 import { CollectionNames } from '/imports/share/constants';
 
@@ -75,12 +74,7 @@ export default compose(
   connect(mapStateToProps),
   mapProps(({ standardBookSections, standards, ...props }) => {
     let sections = standardBookSections;
-    const uncategorized = {
-      _id: SECTION_UNCATEGORIZED,
-      title: 'Uncategorized',
-      organizationId: getC('organizationId', standards[0]),
-      standards: standards.filter(standard => !sections.find(propEqId(standard.sectionId))),
-    };
+    const uncategorized = createUncategorizedSection({ standards, sections });
 
     // add own standards to each section
     sections = sections.map(section => ({

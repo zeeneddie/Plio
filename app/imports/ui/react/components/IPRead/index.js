@@ -28,7 +28,7 @@ const renderFields = ({ desiredOutcome, targetDate, owner, reviewDates, fileIds 
     {
       label: 'Means statement',
       text: fileIds.length && fileIds.map(fileId => (
-        <FileItemContainer key={fileId} fileId={fileId} />
+        <FileItemContainer key={fileId} _id={fileId} />
       )),
     },
   ];

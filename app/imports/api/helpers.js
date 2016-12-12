@@ -463,3 +463,6 @@ export const getUserJoinedAt = (organization = {}, userId) => {
 
   return joinedAt;
 };
+
+export const looksLikeAPromise = fn => typeof fn === 'function' && typeof fn.then === 'function';
+ 

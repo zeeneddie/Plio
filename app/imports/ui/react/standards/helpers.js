@@ -19,6 +19,7 @@ import {
 import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
 import { goToStandard, goToStandards } from '../helpers/routeHelpers';
 import store, { getState } from '/client/redux/store';
+import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
   'sub'.repeat(parseInt(nestingLevel, 10) - 1);
@@ -48,6 +49,20 @@ export const getStandardsByFilter = ({ filter, standards }) => (
 export const addCollapsedType = compose(addCollapsed, createTypeItem, propId);
 
 export const addCollapsedSection = compose(addCollapsed, createSectionItem, propId);
+
+export const createUncategorizedSection = ({ standards, sections }) => ({
+  _id: SECTION_UNCATEGORIZED,
+  title: 'Uncategorized',
+  organizationId: getC('organizationId', standards[0]),
+  standards: standards.filter(standard => !sections.find(propEqId(standard.sectionId))),
+});
+
+export const createUncategorizedType = ({ standards, types }) => ({
+  _id: TYPE_UNCATEGORIZED,
+  title: 'Uncategorized',
+  organizationId: getC('organizationId', standards[0]),
+  standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
+});
 
 export const getSelectedAndDefaultStandardByFilter = ({
   sections, types, standards, filter, urlItemId,
@@ -144,6 +159,92 @@ export const expandCollapsedStandard = (_id) => {
   }
 
   return store.dispatch(action);
+};
+
+export const expandCollapsedStandards = (ids) => {
+  const {
+    collections: { standards, standardBookSections, standardTypes },
+    global: { filter, collapsed },
+  } = getState();
+
+  const notCollapsed = _id => !collapsed.find(propEq('key', _id)); // reject already expanded
+  const standardsFound = standards.filter(standard => ids.includes(standard._id));
+  const uncategorizedSection = createUncategorizedSection({
+    sections: standardBookSections,
+    standards: standardsFound,
+  });
+  let sections = standardBookSections.filter(section =>
+    notCollapsed(section._id) &&
+    standardsFound.filter(propEq('sectionId', section._id)).length
+  );
+
+  sections = uncategorizedSection.standards.length
+    ? sections.concat(uncategorizedSection)
+    : sections;
+
+  switch (filter) {
+    case STANDARD_FILTER_MAP.SECTION:
+      return store.dispatch(chainActions(sections.map(addCollapsedSection)));
+    case STANDARD_FILTER_MAP.TYPE: {
+      const uncategorizedType = createUncategorizedType({
+        standards: standardsFound,
+        types: standardTypes,
+      });
+      let types = standardTypes.filter(type =>
+        notCollapsed(type._id) &&
+        standardsFound.filter(propEq('typeId', type._id)).length
+      );
+
+      types = uncategorizedType.standards.length
+        ? types.concat(uncategorizedType)
+        : types;
+
+      return store.dispatch(chainActions(
+        types.map(addCollapsedType).concat(sections.map(addCollapsedSection))
+      ));
+    }
+    default:
+      return false;
+  }
+};
+
+export const collapseExpandedStandards = () => {
+  const {
+    collections: { standardsByIds, standardTypesByIds, standardBookSectionsByIds },
+    global: { filter, urlItemId },
+  } = getState();
+  // expand section and type with currently selected standard and close others
+  const selectedStandard = standardsByIds[urlItemId];
+
+  if (!selectedStandard) return false;
+
+  const selectedSection = standardBookSectionsByIds[selectedStandard.sectionId] ||
+    { _id: SECTION_UNCATEGORIZED };
+  const selectedSectionItem = createSectionItem(getId(selectedSection));
+  const addClose = item => ({
+    ...item,
+    close: { type: item.type },
+  });
+  const sectionCollapseAction = addCollapsed(addClose(selectedSectionItem));
+
+  switch (filter) {
+    case STANDARD_FILTER_MAP.SECTION:
+      // if standards are filtered by 'section'
+      // collapse all sections except the one that is holding selected standard
+      return store.dispatch(sectionCollapseAction);
+    case STANDARD_FILTER_MAP.TYPE: {
+      // if standards are filtered by 'type'
+      // collapse all types and sections except the one that is holding selected standard
+      const selectedType = standardTypesByIds[selectedStandard.typeId] ||
+        { _id: TYPE_UNCATEGORIZED };
+      const selectedTypeItem = createTypeItem(getId(selectedType));
+      const typeCollapseAction = addCollapsed(addClose(selectedTypeItem));
+
+      return store.dispatch(chainActions([typeCollapseAction, sectionCollapseAction]));
+    }
+    default:
+      return false;
+  }
 };
 
 export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {

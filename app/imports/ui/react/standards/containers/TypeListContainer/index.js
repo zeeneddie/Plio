@@ -1,13 +1,12 @@
 import { compose, lifecycle, mapProps } from 'recompose';
 import { connect } from 'react-redux';
-import { Meteor } from 'meteor/meteor';
 
 import TypeList from '../../components/TypeList';
-import { TYPE_UNCATEGORIZED } from '../../constants';
 import {
   lengthStandards,
   propEq,
   propEqId,
+  getC,
 } from '/imports/api/helpers';
 import { getState } from '/client/redux/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
@@ -15,6 +14,7 @@ import {
   openStandardByFilter,
   getSelectedAndDefaultStandardByFilter,
   getSelectedStandardDeletedState,
+  createUncategorizedType,
 } from '../../helpers';
 
 const mapStateToProps = (state) => ({
@@ -48,11 +48,7 @@ export default compose(
   connect(mapStateToProps),
   mapProps(({ standardTypes, standards, ...props }) => {
     let types = standardTypes;
-    const uncategorized = {
-      _id: TYPE_UNCATEGORIZED,
-      title: 'Uncategorized',
-      standards: standards.filter(standard => !types.find(propEqId(standard.typeId))),
-    };
+    const uncategorized = createUncategorizedType({ types, standards });
 
     // add own standards to each type
     types = types.map(type => ({

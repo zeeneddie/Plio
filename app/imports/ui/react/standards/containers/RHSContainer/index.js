@@ -154,14 +154,12 @@ export default compose(
     );
     const getFileId = getC('fileId');
     const source1 = standard.source1 && {
-      ...props.standard.source1,
-      // file: props.filesByIds[getFileId(standard.source1)],
-      file: files.find(propEqId(getFileId(standard.source1))),
+      ...standard.source1,
+      file: props.filesByIds[getFileId(standard.source1)],
     };
     const source2 = standard.source2 && {
-      ...props.standard.source2,
+      ...standard.source2,
       file: props.filesByIds[getFileId(standard.source2)],
-      // file: files.find(propEqId(getFileId(standard.source2))),
     };
 
     standard = { ...props.standard, source1, source2 };
