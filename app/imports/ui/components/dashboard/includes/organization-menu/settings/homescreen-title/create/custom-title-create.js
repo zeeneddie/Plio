@@ -10,7 +10,7 @@ Template.CustomTitleCreate.viewmodel({
     swal(
       {
         title: 'Are you sure?',
-        text: `New title "${this.value()}" will be added.`,
+        text: `New title "${this.value()}" will replace the current one.`,
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Add',
