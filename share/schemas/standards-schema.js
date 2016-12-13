@@ -4,7 +4,7 @@ import { StandardStatuses, StringLimits } from '../constants.js';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
-  ImprovementPlanSchema, getNotifySchema
+  ImprovementPlanSchema, getNotifySchema,
 } from './schemas.js';
 
 
@@ -15,87 +15,94 @@ const optionalFields = new SimpleSchema([
   {
     description: {
       type: String,
-      optional: true
+      optional: true,
     },
     approved: {
       type: Boolean,
-      optional: true
+      optional: true,
     },
     approvedAt: {
       type: Date,
-      optional: true
+      optional: true,
     },
     notes: {
       type: String,
-      optional: true
+      optional: true,
     },
     departmentsIds: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
       defaultValue: [],
-      optional: true
+      optional: true,
     },
     source1: {
       type: Object,
-      optional: true
+      optional: true,
     },
     'source1.fileId': {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     'source1.type': {
-      type: String
+      type: String,
     },
     'source1.url': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     'source1.htmlUrl': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     source2: {
       type: Object,
-      optional: true
+      optional: true,
     },
     'source2.fileId': {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     'source2.type': {
-      type: String
+      type: String,
     },
     'source2.url': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     'source2.htmlUrl': {
       type: String,
       regEx: SimpleSchema.RegEx.Url,
-      optional: true
+      optional: true,
     },
     lessons: {
       type: [String],
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
+      optional: true,
     },
     improvementPlan: {
       type: ImprovementPlanSchema,
-      optional: true
+      optional: true,
+    },
+    standardNumber: {
+      type: Number,
+      min: 1,
+      max: 1000,
+      unique: true,
+      optional: true,
     },
     issueNumber: {
       type: Number,
       min: 1,
       max: 1000,
       defaultValue: 1,
-      optional: true
-    }
-  }
+      optional: true,
+    },
+  },
 ]);
 
 const StandardsSchema = new SimpleSchema([
@@ -106,28 +113,28 @@ const StandardsSchema = new SimpleSchema([
     title: {
       type: String,
       min: StringLimits.title.min,
-      max: StringLimits.title.max
+      max: StringLimits.title.max,
     },
     typeId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     sectionId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     nestingLevel: {
-      type: Number
+      type: Number,
     },
     owner: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     status: {
       type: String,
-      allowedValues: _.keys(StandardStatuses)
-    }
-  }
+      allowedValues: _.keys(StandardStatuses),
+    },
+  },
 ]);
 
 const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
@@ -135,44 +142,44 @@ const StandardsUpdateSchema = new SimpleSchema([optionalFields, {
     type: String,
     min: StringLimits.title.min,
     max: StringLimits.title.max,
-    optional: true
+    optional: true,
   },
   typeId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   sectionId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   nestingLevel: {
     type: Number,
-    optional: true
+    optional: true,
   },
   description: {
     type: String,
-    optional: true
+    optional: true,
   },
   owner: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    optional: true
+    optional: true,
   },
   issueNumber: {
     type: Number,
-    optional: true
+    optional: true,
   },
   status: {
     type: String,
     optional: true,
-    allowedValues: _.keys(StandardStatuses)
+    allowedValues: _.keys(StandardStatuses),
   },
   improvementPlan: {
     type: ImprovementPlanSchema,
     optional: true
-  }
+  },
 }]);
 
 const invalidUrlMessage = 'The source file url link is not valid';
@@ -180,11 +187,11 @@ const invalidUrlMessage = 'The source file url link is not valid';
 StandardsSchema.messages({
   'regEx source1.url': [{
     exp: SimpleSchema.RegEx.Url,
-    msg: invalidUrlMessage
+    msg: invalidUrlMessage,
   }],
   'regEx source2.url': [{
     exp: SimpleSchema.RegEx.Url,
-    msg: invalidUrlMessage
+    msg: invalidUrlMessage,
   }],
 });
 

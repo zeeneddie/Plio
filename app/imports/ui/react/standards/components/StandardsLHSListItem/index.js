@@ -15,6 +15,7 @@ const StandardsLHSListItem = ({
   title,
   status,
   issueNumber,
+  standardNumber,
   isDeleted,
   deletedByText,
   deletedAtText,
@@ -55,7 +56,7 @@ const StandardsLHSListItem = ({
         </div>
       </div>
       <ListItem.LeftText>
-        {type.title}
+        {type.abbreviation + (standardNumber || '')}
       </ListItem.LeftText>
       {isDeleted && (
         <ListItem.RightText>
