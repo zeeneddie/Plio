@@ -24,7 +24,13 @@ Template.HelloPage.viewmodel({
             this.goToDashboard(serialNumber);
           } else {
             const org = Organizations.findOne();
-            !!org && this.goToDashboard(org.serialNumber);
+            if (org) {
+              localStorage.setItem(
+                `${Meteor.userId()}: selectedOrganizationSerialNumber`,
+                org.serialNumber
+              );
+              this.goToDashboard(org.serialNumber);
+            }
           }
         } else {
           FlowRouter.withReplaceState(() => {

@@ -135,6 +135,18 @@ export const WorkItemsListProjection = {
   deletedBy: 1,
 };
 
+export const HelpDocsListProjection = {
+  sectionId: 1,
+  title: 1,
+  issueNumber: 1,
+  status: 1,
+};
+
+export const HelpSectionProjection = {
+  index: 1,
+  title: 1,
+};
+
 export const StandardsBookSectionsListProjection = {
   organizationId: 1,
   title: 1,

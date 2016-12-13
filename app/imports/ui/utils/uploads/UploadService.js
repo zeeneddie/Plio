@@ -45,7 +45,9 @@ export default class UploadService {
   }
 
   uploadExisting(fileId, file) {
-    this._upload(file, fileId);
+    this._subscribe(fileId, {
+      onReady: () => this._upload(file, fileId),
+    });
   }
 
   _beforeInsert(file) {
@@ -71,10 +73,7 @@ export default class UploadService {
       return;
     }
 
-    // we need to make sure that file document is available on the client,
-    // because we may read some properties of that document and call methods
-    // during upload process
-    const handle = Meteor.subscribe('fileById', fileId, {
+    this._subscribe(fileId, {
       onReady: () => {
         const afterInsertHook = this.hooks.afterInsert;
         afterInsertHook && afterInsertHook(fileId);
@@ -82,8 +81,6 @@ export default class UploadService {
         this._upload(file, fileId);
       }
     });
-
-    this._fileSubscriptions[fileId] = handle;
   }
 
   _upload(file, fileId) {
@@ -122,6 +119,14 @@ export default class UploadService {
       // it must be delivered to the client by another publication
       this._stopSubscription(fileId);
     });
+  }
+
+  _subscribe(fileId, options) {
+    // we need to make sure that file document is available on the client,
+    // because we may read some properties of that document and call methods
+    // during upload process
+    const handle = Meteor.subscribe('fileById', fileId, options);
+    this._fileSubscriptions[fileId] = handle;
   }
 
   _stopSubscription(fileId) {

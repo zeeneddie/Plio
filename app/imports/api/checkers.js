@@ -106,7 +106,7 @@ export const isPlioUser = (userId) => {
   }
 
   return _.find(adminOrg.users, user => user.userId === userId) !== undefined;
-}
+};
 
 export const isPlioAdmin = (userId) => {
   if (!SimpleSchema.RegEx.Id.test(userId)) {
@@ -125,7 +125,23 @@ export const isPlioAdmin = (userId) => {
       }
     }
   });
-}
+};
+
+export const canChangeHelpDocs = (userId) => {
+  const { _id:adminOrgId } = Organizations.findOne({
+    isAdminOrg: true,
+    users: {
+      $elemMatch: {
+        userId,
+        isRemoved: false,
+        removedBy: { $exists: false },
+        removedAt: { $exists: false }
+      }
+    }
+  }) || {};
+
+  return !!adminOrgId && canChangeStandards(userId, adminOrgId);
+};
 
 export const isOrgMemberBySelector = (userId, selector) => {
   return !!Organizations.findOne({
