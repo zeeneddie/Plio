@@ -1,8 +1,11 @@
+import { Meteor } from 'meteor/meteor';
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Random } from 'meteor/random';
 
+import { HelpDocs } from '/imports/share/collections/help-docs.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { isOrgMember } from '/imports/api/checkers.js';
+import { isOrgMember, canChangeHelpDocs } from '/imports/api/checkers.js';
 
 
 const configureSlingshot = () => {
@@ -11,7 +14,7 @@ const configureSlingshot = () => {
     standardFilesDir, improvementPlanFilesDir,
     nonConformityFilesDir, riskFilesDir,
     actionFilesDir, rootCauseAnalysisFilesDir,
-    discussionFilesDir
+    discussionFilesDir, helpDocsFilesDir,
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -216,6 +219,38 @@ const configureSlingshot = () => {
 
       return `uploads/${organizationId}/${rootCauseAnalysisFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
     }
+  });
+
+  Slingshot.createDirective('helpDocFiles', Slingshot.S3Storage, {
+    bucket: bucketName,
+
+    acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize(file, { helpDocId }) {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      const helpDoc = HelpDocs.findOne({ _id: helpDocId });
+      if (!helpDoc) {
+        throw new Meteor.Error(400, 'Help document does not exist');
+      }
+
+      if (!canChangeHelpDocs(this.userId)) {
+        throw new Meteor.Error(
+          403, 'User is not authorized for uploading files for help documents'
+        );
+      }
+
+      return true;
+    },
+
+    key(file, { helpDocId }) {
+      const { _id: organizationId } = Organizations.findOne({ isAdminOrg: true });
+      return `uploads/${organizationId}/${helpDocsFilesDir}/${helpDocId}/${Random.id()}-${file.name}`;
+    },
   });
 };
 

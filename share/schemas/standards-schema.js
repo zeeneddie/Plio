@@ -4,13 +4,15 @@ import { StandardStatuses, StringLimits } from '../constants.js';
 import {
   BaseEntitySchema, OrganizationIdSchema,
   DeletedSchema, ViewedBySchema,
-  ImprovementPlanSchema, getNotifySchema
+  ImprovementPlanSchema, getNotifySchema,
+  standardStatusSchema, issueNumberSchema,
 } from './schemas.js';
 
 
 const optionalFields = new SimpleSchema([
   DeletedSchema,
   ViewedBySchema,
+  issueNumberSchema,
   getNotifySchema('owner'),
   {
     description: {
@@ -88,13 +90,6 @@ const optionalFields = new SimpleSchema([
       type: ImprovementPlanSchema,
       optional: true
     },
-    issueNumber: {
-      type: Number,
-      min: 1,
-      max: 1000,
-      defaultValue: 1,
-      optional: true
-    }
   }
 ]);
 
@@ -102,6 +97,7 @@ const StandardsSchema = new SimpleSchema([
   optionalFields,
   BaseEntitySchema,
   OrganizationIdSchema,
+  standardStatusSchema,
   {
     title: {
       type: String,
@@ -123,10 +119,6 @@ const StandardsSchema = new SimpleSchema([
       type: String,
       regEx: SimpleSchema.RegEx.Id
     },
-    status: {
-      type: String,
-      allowedValues: _.keys(StandardStatuses)
-    }
   }
 ]);
 

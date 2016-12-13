@@ -8,6 +8,7 @@ Template.Subcards_Notify_Edit.viewmodel({
   doc: '',
   documentType: '',
   placeholder: 'User to notify',
+  membersQuery: '',
   selectArgs() {
     const {
       placeholder,
@@ -18,6 +19,7 @@ Template.Subcards_Notify_Edit.viewmodel({
     return {
       values,
       placeholder,
+      query: this.membersQuery(),
       onUpdate: ({ user, userId, users }) =>
         this.addToNotifyList(userId),
       onRemove: ({ user, userId, users }) =>

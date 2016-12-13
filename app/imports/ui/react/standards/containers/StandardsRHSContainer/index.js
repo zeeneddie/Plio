@@ -25,7 +25,6 @@ import {
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import StandardsRHS from '../../components/StandardsRHS';
 import {
-  onToggleScreenMode,
   onDiscussionOpen,
   onModalOpen,
   onRestore,
@@ -33,10 +32,11 @@ import {
 } from './handlers';
 import { getPathToDiscussion, getStandardsByFilter, withStandard } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
+import onToggleScreenMode from '../../../handlers/onToggleScreenMode';
 
 const mapStateToProps = ({
-  standards: { standards, isCardReady, isFullScreenMode },
-  global: { urlItemId, userId, filter },
+  standards: { standards },
+  global: { urlItemId, userId, filter, isCardReady, isFullScreenMode },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
   collections: { files, ncs, risks, actions, workItems, lessons },
@@ -61,7 +61,7 @@ const mapStateToProps = ({
 export default compose(
   connect(pickDeep([
     'standards.standards',
-    'standards.isCardReady',
+    'global.isCardReady',
     'global.urlItemId',
     'global.filter',
   ])),
@@ -72,6 +72,11 @@ export default compose(
     renderComponent(StandardsRHS.NotFound),
   ),
   withStandard,
+  branch(
+    ({ isCardReady, urlItemId, standard }) => isCardReady && urlItemId && !standard,
+    renderComponent(StandardsRHS.NotExist),
+    _.identity,
+  ),
   withProps(props => ({
     isReady: !!(props.isCardReady && props.standards.length && props.standard),
     names: {

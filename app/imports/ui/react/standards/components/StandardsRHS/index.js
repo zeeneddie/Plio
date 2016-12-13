@@ -7,6 +7,7 @@ import HeaderButtons from './HeaderButtons';
 import ContentList from './ContentList';
 import Body from './Body';
 import NotFound from './NotFound';
+import NotExist from './NotExist';
 
 const StandardsRHS = (props) => (
   <RHS
@@ -24,7 +25,7 @@ const StandardsRHS = (props) => (
           isDiscussionOpened={props.isDiscussionOpened}
           names={props.names.headerNames}
           isDeleted={props.standard ? props.standard.isDeleted : false}
-          unreadMessagesCount={props.standard.unreadMessagesCount}
+          unreadMessagesCount={props.standard ? props.standard.unreadMessagesCount : 0}
           pathToDiscussion={props.pathToDiscussion}
           hasDocxAttachment={props.hasDocxAttachment}
           hasAccess={props.hasAccess}
@@ -59,5 +60,6 @@ StandardsRHS.HeaderButtons = HeaderButtons;
 StandardsRHS.ContentList = ContentList;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
+StandardsRHS.NotExist = NotExist;
 
 export default StandardsRHS;

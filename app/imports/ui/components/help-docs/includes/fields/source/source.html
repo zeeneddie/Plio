@@ -1,0 +1,12 @@
+<template name="HelpDocs_Source_Edit">
+  {{> Sources_Edit
+      label="Source file"
+      sourceType=sourceType
+      sourceUrl=sourceUrl
+      sourceFileId=sourceFileId
+      sourceHtmlUrl=sourceHtmlUrl
+      slingshotDirective='helpDocFiles'
+      metaContext=uploaderMetaContext
+      convertDocxToHtml=(callback 'convertDocxToHtml')
+      fileData=fileData}}
+</template>

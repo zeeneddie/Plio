@@ -49,7 +49,12 @@ export const insert = new Method({
 
     ACT_LinkedDocsChecker(linkedTo);
 
-    return ActionService.insert({ organizationId, linkedTo, ...args });
+    return ActionService.insert({
+      organizationId,
+      linkedTo,
+      completionAssignedBy: this.userId,
+      ...args,
+    });
   }
 });
 
@@ -138,7 +143,11 @@ export const setCompletionExecutor = new CheckedMethod({
   },
 
   run({ _id, ...args }) {
-    return ActionService.setCompletionExecutor({ _id, ...args });
+    return ActionService.setCompletionExecutor({
+      _id,
+      assignedBy: this.userId,
+      ...args,
+    });
   }
 });
 
@@ -179,7 +188,11 @@ export const setVerificationExecutor = new CheckedMethod({
   },
 
   run({ _id, ...args }) {
-    return ActionService.setVerificationExecutor({ _id, ...args });
+    return ActionService.setVerificationExecutor({
+      _id,
+      assignedBy: this.userId,
+      ...args,
+    });
   }
 });
 
