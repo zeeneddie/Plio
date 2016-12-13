@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { insert } from '/imports/api/standards-book-sections/methods.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 
 Template.ESBookSectionCreate.viewmodel({
@@ -35,7 +36,13 @@ Template.ESBookSectionCreate.viewmodel({
       if (err) {
         swal('Oops... Something went wrong!', err.reason, 'error');
       } else {
-        swal("Added!", `Section "${this.value()}" was added successfully.`, "success");
+        swal({
+          title: 'Added!',
+          text: `Section "${this.value()}" was added successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
 
         this.selected(_id);
 

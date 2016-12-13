@@ -7,9 +7,9 @@ import TitleSelect from '../TitleSelect';
 import {
   StandardTitles,
   RiskTitles,
-  NonConformitieTitles,
+  NonConformitiesTitles,
   WorkInboxTitles,
-} from '/imports/api/constants';
+} from '/imports/share/constants';
 
 
 const HomeTitlesSubcard = ({
@@ -44,9 +44,9 @@ const HomeTitlesSubcard = ({
         />
 
         <TitleSelect
-          name="noconformities"
+          name="nonConformities"
           label="Non-conformities"
-          items={NonConformitieTitles}
+          items={NonConformitiesTitles}
           selected={titles.nonConformities}
         />
 

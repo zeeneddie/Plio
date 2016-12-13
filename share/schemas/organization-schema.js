@@ -1,13 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { OrgCurrencies,  WorkflowTypes, UserMembership } from '../constants.js';
-import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 import {
-  StandardTitles,
-  RiskTitles,
-  NonConformitieTitles,
+  OrgCurrencies, WorkflowTypes, UserMembership,
+  StandardTitles, RiskTitles, NonConformitiesTitles,
   WorkInboxTitles,
-} from '/imports/api/constants';
+} from '../constants.js';
+import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
 export const HomeTitlesSchema = new SimpleSchema({
   standards: {
@@ -215,7 +213,7 @@ const OrganizationSchema = new SimpleSchema([
       defaultValue: {
         standards: _.first(StandardTitles),
         risks: _.first(RiskTitles),
-        nonConformities: _.first(NonConformitieTitles),
+        nonConformities: _.first(NonConformitiesTitles),
         workInbox: _.first(WorkInboxTitles),
       },
     },

@@ -477,6 +477,30 @@ export const OrganizationDefaults = {
   rkScoringGuidelines: defaultRiskScoringGuideline
 };
 
+export const StandardTitles = [
+  'Standards',
+  'Compliance standards',
+  'Compliance manual',
+  'Quality standards',
+  'Quality manual',
+];
+
+export const RiskTitles = [
+  'Risk register',
+  'Risk records',
+  'Risks',
+];
+
+export const NonConformitiesTitles = [
+  'Non-conformities',
+  'Exceptions',
+];
+
+export const WorkInboxTitles = [
+  'Work inbox',
+  'Work items',
+  'Work',
+];
 
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',
