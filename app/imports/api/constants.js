@@ -207,29 +207,4 @@ export const MarginMap = {
   bottom: 'margin-bottom',
 };
 
-export const StandardTitles = [
-  'Standards',
-  'Compliance standards',
-  'Compliance manual',
-  'Quality standards',
-  'Quality manual',
-];
-
-export const RiskTitles = [
-  'Risk register',
-  'Risk records',
-  'Risks',
-];
-
-export const NonConformitieTitles = [
-  'Non-conformities',
-  'Exceptions',
-];
-
-export const WorkInboxTitles = [
-  'Work inbox',
-  'Work items',
-  'Work',
-];
-
 export const MOBILE_BREAKPOINT = 768;
