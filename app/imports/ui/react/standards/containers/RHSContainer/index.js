@@ -108,15 +108,11 @@ export default compose(
     _.identity,
     renderComponent(StandardsRHS.NotFound),
   ),
-  branch(
-    props => props.isReady,
-    _.identity,
-    renderComponent(StandardsRHS),
-  ),
   shouldUpdate((props, nextProps) => {
     const omitStandardKeys = omitC(['updatedAt']);
     const compareBySeqId = compareByProps(['title', 'serialNumber']);
-    return !!nextProps.standard && !!(
+    return !!(
+      props.isReady !== nextProps.isReady ||
       props.userId !== nextProps.userId ||
       props.organizationId !== nextProps.organizationId ||
       props.isFullScreenMode !== nextProps.isFullScreenMode ||

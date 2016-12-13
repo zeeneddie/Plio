@@ -1,7 +1,7 @@
 export const ActionPlanOptions = {
   YES: 'Yes',
   NO: 'No',
-  NOT_NEEDED: 'Not needed'
+  NOT_NEEDED: 'Not needed',
 };
 
 export const ActionStatuses = {
@@ -14,20 +14,20 @@ export const ActionStatuses = {
   7: 'Completed - failed verification',
   8: 'Completed - verified as effective',
   9: 'Completed',
-  10: 'Deleted'
+  10: 'Deleted',
 };
 
 export const ActionTypes = {
   CORRECTIVE_ACTION: 'CA',
   PREVENTATIVE_ACTION: 'PA',
-  RISK_CONTROL: 'RC'
+  RISK_CONTROL: 'RC',
 };
 
 export const ActionUndoTimeInHours = 1;
 
 export const AnalysisStatuses = {
   0: 'Not completed',
-  1: 'Completed'
+  1: 'Completed',
 };
 
 export const AvatarPlaceholders = [
@@ -46,11 +46,11 @@ export const AvatarPlaceholders = [
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/13.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/14.png',
   'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/15.png',
-  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png'
+  'https://s3-eu-west-1.amazonaws.com/plio/avatar-placeholders/16.png',
 ];
 
 export const PlioS3Logos = {
-  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
+  square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
 }
 
 export const CollectionNames = {
@@ -71,109 +71,109 @@ export const CollectionNames = {
   STANDARD_TYPES: 'StandardTypes',
   STANDARD_BOOK_SECTIONS: 'StandardsBookSections',
   STANDARDS: 'Standards',
-  WORK_ITEMS: 'WorkItems'
+  WORK_ITEMS: 'WorkItems',
 };
 
 export const DefaultRiskTypes = [
   {
-    title: 'Credit risk'
+    title: 'Credit risk',
   },
   {
-    title: 'Liquidity risk'
+    title: 'Liquidity risk',
   },
   {
-    title: 'Market risk'
+    title: 'Market risk',
   },
   {
-    title: 'Operational risk'
+    title: 'Operational risk',
   },
   {
-    title: 'Regulatory risk'
+    title: 'Regulatory risk',
   },
   {
-    title: 'Reputational risk'
+    title: 'Reputational risk',
   },
   {
-    title: 'Infosecurity risk'
-  }
+    title: 'Infosecurity risk',
+  },
 ];
 
 export const DefaultStandardSections = [
   {
-    title: 'Introduction'
+    title: 'Introduction',
   },
   {
-    title: 'High level standards'
+    title: 'High level standards',
   },
   {
-    title: 'Business standards'
-  }
+    title: 'Business standards',
+  },
 ];
 
 export const DefaultStandardTypes = [
   {
     title: 'Process',
-    abbreviation: 'PRO'
+    abbreviation: 'PRO',
   },
   {
     title: 'Policy',
-    abbreviation: 'POL'
+    abbreviation: 'POL',
   },
   {
     title: 'Checklist',
-    abbreviation: 'CHK'
+    abbreviation: 'CHK',
   },
   {
     title: 'Compliance management objective',
-    abbreviation: 'CMO'
+    abbreviation: 'CMO',
   },
   {
     title: 'Compliance obligation',
-    abbreviation: 'COB'
+    abbreviation: 'COB',
   },
   {
     title: 'Standard operating procedure',
-    abbreviation: 'SOP'
+    abbreviation: 'SOP',
   },
   {
     title: 'Work instruction',
-    abbreviation: 'WORK'
+    abbreviation: 'WORK',
   },
   {
     title: 'Product specification',
-    abbreviation: 'SPEC'
+    abbreviation: 'SPEC',
   },
   {
     title: 'Risk control',
-    abbreviation: 'RSC'
+    abbreviation: 'RSC',
   },
   {
-    title: 'Section header'
-  }
+    title: 'Section header',
+  },
 ];
 
 export const DocChangesKinds = {
   DOC_CREATED: 1,
   DOC_UPDATED: 2,
-  DOC_REMOVED: 3
+  DOC_REMOVED: 3,
 };
 
 export const InvitationStatuses = {
   failed: 0,
   invited: 1,
-  added: 2
+  added: 2,
 };
 
 export const PhoneTypes = {
   WORK: 'Work',
   HOME: 'Home',
-  MOBILE: 'Mobile'
+  MOBILE: 'Mobile',
 };
 
 export const ProblemMagnitudes = {
   MINOR: 'minor',
   MAJOR: 'major',
-  CRITICAL: 'critical'
+  CRITICAL: 'critical',
 };
 
 export const ProblemsStatuses = {
@@ -196,24 +196,24 @@ export const ProblemsStatuses = {
   17: 'Open - action(s) failed verification',
   18: 'Closed - action(s) completed',
   19: 'Closed - action(s) verified, standard(s) reviewed',
-  20: 'Deleted'
+  20: 'Deleted',
 };
 
 export const ProblemTypes = {
   NON_CONFORMITY: 'non-conformity',
-  RISK: 'risk'
+  RISK: 'risk',
 };
 
 export const DocumentTypes = {
   STANDARD: 'standard',
   ...ProblemTypes,
-  ...ActionTypes
+  ...ActionTypes,
 };
 
 export const ReviewStatuses = {
   0: 'Overdue',
   1: 'Awaiting review',
-  2: 'Up-to-date'
+  2: 'Up-to-date',
 };
 
 export const RCAMaxCauses = 5;
@@ -222,7 +222,7 @@ export const RiskEvaluationDecisions = {
   'tolerate': 'Tolerate',
   'treat': 'Treat',
   'transfer': 'Transfer',
-  'terminate': 'Terminate'
+  'terminate': 'Terminate',
 };
 
 export const RiskEvaluationPriorities = {

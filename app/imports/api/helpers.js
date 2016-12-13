@@ -177,6 +177,8 @@ export const propEq = curry((path, assumption, obj) => equals(get(obj, path), as
 
 export const propEqId = propEq('_id');
 
+export const findIndexById = curry((_id, array) => array.findIndex(propEqId(_id)));
+
 export const T = () => true;
 
 export const F = () => false;
@@ -465,4 +467,3 @@ export const getUserJoinedAt = (organization = {}, userId) => {
 };
 
 export const looksLikeAPromise = fn => typeof fn === 'function' && typeof fn.then === 'function';
- 

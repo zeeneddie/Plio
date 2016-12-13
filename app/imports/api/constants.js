@@ -1,3 +1,8 @@
+import { CollectionNames } from '/imports/share/constants';
+
+const mirrorKeys = (obj = {}) => Object.keys(obj)
+  .reduce((prev, cur) => ({ ...prev, [cur]: cur }), {});
+
 export const DEFAULT_POLLING_INTERVAL_FOR_COUNTER = 5000; // 5 sec
 export const ALERT_AUTOHIDE_TIME = 1500;
 
@@ -214,3 +219,5 @@ export const FILE_TYPE_MAP = {
   ATTACHMENT: 'attachment',
   VIDEO: 'video',
 };
+
+export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);
