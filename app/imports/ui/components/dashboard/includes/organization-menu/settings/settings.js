@@ -10,6 +10,8 @@ import {
 import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';
 
+import HomeTitlesSubcardContainer
+  from '/imports/ui/react/organization-settings/containers/HomeTitlesSubcardContainer';
 
 Template.OrgSettings.viewmodel({
   mixin: 'organization',
@@ -21,6 +23,9 @@ Template.OrgSettings.viewmodel({
     if (org) {
       this.load(_.pick(org, ['name', 'currency', 'timezone']));
     }
+  },
+  homeTitlesSubcard() {
+    return HomeTitlesSubcardContainer;
   },
   departments() {
     const query = { organizationId: this.organizationId() };

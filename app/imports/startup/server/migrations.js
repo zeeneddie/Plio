@@ -92,6 +92,34 @@ Migrations.add({
   down() { },
 });
 
+Migrations.add({
+  version: 3,
+  name: 'Add default screen titles to organizations',
+  up() {
+    Organizations.update(
+      { homeScreenTitles: null },
+      {
+        $set: {
+          homeScreenTitles: {
+            standards: 'Standards',
+            risks: 'Risk register',
+            nonConformities: 'Non-conformities',
+            workInbox: 'Work inbox',
+          },
+        },
+      },
+      { multi: true },
+    );
+
+    console.log('Default screen titles was be added to all organization');
+  },
+  down() {
+    Organizations.update({}, { $unset: { homeScreenTitles: '' } }, { multi: true });
+
+    console.log('Default screen titles was be removed from all organization');
+  },
+});
+
 Meteor.startup(() => {
   Migrations.migrateTo('latest');
 });

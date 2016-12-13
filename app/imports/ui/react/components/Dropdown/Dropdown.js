@@ -11,7 +11,7 @@ const getMenuValue = (menu, index) => get(menu, `props.children[${index}].props.
 
 const enhance = mapProps(props => ({
   ...props,
-  children: React.Children.map(props.children, child => {
+  children: React.Children.map(props.children.filter(Boolean), child => {
     switch (child.type) {
       case Menu:
         return React.cloneElement(child, {
