@@ -141,10 +141,6 @@
     }
   }
 
-  &-footer {
-    border-radius: 0 0 4px 4px;
-  }
-
   @media (max-width: 767px) {
     .card-content {
       min-height: inherit;
@@ -152,8 +148,11 @@
   }
 }
 
-
-
+.card:not(.dashboard-item) .card-footer {
+  border-radius: 0 0 4px 4px;
+  background: #f5f5f5;
+  border-top: 0;
+}
 
 .content-cards {
   @include flex(1);
@@ -395,4 +394,9 @@
       visibility: hidden;
     }
   }
+}
+
+.card-footer {
+  background: transparent;
+  min-height: 65px;
 }

@@ -100,7 +100,11 @@ export const setAnalysisExecutor = new CheckedMethod({
   check: checker => injectRK(checker)(P_OnSetAnalysisExecutorChecker),
 
   run({ _id, executor }, doc) {
-    return RisksService.setAnalysisExecutor({ _id, executor }, doc);
+    return RisksService.setAnalysisExecutor({
+      _id,
+      executor,
+      assignedBy: this.userId,
+    }, doc);
   }
 });
 
@@ -239,7 +243,11 @@ export const setStandardsUpdateExecutor = new CheckedMethod({
   check: checker => injectRK(checker)(P_OnSetStandardsUpdateExecutorChecker),
 
   run({ _id, executor }, doc) {
-    return RisksService.setStandardsUpdateExecutor({ _id, executor }, doc);
+    return RisksService.setStandardsUpdateExecutor({
+      _id,
+      executor,
+      assignedBy: this.userId,
+    }, doc);
   }
 });
 

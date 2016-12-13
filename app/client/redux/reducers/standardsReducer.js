@@ -11,9 +11,7 @@ import {
   INIT_TYPES,
   SET_TYPES,
   INIT_STANDARDS,
-  SET_IS_CARD_READY,
   SET_FILTERED_STANDARDS,
-  SET_IS_FULL_SCREEN_MODE,
 } from '../actions/types';
 
 const initialState = {
@@ -21,8 +19,6 @@ const initialState = {
   types: [],
   standards: [],
   standardsFiltered: [],
-  isCardReady: false,
-  isFullScreenMode: false,
 };
 
 export default function reducer(state = initialState, action) {
@@ -30,9 +26,7 @@ export default function reducer(state = initialState, action) {
     case SET_SECTIONS:
     case SET_STANDARDS:
     case SET_TYPES:
-    case SET_IS_CARD_READY:
     case SET_FILTERED_STANDARDS:
-    case SET_IS_FULL_SCREEN_MODE:
       return { ...state, ...action.payload };
     case INIT_SECTIONS:
       return { ...state, sections: initSections(action.payload) };

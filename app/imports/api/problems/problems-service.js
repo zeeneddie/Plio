@@ -34,11 +34,16 @@ export default {
     return this.collection.update(query, options);
   },
 
-  setAnalysisExecutor({ _id, executor }, doc) {
+  setAnalysisExecutor({ _id, executor, assignedBy }, doc) {
     const { analysis = {}, ...rest } = doc;
 
     const query = { _id };
-    const options = { $set: { 'analysis.executor': executor } };
+    const options = {
+      $set: {
+        'analysis.executor': executor,
+        'analysis.assignedBy': assignedBy,
+      },
+    };
 
     const ret = this.collection.update(query, options);
 
@@ -153,11 +158,16 @@ export default {
     return ret;
   },
 
-  setStandardsUpdateExecutor({ _id, executor }, doc) {
+  setStandardsUpdateExecutor({ _id, executor, assignedBy }, doc) {
     const { updateOfStandards = {}, ...rest } = doc;
 
     const query = { _id };
-    const options = { $set: { 'updateOfStandards.executor': executor } };
+    const options = {
+      $set: {
+        'updateOfStandards.executor': executor,
+        'updateOfStandards.assignedBy': assignedBy,
+      },
+    };
 
     const ret = this.collection.update(query, options);
 

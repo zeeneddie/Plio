@@ -1,9 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 import moment from 'moment-timezone';
 
 import {
   TimeUnits, DocumentTypes, AnalysisStatuses,
-  ReviewStatuses, SystemName, StringLimits
+  ReviewStatuses, SystemName, StringLimits,
+  StandardStatuses,
 } from '../constants.js';
 
 
@@ -360,7 +362,12 @@ export const BaseProblemsOptionalSchema = ((() => {
         type: String,
         regEx: SimpleSchema.RegEx.Id,
         optional: true
-      }
+      },
+      [`${key}.assignedBy`]: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true,
+      },
     };
   };
 
@@ -466,3 +473,27 @@ export const CompleteActionSchema = new SimpleSchema([
     }
   }
 ]);
+
+export const ownerIdSchema = new SimpleSchema({
+  ownerId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+  },
+});
+
+export const standardStatusSchema = new SimpleSchema({
+  status: {
+    type: String,
+    allowedValues: _.keys(StandardStatuses),
+  },
+});
+
+export const issueNumberSchema = new SimpleSchema({
+  issueNumber: {
+    type: Number,
+    min: 1,
+    max: 1000,
+    defaultValue: 1,
+    optional: true,
+  },
+});

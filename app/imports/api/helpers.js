@@ -449,6 +449,10 @@ export const compareStatusesByPriority = (() => {
   };
 })();
 
+export const getSelectedOrgSerialNumber = () => (
+  localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
+);
+
 export const getUserJoinedAt = (organization = {}, userId) => {
   const currentUserInOrg = [...organization.users].find(propEq('userId', userId));
   const joinedAt = getC('joinedAt', currentUserInOrg);

@@ -12,6 +12,17 @@ export default class BaseEntityService {
     this.collection = collection;
   }
 
+  update({ _id, query = {}, options = {}, ...args }) {
+    if (!_.keys(query).length > 0) {
+      query = { _id };
+    }
+    if (!_.keys(options).length > 0) {
+      options['$set'] = args;
+    }
+
+    return this.collection.update(query, options);
+  }
+
   updateViewedBy({ _id, viewedBy }) {
     const query = { _id };
     const options = { $addToSet: { viewedBy } };
