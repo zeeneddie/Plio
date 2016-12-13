@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import propTypes from './propTypes';
-
-const FieldRead = ({ label, className, children }) => (
+const Field = ({ label, className, children }) => (
   <div className="list-group-item">
     {label && (
       <p className="list-group-item-text">{label}</p>
@@ -14,6 +12,10 @@ const FieldRead = ({ label, className, children }) => (
   </div>
 );
 
-FieldRead.propTypes = propTypes;
+Field.propTypes = {
+  label: PropTypes.string,
+  className: PropTypes.string,
+  children: PropTypes.node,
+};
 
-export default FieldRead;
+export default Field;

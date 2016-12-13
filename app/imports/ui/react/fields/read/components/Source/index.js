@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-import FileItem from '../../fields/read/components/FileItem';
-import Iframe from '../Iframe';
-import IframeWrapper from '../IframeWrapper';
-import propTypes from './propTypes';
-import getVideoSource from '../../helpers/getVideoSource';
+import FileItem from '../FileItem';
+import Iframe from '../../../../components/Iframe';
+import IframeWrapper from '../../../../components/IframeWrapper';
+import getVideoSource from '../../../../helpers/getVideoSource';
 import { FILE_TYPE_MAP } from '/imports/api/constants';
 
 const getSourceTitle = (id) => {
@@ -55,6 +54,11 @@ const SourceRead = ({ id, type, url, file }) => {
   );
 };
 
-SourceRead.propTypes = propTypes;
+SourceRead.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  type: PropTypes.oneOf(['url', 'attachment', 'video']),
+  url: PropTypes.string,
+  file: PropTypes.object,
+};
 
 export default SourceRead;

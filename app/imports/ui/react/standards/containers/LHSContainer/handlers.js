@@ -43,12 +43,6 @@ export const needToSearchPrecisely = (value) => {
 
 export const onSearchTextChange = _.debounce(({
   dispatch,
-  sections,
-  types,
-  standards,
-  urlItemId,
-  filter,
-  collapsed,
   collapseOnSearch,
 }, target) => {
   const value = target.value;
@@ -61,12 +55,10 @@ export const onSearchTextChange = _.debounce(({
   const options = { sort: { title: 1 } };
   const standardsFound = Standards.find(query, options).fetch();
   const standardsFoundIds = extractIds(standardsFound);
-  const newStandards = standards.filter(standard =>
-    standardsFoundIds.includes(standard._id));
 
   let actions = [
     setSearchText(value),
-    setFilteredStandards(extractIds(newStandards)),
+    setFilteredStandards(standardsFoundIds),
   ];
 
   if (collapseOnSearch) actions = actions.concat(setAnimating(true));

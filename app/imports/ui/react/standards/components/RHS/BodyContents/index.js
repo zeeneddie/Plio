@@ -9,11 +9,11 @@ import _actionStatus_ from '/imports/startup/client/mixins/actionStatus';
 import _workInbox_ from '/imports/startup/client/mixins/workInbox';
 import { ActionTypes } from '/imports/share/constants';
 import createReadFields from '../../../../helpers/createReadFields';
-import DepartmentsReadContainer from '../../../../containers/DepartmentsReadContainer';
-import SourceRead from '../../../../components/SourceRead';
-import NotifyRead from '../../../../components/NotifyRead';
-import FieldReadLinkItemList from '../../../../components/FieldReadLinkItemList';
-import IPRead from '../../../../components/IPRead';
+import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
+import Source from '../../../../fields/read/components/Source';
+import Notify from '../../../../fields/read/components/Notify';
+import LinkItemList from '../../../../fields/read/components/LinkItemList';
+import IP from '../../../../fields/read/components/IP';
 
 const StandardsRHSBodyContents = ({
   description,
@@ -91,22 +91,22 @@ const StandardsRHSBodyContents = ({
         </div>
 
         {departmentsIds.length ? (
-          <DepartmentsReadContainer departmentsIds={departmentsIds} />
+          <DepartmentsContainer departmentsIds={departmentsIds} />
         ) : null}
 
         {source1 ? (
-          <SourceRead {...source1} id={1} />
+          <Source {...source1} id={1} />
         ) : null}
 
         {source2 ? (
-          <SourceRead {...source2} id={2} />
+          <Source {...source2} id={2} />
         ) : null}
       </div>
 
-      {notify ? (<NotifyRead users={[...notify]} />) : null}
+      {notify ? (<Notify users={[...notify]} />) : null}
 
       {ncs.length ? (
-        <FieldReadLinkItemList
+        <LinkItemList
           label="Non-conformities"
           items={ncsMapped}
           orgSerialNumber={orgSerialNumber}
@@ -114,7 +114,7 @@ const StandardsRHSBodyContents = ({
       ) : null}
 
       {risks.length ? (
-        <FieldReadLinkItemList
+        <LinkItemList
           label="Risks"
           items={risksMapped}
           orgSerialNumber={orgSerialNumber}
@@ -122,7 +122,7 @@ const StandardsRHSBodyContents = ({
       ) : null}
 
       {actionsByType[ActionTypes.CORRECTIVE_ACTION].length ? (
-        <FieldReadLinkItemList
+        <LinkItemList
           label="Corrective actions"
           items={actionsByType[ActionTypes.CORRECTIVE_ACTION]}
           orgSerialNumber={orgSerialNumber}
@@ -130,7 +130,7 @@ const StandardsRHSBodyContents = ({
       ) : null}
 
       {actionsByType[ActionTypes.PREVENTATIVE_ACTION].length ? (
-        <FieldReadLinkItemList
+        <LinkItemList
           label="Preventative actions"
           items={actionsByType[ActionTypes.PREVENTATIVE_ACTION]}
           orgSerialNumber={orgSerialNumber}
@@ -138,14 +138,14 @@ const StandardsRHSBodyContents = ({
       ) : null}
 
       {improvementPlan ? (
-        <IPRead
+        <IP
           label="Improvement Plan"
           {...improvementPlan}
         />
       ) : null}
 
       {lessons.length ? (
-        <FieldReadLinkItemList
+        <LinkItemList
           label="Lessons learned"
           items={lessonsMapped}
           orgSerialNumber={orgSerialNumber}

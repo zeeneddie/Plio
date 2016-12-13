@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 
-import FieldReadBlock from '../FieldReadBlock';
-import FileItemContainer from '../../fields/read/containers/FileItemContainer';
+import Block from '../Block';
+import FileItemContainer from '../../containers/FileItemContainer';
 import _date_ from '/imports/startup/client/mixins/date';
 import _user_ from '/imports/startup/client/mixins/user';
-import createReadFields from '../../helpers/createReadFields';
-import propTypes from './propTypes';
+import createReadFields from '../../../../helpers/createReadFields';
 
 const renderReviewDates = (reviewDates = []) => reviewDates
   .map(doc => _date_.renderDate(doc.date))
@@ -28,12 +27,12 @@ const renderFields = ({ desiredOutcome, targetDate, owner, reviewDates, fileIds 
     {
       label: 'Means statement',
       text: fileIds.length && fileIds.map(fileId => (
-        <FileItemContainer key={fileId} _id={fileId} />
+        <FileItemContainer key={fileId} fileId={fileId} />
       )),
     },
   ];
 
-  return _.values(createReadFields(data)).map((field, i) => ({ ...field, key: i }));
+  return _.values(createReadFields(data)).map((field, key) => ({ ...field, key }));
 };
 
 const IPRead = ({
@@ -43,12 +42,21 @@ const IPRead = ({
   owner,
   reviewDates = [],
   fileIds = [],
-}) => (desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length) ? (
-  <FieldReadBlock label={label}>
-    {[...renderFields({ desiredOutcome, targetDate, owner, reviewDates, fileIds })]}
-  </FieldReadBlock>
-) : null;
+}) => (
+  (desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length) ? (
+    <Block label={label}>
+      {[...renderFields({ desiredOutcome, targetDate, owner, reviewDates, fileIds })]}
+    </Block>
+  ) : null
+);
 
-IPRead.propTypes = propTypes;
+IPRead.propTypes = {
+  label: PropTypes.string.isRequired,
+  desiredOutcome: PropTypes.string,
+  targetDate: PropTypes.instanceOf(Date),
+  owner: PropTypes.string,
+  reviewDates: PropTypes.arrayOf(PropTypes.shape({ date: PropTypes.instanceOf(Date) })),
+  fileIds: PropTypes.arrayOf(PropTypes.string),
+};
 
 export default IPRead;

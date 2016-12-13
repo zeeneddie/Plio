@@ -40,7 +40,7 @@ export const getMessageContents = (props) => {
       });
       return <span dangerouslySetInnerHTML={createMarkup()}></span>;
     case 'file':
-      return props.fileId && <FileItemContainer _id={props.fileId} />;
+      return props.fileId && <FileItemContainer fileId={props.fileId} />;
     default:
       return props.text;
   }

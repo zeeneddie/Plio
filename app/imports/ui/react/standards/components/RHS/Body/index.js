@@ -6,7 +6,7 @@ import Collapse from '../../../../components/Collapse';
 import BodyHeading from '../BodyHeading';
 import BodyContents from '../BodyContents';
 import SourceWordDocument from '../../../../components/SourceWordDocument';
-import SourceRead from '../../../../components/SourceRead';
+import Source from '../../../../fields/read/components/Source';
 import Wrapper from '../../../../components/Wrapper';
 
 const StandardsRHSBody = (props) => (
@@ -29,12 +29,12 @@ const StandardsRHSBody = (props) => (
     </Collapse>
     {getC('standard.source1.htmlUrl', props) && (
       <SourceWordDocument src={props.standard.source1.htmlUrl}>
-        <SourceRead id={1} {...props.standard.source1} />
+        <Source id={1} {...props.standard.source1} />
       </SourceWordDocument>
     )}
     {getC('standard.source2.htmlUrl', props) && (
       <SourceWordDocument src={props.standard.source2.htmlUrl}>
-        <SourceRead id={2} {...props.standard.source2} />
+        <Source id={2} {...props.standard.source2} />
       </SourceWordDocument>
     )}
   </Wrapper>
