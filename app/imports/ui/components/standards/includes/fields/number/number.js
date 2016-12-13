@@ -14,7 +14,7 @@ Template.StandardNumberField.viewmodel({
   },
   inputArgs() {
     return {
-      placeholder: 'Number',
+      placeholder: '#',
       value: this.standardNumber,
       className: 'form-control',
       onFocusOut: this.update.bind(this),

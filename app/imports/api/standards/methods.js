@@ -52,7 +52,7 @@ export const update = new CheckedMethod({
       if (e.code === UNIQUE_FIELD_MONGO_ERROR_CODE) {
         throw new Meteor.Error(
           'unique-field-error',
-          'Unique field save error. Please check field with "unique" label'
+          'Unique field saving error. Please check field with "unique" label'
         );
       }
 
