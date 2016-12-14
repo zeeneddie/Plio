@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 
 import { getPathToDiscussion } from '../../../helpers/routeHelpers';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
-import { pickDeep, getC, getId } from '/imports/api/helpers';
+import { pickDeep } from '/imports/api/helpers';
 import {
   onToggleScreenMode,
   onDiscussionOpen,
-  onModalOpen, // TODO: fix
+  onModalOpen,
   onRestore,
   onDelete,
 } from './handlers';
@@ -21,14 +21,14 @@ export default compose(
     'discussions.isDiscussionOpened',
   ])),
 
-  mapProps(({ standard, organizationId, userId, ...props }) => {
+  mapProps(({ standard: { _id, isDeleted = false }, organizationId, userId, ...props }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);
-    const pathToDiscussion = getPathToDiscussion({ urlItemId: getId(standard) });
-    const isDeleted = getC('isDeleted', standard);
+    const pathToDiscussion = getPathToDiscussion({ urlItemId: _id });
 
     return {
       ...props,
+      _id,
       hasAccess,
       hasFullAccess,
       pathToDiscussion,

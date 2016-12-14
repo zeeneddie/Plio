@@ -8,13 +8,7 @@ const LinkItemList = ({ items, label }) => (
   <Block label={label}>
     <Field>
       {items.map(({ _id, href, indicator, title, sequentialId }) => (
-        <LinkItem
-          key={_id}
-          href={href}
-          indicator={indicator}
-          title={title}
-          sequentialId={sequentialId}
-        />
+        <LinkItem key={_id} {...{ href, indicator, title, sequentialId }} />
       ))}
     </Field>
   </Block>

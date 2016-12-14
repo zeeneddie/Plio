@@ -129,15 +129,4 @@ export default {
       }
     };
   },
-  _splitActionsByType(actions) {
-    const propEqType = propEq('type');
-    return {
-      [ActionTypes.CORRECTIVE_ACTION]:
-        actions.filter(propEqType(ActionTypes.CORRECTIVE_ACTION)),
-      [ActionTypes.PREVENTATIVE_ACTION]:
-        actions.filter(propEqType(ActionTypes.PREVENTATIVE_ACTION)),
-      [ActionTypes.RISK_CONTROL]:
-        actions.filter(propEqType(ActionTypes.RISK_CONTROL)),
-    };
-  },
 };

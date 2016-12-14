@@ -21,7 +21,7 @@ const enhance = compose(
   connect((_, { fileId }) => (state) => ({
     file: state.collections.filesByIds[fileId],
   })),
-  defaultProps({ component: FileItem }),
+  defaultProps({ component: FileItem, flat: true }),
   branch(
     property('flat'),
     flattenProp('file'),

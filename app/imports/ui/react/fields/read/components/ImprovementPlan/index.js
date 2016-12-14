@@ -21,12 +21,12 @@ const renderFields = ({ desiredOutcome, targetDate, owner, reviewDates, fileIds 
     },
     {
       label: 'Improvement plan review dates',
-      text: reviewDates.length && renderReviewDates(reviewDates),
+      text: !!reviewDates.length && renderReviewDates(reviewDates),
     },
     { label: 'Owner', text: owner && _user_.userNameOrEmail(owner) },
     {
       label: 'Means statement',
-      text: fileIds.length && fileIds.map(fileId => (
+      text: !!fileIds.length && fileIds.map(fileId => (
         <FileProvider key={fileId} fileId={fileId} />
       )),
     },
@@ -35,7 +35,7 @@ const renderFields = ({ desiredOutcome, targetDate, owner, reviewDates, fileIds 
   return _.values(createReadFields(data)).map((field, key) => ({ ...field, key }));
 };
 
-const IPRead = ({
+const ImprovementPlan = ({
   label = 'Improvement plan',
   desiredOutcome,
   targetDate,
@@ -43,14 +43,14 @@ const IPRead = ({
   reviewDates = [],
   fileIds = [],
 }) => (
-  (desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length) ? (
+  !!(desiredOutcome || targetDate || owner || reviewDates.length || fileIds.length) ? (
     <Block label={label}>
       {[...renderFields({ desiredOutcome, targetDate, owner, reviewDates, fileIds })]}
     </Block>
   ) : null
 );
 
-IPRead.propTypes = {
+ImprovementPlan.propTypes = {
   label: PropTypes.string.isRequired,
   desiredOutcome: PropTypes.string,
   targetDate: PropTypes.instanceOf(Date),
@@ -59,4 +59,4 @@ IPRead.propTypes = {
   fileIds: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default IPRead;
+export default ImprovementPlan;

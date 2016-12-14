@@ -10,9 +10,7 @@ Template.ESType.viewmodel({
   share: 'standard',
   mixin: ['organization', 'collapsing', 'standard'],
   typeId: '',
-
   autorun() {
-
     // to fix bug wich randomly calls method
     if (this.typeId() !== this.templateInstance.data.typeId) {
       Tracker.nonreactive(() => this.update());
@@ -41,7 +39,6 @@ Template.ESType.viewmodel({
     }
 
     this.parent().update({ typeId }, (err) => {
-      Tracker.flush();
       this.expandCollapsed(this.standardId());
     });
   },

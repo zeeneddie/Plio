@@ -59,12 +59,11 @@ Template.ESBookSection.viewmodel({
     }
 
     this.parent().update({ sectionId }, () => {
-      Tracker.flush();
       this.expandCollapsed(this.standardId());
     });
   },
   getData() {
-    const { selected:sectionId } = this.child('Select_Single').getData();
+    const { selected: sectionId } = this.child('Select_Single').getData();
     return { sectionId };
-  }
+  },
 });

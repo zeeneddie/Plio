@@ -4,6 +4,7 @@ import { getC } from '/imports/api/helpers';
 import Collapse from '../../../../components/Collapse';
 import BodyHeading from '../BodyHeading';
 import BodyContents from '../BodyContents';
+import RHSBodyContentsContainer from '../../../containers/RHSBodyContentsContainer';
 import SourceWordDocument from '../../../../components/SourceWordDocument';
 import Source from '../../../../fields/read/components/Source';
 import Wrapper from '../../../../components/Wrapper';
@@ -17,12 +18,12 @@ const StandardsRHSBody = ({
   <Wrapper>
     <Collapse {...{ collapsed, onToggleCollapse }}>
       <BodyHeading {...standard} />
-      <BodyContents {...standard} />
+      <RHSBodyContentsContainer {...standard} />
     </Collapse>
     {[standard.source1, standard.source2].map((source, key) => (
       getC('htmlUrl', source) && (
         <SourceWordDocument key={key} src={source.htmlUrl}>
-          <FileProvider component={Source} {...{ ...source }} />
+          <FileProvider flat={false} component={Source} {...{ ...source }} />
         </SourceWordDocument>
       )
     ))}

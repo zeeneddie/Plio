@@ -49,12 +49,12 @@ export const onToggleScreenMode = props => e => {
   }
 };
 
-export const onModalOpen = props => () =>
+export const onModalOpen = ({ _id }) => () =>
   modal.modal.open({
+    _id,
     _title: 'Compiance Standard',
     template: 'EditStandard',
     helpText: StandardsHelp.standard,
-    _id: getId(props.standard),
   });
 
 
