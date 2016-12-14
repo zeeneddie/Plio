@@ -14,5 +14,7 @@ SimpleSchema.messages({
   'minCount linkedTo': 'At least one linked document must be attached',
   'minNumber issueNumber': 'Issue number must be in range of [min] and [max]',
   'maxNumber issueNumber': 'Issue number must be in range of [min] and [max]',
+  'minNumber standardNumber': 'Unique number must be in range of [min] and [max]',
+  'maxNumber standardNumber': 'Unique number must be in range of [min] and [max]',
   'minString title': '[label] must be at least [min] character(s)',
 });

@@ -480,6 +480,10 @@ fieldset[disabled] {
   margin: 0 0 10px;
 }
 
+.field-help-message {
+  padding: 0 1em !important;
+}
+
 .source-file-uploader {
   label.btn.btn-secondary {
     input[type="file"] {

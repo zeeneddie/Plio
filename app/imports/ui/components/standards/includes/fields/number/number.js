@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
 Template.StandardNumberField.viewmodel({
+  helpText: 'Please enter a unique number between 1 and 10000 for this standards document',
   update() {
     if (!this._id) return;
     const { standardNumber } = this.getData();
