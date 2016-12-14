@@ -40,7 +40,7 @@ export const update = new CheckedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
-    IdSchema, StandardsUpdateSchema, optionsSchema, optionsSchema,
+    IdSchema, StandardsUpdateSchema, optionsSchema,
   ]).validator(),
 
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
