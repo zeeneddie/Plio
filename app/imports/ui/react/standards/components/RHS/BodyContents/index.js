@@ -6,7 +6,6 @@ import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
 import Source from '../../../../fields/read/components/Source';
 import Notify from '../../../../fields/read/components/Notify';
-import LinkItemList from '../../../../fields/read/components/LinkItemList';
 import ImprovementPlan from '../../../../fields/read/components/ImprovementPlan';
 import FileProvider from '../../../../containers/providers/FileProvider';
 import ConnectedDocListContainer from '../../../fields/read/containers/ConnectedDocListContainer';
