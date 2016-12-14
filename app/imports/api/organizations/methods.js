@@ -557,3 +557,35 @@ export const deleteCustomerOrganization = new Method({
     return OrganizationService.deleteOrganization({ organizationId });
   }
 });
+
+export const changeTitle = new Method({
+  name: 'Organizations.changeTitle',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    {
+      fieldName: {
+        type: String,
+      },
+      fieldValue: {
+        type: String,
+      },
+    },
+  ]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return checker(({ organizationId }) => ORG_EnsureCanChange(this.userId, organizationId));
+  },
+
+  run(args) {
+    if (this.isSimulation) {
+      return undefined;
+    }
+
+    return OrganizationService.setTitleValue(args);
+  },
+});

@@ -42,7 +42,7 @@ const StandardsLayout = (props) => (
           activeItemIndex={props.filter - 1}
           onChange={props.onHandleFilterChange}
         >
-          <Dropdown.Title>
+          <Dropdown.Title className="dropdown-toggle pointer">
             Standards <span className="text-muted">- @value</span>
           </Dropdown.Title>
           <Dropdown.Menu>

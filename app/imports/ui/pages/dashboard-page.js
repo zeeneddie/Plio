@@ -80,5 +80,8 @@ Template.Dashboard_Page.viewmodel({
   },
   risksMetrics() {
     return this._renderMetrics('risk', this.risksViewedCount(), this.risksNotViewedCount());
-  }
+  },
+  titles() {
+    return this.organization().homeScreenTitles;
+  },
 });
