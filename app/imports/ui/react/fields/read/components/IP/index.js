@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 
 import Block from '../Block';
-import FileItemContainer from '../../containers/FileItemContainer';
+import FileProvider from '../../../../containers/providers/FileProvider';
 import _date_ from '/imports/startup/client/mixins/date';
 import _user_ from '/imports/startup/client/mixins/user';
 import createReadFields from '../../../../helpers/createReadFields';
@@ -27,7 +27,7 @@ const renderFields = ({ desiredOutcome, targetDate, owner, reviewDates, fileIds 
     {
       label: 'Means statement',
       text: fileIds.length && fileIds.map(fileId => (
-        <FileItemContainer key={fileId} fileId={fileId} />
+        <FileProvider key={fileId} fileId={fileId} />
       )),
     },
   ];

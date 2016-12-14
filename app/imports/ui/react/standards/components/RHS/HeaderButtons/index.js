@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-import propTypes from './propTypes';
 import ToggleExpandButton from '../../../../components/Buttons/ToggleExpandButton';
 import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
 
-const StandardsRHSHeaderButtons = (props) => {
+const HeaderButtons = (props) => {
   const toggleExpandButton = props.hasDocxAttachment ? (
     <ToggleExpandButton onClick={props.onToggleScreenMode} />
   ) : null;
@@ -16,13 +15,13 @@ const StandardsRHSHeaderButtons = (props) => {
       href={props.pathToDiscussion}
       unreadMessagesCount={props.unreadMessagesCount}
     >
-      {props.names.discuss}
+      Discuss
     </DiscussButton>
   ) : null;
 
   const restoreButton = props.hasAccess && props.isDeleted ? (
     <Button type="secondary" onClick={props.onRestore}>
-      {props.names.restore}
+      Restore
     </Button>
   ) : null;
 
@@ -31,14 +30,14 @@ const StandardsRHSHeaderButtons = (props) => {
     props.isDeleted &&
     props.hasFullAccess ? (
       <Button type="primary" onClick={props.onDelete}>
-        {props.names.delete}
+        Delete
       </Button>
     ) : null
   );
 
   const editButton = !props.isDeleted ? (
     <Button type="primary" onClick={props.onModalOpen} >
-      {props.names.edit}
+      Edit
     </Button>
   ) : null;
 
@@ -53,6 +52,19 @@ const StandardsRHSHeaderButtons = (props) => {
   );
 };
 
-StandardsRHSHeaderButtons.propTypes = propTypes;
+HeaderButtons.propTypes = {
+  hasDocxAttachment: PropTypes.bool,
+  isDiscussionOpened: PropTypes.bool,
+  isDeleted: PropTypes.bool,
+  unreadMessagesCount: PropTypes.number,
+  hasAccess: PropTypes.bool,
+  hasFullAccess: PropTypes.bool,
+  onToggleScreenMode: PropTypes.func,
+  pathToDiscussion: PropTypes.string,
+  onDiscussionOpen: PropTypes.func,
+  onRestore: PropTypes.func,
+  onDelete: PropTypes.func,
+  onModalOpen: PropTypes.func,
+};
 
-export default StandardsRHSHeaderButtons;
+export default HeaderButtons;

@@ -15,7 +15,7 @@ import Notify from '../../../../fields/read/components/Notify';
 import LinkItemList from '../../../../fields/read/components/LinkItemList';
 import IP from '../../../../fields/read/components/IP';
 
-const StandardsRHSBodyContents = ({
+const BodyContents = ({
   description,
   issueNumber,
   owner,
@@ -156,6 +156,6 @@ const StandardsRHSBodyContents = ({
   );
 };
 
-StandardsRHSBodyContents.propTypes = propTypes;
+BodyContents.propTypes = propTypes;
 
-export default StandardsRHSBodyContents;
+export default BodyContents;

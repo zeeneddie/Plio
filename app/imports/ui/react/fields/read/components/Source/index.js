@@ -12,7 +12,7 @@ const getSourceTitle = (id) => {
   return id === 1 ? 'Source file' : `Source file ${id}`;
 };
 
-const SourceRead = ({ id, type, url, file }) => {
+const Source = ({ id, type, url, file }) => {
   const title = getSourceTitle(id);
   let content;
 
@@ -54,11 +54,11 @@ const SourceRead = ({ id, type, url, file }) => {
   );
 };
 
-SourceRead.propTypes = {
+Source.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   type: PropTypes.oneOf(['url', 'attachment', 'video']),
   url: PropTypes.string,
   file: PropTypes.object,
 };
 
-export default SourceRead;
+export default Source;

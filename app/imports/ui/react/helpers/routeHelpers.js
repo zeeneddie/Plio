@@ -31,3 +31,13 @@ export const goToStandard = (params, queryParams) => {
   return FlowRouter.withReplaceState(() =>
     FlowRouter.go('standard', _params, _queryParams));
 };
+
+export const getPathToDiscussion = (params, queryParams) => {
+  const orgSerialNumber = getOrgSerialNumber(params);
+  const urlItemId = params.urlItemId;
+  const _params = { ...params, orgSerialNumber, urlItemId };
+  const filter = getFilter(queryParams);
+  const _queryParams = queryParams || { filter };
+
+  return FlowRouter.path('standardDiscussion', _params, _queryParams);
+};

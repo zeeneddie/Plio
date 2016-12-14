@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { CollectionNames } from '/imports/share/constants';
 import PreloaderPage from '../../../../components/PreloaderPage';
@@ -6,20 +6,26 @@ import ChangelogContainer from '../../../../changelog/containers/ChangelogContai
 import RHSBodyContainer from '../../../containers/RHSBodyContainer';
 import Wrapper from '../../../../components/Wrapper';
 
-const StandardsRHSContentList = ({ isReady = true, ...props }) => (
+const ContentList = ({ isReady = true, standard, hasDocxAttachment }) => (
   <Wrapper className="content-list">
     {isReady ? (
-      <RHSBodyContainer {...props} />
+      <RHSBodyContainer {...{ standard, hasDocxAttachment }} />
     ) : (
       <Wrapper className="m-t-3">
         <PreloaderPage size={2} />
       </Wrapper>
     )}
     <ChangelogContainer
-      documentId={props.standard ? props.standard._id : ''}
+      documentId={standard ? standard._id : ''}
       collection={CollectionNames.STANDARDS}
     />
   </Wrapper>
 );
 
-export default StandardsRHSContentList;
+ContentList.propTypes = {
+  isReady: PropTypes.bool,
+  hasDocxAttachment: PropTypes.bool,
+  standard: PropTypes.object,
+};
+
+export default ContentList;
