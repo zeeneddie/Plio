@@ -15,7 +15,9 @@ import { getUserOrganizations } from '../utils';
 import { isOrgMember } from '../../checkers';
 import {
   StandardsBookSectionsListProjection,
-  StandardTypesListProjection
+  StandardTypesListProjection,
+  CustomersListProjection,
+  CustomerCardProjection,
 } from '../../constants';
 import { makeOptionsFields } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
@@ -158,4 +160,39 @@ Meteor.publishComposite('organizationsInfo', {
           .find({ _id: owner.userId });
       }
   }],
+});
+
+Meteor.publishComposite('customersLayout', {
+  find() {
+    if (!this.userId || !isPlioUser(this.userId)) {
+      return this.ready();
+    }
+
+    return Organizations.find({}, {
+      fields: CustomersListProjection,
+    });
+  },
+  children: [{
+    find(organization) {
+      return Meteor.users.find({
+        _id: organization.ownerId(),
+      }, {
+        fields: {
+          'emails.address': 1,
+          'profile.firstName': 1,
+          'profile.lastName': 1,
+        },
+      });
+    },
+  }],
+});
+
+Meteor.publish('customerCard', function getCustomerData(orgId) {
+  if (!this.userId || !isPlioUser(this.userId)) {
+    return this.ready();
+  }
+
+  return Organizations.find({ _id: orgId }, {
+    fields: CustomerCardProjection,
+  });
 });

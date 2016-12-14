@@ -4,6 +4,7 @@ import discussion from './discussionReducer';
 import standards from './standardsReducer';
 import organizations from './organizationsReducer';
 import changelog from './changelogReducer';
+import customers from './customersReducer';
 import global from './globalReducer';
 import collections from './collectionsReducer';
 import window from './windowReducer';
@@ -15,6 +16,7 @@ export default combineReducers({
   standards,
   organizations,
   changelog,
+  customers,
   collections,
   window,
   mobile,

@@ -33,8 +33,8 @@ import { getPathToDiscussion, getStandardsByFilter } from '../../helpers';
 import { ProblemTypes, DocumentTypes } from '/imports/share/constants';
 
 const mapStateToProps = ({
-  standards: { isFullScreenMode, isCardReady },
-  global: { urlItemId, filter, userId },
+  standards: { isFullScreenMode },
+  global: { urlItemId, filter, userId, isCardReady },
   organizations: { organizationId, orgSerialNumber },
   discussion: { isDiscussionOpened },
   collections: {

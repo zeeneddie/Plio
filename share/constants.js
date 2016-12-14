@@ -448,3 +448,15 @@ export const FILE_STATUS_MAP = {
   IN_PROGRESS: 'in-progress',
   COMPLETED: 'completed',
 };
+
+export const CustomerTypes = {
+  PAYING_SUBSCRIBER: 1,
+  FREE_TRIAL: 2,
+  TEST_ACCOUNT: 3,
+};
+
+export const CustomerTypesNames = {
+  [CustomerTypes.PAYING_SUBSCRIBER]: 'Paying subscriber',
+  [CustomerTypes.FREE_TRIAL]: 'Free trial',
+  [CustomerTypes.TEST_ACCOUNT]: 'Test account',
+};

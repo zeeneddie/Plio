@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
-import { OrgCurrencies,  WorkflowTypes, UserMembership } from '../constants.js';
+import { OrgCurrencies, WorkflowTypes, UserMembership, CustomerTypes } from '../constants.js';
 import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
 
@@ -11,19 +12,19 @@ const UserSettingsSchema = new SimpleSchema({
       if (!this.isSet) {
         return true;
       }
-    }
-  }
+    },
+  },
 });
 
 const OrgUserSchema = new SimpleSchema([
   {
     userId: {
       type: String,
-      regEx: SimpleSchema.RegEx.Id
+      regEx: SimpleSchema.RegEx.Id,
     },
     role: {
       type: String,
-      allowedValues: _.values(UserMembership)
+      allowedValues: _.values(UserMembership),
     },
     joinedAt: {
       autoValue() {
@@ -31,7 +32,7 @@ const OrgUserSchema = new SimpleSchema([
           return new Date();
         }
       },
-      type: Date
+      type: Date,
     },
     isRemoved: {
       type: Boolean,
@@ -39,151 +40,151 @@ const OrgUserSchema = new SimpleSchema([
         if (!this.isSet) {
           return false;
         }
-      }
+      },
     },
     removedAt: {
       type: Date,
-      optional: true
+      optional: true,
     },
     removedBy: {
       type: String,
       regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    }
+      optional: true,
+    },
   },
-  UserSettingsSchema
+  UserSettingsSchema,
 ]);
 
 const problemWorkflowSchema = new SimpleSchema({
   workflowType: {
     type: String,
-    allowedValues: _.values(WorkflowTypes)
+    allowedValues: _.values(WorkflowTypes),
   },
   stepTime: {
-    type: TimePeriodSchema
-  }
+    type: TimePeriodSchema,
+  },
 });
 
 const workflowDefaultsSchema = new SimpleSchema({
   minorProblem: {
-    type: problemWorkflowSchema
+    type: problemWorkflowSchema,
   },
   majorProblem: {
-    type: problemWorkflowSchema
+    type: problemWorkflowSchema,
   },
   criticalProblem: {
-    type: problemWorkflowSchema
-  }
+    type: problemWorkflowSchema,
+  },
 });
 
 const reminderSchema = new SimpleSchema({
   start: {
-    type: TimePeriodSchema
+    type: TimePeriodSchema,
   },
   interval: {
-    type: TimePeriodSchema
+    type: TimePeriodSchema,
   },
   until: {
-    type: TimePeriodSchema
-  }
+    type: TimePeriodSchema,
+  },
 });
 
 const remindersSchema = new SimpleSchema({
   minorNc: {
-    type: reminderSchema
+    type: reminderSchema,
   },
   majorNc: {
-    type: reminderSchema
+    type: reminderSchema,
   },
   criticalNc: {
-    type: reminderSchema
+    type: reminderSchema,
   },
   improvementPlan: {
-    type: reminderSchema
-  }
+    type: reminderSchema,
+  },
 });
 
 const OrganizationCurrencySchema = {
   currency: {
     type: String,
     allowedValues: _.values(OrgCurrencies),
-    optional: true
-  }
+    optional: true,
+  },
 };
 
 const ncGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
-    label: 'Guideline for classifying a minor non-conformity'
+    label: 'Guideline for classifying a minor non-conformity',
   },
   major: {
     type: String,
-    label: 'Guideline for classifying a major non-conformity'
+    label: 'Guideline for classifying a major non-conformity',
   },
   critical: {
     type: String,
-    label: 'Guideline for classifying a critical non-conformity'
-  }
+    label: 'Guideline for classifying a critical non-conformity',
+  },
 });
 
 const rkGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
-    label: 'Guideline for initial categorization of a minor risk'
+    label: 'Guideline for initial categorization of a minor risk',
   },
   major: {
     type: String,
-    label: 'Guideline for initial categorization of a major risk'
+    label: 'Guideline for initial categorization of a major risk',
   },
   critical: {
     type: String,
-    label: 'Guideline for initial categorization of a critical risk'
-  }
+    label: 'Guideline for initial categorization of a critical risk',
+  },
 });
 
 const OrganizationEditableFields = {
   name: {
     type: String,
     min: 1,
-    max: 40
+    max: 40,
   },
   workflowDefaults: {
     type: workflowDefaultsSchema,
-    optional: true
+    optional: true,
   },
   reminders: {
     type: remindersSchema,
-    optional: true
+    optional: true,
   },
   ncGuidelines: {
     type: ncGuidelinesSchema,
-    optional: true
+    optional: true,
   },
   rkGuidelines: {
     type: rkGuidelinesSchema,
-    optional: true
+    optional: true,
   },
   rkScoringGuidelines: {
     type: String,
     label: 'Risk scoring guidelines text',
-    optional: true
+    optional: true,
   },
   ...OrganizationCurrencySchema,
-  ...TimezoneSchema.schema()
+  ...TimezoneSchema.schema(),
 };
 
 const transferSchema = new SimpleSchema({
   _id: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
   },
   newOwnerId: {
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
   },
   createdAt: {
-    type: Date
-  }
+    type: Date,
+  },
 });
 
 const OrganizationSchema = new SimpleSchema([
@@ -192,23 +193,28 @@ const OrganizationSchema = new SimpleSchema([
   {
     serialNumber: {
       type: Number,
-      min: 0
+      min: 0,
     },
     users: {
       type: [OrgUserSchema],
       minCount: 1,
-      defaultValue: []
+      defaultValue: [],
     },
     transfer: {
       type: transferSchema,
-      optional: true
-    }
-  }
+      optional: true,
+    },
+    customerType: {
+      type: Number,
+      allowedValues: _.values(CustomerTypes),
+      defaultValue: CustomerTypes.FREE_TRIAL,
+    },
+  },
 ]);
 
 export {
   OrganizationEditableFields,
   OrganizationSchema,
   OrganizationCurrencySchema,
-  UserSettingsSchema
+  UserSettingsSchema,
 };

@@ -8,6 +8,7 @@ import {
   SET_STANDARD_BOOK_SECTIONS,
   SET_STANDARD_TYPES,
   SET_LESSONS_LEARNED,
+  SET_ORGANIZATIONS,
   SET_STANDARDS,
   ADD_STANDARD,
   UPDATE_STANDARD,
@@ -18,6 +19,9 @@ import {
   ADD_STANDARD_TYPE,
   UPDATE_STANDARD_TYPE,
   REMOVE_STANDARD_TYPE,
+  ADD_ORGANIZATION,
+  UPDATE_ORGANIZATION,
+  REMOVE_ORGANIZATION,
 } from '../actions/types';
 import { mapByIndex, propEqId, flattenObjects, omitC } from '/imports/api/helpers';
 
@@ -32,6 +36,7 @@ const initialState = {
   standardBookSections: [],
   standardTypes: [],
   lessons: [],
+  organizations: [],
   standardsByIds: [],
   standardBookSectionsByIds: [],
   standardTypesByIds: [],
@@ -42,6 +47,7 @@ const initialState = {
   actionsByIds: [],
   workItemsByIds: [],
   lessonsByIds: [],
+  organizationsByIds: [],
 };
 
 const findIndexById = (_id, array) => array.findIndex(propEqId(_id));
@@ -99,6 +105,7 @@ export default function reducer(state = initialState, action) {
     case SET_STANDARD_TYPES:
     case SET_LESSONS_LEARNED:
     case SET_STANDARDS:
+    case SET_ORGANIZATIONS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
       return add('standards');
@@ -118,6 +125,12 @@ export default function reducer(state = initialState, action) {
       return update('standardTypes');
     case REMOVE_STANDARD_TYPE:
       return remove('standardTypes');
+    case ADD_ORGANIZATION:
+      return add('organizations');
+    case UPDATE_ORGANIZATION:
+      return update('organizations');
+    case REMOVE_ORGANIZATION:
+      return remove('organizations');
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers';
-import { setIsCardReady } from '/client/redux/actions/standardsActions';
+import { setIsCardReady } from '/client/redux/actions/globalActions';
 
 export default function loadCardData({
   dispatch,

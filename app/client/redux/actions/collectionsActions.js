@@ -9,6 +9,7 @@ import {
   SET_STANDARD_TYPES,
   SET_STANDARDS,
   SET_LESSONS_LEARNED,
+  SET_ORGANIZATIONS,
   ADD_STANDARD,
   UPDATE_STANDARD,
   REMOVE_STANDARD,
@@ -18,6 +19,9 @@ import {
   ADD_STANDARD_TYPE,
   UPDATE_STANDARD_TYPE,
   REMOVE_STANDARD_TYPE,
+  ADD_ORGANIZATION,
+  UPDATE_ORGANIZATION,
+  REMOVE_ORGANIZATION,
 } from './types';
 import { createAction } from './helpers';
 
@@ -91,6 +95,13 @@ export function setLessons(lessons) {
   };
 }
 
+export function setOrganizations(organizations) {
+  return {
+    type: SET_ORGANIZATIONS,
+    payload: { organizations },
+  };
+}
+
 export const addStandard = createAction(ADD_STANDARD);
 
 export const updateStandard = createAction(UPDATE_STANDARD);
@@ -108,3 +119,9 @@ export const addStandardType = createAction(ADD_STANDARD_TYPE);
 export const updateStandardType = createAction(UPDATE_STANDARD_TYPE);
 
 export const removeStandardType = createAction(REMOVE_STANDARD_TYPE);
+
+export const addOrganization = createAction(ADD_ORGANIZATION);
+
+export const updateOrganization = createAction(UPDATE_ORGANIZATION);
+
+export const removeOrganization = createAction(REMOVE_ORGANIZATION);

@@ -150,6 +150,23 @@ export const DepartmentsListProjection = {
   name: 1,
 };
 
+export const CustomersListProjection = {
+  name: 1,
+  createdAt: 1,
+  customerType: 1,
+  isAdminOrg: 1,
+  'users.userId': 1,
+  'users.isRemoved': 1,
+  'users.removedAt': 1,
+  'users.removedBy': 1,
+};
+
+export const CustomerCardProjection = {
+  ...CustomersListProjection,
+  timezone: 1,
+  currency: 1,
+};
+
 export const AnalysisTitles = {
   rootCauseAnalysis: 'Root cause analysis',
   riskAnalysis: 'Initial risk analysis',
