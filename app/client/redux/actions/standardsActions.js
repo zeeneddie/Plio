@@ -1,6 +1,5 @@
 import {
   SET_FILTERED_STANDARDS,
-  SET_IS_FULL_SCREEN_MODE,
   SET_STANDARD_DEPS_READY,
   SET_STANDARDS_INITIALIZING,
 } from './types';
@@ -9,13 +8,6 @@ export function setFilteredStandards(standardsFiltered) {
   return {
     payload: { standardsFiltered },
     type: SET_FILTERED_STANDARDS,
-  };
-}
-
-export function setIsFullScreenMode(isFullScreenMode) {
-  return {
-    payload: { isFullScreenMode },
-    type: SET_IS_FULL_SCREEN_MODE,
   };
 }
 

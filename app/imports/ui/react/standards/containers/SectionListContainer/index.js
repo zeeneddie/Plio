@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import {
   propEq,
   lengthStandards,
-  getC,
-  propEqId,
   sortArrayByTitlePrefix,
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';

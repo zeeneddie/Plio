@@ -15,6 +15,7 @@ Template.Select_Members.viewmodel({
   mixin: ['members', 'search', 'user'],
   values: [],
   placeholder: 'Select',
+  query: '',
   currentSelectedMembers() {
     const { values } = this.data();
     const query = { _id: { $in: values } };
@@ -30,7 +31,7 @@ Template.Select_Members.viewmodel({
     return {
       selected,
       placeholder,
-      items: this._members(),
+      items: this._members(this.query() || {}),
       onUpdate: destructure(({ user, userId, users }) => {
         if (hasUserId(userId)) return;
 

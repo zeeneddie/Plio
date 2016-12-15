@@ -1,47 +1,41 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import { getC } from '/imports/api/helpers';
-import propTypes from './propTypes';
 import Collapse from '../../../../components/Collapse';
 import BodyHeading from '../BodyHeading';
 import BodyContents from '../BodyContents';
+import RHSBodyContentsContainer from '../../../containers/RHSBodyContentsContainer';
 import SourceWordDocument from '../../../../components/SourceWordDocument';
-import SourceRead from '../../../../components/SourceRead';
+import Source from '../../../../fields/read/components/Source';
 import Wrapper from '../../../../components/Wrapper';
+import FileProvider from '../../../../containers/providers/FileProvider';
 
-const StandardsRHSBody = (props) => (
+const StandardsRHSBody = ({
+  collapsed,
+  standard = {},
+  onToggleCollapse,
+}) => (
   <Wrapper>
-    <Collapse
-      collapsed={props.collapsed}
-      onToggleCollapse={props.onToggleCollapse}
-    >
-      <BodyHeading {...props.standard} />
-      <BodyContents
-        {...props.standard}
-        files={props.files}
-        orgSerialNumber={props.orgSerialNumber}
-        ncs={props.ncs}
-        risks={props.risks}
-        actions={props.actions}
-        workItems={props.workItems}
-        lessons={props.lessons}
-      />
+    <Collapse {...{ collapsed, onToggleCollapse }}>
+      <BodyHeading {...standard} />
+      <RHSBodyContentsContainer {...standard} />
     </Collapse>
-    {getC('standard.source1.htmlUrl', props) && (
-      <SourceWordDocument src={props.standard.source1.htmlUrl}>
-        <SourceRead id={1} {...props.standard.source1} />
-      </SourceWordDocument>
-    )}
-    {getC('standard.source2.htmlUrl', props) && (
-      <SourceWordDocument src={props.standard.source2.htmlUrl}>
-        <SourceRead id={2} {...props.standard.source2} />
-      </SourceWordDocument>
-    )}
+    {[standard.source1, standard.source2].map((source, key) => (
+      getC('htmlUrl', source) && (
+        <SourceWordDocument key={key} src={source.htmlUrl}>
+          <FileProvider flat={false} component={Source} {...{ ...source }} />
+        </SourceWordDocument>
+      )
+    ))}
   </Wrapper>
 );
 
 
-StandardsRHSBody.propTypes = propTypes;
+StandardsRHSBody.propTypes = {
+  collapsed: PropTypes.bool.isRequired,
+  onToggleCollapse: PropTypes.func.isRequired,
+  standard: PropTypes.object,
+};
 
 StandardsRHSBody.Heading = BodyHeading;
 StandardsRHSBody.Contents = BodyContents;

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import propTypes from './propTypes';
+import defer from '../../helpers/defer';
 
 const Iframe = ({
   width = 560,
@@ -8,17 +9,13 @@ const Iframe = ({
   allowFullScreen = true,
   src = null,
   frameBorder = 0,
+  ...other,
 }) => (
   <iframe
-    width={width}
-    height={height}
-    allowFullScreen={allowFullScreen}
-    src={src}
-    frameBorder={frameBorder}
-  >
-  </iframe>
+    {...{ width, height, src, frameBorder, allowFullScreen, ...other }}
+  ></iframe>
 );
 
 Iframe.propTypes = propTypes;
 
-export default Iframe;
+export default defer(Iframe);

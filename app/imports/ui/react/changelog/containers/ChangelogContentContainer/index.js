@@ -1,11 +1,10 @@
-import { compose, mapProps, shouldUpdate } from 'recompose';
+import { compose, mapProps } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
-import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
 import { setLogs } from '/client/redux/actions/changelogActions';
-import { pickC } from '/imports/api/helpers';
+import { pickDeep } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogContent from '../../components/ChangelogContent';
 import propTypes from './propTypes';
@@ -36,9 +35,7 @@ const ChangelogContentContainer = compose(
 
   connect(state => ({ logs: state.changelog.logs })),
 
-  mapProps(props => pickC(['logs'])(props)),
-
-  shouldUpdate((props, nextProps) => !_.isEqual(props.logs, nextProps.logs))
+  mapProps(pickDeep(['logs'])),
 )(ChangelogContent);
 
 ChangelogContentContainer.propTypes = propTypes;

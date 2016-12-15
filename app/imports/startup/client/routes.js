@@ -13,6 +13,7 @@ import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
+import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 
 BlazeLayout.setRoot('#app');
 
@@ -207,6 +208,22 @@ FlowRouter.route('/customers/:urlItemId', {
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action() {
     mount2(CustomersProvider);
+  },
+});
+
+FlowRouter.route('/help-center', {
+  name: 'helpDocs',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
+  },
+});
+
+FlowRouter.route('/help-center/:helpId', {
+  name: 'helpDoc',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
   },
 });
 

@@ -1,0 +1,14 @@
+<template name="HelpDocs_Create">
+  {{#Card_Create ref="card"}}
+    {{> Title_Edit}}
+
+    {{> HelpDocs_Section_Edit}}
+
+    {{> Owner_Edit
+        membersQuery=membersQuery}}
+
+    {{> StandardStatus_Edit}}
+
+    {{> Sources_Create}}
+  {{/Card_Create}}
+</template>

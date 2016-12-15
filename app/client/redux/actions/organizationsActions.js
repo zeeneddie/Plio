@@ -2,7 +2,10 @@ import {
   SET_ORG,
   SET_ORG_ID,
   SET_ORG_SERIAL_NUMBER,
+  ORGANIZATION_CHANGED,
 } from './types';
+
+export const organizationChanged = { type: ORGANIZATION_CHANGED };
 
 export function setOrg(organization) {
   return {

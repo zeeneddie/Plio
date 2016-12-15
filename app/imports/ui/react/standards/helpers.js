@@ -247,13 +247,6 @@ export const collapseExpandedStandards = () => {
   }
 };
 
-export const getPathToDiscussion = ({ orgSerialNumber, urlItemId, filter }) => {
-  const params = { orgSerialNumber, urlItemId };
-  const queryParams = { filter };
-
-  return FlowRouter.path('standardDiscussion', params, queryParams);
-};
-
 export const withStandard = withProps(props => ({
   standard: findSelectedStandard(props.urlItemId)(props),
 }));

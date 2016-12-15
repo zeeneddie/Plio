@@ -22,6 +22,8 @@ import {
   ADD_ORGANIZATION,
   UPDATE_ORGANIZATION,
   REMOVE_ORGANIZATION,
+  SET_HELP_DOCS,
+  SET_HELP_SECTIONS,
 } from './types';
 import { createAction } from './helpers';
 
@@ -99,6 +101,20 @@ export function setOrganizations(organizations) {
   return {
     type: SET_ORGANIZATIONS,
     payload: { organizations },
+  };
+}
+
+export function setHelpDocs(helpDocs) {
+  return {
+    type: SET_HELP_DOCS,
+    payload: { helpDocs },
+  };
+}
+
+export function setHelpSections(helpSections) {
+  return {
+    type: SET_HELP_SECTIONS,
+    payload: { helpSections },
   };
 }
 

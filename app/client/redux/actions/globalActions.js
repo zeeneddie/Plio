@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
 import { equals } from '/imports/api/helpers';
@@ -12,7 +11,11 @@ import {
   SET_URL_ITEM_ID,
   SET_DATA_LOADING,
   SET_IS_CARD_READY,
+  SET_IS_FULL_SCREEN_MODE,
+  USER_LOGOUT,
 } from './types';
+
+export const userLogout = { type: USER_LOGOUT };
 
 export function setUserId(userId) {
   return {
@@ -60,6 +63,13 @@ export function setIsCardReady(isCardReady) {
   return {
     type: SET_IS_CARD_READY,
     payload: { isCardReady },
+  };
+}
+
+export function setIsFullScreenMode(isFullScreenMode) {
+  return {
+    payload: { isFullScreenMode },
+    type: SET_IS_FULL_SCREEN_MODE,
   };
 }
 

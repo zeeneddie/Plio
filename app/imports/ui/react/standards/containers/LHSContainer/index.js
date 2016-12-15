@@ -62,9 +62,13 @@ export default compose(
       : props.standards;
     standards = getStandardsByFilter({ standards, filter: props.filter });
     standards = sortArrayByTitlePrefix(standards);
+
+    const searchResultsText = props.searchText ? `${standards.length} matching resulsts` : '';
+
     return {
       ...props,
       standards,
+      searchResultsText,
     };
   }),
 )(StandardsLHS);

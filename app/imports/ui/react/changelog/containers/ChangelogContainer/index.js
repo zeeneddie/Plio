@@ -94,10 +94,9 @@ const onViewAllClick = (props) => () => {
 const ChangelogContainer = compose(
   connect(),
 
-  kompose(onPropsChange, null, null, {
-    shouldResubscribe: (props, nextProps) =>
-      props.documentId !== nextProps.documentId,
-  }),
+  shouldUpdate((props, nextProps) => props.documentId !== nextProps.documentId),
+
+  kompose(onPropsChange),
 
   connect(state => pickC([
     'documentId',

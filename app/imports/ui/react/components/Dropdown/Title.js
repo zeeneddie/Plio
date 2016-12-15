@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 import { mapProps } from 'recompose';
+import TextInput from '/imports/ui/react/forms/components/TextInput';
 
 const replaceValue = (string, value) =>
   string.replace('@value', value);
@@ -18,15 +19,21 @@ const enhance = mapProps(props => ({
       });
     }
 
+    if (child.type === TextInput) {
+      return React.cloneElement(child, {
+        value: replaceValue(child.props.value, props.dropdownValue),
+      });
+    }
+
     return child;
   }),
 }));
 
-export const Title = enhance(({ children }) => (
-  <a className="dropdown-toggle pointer" data-toggle="dropdown">
-    {children}
-  </a>
-));
+export const Title = enhance((props) => {
+  const { children, as = 'a', dropdownValue, ...other } = props;
+  
+  return React.createElement(as, { 'data-toggle': 'dropdown', ...other }, children);
+});
 
 Title.propTypes = {
   className: PropTypes.string,

@@ -1,0 +1,9 @@
+<template name="HelpDocs_Section_Edit">
+  {{#FormField label="Section"}}
+    <div class="dropdown">
+      <select class="form-control c-select"
+        {{b "options: sections, optionsValue: _id, optionsText: title, value: sectionId"}}>
+      </select>
+    </div>
+  {{/FormField}}
+</template>

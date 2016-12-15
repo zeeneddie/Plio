@@ -22,38 +22,22 @@ import {
   ADD_ORGANIZATION,
   UPDATE_ORGANIZATION,
   REMOVE_ORGANIZATION,
+  SET_HELP_DOCS,
+  SET_HELP_SECTIONS,
 } from '../actions/types';
-import { mapByIndex, propEqId, flattenObjects, omitC } from '/imports/api/helpers';
+import { mapByIndex, flattenObjects, omitC, findIndexById } from '/imports/api/helpers';
+import { CollectionNames } from '/imports/share/constants';
+import { STORE_COLLECTION_NAMES } from '../lib/constants';
+import {
+  getNormalizedDataKey,
+  normalizeObject,
+  normalizeArray,
+} from '../lib/collectionsHelpers';
 
-const initialState = {
-  departments: [],
-  files: [],
-  ncs: [],
-  risks: [],
-  actions: [],
-  workItems: [],
-  standards: [],
-  standardBookSections: [],
-  standardTypes: [],
-  lessons: [],
-  organizations: [],
-  standardsByIds: [],
-  standardBookSectionsByIds: [],
-  standardTypesByIds: [],
-  departmentsByIds: [],
-  filesByIds: [],
-  ncsByIds: [],
-  risksByIds: [],
-  actionsByIds: [],
-  workItemsByIds: [],
-  lessonsByIds: [],
-  organizationsByIds: [],
-};
-
-const findIndexById = (_id, array) => array.findIndex(propEqId(_id));
-const normalizeObject = ({ _id, ...props }) => ({ [_id]: { _id, ...props } });
-const normalize = array => flattenObjects(array.map(normalizeObject));
-const getNormalizedDataKey = prop => `${prop}ByIds`;
+const initialState = flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key => {
+  const value = STORE_COLLECTION_NAMES[key];
+  return { [value]: [], [getNormalizedDataKey(value)]: [] };
+}));
 
 export default function reducer(state = initialState, action) {
   const set = (prop) => {
@@ -61,7 +45,7 @@ export default function reducer(state = initialState, action) {
     return {
       ...state,
       ...action.payload,
-      [normalizedKey]: normalize(action.payload[prop]),
+      [normalizedKey]: normalizeArray(action.payload[prop]),
     };
   };
   const add = (prop) => {
@@ -106,31 +90,33 @@ export default function reducer(state = initialState, action) {
     case SET_LESSONS_LEARNED:
     case SET_STANDARDS:
     case SET_ORGANIZATIONS:
+    case SET_HELP_DOCS:
+    case SET_HELP_SECTIONS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
-      return add('standards');
+      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
     case UPDATE_STANDARD:
-      return update('standards');
+      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
     case REMOVE_STANDARD:
-      return remove('standards');
+      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);
     case ADD_STANDARD_BOOK_SECTION:
-      return add('standardBookSections');
+      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
     case UPDATE_STANDARD_BOOK_SECTION:
-      return update('standardBookSections');
+      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
     case REMOVE_STANDARD_BOOK_SECTION:
-      return remove('standardBookSections');
+      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_BOOK_SECTIONS]);
     case ADD_STANDARD_TYPE:
-      return add('standardTypes');
+      return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
     case UPDATE_STANDARD_TYPE:
-      return update('standardTypes');
+      return update(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
     case REMOVE_STANDARD_TYPE:
-      return remove('standardTypes');
+      return remove(STORE_COLLECTION_NAMES[CollectionNames.STANDARD_TYPES]);
     case ADD_ORGANIZATION:
-      return add('organizations');
+      return add(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
     case UPDATE_ORGANIZATION:
-      return update('organizations');
+      return update(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
     case REMOVE_ORGANIZATION:
-      return remove('organizations');
+      return remove(STORE_COLLECTION_NAMES[CollectionNames.ORGANIZATIONS]);
     default:
       return state;
   }

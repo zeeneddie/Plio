@@ -1,63 +1,50 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import propTypes from './propTypes';
 import RHS from '../../../components/RHS';
 import HeaderButtons from './HeaderButtons';
 import ContentList from './ContentList';
 import Body from './Body';
 import NotFound from './NotFound';
+import NotExist from './NotExist';
+import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
 
-const StandardsRHS = (props) => (
+const StandardsRHS = ({
+  isFullScreenMode,
+  standard,
+  isReady = true,
+  hasDocxAttachment,
+}) => (
   <RHS
     className={cx('expandable', {
-      expanded: props.isFullScreenMode,
-      content: !props.standard,
+      expanded: isFullScreenMode,
+      content: !standard,
     })}
   >
     <RHS.Card className="standard-details">
       <RHS.Header
-        title={props.names.headerNames.header}
-        isReady={props.isReady}
+        title="Compliance Standard"
+        isReady={isReady}
       >
-        <HeaderButtons
-          isDiscussionOpened={props.isDiscussionOpened}
-          names={props.names.headerNames}
-          isDeleted={props.standard ? props.standard.isDeleted : false}
-          unreadMessagesCount={props.standard ? props.standard.unreadMessagesCount : null}
-          pathToDiscussion={props.pathToDiscussion}
-          hasDocxAttachment={props.hasDocxAttachment}
-          hasAccess={props.hasAccess}
-          hasFullAccess={props.hasFullAccess}
-          onToggleScreenMode={props.onToggleScreenMode}
-          onModalOpen={props.onModalOpen}
-          onDiscussionOpen={props.onDiscussionOpen}
-          onRestore={props.onRestore}
-          onDelete={props.onDelete}
-        />
+        <RHSHeaderButtonsContainer {...{ standard, hasDocxAttachment }} />
       </RHS.Header>
 
-      <ContentList
-        isReady={props.isReady}
-        standard={props.standard}
-        hasDocxAttachment={props.hasDocxAttachment}
-        files={props.files}
-        orgSerialNumber={props.orgSerialNumber}
-        ncs={props.ncs}
-        risks={props.risks}
-        actions={props.actions}
-        workItems={props.workItems}
-        lessons={props.lessons}
-      />
+      <ContentList {...{ isReady, standard, hasDocxAttachment }} />
     </RHS.Card>
   </RHS>
 );
 
-StandardsRHS.propTypes = propTypes;
+StandardsRHS.propTypes = {
+  hasDocxAttachment: PropTypes.bool,
+  isFullScreenMode: PropTypes.bool,
+  standard: PropTypes.object,
+  isReady: PropTypes.bool,
+};
 
 StandardsRHS.HeaderButtons = HeaderButtons;
 StandardsRHS.ContentList = ContentList;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
+StandardsRHS.NotExist = NotExist;
 
 export default StandardsRHS;

@@ -10,33 +10,36 @@ export default {
     return this.activeRiskFilterId() === parseInt(filterId, 10);
   },
   activeRiskFilterId() {
-    let id = parseInt(FlowRouter.getQueryParam('filter'));
-    if (!RiskFilters[id]) {
-      id = 1;
-    }
+    const id = parseInt(FlowRouter.getQueryParam('filter'), 10);
+
+    if (!RiskFilters[id]) return 1;
 
     return id;
   },
   getRiskFilterLabel(id) {
-    if (!RiskFilters[id]) {
-      id = 1;
-    }
+    if (!RiskFilters[id]) return RiskFilters[1].name;
 
-    return RiskFilters[id];
+    return RiskFilters[id].name;
   },
   currentRisk() {
     const _id = this.riskId();
     return Risks.findOne({ _id });
   },
   _getIsDeletedQuery() {
-    return this.isActiveRiskFilter('deleted') ? { isDeleted: true } : { isDeleted: { $in: [null, false] } };
+    return this.isActiveRiskFilter('deleted')
+      ? { isDeleted: true }
+      : { isDeleted: { $in: [null, false] } };
   },
-  _getRisksByQuery({ isDeleted = { $in: [null, false] }, ...args } = {}, options = { sort: { createdAt: -1 } }) {
+  _getRisksByQuery({
+    isDeleted = { $in: [null, false] },
+    ...args,
+  } = {},
+  options = { sort: { createdAt: -1 } }) {
     const query = { isDeleted, ...args, organizationId: this.organizationId() };
     return Risks.find(query, options);
   },
   _getRiskByQuery(filter = {}, options = { sort: { createdAt: -1 } }) {
     const query = { ...filter, organizationId: this.organizationId() };
     return Risks.findOne(query, options);
-  }
-}
+  },
+};

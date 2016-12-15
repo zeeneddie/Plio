@@ -26,3 +26,6 @@ import './card-create';
 import './org-deletion';
 import './help-info';
 import './messages-counter';
+import './sources-create';
+import './sources-edit';
+import './card-heading';

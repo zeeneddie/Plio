@@ -1,9 +1,27 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { _ } from 'meteor/underscore';
 
-import { OrgCurrencies, WorkflowTypes, UserMembership, CustomerTypes } from '../constants.js';
+import {
+  OrgCurrencies, WorkflowTypes, UserMembership,
+  StandardTitles, RiskTitles, NonConformitiesTitles,
+  WorkInboxTitles, CustomerTypes
+} from '../constants.js';
 import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
+export const HomeTitlesSchema = new SimpleSchema({
+  standards: {
+    type: String,
+  },
+  risks: {
+    type: String,
+  },
+  nonConformities: {
+    type: String,
+  },
+  workInbox: {
+    type: String,
+  },
+});
 
 const UserSettingsSchema = new SimpleSchema({
   sendDailyRecap: {
@@ -191,6 +209,15 @@ const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
   {
+    homeScreenTitles: {
+      type: HomeTitlesSchema,
+      defaultValue: {
+        standards: _.first(StandardTitles),
+        risks: _.first(RiskTitles),
+        nonConformities: _.first(NonConformitiesTitles),
+        workInbox: _.first(WorkInboxTitles),
+      },
+    },
     serialNumber: {
       type: Number,
       min: 0,
