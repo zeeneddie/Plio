@@ -5,11 +5,11 @@ import DiscussButton from '../../../../components/Buttons/DiscussButton';
 import Button from '../../../../components/Buttons/Button';
 
 const HeaderButtons = (props) => {
-  const toggleExpandButton = props.hasDocxAttachment ? (
+  const toggleExpandButton = props.hasDocxAttachment && (
     <ToggleExpandButton onClick={props.onToggleScreenMode} />
-  ) : null;
+  );
 
-  const discussionButton = !props.isDiscussionOpened ? (
+  const discussionButton = !props.isDiscussionOpened && (
     <DiscussButton
       onClick={props.onDiscussionOpen}
       href={props.pathToDiscussion}
@@ -17,29 +17,29 @@ const HeaderButtons = (props) => {
     >
       Discuss
     </DiscussButton>
-  ) : null;
+  );
 
-  const restoreButton = props.hasAccess && props.isDeleted ? (
+  const restoreButton = props.hasAccess && props.isDeleted && (
     <Button type="secondary" onClick={props.onRestore}>
       Restore
     </Button>
-  ) : null;
+  );
 
   const deleteButton = (
     props.hasAccess &&
     props.isDeleted &&
-    props.hasFullAccess ? (
+    props.hasFullAccess && (
       <Button type="primary" onClick={props.onDelete}>
         Delete
       </Button>
-    ) : null
+    )
   );
 
-  const editButton = !props.isDeleted ? (
+  const editButton = !props.isDeleted && (
     <Button type="primary" onClick={props.onModalOpen} >
       Edit
     </Button>
-  ) : null;
+  );
 
   return (
     <div>

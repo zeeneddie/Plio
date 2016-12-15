@@ -5,7 +5,6 @@ import { Meteor } from 'meteor/meteor';
 import { setIsFullScreenMode } from '/client/redux/actions/standardsActions';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';
-import { getId } from '/imports/api/helpers';
 import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
@@ -59,11 +58,9 @@ export const onModalOpen = ({ _id }) => () =>
 
 
 export const onRestore = ({
-  standard: {
-    _id,
-    title,
-    isDeleted,
-  } = {},
+  _id,
+  title,
+  isDeleted,
 }) => () => {
   if (!isDeleted) return;
 
@@ -92,14 +89,13 @@ export const onRestore = ({
 };
 
 export const onDelete = ({
-  standard: {
-    _id,
-    title,
-    isDeleted,
-  } = {},
+  _id,
+  title,
+  isDeleted,
   userId,
   organizationId,
 }) => () => {
+  console.log(userId, organizationId);
   if (!isDeleted || !isOrgOwner(userId, organizationId)) return;
 
   const options = {

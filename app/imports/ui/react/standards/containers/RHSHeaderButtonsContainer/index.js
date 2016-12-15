@@ -21,14 +21,17 @@ export default compose(
     'discussions.isDiscussionOpened',
   ])),
 
-  mapProps(({ standard: { _id, isDeleted = false }, organizationId, userId, ...props }) => {
+  mapProps(({ standard: { _id, title, isDeleted = false }, organizationId, userId, ...props }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);
     const pathToDiscussion = getPathToDiscussion({ urlItemId: _id });
 
     return {
       ...props,
+      userId,
+      organizationId,
       _id,
+      title,
       hasAccess,
       hasFullAccess,
       pathToDiscussion,
