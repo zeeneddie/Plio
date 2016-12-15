@@ -90,7 +90,7 @@ const optionalFields = new SimpleSchema([
       type: ImprovementPlanSchema,
       optional: true,
     },
-    standardNumber: {
+    uniqueNumber: {
       type: Number,
       min: 1,
       max: 10000,

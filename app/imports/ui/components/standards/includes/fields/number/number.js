@@ -1,22 +1,22 @@
 import { Template } from 'meteor/templating';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-Template.StandardNumberField.viewmodel({
+Template.UniqueNumberField.viewmodel({
   helpText: 'Please enter a unique number between 1 and 10000 for this standards document',
   update() {
     if (!this._id) return;
-    const { standardNumber } = this.getData();
+    const { uniqueNumber } = this.getData();
 
-    this.parent().update({ standardNumber });
+    this.parent().update({ uniqueNumber });
   },
   getData() {
-    const { standardNumber } = this.data();
-    return { standardNumber: parseInt(standardNumber, 10) };
+    const { uniqueNumber } = this.data();
+    return { uniqueNumber: parseInt(uniqueNumber, 10) || null };
   },
   inputArgs() {
     return {
       placeholder: '#',
-      value: this.standardNumber,
+      value: this.uniqueNumber,
       className: 'form-control',
       onFocusOut: this.update.bind(this),
     };

@@ -31,7 +31,7 @@ export default compose(
       ((props.type && props.type.title) !== (nextProps.type && nextProps.type.title)) ||
       isNewCurrent !== isNewNext ||
       notEquals(pickKeys(props), pickKeys(nextProps)) ||
-      props.standardNumber !== nextProps.standardNumber ||
+      props.uniqueNumber !== nextProps.uniqueNumber ||
       (nextProps.filter === STANDARD_FILTER_MAP.DELETED && (
         notEquals(pickKeysDeleted(props), pickKeysDeleted(nextProps))
       ))
