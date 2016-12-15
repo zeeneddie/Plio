@@ -156,6 +156,7 @@ export const CustomersListProjection = {
   customerType: 1,
   isAdminOrg: 1,
   'users.userId': 1,
+  'users.role': 1,
   'users.isRemoved': 1,
   'users.removedAt': 1,
   'users.removedBy': 1,

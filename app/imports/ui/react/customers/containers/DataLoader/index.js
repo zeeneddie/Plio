@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
+import ReactDOM from 'react-dom';
 
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 import {
@@ -91,6 +92,8 @@ export default compose(
       if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
         return props.dispatch(setShowCard(false));
       }
+
+      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
       return goToDashboard();
     },

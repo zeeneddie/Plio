@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { ArrowBack } from './ArrowBack';
+import Title from './Title';
 
 const Header = ({ children, ...other }) => (
   <nav className="navbar" {...other}>
@@ -12,5 +13,6 @@ Header.propTypes = {
 };
 
 Header.ArrowBack = ArrowBack;
+Header.Title = Title;
 
 export default Header;
