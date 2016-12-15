@@ -18,9 +18,12 @@ export default compose(
   setPropTypes({
     standardId: PropTypes.string.isRequired,
   }),
-  connect(() => (state) => pickC([
-    'ncs', 'risks', 'actions', 'lessons', 'workItems',
-  ])(state.collections)),
+  connect(() => (state) => ({
+    ...pickC(['userId'], state.global),
+    ...pickC([
+      'ncs', 'risks', 'actions', 'lessons', 'workItems',
+    ], state.collections),
+  })),
   mapProps((props) => {
     const problemFilter = every([
       notDeleted,

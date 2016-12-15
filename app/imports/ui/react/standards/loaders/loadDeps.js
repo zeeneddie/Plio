@@ -31,8 +31,8 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const ncs = NonConformities.find(query, pOptions).fetch();
     const risks = Risks.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
-    const workItems = WorkItems.find(query, pOptions).fetch();
     const lessons = LessonsLearned.find(query, pOptions).fetch();
+    const workItems = WorkItems.find(query).fetch();
     const reduxActions = [
       setDepartments(departments),
       setFiles(files),

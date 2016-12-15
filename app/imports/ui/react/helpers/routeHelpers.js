@@ -11,10 +11,9 @@ export const goToDashboard = (params = {}) => {
   FlowRouter.withReplaceState(() => FlowRouter.go('dashboardPage', { orgSerialNumber }));
 };
 
-const createPathGetter = path => (params, queryParams) => {
+const createPathGetter = (path, urlItemIdParamName = 'urlItemId') => (params, queryParams) => {
   const orgSerialNumber = getOrgSerialNumber(params);
-  const urlItemId = params.urlItemId;
-  const _params = { ...params, orgSerialNumber, urlItemId };
+  const _params = { ...params, orgSerialNumber, [urlItemIdParamName]: params.urlItemId };
   const filter = getFilter(queryParams);
   const _queryParams = queryParams || { filter };
 
@@ -46,6 +45,6 @@ export const getPathToDiscussion = createPathGetter('standardDiscussion');
 
 export const getPathToNC = createPathGetter('nonconformity');
 
-export const getPathToRisk = createPathGetter('risk');
+export const getPathToRisk = createPathGetter('risk', 'riskId');
 
-export const getPathToWorkItem = createPathGetter('workInboxItem');
+export const getPathToWorkItem = createPathGetter('workInboxItem', 'workItemId');

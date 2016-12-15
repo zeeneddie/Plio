@@ -1,6 +1,4 @@
 import React, { PropTypes } from 'react';
-import property from 'lodash.property';
-import { compose } from 'recompose';
 
 import { ActionTypes } from '/imports/share/constants';
 import { splitActionsByType } from '/imports/ui/react/actions/helpers';
@@ -9,7 +7,7 @@ import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
 import _actionStatus_ from '/imports/startup/client/mixins/actionStatus';
 import _workInbox_ from '/imports/startup/client/mixins/workInbox';
 import { getPathToNC, getPathToRisk, getPathToWorkItem } from '../../../../../helpers/routeHelpers';
-import { propEqId } from '/imports/api/helpers';
+import { propEq } from '/imports/api/helpers';
 
 // TODO: work items are not publishing
 
@@ -25,16 +23,19 @@ const ConnectedDocList = (props) => {
     href: getPathToRisk({ urlItemId: risk._id }),
   }));
   const actions = props.actions.map((action) => {
-    const workItem = {
-      ...props.workItems.find(compose(find(propEqId(action._id)), property('linkedTo'))),
-    };
-    const params = { urlItemId: workItem._id };
-    const queryParams = _workInbox_._getQueryParams(workItem);
+    const workItem = props.workItems.find(propEq('linkedDoc._id', action._id));
+    const href = ((() => {
+      if (!workItem) return '#';
 
+      const params = { urlItemId: workItem._id };
+      const queryParams = _workInbox_._getQueryParams(workItem)(props.userId);
+
+      return getPathToWorkItem(params, queryParams);
+    })());
     return {
       ...action,
+      href,
       indicator: _actionStatus_.getClassByStatus(action.status),
-      href: getPathToWorkItem(params, queryParams),
     };
   });
   const actionsByType = splitActionsByType(actions);
@@ -70,6 +71,7 @@ const ConnectedDocList = (props) => {
 };
 
 ConnectedDocList.propTypes = {
+  userId: PropTypes.string,
   ncs: PropTypes.array,
   risks: PropTypes.array,
   actions: PropTypes.array,

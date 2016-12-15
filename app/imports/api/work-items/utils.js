@@ -8,5 +8,6 @@ export const getWorkItemsCursorByIdsWithLimitedFields =
   getWorkItemsCursorByIds({
     linkedDoc: 1,
     isCompleted: 1,
-    assigneeId: 1
+    assigneeId: 1,
+    organizationId: 1,
   });
