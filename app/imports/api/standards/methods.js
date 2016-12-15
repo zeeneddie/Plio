@@ -46,18 +46,7 @@ export const update = new CheckedMethod({
   check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
   run({ ...args }) {
-    try {
-      return StandardsService.update({ ...args });
-    } catch (e) {
-      if (e.code === UNIQUE_FIELD_MONGO_ERROR_CODE) {
-        throw new Meteor.Error(
-          'unique-field-error',
-          'Unique field saving error. Please check field with "unique" label'
-        );
-      }
-
-      throw e;
-    }
+    return StandardsService.update({ ...args });
   },
 });
 

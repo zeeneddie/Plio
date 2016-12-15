@@ -94,7 +94,6 @@ const optionalFields = new SimpleSchema([
       type: Number,
       min: 1,
       max: 10000,
-      unique: true,
       optional: true,
     },
   },
