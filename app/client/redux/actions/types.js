@@ -90,13 +90,10 @@ export const SET_DATA_LOADING = 'SET_DATA_LOADING';
 
 export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
-<<<<<<< HEAD
-=======
 export const SET_IS_FULL_SCREEN_MODE = 'SET_IS_FULL_SCREEN_MODE';
 
 export const USER_LOGOUT = 'USER_LOGOUT';
 
->>>>>>> c4dc57171f9211be9b6edb4871aed1021cea1c24
 // collections
 
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';
