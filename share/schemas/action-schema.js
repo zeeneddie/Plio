@@ -107,6 +107,11 @@ const ActionSchema = new SimpleSchema([
       type: String,
       optional: true
     },
+    completionAssignedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
+    },
     isVerified: {
       type: Boolean,
       defaultValue: false
@@ -136,6 +141,11 @@ const ActionSchema = new SimpleSchema([
     },
     verificationComments: {
       type: String,
+      optional: true
+    },
+    verificationAssignedBy: {
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
       optional: true
     },
     isDeleted: {

@@ -1,7 +1,6 @@
 import { $ } from 'meteor/jquery';
 import { Meteor } from 'meteor/meteor';
 
-import { setIsFullScreenMode } from '/client/redux/actions/standardsActions';
 import modal from '/imports/startup/client/mixins/modal';
 import { StandardsHelp } from '/imports/api/help-messages';
 import swal from '/imports/ui/utils/swal';
@@ -9,6 +8,7 @@ import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
 import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import { goToStandard } from '../../../helpers/routeHelpers';
+import { setIsFullScreenMode } from '/client/redux/actions/globalActions';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');

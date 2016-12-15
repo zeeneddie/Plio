@@ -453,11 +453,15 @@ export const compareStatusesByPriority = (() => {
 
     if (priority1 !== priority2) {
       return priority2 - priority1;
-    } else {
-      return status2 - status1;
     }
+
+    return status2 - status1;
   };
 })();
+
+export const getSelectedOrgSerialNumber = () => (
+  localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`)
+);
 
 export const getUserJoinedAt = (organization = {}, userId) => {
   const currentUserInOrg = [...organization.users].find(propEq('userId', userId));
@@ -466,4 +470,6 @@ export const getUserJoinedAt = (organization = {}, userId) => {
   return joinedAt;
 };
 
-export const looksLikeAPromise = fn => typeof fn === 'function' && typeof fn.then === 'function';
+export const looksLikeAPromise = obj => !!(
+  obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
+);

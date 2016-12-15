@@ -6,7 +6,6 @@ import {
   shouldUpdate,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { _ } from 'meteor/underscore';
 
 import {
   some,
@@ -15,15 +14,14 @@ import {
   notEquals,
   omitC,
   pickDeep,
+  identity,
+  pickC,
 } from '/imports/api/helpers';
 import StandardsRHS from '../../components/RHS';
 import { getStandardsByFilter } from '../../helpers';
 
 const mapStateToProps = state => ({
-  ...pickDeep([
-    'standards.isFullScreenMode',
-    'standards.isCardReady',
-  ])(state),
+  ...pickC(['isFullScreenMode', 'isCardReady', 'urlItemId'])(state.global),
   standard: state.collections.standardsByIds[state.global.urlItemId],
 });
 
@@ -36,7 +34,7 @@ export default compose(
   mapProps(props => ({ standards: getStandardsByFilter(props) })),
   branch(
     lengthStandards,
-    _.identity,
+    identity,
     renderComponent(StandardsRHS.NotFound),
   ),
   connect(mapStateToProps),
@@ -58,6 +56,11 @@ export default compose(
       notEquals(omitStandardKeys(props.standard), omitStandardKeys(nextProps.standard))
     );
   }),
+  branch(
+    props => props.isReady && props.urlItemId && !props.standard,
+    renderComponent(StandardsRHS.NotExist),
+    identity,
+  ),
   mapProps((props) => {
     const hasDocxAttachment = some([
       getC('source1.htmlUrl'),

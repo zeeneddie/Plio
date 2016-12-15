@@ -13,23 +13,23 @@ export const DocumentTitles = {
 };
 
 export const NonConformityFilters = {
-  1: 'magnitude',
-  2: 'status',
-  3: 'department',
-  4: 'deleted',
+  1: { title: 'NCs', name: 'magnitude', prepend: 'by' },
+  2: { title: 'NCs', name: 'status', prepend: 'by' },
+  3: { title: 'NCs', name: 'department', prepend: 'by' },
+  4: { title: 'NCs', name: 'deleted' },
 };
 
 export const RiskFilters = {
-  1: 'type',
-  2: 'status',
-  3: 'department',
-  4: 'deleted',
+  1: { title: 'Risks', name: 'type', prepend: 'by' },
+  2: { title: 'Risks', name: 'status', prepend: 'by' },
+  3: { title: 'Risks', name: 'department', prepend: 'by' },
+  4: { title: 'Risks', name: 'deleted' },
 };
 
 export const StandardFilters = {
-  1: { name: 'section', prepend: 'by' },
-  2: { name: 'type', prepend: 'by' },
-  3: { name: 'deleted', prepend: '' },
+  1: { title: 'Standards', name: 'section', prepend: 'by' },
+  2: { title: 'Standards', name: 'type', prepend: 'by' },
+  3: { title: 'Standards', name: 'deleted', prepend: '' },
 };
 
 export const STANDARD_FILTER_MAP = {
@@ -39,12 +39,12 @@ export const STANDARD_FILTER_MAP = {
 };
 
 export const WorkInboxFilters = {
-  1: 'my current',
-  2: 'team current',
-  3: 'my completed',
-  4: 'team completed',
-  5: 'my deleted',
-  6: 'team deleted',
+  1: { title: 'Work', name: 'my current', prepend: 'by' },
+  2: { title: 'Work', name: 'team current', prepend: 'by' },
+  3: { title: 'Work', name: 'my completed', prepend: 'by' },
+  4: { title: 'Work', name: 'team completed', prepend: 'by' },
+  5: { name: 'My deleted actions' },
+  6: { name: 'Team deleted actions' },
 };
 
 export const UncategorizedTypeSection = {
@@ -138,6 +138,18 @@ export const WorkItemsListProjection = {
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1,
+};
+
+export const HelpDocsListProjection = {
+  sectionId: 1,
+  title: 1,
+  issueNumber: 1,
+  status: 1,
+};
+
+export const HelpSectionProjection = {
+  index: 1,
+  title: 1,
 };
 
 export const StandardsBookSectionsListProjection = {

@@ -18,6 +18,8 @@ import {
   ADD_STANDARD_TYPE,
   UPDATE_STANDARD_TYPE,
   REMOVE_STANDARD_TYPE,
+  SET_HELP_DOCS,
+  SET_HELP_SECTIONS,
 } from './types';
 import { createAction } from './helpers';
 
@@ -88,6 +90,20 @@ export function setLessons(lessons) {
   return {
     type: SET_LESSONS_LEARNED,
     payload: { lessons },
+  };
+}
+
+export function setHelpDocs(helpDocs) {
+  return {
+    type: SET_HELP_DOCS,
+    payload: { helpDocs },
+  };
+}
+
+export function setHelpSections(helpSections) {
+  return {
+    type: SET_HELP_SECTIONS,
+    payload: { helpSections },
   };
 }
 

@@ -148,9 +148,9 @@ Template.CreateStandard.viewmodel({
     uploadService.uploadExisting(fileId, file);
   },
   _launchDocxRendering(fileUrl, fileName, standardId) {
-    Meteor.call('Mammoth.convertDocxToHtml', {
-      url: fileUrl,
-      fileName: fileName + '.html',
+    Meteor.call('Mammoth.convertStandardFileToHtml', {
+      fileUrl,
+      htmlFileName: fileName + '.html',
       source: 'source1',
       standardId,
     }, (error, result) => {

@@ -1,8 +1,7 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import get from 'lodash.get';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { UserMembership } from '/imports/share/constants.js';
 import { isOrgOwner } from '/imports/api/checkers.js';
 
 
@@ -12,23 +11,25 @@ Template.OrgSettings_OrgTransfer.viewmodel({
   newOwnerId: '',
   placeholder: 'Select new organization owner',
   selectFirstIfNoSelected: false,
-  ownerId() { return Meteor.userId() },
+  ownerId() { return Meteor.userId(); },
   owner() {
     const owner = Meteor.users.findOne({ _id: this.ownerId() });
     return owner ? owner.fullNameOrEmail() : '';
   },
   selectArgs() {
     const {
-      newOwnerId:value,
+      newOwnerId: value,
       placeholder,
-      selectFirstIfNoSelected
+      selectFirstIfNoSelected,
     } = this.data();
 
     const disabled = !this.isInputEnabled();
 
-    const { users:orgMembersData } = this.organization() || {};
-    const allMembersIds = _(orgMembersData).pluck('userId');
-    const membersIds = _(allMembersIds).filter(userId => userId !== this.ownerId());
+    const { users: orgMembersData } = this.organization() || {};
+    const filteredUsers = _(orgMembersData)
+      .filter(user => user.userId !== this.ownerId() && user.isRemoved === false);
+
+    const membersIds = _.pluck(filteredUsers, 'userId');
 
     return {
       value,

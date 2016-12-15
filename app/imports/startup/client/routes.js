@@ -11,6 +11,7 @@ import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
+import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 
 BlazeLayout.setRoot('#app');
 
@@ -150,6 +151,22 @@ FlowRouter.route('/transfer-organization/:transferId', {
       content: 'TransferOrganizationPage'
     });
   }
+});
+
+FlowRouter.route('/help-center', {
+  name: 'helpDocs',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
+  },
+});
+
+FlowRouter.route('/help-center/:helpId', {
+  name: 'helpDoc',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(HelpDocsProvider);
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/standards', {

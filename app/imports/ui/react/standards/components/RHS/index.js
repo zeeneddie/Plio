@@ -6,6 +6,7 @@ import HeaderButtons from './HeaderButtons';
 import ContentList from './ContentList';
 import Body from './Body';
 import NotFound from './NotFound';
+import NotExist from './NotExist';
 import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
 
 const StandardsRHS = ({
@@ -44,5 +45,6 @@ StandardsRHS.HeaderButtons = HeaderButtons;
 StandardsRHS.ContentList = ContentList;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
+StandardsRHS.NotExist = NotExist;
 
 export default StandardsRHS;

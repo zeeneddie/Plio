@@ -18,6 +18,8 @@ import {
   ADD_STANDARD_TYPE,
   UPDATE_STANDARD_TYPE,
   REMOVE_STANDARD_TYPE,
+  SET_HELP_DOCS,
+  SET_HELP_SECTIONS,
 } from '../actions/types';
 import { mapByIndex, flattenObjects, omitC, findIndexById } from '/imports/api/helpers';
 import { CollectionNames } from '/imports/share/constants';
@@ -83,6 +85,8 @@ export default function reducer(state = initialState, action) {
     case SET_STANDARD_TYPES:
     case SET_LESSONS_LEARNED:
     case SET_STANDARDS:
+    case SET_HELP_DOCS:
+    case SET_HELP_SECTIONS:
       return set(Object.keys(action.payload)[0]);
     case ADD_STANDARD:
       return add(STORE_COLLECTION_NAMES[CollectionNames.STANDARDS]);

@@ -1,5 +1,7 @@
-import { SystemName } from '/imports/share/constants';
+import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
+import { SystemName } from '/imports/share/constants';
 
 export default class BaseEntityService {
   constructor(collection) {
@@ -10,6 +12,17 @@ export default class BaseEntityService {
     this.collection = collection;
   }
 
+  update({ _id, query = {}, options = {}, ...args }) {
+    if (!_.keys(query).length > 0) {
+      query = { _id };
+    }
+    if (!_.keys(options).length > 0) {
+      options['$set'] = args;
+    }
+
+    return this.collection.update(query, options);
+  }
+
   updateViewedBy({ _id, viewedBy }) {
     const query = { _id };
     const options = { $addToSet: { viewedBy } };
@@ -17,20 +30,26 @@ export default class BaseEntityService {
     return this.collection.update(query, options);
   }
 
-  remove({ _id, deletedBy, onSoftDelete }) {
+  remove({ _id, deletedBy, onSoftDelete, onPermanentDelete }) {
     const query = { _id };
 
     const { isDeleted } = this.collection.findOne({ _id });
 
     if (isDeleted) {
-      return this.collection.remove(query);
+      const result = this.collection.remove(query);
+
+      if (Meteor.isServer && _(onPermanentDelete).isFunction()) {
+        Meteor.defer(onPermanentDelete);
+      }
+
+      return result;
     } else {
       const modifier = {
         $set: {
           deletedBy,
           isDeleted: true,
-          deletedAt: new Date()
-        }
+          deletedAt: new Date(),
+        },
       };
 
       const ret = this.collection.update(query, modifier);

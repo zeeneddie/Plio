@@ -15,10 +15,10 @@ import HeaderButtons from '../../components/RHS/HeaderButtons';
 
 export default compose(
   connect(pickDeep([
-    'standards.isFullScreenMode',
+    'global.isFullScreenMode',
     'global.userId',
     'organizations.organizationId',
-    'discussions.isDiscussionOpened',
+    'discussion.isDiscussionOpened',
   ])),
 
   mapProps(({ standard: { _id, title, isDeleted = false }, organizationId, userId, ...props }) => {

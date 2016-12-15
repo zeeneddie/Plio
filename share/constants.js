@@ -60,6 +60,8 @@ export const CollectionNames = {
   DEPARTMENTS: 'Departments',
   DISCUSSIONS: 'Discussions',
   FILES: 'Files',
+  HELP_DOCS: 'HelpDocs',
+  HELP_SECTIONS: 'HelpSections',
   LESSONS: 'LessonsLearned',
   MESSAGES: 'Messages',
   NCS: 'NonConformities',
@@ -158,6 +160,41 @@ export const DocChangesKinds = {
   DOC_REMOVED: 3,
 };
 
+export const DefaultHelpSections = [
+  {
+    index: 1,
+    title: 'How to get help',
+  },
+  {
+    index: 2,
+    title: 'Getting started',
+  },
+  {
+    index: 3,
+    title: 'Creating your Standards manual',
+  },
+  {
+    index: 4,
+    title: 'Managing risks',
+  },
+  {
+    index: 5,
+    title: 'Managing non-conformities',
+  },
+  {
+    index: 6,
+    title: 'Managing workflows',
+  },
+  {
+    index: 7,
+    title: 'User management',
+  },
+  {
+    index: 8,
+    title: 'FAQs',
+  },
+];
+
 export const InvitationStatuses = {
   failed: 0,
   invited: 1,
@@ -242,6 +279,12 @@ export const riskScoreTypes = {
     label: 'Residual risk',
     adj: 'Residual'
   }
+};
+
+export const SourceTypes = {
+  ATTACHMENT: 'attachment',
+  URL: 'url',
+  VIDEO: 'video',
 };
 
 export const StandardStatuses = {
@@ -434,6 +477,30 @@ export const OrganizationDefaults = {
   rkScoringGuidelines: defaultRiskScoringGuideline
 };
 
+export const StandardTitles = [
+  'Standards',
+  'Compliance standards',
+  'Compliance manual',
+  'Quality standards',
+  'Quality manual',
+];
+
+export const RiskTitles = [
+  'Risk register',
+  'Risk records',
+  'Risks',
+];
+
+export const NonConformitiesTitles = [
+  'Non-conformities',
+  'Exceptions',
+];
+
+export const WorkInboxTitles = [
+  'Work inbox',
+  'Work items',
+  'Work',
+];
 
 export const EmailsForPlioReporting = [
   'james.ives@pliohub.com',

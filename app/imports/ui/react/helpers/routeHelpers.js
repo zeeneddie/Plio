@@ -1,7 +1,13 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-const getOrgSerialNumber = ({ orgSerialNumber } = {}) =>
-  orgSerialNumber || FlowRouter.getParam('orgSerialNumber');
+import { getSelectedOrgSerialNumber } from '/imports/api/helpers';
+
+const getOrgSerialNumber = ({ orgSerialNumber } = {}) => (
+  orgSerialNumber ||
+  FlowRouter.getParam('orgSerialNumber') ||
+  getSelectedOrgSerialNumber()
+);
+
 const getFilter = ({ filter } = {}) =>
   filter || FlowRouter.getQueryParam('filter') || 1;
 

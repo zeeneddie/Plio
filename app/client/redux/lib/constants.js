@@ -11,4 +11,6 @@ export const STORE_COLLECTION_NAMES = {
   [CollectionNames.STANDARD_BOOK_SECTIONS]: 'standardBookSections',
   [CollectionNames.STANDARD_TYPES]: 'standardTypes',
   [CollectionNames.LESSONS]: 'lessons',
+  [CollectionNames.HELP_DOCS]: 'helpDocs',
+  [CollectionNames.HELP_SECTIONS]: 'helpSections',
 };

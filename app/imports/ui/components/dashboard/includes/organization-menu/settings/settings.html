@@ -1,5 +1,4 @@
 <template name="OrgSettings">
-
     {{> OrgSettings_MainSettings
         name=name
         ownerId=ownerId
@@ -7,6 +6,9 @@
         timezone=timezone
         organizationId=organizationId
         isEditable=true}}
+
+    <div class="card-divider"></div>
+    <div>{{> React component=homeTitlesSubcard}}</div>
 
     {{> OrgSettings_Departments
         departments=departments

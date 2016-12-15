@@ -16,3 +16,4 @@ import './work-inbox';
 import './discussion';
 import './notifications';
 import './problems';
+import './help-docs';
