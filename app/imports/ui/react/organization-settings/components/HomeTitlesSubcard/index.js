@@ -23,7 +23,7 @@ const HomeTitlesSubcard = ({
   <Subcard loading={loading} {...other}>
     <Subcard.Title>
       <Subcard.TitleItem pull="left">
-        Home screen titles
+        Workspace titles
       </Subcard.TitleItem>
     </Subcard.Title>
 
