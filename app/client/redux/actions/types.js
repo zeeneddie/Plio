@@ -92,6 +92,8 @@ export const SET_IS_CARD_READY = 'SET_IS_CARD_READY';
 
 export const SET_IS_FULL_SCREEN_MODE = 'SET_IS_FULL_SCREEN_MODE';
 
+export const USER_LOGOUT = 'USER_LOGOUT';
+
 // collections
 
 export const SET_DEPARTMENTS = 'SET_DEPARTMENTS';

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { combineReducers } from 'redux';
-import { ORGANIZATION_CHANGED } from '../actions/types';
+import { ORGANIZATION_CHANGED, USER_LOGOUT } from '../actions/types';
 
 import discussion from './discussionReducer';
 import standards from './standardsReducer';
@@ -28,8 +28,8 @@ const appReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  // reset the state if the user changes organization
-  if (action.type === ORGANIZATION_CHANGED) {
+  // reset the state if the user changes organization or logs out
+  if (action.type === ORGANIZATION_CHANGED || action.type === USER_LOGOUT) {
     state = undefined;
   }
 
