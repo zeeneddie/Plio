@@ -92,12 +92,10 @@ export default compose(
       props.organizationId !== nextProps.organizationId ||
       props.initializing !== nextProps.initializing,
   }),
-  connect(pickDeep(['standards.areDepsReady', 'standards.initializing'])),
-  // TODO: when changing filters where layout needs to resubscribe
-  // observers are still running and adding each item from subscription
+  connect(pickDeep(['global.dataLoading', 'standards.areDepsReady', 'standards.initializing'])),
   lifecycle({
     componentWillReceiveProps(nextProps) {
-      if (nextProps.initializing && nextProps.areDepsReady) {
+      if (!nextProps.dataLoading && nextProps.initializing && nextProps.areDepsReady) {
         const { dispatch, organizationId } = nextProps;
 
         Meteor.defer(() => {
@@ -113,8 +111,11 @@ export default compose(
       }
     },
     componentWillUnmount() {
-      return this.observers && this.observers.map(observer =>
-        typeof observer === 'function' && observer.stop());
+      const result = this.observers && this.observers.map(observer => observer && observer.stop());
+
+      this.props.dispatch(setInitializing(true));
+
+      return result;
     },
   }),
   connect(state => ({

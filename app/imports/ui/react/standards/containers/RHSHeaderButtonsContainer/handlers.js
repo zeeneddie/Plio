@@ -1,5 +1,4 @@
 import { $ } from 'meteor/jquery';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
 import { setIsFullScreenMode } from '/client/redux/actions/standardsActions';
@@ -9,6 +8,7 @@ import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
 import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+import { goToStandard } from '../../../helpers/routeHelpers';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -79,10 +79,10 @@ export const onRestore = ({
       showConfirmButton: false,
     });
 
-    const params = { orgSerialNumber: FlowRouter.getParam('orgSerialNumber'), urlItemId: _id };
+    const params = { urlItemId: _id };
     const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
 
-    Meteor.setTimeout(() => FlowRouter.go('standard', params, queryParams), 0);
+    Meteor.defer(() => goToStandard(params, queryParams));
   };
 
   swal(options, () => restore.call({ _id }, cb));
@@ -95,7 +95,6 @@ export const onDelete = ({
   userId,
   organizationId,
 }) => () => {
-  console.log(userId, organizationId);
   if (!isDeleted || !isOrgOwner(userId, organizationId)) return;
 
   const options = {

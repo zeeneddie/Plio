@@ -2,6 +2,7 @@ import React from 'react';
 
 import propTypes from './propTypes';
 import _user_ from '/imports/startup/client/mixins/user';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
 import Source from '../../../../fields/read/components/Source';
@@ -29,7 +30,7 @@ const BodyContents = ({
     { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Section', text: section.title, wrap },
     { label: 'Type', text: type.title, wrap },
-    { label: 'Owner', text: _user_.userNameOrEmail(owner), wrap },
+    { label: 'Owner', text: getUserFullNameOrEmail(owner), wrap },
   ];
   const fields = createReadFields(data);
 

@@ -5,12 +5,6 @@ const getOrgSerialNumber = ({ orgSerialNumber } = {}) =>
 const getFilter = ({ filter } = {}) =>
   filter || FlowRouter.getQueryParam('filter') || 1;
 
-export const goToDashboard = (params = {}) => {
-  const orgSerialNumber = getOrgSerialNumber(params);
-
-  FlowRouter.withReplaceState(() => FlowRouter.go('dashboardPage', { orgSerialNumber }));
-};
-
 const createPathGetter = (path, urlItemIdParamName = 'urlItemId') => (params, queryParams) => {
   const orgSerialNumber = getOrgSerialNumber(params);
   const _params = { ...params, orgSerialNumber, [urlItemIdParamName]: params.urlItemId };
@@ -18,6 +12,22 @@ const createPathGetter = (path, urlItemIdParamName = 'urlItemId') => (params, qu
   const _queryParams = queryParams || { filter };
 
   return FlowRouter.path(path, _params, _queryParams);
+};
+
+export const getPathToStandard = createPathGetter('standard');
+
+export const getPathToDiscussion = createPathGetter('standardDiscussion');
+
+export const getPathToNC = createPathGetter('nonconformity');
+
+export const getPathToRisk = createPathGetter('risk', 'riskId');
+
+export const getPathToWorkItem = createPathGetter('workInboxItem', 'workItemId');
+
+export const goToDashboard = (params = {}) => {
+  const orgSerialNumber = getOrgSerialNumber(params);
+
+  FlowRouter.withReplaceState(() => FlowRouter.go('dashboardPage', { orgSerialNumber }));
 };
 
 export const goToStandards = (params, queryParams) => {
@@ -31,20 +41,7 @@ export const goToStandards = (params, queryParams) => {
 };
 
 export const goToStandard = (params, queryParams) => {
-  const orgSerialNumber = getOrgSerialNumber(params);
-  const urlItemId = params.urlItemId;
-  const _params = { ...params, orgSerialNumber, urlItemId };
-  const filter = getFilter(queryParams);
-  const _queryParams = queryParams || { filter };
+  const path = getPathToStandard(params, queryParams);
 
-  return FlowRouter.withReplaceState(() =>
-    FlowRouter.go('standard', _params, _queryParams));
+  return FlowRouter.withReplaceState(() => FlowRouter.go(path));
 };
-
-export const getPathToDiscussion = createPathGetter('standardDiscussion');
-
-export const getPathToNC = createPathGetter('nonconformity');
-
-export const getPathToRisk = createPathGetter('risk', 'riskId');
-
-export const getPathToWorkItem = createPathGetter('workInboxItem', 'workItemId');
