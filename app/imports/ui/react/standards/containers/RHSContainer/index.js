@@ -23,31 +23,33 @@ const mapStateToProps = state => ({
   ...pickDeep([
     'standards.isFullScreenMode',
     'standards.isCardReady',
-    'collections.standards',
-    'global.filter',
   ])(state),
   standard: state.collections.standardsByIds[state.global.urlItemId],
 });
 
 export default compose(
-  connect(mapStateToProps),
-  mapProps(({
-    isCardReady,
-    standard,
-    standards,
-    filter,
-    ...props,
-  }) => ({
-    ...props,
-    standard,
-    standards: getStandardsByFilter({ standards, filter }),
-    isReady: !!(isCardReady && standards.length && standard),
-  })),
+  connect(pickDeep(['global.filter', 'collections.standards'])),
+  shouldUpdate((props, nextProps) => !!(
+    lengthStandards(props) !== lengthStandards(nextProps) ||
+    props.filter !== nextProps.filter
+  )),
+  mapProps(props => ({ standards: getStandardsByFilter(props) })),
   branch(
     lengthStandards,
     _.identity,
     renderComponent(StandardsRHS.NotFound),
   ),
+  connect(mapStateToProps),
+  mapProps(({
+    isCardReady,
+    standard,
+    standards,
+    ...props,
+  }) => ({
+    ...props,
+    standard,
+    isReady: !!(isCardReady && standards.length && standard),
+  })),
   shouldUpdate((props, nextProps) => {
     const omitStandardKeys = omitC(['updatedAt']);
     return !!(

@@ -48,9 +48,9 @@ const BodyContents = ({
           {fields.owner}
         </div>
 
-        {departmentsIds.length ? (
+        {!!departmentsIds.length && (
           <DepartmentsContainer departmentsIds={departmentsIds} />
-        ) : null}
+        )}
 
         {[source1, source2].map((source, i) => source && (
           <FileProvider

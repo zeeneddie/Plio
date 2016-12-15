@@ -9,8 +9,6 @@ import _workInbox_ from '/imports/startup/client/mixins/workInbox';
 import { getPathToNC, getPathToRisk, getPathToWorkItem } from '../../../../../helpers/routeHelpers';
 import { propEq } from '/imports/api/helpers';
 
-// TODO: work items are not publishing
-
 const ConnectedDocList = (props) => {
   const ncs = props.ncs.map(nc => ({
     ...nc,
@@ -65,7 +63,9 @@ const ConnectedDocList = (props) => {
         <LinkItemList key={i} {...{ label, items }} />
       ))}
       {props.children}
-      <LinkItemList label="Lessons Learned" items={props.lessons} />
+      {props.lessons && !!props.lessons.length && (
+        <LinkItemList label="Lessons Learned" items={props.lessons} />
+      )}
     </div>
   );
 };
