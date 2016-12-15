@@ -155,6 +155,7 @@ export const StandardsBookSectionsListProjection = {
 export const StandardTypesListProjection = {
   organizationId: 1,
   title: 1,
+  abbreviation: 1,
 };
 
 export const DepartmentsListProjection = {
@@ -219,4 +220,5 @@ export const MarginMap = {
   bottom: 'margin-bottom',
 };
 
+export const UNIQUE_FIELD_MONGO_ERROR_CODE = 11000;
 export const MOBILE_BREAKPOINT = 768;

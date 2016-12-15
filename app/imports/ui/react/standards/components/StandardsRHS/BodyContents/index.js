@@ -18,6 +18,7 @@ import IPRead from '../../../../components/IPRead';
 const StandardsRHSBodyContents = ({
   description,
   issueNumber,
+  uniqueNumber,
   owner,
   departmentsIds = [],
   source1,
@@ -38,7 +39,7 @@ const StandardsRHSBodyContents = ({
     { label: 'Description', text: description },
     { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Section', text: section.title, wrap },
-    { label: 'Type', text: type.title, wrap },
+    { label: 'Type', text: type.abbreviation + (uniqueNumber || ''), wrap },
     { label: 'Owner', text: _user_.userNameOrEmail(owner), wrap },
   ];
   const fields = createReadFields(data);
