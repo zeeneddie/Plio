@@ -17,7 +17,7 @@ export const StandardsTypeSchema = new SimpleSchema([
     abbreviation: {
       type: String,
       label: 'Standard type abbreviation',
-      min: 1,
+      min: 0,
       max: 4,
       optional: true
     }
