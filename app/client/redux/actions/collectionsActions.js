@@ -9,9 +9,19 @@ import {
   SET_STANDARD_TYPES,
   SET_STANDARDS,
   SET_LESSONS_LEARNED,
+  ADD_STANDARD,
+  UPDATE_STANDARD,
+  REMOVE_STANDARD,
+  ADD_STANDARD_BOOK_SECTION,
+  UPDATE_STANDARD_BOOK_SECTION,
+  REMOVE_STANDARD_BOOK_SECTION,
+  ADD_STANDARD_TYPE,
+  UPDATE_STANDARD_TYPE,
+  REMOVE_STANDARD_TYPE,
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
 } from './types';
+import { createAction } from './helpers';
 
 export function setDepartments(departments) {
   return {
@@ -96,3 +106,21 @@ export function setHelpSections(helpSections) {
     payload: { helpSections },
   };
 }
+
+export const addStandard = createAction(ADD_STANDARD);
+
+export const updateStandard = createAction(UPDATE_STANDARD);
+
+export const removeStandard = createAction(REMOVE_STANDARD);
+
+export const addStandardBookSection = createAction(ADD_STANDARD_BOOK_SECTION);
+
+export const updateStandardBookSection = createAction(UPDATE_STANDARD_BOOK_SECTION);
+
+export const removeStandardBookSection = createAction(REMOVE_STANDARD_BOOK_SECTION);
+
+export const addStandardType = createAction(ADD_STANDARD_TYPE);
+
+export const updateStandardType = createAction(UPDATE_STANDARD_TYPE);
+
+export const removeStandardType = createAction(REMOVE_STANDARD_TYPE);

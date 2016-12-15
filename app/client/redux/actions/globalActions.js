@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
 import { equals } from '/imports/api/helpers';
@@ -13,7 +12,10 @@ import {
   SET_DATA_LOADING,
   SET_IS_CARD_READY,
   SET_IS_FULL_SCREEN_MODE,
+  USER_LOGOUT,
 } from './types';
+
+export const userLogout = { type: USER_LOGOUT };
 
 export function setUserId(userId) {
   return {
@@ -107,7 +109,7 @@ export function chainActions(actions, wait = 400) {
 
         dispatch(actions[i]);
 
-        return Meteor.setTimeout(() => start(i + 1), wait);
+        return setTimeout(() => start(i + 1), wait);
       };
 
       start(0);

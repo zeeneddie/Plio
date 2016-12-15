@@ -5,7 +5,7 @@ import Collapse from '../../../components/Collapse';
 import HelpDocsRHSBodyHeading from '../HelpDocsRHSBodyHeading';
 import HelpDocsRHSBodyContents from '../HelpDocsRHSBodyContents';
 import SourceWordDocument from '../../../components/SourceWordDocument';
-import SourceRead from '../../../components/SourceRead';
+import Source from '../../../fields/read/components/Source';
 import PreloaderPage from '../../../components/PreloaderPage';
 import propTypes from './propTypes';
 
@@ -32,7 +32,7 @@ const HelpDocsRHSBody = (props) => (
         </Collapse>
         {getC('helpDoc.source.htmlUrl', props) && (
           <SourceWordDocument src={props.helpDoc.source.htmlUrl}>
-            <SourceRead id={1} {...props.helpDoc.source} file={props.file} />
+            <Source id={1} {...props.helpDoc.source} file={props.file} />
           </SourceWordDocument>
         )}
       </div>

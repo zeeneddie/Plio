@@ -155,6 +155,8 @@ export const CreatedBySchema = new SimpleSchema({
   }
 });
 
+// BUG: updating document calls autoValue twice on client
+// because of the actual method call and the subscription afterwards
 export const UpdatedAtSchema = new SimpleSchema({
   updatedAt: {
     type: Date,

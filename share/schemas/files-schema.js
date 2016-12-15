@@ -1,17 +1,19 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
-import { idSchemaDoc, BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from './schemas.js';
+import { BaseEntitySchema, OrganizationIdSchema, ProgressSchema } from './schemas.js';
+import { FILE_STATUS_MAP } from '../constants';
 
 export const RequiredSchema = new SimpleSchema([
   OrganizationIdSchema,
   {
     name: {
-      type: String
+      type: String,
     },
     extension: {
-      type: String
-    }
-  }
+      type: String,
+    },
+  },
 ]);
 
 export const FileIdsSchema = new SimpleSchema([
@@ -22,13 +24,13 @@ export const FileIdsSchema = new SimpleSchema([
     url: {
       type: String,
       defaultValue: '',
-      optional: true
+      optional: true,
     },
 
-    // 'uploading'/'uploaded'/'terminated'/'failed'
     status: {
       type: String,
-      defaultValue: 'in-progress'
-    }
-  }
+      defaultValue: FILE_STATUS_MAP.IN_PROGRESS,
+      allowedValues: _.values(FILE_STATUS_MAP),
+    },
+  },
 ]);

@@ -1,7 +1,6 @@
 import { Template } from 'meteor/templating';
-import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
 
-import { terminateUploading } from '/imports/api/files/methods.js';
 import UploadsStore from '/imports/ui/utils/uploads/uploads-store.js';
 
 Template.FileItem_Read.viewmodel({
@@ -21,7 +20,7 @@ Template.FileItem_Read.viewmodel({
       getWidth({ progress = 0 } = {}) {
         const percentage = progress * 100;
         return `${percentage}%`;
-      }
-    }
-  }
+      },
+    };
+  },
 });

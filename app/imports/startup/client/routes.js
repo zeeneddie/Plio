@@ -10,7 +10,7 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
-import StandardsProvider from '/imports/ui/react/standards/components/StandardsProvider';
+import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 
 BlazeLayout.setRoot('#app');

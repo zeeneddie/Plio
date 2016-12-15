@@ -1,10 +1,9 @@
 import { Template } from 'meteor/templating';
 
-import { selectOrganization } from '/imports/api/users/methods.js';
-import { handleMethodResult } from '/imports/api/helpers.js';
+import { organizationChanged } from '/client/redux/actions/organizationsActions';
 
 Template.Organization_Menu_Item.viewmodel({
-  mixin: 'router',
+  mixin: ['router', 'store'],
   serialNumber: '',
   regex() {
     return `^\\/${this.serialNumber()}`;
@@ -13,6 +12,8 @@ Template.Organization_Menu_Item.viewmodel({
     e.preventDefault();
 
     const selectedOrganizationSerialNumber = this.serialNumber();
+
+    this.dispatch(organizationChanged);
 
     localStorage.setItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`, selectedOrganizationSerialNumber);
 

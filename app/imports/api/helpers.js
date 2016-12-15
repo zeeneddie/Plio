@@ -48,8 +48,8 @@ export const extractIds = (collection = []) => collection.map(property('_id'));
 
 export const not = expression => !expression;
 
-export const mapByIndex = (value = {}, index = 0, arr = []) =>
-  Object.assign([], arr, { [index]: { ...arr[index], ...value } });
+export const mapByIndex = (obj = {}, index = 0, arr = []) =>
+  Object.assign([], arr, { [index]: { ...arr[index], ...obj } });
 
 export const mapValues = curry((mapper, obj) =>
   flattenObjects(Object.keys(obj).map(key => ({ [key]: mapper(obj[key], key, obj) }))));
@@ -114,7 +114,13 @@ export const propSections = property('sections');
 
 export const lengthSections = compose(length, propSections);
 
+export const propTypes = property('types');
+
+export const lengthTypes = compose(length, propTypes);
+
 export const propIsDeleted = property('isDeleted');
+
+export const notDeleted = compose(not, propIsDeleted);
 
 export const flattenMapItems = flattenMap(propItems);
 
@@ -171,6 +177,8 @@ export const propEq = curry((path, assumption, obj) => equals(get(obj, path), as
 
 export const propEqId = propEq('_id');
 
+export const findIndexById = curry((_id, array) => array.findIndex(propEqId(_id)));
+
 export const T = () => true;
 
 export const F = () => false;
@@ -200,6 +208,8 @@ export const compareByProps = curry((props, a, b) =>
 export const compareProps = obj => compose(equals(obj), pickC(Object.keys(obj)));
 
 export const includes = curry((value, array) => Object.assign([], array).includes(value));
+
+export const identity = _.identity;
 
 export const handleMethodResult = (cb) => {
   return (err, res) => {
@@ -459,3 +469,7 @@ export const getUserJoinedAt = (organization = {}, userId) => {
 
   return joinedAt;
 };
+
+export const looksLikeAPromise = obj => !!(
+  obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
+);

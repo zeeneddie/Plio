@@ -2,9 +2,10 @@ import React from 'react';
 import cx from 'classnames';
 
 import propTypes from './propTypes';
-import ClearableField from '../ClearableField';
+import ClearField from '../../fields/read/components/ClearField';
 import AddButton from '../Buttons/AddButton';
 import TextInput from '../../forms/components/TextInput';
+import Icon from '../Icon';
 
 const LHS = ({
   animating = false,
@@ -31,7 +32,7 @@ const LHS = ({
             { loading: animating }
           )}
         >
-          <ClearableField
+          <ClearField
             onClick={e => onClear && onClear(searchInput)(e)}
             animating={animating}
             isFocused={isFocused}
@@ -46,10 +47,10 @@ const LHS = ({
               className="form-control"
               placeholder="Search..."
             />
-          </ClearableField>
+          </ClearField>
 
           {animating && (
-            <i className="small-loader fa fa-circle-o-notch fa-spin"></i>
+            <Icon names="circle-o-notch spin" className="small-loader" />
           )}
         </div>
         {onModalButtonClick && (

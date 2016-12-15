@@ -1,7 +1,7 @@
 import React from 'react';
 
 import createReadFields from '../../../helpers/createReadFields';
-import SourceRead from '../../../components/SourceRead';
+import Source from '../../../fields/read/components/Source';
 import propTypes from './propTypes';
 
 const HelpDocsRHSBodyContents = (props) => {
@@ -29,7 +29,7 @@ const HelpDocsRHSBodyContents = (props) => {
       </div>
 
       {source ? (
-        <SourceRead {...source} file={file} id={1} />
+        <Source {...source} file={file} id={1} />
       ) : ''}
     </div>
   );

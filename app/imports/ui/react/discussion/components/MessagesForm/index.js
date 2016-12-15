@@ -9,9 +9,9 @@ const MessagesForm = (props) => (
             {props.children}
 						<input
               name="message"
-							type="text"
-							className="form-control"
-							placeholder="Add a comment"
+  						type="text"
+  						className="form-control"
+  						placeholder="Add a comment"
               autoComplete="off"/>
 						<span className="input-group-btn">
 							<button type="submit" className="btn btn-secondary">

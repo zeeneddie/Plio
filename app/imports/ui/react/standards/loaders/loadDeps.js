@@ -17,8 +17,10 @@ import {
   setWorkItems,
   setLessons,
 } from '/client/redux/actions/collectionsActions';
+import { setDepsReady } from '/client/redux/actions/standardsActions';
+import loadMainData from './loadMainData';
 
-export default function loadDeps({ dispatch, organizationId }, onData) {
+export default function loadDeps({ dispatch, organizationId, initializing }, onData) {
   const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
 
   if (subscription.ready()) {
@@ -29,8 +31,8 @@ export default function loadDeps({ dispatch, organizationId }, onData) {
     const ncs = NonConformities.find(query, pOptions).fetch();
     const risks = Risks.find(query, pOptions).fetch();
     const actions = Actions.find(query, pOptions).fetch();
-    const workItems = WorkItems.find(query, pOptions).fetch();
     const lessons = LessonsLearned.find(query, pOptions).fetch();
+    const workItems = WorkItems.find(query).fetch();
     const reduxActions = [
       setDepartments(departments),
       setFiles(files),
@@ -39,7 +41,12 @@ export default function loadDeps({ dispatch, organizationId }, onData) {
       setActions(actions),
       setWorkItems(workItems),
       setLessons(lessons),
+      setDepsReady(true),
     ];
+
+    if (initializing) {
+      loadMainData({ dispatch, organizationId }, () => null);
+    }
 
     dispatch(batchActions(reduxActions));
   }
