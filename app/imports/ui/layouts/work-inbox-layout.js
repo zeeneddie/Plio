@@ -8,10 +8,7 @@ Template.WorkInbox_Layout.viewmodel({
   autorun: [
     function() {
       const orgSerialNumber = this.organizationSerialNumber();
-      const isDeleted = (this.isActiveWorkInboxFilter(5) ||
-                        this.isActiveWorkInboxFilter(6))
-        ? true
-        : { $in: [null, false] };
+      const isDeleted = { $in: [null, false, true] };
       const _subHandlers = [
         DocumentLayoutSubs.subscribe('workInboxLayout', orgSerialNumber, isDeleted)
       ];
