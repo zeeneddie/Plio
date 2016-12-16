@@ -25,7 +25,10 @@ export const onSearchTextChange = _.debounce(({
 }, target) => {
   const value = target.value;
   const fields = [{ name: 'name' }];
-  const query = _search_.searchQuery(value, fields);
+  const searchQuery = _search_.searchQuery(value, fields);
+  const query = Object.assign({}, searchQuery, {
+    isAdminOrg: { $ne: true },
+  });
   const options = { sort: { name: 1 } };
 
   const organizationsFound = Organizations.find(query, options).fetch();

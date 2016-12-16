@@ -110,6 +110,9 @@ export const getTzTargetDate = (targetDate, timezone) => {
   ], timezone).toDate();
 };
 
+export const getFormattedTzDate = (timezone, format = 'z Z') =>
+  moment.tz(timezone).format(format);
+
 export const getWorkflowDefaultStepDate = ({ organization, linkedTo }) => {
   let magnitude = ProblemMagnitudes.MINOR;
 

@@ -6,7 +6,6 @@ import {
   onlyUpdateForKeys,
 } from 'recompose';
 import { connect } from 'react-redux';
-import React from 'react';
 import property from 'lodash.property';
 
 import CustomersRHS from '../../components/RHS';
@@ -19,7 +18,7 @@ export default compose(
   branch(
     property('organizationsLength'),
     identity,
-    renderComponent(() => <div>Not Found</div>)
+    renderComponent(CustomersRHS.NotFound)
   ),
   connect(state => ({
     ...pickC(['isCardReady', 'urlItemId'], state.global),

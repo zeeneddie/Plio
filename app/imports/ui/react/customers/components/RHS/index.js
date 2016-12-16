@@ -2,42 +2,39 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 import RHS from '../../../components/RHS';
-// import HeaderButtons from './HeaderButtons';
-// import ContentList from './ContentList';
-// import Body from './Body';
-// import NotFound from './NotFound';
-// import NotExist from './NotExist';
-// import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
+import NotFound from './NotFound';
+import NotExist from './NotExist';
+import CustomersRHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
+import Body from './Body';
 
-const CustomersRHS = ({
-  organization,
-  isReady = true,
-}) => (
+const CustomersRHS = ({ isReady, organization }) => (
   <RHS
-    className={cx('expandable', { content: !organization })}
+    className={cx({ content: !organization })}
   >
-    <RHS.Card className="organization-details">
+    <RHS.Card className="standard-details">
       <RHS.Header
-        title="Compliance Standard"
+        title="Organization"
         isReady={isReady}
       >
-        {/* <RHSHeaderButtonsContainer {...{ organization, hasDocxAttachment }} /> */}
+        <CustomersRHSHeaderButtonsContainer
+          organization={organization}
+        />
       </RHS.Header>
 
-      {/* <ContentList {...{ isReady, organization, hasDocxAttachment }} /> */}
+      <RHS.ContentList isReady={isReady}>
+        <Body {...organization} />
+      </RHS.ContentList>
     </RHS.Card>
   </RHS>
 );
 
-CustomersRHS.propTypes = {
-  isReady: PropTypes.bool,
-  organization: PropTypes.object,
-};
+CustomersRHS.NotFound = NotFound;
+CustomersRHS.NotExist = NotExist;
+CustomersRHS.Body = Body;
 
-// CustomersRHS.HeaderButtons = HeaderButtons;
-// CustomersRHS.ContentList = ContentList;
-// CustomersRHS.Body = Body;
-// CustomersRHS.NotFound = NotFound;
-// CustomersRHS.NotExist = NotExist;
+CustomersRHS.propTypes = {
+  organization: PropTypes.object,
+  isReady: PropTypes.bool,
+};
 
 export default CustomersRHS;

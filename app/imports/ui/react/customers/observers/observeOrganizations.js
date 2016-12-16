@@ -6,7 +6,9 @@ import {
 } from '/client/redux/actions/collectionsActions';
 
 export default (dispatch) => {
-  const handle = Organizations.find().observeChanges({
+  const query = { isAdminOrg: { $ne: true } };
+
+  const handle = Organizations.find(query).observeChanges({
     added(_id, fields) {
       if (handle) {
         console.log('added');

@@ -1,13 +1,16 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
+import { CollectionNames } from '/imports/share/constants';
+import { getId } from '/imports/api/helpers';
 import RHS from '../../../components/RHS';
 import HeaderButtons from './HeaderButtons';
-import ContentList from './ContentList';
 import Body from './Body';
 import NotFound from './NotFound';
 import NotExist from './NotExist';
 import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
+import RHSBodyContainer from '../../containers/RHSBodyContainer';
+import ChangelogContainer from '../../../changelog/containers/ChangelogContainer';
 
 const StandardsRHS = ({
   isFullScreenMode,
@@ -29,7 +32,13 @@ const StandardsRHS = ({
         <RHSHeaderButtonsContainer {...{ standard, hasDocxAttachment }} />
       </RHS.Header>
 
-      <ContentList {...{ isReady, standard, hasDocxAttachment }} />
+      <RHS.ContentList isReady={isReady}>
+        <RHSBodyContainer {...{ standard, hasDocxAttachment }} />
+        <ChangelogContainer
+          documentId={getId(standard)}
+          collection={CollectionNames.STANDARDS}
+        />
+      </RHS.ContentList>
     </RHS.Card>
   </RHS>
 );
@@ -42,7 +51,6 @@ StandardsRHS.propTypes = {
 };
 
 StandardsRHS.HeaderButtons = HeaderButtons;
-StandardsRHS.ContentList = ContentList;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
 StandardsRHS.NotExist = NotExist;

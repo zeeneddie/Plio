@@ -1,7 +1,6 @@
 import React from 'react';
 
 import propTypes from './propTypes';
-import _user_ from '/imports/startup/client/mixins/user';
 import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';

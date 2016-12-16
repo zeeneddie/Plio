@@ -15,7 +15,7 @@ const StandardsLHS = (props) => {
       content = (
         <SectionListContainer
           standards={props.standards}
-          onToggleCollapse={props.onSectionToggleCollapse}
+          onToggleCollapse={props.onToggleCollapse}
         />
       );
       break;
