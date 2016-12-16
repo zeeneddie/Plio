@@ -1,39 +1,50 @@
-import { compose, withHandlers, mapProps } from 'recompose';
+import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes } from 'recompose';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
+import { PropTypes } from 'react';
 
 import CustomersListItem from '../../components/ListItem';
 import { setUrlItemId } from '/client/redux/actions/globalActions';
 import { UserMembership } from '/imports/share/constants';
 import { getFormattedDate, getUserFullNameOrEmail } from '/imports/share/helpers';
-import propTypes from './propTypes';
+import { notEquals, propEq, getC } from '/imports/api/helpers';
 
 const CustomersListItemContainer = compose(
+  setPropTypes({
+    urlItemId: PropTypes.string,
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    createdAt: PropTypes.instanceOf(Date),
+    users: PropTypes.arrayOf(PropTypes.shape({
+      userId: PropTypes.string,
+      role: PropTypes.string,
+    })),
+  }),
+  shouldUpdate((props, nextProps) => !!(
+    (props._id !== props.urlItemId && props._id === nextProps.urlItemId) ||
+    (props._id === props.urlItemId && props._id !== nextProps.urlItemId) ||
+    props.name !== nextProps.name ||
+    props.createdAt !== nextProps.createdAt ||
+    notEquals(props.users, nextProps.users)
+  )),
   mapProps((props) => {
     const href = (() => {
-      const params = { urlItemId: props.organization._id };
+      const params = { urlItemId: props._id };
 
       return FlowRouter.path('customer', params);
     })();
 
-    const isActive = props.urlItemId === props.organization._id;
-
-    const orgId = props.organization._id;
-    const orgName = props.organization.name;
-    const orgCreatedAt = getFormattedDate(props.organization.createdAt, 'DD MMM YYYY');
-
-    const ownerData = props.organization.users.find(doc => (
-      doc.role === UserMembership.ORG_OWNER
-    ));
-    const orgOwner = ownerData ? getUserFullNameOrEmail(ownerData.userId) : '';
+    const isActive = props.urlItemId === props._id;
+    const createdAt = getFormattedDate(props.createdAt, 'DD MMM YYYY');
+    const ownerData = props.users.find(propEq('role', UserMembership.ORG_OWNER));
+    const owner = getUserFullNameOrEmail(getC('userId', ownerData));
 
     return {
       href,
       isActive,
-      orgId,
-      orgName,
-      orgCreatedAt,
-      orgOwner,
+      createdAt,
+      owner,
+      name: props.name,
     };
   }),
 
@@ -41,13 +52,11 @@ const CustomersListItemContainer = compose(
 
   withHandlers({
     onClick: props => handler => {
-      props.dispatch(setUrlItemId(props.orgId));
+      props.dispatch(setUrlItemId(props._id));
 
-      handler({ urlItemId: props.orgId });
+      handler({ urlItemId: props._id });
     },
   }),
 )(CustomersListItem);
-
-CustomersListItemContainer.propTypes = propTypes;
 
 export default CustomersListItemContainer;

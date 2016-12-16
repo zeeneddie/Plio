@@ -9,7 +9,7 @@ const CustomersList = (props) => (
       <CustomersListItemContainer
         key={organization._id}
         urlItemId={props.urlItemId}
-        organization={organization}
+        {...organization}
       />
     ))}
   </div>

@@ -1,31 +1,38 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-import propTypes from './propTypes';
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
 
-const CustomersListItem = (props) => (
+const CustomersListItem = ({ isActive, onClick, href, name, owner, createdAt }) => (
   <ListItemLink
-    isActive={props.isActive}
-    onClick={props.onClick}
-    href={props.href}
+    isActive={isActive}
+    onClick={onClick}
+    href={href}
   >
     <ListItem>
       <div className="flexbox-row">
         <ListItem.Heading>
-          <span className="margin-right">{props.orgName}</span>
+          <span className="margin-right">{name}</span>
         </ListItem.Heading>
       </div>
       <ListItem.LeftText>
-        {props.orgOwner}
+        {owner}
       </ListItem.LeftText>
       <ListItem.RightText>
-        {props.orgCreatedAt}
+        {createdAt}
       </ListItem.RightText>
     </ListItem>
   </ListItemLink>
 );
 
-CustomersListItem.propTypes = propTypes;
+CustomersListItem.propTypes = {
+  href: PropTypes.string,
+  isActive: PropTypes.bool,
+  onClick: PropTypes.func,
+  _id: PropTypes.string,
+  name: PropTypes.string,
+  createdAt: PropTypes.string,
+  owner: PropTypes.string,
+};
 
 export default CustomersListItem;
