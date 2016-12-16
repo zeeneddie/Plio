@@ -5,7 +5,6 @@ import { Organizations } from '/imports/share/collections/organizations';
 import { setFilteredOrganizations } from '/client/redux/actions/customersActions';
 import {
   setSearchText,
-  toggleCollapsed,
   setAnimating,
 } from '/client/redux/actions/globalActions';
 import {
@@ -17,10 +16,7 @@ import {
   collapseExpandedCustomers,
 } from '../../helpers';
 import _search_ from '/imports/startup/client/mixins/search';
-
-export const onToggleCollapse = ({ dispatch }) => (e, { key, type }) => {
-  dispatch(toggleCollapsed({ key, type, close: { type } }));
-};
+import { onSearchTextClear } from '/imports/ui/react/share/LHS/handlers';
 
 export const onSearchTextChange = _.debounce(({
   dispatch,
@@ -55,12 +51,4 @@ export const onSearchTextChange = _.debounce(({
   return invokeFinish(collapseExpandedCustomers());
 }, 400);
 
-export const onClear = props => input => () => {
-  if (!props.searchText) return;
-
-  input.focus();
-
-  props.dispatch(setSearchText(''));
-
-  onSearchTextChange(props, input);
-};
+export const onClear = onSearchTextClear(onSearchTextChange);

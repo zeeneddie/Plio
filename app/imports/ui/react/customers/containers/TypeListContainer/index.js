@@ -11,17 +11,15 @@ import propTypes from './propTypes';
 
 const CustomersTypeListContainer = compose(
   withProps((props) => {
-    const types = [];
-
-    _.each(CustomerTypes, (customerType) => {
+    const types = _.values(CustomerTypes).reduce((prev, customerType) => {
       const organizations = props.organizations.filter(
         propEq('customerType', customerType)
       );
 
-      if (organizations.length) {
-        types.push({ customerType, organizations });
-      }
-    });
+      return organizations.length
+        ? prev.concat({ customerType, organizations })
+        : prev;
+    }, []);
 
     return { types };
   }),

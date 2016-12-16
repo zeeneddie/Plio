@@ -3,7 +3,7 @@ import { setIsCardReady } from '/client/redux/actions/globalActions';
 export default subscribe => function loadCardData({
     dispatch,
     urlItemId,
-    ...props
+    ...props,
   }, onData) {
   let subscription;
   let isCardReady = true;

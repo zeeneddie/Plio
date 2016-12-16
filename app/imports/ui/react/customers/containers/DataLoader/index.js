@@ -7,16 +7,15 @@ import {
   withHandlers,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
-import ReactDOM from 'react-dom';
+import property from 'lodash.property';
 
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
 import {
   DocumentLayoutSubs,
   DocumentCardSubs,
 } from '/imports/startup/client/subsmanagers';
-import { pickDeep } from '/imports/api/helpers';
+import { pickDeep, identity } from '/imports/api/helpers';
 import { setInitializing } from '/client/redux/actions/customersActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
 import { goToDashboard } from '../../../helpers/routeHelpers';
@@ -47,9 +46,9 @@ export default compose(
   }),
 
   branch(
-    props => props.loading,
+    property('loading'),
     renderComponent(CustomersLayout),
-    _.identity
+    identity
   ),
 
   lifecycle({
@@ -82,8 +81,12 @@ export default compose(
       }
     },
     componentWillUnmount() {
-      return this.observers && this.observers.forEach(observer =>
-        typeof observer === 'function' && observer.stop());
+      const result = this.observers && this.observers.map(observer =>
+        observer && observer.stop());
+
+      this.props.dispatch(setInitializing(true));
+
+      return result;
     },
   }),
 
@@ -92,8 +95,6 @@ export default compose(
       if (props.width <= MOBILE_BREAKPOINT && props.showCard) {
         return props.dispatch(setShowCard(false));
       }
-
-      ReactDOM.unmountComponentAtNode(document.getElementById('app'));
 
       return goToDashboard();
     },

@@ -7,7 +7,7 @@ import StandardListContainer from '../../containers/StandardListContainer';
 import LabelMessagesCount from '../../../components/Labels/LabelMessagesCount';
 import SectionListContainer from '../../containers/SectionListContainer';
 
-const TypeList = ({ types, onTypeToggleCollapse, onSectionToggleCollapse }) => (
+const TypeList = ({ types, onToggleCollapse }) => (
   <div>
     {types.map(type => (
       <LHSItemContainer
@@ -18,7 +18,7 @@ const TypeList = ({ types, onTypeToggleCollapse, onSectionToggleCollapse }) => (
           <LabelMessagesCount count={type.unreadMessagesCount} />
         )}
         hideRTextOnCollapse
-        onToggleCollapse={onTypeToggleCollapse}
+        onToggleCollapse={onToggleCollapse}
       >
         <div className="sub">
           {type._id === TYPE_UNCATEGORIZED ? (
@@ -28,7 +28,7 @@ const TypeList = ({ types, onTypeToggleCollapse, onSectionToggleCollapse }) => (
               defaultType={types[0]}
               type={type}
               standards={type.standards}
-              onToggleCollapse={onSectionToggleCollapse}
+              onToggleCollapse={onToggleCollapse}
             />
           )}
         </div>
@@ -39,8 +39,7 @@ const TypeList = ({ types, onTypeToggleCollapse, onSectionToggleCollapse }) => (
 
 TypeList.propTypes = {
   types: PropTypes.array.isRequired,
-  onTypeToggleCollapse: PropTypes.func.isRequired,
-  onSectionToggleCollapse: PropTypes.func.isRequired,
+  onToggleCollapse: PropTypes.func.isRequired,
 };
 
 export default TypeList;

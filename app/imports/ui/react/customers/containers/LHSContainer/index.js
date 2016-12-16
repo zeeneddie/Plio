@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
 
 import {
-  onToggleCollapse,
   onSearchTextChange,
   onClear,
 } from './handlers';
+import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 import { pickDeep, notEquals } from '/imports/api/helpers';
 import CustomersLHS from '../../components/LHS';
 
