@@ -8,6 +8,7 @@ import { Risks } from '/imports/share/collections/risks';
 import { Actions } from '/imports/share/collections/actions';
 import { WorkItems } from '/imports/share/collections/work-items';
 import { LessonsLearned } from '/imports/share/collections/lessons';
+import { Standards } from '/imports/share/collections/standards';
 import {
   setDepartments,
   setFiles,
@@ -16,9 +17,9 @@ import {
   setActions,
   setWorkItems,
   setLessons,
+  setStandards,
 } from '/client/redux/actions/collectionsActions';
 import { setDepsReady } from '/client/redux/actions/standardsActions';
-import loadMainData from './loadMainData';
 
 export default function loadDeps({ dispatch, organizationId, initializing }, onData) {
   const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
@@ -33,7 +34,7 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     const actions = Actions.find(query, pOptions).fetch();
     const lessons = LessonsLearned.find(query, pOptions).fetch();
     const workItems = WorkItems.find(query).fetch();
-    const reduxActions = [
+    let reduxActions = [
       setDepartments(departments),
       setFiles(files),
       setNCs(ncs),
@@ -45,7 +46,11 @@ export default function loadDeps({ dispatch, organizationId, initializing }, onD
     ];
 
     if (initializing) {
-      loadMainData({ dispatch, organizationId }, () => null);
+      // set standards only when initializing because
+      // later observers will be running
+      const standards = Standards.find(query, { sort: { title: 1 } }).fetch();
+
+      reduxActions = reduxActions.concat(setStandards(standards));
     }
 
     dispatch(batchActions(reduxActions));
