@@ -27,24 +27,25 @@ const CustomersListItemContainer = compose(
     props.createdAt !== nextProps.createdAt ||
     notEquals(props.users, nextProps.users)
   )),
-  mapProps((props) => {
+  mapProps(({ _id, name, urlItemId, users, ...props }) => {
     const href = (() => {
-      const params = { urlItemId: props._id };
+      const params = { urlItemId: _id };
 
       return FlowRouter.path('customer', params);
     })();
 
-    const isActive = props.urlItemId === props._id;
+    const isActive = urlItemId === _id;
     const createdAt = getFormattedDate(props.createdAt, 'DD MMM YYYY');
-    const ownerData = props.users.find(propEq('role', UserMembership.ORG_OWNER));
+    const ownerData = users.find(propEq('role', UserMembership.ORG_OWNER));
     const owner = getUserFullNameOrEmail(getC('userId', ownerData));
 
     return {
+      _id,
+      name,
       href,
       isActive,
       createdAt,
       owner,
-      name: props.name,
     };
   }),
 
