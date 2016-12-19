@@ -4,18 +4,17 @@ import propTypes from './propTypes';
 import LHSContainer from '../../../containers/LHSContainer';
 import CustomersTypeListContainer from '../../containers/TypeListContainer';
 
-const CustomersLHS = (props) => (
-  <LHSContainer
-    animating={props.animating}
-    searchText={props.searchText}
-    searchResultsText={props.searchResultsText}
-    onChange={props.onSearchTextChange}
-    onClear={props.onClear}
-  >
-    <CustomersTypeListContainer
-      organizations={props.organizations}
-      onToggleCollapse={props.onToggleCollapse}
-    />
+const CustomersLHS = ({
+  animating,
+  searchText,
+  searchResultsText,
+  onSearchTextChange,
+  onClear,
+  organizations,
+  onToggleCollapse,
+}) => (
+  <LHSContainer {...{ animating, searchText, searchResultsText, onSearchTextChange, onClear }}>
+    <CustomersTypeListContainer {...{ organizations, onToggleCollapse }} />
   </LHSContainer>
 );
 

@@ -1,4 +1,4 @@
-import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes } from 'recompose';
+import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes, lifecycle } from 'recompose';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
 import { PropTypes } from 'react';

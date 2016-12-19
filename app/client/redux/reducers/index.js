@@ -14,6 +14,7 @@ import window from './windowReducer';
 import mobile from './mobileReducer';
 import counters from './countersReducer';
 import helpDocs from './helpDocsReducer';
+import modal from './modalReducer';
 
 const appReducer = combineReducers({
   discussion,
@@ -27,6 +28,7 @@ const appReducer = combineReducers({
   counters,
   global,
   helpDocs,
+  modal,
 });
 
 const rootReducer = (state, action) => {

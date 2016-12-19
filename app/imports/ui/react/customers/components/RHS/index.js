@@ -1,24 +1,29 @@
+/* eslint-disable react/jsx-pascal-case */
+
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 import RHS from '../../../components/RHS';
 import NotFound from './NotFound';
 import NotExist from './NotExist';
-import CustomersRHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
 import Body from './Body';
+import ModalHandle from '../../../components/ModalHandle';
 
 const CustomersRHS = ({ isReady, organization }) => (
-  <RHS
-    className={cx({ content: !organization })}
-  >
+  <RHS className={cx({ content: !organization })}>
     <RHS.Card className="standard-details">
       <RHS.Header
         title="Organization"
         isReady={isReady}
       >
-        <CustomersRHSHeaderButtonsContainer
-          organization={organization}
-        />
+        <ModalHandle
+          title="Organization"
+          helpContent={(
+            <div>Hello World</div>
+          )}
+        >
+          <div>Hello World</div>
+        </ModalHandle>
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>
