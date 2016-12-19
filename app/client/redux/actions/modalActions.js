@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { batchActions } from 'redux-batched-actions';
+import { $ } from 'meteor/jquery';
 
-import ModalWindow from '/imports/ui/react/components/ModalWindow';
 import {
   SET_MODAL,
   SET_MODAL_SAVING,
   SET_MODAL_ERROR_TEXT,
+  ON_MODAL_CLOSE,
 } from './types';
+
+export const onModalClose = { type: ON_MODAL_CLOSE };
 
 export function setModal(modal) {
   return {
@@ -27,16 +28,14 @@ export function setErrorText(errorText) {
   return {
     type: SET_MODAL_ERROR_TEXT,
     payload: { errorText },
+    throttle: 400,
   };
 }
-
-export const open = props => () =>
-  ReactDOM.render(<ModalWindow {...props} />, document.getElementById('modal'));
 
 export const close = () => (dispatch, getState) => {
   const { modal } = getState().modal.modal;
 
-  return modal && modal.modal('hide');
+  return modal && $(modal).modal('hide');
 };
 
 export const setError = errorText => dispatch =>

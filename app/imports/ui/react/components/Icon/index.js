@@ -7,10 +7,10 @@ import { MarginMap } from '/imports/api/constants';
 const sizeMap = {
   1: '',
   2: 'lg',
-  3: 'x2',
-  4: 'x3',
-  5: 'x4',
-  6: 'x5',
+  3: '2x',
+  4: '3x',
+  5: '4x',
+  6: '5x',
 };
 
 const Icon = ({ margin, size = 1, className, names }) => {

@@ -1,18 +1,21 @@
 import React, { PropTypes } from 'react';
 import { $ } from 'meteor/jquery';
-import { connect } from 'react-redux';
-import { compose, pure } from 'recompose';
-import property from 'lodash.property';
+import { pure } from 'recompose';
+import { _ } from 'meteor/underscore';
 
 import Modal from '../Modal';
-import { pickC } from '/imports/api/helpers';
-import { setModal } from '/client/redux/actions/modalActions';
+import { setModal, onModalClose } from '/client/redux/actions/modalActions';
 
-class ModalWindow extends React.Component {
+const ERROR_PANEL_CLOSE_TIMER = 2000;
+
+@pure
+export default class ModalWindow extends React.Component {
   static get propTypes() {
     return {
       variation: PropTypes.oneOf(['save', 'simple', null, undefined]),
-      helpText: PropTypes.string,
+      helpContent: PropTypes.node,
+      onToggleHelpPanel: PropTypes.func,
+      isHelpPanelCollapsed: PropTypes.bool,
       isSaving: PropTypes.bool,
       title: PropTypes.string.isRequired,
       submitCaptionText: PropTypes.string,
@@ -30,6 +33,7 @@ class ModalWindow extends React.Component {
     return {
       variation: null,
       isSaving: false,
+      isHelpPanelCollapsed: true,
       errorText: '',
       submitCaptionText: 'Save',
       submitCaptionTextOnSave: 'Saving...',
@@ -43,6 +47,7 @@ class ModalWindow extends React.Component {
 
     this.closeModal = this.closeModal.bind(this);
     this.closePortal = props.closePortal.bind(this);
+    this.toggleHelpPanel = _.throttle(props.onToggleHelpPanel, 400).bind(this);
   }
 
   componentDidMount() {
@@ -51,27 +56,38 @@ class ModalWindow extends React.Component {
     $(this.modalRef).modal('show');
     $(this.modalRef).on('hidden.bs.modal', this.closePortal);
 
-    // const oldOnpopstate = window.onpopstate;
-    // window.onpopstate = (e) => {
-    //   this.close();
-    //   if (_.isFunction(oldOnpopstate)) {
-    //     oldOnpopstate(e);
-    //   }
-    //   window.onpopstate = oldOnpopstate;
-    // };
+    const oldOnpopstate = window.onpopstate;
+
+    window.onpopstate = (e) => {
+      this.closeModal();
+
+      if (typeof oldOnpopstate === 'function') oldOnpopstate(e);
+
+      window.onpopstate = oldOnpopstate;
+    };
   }
 
   componentWillUpdate(nextProps) {
+    if (this.props.isHelpPanelCollapsed && !nextProps.isHelpPanelCollapsed) {
+      $(this.helpPanel).collapse('show');
+    } else if (!this.props.isHelpPanelCollapsed && nextProps.isHelpPanelCollapsed) {
+      $(this.helpPanel).collapse('hide');
+    }
+
     if (!this.props.errorText && nextProps.errorText) {
       $(this.errorSection).collapse('show');
       $(this.modalRef).animate({ scrollTop: 0 }, 250, 'swing');
+      const timeout = setTimeout(() => {
+        $(this.errorSection).collapse('hide');
+        clearTimeout(timeout);
+      }, ERROR_PANEL_CLOSE_TIMER);
     } else if (this.props.errorText && !nextProps.errorText) {
       $(this.errorSection).collapse('hide');
     }
   }
 
   componentWillUnmount() {
-    this.props.dispatch(setModal(null));
+    this.props.dispatch(onModalClose);
   }
 
   _getSubmitCaptionText() {
@@ -96,6 +112,7 @@ class ModalWindow extends React.Component {
     return (
       <Modal
         {...this.props}
+        onToggleHelpPanel={this.toggleHelpPanel}
         submitCaptionText={this._getSubmitCaptionText()}
         closeCaptionText={this._getCloseCaptionText()}
         modalRefCb={modalRef => (this.modalRef = modalRef)}
@@ -108,8 +125,3 @@ class ModalWindow extends React.Component {
     );
   }
 }
-
-export default compose(
-  pure,
-  connect(compose(pickC(['isSaving', 'errorText']), property('modal'))),
-)(ModalWindow);

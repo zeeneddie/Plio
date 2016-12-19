@@ -1,27 +1,26 @@
 import React, { PropTypes } from 'react';
 import Portal from 'react-portal';
 
-import Button from '../Buttons/Button';
-import ModalWindow from '../ModalWindow';
+import ModalWindowContainer from '../../containers/ModalWindowContainer';
 
 const ModalHandle = ({
   closeOnEsc = false,
   closeOnOutsideClick = false,
-  openByClickOn = (<Button type="primary">Edit</Button>),
+  openByClickOn,
   children,
   ...props,
 }) => (
   <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn }}>
-    <ModalWindow {...props}>
+    <ModalWindowContainer {...props}>
       {children}
-    </ModalWindow>
+    </ModalWindowContainer>
   </Portal>
 );
 
 ModalHandle.propTypes = {
   closeOnEsc: PropTypes.bool,
   closeOnOutsideClick: PropTypes.bool,
-  openByClickOn: PropTypes.node,
+  openByClickOn: PropTypes.element.isRequired,
   children: PropTypes.node,
 };
 

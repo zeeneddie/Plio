@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
+import { compose, componentFromProp, defaultProps, mapProps } from 'recompose';
 
 const sizeMap = {
   1: 'sm',
@@ -7,29 +8,29 @@ const sizeMap = {
   3: 'lg',
 };
 
-const Button = ({
-  children,
-  type = 'primary',
-  onClick,
-  className,
-  href = '',
-  size = 2,
-  ...other,
-}) => {
-  const typeCx = `btn-${type}`;
-  const sizeCx = size && `btn-${size}`;
+const Button = compose(
+  defaultProps({
+    component: 'a',
+  }),
+  mapProps(({
+    children,
+    type = 'primary',
+    onClick,
+    className,
+    size = 2,
+    ...other,
+  }) => {
+    const typeCx = type.split(' ').map(t => `btn-${t}`).join(' ');
+    const sizeCx = size && `btn-${size}`;
 
-  return (
-    <a
-      className={cx('btn', typeCx, sizeCx, className)}
-      onClick={onClick}
-      href={href}
-      {...other}
-    >
-      {children}
-    </a>
-  );
-};
+    return {
+      ...other,
+      onClick,
+      children,
+      className: cx('btn', typeCx, sizeCx, className),
+    };
+  })
+)(componentFromProp('component'));
 
 Button.propTypes = {
   children: PropTypes.node,

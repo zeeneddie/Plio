@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 
-import Button from '../Buttons/Button';
 import Icon from '../Icon';
 import Heading from './Heading';
 import HelpPanel from '../HelpPanel';
@@ -8,12 +7,11 @@ import HelpPanel from '../HelpPanel';
 const Modal = ({
   variation,
   helpContent,
-  collapsed = false,
-  onToggleCollapse = () => null,
+  isHelpPanelCollapsed = true,
+  onToggleHelpPanel,
   isSaving,
   submitCaptionText,
   title,
-  disabled,
   onModalClose,
   closeCaptionText,
   errorText,
@@ -29,13 +27,12 @@ const Modal = ({
           {...{
             variation,
             helpContent,
-            collapsed,
-            onToggleCollapse,
+            isHelpPanelCollapsed,
+            onToggleHelpPanel,
             isSaving,
             title,
             submitCaptionText,
             closeCaptionText,
-            disabled,
             onModalClose,
           }}
         />
@@ -44,21 +41,19 @@ const Modal = ({
         {helpContent && (
           <HelpPanel.Body
             refCb={helpPanelRefCb}
-            onToggleCollapse={onToggleCollapse}
+            onToggleCollapse={onToggleHelpPanel}
           >
             {helpContent}
           </HelpPanel.Body>
         )}
 
         {/* notification panel */}
-        {errorText && (
-          <div className="collapse modal-error-section" ref={errorSectionRefCb}>
-            <div className="card-block">
-              <Icon names="exclamation-circle" size="4" aria-hidden="true" />
-              {errorText}
-            </div>
+        <div className="collapse modal-error-section" ref={errorSectionRefCb}>
+          <div className="card-block">
+            <Icon names="exclamation-circle" size="4" aria-hidden="true" />
+            {errorText}
           </div>
-        )}
+        </div>
 
         <div className="modal-window-content">
           {children}
@@ -71,12 +66,11 @@ const Modal = ({
 Modal.propTypes = {
   variation: PropTypes.oneOf(['save', 'simple', null, undefined]),
   helpContent: PropTypes.node,
-  collapsed: PropTypes.bool,
-  onToggleCollapse: PropTypes.func,
+  isHelpPanelCollapsed: PropTypes.bool,
+  onToggleHelpPanel: PropTypes.func,
   isSaving: PropTypes.bool,
   submitCaptionText: PropTypes.string,
   title: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
   onModalClose: PropTypes.func.isRequired,
   closeCaptionText: PropTypes.string,
   errorText: PropTypes.string,

@@ -8,6 +8,7 @@ import NotFound from './NotFound';
 import NotExist from './NotExist';
 import Body from './Body';
 import ModalHandle from '../../../components/ModalHandle';
+import Button from '../../../components/Buttons/Button';
 
 const CustomersRHS = ({ isReady, organization }) => (
   <RHS className={cx({ content: !organization })}>
@@ -18,6 +19,7 @@ const CustomersRHS = ({ isReady, organization }) => (
       >
         <ModalHandle
           title="Organization"
+          openByClickOn={(<Button type="primary">Edit</Button>)}
           helpContent={(
             <div>Hello World</div>
           )}

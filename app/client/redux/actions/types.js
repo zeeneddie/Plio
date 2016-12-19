@@ -175,3 +175,5 @@ export const SET_MODAL = 'SET_MODAL';
 export const SET_MODAL_SAVING = 'SET_MODAL_SAVING';
 
 export const SET_MODAL_ERROR_TEXT = 'SET_MODAL_ERROR_TEXT';
+
+export const ON_MODAL_CLOSE = 'ON_MODAL_CLOSE';

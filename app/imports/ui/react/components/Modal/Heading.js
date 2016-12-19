@@ -9,12 +9,11 @@ import HelpPanel from '../HelpPanel';
 const ModalHeading = ({
   variation,
   helpContent,
-  collapsed,
-  onToggleCollapse,
+  isHelpPanelCollapsed,
+  onToggleHelpPanel,
   isSaving,
   title,
   submitCaptionText,
-  disabled,
   onModalClose,
   closeCaptionText,
 }) => (
@@ -31,13 +30,16 @@ const ModalHeading = ({
         )}
       >
         {helpContent && (
-          <HelpPanel.Head {...{ collapsed, onToggleCollapse }} />
+          <HelpPanel.Head
+            collapsed={isHelpPanelCollapsed}
+            onToggleCollapse={onToggleHelpPanel}
+          />
         )}
         {variation === 'save' && (
           <Button
             type="primary"
             className={cx('submit-modal-button', { disabled: isSaving })}
-            disable={isSaving}
+            disabled={isSaving}
           >
             {isSaving && (
               <Icon names="spinner pulse fw" margin="bottom" />
@@ -60,11 +62,15 @@ const ModalHeading = ({
       )}
     >
       <Button
+        component="button"
         type="secondary"
-        className={cx({ disabled })}
-        // disable={disabled}
+        className={cx({ disabled: isSaving })}
+        disabled={isSaving}
         onClick={onModalClose}
       >
+        {isSaving && variation !== 'save' && (
+          <Icon names="spinner pulse fw" margin="bottom" />
+        )}
         {closeCaptionText}
       </Button>
     </div>
@@ -74,12 +80,11 @@ const ModalHeading = ({
 ModalHeading.propTypes = {
   variation: PropTypes.oneOf(['save', 'simple', null, undefined]),
   helpContent: PropTypes.node,
-  collapsed: PropTypes.bool,
-  onToggleCollapse: PropTypes.func,
+  isHelpPanelCollapsed: PropTypes.bool,
+  onToggleHelpPanel: PropTypes.func,
   isSaving: PropTypes.bool,
   submitCaptionText: PropTypes.string,
   title: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
   onModalClose: PropTypes.func.isRequired,
   closeCaptionText: PropTypes.string,
 };
