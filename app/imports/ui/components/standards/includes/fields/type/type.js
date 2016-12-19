@@ -5,6 +5,7 @@ import get from 'lodash.get';
 
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { DefaultStandardTypes } from '/imports/share/constants.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.ESType.viewmodel({
   share: 'standard',
@@ -24,9 +25,12 @@ Template.ESType.viewmodel({
   },
   types() {
     const organizationId = this.organizationId();
-    const types = StandardTypes.find({ organizationId }).fetch();
+    const types = StandardTypes.find({ organizationId }).fetch().map(item => ({
+      ...item,
+      titlePrefix: item.title,
+    }));
 
-    return types;
+    return sortArrayByTitlePrefix(types);
   },
   update() {
     if (!this._id) return;

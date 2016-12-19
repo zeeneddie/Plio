@@ -18,6 +18,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
+import { getTitlePrefix } from '/imports/share/helpers.js';
 
 export const { compose } = _;
 
@@ -228,8 +229,9 @@ export const showError = (errorMsg) => {
 
 // 1, 1.2, 3, 10.3, a, b, c
 export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
-  const at = a.titlePrefix;
-  const bt = b.titlePrefix;
+  let at = getTitlePrefix(a.titlePrefix.toString());
+  let bt = getTitlePrefix(b.titlePrefix.toString());
+
   if (typeof at === 'number' && typeof bt !== 'number') {
     return -1;
   }
