@@ -96,7 +96,11 @@ export const getTitlePrefix = (title) => {
     const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
       return b + c.replace(/\./g, '');
     });
-    titlePrefix = parseFloat(stringPrefixFloat) || title;
+    titlePrefix = parseFloat(stringPrefixFloat);
+
+    if (!titlePrefix && titlePrefix !== 0) {
+      titlePrefix = title;
+    }
   } else {
     titlePrefix = title;
   }

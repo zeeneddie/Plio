@@ -10,7 +10,7 @@ const Standards = new Mongo.Collection(CollectionNames.STANDARDS, {
   transform(doc) {
     const title = doc.title;
     if (title) {
-      doc.titlePrefix = getTitlePrefix(title);
+      doc.titlePrefix = title;
     }
 
     return doc;
