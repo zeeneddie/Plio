@@ -14,12 +14,12 @@ Template.WorkInbox_Card_Read_Wrapper.viewmodel({
   cardArgs() {
     const workItem = Object.assign({}, this.workItem());
     const isReady = this.isReady();
-    const isReadOnly = workItem.isDeleted;
     const { linkedDoc: { _id } = {} } = workItem;
+
     return {
       _id,
       isReady,
-      isReadOnly,
+      isReadOnly: false,
       showCard: true,
     };
   },

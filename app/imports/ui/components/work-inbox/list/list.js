@@ -61,7 +61,9 @@ Template.WorkInbox_List.viewmodel({
             Meteor.setTimeout(() => this.goToWorkInbox(), 0);
           }
         } else {
-          const allItems = this._getWorkItemsByQuery().fetch();
+          const allItems = this._getWorkItemsByQuery({
+            isDeleted: { $in: [true, false] },
+          }).fetch();
 
           if (!workItemId || (workItemId && findById(workItemId, allItems))) {
             const { _id } = defaultDoc;
@@ -118,8 +120,8 @@ Template.WorkInbox_List.viewmodel({
         .reduce((prev, cur) => [...prev, ...cur]);
 
     const workItems = this._getWorkItemsByQuery({
-      ..._query,
       'linkedDoc._id': { $in: linkedDocsIds },
+      ..._query,
     }).fetch();
 
     return _(workItems)
@@ -194,12 +196,19 @@ Template.WorkInbox_List.viewmodel({
     const getItems = (userQuery) => {
       const workItemsQuery = { assigneeId: userQuery, isDeleted: false };
       const workItems = sortItems(this.getPendingItems(workItemsQuery));
+
       const deletedQuery = {
         ...this.getActionsSearchQuery(),
         isDeleted: true,
         deletedBy: userQuery,
       };
-      const deleted = sortItems(this._getActionsByQuery(deletedQuery).fetch());
+      const deletedActions = sortItems(this._getActionsByQuery(deletedQuery).fetch());
+      const deletedActionsIds = extractIds(deletedActions);
+      const deleted = sortItems(this.getPendingItems({
+        'linkedDoc._id': { $in: deletedActionsIds },
+        isDeleted: true,
+      }));
+
       const current = byStatus(isInProgress, workItems);
       const completed = byStatus(isCompleted, workItems);
 

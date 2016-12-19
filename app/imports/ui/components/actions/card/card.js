@@ -4,6 +4,7 @@ import get from 'lodash.get';
 
 import { WorkInboxHelp } from '/imports/api/help-messages.js';
 import { ActionPlanOptions } from '/imports/share/constants.js';
+import { restore, remove } from '/imports/api/actions/methods.js';
 
 Template.Actions_Card_Read.viewmodel({
   mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
@@ -50,5 +51,15 @@ Template.Actions_Card_Read.viewmodel({
       template: 'Actions_Edit',
       _id: get(this.action(), '_id')
     });
-  }
+  },
+  restore({ _id, isDeleted, title }, cb = () => {}) {
+    if (!isDeleted) return;
+
+    restore.call({ _id }, cb);
+  },
+  delete({ _id, title, isDeleted }, cb = () => {}) {
+    if (!isDeleted) return;
+
+    remove.call({ _id }, cb);
+  },
 });
