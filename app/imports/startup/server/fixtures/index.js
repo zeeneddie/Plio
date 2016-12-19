@@ -1,2 +1,3 @@
-import './fixtures.js';
-import './fixtures-messages.js';
+import './fixtures';
+import './fixtures-messages';
+import './fixtures-standards';
