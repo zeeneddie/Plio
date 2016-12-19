@@ -1,6 +1,6 @@
 <template name="SimpleSelection_Edit">
   <div class="new-cards" {{b "ref: forms"}}>
-    {{#each items}}
+    {{#each getItems}}
       {{> SimpleSelection_Edit_Item (getArgs this)}}
     {{/each}}
   </div>
