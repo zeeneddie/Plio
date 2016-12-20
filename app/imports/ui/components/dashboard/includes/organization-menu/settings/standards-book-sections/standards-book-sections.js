@@ -9,6 +9,7 @@ import {
   insert, update, remove
 } from '/imports/api/standards-book-sections/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_StandardsBookSections.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -66,11 +67,13 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
         if (err) {
           swal('Oops... Something went wrong!', err.reason, 'error');
         } else {
-          swal(
-            'Removed!',
-            `Standards section "${title}" was removed successfully.`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Standards section "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });
