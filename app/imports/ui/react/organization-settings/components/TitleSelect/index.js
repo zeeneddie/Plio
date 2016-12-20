@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import Form from '/imports/ui/react/forms/components/Form';
-import Select from '/imports/ui/react/forms/components/Select';
+import SelectInput from '/imports/ui/react/forms/components/SelectInput';
 
 const TitleSelect = ({ label, ...other }) => (
   <Form.Group>
     <Form.Label colXs={12} colSm={4}>
       {label}
     </Form.Label>
-    <Select
+    <SelectInput
       {...other}
       colXs={12}
       colSm={8}

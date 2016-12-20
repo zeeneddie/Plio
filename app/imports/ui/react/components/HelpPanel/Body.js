@@ -1,13 +1,18 @@
 import React, { PropTypes } from 'react';
 
 import Button from '../Buttons/Button';
+import Collapse from '../Collapse';
 
-const HelpPanelBody = ({ refCb, onToggleCollapse, children }) => (
-  <div className="collapse guidance-panel" ref={refCb}>
+const HelpPanelBody = ({ onToggleCollapse, collapsed, children }) => (
+  <Collapse
+    {...{ collapsed }}
+    className="collapse guidance-panel"
+  >
     <div className="card-block">
-      {children}
+      <div>{children}</div>
       <div className="btn-group">
         <Button
+          component="button"
           type="link"
           className="guidance-panel-close pointer"
           onClick={onToggleCollapse}
@@ -16,12 +21,13 @@ const HelpPanelBody = ({ refCb, onToggleCollapse, children }) => (
         </Button>
       </div>
     </div>
-  </div>
+  </Collapse>
 );
 
 HelpPanelBody.propTypes = {
   refCb: PropTypes.func,
   onToggleCollapse: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
 };
 

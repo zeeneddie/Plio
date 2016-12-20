@@ -13,7 +13,15 @@ const CustomersLHS = ({
   organizations,
   onToggleCollapse,
 }) => (
-  <LHSContainer {...{ animating, searchText, searchResultsText, onSearchTextChange, onClear }}>
+  <LHSContainer
+    {...{
+      animating,
+      searchText,
+      searchResultsText,
+      onClear,
+      onChange: onSearchTextChange,
+    }}
+  >
     <CustomersTypeListContainer {...{ organizations, onToggleCollapse }} />
   </LHSContainer>
 );

@@ -1,35 +1,24 @@
 import React, { PropTypes } from 'react';
-import { _ } from 'meteor/underscore';
-import { compose, getContext, mapProps } from 'recompose';
 import cx from 'classnames';
-import Blaze from 'meteor/blaze-react-component';
 
-const enhance = compose(
-  mapProps(props => ({
-    ...props,
-    items: _.contains(props.items, props.selected)
-      ? props.items
-      : [...props.items, props.selected],
-  })),
-  getContext({ changeField: PropTypes.func }),
+const Select = ({ value, options, className, onChange }) => (
+  <select className={cx('form-control c-select', className)} {...{ value, onChange }}>
+   {options.map((option, i) => (
+     <option key={i} value={option.value}>
+       {option.text}
+     </option>
+   ))}
+  </select>
 );
-const Select = enhance(({ items, name, changeField, colSm, colXs, ...other }) => (
-  <div className={cx(colSm && `col-sm-${colSm}`, colXs && `col-xs-${colXs}`)}>
-    <Blaze
-      template="Select_Single"
-      content="CustomTitleCreate"
-      onUpdate={vm => changeField(name, vm.value())}
-      items={items.map(item => ({ _id: item, title: item }))}
-      {...other}
-    />
-  </div>
-));
 
 Select.propTypes = {
-  items: PropTypes.array.isRequired,
-  selected: PropTypes.string,
-  colSm: PropTypes.number,
-  colXs: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  })).isRequired,
+  onChange: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default Select;

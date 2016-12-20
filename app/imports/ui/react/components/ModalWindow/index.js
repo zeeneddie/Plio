@@ -68,10 +68,6 @@ export default class ModalWindow extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.isHelpPanelCollapsed !== prevProps.isHelpPanelCollapsed) {
-      $(this.helpPanel).collapse('toggle');
-    }
-
     if (this.props.errorText && !prevProps.errorText) {
       $(this.errorSection).collapse('show');
       $(this.modalRef).animate({ scrollTop: 0 }, 250, 'swing');
@@ -116,7 +112,6 @@ export default class ModalWindow extends React.Component {
         closeCaptionText={this._getCloseCaptionText()}
         modalRefCb={modalRef => (this.modalRef = modalRef)}
         errorSectionRefCb={errorSection => (this.errorSection = errorSection)}
-        helpPanelRefCb={helpPanel => (this.helpPanel = helpPanel)}
         onModalClose={this.closeModal}
       >
         {this.props.children}

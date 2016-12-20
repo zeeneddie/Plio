@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 
-import FormLabel from '../FormLabel';
+import FormLabel from '../../../../components/Labels/FormLabel';
 import HelpPanel from '../../../../components/HelpPanel';
+import withStateCollapsed from '../../../../helpers/withStateCollapsed';
 
 const FormField = ({
   colXs = 12,
@@ -9,7 +10,6 @@ const FormField = ({
   helpText,
   collapsed = true,
   onToggleCollapse,
-  collapseRefCb,
   children,
 }) => (
   <div className="form-group row">
@@ -23,7 +23,7 @@ const FormField = ({
       {children[1]}
 
       {helpText && (
-        <HelpPanel.Body onToggleCollapse={onToggleCollapse} refCb={collapseRefCb}>
+        <HelpPanel.Body {...{ collapsed, onToggleCollapse }}>
           {helpText}
         </HelpPanel.Body>
       )}
@@ -37,8 +37,7 @@ FormField.propTypes = {
   helpText: PropTypes.string,
   collapsed: PropTypes.bool,
   onToggleCollapse: PropTypes.func,
-  collapseRefCb: PropTypes.func,
   children: PropTypes.node,
 };
 
-export default FormField;
+export default withStateCollapsed(({ collapsed = true } = {}) => collapsed)(FormField);

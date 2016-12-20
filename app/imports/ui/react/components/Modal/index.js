@@ -17,7 +17,6 @@ const Modal = ({
   errorText,
   children,
   modalRefCb,
-  helpPanelRefCb,
   errorSectionRefCb,
 }) => (
   <div className="modal fade" data-backdrop="static" data-keyboard="false" ref={modalRefCb}>
@@ -40,7 +39,7 @@ const Modal = ({
         {/* help panel */}
         {helpContent && (
           <HelpPanel.Body
-            refCb={helpPanelRefCb}
+            collapsed={isHelpPanelCollapsed}
             onToggleCollapse={onToggleHelpPanel}
           >
             {helpContent}
@@ -76,7 +75,6 @@ Modal.propTypes = {
   errorText: PropTypes.string,
   children: PropTypes.node,
   modalRefCb: PropTypes.func,
-  helpPanelRefCb: PropTypes.func,
   errorSectionRefCb: PropTypes.func,
 };
 
