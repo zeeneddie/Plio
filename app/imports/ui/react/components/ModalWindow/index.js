@@ -4,9 +4,9 @@ import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import Modal from '../Modal';
-import { setModal, onModalClose } from '/client/redux/actions/modalActions';
+import { setModal, onModalClose, setErrorText } from '/client/redux/actions/modalActions';
 
-const ERROR_PANEL_CLOSE_TIMER = 2000;
+const ERROR_PANEL_CLOSE_TIMER = 3000;
 
 @pure
 export default class ModalWindow extends React.Component {
@@ -67,21 +67,20 @@ export default class ModalWindow extends React.Component {
     };
   }
 
-  componentWillUpdate(nextProps) {
-    if (this.props.isHelpPanelCollapsed && !nextProps.isHelpPanelCollapsed) {
-      $(this.helpPanel).collapse('show');
-    } else if (!this.props.isHelpPanelCollapsed && nextProps.isHelpPanelCollapsed) {
-      $(this.helpPanel).collapse('hide');
+  componentDidUpdate(prevProps) {
+    if (this.props.isHelpPanelCollapsed !== prevProps.isHelpPanelCollapsed) {
+      $(this.helpPanel).collapse('toggle');
     }
 
-    if (!this.props.errorText && nextProps.errorText) {
+    if (this.props.errorText && !prevProps.errorText) {
       $(this.errorSection).collapse('show');
       $(this.modalRef).animate({ scrollTop: 0 }, 250, 'swing');
       const timeout = setTimeout(() => {
         $(this.errorSection).collapse('hide');
+        this.props.dispatch(setErrorText(''));
         clearTimeout(timeout);
       }, ERROR_PANEL_CLOSE_TIMER);
-    } else if (this.props.errorText && !nextProps.errorText) {
+    } else if (!this.props.errorText && prevProps.errorText) {
       $(this.errorSection).collapse('hide');
     }
   }

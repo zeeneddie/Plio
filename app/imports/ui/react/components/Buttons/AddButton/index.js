@@ -8,7 +8,7 @@ const AddButton = ({ onClick, children }) => (
     type="primary"
     onClick={onClick}
   >
-    <Icon names="plus" className="margin-right" />
+    <Icon name="plus" className="margin-right" />
     {children}
   </Button>
 );

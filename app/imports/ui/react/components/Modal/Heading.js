@@ -42,7 +42,7 @@ const ModalHeading = ({
             disabled={isSaving}
           >
             {isSaving && (
-              <Icon names="spinner pulse fw" margin="bottom" />
+              <Icon name="spinner pulse fw" margin="bottom" />
             )}
             <span>{submitCaptionText}</span>
           </Button>
@@ -69,7 +69,7 @@ const ModalHeading = ({
         onClick={onModalClose}
       >
         {isSaving && variation !== 'save' && (
-          <Icon names="spinner pulse fw" margin="bottom" />
+          <Icon name="spinner pulse fw" margin="bottom" />
         )}
         {closeCaptionText}
       </Button>

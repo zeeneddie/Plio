@@ -18,7 +18,6 @@
     "handlebars": "^4.0.5",
     "invariant": "^2.2.1",
     "lodash.curry": "^4.1.1",
-    "lodash.flip": "^4.2.1",
     "lodash.get": "^4.4.2",
     "lodash.invoke": "^4.5.1",
     "lodash.property": "^4.4.2",
@@ -45,6 +44,8 @@
     "warning": "^3.0.0"
   },
   "devDependencies": {
+    "eslint-import-resolver-meteor": "^0.3.4",
+    "eslint-plugin-import": "^2.2.0",
     "redux-devtools-extension": "^1.0.0"
   }
 }

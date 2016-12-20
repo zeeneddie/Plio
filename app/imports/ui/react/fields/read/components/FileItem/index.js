@@ -32,7 +32,7 @@ const FileItem = ({ url = '#', name = null, extension, progress, status }) => {
       >
         {extension && (
           <span>
-            <Icon size="2" names={`file-${extension}-o`} margin="right" />
+            <Icon name={`file-${extension}-o`} size="2" margin="right" />
           </span>
         )}
 

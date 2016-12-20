@@ -11,9 +11,9 @@ const ClearButton = ({ onClick, animating }) => (
     onClick={onClick}
   >
     {animating ? (
-      <Icon names="spinner pulse fw" margin="bottom" />
+      <Icon name="spinner pulse fw" margin="bottom" />
     ) : (
-      <Icon names="times-circle" />
+      <Icon name="times-circle" />
     )}
   </Button>
 );

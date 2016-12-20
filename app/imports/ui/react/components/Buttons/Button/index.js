@@ -37,7 +37,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   className: PropTypes.string,
   href: PropTypes.string,
-  type: PropTypes.oneOf(['primary', 'secondary', 'link']),
+  type: PropTypes.string,
   size: PropTypes.oneOf(Object.keys(sizeMap)),
 };
 

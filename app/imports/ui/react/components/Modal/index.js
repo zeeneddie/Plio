@@ -50,7 +50,7 @@ const Modal = ({
         {/* notification panel */}
         <div className="collapse modal-error-section" ref={errorSectionRefCb}>
           <div className="card-block">
-            <Icon names="exclamation-circle" size="4" aria-hidden="true" />
+            <Icon name="exclamation-circle" size="4" aria-hidden="true" />
             {errorText}
           </div>
         </div>

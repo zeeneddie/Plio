@@ -50,7 +50,7 @@ const LHS = ({
           </ClearField>
 
           {animating && (
-            <Icon names="circle-o-notch spin" className="small-loader" />
+            <Icon name="circle-o-notch spin" className="small-loader" />
           )}
         </div>
         {onModalButtonClick && (
