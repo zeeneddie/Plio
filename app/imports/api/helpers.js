@@ -229,8 +229,8 @@ export const showError = (errorMsg) => {
 
 // 1, 1.2, 3, 10.3, a, b, c
 export const sortArrayByTitlePrefix = (arr) => [...arr].sort((a, b) => {
-  let at = getTitlePrefix(a.titlePrefix.toString());
-  let bt = getTitlePrefix(b.titlePrefix.toString());
+  let at = getTitlePrefix(a.titlePrefix.toString().toLowerCase());
+  let bt = getTitlePrefix(b.titlePrefix.toString().toLowerCase());
 
   if (typeof at === 'number' && typeof bt !== 'number') {
     return -1;
