@@ -2,13 +2,15 @@ import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 const Select = ({ value, options, className, onChange }) => (
-  <select className={cx('form-control c-select', className)} {...{ value, onChange }}>
-   {options.map((option, i) => (
-     <option key={i} value={option.value}>
-       {option.text}
-     </option>
-   ))}
-  </select>
+  <div className="dropdown">
+    <select className={cx('form-control c-select', className)} {...{ value, onChange }}>
+     {options.map((option, i) => (
+       <option key={i} value={option.value}>
+         {option.text}
+       </option>
+     ))}
+    </select>
+  </div>
 );
 
 Select.propTypes = {

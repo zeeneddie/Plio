@@ -1,33 +1,24 @@
 import React, { PropTypes } from 'react';
+import { withHandlers } from 'recompose';
 
-import { CustomerTypesNames } from '/imports/share/constants';
-import FormField from '../../../fields/edit/components/FormField';
-import FormInput from '../../../forms/components/FormInput';
-import Select from '../../../forms/components/Select';
+import OrgName from '../../fields/edit/components/OrgName';
+import CustomerTypeSelectContainer from '../../fields/edit/containers/CustomerTypeSelectContainer';
+import Button from '../../../components/Buttons/Button';
+import { handleOrgDelete } from './handlers';
 
-const ModalEdit = ({ organization = {} }) => (
+const enhance = withHandlers({ onOrgDelete: handleOrgDelete });
+
+const ModalEdit = enhance(({ organization = {}, onOrgDelete }) => (
   <div className="relative">
     <div className="card-block">
-      <FormField>
-        <span>Org name</span>
-        <FormInput readOnly disabled value={organization.name} />
-      </FormField>
-      <FormField>
-        <span>Type</span>
-        <div className="dropdown">
-          <Select
-            onChange={() => null}
-            value={CustomerTypesNames[organization.customerType]}
-            options={Object.keys(CustomerTypesNames).reduce((prev, key) => ([
-              ...prev,
-              { value: key, text: CustomerTypesNames[key] },
-            ]), [])}
-          />
-        </div>
-      </FormField>
+      <OrgName {...organization} />
+      <CustomerTypeSelectContainer {...organization} />
+    </div>
+    <div className="card-block text-xs-center">
+      <Button type="secondary" onClick={onOrgDelete}>Delete</Button>
     </div>
   </div>
-);
+));
 
 ModalEdit.propTypes = {
   organization: PropTypes.object.isRequired,

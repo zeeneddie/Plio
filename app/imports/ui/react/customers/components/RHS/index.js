@@ -18,6 +18,7 @@ const CustomersRHS = ({ isReady, organization }) => (
         title="Organization"
         isReady={isReady}
       >
+      {organization && (
         <ModalHandle
           title="Organization"
           helpContent={(<div>Hello World</div>)}
@@ -25,6 +26,7 @@ const CustomersRHS = ({ isReady, organization }) => (
         >
           <ModalEdit organization={organization} />
         </ModalHandle>
+      )}
       </RHS.Header>
 
       <RHS.ContentList isReady={isReady}>

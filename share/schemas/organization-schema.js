@@ -205,9 +205,18 @@ const transferSchema = new SimpleSchema({
   },
 });
 
+const CustomerTypeSchema = new SimpleSchema({
+  customerType: {
+    type: Number,
+    allowedValues: _.values(CustomerTypes),
+    defaultValue: CustomerTypes.FREE_TRIAL,
+  },
+});
+
 const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
+  CustomerTypeSchema,
   {
     homeScreenTitles: {
       type: HomeTitlesSchema,
@@ -231,11 +240,6 @@ const OrganizationSchema = new SimpleSchema([
       type: transferSchema,
       optional: true,
     },
-    customerType: {
-      type: Number,
-      allowedValues: _.values(CustomerTypes),
-      defaultValue: CustomerTypes.FREE_TRIAL,
-    },
   },
 ]);
 
@@ -244,4 +248,5 @@ export {
   OrganizationSchema,
   OrganizationCurrencySchema,
   UserSettingsSchema,
+  CustomerTypeSchema,
 };

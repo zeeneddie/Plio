@@ -10,6 +10,19 @@ export const createTypeItem = key => ({
   type: 'CustomerType',
 });
 
+export const expandCollapsedCustomer = (_id) => {
+  const { organizationsByIds } = getState('collections');
+  const organization = organizationsByIds[_id];
+
+  if (!organization) return false;
+
+  const typeItem = createTypeItem(organization.customerType);
+
+  console.log(typeItem);
+
+  return store.dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
+};
+
 export const expandCollapsedCustomers = (ids) => {
   const {
     collections: { organizations },

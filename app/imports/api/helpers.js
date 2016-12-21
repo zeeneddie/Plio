@@ -18,6 +18,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
+import { renderTemplate } from '/imports/share/helpers';
 
 export const { compose } = _;
 
@@ -473,3 +474,29 @@ export const getUserJoinedAt = (organization = {}, userId) => {
 export const looksLikeAPromise = obj => !!(
   obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
 );
+
+/*
+  Example:
+  compileTemplateObject({
+    title: 'Hello {{title}}',
+    type: 'some {{type}}',
+  }, {
+    title: 'World',
+    type: 'cool stuff',
+  });
+  -> { title: 'Hello World', type: 'some cool stuff' };
+*/
+export const compileTemplateObject = (params, paramMap) => {
+  const regexString = Object.keys(paramMap).reduce((prev, cur) => `${prev}|{{${paramMap[cur]}}}`);
+  const regex = new RegExp(regexString, 'g');
+
+  return Object.keys(params).reduce((prev, key) => {
+    let value = params[key];
+
+    if (typeof value === 'string' && value.search(regex)) {
+      value = renderTemplate(value, paramMap);
+    }
+
+    return { ...prev, [key]: value };
+  }, {});
+};

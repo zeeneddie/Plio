@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import Icon from '../Icon';
 import Heading from './Heading';
 import HelpPanel from '../HelpPanel';
+import Collapse from '../Collapse';
 
 const Modal = ({
   variation,
@@ -17,7 +18,6 @@ const Modal = ({
   errorText,
   children,
   modalRefCb,
-  errorSectionRefCb,
 }) => (
   <div className="modal fade" data-backdrop="static" data-keyboard="false" ref={modalRefCb}>
     <div className="modal-dialog content-cards">
@@ -47,12 +47,12 @@ const Modal = ({
         )}
 
         {/* notification panel */}
-        <div className="collapse modal-error-section" ref={errorSectionRefCb}>
+        <Collapse className="modal-error-section" collapsed={!errorText}>
           <div className="card-block">
             <Icon name="exclamation-circle" size="4" aria-hidden="true" />
             {errorText}
           </div>
-        </div>
+        </Collapse>
 
         <div className="modal-window-content">
           {children}
@@ -75,7 +75,6 @@ Modal.propTypes = {
   errorText: PropTypes.string,
   children: PropTypes.node,
   modalRefCb: PropTypes.func,
-  errorSectionRefCb: PropTypes.func,
 };
 
 export default Modal;

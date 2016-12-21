@@ -1,5 +1,7 @@
+import { compose } from 'recompose';
 import { batchActions } from 'redux-batched-actions';
 import { $ } from 'meteor/jquery';
+import swal from '/imports/ui/utils/swal';
 
 import {
   SET_MODAL,
@@ -32,36 +34,29 @@ export function setErrorText(errorText) {
   };
 }
 
-export const close = () => (dispatch, getState) => {
-  const { modal } = getState().modal.modal;
+export const close = (dispatch, getState) => {
+  const { modal } = getState().modal;
 
   return modal && $(modal).modal('hide');
 };
 
-export const setError = errorText => dispatch =>
-  dispatch(setErrorText(errorText));
+const handleMethodResult = (resolve, reject) => (err, res) => (dispatch) => {
+  let actions = [setSaving(false)];
 
-export const callMethod = (method, args, cb) => (dispatch) => {
-  if (typeof args === 'function') {
-    cb = args;
-    args = {};
-  }
+  if (err) {
+    swal.close();
+    reject(err);
+    actions = actions.concat(setErrorText(err.reason || 'Internal server error'));
+  } else resolve(res);
 
+  dispatch(batchActions(actions));
+};
+
+export const callMethod = (method, args) => (dispatch) => new Promise((resolve, reject) => {
   dispatch(batchActions([
     setErrorText(''),
     setSaving(true),
   ]));
 
-  const handleMethodResult = (callback) => (err, res) => {
-    // if callback returns true, doesn't perform default actions
-    if (typeof callback === 'function' && callback(err, res)) return;
-
-    let actions = [setSaving(false)];
-
-    if (err) actions = actions.concat(setErrorText(err.reason || 'Internal server error'));
-
-    dispatch(batchActions(actions));
-  };
-
-  method.call(args, handleMethodResult(cb));
-};
+  return method.call(args, compose(dispatch, handleMethodResult(resolve, reject)));
+});

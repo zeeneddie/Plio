@@ -4,6 +4,8 @@ import {
   updateOrganization,
   removeOrganization,
 } from '/client/redux/actions/collectionsActions';
+import { getState } from '/client/redux/store';
+import { expandCollapsedCustomer } from '../helpers';
 
 export default (dispatch) => {
   const query = { isAdminOrg: { $ne: true } };
@@ -19,6 +21,10 @@ export default (dispatch) => {
     changed(_id, fields) {
       console.log('changed');
       dispatch(updateOrganization({ _id, ...fields }));
+
+      if (fields.customerType && getState('global.urlItemId') === _id) {
+        expandCollapsedCustomer(_id);
+      }
     },
 
     removed(_id) {

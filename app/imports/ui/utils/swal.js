@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+
 const sweetAlert = ({
   title = 'Are you sure?',
   text = '',
@@ -5,6 +8,7 @@ const sweetAlert = ({
   showCancelButton = true,
   confirmButtonText = '',
   closeOnConfirm = false,
+  ...other,
 }, cb) => swal({
   title,
   text,
@@ -12,7 +16,10 @@ const sweetAlert = ({
   showCancelButton,
   confirmButtonText,
   closeOnConfirm,
+  ...other,
 }, cb);
+
+Object.assign(sweetAlert, swal);
 
 sweetAlert.error = err => swal(
   'Oops... Something went wrong!',
@@ -20,6 +27,17 @@ sweetAlert.error = err => swal(
   'error'
 );
 
-sweetAlert.success = (title, body) => swal(title, body, 'success');
+sweetAlert.success = (title, text, {
+  timer = ALERT_AUTOHIDE_TIME,
+  showConfirmButton = false,
+  ...other,
+} = {}) => swal({
+  title,
+  text,
+  timer,
+  showConfirmButton,
+  type: 'success',
+  ...other,
+});
 
 export default sweetAlert;

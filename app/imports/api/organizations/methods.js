@@ -1,27 +1,24 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { Roles } from 'meteor/alanning:roles';
 
 import OrganizationService from './organization-service';
-import { Organizations } from '/imports/share/collections/organizations';
 import InvitationService from './invitation-service';
 
 import {
-  OrganizationEditableFields,
   OrganizationCurrencySchema,
-  UserSettingsSchema
+  UserSettingsSchema,
+  CustomerTypeSchema,
 } from '/imports/share/schemas/organization-schema';
 import {
-  WorkflowTypes, NCTypes, UserRoles,
-  UserMembership, ProblemMagnitudes, RKTypes, InvitationStatuses
+  WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
 } from '/imports/share/constants';
 import {
   IdSchema, TimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
-  UserIdSchema, TimezoneSchema
+  UserIdSchema, TimezoneSchema,
 } from '/imports/share/schemas/schemas';
-import Method, { CheckedMethod } from '../method.js';
+import Method from '../method.js';
 import { chain } from '/imports/api/helpers.js';
 import {
   checkOrgMembership,
@@ -556,6 +553,23 @@ export const deleteCustomerOrganization = new Method({
 
     return OrganizationService.deleteOrganization({ organizationId });
   }
+});
+
+export const changeCustomerType = new Method({
+  name: 'Organizations.changeCustomerType',
+
+  validate: new SimpleSchema([
+    OrganizationIdSchema,
+    CustomerTypeSchema,
+  ]).validator(),
+
+  check(checker) {
+    return checker(() => USR_EnsureIsPlioAdmin(this.userId));
+  },
+
+  run(args) {
+    return OrganizationService.changeCustomerType(args);
+  },
 });
 
 export const changeTitle = new Method({

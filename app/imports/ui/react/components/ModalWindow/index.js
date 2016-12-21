@@ -4,9 +4,7 @@ import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import Modal from '../Modal';
-import { setModal, onModalClose, setErrorText } from '/client/redux/actions/modalActions';
-
-const ERROR_PANEL_CLOSE_TIMER = 3000;
+import { setModal, onModalClose } from '/client/redux/actions/modalActions';
 
 @pure
 export default class ModalWindow extends React.Component {
@@ -68,16 +66,10 @@ export default class ModalWindow extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.errorText && !prevProps.errorText) {
-      $(this.errorSection).collapse('show');
+    if (this.props.errorText && !prevProps.errorText ||
+        (this.props.errorText && prevProps.errorText &&
+        this.props.errorText !== prevProps.errorText)) {
       $(this.modalRef).animate({ scrollTop: 0 }, 250, 'swing');
-      const timeout = setTimeout(() => {
-        $(this.errorSection).collapse('hide');
-        this.props.dispatch(setErrorText(''));
-        clearTimeout(timeout);
-      }, ERROR_PANEL_CLOSE_TIMER);
-    } else if (!this.props.errorText && prevProps.errorText) {
-      $(this.errorSection).collapse('hide');
     }
   }
 
@@ -111,7 +103,6 @@ export default class ModalWindow extends React.Component {
         submitCaptionText={this._getSubmitCaptionText()}
         closeCaptionText={this._getCloseCaptionText()}
         modalRefCb={modalRef => (this.modalRef = modalRef)}
-        errorSectionRefCb={errorSection => (this.errorSection = errorSection)}
         onModalClose={this.closeModal}
       >
         {this.props.children}
