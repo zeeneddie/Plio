@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { _ } from 'meteor/underscore';
 
@@ -25,6 +25,11 @@ const getMenuItems = ({ filters, filter }) => (
     );
   })
 );
+
+getMenuItems.propTypes = {
+  filters: PropTypes.array,
+  filter: PropTypes.string,
+};
 
 const StandardsLayout = (props) => (
   <div>
