@@ -49,10 +49,12 @@ export default class ModalWindow extends React.Component {
   }
 
   componentDidMount() {
+    this._mounted = true;
+
     this.props.dispatch(setModal(this.modalRef));
 
     $(this.modalRef).modal('show');
-    $(this.modalRef).on('hidden.bs.modal', this.closePortal);
+    $(this.modalRef).on('hidden.bs.modal', () => this._mounted && this.closePortal());
 
     const oldOnpopstate = window.onpopstate;
 
@@ -74,7 +76,9 @@ export default class ModalWindow extends React.Component {
   }
 
   componentWillUnmount() {
+    this._mounted = false;
     this.props.dispatch(onModalClose);
+    this.closeModal();
   }
 
   _getSubmitCaptionText() {

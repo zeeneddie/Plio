@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import OrgName from '../../fields/edit/components/OrgName';
 import CustomerTypeSelectContainer from '../../fields/edit/containers/CustomerTypeSelectContainer';
-import OrgDeleteButtonContainer from '../../fields/edit/containers/OrgDeleteButtonContainer';
+import OrgDelete from '../../fields/edit/containers/OrgDelete';
 
 const ModalEdit = ({ organization = {} }) => (
   <div className="relative">
@@ -10,9 +10,7 @@ const ModalEdit = ({ organization = {} }) => (
       <OrgName {...organization} />
       <CustomerTypeSelectContainer {...organization} />
     </div>
-    <div className="card-block text-xs-center">
-      <OrgDeleteButtonContainer {...organization} />
-    </div>
+    <OrgDelete {...organization} />
   </div>
 );
 

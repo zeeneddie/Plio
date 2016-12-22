@@ -13,7 +13,7 @@ import { redirectAndOpen } from '../../../../containers/TypeListContainer/helper
 
 
 // BUG: modal doesn't close
-export const handleOrgDelete = ({
+export const onOrgDelete = ({
   _id: organizationId,
   name: orgName,
 }) => () => {
