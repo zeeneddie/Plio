@@ -30,15 +30,6 @@ Template.Organization_Menu.viewmodel({
       organizationId: this.organization()._id
     });
   },
-  openCustomersSettings(e) {
-    e.preventDefault();
-
-    this.modal().open({
-      template: 'CustomersSettings',
-      _title: 'Plio customers',
-      organizationId: this.organization()._id
-    });
-  },
   openCreateNewOrgModal(e) {
     e.preventDefault();
     this.modal().open({
