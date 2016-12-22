@@ -32,7 +32,7 @@ export const getActionFiles = ({ fileIds = [] }) =>
 
 export const createActionCardPublicationTree = (getQuery) => {
   const getLinkedProblemsOptions = fields =>
-    makeOptionsFields({ ...fields, workflowType: 1, status: 1 });
+    makeOptionsFields({ ...fields, workflowType: 1, status: 1, magnitude: 1 });
   return {
     find(...args) {
       return Actions.find(getQuery(...args));
