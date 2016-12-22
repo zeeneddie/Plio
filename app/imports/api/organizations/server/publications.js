@@ -57,8 +57,13 @@ Meteor.publish('currentUserOrganizations', function() {
     return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
-        serialNumber: 1
-      }
+        serialNumber: 1,
+        'users.userId': 1,
+        'users.role': 1,
+        'users.isRemoved': 1,
+        'users.removedAt': 1,
+        'users.removedBy': 1,
+      },
     });
   } else {
     return this.ready();

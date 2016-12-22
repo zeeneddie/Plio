@@ -15,7 +15,18 @@ Template.Organization_Menu.viewmodel({
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organizations() {
-    return Organizations.find();
+    const userId = Meteor.userId();
+
+    return Organizations.find({
+      users: {
+        $elemMatch: {
+          userId,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false },
+        },
+      },
+    });
   },
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());

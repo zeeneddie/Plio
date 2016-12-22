@@ -10,7 +10,7 @@ const ModalHandle = ({
   children,
   ...props,
 }) => (
-  <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn }}>
+  <Portal {...{ closeOnEsc, closeOnOutsideClick, openByClickOn }} ref={portal => (window.portal = portal)}>
     <ModalWindowContainer {...props}>
       {children}
     </ModalWindowContainer>
