@@ -4,6 +4,7 @@ import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js'
 import HandlebarsCache from './handlebars-cache.js';
+import { htmlToPlainText } from '/imports/share/helpers.js';
 
 
 /**
@@ -120,13 +121,14 @@ export default class NotificationSender {
       // Reporting of beta user activity
       bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
-
+    
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || this._getDefaultEmail(),
       to: emails,
       bcc,
-      html
+      html,
+      text: htmlToPlainText(html),
     };
 
     Email.send(emailOptions);

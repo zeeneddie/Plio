@@ -5,6 +5,7 @@ import { Departments } from '/imports/share/collections/departments.js';
 import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/departments/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_Departments.viewmodel({
   mixin: ['addForm', 'modal', 'utils'],
@@ -64,11 +65,13 @@ Template.OrgSettings_Departments.viewmodel({
         if (err) {
           swal('Oops... Something went wrong!', err.reason, 'error');
         } else {
-          swal(
-            'Removed!',
-            `Department "${title}" was removed successfully.`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Department "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

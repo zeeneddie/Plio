@@ -25,13 +25,15 @@ import {
   SET_HELP_DOCS,
   SET_HELP_SECTIONS,
 } from '../actions/types';
-import { mapByIndex, flattenObjects, omitC, findIndexById } from '/imports/api/helpers';
+import { flattenObjects } from '/imports/api/helpers';
 import { CollectionNames } from '/imports/share/constants';
 import { STORE_COLLECTION_NAMES } from '../lib/constants';
 import {
   getNormalizedDataKey,
-  normalizeObject,
-  normalizeArray,
+  setC,
+  addC,
+  updateC,
+  removeC,
 } from '../lib/collectionsHelpers';
 
 const initialState = flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key => {
@@ -40,43 +42,10 @@ const initialState = flattenObjects(Object.keys(STORE_COLLECTION_NAMES).map(key 
 }));
 
 export default function reducer(state = initialState, action) {
-  const set = (prop) => {
-    const normalizedKey = getNormalizedDataKey(prop);
-    return {
-      ...state,
-      ...action.payload,
-      [normalizedKey]: normalizeArray(action.payload[prop]),
-    };
-  };
-  const add = (prop) => {
-    const normalizedKey = getNormalizedDataKey(prop);
-    return {
-      ...state,
-      [prop]: state[prop].concat(action.payload),
-      [normalizedKey]: { ...state[normalizedKey], ...normalizeObject(action.payload) },
-    };
-  };
-  const update = (prop) => {
-    const index = findIndexById(action.payload._id, state[prop]);
-    const normalizedKey = getNormalizedDataKey(prop);
-    const { _id, ...props } = action.payload;
-    const obj = { [_id]: { ...state[normalizedKey][_id], ...props } };
-    return {
-      ...state,
-      [prop]: mapByIndex(action.payload, index, state[prop]),
-      [normalizedKey]: { ...state[normalizedKey], ...obj },
-    };
-  };
-  const remove = (prop) => {
-    const index = findIndexById(action.payload, state[prop]);
-    const normalizedKey = getNormalizedDataKey(prop);
-    return {
-      ...state,
-      [prop]: state[prop].slice(0, index)
-                         .concat(state[prop].slice(index + 1)),
-      [normalizedKey]: { ...omitC([action.payload], state[normalizedKey]) },
-    };
-  };
+  const set = setC(state, action);
+  const add = addC(state, action);
+  const update = updateC(state, action);
+  const remove = removeC(state, action);
 
   switch (action.type) {
     case SET_DEPARTMENTS:

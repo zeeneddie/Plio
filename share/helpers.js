@@ -96,7 +96,11 @@ export const getTitlePrefix = (title) => {
     const stringPrefixFloat = stringPrefix.replace(/^([^.]*\.)(.*)$/, function (a, b, c) {
       return b + c.replace(/\./g, '');
     });
-    titlePrefix = parseFloat(stringPrefixFloat) || title;
+    titlePrefix = parseFloat(stringPrefixFloat);
+
+    if (!titlePrefix && titlePrefix !== 0) {
+      titlePrefix = title;
+    }
   } else {
     titlePrefix = title;
   }
@@ -220,4 +224,14 @@ export const getUserFullNameOrEmail = (userOrId) => {
   }
 
   return (user && user.fullNameOrEmail()) || '';
+};
+
+export const htmlToPlainText = (html) => {
+  check(html, String);
+  
+  return html.replace(/<br>/gi, "\n")
+    .replace(/<p.*>/gi, "\n")
+    .replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")
+    .replace(/<(?:.|\s)*?>/g, "")
+    .trim();
 };

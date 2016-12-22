@@ -21,10 +21,7 @@ import {
   setSearchText,
 } from '/client/redux/actions/globalActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
-import {
-  pickDeep,
-  testPerformance,
-} from '/imports/api/helpers';
+import { pickDeep } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goTo } from '../../../../utils/router/actions';
 import loadInitialData from '../../../loaders/loadInitialData';
@@ -51,8 +48,8 @@ const getLayoutData = () => loadLayoutData(({ filter, orgSerialNumber }) => {
 export default compose(
   connect(),
   defaultProps({ filters: StandardFilters }),
-  kompose(testPerformance(loadIsDiscussionOpened)),
-  composeWithTracker(testPerformance(loadInitialData), null, null, {
+  kompose(loadIsDiscussionOpened),
+  composeWithTracker(loadInitialData, null, null, {
     shouldResubscribe: false,
   }),
   connect(pickDeep([
@@ -60,7 +57,7 @@ export default compose(
     'organizations.orgSerialNumber',
   ])),
   composeWithTracker(
-    testPerformance(getLayoutData()),
+    getLayoutData(),
     null,
     null,
     {
@@ -80,14 +77,14 @@ export default compose(
     },
   }),
   connect(pickDeep(['organizations.organizationId', 'global.urlItemId'])),
-  composeWithTracker(testPerformance(loadCardData), null, null, {
+  composeWithTracker(loadCardData, null, null, {
     shouldResubscribe: (props, nextProps) => !!(
       props.organizationId !== nextProps.organizationId ||
       props.urlItemId !== nextProps.urlItemId
     ),
   }),
   connect(pickDeep(['organizations.organizationId', 'standards.initializing'])),
-  composeWithTracker(testPerformance(loadDeps), null, null, {
+  composeWithTracker(loadDeps, null, null, {
     shouldResubscribe: (props, nextProps) =>
       props.organizationId !== nextProps.organizationId ||
       props.initializing !== nextProps.initializing,

@@ -36,19 +36,25 @@ Template.WorkInbox_Item.viewmodel({
   getTitle({ title, linkedDocument = {} }) {
     return linkedDocument.title || title || '';
   },
-  getDescription({ linkedDocument, sequentialId, ...rest }) {
-    return linkedDocument
-      ? `${linkedDocument.sequentialId} - ${this.getTypeText(rest)}`
-      : sequentialId;
+  getDescription({ isDeleted, linkedDocument, ...rest }) {
+    if (!linkedDocument) {
+      return '';
+    }
+
+    return isDeleted
+      ? linkedDocument.sequentialId
+      : `${linkedDocument.sequentialId} - ${this.getTypeText(rest)}`;
   },
   getDate({ isDeleted, deletedAt, targetDate }) {
     const date = isDeleted ? deletedAt : targetDate;
     return date ? this.renderDate(date) : '';
   },
-  getUserText({ isDeleted, deletedBy }) {
-    return isDeleted
-            ? `Deleted by: ${this.userNameOrEmail(deletedBy)}`
-            : '';
+  getUserText({ isDeleted, linkedDocument }) {
+    if (isDeleted && linkedDocument) {
+      return `Deleted by: ${this.userNameOrEmail(linkedDocument.deletedBy)}`;
+    }
+
+    return '';
   },
   getHref() {
     const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: this._id() };

@@ -4,6 +4,7 @@ import invoke from 'lodash.invoke';
 import { OrgSettingsDocSubs } from '/imports/startup/client/subsmanagers.js';
 import { insert, update, remove } from '/imports/api/risk-types/methods.js';
 import { OrganizationSettingsHelp } from '/imports/api/help-messages.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgSettings_RisksTypes.viewmodel({
   mixin: ['modal', 'addForm', 'utils'],
@@ -61,11 +62,13 @@ Template.OrgSettings_RisksTypes.viewmodel({
         if (err) {
           swal('Oops... Something went wrong!', err.reason, 'error');
         } else {
-          swal(
-            'Removed!',
-            `Risk type "${title}" was removed successfully.`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Risk type "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

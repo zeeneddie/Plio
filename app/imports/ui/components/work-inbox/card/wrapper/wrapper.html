@@ -2,7 +2,10 @@
   {{#if isRendered}}
     {{#if workItem}}
       {{#if isDocType LINKED_TYPES.CORRECTIVE_ACTION LINKED_TYPES.PREVENTATIVE_ACTION LINKED_TYPES.RISK_CONTROL}}
-        {{> WorkInbox_QAPanel_Read doc=workItem}}
+        {{#unless workItem.isDeleted}}
+          {{> WorkInbox_QAPanel_Read doc=workItem}}
+        {{/unless}}
+
         {{> Actions_Card_Read (cardArgs)}}
       {{/if}}
 
