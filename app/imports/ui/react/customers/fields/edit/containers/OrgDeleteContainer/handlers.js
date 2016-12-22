@@ -12,7 +12,6 @@ import { initCustomerTypes } from '../../../../helpers';
 import { redirectAndOpen } from '../../../../containers/TypeListContainer/helpers';
 
 
-// BUG: modal doesn't close
 export const onOrgDelete = ({
   _id: organizationId,
   name: orgName,

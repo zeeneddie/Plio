@@ -33,7 +33,8 @@ import {
   ORG_OnTransferChecker,
   ORG_EnsureCanDelete,
   ORG_EnsureCanBeDeleted,
-  USR_EnsureIsPlioAdmin
+  USR_EnsureIsPlioAdmin,
+  USR_EnsureIsPlioUser,
 } from '../checkers.js';
 import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
 
@@ -564,7 +565,7 @@ export const changeCustomerType = new Method({
   ]).validator(),
 
   check(checker) {
-    return checker(() => USR_EnsureIsPlioAdmin(this.userId));
+    return checker(() => USR_EnsureIsPlioUser(this.userId));
   },
 
   run(args) {

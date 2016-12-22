@@ -21,7 +21,6 @@ const CustomersRHS = ({ isReady, organization }) => (
       {organization && (
         <ModalHandle
           title="Organization"
-          helpContent={(<div>Hello World</div>)}
           openByClickOn={(<Button type="primary">Edit</Button>)}
         >
           <ModalEdit organization={organization} />
