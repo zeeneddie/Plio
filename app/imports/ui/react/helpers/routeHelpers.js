@@ -20,6 +20,12 @@ const createPathGetter = (path, urlItemIdParamName = 'urlItemId') => (params, qu
   return FlowRouter.path(path, _params, _queryParams);
 };
 
+const createRedirectHandler = (pathGetter) => (params, queryParams) => {
+  const path = pathGetter(params, queryParams);
+
+  return FlowRouter.withReplaceState(() => FlowRouter.go(path));
+};
+
 export const getPathToStandard = createPathGetter('standard');
 
 export const getPathToDiscussion = createPathGetter('standardDiscussion');
@@ -29,6 +35,8 @@ export const getPathToNC = createPathGetter('nonconformity');
 export const getPathToRisk = createPathGetter('risk', 'riskId');
 
 export const getPathToWorkItem = createPathGetter('workInboxItem', 'workItemId');
+
+export const getPathToCustomer = createPathGetter('customer');
 
 export const goToDashboard = (params = {}) => {
   const orgSerialNumber = getOrgSerialNumber(params);
@@ -46,8 +54,6 @@ export const goToStandards = (params, queryParams) => {
     FlowRouter.go('standards', _params, _queryParams));
 };
 
-export const goToStandard = (params, queryParams) => {
-  const path = getPathToStandard(params, queryParams);
+export const goToStandard = createRedirectHandler(getPathToStandard);
 
-  return FlowRouter.withReplaceState(() => FlowRouter.go(path));
-};
+export const goToCustomer = createRedirectHandler(getPathToCustomer);

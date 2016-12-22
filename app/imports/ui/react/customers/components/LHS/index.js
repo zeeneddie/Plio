@@ -7,6 +7,7 @@ import CustomersTypeListContainer from '../../containers/TypeListContainer';
 const CustomersLHS = ({
   animating,
   searchText,
+  urlItemId,
   searchResultsText,
   onSearchTextChange,
   onClear,
@@ -22,7 +23,7 @@ const CustomersLHS = ({
       onChange: onSearchTextChange,
     }}
   >
-    <CustomersTypeListContainer {...{ organizations, onToggleCollapse }} />
+    <CustomersTypeListContainer {...{ organizations, onToggleCollapse, urlItemId }} />
   </LHSContainer>
 );
 

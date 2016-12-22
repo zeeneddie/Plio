@@ -2,12 +2,14 @@
 
 import { SHA256 } from 'meteor/sha';
 
-import store from '/client/redux/store';
+import store, { getState } from '/client/redux/store';
 import { callMethod, setErrorText, close } from '/client/redux/actions/modalActions';
 import { deleteOrganization } from '/imports/api/organizations/methods';
 import swal from '/imports/ui/utils/swal';
 import { ORG_DELETE, ORG_DELETE_PASSWORD } from '/imports/api/swal-params';
 import { compileTemplateObject } from '/imports/api/helpers';
+import { initCustomerTypes } from '../../helpers';
+import { redirectAndOpen } from '../../containers/TypeListContainer/helpers';
 
 
 // BUG: modal doesn't close
@@ -29,6 +31,11 @@ export const handleOrgDelete = ({
       .then(() => {
         store.dispatch(close);
         swal.success('Success', `Organization ${orgName} has been deleted`);
+
+        // redirect and expand the default customer
+        const { organizations } = getState('collections');
+        const { types } = initCustomerTypes({ organizations });
+        redirectAndOpen({ organizations, types });
       });
   };
 

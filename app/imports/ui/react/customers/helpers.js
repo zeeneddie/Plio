@@ -18,8 +18,6 @@ export const expandCollapsedCustomer = (_id) => {
 
   const typeItem = createTypeItem(organization.customerType);
 
-  console.log(typeItem);
-
   return store.dispatch(addCollapsed({ ...typeItem, close: { type: typeItem.type } }));
 };
 
@@ -69,4 +67,18 @@ export const collapseExpandedCustomers = () => {
   });
 
   return store.dispatch(typeCollapseAction);
+};
+
+export const initCustomerTypes = (props) => {
+  const types = _.values(CustomerTypes).reduce((prev, customerType) => {
+    const organizations = Object.assign([], props.organizations).filter(
+      propEq('customerType', customerType)
+    );
+
+    return organizations.length
+      ? prev.concat({ customerType, organizations })
+      : prev;
+  }, []);
+
+  return { types };
 };
