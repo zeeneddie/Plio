@@ -1,5 +1,5 @@
-import store from '/client/redux/store';
-import { setSearchText, toggleCollapsed } from '/client/redux/actions/globalActions';
+import store from '/imports/client/store';
+import { setSearchText, toggleCollapsed } from '/imports/client/store/actions/globalActions';
 
 export const onToggleCollapse = () => (e, { key, type } = {}) =>
   store.dispatch(toggleCollapsed({ key, type, close: { type } }));

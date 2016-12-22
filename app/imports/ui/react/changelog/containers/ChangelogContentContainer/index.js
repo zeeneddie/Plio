@@ -3,7 +3,7 @@ import { composeWithTracker } from 'react-komposer';
 import { connect } from 'react-redux';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs';
-import { setLogs } from '/client/redux/actions/changelogActions';
+import { setLogs } from '/imports/client/store/actions/changelogActions';
 import { pickDeep } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogContent from '../../components/ChangelogContent';

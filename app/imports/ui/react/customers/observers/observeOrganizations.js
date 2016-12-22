@@ -3,8 +3,8 @@ import {
   addOrganization,
   updateOrganization,
   removeOrganization,
-} from '/client/redux/actions/collectionsActions';
-import { getState } from '/client/redux/store';
+} from '/imports/client/store/actions/collectionsActions';
+import { getState } from '/imports/client/store';
 import { expandCollapsedCustomer } from '../helpers';
 
 export default (dispatch) => {

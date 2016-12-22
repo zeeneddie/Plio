@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { reset, submit as submitMessage } from '/client/redux/actions/discussionActions';
+import { reset, submit as submitMessage } from '/imports/client/store/actions/discussionActions';
 
 const MESSAGES_LENGTH_LIMIT_BEFORE_RESET = 100;
 

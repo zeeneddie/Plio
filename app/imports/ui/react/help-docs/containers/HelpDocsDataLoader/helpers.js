@@ -2,7 +2,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 
 import { propEqId } from '/imports/api/helpers';
-import { addCollapsed } from '/client/redux/actions/globalActions';
+import { addCollapsed } from '/imports/client/store/actions/globalActions';
 import { createHelpSectionItem } from '../../helpers';
 import { goTo } from '/imports/ui/utils/router/actions';
 

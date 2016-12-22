@@ -9,7 +9,7 @@ import {
   setLoadingLogsCount,
   setLogsCount,
   setShowAll,
-} from '/client/redux/actions/changelogActions';
+} from '/imports/client/store/actions/changelogActions';
 import { pickC, shallowCompare } from '/imports/api/helpers';
 import { lastLogsLimit } from '../../constants';
 import ChangelogFooter from '../../components/ChangelogFooter';

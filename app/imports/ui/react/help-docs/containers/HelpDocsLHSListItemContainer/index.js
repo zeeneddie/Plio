@@ -1,7 +1,7 @@
 import { compose, mapProps, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
 import { connect } from 'react-redux';
 
-import { setUrlItemId } from '/client/redux/actions/globalActions';
+import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { pickC, pickDeep } from '/imports/api/helpers';
 import HelpDocsLHSListItem from '../../components/HelpDocsLHSListItem';
 import propTypes from './propTypes';

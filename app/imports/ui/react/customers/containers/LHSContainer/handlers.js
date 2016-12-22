@@ -2,11 +2,11 @@ import { batchActions } from 'redux-batched-actions';
 import { _ } from 'meteor/underscore';
 
 import { Organizations } from '/imports/share/collections/organizations';
-import { setFilteredOrganizations } from '/client/redux/actions/customersActions';
+import { setFilteredOrganizations } from '/imports/client/store/actions/customersActions';
 import {
   setSearchText,
   setAnimating,
-} from '/client/redux/actions/globalActions';
+} from '/imports/client/store/actions/globalActions';
 import {
   extractIds,
   looksLikeAPromise,

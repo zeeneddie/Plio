@@ -1,8 +1,8 @@
 import { _ } from 'meteor/underscore';
 
 import { propEq } from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
-import store, { getState } from '/client/redux/store';
+import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
+import store, { getState } from '/imports/client/store';
 import { CustomerTypes } from '/imports/share/constants';
 
 export const createTypeItem = key => ({

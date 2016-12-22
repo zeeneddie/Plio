@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { setShowCard } from '/client/redux/actions/mobileActions';
+import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { goTo } from '../../../../utils/router/actions';
 
 export const onHandleReturn = (props) => () => {

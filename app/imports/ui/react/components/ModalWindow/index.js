@@ -4,7 +4,7 @@ import { pure } from 'recompose';
 import { _ } from 'meteor/underscore';
 
 import Modal from '../Modal';
-import { setModal, onModalClose } from '/client/redux/actions/modalActions';
+import { setModal, onModalClose } from '/imports/client/store/actions/modalActions';
 
 @pure
 export default class ModalWindow extends React.Component {

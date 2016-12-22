@@ -19,8 +19,8 @@ import StandardsLayout from '../../components/Layout';
 import {
   setFilter,
   setSearchText,
-} from '/client/redux/actions/globalActions';
-import { setShowCard } from '/client/redux/actions/mobileActions';
+} from '/imports/client/store/actions/globalActions';
+import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { pickDeep } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
 import { goTo } from '../../../../utils/router/actions';
@@ -30,7 +30,7 @@ import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
-import { setInitializing } from '/client/redux/actions/standardsActions';
+import { setInitializing } from '/imports/client/store/actions/standardsActions';
 import {
   observeStandards,
   observeStandardBookSections,

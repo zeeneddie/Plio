@@ -14,11 +14,11 @@ import _search_ from '/imports/startup/client/mixins/search';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import {
   setFilteredStandards,
-} from '/client/redux/actions/standardsActions';
+} from '/imports/client/store/actions/standardsActions';
 import {
   setSearchText,
   setAnimating,
-} from '/client/redux/actions/globalActions';
+} from '/imports/client/store/actions/globalActions';
 import { onSearchTextClear, needToSearchPrecisely } from '/imports/ui/react/share/LHS/handlers';
 
 export const onSearchTextChange = _.debounce(({

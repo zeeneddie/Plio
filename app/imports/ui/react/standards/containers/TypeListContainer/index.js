@@ -6,7 +6,7 @@ import {
   lengthStandards,
   propEq,
 } from '/imports/api/helpers';
-import { getState } from '/client/redux/store';
+import { getState } from '/imports/client/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
   openStandardByFilter,

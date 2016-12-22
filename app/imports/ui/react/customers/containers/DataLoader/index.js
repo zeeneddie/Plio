@@ -16,8 +16,8 @@ import {
   DocumentCardSubs,
 } from '/imports/startup/client/subsmanagers';
 import { pickDeep, identity } from '/imports/api/helpers';
-import { setInitializing } from '/client/redux/actions/customersActions';
-import { setShowCard } from '/client/redux/actions/mobileActions';
+import { setInitializing } from '/imports/client/store/actions/customersActions';
+import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { goTo } from '../../../../utils/router/actions';
 import CustomersLayout from '../../components/Layout';
 import loadInitialData from '../../../loaders/loadInitialData';

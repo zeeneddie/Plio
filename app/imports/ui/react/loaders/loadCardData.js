@@ -1,4 +1,4 @@
-import { setIsCardReady } from '/client/redux/actions/globalActions';
+import { setIsCardReady } from '/imports/client/store/actions/globalActions';
 
 export default subscribe => function loadCardData({
     dispatch,

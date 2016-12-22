@@ -8,7 +8,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { _ } from 'meteor/underscore';
 
 import { transsoc } from '/imports/api/helpers';
-import { setShowCard } from '/client/redux/actions/mobileActions';
+import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import propTypes from './propTypes';
 
 const ListItemLink = (props) => (

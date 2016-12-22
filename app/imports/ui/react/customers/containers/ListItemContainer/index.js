@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'react';
 
 import CustomersListItem from '../../components/ListItem';
-import { setUrlItemId } from '/client/redux/actions/globalActions';
+import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { UserMembership } from '/imports/share/constants';
 import { getFormattedDate, getUserFullNameOrEmail } from '/imports/share/helpers';
 import { notEquals, propEq, getC } from '/imports/api/helpers';

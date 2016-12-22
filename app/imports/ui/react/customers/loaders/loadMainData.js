@@ -1,5 +1,5 @@
 import { Organizations } from '/imports/share/collections/organizations';
-import { setOrganizations } from '/client/redux/actions/collectionsActions';
+import { setOrganizations } from '/imports/client/store/actions/collectionsActions';
 
 export default function loadMainData({ dispatch }, onData) {
   const organizations = Organizations.find({

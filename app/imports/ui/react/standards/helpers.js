@@ -15,9 +15,9 @@ import {
   notDeleted,
   getId,
 } from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
+import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
 import { goTo } from '../../utils/router/actions';
-import store, { getState } from '/client/redux/store';
+import store, { getState } from '/imports/client/store';
 import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>

@@ -10,12 +10,12 @@ import {
   addStandardType,
   updateStandardType,
   removeStandardType,
-} from '/client/redux/actions/collectionsActions';
+} from '/imports/client/store/actions/collectionsActions';
 import { Standards } from '/imports/share/collections/standards';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { expandCollapsedStandard } from './helpers';
-import { getState } from '/client/redux/store';
+import { getState } from '/imports/client/store';
 import { propEq, getId } from '/imports/api/helpers';
 import { goTo } from '../../utils/router/actions';
 

@@ -4,7 +4,7 @@ import { $ } from 'meteor/jquery';
 import { _ } from 'meteor/underscore';
 
 import { MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { setWindowWidth } from '/client/redux/actions/windowActions';
+import { setWindowWidth } from '/imports/client/store/actions/windowActions';
 import { pickDeep } from '/imports/api/helpers';
 import Page from '../../components/Page';
 

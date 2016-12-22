@@ -5,7 +5,7 @@ import { getSubNestingClassName } from '../../helpers';
 import StandardListItem from '../../components/StandardListItem';
 import _user_ from '/imports/startup/client/mixins/user';
 import _date_ from '/imports/startup/client/mixins/date';
-import { setUrlItemId } from '/client/redux/actions/globalActions';
+import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { updateViewedBy } from '/imports/api/standards/methods';
 import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 import { pickC, notEquals } from '/imports/api/helpers';

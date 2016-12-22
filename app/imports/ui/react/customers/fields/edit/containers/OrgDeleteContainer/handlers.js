@@ -2,8 +2,8 @@
 
 import { SHA256 } from 'meteor/sha';
 
-import store, { getState } from '/client/redux/store';
-import { callMethod, setErrorText, close } from '/client/redux/actions/modalActions';
+import store, { getState } from '/imports/client/store';
+import { callMethod, setErrorText, close } from '/imports/client/store/actions/modalActions';
 import { deleteCustomerOrganization } from '/imports/api/organizations/methods';
 import swal from '/imports/ui/utils/swal';
 import { ORG_DELETE, ORG_DELETE_PASSWORD } from '/imports/api/swal-params';

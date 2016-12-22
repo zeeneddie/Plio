@@ -18,8 +18,8 @@ import {
   setWorkItems,
   setLessons,
   setStandards,
-} from '/client/redux/actions/collectionsActions';
-import { setDepsReady } from '/client/redux/actions/standardsActions';
+} from '/imports/client/store/actions/collectionsActions';
+import { setDepsReady } from '/imports/client/store/actions/standardsActions';
 
 export default function loadDeps({ dispatch, organizationId, initializing }, onData) {
   const subscription = BackgroundSubs.subscribe('standardsDeps', organizationId);
