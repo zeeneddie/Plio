@@ -11,12 +11,16 @@ export const getOrgSerialNumber = ({ orgSerialNumber } = {}) => (
 export const getFilter = ({ filter } = {}) =>
   filter || FlowRouter.getQueryParam('filter') || 1;
 
-export const createPathGetter = (path) =>
+export const createPathGetter = (path, withOrgSerialNumber, withFilter) =>
   (params, queryParams) => {
-    const orgSerialNumber = getOrgSerialNumber(params);
-    const _params = { ...params, orgSerialNumber };
-    const filter = getFilter(queryParams);
-    const _queryParams = queryParams || { filter };
+    const _params = { ...params };
+    const _queryParams = { ...queryParams };
+    if (withOrgSerialNumber) {
+      Object.assign(_params, { orgSerialNumber: getOrgSerialNumber(params) });
+    }
+    if (withFilter) {
+      Object.assign(_queryParams, { filter: getFilter(queryParams) });
+    }
 
     return FlowRouter.path(path, _params, _queryParams);
   };

@@ -1,13 +1,10 @@
 import { createPathGetter } from './helpers';
+import { PATH_MAP } from './constants';
 
-export const getPathToStandard = createPathGetter('standard');
+export const paths = Object.keys(PATH_MAP).reduce((prev, path) =>
+  ({
+    ...prev,
+    [path]: createPathGetter(path, PATH_MAP[path].orgSerialNumber, PATH_MAP[path].filter),
+  }), {});
 
-export const getPathToDiscussion = createPathGetter('standardDiscussion');
-
-export const getPathToNC = createPathGetter('nonconformity');
-
-export const getPathToRisk = createPathGetter('risk', 'riskId');
-
-export const getPathToWorkItem = createPathGetter('workInboxItem', 'workItemId');
-
-export const getPathToCustomer = createPathGetter('customer');
+export const getPath = name => paths[name];

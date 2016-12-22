@@ -18,7 +18,7 @@ import {
 import { pickDeep, identity } from '/imports/api/helpers';
 import { setInitializing } from '/client/redux/actions/customersActions';
 import { setShowCard } from '/client/redux/actions/mobileActions';
-import { goToDashboard } from '../../../helpers/routeHelpers';
+import { goTo } from '../../../../utils/router/actions';
 import CustomersLayout from '../../components/Layout';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadLayoutData from '../../../loaders/loadLayoutData';
@@ -96,7 +96,7 @@ export default compose(
         return props.dispatch(setShowCard(false));
       }
 
-      return goToDashboard();
+      return goTo('dashboardPage')();
     },
   })
 )(CustomersLayout);

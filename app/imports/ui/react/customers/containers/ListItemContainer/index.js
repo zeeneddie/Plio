@@ -1,5 +1,4 @@
-import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes, lifecycle } from 'recompose';
-import { FlowRouter } from 'meteor/kadira:flow-router';
+import { compose, withHandlers, mapProps, shouldUpdate, setPropTypes } from 'recompose';
 import { connect } from 'react-redux';
 import { PropTypes } from 'react';
 
@@ -8,6 +7,7 @@ import { setUrlItemId } from '/client/redux/actions/globalActions';
 import { UserMembership } from '/imports/share/constants';
 import { getFormattedDate, getUserFullNameOrEmail } from '/imports/share/helpers';
 import { notEquals, propEq, getC } from '/imports/api/helpers';
+import { getPath } from '/imports/ui/utils/router/paths';
 
 const CustomersListItemContainer = compose(
   setPropTypes({
@@ -28,12 +28,7 @@ const CustomersListItemContainer = compose(
     notEquals(props.users, nextProps.users)
   )),
   mapProps(({ _id, name, urlItemId, users, ...props }) => {
-    const href = (() => {
-      const params = { urlItemId: _id };
-
-      return FlowRouter.path('customer', params);
-    })();
-
+    const href = getPath('customer')({ urlItemId: _id });
     const isActive = urlItemId === _id;
     const createdAt = getFormattedDate(props.createdAt, 'DD MMM YYYY');
     const ownerData = users.find(propEq('role', UserMembership.ORG_OWNER));

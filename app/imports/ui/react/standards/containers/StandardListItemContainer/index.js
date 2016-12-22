@@ -1,5 +1,4 @@
 import { compose, withHandlers, withProps, shouldUpdate } from 'recompose';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
 
 import { getSubNestingClassName } from '../../helpers';
@@ -12,6 +11,7 @@ import withUpdateViewedBy from '../../../helpers/withUpdateViewedBy';
 import { pickC, notEquals } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP, UncategorizedTypeSection } from '/imports/api/constants';
 import { isNewDoc } from '/imports/api/checkers';
+import { getPath } from '/imports/ui/utils/router/paths';
 
 export default compose(
   shouldUpdate((props, nextProps) => !!(
@@ -66,7 +66,7 @@ export default compose(
         filter: props.filter || 1,
       };
 
-      return FlowRouter.path('standard', params, queryParams);
+      return getPath('standard')(params, queryParams);
     })();
     const className = getSubNestingClassName(props);
     const isNew = isNewDoc(props.organization, props.userId, props);

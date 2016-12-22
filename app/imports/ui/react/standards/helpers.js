@@ -1,5 +1,4 @@
 import { _ } from 'meteor/underscore';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { withProps } from 'recompose';
 
 import { CollectionNames } from '/imports/share/constants';
@@ -17,7 +16,7 @@ import {
   getId,
 } from '/imports/api/helpers';
 import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
-import { goToStandard, goToStandards } from '../helpers/routeHelpers';
+import { goTo } from '../../utils/router/actions';
 import store, { getState } from '/client/redux/store';
 import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
 
@@ -103,8 +102,8 @@ export const redirectToStandardOrDefault = ({
   defaultStandard,
 }) => !selectedStandard && (
   defaultStandard
-    ? goToStandard({ urlItemId: getId(defaultStandard) })
-    : goToStandards()
+    ? goTo('standard')({ urlItemId: getId(defaultStandard) })
+    : goTo('standards')()
 );
 
 export const openStandardByFilter = ({

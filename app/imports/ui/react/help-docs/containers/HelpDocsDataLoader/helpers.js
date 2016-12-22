@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { propEqId } from '/imports/api/helpers';
 import { addCollapsed } from '/client/redux/actions/globalActions';
 import { createHelpSectionItem } from '../../helpers';
+import { goTo } from '/imports/ui/utils/router/actions';
 
 export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => {
   const helpDoc = helpDocs.find(propEqId(urlItemId));
@@ -13,8 +14,7 @@ export const redirectToHelpDoc = ({ urlItemId, helpDocs, helpSectionsData }) => 
     const params = {
       helpId: helpSectionsData[0].helpDocs[0]._id,
     };
-
-    Meteor.defer(() => FlowRouter.go('helpDoc', params));
+    Meteor.defer(() => goTo('helpDoc')(params));
   }
 };
 

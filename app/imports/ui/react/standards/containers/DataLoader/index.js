@@ -26,7 +26,7 @@ import {
   testPerformance,
 } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
+import { goTo } from '../../../../utils/router/actions';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
@@ -155,13 +155,13 @@ export default compose(
         props.dispatch(setShowCard(false));
 
         if (props.isDiscussionOpened) {
-          return goToStandard({ orgSerialNumber, urlItemId });
+          return goTo('standard')({ orgSerialNumber, urlItemId });
         } else if (!props.isDiscussionOpened && props.showCard) {
           return true;
         }
       }
 
-      return goToDashboard();
+      return goTo('dashboardPage')();
     },
   }),
 )(StandardsLayout);

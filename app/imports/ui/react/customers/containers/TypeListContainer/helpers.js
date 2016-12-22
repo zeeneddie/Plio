@@ -1,8 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { expandCollapsedCustomer } from '../../helpers';
 import { getC, propEqId } from '/imports/api/helpers';
+import { goTo } from '/imports/ui/utils/router/actions';
 
 export const redirectAndOpen = ({
   types,
@@ -14,9 +14,7 @@ export const redirectAndOpen = ({
   const defaultOrg = getC('types[0].organizations[0]', { types });
 
   if (!org && defaultOrg) {
-    FlowRouter.go('customer', {
-      urlItemId: defaultOrg._id,
-    });
+    goTo('customer')({ urlItemId: defaultOrg._id });
 
     target = defaultOrg._id;
   } else if (org) target = org._id;
