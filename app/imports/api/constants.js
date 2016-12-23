@@ -81,6 +81,7 @@ export const RisksListProjection = {
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1,
+  magnitude: 1,
 };
 
 export const ActionsListProjection = {
@@ -118,6 +119,10 @@ export const NonConformitiesListProjection = {
   isDeleted: 1,
   deletedAt: 1,
   deletedBy: 1,
+<<<<<<< HEAD
+  magnitude: 1,
+=======
+>>>>>>> 4581e9d2500fc21a0e0dfe58dd0eea3eff8899cc
 };
 
 export const WorkItemsListProjection = {
