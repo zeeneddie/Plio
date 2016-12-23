@@ -1,10 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
-import get from 'lodash.get';
+import cx from 'classnames';
 
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { DefaultStandardTypes } from '/imports/share/constants.js';
 import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
 
 Template.ESType.viewmodel({
@@ -27,6 +26,7 @@ Template.ESType.viewmodel({
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch().map(item => ({
       ...item,
+      title: cx(item.title, `(${item.abbreviation})`),
       titlePrefix: item.title,
     }));
 
