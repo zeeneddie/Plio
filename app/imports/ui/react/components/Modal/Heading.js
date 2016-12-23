@@ -66,7 +66,7 @@ const ModalHeading = ({
         type="secondary"
         className={cx({ disabled: isSaving })}
         disabled={isSaving}
-        onClick={onModalClose}
+        onMouseDown={onModalClose}
       >
         {isSaving && variation !== 'save' && (
           <Icon name="spinner pulse fw" margin="bottom" />

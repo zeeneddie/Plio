@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
+
 import React, { PropTypes } from 'react';
 import { compose, withState, lifecycle } from 'recompose';
 import property from 'lodash.property';
-import { _ } from 'meteor/underscore';
 
 const enhance = compose(
   withState('internalValue', 'setInternalValue', property('value')),
@@ -19,18 +20,18 @@ const TextInput = enhance(({
   internalValue,
   onChange,
   setInternalValue,
-  reference = () => null,
+  refCb = () => null,
   ...other,
 }) => (
   <input
     type="text"
     value={internalValue}
     onChange={(e) => {
-      setInternalValue(_.identity(e.target.value));
-      
+      setInternalValue(e.target.value);
+
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={reference}
+    ref={refCb}
     {...other}
   />
 ));
@@ -38,7 +39,7 @@ const TextInput = enhance(({
 TextInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  reference: PropTypes.func,
+  refCb: PropTypes.func,
 };
 
 export default TextInput;
