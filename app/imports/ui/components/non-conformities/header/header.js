@@ -8,15 +8,30 @@ import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
+import HeaderOptionsMenu from '/imports/ui/react/risks/components/HeaderOptionsMenu';
 
 Template.NC_Header.viewmodel({
-  mixin: ['nonconformity', 'organization', 'router'],
+  mixin: ['modal', 'nonconformity', 'organization', 'router'],
   headerArgs() {
+    const view = this;
+
     return {
       idToExpand: this.NCId(),
       filters: NonConformityFilters,
       onSelectFilter: this.onSelectFilter.bind(this),
       isActiveFilter: this.isActiveNCFilter.bind(this),
+      getOptionsMenu() {
+        return {
+          component: HeaderOptionsMenu,
+          onHandleDataExport() {
+            view.modal().open({
+              template: 'NonConformitiesExport',
+              _title: 'Non Conformities Export',
+              variation: 'close',
+            });
+          },
+        };
+      },
     };
   },
   NC() {

@@ -1,24 +1,28 @@
 import { WebApp } from 'meteor/webapp';
+import { readFile } from 'fs';
 import { _ } from 'meteor/underscore';
-import { RISKS, NON_CONFORMITIES } from './exportDocTypes';
+import url from 'url';
+import { getLastModifiedFileTime, createMd5Hash } from './helpers';
 
-WebApp.connectHandlers.use('/export/', (req, res) => {
-  const docType = _.last(req.url.split('/'));
+WebApp.connectHandlers.use('/export', (req, res) => {
+  const reqUrl = url.parse(req.url, true);
+  const fileName = _.last(reqUrl.pathname.split('/'));
 
-  switch (docType) {
-    case RISKS:
+  const queryData = reqUrl.query;
+  const filePath = `/tmp/${fileName}`;
+  const hash = createMd5Hash(getLastModifiedFileTime(filePath));
 
-      break;
-
-    case NON_CONFORMITIES:
-
-      break;
-
-    default:
-      res.writeHead(404);
-      return res.end();
+  function sendNotFound() {
+    res.writeHead(404);
+    return res.end('Page not found');
   }
 
-  res.writeHead(200);
-  return res.end(docType);
+  if (hash !== queryData.token) sendNotFound();
+
+  return readFile(filePath, (error, result) => {
+    if (error) sendNotFound();
+
+    res.writeHead(200, { 'Content-type': 'text/csv' });
+    res.end(result);
+  });
 });

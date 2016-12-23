@@ -20,7 +20,7 @@ Template.Risks_Header.viewmodel({
           component: HeaderOptionsMenu,
           onHandleDataExport() {
             view.modal().open({
-              template: 'DataExport',
+              template: 'RiskExport',
               _title: 'Risks export',
               variation: 'close',
             });

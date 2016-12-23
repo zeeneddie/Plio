@@ -4,7 +4,14 @@ import
   from '/imports/ui/react/data-export/containers/SelectOptionsContainer';
 
 Template.DataExport.viewmodel({
-  exportOptions() {
-    return SelectOptionsContainer;
+  mixin: 'modal',
+  getArgs() {
+    const modal = this.modal();
+
+    return {
+      handleMethodResult: modal.handleMethodResult.bind(modal),
+      component: SelectOptionsContainer,
+      ...this.args(),
+    };
   },
 });
