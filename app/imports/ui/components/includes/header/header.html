@@ -8,7 +8,7 @@
         {{#each filters}}
           <a class="dropdown-item pointer"
             {{b "class: { active: isActiveFilter(this.value) }, click: onSelectFilter(this.value)"}}>
-            {{text}}
+            {{#if title}}{{title}} - {{/if}}{{text}}
           </a>
         {{/each}}
       </div>

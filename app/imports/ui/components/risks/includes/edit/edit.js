@@ -54,36 +54,33 @@ Template.Risks_Card_Edit.viewmodel({
     const { title } = this.risk();
     const _id = this._id();
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The risk "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      },
-      () => {
-        this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal.close();
-            return;
-          };
+    swal({
+      title: 'Are you sure?',
+      text: `The risk "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      this.modal().callMethod(remove, { _id }, (err) => {
+        if (err) {
+          swal.close();
+          return;
+        };
 
-          swal({
-            title: 'Removed!',
-            text: `The risk "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-
-          this.modal().close();
-
-          this.handleRouteRisks();
+        swal({
+          title: 'Removed!',
+          text: `The risk "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
         });
-      }
-    );
+
+        this.modal().close();
+
+        this.handleRouteRisks();
+      });
+    });
   },
   onInsertScoreCb() {
     return this.insertScore.bind(this);

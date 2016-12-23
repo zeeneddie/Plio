@@ -126,31 +126,28 @@ Template.Subcards_RiskScoring_Edit.viewmodel({
     if (!_id) {
       viewmodel.destroy();
     } else {
-      swal(
-        {
-          title: 'Are you sure?',
-          text: `Risk score will be removed.`,
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Remove',
-          closeOnConfirm: false
-        },
-        () => {
-          const showSuccess = (err) => {
-            if (!err) {
-              swal({
-                title: 'Removed!',
-                text: `Risk score was removed successfully.`,
-                type: 'success',
-                timer: ALERT_AUTOHIDE_TIME,
-                showConfirmButton: false,
-              });
-            }
-          };
+      swal({
+        title: 'Are you sure?',
+        text: `Risk score will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      }, () => {
+        const showSuccess = (err) => {
+          if (!err) {
+            swal({
+              title: 'Removed!',
+              text: `Risk score was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
+          }
+        };
 
-          this.onRemove({ score }, showSuccess);
-        }
-      );
+        this.onRemove({ score }, showSuccess);
+      });
     }
   }
 });

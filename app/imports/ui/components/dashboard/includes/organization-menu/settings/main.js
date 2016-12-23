@@ -66,7 +66,13 @@ Template.OrgSettings_MainSettings.viewmodel({
         organizationId, newOwnerId
       }, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
           swal({
             title: 'Success',
@@ -96,12 +102,20 @@ Template.OrgSettings_MainSettings.viewmodel({
         organizationId
       }, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
           swal({
             title: 'Success',
             text: `Transfer of the "${name}" organization was canceled`,
             type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
           });
         }
       });

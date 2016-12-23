@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const sweetAlert = ({
@@ -19,25 +20,20 @@ const sweetAlert = ({
   ...other,
 }, cb);
 
-Object.assign(sweetAlert, swal);
+sweetAlert.error = err => swal({
+  title: 'Oops... Something went wrong!',
+  text: err.reason || 'Internal server error',
+  type: 'error',
+  timer: ALERT_AUTOHIDE_TIME,
+  showConfirmButton: false,
+});
 
-sweetAlert.error = err => swal(
-  'Oops... Something went wrong!',
-  err.reason || 'Internal server error',
-  'error'
-);
-
-sweetAlert.success = (title, text, {
-  timer = ALERT_AUTOHIDE_TIME,
-  showConfirmButton = false,
-  ...other,
-} = {}) => swal({
+sweetAlert.success = (title, body) => swal({
   title,
-  text,
-  timer,
-  showConfirmButton,
+  text: body,
   type: 'success',
-  ...other,
+  timer: ALERT_AUTOHIDE_TIME,
+  showConfirmButton: false,
 });
 
 export default sweetAlert;

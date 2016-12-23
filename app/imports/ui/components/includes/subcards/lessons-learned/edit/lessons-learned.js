@@ -80,30 +80,27 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
     if (!_id) {
       return viewmodel.destroy();
     } else {
-      swal(
-        {
-          title: 'Are you sure?',
-          text: `The lesson "${title}" will be removed.`,
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Remove',
-          closeOnConfirm: false
-        },
-        () => {
-          const cb = () => {
-            viewmodel.destroy();
-            swal({
-              title: 'Removed!',
-              text: `The lesson "${title}" was removed successfully.`,
-              type: 'success',
-              timer: ALERT_AUTOHIDE_TIME,
-              showConfirmButton: false,
-            });
-          };
+      swal({
+        title: 'Are you sure?',
+        text: `The lesson "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      }, () => {
+        const cb = () => {
+          viewmodel.destroy();
+          swal({
+            title: 'Removed!',
+            text: `The lesson "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+        };
 
-          this.modal().callMethod(remove, { _id }, cb);
-        }
-      );
+        this.modal().callMethod(remove, { _id }, cb);
+      });
     }
   }
 });

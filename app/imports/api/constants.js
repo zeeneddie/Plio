@@ -39,10 +39,10 @@ export const STANDARD_FILTER_MAP = {
 };
 
 export const WorkInboxFilters = {
-  1: { title: 'Work', name: 'my current', prepend: 'by' },
-  2: { title: 'Work', name: 'team current', prepend: 'by' },
-  3: { title: 'Work', name: 'my completed', prepend: 'by' },
-  4: { title: 'Work', name: 'team completed', prepend: 'by' },
+  1: { title: 'Work', name: 'my current', prepend: '' },
+  2: { title: 'Work', name: 'team current', prepend: '' },
+  3: { title: 'Work', name: 'my completed', prepend: '' },
+  4: { title: 'Work', name: 'team completed', prepend: '' },
   5: { name: 'My deleted actions' },
   6: { name: 'Team deleted actions' },
 };
