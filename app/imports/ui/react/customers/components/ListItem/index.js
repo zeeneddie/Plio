@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
-import cx from 'classnames';
 
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
-import { CUSTOMER_SEQUENTIAL_ID } from '../../constants';
+import SequentialId from '../../fields/read/components/SequentialId';
 
 const CustomersListItem = ({ isActive, onClick, href, name, owner, createdAt, serialNumber }) => (
   <ListItemLink {...{ isActive, onClick, href }}>
@@ -11,7 +10,8 @@ const CustomersListItem = ({ isActive, onClick, href, name, owner, createdAt, se
       <div className="flexbox-row">
         <ListItem.Heading>
           <span className="margin-right">
-            {cx(serialNumber && `${CUSTOMER_SEQUENTIAL_ID}${serialNumber}`, name)}
+            <SequentialId {...{ serialNumber }} />
+            <span> {name}</span>
           </span>
         </ListItem.Heading>
       </div>
