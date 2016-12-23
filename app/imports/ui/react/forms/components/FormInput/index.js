@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import cx from 'classnames';
 import { withHandlers } from 'recompose';
 
 import TextInput from '../TextInput';
@@ -9,7 +8,6 @@ import { onHandleBlur, onHandleClear } from './handlers';
 const enhance = withHandlers({ onHandleBlur, onHandleClear });
 
 const FormInput = enhance(({
-  className,
   value,
   onHandleBlur: onBlur,
   onHandleClear: onClear,
@@ -20,7 +18,6 @@ const FormInput = enhance(({
   return (
     <ClearField onClick={e => onClear(e)(textInput)}>
       <TextInput
-        className={cx('form-control', className)}
         refCb={input => (textInput = input)}
         {...{ ...other, onBlur, value }}
       />

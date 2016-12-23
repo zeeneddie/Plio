@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { PropTypes } from 'react';
+import cx from 'classnames';
 import { compose, withState, lifecycle } from 'recompose';
 import property from 'lodash.property';
 
@@ -20,6 +21,7 @@ const TextInput = enhance(({
   internalValue,
   onChange,
   setInternalValue,
+  className,
   refCb = () => null,
   ...other,
 }) => (
@@ -32,6 +34,7 @@ const TextInput = enhance(({
       return typeof onChange === 'function' && onChange(e);
     }}
     ref={refCb}
+    className={cx('form-control', className)}
     {...other}
   />
 ));
@@ -40,6 +43,7 @@ TextInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   refCb: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default TextInput;
