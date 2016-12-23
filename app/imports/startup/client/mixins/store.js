@@ -1,4 +1,4 @@
-import store, { getState } from '/client/redux/store';
+import store, { getState } from '/imports/client/store';
 
 export default {
   store,

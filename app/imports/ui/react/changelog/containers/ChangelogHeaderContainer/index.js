@@ -14,12 +14,12 @@ import {
   setChangelogDocument,
   setLastHumanLog,
   setLoadingLastHumanLog,
-} from '/client/redux/actions/changelogActions';
+} from '/imports/client/store/actions/changelogActions';
 import { shallowCompare, pickFrom } from '/imports/api/helpers';
 import ChangelogHeader from '../../components/ChangelogHeader';
 import propTypes from './propTypes';
-import { STORE_COLLECTION_NAMES } from '/client/redux/lib/constants';
-import { getNormalizedDataKey } from '/client/redux/lib/collectionsHelpers';
+import { STORE_COLLECTION_NAMES } from '/imports/client/store/lib/constants';
+import { getNormalizedDataKey } from '/imports/client/store/lib/collectionsHelpers';
 
 const getPrettyDate = date => getFormattedDate(date, 'DD MMM YYYY');
 

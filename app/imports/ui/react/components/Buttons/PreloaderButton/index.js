@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 
 const PreloaderButton = ({ size = '2', children }) => (
   <Button type="secondary" size={size} className="disabled">
-    <Icon names="spinner spin" margin="right" />
+    <Icon name="spinner spin" margin="right" />
     {children}
   </Button>
 );

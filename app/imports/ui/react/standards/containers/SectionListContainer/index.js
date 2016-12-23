@@ -8,7 +8,7 @@ import {
 } from '/imports/api/helpers';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import SectionList from '../../components/SectionList';
-import { getState } from '/client/redux/store';
+import { getState } from '/imports/client/store';
 import {
   getSelectedAndDefaultStandardByFilter,
   redirectToStandardOrDefault,

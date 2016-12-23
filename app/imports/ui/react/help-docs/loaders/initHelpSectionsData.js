@@ -1,4 +1,4 @@
-import { setHelpSectionsData } from '/client/redux/actions/helpDocsActions';
+import { setHelpSectionsData } from '/imports/client/store/actions/helpDocsActions';
 import { createHelpSectionsData } from '../helpers';
 
 export default initHelpSectionsData = ({ helpDocs, helpSections, dispatch }, onData) => {

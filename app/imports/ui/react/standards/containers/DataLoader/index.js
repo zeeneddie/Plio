@@ -19,18 +19,18 @@ import StandardsLayout from '../../components/Layout';
 import {
   setFilter,
   setSearchText,
-} from '/client/redux/actions/globalActions';
-import { setShowCard } from '/client/redux/actions/mobileActions';
+} from '/imports/client/store/actions/globalActions';
+import { setShowCard } from '/imports/client/store/actions/mobileActions';
 import { pickDeep } from '/imports/api/helpers';
 import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { goToDashboard, goToStandard } from '../../../helpers/routeHelpers';
+import { goTo } from '../../../../utils/router/actions';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
 import loadMainData from '../../loaders/loadMainData';
 import loadCardData from '../../loaders/loadCardData';
 import loadDeps from '../../loaders/loadDeps';
-import { setInitializing } from '/client/redux/actions/standardsActions';
+import { setInitializing } from '/imports/client/store/actions/standardsActions';
 import {
   observeStandards,
   observeStandardBookSections,
@@ -152,13 +152,13 @@ export default compose(
         props.dispatch(setShowCard(false));
 
         if (props.isDiscussionOpened) {
-          return goToStandard({ orgSerialNumber, urlItemId });
+          return goTo('standard')({ orgSerialNumber, urlItemId });
         } else if (!props.isDiscussionOpened && props.showCard) {
           return true;
         }
       }
 
-      return goToDashboard();
+      return goTo('dashboardPage')();
     },
   }),
 )(StandardsLayout);

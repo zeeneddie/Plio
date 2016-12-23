@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { batchActions } from 'redux-batched-actions';
 
-import { setUserId, setFilter, setUrlItemId } from '/client/redux/actions/globalActions';
-import { setOrgSerialNumber } from '/client/redux/actions/organizationsActions';
+import { setUserId, setFilter, setUrlItemId } from '/imports/client/store/actions/globalActions';
+import { setOrgSerialNumber } from '/imports/client/store/actions/organizationsActions';
 
 export default function loadInitialData({ dispatch }, onData) {
   const userId = Meteor.userId();

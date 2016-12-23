@@ -1,4 +1,4 @@
-import { setIsDiscussionOpened } from '/client/redux/actions/discussionActions';
+import { setIsDiscussionOpened } from '/imports/client/store/actions/discussionActions';
 
 export default function loadIsDiscussionOpened({ dispatch, isDiscussionOpened = false }, onData) {
   dispatch(setIsDiscussionOpened(isDiscussionOpened));

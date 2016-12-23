@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 const sweetAlert = ({
@@ -7,6 +9,7 @@ const sweetAlert = ({
   showCancelButton = true,
   confirmButtonText = '',
   closeOnConfirm = false,
+  ...other,
 }, cb) => swal({
   title,
   text,
@@ -14,6 +17,7 @@ const sweetAlert = ({
   showCancelButton,
   confirmButtonText,
   closeOnConfirm,
+  ...other,
 }, cb);
 
 sweetAlert.error = err => swal({

@@ -15,7 +15,7 @@ const StandardsLHS = (props) => {
       content = (
         <SectionListContainer
           standards={props.standards}
-          onToggleCollapse={props.onSectionToggleCollapse}
+          onToggleCollapse={props.onToggleCollapse}
         />
       );
       break;
@@ -23,8 +23,7 @@ const StandardsLHS = (props) => {
       content = (
         <TypeListContainer
           standards={props.standards}
-          onTypeToggleCollapse={props.onTypeToggleCollapse}
-          onSectionToggleCollapse={props.onSectionToggleCollapse}
+          onToggleCollapse={props.onToggleCollapse}
         />
       );
       break;

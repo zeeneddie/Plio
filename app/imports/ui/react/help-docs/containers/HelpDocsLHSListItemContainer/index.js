@@ -1,11 +1,11 @@
 import { compose, mapProps, shallowEqual, shouldUpdate, withHandlers, withProps } from 'recompose';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { connect } from 'react-redux';
 
-import { setUrlItemId } from '/client/redux/actions/globalActions';
+import { setUrlItemId } from '/imports/client/store/actions/globalActions';
 import { pickC, pickDeep } from '/imports/api/helpers';
 import HelpDocsLHSListItem from '../../components/HelpDocsLHSListItem';
 import propTypes from './propTypes';
+import { getPath } from '/imports/ui/utils/router/paths';
 
 const HelpDocsLHSListItemContainer = compose(
   connect(pickDeep(['global.urlItemId'])),
@@ -18,7 +18,7 @@ const HelpDocsLHSListItemContainer = compose(
   }),
 
   withProps((props) => ({
-    href: FlowRouter.path('helpDoc', { helpId: props._id }),
+    href: getPath('helpDoc')({ helpId: props._id }),
     isActive: props.urlItemId === props._id,
   })),
 

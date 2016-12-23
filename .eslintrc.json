@@ -18,23 +18,6 @@
     "global-require": "off"
   },
   "settings": {
-    "import/resolver": {
-      "meteor": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".es6",
-          ".coffee"
-        ],
-        "paths": [
-          "/usr/local/share/global_modules"
-        ],
-        "moduleDirectory": [
-          "node_modules",
-          "bower_components",
-          "project/src"
-        ]
-      }
-    }
+    "import/resolver": "meteor"
   }
 }

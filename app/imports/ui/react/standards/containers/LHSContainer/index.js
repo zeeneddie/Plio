@@ -11,6 +11,7 @@ import {
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
 import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
+import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 
 const mapStateToProps = ({
   standards: { standardsFiltered },
@@ -50,8 +51,7 @@ export default compose(
     notEquals(props.standards, nextProps.standards)
   )),
   withHandlers({
-    onSectionToggleCollapse,
-    onTypeToggleCollapse,
+    onToggleCollapse,
     onClear,
     onModalOpen,
     onSearchTextChange: props => e => onSearchTextChange(props, e.target),

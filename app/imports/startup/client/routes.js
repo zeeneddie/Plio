@@ -3,6 +3,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 import { withOptions } from 'react-mounter';
 import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
+import { AccountsTemplates } from 'meteor/useraccounts:core';
 import ReactDOM from 'react-dom';
 import { $ } from 'meteor/jquery';
 
@@ -11,9 +12,50 @@ import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
+import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 
 BlazeLayout.setRoot('#app');
+
+function redirectHandler() {
+  const targetURL = FlowRouter.getQueryParam('b');
+  if (targetURL) {
+    FlowRouter.go(targetURL);
+  } else {
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('hello');
+    });
+  }
+}
+
+function checkLoggedIn(context, redirect) {
+  // Redirect to maintenance route can be here.
+  // redirect('maintenance'); return;
+  if (!Meteor.loggingIn()) {
+    if (!Meteor.user()) {
+      redirect('signIn', {}, { b: context.path });
+    }
+  }
+}
+
+function checkEmailVerified(context, redirect) {
+  const user = Meteor.user();
+  const isOnUserWaiting = context.route.name === 'userWaiting';
+
+  if (user) {
+    const email = user.emails[0];
+
+    if (!email.verified) {
+      if (!isOnUserWaiting) {
+        redirect('userWaiting');
+      }
+    } else {
+      if (isOnUserWaiting) {
+        redirect('hello');
+      }
+    }
+  }
+}
 
 function mount(layoutClass, regions, options = {}) {
   const additionalOptions = {
@@ -35,7 +77,7 @@ AccountsTemplates.configureRoute('signIn', {
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content',
-  redirect: redirectHandler
+  redirect: redirectHandler,
 });
 
 AccountsTemplates.configureRoute('signUp', {
@@ -45,7 +87,7 @@ AccountsTemplates.configureRoute('signUp', {
   layoutTemplate: 'LoginLayout',
   layoutRegions: {},
   contentRegion: 'content',
-  redirect: redirectHandler
+  redirect: redirectHandler,
 });
 
 AccountsTemplates.configureRoute('verifyEmail', {
@@ -60,7 +102,7 @@ AccountsTemplates.configureRoute('verifyEmail', {
       FlowRouter.go('hello');
     });
     toastr.success('Email verified! Thanks!');
-  }
+  },
 });
 
 AccountsTemplates.configureRoute('forgotPwd', {
@@ -70,7 +112,7 @@ AccountsTemplates.configureRoute('forgotPwd', {
   layoutTemplate: 'LoginLayout',
   redirect: redirectHandler,
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
 });
 
 AccountsTemplates.configureRoute('resetPwd', {
@@ -80,32 +122,32 @@ AccountsTemplates.configureRoute('resetPwd', {
   layoutTemplate: 'LoginLayout',
   redirect: redirectHandler,
   layoutRegions: {},
-  contentRegion: 'content'
+  contentRegion: 'content',
 });
 
 FlowRouter.route('/accept-invitation/:invitationId', {
   name: 'acceptInvitationPage',
-  action(params) {
+  action() {
     BlazeLayout.render('LoginLayout', {
-      content: 'AcceptInvitationPage'
+      content: 'AcceptInvitationPage',
     });
-  }
+  },
 });
 
 FlowRouter.route('/', {
   name: 'home',
-  action(params) {
+  action() {
     BlazeLayout.render('LoginLayout');
-  }
+  },
 });
 
 FlowRouter.route('/hello', {
   name: 'hello',
-  action(params) {
+  action() {
     BlazeLayout.render('TransitionalLayout', {
-      content: 'HelloPage'
+      content: 'HelloPage',
     });
-  }
+  },
 });
 
 // Uncomment this code to enable maintenance page
@@ -120,7 +162,7 @@ FlowRouter.route('/hello', {
 
 FlowRouter.route('/sign-out', {
   name: 'signOut',
-  action(params) {
+  action() {
     Meteor.logout();
     const targetURL = FlowRouter.getQueryParam('b');
     if (targetURL) {
@@ -130,27 +172,43 @@ FlowRouter.route('/sign-out', {
         FlowRouter.go('hello');
       });
     }
-  }
+  },
 });
 
 FlowRouter.route('/user-waiting', {
   name: 'userWaiting',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('TransitionalLayout', {
-      content: 'UserAccountWaitingPage'
+      content: 'UserAccountWaitingPage',
     });
-  }
+  },
 });
 
 FlowRouter.route('/transfer-organization/:transferId', {
   name: 'transferOrganization',
   triggersEnter: [checkLoggedIn],
-  action(params) {
+  action() {
     BlazeLayout.render('TransitionalLayout', {
-      content: 'TransferOrganizationPage'
+      content: 'TransferOrganizationPage',
     });
-  }
+  },
+});
+
+FlowRouter.route('/customers', {
+  name: 'customers',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(CustomersProvider);
+  },
+});
+
+FlowRouter.route('/customers/:urlItemId', {
+  name: 'customer',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action() {
+    mount2(CustomersProvider);
+  },
 });
 
 FlowRouter.route('/help-center', {
@@ -198,155 +256,114 @@ FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId/discussion', {
   // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
   name: 'nonConformityDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('NC_Layout', {
       content: 'NC_Page',
-      isDiscussionOpened: true
+      isDiscussionOpened: true,
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/risks/:riskId/discussion', {
   // http://localhost:3000/98/non-conformities/Zty4NCagWvrcuLYoy/discussion
   name: 'riskDiscussion',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('Risks_Layout', {
       content: 'Risks_Page',
-      isDiscussionOpened: true
+      isDiscussionOpened: true,
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber', {
   name: 'dashboardPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified, BlazeLayout.reset],
-  action(params) {
+  action() {
     $(() => ReactDOM.unmountComponentAtNode(document.getElementById('app')));
 
     BlazeLayout.render('Dashboard_Layout', {
-      content: 'Dashboard_Page'
+      content: 'Dashboard_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/users', {
   name: 'userDirectoryPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page'
+      content: 'UserDirectory_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/users/:userId', {
   name: 'userDirectoryUserPage',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('UserDirectory_Layout', {
-      content: 'UserDirectory_Page'
+      content: 'UserDirectory_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities', {
   name: 'nonconformities',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page'
+      content: 'NC_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/non-conformities/:urlItemId', {
   name: 'nonconformity',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('NC_Layout', {
-      content: 'NC_Page'
+      content: 'NC_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/risks', {
   name: 'risks',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('Risks_Layout', {
-      content: 'Risks_Page'
+      content: 'Risks_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/risks/:riskId', {
   name: 'risk',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('Risks_Layout', {
-      content: 'Risks_Page'
+      content: 'Risks_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox', {
   name: 'workInbox',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page'
+      content: 'WorkInbox_Page',
     });
-  }
+  },
 });
 
 FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   name: 'workInboxItem',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action(params) {
+  action() {
     BlazeLayout.render('WorkInbox_Layout', {
-      content: 'WorkInbox_Page'
+      content: 'WorkInbox_Page',
     });
-  }
+  },
 });
-
-function redirectHandler() {
-  const targetURL = FlowRouter.getQueryParam('b');
-  if (targetURL) {
-    FlowRouter.go(targetURL);
-  } else {
-    FlowRouter.withReplaceState(() => {
-      FlowRouter.go('hello');
-    });
-  }
-}
-
-function checkLoggedIn(context, redirect) {
-
-  // Redirect to maintenance route can be here.
-  // redirect('maintenance'); return;
-  if (!Meteor.loggingIn()) {
-    if (!Meteor.user()) {
-      redirect('signIn', {}, { b: context.path });
-    }
-  }
-}
-
-function checkEmailVerified(context, redirect) {
-  const user = Meteor.user();
-  const isOnUserWaiting = context.route.name === 'userWaiting';
-
-  if (user) {
-    const email = user.emails[0];
-
-    if (!email.verified) {
-      if (!isOnUserWaiting) {
-        redirect('userWaiting');
-      }
-    } else {
-      if (isOnUserWaiting) {
-        redirect('hello');
-      }
-    }
-  }
-}

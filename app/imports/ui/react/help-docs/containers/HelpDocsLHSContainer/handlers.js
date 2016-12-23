@@ -8,9 +8,9 @@ import {
   toggleCollapsed,
   addCollapsed,
   chainActions,
-} from '/client/redux/actions/globalActions';
+} from '/imports/client/store/actions/globalActions';
 import { extractIds, propEqId } from '/imports/api/helpers';
-import { setFilteredHelpDocs } from '/client/redux/actions/helpDocsActions';
+import { setFilteredHelpDocs } from '/imports/client/store/actions/helpDocsActions';
 import { createHelpSectionItem, createHelpSectionsData } from '../../helpers';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import _search_ from '/imports/startup/client/mixins/search';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { getC } from '/imports/api/helpers';
-import Collapse from '../../../components/Collapse';
+import CollapseBlock from '../../../components/CollapseBlock';
 import HelpDocsRHSBodyHeading from '../HelpDocsRHSBodyHeading';
 import HelpDocsRHSBodyContents from '../HelpDocsRHSBodyContents';
 import SourceWordDocument from '../../../components/SourceWordDocument';
@@ -13,7 +13,7 @@ const HelpDocsRHSBody = (props) => (
   <div className="content-list">
     {props.isReady ? (
       <div>
-        <Collapse
+        <CollapseBlock
           collapsed={props.collapsed}
           onToggleCollapse={props.onToggleCollapse}
           initial={props.initialCollapsed}
@@ -29,7 +29,7 @@ const HelpDocsRHSBody = (props) => (
             owner={props.owner}
             userHasChangeAccess={props.userHasChangeAccess}
           />
-        </Collapse>
+        </CollapseBlock>
         {getC('helpDoc.source.htmlUrl', props) && (
           <SourceWordDocument src={props.helpDoc.source.htmlUrl}>
             <Source id={1} {...props.helpDoc.source} file={props.file} />

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 
 import { getC } from '/imports/api/helpers';
-import Collapse from '../../../../components/Collapse';
+import CollapseBlock from '../../../../components/CollapseBlock';
 import BodyHeading from '../BodyHeading';
 import BodyContents from '../BodyContents';
 import RHSBodyContentsContainer from '../../../containers/RHSBodyContentsContainer';
@@ -16,10 +16,10 @@ const StandardsRHSBody = ({
   onToggleCollapse,
 }) => (
   <Wrapper>
-    <Collapse {...{ collapsed, onToggleCollapse }}>
+    <CollapseBlock {...{ collapsed, onToggleCollapse }}>
       <BodyHeading {...standard} />
       <RHSBodyContentsContainer {...standard} />
-    </Collapse>
+    </CollapseBlock>
     {[standard.source1, standard.source2].map((source, key) => (
       getC('htmlUrl', source) && (
         <SourceWordDocument key={key} src={source.htmlUrl}>

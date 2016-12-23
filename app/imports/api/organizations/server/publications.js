@@ -8,10 +8,15 @@ import { StandardTypes } from '/imports/share/collections/standards-types';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { getUserOrganizations } from '../utils';
-import { StandardsBookSectionsListProjection, StandardTypesListProjection } from '../../constants';
+import { isPlioUser, isOrgMember } from '../../checkers';
+import {
+  StandardsBookSectionsListProjection,
+  StandardTypesListProjection,
+  CustomersListProjection,
+  CustomerCardProjection,
+} from '../../constants';
 import { makeOptionsFields } from '../../helpers';
 import { UserMembership } from '/imports/share/constants';
-import { isPlioUser, isOrgMember } from '../../checkers';
 
 
 Meteor.publish('invitationInfo', (invitationId) => {
@@ -52,8 +57,13 @@ Meteor.publish('currentUserOrganizations', function() {
     return getUserOrganizations(this.userId, {}, {
       fields: {
         name: 1,
-        serialNumber: 1
-      }
+        serialNumber: 1,
+        'users.userId': 1,
+        'users.role': 1,
+        'users.isRemoved': 1,
+        'users.removedAt': 1,
+        'users.removedBy': 1,
+      },
     });
   } else {
     return this.ready();
@@ -153,4 +163,39 @@ Meteor.publishComposite('organizationsInfo', {
           .find({ _id: owner.userId });
       }
   }],
+});
+
+Meteor.publishComposite('customersLayout', {
+  find() {
+    if (!this.userId || !isPlioUser(this.userId)) {
+      return this.ready();
+    }
+
+    return Organizations.find({}, {
+      fields: CustomersListProjection,
+    });
+  },
+  children: [{
+    find(organization) {
+      return Meteor.users.find({
+        _id: organization.ownerId(),
+      }, {
+        fields: {
+          'emails.address': 1,
+          'profile.firstName': 1,
+          'profile.lastName': 1,
+        },
+      });
+    },
+  }],
+});
+
+Meteor.publish('customerCard', function getCustomerData(orgId) {
+  if (!this.userId || !isPlioUser(this.userId)) {
+    return this.ready();
+  }
+
+  return Organizations.find({ _id: orgId }, {
+    fields: CustomerCardProjection,
+  });
 });

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose, withHandlers, withProps, withState } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 
-import store from '/client/redux/store.js';
+import store from '/imports/client/store';
 import HomeTitlesSubcard from '../../components/HomeTitlesSubcard';
 import initMainData from '../loaders/initMainData';
 

@@ -1,7 +1,7 @@
 import { DocumentCardSubs } from '/imports/startup/client/subsmanagers';
-import { setIsCardReady } from '/client/redux/actions/globalActions';
-import { updateStandard } from '/client/redux/actions/collectionsActions';
-import { getState } from '/client/redux/store';
+import { setIsCardReady } from '/imports/client/store/actions/globalActions';
+import { updateStandard } from '/imports/client/store/actions/collectionsActions';
+import { getState } from '/imports/client/store';
 import { Standards } from '/imports/share/collections/standards';
 
 export default function loadCardData({

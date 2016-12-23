@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { propEq } from '/imports/api/helpers';
-import Collapse from '../../components/Collapse';
+import CollapseBlock from '../../components/CollapseBlock';
 import propTypes from './propTypes';
 
 const isCollapsed = props => !props.collapsed.find(propEq('key', props.item.key));
 
 const LHSItem = (props) => (
-  <Collapse
+  <CollapseBlock
     collapsed={isCollapsed(props)}
     onToggleCollapse={e => props.onToggleCollapse(e, props.item)}
   >
@@ -24,7 +24,7 @@ const LHSItem = (props) => (
     <div className="list-group">
       {props.children}
     </div>
-  </Collapse>
+  </CollapseBlock>
 );
 
 LHSItem.propTypes = propTypes;
