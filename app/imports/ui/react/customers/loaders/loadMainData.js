@@ -5,7 +5,7 @@ export default function loadMainData({ dispatch }, onData) {
   const organizations = Organizations.find({
     isAdminOrg: { $ne: true },
   }, {
-    sort: { name: 1 },
+    sort: { serialNumber: 1 },
   }).fetch();
 
   dispatch(setOrganizations(organizations));
