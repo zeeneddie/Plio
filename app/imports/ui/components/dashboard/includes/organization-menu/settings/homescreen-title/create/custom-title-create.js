@@ -7,19 +7,16 @@ Template.CustomTitleCreate.viewmodel({
   showAlert() {
     if (!this.value()) return;
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `New title "${this.value()}" will replace the current one.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Add',
-        closeOnConfirm: false,
-      },
-      () => {
-        this.addNewSection();
-      }
-    );
+    swal({
+      title: 'Are you sure?',
+      text: `New title "${this.value()}" will replace the current one.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Add',
+      closeOnConfirm: false,
+    }, () => {
+      this.addNewSection();
+    });
   },
   sectionHintText() {
     return !!this.value() ? `Add "${this.value()}" title` : 'Start typing...';

@@ -46,36 +46,33 @@ Template.NC_Card_Edit.viewmodel({
     const { title } = this.NC();
     const _id = this._id();
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The non-conformity "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      },
-      () => {
-        this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal.close();
-            return;
-          };
+    swal({
+      title: 'Are you sure?',
+      text: `The non-conformity "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      this.modal().callMethod(remove, { _id }, (err) => {
+        if (err) {
+          swal.close();
+          return;
+        };
 
-          swal({
-            title: 'Removed!',
-            text: `The non-conformity "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-
-          this.modal().close();
-
-          this.redirect();
+        swal({
+          title: 'Removed!',
+          text: `The non-conformity "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
         });
-      }
-    );
+
+        this.modal().close();
+
+        this.redirect();
+      });
+    });
   },
   redirect() {
     const list = Object.assign({}, ViewModel.findOne('NC_List'));

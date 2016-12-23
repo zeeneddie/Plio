@@ -60,7 +60,13 @@ Template.OrgSettings_RisksTypes.viewmodel({
 
       this.modal().callMethod(remove, { _id }, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
           swal({
             title: 'Removed!',

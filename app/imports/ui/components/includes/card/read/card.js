@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 import { isOrgOwner } from '/imports/api/checkers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.Card_Read.viewmodel({
   mixin: 'utils',
@@ -49,10 +50,22 @@ Template.Card_Read.viewmodel({
   },
   handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
-      console.log(err);
-      swal('Oops... Something went wrong!', err.reason, 'error');
+
+      swal({
+        title: 'Oops... Something went wrong!',
+        text: err.reason,
+        type: 'error',
+        timer: ALERT_AUTOHIDE_TIME,
+        showConfirmButton: false,
+      });
     } else {
-      swal(this.capitalize(action), `The document "${title}" was ${action} successfully.`, 'success');
+      swal({
+        title: this.capitalize(action),
+        text: `The document "${title}" was ${action} successfully.`,
+        type: 'success',
+        timer: ALERT_AUTOHIDE_TIME,
+        showConfirmButton: false,
+      });
 
       return _.isFunction(cb) && cb();
     }
@@ -60,8 +73,7 @@ Template.Card_Read.viewmodel({
   restore({ _id, title, isDeleted, ...args }) {
     if (!isDeleted) return;
 
-    swal(
-      {
+    swal({
         title: 'Are you sure?',
         text: `The document "${title}" will be restored!`,
         type: 'warning',
@@ -79,20 +91,17 @@ Template.Card_Read.viewmodel({
   delete({ _id, title, isDeleted, organizationId, ...args }) {
     if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The document "${title}" will be deleted permanently!`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Delete',
-        closeOnConfirm: false,
-      },
-      () => {
-        this.onDelete({ _id, title, isDeleted, ...args }, (err, cb) => {
-          this.handleMethodCall(err, title, 'deleted', cb);
-        });
-      }
-    );
+    swal({
+      title: 'Are you sure?',
+      text: `The document "${title}" will be deleted permanently!`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      closeOnConfirm: false,
+    }, () => {
+      this.onDelete({ _id, title, isDeleted, ...args }, (err, cb) => {
+        this.handleMethodCall(err, title, 'deleted', cb);
+      });
+    });
   }
 });

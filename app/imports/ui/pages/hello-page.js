@@ -65,13 +65,21 @@ Template.HelloPage.viewmodel({
     }, () => {
       remove.call({}, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type:'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
-          swal(
-            'Removed!',
-            `Your account was removed successfully!`,
-            'success'
-          );
+          swal({
+            title: 'Removed!',
+            text: `Your account was removed successfully!`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         }
       });
     });

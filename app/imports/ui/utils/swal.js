@@ -1,3 +1,5 @@
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+
 const sweetAlert = ({
   title = 'Are you sure?',
   text = '',
@@ -14,12 +16,20 @@ const sweetAlert = ({
   closeOnConfirm,
 }, cb);
 
-sweetAlert.error = err => swal(
-  'Oops... Something went wrong!',
-  err.reason || 'Internal server error',
-  'error'
-);
+sweetAlert.error = err => swal({
+  title: 'Oops... Something went wrong!',
+  text: err.reason || 'Internal server error',
+  type: 'error',
+  timer: ALERT_AUTOHIDE_TIME,
+  showConfirmButton: false,
+});
 
-sweetAlert.success = (title, body) => swal(title, body, 'success');
+sweetAlert.success = (title, body) => swal({
+  title,
+  text: body,
+  type: 'success',
+  timer: ALERT_AUTOHIDE_TIME,
+  showConfirmButton: false,
+});
 
 export default sweetAlert;
