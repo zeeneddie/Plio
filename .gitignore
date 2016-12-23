@@ -4,5 +4,7 @@ node_modules
 deploy
 .idea
 .DS_Store
+mup.js
 settings-local.json
+settings-production.json
 npm-debug.log
