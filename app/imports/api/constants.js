@@ -170,6 +170,7 @@ export const DepartmentsListProjection = {
 
 export const CustomersListProjection = {
   name: 1,
+  serialNumber: 1,
   createdAt: 1,
   customerType: 1,
   isAdminOrg: 1,

@@ -1,25 +1,25 @@
 import React, { PropTypes } from 'react';
+import cx from 'classnames';
 
 import ListItemLink from '../../../components/ListItemLink';
 import ListItem from '../../../components/ListItem';
+import { CUSTOMER_SEQUENTIAL_ID } from '../../constants';
 
-const CustomersListItem = ({ isActive, onClick, href, name, owner, createdAt }) => (
-  <ListItemLink
-    isActive={isActive}
-    onClick={onClick}
-    href={href}
-  >
+const CustomersListItem = ({ isActive, onClick, href, name, owner, createdAt, serialNumber }) => (
+  <ListItemLink {...{ isActive, onClick, href }}>
     <ListItem>
       <div className="flexbox-row">
         <ListItem.Heading>
-          <span className="margin-right">{name}</span>
+          <span className="margin-right">
+            {cx(serialNumber && `${CUSTOMER_SEQUENTIAL_ID}${serialNumber}`, name)}
+          </span>
         </ListItem.Heading>
       </div>
       <ListItem.LeftText>
-        {owner}
+        <span>{owner}</span>
       </ListItem.LeftText>
       <ListItem.RightText>
-        {createdAt}
+        <span>{createdAt}</span>
       </ListItem.RightText>
     </ListItem>
   </ListItemLink>
@@ -30,6 +30,7 @@ CustomersListItem.propTypes = {
   isActive: PropTypes.bool,
   onClick: PropTypes.func,
   _id: PropTypes.string,
+  serialNumber: PropTypes.number,
   name: PropTypes.string,
   createdAt: PropTypes.string,
   owner: PropTypes.string,
