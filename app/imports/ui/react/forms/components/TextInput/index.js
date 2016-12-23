@@ -19,7 +19,7 @@ const TextInput = enhance(({
   internalValue,
   onChange,
   setInternalValue,
-  reference = () => null,
+  refCb = () => null,
   ...other,
 }) => (
   <input
@@ -27,10 +27,10 @@ const TextInput = enhance(({
     value={internalValue}
     onChange={(e) => {
       setInternalValue(_.identity(e.target.value));
-      
+
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={reference}
+    ref={refCb}
     {...other}
   />
 ));
@@ -38,7 +38,7 @@ const TextInput = enhance(({
 TextInput.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  reference: PropTypes.func,
+  refCb: PropTypes.func,
 };
 
 export default TextInput;

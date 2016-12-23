@@ -7,13 +7,28 @@ import { propEq, getC } from '/imports/api/helpers';
 import _date_ from '/imports/startup/client/mixins/date';
 import Wrapper from '../../../../components/Wrapper';
 import createReadFields from '../../../../helpers/createReadFields';
+import SequentialId from '../../../fields/read/components/SequentialId';
+import Label from '../../../../components/Labels/Label';
 
-const CustomersRHSBody = ({ name, users, currency, createdAt, customerType, timezone }) => {
+const CustomersRHSBody = ({
+  name,
+  serialNumber,
+  users,
+  currency,
+  createdAt,
+  customerType,
+  timezone,
+}) => {
   const owner = getC('userId', users.find(propEq('role', UserMembership.ORG_OWNER)));
   const tz = getFormattedTzDate(timezone);
   const orgTimezone = `${tz} ${timezone}`;
   const data = [
-    { label: 'Org name', text: name },
+    { label: 'Org name', text: (
+      <span>
+        <span>{name}</span>
+        <Label margin="left"><SequentialId {...{ serialNumber }} /></Label>
+      </span>
+    ) },
     { label: 'Org owner', text: getUserFullNameOrEmail(owner) },
     { label: 'Org timezone', text: orgTimezone },
     { label: 'Default currency', text: currency },
@@ -37,6 +52,7 @@ const CustomersRHSBody = ({ name, users, currency, createdAt, customerType, time
 
 CustomersRHSBody.propTypes = {
   name: PropTypes.string,
+  serialNumber: PropTypes.number,
   users: PropTypes.arrayOf(PropTypes.object),
   currency: PropTypes.string,
   createdAt: PropTypes.instanceOf(Date),
