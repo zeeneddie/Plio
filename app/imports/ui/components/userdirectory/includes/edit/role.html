@@ -1,0 +1,33 @@
+<template name="UserEdit_Role">
+  <div class="form-group row">
+    <div class="col-xs-12">
+      <button type="button" class="btn btn-checkbox btn-secondary"
+              data-toggle="button" autocomplete="off"
+        {{b "attr: {id: role, aria-pressed: userHasRole()}, enable: isEditable, class: {active: userHasRole()}, click: updateRole()"}}>
+        <i class="fa fa-check"></i>
+      </button>
+      <label class="btn-checkbox-label"
+        {{b "text: roleName(), attr: {for: role}"}}>
+      </label>
+      {{#if helpText}}
+        <button type="button"
+                class="btn btn-link help-icon btn-collapse pull-right" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+          <i class="fa fa-question-circle"></i>
+        </button>
+        <div class="row">
+          <div class="collapse guidance-panel" {{b "ref: collapse"}}>
+            <div class="card-block">
+              <div>{{helpText}}</div>
+              <div class="btn-group">
+                <a class="btn btn-link guidance-panel-close pointer"
+                  {{b "click: hideHelp"}}>
+                  Close
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</template>

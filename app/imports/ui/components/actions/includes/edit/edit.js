@@ -1,7 +1,7 @@
 import { Template } from 'meteor/templating';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 import {
-  insert,
   update,
   remove,
   complete,
@@ -11,11 +11,16 @@ import {
   linkStandard,
   unlinkStandard,
   linkDocument,
-  unlinkDocument
+  unlinkDocument,
+  setCompletionDate,
+  setCompletionExecutor,
+  setVerificationDate,
+  setVerificationExecutor
 } from '/imports/api/actions/methods.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
 
 Template.Actions_Edit.viewmodel({
-  mixin: ['organization', 'action', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
+  mixin: ['organization', 'workInbox', 'modal', 'callWithFocusCheck', 'router', 'collapsing', 'utils'],
   isLinkedToEditable: true,
   action() {
     return this._getActionByQuery({ _id: this._id() });
@@ -23,7 +28,7 @@ Template.Actions_Edit.viewmodel({
   isCompletionEditable(isVerified) {
     return !isVerified;
   },
-  slingshotDirective: 'actionsFiles',
+  slingshotDirective: 'actionFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
@@ -54,16 +59,16 @@ Template.Actions_Edit.viewmodel({
     }
   },
   getCompleteFn() {
-    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(complete, { ...args }, cb);
   },
   getUndoCompletionFn() {
-    return (e) => this.callUpdate(undoCompletion, {}, this.generateCallback('My current actions'));
+    return (cb) => this.callUpdate(undoCompletion, {}, cb);
   },
   getVerifyFn() {
-    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, this.generateCallback('My completed actions', cb));
+    return ({ ...args }, cb) => this.callUpdate(verify, { ...args }, cb);
   },
   getUndoVerificationFn() {
-    return (e) => this.callUpdate(undoVerification);
+    return (cb) => this.callUpdate(undoVerification, {}, cb);
   },
   getLinkStandardFn() {
     return ({ standardId }, cb) => {
@@ -85,20 +90,63 @@ Template.Actions_Edit.viewmodel({
       this.callUpdate(unlinkDocument, { documentId, documentType }, cb);
     };
   },
-  generateCallback(queryParam, cb = () => {}) {
+  getUpdateCompletionDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setCompletionDate, { targetDate: tzDate }, cb);
+    };
+  },
+  getUpdateCompletionExecutorFn() {
+    return ({ userId }, cb) => {
+      this.callUpdate(setCompletionExecutor, { userId }, cb);
+    };
+  },
+  getUpdateVerificationDateFn() {
+    return ({ targetDate }, cb) => {
+      const { timezone } = this.organization();
+      const tzDate = getTzTargetDate(targetDate, timezone);
+
+      this.callUpdate(setVerificationDate, { targetDate: tzDate }, cb);
+    };
+  },
+  getUpdateVerificationExecutorFn() {
+    return ({ userId }, cb) => {
+      this.callUpdate(setVerificationExecutor, { userId }, cb);
+    };
+  },
+  remove() {
+    const { title } = this.action();
     const _id = this._id();
 
-    return (err) => {
-      if (!err && FlowRouter.getQueryParam('by') !== queryParam) {
-        FlowRouter.setQueryParams({ by: queryParam });
-        Meteor.setTimeout(() => {
-          this.goToAction(_id);
-          this.expandCollapsed(_id);
-          cb(undefined);
-        }, 100);
-      } else {
-        return cb(err);
+    swal(
+      {
+        title: 'Are you sure?',
+        text: `An action "${title}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false,
+      },
+      () => {
+        this.modal().callMethod(remove, { _id }, (err) => {
+          if (err) {
+            swal.close();
+            return;
+          }
+
+          swal({
+            title: 'Removed!',
+            text: `An action "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
+
+          this.modal().close();
+        });
       }
-    }
-  }
+    );
+  },
 });

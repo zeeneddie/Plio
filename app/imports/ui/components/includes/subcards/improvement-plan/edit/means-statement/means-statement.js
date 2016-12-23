@@ -1,16 +1,32 @@
 import { Template } from 'meteor/templating';
-
+import { Files } from '/imports/share/collections/files.js';
 
 Template.IP_MeansStatement_Edit.viewmodel({
   mixin: 'organization',
-  files: [],
+  fileIds: [],
   uploaderMetaContext() {
     return {
-      organizationId: this.organizationId(),
-      improvementPlanId: this._id()
+      organizationId: this.organizationId()
     };
   },
-  update(...args) {
-    this.parent().update(...args);
+  update({ ...args }, cb) {
+    const renameFields = (obj, fieldRe) => {
+      for (let key in obj) {
+        if (!obj.hasOwnProperty(key)) {
+          continue;
+        }
+
+        const val = obj[key];
+        if (fieldRe.test(key)) {
+          obj[`improvementPlan.${key}`] = val;
+          delete obj[key];
+        } else if (_(val).isObject()) {
+          renameFields(val, fieldRe);
+        }
+      }
+    };
+
+    renameFields(args, /^fileIds/);
+    this.parent().update({ ...args }, cb);
   }
 })

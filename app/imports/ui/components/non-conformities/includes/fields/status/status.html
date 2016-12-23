@@ -1,8 +1,13 @@
 <template name="NC_Status_Edit">
   {{#FormField label="Status"}}
-    <span class="label text-default">
+    <span class="label text-default doc-status">
       <i class="fa fa-circle margin-right" {{b "class: 'text-'+getClassByStatus(status)"}}></i>
-      <span {{b "text: getStatusName(status)"}}></span>
+      <span>
+        {{getStatusName status}}
+        {{#if workflowType}}
+          <span class="display-on-parent-hover">({{workflowType}} workflow)</span>
+        {{/if}}
+      </span>
     </span>
   {{/FormField}}
 </template>

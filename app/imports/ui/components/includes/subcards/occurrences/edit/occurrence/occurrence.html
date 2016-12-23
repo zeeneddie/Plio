@@ -3,7 +3,7 @@
     {{#FormField label="Date"}}
       {{> Datepicker placeholder="Date" date=date onChange=onDateChangedCb}}
     {{/FormField}}
-    {{#FormField label="Description"}}
+    {{#FormField label="Description" helpText=helpText}}
       <textarea class="form-control" rows="3" placeholder="Description" {{b "value: description, focusout: updateDescription"}}></textarea>
     {{/FormField}}
   </div>

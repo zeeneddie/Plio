@@ -1,15 +1,18 @@
-import { UserSchema } from '../../api/users/user-schema.js';
-
+import { Meteor } from 'meteor/meteor';
+import { UserSchema } from '/imports/share/schemas/user-schema.js';
+import { _ } from 'meteor/underscore';
 
 Meteor.users.attachSchema(UserSchema);
 
 Meteor.users.helpers({
   fullName() {
-    const { firstName='', lastName='' } = this.profile;
+    const { firstName = '', lastName = '' } = this.profile;
 
     if (firstName && lastName) {
       return `${firstName} ${lastName}`;
     }
+
+    return null;
   },
   fullNameOrEmail() {
     return this.fullName() || this.email();
@@ -52,10 +55,10 @@ Meteor.users.helpers({
     parts = _.filter(parts, part => part.search(/[a-z0-9]/i) > -1);
 
     // join address parts with commas
-    let addressString = _.map(parts, part => part.replace(/\,\s*$/, '').trim()).join(', ');
+    let addressString = _.map(parts, part => part.replace(/,\s*$/, '').trim()).join(', ');
 
     // add trailing '.' if needed
-    addressString = addressString.slice(-1) === '.' ? addressString : addressString + '.';
+    addressString = addressString.slice(-1) === '.' ? addressString : `${addressString}.`;
     return addressString;
   },
   country() {
@@ -72,5 +75,8 @@ Meteor.users.helpers({
   },
   hasAcceptedInvite() {
     return !this.invitationId && !this.invitationExpirationDate;
-  }
+  },
+  areNotificationsEnabled() {
+    return this.preferences && this.preferences.areNotificationsEnabled;
+  },
 });

@@ -1,0 +1,25 @@
+<template name="NC_Item">
+  {{#ListItemLink (linkArgs)}}
+    <div class="list-group-item-content">
+      <div class="flexbox-row">
+        <h4 class="list-group-item-heading pull-left">
+          <span {{b "text: renderTitle"}}></span>
+          {{#if isNew}}
+            <span class="label label-primary">New</span>
+          {{/if}}
+        </h4>
+        <div class="flex">
+          <p class="list-group-item-text pull-right">{{getUserText this}}</p>
+          {{> MessagesCounter isHidden=this.isDeleted unreadMessagesCount=unreadMessagesCount pull="right"}}
+          {{#if occurrences.count}}
+            {{#unless isDeleted}}
+              <p class="list-group-item-text text-danger pull-right" {{b "text: totalCost"}}></p>
+            {{/unless}}
+          {{/if}}
+        </div>
+      </div>
+      <p class="list-group-item-text label pull-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></p>
+      <p class="list-group-item-text pull-right" {{b "text: renderDate(this.identifiedAt)"}}></p>
+    </div>
+  {{/ListItemLink}}
+</template>

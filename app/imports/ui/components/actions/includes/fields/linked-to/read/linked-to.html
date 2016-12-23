@@ -1,13 +1,14 @@
 <template name="Actions_LinkedTo_Read">
   <div class="list-group-item">
     <p class="list-group-item-text">Linked to</p>
-    {{#each linkedDocs}}
       <h4 class="list-group-heading">
-        <a {{b "attr: { href: getLink(this) }"}}>
-          <strong {{b "text: this.sequentialId"}}></strong>
-          <span {{b "text: this.title"}}></span>
-        </a>
-      </h4>
-    {{/each}}
+        {{#each linkedDocs}}
+          <a class="btn btn-secondary btn-inline pointer" {{b "attr: { href: getLink(this) }"}}>
+            <strong>{{this.sequentialId}}</strong>
+            <span>{{this.title}}</span>
+            <i class="fa fa-circle margin-left" {{b "class: 'text-'+getClassByStatus(this.status)"}}></i>
+          </a>
+        {{/each}}
+    </h4>
   </div>
 </template>

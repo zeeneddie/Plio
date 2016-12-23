@@ -1,0 +1,9 @@
+<template name="WorkInbox_Page">
+  {{#Page}}
+    {{> WorkInbox_List}}
+  {{else}}
+    {{> WorkInbox_Card_Read_Wrapper
+        _id=workItemId
+        isReady=isReady}}
+  {{/Page}}
+</template>

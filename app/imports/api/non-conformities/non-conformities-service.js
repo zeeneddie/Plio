@@ -1,57 +1,25 @@
-import { NonConformities } from './non-conformities.js';
-import { generateSerialNumber } from '/imports/core/utils.js';
+import { Meteor } from 'meteor/meteor';
+
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import ProblemsService from '../problems/problems-service.js';
+import { ProblemTypes } from '/imports/share/constants.js';
+import BaseEntityService from '../base-entity-service.js';
 
 
-export default {
+export default _.extend({}, ProblemsService, {
   collection: NonConformities,
 
-  insert({ organizationId, ...args }) {
-    const serialNumber = Utils.generateSerialNumber(this.collection, { organizationId });
+  _service: new BaseEntityService(NonConformities),
 
-    const sequentialId = `NC${serialNumber}`;
+  _abbr: 'NC',
 
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, ...args });
-  },
+  _docType: ProblemTypes.NON_CONFORMITY,
 
-  update({ _id, query = {}, options = {}, ...args }) {
-    if (!_.keys(query).length > 0) {
-      query = { _id };
+  _getDoc(_id) {
+    const NC = this.collection.findOne({ _id });
+    if (!NC) {
+      throw new Meteor.Error(400, 'Non-conformity does not exist');
     }
-    if (!_.keys(options).length > 0) {
-      options['$set'] = args;
-    }
-
-    return this.collection.update(query, options);
-  },
-
-  updateViewedBy({ _id, userId }) {
-    const query = { _id };
-    const options = {
-      $addToSet: {
-        viewedBy: userId
-      }
-    };
-
-    return this.collection.update(query, options);
-  },
-
-  remove({ _id, deletedBy, isDeleted }) {
-    const query = { _id };
-
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
-
-      console.log(query, options);
-
-      return this.collection.update(query, options);
-    }
+    return NC;
   }
-};
+});

@@ -1,80 +1,87 @@
-<template name="ActionsCard">
-  {{> Actions_QAPanel_Read document=action}}
-
+<template name="Actions_Card_Read">
   <div class="content-cards-inner flex scroll">
-    {{#if hasActions}}
+    {{#if showCard}}
       {{#with action}}
         {{#Card_Read
+          isReadOnly=isReadOnly
           cardTitle=(_getNameByType this.type)
-          document=this
-          onOpenEditModal=onOpenEditModalCb}}
+          doc=this
+          docType=this.type
+          isReady=isReady
+          onOpenEditModal=(callback 'openEditModal')}}
 
           <div class="list-group">
+            {{#Fields_ListGroupItem_Read
+              label="Title"}}
+              <span>{{this.title}}</span>
+              <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
+              <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
+            {{/Fields_ListGroupItem_Read}}
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Title</p>
-              <h4 class="list-group-item-heading">
-                <span {{b "text: this.title"}}></span>
-                <span class="label margin-left" {{b "text: this.sequentialId, class: 'label-'+getClassByStatus(this.status)"}}></span>
-                <span class="label text-default" {{b "text: getStatusName(this.status)"}}></span>
-              </h4>
-            </div>
+            {{#with description}}
+              {{> Fields_ListGroupItem_Read
+                  label="Description"
+                  text=this}}
+            {{/with}}
 
-            {{> Actions_LinkedTo_Read linkedDocs=this.linkedDocuments}}
+            {{#with this.linkedTo}}
+              {{> Actions_LinkedTo_Read linkedTo=this}}
+            {{/with}}
 
             <div class="row">
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Created date</p>
-                  <h4 class="list-group-item-heading" {{b "text: renderDate(this.createdAt)"}}></h4>
+              {{#with this.createdAt}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Created date"
+                      text=(renderDate this)}}
                 </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Owner</p>
-                  <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.ownerId)"}}></h4>
+              {{/with}}
+              {{#with this.ownerId}}
+                <div class="col-sm-6">
+                  {{> Fields_ListGroupItem_Read
+                      label="Owner"
+                      text=(userNameOrEmail this)}}
                 </div>
-              </div>
+              {{/with}}
             </div>
 
-            <div class="list-group-item">
-              <p class="list-group-item-text">Plan in place?</p>
-              <h4 class="list-group-item-heading"
-                {{b "text: this.planInPlace, class: getClassForPlanInPlace(this.planInPlace)"}}></h4>
-            </div>
-
+            {{#with this.planInPlace}}
+              {{> Fields_ListGroupItem_Read
+                  label="Plan in place?"
+                  text=this
+                  className=(getClassForPlanInPlace this)}}
+            {{/with}}
           </div>
 
           <div class="list-group">
             <div class="row">
               <div class="col-sm-6">
-                <div class="list-group-item">
-                  {{#if this.isCompleted}}
-                    <p class="list-group-item-text">Completed date</p>
-                    <h4 class="list-group-item-heading" {{b "text: renderDate(this.completedAt)"}}></h4>
-                  {{else}}
-                    <p class="list-group-item-text">Completion target date</p>
-                    <h4 class="list-group-item-heading" {{b "text: renderDate(this.completionTargetDate)"}}></h4>
-                  {{/if}}
-                </div>
+                {{#if this.isCompleted}}
+                  {{> Fields_ListGroupItem_Read
+                      label="Completed date"
+                      text=(renderDate this.completedAt)}}
+                {{else}}
+                  {{> Fields_ListGroupItem_Read
+                      label="Completion target date"
+                      text=(renderDate this.completionTargetDate)}}
+                {{/if}}
               </div>
               <div class="col-sm-6">
-                <div class="list-group-item">
-                  {{#if this.isCompleted}}
-                    <p class="list-group-item-text">Completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.completedBy)"}}></h4>
-                  {{else}}
-                    <p class="list-group-item-text">To be completed by</p>
-                    <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeCompletedBy)"}}></h4>
-                  {{/if}}
-                </div>
+                {{#if this.isCompleted}}
+                  {{> Fields_ListGroupItem_Read
+                      label="Completed by"
+                      text=(userNameOrEmail this.completedBy)}}
+                {{else}}
+                  {{> Fields_ListGroupItem_Read
+                      label="To be completed by"
+                      text=(userNameOrEmail this.toBeCompletedBy)}}
+                {{/if}}
               </div>
             </div>
-            {{#with this.completionResult}}
-              <div class="list-group-item">
-                <p class="list-group-item-text">Result</p>
-                <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
-              </div>
+            {{#with this.completionComments}}
+              {{> Fields_ListGroupItem_Read
+                  label="Comments"
+                  text=this}}
             {{/with}}
           </div>
 
@@ -82,33 +89,32 @@
             <div class="list-group">
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="list-group-item">
-                    {{#if this.isVerified}}
-                      <p class="list-group-item-text">Verified as effective date</p>
-                      <h4 class="list-group-item-heading" {{b "text: renderDate(this.verifiedAt)"}}></h4>
-                    {{else}}
-                      <p class="list-group-item-text">Verification target date</p>
-                      <h4 class="list-group-item-heading" {{b "text: renderDate(this.verificationTargetDate)"}}></h4>
-                    {{/if}}
-                  </div>
+                  {{#if this.isVerified}}
+                    {{> Fields_ListGroupItem_Read
+                        label=(getVerifiedDateLabel this)
+                        text=(renderDate this.verifiedAt)}}
+                  {{else}}
+                    {{> Fields_ListGroupItem_Read
+                        label="Verification target date"
+                        text=(renderDate this.verificationTargetDate)}}
+                  {{/if}}
                 </div>
                 <div class="col-sm-6">
-                  <div class="list-group-item">
-                    {{#if this.isVerified}}
-                      <p class="list-group-item-text">Verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.verifiedBy)"}}></h4>
-                    {{else}}
-                      <p class="list-group-item-text">To be verified by</p>
-                      <h4 class="list-group-item-heading" {{b "text: userFullNameOrEmail(this.toBeVerifiedBy)"}}></h4>
-                    {{/if}}
-                  </div>
+                  {{#if this.isVerified}}
+                    {{> Fields_ListGroupItem_Read
+                        label="Verified by"
+                        text=(userNameOrEmail this.verifiedBy)}}
+                  {{else}}
+                    {{> Fields_ListGroupItem_Read
+                        label="To be verified by"
+                        text=(userNameOrEmail this.toBeVerifiedBy)}}
+                  {{/if}}
                 </div>
               </div>
-              {{#with this.verificationResult}}
-                <div class="list-group-item">
-                  <p class="list-group-item-text">Result</p>
-                  <h4 class="list-group-item-heading" {{b "text: this"}}></h4>
-                </div>
+              {{#with this.verificationComments}}
+                {{> Fields_ListGroupItem_Read
+                    label="Comments"
+                    text=this}}
               {{/with}}
             </div>
           {{/if}}
@@ -119,7 +125,7 @@
 
           {{> Subcards_Notes_Read notes=this.notes}}
 
-          {{> Subcards_OtherFiles_Read label="Files" files=this.files}}
+          {{> Subcards_OtherFiles_Read label="Files" fileIds=this.fileIds}}
         {{/Card_Read}}
 
       {{/with}}

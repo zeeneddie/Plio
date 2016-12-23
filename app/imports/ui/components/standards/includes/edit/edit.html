@@ -2,28 +2,28 @@
   <div>
     <div class="relative">
       <div class="card-block">
-        {{> ESTitle titleText=standard.title _id=standard._id}}
+        {{> Standards_Title_Edit title=standard.title _id=standard._id}}
 
-        {{> ES_Description_Edit description=standard.description}}
+        {{> DescriptionTextBox description=standard.description}}
 
         {{> ESBookSection selectedBookSectionId=standard.sectionId _id=standard.sectionId}}
 
         {{> ESType typeId=standard.typeId _id=standard._id}}
 
-        {{> ESOwner owner=standard.owner _id=standard._id}}
+        {{> Standards_Owner_Edit owner=standard.owner _id=standard._id}}
 
         {{> ESIssueNumber issueNumber=standard.issueNumber _id=standard._id}}
 
         {{> ESStatus status=standard.status _id=standard._id}}
 
-        {{> Departments_Edit _id=standard._id departmentsIds=standard.departments}}
+        {{> Departments_Edit _id=standard._id departmentsIds=standard.departmentsIds}}
 
         <hr>
 
         {{> ESSources
             sourceType=standard.source1.type
             sourceUrl=standard.source1.url
-            sourceName=standard.source1.name
+            sourceFileId=standard.source1.fileId
             sourceHtmlUrl = standard.source1.htmlUrl
             label="Source file"
             id=1}}
@@ -32,7 +32,7 @@
           {{> ESSources
               sourceType=standard.source2.type
               sourceUrl=standard.source2.url
-              sourceName=standard.source2.name
+              sourceFileId=standard.source2.fileId
               sourceHtmlUrl = standard.source2.htmlUrl
               label="Source file 2"
               id=2}}
@@ -41,7 +41,7 @@
       </div>
 
       {{> Subcards_Notify_Edit
-          document=standard
+          doc=standard
           documentType="standard"
           onUpdate=onUpdateNotifyUserCb}}
 
@@ -49,21 +49,16 @@
           _id=this._id
           _query=_getNCsQuery}}
 
-      {{> Subcards_Actions_Edit
-          type="CA"
-          standardId=standard._id}}
+      {{> Subcards_Risks_Edit
+          _id=this._id
+          _query=_getRisksQuery}}
 
-      {{> Subcards_Actions_Edit
-          type="PA"
-          standardId=standard._id}}
+      {{> Subcards_Actions_Edit (getActionsArgs 'CA')}}
 
-      {{> Subcards_Actions_Edit
-          type="RC"
-          standardId=standard._id}}
+      {{> Subcards_Actions_Edit (getActionsArgs 'PA')}}
 
       {{> Subcards_ImprovementPlan_Edit
-          documentId=standard._id
-          documentType="standard"}}
+          improvementPlan=standard.improvementPlan}}
 
       {{> Subcards_LessonsLearned_Edit
           documentId=standard._id

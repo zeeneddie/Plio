@@ -1,44 +1,62 @@
 import { Template } from 'meteor/templating';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
-import { update, remove } from '/imports/api/risks/methods.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { UncategorizedTypeSection, AnalysisTitles } from '/imports/api/constants.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
+import { restore, remove } from '/imports/api/risks/methods.js';
+import { RisksHelp } from '/imports/api/help-messages.js';
 
-Template.RisksCard.viewmodel({
-  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'action'],
-  hasRisks() {
-    return this.risks().count() > 0;
+Template.Risks_Card_Read.viewmodel({
+  mixin: ['organization', 'risk', 'problemsStatus', 'utils', 'user', 'date', 'modal', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
+  isReady: false,
+  RiskRCALabel: AnalysisTitles.riskAnalysis,
+  RiskUOSLabel: AnalysisTitles.updateOfRiskRecord,
+  showCard() {
+    return this.risks().length;
+  },
+  ActionTypes() {
+    return ActionTypes;
   },
   risks() {
-    const list = ViewModel.findOne('RisksList');
-    const query = list && list._getQueryForFilter();
-    return this._getRisksByQuery(query);
+    const organizationId = this.organizationId();
+    const query = this.isActiveRiskFilter(4)
+      ? { isDeleted: true }
+      : { isDeleted: { $in: [null, false] } };
+
+    return this._getRisksByQuery({ organizationId, ...query }).fetch();
   },
   risk() {
-    return this._getRiskByQuery({ _id: this.riskId() });
+    return this._getRiskByQuery({ _id: this._id() });
   },
-  renderType(_id) {
-    const type = RiskTypes.findOne({ _id });
-    return !!type ? type.title : '';
-  },
-  onOpenEditModalCb() {
-    return this.openEditModal.bind(this);
+  type() {
+    const risk = Object.assign({}, this.risk());
+    const type = RiskTypes.findOne({ _id: risk.typeId });
+    return type || UncategorizedTypeSection;
   },
   openEditModal() {
     this.modal().open({
       _title: 'Risk',
-      template: 'EditRisk',
-      _id: this.riskId()
+      helpText: RisksHelp.risk,
+      template: 'Risks_Card_Edit',
+      _id: this.risk() && this.risk()._id
     });
   },
-  onRestoreCb() {
-    return this.restore.bind(this);
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      riskId: this.riskId(),
+    };
+    const queryParams = { filter: this.activeRiskFilterId() };
+    return FlowRouter.path('riskDiscussion', params, queryParams);
   },
   restore({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
     const callback = (err) => {
       cb(err, () => {
-        FlowRouter.setQueryParams({ by: 'type' });
+        FlowRouter.setQueryParams({ filter: 1 });
         Meteor.setTimeout(() => {
           this.goToRisk(_id);
           this.expandCollapsed(_id);
@@ -46,26 +64,13 @@ Template.RisksCard.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
+    restore.call({ _id }, callback);
   },
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
-    const callback = (err) => {
-      cb(err, () => {
-        const risks = this._getRisksByQuery({});
-
-        if (risks.count() > 0) {
-          Meteor.setTimeout(() => {
-            this.goToRisks();
-          }, 0);
-        }
-      });
-    };
+    const callback = (err) => cb(err, () => this.handleRouteRisks());
 
     remove.call({ _id }, callback);
-  }
+  },
 });

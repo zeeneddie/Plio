@@ -1,0 +1,23 @@
+<template name="OrgSettings_ProblemGuidelines">
+  {{#Subcards_Wrapper _lText=label helpText=helpText}}
+    <div class="card-block">
+      {{> OrgSettings_ProblemGuideline
+          documentType=documentType
+          magnitude="minor"
+          text=minor
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_ProblemGuideline
+          documentType=documentType
+          magnitude="major"
+          text=major
+          onChange=onChangeCb}}
+
+      {{> OrgSettings_ProblemGuideline
+          documentType=documentType
+          magnitude="critical"
+          text=critical
+          onChange=onChangeCb}}
+    </div>
+  {{/Subcards_Wrapper}}
+</template>

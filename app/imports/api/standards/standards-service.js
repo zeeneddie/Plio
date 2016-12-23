@@ -1,10 +1,17 @@
-import { Standards } from './standards.js';
-import { ImprovementPlans } from '../improvement-plans/improvement-plans.js';
-import { LessonsLearned } from '../lessons/lessons.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { canChangeStandards } from '../checkers.js';
+import BaseEntityService from '../base-entity-service.js';
+import NonConformityService from '../non-conformities/non-conformities-service';
+import RiskService from '../risks/risks-service';
 
 
 export default {
   collection: Standards,
+
+  _service: new BaseEntityService(Standards),
 
   insert({ ...args }) {
     return this.collection.insert(args);
@@ -17,39 +24,41 @@ export default {
     if (!_.keys(options).length > 0) {
       options['$set'] = args;
     }
-    
-    return this.collection.update(query, options);
-  },
-
-  updateViewedBy({ _id, userId }) {
-    const query = { _id };
-    const options = {
-      $addToSet: {
-        viewedBy: userId
-      }
-    };
 
     return this.collection.update(query, options);
   },
 
-  remove({ _id, deletedBy, isDeleted }) {
-    const query = { _id };
+  updateViewedBy({ _id, userId:viewedBy }) {
+    return this._service.updateViewedBy({ _id, viewedBy });
+  },
 
-    if (isDeleted) {
-      ImprovementPlans.remove({ standardId: _id });
-      LessonsLearned.remove({ standardId: _id });
+  remove({ _id, deletedBy }) {
+    return this._service.remove({ _id, deletedBy });
+  },
 
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
+  restore({ _id }) {
+    return this._service.restore({ _id });
+  },
 
-      return this.collection.update(query, options);
-    }
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  unlinkProblemDocs({ _id }) {
+    const query = { standardsIds: _id };
+
+    NonConformities.find(query).forEach((nc) => {
+      NonConformityService.unlinkStandard({
+        _id: nc._id,
+        standardId: _id,
+      });
+    });
+
+    Risks.find(query).forEach((risk) => {
+      RiskService.unlinkStandard({
+        _id: risk._id,
+        standardId: _id
+      });
+    });
   }
 };

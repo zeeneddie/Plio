@@ -1,56 +1,62 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
 import { insert } from '/imports/api/risks/methods.js';
+import { setModalError, inspire } from '/imports/api/helpers.js';
 
-Template.CreateRisk.viewmodel({
-  mixin: ['modal', 'organization', 'router', 'collapsing'],
+Template.Risks_Create.viewmodel({
+  mixin: ['organization', 'router', 'getChildrenData'],
+  isStandardsEditable: true,
+  standardsIds: [],
+  RKGuidelines() {
+    return this.organization() && this.organization().rkGuidelines;
+  },
   save() {
     const data = this.getData();
 
     for (let key in data) {
       if (!data[key]) {
-        const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
-        this.modal().setError(errorMessage);
-        return;
+        if (key === 'title') {
+          errorMessage = `The new risk cannot be created without a title. Please enter a title for your risk`;
+          setModalError(errorMessage);
+          return;
+        } else if (key === 'sectionId') {
+          errorMessage = `The new risk cannot be created without a section. You can create a new section by typing it's name into the corresponding text input`;
+          setModalError(errorMessage);
+          return;
+        } else if (key === 'typeId') {
+          errorMessage = `The new standard cannot be created without a type. You can create a new risk type in Org settings`;
+          setModalError(errorMessage);
+          return;
+        } else {
+          const errorMessage = `The new risk cannot be created without a ${key}. Please enter a ${key} for your risk.`;
+          setModalError(errorMessage);
+          return;
+        }
       }
     }
 
     this.insert(data);
   },
   insert({ ...args }) {
-    const organizationId = this.organizationId();
-
     const allArgs = {
       ...args,
-      organizationId
+      ...inspire(['organizationId'], this)
     };
 
-    this.modal().callMethod(insert, allArgs, (err, _id) => {
-      if (err) {
-        return;
-      }
+    const cb = (_id, open) => {
+      this.goToRisk(_id, false);
 
-      this.modal().close();
+      open({
+        _id,
+        _title: 'Risk',
+        template: 'Risks_Card_Edit'
+      });
+    };
 
-      Meteor.setTimeout(() => {
-        this.goToRisk(_id, false);
-
-        this.expandCollapsed(_id);
-
-        this.modal().open({
-          _id,
-          _title: 'Risk',
-          template: 'EditRisk'
-        });
-        }, 400);
-    });
+    invoke(this.card, 'insert', insert, allArgs, cb);
   },
   getData() {
-    let data = {};
-
-    this.children(vm => vm.getData && vm.getData())
-        .forEach(vm => data = { ...data, ...vm.getData() });
-
-    return data;
+    return this.getChildrenData();
   }
 });

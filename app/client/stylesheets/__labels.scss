@@ -20,6 +20,9 @@
   &-info {
     background: $light-blue-color;
   }
+  &-yellow {
+    background: $yellow-color;
+  }
 
   &-standard {
     $label-standard-size: 36px;
@@ -61,7 +64,11 @@
   }
 
   &.margin-left {
-    margin-left: 10px;
+    margin-left: 5px;
+  }
+
+  &.margin-right {
+    margin-right: 5px;
   }
 
   &.impact-vlow { background: $green-color; }
@@ -69,6 +76,11 @@
   &.impact-medium { background: $amber-color; }
   &.impact-high { background: $red-color; }
   &.impact-vhigh { background: $red-color; }
+
+  &.doc-status {
+    white-space: normal;
+    text-align: left;
+  }
 }
 
 .form-group .label {
@@ -98,4 +110,25 @@
   margin-right: 12px;
   font-weight: normal;
   //font-family: $SegoeUILight;
+}
+
+.text {
+  &-success {
+    color: $green-color;
+  }
+  &-warning {
+    color: $amber-color;
+  }
+  &-danger {
+    color: $red-color;
+  }
+  &-primary {
+    color: $blue-color;
+  }
+  &-info {
+    color: $light-blue-color;
+  }
+  &-yellow {
+    color: $yellow-color;
+  }
 }

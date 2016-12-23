@@ -1,31 +1,37 @@
 import { Template } from 'meteor/templating';
 
-import { AnalysisStatuses } from '/imports/api/constants.js';
+import { RCAMaxCauses } from '/imports/share/constants.js';
+
 
 Template.Subcards_RootCauseAnalysis_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'date'],
-  defaultTargetDate() {
-    const workflowDefaults = this.organization().workflowDefaults;
-    const found = _.keys(workflowDefaults)
-                    .find(key => this.magnitude() === key.replace('Nc', ''));
-    const workflowDefault = workflowDefaults[found];
-    if (workflowDefault) {
-      const { timeUnit, timeValue } = workflowDefault;
-      const date = moment(new Date());
-      date[timeUnit](date[timeUnit]() + timeValue);
-      return date.toDate();
-    }
+  mixin: ['collapse', 'modal'],
+  doc() {
+    return this.rootCauseAnalysis() || {};
   },
-  magnitude: '',
-  analysis: '',
-  updateOfStandards: '',
-  isAnalysisCompleted() {
-    const analysis = this.analysis();
-    return analysis && analysis.status && analysis.status === parseInt(_.invert(AnalysisStatuses)['Completed'], 10);
+  label: 'Root cause analysis',
+  causes() {
+    return this.doc() && this.doc().causes || [];
+  },
+  fileIds() {
+    return this.doc() && this.doc().fileIds || [];
+  },
+  isTextPresent() {
+    return !!_(this.causes()).find(cause => cause.text && !!cause.text.length);
+  },
+  getTextIndicator() {
+    return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';
+  },
+  causesData() {
+    const causes = this.causes();
+
+    return _(RCAMaxCauses).times((n) => {
+      const index = n + 1;
+      const cause = causes.find(cause => cause.index === index);
+
+      return cause ? { ...cause, isNew: false } : { index, text: '', isNew: true };
+    });
   },
   update({ query = {}, options = {}, ...args }, cb) {
-    const allArgs = { ...args, options, query };
-
-    this.parent().update(allArgs, cb);
+    this.parent().update({ query, options, ...args }, cb);
   }
 });

@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsService from './standards-service.js';
-import { StandardsSchema, StandardsUpdateSchema } from './standards-schema.js';
-import { Standards } from './standards.js';
+import { StandardsSchema, StandardsUpdateSchema } from '/imports/share/schemas/standards-schema.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import StandardsNotificationsSender from './standards-notifications-sender.js';
 import {
   IdSchema,
@@ -11,122 +11,84 @@ import {
   optionsSchema,
   StandardIdSchema,
   UserIdSchema
-} from '../schemas.js';
-import { UserRoles } from '../constants';
-import { canChangeStandards } from '../checkers.js';
+} from '/imports/share/schemas/schemas.js';
+import { UserRoles } from '/imports/share/constants.js';
+import {
+  canChangeStandards,
+  checkOrgMembership,
+  onRemoveChecker,
+  onRestoreChecker,
+  S_EnsureCanChange,
+  S_EnsureCanChangeChecker
+} from '../checkers.js';
+import { chain, chainCheckers, inject } from '/imports/api/helpers.js';
+import Method, { CheckedMethod } from '../method.js';
 
+const injectSTD = inject(Standards);
 
-const ensureCanChangeStandards = (userId, organizationId) => {
-  if (!canChangeStandards(userId, organizationId)) {
-    throw new Meteor.Error(
-      403,
-      'You are not authorized for creating, removing or editing standards'
-    );
-  }
-};
-
-const getStandardOrThrow = (_id) => {
-  const standard = Standards.findOne({ _id });
-  if (!standard) {
-    throw new Meteor.Error(400, 'Standard does not exist');
-  }
-  return standard;
-};
-
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'Standards.insert',
 
   validate: StandardsSchema.validator(),
 
   run({ organizationId, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a standard'
-      );
-    }
-
-    ensureCanChangeStandards(userId, organizationId);
+    chain(checkOrgMembership, S_EnsureCanChange)(this.userId, organizationId);
 
     return StandardsService.insert({ organizationId, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'Standards.update',
 
   validate: new SimpleSchema([
     IdSchema, StandardsUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({ _id, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a standard'
-      );
-    }
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
 
-    const standard = getStandardOrThrow(_id);
-
-    const { organizationId } = standard;
-
-    ensureCanChangeStandards(userId, organizationId);
-
-    return StandardsService.update({ _id, ...args });
+  run({ ...args }) {
+    return StandardsService.update({ ...args });
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const updateViewedBy = new CheckedMethod({
   name: 'Standards.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
+
   run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a standard'
-      );
-    }
-
-    const standard = getStandardOrThrow(_id);
-
-    const { viewedBy } = standard;
-
-    if (viewedBy && viewedBy === this.userId) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
-
     return StandardsService.updateViewedBy({ _id, userId: this.userId });
   }
 });
 
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Standards.remove',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectSTD(checker)(chainCheckers(S_EnsureCanChangeChecker, onRemoveChecker)),
+
   run({ _id }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot delete a standard'
-      );
-    }
-
-    const standard = getStandardOrThrow(_id);
-
-    const { organizationId, isDeleted } = standard;
-
-    ensureCanChangeStandards(userId, organizationId);
-
-    return StandardsService.remove({ _id, isDeleted, deletedBy: userId });
+    return StandardsService.remove({ _id, deletedBy: this.userId });
   }
 });
 
-export const addedToNotifyList = new ValidatedMethod({
+export const restore = new CheckedMethod({
+  name: 'Standards.restore',
+
+  validate: IdSchema.validator(),
+
+  check: checker => injectSTD(checker)(chainCheckers(S_EnsureCanChangeChecker, onRestoreChecker)),
+
+  run({ _id }) {
+    return StandardsService.restore({ _id });
+  }
+});
+
+export const addedToNotifyList = new Method({
   name: 'Standards.addedToNotifyList',
 
   validate: new SimpleSchema([
@@ -134,21 +96,15 @@ export const addedToNotifyList = new ValidatedMethod({
     UserIdSchema
   ]).validator(),
 
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
+
   run({ standardId, userId }) {
     if (this.isSimulation) {
       return;
     }
 
-    const currUserId = this.userId;
-    if (!currUserId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot send emails'
-      );
+    if (userId !== this.userId) {
+      return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
     }
-
-    const standard = getStandardOrThrow(standardId);
-    ensureCanChangeStandards(currUserId, standard.organizationId);
-
-    return new StandardsNotificationsSender(standardId).addedToNotifyList(userId);
   }
 });

@@ -1,0 +1,35 @@
+<template name="Select_Single">
+  <div class="dropdown input-group-typeahead form-group-flex-flex" {{b "ref: dropdown"}}>
+    <div class="input-group" data-toggle="dropdown">
+      <input type="text" class="form-control"
+        {{b "value: value, focus: focused, disable: disabled, attr: { placeholder: placeholder }, throttle: 300"}}/>
+
+      <span class="input-group-btn">
+        {{#if Template.contentBlock}}
+          {{> Template.contentBlock}}
+        {{else}}
+          <button type="button" class="btn btn-secondary btn-icon" {{b "class: { disabled: disabled }"}}>
+            <i class="fa" {{b "class: { fa-caret-down: !loading, fa-spinner: loading }"}}></i>
+          </button>
+        {{/if}}
+      </span>
+    </div>
+    <div class="dropdown-menu dropdown-menu-full">
+      {{#each itemsFiltered}}
+        <a class="dropdown-item pointer" {{b "text: itemTitle(this), click: select(this), class: { active: this._id === selected, indent: this.nestingLevel > 1 }"}}></a>
+      {{/each}}
+      {{#unless items.length }}
+        <div class="dropdown-item">
+          {{#if showContent}}
+            There are no available items...
+            {{else}}
+            <strong>There are no available items...</strong>
+          {{/if}}
+        </div>
+      {{/unless}}
+      {{#if showContent}}
+        {{> Template.dynamic template=content data=getContentData}}
+      {{/if}}
+    </div>
+  </div>
+</template>

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
 import { canChangeStandards } from '/imports/api/checkers.js';
 import MammothService from './service.js';
 

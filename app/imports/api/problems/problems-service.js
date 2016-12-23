@@ -1,29 +1,26 @@
-import { Problems } from './problems.js';
+import { Meteor } from 'meteor/meteor';
 
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { Actions } from '/imports/share/collections/actions.js';
+import { generateSerialNumber } from '/imports/share/helpers.js';
+import ActionService from '../actions/action-service';
+import WorkItemService from '../work-items/work-item-service.js';
+import { WorkItemsStore } from '/imports/share/constants.js';
 
 export default {
-  collection: Problems,
 
-  insert({ organizationId, type, ...args }) {
-    const lastProblem = this.collection.findOne({
-      organizationId,
-      type,
-      serialNumber: {
-        $type: 16 // 32-bit integer
-      }
-    }, {
-      sort: {
-        serialNumber: -1
-      }
+  insert({ organizationId, magnitude, ...args }) {
+    const organization = Organizations.findOne({ _id: organizationId });
+
+    const serialNumber = generateSerialNumber(this.collection, { organizationId });
+    const sequentialId = `${this._abbr}${serialNumber}`;
+
+    const workflowType = organization.workflowType(magnitude);
+
+    return this.collection.insert({
+      organizationId, serialNumber, sequentialId,
+      workflowType, magnitude, ...args
     });
-
-    const typeAbbreviation = type === 'non-conformity' ? 'NC' : 'RK';
-
-    const serialNumber = lastProblem ? lastProblem.serialNumber + 1 : 1;
-
-    const sequentialId = typeAbbreviation + serialNumber;
-
-    return this.collection.insert({ organizationId, serialNumber, sequentialId, type, ...args });
   },
 
   update({ _id, query = {}, options = {}, ...args }) {
@@ -34,26 +31,218 @@ export default {
       options['$set'] = args;
     }
 
-    console.log(query, options);
+    return this.collection.update(query, options);
+  },
+
+  setAnalysisExecutor({ _id, executor }, doc) {
+    const { analysis = {}, ...rest } = doc;
+
+    const query = { _id };
+    const options = { $set: { 'analysis.executor': executor } };
+
+    const ret = this.collection.update(query, options);
+
+    WorkItemService.analysisUserUpdated(_id, this._docType, executor);
+
+    return ret;
+  },
+
+  setAnalysisDate({ _id, targetDate }, doc) {
+    const { analysis: { targetDate:td, ...analysis } = {}, ...rest } = doc;
+
+    const query = { _id };
+    const options = { $set: { 'analysis.targetDate': targetDate } };
+
+    const ret = this.collection.update(query, options);
+
+    WorkItemService.analysisDateUpdated(_id, this._docType, targetDate);
+
+    return ret;
+  },
+
+  setAnalysisCompletedBy({ _id, completedBy }) {
+    const query = { _id };
+    const options = { $set: { 'analysis.completedBy': completedBy } };
 
     return this.collection.update(query, options);
   },
 
-  remove({ _id, deletedBy, isDeleted }) {
+  setAnalysisCompletedDate({ _id, completedAt }) {
     const query = { _id };
+    const options = { $set: { 'analysis.completedAt': completedAt } };
 
-    if (isDeleted) {
-      return this.collection.remove(query);
-    } else {
-      const options = {
-        $set: {
-          isDeleted: true,
-          deletedBy,
-          deletedAt: new Date()
-        }
-      };
+    return this.collection.update(query, options);
+  },
 
-      return this.collection.update(query, options);
-    }
+  setAnalysisComments({ _id, completionComments }) {
+    const query = { _id };
+    const options = { $set: { 'analysis.completionComments': completionComments } };
+
+    return this.collection.update(query, options);
+  },
+
+  completeAnalysis({ _id, completionComments, userId }) {
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'analysis.status': 1, // Completed
+        'analysis.completedAt': new Date(),
+        'analysis.completedBy': userId,
+        'analysis.completionComments': completionComments
+      }
+    });
+
+    WorkItemService.analysisCompleted(_id, this._docType);
+
+    return ret;
+  },
+
+  undoAnalysis({ _id, userId }) {
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { 'analysis.status': 0 }, // Not completed
+      $unset: {
+        'analysis.completedAt': '',
+        'analysis.completedBy': '',
+        'analysis.completionComments': '',
+        'updateOfStandards.targetDate': '',
+        'updateOfStandards.executor': ''
+      }
+    });
+
+    WorkItemService.analysisCanceled(_id, this._docType);
+
+    return ret;
+  },
+
+  updateStandards({ _id, completionComments, userId }) {
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 1, // Completed
+        'updateOfStandards.completedAt': new Date(),
+        'updateOfStandards.completedBy': userId,
+        'updateOfStandards.completionComments': completionComments
+      }
+    });
+
+    WorkItemService.standardsUpdated(_id, this._docType);
+
+    return ret;
+  },
+
+  undoStandardsUpdate({ _id, userId }) {
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: {
+        'updateOfStandards.status': 0 // Not completed
+      },
+      $unset: {
+        'updateOfStandards.completedAt': '',
+        'updateOfStandards.completedBy': '',
+        'updateOfStandards.completionComments': ''
+      }
+    });
+
+    WorkItemService.standardsUpdateCanceled(_id, this._docType);
+
+    return ret;
+  },
+
+  setStandardsUpdateExecutor({ _id, executor }, doc) {
+    const { updateOfStandards = {}, ...rest } = doc;
+
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.executor': executor } };
+
+    const ret = this.collection.update(query, options);
+
+    WorkItemService.updateOfStandardsUserUpdated(_id, this._docType, executor);
+
+    return ret;
+  },
+
+  setStandardsUpdateDate({ _id, targetDate }, doc) {
+    const { updateOfStandards: { targetDate:td, ...updateOfStandards } = {}, ...rest } = doc;
+
+    const ret = this.collection.update({
+      _id
+    }, {
+      $set: { 'updateOfStandards.targetDate': targetDate }
+    });
+
+    WorkItemService.updateOfStandardsDateUpdated(_id, this._docType, targetDate);
+
+    return ret;
+  },
+
+  setStandardsUpdateCompletedBy({ _id, completedBy }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completedBy': completedBy } };
+
+    return this.collection.update(query, options);
+  },
+
+  setStandardsUpdateCompletedDate({ _id, completedAt }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completedAt': completedAt } };
+
+    return this.collection.update(query, options);
+  },
+
+  setStandardsUpdateComments({ _id, completionComments }) {
+    const query = { _id };
+    const options = { $set: { 'updateOfStandards.completionComments': completionComments } };
+
+    return this.collection.update(query, options);
+  },
+
+  updateViewedBy({ _id, viewedBy }) {
+    return this._service.updateViewedBy({ _id, viewedBy });
+  },
+
+  remove({ _id, deletedBy }) {
+    const onSoftDelete = () => {
+      WorkItemService.removeSoftly({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.remove({ _id, deletedBy, onSoftDelete });
+  },
+
+  restore({ _id }) {
+    const onRestore = () => {
+      WorkItemService.restore({ query: { 'linkedDoc._id': _id } });
+    };
+
+    return this._service.restore({ _id, onRestore });
+  },
+
+  removePermanently({ _id, query }) {
+    return this._service.removePermanently({ _id, query });
+  },
+
+  unlinkStandard({ _id, standardId }) {
+    this.collection.update({ _id }, {
+      $pull: { standardsIds: standardId }
+    });
+  },
+
+  unlinkActions({ _id }) {
+    const query = {
+      'linkedTo.documentId': _id,
+      'linkedTo.documentType': this._docType
+    };
+
+    Actions.find(query).forEach((action) => {
+      ActionService.unlinkDocument({
+        _id: action._id,
+        documentId: _id,
+        documentType: this._docType
+      });
+    });
   }
 };

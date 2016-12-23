@@ -1,16 +1,17 @@
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { ProblemTypes } from '/imports/api/constants.js';
+import { extractIds } from '/imports/api/helpers';
+import { ProblemTypes } from '/imports/share/constants.js';
 
 Template.Subcards_Actions_Read.viewmodel({
-  mixin: ['organization', 'action', 'actionStatus', 'nonconformity', 'risk', 'utils'],
+  mixin: ['organization', 'workInbox', 'actionStatus', 'nonconformity', 'risk', 'utils'],
   type: '',
   documentId: '',
   standardId: '',
   actions() {
     const { type, documentId, standardId } = this.data();
-    let query = { type };
+    let query = { type, isDeleted: { $in: [null, false] } };
     const options = { sort: { serialNumber: 1 } };
 
     if (documentId) {
@@ -18,40 +19,28 @@ Template.Subcards_Actions_Read.viewmodel({
     } else if (standardId) {
       const pQuery = { standardsIds: standardId };
 
-      const NCsIds = this._getNCsByQuery(pQuery).map(({ _id }) => _id);
-      const risksIds = this._getRisksByQuery(pQuery).map(({ _id }) => _id);
+      const NCsIds = extractIds(this._getNCsByQuery(pQuery));
+      const risksIds = extractIds(this._getRisksByQuery(pQuery));
 
       query = {
         ...query,
         $or: [
-          { 'linkedTo.documentId': { $in: NCsIds }, 'linkedTo.documentType': ProblemTypes.NC },
+          { 'linkedTo.documentId': { $in: NCsIds }, 'linkedTo.documentType': ProblemTypes.NON_CONFORMITY },
           { 'linkedTo.documentId': { $in: risksIds }, 'linkedTo.documentType': ProblemTypes.RISK }
         ]
       };
     }
 
-    return this._getActionsByQuery(query, options).map(({ _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, ...args }) => {
-      const href = ((() => {
-        const params = { orgSerialNumber: this.organizationSerialNumber(), actionId: _id };
-        const queryParams = this._getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified });
-        return FlowRouter.path('action', params, queryParams);
-      })());
-      return { _id, toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified, href, ...args };
-    });
-  },
-  _getQueryParams({ toBeCompletedBy, toBeVerifiedBy, isCompleted, isVerified }) {
-    const userId = Meteor.userId();
+    const actions = this._getActionsByQuery(query, options).fetch();
 
-    if ( (toBeCompletedBy === userId && !isCompleted) || (toBeVerifiedBy === userId && !isVerified) ) {
-      return { by: 'My current actions' };
-    } else if ( (toBeCompletedBy === userId && isCompleted) || (toBeVerifiedBy === userId && isVerified) ) {
-      return { by: 'My completed actions' };
-    } else if ( (toBeCompletedBy !== userId && !isCompleted) || (toBeVerifiedBy !== userId && !isVerified) ) {
-      return { by: 'Team current actions' };
-    } else if ( (toBeCompletedBy !== userId && isCompleted) || (toBeVerifiedBy !== userId && isVerified) ) {
-      return { by: 'Team completed actions' };
-    } else {
-      return { by: 'My current actions' };
-    }
+    return actions.map((action) => {
+      const workItem = this._getWorkItemByQuery({ 'linkedDoc._id': action._id });
+      const href = !workItem ? '#' : ((() => {
+        const params = { orgSerialNumber: this.organizationSerialNumber(), workItemId: workItem._id };
+        const queryParams = this._getQueryParams(workItem)(Meteor.userId());
+        return FlowRouter.path('workInboxItem', params, queryParams);
+      })());
+      return { ...action, href };
+    });
   }
 });

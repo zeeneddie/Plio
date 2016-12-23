@@ -1,0 +1,11 @@
+<template name="Select_Single_Radio">
+  <div class="btn-group btn-group-nomargin" data-toggle="buttons">
+    {{#each items}}
+      <label class="btn btn-secondary"
+        {{b "click: select(this), class: { active: value === this.value }"}}>
+        <input type="radio" autocomplete="off" {{b "value: this.value"}}>
+        <span {{b "text: this.text"}}></span>
+      </label>
+    {{/each}}
+  </div>
+</template>

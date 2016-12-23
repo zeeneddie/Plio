@@ -1,82 +1,54 @@
 <template name="CardChangelog">
   {{#with document}}
-    <div class="card-footer card-changelog-toggle" {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+    <div class="card-footer card-changelog-toggle" {{b "click: toggleLogs, class: { collapsed: collapsed, waiting: loadingLogs }"}}>
       <div class="row">
         <div class="col-xs-6">
-          Created by: <span {{b "text: userFullNameOrEmail(this.createdBy)"}}></span>
+          Created by: <span {{b "text: getUser(this.createdBy)"}}></span>
           <br>Date: <span {{b "text: renderDate(this.createdAt)"}}></span>
         </div>
-        <div class="col-xs-6" {{b "if: this.updatedBy && this.updatedAt"}}>
-          Last edited by: <span {{b "text: userFullNameOrEmail(this.updatedBy)"}}></span>
-          <br>Date: <span {{b "text: renderDate(this.updatedAt)"}}></span>
-        </div>
+        {{#if lastUserLog}}
+          <div class="col-xs-6">
+            Last edited by: <span {{b "text: getUser(lastUserLogExecutor)"}}></span>
+            <br>Date: <span {{b "text: renderDate(lastUserLogDate)"}}></span>
+          </div>
+        {{/if}}
       </div>
     </div>
 
-    <div class="card-changelog collapse" {{b "ref: collapse"}}>
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Change summary</th>
-            <th class="text-right">Date &amp; time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Mike Smith</td>
-            <td>New agenda item added - Review non-conformities</td>
-            <td class="text-right">15 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Mike Smith</td>
-            <td>Removed meeting action - Test server-side performance</td>
-            <td class="text-right">14 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Mark Dixon</td>
-            <td>New meeting action added - Investigate Japan pricing</td>
-            <td class="text-right">12 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Steve Ives</td>
-            <td>New meeting action added - Renew EMEA prices</td>
-            <td class="text-right">10 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Nigel Cheshire</td>
-            <td>New agenda item added - Status of corrective and preventative measures</td>
-            <td class="text-right">7 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Mike Smith</td>
-            <td>New agenda item added - Review non-conformities</td>
-            <td class="text-right">6 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Mike Smith</td>
-            <td>Removed meeting action - Test server-side performance</td>
-            <td class="text-right">4 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Mark Dixon</td>
-            <td>New meeting action added - Investigate Japan pricing</td>
-            <td class="text-right">2 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Steve Ives</td>
-            <td>New meeting action added - Renew EMEA prices</td>
-            <td class="text-right">2 Jun 2015  15:15</td>
-          </tr>
-          <tr>
-            <td>Nigel Cheshire</td>
-            <td>New agenda item added - Status of corrective and preventative measures</td>
-            <td class="text-right">1 Jun 2015  15:15</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-changelog collapse" {{b "ref: collapse, class: { in: !collapsed}"}}>
+      {{#if logs.count}}
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Change summary</th>
+              <th class="text-right">Date &amp; time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each logs}}
+              <tr>
+                <td class="log-user">{{getUser executor}}</td>
+                <td>{{message}}</td>
+                <td class="log-date text-right">{{getPrettyDate date}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{/if}}
       <div class="card-footer">
-        <a class="btn btn-secondary pointer">View all changes (34 total)</a>
+        {{#unless showAllLogs}}
+          <a class="btn btn-secondary pointer" {{b "click: loadAllLogs, class: { not-visible: viewButtonHidden }"}}>
+            View all changes ({{logsLength}} total)
+            {{#if loadingAllLogs}}
+              <i class="fa fa-spinner fa-pulse"></i>
+            {{/if}}
+          </a>
+        {{else}}
+          <a class="btn btn-secondary pointer" {{b "click: viewRecentLogs"}}>
+            View {{limit}} recent changes
+          </a>
+        {{/unless}}
       </div>
     </div>
   {{/with}}

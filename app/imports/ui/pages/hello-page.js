@@ -1,9 +1,12 @@
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import moment from 'moment-timezone';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 import { remove } from '/imports/api/users/methods.js';
+import { OrgCurrencies } from '/imports/share/constants.js';
+
 
 Template.HelloPage.viewmodel({
   mixin: ['router', 'modal'],
@@ -13,24 +16,20 @@ Template.HelloPage.viewmodel({
       const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
-          if (Organizations.find({ 'users.userId': currentUser._id })) {
-            // if the user is an owner of organization go to that organization no matter what
-            const ownerOrg = Organizations.findOne({ 'users': { $elemMatch: { userId: currentUser._id, role: 'owner' } } });
-            if (!!ownerOrg) {
-              this.goToDashboard(ownerOrg.serialNumber);
-            } else {
-              const { selectedOrganizationSerialNumber } = currentUser;
-              const orgExists = !!Organizations.findOne({ serialNumber: selectedOrganizationSerialNumber });
-              if (selectedOrganizationSerialNumber && orgExists) {
-                this.goToDashboard(selectedOrganizationSerialNumber);
-              } else {
-                const org = Organizations.findOne({ 'users.userId': currentUser._id });
-                !!org && this.goToDashboard(org.serialNumber);
-              }
-            }
+          const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+          const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
+          const orgExists = !!Organizations.findOne({ serialNumber });
+
+          if (serialNumber && orgExists) {
+            this.goToDashboard(serialNumber);
+          } else {
+            const org = Organizations.findOne();
+            !!org && this.goToDashboard(org.serialNumber);
           }
         } else {
-          FlowRouter.go('signIn');
+          FlowRouter.withReplaceState(() => {
+            FlowRouter.go('signIn');
+          });
         }
       }
     });
@@ -39,11 +38,12 @@ Template.HelloPage.viewmodel({
     e.preventDefault();
 
     this.modal().open({
-      template: 'OrganizationSettings_MainSettings',
+      template: 'Organizations_Create',
       _title: 'New organization',
       variation: 'save',
-      owner: Meteor.user().fullName(),
-      currency: 'GBP'
+      timezone: moment.tz.guess(),
+      ownerName: Meteor.user().fullName(),
+      currency: OrgCurrencies.GBP
     });
   },
   deleteAccount(e) {

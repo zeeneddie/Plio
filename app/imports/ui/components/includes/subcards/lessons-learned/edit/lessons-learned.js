@@ -1,13 +1,43 @@
 import { Template } from 'meteor/templating';
-import { LessonsLearned } from '/imports/api/lessons/lessons.js';
+import invoke from 'lodash.invoke';
+
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
 import { insert, update, remove } from '/imports/api/lessons/methods.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
+
+const getLinks = instance => instance.data(['linkedTo', 'linkedToId']);
 
 Template.Subcards_LessonsLearned_Edit.viewmodel({
-  mixin: ['collapse', 'modal', 'addForm', 'organization'],
+  mixin: ['modal', 'organization'],
   documentId: '',
   documentType: '',
   linkedTo: '',
   linkedToId: '',
+  wrapperArgs() {
+    const items = invoke(this.lessons(), 'fetch');
+
+    return {
+      items,
+      addText: 'Add a new lesson learned',
+      renderContentOnInitial: !(items.length > 10),
+      _lText: 'Lessons learned',
+      _rText: items.length,
+      onAdd: this.onAdd.bind(this),
+      getSubcardArgs: this.getSubcardArgs.bind(this)
+    };
+  },
+  getSubcardArgs(doc) {
+    return {
+      doc,
+      ...doc,
+      ...getLinks(this),
+      _lText: this.renderText(doc),
+      content: 'Subcards_LessonLearned',
+      insertFn: this.insert.bind(this),
+      updateFn: this.update.bind(this),
+      removeFn: this.remove.bind(this)
+    };
+  },
   renderText({ title, serialNumber }) {
     return `<strong>LL${serialNumber}</strong> ${title}`;
   },
@@ -17,22 +47,19 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
     const options = { sort: { serialNumber: 1 } };
     return LessonsLearned.find(query, options);
   },
-  addLesson() {
-    this.addForm(
-      'SubCard_Edit',
+  onAdd(add) {
+    return add(
+      'Subcard',
       {
         content: 'Subcards_LessonLearned',
-        _lText: 'New lessons learned',
-        linkedTo: this.linkedTo(),
-        linkedToId: this.linkedToId(),
-        insertFn: this.insertFn(),
-        removeFn: this.removeFn(),
-        updateFn: this.updateFn()
+        _lText: 'New lesson learned',
+        isNew: false,
+        ...getLinks(this),
+        insertFn: this.insert.bind(this),
+        updateFn: this.update.bind(this),
+        removeFn: this.remove.bind(this)
       }
     );
-  },
-  insertFn() {
-    return this.insert.bind(this);
   },
   insert({ ...args }, cb) {
     const organizationId = this.organizationId();
@@ -41,9 +68,6 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
     this.modal().callMethod(insert, {
       organizationId, documentId, documentType, ...args
     }, cb);
-  },
-  updateFn() {
-    return this.update.bind(this);
   },
   update({ ...args }, cb) {
     this.modal().callMethod(update, { ...args }, cb);
@@ -68,15 +92,18 @@ Template.Subcards_LessonsLearned_Edit.viewmodel({
         () => {
           const cb = () => {
             viewmodel.destroy();
-            swal('Removed!', `The lesson "${title}" was removed successfully.`, 'success');
+            swal({
+              title: 'Removed!',
+              text: `The lesson "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           };
 
           this.modal().callMethod(remove, { _id }, cb);
         }
       );
     }
-  },
-  removeFn() {
-    return this.remove.bind(this);
-  },
+  }
 });

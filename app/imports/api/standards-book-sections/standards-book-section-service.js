@@ -1,13 +1,13 @@
-import { StandardsBookSections } from './standards-book-sections.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
 
 
 export default StandardsBookSectionService = {
 
   collection: StandardsBookSections,
 
-  insert({ title, organizationId }) {
+  insert({ title, organizationId, createdBy }) {
     return this.collection.insert({
-      title, organizationId
+      title, organizationId, createdBy
     });
   },
 

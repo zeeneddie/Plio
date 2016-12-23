@@ -1,8 +1,7 @@
-<template name="UserDirectoryPage">
-  {{#if Template.subscriptionsReady}}
-    {{> UsersList organizationUsers=organizationUsers}}
-    {{> UsersDetails user=user}}
+<template name="UserDirectory_Page">
+  {{#Page}}
+    {{> UserDirectory_List organizationUsers=organizationUsers}}
   {{else}}
-    {{> PreloaderPage}}
-  {{/if}}
+    {{> UserDirectory_Card_Read user=user}}
+  {{/Page}}
 </template>

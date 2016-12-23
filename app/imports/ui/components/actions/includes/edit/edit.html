@@ -13,10 +13,14 @@
             linkStandardFn=getLinkStandardFn
             unlinkStandardFn=getUnlinkStandardFn
             linkDocumentFn=getLinkDocumentFn
-            unlinkDocumentFn=getUnlinkDocumentFn}}
+            unlinkDocumentFn=getUnlinkDocumentFn
+            updateCompletionDateFn=getUpdateCompletionDateFn
+            updateCompletionExecutorFn=getUpdateCompletionExecutorFn
+            updateVerificationDateFn=getUpdateVerificationDateFn
+            updateVerificationExecutorFn=getUpdateVerificationExecutorFn}}
 
         {{> Subcards_Notify_Edit
-            document=this
+            doc=this
             documentType="action"
             onUpdate=onUpdateNotifyUserCb}}
 
@@ -26,10 +30,13 @@
         {{> Subcards_OtherFiles_Edit
             label="Files"
             _id=this._id
-            files=this.files
+            fileIds=this.fileIds
             uploaderMetaContext=uploaderMetaContext
             slingshotDirective=slingshotDirective}}
       {{/with}}
+      <div class="card-block text-xs-center">
+        <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
+      </div>
     </div>
   </div>
 </template>

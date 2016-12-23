@@ -4,14 +4,16 @@
   "serialNumber": 99,
   "users": [
     {
+      "joinedAt": { "$date": 1459508400000 },
       "userId": "SQHmBKJ94gJvpLKLt",
-      "role": "member"
+      "role": "owner"
     },
     {
       "userId": "TCstWknRczHkvP6j4",
       "role": "member"
     },
     {
+      "joinedAt": { "$date": 1459508400000 },
       "userId": "ABKpuGYiJHKhDwLDk",
       "role": "owner"
     },
@@ -23,22 +25,31 @@
   "timezone": "Europe/London",
   "currency": "GBP",
   "createdAt": {"$date": 1459508400000},
-  "createdAt": "SecondaryUser",
+  "createdBy": "Plio",
   "updatedAt": null,
   "updatedBy": null,
   "isDeleted": false,
   "workflowDefaults": {
-    "minorNc": {
-      "timeValue": 1,
-      "timeUnit": "days"
+    "minorProblem": {
+      "workflowType": "3-step",
+      "stepTime": {
+        "timeValue": 1,
+        "timeUnit": "days"
+      }
     },
-    "majorNc": {
-      "timeValue": 2,
-      "timeUnit": "days"
+    "majorProblem": {
+      "workflowType": "6-step",
+      "stepTime": {
+        "timeValue": 2,
+        "timeUnit": "days"
+      }
     },
-    "criticalNc": {
-      "timeValue": 3,
-      "timeUnit": "days"
+    "criticalProblem": {
+      "workflowType": "6-step",
+      "stepTime": {
+        "timeValue": 3,
+        "timeUnit": "days"
+      }
     }
   },
   "reminders": {
@@ -103,5 +114,11 @@
     "minor" : "Please go to Org Settings to define what a minor non-conformity means in your organization.",
     "major" : "Please go to Org Settings to define what a major non-conformity means in your organization.",
     "critical" : "Please go to Org Settings to define what a critical non-conformity means in your organization."
-  }
+  },
+  "rkGuidelines" : {
+    "minor" : "Please go to Org Settings to define what a minor risk means in your organization.",
+    "major" : "Please go to Org Settings to define what a major risk means in your organization.",
+    "critical" : "Please go to Org Settings to define what a critical risk means in your organization."
+  },
+  "rkScoringGuidelines": "Please go to Org Settings to define what risk scoring means in your organization."
 }

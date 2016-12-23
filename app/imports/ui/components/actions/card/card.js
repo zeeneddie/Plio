@@ -1,14 +1,21 @@
 import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import get from 'lodash.get';
 
-import { ActionPlanOptions } from '/imports/api/constants.js';
+import { WorkInboxHelp } from '/imports/api/help-messages.js';
+import { ActionPlanOptions } from '/imports/share/constants.js';
 
-Template.ActionsCard.viewmodel({
-  mixin: ['organization', 'action', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
+Template.Actions_Card_Read.viewmodel({
+  mixin: ['organization', 'workInbox', 'user', 'date', 'modal', 'router', 'collapsing', 'actionStatus'],
+  isReadOnly: false,
+  showCard() {
+    return this.actions().length;
+  },
   action() {
-    return this._getActionByQuery({ _id: this.actionId() });
+    return this._getActionByQuery({ _id: this._id() });
   },
   getActionTitle() {
-    return this._getNameByType(this.action() && this.action().type);
+    return this._getNameByType(get(this.action(), 'type'));
   },
   getClassForPlanInPlace(plan) {
     switch(plan) {
@@ -26,23 +33,22 @@ Template.ActionsCard.viewmodel({
         break;
     }
   },
+  getVerifiedDateLabel({ isVerifiedAsEffective } = {}) {
+    return isVerifiedAsEffective
+      ? 'Verified as effective date'
+      : 'Assessed as ineffective date';
+  },
   actions() {
-    const list = ViewModel.findOne('ActionsList');
-    const query = list && list._getQueryForFilter();
-    return this._getActionsByQuery(query);
+    const organizationId = this.organizationId();
+    return this._getActionsByQuery({ organizationId }).fetch();
   },
-  hasActions() {
-    return this.actions().count() > 0;
-  },
-  onOpenEditModalCb() {
-    return this.openEditActionModal.bind(this);
-  },
-  openEditActionModal() {
+  openEditModal() {
     const _title = this.getActionTitle();
     this.modal().open({
       _title,
+      helpText: WorkInboxHelp.workInbox,
       template: 'Actions_Edit',
-      _id: this.actionId()
+      _id: get(this.action(), '_id')
     });
   }
 });

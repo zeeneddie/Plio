@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers.js';
 
 Template.NC_Layout.viewmodel({
   mixin: ['organization', 'nonconformity'],
@@ -7,24 +8,12 @@ Template.NC_Layout.viewmodel({
   autorun: [
     function() {
       const orgSerialNumber = this.organizationSerialNumber();
-      const org = this.organization();
-      const { _id, users } = !!org && org;
-      const userIds = _.pluck(users, 'userId');
+      const isDeleted = this.isActiveNCFilter(4)
+        ? true
+        : { $in: [null, false] };
       const _subHandlers = [
-        this.templateInstance.subscribe('currentUserOrganizationBySerialNumber', orgSerialNumber),
-        this.templateInstance.subscribe('organizationUsers', userIds),
-        this.templateInstance.subscribe('standards', _id),
-        this.templateInstance.subscribe('lessons', _id),
-        this.templateInstance.subscribe('departments', _id),
-        this.templateInstance.subscribe('actions', _id),
-        this.templateInstance.subscribe('risks', _id)
+        DocumentLayoutSubs.subscribe('nonConformitiesLayout', orgSerialNumber, isDeleted),
       ];
-
-      if (this.isActiveNCFilter('deleted')) {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id, true));
-      } else {
-        _subHandlers.push(this.templateInstance.subscribe('nonConformities', _id));
-      }
 
       this._subHandlers(_subHandlers);
     },

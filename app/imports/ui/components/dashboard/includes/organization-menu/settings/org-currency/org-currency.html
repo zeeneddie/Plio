@@ -1,0 +1,13 @@
+<template name="OrgSettings_OrgCurrency">
+  {{#FormField label="Default currency" helpText=helpText}}
+    <div class="btn-group btn-group-nomargin" data-toggle="buttons">
+      {{#each currencies}}
+        <label class="btn btn-secondary"
+            {{b "{click: update, class: {active: isSelectedCurrency(this)}}"}}>
+          <input type="radio" name="options" id="{{this}}" autocomplete="off">
+          {{this}}
+        </label>
+      {{/each}}
+    </div>
+  {{/FormField}}
+</template>

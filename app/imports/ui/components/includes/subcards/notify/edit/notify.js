@@ -1,27 +1,32 @@
 import { Template } from 'meteor/templating';
 
 import { addedToNotifyList } from '/imports/api/standards/methods.js';
-import Utils from '/imports/core/utils.js';
+import { showError } from '/imports/api/helpers.js';
 
 Template.Subcards_Notify_Edit.viewmodel({
   mixin: ['search', 'user', 'members'],
-  members() {
-    return this._members({ _id: { $nin: this.currentNotifyUsersIds() } });
-  },
-  document: '',
+  doc: '',
   documentType: '',
-  currentNotifyUsersIds() {
-    return this.currentNotifyUsers().fetch().map(({ _id }) => _id) || [];
-  },
-  currentNotifyUsers() {
-    const usersIds = (this.document() && this.document().notify) || [];
-    const query = { _id: { $in: usersIds } };
-    const options = { sort: { 'profile.firstName': 1 } };
-    return Meteor.users.find(query, options);
+  placeholder: 'User to notify',
+  selectArgs() {
+    const {
+      placeholder,
+      doc: { notify:values = [] } = {}
+    } = this.data();
+
+
+    return {
+      values,
+      placeholder,
+      onUpdate: ({ user, userId, users }) =>
+        this.addToNotifyList(userId),
+      onRemove: ({ user, userId, users }) =>
+        this.update(userId, '$pull')
+    };
   },
   onUpdate() {},
   update(userId, option, cb) {
-    const _id = this.document() && this.document()._id;
+    const { doc: { _id } = {} } = this.data();
     const query = { _id };
     const options = {
       [`${option}`]: {
@@ -31,45 +36,27 @@ Template.Subcards_Notify_Edit.viewmodel({
 
     this.onUpdate({ query, options }, cb);
   },
-  onSelectUserCb() {
-    return this.onSelectUser.bind(this);
-  },
-  onSelectUser(viewmodel) {
-    const { selected:userId } = viewmodel.getData();
-    const currentNotifyUsersIds = this.currentNotifyUsersIds();
-
-    if (_.contains(currentNotifyUsersIds, userId)) return;
-
-    this.addToNotifyList(userId, viewmodel);
-  },
-  addToNotifyList(userId, viewmodel) {
-    this.update(userId, '$addToSet', (err, res) => {
+  addToNotifyList(userId) {
+    const callback = (err, res) => {
       if (err) {
         return;
       }
 
-      viewmodel.value('');
-      viewmodel.selected('');
-
-      // TODO need one for non-conformities
+      // TODO need one for Non-conformities, risks, actions
       if (this.documentType() === 'standard') {
-        addedToNotifyList.call({
-          standardId: this.document()._id,
+        /*addedToNotifyList.call({
+          standardId: this.doc()._id,
           userId
         }, (err, res) => {
           if (err) {
-            Utils.showError(
+            showError(
               'Failed to send email to the user that was added to standard\'s notify list'
             );
           }
-        });
+        });*/
       }
-    });
-  },
-  removeFromNotifyListFn() {
-    return this.removeFromNotifyList.bind(this, Template.currentData());
-  },
-  removeFromNotifyList({ _id }) {
-    this.update(_id, '$pull');
+    };
+
+    this.update(userId, '$addToSet', callback);
   }
 });

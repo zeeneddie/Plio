@@ -1,8 +1,20 @@
-<template name="RisksPage">
-  <div class="content-list scroll" {{b "if: !width || width > 768"}}>
-    {{> RisksList}}
-  </div>
-  <div class="content-cards hidden-sm-down scroll" {{b "attr: { style: display }"}}>
-    {{> RisksCard}}
-  </div>
+<template name="Risks_Page">
+  {{#Page classNames=classNames}}
+    {{#if isDiscussionOpened}}
+      {{> Risks_Card_Read cardArgs}}
+    {{else}}
+      {{> Problems_ListWrapper listArgs}}
+    {{/if}}
+  {{else}}
+    {{#if isDiscussionOpened}}
+      {{> Discussion_Card
+          organizationId=organizationId
+          discussionId=discussion._id
+          linkedTo=riskId
+          isReady=isDiscussionReady
+          doc=risk}}
+    {{else}}
+      {{> Risks_Card_Read cardArgs}}
+    {{/if}}
+  {{/Page}}
 </template>

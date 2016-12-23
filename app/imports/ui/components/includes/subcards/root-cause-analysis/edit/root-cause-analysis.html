@@ -1,12 +1,11 @@
 <template name="Subcards_RootCauseAnalysis_Edit">
-  {{> NC_Analysis_Edit
-      analysis=analysis
-      defaultTargetDate=defaultTargetDate
-      isAnalysisCompleted=isAnalysisCompleted}}
-  {{#if isAnalysisCompleted}}
-    {{> NC_UpdateOfStandards_Edit
-        updateOfStandards=updateOfStandards
-        executor=analysis.executor
-        defaultTargetDate=defaultTargetDate}}
-  {{/if}}
+  {{#Subcards_Wrapper _lText=label _rText=getTextIndicator}}
+    <div class="card-block" id="root-cause-analysis">
+      {{#each causesData}}
+        {{> RCA_Cause_Edit cause=this}}
+      {{/each}}
+
+      {{> RCA_Files_Edit fileIds=fileIds}}
+    </div>
+  {{/Subcards_Wrapper}}
 </template>

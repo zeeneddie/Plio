@@ -29,7 +29,7 @@ export default {
       }
     });
 
-    const { bucketName, acl, standardsFilesDir } = Meteor.settings.AWSS3Bucket;
+    const { bucketName, acl, standardFilesDir } = Meteor.settings.AWSS3Bucket;
 
     const fut = new Future();
 
@@ -46,6 +46,7 @@ export default {
       if (!_.contains([
         'application/vnd.openxmlformats',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'binary/octet-stream'
       ], result.headers['content-type'])) {
         return fut.return(new Meteor.Error('TypeError', `Invalid content type - ${result.headers['content-type']}`));
       }
@@ -73,15 +74,15 @@ export default {
               </body>
             </html>
           `;
-          
+
           const params = {
             Bucket: bucketName,
             ACL: acl,
-            Key: `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${fileName}`,
+            Key: `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${fileName}`,
             Body: htmlString,
             ContentType: 'text/html; charset=UTF-8'
           };
-      
+
           const uploader = s3.upload(params, (error, data) => {
             if (error) {
               fut.return(new Meteor.Error(error.message));

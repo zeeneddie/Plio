@@ -1,4 +1,14 @@
 .modal {
+  transform: translateZ(0);
+
+  @media (min-width: 600px) {
+    .clearable-field-container .clear-field {
+      top: 2px;
+    }
+    &, .form-control, .btn:not(.help-icon) {
+      font-size: 15px;
+    }
+  }
   .relative {
     .card {
       position: inherit;
@@ -18,13 +28,24 @@
       }
     }
 
+    &.ql-expanded {
+      overflow: hidden;
+    }
+
     > .card {
       border: 0;
 
       > .card-heading {
         border-radius: 4px 4px 0 0;
+        max-height: 56px;
 
         .card-title {
+          max-width: calc(100% - 200px);
+          line-height: 21px;
+          white-space: nowrap;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+          margin: 0 auto;
           text-align: center !important;
           font-family: $font-semibold;
         }
@@ -39,6 +60,10 @@
       .card-block {
         &:not(:first-child) {
           border-top: 1px solid #ddd;
+        }
+
+        > .margin-bottom {
+          margin-bottom: 1.25rem !important;
         }
 
         .user-avatar {
@@ -58,7 +83,18 @@
       }
 
       .list-group {
+
+        border-bottom: none;
+        padding: 0;
         &-item {
+          &:first-child {
+            border-top: 0;
+          }
+        }
+
+        & > .list-group-item {
+          border: 1px solid #ddd;
+
           &:first-child {
             border-top: 0;
           }
@@ -132,15 +168,15 @@
   }
 }
 
-.cancel-org-transfer {
-  .label.text-default {
+.org-transfer {
+  .cancel, .cancel-transfer {
+    padding-right: 0;
+  }
+
+  .invitation-info {
     white-space: normal;
     text-align: left;
     display: block;
-  }
-
-  .btn.btn-link {
-    margin: 0;
-    padding: 0;
+    padding-bottom: 0;
   }
 }

@@ -1,0 +1,28 @@
+<template name="UserDirectory_Card_Edit">
+  {{> UserEdit_MainDetails
+      avatar=avatar
+      firstName=firstName
+      lastName=lastName
+      initials=initials
+      email=email
+      description=description}}
+
+  {{#if isEditable}}
+    {{> UserEdit_Password}}
+  {{/if}}
+
+  {{> UserEdit_ContactDetails
+      address=address
+      country=country
+      phoneNumbers=phoneNumbers
+      skype=skype}}
+
+  {{> UserEdit_Roles
+      userRoles=userRoles
+      label=rolesLabel
+      orgOwnerLabel=orgOwnerLabel}}
+
+  {{#if isDeleteButtonEnabled}}
+    {{> ModalDeleteButton onClick=removeUserFn}}
+  {{/if}}
+</template>

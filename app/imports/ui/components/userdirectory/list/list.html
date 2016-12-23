@@ -1,0 +1,7 @@
+<template name="UserDirectory_List">
+  {{#List_Read listArgs}}
+    {{#each organizationUsers}}
+      {{> UserDirectory_List_Item}}
+    {{/each}}
+  {{/List_Read}}
+</template>

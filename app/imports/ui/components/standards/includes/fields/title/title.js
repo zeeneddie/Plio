@@ -1,34 +1,40 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
-Template.ESTitle.viewmodel({
-  mixin: ['modal', 'callWithFocusCheck', 'numberRegex'],
-  titleText: '',
-  update(e) {
-    this.callWithFocusCheck(e, () => {
-      const { title } = this.getData();
+Template.Standards_Title_Edit.viewmodel({
+  mixin: 'numberRegex',
+  title: '',
 
-      if (title === this.templateInstance.data.title) return;
+  titleArgs() {
+    const { title:value } = this.data();
+    const withFocusCheck = this._id ? true : false;
 
-      const number = this.parseNumber(title);
-      const nestingLevel = (number && number[0].split('.').length) || 1;
+    return {
+      value,
+      withFocusCheck,
+      label: 'Document title',
+      onFocusOut: (e, { value:title }) => {
+        const number = this.parseNumber(title);
+        const nestingLevel = (_.first(number) || '').split('.').length || 1;
 
-      if (nestingLevel > 4) {
-        this.modal().setError('Maximum nesting is 4 levels. Please change your title.');
-        return;
+        if (nestingLevel > 4) {
+          return invoke(
+            ViewModel.findOne('ModalWindow'),
+            'setError',
+            'Maximum nesting is 4 levels. Please change your title.'
+          );
+        }
+
+        this.title(title);
+
+        if (!this._id) return;
+
+        return invoke(this.parent(), 'update', { title, nestingLevel });
       }
-
-      if (!this._id) return;
-
-      if (!title) {
-        this.modal().setError('Title is required!');
-        return;
-      }
-
-      this.parent().update({ title, nestingLevel });
-    });
+    };
   },
   getData() {
-    const { titleText:title } = this.data();
+    const { title } = this.data();
     return { title };
   }
 });

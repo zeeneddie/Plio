@@ -1,0 +1,17 @@
+<template name="FileItem_Read">
+  {{#with file}}
+    <div class="file-item-read">
+      <a class="btn btn-secondary file-label text-xs-left"
+        {{b "href: this.url || '', class: { uploaded: this.isUploaded, failed: this.isFailed, no-pointer-events: !this.isUploaded }"}}>
+        <span>
+          {{#if extension}}
+            <i class="fa fa-lg fa-file-{{this.extension}}-o margin-right"></i>
+          {{/if}}
+          <span>{{this.name}}</span>
+        </span>
+        <div class="uploading-file progress progress-striped stripes progress-animated"
+            {{b "class: { uploaded: this.isUploaded }, style: { width: styles.getWidth(this)}"}}></div>
+      </a>
+    </div>
+  {{/with}}
+</template>

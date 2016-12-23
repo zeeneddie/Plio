@@ -5,7 +5,10 @@ Template.Subcards_Notes_Edit.viewmodel({
   label: 'Notes',
   notes: '',
   isTextPresent() {
-    return $(this.notes()).text();
+    const html = this.notes() && this.notes().includes('<div>')
+                  ? this.notes()
+                  : `<div>${this.notes()}</div>`;
+    return $(html).text();
   },
   getTextIndicator() {
     return this.isTextPresent() ? '<i class="fa fa-align-left disclosure-indicator pull-right"></i>' : '';

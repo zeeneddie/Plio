@@ -2,12 +2,12 @@
   {{#FormField label=label}}
     <div class="btn-group" data-toggle="buttons">
       <label class="btn btn-secondary"
-        {{b "click: changeType('url'), class: { active: sourceType === 'url' }"}}>
-        <input type="radio" name="options" autocomplete="off" checked> URL link
-      </label>
-      <label class="btn btn-secondary"
         {{b "click: changeType('attachment'), class: { active: sourceType === 'attachment' }"}}>
         <input type="radio" name="options" autocomplete="off"> Attachment
+      </label>
+      <label class="btn btn-secondary"
+        {{b "click: changeType('url'), class: { active: sourceType === 'url' }"}}>
+        <input type="radio" name="options" autocomplete="off" checked> URL link
       </label>
       <label class="btn btn-secondary"
         {{b "click: changeType('video'), class: { active: sourceType === 'video' }"}}>
@@ -15,28 +15,23 @@
       </label>
     </div>
       <i class="fa pull-right margin-top" {{b "class: { 'fa-spinner fa-pulse': docxRenderInProgress, 'fa-align-left': !docxRenderInProgress && sourceHtmlUrl }"}}></i>
+    <div {{b "if: sourceType === 'attachment'"}}>
+      {{#with file}}
+        {{> FileItem file=this removeFile=removeAttachmentFn}}
+      {{else}}
+        <div>
+          {{> FileUploader
+              afterInsert=afterInsertFn
+              afterUpload=afterUploadCb
+              slingshotDirective='standardFiles'
+              metaContext=uploaderMetaContext}}
+        </div>
+      {{/with}}
+    </div>
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="URL link"
           {{b "if: sourceType === 'url', value: sourceUrl, focusout: update"}} />
     {{/ClearableField}}
-    <div {{b "if: sourceType === 'attachment'"}}>
-      {{#with sourceName}}
-        {{> FileItem
-            _id=fileId
-            name=sourceName
-            url=sourceUrl
-            extension=sourceExtension
-            removeFile=removeAttachmentFn
-            uploader=uploader}}
-      {{/with}}
-      <div {{b "unless: sourceName"}}>
-        {{> FileUploader
-            insertFile=insertFileFn
-            onUpload=onUploadCb
-            slingshotDirective='standardsFiles'
-            metaContext=uploaderMetaContext}}
-      </div>
-    </div>
     {{#ClearableField field="sourceUrl"}}
       <input type="text" class="form-control" placeholder="Video"
           {{b "if: sourceType === 'video', value: sourceUrl, focusout: update"}} />

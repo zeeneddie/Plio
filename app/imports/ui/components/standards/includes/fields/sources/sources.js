@@ -1,35 +1,38 @@
 import { Template } from 'meteor/templating';
-import { check } from 'meteor/check'
+import { check } from 'meteor/check';
+import { Files } from '/imports/share/collections/files.js';
+import { remove as removeFile } from '/imports/api/files/methods.js';
 
 Template.ESSources.viewmodel({
   mixin: ['urlRegex', 'modal', 'callWithFocusCheck', 'organization'],
   autorun() {
     if (!this.sourceType()) {
-      this.sourceType('url');
+      this.sourceType('attachment');
     }
   },
-  sourceType: 'url',
+  sourceType: 'attachment',
   sourceUrl: '',
-  sourceName: '',
-  sourceExtension() {
-    return this.sourceName().split('.').pop().toLowerCase();
-  },
-  sourceHtmlUrl: null,
+  sourceFileId: '',
   docxRenderInProgress: null,
-  fileId: '',
+  file() {
+    const fileId = this.sourceFileId();
+
+    return Files.findOne({ _id: fileId });
+  },
   shouldUpdate() {
-    const { type, url, name, htmlUrl } = this.getData();
-    const { sourceType, sourceUrl, sourceName, sourceHtmlUrl } = this.templateInstance.data;
+    const { type, fileId, url } = this.getData();
+    const { sourceType, sourceFileId, sourceUrl } = this.templateInstance.data;
 
     if (type === 'attachment') {
       return _.every([
-        (type && name) || (type && url),
-        (type !== sourceType) || (url !== sourceUrl) || (name !== sourceName) || (htmlUrl !== sourceHtmlUrl)
+        type, fileId,
+        (type !== sourceType) || (fileId !== sourceFileId)
       ]);
     } else {
       return _.every([
-        type && url,
-        (type !== sourceType) || (url !== sourceUrl) || (htmlUrl !== sourceHtmlUrl)
+        type,
+        (!sourceUrl && url) || (sourceUrl && !url) || (sourceUrl && url),
+        (type !== sourceType) || (url !== sourceUrl)
       ]);
     }
   },
@@ -39,62 +42,61 @@ Template.ESSources.viewmodel({
     const context = this.templateInstance.data;
     if (type === context.sourceType) {
       this.sourceUrl(context.sourceUrl || '');
-      this.sourceName(context.sourceName || '');
     } else {
       this.sourceUrl('');
-      this.sourceName('');
     }
 
     this.update();
   },
   update(e, cb) {
-    let { type, url, name, htmlUrl } = this.getData();
+    let { type, fileId, url } = this.getData();
 
     if (!this.shouldUpdate()) {
       return;
     }
 
-    if ((url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
-      url = `http://${url}`;
-    }
-
-    if (url && !this.IsValidUrl(url)) {
-      ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
-      return;
-    }
-
-    const sourceDoc = { type, url, htmlUrl };
+    let sourceDoc = { type };
     if (type === 'attachment') {
-      sourceDoc.name = name;
+      sourceDoc.fileId = fileId;
+    } else {
+      if (url && (url.search(/^https?\:\/\//) === -1) && (type !== 'attachment')) {
+        url = `http://${url}`;
+      }
 
-      if (url) {
-        sourceDoc.extension = url.split('.').pop();
+      if (url && !this.isValidUrl(url)) {
+        ViewModel.findOne('ModalWindow').setError('The source file url link is not valid');
+
+        return;
       } else {
-        delete sourceDoc.url;
+        sourceDoc.url = url;
       }
     }
 
-    const query = {
-      [`source${this.id()}`]: sourceDoc
-    };
-
-    const updateFn = () => this.parent().update(query, cb);
+    const query = { [`source${this.id()}`]: sourceDoc };
 
     if (type === 'attachment') {
-      updateFn();
+      this.parent().update(query, cb);
     } else {
-      this.callWithFocusCheck(e, updateFn);
+      this.callWithFocusCheck(e, () => {
+        if (url) {
+          this.parent().update(query, cb);
+        } else {
+          this._removeSourceFile();
+        }
+      });
     }
   },
   renderDocx(url) {
     check(url, String);
-    const isDocx = this.sourceExtension() === 'docx';
+
+    const file = this.file();
+    const isDocx = file && file.extension === 'docx';
 
     if (isDocx) {
       this.docxRenderInProgress(true);
       Meteor.call('Mammoth.convertDocxToHtml', {
         url,
-        fileName: this.sourceName() + '.html',
+        fileName: file.name + '.html',
         source: `source${this.id()}`,
         standardId:  this.parent()._id(),
       }, (error, result) => {
@@ -107,7 +109,6 @@ Template.ESSources.viewmodel({
             this.renderDocxError(`Rendering document: ${result.error}`);
           } else {
             this.docxRenderInProgress('');
-            this.sourceHtmlUrl(result);
           }
         }
       });
@@ -120,23 +121,17 @@ Template.ESSources.viewmodel({
       this.docxRenderInProgress('');
     }, 5000);
   },
-  insertFileFn() {
-    return this.insertFile.bind(this);
+  afterInsertFn() {
+    return this.afterInsert.bind(this);
   },
-  insertFile({ _id, name }, cb) {
-    this.fileId(_id);
-    this.sourceName(name);
+  afterInsert(fileId, cb) {
+    this.sourceFileId(fileId);
     this.update(null, cb);
   },
-  onUploadCb() {
-    return this.onUpload.bind(this);
+  afterUploadCb() {
+    return this.afterUpload.bind(this);
   },
-  onUpload(err, { url }) {
-    if (err) {
-      return;
-    }
-
-    this.sourceUrl(url);
+  afterUpload(fileId, url) {
     this.renderDocx(url);
     this.update();
   },
@@ -144,9 +139,8 @@ Template.ESSources.viewmodel({
     return this.removeAttachment.bind(this);
   },
   removeAttachment() {
-    const fileUploader = this.uploader();
-
-    const isFileUploading = fileUploader.isFileUploading(this.fileId());
+    const file = this.file();
+    const isFileUploading = !file.isUploaded() && !file.isFailed();
 
     let warningMsg = 'This attachment will be removed';
     let buttonText = 'Remove';
@@ -164,29 +158,12 @@ Template.ESSources.viewmodel({
       closeOnConfirm: true
     }, () => {
       if (isFileUploading) {
-        fileUploader.cancelUpload(this.fileId());
+        UploadsStore.terminateUploading(this.sourceFileId());
       }
 
-      const options = {
-        $unset: {
-          [`source${this.id()}`]: ''
-        }
-      };
-
-      this.parent().update({ options }, (err) =>  {
-        if (!err && this.id() === 1) {
-          const options = {
-            $rename: {
-              source2: 'source1'
-            }
-          };
-          this.parent().update({ options });
-        }
-      });
+      removeFile.call({ _id: file._id });
+      this._removeSourceFile();
     });
-  },
-  uploader() {
-    return this.child('FileUploader');
   },
   uploaderMetaContext() {
     return {
@@ -194,8 +171,22 @@ Template.ESSources.viewmodel({
       standardId: this.parent().standardId()
     };
   },
+  _removeSourceFile() {
+    const options = {
+      $unset: { [`source${this.id()}`]: '' }
+    };
+
+    this.parent().update({ options }, (err) => {
+      if (!err && this.id() === 1) {
+        const options = {
+          $rename: { source2: 'source1' }
+        };
+        this.parent().update({ options });
+      }
+    });
+  },
   getData() {
-    const { sourceType:type, sourceUrl:url, sourceName:name, sourceExtension:extension, sourceHtmlUrl:htmlUrl } = this.data();
-    return { type, url, name, htmlUrl };
+    const { sourceType: type, sourceFileId: fileId, sourceUrl: url, sourceExtension: extension } = this.data();
+    return { type, fileId, url };
   }
 });

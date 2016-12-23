@@ -2,18 +2,46 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import RisksService from './risks-service.js';
-import { RisksUpdateSchema, RequiredSchema } from './risks-schema.js';
-import { Risks } from './risks.js';
+import {
+  RisksUpdateSchema,
+  RequiredSchema,
+  RiskScoreSchema
+} from '/imports/share/schemas/risks-schema.js';
+import { Risks } from '/imports/share/collections/risks.js';
 import {
   IdSchema,
   OrganizationIdSchema,
   optionsSchema,
-  UserIdSchema
-} from '../schemas.js';
+  UserIdSchema,
+  CompleteActionSchema
+} from '/imports/share/schemas/schemas.js';
+import Method, { CheckedMethod } from '../method.js';
+import {
+  checkOrgMembership,
+  checkAnalysis,
+  onRemoveChecker,
+  onRestoreChecker,
+  P_OnSetAnalysisExecutorChecker,
+  P_OnSetAnalysisDateChecker,
+  P_OnCompleteAnalysisChecker,
+  P_OnStandardsUpdateChecker,
+  P_OnUndoStandardsUpdateChecker,
+  P_OnUndoAnalysisChecker,
+  P_OnSetStandardsUpdateExecutorChecker,
+  P_OnSetStandardsUpdateDateChecker,
+  P_OnSetAnalysisCompletedByChecker,
+  P_OnSetAnalysisCompletedDateChecker,
+  P_OnSetAnalysisCommentsChecker,
+  P_OnSetStandardsUpdateCompletedByChecker,
+  P_OnSetStandardsUpdateCompletedDateChecker,
+  P_OnSetStandardsUpdateCommentsChecker
+} from '../checkers.js';
+import { ACCESS_DENIED } from '../errors.js';
+import { inject } from '/imports/api/helpers.js';
 
-import { checkAnalysis } from '../checkers.js';
+const injectRK = inject(Risks);
 
-export const insert = new ValidatedMethod({
+export const insert = new Method({
   name: 'Risks.insert',
 
   validate: new SimpleSchema([RequiredSchema, {
@@ -24,104 +52,329 @@ export const insert = new ValidatedMethod({
     }
   }]).validator(),
 
-  run({ ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot create a risk'
-      );
-    }
+  run({ organizationId, ...args }) {
+    checkOrgMembership(this.userId, organizationId);
 
-    return RisksService.insert({ ...args });
+    return RisksService.insert({ organizationId, ...args });
   }
 });
 
-export const update = new ValidatedMethod({
+export const update = new CheckedMethod({
   name: 'Risks.update',
 
   validate: new SimpleSchema([
     IdSchema, RisksUpdateSchema, optionsSchema
   ]).validator(),
 
-  run({ _id, options, query, ...args }) {
-    const userId = this.userId;
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a risk'
-      );
-    }
+  check(checker) {
+    const _checker = (...args) => {
+      return (doc) => {
+        if (_.has(args, ['scoredBy', 'scoredAt']) && !doc.score) {
+          throw ACCESS_DENIED;
+        }
+        return checkAnalysis(doc, args);
+      };
+    };
 
-    const risk = Risks.findOne({ _id });
+    return injectRK(checker)(_checker);
+  },
 
-    if (!risk) {
-      throw new Meteor.Error(
-        400, 'Risk does not exist'
-      );
-    }
-
-    checkAnalysis(risk, args);
-
-    if (_.has('args', ['scoredBy', 'scoredAt']) && !risk.score) {
-      throw new Meteor.Error(
-        403, 'Access denied'
-      )
-    }
-
-    return RisksService.update({ _id, options, query, ...args });
+  run({ ...args }) {
+    return RisksService.update({ ...args });
   }
 });
 
-export const updateViewedBy = new ValidatedMethod({
+export const setAnalysisExecutor = new CheckedMethod({
+  name: 'Risks.setAnalysisExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisExecutorChecker),
+
+  run({ _id, executor }, doc) {
+    return RisksService.setAnalysisExecutor({ _id, executor }, doc);
+  }
+});
+
+export const setAnalysisDate = new CheckedMethod({
+  name: 'Risks.setAnalysisDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisDateChecker),
+
+  run({ ...args }, doc) {
+    return RisksService.setAnalysisDate({ ...args }, doc);
+  }
+});
+
+export const setAnalysisCompletedBy = new CheckedMethod({
+  name: 'Risks.setAnalysisCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return RisksService.setAnalysisCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setAnalysisCompletedDate = new CheckedMethod({
+  name: 'Risks.setAnalysisCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setAnalysisCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setAnalysisComments = new CheckedMethod({
+  name: 'Risks.setAnalysisComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetAnalysisCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setAnalysisComments({ _id, ...args }, doc);
+  }
+});
+
+export const completeAnalysis = new CheckedMethod({
+  name: 'Risks.completeAnalysis',
+
+  validate: CompleteActionSchema.validator(),
+
+  check: checker => injectRK(checker)(P_OnCompleteAnalysisChecker),
+
+  run({ _id, completionComments }) {
+    return RisksService.completeAnalysis({ _id, completionComments, userId: this.userId });
+  }
+});
+
+export const updateStandards = new CheckedMethod({
+  name: 'Risks.updateStandards',
+
+  validate: CompleteActionSchema.validator(),
+
+  check: checker => injectRK(checker)(P_OnStandardsUpdateChecker),
+
+  run({ _id, completionComments }) {
+    return RisksService.updateStandards({ _id, completionComments, userId: this.userId });
+  }
+});
+
+export const undoStandardsUpdate = new CheckedMethod({
+  name: 'Risks.undoStandardsUpdate',
+
+  validate: IdSchema.validator(),
+
+  check: checker => injectRK(checker)(P_OnUndoStandardsUpdateChecker),
+
+  run({ _id }) {
+    return RisksService.undoStandardsUpdate({ _id, userId: this.userId });
+  }
+});
+
+export const undoAnalysis = new CheckedMethod({
+  name: 'Risks.undoAnalysis',
+
+  validate: IdSchema.validator(),
+
+  check: checker => injectRK(checker)(P_OnUndoAnalysisChecker),
+
+  run({ _id }) {
+    return RisksService.undoAnalysis({ _id, userId: this.userId });
+  }
+});
+
+export const setStandardsUpdateExecutor = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateExecutor',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      executor: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateExecutorChecker),
+
+  run({ _id, executor }, doc) {
+    return RisksService.setStandardsUpdateExecutor({ _id, executor }, doc);
+  }
+});
+
+export const setStandardsUpdateDate = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      targetDate: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateDateChecker),
+
+  run({ ...args }, doc) {
+    return RisksService.setStandardsUpdateDate({ ...args }, doc);
+  }
+});
+
+export const setStandardsUpdateCompletedBy = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateCompletedBy',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedBy: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id
+      }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCompletedByChecker),
+
+  run({ _id, completedBy }, doc) {
+    return RisksService.setStandardsUpdateCompletedBy({ _id, completedBy }, doc);
+  }
+});
+
+export const setStandardsUpdateCompletedDate = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateCompletedDate',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completedAt: { type: Date }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCompletedDateChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setStandardsUpdateCompletedDate({ _id, ...args }, doc);
+  }
+});
+
+export const setStandardsUpdateComments = new CheckedMethod({
+  name: 'Risks.setStandardsUpdateComments',
+
+  validate: new SimpleSchema([
+    IdSchema,
+    {
+      completionComments: { type: String }
+    }
+  ]).validator(),
+
+  check: checker => injectRK(checker)(P_OnSetStandardsUpdateCommentsChecker),
+
+  run({ _id, ...args }, doc) {
+    return RisksService.setStandardsUpdateComments({ _id, ...args }, doc);
+  }
+});
+
+
+export const updateViewedBy = new CheckedMethod({
   name: 'Risks.updateViewedBy',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRK(checker),
+
   run({ _id }) {
-    if (!this.userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot update a risk'
-      );
-    }
-
-    if (!Risks.findOne({ _id })) {
-      throw new Meteor.Error(
-        400, 'Risk does not exist'
-      );
-    }
-
-    if (!!Risks.findOne({ _id, viewedBy: this.userId })) {
-      throw new Meteor.Error(
-        400, 'You have been already added to this list'
-      );
-    }
-
-    return RisksService.updateViewedBy({ _id, userId: this.userId });
+    return RisksService.updateViewedBy({ _id, viewedBy: this.userId });
   }
 });
 
-
-export const remove = new ValidatedMethod({
+export const remove = new CheckedMethod({
   name: 'Risks.remove',
 
   validate: IdSchema.validator(),
 
+  check: checker => injectRK(checker)(onRemoveChecker),
+
   run({ _id }) {
-    const userId = this.userId;
+    return RisksService.remove({ _id, deletedBy: this.userId });
+  }
+});
 
-    if (!userId) {
-      throw new Meteor.Error(
-        403, 'Unauthorized user cannot remove a risk'
-      );
+export const restore = new CheckedMethod({
+  name: 'Risks.restore',
+
+  validate: IdSchema.validator(),
+
+  check: checker => injectRK(checker)(onRestoreChecker),
+
+  run({ _id }) {
+    return RisksService.restore({ _id });
+  }
+});
+
+export const insertScore = new CheckedMethod({
+  name: 'Risks.scores.insert',
+
+  validate: new SimpleSchema([IdSchema, RiskScoreSchema]).validator(),
+
+  check: checker => injectRK(checker),
+
+  run({ ...args }) {
+    return RisksService['scores.insert']({ ...args });
+  }
+});
+
+export const removeScore = new CheckedMethod({
+  name: 'Risks.scores.remove',
+
+  validate: new SimpleSchema([IdSchema, {
+    score: {
+      type: RiskScoreSchema
     }
+  }]).validator(),
 
-    const risk = Risks.findOne({ _id });
+  check: checker => injectRK(checker),
 
-    if (!risk) {
-      throw new Meteor.Error(
-        400, 'Risk with the given id does not exist'
-      );
-    }
-
-    return RisksService.remove({ _id, deletedBy: userId, isDeleted: risk.isDeleted});
+  run({ _id, score }) {
+    return RisksService['scores.remove']({ _id, score });
   }
 });

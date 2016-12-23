@@ -1,8 +1,18 @@
 .card {
   border-color: #ccc;
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  margin-bottom: 1.25rem;
+  margin-bottom: 82px;
+
+  .modal & {
+    margin-bottom: 20px;
+  }
+
+  width: 100%;
   z-index: 101;
+  &.new-cards:not(:first-of-type) {
+    border-top: 1px solid #ddd;
+    margin-top: 0;
+  }
   &:empty {
     display: none;
   }
@@ -10,6 +20,14 @@
   .search-results-meta {
     padding-left: 14px !important;
     padding-right: 14px;
+  }
+
+  * > .display-on-parent-hover  {
+    display: none;
+  }
+
+  *:hover > .display-on-parent-hover {
+    display: inline;
   }
 
   iframe {
@@ -21,7 +39,7 @@
 
     .card-block-collapse-toggle {
       padding-left: 20px;
-      
+
       &::before {
         display: none;
       }
@@ -34,12 +52,12 @@
     border-radius: 0;
     border-width: 0 0 1px;
   }
-  
+
   &-heading {
     @include clearfix;
-    border-bottom: 1px solid #ddd;    
+    border-bottom: 1px solid #ddd;
     background: #f5f5f5;
-    
+
     &:first-child {
       border-radius: 4px 4px 0 0;
     }
@@ -47,26 +65,39 @@
     &-buttons {
       position: absolute;
       top: 10px;
-      
+      background-color: #f5f5f5;
+
       .btn {
         float: left;
       }
-      
+
       &.pull-xs-left {
         left: 10px;
-        
+
         .btn {
           margin-right: 10px;
+
+          &:last-of-type {
+            margin-right: 0;
+          }
         }
+
       }
-      
+
       &.pull-xs-right {
         right: 10px;
-        
+
         .btn {
           margin-left: 10px;
         }
       }
+    }
+
+    .card-title {
+      max-width: calc(100% - 151px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
@@ -79,29 +110,37 @@
     font-size: 18px;
     font-weight: normal;
     font-family: $font-semibold;
+
+    .btn-collapse {
+      font-size: 20px;
+      padding: 0;
+      vertical-align: text-bottom;
+      line-height: 20px;
+    }
   }
-  
+
   &-block {
     @include clearfix;
-    
+
     hr {
       margin: 1.75rem -1.25rem;
       border-color: #ddd;
     }
-    
+
   }
-  
-  .table {  
+
+  .table {
     margin-bottom: 0;
+
     th, td {
       border-color: #ddd;
-      
+
       &:first-child {
         padding-left: 17px;
       }
     }
   }
-  
+
   &-footer {
     border-radius: 0 0 4px 4px;
   }
@@ -137,7 +176,11 @@
       visibility: hidden;
       z-index: -1;
     }
-    
+
+    &.expandable {
+      z-index: 102;
+    }
+
     &.expanded {
       position: fixed !important;
       top: 0 !important;
@@ -146,6 +189,7 @@
       bottom: 0 !important;
       padding-left: 10%;
       padding-right: 10%;
+      overflow-y: scroll;
 
       &::before {
         visibility: visible;
@@ -174,8 +218,8 @@
     border-radius: 0;
     border-width: 0 0 1px;
   }
-  
-  .card {    
+
+  .card {
     &-subheading {
       padding-bottom: 0;
       border-bottom: 0;
@@ -185,32 +229,33 @@
         font-size: 18px;
         color: #777;
         font-weight: normal;
-        font-family: $font-semilight;     
+        font-family: $font-semilight;
       }
     }
-    
+
     .list-group {
       border-bottom: 1px solid #ddd;
       padding-top: 8px;
       padding-bottom: 8px;
-      
+
       &-item {
         border: 0;
         padding-top: 8px;
         padding-bottom: 8px;
-        
+
         .user-avatar {
           margin-right: 15px;
         }
-        
+
         &-heading {
           font-size: 18px;
           line-height: 24px;
           margin: 0 0 3px;
           font-weight: normal;
+          word-break: break-word;
           font-family: $font-semilight;
         }
-        
+
         &-text {
           font-size: 14px;
           color: #777;
@@ -218,11 +263,11 @@
           //font-family: $SegoeUI;
           font-weight: normal;
         }
-        
+
         .file-link {
           margin-right: 15px;
           display: inline-block;
-          
+
           i {
             font-size: 22px;
             margin-right: 3px;
@@ -232,12 +277,23 @@
         }
       }
     }
-    
+
     .table {
       margin-top: 5px;
-      
+
       border-bottom: 1px solid #ddd;
-      
+
+      &.big {
+        font-size: 1.28rem;
+      }
+
+      &.borderless {
+        border: none;
+        & tr > th, td {
+          border: none;
+        }
+      }
+
       th {
         border-top: 0;
       }
@@ -245,6 +301,18 @@
   }
 }
 
+.content-cards-flush {
+  .content-cards-inner {
+    padding: 0;
+
+    .card {
+      border-width: 0 0 0 1px;
+      border-radius: 0;
+      margin: 0;
+    }
+  }
+
+}
 
 .card-changelog {
   &-toggle {
@@ -256,12 +324,16 @@
     color: #777;
     position: relative;
     padding-right: 40px;
-    
+
+    .modal & {
+      border-top: 1px solid #e5e5e5;
+    }
+
     &:not(.collapsed) {
       border-radius: 0;
       border-bottom: 1px solid #ddd;
     }
-    
+
     &:after {
       content: "\f106";
       font-family: 'FontAwesome';
@@ -274,28 +346,53 @@
       color: #aaa;
       @include transition(all .3s ease);
     }
-    
+
     &.collapsed:after {
       @include rotate(180);
     }
-    
+
+    &.waiting:after {
+      content: "\f110";
+      animation: fa-spin 1s infinite steps(8);
+    }
+
     .row {
       @include flex(1);
-    }      
+    }
   }
 
   .table {
     margin: 0;
     font-size: 12px;
     border-bottom: 0 !important;
-    
+
     th, td {
       border-color: #ddd;
       border-bottom-width: 1px;
-      
+      word-break: break-word;
+
       &:first-child {
-        padding-left: 1.25rem;  
+        padding-left: 1.25rem;
       }
+
+      &:last-child {
+        padding-right: 1.25rem;
+      }
+
+      &.log-user {
+        width: 16%;
+      }
+
+      &.log-date {
+        padding-right: 1.25rem;
+        width: 141px;
+      }
+    }
+  }
+
+  .card-footer {
+    .btn.not-visible {
+      visibility: hidden;
     }
   }
 }

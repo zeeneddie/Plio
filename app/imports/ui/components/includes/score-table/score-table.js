@@ -1,6 +1,7 @@
 import { Template } from 'meteor/templating';
 
 Template.ScoreTable_Edit.viewmodel({
+  disabled: false,
   score: '',
   tableData() {
     return {
@@ -21,8 +22,10 @@ Template.ScoreTable_Edit.viewmodel({
   update({ rowId, value }) {
     this.onUpdate({ rowId, value });
   },
-  getData() {
-    const { active } = this.data();
-    return { active };
+  onGuidePanelToggle() {},
+  events: {
+    'click .toggle-collapse'(e) {
+      this.onGuidePanelToggle(this);
+    }
   }
 });

@@ -4,27 +4,35 @@ Template.NC_Ref_Edit.viewmodel({
   mixin: 'urlRegex',
   text: '',
   url: '',
-  update(e) {
-    let { text, url } = this.data();
+  updateText(e) {
+    let { text } = this.data();
     const context = this.templateInstance.data;
 
-    if (!text || !url) return;
-
-    if (text === context.text && url === context.url) return;
-
+    if (!text) return;
+    if (text === context.text) return;
     if (!this._id) return;
 
-    if (url.search(/^https?\:\/\//) === -1) {
-      url = `http://${url}`;
+    this.parent().update({ 'ref.text': text, e, withFocusCheck: true });
+  },
+  updateUrl(e) {
+    let { url } = this.data();
+    const context = this.templateInstance.data;
+
+    if (url === context.url) return;
+    if (!this._id) return;
+    if (!!url) {
+      if (url.search(/^https?\:\/\//) === -1) {
+        url = `http://${url}`;
+      }
+
+      if (!this.isValidUrl(url)) {
+        ViewModel.findOne('ModalWindow').setError('Url is not valid!');
+        return;
+      }
+    } else {
+      url = null;
     }
 
-    if (!!url && !this.IsValidUrl(url)) {
-      ViewModel.findOne('ModalWindow').setError('Url is not valid!');
-      return;
-    }
-
-    const ref = { text, url };
-
-    this.parent().update({ ref, e, withFocusCheck: true });
+    this.parent().update({ 'ref.url': url, e, withFocusCheck: true });
   }
 });

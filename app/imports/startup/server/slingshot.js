@@ -1,15 +1,17 @@
 import { Slingshot } from 'meteor/edgee:slingshot';
 import { Random } from 'meteor/random';
 
-import Utils from '/imports/core/utils';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { isOrgMember } from '/imports/api/checkers.js';
 
 
-const configureSlignshot = () => {
+const configureSlingshot = () => {
   const {
-    bucketName, acl, usersAvatarsDir,
-    standardsFilesDir, improvementPlansFilesDir,
-    nonConformitiesFilesDir, risksFilesDir,
-    actionsFilesDir
+    bucketName, acl, ussionsFilesDir, userAvatarsDir,
+    standardFilesDir, improvementPlanFilesDir,
+    nonConformityFilesDir, riskFilesDir,
+    actionFilesDir, rootCauseAnalysisFilesDir,
+    discussionFilesDir
   } = Meteor.settings.AWSS3Bucket;
 
   const attachmentDisposition = (file, metaContext) => {
@@ -18,7 +20,28 @@ const configureSlignshot = () => {
     return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
 
-  Slingshot.createDirective('usersAvatars', Slingshot.S3Storage, {
+  Slingshot.createDirective('discussionFiles', Slingshot.S3Storage, {
+    bucket: bucketName,
+
+    acl: acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize() {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { organizationId, discussionId } = metaContext;
+      return `uploads/${organizationId}/${discussionFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
+    }
+  });
+
+  Slingshot.createDirective('userAvatars', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -33,11 +56,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { userId } = metaContext;
-      return `${usersAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
+      return `${userAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('standardsFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('standardFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -54,7 +77,7 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
@@ -73,11 +96,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardsFilesDir}/${standardId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('improvementPlansFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -94,11 +117,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, improvementPlanId } = metaContext;
-      return `uploads/${organizationId}/${improvementPlansFilesDir}/${improvementPlanId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${improvementPlanFilesDir}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('nonConformitiesFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('nonConformityFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -115,11 +138,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, nonConformityId } = metaContext;
-      return `uploads/${organizationId}/${nonConformitiesFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${nonConformityFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('risksFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('riskFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -136,11 +159,11 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, riskId } = metaContext;
-      return `uploads/${organizationId}/${risksFilesDir}/${riskId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${riskFilesDir}/${riskId}/${Random.id()}-${file.name}`;
     }
   });
 
-  Slingshot.createDirective('actionsFiles', Slingshot.S3Storage, {
+  Slingshot.createDirective('actionFiles', Slingshot.S3Storage, {
     bucket: bucketName,
 
     acl: acl,
@@ -157,11 +180,45 @@ const configureSlignshot = () => {
 
     key(file, metaContext) {
       const { organizationId, actionId } = metaContext;
-      return `uploads/${organizationId}/${actionsFilesDir}/${actionId}/${Random.id()}-${file.name}`;
+      return `uploads/${organizationId}/${actionFilesDir}/${actionId}/${Random.id()}-${file.name}`;
+    }
+  });
+
+  Slingshot.createDirective('rootCauseAnalysisFiles', Slingshot.S3Storage, {
+    bucket: bucketName,
+
+    acl: acl,
+
+    contentDisposition: attachmentDisposition,
+
+    authorize(file, metaContext) {
+      if (!this.userId) {
+        throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
+      }
+
+      const NC = NonConformities.findOne({ _id: metaContext.nonConformityId });
+      if (!NC) {
+        throw new Meteor.Error(400, 'Non-conformity does not exist');
+      }
+
+      if (!isOrgMember(this.userId, NC.organizationId)) {
+        throw new Meteor.Error(
+          403, 'User is not authorized for uploading files in this organization'
+        );
+      }
+
+      return true;
+    },
+
+    key(file, metaContext) {
+      const { nonConformityId } = metaContext;
+      const { organizationId } = NonConformities.findOne({ _id: nonConformityId });
+
+      return `uploads/${organizationId}/${rootCauseAnalysisFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
     }
   });
 };
 
-// if (Utils.isProduction()) {
-  configureSlignshot();
+// if (Meteor.isProduction) {
+  configureSlingshot();
 // }

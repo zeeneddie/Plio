@@ -1,7 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import invoke from 'lodash.invoke';
+import moment from 'moment-timezone';
 
-import { ActionUndoTimeInHours } from '/imports/api/constants.js';
+import { ActionUndoTimeInHours } from '/imports/share/constants.js';
 
 
 Template.Actions_VerifiedBy.viewmodel({
@@ -28,15 +30,25 @@ Template.Actions_VerifiedBy.viewmodel({
   clearInterval() {
     Meteor.clearInterval(this.interval);
   },
-  onUpdateCb() {
-    return this.update.bind(this);
-  },
-  update(viewmodel) {
-    const { selected:verifiedBy } = viewmodel.getData();
+  selectArgs() {
+    const {
+      verifiedBy:value,
+      placeholder,
+      selectFirstIfNoSelected
+    } = this.data();
 
-    this.verifiedBy(verifiedBy);
+    return {
+      value,
+      placeholder,
+      selectFirstIfNoSelected,
+      onUpdate: (viewmodel) => {
+        const { selected:verifiedBy } = viewmodel.getData();
 
-    this.parent().update && this.parent().update({ verifiedBy });
+        this.verifiedBy(verifiedBy);
+
+        return invoke(this.parent(), 'update', { verifiedBy });
+      }
+    };
   },
   canBeUndone() {
     const currentTime = this.currentTime();
@@ -48,6 +60,10 @@ Template.Actions_VerifiedBy.viewmodel({
     }
 
     return isTimeLeftToUndo && (this.verifiedBy() === Meteor.userId());
+  },
+  onUndo() {},
+  undo() {
+    return (...args) => this.onUndo(...args);
   },
   passedFromVerified() {
     return moment(this.verifiedAt()).from(this.currentTime());

@@ -1,18 +1,60 @@
 import { Template } from 'meteor/templating';
 
+import { isOrgOwner } from '/imports/api/checkers.js';
+
 Template.Card_Read.viewmodel({
+  mixin: 'utils',
   cardTitle: 'Title',
-  document: '',
+  doc: '',
+  isReadOnly: false,
+  isDeleteBtnShown: false,
+  isReady: false,
+  isFullScreenMode: false,
+
+  isOrgOwner({ organizationId }) {
+    return isOrgOwner(Meteor.userId(), organizationId);
+  },
+  showDeleteBtn({ organizationId }) {
+    return isOrgOwner(Meteor.userId(), organizationId) || !!this.isDeleteBtnShown();
+  },
   onRestore() {},
   onDelete() {},
   onOpenEditModal() {},
-  handleMethodCall(err = '', title = '', action = 'updated', cb = () => {}) {
+  openModal: _.throttle(function() {
+    if (ViewModel.findOne('ModalWindow')) {
+      return;
+    }
+
+    this.onOpenEditModal();
+  }, 1000),
+  toggleScreenMode() {
+    const $div = $(this.templateInstance.firstNode).closest('.content-cards-inner');
+    const offset = $div.offset();
+    if (this.parent().isFullScreenMode()) {
+      this.parent().isFullScreenMode(false);
+
+      setTimeout(() => {
+        $div.css({ 'position': 'inherit', 'top': 'auto', 'right': 'auto', 'bottom': 'auto', 'left': 'auto', 'transition': 'none' });
+      }, 150);
+    } else {
+      $div.css({ 'position': 'fixed', 'top': offset.top, 'right': $(window).width() - (offset.left + $div.outerWidth()), 'bottom': '0', 'left': offset.left });
+
+      setTimeout(() => {
+
+        // Safari workaround
+        $div.css({ 'transition': 'all .15s linear' });
+        this.parent().isFullScreenMode(true);
+      }, 100);
+    }
+  },
+  handleMethodCall(err = '', title = '', action = 'updated', cb) {
     if (err) {
+      console.log(err);
       swal('Oops... Something went wrong!', err.reason, 'error');
     } else {
-      swal('Removed!', `The document "${title}" was ${action} successfully.`, 'success');
+      swal(this.capitalize(action), `The document "${title}" was ${action} successfully.`, 'success');
 
-      cb();
+      return _.isFunction(cb) && cb();
     }
   },
   restore({ _id, title, isDeleted, ...args }) {
@@ -34,8 +76,8 @@ Template.Card_Read.viewmodel({
       }
     );
   },
-  delete({ _id, title, isDeleted, ...args }) {
-    if (!isDeleted) return;
+  delete({ _id, title, isDeleted, organizationId, ...args }) {
+    if (!isDeleted || !this.isOrgOwner({ organizationId })) return;
 
     swal(
       {

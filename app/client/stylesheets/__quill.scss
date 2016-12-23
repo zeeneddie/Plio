@@ -11,7 +11,7 @@ $font_2: sans-serif;
 
   &.ql-expanded {
     position: fixed;
-    top: 0;
+    top: 55px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -22,6 +22,7 @@ $font_2: sans-serif;
 
     .editor-container {
       height: 100%;
+      padding-top: 54px;
     }
   }
 
@@ -207,9 +208,22 @@ $font_2: sans-serif;
 
 .modal .quill {
   &.ql-expanded {
-    position: absolute;
     .rich-text-controls {
       border-top: none;
+      background-color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+    }
+  }
+
+  .rich-text-controls {
+    .btn {
+      border: 1px solid;
+      border-color: #e6e6e6;
+      border-bottom-color: #cccccc;
     }
   }
 }

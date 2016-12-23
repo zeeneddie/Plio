@@ -1,0 +1,9 @@
+<template name="RiskScoring_ScoreType_Edit">
+  {{#FormField label=label helpText=helpText}}
+    <div class="dropdown">
+      <select class="form-control c-select"
+        {{b "options: types, optionsValue: id, optionsText: label, value: scoreTypeId, change: update, class: { disabled: disabled }"}}>
+      </select>
+    </div>
+  {{/FormField}}
+</template>

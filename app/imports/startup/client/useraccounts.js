@@ -1,16 +1,19 @@
+import moment from 'moment-timezone';
+
+
 AccountsTemplates.configure({
   texts: {
     signInLink_pre: "Already have an account?",
     signInLink_link: "Login",
     title: {
-      signUp: 'Sign up for a Plio account',
+      signUp: 'Sign up for a Plio account - 30 day free trial',
       signIn: 'Login'
     },
     button: {
-      signUp: 'Sign up',
-      signIn: 'Login',
-      changePwd: 'Change password',
-      forgotPwd: 'Email me reset instructions'
+      signUp: 'Sign up/Signing up...',
+      signIn: 'Login/Logging in...',
+      changePwd: 'Change password/Changing password...',
+      forgotPwd: 'Email me reset instructions/Sending email...',
     },
     info: {
       emailSent: 'info.emailSent',
@@ -34,7 +37,10 @@ AccountsTemplates.addField({
   placeholder: 'First name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  },
 });
 
 AccountsTemplates.addField({
@@ -44,10 +50,21 @@ AccountsTemplates.addField({
   placeholder: 'Last name',
   required: true,
   minLength: 1,
-  maxLength: 40
+  maxLength: 40,
+  transform(value) {
+    return value.capitalize();
+  }
 });
 
-AccountsTemplates.addField(email);
+AccountsTemplates.addField({
+  _id: 'email',
+  type: 'email',
+  required: true,
+  displayName: "email",
+  re: /.+@(.+){2,}\.(?!con)(.+){2,}/,
+  errStr: 'Invalid email',
+});
+
 AccountsTemplates.addField(password);
 
 AccountsTemplates.addField({
@@ -58,4 +75,10 @@ AccountsTemplates.addField({
   required: true,
   minLength: 1,
   maxLength: 40
+});
+
+AccountsTemplates.configure({
+  preSignUpHook(password, info) {
+    info.profile['organizationTimezone'] = moment.tz.guess();
+  }
 });

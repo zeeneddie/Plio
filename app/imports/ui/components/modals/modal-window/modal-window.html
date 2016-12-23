@@ -1,14 +1,16 @@
 <template name="ModalWindow">
   <div class="modal fade" data-backdrop="static" data-keyboard="false" {{b "ref: modal"}}>
-    <div class="modal-dialog">
+    <div class="modal-dialog content-cards">
       <div class="card">
         <div class="card-block card-heading modal-window-heading">
           <div class="card-heading-buttons"
             {{b "unless: isVariation('simple'), class: { pull-xs-left: !isVariation('save'), pull-xs-right: isVariation('save') }"}}>
-            <button type="button" class="btn btn-link btn-icon guidance-panel-open"
-              {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
-              <i class="fa fa-question-circle"></i>
-            </button>
+            {{#if helpText}}
+              <button type="button" class="btn btn-link btn-icon guidance-panel-open"
+                {{b "click: toggleCollapse, class: { collapsed: collapsed }"}}>
+                <i class="fa fa-question-circle"></i>
+              </button>
+            {{/if}}
             <button type="button" class="btn btn-primary submit-modal-button"
               {{b "if: isVariation('save'), click: child.save, disable: isSaving, class: { disabled: isSaving }"}}>
               <i class="fa fa-spinner fa-pulse fa-fw margin-bottom" {{b "if: isSaving && isVariation('save')"}}></i>
@@ -31,14 +33,12 @@
         <!--help panel-->
         <div class="collapse guidance-panel" {{b "ref: collapse"}}>
           <div class="card-block">
-            <div {{b "html: guideHtml"}}>
-            </div>
+            <div>{{helpText}}</div>
             <div class="btn-group">
               <a class="btn btn-link guidance-panel-close pointer"
                 {{b "click: toggleCollapse"}}>
                 <span>Close</span>
               </a>
-              <a {{b "attr: { href: moreInfoLink }"}} class="btn btn-link">More info</a>
             </div>
           </div>
         </div>
@@ -52,9 +52,9 @@
           </div>
         </div>
 
-        <form>
+        <div class="modal-window-content">
           {{> Template.dynamic template=template}}
-        </form>
+        </div>
       </div>
     </div>
   </div>

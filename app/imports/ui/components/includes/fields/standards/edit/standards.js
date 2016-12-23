@@ -1,31 +1,40 @@
 import { Template } from 'meteor/templating';
+import invoke from 'lodash.invoke';
 
-import { Standards } from '/imports/api/standards/standards.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { sortArrayByTitlePrefix } from '/imports/api/helpers.js';
+
 
 Template.Fields_Standards_Edit.viewmodel({
   mixin: ['organization', 'search', 'standard'],
   isEditable: true,
   standardsIds: [],
+  isDeleteButtonVisible() {
+    return !this._id || invoke(this.selected(), 'count') > 1;
+  },
   selected() {
     const standardsIds = Array.from(this.standardsIds() || []);
     return this._getStandardsByQuery({ _id: { $in: standardsIds } });
   },
   value() {
-    const child = this.child('Select_Multi');
-    return !!child && child.value();
+    return invoke(this.child('Select_Multi'), 'value');
   },
   standards() {
-    return this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) });
+    const standards = this._getStandardsByQuery({ ...this.searchObject('value', [{ name: 'title' }, { name: 'status' }]) }).fetch();
+    return sortArrayByTitlePrefix(standards);
   },
   onUpdateCb() {
     return this.update.bind(this);
   },
   update(viewmodel) {
-    const { selected = [] } = viewmodel.getData();
+    const { selectedItemId, selected } = viewmodel.getData();
+    if (this.areIdsIncludesItemId(selectedItemId)) return;
 
+    this.callUpdate(selectedItemId, selected, '$addToSet');
+  },
+  callUpdate(selectedItemId, selected, option) {
     if (selected.length === 0 && this._id) {
       ViewModel.findOne('ModalWindow').setError('Link cannot be removed. There must be at least one Standard linked to this document.');
-      viewmodel.selected(this.selected());
       return;
     }
 
@@ -37,13 +46,26 @@ Template.Fields_Standards_Edit.viewmodel({
 
     if (!this._id) return;
 
-    this.parent().update({ standardsIds })
+    const options = {
+      [`${option}`]: {
+        standardsIds: selectedItemId
+      }
+    };
+
+    this.parent().update({ options });
   },
   onRemoveCb() {
     return this.remove.bind(this);
   },
   remove(viewmodel) {
-    this.update(viewmodel);
+    const { selectedItemId, selected } = viewmodel.getData();
+
+    if (!this.areIdsIncludesItemId(selectedItemId)) return;
+
+    this.callUpdate(selectedItemId, selected, '$pull');
+  },
+  areIdsIncludesItemId(selectedItemId) {
+    return this.standardsIds().includes(selectedItemId);
   },
   getData() {
     const { standardsIds } = this.data();

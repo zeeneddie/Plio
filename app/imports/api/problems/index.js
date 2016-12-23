@@ -1,5 +1,3 @@
-import './server/publications.js';
-import './problems.js';
-import './problems-schema.js';
+import './checkers.js';
+import './errors.js';
 import './problems-service.js';
-import './methods.js';

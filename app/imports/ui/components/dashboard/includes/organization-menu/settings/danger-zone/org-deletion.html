@@ -1,0 +1,6 @@
+<template name="OrgSettings_OrgDeletion">
+  {{> OrgDeletion
+    organizationId=organizationId
+    deleteOrganization=(callback 'deleteOrganization')
+    afterDelete=(callback 'afterDelete')}}
+</template>

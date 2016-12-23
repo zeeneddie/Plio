@@ -1,8 +1,9 @@
 import { Meteor } from 'meteor/meteor';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Standards } from './standards.js';
-import { Organizations } from '../organizations/organizations.js';
-import NotificationSender from '../../core/NotificationSender';
+import { Standards } from '/imports/share/collections/standards.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 export default class StandardsNotificationsSender {
@@ -15,16 +16,27 @@ export default class StandardsNotificationsSender {
   }
 
   addedToNotifyList(userId) {
-    const subject = `You have been added to the notification list for any changes to the Compliance standards document "${this._standard.title}"`;
-    const options = {
+    const emailSubject = `You have been added to the notification list for any changes to the Standards document "${this._standard.title}"`;
+    const templateData = {
       organizationName: this._organization.name,
-      title: subject,
+      title: emailSubject,
       button: {
         label: 'View standard',
         url: this.getStandardUrl()
       }
     };
-    new NotificationSender(subject, 'minimalisticEmail', options).sendEmail(userId);
+
+    new NotificationSender({
+      recipients: userId,
+      emailSubject,
+      templateName: 'minimalisticEmail',
+      templateData,
+      notificationData: {
+        title: this._standard.title,
+        body: 'You have been added to the notification list for any changes',
+        url: this.getStandardUrl()
+      }
+    }).sendOnSite().sendEmail()
   }
 
   removedFromNotifyList(userId) {

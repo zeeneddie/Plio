@@ -1,9 +1,8 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
 
-Template.UserDirectoryLayout.viewmodel({
-  share: 'organization',
+Template.UserDirectory_Layout.viewmodel({
   mixin: 'organization',
   isReady: false,
   _subHandlers: [],

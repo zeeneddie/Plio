@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Departments } from '/imports/api/departments/departments.js';
+import { Departments } from '/imports/share/collections/departments.js';
 
 Template.Departments_Read.viewmodel({
   mixin: 'organization',

@@ -1,22 +1,14 @@
-<template name="RisksHeader">
-  <div class="navbar">
-    <span class="navbar-title dropdown">
-      <a class="dropdown-toggle pointer" data-toggle="dropdown" {{b "text: 'Risks by - ' + activeRiskFilter"}}>
-      </a>
-      <div class="dropdown-menu">
-        {{#each riskFilters}}
-          <a class="dropdown-item pointer"
-            {{b "class: { active: isActiveRiskFilter(this) }, text: 'By ' + this, click: selectFilter(this)"}}>
-          </a>
-        {{/each}}
-      </div>
-    </span>
-    <ul class="nav navbar-nav pull-xs-left">
-      <li class="nav-item">
-        <a class="nav-link pointer" {{b "click: navigate"}}>
-        	<i class="fa fa-angle-left"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
+<template name="Risks_Header">
+  {{#if isDiscussionOpened}}
+    {{#with risk}}
+      {{#Navbar}}
+        {{#Navbar_Title}}
+          {{this.title}} - discussion
+        {{/Navbar_Title}}
+        {{> Navbar_Arrow onClick=(callback 'onNavigate')}}
+      {{/Navbar}}
+    {{/with}}
+  {{else}}
+    {{> PageHeader (headerArgs)}}
+  {{/if}}
 </template>

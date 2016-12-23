@@ -1,5 +1,6 @@
 import './server/publications.js';
-import './standards.js';
-import './standards-schema.js';
-import './standards-service.js';
+import './checkers.js';
+import './errors.js';
+import './hooks.js';
 import './methods.js';
+import './standards-service.js';

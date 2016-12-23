@@ -2,9 +2,9 @@ import { Template } from 'meteor/templating';
 import { Tracker } from 'meteor/tracker';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 
-import { RiskTypes } from '/imports/api/risk-types/risk-types.js';
+import { RiskTypes } from '/imports/share/collections/risk-types.js';
 
-Template.RKType.viewmodel({
+Template.Risks_Type_Edit.viewmodel({
   mixin: ['organization', 'collapsing', 'risk'],
   autorun() {
     // to fix bug wich randomly calls method
@@ -13,8 +13,10 @@ Template.RKType.viewmodel({
     }
   },
   onCreated() {
-    if (!this.typeId() && this.types().length > 0) {
-      this.typeId(this.types()[0]._id);
+    const types = this.types();
+
+    if (!this.typeId() && types.length > 0) {
+      this.typeId(types[0]._id);
     }
   },
   typeId: '',
@@ -31,10 +33,9 @@ Template.RKType.viewmodel({
       ViewModel.findOne('ModalWindow').setError('Type is required!');
     }
 
-    this.parent().update({ typeId }, (err) => {
-      Tracker.flush();
-      this.expandCollapsed(this.riskId());
-    });
+    this.parent().update({ typeId }, (err) =>
+      Tracker.afterFlush(() =>
+        this.expandCollapsed(this.riskId())));
   },
   getData() {
     const { typeId } = this.data();

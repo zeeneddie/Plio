@@ -1,8 +1,14 @@
 import '../../api/actions';
 
+import '../../api/audit-logs';
+
 import '../../api/organizations';
 
 import '../../api/departments';
+
+import '../../api/discussions';
+
+import '../../api/messages';
 
 import '../../api/standards-types';
 
@@ -14,8 +20,6 @@ import '../../api/standards';
 
 import '../../api/lessons';
 
-import '../../api/improvement-plans';
-
 import '../../api/risks';
 
 import '../../api/risk-types';
@@ -26,6 +30,10 @@ import '../../api/problems';
 
 import '../../api/occurrences';
 
-import '../../api/analysis';
+import '../../api/notifications';
 
 import '../../api/mammoth';
+
+import '../../api/work-items';
+
+import '../../api/files';

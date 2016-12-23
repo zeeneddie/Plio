@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { Actions } from '/imports/api/actions/actions.js';
+import { Actions } from '/imports/share/collections/actions.js';
 
 
 Template.Actions_SelectExisting.viewmodel({
@@ -9,7 +9,7 @@ Template.Actions_SelectExisting.viewmodel({
   actionId: '',
   linkTo: '',
   actionSearchText() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   actions() {
@@ -27,7 +27,7 @@ Template.Actions_SelectExisting.viewmodel({
       });
     }
 
-    return Actions.find(query, {
+    const actions = Actions.find(query, {
       sort: {
         sequentialId: 1
       }
@@ -36,6 +36,8 @@ Template.Actions_SelectExisting.viewmodel({
       const html = `<strong>${sequentialId}</strong> ${title}`;
       return { _id, html, title: fullTitle, ...args };
     });
+
+    return actions;
   },
   dropdownAddActionData() {
     return {

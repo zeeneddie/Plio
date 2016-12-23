@@ -1,10 +1,7 @@
+import moment from 'moment-timezone';
 import { Accounts } from 'meteor/accounts-base';
-import HandlebarsCompiledCache from '/imports/core/HandlebarsCompiledCache';
+import HandlebarsCache from '/imports/share/utils/handlebars-cache.js';
 
-const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
-const handlebarsCache = Meteor.isServer ? new HandlebarsCompiledCache({
-  minimalisticEmail: getAssetPath('email', 'minimalistic-email')
-}) : false;
 
 Accounts.emailTemplates.siteName = 'Plio';
 Accounts.emailTemplates.from     = 'Plio<noreply@pliohub.com>';
@@ -18,7 +15,7 @@ Accounts.emailTemplates.verifyEmail = {
     // 3 days by default
     const emailConfirmationExpirationInHours = Meteor.settings.emailConfirmationExpirationInHours || 72;
 
-    return handlebarsCache.render('minimalisticEmail', {
+    return HandlebarsCache.render('minimalisticEmail', {
       title: 'Welcome, ' + user.profile.firstName + '! Please click on the following button to confirm your email address:',
       button: {
         label: `Confirm '${user.emails[0].address}'`,
@@ -34,7 +31,7 @@ Accounts.emailTemplates.resetPassword = {
     return 'Reset Your Password';
   },
   html(user, url) {
-    return handlebarsCache.render('minimalisticEmail', {
+    return HandlebarsCache.render('minimalisticEmail', {
       title: 'Please click on the following button to create a new password:',
       button: {
         label: 'Reset Password',

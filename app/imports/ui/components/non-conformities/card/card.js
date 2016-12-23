@@ -1,23 +1,38 @@
 import { Template } from 'meteor/templating';
+import get from 'lodash.get';
 
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { update, remove } from '/imports/api/non-conformities/methods.js';
+import { ActionTypes } from '/imports/share/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Occurrences } from '/imports/share/collections/occurrences.js';
+import { DocumentCardSubs } from '/imports/startup/client/subsmanagers.js';
+import { restore, remove } from '/imports/api/non-conformities/methods.js';
+import { NonConformitiesHelp } from '/imports/api/help-messages.js';
 
 Template.NC_Card_Read.viewmodel({
-  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'action'],
-  autorun() {
-    this.templateInstance.subscribe('NCImprovementPlan', this.NCId());
+  mixin: ['organization', 'nonconformity', 'user', 'date', 'utils', 'modal', 'currency', 'problemsStatus', 'collapse', 'router', 'collapsing', 'workInbox'],
+  isReadOnly: false,
+  isReady: false,
+  showCard() {
+    return this.NCs().length;
+  },
+  ActionTypes() {
+    return ActionTypes;
   },
   NC() {
-    return this._getNCByQuery({ _id: this.NCId() });
+    return this._getNCByQuery({ _id: this._id() });
   },
   NCs() {
-    const list = ViewModel.findOne('NCList');
-    const query = list && list._getQueryForFilter();
-    return this._getNCsByQuery(query);
+    const organizationId = this.organizationId();
+    const query = this.isActiveNCFilter(4)
+      ? { isDeleted: true }
+      : { isDeleted: { $in: [null, false] } };
+
+    return this._getNCsByQuery({ organizationId, ...query }).fetch();
   },
-  hasNCs() {
-    return this.NCs().count() > 0;
+  occurrences() {
+    const query = { nonConformityId: get(this.NC(), '_id') };
+    const options = { sort: { serialNumber: 1 } };
+    return Occurrences.find(query, options).fetch();
   },
   getStatus(status) {
     return status || 1;
@@ -26,25 +41,28 @@ Template.NC_Card_Read.viewmodel({
     const currency = this.organization() && this.organization().currency;
     return currency ? this.getCurrencySymbol(currency) + cost : '';
   },
-  onOpenEditModalCb() {
-    return this.openEditModal.bind(this);
-  },
   openEditModal() {
     this.modal().open({
       _title: 'Non-conformity',
       template: 'NC_Card_Edit',
-      _id: this.NCId()
+      helpText: NonConformitiesHelp.nonConformity,
+      _id: this.NC() && this.NC()._id
     });
   },
-  onRestoreCb() {
-    return this.restore.bind(this);
+  pathToDiscussion() {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      urlItemId: this.NCId()
+    };
+    const queryParams = { filter: this.activeNCFilterId() };
+    return FlowRouter.path('nonConformityDiscussion', params, queryParams);
   },
   restore({ _id, isDeleted, title }, cb = () => {}) {
     if (!isDeleted) return;
 
     const callback = (err) => {
       cb(err, () => {
-        FlowRouter.setQueryParams({ by: 'magnitude' });
+        FlowRouter.setQueryParams({ filter: 1 });
         Meteor.setTimeout(() => {
           this.goToNC(_id);
           this.expandCollapsed(_id);
@@ -52,26 +70,11 @@ Template.NC_Card_Read.viewmodel({
       });
     };
 
-    update.call({ _id, isDeleted: false }, callback);
-  },
-  onDeleteCb() {
-    return this.delete.bind(this);
+    restore.call({ _id }, callback);
   },
   delete({ _id, title, isDeleted }, cb = () => {}) {
     if (!isDeleted) return;
 
-    const callback = (err) => {
-      cb(err, () => {
-        const NCs = this._getNCsByQuery({});
-
-        if (NCs.count() > 0) {
-          Meteor.setTimeout(() => {
-            this.goToNCs();
-          }, 0);
-        }
-      });
-    };
-
-    remove.call({ _id }, callback);
+    remove.call({ _id }, cb);
   }
 });

@@ -2,18 +2,16 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
-import { Organizations } from '/imports/api/organizations/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { UserSubs } from '/imports/startup/client/subsmanagers.js';
 
-Template.UserDirectoryPage.viewmodel({
+Template.UserDirectory_Page.viewmodel({
   share: 'search',
   mixin: ['search', 'organization'],
-  onCreated() {
-    this.searchText('');
-  },
   autorun() {
     const userIds = this.getCurrentOrganizationUsers();
     if (userIds && userIds.length) {
-      const organizationUsersHandle = this.templateInstance.subscribe('organizationUsers', userIds);
+      const organizationUsersHandle = UserSubs.subscribe('organizationUsers', userIds);
       if (!this.activeUser() && organizationUsersHandle.ready()) {
         FlowRouter.redirect(FlowRouter.path('userDirectoryUserPage', {
           orgSerialNumber: this.organizationSerialNumber(),
@@ -50,7 +48,7 @@ Template.UserDirectoryPage.viewmodel({
       { ...searchUsers }
     ];
 
-    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1 }});
+    const cursor = Meteor.users.find(findQuery, { sort: { 'profile.firstName': 1, 'emails.0.address': 1 }});
 
     const result = _.pluck(cursor.fetch(), '_id');
 

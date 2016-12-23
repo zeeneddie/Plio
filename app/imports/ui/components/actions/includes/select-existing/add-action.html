@@ -1,6 +1,7 @@
 <template name="Actions_DropdownAddAction">
-  <div class="dropdown-divider" {{b "if: items.length > 0"}}></div>
+  <div class="dropdown-divider"></div>
   <a class="dropdown-item pointer" {{b "click: addAction"}}>
+    {{> Select_Add_Button value=this.value}}
     <strong {{b "text: hintText"}}>Add new action</strong>
   </a>
 </template>

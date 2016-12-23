@@ -2,7 +2,7 @@
 const atPwdFormBtnHelpers = AccountsTemplates.atPwdFormBtnHelpers
 atPwdFormBtnHelpers.submitDisabled = () => {
   if (AccountsTemplates.disabled()) {
-    return "disabled";
+    return 'disabled';
   }
 
   const disable = _.chain(AccountsTemplates.getFields()).map((field) => {
@@ -10,8 +10,21 @@ atPwdFormBtnHelpers.submitDisabled = () => {
   }).some().value();
 
   if (disable) {
-    return "disabled";
+    return 'disabled';
   }
 };
 
+atPwdFormBtnHelpers.isDisabled = () => AccountsTemplates.disabled();
+atPwdFormBtnHelpers.getButtonLabel = (text) => {
+  return AccountsTemplates.disabled() && text.split('/')[1] || text.split('/')[0];
+};
+
 Template.atPwdFormBtn.helpers(atPwdFormBtnHelpers);
+
+// bugfix for Edge/IE
+Template.atPwdFormBtn.events({
+  'click #at-btn': function(event, t) {
+    event.preventDefault();
+    $('#at-pwd-form').trigger('submit');
+  },
+});

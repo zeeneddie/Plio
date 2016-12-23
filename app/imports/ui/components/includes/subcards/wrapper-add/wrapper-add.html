@@ -1,0 +1,23 @@
+<template name="Subcards_Wrapper_Add">
+  {{#if isVisible}}
+    {{#Subcards_Wrapper (wrapperArgs)}}
+      <div class="card-block">
+        {{#if items.length}}
+          <div class="card">
+            {{#each items}}
+              {{> Subcard (getSubcardArgs this)}}
+            {{/each}}
+          </div>
+        {{/if}}
+      {{#unless isEditOnly}}
+        <div class="card new-cards" {{b "ref: forms"}}></div>
+        <div class="text-xs-center">
+          <button type="button" class="btn btn-link" {{b "text: addText, click: add"}}></button>
+        </div>
+      {{else}}
+        <p>{{textToReplaceAddButton}}</p>
+      {{/unless}}
+      </div>
+    {{/Subcards_Wrapper}}
+  {{/if}}
+</template>

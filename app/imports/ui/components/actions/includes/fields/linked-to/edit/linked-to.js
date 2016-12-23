@@ -1,20 +1,22 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import get from 'lodash.get';
+import invoke from 'lodash.invoke';
 
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
 
 Template.Actions_LinkedTo_Edit.viewmodel({
-  mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils'],
+  mixin: ['organization', 'nonconformity', 'risk', 'search', 'utils', 'vmTraverse'],
   linkedTo: '',
   standardId: '',
   isEditable: false,
   placeholder: 'Linked to',
   type: '',
+  isDeleteButtonVisible: true,
   value() {
-    const child = this.child('Select_Multi');
-    return !!child && child.value();
+    return invoke(this.child('Select_Multi'), 'value');
   },
   linkedDocs() {
     const { linkedTo } = this.getData();
@@ -27,18 +29,19 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     return this.toArray(this.linkedDocs()).map(({ _id }) => _id);
   },
   mapDocs(array, type) {
-    return array.map(({ sequentialId, title, ...args }) => ({ title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
+    return array.map(({ sequentialId, title, ...args }) => ({ docTitle: title, title: `${sequentialId} ${title}`, sequentialId, type, ...args }));
   },
   getDocs(query, options) {
-    const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NC);
+    const ncs = this.mapDocs(this._getNCsByQuery(query, options), ProblemTypes.NON_CONFORMITY);
     const risks = this.mapDocs(this._getRisksByQuery(query, options), ProblemTypes.RISK);
     return [ncs, risks];
   },
   items() {
     const searchQuery = this.searchObject('value', [{ name: 'sequentialId' }, { name: 'title' }]);
     let query = { ...searchQuery, _id: { $nin: this.linkedDocsIds() } };
-    if (this.standardId()) {
-      query = { ...query, standardsIds: this.standardId() };
+    const standardId = this.standardId();
+    if (standardId) {
+      query = { ...query, standardsIds: standardId };
     }
     const options = { sort: { serialNumber: 1 } };
     const [ncs, risks] = this.getDocs(query, options);
@@ -50,7 +53,7 @@ Template.Actions_LinkedTo_Edit.viewmodel({
         return ncs.concat(risks);
         break;
       case ActionTypes.PREVENTATIVE_ACTION:
-        return ncs;
+        return ncs.concat(risks);
         break;
       case ActionTypes.RISK_CONTROL:
         return risks;
@@ -68,18 +71,26 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.concat([{ documentId, documentType }]);
-    const newDocs = Array.from(this.linkedDocs() || []).concat([selectedItem]);
+    const newDocs = Array.from(linkedDocs || []).concat([selectedItem]);
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.onLink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onLink({ documentId, documentType }, cb);
   },
   onUnlink() {},
   onRemoveFn() {
@@ -89,30 +100,26 @@ Template.Actions_LinkedTo_Edit.viewmodel({
     const { selectedItem = {}, selected } = viewmodel.getData();
     const { _id:documentId, type:documentType } = selectedItem;
     const { linkedTo } = this.getData();
+    const { linkedDocs } = this.data();
 
     if (!linkedTo.find(({ documentId:_id }) => _id === documentId)) return;
 
     const newLinkedTo = linkedTo.filter(({ documentId:_id }) => _id !== documentId);
-    const newDocs = Array.from(this.linkedDocs() || []).filter(({ _id }) => _id !== documentId);
-
-    // if we are viewing subcard show error in subcard, otherwise in modal
-    if (this._id && newLinkedTo.length === 0) {
-      const subcard = this.findParentRecursive('SubCard_Edit', this.parent());
-
-      if (!subcard) {
-        ViewModel.findOne('ModalWindow').setError('An action must be linked to at least one document');
-      } else {
-        subcard.setError && subcard.setError('An action must be linked to at least one document');
-      }
-      return;
-    }
+    const newDocs = Array.from(linkedDocs || []).filter(({ _id }) => _id !== documentId);
 
     this.linkedTo(newLinkedTo);
     this.linkedDocs(newDocs);
 
     if (!this._id) return;
 
-    this.onUnlink({ documentId, documentType });
+    const cb = (err) => {
+      if (err) {
+        this.linkedTo(linkedTo);
+        this.linkedDocs(linkedDocs);
+      }
+    };
+
+    this.onUnlink({ documentId, documentType }, cb);
   },
   getData() {
     const { linkedTo } = this.data();

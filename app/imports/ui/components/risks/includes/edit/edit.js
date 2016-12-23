@@ -1,9 +1,24 @@
 import { Template } from 'meteor/templating';
+import moment from 'moment-timezone';
+import invoke from 'lodash.invoke';
 
-import { update, remove } from '/imports/api/risks/methods.js';
+import {
+  update,
+  remove,
+  updateViewedBy,
+  insertScore,
+  removeScore
+} from '/imports/api/risks/methods.js';
+import { WorkflowTypes } from '/imports/share/constants.js';
+import { AnalysisTitles } from '/imports/api/constants.js';
+import { isViewed } from '/imports/api/checkers.js';
+import { getTzTargetDate } from '/imports/share/helpers.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
-Template.EditRisk.viewmodel({
-  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal'],
+Template.Risks_Card_Edit.viewmodel({
+  mixin: ['risk', 'organization', 'callWithFocusCheck', 'modal', 'utils', 'router'],
+  RiskRCALabel: AnalysisTitles.riskAnalysis,
+
   risk() {
     return this._getRiskByQuery({ _id: this._id() });
   },
@@ -13,12 +28,15 @@ Template.EditRisk.viewmodel({
   onUpdateNotifyUser({ query, options }, cb) {
     return this.update({ query, options }, cb);
   },
-  slingshotDirective: 'risksFiles',
+  slingshotDirective: 'riskFiles',
   uploaderMetaContext() {
     return {
       organizationId: this.organizationId(),
       riskId: this._id()
     };
+  },
+  onUpdateCb() {
+    return this.update.bind(this);
   },
   update({ query = {}, options = {}, e = {}, withFocusCheck = false, ...args }, cb = () => {}) {
     const _id = this._id();
@@ -47,12 +65,40 @@ Template.EditRisk.viewmodel({
       },
       () => {
         this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) return;
-          swal('Removed!', `The risk "${title}" was removed successfully.`, 'success');
+          if (err) {
+            swal.close();
+            return;
+          };
+
+          swal({
+            title: 'Removed!',
+            text: `The risk "${title}" was removed successfully.`,
+            type: 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
 
           this.modal().close();
+
+          this.handleRouteRisks();
         });
       }
     );
   },
+  onInsertScoreCb() {
+    return this.insertScore.bind(this);
+  },
+  insertScore({ ...args }, cb) {
+    const _id = this._id();
+
+    this.modal().callMethod(insertScore, { _id, ...args }, cb);
+  },
+  onRemoveScoreCb() {
+    return this.removeScore.bind(this);
+  },
+  removeScore({ ...args }, cb) {
+    const _id = this._id();
+
+    this.modal().callMethod(removeScore, { _id, ...args }, cb);
+  }
 });

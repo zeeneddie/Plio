@@ -1,8 +1,10 @@
 import { Template } from 'meteor/templating';
-import { Organizations } from '/imports/api/organizations/organizations.js';
+
+import { Organizations } from '/imports/share/collections/organizations.js';
+import { OrgSubs } from '/imports/startup/client/subsmanagers.js';
 
 
-Template.DashboardLayout.viewmodel({
+Template.Dashboard_Layout.viewmodel({
   mixin: 'organization',
   isReady: false,
   _subHandlers: [],
@@ -11,10 +13,8 @@ Template.DashboardLayout.viewmodel({
       this.isReady(this._subHandlers().every(handle => handle.ready()));
     },
     function() {
-      const { _id, users } = !!this.organization() && this.organization();
-      const userIds = _.pluck(users, 'userId');
       this._subHandlers([
-        this.templateInstance.subscribe('currentUserOrganizationById', _id),
+        OrgSubs.subscribe('currentUserOrganizationBySerialNumber', this.organizationSerialNumber())
       ]);
     }
   ]

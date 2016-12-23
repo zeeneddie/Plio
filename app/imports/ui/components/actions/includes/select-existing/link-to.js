@@ -1,9 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 
-import { NonConformities } from '/imports/api/non-conformities/non-conformities.js';
-import { Risks } from '/imports/api/risks/risks.js';
-import { ActionTypes, ProblemTypes } from '/imports/api/constants.js';
+import { NonConformities } from '/imports/share/collections/non-conformities.js';
+import { Risks } from '/imports/share/collections/risks.js';
+import { ActionTypes, ProblemTypes } from '/imports/share/constants.js';
 
 
 Template.Actions_LinkTo.viewmodel({
@@ -13,13 +13,13 @@ Template.Actions_LinkTo.viewmodel({
     return this._getDocsIds();
   },
   NCsIds() {
-    return this._getDocsIds(ProblemTypes.NC);
+    return this._getDocsIds(ProblemTypes.NON_CONFORMITY);
   },
   risksIds() {
     return this._getDocsIds(ProblemTypes.RISK);
   },
   docSearchText() {
-    const child = this.child('SelectItem');
+    const child = this.child('Select_Single');
     return child && child.value();
   },
   docs() {
@@ -52,7 +52,7 @@ Template.Actions_LinkTo.viewmodel({
     return NonConformities.find(NCQuery, { sort: { serialNumber: 1 } }).map(({ title, sequentialId, ...args }) => {
       const fullTitle = `${sequentialId} ${title}`;
       const html = `<strong>${sequentialId}</strong> ${title}`;
-      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NC, ...args };
+      return { html, sequentialId, title: fullTitle, documentType: ProblemTypes.NON_CONFORMITY, ...args };
     });
   },
   risksDocs() {
