@@ -99,8 +99,7 @@
 
     .card-title {
       max-width: calc(100% - 151px);
-      white-space: nowrap;
-      overflow: hidden;
+      overflow: visible;
       text-overflow: ellipsis;
     }
   }
