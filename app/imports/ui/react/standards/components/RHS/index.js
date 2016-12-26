@@ -21,7 +21,6 @@ const StandardsRHS = ({
   <RHS
     className={cx('expandable', {
       expanded: isFullScreenMode,
-      content: !standard,
     })}
   >
     <RHS.Card className="standard-details">
