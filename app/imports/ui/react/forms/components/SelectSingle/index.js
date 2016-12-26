@@ -31,12 +31,15 @@ export default class SelectSingle extends React.Component {
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onInputChange = _.throttle(this.onInputChange, 300).bind(this);
   }
 
-  onInputChange(e) {
-    const value = e.target.value;
+  onChange(e) {
+    this.onInputChange(e.target.value);
+  }
 
+  onInputChange(value) {
     if (!value) {
       this.setState({ items: this.props.items });
       return;
@@ -55,14 +58,17 @@ export default class SelectSingle extends React.Component {
   }
 
   close() {
-    this.setState({
+    // timeout because onBlur runs before onClick so onClick will never fire otherwise
+    setTimeout(() => this.setState({
       isOpen: false,
       value: this.props.selected,
       items: this.props.items,
-    });
+    }), 150);
   }
 
   toggle() {
+    if (this.props.disabled) return;
+
     this.setState({ isOpen: !this.state.isOpen });
   }
 
@@ -73,7 +79,7 @@ export default class SelectSingle extends React.Component {
         onFocus={this.open}
         onBlur={this.close}
         toggle={this.toggle}
-        onChange={this.onInputChange}
+        onChange={this.onChange}
       >
         {this.props.children}
       </SelectSingleView>

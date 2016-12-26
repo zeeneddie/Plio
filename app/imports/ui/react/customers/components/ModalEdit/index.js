@@ -30,7 +30,11 @@ const ModalEdit = enhance(({ organization = {}, onSelect, selected }) => (
             { text: 'Qwerty', value: 2 },
             { text: 'Lorem ipsum', value: 3 },
           ]}
-        />
+        >
+          <div className="dropdown-item">
+            Hello World
+          </div>
+        </SelectSingle>
       </FormField>
     </div>
     <OrgDeleteContainer {...organization} />

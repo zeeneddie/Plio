@@ -19,6 +19,7 @@ const SelectSingleView = ({
   onFocus,
   onBlur,
   toggle,
+  children,
 }) => (
   <Dropdown
     className="input-group-typeahead form-group-flex-flex"
@@ -30,7 +31,7 @@ const SelectSingleView = ({
         {...{ disabled, placeholder, onChange, onFocus, onBlur }}
       />
       <InputGroupButton onClick={toggle}>
-        <Button type="secondary icon" className={cx({ disabled })}>
+        <Button type="secondary icon" className={cx({ disabled })} disabled>
           <Icon name="caret-down" />
         </Button>
       </InputGroupButton>
@@ -41,7 +42,7 @@ const SelectSingleView = ({
           <DropdownItem
             key={i}
             tag="a"
-            onMouseDown={e => onSelect(e, item)}
+            onClick={e => onSelect(e, item)}
             className={cx('pointer', {
               indent: item.indent,
               active: selected === item.value,
@@ -51,9 +52,15 @@ const SelectSingleView = ({
           </DropdownItem>
         ))
       ) : (
-        <DropdownItem>
-          <strong>There are no available items...</strong>
-        </DropdownItem>
+        <div>
+          <DropdownItem tag="div">
+            {(() => {
+              const Tag = !!children ? 'span' : 'strong';
+              return (<Tag>There are no available items...</Tag>);
+            })()}
+          </DropdownItem>
+          {children}
+        </div>
       )}
     </DropdownMenu>
   </Dropdown>
@@ -75,6 +82,7 @@ SelectSingleView.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 export default SelectSingleView;
