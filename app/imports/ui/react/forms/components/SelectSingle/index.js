@@ -13,7 +13,6 @@ export default class SelectSingle extends React.Component {
         indent: PropTypes.bool,
       })).isRequired,
       onSelect: PropTypes.func.isRequired,
-      onChange: PropTypes.func.isRequired,
       disabled: PropTypes.bool,
       placeholder: PropTypes.string,
       children: PropTypes.node,
@@ -23,11 +22,32 @@ export default class SelectSingle extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { value: props.selected, isOpen: false };
+    this.state = {
+      isOpen: false,
+      value: props.selected,
+      items: props.items || [],
+    };
 
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
+  }
+
+  onInputChange(e) {
+    const value = e.target.value;
+
+    if (!value) {
+      this.setState({ items: this.props.items });
+      return;
+    }
+
+    const regex = new RegExp(`.*(${value}).*`, 'i');
+
+    const items = [...this.state.items].filter(({ text }) =>
+      typeof text === 'string' && !text.search(regex));
+
+    this.setState({ items });
   }
 
   open() {
@@ -35,7 +55,11 @@ export default class SelectSingle extends React.Component {
   }
 
   close() {
-    this.setState({ value: this.props.selected, isOpen: false });
+    this.setState({
+      isOpen: false,
+      value: this.props.selected,
+      items: this.props.items,
+    });
   }
 
   toggle() {
@@ -45,10 +69,11 @@ export default class SelectSingle extends React.Component {
   render() {
     return (
       <SelectSingleView
+        {...{ ...this.props, ...this.state }}
         onFocus={this.open}
         onBlur={this.close}
         toggle={this.toggle}
-        {...{ ...this.props, ...this.state }}
+        onChange={this.onInputChange}
       >
         {this.props.children}
       </SelectSingleView>

@@ -24,7 +24,6 @@ const ModalEdit = enhance(({ organization = {}, onSelect, selected }) => (
         <SelectSingle
           placeholder="Hello World"
           selected={selected}
-          onChange={() => null}
           onSelect={onSelect}
           items={[
             { text: 'Hello World', value: 1 },
