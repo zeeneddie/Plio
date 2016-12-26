@@ -1,48 +1,32 @@
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames, ActionStatuses } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
-
-const GENERAL_SECTION = 'General';
-const EVALUATION_SECTION = 'Evaluation';
-const TREATMENT_PLAN_SECTION = 'Treatment Plan';
-const SCORING_PLAN_SECTION = 'Scoring Plan';
-
-export const sections = [
-  GENERAL_SECTION,
-  EVALUATION_SECTION,
-  TREATMENT_PLAN_SECTION,
-  SCORING_PLAN_SECTION,
-];
 
 export const mapping = {
   collection: NonConformities,
   fields: {
-    id: {
-      section: GENERAL_SECTION,
+    _id: {
       label: 'Non-conformity ID',
       required: true,
-      reference: '_id',
     },
     name: {
-      section: GENERAL_SECTION,
       label: 'Non-conformity name',
       required: true,
       reference: 'title',
     },
     description: {
-      section: GENERAL_SECTION,
       label: 'Description',
     },
     status: {
-      section: GENERAL_SECTION,
       label: 'Status',
-      // mapper:
+      mapper: ActionStatuses,
     },
     // statusComment: {
-    //   section: GENERAL_SECTION,
     //   label: 'Status comment',
     // },
+    workflowType: {
+      label: 'Workflow Type',
+    },
     standards: {
-      section: GENERAL_SECTION,
       label: 'Standard(s)',
       reference: {
         from: CollectionNames.STANDARDS,
@@ -51,6 +35,33 @@ export const mapping = {
         target: 'title',
         many: true,
       },
+    },
+    departmentSectors: {
+      label: 'Department/sector(s)',
+    },
+    identifiedDate: {
+      label: 'Identified date',
+    },
+    magnitude: {
+      label: 'Magnitude',
+    },
+    approxCost: {
+      label: 'Approx cost per occurrence?',
+    },
+    helpUrl: {
+      label: 'Help desk ref URL',
+    },
+    notifyChanges: {
+      label: 'Notify changes',
+    },
+    occurences: {
+      label: 'Occurences',
+    },
+    actions: {
+      label: 'Actions',
+    },
+    lessonsLearned: {
+      label: 'Lessons learned',
     },
   },
 };

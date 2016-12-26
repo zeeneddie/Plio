@@ -7,19 +7,13 @@ import Checkbox from '/imports/ui/react/forms/components/Checkbox';
 import Icon from '/imports/ui/react/components/Icon';
 
 
-const SelectOptions = ({ sections, fields, onSubmit, downloadLink, processing }) => (
+const SelectOptions = ({ fields, onSubmit, downloadLink, processing }) => (
   <div className="relative">
     <Form onSubmit={onSubmit}>
       <CardBlock>
-        {sections.map((sectionName) => (
-          <div key={`risk-export-${sectionName}`}>
-            <div>{sectionName}</div>
-            {_.where(fields, { section: sectionName })
-              .map(({ name, label }) =>
-                <Checkbox checked name={name} text={label} key={`risk-export-${name}`} />
-            )}
-          </div>
-        ))}
+        {fields.map(({ name, label }) =>
+          <Checkbox checked name={name} text={label} key={`risk-export-${name}`} />
+        )}
       </CardBlock>
       <CardBlock className="text-xs-center">
         <Button color="primary" disabled={processing}>
@@ -36,7 +30,6 @@ const SelectOptions = ({ sections, fields, onSubmit, downloadLink, processing })
 );
 
 SelectOptions.propTypes = {
-  sections: PropTypes.array.isRequired,
   fields: PropTypes.array,
   onSubmit: PropTypes.func,
   downloadLink: PropTypes.string,

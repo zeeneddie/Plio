@@ -24,7 +24,11 @@ function saveData(file, fields, mapping, data) {
     .format({ headers: true, quoteColumns: true })
     .transform((row) => _.object(
       fields.map(field => mapping.fields[field].label),
-      fields.map(field => row[field]),
+      fields.map(field => (
+        mapping.fields[field].mapper
+          ? mapping.fields[field].mapper[row[field]]
+          : row[field]
+      )),
     ));
 
   writer.on('finish', () => streamFuture.return({

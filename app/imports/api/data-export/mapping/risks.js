@@ -1,66 +1,66 @@
-import { CollectionNames } from '/imports/share/constants';
+import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
-
-const GENERAL_SECTION = 'General';
-const EVALUATION_SECTION = 'Evaluation';
-const TREATMENT_PLAN_SECTION = 'Treatment Plan';
-const SCORING_PLAN_SECTION = 'Scoring Plan';
-
-export const sections = [
-  GENERAL_SECTION,
-  EVALUATION_SECTION,
-  TREATMENT_PLAN_SECTION,
-  SCORING_PLAN_SECTION,
-];
 
 export const mapping = {
   collection: Risks,
   fields: {
-    riskId: {
-      section: GENERAL_SECTION,
+    _id: {
       label: 'Risk ID',
       required: true,
       reference: '_id',
     },
     title: {
-      section: GENERAL_SECTION,
-      label: 'Title',
+      label: 'Risk name',
       required: true,
     },
     description: {
-      section: GENERAL_SECTION,
       label: 'Description',
     },
-    // status: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Status',
-    // },
-    // statusComment: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Status comment',
-    // },
-    // standard: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Standard',
-    // },
-    // department: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Department',
-    // },
-    // identifiedBy: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Identified by',
-    // },
-    // date: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Date',
-    // },
-    // initialCategorisation: {
-    //   section: GENERAL_SECTION,
-    //   label: 'Initial categorisation',
-    // },
+    status: {
+      label: 'Status',
+      mapper: ProblemsStatuses,
+    },
+    workflowType: {
+      label: 'Workflow Type',
+    },
+    standards: {
+      label: 'Standard(s)',
+      reference: {
+        from: CollectionNames.STANDARDS,
+        internalField: 'standardsIds',
+        externalField: '_id',
+        target: 'title',
+        many: true,
+      },
+    },
+    departments: {
+      label: 'Department/sector(s)',
+      reference: {
+        from: CollectionNames.DEPARTMENTS,
+        internalField: 'departmentsIds',
+        externalField: '_id',
+        target: 'name',
+        many: true,
+      },
+    },
+    identifiedBy: {
+      label: 'Identified by',
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'identifiedBy',
+        externalField: '_id',
+        target: 'emails.0.address',
+      },
+    },
+    identifiedDate: {
+      label: 'Identified date',
+      reference: 'identifiedAt',
+    },
+    initialCategorization: {
+      label: 'Initial categorization',
+      reference: 'magnitude',
+    },
     riskType: {
-      section: GENERAL_SECTION,
       label: 'Risk type',
       reference: {
         from: CollectionNames.RISK_TYPES,
@@ -69,8 +69,30 @@ export const mapping = {
         target: 'title',
       },
     },
+    notifyChanges: {
+      label: 'Notify changes',
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'notify',
+        externalField: '_id',
+        target: 'emails.0.address',
+        many: true,
+      },
+    },
+    // score: {
+    //   label: 'Score(s)',
+    //   reference: {
+    //     from: CollectionNames.S,
+    //     internalField: 'notify',
+    //     externalField: '_id',
+    //     target: 'emails.0.address',
+    //     many: true,
+    //   },
+    // },
+    // scoreType: {
+    //   label: 'Score type',
+    // },
     actions: {
-      section: GENERAL_SECTION,
       label: 'Actions',
       reference: {
         from: CollectionNames.ACTIONS,
@@ -80,52 +102,15 @@ export const mapping = {
         many: true,
       },
     },
-    //
-    // decision: {
-    //   section: EVALUATION_SECTION,
-    //   label: 'Decision',
-    // },
-    // treatmentPriority: {
-    //   section: EVALUATION_SECTION,
-    //   label: 'Treatment priority',
-    // },
-    //
-    // desiredOutcome: {
-    //   section: TREATMENT_PLAN_SECTION,
-    //   label: 'Desired outcome',
-    // },
-    // targetDate: {
-    //   section: TREATMENT_PLAN_SECTION,
-    //   label: 'Target date',
-    // },
-    // reviewDate: {
-    //   section: TREATMENT_PLAN_SECTION,
-    //   label: 'Review date',
-    // },
-    // owner: {
-    //   section: TREATMENT_PLAN_SECTION,
-    //   label: 'Owner',
-    // },
-    //
-    // score: {
-    //   section: SCORING_PLAN_SECTION,
-    //   label: 'Score',
-    // },
-    // category: {
-    //   section: SCORING_PLAN_SECTION,
-    //   label: 'Category',
-    // },
-    // type: {
-    //   section: SCORING_PLAN_SECTION,
-    //   label: 'Type',
-    // },
-    // scoredBy: {
-    //   section: SCORING_PLAN_SECTION,
-    //   label: 'Scored by',
-    // },
-    // scoringDate: {
-    //   section: SCORING_PLAN_SECTION,
-    //   label: 'Date',
-    // },
+    lessonsLearned: {
+      label: 'Lessons learned',
+      reference: {
+        from: CollectionNames.LESSONS,
+        internalField: '_id',
+        externalField: 'documentId',
+        target: 'title',
+        many: true,
+      },
+    },
   },
 };
