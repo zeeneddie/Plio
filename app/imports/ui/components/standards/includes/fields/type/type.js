@@ -26,7 +26,7 @@ Template.ESType.viewmodel({
     const organizationId = this.organizationId();
     const types = StandardTypes.find({ organizationId }).fetch().map(item => ({
       ...item,
-      title: cx(item.title, `(${item.abbreviation})`),
+      title: cx(item.title, item.abbreviation && `(${item.abbreviation})`),
       titlePrefix: item.title,
     }));
 
