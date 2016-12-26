@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import cx from 'classnames';
 
 import { createTypeItem } from '../../helpers';
 import { TYPE_UNCATEGORIZED } from '../../constants';
@@ -13,7 +14,7 @@ const TypeList = ({ types, onToggleCollapse }) => (
       <LHSItemContainer
         key={type._id}
         item={createTypeItem(type._id)}
-        lText={type.title}
+        lText={cx(type.title, type.abbreviation && `(${type.abbreviation})`)}
         rText={type.unreadMessagesCount && (
           <LabelMessagesCount count={type.unreadMessagesCount} />
         )}
