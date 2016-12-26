@@ -41,7 +41,7 @@ const SelectSingleView = ({
           <DropdownItem
             key={i}
             tag="a"
-            onClick={e => onSelect(e, item)}
+            onMouseDown={e => onSelect(e, item)}
             className={cx('pointer', {
               indent: item.indent,
               active: selected === item.value,

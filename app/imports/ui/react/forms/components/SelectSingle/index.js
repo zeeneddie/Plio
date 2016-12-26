@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { _ } from 'meteor/underscore';
 
 import SelectSingleView from './view';
 
