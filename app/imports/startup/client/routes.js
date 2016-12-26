@@ -5,8 +5,8 @@ import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 import ReactDOM from 'react-dom';
+import React from 'react';
 import { $ } from 'meteor/jquery';
-
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
@@ -14,6 +14,8 @@ import '/imports/ui/pages';
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
+import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
+import NotificationsUnsubscribePage from '/imports/ui/react/pages/NotificationsUnsubscribePage';
 
 BlazeLayout.setRoot('#app');
 
@@ -364,6 +366,18 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action() {
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page',
+    });
+  },
+});
+
+FlowRouter.route('/notifications-unsubscribe/:documentType/:documentId', {
+  name: 'notificationsUnsubscribe',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ documentId, documentType }) {
+    mount2(TransitionalLayout, {
+      content: (
+        <NotificationsUnsubscribePage {...{ documentId, documentType }} />
+      ),
     });
   },
 });
