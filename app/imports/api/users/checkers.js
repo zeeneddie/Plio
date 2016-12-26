@@ -15,7 +15,7 @@ import {
 import { UserMembership } from '/imports/share/constants';
 import { Organizations } from '/imports/share/collections/organizations';
 import { checkAndThrow, withUserId } from '/imports/api/helpers.js';
-import { canChangeRoles, isOrgOwner, isPlioAdmin } from '../checkers.js';
+import { canChangeRoles, isOrgOwner, isPlioAdmin, isPlioUser } from '../checkers.js';
 
 export const USR_EnsureUpdatingHimselfChecker = curry(({ userId }, doc) => {
   const predicate = Object.is(userId, doc._id);
@@ -63,3 +63,6 @@ export const USR_EnsurePasswordIsValid = (userId, password) => {
 export const USR_EnsureIsPlioAdmin = (userId) => {
   checkAndThrow(!isPlioAdmin(userId), ACCESS_DENIED);
 };
+
+export const USR_EnsureIsPlioUser = (userId) =>
+  checkAndThrow(!isPlioUser(userId), ACCESS_DENIED);

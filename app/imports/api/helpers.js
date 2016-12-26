@@ -7,6 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
 import { shallowEqual } from 'recompose';
+import { $ } from 'meteor/jquery';
 
 import {
   ActionsListProjection,
@@ -18,7 +19,7 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { getUserOrganizations } from './organizations/utils';
 import { isOrgMemberBySelector } from './checkers';
-import { getTitlePrefix } from '/imports/share/helpers.js';
+import { renderTemplate, getTitlePrefix } from '/imports/share/helpers';
 
 export const { compose } = _;
 
@@ -267,7 +268,7 @@ export const getPublishCompositeOrganizationUsersObject = (userId, selector) => 
 });
 
 export const getPublishCompositeOrganizationUsers = (fn) =>
-  function(serialNumber, isDeleted = { $in: [null, false] }) {
+  function publishCompositeOrganizationUsers(serialNumber, isDeleted = { $in: [null, false] }) {
     check(serialNumber, Number);
     check(isDeleted, Match.OneOf(Boolean, {
       $in: Array
@@ -310,7 +311,7 @@ export const explainMongoQuery = (
 };
 
 export const makeQueryNonDeleted = query => ({ ...query, isDeleted: { $in: [null, false] } });
-export const makeOptionsFields = fields => fields ? ({ fields }) : ({});
+export const makeOptionsFields = fields => (fields ? ({ fields }) : ({}));
 export const getCursorNonDeleted = curry((query, fields, collection) =>
   collection.find(makeQueryNonDeleted(query), makeOptionsFields(fields)));
 
@@ -417,15 +418,14 @@ export const getProblemStatusColor = (status) => {
   }
 };
 
-export const getSortedItems = (items, compareFn) => {
-  return Array.from(items || []).sort(compareFn);
-};
+export const getSortedItems = (items, compareFn) =>
+  Array.from(items || []).sort(compareFn);
 
 export const compareRisksByScore = (risk1, risk2) => {
   const score1 = risk1.getScore();
   const score2 = risk2.getScore();
-  const { value:scoreVal1 } = score1 || {};
-  const { value:scoreVal2 } = score2 || {};
+  const { value: scoreVal1 } = score1 || {};
+  const { value: scoreVal2 } = score2 || {};
 
   if ((score1 && score2) && (scoreVal1 !== scoreVal2)) {
     return scoreVal2 - scoreVal1;
@@ -475,3 +475,29 @@ export const getUserJoinedAt = (organization = {}, userId) => {
 export const looksLikeAPromise = obj => !!(
   obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function'
 );
+
+/*
+  Example:
+  compileTemplateObject({
+    title: 'Hello {{title}}',
+    type: 'some {{type}}',
+  }, {
+    title: 'World',
+    type: 'cool stuff',
+  });
+  -> { title: 'Hello World', type: 'some cool stuff' };
+*/
+export const compileTemplateObject = (params, paramMap) => {
+  const regexString = Object.keys(paramMap).reduce((prev, cur) => `${prev}|{{${paramMap[cur]}}}`);
+  const regex = new RegExp(regexString, 'g');
+
+  return Object.keys(params).reduce((prev, key) => {
+    let value = params[key];
+
+    if (typeof value === 'string' && value.search(regex)) {
+      value = renderTemplate(value, paramMap);
+    }
+
+    return { ...prev, [key]: value };
+  }, {});
+};

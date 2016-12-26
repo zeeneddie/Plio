@@ -1,7 +1,7 @@
 import { compose, mapProps, withHandlers } from 'recompose';
 import { connect } from 'react-redux';
 
-import { getPathToDiscussion } from '../../../helpers/routeHelpers';
+import { getPath } from '../../../../utils/router/paths';
 import { canChangeStandards, isOrgOwner } from '/imports/api/checkers';
 import { pickDeep } from '/imports/api/helpers';
 import {
@@ -24,7 +24,7 @@ export default compose(
   mapProps(({ standard: { _id, title, isDeleted = false }, organizationId, userId, ...props }) => {
     const hasAccess = canChangeStandards(userId, organizationId);
     const hasFullAccess = isOrgOwner(userId, organizationId);
-    const pathToDiscussion = getPathToDiscussion({ urlItemId: _id });
+    const pathToDiscussion = getPath('standardDiscussion')({ urlItemId: _id });
 
     return {
       ...props,

@@ -17,8 +17,8 @@ import {
   setLastMessageId,
   setResetCompleted,
   markMessagesAsRead,
-} from '/client/redux/actions/discussionActions';
-import { getState } from '/client/redux/store';
+} from '/imports/client/store/actions/discussionActions';
+import { getState } from '/imports/client/store';
 import notifications from '/imports/startup/client/mixins/notifications';
 import { pickFromDiscussion, omitC } from '/imports/api/helpers';
 import { LastDiscussionMessage } from '/client/collections';

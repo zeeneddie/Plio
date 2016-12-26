@@ -2,9 +2,9 @@ import { compose, withState, withHandlers } from 'recompose';
 
 import { not } from '/imports/api/helpers';
 
-export default (initial) => compose(
-  withState('collapsed', 'setCollapsed', initial),
+export default (initial, prop = 'collapsed', handle = 'onToggleCollapse') => compose(
+  withState(prop, 'setCollapsed', initial),
   withHandlers({
-    onToggleCollapse: props => () => props.setCollapsed(not),
+    [handle]: props => () => props.setCollapsed(not),
   }),
 );

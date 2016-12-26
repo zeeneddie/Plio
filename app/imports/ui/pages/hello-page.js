@@ -16,14 +16,25 @@ Template.HelloPage.viewmodel({
       const organizationsHandle = template.subscribe('currentUserOrganizations');
       if (!Meteor.loggingIn() && organizationsHandle.ready()) {
         if (currentUser) {
-          const selectedOrganizationSerialNumber = localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
+          const query = {
+            users: {
+              $elemMatch: {
+                userId: currentUser._id,
+                isRemoved: false,
+                removedBy: { $exists: false },
+                removedAt: { $exists: false },
+              },
+            },
+          };
+          const selectedOrganizationSerialNumber =
+            localStorage.getItem(`${Meteor.userId()}: selectedOrganizationSerialNumber`);
           const serialNumber = parseInt(selectedOrganizationSerialNumber, 10);
-          const orgExists = !!Organizations.findOne({ serialNumber });
+          const orgExists = !!Organizations.findOne({ ...query, serialNumber });
 
           if (serialNumber && orgExists) {
             this.goToDashboard(serialNumber);
           } else {
-            const org = Organizations.findOne();
+            const org = Organizations.findOne(query);
             if (org) {
               localStorage.setItem(
                 `${Meteor.userId()}: selectedOrganizationSerialNumber`,

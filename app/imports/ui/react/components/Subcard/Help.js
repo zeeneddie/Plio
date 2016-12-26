@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react';
-import Collapse from '/imports/ui/react/components/Collapse';
+import CollapseBlock from '/imports/ui/react/components/CollapseBlock';
 
 const Help = ({ children, collapsed, setCollapsed }) => {
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
-  
+
   return (
     <div className="help-info" onClick={toggleCollapse}>
 
-      <Collapse
+      <CollapseBlock
         collapsed={collapsed}
         onToggleCollapse={toggleCollapse}
         classNames={{ body: 'collapse guidance-panel', head: '' }}
@@ -30,7 +30,7 @@ const Help = ({ children, collapsed, setCollapsed }) => {
             </div>
           </div>
         </div>
-      </Collapse>
+      </CollapseBlock>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { Template } from 'meteor/templating';
 
-import { organizationChanged } from '/client/redux/actions/organizationsActions';
+import { organizationChanged } from '/imports/client/store/actions/organizationsActions';
 
 Template.Organization_Menu_Item.viewmodel({
   mixin: ['router', 'store'],

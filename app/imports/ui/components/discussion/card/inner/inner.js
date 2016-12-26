@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 
-import store from '/client/redux/store';
-import { setUrlItemId } from '/client/redux/actions/globalActions';
-import { setOrgId } from '/client/redux/actions/organizationsActions';
+import store from '/imports/client/store';
+import { setUrlItemId } from '/imports/client/store/actions/globalActions';
+import { setOrgId } from '/imports/client/store/actions/organizationsActions';
 import DiscussionContainer from '/imports/ui/react/discussion/containers/DiscussionContainer';
 
 Template.Discussion_Card_Inner.viewmodel({

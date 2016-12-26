@@ -312,7 +312,7 @@ export const TimeUnits = {
 
 export const UserMembership = {
   ORG_OWNER: 'owner',
-  ORG_MEMBER: 'member'
+  ORG_MEMBER: 'member',
 };
 
 export const UserRoles = {
@@ -321,7 +321,7 @@ export const UserRoles = {
   INVITE_USERS: 'invite-users',
   DELETE_USERS: 'delete-users',
   EDIT_USER_ROLES: 'edit-user-roles',
-  CHANGE_ORG_SETTINGS: 'change-org-settings'
+  CHANGE_ORG_SETTINGS: 'change-org-settings',
 };
 
 export const UserRolesNames = {
@@ -330,7 +330,7 @@ export const UserRolesNames = {
   [UserRoles.INVITE_USERS]: 'Invite users',
   [UserRoles.DELETE_USERS]: 'Delete users',
   [UserRoles.EDIT_USER_ROLES]: 'Edit user superpowers',
-  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings'
+  [UserRoles.CHANGE_ORG_SETTINGS]: 'Change organization settings',
 };
 
 export const WorkItemsStore = {
@@ -514,4 +514,16 @@ export const FILE_STATUS_MAP = {
   FAILED: 'failed',
   IN_PROGRESS: 'in-progress',
   COMPLETED: 'completed',
+};
+
+export const CustomerTypes = {
+  PAYING_SUBSCRIBER: 1,
+  FREE_TRIAL: 2,
+  TEST_ACCOUNT: 3,
+};
+
+export const CustomerTypesNames = {
+  [CustomerTypes.PAYING_SUBSCRIBER]: 'Paying subscriber',
+  [CustomerTypes.FREE_TRIAL]: 'Free trial',
+  [CustomerTypes.TEST_ACCOUNT]: 'Test account',
 };

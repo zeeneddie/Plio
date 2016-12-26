@@ -15,7 +15,18 @@ Template.Organization_Menu.viewmodel({
     this.templateInstance.subscribe('currentUserOrganizations');
   },
   organizations() {
-    return Organizations.find();
+    const userId = Meteor.userId();
+
+    return Organizations.find({
+      users: {
+        $elemMatch: {
+          userId,
+          isRemoved: false,
+          removedBy: { $exists: false },
+          removedAt: { $exists: false },
+        },
+      },
+    });
   },
   haveCustomerAccess() {
     return isPlioUser(Meteor.userId());
@@ -27,15 +38,6 @@ Template.Organization_Menu.viewmodel({
       template: 'OrgSettings',
       _title: 'Organization settings',
       helpText: OrganizationSettingsHelp.organizationSettings,
-      organizationId: this.organization()._id
-    });
-  },
-  openCustomersSettings(e) {
-    e.preventDefault();
-
-    this.modal().open({
-      template: 'CustomersSettings',
-      _title: 'Plio customers',
       organizationId: this.organization()._id
     });
   },

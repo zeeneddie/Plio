@@ -1,8 +1,8 @@
 import { batchActions } from 'redux-batched-actions';
 
 import { Organizations } from '/imports/share/collections/organizations';
-import { setOrg, setOrgId } from '/client/redux/actions/organizationsActions';
-import { setDataLoading } from '/client/redux/actions/globalActions';
+import { setOrg, setOrgId } from '/imports/client/store/actions/organizationsActions';
+import { setDataLoading } from '/imports/client/store/actions/globalActions';
 import { getId } from '/imports/api/helpers';
 
 export default subscribe => function loadLayoutData({

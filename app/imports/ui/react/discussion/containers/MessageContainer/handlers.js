@@ -1,7 +1,7 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import modal from '/imports/startup/client/mixins/modal';
-import { setAt, removeMessage } from '/client/redux/actions/discussionActions';
+import { setAt, removeMessage } from '/imports/client/store/actions/discussionActions';
 
 const setAtWithRouter = (val, props) => {
   FlowRouter.setQueryParams({ at: val });

@@ -302,5 +302,16 @@ export default OrganizationService = {
     _(collections).each(coll => coll.direct.remove({ organizationId }));
 
     return this.collection.remove({ _id: organizationId });
-  }
+  },
+
+  changeCustomerType({ organizationId, customerType }) {
+    const query = { _id: organizationId };
+    const modifier = {
+      $set: {
+        customerType,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
 };

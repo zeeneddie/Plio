@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import RHSCard from './RHSCard';
 import RHSHeader from './RHSHeader';
+import RHSContentList from './RHSContentList';
 
 const RHS = ({
   className,
@@ -20,5 +21,6 @@ RHS.propTypes = {
 
 RHS.Card = RHSCard;
 RHS.Header = RHSHeader;
+RHS.ContentList = RHSContentList;
 
 export default RHS;

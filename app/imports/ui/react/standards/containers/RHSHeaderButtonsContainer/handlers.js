@@ -7,8 +7,8 @@ import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
 import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
-import { goToStandard } from '../../../helpers/routeHelpers';
-import { setIsFullScreenMode } from '/client/redux/actions/globalActions';
+import { goTo } from '../../../../utils/router/actions';
+import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -82,7 +82,7 @@ export const onRestore = ({
     const params = { urlItemId: _id };
     const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
 
-    Meteor.defer(() => goToStandard(params, queryParams));
+    Meteor.defer(() => goTo('standard')(params, queryParams));
   };
 
   swal(options, () => restore.call({ _id }, cb));

@@ -5,10 +5,8 @@ import TypeList from '../../components/TypeList';
 import {
   lengthStandards,
   propEq,
-  propEqId,
-  getC,
 } from '/imports/api/helpers';
-import { getState } from '/client/redux/store';
+import { getState } from '/imports/client/store';
 import { STANDARD_FILTER_MAP } from '/imports/api/constants';
 import {
   openStandardByFilter,

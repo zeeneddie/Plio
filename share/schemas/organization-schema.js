@@ -1,9 +1,10 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
+import { _ } from 'meteor/underscore';
 
 import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
-  WorkInboxTitles,
+  WorkInboxTitles, CustomerTypes
 } from '../constants.js';
 import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
 
@@ -91,7 +92,7 @@ const workflowDefaultsSchema = new SimpleSchema({
   },
   criticalProblem: {
     type: problemWorkflowSchema,
-  }
+  },
 });
 
 const reminderSchema = new SimpleSchema({
@@ -132,7 +133,7 @@ const OrganizationCurrencySchema = {
 const ncGuidelinesSchema = new SimpleSchema({
   minor: {
     type: String,
-    label: 'Guideline for classifying a minor non-conformity'
+    label: 'Guideline for classifying a minor non-conformity',
   },
   major: {
     type: String,
@@ -141,7 +142,7 @@ const ncGuidelinesSchema = new SimpleSchema({
   critical: {
     type: String,
     label: 'Guideline for classifying a critical non-conformity',
-  }
+  },
 });
 
 const rkGuidelinesSchema = new SimpleSchema({
@@ -156,7 +157,7 @@ const rkGuidelinesSchema = new SimpleSchema({
   critical: {
     type: String,
     label: 'Guideline for initial categorization of a critical risk',
-  }
+  },
 });
 
 const OrganizationEditableFields = {
@@ -204,9 +205,18 @@ const transferSchema = new SimpleSchema({
   },
 });
 
+const CustomerTypeSchema = new SimpleSchema({
+  customerType: {
+    type: Number,
+    allowedValues: _.values(CustomerTypes),
+    defaultValue: CustomerTypes.FREE_TRIAL,
+  },
+});
+
 const OrganizationSchema = new SimpleSchema([
   BaseEntitySchema,
   OrganizationEditableFields,
+  CustomerTypeSchema,
   {
     homeScreenTitles: {
       type: HomeTitlesSchema,
@@ -238,4 +248,5 @@ export {
   OrganizationSchema,
   OrganizationCurrencySchema,
   UserSettingsSchema,
+  CustomerTypeSchema,
 };

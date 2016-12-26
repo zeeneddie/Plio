@@ -21,15 +21,14 @@
 
         {{#if haveCustomerAccess}}
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item org-settings-modal-link"
-              {{b "click: openCustomersSettings"}}>
+          <a class="dropdown-item org-settings-modal-link" href="/customers">
               Plio customers
           </a>
         {{/if}}
         <div class="dropdown-divider"></div>
         <a class="dropdown-item pointer" {{b "click: openCreateNewOrgModal"}}>Create new Plio organization</a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item disabled">Plio version 0.2.72</a>
+        <a class="dropdown-item disabled">Plio version 0.2.73</a>
       </div>
     </li>
   </ul>

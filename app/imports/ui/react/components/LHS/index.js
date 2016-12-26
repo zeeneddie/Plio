@@ -43,14 +43,14 @@ const LHS = ({
               onBlur={onBlur}
               onFocus={onFocus}
               disabled={animating}
-              reference={input => (searchInput = input)}
+              refCb={input => (searchInput = input)}
               className="form-control"
               placeholder="Search..."
             />
           </ClearField>
 
           {animating && (
-            <Icon names="circle-o-notch spin" className="small-loader" />
+            <Icon name="circle-o-notch spin" className="small-loader" />
           )}
         </div>
         {onModalButtonClick && (

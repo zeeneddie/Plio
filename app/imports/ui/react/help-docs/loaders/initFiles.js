@@ -1,5 +1,5 @@
 import { Files } from '/imports/share/collections/files';
-import { setFiles } from '/client/redux/actions/collectionsActions';
+import { setFiles } from '/imports/client/store/actions/collectionsActions';
 
 export default initFiles = (props, onData) => {
   const filesIds = [];

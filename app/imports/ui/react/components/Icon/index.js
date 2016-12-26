@@ -7,23 +7,23 @@ import { MarginMap } from '/imports/api/constants';
 const sizeMap = {
   1: '',
   2: 'lg',
-  3: 'x2',
-  4: 'x3',
-  5: 'x4',
-  6: 'x5',
+  3: '2x',
+  4: '3x',
+  5: '4x',
+  6: '5x',
 };
 
-const Icon = ({ margin, size = 1, className, names }) => {
+const Icon = ({ margin, size = 1, className, name }) => {
   const sizeCx = sizeMap[size] && `fa-${sizeMap[size]}`;
   const marginCx = margin && MarginMap[margin];
-  const namesCx = names.split(' ').map(name => `fa-${name}`);
+  const nameCx = name.split(' ').map(a => `fa-${a}`);
   return (
-    <i className={cx('fa', ...namesCx, sizeCx, marginCx, className)} />
+    <i className={cx('fa', ...nameCx, sizeCx, marginCx, className)} />
   );
 };
 
 Icon.propTypes = {
-  names: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   margin: PropTypes.oneOf(_.keys(MarginMap)),
   size: PropTypes.oneOf(_.keys(sizeMap)),
   className: PropTypes.string,

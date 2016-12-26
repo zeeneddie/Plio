@@ -6,8 +6,6 @@ import {
   looksLikeAPromise,
 } from '/imports/api/helpers';
 import {
-  createSectionItem,
-  createTypeItem,
   expandCollapsedStandards,
   collapseExpandedStandards,
 } from '../../helpers';
@@ -16,30 +14,12 @@ import _search_ from '/imports/startup/client/mixins/search';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import {
   setFilteredStandards,
-} from '/client/redux/actions/standardsActions';
+} from '/imports/client/store/actions/standardsActions';
 import {
   setSearchText,
-  toggleCollapsed,
   setAnimating,
-} from '/client/redux/actions/globalActions';
-
-const onToggle = fn => ({ dispatch }) => (e, { key, type } = {}) =>
-  dispatch(toggleCollapsed({ ...fn(key), close: { type } }));
-
-export const onSectionToggleCollapse = onToggle(createSectionItem);
-
-export const onTypeToggleCollapse = onToggle(createTypeItem);
-
-export const needToSearchPrecisely = (value) => {
-  const doubleQuotes = '"';
-  const getQuotesIndexes = quotes => [value.indexOf(quotes), value.lastIndexOf(quotes)];
-  const doubleQuotesIndexes = getQuotesIndexes(doubleQuotes);
-  const isPrecise = (quotesIndexes) =>
-    quotesIndexes.length > 1
-    && quotesIndexes.every(idx => idx !== -1);
-
-  return isPrecise(doubleQuotesIndexes);
-};
+} from '/imports/client/store/actions/globalActions';
+import { onSearchTextClear, needToSearchPrecisely } from '/imports/ui/react/share/LHS/handlers';
 
 export const onSearchTextChange = _.debounce(({
   dispatch,
@@ -81,15 +61,7 @@ export const onSearchTextChange = _.debounce(({
   return invokeFinish(collapseExpandedStandards());
 }, 400);
 
-export const onClear = props => input => () => {
-  if (!props.searchText) return;
-
-  input.focus();
-
-  props.dispatch(setSearchText(''));
-
-  onSearchTextChange(props, input);
-};
+export const onClear = onSearchTextClear(onSearchTextChange);
 
 export const onModalOpen = () => () => _modal_.modal.open({
   _title: 'Compliance standard',

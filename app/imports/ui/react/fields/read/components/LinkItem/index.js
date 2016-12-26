@@ -15,7 +15,7 @@ const LinkItem = ({ href, indicator, title, sequentialId }) => (
 
     {indicator && (
       <Icon
-        names="circle"
+        name="circle"
         margin="left"
         className={`text-${indicator}`}
       />
