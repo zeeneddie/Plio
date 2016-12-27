@@ -13,7 +13,7 @@ const FormButtonList = ({ selectedItems, onDelete, children }) => (
         </Button>
         {!!onDelete && (
           <Button
-            type="secondary"
+            type="secondary icon"
             onClick={e => onDelete(e, { text, ...item })}
           >
             <Icon name="times-circle" />

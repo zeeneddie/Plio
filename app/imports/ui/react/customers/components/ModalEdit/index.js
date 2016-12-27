@@ -7,6 +7,7 @@ import OrgDeleteContainer from '../../fields/edit/containers/OrgDeleteContainer'
 import SelectSingle from '../../../forms/components/SelectSingle';
 import FormField from '../../../fields/edit/components/FormField';
 import FormButtonList from '../../../forms/components/FormButtonList';
+import SelectRadio from '../../../forms/components/SelectRadio';
 
 const enhance = compose(
   withState('state', 'setState', {
@@ -55,11 +56,7 @@ const ModalEdit = enhance(({
         <SelectSingle
           {...{ selected, onSelect, items }}
           placeholder="Placeholder"
-        >
-          <div className="dropdown-item">
-            Hello World
-          </div>
-        </SelectSingle>
+        />
       </FormField>
       <FormField>
         <span>Test #2</span>
@@ -67,12 +64,12 @@ const ModalEdit = enhance(({
           <SelectSingle
             {...{ selected, onSelect, items }}
             placeholder="Placeholder"
-          >
-            <div className="dropdown-item">
-              Hello World
-            </div>
-          </SelectSingle>
+          />
         </FormButtonList>
+      </FormField>
+      <FormField>
+        <span>Test #3</span>
+        <SelectRadio {...{ selected, items, onSelect }} />
       </FormField>
     </div>
     <OrgDeleteContainer {...organization} />
