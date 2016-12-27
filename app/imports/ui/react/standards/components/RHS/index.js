@@ -25,7 +25,7 @@ const StandardsRHS = ({
   >
     <RHS.Card className="standard-details">
       <RHS.Header
-        title="Compliance Standard"
+        title="Standard"
         isReady={isReady}
       >
         <RHSHeaderButtonsContainer {...{ standard, hasDocxAttachment }} />
