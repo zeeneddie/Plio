@@ -1,16 +1,17 @@
-import { CollectionNames, ActionStatuses } from '/imports/share/constants';
+import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 
 export const mapping = {
   collection: NonConformities,
+  filter: { status: { $lt: 18 }, isDeleted: { $ne: true } }, // open only
   fields: {
     _id: {
       label: 'Non-conformity ID',
-      required: true,
+      isDefault: true,
     },
     name: {
       label: 'Non-conformity name',
-      required: true,
+      isDefault: true,
       reference: 'title',
     },
     description: {
@@ -18,16 +19,16 @@ export const mapping = {
     },
     status: {
       label: 'Status',
-      mapper: ActionStatuses,
+      isDefault: true,
+      mapper: ProblemsStatuses,
     },
-    // statusComment: {
-    //   label: 'Status comment',
-    // },
-    workflowType: {
-      label: 'Workflow Type',
+    statusComment: {
+      label: 'Status comment',
+      isDefault: true,
     },
     standards: {
       label: 'Standard(s)',
+      isDefault: true,
       reference: {
         from: CollectionNames.STANDARDS,
         internalField: 'standardsIds',
@@ -36,32 +37,64 @@ export const mapping = {
         many: true,
       },
     },
-    departmentSectors: {
+    departments: {
       label: 'Department/sector(s)',
+      isDefault: true,
+      reference: {
+        from: CollectionNames.DEPARTMENTS,
+        internalField: 'departmentsIds',
+        externalField: '_id',
+        target: 'name',
+        many: true,
+      },
+    },
+    identifiedBy: {
+      label: 'Identified by',
+      isDefault: true,
     },
     identifiedDate: {
       label: 'Identified date',
+      isDefault: true,
+      reference: 'identifiedAt',
     },
     magnitude: {
       label: 'Magnitude',
+      isDefault: true,
     },
     approxCost: {
       label: 'Approx cost per occurrence?',
+      reference: 'cost',
     },
-    helpUrl: {
-      label: 'Help desk ref URL',
-    },
-    notifyChanges: {
-      label: 'Notify changes',
-    },
-    occurences: {
-      label: 'Occurences',
+    occurrences: {
+      label: 'Occurrence',
+      reference: {
+        from: CollectionNames.OCCURRENCES,
+        internalField: '_id',
+        externalField: 'nonConformityId',
+        target: 'sequentialId',
+        many: true,
+      },
     },
     actions: {
       label: 'Actions',
+      isDefault: true,
+      reference: {
+        from: CollectionNames.ACTIONS,
+        internalField: '_id',
+        externalField: 'linkedTo.documentId',
+        target: 'sequentialId',
+        many: true,
+      },
     },
     lessonsLearned: {
       label: 'Lessons learned',
+      reference: {
+        from: CollectionNames.LESSONS,
+        internalField: '_id',
+        externalField: 'documentId',
+        target: 'title',
+        many: true,
+      },
     },
   },
 };

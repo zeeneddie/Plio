@@ -1,8 +1,9 @@
-import { CollectionNames } from '/imports/share/constants';
-import { Risks } from '/imports/share/collections/risks';
+import { ActionStatuses } from '/imports/share/constants';
+import { Actions } from '/imports/share/collections/actions';
 
 export const mapping = {
-  collection: Risks,
+  collection: Actions,
+  filter: { status: { $lt: 6 }, isDeleted: { $ne: true } }, // only in progress actions
   fields: {
     _id: {
       label: 'Action ID',
@@ -18,19 +19,15 @@ export const mapping = {
     },
     linkedTo: {
       label: 'Linked to',
-      reference: {
-        from: CollectionNames.ACTIONS,
-        internalField: '_id',
-        externalField: 'linkedTo.documentId',
-        target: 'sequentialId',
-        many: true,
-      },
+      reference: 'linkedTo.documentId',
     },
     status: {
       label: 'Status',
+      mapper: ActionStatuses,
     },
     owner: {
       label: 'Owner',
+      reference: 'ownerId',
     },
     planInPlace: {
       label: 'Plan in place?',
@@ -40,6 +37,7 @@ export const mapping = {
     },
     completedOn: {
       label: 'Completed on',
+      reference: 'completedAt',
     },
     completedBy: {
       label: 'Completed by',

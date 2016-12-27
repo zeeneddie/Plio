@@ -32,7 +32,7 @@ const enhance = compose(
       Meteor.call(
         'DataExport.generateLink', {
           docType,
-          orgName: organization.name,
+          org: organization,
           fields: selectedFields,
         }, handleMethodResult((err, result) => {
           setProcessing(false);

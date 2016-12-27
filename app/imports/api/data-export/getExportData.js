@@ -1,8 +1,7 @@
 import { _ } from 'meteor/underscore';
 
-function getExportData(fields, mapping) {
+function getExportData(fields, mapping, organizationId) {
   const preUnwinds = [];
-  const preLookup = [];
   const lookups = [];
   const unwinds = [];
   let project = {};
@@ -34,15 +33,11 @@ function getExportData(fields, mapping) {
 
     const { from, internalField, externalField, target } = reference;
 
-    preUnwinds.push({
+    preUnwinds.push({ $unwind: {
       path: `$${internalField}`,
       preserveNullAndEmptyArrays: true,
-    });
-    preLookup.push({
-      $project: {
-        [internalField]: { $ifNull: [`$${internalField}`, 'Unspecified'] },
-      },
-    });
+    } });
+
     lookups.push({
       $lookup: {
         from,
@@ -52,12 +47,10 @@ function getExportData(fields, mapping) {
       },
     });
 
-    unwinds.push({
-      $unwind: {
-        path: `$${field}`,
-        preserveNullAndEmptyArrays: true,
-      },
-    });
+    unwinds.push({ $unwind: {
+      path: `$${field}`,
+      preserveNullAndEmptyArrays: true,
+    } });
 
     addProjectField(field, `${field}.${target}`);
 
@@ -72,8 +65,8 @@ function getExportData(fields, mapping) {
 
 
   return mapping.collection.aggregate([
+    { $match: { ...mapping.filter, organizationId } },
     ...preUnwinds,
-    ...preLookup,
     ...lookups,
     ...unwinds,
     { $project: project },

@@ -1,8 +1,10 @@
+import { _ } from 'meteor/underscore';
 import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
 
 export const mapping = {
   collection: Risks,
+  filter: { status: { $lt: 18 }, isDeleted: { $ne: true } }, // open only
   fields: {
     _id: {
       label: 'Risk ID',
@@ -20,8 +22,9 @@ export const mapping = {
       label: 'Status',
       mapper: ProblemsStatuses,
     },
-    workflowType: {
-      label: 'Workflow Type',
+    statusComment: {
+      label: 'Status comment',
+      isDefault: true,
     },
     standards: {
       label: 'Standard(s)',
@@ -45,12 +48,6 @@ export const mapping = {
     },
     identifiedBy: {
       label: 'Identified by',
-      reference: {
-        from: CollectionNames.USERS,
-        internalField: 'identifiedBy',
-        externalField: '_id',
-        target: 'emails.0.address',
-      },
     },
     identifiedDate: {
       label: 'Identified date',
@@ -69,29 +66,17 @@ export const mapping = {
         target: 'title',
       },
     },
-    notifyChanges: {
-      label: 'Notify changes',
-      reference: {
-        from: CollectionNames.USERS,
-        internalField: 'notify',
-        externalField: '_id',
-        target: 'emails.0.address',
-        many: true,
+    score: {
+      label: 'Score',
+      reference: 'scores',
+      format(fieldValue) {
+        const scores = fieldValue.sort((a, b) => b.scoredAt.getTime() - a.scoredAt.getTime());
+        const score = scores.find(scoreItem => scoreItem.scoreTypeId === 'residual') ||
+          _.first(scores);
+
+        return score ? `${score.value} - ${score.scoreTypeId}` : '';
       },
     },
-    // score: {
-    //   label: 'Score(s)',
-    //   reference: {
-    //     from: CollectionNames.S,
-    //     internalField: 'notify',
-    //     externalField: '_id',
-    //     target: 'emails.0.address',
-    //     many: true,
-    //   },
-    // },
-    // scoreType: {
-    //   label: 'Score type',
-    // },
     actions: {
       label: 'Actions',
       reference: {

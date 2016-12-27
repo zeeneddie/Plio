@@ -24,11 +24,15 @@ function saveData(file, fields, mapping, data) {
     .format({ headers: true, quoteColumns: true })
     .transform((row) => _.object(
       fields.map(field => mapping.fields[field].label),
-      fields.map(field => (
-        mapping.fields[field].mapper
-          ? mapping.fields[field].mapper[row[field]]
-          : row[field]
-      )),
+      fields.map(field => {
+        const fieldConfig = mapping.fields[field];
+        const { mapper, format } = fieldConfig;
+
+        if (mapper) return mapper[row[field]];
+        if (_.isFunction(format)) return format(row[field]);
+
+        return row[field];
+      }),
     ));
 
   writer.on('finish', () => streamFuture.return({
@@ -44,13 +48,13 @@ function saveData(file, fields, mapping, data) {
 }
 
 Meteor.methods({
-  'DataExport.generateLink'({ orgName, docType, fields }) {
+  'DataExport.generateLink'({ org, docType, fields }) {
     const { mapping } = Mapping[docType];
-    const file = createFileInfo(orgName, docType);
+    const file = createFileInfo(org.name, docType);
 
     // get field order from mapping
     const sortedFields = _.intersection(Object.keys(mapping.fields), fields);
 
-    return saveData(file, sortedFields, mapping, getExportData(fields, mapping));
+    return saveData(file, sortedFields, mapping, getExportData(fields, mapping, org._id));
   },
 });
