@@ -6,7 +6,8 @@ import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Risks } from '/imports/share/collections/risks';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants';
-import { getProblemName, getProblemDescription, getProblemUrl } from '/imports/helpers';
+import { capitalize, getFormattedDate } from '/imports/share/helpers';
+import { getProblemName, getProblemDescription, getProblemUrl, getDiffInDays } from '/imports/helpers';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
@@ -97,14 +98,16 @@ export default class ActionCreationReminderSender {
   }
 
   _sendReminder(problem, problemType) {
-    const emailSubject = 'Action must be created';
-
     const problemDesc = getProblemDescription(problemType);
     const problemName = getProblemName(problem);
+    const prettyDate = getFormattedDate(problem.createdAt, 'MMMM DD, YYYY');
+    const diff = getDiffInDays(problem.createdAt, this._organization.timezone);
 
-    const emailText = `Action for ${problemDesc} ${problemName} must be created.`;
+    const emailSubject = `${capitalize(problemDesc)} ${problemName} - action(s) needed`;
+    const emailText = `You created ${problemDesc} ${problem.sequentialId} on ${prettyDate}. ` +
+      `Action(s) now need to be created for this non-conformity (${diff} overdue).`;
 
-    const buttonLabel = `Go to ${problemDesc}`;
+    const buttonLabel = `Go to this ${problemDesc}`;
     const buttonUrl = Meteor.absoluteUrl(
       getProblemUrl(problem, problemType, this._organization),
       {
@@ -114,6 +117,7 @@ export default class ActionCreationReminderSender {
 
     const templateData = {
       organizationName: this._organization.name,
+      title: emailSubject,
       text: emailText,
       button: {
         label: buttonLabel,

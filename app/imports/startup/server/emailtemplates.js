@@ -15,8 +15,8 @@ Accounts.emailTemplates.verifyEmail = {
     // 3 days by default
     const emailConfirmationExpirationInHours = Meteor.settings.emailConfirmationExpirationInHours || 72;
 
-    return HandlebarsCache.render('minimalisticEmail', {
-      title: 'Welcome, ' + user.profile.firstName + '! Please click on the following button to confirm your email address:',
+    return HandlebarsCache.render('personalEmail', {
+      title: 'Welcome, ' + user.profile.firstName + '! Please click on the following link to confirm your email address:',
       button: {
         label: `Confirm '${user.emails[0].address}'`,
         url: url
@@ -31,8 +31,8 @@ Accounts.emailTemplates.resetPassword = {
     return 'Reset Your Password';
   },
   html(user, url) {
-    return HandlebarsCache.render('minimalisticEmail', {
-      title: 'Please click on the following button to create a new password:',
+    return HandlebarsCache.render('personalEmail', {
+      title: 'Please click on the following link to create a new password:',
       button: {
         label: 'Reset Password',
         url: url
