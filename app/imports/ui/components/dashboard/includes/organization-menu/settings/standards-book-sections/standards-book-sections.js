@@ -65,7 +65,13 @@ Template.OrgSettings_StandardsBookSections.viewmodel({
 
       this.modal().callMethod(remove, { _id, organizationId }, (err) => {
         if (err) {
-          swal('Oops... Something went wrong!', err.reason, 'error');
+          swal({
+            title: 'Oops... Something went wrong!',
+            text: err.reason,
+            type: 'error',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
         } else {
           swal({
             title: 'Removed!',

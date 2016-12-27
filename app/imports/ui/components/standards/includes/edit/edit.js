@@ -60,48 +60,45 @@ Template.EditStandard.viewmodel({
   remove() {
     const { _id, title } = this.standard();
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `The standard "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false
-      },
-      () => {
-        this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal.close();
-            return;
-          };
+    swal({
+      title: 'Are you sure?',
+      text: `The standard "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false
+    }, () => {
+      this.modal().callMethod(remove, { _id }, (err) => {
+        if (err) {
+          swal.close();
+          return;
+        };
 
-          swal({
-            title: 'Removed!',
-            text: `The standard "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-
-          this.modal().close();
-
-          const list = Object.assign({}, ViewModel.findOne('StandardsList'));
-
-          if (list) {
-            const { first } = Object.assign({}, invoke(list, '_findStandardForFilter'));
-
-            if (!!first) {
-              const { _id } = first;
-
-              Meteor.setTimeout(() => {
-                this.goToStandard(_id);
-                this.expandCollapsed(_id);
-              }, 0);
-            }
-          }
+        swal({
+          title: 'Removed!',
+          text: `The standard "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
         });
-      }
-    );
+
+        this.modal().close();
+
+        const list = Object.assign({}, ViewModel.findOne('StandardsList'));
+
+        if (list) {
+          const { first } = Object.assign({}, invoke(list, '_findStandardForFilter'));
+
+          if (!!first) {
+            const { _id } = first;
+
+            Meteor.setTimeout(() => {
+              this.goToStandard(_id);
+              this.expandCollapsed(_id);
+            }, 0);
+          }
+        }
+      });
+    });
   }
 });

@@ -46,8 +46,14 @@ export default compose(
   }) => ({
     ...props,
     standard,
+    isCardReady,
     isReady: !!(isCardReady && standards.length && standard),
   })),
+  branch(
+    props => props.isCardReady && props.urlItemId && !props.standard,
+    renderComponent(StandardsRHS.NotExist),
+    identity,
+  ),
   shouldUpdate((props, nextProps) => {
     const omitStandardKeys = omitC(['updatedAt']);
     return !!(
@@ -56,11 +62,6 @@ export default compose(
       notEquals(omitStandardKeys(props.standard), omitStandardKeys(nextProps.standard))
     );
   }),
-  branch(
-    props => props.isReady && props.urlItemId && !props.standard,
-    renderComponent(StandardsRHS.NotExist),
-    identity,
-  ),
   mapProps((props) => {
     const hasDocxAttachment = some([
       getC('source1.htmlUrl'),

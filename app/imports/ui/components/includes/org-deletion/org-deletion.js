@@ -7,7 +7,7 @@ import {
   ORG_DELETE_PASSWORD as ORG_DELETE_SWAL_PASSWORD_PARAMS,
 } from '/imports/api/swal-params';
 import { compileTemplateObject } from '/imports/api/helpers';
-
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.OrgDeletion.viewmodel({
   mixin: 'modal',
@@ -45,7 +45,7 @@ Template.OrgDeletion.viewmodel({
     });
   },
   _deleteOrganization(password) {
-    const { name:orgName } = this.organization() || {};
+    const { name: orgName } = this.organization() || {};
     const organizationId = this.organizationId();
     password = SHA256(password);
 
@@ -54,9 +54,21 @@ Template.OrgDeletion.viewmodel({
       password
     }, (err, res) => {
       if (err) {
-        swal('Oops... Something went wrong!', err.reason || err, 'error');
+        swal({
+          title: 'Oops... Something went wrong!',
+          text: err.reason || err,
+          type: 'error',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
       } else {
-        swal('Success', `Organization ${orgName} has been deleted`, 'success');
+        swal({
+          title: 'Success',
+          text: `Organization ${orgName} has been deleted`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
+        });
       }
 
       this.afterDelete && this.afterDelete(err, res, organizationId);

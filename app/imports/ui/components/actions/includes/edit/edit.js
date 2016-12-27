@@ -120,33 +120,31 @@ Template.Actions_Edit.viewmodel({
     const { title } = this.action();
     const _id = this._id();
 
-    swal(
-      {
-        title: 'Are you sure?',
-        text: `An action "${title}" will be removed.`,
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Remove',
-        closeOnConfirm: false,
-      },
-      () => {
-        this.modal().callMethod(remove, { _id }, (err) => {
-          if (err) {
-            swal.close();
-            return;
-          }
+    swal({
+      title: 'Are you sure?',
+      text: `An action "${title}" will be removed.`,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remove',
+      closeOnConfirm: false,
+    },
+    () => {
+      this.modal().callMethod(remove, { _id }, (err) => {
+        if (err) {
+          swal.close();
+          return;
+        }
 
-          swal({
-            title: 'Removed!',
-            text: `An action "${title}" was removed successfully.`,
-            type: 'success',
-            timer: ALERT_AUTOHIDE_TIME,
-            showConfirmButton: false,
-          });
-
-          this.modal().close();
+        swal({
+          title: 'Removed!',
+          text: `An action "${title}" was removed successfully.`,
+          type: 'success',
+          timer: ALERT_AUTOHIDE_TIME,
+          showConfirmButton: false,
         });
-      }
-    );
+
+        this.modal().close();
+      });
+    });
   },
 });

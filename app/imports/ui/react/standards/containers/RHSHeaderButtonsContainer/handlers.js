@@ -71,7 +71,7 @@ export const onRestore = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal.success({
+    swal({
       title: 'Restored!',
       text: `The standard "${title}" was restored successfully.`,
       type: 'success',
@@ -104,7 +104,13 @@ export const onDelete = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal.success('Deleted!', `The standard "${title}" was removed successfully.`);
+    swal({
+      title: 'Deleted!',
+      text: `The standard "${title}" was removed successfully.`,
+      type: 'success',
+      timer: ALERT_AUTOHIDE_TIME,
+      showConfirmButton: false,
+    });
   };
 
   swal(options, () => remove.call({ _id }, cb));

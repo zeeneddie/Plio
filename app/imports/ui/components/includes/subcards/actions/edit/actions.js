@@ -4,6 +4,7 @@ import invoke from 'lodash.invoke';
 import { _ } from 'meteor/underscore';
 
 import { ProblemTypes } from '/imports/share/constants.js';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 import { getTzTargetDate } from '/imports/share/helpers.js';
 import { flattenObjects, inspire } from '/imports/api/helpers.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -227,11 +228,13 @@ Template.Subcards_Actions_Edit.viewmodel({
         const cb = (err, res) => {
           if (!err) {
             viewmodel.destroy();
-            swal(
-              'Removed!',
-              `The action "${title}" was removed successfully.`,
-              'success'
-            );
+            swal({
+              title: 'Removed!',
+              text: `The action "${title}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
           }
         };
 

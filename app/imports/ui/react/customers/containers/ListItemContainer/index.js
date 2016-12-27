@@ -15,6 +15,7 @@ const CustomersListItemContainer = compose(
     _id: PropTypes.string,
     name: PropTypes.string,
     createdAt: PropTypes.instanceOf(Date),
+    serialNumber: PropTypes.number,
     users: PropTypes.arrayOf(PropTypes.shape({
       userId: PropTypes.string,
       role: PropTypes.string,
@@ -27,7 +28,7 @@ const CustomersListItemContainer = compose(
     props.createdAt !== nextProps.createdAt ||
     notEquals(props.users, nextProps.users)
   )),
-  mapProps(({ _id, name, urlItemId, users, ...props }) => {
+  mapProps(({ _id, urlItemId, users, ...props }) => {
     const href = getPath('customer')({ urlItemId: _id });
     const isActive = urlItemId === _id;
     const createdAt = getFormattedDate(props.createdAt, 'DD MMM YYYY');
@@ -35,8 +36,8 @@ const CustomersListItemContainer = compose(
     const owner = getUserFullNameOrEmail(getC('userId', ownerData));
 
     return {
+      ...props,
       _id,
-      name,
       href,
       isActive,
       createdAt,
