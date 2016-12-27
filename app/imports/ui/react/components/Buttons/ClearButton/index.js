@@ -3,12 +3,12 @@ import React, { PropTypes } from 'react';
 import Button from '../Button';
 import Icon from '../../Icon';
 
-const ClearButton = ({ onClick, animating }) => (
+const ClearButton = ({ animating, ...other }) => (
   <Button
     type="link"
     className="clear-field"
     tabIndex="-1"
-    onClick={onClick}
+    {...other}
   >
     {animating ? (
       <Icon name="spinner pulse fw" margin="bottom" />

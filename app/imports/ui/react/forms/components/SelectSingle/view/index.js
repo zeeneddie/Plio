@@ -52,16 +52,14 @@ const SelectSingleView = ({
           </DropdownItem>
         ))
       ) : (
-        <div>
-          <DropdownItem tag="div">
-            {(() => {
-              const Tag = !!children ? 'span' : 'strong';
-              return (<Tag>There are no available items...</Tag>);
-            })()}
-          </DropdownItem>
-          {children}
-        </div>
+        <DropdownItem tag="div">
+          {(() => {
+            const Tag = !!children ? 'span' : 'strong';
+            return (<Tag>There are no available items...</Tag>);
+          })()}
+        </DropdownItem>
       )}
+      {children}
     </DropdownMenu>
   </Dropdown>
 );

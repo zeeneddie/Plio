@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 
+import { searchByRegex, createSearchRegex } from '/imports/api/helpers';
 import SelectSingleView from './view';
 
 export default class SelectSingle extends React.Component {
@@ -45,10 +46,7 @@ export default class SelectSingle extends React.Component {
       return;
     }
 
-    const regex = new RegExp(`.*(${value}).*`, 'i');
-
-    const items = [...this.state.items].filter(({ text }) =>
-      typeof text === 'string' && !text.search(regex));
+    const items = searchByRegex(createSearchRegex(value), ['text'], [...this.state.items]);
 
     this.setState({ items });
   }
