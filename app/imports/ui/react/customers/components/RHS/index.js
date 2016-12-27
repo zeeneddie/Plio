@@ -30,6 +30,7 @@ const CustomersRHS = ({ isReady, organization }) => (
 
       <RHS.ContentList isReady={isReady}>
         <Body {...organization} />
+        <div className="card-footer"></div>
       </RHS.ContentList>
     </RHS.Card>
   </RHS>
