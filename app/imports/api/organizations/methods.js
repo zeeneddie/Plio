@@ -37,6 +37,7 @@ import {
   USR_EnsureIsPlioUser,
 } from '../checkers.js';
 import { USR_EnsurePasswordIsValid } from '/imports/api/users/checkers';
+import { ensureCanUnsubscribeFromDailyRecap } from './checkers';
 
 
 const nameSchema = new SimpleSchema({
@@ -602,5 +603,24 @@ export const changeTitle = new Method({
     }
 
     return OrganizationService.setTitleValue(args);
+  },
+});
+
+export const unsubscribeFromDailyRecap = new Method({
+  name: 'Organizations.unsubscribeFromDailyRecap',
+
+  validate: new SimpleSchema([OrganizationIdSchema]).validator(),
+
+  check(checker) {
+    if (this.isSimulation) return undefined;
+
+    return checker(({ organizationId }) =>
+      ensureCanUnsubscribeFromDailyRecap({ organizationId, userId: this.userId }));
+  },
+
+  run({ organizationId }) {
+    if (this.isSimulation) return undefined;
+
+    return OrganizationService.unsubscribeFromDailyRecap({ organizationId, userId: this.userId });
   },
 });

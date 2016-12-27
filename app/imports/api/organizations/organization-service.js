@@ -314,4 +314,23 @@ export default OrganizationService = {
 
     return this.collection.update(query, modifier);
   },
+
+  unsubscribeFromDailyRecap({ organizationId, userId }) {
+    const query = {
+      _id: organizationId,
+      users: {
+        $elemMatch: {
+          userId,
+          sendDailyRecap: true,
+        },
+      },
+    };
+    const modifier = {
+      $set: {
+        'users.$.sendDailyRecap': false,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
 };

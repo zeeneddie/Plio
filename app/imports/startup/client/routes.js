@@ -15,7 +15,9 @@ import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
 import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
-import NotificationsUnsubscribePage from '/imports/ui/react/pages/NotificationsUnsubscribePage';
+import UnsubscribeFromNotifications
+  from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
+import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
 
 BlazeLayout.setRoot('#app');
 
@@ -371,12 +373,24 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
 });
 
 FlowRouter.route('/notifications-unsubscribe/:documentType/:documentId', {
-  name: 'notificationsUnsubscribe',
+  name: 'unsubscribeFromNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
   action({ documentId, documentType }) {
     mount2(TransitionalLayout, {
       content: (
-        <NotificationsUnsubscribePage {...{ documentId, documentType }} />
+        <UnsubscribeFromNotifications {...{ documentId, documentType }} />
+      ),
+    });
+  },
+});
+
+FlowRouter.route('/daily-recap-unsubscribe/:organizationId', {
+  name: 'unsubscribeFromDailyRecap',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ organizationId }) {
+    mount2(TransitionalLayout, {
+      content: (
+        <UnsubscribeFromDailyRecap {...{ organizationId }} />
       ),
     });
   },

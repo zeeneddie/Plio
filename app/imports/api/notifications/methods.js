@@ -43,8 +43,9 @@ export const unsubscribe = new Method({
   validate: new SimpleSchema([DocumentIdSchema, DocumentTypeSchema]).validator(),
 
   check(checker) {
+    if (this.isSimulation) return undefined;
+
     return checker(({ documentId, documentType }) => {
-      if (this.isSimulation) return true;
       const collection = getCollectionByDocType(documentType);
 
       checkAndThrow(!collection, INVALID_DOC_TYPE);
@@ -57,7 +58,7 @@ export const unsubscribe = new Method({
     });
   },
 
-  run({ documentId, documentType }, { collection }) {
+  run({ documentId, documentType }, { collection } = {}) {
     if (this.isSimulation) return undefined;
 
     return NotificationsService.unsubscribe({
