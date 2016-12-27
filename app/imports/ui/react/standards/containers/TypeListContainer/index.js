@@ -22,6 +22,7 @@ const mapStateToProps = (state) => ({
 
 const openType = (props) => setTimeout(() => {
   const urlItemId = getState('global.urlItemId');
+  const standardsByIds = getState('collections.standardsByIds');
   const {
     containedIn,
     defaultContainedIn,
@@ -31,6 +32,12 @@ const openType = (props) => setTimeout(() => {
     types: props.types,
     filter: STANDARD_FILTER_MAP.TYPE,
   });
+
+  // if standard does not exist, do not open type.
+  // show message that standard does not exist instead.
+  if (urlItemId && !standardsByIds[urlItemId]) {
+    return;
+  }
 
   // if a type contains selected standard open that type otherwise open default type collapse
   openStandardByFilter({

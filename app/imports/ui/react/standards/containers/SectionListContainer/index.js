@@ -20,6 +20,7 @@ import { CollectionNames } from '/imports/share/constants';
 
 const redirectAndOpen = (props) => setTimeout(() => {
   const { urlItemId, filter, collapsed } = getState('global');
+  const standardsByIds = getState('collections.standardsByIds');
   const {
     containedIn,
     defaultContainedIn,
@@ -38,6 +39,12 @@ const redirectAndOpen = (props) => setTimeout(() => {
     dispatch: props.dispatch,
     filter: STANDARD_FILTER_MAP.SECTION,
   });
+
+  // if standard does not exist, do not redirect.
+  // show message that standard does not exist instead.
+  if (urlItemId && !standardsByIds[urlItemId]) {
+    return;
+  }
 
   // redirect to the selected or default standard
   // and open the section and/or type which contains that standard
