@@ -20,7 +20,7 @@ export const onSearchTextChange =
 export const onClear = onSearchTextClear(onSearchTextChange);
 
 export const onModalOpen = () => () => _modal_.modal.open({
-  _title: 'Compliance standard',
+  _title: 'Standard',
   template: 'CreateStandard',
   variation: 'save',
 });

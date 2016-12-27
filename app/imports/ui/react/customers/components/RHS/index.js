@@ -12,7 +12,7 @@ import Button from '../../../components/Buttons/Button';
 import ModalEdit from '../ModalEdit';
 
 const CustomersRHS = ({ isReady, organization }) => (
-  <RHS className={cx({ content: !organization })}>
+  <RHS>
     <RHS.Card className="standard-details">
       <RHS.Header
         title="Organization"
