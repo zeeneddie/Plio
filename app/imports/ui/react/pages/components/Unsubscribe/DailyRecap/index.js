@@ -9,15 +9,15 @@ import renderUnsubscribePage from '../helpers/withState';
 const enhancer = compose(
   lifecycle({
     componentDidMount() {
-      const { organizationId } = this.props;
-      unsubscribeFromDailyRecap.call({ organizationId }, handleMethodResult((error) =>
+      const orgSerialNumber = parseInt(this.props.orgSerialNumber, 10);
+      unsubscribeFromDailyRecap.call({ orgSerialNumber }, handleMethodResult((error) =>
         this.props.setState({ error, loading: false })
       ));
     },
   }),
   withProps({
     children: (
-      <h3>You've successfully unsubscribed from daily recap!</h3>
+      <h3>You've successfully unsubscribed from the daily recap!</h3>
     ),
   }),
 );
@@ -25,7 +25,7 @@ const enhancer = compose(
 const DailyRecap = renderUnsubscribePage(enhancer);
 
 DailyRecap.propTypes = {
-  organizationId: PropTypes.string.isRequired,
+  orgSerialNumber: PropTypes.string.isRequired,
 };
 
 export default DailyRecap;

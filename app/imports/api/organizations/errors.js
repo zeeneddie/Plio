@@ -30,4 +30,4 @@ export const ORG_ALREADY_EXISTS = name => new Meteor.Error(400, `Organization "$
 
 export const ORG_CAN_NOT_BE_DELETED = new Meteor.Error(400, 'Organization can not be deleted');
 
-export const DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED = 'The document you are looking for is not found or you\'ve already unsubscribed from the daily recap';
+export const DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED = new Meteor.Error(400, 'The document you are looking for is not found or you\'ve already unsubscribed from the daily recap');

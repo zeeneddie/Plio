@@ -24,7 +24,7 @@ import {
   canDeleteUsers,
   isOrgOwner,
   isOrgMember,
-  checkOrgMembership,
+  checkOrgMembershipBySelector,
 } from '../checkers.js';
 import { checkAndThrow } from '../helpers.js';
 import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from './errors';
@@ -146,11 +146,11 @@ export const ORG_EnsureCanBeDeleted = (organizationId) => {
   checkAndThrow(isAdminOrg === true, ORG_CAN_NOT_BE_DELETED);
 };
 
-export const ensureCanUnsubscribeFromDailyRecap = ({ organizationId, userId }) => {
-  checkOrgMembership(userId, organizationId);
+export const ensureCanUnsubscribeFromDailyRecap = ({ orgSerialNumber: serialNumber, userId }) => {
+  checkOrgMembershipBySelector(userId, { serialNumber });
 
   const query = {
-    _id: organizationId,
+    serialNumber,
     users: {
       $elemMatch: {
         userId,

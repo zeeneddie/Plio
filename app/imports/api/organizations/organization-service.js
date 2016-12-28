@@ -315,9 +315,9 @@ export default OrganizationService = {
     return this.collection.update(query, modifier);
   },
 
-  unsubscribeFromDailyRecap({ organizationId, userId }) {
+  unsubscribeFromDailyRecap({ orgSerialNumber, userId }) {
     const query = {
-      _id: organizationId,
+      serialNumber: orgSerialNumber,
       users: {
         $elemMatch: {
           userId,

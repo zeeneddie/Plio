@@ -609,18 +609,22 @@ export const changeTitle = new Method({
 export const unsubscribeFromDailyRecap = new Method({
   name: 'Organizations.unsubscribeFromDailyRecap',
 
-  validate: new SimpleSchema([OrganizationIdSchema]).validator(),
+  validate: new SimpleSchema({
+    orgSerialNumber: {
+      type: Number,
+    },
+  }).validator(),
 
   check(checker) {
     if (this.isSimulation) return undefined;
 
-    return checker(({ organizationId }) =>
-      ensureCanUnsubscribeFromDailyRecap({ organizationId, userId: this.userId }));
+    return checker(({ orgSerialNumber }) =>
+      ensureCanUnsubscribeFromDailyRecap({ orgSerialNumber, userId: this.userId }));
   },
 
-  run({ organizationId }) {
+  run({ orgSerialNumber }) {
     if (this.isSimulation) return undefined;
 
-    return OrganizationService.unsubscribeFromDailyRecap({ organizationId, userId: this.userId });
+    return OrganizationService.unsubscribeFromDailyRecap({ orgSerialNumber, userId: this.userId });
   },
 });

@@ -11,6 +11,7 @@ import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
+import { DocumentTypes, ActionTypes } from '/imports/share/constants';
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
@@ -73,6 +74,20 @@ function mount(layoutClass, regions, options = {}) {
 const mount2 = withOptions({
   rootId: 'app',
 }, mount);
+
+const ROUTE_MAP = {
+  STANDARDS: 'standards',
+  NON_CONFORMITIES: 'non-conformities',
+  RISKS: 'risks',
+  ACTIONS: 'actions',
+};
+
+const DOCUMENT_TYPE_BY_ROUTE_MAP = {
+  [ROUTE_MAP.STANDARDS]: DocumentTypes.STANDARD,
+  [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
+  [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
+  [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
+};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -372,25 +387,27 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   },
 });
 
-FlowRouter.route('/notifications-unsubscribe/:documentType/:documentId', {
+FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
   name: 'unsubscribeFromNotifications',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action({ documentId, documentType }) {
+  action({ documentId, route, orgSerialNumber }) {
+    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+
     mount2(TransitionalLayout, {
       content: (
-        <UnsubscribeFromNotifications {...{ documentId, documentType }} />
+        <UnsubscribeFromNotifications {...{ documentId, documentType, orgSerialNumber }} />
       ),
     });
   },
 });
 
-FlowRouter.route('/daily-recap-unsubscribe/:organizationId', {
+FlowRouter.route('/:orgSerialNumber/unsubscribe', {
   name: 'unsubscribeFromDailyRecap',
   triggersEnter: [checkLoggedIn, checkEmailVerified],
-  action({ organizationId }) {
+  action({ orgSerialNumber }) {
     mount2(TransitionalLayout, {
       content: (
-        <UnsubscribeFromDailyRecap {...{ organizationId }} />
+        <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
       ),
     });
   },
