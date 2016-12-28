@@ -1,5 +1,5 @@
-function formatLessonsLearned(value) {
-  return value ? `LL${value}` : '';
+function formatLessonsLearned(lessons) {
+  return lessons.map(lesson => `LL${lesson}`);
 }
 
 export { formatLessonsLearned };

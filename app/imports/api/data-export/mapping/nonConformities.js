@@ -101,7 +101,7 @@ export const mapping = {
         from: CollectionNames.LESSONS,
         internalField: '_id',
         externalField: 'documentId',
-        target: 'title',
+        target: 'serialNumber',
         many: true,
       },
       format: formatLessonsLearned,
