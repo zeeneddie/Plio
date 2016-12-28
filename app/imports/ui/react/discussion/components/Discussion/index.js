@@ -7,7 +7,7 @@ import DiscussionFileUploaderContainer from '../../containers/DiscussionFileUplo
 import CardHeader from '../../../components/CardHeader';
 import Button from '../../../components/Buttons/Button';
 import Wrapper from '../../../components/Wrapper';
-import Icon from '../../../components/Icon';
+import Icon from '../../../components/Icons/Icon';
 
 const Discussion = (props) => (
   <Wrapper className="content-cards-inner flexbox-column">

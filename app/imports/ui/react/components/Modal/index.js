@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import Icon from '../Icon';
+import Icon from '../Icons/Icon';
 import Heading from './Heading';
 import HelpPanel from '../HelpPanel';
 import Collapse from '../Collapse';

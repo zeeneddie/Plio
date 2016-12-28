@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { FormGroup, ButtonGroup } from 'reactstrap';
 
 import Button from '../../../components/Buttons/Button';
-import Icon from '../../../components/Icon';
+import Icon from '../../../components/Icons/Icon';
 
 const FormButtonList = ({ selectedItems, onDelete, children }) => (
   <FormGroup className="form-group-buttons no-margin">

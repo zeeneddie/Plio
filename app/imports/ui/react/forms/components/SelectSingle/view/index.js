@@ -5,7 +5,7 @@ import { Dropdown, InputGroup, InputGroupButton, DropdownMenu, DropdownItem } fr
 import { getC, propEq } from '/imports/api/helpers';
 import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
-import Icon from '../../../../components/Icon';
+import Icon from '../../../../components/Icons/Icon';
 
 const SelectSingleView = ({
   value,

@@ -8,6 +8,7 @@ import SelectSingle from '../../../forms/components/SelectSingle';
 import FormField from '../../../fields/edit/components/FormField';
 import FormButtonList from '../../../forms/components/FormButtonList';
 import SelectRadio from '../../../forms/components/SelectRadio';
+import CardBlockCollapse from '../../../components/CardBlockCollapse';
 
 const enhance = compose(
   withState('state', 'setState', {
@@ -71,6 +72,10 @@ const ModalEdit = enhance(({
         <span>Test #3</span>
         <SelectRadio {...{ selected, items, onSelect }} />
       </FormField>
+      <CardBlockCollapse leftText="Test #4">
+        <p>You been with a woman, Zophael? It's like dying... you moan, cry out. You get to a spot that has you begging for release. Once, I was an Angel of Death... now, I die every day... when I have the cash.</p>
+        <p>Let's understand each other. I sang the first hymn when the stars were born. Not that long ago, I announced to a young woman, Mary, who it was she was expecting. On the other hand, I've turned rivers into blood. Kings into cripples. Cities to salt. So, I don't think that I have to explain myself to you.</p>
+      </CardBlockCollapse>
     </div>
     <OrgDeleteContainer {...organization} />
   </div>

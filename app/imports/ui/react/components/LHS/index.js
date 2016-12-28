@@ -5,7 +5,7 @@ import propTypes from './propTypes';
 import ClearField from '../../fields/read/components/ClearField';
 import AddButton from '../Buttons/AddButton';
 import TextInput from '../../forms/components/TextInput';
-import Icon from '../Icon';
+import Icon from '../Icons/Icon';
 
 const LHS = ({
   animating = false,

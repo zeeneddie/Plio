@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import Icon from '../Icon';
+import Icon from '../Icons/Icon';
 
 const FileUploader = ({ value, onChange }) => (
   <div className="btn btn-secondary btn-file">
