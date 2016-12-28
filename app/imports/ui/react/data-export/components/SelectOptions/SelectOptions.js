@@ -17,7 +17,7 @@ const SelectOptions = ({ fields, onSubmit, downloadLink, processing }) => (
       </CardBlock>
       <CardBlock className="text-xs-center">
         <Button color="primary" disabled={processing}>
-          {processing ? <Icon names="spinner spin" margin="right" /> : null}
+          {processing ? <Icon name="spinner spin" margin="right" /> : null}
           {downloadLink ? 'Export again' : 'Export'}
         </Button>
         {downloadLink && !processing ?

@@ -16,7 +16,7 @@ const HeaderOptionsMenu = (props) => (
     <NavItem>
       <Dropdown isOpen={props.isOpen} toggle={props.setIsOpen}>
         <DropdownToggle tag={NavLink}>
-          <Icon names="ellipsis-v" />
+          <Icon name="ellipsis-v" />
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem onClick={props.onHandleDataExport}>
