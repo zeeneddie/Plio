@@ -32,8 +32,7 @@ const StandardsLayout = (props) => (
       {props.isDiscussionOpened ? (
         <span className="navbar-title">
           {cx(
-            props.standard ? `${props.standard.title} - ` : '',
-            'discussion'
+            props.standard ? `${props.standard.title}` : ''
           )}
         </span>
       ) : (
