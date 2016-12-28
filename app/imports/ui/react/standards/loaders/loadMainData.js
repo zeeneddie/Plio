@@ -7,7 +7,7 @@ import {
   setStandardBookSections,
   setStandardTypes,
   setStandards,
-} from '/client/redux/actions/collectionsActions';
+} from '/imports/client/store/actions/collectionsActions';
 
 export default function loadMainData({ dispatch, organizationId }, onData) {
   const query = { organizationId };

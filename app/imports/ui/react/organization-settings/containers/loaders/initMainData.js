@@ -1,6 +1,6 @@
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { batchActions } from 'redux-batched-actions';
-import { setOrg, setOrgId, setOrgSerialNumber } from '/client/redux/actions/organizationsActions';
+import { setOrg, setOrgId, setOrgSerialNumber } from '/imports/client/store/actions/organizationsActions';
 import { Organizations } from '/imports/share/collections/organizations';
 
 export default function initMainData({ store }, onData) {

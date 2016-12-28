@@ -16,7 +16,7 @@ const Discussion = (props) => (
         <Wrapper className="discussions-hd-top">
           <CardHeader.Item pull="left" className="card-heading-buttons">
             <Button type="secondary" onClick={props.onBackArrowClick}>
-              <Icon names="angle-left" margin="right-2x" size="2" />
+              <Icon name="angle-left" margin="right-2x" size="2" />
               <span>Back</span>
             </Button>
           </CardHeader.Item>

@@ -101,7 +101,7 @@ export const isOrgOwner = (userId, organizationId) => {
 export const isPlioUser = (userId) => {
   const adminOrg = Organizations.findOne({ isAdminOrg: true });
 
-  if(adminOrg === undefined) {
+  if (adminOrg === undefined) {
     return false;
   }
 

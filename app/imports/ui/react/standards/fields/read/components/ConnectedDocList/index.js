@@ -6,29 +6,31 @@ import LinkItemList from '../../../../../fields/read/components/LinkItemList';
 import _problemsStatus_ from '/imports/startup/client/mixins/problemsStatus';
 import _actionStatus_ from '/imports/startup/client/mixins/actionStatus';
 import _workInbox_ from '/imports/startup/client/mixins/workInbox';
-import { getPathToNC, getPathToRisk, getPathToWorkItem } from '../../../../../helpers/routeHelpers';
+import { getPath } from '../../../../../../utils/router/paths';
 import { propEq } from '/imports/api/helpers';
+
+// TODO: change param to urlItemId for every route
 
 const ConnectedDocList = (props) => {
   const ncs = props.ncs.map(nc => ({
     ...nc,
     indicator: _problemsStatus_.getClassByStatus(nc.status),
-    href: getPathToNC({ urlItemId: nc._id }),
+    href: getPath('nonconformity')({ urlItemId: nc._id }),
   }));
   const risks = props.risks.map(risk => ({
     ...risk,
     indicator: _problemsStatus_.getClassByStatus(risk.status),
-    href: getPathToRisk({ urlItemId: risk._id }),
+    href: getPath('risk')({ riskId: risk._id }),
   }));
   const actions = props.actions.map((action) => {
     const workItem = props.workItems.find(propEq('linkedDoc._id', action._id));
     const href = ((() => {
       if (!workItem) return '#';
 
-      const params = { urlItemId: workItem._id };
+      const params = { workItemId: workItem._id };
       const queryParams = _workInbox_._getQueryParams(workItem)(props.userId);
 
-      return getPathToWorkItem(params, queryParams);
+      return getPath('workInboxItem')(params, queryParams);
     })());
     return {
       ...action,

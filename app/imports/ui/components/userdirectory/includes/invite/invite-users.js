@@ -3,7 +3,8 @@ import { ViewModel } from 'meteor/manuel:viewmodel';
 import pluralize from 'pluralize';
 import moment from 'moment-timezone';
 
-import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods'
+import { inviteMultipleUsersByEmail } from '/imports/api/organizations/methods';
+import { ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
 
 Template.UserDirectory_InviteUsers.viewmodel({
   mixin: ['modal', 'organization'],
@@ -52,8 +53,13 @@ Template.UserDirectory_InviteUsers.viewmodel({
           }
 
           const expirationMessagePart = invitedEmailsText.length ? `\nInvitation expiration date: ${moment().add(res.expirationTime, 'days').format('MMMM Do YYYY')}` : '';
-          swal(notificationTitle, `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
-            failMessagePart ? 'error' : 'success');
+          swal({
+            title: notificationTitle,
+            text: `${successMessagePart}${failMessagePart}${expirationMessagePart}`,
+            type: failMessagePart ? 'error' : 'success',
+            timer: ALERT_AUTOHIDE_TIME,
+            showConfirmButton: false,
+          });
           this.modal().close();
         }
       });

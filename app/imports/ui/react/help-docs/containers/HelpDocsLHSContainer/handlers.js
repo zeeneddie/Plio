@@ -8,12 +8,13 @@ import {
   toggleCollapsed,
   addCollapsed,
   chainActions,
-} from '/client/redux/actions/globalActions';
+} from '/imports/client/store/actions/globalActions';
 import { extractIds, propEqId } from '/imports/api/helpers';
-import { setFilteredHelpDocs } from '/client/redux/actions/helpDocsActions';
+import { setFilteredHelpDocs } from '/imports/client/store/actions/helpDocsActions';
 import { createHelpSectionItem, createHelpSectionsData } from '../../helpers';
 import _modal_ from '/imports/startup/client/mixins/modal';
 import _search_ from '/imports/startup/client/mixins/search';
+import { onSearchTextClear } from '/imports/ui/react/share/LHS/handlers';
 
 export const onToggleCollapse = (props) => (e, { key, type }) => {
   props.dispatch(toggleCollapsed({ key, type, close: { type } }));
@@ -61,15 +62,7 @@ const onChange = _.debounce(({ dispatch, helpSections, urlItemId }, target) => {
 
 export const onSearchTextChange = props => e => onChange(props, e.target);
 
-export const onClear = props => input => () => {
-  if (!props.searchText) {
-    return;
-  }
-
-  input.focus();
-  props.dispatch(setSearchText(''));
-  onChange(props, input);
-};
+export const onClear = onSearchTextClear(onChange);
 
 export const onModalOpen = () => () => _modal_.modal.open({
   _title: 'Help document',

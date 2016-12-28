@@ -7,8 +7,8 @@ import swal from '/imports/ui/utils/swal';
 import { restore, remove } from '/imports/api/standards/methods';
 import { isOrgOwner } from '/imports/api/checkers';
 import { STANDARD_FILTER_MAP, ALERT_AUTOHIDE_TIME } from '/imports/api/constants';
-import { goToStandard } from '../../../helpers/routeHelpers';
-import { setIsFullScreenMode } from '/client/redux/actions/globalActions';
+import { goTo } from '../../../../utils/router/actions';
+import { setIsFullScreenMode } from '/imports/client/store/actions/globalActions';
 
 export const onToggleScreenMode = props => e => {
   const $div = $(e.target).closest('.content-cards-inner');
@@ -51,7 +51,7 @@ export const onToggleScreenMode = props => e => {
 export const onModalOpen = ({ _id }) => () =>
   modal.modal.open({
     _id,
-    _title: 'Compiance Standard',
+    _title: 'Standard',
     template: 'EditStandard',
     helpText: StandardsHelp.standard,
   });
@@ -71,7 +71,7 @@ export const onRestore = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal.success({
+    swal({
       title: 'Restored!',
       text: `The standard "${title}" was restored successfully.`,
       type: 'success',
@@ -82,7 +82,7 @@ export const onRestore = ({
     const params = { urlItemId: _id };
     const queryParams = { filter: STANDARD_FILTER_MAP.SECTION };
 
-    Meteor.defer(() => goToStandard(params, queryParams));
+    Meteor.defer(() => goTo('standard')(params, queryParams));
   };
 
   swal(options, () => restore.call({ _id }, cb));
@@ -104,7 +104,13 @@ export const onDelete = ({
   const cb = (err) => {
     if (err) swal.error(err);
 
-    swal.success('Deleted!', `The standard "${title}" was removed successfully.`);
+    swal({
+      title: 'Deleted!',
+      text: `The standard "${title}" was removed successfully.`,
+      type: 'success',
+      timer: ALERT_AUTOHIDE_TIME,
+      showConfirmButton: false,
+    });
   };
 
   swal(options, () => remove.call({ _id }, cb));

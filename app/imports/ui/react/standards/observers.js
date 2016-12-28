@@ -10,14 +10,14 @@ import {
   addStandardType,
   updateStandardType,
   removeStandardType,
-} from '/client/redux/actions/collectionsActions';
+} from '/imports/client/store/actions/collectionsActions';
 import { Standards } from '/imports/share/collections/standards';
 import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
 import { StandardTypes } from '/imports/share/collections/standards-types';
 import { expandCollapsedStandard } from './helpers';
-import { getState } from '/client/redux/store';
+import { getState } from '/imports/client/store';
 import { propEq, getId } from '/imports/api/helpers';
-import { goToStandard } from '../helpers/routeHelpers';
+import { goTo } from '../../utils/router/actions';
 
 export const observeStandards = (dispatch, query, options) => {
   const handle = Standards.find(query, options).observeChanges({
@@ -32,16 +32,19 @@ export const observeStandards = (dispatch, query, options) => {
       dispatch(updateStandard({ _id, ...fields }));
 
       // expand the section and type that are holding selected standard
-      if (fields.sectionId || fields.typeId) {
+      if (getState('global.urlItemId') === _id && (fields.sectionId || fields.typeId)) {
         expandCollapsedStandard(_id);
       }
     },
     removed(_id) {
       dispatch(removeStandard(_id));
-      const standards = getState('collections.standards').filter(propEq('isDeleted', true));
-      const urlItemId = getId(_.first(standards));
-      // redirect to the first standard if the selected standard is removed
-      goToStandard({ urlItemId });
+
+      if (getState('global.urlItemId') === _id) {
+        const standards = getState('collections.standards').filter(propEq('isDeleted', true));
+        const urlItemId = getId(_.first(standards));
+        // redirect to the first standard if the selected standard is removed
+        goTo('standard')({ urlItemId });
+      }
     },
   });
 

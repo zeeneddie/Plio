@@ -1,5 +1,4 @@
 import { _ } from 'meteor/underscore';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { withProps } from 'recompose';
 
 import { CollectionNames } from '/imports/share/constants';
@@ -16,9 +15,9 @@ import {
   notDeleted,
   getId,
 } from '/imports/api/helpers';
-import { addCollapsed, chainActions } from '/client/redux/actions/globalActions';
-import { goToStandard, goToStandards } from '../helpers/routeHelpers';
-import store, { getState } from '/client/redux/store';
+import { addCollapsed, chainActions } from '/imports/client/store/actions/globalActions';
+import { goTo } from '../../utils/router/actions';
+import store, { getState } from '/imports/client/store';
 import { SECTION_UNCATEGORIZED, TYPE_UNCATEGORIZED } from './constants';
 
 export const getSubNestingClassName = ({ nestingLevel = 1 }) =>
@@ -103,8 +102,8 @@ export const redirectToStandardOrDefault = ({
   defaultStandard,
 }) => !selectedStandard && (
   defaultStandard
-    ? goToStandard({ urlItemId: getId(defaultStandard) })
-    : goToStandards()
+    ? goTo('standard')({ urlItemId: getId(defaultStandard) })
+    : goTo('standards')()
 );
 
 export const openStandardByFilter = ({

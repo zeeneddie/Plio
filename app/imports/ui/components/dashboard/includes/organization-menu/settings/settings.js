@@ -1,11 +1,10 @@
 import { Template } from 'meteor/templating';
 
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { Departments } from '/imports/share/collections/departments.js';
 import { StandardTypes } from '/imports/share/collections/standards-types.js';
 import { RiskTypes } from '/imports/share/collections/risk-types.js';
 import {
-  StandardsBookSections
+  StandardsBookSections,
 } from '/imports/share/collections/standards-book-sections.js';
 import { isOrgOwner } from '/imports/api/checkers';
 import { setNCGuideline, setRKGuideline } from '/imports/api/organizations/methods.js';

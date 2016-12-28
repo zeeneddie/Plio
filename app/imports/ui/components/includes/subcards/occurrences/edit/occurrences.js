@@ -74,31 +74,28 @@ Template.Subcards_Occurrences_Edit.viewmodel({
       viewmodel.destroy();
     } else {
       const seq = invoke(viewmodel, 'sequentialId');
-      swal(
-        {
-          title: 'Are you sure?',
-          text: `The occurrence "${seq}" will be removed.`,
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Remove',
-          closeOnConfirm: false
-        },
-        () => {
-          const cb = (err) => {
-            if (!err) {
-              swal({
-                title: 'Removed!',
-                text: `The occurrence "${seq}" was removed successfully.`,
-                type: 'success',
-                timer: ALERT_AUTOHIDE_TIME,
-                showConfirmButton: false,
-              });
-            }
-          };
+      swal({
+        title: 'Are you sure?',
+        text: `The occurrence "${seq}" will be removed.`,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Remove',
+        closeOnConfirm: false
+      }, () => {
+        const cb = (err) => {
+          if (!err) {
+            swal({
+              title: 'Removed!',
+              text: `The occurrence "${seq}" was removed successfully.`,
+              type: 'success',
+              timer: ALERT_AUTOHIDE_TIME,
+              showConfirmButton: false,
+            });
+          }
+        };
 
-          this.modal().callMethod(remove, { _id }, cb);
-        }
-      );
+        this.modal().callMethod(remove, { _id }, cb);
+      });
     }
   }
 });

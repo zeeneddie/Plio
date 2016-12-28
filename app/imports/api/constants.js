@@ -39,10 +39,10 @@ export const STANDARD_FILTER_MAP = {
 };
 
 export const WorkInboxFilters = {
-  1: { title: 'Work', name: 'my current', prepend: 'by' },
-  2: { title: 'Work', name: 'team current', prepend: 'by' },
-  3: { title: 'Work', name: 'my completed', prepend: 'by' },
-  4: { title: 'Work', name: 'team completed', prepend: 'by' },
+  1: { title: 'Work', name: 'my current', prepend: '' },
+  2: { title: 'Work', name: 'team current', prepend: '' },
+  3: { title: 'Work', name: 'my completed', prepend: '' },
+  4: { title: 'Work', name: 'team completed', prepend: '' },
   5: { name: 'My deleted actions' },
   6: { name: 'Team deleted actions' },
 };
@@ -166,6 +166,25 @@ export const StandardTypesListProjection = {
 export const DepartmentsListProjection = {
   organizationId: 1,
   name: 1,
+};
+
+export const CustomersListProjection = {
+  name: 1,
+  serialNumber: 1,
+  createdAt: 1,
+  customerType: 1,
+  isAdminOrg: 1,
+  'users.userId': 1,
+  'users.role': 1,
+  'users.isRemoved': 1,
+  'users.removedAt': 1,
+  'users.removedBy': 1,
+};
+
+export const CustomerCardProjection = {
+  ...CustomersListProjection,
+  timezone: 1,
+  currency: 1,
 };
 
 export const AnalysisTitles = {

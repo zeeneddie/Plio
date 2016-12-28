@@ -14,7 +14,7 @@ import {
   setSort,
   setPriorLimit,
   setFollowingLimit
-} from '/client/redux/actions/discussionActions';
+} from '/imports/client/store/actions/discussionActions';
 import { swipedetect } from '/client/lib/mobile';
 import { lengthMessages, $isAlmostScrolledToBottom } from '/imports/api/helpers';
 

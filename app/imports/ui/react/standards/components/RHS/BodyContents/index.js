@@ -1,7 +1,7 @@
 import React from 'react';
+import cx from 'classnames';
 
 import propTypes from './propTypes';
-import _user_ from '/imports/startup/client/mixins/user';
 import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import createReadFields from '../../../../helpers/createReadFields';
 import DepartmentsContainer from '../../../../fields/read/containers/DepartmentsContainer';
@@ -29,7 +29,7 @@ const BodyContents = ({
     { label: 'Description', text: description },
     { label: 'Issue number', text: issueNumber, wrap },
     { label: 'Section', text: section.title, wrap },
-    { label: 'Type', text: type.title, wrap },
+    { label: 'Type', text: cx(type.title, type.abbreviation && `(${type.abbreviation})`), wrap },
     { label: 'Owner', text: getUserFullNameOrEmail(owner), wrap },
   ];
   const fields = createReadFields(data);

@@ -7,7 +7,7 @@ const Title = (props) => (
 );
 
 Title.propTypes = {
-  text: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default Title;

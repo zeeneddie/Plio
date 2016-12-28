@@ -3,14 +3,13 @@ import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
 
 import StandardsLHS from '../../components/LHS';
 import {
-  onSectionToggleCollapse,
-  onTypeToggleCollapse,
   onSearchTextChange,
   onClear,
   onModalOpen,
 } from './handlers';
 import { getStandardsByFilter } from '../../helpers';
 import { sortArrayByTitlePrefix, pickC, notEquals } from '/imports/api/helpers';
+import { onToggleCollapse } from '/imports/ui/react/share/LHS/handlers';
 
 const mapStateToProps = ({
   standards: { standardsFiltered },
@@ -32,9 +31,11 @@ const mapStateToProps = ({
 
 export default compose(
   connect(mapStateToProps),
+  withHandlers({
+    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
+  }),
   mapProps(props => ({
     ...props,
-    collapseOnSearch: props.filter !== 3,
     standards: props.standards.map(pickC([
       '_id',
       'sectionId',
@@ -50,11 +51,9 @@ export default compose(
     notEquals(props.standards, nextProps.standards)
   )),
   withHandlers({
-    onSectionToggleCollapse,
-    onTypeToggleCollapse,
+    onToggleCollapse,
     onClear,
     onModalOpen,
-    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps((props) => {
     let standards = props.searchText
@@ -63,7 +62,7 @@ export default compose(
     standards = getStandardsByFilter({ standards, filter: props.filter });
     standards = sortArrayByTitlePrefix(standards);
 
-    const searchResultsText = props.searchText ? `${standards.length} matching resulsts` : '';
+    const searchResultsText = props.searchText ? `${standards.length} matching results` : '';
 
     return {
       ...props,

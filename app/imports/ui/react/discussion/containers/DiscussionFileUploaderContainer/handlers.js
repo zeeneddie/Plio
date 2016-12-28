@@ -1,4 +1,4 @@
-import { submit } from '/client/redux/actions/discussionActions';
+import { submit } from '/imports/client/store/actions/discussionActions';
 
 export const addFile = ({ dispatch, disabled, discussionId, organizationId }) => {
   return (fileId, cb) => {
