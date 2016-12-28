@@ -83,8 +83,9 @@ export const getNotifications = () => {
       emailTemplateData: getEmailTemplateData
     },
     {
-      shouldSendNotification({ newDoc: { type } }) {
-        return type === COMPLETE_ANALYSIS;
+      shouldSendNotification({ newDoc: { type, linkedDoc } }) {
+        return (type === COMPLETE_ANALYSIS)
+            && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
       },
       text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}} {{{docName}}}',
       title: 'You have been assigned to do a root cause analysis',
@@ -92,13 +93,34 @@ export const getNotifications = () => {
       emailTemplateData: getEmailTemplateData
     },
     {
-      shouldSendNotification({ newDoc: { type } }) {
-        return type === COMPLETE_UPDATE_OF_DOCUMENTS;
+      shouldSendNotification({ newDoc: { type, linkedDoc } }) {
+        return (type === COMPLETE_ANALYSIS)
+            && (linkedDoc.type === ProblemTypes.RISK);
+      },
+      text: '{{userName}} assigned you to do an initial risk analysis of {{{docName}}}',
+      title: 'You have been assigned to do an initial risk analysis',
+      sendBoth: true,
+      emailTemplateData: getEmailTemplateData
+    },
+    {
+      shouldSendNotification({ newDoc: { type, linkedDoc } }) {
+        return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
+            && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
       },
       text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}} {{{docName}}}',
       title: 'You have been assigned to do an update of standards',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
-    }
+    },
+    {
+      shouldSendNotification({ newDoc: { type, linkedDoc } }) {
+        return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
+            && (linkedDoc.type === ProblemTypes.RISK);
+      },
+      text: '{{userName}} assigned you to do an update of risk record {{{docName}}}',
+      title: 'You have been assigned to do an update of risk record',
+      sendBoth: true,
+      emailTemplateData: getEmailTemplateData
+    },
   ];
 };
