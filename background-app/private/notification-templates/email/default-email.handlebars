@@ -3,24 +3,46 @@
     <tbody>
       <tr>
         {{#with avatar}}
-          <td width="45" valign="middle" style="font-size:15px;line-height:19px;font-family:&quot;Helvetica Neue&quot;,helvetica,arial,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0;padding:0;background:#ffffff;text-align:left;width:45px;vertical-align:middle">
-            <img alt="{{alt}}" src="{{url}}" style="border-radius:100px;vertical-align:middle;width:45px;min-height:45px;min-height:45px;max-height:45px;padding:0!important;border:0!important;padding:1px;border:1px solid #cccccc" title="{{title}}">
+          <td width="45" valign="middle" style="font-size:15px;line-height:19px;font-family:&quot;Helvetica Neue&quot;,helvetica,arial,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0;padding:0;background:#ffffff;text-align:left;width:45px;vertical-align:middle;padding-right:14px;">
+            <img alt="{{alt}}" src="{{url}}" style="border-radius:100px;vertical-align:middle;width:45px;min-height:45px;min-height:45px;max-height:45px;padding:0!important;border:0!important;padding:1px;border:1px solid #cccccc;object-fit: cover;" title="{{title}}">
+          </td>
+        {{else}}
+          <td width="45" valign="middle" style="font-size:15px;line-height:19px;font-family:&quot;Helvetica Neue&quot;,helvetica,arial,sans-serif;color:#000000;border-collapse:collapse;border-spacing:0;padding:0;background:#ffffff;text-align:left;width:45px;vertical-align:middle;padding-right:14px;">
+            <img alt="Plio" src="https://ci5.googleusercontent.com/proxy/W9Fm9ZqpCFnbmc6F5t1F_XYEb3ADyI50M5xobaHVUTnOsDVV2tx33YDezK3o_Ril1ep4F_f7PWerEASpf5pOL_09ha1BTSWuDkcdhojTU5YtkomCKYY=s0-d-e1-ft#https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png" style="border-radius:100px;vertical-align:middle;width:45px;min-height:45px;min-height:45px;max-height:45px;padding:0!important;border:0!important;padding:1px;border:1px solid #cccccc;object-fit: cover;" title="{{title}}">
           </td>
         {{/with}}
-        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;">
           <p>{{text}}</p>
         </td>
       </tr>
       <tr>
-        {{#if avatar}}
-          <td></td>
-        {{/if}}
-        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif; padding-left: 14px;">
+        <td></td>
+        <td class="column" style="background:#ffffff;text-align:left;vertical-align:top;font-size:15px;line-height:19px;border-collapse:collapse;color:#000000;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;">
           {{#with button}}
-            <p style="margin:0 0 19px">
+            <p style="margin-bottom: 35px;">
               <a href="{{this.url}}">{{this.label}}</a>
             </p>
           {{/with}}
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="column" align="left" style="background:#ffffff;text-align:left;vertical-align:top;border-collapse:collapse;color:#888888;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;border-top:1px solid #dddddd">
+          <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
+            Do not reply to this email - this is an automated notification message.
+          </p>
+          <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
+            At Plio, we believe that managing your compliance activities and your quality procedures is vital to the future of your business. You need a better software tool than a spreadsheet to keep on top of everything.
+          </p>
+          <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
+            Spreadsheets are time-consuming to maintain and don’t give you the proper structure or audit trail that you need in a management system. One day, when you need to demonstrate the integrity of your management system to a regulatory body or certification body, these are two things that you will wish you had in place much earlier.
+          </p>
+          <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
+            Software systems for compliance management and quality management have been around for several years, and are routinely used by larger organizations. However the price tag for these systems – and the time needed to implement them – have put them out of range for most small firms.
+          </p>
+          <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
+            At Plio, we believe that running a proper management system shouldn’t just be for those that can afford it, it should be available to everyone. It should also be easy enough to use to be understandable by everyone.
+          </p>
         </td>
       </tr>
     </tbody>

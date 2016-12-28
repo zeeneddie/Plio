@@ -337,6 +337,7 @@ export default class DocChangeHandler {
       emailSubject,
       templateData: _({
         organizationName: this._docOrgName,
+        title: emailSubject,
         text: emailText
       }).extend(emailTemplateData),
       notificationData: _({
@@ -350,6 +351,15 @@ export default class DocChangeHandler {
     if (_(this._user).isObject()) {
       _(notification.templateData).extend({
         avatar: { url: this._user.profile.avatar }
+      });
+    }
+
+    if (this._docUrl) {
+      _(notification.templateData).extend({
+        button: {
+          url: this._docUrl,
+          label: 'Go to this document',
+        },
       });
     }
 
