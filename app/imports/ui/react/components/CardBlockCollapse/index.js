@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { CardTitle } from 'reactstrap';
 
-import withStateCollapsed from '../../../helpers/withStateCollapsed';
-import CollapseBlock from '../../../components/CollapseBlock';
-import IconLoading from '../../../components/Icons/IconLoading';
+import withStateCollapsed from '../../helpers/withStateCollapsed';
+import CollapseBlock from '../CollapseBlock';
+import IconLoading from '../Icons/IconLoading';
 
 const SubcardWrapper = withStateCollapsed(true)(({
   collapsed,
