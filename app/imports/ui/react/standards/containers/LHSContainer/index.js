@@ -3,8 +3,6 @@ import { compose, withHandlers, mapProps, shouldUpdate } from 'recompose';
 
 import StandardsLHS from '../../components/LHS';
 import {
-  onSectionToggleCollapse,
-  onTypeToggleCollapse,
   onSearchTextChange,
   onClear,
   onModalOpen,
@@ -33,9 +31,11 @@ const mapStateToProps = ({
 
 export default compose(
   connect(mapStateToProps),
+  withHandlers({
+    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
+  }),
   mapProps(props => ({
     ...props,
-    collapseOnSearch: props.filter !== 3,
     standards: props.standards.map(pickC([
       '_id',
       'sectionId',
@@ -54,7 +54,6 @@ export default compose(
     onToggleCollapse,
     onClear,
     onModalOpen,
-    onSearchTextChange: props => e => onSearchTextChange(props, e.target),
   }),
   mapProps((props) => {
     let standards = props.searchText
@@ -63,7 +62,7 @@ export default compose(
     standards = getStandardsByFilter({ standards, filter: props.filter });
     standards = sortArrayByTitlePrefix(standards);
 
-    const searchResultsText = props.searchText ? `${standards.length} matching resulsts` : '';
+    const searchResultsText = props.searchText ? `${standards.length} matching results` : '';
 
     return {
       ...props,

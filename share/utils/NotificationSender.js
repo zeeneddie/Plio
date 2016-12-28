@@ -121,7 +121,7 @@ export default class NotificationSender {
       // Reporting of beta user activity
       bcc.push('steve.ives@pliohub.com', 'jamesalexanderives@gmail.com');
     }
-    
+
     let emailOptions = {
       subject: this._getEmailSubject(),
       from: this._getUserEmail(this._options.senderId) || this._getDefaultEmail(),

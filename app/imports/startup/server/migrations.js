@@ -35,7 +35,12 @@ import { Discussions } from '/imports/share/collections/discussions.js';
 import DiscussionsService from '/imports/api/discussions/discussions-service.js';
 import { Risks } from '/imports/share/collections/risks.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { DocumentTypes, CollectionNames, SystemName } from '/imports/share/constants';
+import {
+  DocumentTypes,
+  CollectionNames,
+  SystemName,
+  CustomerTypes,
+} from '/imports/share/constants';
 
 Migrations.add({
   version: 1,
@@ -51,7 +56,7 @@ Migrations.add({
           executor: SystemName,
           collection: CollectionNames.ORGANIZATIONS,
           documentId: org._id,
-          message: 'Organization created'
+          message: 'Organization created',
         });
       }
     });
@@ -117,6 +122,32 @@ Migrations.add({
     Organizations.update({}, { $unset: { homeScreenTitles: '' } }, { multi: true });
 
     console.log('Default screen titles was be removed from all organization');
+  },
+});
+
+Migrations.add({
+  version: 4,
+  name: 'Add default customer type to organizations without it',
+  up() {
+    const query = { customerType: null };
+    const modifier = {
+      $set: {
+        customerType: CustomerTypes.FREE_TRIAL,
+      },
+    };
+    const options = { multi: true };
+
+    Organizations.update(query, modifier, options);
+
+    console.log('Default customer type was added to all organizations that did not have it');
+  },
+  down() {
+    const query = {};
+    const modifier = { $unset: { customerType: '' } };
+
+    Organizations.update(query, modifier);
+
+    console.log('Customer type was removed from all organizations');
   },
 });
 

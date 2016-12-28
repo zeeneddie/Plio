@@ -23,6 +23,8 @@
    }
 
   .navbar-title {
+    padding: 0 34px;
+
     .dropdown-toggle {
        &::after, .text-muted  {
         -moz-transition: color 0.4s ease;
