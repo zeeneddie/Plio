@@ -1,5 +1,6 @@
 import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
+import { formatUserEmail, formatLessonsLearned } from '../formatters';
 
 export const mapping = {
   collection: NonConformities,
@@ -8,6 +9,7 @@ export const mapping = {
     _id: {
       label: 'Non-conformity ID',
       isDefault: true,
+      reference: 'sequentialId',
     },
     name: {
       label: 'Non-conformity name',
@@ -51,6 +53,13 @@ export const mapping = {
     identifiedBy: {
       label: 'Identified by',
       isDefault: true,
+      format: formatUserEmail,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'identifiedBy',
+        externalField: '_id',
+        target: 'emails',
+      },
     },
     identifiedDate: {
       label: 'Identified date',
@@ -95,6 +104,7 @@ export const mapping = {
         target: 'title',
         many: true,
       },
+      format: formatLessonsLearned,
     },
   },
 };

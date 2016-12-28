@@ -1,5 +1,8 @@
-import { ActionStatuses } from '/imports/share/constants';
+import { _ } from 'meteor/underscore';
+import { ActionStatuses, CollectionNames } from '/imports/share/constants';
 import { Actions } from '/imports/share/collections/actions';
+import { formatUserEmail, stripHtml } from '../formatters';
+
 
 export const mapping = {
   collection: Actions,
@@ -8,7 +11,7 @@ export const mapping = {
     _id: {
       label: 'Action ID',
       isDefault: true,
-      reference: '_id',
+      reference: 'sequentialId',
     },
     title: {
       label: 'Title',
@@ -17,17 +20,19 @@ export const mapping = {
     description: {
       label: 'Description',
     },
-    linkedTo: {
-      label: 'Linked to',
-      reference: 'linkedTo.documentId',
-    },
     status: {
       label: 'Status',
       mapper: ActionStatuses,
     },
     owner: {
       label: 'Owner',
-      reference: 'ownerId',
+      format: formatUserEmail,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'ownerId',
+        externalField: '_id',
+        target: 'emails',
+      },
     },
     planInPlace: {
       label: 'Plan in place?',
@@ -41,6 +46,13 @@ export const mapping = {
     },
     completedBy: {
       label: 'Completed by',
+      format: formatUserEmail,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'completedBy',
+        externalField: '_id',
+        target: 'emails',
+      },
     },
     completionComments: {
       label: 'Completion comments',
@@ -50,12 +62,20 @@ export const mapping = {
     },
     verifiedBy: {
       label: 'Verified by',
+      format: formatUserEmail,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'verifiedBy',
+        externalField: '_id',
+        target: 'emails',
+      },
     },
     verificationComments: {
       label: 'Verification comments',
     },
     notes: {
       label: 'Notes',
+      format: stripHtml,
     },
   },
 };

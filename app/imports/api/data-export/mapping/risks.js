@@ -1,6 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
+import { formatUserEmail, formatLessonsLearned } from '../formatters';
 
 export const mapping = {
   collection: Risks,
@@ -9,7 +10,7 @@ export const mapping = {
     _id: {
       label: 'Risk ID',
       isDefault: true,
-      reference: '_id',
+      reference: 'sequentialId',
     },
     title: {
       label: 'Risk name',
@@ -51,6 +52,13 @@ export const mapping = {
     },
     identifiedBy: {
       label: 'Identified by',
+      format: formatUserEmail,
+      reference: {
+        from: CollectionNames.USERS,
+        internalField: 'identifiedBy',
+        externalField: '_id',
+        target: 'emails',
+      },
     },
     identifiedDate: {
       label: 'Identified date',
@@ -95,11 +103,12 @@ export const mapping = {
     },
     lessonsLearned: {
       label: 'Lessons learned',
+      format: formatLessonsLearned,
       reference: {
         from: CollectionNames.LESSONS,
         internalField: '_id',
         externalField: 'documentId',
-        target: 'title',
+        target: 'serialNumber',
         many: true,
       },
     },
