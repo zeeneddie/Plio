@@ -8,18 +8,19 @@ export const mapping = {
   fields: {
     _id: {
       label: 'Risk ID',
-      required: true,
+      isDefault: true,
       reference: '_id',
     },
     title: {
       label: 'Risk name',
-      required: true,
+      isDefault: true,
     },
     description: {
       label: 'Description',
     },
     status: {
       label: 'Status',
+      isDefault: true,
       mapper: ProblemsStatuses,
     },
     statusComment: {
@@ -28,6 +29,7 @@ export const mapping = {
     },
     standards: {
       label: 'Standard(s)',
+      isDefault: true,
       reference: {
         from: CollectionNames.STANDARDS,
         internalField: 'standardsIds',
@@ -38,6 +40,7 @@ export const mapping = {
     },
     departments: {
       label: 'Department/sector(s)',
+      isDefault: true,
       reference: {
         from: CollectionNames.DEPARTMENTS,
         internalField: 'departmentsIds',
@@ -59,6 +62,7 @@ export const mapping = {
     },
     riskType: {
       label: 'Risk type',
+      isDefault: true,
       reference: {
         from: CollectionNames.RISK_TYPES,
         internalField: 'typeId',
@@ -68,6 +72,7 @@ export const mapping = {
     },
     score: {
       label: 'Score',
+      isDefault: true,
       reference: 'scores',
       format(fieldValue) {
         const scores = fieldValue.sort((a, b) => b.scoredAt.getTime() - a.scoredAt.getTime());
@@ -79,6 +84,7 @@ export const mapping = {
     },
     actions: {
       label: 'Actions',
+      isDefault: true,
       reference: {
         from: CollectionNames.ACTIONS,
         internalField: '_id',

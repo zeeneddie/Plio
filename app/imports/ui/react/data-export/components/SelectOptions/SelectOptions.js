@@ -11,8 +11,8 @@ const SelectOptions = ({ fields, onSubmit, downloadLink, processing }) => (
   <div className="relative">
     <Form onSubmit={onSubmit}>
       <CardBlock>
-        {fields.map(({ name, label }) =>
-          <Checkbox checked name={name} text={label} key={`risk-export-${name}`} />
+        {fields.map(({ name, label, isDefault }) =>
+          <Checkbox checked={isDefault} name={name} text={label} key={`risk-export-${name}`} />
         )}
       </CardBlock>
       <CardBlock className="text-xs-center">

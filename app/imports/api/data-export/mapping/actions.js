@@ -7,12 +7,12 @@ export const mapping = {
   fields: {
     _id: {
       label: 'Action ID',
-      required: true,
+      isDefault: true,
       reference: '_id',
     },
     title: {
       label: 'Title',
-      required: true,
+      isDefault: true,
     },
     description: {
       label: 'Description',
