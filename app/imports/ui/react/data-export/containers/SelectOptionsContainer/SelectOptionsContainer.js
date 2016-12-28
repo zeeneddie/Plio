@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose, withProps, withState, withHandlers } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 
-import store from '/client/redux/store';
+import store from '/imports/client/store';
 import { pickDeep } from '/imports/api/helpers';
 
 import SelectOptions from '../../components/SelectOptions';
