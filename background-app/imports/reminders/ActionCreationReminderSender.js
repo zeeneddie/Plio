@@ -105,7 +105,7 @@ export default class ActionCreationReminderSender {
 
     const emailSubject = `${capitalize(problemDesc)} ${problemName} - action(s) needed`;
     const emailText = `You created ${problemDesc} ${problem.sequentialId} on ${prettyDate}. ` +
-      `Action(s) now need to be created for this non-conformity (${diff} overdue).`;
+      `Action(s) now need to be created for this ${problemDesc} (${diff} overdue).`;
 
     const buttonLabel = `Go to this ${problemDesc}`;
     const buttonUrl = Meteor.absoluteUrl(
