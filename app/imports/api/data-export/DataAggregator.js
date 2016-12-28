@@ -29,7 +29,7 @@ class DataAggregator {
     ];
   }
 
-  addProjectField(name, value) {
+  addProjectField(name, value = true) {
     this.project[name] = _.isString(value) ? `$${value}` : value;
 
     return this;
@@ -86,7 +86,7 @@ class DataAggregator {
         .addUnwind(internalField, PRE_LOOKUP)
         .addLookup({ from, localField: internalField, foreignField: externalField, as: field })
         .addUnwind(field, POST_LOOKUP)
-        .addProjectField(field, `${field}.${target}`)
+        .addProjectField(field, target ? `${field}.${target}` : true)
         .addGroupField(field, Boolean(many));
     });
   }

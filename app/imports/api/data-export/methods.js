@@ -27,13 +27,9 @@ function saveData(file, fields, mapping, data) {
     .transform((row) => _.object(
       fields.map(field => mapping.fields[field].label),
       fields.map(field => {
-        const fieldConfig = mapping.fields[field];
-        const { mapper, format } = fieldConfig;
+        const { format } = mapping.fields[field];
 
-        if (mapper) return mapper[row[field]];
-        if (_.isFunction(format)) return format(row[field]);
-
-        return row[field];
+        return _.isFunction(format) && format(row[field]) || row[field];
       }),
     ));
 

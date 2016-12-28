@@ -1,6 +1,6 @@
 import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
-import { formatUserEmail, formatLessonsLearned } from '../formatters';
+import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../formatters';
 
 export const mapping = {
   collection: NonConformities,
@@ -22,7 +22,7 @@ export const mapping = {
     status: {
       label: 'Status',
       isDefault: true,
-      mapper: ProblemsStatuses,
+      format: formatMap(ProblemsStatuses),
     },
     statusComment: {
       label: 'Status comment',
@@ -53,18 +53,18 @@ export const mapping = {
     identifiedBy: {
       label: 'Identified by',
       isDefault: true,
-      format: formatUserEmail,
+      format: formatUser,
       reference: {
         from: CollectionNames.USERS,
         internalField: 'identifiedBy',
         externalField: '_id',
-        target: 'emails',
       },
     },
     identifiedDate: {
       label: 'Identified date',
       isDefault: true,
       reference: 'identifiedAt',
+      format: formatDate,
     },
     magnitude: {
       label: 'Magnitude',

@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { CollectionNames, ProblemsStatuses } from '/imports/share/constants';
 import { Risks } from '/imports/share/collections/risks';
-import { formatUserEmail, formatLessonsLearned } from '../formatters';
+import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../formatters';
 
 export const mapping = {
   collection: Risks,
@@ -22,7 +22,7 @@ export const mapping = {
     status: {
       label: 'Status',
       isDefault: true,
-      mapper: ProblemsStatuses,
+      format: formatMap(ProblemsStatuses),
     },
     statusComment: {
       label: 'Status comment',
@@ -52,17 +52,17 @@ export const mapping = {
     },
     identifiedBy: {
       label: 'Identified by',
-      format: formatUserEmail,
+      format: formatUser,
       reference: {
         from: CollectionNames.USERS,
         internalField: 'identifiedBy',
         externalField: '_id',
-        target: 'emails',
       },
     },
     identifiedDate: {
       label: 'Identified date',
       reference: 'identifiedAt',
+      format: formatDate,
     },
     initialCategorization: {
       label: 'Initial categorization',

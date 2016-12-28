@@ -1,7 +1,7 @@
 import { _ } from 'meteor/underscore';
 import { ActionStatuses, CollectionNames } from '/imports/share/constants';
 import { Actions } from '/imports/share/collections/actions';
-import { formatUserEmail, stripHtml } from '../formatters';
+import { formatUser, stripHtml, formatDate, formatMap } from '../formatters';
 
 
 export const mapping = {
@@ -22,16 +22,15 @@ export const mapping = {
     },
     status: {
       label: 'Status',
-      mapper: ActionStatuses,
+      format: formatMap(ActionStatuses),
     },
     owner: {
       label: 'Owner',
-      format: formatUserEmail,
+      format: formatUser,
       reference: {
         from: CollectionNames.USERS,
         internalField: 'ownerId',
         externalField: '_id',
-        target: 'emails',
       },
     },
     planInPlace: {
@@ -39,19 +38,20 @@ export const mapping = {
     },
     completionTargetDate: {
       label: 'Completion - target date',
+      format: formatDate,
     },
     completedOn: {
       label: 'Completed on',
       reference: 'completedAt',
+      format: formatDate,
     },
     completedBy: {
       label: 'Completed by',
-      format: formatUserEmail,
+      format: formatUser,
       reference: {
         from: CollectionNames.USERS,
         internalField: 'completedBy',
         externalField: '_id',
-        target: 'emails',
       },
     },
     completionComments: {
@@ -59,15 +59,15 @@ export const mapping = {
     },
     verificationTargetDate: {
       label: 'Verification - target date',
+      format: formatDate,
     },
     verifiedBy: {
       label: 'Verified by',
-      format: formatUserEmail,
+      format: formatUser,
       reference: {
         from: CollectionNames.USERS,
         internalField: 'verifiedBy',
         externalField: '_id',
-        target: 'emails',
       },
     },
     verificationComments: {

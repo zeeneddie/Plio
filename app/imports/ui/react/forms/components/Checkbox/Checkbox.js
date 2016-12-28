@@ -1,10 +1,12 @@
 import React, { PropTypes } from 'react';
-import { _ } from 'meteor/underscore';
+import cx from 'classnames';
 import { compose, withState, getContext } from 'recompose';
 
 import FormGroup from 'reactstrap/lib/FormGroup';
 import Label from 'reactstrap/lib/Label';
 import Input from 'reactstrap/lib/Input';
+import Button from 'reactstrap/lib/Button';
+import Icon from '/imports/ui/react/components/Icon';
 
 const enhance = compose(
   getContext({ changeField: PropTypes.func }),
@@ -13,14 +15,23 @@ const enhance = compose(
 const Checkbox = enhance(({ text, name, changeField, isChecked, setIsChecked }) => (
   <FormGroup check>
     <Label check>
+      <Button
+        color="secondary"
+        className={cx('btn-checkbox', { active: isChecked })}
+        onClick={(e) => {
+          e.preventDefault();
+          setIsChecked(!isChecked);
+          changeField(name, !isChecked ? 'on' : '');
+        }}
+      >
+        <Icon name="check" className={cx({ invisible: !isChecked })} />
+      </Button>
       <Input
+        readOnly
         name={name}
         type="checkbox"
         checked={isChecked}
-        onChange={({ target: { value, checked } }) => {
-          setIsChecked(checked);
-          changeField(name, checked ? value : '');
-        }}
+        className="hidden"
       />
       {` ${text}`}
     </Label>
