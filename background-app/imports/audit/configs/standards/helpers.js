@@ -2,23 +2,25 @@ import { getUserId } from '../../utils/helpers.js';
 
 
 export const getReceivers = function({ newDoc, user }) {
-  const { owner } = newDoc;
-  const userId = getUserId(user);
+  const { notify } = newDoc;
+  const index = notify.indexOf(getUserId(user));
 
-  return (owner !== userId) ? [owner]: [];
+  return index > -1
+    ? notify.slice(0, index).concat(notify.slice(index + 1))
+    : [...notify];
 };
 
 export const getReceiversForIPReviewDate = function({ newDoc, user }) {
-  const { owner:standardOwnerId } = newDoc;
   const { owner:IPOwnerId } = newDoc.improvementPlan;
-  const userId = getUserId(user);
+  let receivers = getReceivers({ newDoc, user });
 
-  const receivers = new Set();
-  _([standardOwnerId, IPOwnerId]).each((_id) => {
-    if (_id && (_id !== userId)) {
-      receivers.add(_id);
+  if (IPOwnerId && (IPOwnerId !== getUserId(user))) {
+    const index = receivers.indexOf(IPOwnerId);
+
+    if (index === -1) {
+      receivers = [...receivers, IPOwnerId];
     }
-  });
+  }
 
-  return Array.from(receivers);
+  return receivers;
 };

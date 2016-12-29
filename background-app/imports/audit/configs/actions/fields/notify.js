@@ -23,7 +23,7 @@ export default {
     },
     {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
-        return kind === ITEM_ADDED;
+        return kind === ChangesKinds.ITEM_ADDED;
       },
       text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',

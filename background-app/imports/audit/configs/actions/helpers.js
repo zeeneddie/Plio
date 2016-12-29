@@ -8,7 +8,7 @@ import NCAuditConfig from '../non-conformities/nc-audit-config.js';
 import RiskAuditConfig from '../risks/risk-audit-config.js';
 
 
-export const getReceivers = ({ linkedTo, ownerId }, user) => {
+export const getReceivers = ({ linkedTo, notify }, user) => {
   const getLinkedDocsIds = (linkedDocs, docType) => {
     return _.pluck(
       _.filter(linkedDocs, ({ documentType }) => documentType === docType),
@@ -16,7 +16,7 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
     );
   };
 
-  const usersIds = new Set([ownerId]);
+  const usersIds = new Set(notify);
   const standardsIds = new Set();
 
   const getIds = (collection, problemType) => {
@@ -43,12 +43,11 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
   }).forEach(({ owner }) => usersIds.add(owner));
 
   const receivers = Array.from(usersIds);
-
-  const userId = getUserId(user);
-  const index = receivers.indexOf(userId);
-  (index > -1) && receivers.splice(index, 1);
-
-  return receivers;
+  const index = receivers.indexOf(getUserId(user));
+  
+  return index > -1
+    ? receivers.slice(0, index).concat(receivers.slice(index + 1))
+    : receivers;
 };
 
 export const getLinkedDocAuditConfig = (documentType) => {
