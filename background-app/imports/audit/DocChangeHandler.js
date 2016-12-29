@@ -46,10 +46,13 @@ export default class DocChangeHandler {
     this._docDesc = auditConfig.docDescription(doc);
     this._docName = auditConfig.docName(doc);
     this._docUrl = auditConfig.docUrl(doc);
+    this._docNotifyList = auditConfig.docNotifyList && auditConfig.docNotifyList(doc);
+    this._unsubscribeFromNotificationsUrl = auditConfig.docUnsubscribeFromNotificationsUrl &&
+      auditConfig.docUnsubscribeFromNotificationsUrl(doc);
 
     this._docOrgId = auditConfig.docOrgId(doc);
 
-    const { name:orgName } = Organizations.findOne({ _id: this._docOrgId }) || {};
+    const { name: orgName } = Organizations.findOne({ _id: this._docOrgId }) || {};
     this._docOrgName = orgName;
 
     this._collectionName = auditConfig.collectionName;
@@ -308,7 +311,7 @@ export default class DocChangeHandler {
     emailTemplate, emailSubjectTemplate, emailTemplateData,
     pushTemplate, pushTitleTemplate, pushData,
     emailTemplateName, receivers, templateData,
-    sendBoth
+    sendBoth,
   }) {
     if (!receivers || !receivers.length) {
       return;
@@ -337,15 +340,16 @@ export default class DocChangeHandler {
       emailSubject,
       templateData: _({
         organizationName: this._docOrgName,
+        docName: this._docName,
         title: emailSubject,
         text: emailText
       }).extend(emailTemplateData),
       notificationData: _({
         title: pushTitle,
         body: pushText,
-        url: this._docUrl
+        url: this._docUrl,
       }).extend(pushData),
-      sendBoth
+      sendBoth,
     };
 
     if (_(this._user).isObject()) {
@@ -360,6 +364,12 @@ export default class DocChangeHandler {
           url: this._docUrl,
           label: 'Go to this document',
         },
+      });
+    }
+
+    if (this._unsubscribeFromNotificationsUrl) {
+      _(notification.templateData).extend({
+        unsubscribeFromNotificationsUrl: this._unsubscribeFromNotificationsUrl,
       });
     }
 
@@ -411,11 +421,24 @@ export default class DocChangeHandler {
   _sendNotificationsToUser(notifications, user) {
     const isUserOnline = user.status === 'online';
 
-    _(notifications).each(({ recipients, sendBoth, ...args }) => {
-      const sender = new NotificationSender({
-        recipients: user._id,
-        ...args
-      });
+    _(notifications).each(({
+      recipients,
+      sendBoth,
+      templateData: {
+        unsubscribeFromNotificationsUrl,
+        ...templateData,
+      },
+      ...args,
+    }) => {
+      const options = { recipients: user._id, templateData, ...args };
+
+      if (unsubscribeFromNotificationsUrl &&
+          this._notifyList &&
+          this._notifyList.includes(user._id)) {
+        Object.assign(options, { unsubscribeFromNotificationsUrl });
+      }
+
+      const sender = new NotificationSender(options);
 
       if (sendBoth) {
         sender.sendAll();

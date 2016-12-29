@@ -1,7 +1,6 @@
-import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { Risks } from '/imports/share/collections/risks.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import { CollectionNames } from '/imports/share/constants.js';
 import ProblemAuditConfig from '../problems/problem-audit-config.js';
 import RiskWorkflow from '/imports/workflow/RiskWorkflow.js';
@@ -21,7 +20,9 @@ import riskEvaluationPrevLossExp from './fields/riskEvaluation.prevLossExp.js';
 import riskEvaluationPriority from './fields/riskEvaluation.priority.js';
 import scores from './fields/scores.js';
 import typeId from './fields/typeId.js';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
 
+const generateRiskDocUrl = generateDocUrlByPrefix('risks');
 
 export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
@@ -47,18 +48,14 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
     riskEvaluationPrevLossExp,
     riskEvaluationPriority,
     scores,
-    typeId
+    typeId,
   ],
 
-  docDescription(doc) {
+  docDescription() {
     return 'risk';
   },
 
-  docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/risks/${_id}`, {
-      rootUrl: Meteor.settings.mainApp.url
-    });
-  }
+  docUrl: generateRiskDocUrl,
 
+  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateRiskDocUrl),
 });

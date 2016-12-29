@@ -1,8 +1,7 @@
-import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { CollectionNames } from '/imports/share/constants.js';
 import { Standards } from '/imports/share/collections/standards.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 
 import onCreated from './on-created.js';
 import onRemoved from './on-removed.js';
@@ -23,7 +22,9 @@ import sectionId from './fields/sectionId.js';
 import status from './fields/status.js';
 import title from './fields/title.js';
 import typeId from './fields/typeId.js';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
 
+const generateStandardDocUrl = generateDocUrlByPrefix('standards');
 
 export default StandardAuditConfig = {
 
@@ -49,7 +50,7 @@ export default StandardAuditConfig = {
     sectionId,
     status,
     title,
-    typeId
+    typeId,
   ],
 
   onRemoved,
@@ -58,7 +59,7 @@ export default StandardAuditConfig = {
     return _id;
   },
 
-  docDescription(doc) {
+  docDescription() {
     return 'standard';
   },
 
@@ -70,11 +71,11 @@ export default StandardAuditConfig = {
     return organizationId;
   },
 
-  docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/standards/${_id}`, {
-      rootUrl: Meteor.settings.mainApp.url
-    });
-  }
+  docUrl: generateStandardDocUrl,
 
+  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateStandardDocUrl),
+
+  docNotifyList({ notify: notifyList = [] }) {
+    return notifyList;
+  },
 };

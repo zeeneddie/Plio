@@ -1,8 +1,7 @@
-import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { CollectionNames } from '/imports/share/constants.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
 import ProblemAuditConfig from '../problems/problem-audit-config.js';
 import NCWorkflow from '/imports/workflow/NCWorkflow.js';
 
@@ -16,7 +15,9 @@ import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import ref from './fields/ref.js';
 import refText from './fields/ref.text.js';
 import refUrl from './fields/ref.url.js';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
 
+const generateNCDocUrl = generateDocUrlByPrefix('non-conformities');
 
 export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
 
@@ -37,18 +38,18 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
     improvementPlanTargetDate,
     ref,
     refText,
-    refUrl
+    refUrl,
   ],
 
-  docDescription(doc) {
+  docDescription() {
     return 'non-conformity';
   },
 
-  docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/non-conformities/${_id}`, {
-      rootUrl: Meteor.settings.mainApp.url
-    });
-  }
+  docUrl: generateNCDocUrl,
 
+  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateNCDocUrl),
+
+  docNotifyList({ notify = [] }) {
+    return notify;
+  },
 });

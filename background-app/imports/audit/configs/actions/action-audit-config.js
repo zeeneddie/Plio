@@ -1,3 +1,5 @@
+import { _ } from 'meteor/underscore';
+
 import { Actions } from '/imports/share/collections/actions.js';
 import { ActionTypes, CollectionNames } from '/imports/share/constants.js';
 
@@ -25,7 +27,7 @@ import verificationComments from './fields/verificationComments.js';
 import verificationTargetDate from './fields/verificationTargetDate.js';
 import verifiedAt from './fields/verifiedAt.js';
 import verifiedBy from './fields/verifiedBy.js';
-
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
 
 export default ActionAuditConfig = {
 
@@ -56,7 +58,7 @@ export default ActionAuditConfig = {
     verificationComments,
     verificationTargetDate,
     verifiedAt,
-    verifiedBy
+    verifiedBy,
   ],
 
   onRemoved,
@@ -69,7 +71,7 @@ export default ActionAuditConfig = {
     return {
       [ActionTypes.CORRECTIVE_ACTION]: 'corrective action',
       [ActionTypes.PREVENTATIVE_ACTION]: 'preventative action',
-      [ActionTypes.RISK_CONTROL]: 'risk control'
+      [ActionTypes.RISK_CONTROL]: 'risk control',
     }[type];
   },
 
@@ -81,6 +83,14 @@ export default ActionAuditConfig = {
     return organizationId;
   },
 
-  docUrl(doc) { }
+  docUrl(doc) { },
 
+  docUnsubscribeFromNotificationsUrl: _.compose(
+    generateDocUnsubscribeUrl,
+    generateDocUrlByPrefix('actions')
+  ),
+
+  docNotifyList({ notify: notifyList = [] }) {
+    return notifyList;
+  },
 };
