@@ -39,7 +39,7 @@ function saveData(file, fields, mapping, data) {
   }));
 
   writer.pipe(stream);
-  data.forEach(entity => writer.write(entity));
+  data.fetch().forEach(entity => writer.write(entity));
   writer.end();
 
   return streamFuture.wait();
@@ -68,6 +68,6 @@ Meteor.methods({
       org._id
     );
 
-    return saveData(file, sortedFields, mapping, dataAggregator.fetch());
+    return saveData(file, sortedFields, mapping, dataAggregator);
   },
 });
