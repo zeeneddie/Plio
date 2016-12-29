@@ -5,7 +5,7 @@ import { _ } from 'meteor/underscore';
 import Handlebars from 'handlebars';
 
 
-export default HandlebarsCache = {
+export default EmailTemplates = {
 
   _cachedTemplates: {},
 

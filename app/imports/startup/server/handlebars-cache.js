@@ -1,9 +1,9 @@
-import HandlebarsCache from '/imports/share/utils/handlebars-cache.js';
+import EmailTemplates from '/imports/share/utils/email-templates';
 
 
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 
-HandlebarsCache.addTemplates({
+EmailTemplates.addTemplates({
   minimalisticEmail: getAssetPath('email', 'minimalistic-email'),
   personalEmail: getAssetPath('email', 'personal-email')
 });

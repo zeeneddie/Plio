@@ -11,14 +11,11 @@ export default {
         return !isCompleted;
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Completion date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Completion date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Completion date removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -26,14 +23,11 @@ export default {
         return !isCompleted;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion date of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.removed',
+      },
+    },
   ],
   data({ diffs: { completedAt }, newDoc, user }) {
     const { newValue, oldValue } = completedAt;
@@ -45,10 +39,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

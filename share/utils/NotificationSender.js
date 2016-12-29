@@ -3,7 +3,7 @@ import { _ } from 'meteor/underscore';
 import { Email } from 'meteor/email';
 
 import { Notifications } from '../collections/notifications.js'
-import HandlebarsCache from './handlebars-cache.js';
+import EmailTemplates from './email-templates.js';
 import { htmlToPlainText } from '/imports/share/helpers.js';
 
 
@@ -61,7 +61,7 @@ export default class NotificationSender {
   _renderTemplateWithData() {
     let templateData = this._options.templateData;
     let templateName = this._options.templateName;
-    return HandlebarsCache.render(templateName, templateData, this._options.helpers);
+    return EmailTemplates.render(templateName, templateData, this._options.helpers);
   }
 
   _getEmailSubject() {
