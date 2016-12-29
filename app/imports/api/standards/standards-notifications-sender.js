@@ -29,7 +29,7 @@ export default class StandardsNotificationsSender {
     new NotificationSender({
       recipients: userId,
       emailSubject,
-      templateName: 'minimalisticEmail',
+      templateName: 'personalEmail',
       templateData,
       notificationData: {
         title: this._standard.title,

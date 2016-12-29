@@ -1,9 +1,9 @@
 import moment from 'moment-timezone';
-import pluralize from 'pluralize';
 
 import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { capitalize, getUserFullNameOrEmail } from '/imports/share/helpers.js';
+import { getDiffInDays } from '/imports/helpers';
 
 
 const ReminderTypes = {
@@ -119,14 +119,6 @@ const getDocUrl = ({ docType, ...rest }) => {
     case ReminderDocTypes.STANDARD:
       return getStandardUrl({ docType, ...rest });
   }
-};
-
-const getDiffInDays = (targetDate, timezone) => {
-  const today = moment().tz(timezone).startOf('day').toDate();
-  const diff = moment(targetDate).diff(today);
-  const days = Math.abs(moment.duration(diff).asDays());
-
-  return `${days} ${pluralize('day', days)}`;
 };
 
 const ReminderConfig = {
