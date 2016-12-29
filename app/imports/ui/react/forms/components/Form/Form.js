@@ -2,9 +2,11 @@ import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 import { compose, withContext, withState, defaultProps } from 'recompose';
 import serialize from 'form-serialize';
+import set from 'lodash.set';
 
 import FormGroup from './FormGroup';
 import FormLabel from './FormLabel';
+import SubForm from './SubForm';
 
 const enhance = compose(
   defaultProps({ autosave: false }),
@@ -14,14 +16,13 @@ const enhance = compose(
       changeField: PropTypes.func,
       getField: PropTypes.func,
     },
-    props => ({
+    (props) => ({
       changeField(fieldName, newFieldValue) {
         if (!props.autosave) return;
 
-        props.setFormData({
-          ...props.formData,
-          [fieldName]: newFieldValue,
-        });
+        const newFormData = set(props.formData, fieldName, newFieldValue);
+
+        props.setFormData(newFormData);
 
         _.isFunction(props.onFormChange) && props.onFormChange(fieldName, newFieldValue);
       },
@@ -58,5 +59,6 @@ Form.propTypes = {
 
 Form.Group = FormGroup;
 Form.Label = FormLabel;
+Form.SubForm = SubForm;
 
 export default Form;

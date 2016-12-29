@@ -4,7 +4,7 @@ const PRE_LOOKUP = 'preLookupUnwinds';
 const POST_LOOKUP = 'postLookupUnwinds';
 
 class DataAggregator {
-  constructor(fields, mapping, organizationId) {
+  constructor(fields, filters, mapping, organizationId) {
     this.preLookupUnwinds = [];
     this.lookups = [];
     this.postLookupUnwinds = [];
@@ -12,6 +12,7 @@ class DataAggregator {
     this.group = { _id: '$_id' };
 
     this.fields = fields;
+    this.filters = filters;
     this.mapping = mapping;
     this.organizationId = organizationId;
 
@@ -20,7 +21,12 @@ class DataAggregator {
 
   get query() {
     return [
-      { $match: { ...this.mapping.filter, organizationId: this.organizationId } },
+      {
+        $match: {
+          [this.mapping.filterField]: { $in: this.filters },
+          organizationId: this.organizationId,
+        },
+      },
       ...this.preLookupUnwinds,
       ...this.lookups,
       ...this.postLookupUnwinds,

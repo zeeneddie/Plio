@@ -46,13 +46,13 @@ function saveData(file, fields, mapping, data) {
 }
 
 Meteor.methods({
-  'DataExport.generateLink'({ org, docType, fields }) {
+  'DataExport.generateLink'({ org, docType, fields, filters }) {
     if (!isOrgMember(this.userId, org._id)) {
       throw new Meteor.Error(`${this.userId} is't member of organization ${org._id}`);
     }
 
     if (!(docType in Mapping)) {
-      throw new Meteor.Error('bad-entity-for-export', 'Bad entity for export');
+      throw new Meteor.Error('bad-doc-type-for-export', 'Bad document type for export');
     }
 
     const { mapping } = Mapping[docType];
@@ -61,7 +61,12 @@ Meteor.methods({
 
     // get field order from mapping
     const sortedFields = _.intersection(Object.keys(mapping.fields), fields);
-    const dataAggregator = new DataAggregator(fields, mapping, org._id);
+    const dataAggregator = new DataAggregator(
+      fields.map(String),
+      filters.map(Number),
+      mapping,
+      org._id
+    );
 
     return saveData(file, sortedFields, mapping, dataAggregator.fetch());
   },

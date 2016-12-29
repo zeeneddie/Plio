@@ -9,10 +9,13 @@ import Button from 'reactstrap/lib/Button';
 import Icon from '/imports/ui/react/components/Icon';
 
 const enhance = compose(
-  getContext({ changeField: PropTypes.func }),
+  getContext({
+    changeField: PropTypes.func,
+    subFormName: PropTypes.string,
+  }),
   withState('isChecked', 'setIsChecked', props => !!props.checked),
 );
-const Checkbox = enhance(({ text, name, changeField, isChecked, setIsChecked }) => (
+const Checkbox = enhance(({ text, name, subFormName, changeField, isChecked, setIsChecked }) => (
   <FormGroup check>
     <Label check>
       <Button
@@ -21,14 +24,17 @@ const Checkbox = enhance(({ text, name, changeField, isChecked, setIsChecked }) 
         onClick={(e) => {
           e.preventDefault();
           setIsChecked(!isChecked);
-          changeField(name, !isChecked ? 'on' : '');
+          changeField(
+            subFormName ? `${subFormName}.${name}` : name,
+            !isChecked ? 'on' : ''
+          );
         }}
       >
-        <Icon name="check" className={cx({ invisible: !isChecked })} />
+        <Icon name="check" />
       </Button>
       <Input
         readOnly
-        name={name}
+        name={subFormName ? `${subFormName}[${name}]` : name}
         type="checkbox"
         checked={isChecked}
         className="hidden"

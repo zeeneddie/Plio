@@ -23,6 +23,7 @@
     "lodash.get": "^4.4.2",
     "lodash.invoke": "^4.5.1",
     "lodash.property": "^4.4.2",
+    "lodash.set": "^4.3.2",
     "mammoth": "^1.0.3",
     "matches-selector": "^1.0.0",
     "meteor-node-stubs": "^0.2.3",

@@ -26,7 +26,7 @@ Template.NC_Header.viewmodel({
           onHandleDataExport() {
             view.modal().open({
               template: 'NonConformitiesExport',
-              _title: 'Non Conformities Export',
+              _title: 'Non-conformities Export',
               variation: 'close',
             });
           },

@@ -6,7 +6,7 @@ import { formatUser, stripHtml, formatDate, formatMap } from '../formatters';
 
 export const mapping = {
   collection: Actions,
-  filter: { status: { $lt: 6 }, isDeleted: { $ne: true } }, // only in progress actions
+  filterField: 'status',
   fields: {
     _id: {
       label: 'Action ID',

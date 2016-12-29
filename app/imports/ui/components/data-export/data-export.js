@@ -1,7 +1,5 @@
 import { Template } from 'meteor/templating';
-import
-  SelectOptionsContainer
-  from '/imports/ui/react/data-export/containers/SelectOptionsContainer';
+import DataExport from '/imports/ui/react/data-export/containers/DataExportContainer';
 
 Template.DataExport.viewmodel({
   mixin: 'modal',
@@ -10,7 +8,7 @@ Template.DataExport.viewmodel({
 
     return {
       handleMethodResult: modal.handleMethodResult.bind(modal),
-      component: SelectOptionsContainer,
+      component: DataExport,
       ...this.args(),
     };
   },

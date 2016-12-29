@@ -4,7 +4,7 @@ import { formatUser, formatLessonsLearned, formatMap, formatDate } from '../form
 
 export const mapping = {
   collection: NonConformities,
-  filter: { status: { $lt: 18 }, isDeleted: { $ne: true } }, // open only
+  filterField: 'status',
   fields: {
     _id: {
       label: 'Non-conformity ID',
