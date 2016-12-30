@@ -1,6 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds.js';
 import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceiversForIPReviewDate } from '../helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -37,7 +37,5 @@ export default {
       date: () => getPrettyOrgDate(date, orgId())
     };
   },
-  receivers({ newDoc, user }) {
-    return getReceiversForIPReviewDate({ newDoc, user });
-  }
+  receivers: getReceivers,
 };
