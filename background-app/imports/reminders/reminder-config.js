@@ -1,10 +1,11 @@
 import moment from 'moment-timezone';
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { capitalize, getUserFullNameOrEmail } from '/imports/share/helpers.js';
-import { getDiffInDays } from '/imports/helpers';
+import { getDiffInDays, generateDocUnsubscribeUrl } from '/imports/helpers';
 
 
 const ReminderTypes = {
@@ -68,8 +69,10 @@ const getActionUrl = ({ doc, reminderType, org }) => {
   });
 };
 
-const getActionUnsubscribeFromNotificationsUrl = ({ doc, org }) =>
-  Meteor.absoluteUrl(`${org.serialNumber}/actions/${doc._id}/unsubscribe`);
+const getActionUrlByPrefix = ({ doc, org }) =>
+  Meteor.absoluteUrl(`${org.serialNumber}/actions/${doc._id}`, {
+    rootUrl: Meteor.settings.mainApp.url,
+  });
 
 const getStandardUrl = ({ doc, org }) =>
   Meteor.absoluteUrl(`${org.serialNumber}/standards/${doc._id}`, {
@@ -87,6 +90,8 @@ const getDocDesc = (docType) => {
       return getActionDesc(docType);
     case ReminderDocTypes.STANDARD:
       return getStandardDesc();
+    default:
+      return undefined;
   }
 };
 
@@ -101,6 +106,8 @@ const getDocName = (doc, docType) => {
       return getActionName(doc);
     case ReminderDocTypes.STANDARD:
       return getStandardName(doc);
+    default:
+      return undefined;
   }
 };
 
@@ -115,6 +122,8 @@ const getDocUrl = ({ docType, ...rest }) => {
       return getActionUrl({ docType, ...rest });
     case ReminderDocTypes.STANDARD:
       return getStandardUrl({ docType, ...rest });
+    default:
+      return undefined;
   }
 };
 
@@ -123,134 +132,146 @@ const ReminderConfig = {
   [ReminderTypes.COMPLETE_ANALYSIS]: {
     title: {
       beforeDue:
-        'Root cause analysis of {{problemDesc}} {{{problemName}}} is {{diff}} before due',
+        'Root cause analysis of {{problemDesc}} {{{docName}}} is {{diff}} before due',
       dueToday:
-        'Root cause analysis of {{problemDesc}} {{{problemName}}} is due today',
+        'Root cause analysis of {{problemDesc}} {{{docName}}} is due today',
       overdue:
-        'Root cause analysis of {{problemDesc}} {{{problemName}}} is {{diff}} overdue',
+        'Root cause analysis of {{problemDesc}} {{{docName}}} is {{diff}} overdue',
     },
     text: {
       beforeDue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete a root cause analysis of {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
+        '{{{docName}}} by {{date}}. This action is {{diff}} before due.',
       dueToday:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete a root cause analysis of {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is due today.',
+        '{{{docName}}} by {{date}}. This action is due today.',
       overdue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete a root cause analysis of {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.',
+        '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, dateConfig, org }) => ({
-      problemName: () => getProblemName(doc),
-      problemDesc: () => getProblemDesc(docType),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
-      userName: () => getUserFullNameOrEmail(doc.analysis.assignedBy),
-    }),
-    receivers: ({ doc }) => doc.analysis.executor,
-    url: getProblemUrl
+    receivers: ({ doc: { analysis, notify } }) => (
+      (analysis.executor && notify.includes(analysis.executor))
+        ? [analysis.executor]
+        : []
+    ),
+    url: getProblemUrl,
+    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getProblemUrl),
   },
 
   [ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS]: {
     title: {
       beforeDue:
-        'Update of standards related to {{problemDesc}} {{{problemName}}} is {{diff}} before due',
+        'Update of standards related to {{problemDesc}} {{{docName}}} is {{diff}} before due',
       dueToday:
-        'Update of standards related to {{problemDesc}} {{{problemName}}} is due today',
+        'Update of standards related to {{problemDesc}} {{{docName}}} is due today',
       overdue:
-        'Update of standards related to {{problemDesc}} {{{problemName}}} is {{diff}} overdue',
+        'Update of standards related to {{problemDesc}} {{{docName}}} is {{diff}} overdue',
     },
     text: {
       beforeDue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete an update of standards related to {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is {{diff}} before due.',
+        '{{{docName}}} by {{date}}. This action is {{diff}} before due.',
       dueToday:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete an update of standards related to {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is due today.',
+        '{{{docName}}} by {{date}}. This action is due today.',
       overdue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
         'to complete an update of standards related to {{problemDesc}} ' +
-        '{{{problemName}}} by {{date}}. This action is {{diff}} overdue.',
+        '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
     },
     data: ({ doc, docType, date, org }) => ({
-      problemName: () => getProblemName(doc),
+      docName: () => getProblemName(doc),
       problemDesc: () => getProblemDesc(docType),
       date: () => getPrettyDate(date, org.timezone),
       diff: () => getDiffInDays(date, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.updateOfStandards.assignedBy),
     }),
-    receivers: ({ doc }) => doc.updateOfStandards.executor,
+    receivers: ({ doc: { updateOfStandards, notify } }) => (
+      (updateOfStandards.executor && notify.includes(updateOfStandards.executor))
+        ? [updateOfStandards.executor]
+        : []
+    ),
     url: getProblemUrl,
+    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getProblemUrl),
   },
 
   [ReminderTypes.COMPLETE_ACTION]: {
     title: {
-      beforeDue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} before due',
-      dueToday: '{{actionDescCapitalized}} {{{actionName}}} is due today',
-      overdue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} overdue',
+      beforeDue: '{{actionDescCapitalized}} {{{docName}}} is {{diff}} before due',
+      dueToday: '{{actionDescCapitalized}} {{{docName}}} is due today',
+      overdue: '{{actionDescCapitalized}} {{{docName}}} is {{diff}} overdue',
     },
     text: {
       beforeDue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to complete {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} before due.',
       dueToday:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to complete {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is due today.',
       overdue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to complete {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to complete {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} overdue.',
     },
     data: ({ doc, docType, date, org }) => ({
-      actionName: () => getActionName(doc),
+      docName: () => getActionName(doc),
       actionDesc: () => getActionDesc(docType),
       actionDescCapitalized: () => capitalize(getActionDesc(docType)),
       date: () => getPrettyDate(date, org.timezone),
       diff: () => getDiffInDays(date, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.completionAssignedBy),
     }),
-    receivers: ({ doc }) => doc.toBeCompletedBy,
     url: getActionUrl,
-    unsubscribeFromNotificationsUrl: getActionUnsubscribeFromNotificationsUrl,
+    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getActionUrlByPrefix),
+    receivers: ({ doc: { toBeCompletedBy, notify } }) => (
+      (toBeCompletedBy && notify.includes(toBeCompletedBy))
+        ? [toBeCompletedBy]
+        : []
+    ),
   },
 
   [ReminderTypes.VERIFY_ACTION]: {
     title: {
-      beforeDue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} before due',
-      dueToday: '{{actionDescCapitalized}} {{{actionName}}} is due today',
-      overdue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} overdue',
+      beforeDue: '{{actionDescCapitalized}} {{{docName}}} is {{diff}} before due',
+      dueToday: '{{actionDescCapitalized}} {{{docName}}} is due today',
+      overdue: '{{actionDescCapitalized}} {{{docName}}} is {{diff}} overdue',
     },
     text: {
       beforeDue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to verify {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} before due.',
       dueToday:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to verify {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is due today.',
       overdue:
         'You have been asked {{#if userName}}by {{{userName}}} {{/if}}' +
-        'to verify {{actionDesc}} {{{actionName}}} by {{date}}. ' +
+        'to verify {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} overdue.',
     },
     data: ({ doc, docType, date, org }) => ({
-      actionName: () => getActionName(doc),
+      docName: () => getActionName(doc),
       actionDesc: () => getActionDesc(docType),
       actionDescCapitalized: () => capitalize(getActionDesc(docType)),
       date: () => getPrettyDate(date, org.timezone),
       diff: () => getDiffInDays(date, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.verificationAssignedBy),
     }),
-    receivers: ({ doc }) => doc.toBeVerifiedBy,
+    receivers: ({ doc: { toBeVerifiedBy, notify } }) => (
+      (toBeVerifiedBy && notify.includes(toBeVerifiedBy))
+        ? [toBeVerifiedBy]
+        : []
+    ),
     url: getActionUrl,
+    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getActionUrlByPrefix),
   },
 
   [ReminderTypes.REVIEW_IMPROVEMENT_PLAN]: {
@@ -276,8 +297,13 @@ const ReminderConfig = {
       date: () => getPrettyDate(date, org.timezone),
       diff: () => getDiffInDays(date, org.timezone),
     }),
-    receivers: ({ doc }) => doc.improvementPlan.owner,
+    receivers: ({ doc: { improvementPlan, notify } }) => (
+      (improvementPlan.owner && notify.includes(improvementPlan.owner))
+        ? [improvementPlan.owner]
+        : []
+    ),
     url: getDocUrl,
+    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getDocUrl),
   },
 
 };

@@ -103,7 +103,18 @@ export default class ActionCreationReminderSender {
     ));
   }
 
+  _getReceivers({ identifiedBy, notify = [] }) {
+    return (identifiedBy && notify.includes(identifiedBy))
+      ? [identifiedBy]
+      : [];
+  }
+
   _sendReminder(problem, problemType) {
+    const receivers = this._getReceivers(problem);
+    if (!receivers.length) {
+      return;
+    }
+
     const problemDesc = getProblemDescription(problemType);
     const problemName = getProblemName(problem);
     const prettyDate = getFormattedDate(problem.createdAt, 'MMMM DD, YYYY');
@@ -132,7 +143,7 @@ export default class ActionCreationReminderSender {
 
     new NotificationSender({
       templateName: REMINDER_EMAIL_TEMPLATE,
-      recipients: [problem.identifiedBy],
+      recipients: receivers,
       emailSubject,
       templateData,
     }).sendEmail();
