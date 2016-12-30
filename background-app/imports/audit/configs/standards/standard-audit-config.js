@@ -22,7 +22,7 @@ import sectionId from './fields/sectionId.js';
 import status from './fields/status.js';
 import title from './fields/title.js';
 import typeId from './fields/typeId.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
 
 const generateStandardDocUrl = generateDocUrlByPrefix('standards');
 

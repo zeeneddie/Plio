@@ -203,6 +203,8 @@ export default class ReminderSender {
       };
       const templateData = config.data(args);
 
+      console.log(args, templateData);
+
       const today = this._date;
       let templateKey;
       if (moment(today).isBefore(date)) {

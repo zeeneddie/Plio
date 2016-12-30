@@ -27,7 +27,7 @@ import verificationComments from './fields/verificationComments.js';
 import verificationTargetDate from './fields/verificationTargetDate.js';
 import verifiedAt from './fields/verifiedAt.js';
 import verifiedBy from './fields/verifiedBy.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
 
 export default ActionAuditConfig = {
 

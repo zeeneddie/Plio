@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import { Meteor } from 'meteor/meteor';
 
 import { ActionTypes, DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
@@ -72,6 +73,9 @@ const getActionUrl = ({ doc, docType, reminderType, org }) => {
     rootUrl: Meteor.settings.mainApp.url
   });
 };
+
+const getActionUnsubscribeFromNotificationsUrl = ({ doc, org }) =>
+  Meteor.absoluteUrl(`${org.serialNumber}/actions/${doc._id}/unsubscribe`);
 
 const getStandardUrl = ({ doc, org }) => {
   return Meteor.absoluteUrl(`${org.serialNumber}/standards/${doc._id}`, {
@@ -233,7 +237,8 @@ const ReminderConfig = {
     receivers: ({ doc }) => {
       return doc.toBeCompletedBy;
     },
-    url: getActionUrl
+    url: getActionUrl,
+    unsubscribeFromNotificationsUrl: getActionUnsubscribeFromNotificationsUrl,
   },
 
   [ReminderTypes.VERIFY_ACTION]: {

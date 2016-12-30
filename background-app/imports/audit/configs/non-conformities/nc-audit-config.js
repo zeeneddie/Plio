@@ -15,7 +15,7 @@ import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import ref from './fields/ref.js';
 import refText from './fields/ref.text.js';
 import refUrl from './fields/ref.url.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
 
 const generateNCDocUrl = generateDocUrlByPrefix('non-conformities');
 

@@ -20,7 +20,7 @@ import riskEvaluationPrevLossExp from './fields/riskEvaluation.prevLossExp.js';
 import riskEvaluationPriority from './fields/riskEvaluation.priority.js';
 import scores from './fields/scores.js';
 import typeId from './fields/typeId.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '../utils/helpers';
+import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
 
 const generateRiskDocUrl = generateDocUrlByPrefix('risks');
 
