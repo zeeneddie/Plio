@@ -155,8 +155,10 @@ const ReminderConfig = {
         userName: () => getUserFullNameOrEmail(doc.analysis.assignedBy),
       };
     },
-    receivers: ({ doc }) => {
-      return doc.analysis.executor;
+    receivers: ({ doc: { analysis, notify } }) => {
+      return (analysis.executor && notify.includes(analysis.executor))
+        ? [analysis.executor]
+        : [];
     },
     url: getProblemUrl
   },
@@ -193,14 +195,15 @@ const ReminderConfig = {
         userName: () => getUserFullNameOrEmail(doc.updateOfStandards.assignedBy),
       };
     },
-    receivers: ({ doc }) => {
-      return doc.updateOfStandards.executor;
+    receivers: ({ doc: { updateOfStandards, notify } }) => {
+      return (updateOfStandards.executor && notify.includes(updateOfStandards.executor))
+        ? [updateOfStandards.executor]
+        : [];
     },
     url: getProblemUrl
   },
 
   [ReminderTypes.COMPLETE_ACTION]: {
-    title: '{{actionDesc}} must be completed',
     title: {
       beforeDue: '{{actionDescCapitalized}} {{{actionName}}} is {{diff}} before due',
       dueToday: '{{actionDescCapitalized}} {{{actionName}}} is due today',
@@ -230,8 +233,10 @@ const ReminderConfig = {
         userName: () => getUserFullNameOrEmail(doc.completionAssignedBy),
       };
     },
-    receivers: ({ doc }) => {
-      return doc.toBeCompletedBy;
+    receivers: ({ doc: { toBeCompletedBy, notify } }) => {
+      return (toBeCompletedBy && notify.includes(toBeCompletedBy))
+        ? [toBeCompletedBy]
+        : [];
     },
     url: getActionUrl
   },
@@ -266,8 +271,10 @@ const ReminderConfig = {
         userName: () => getUserFullNameOrEmail(doc.verificationAssignedBy),
       };
     },
-    receivers: ({ doc }) => {
-      return doc.toBeVerifiedBy;
+    receivers: ({ doc: { toBeVerifiedBy, notify } }) => {
+      return (toBeVerifiedBy && notify.includes(toBeVerifiedBy))
+        ? [toBeVerifiedBy]
+        : [];
     },
     url: getActionUrl
   },
@@ -297,8 +304,10 @@ const ReminderConfig = {
         diff: () => getDiffInDays(date, org.timezone)
       };
     },
-    receivers: ({ doc }) => {
-      return doc.improvementPlan.owner;
+    receivers: ({ doc: { improvementPlan, notify } }) => {
+      return (improvementPlan.owner && notify.includes(improvementPlan.owner))
+        ? [improvementPlan.owner]
+        : [];
     },
     url: getDocUrl
   }

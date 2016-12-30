@@ -217,6 +217,9 @@ export default class ReminderSender {
       const text = renderTemplate(config.text[templateKey], templateData);
 
       const receivers = config.receivers(args);
+      if (!receivers.length) {
+        return;
+      }
 
       const emailTemplateData = {
         organizationName: this._organization.name,
