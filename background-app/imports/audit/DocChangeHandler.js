@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
@@ -92,8 +93,8 @@ export default class DocChangeHandler {
       args: {
         newDoc: this._newDoc,
         user: this._user,
-        date: this._date
-      }
+        date: this._date,
+      },
     });
   }
 
@@ -110,7 +111,7 @@ export default class DocChangeHandler {
       newDoc: this._newDoc,
       oldDoc: this._oldDoc,
       user: this._user,
-      date: this._date
+      date: this._date,
     };
 
     _(diffs).each((diff) => {
@@ -132,8 +133,8 @@ export default class DocChangeHandler {
       args: {
         oldDoc: this._oldDoc,
         user: this._user,
-        date: this._date
-      }
+        date: this._date,
+      },
     });
   }
 
@@ -165,7 +166,7 @@ export default class DocChangeHandler {
 
   _buildLogs(handler, args, logConfig, diff) {
     const getData = logConfig.data || handler.data;
-    const { message, logData:getLogData } = logConfig;
+    const { message, logData: getLogData } = logConfig;
     const { kind } = diff || {};
 
     const msgTemplate = _(message).isObject() ? message[kind] : message;
@@ -201,7 +202,7 @@ export default class DocChangeHandler {
       executor: this._userId,
       collection,
       documentId,
-      message
+      message,
     };
 
     const { kind, field, newValue, oldValue } = diff || {};
@@ -211,7 +212,7 @@ export default class DocChangeHandler {
     const fieldChanges = [
       ChangesKinds.FIELD_ADDED,
       ChangesKinds.FIELD_CHANGED,
-      ChangesKinds.FIELD_REMOVED
+      ChangesKinds.FIELD_REMOVED,
     ];
     if (_(fieldChanges).contains(kind)) {
       _(log).extend({ newValue, oldValue });
@@ -249,9 +250,9 @@ export default class DocChangeHandler {
 
     const {
       text, title, emailTemplateName,
-      emailText, emailSubject, emailTemplateData:getEmailTplData,
-      pushText, pushTitle, pushData:getPushData,
-      sendBoth=false
+      emailText, emailSubject, emailTemplateData: getEmailTplData,
+      pushText, pushTitle, pushData: getPushData,
+      sendBoth = false,
     } = notificationConfig;
 
     let emailTemplate = emailText || text;
@@ -302,7 +303,7 @@ export default class DocChangeHandler {
         emailTemplate, emailSubjectTemplate, emailTemplateData,
         pushTemplate, pushTitleTemplate, pushData,
         emailTemplateName, receivers, templateData,
-        sendBoth
+        sendBoth,
       });
     });
   }
@@ -342,7 +343,7 @@ export default class DocChangeHandler {
         organizationName: this._docOrgName,
         docName: this._docName,
         title: emailSubject,
-        text: emailText
+        text: emailText,
       }).extend(emailTemplateData),
       notificationData: _({
         title: pushTitle,
@@ -354,7 +355,7 @@ export default class DocChangeHandler {
 
     if (_(this._user).isObject()) {
       _(notification.templateData).extend({
-        avatar: { url: this._user.profile.avatar }
+        avatar: { url: this._user.profile.avatar },
       });
     }
 
@@ -381,7 +382,7 @@ export default class DocChangeHandler {
     const action = {
       [DocChangesKinds.DOC_CREATED]: 'created',
       [DocChangesKinds.DOC_UPDATED]: 'updated',
-      [DocChangesKinds.DOC_REMOVED]: 'removed'
+      [DocChangesKinds.DOC_REMOVED]: 'removed',
     }[this._docChangeKind];
     const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
     const docDesc = this._docDesc;
@@ -410,7 +411,7 @@ export default class DocChangeHandler {
     });
 
     const receiversCursor = Meteor.users.find({
-      _id: { $in: _(notificationsMap).keys() }
+      _id: { $in: _(notificationsMap).keys() },
     });
 
     receiversCursor.forEach((user) => {
@@ -422,7 +423,6 @@ export default class DocChangeHandler {
     const isUserOnline = user.status === 'online';
 
     _(notifications).each(({
-      recipients,
       sendBoth,
       templateData: {
         unsubscribeFromNotificationsUrl,
@@ -433,18 +433,18 @@ export default class DocChangeHandler {
       const options = { recipients: user._id, templateData, ...args };
 
       if (unsubscribeFromNotificationsUrl &&
-          this._notifyList &&
-          this._notifyList.includes(user._id)) {
-        Object.assign(options, { unsubscribeFromNotificationsUrl });
+          this._docNotifyList &&
+          this._docNotifyList.includes(user._id)) {
+        Object.assign(options.templateData, { unsubscribeFromNotificationsUrl });
       }
 
       const sender = new NotificationSender(options);
 
       if (sendBoth) {
-        sender.sendAll();
-      } else {
-        isUserOnline ? sender.sendOnSite() : sender.sendEmail();
+        return sender.sendAll();
       }
+
+      return isUserOnline ? sender.sendOnSite() : sender.sendEmail();
     });
   }
 
