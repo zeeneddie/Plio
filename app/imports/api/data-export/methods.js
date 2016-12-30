@@ -1,6 +1,7 @@
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
+import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { createWriteStream } from 'fs';
+import { tmpdir } from 'os';
 import moment from 'moment-timezone';
 import Future from 'fibers/future';
 import csv from 'fast-csv';
@@ -9,12 +10,16 @@ import * as Mapping from './mapping';
 import DataAggregator from './DataAggregator';
 import { getLastModifiedFileTime, createMd5Hash } from './helpers';
 import { isOrgMember } from '../checkers';
+import Method from '../method';
+import { ORG_MUST_BE_MEMBER } from '../organizations/errors';
+import { IdSchema } from '/imports/share/schemas/schemas';
+
 
 function createFileInfo(orgName, docType) {
   const filteredOrgName = orgName.replace(/\W/g, '');
   const date = moment().format('D-MMM-YYYY');
   const name = `${filteredOrgName}-${docType}-Data-Export-${date}.csv`;
-  const path = `/tmp/${name}`;
+  const path = `${tmpdir()}/${name}`;
 
   return { name, path };
 }
@@ -45,25 +50,51 @@ function saveData(file, fields, mapping, data) {
   return streamFuture.wait();
 }
 
-Meteor.methods({
-  'DataExport.generateLink'({ org, docType, fields, filters }) {
+export const generateLink = new Method({
+  name: 'DataExport.generateLink',
+
+  validate({ org, docType, fields, filters }) {
+    const docTypeSchema = new SimpleSchema({
+      docType: {
+        type: String,
+        allowedValues: Object.keys(Mapping),
+      },
+    });
+
+    docTypeSchema.validate({ docType });
+
+    const argsSchema = new SimpleSchema({
+      org: {
+        type: new SimpleSchema([
+          IdSchema,
+          { name: { type: String } },
+        ]),
+      },
+      fields: {
+        type: [String],
+        allowedValues: Object.keys(Mapping[docType].mapping.fields),
+      },
+      filters: {
+        type: [Number],
+      },
+    });
+
+    argsSchema.validate({ org, fields, filters });
+
     if (!isOrgMember(this.userId, org._id)) {
-      throw new Meteor.Error(`${this.userId} is't member of organization ${org._id}`);
+      throw ORG_MUST_BE_MEMBER;
     }
+  },
 
-    if (!(docType in Mapping)) {
-      throw new Meteor.Error('bad-doc-type-for-export', 'Bad document type for export');
-    }
-
+  run({ org, docType, fields, filters }) {
     const { mapping } = Mapping[docType];
-
     const file = createFileInfo(org.name, docType);
 
     // get field order from mapping
     const sortedFields = _.intersection(Object.keys(mapping.fields), fields);
     const dataAggregator = new DataAggregator(
-      fields.map(String),
-      filters.map(Number),
+      fields,
+      filters,
       mapping,
       org._id
     );
@@ -71,3 +102,4 @@ Meteor.methods({
     return saveData(file, sortedFields, mapping, dataAggregator);
   },
 });
+

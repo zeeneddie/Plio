@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 import { connect } from 'react-redux';
 import { compose, withProps, withState, withHandlers } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
@@ -31,13 +32,12 @@ const enhance = compose(
 
       const selectedFilters = Object
         .keys(data.filter)
-        .filter(key => Boolean(data.filter[key]));
+        .filter(key => Boolean(data.filter[key]))
+        .map(Number);
 
-      callMethod({
-        call: Meteor.call.bind(Meteor, 'DataExport.generateLink'),
-      }, {
+      callMethod('DataExport.generateLink', {
         docType,
-        org: organization,
+        org: _.pick(organization, '_id', 'name'),
         fields: selectedFields,
         filters: selectedFilters,
       })(store.dispatch)
