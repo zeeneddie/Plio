@@ -3,13 +3,11 @@ import { Tracker } from 'meteor/tracker';
 
 import { RiskFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
-import HeaderOptionsMenu from '/imports/ui/react/risks/components/HeaderOptionsMenu';
+import HeaderMenu from '/imports/ui/react/risks/components/HeaderMenu';
 
 Template.Risks_Header.viewmodel({
-  mixin: ['modal', 'risk', 'organization', 'router'],
+  mixin: ['risk', 'organization', 'router'],
   headerArgs() {
-    const view = this;
-
     return {
       idToExpand: this.riskId(),
       filters: RiskFilters,
@@ -17,14 +15,7 @@ Template.Risks_Header.viewmodel({
       onSelectFilter: this.onSelectFilter.bind(this),
       getOptionsMenu() {
         return {
-          component: HeaderOptionsMenu,
-          onHandleDataExport() {
-            view.modal().open({
-              template: 'RiskExport',
-              _title: 'Risks export',
-              variation: 'close',
-            });
-          },
+          component: HeaderMenu,
         };
       },
     };

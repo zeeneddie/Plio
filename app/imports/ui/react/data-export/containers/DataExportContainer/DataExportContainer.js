@@ -1,14 +1,15 @@
 import { Meteor } from 'meteor/meteor';
-import { _ } from 'meteor/underscore';
 import { connect } from 'react-redux';
 import { compose, withProps, withState, withHandlers } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 
 import store from '/imports/client/store';
+import { callMethod } from '/imports/client/store/actions/modalActions';
 import { pickDeep } from '/imports/api/helpers';
 
 import DataExport from '../../components/DataExport';
 import initMainData from '../../loaders/initMainData';
+
 
 const enhance = compose(
   withProps(() => ({ store })),
@@ -22,7 +23,6 @@ const enhance = compose(
       setDownloadLink,
       setProcessing,
       docType,
-      handleMethodResult,
     }) => data => {
       setProcessing(true);
       const selectedFields = Object
@@ -31,24 +31,23 @@ const enhance = compose(
 
       const selectedFilters = Object
         .keys(data.filter)
-        .filter(key => Boolean(data.filter[key]))
-        .map(Number);
+        .filter(key => Boolean(data.filter[key]));
 
-      Meteor.call(
-        'DataExport.generateLink', {
-          docType,
-          org: organization,
-          fields: selectedFields,
-          filters: selectedFilters,
-        }, handleMethodResult((err, result) => {
+      callMethod({
+        call: Meteor.call.bind(Meteor, 'DataExport.generateLink'),
+      }, {
+        docType,
+        org: organization,
+        fields: selectedFields,
+        filters: selectedFilters,
+      })(store.dispatch)
+        .then(({ fileName, token }) => {
           setProcessing(false);
-          if (err) return;
-
-          const { fileName, token } = result;
           const downloadLink = Meteor.absoluteUrl(`export/${fileName}?token=${token}`);
 
           setDownloadLink(downloadLink);
-        }));
+        })
+        .catch(() => setProcessing(false));
     },
   }),
 );

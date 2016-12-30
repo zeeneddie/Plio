@@ -7,5 +7,4 @@ Template.Header.viewmodel({
   onSelectFilter() {},
   onNavigate() {},
   getOptionsMenu() {},
-  getOptionsModal() {},
 });

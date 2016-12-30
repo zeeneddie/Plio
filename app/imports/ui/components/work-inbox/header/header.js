@@ -1,12 +1,10 @@
 import { Template } from 'meteor/templating';
 import { WorkInboxFilters } from '/imports/api/constants.js';
-import HeaderOptionsMenu from '/imports/ui/react/risks/components/HeaderOptionsMenu';
+import HeaderMenu from '/imports/ui/react/work-inbox/components/HeaderMenu';
 
 Template.WorkInbox_Header.viewmodel({
-  mixin: ['modal', 'workInbox'],
+  mixin: 'workInbox',
   headerArgs() {
-    const view = this;
-
     return {
       idToExpand: this.workItemId(),
       filters: WorkInboxFilters,
@@ -14,14 +12,7 @@ Template.WorkInbox_Header.viewmodel({
       transformCurrentFilterLabel: (text, filter) => text.replace(filter.prepend, ''),
       getOptionsMenu() {
         return {
-          component: HeaderOptionsMenu,
-          onHandleDataExport() {
-            view.modal().open({
-              template: 'ActionsExport',
-              _title: 'Actions Export',
-              variation: 'close',
-            });
-          },
+          component: HeaderMenu,
         };
       },
     };

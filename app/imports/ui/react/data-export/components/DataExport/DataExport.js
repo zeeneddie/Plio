@@ -8,7 +8,7 @@ import Form from '/imports/ui/react/forms/components/Form';
 import Filter from '../Filter';
 import SelectOptions from '../SelectOptions';
 
-const DataExport = (props) => (
+const DataExportModal = (props) => (
   <Form onSubmit={props.onSubmit}>
     <div className="relative">
       <CardBlock>
@@ -34,10 +34,10 @@ const DataExport = (props) => (
   </Form>
 );
 
-DataExport.propTypes = {
+DataExportModal.propTypes = {
   downloadLink: PropTypes.string,
   processing: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
 
-export default DataExport;
+export default DataExportModal;
