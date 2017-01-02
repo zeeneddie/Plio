@@ -1,0 +1,9 @@
+{{#if verified}}
+  {{#if verifiedAsEffective}}
+    {{userName}} verified {{{docDesc}}} {{{docName}}} as effective{{#if comments}} with following comments: {{comments}}{{/if}}
+  {{else}}
+    {{userName}} failed verification of {{{docDesc}}} {{{docName}}}{{#if comments}} with following comments: {{comments}}{{/if}}
+  {{/if}}
+{{else}}
+  {{userName}} canceled verification of {{{docDesc}}} {{{docName}}}
+{{/if}}

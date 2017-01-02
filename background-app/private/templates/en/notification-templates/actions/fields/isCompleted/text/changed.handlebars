@@ -1,0 +1,6 @@
+{{#if completed}}
+  {{userName}} completed {{{docDesc}}} {{{docName}}}
+  {{#if comments}} with following comments: {{comments}}{{/if}}
+{{else}}
+  {{userName}} canceled completion of {{{docDesc}}} {{{docName}}}
+{{/if}}
