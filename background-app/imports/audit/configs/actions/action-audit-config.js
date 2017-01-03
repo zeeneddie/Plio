@@ -27,7 +27,7 @@ import verificationComments from './fields/verificationComments.js';
 import verificationTargetDate from './fields/verificationTargetDate.js';
 import verifiedAt from './fields/verifiedAt.js';
 import verifiedBy from './fields/verifiedBy.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
 
 export default ActionAuditConfig = {
 
@@ -86,8 +86,8 @@ export default ActionAuditConfig = {
   docUrl(doc) { },
 
   docUnsubscribeFromNotificationsUrl: _.compose(
-    generateDocUnsubscribeUrl,
-    generateDocUrlByPrefix('actions')
+    getDocUnsubscribePath,
+    getDocUrlByOrganizationId('actions')
   ),
 
   docNotifyList({ notify: notifyList = [] }) {

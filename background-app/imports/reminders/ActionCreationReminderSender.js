@@ -12,7 +12,7 @@ import {
   getProblemDescription,
   getProblemUrl,
   getDiffInDays,
-  generateDocUnsubscribeUrl,
+  getDocUnsubscribePath,
 } from '/imports/helpers';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
@@ -127,7 +127,7 @@ export default class ActionCreationReminderSender {
     const buttonLabel = `Go to this ${problemDesc}`;
     const buttonUrl = getProblemUrl(problem, problemType, this._organization);
 
-    const unsubscribeFromNotificationsUrl = generateDocUnsubscribeUrl(buttonUrl);
+    const unsubscribeFromNotificationsUrl = getDocUnsubscribePath(buttonUrl);
 
     const templateData = {
       unsubscribeFromNotificationsUrl,

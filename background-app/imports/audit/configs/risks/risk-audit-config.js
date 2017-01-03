@@ -20,9 +20,9 @@ import riskEvaluationPrevLossExp from './fields/riskEvaluation.prevLossExp.js';
 import riskEvaluationPriority from './fields/riskEvaluation.priority.js';
 import scores from './fields/scores.js';
 import typeId from './fields/typeId.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
 
-const generateRiskDocUrl = generateDocUrlByPrefix('risks');
+const generateRiskDocUrl = getDocUrlByOrganizationId('risks');
 
 export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
@@ -57,5 +57,5 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   docUrl: generateRiskDocUrl,
 
-  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateRiskDocUrl),
+  docUnsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, generateRiskDocUrl),
 });

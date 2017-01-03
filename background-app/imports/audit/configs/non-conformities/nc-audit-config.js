@@ -15,9 +15,9 @@ import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
 import ref from './fields/ref.js';
 import refText from './fields/ref.text.js';
 import refUrl from './fields/ref.url.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
 
-const generateNCDocUrl = generateDocUrlByPrefix('non-conformities');
+const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
 
 export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
 
@@ -47,7 +47,7 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
 
   docUrl: generateNCDocUrl,
 
-  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateNCDocUrl),
+  docUnsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, generateNCDocUrl),
 
   docNotifyList({ notify = [] }) {
     return notify;

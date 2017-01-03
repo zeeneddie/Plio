@@ -112,7 +112,7 @@ export default class ReminderSender {
       });
     };
 
-    createProblemReminders(NonConformities, NCsIds, DocumentTypes.NC);
+    createProblemReminders(NonConformities, NCsIds, DocumentTypes.NON_CONFORMITY);
     createProblemReminders(Risks, risksIds, DocumentTypes.RISK);
 
     const actionQuery = {
@@ -203,7 +203,7 @@ export default class ReminderSender {
         ...reminder
       };
       const templateData = config.data(args);
-      
+
       const today = this._date;
       let templateKey;
       if (moment(today).isBefore(date)) {

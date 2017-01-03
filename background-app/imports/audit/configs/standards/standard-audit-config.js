@@ -22,9 +22,9 @@ import sectionId from './fields/sectionId.js';
 import status from './fields/status.js';
 import title from './fields/title.js';
 import typeId from './fields/typeId.js';
-import { generateDocUrlByPrefix, generateDocUnsubscribeUrl } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
 
-const generateStandardDocUrl = generateDocUrlByPrefix('standards');
+const generateStandardDocUrl = getDocUrlByOrganizationId('standards');
 
 export default StandardAuditConfig = {
 
@@ -73,7 +73,7 @@ export default StandardAuditConfig = {
 
   docUrl: generateStandardDocUrl,
 
-  docUnsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, generateStandardDocUrl),
+  docUnsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, generateStandardDocUrl),
 
   docNotifyList({ notify: notifyList = [] }) {
     return notifyList;

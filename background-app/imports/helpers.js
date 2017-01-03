@@ -12,17 +12,25 @@ export const getProblemDescription = (problemType) => ({
   [ProblemTypes.RISK]: 'risk',
 }[problemType]);
 
-export const generateDocUrl = getUrl => ({ _id, organizationId }) => {
-  const organization = Organizations.findOne({ _id: organizationId });
-  return Meteor.absoluteUrl(getUrl({ ...organization, organizationId, documentId: _id }), {
-    rootUrl: Meteor.settings.mainApp.url,
-  });
+export const getDocPath = ({ serialNumber, documentId, prefix }) =>
+  `${serialNumber}/${prefix}/${documentId}`;
+
+
+export const getAbsoluteUrl = path => Meteor.absoluteUrl(path, {
+  rootUrl: Meteor.settings.mainApp.url,
+});
+
+export const getDocUrl = ({ serialNumber, documentId, prefix }) =>
+  getAbsoluteUrl(getDocPath({ serialNumber, documentId, prefix }));
+
+export const getDocUrlByOrganizationId = prefix => ({ _id, organizationId }) => {
+  const { serialNumber } = { ...Organizations.findOne({ _id: organizationId }) };
+  const url = getDocUrl({ serialNumber, prefix, documentId: _id });
+
+  return url;
 };
 
-export const generateDocUrlByPrefix = prefix => generateDocUrl(({ serialNumber, documentId }) =>
-  `${serialNumber}/${prefix}/${documentId}`);
-
-export const generateDocUnsubscribeUrl = url => (url ? `${url}/unsubscribe` : '');
+export const getDocUnsubscribePath = path => (path ? `${path}/unsubscribe` : '');
 
 export const getProblemUrl = (problem, problemType, organization) => {
   const path = {
@@ -30,7 +38,13 @@ export const getProblemUrl = (problem, problemType, organization) => {
     [ProblemTypes.RISK]: 'risks',
   }[problemType];
 
-  return generateDocUrlByPrefix(path)({ _id: problem._id, organizationId: organization._id });
+  const url = getDocUrl({
+    serialNumber: organization.serialNumber,
+    documentId: problem._id,
+    prefix: path,
+  });
+
+  return url;
 };
 
 export const getDiffInDays = (targetDate, timezone) => {

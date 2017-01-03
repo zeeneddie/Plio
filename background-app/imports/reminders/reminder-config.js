@@ -5,7 +5,13 @@ import { _ } from 'meteor/underscore';
 import { DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
 import { capitalize, getUserFullNameOrEmail } from '/imports/share/helpers.js';
-import { getDiffInDays, generateDocUnsubscribeUrl } from '/imports/helpers';
+import {
+  getDiffInDays,
+  getDocUnsubscribePath,
+  getProblemUrl,
+  getDocUrl,
+  getAbsoluteUrl,
+} from '/imports/helpers';
 
 
 const ReminderTypes = {
@@ -41,16 +47,7 @@ const getActionDesc = (docType) => ({
 
 const getStandardDesc = () => 'standard';
 
-const getProblemUrl = ({ doc, docType, org }) => {
-  const path = {
-    [ReminderDocTypes.NON_CONFORMITY]: 'non-conformities',
-    [ReminderDocTypes.RISK]: 'risks',
-  }[docType];
-
-  return Meteor.absoluteUrl(`${org.serialNumber}/${path}/${doc._id}`, {
-    rootUrl: Meteor.settings.mainApp.url,
-  });
-};
+const getProblemUrlByData = ({ doc, docType, org }) => getProblemUrl(doc, docType, org);
 
 const getActionUrl = ({ doc, reminderType, org }) => {
   const workItemType = {
@@ -64,20 +61,20 @@ const getActionUrl = ({ doc, reminderType, org }) => {
     isCompleted: false,
   }) || {};
 
-  return Meteor.absoluteUrl(`${org.serialNumber}/work-inbox?id=${_id}`, {
-    rootUrl: Meteor.settings.mainApp.url,
-  });
+  return getAbsoluteUrl(`${org.serialNumber}/work-inbox?id=${_id}`);
 };
 
-const getActionUrlByPrefix = ({ doc, org }) =>
-  Meteor.absoluteUrl(`${org.serialNumber}/actions/${doc._id}`, {
-    rootUrl: Meteor.settings.mainApp.url,
-  });
+const getActionUrlByPrefix = ({ doc, org }) => getDocUrl({
+  serialNumber: org.serialNumber,
+  documentId: doc._id,
+  prefix: 'actions',
+});
 
-const getStandardUrl = ({ doc, org }) =>
-  Meteor.absoluteUrl(`${org.serialNumber}/standards/${doc._id}`, {
-    rootUrl: Meteor.settings.mainApp.url,
-  });
+const getStandardUrl = ({ doc, org }) => getDocUrl({
+  serialNumber: org.serialNumber,
+  documentId: doc._id,
+  prefix: 'standards',
+});
 
 const getDocDesc = (docType) => {
   switch (docType) {
@@ -111,11 +108,11 @@ const getDocName = (doc, docType) => {
   }
 };
 
-const getDocUrl = ({ docType, ...rest }) => {
+const getDocUrlByData = ({ docType, ...rest }) => {
   switch (docType) {
     case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
-      return getProblemUrl({ docType, ...rest });
+      return getProblemUrlByData({ docType, ...rest });
     case ReminderDocTypes.CORRECTIVE_ACTION:
     case ReminderDocTypes.PREVENTATIVE_ACTION:
     case ReminderDocTypes.RISK_CONTROL:
@@ -164,8 +161,8 @@ const ReminderConfig = {
         ? [analysis.executor]
         : []
     ),
-    url: getProblemUrl,
-    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getProblemUrl),
+    url: getProblemUrlByData,
+    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getProblemUrlByData),
   },
 
   [ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS]: {
@@ -203,8 +200,8 @@ const ReminderConfig = {
         ? [updateOfStandards.executor]
         : []
     ),
-    url: getProblemUrl,
-    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getProblemUrl),
+    url: getProblemUrlByData,
+    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getProblemUrlByData),
   },
 
   [ReminderTypes.COMPLETE_ACTION]: {
@@ -236,7 +233,7 @@ const ReminderConfig = {
       userName: () => getUserFullNameOrEmail(doc.completionAssignedBy),
     }),
     url: getActionUrl,
-    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getActionUrlByPrefix),
+    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getActionUrlByPrefix),
     receivers: ({ doc: { toBeCompletedBy, notify } }) => (
       (toBeCompletedBy && notify.includes(toBeCompletedBy))
         ? [toBeCompletedBy]
@@ -278,7 +275,7 @@ const ReminderConfig = {
         : []
     ),
     url: getActionUrl,
-    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getActionUrlByPrefix),
+    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getActionUrlByPrefix),
   },
 
   [ReminderTypes.REVIEW_IMPROVEMENT_PLAN]: {
@@ -309,8 +306,8 @@ const ReminderConfig = {
         ? [improvementPlan.owner]
         : []
     ),
-    url: getDocUrl,
-    unsubscribeFromNotificationsUrl: _.compose(generateDocUnsubscribeUrl, getDocUrl),
+    url: getDocUrlByData,
+    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getDocUrlByData),
   },
 
 };
