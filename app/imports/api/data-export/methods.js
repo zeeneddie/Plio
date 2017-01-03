@@ -2,6 +2,7 @@ import { _ } from 'meteor/underscore';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { createWriteStream } from 'fs';
 import { tmpdir } from 'os';
+import { join } from 'path';
 import moment from 'moment-timezone';
 import Future from 'fibers/future';
 import csv from 'fast-csv';
@@ -19,7 +20,7 @@ function createFileInfo(orgName, docType) {
   const filteredOrgName = orgName.replace(/\W/g, '');
   const date = moment().format('D-MMM-YYYY');
   const name = `${filteredOrgName}-${docType}-Data-Export-${date}.csv`;
-  const path = `${tmpdir()}/${name}`;
+  const path = join(tmpdir(), name);
 
   return { name, path };
 }
