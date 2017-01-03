@@ -52,12 +52,10 @@ export const getData = function({ newDoc, user }) {
 
 export const getReceivers = function({ newDoc, user }) {
   const { assigneeId } = newDoc || {};
-  const { notify = [] } = getLinkedDoc(newDoc) || {};
 
   const needToSend = _.every([
     assigneeId,
     assigneeId !== getUserId(user),
-    notify.includes(assigneeId),
   ]);
 
   return needToSend ? [assigneeId] : [];
