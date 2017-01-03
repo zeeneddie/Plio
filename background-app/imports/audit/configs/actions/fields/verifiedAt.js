@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -11,14 +11,11 @@ export default {
         return !isVerified;
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Verification date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Verification date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Verification date removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.verifiedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.verifiedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.verifiedAt.removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -26,14 +23,11 @@ export default {
         return !isVerified;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification date of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.verifiedAt.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.verifiedAt.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.verifiedAt.text.removed',
+      },
+    },
   ],
   data({ diffs: { verifiedAt }, newDoc, user }) {
     const { newValue, oldValue } = verifiedAt;
@@ -45,10 +39,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

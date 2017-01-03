@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,23 +8,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Title set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]: 'Title removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.title.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set title of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed title of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed title of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.title.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.title.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.title.text.removed',
+      },
+    },
   ],
   data({ diffs: { title }, newDoc, oldDoc, user }) {
     const auditConfig = this;
@@ -34,10 +31,10 @@ export default {
       docName: () => auditConfig.docName(oldDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => title.newValue,
-      oldValue: () => title.oldValue
+      oldValue: () => title.oldValue,
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

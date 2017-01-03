@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -23,9 +23,9 @@ export default {
         return !isCompleted;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.removed',
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.text.removed',
       },
     },
   ],

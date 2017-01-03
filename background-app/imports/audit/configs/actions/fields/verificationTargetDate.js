@@ -1,7 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
 
 export default {
@@ -9,26 +9,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Verification target date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Verification target date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Verification target date removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.verificationTargetDate.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.verificationTargetDate.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.verificationTargetDate.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification target date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification target date of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.verificationTargetDate.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.verificationTargetDate.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.verificationTargetDate.text.removed',
+      },
+    },
   ],
   data({ diffs: { verificationTargetDate }, newDoc, user }) {
     const { newValue, oldValue } = verificationTargetDate;
@@ -40,15 +34,15 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },
   triggers: [
-    function({ newDoc: { _id } }) {
+    function ({ newDoc: { _id } }) {
       new ActionWorkflow(_id).refreshStatus();
-    }
-  ]
+    },
+  ],
 };

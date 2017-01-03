@@ -9,12 +9,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Completion target date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Completion target date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Completion target date removed'
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completionTargetDate.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completionTargetDate.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completionTargetDate.removed',
       }
     }
   ],
@@ -22,11 +19,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion target date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          'actions.fields.completionTargetDate.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          'actions.fields.completionTargetDate.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion target date of {{{docDesc}}} {{{docName}}}'
+          'actions.fields.completionTargetDate.text.removed',
       }
     }
   ],

@@ -1,29 +1,26 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 export default {
   field: 'ownerId',
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Owner set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]: 'Owner removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.ownerId.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.ownerId.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.ownerId.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.ownerId.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.ownerId.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.ownerId.text.removed',
+      },
+    },
   ],
   data({ diffs: { ownerId }, newDoc, user }) {
     const { newValue, oldValue } = ownerId;
@@ -34,10 +31,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

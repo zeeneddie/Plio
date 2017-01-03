@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,26 +8,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'To be completed by set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          'To be completed by changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          'To be completed by removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.toBeCompletedBy.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.toBeCompletedBy.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.toBeCompletedBy.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set to be completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed to be completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed to be completed by of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.toBeCompletedBy.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.toBeCompletedBy.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.toBeCompletedBy.text.removed',
+      },
+    },
   ],
   data({ diffs: { toBeCompletedBy }, newDoc, user }) {
     const { newValue, oldValue } = toBeCompletedBy;
@@ -38,7 +32,7 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
   receivers({ diffs: { toBeCompletedBy }, newDoc, user }) {
@@ -47,5 +41,5 @@ export default {
     (index > -1) && receivers.splice(index, 1);
 
     return receivers;
-  }
+  },
 };

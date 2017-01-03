@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { ActionStatuses } from '/imports/share/constants.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ActionStatuses } from '/imports/share/constants';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,11 +8,11 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Status set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]: 'Status changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]: 'Status removed'
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'actions.fields.status.added',
+        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.status.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.status.removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { status } }) {
@@ -20,10 +20,10 @@ export default {
 
     return {
       newValue: () => ActionStatuses[newValue],
-      oldValue: () => ActionStatuses[oldValue]
+      oldValue: () => ActionStatuses[oldValue],
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

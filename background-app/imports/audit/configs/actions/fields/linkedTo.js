@@ -1,10 +1,10 @@
-import { ProblemTypes } from '/imports/share/constants.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getLinkedDocAuditConfig } from '../../../utils/helpers.js';
-import { getLinkedDocDescription, getLinkedDocName, getReceivers } from '../helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
-import NCWorkflow from '/imports/workflow/NCWorkflow.js';
-import RiskWorkflow from '/imports/workflow/RiskWorkflow.js';
+import { ProblemTypes } from '/imports/share/constants';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getLinkedDocAuditConfig } from '../../../utils/helpers';
+import { getLinkedDocDescription, getLinkedDocName, getReceivers } from '../helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
+import NCWorkflow from '/imports/workflow/NCWorkflow';
+import RiskWorkflow from '/imports/workflow/RiskWorkflow';
 
 
 export default {
@@ -12,14 +12,14 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{linkedDocDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{linkedDocDesc}}}'
-      }
+        [ChangesKinds.ITEM_ADDED]: 'actions.fields.linkedTo.doc-log.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.linkedTo.doc-log.item-removed',
+      },
     },
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{{docName}}} was linked to this document',
-        [ChangesKinds.ITEM_REMOVED]: '{{{docName}}} was unlinked from this document'
+        [ChangesKinds.ITEM_ADDED]: 'actions.fields.linkedTo.linked-doc-log.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.linkedTo.linked-doc-log.item-removed',
       },
       data({ newDoc }) {
         const auditConfig = this;
@@ -32,20 +32,18 @@ export default {
 
         return {
           collection: auditConfig.collectionName,
-          documentId
+          documentId,
         };
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{linkedDocDesc}}} {{{linkedDocName}}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{linkedDocDesc}}} {{{linkedDocName}}}'
-      }
-    }
+        [ChangesKinds.ITEM_ADDED]: 'actions.fields.linkedTo.text.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.linkedTo.text.item-removed',
+      },
+    },
   ],
   data({ diffs: { linkedTo }, newDoc, user }) {
     const { item: { documentId, documentType } } = linkedTo;
@@ -56,7 +54,7 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       linkedDocDesc: () => getLinkedDocDescription(documentId, documentType),
       linkedDocName: () => getLinkedDocName(documentId, documentType),
-      userName: () => getUserFullNameOrEmail(user)
+      userName: () => getUserFullNameOrEmail(user),
     };
   },
   receivers({ diffs: { linkedTo }, newDoc, oldDoc, user }) {
@@ -64,7 +62,7 @@ export default {
     return getReceivers(doc, user);
   },
   triggers: [
-    function({ diffs: { linkedTo }, newDoc: { _id } }) {
+    function ({ diffs: { linkedTo }, newDoc: { _id } }) {
       new ActionWorkflow(_id).refreshStatus();
 
       if (linkedTo.kind === ChangesKinds.ITEM_REMOVED) {
@@ -72,11 +70,11 @@ export default {
 
         const workflowConstructor = {
           [ProblemTypes.NON_CONFORMITY]: NCWorkflow,
-          [ProblemTypes.RISK]: RiskWorkflow
+          [ProblemTypes.RISK]: RiskWorkflow,
         }[documentType];
 
         new workflowConstructor(documentId).refreshStatus();
       }
-    }
-  ]
+    },
+  ],
 };
