@@ -18,12 +18,12 @@ WebApp.connectHandlers.use('/export', (req, res) => {
     return res.end('Page not found');
   }
 
-  if (hash !== queryData.token) sendNotFound();
+  if (hash !== queryData.token) return sendNotFound();
 
   return readFile(filePath, (error, result) => {
-    if (error) sendNotFound();
+    if (error) return sendNotFound();
 
     res.writeHead(200, { 'Content-type': 'text/csv' });
-    res.end(result);
+    return res.end(result);
   });
 });
