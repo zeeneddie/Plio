@@ -152,6 +152,13 @@ const ReminderConfig = {
         'to complete a root cause analysis of {{problemDesc}} ' +
         '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
     },
+    data: ({ doc, docType, date, dateConfig, org }) => ({
+      docName: () => getProblemName(doc),
+      problemDesc: () => getProblemDesc(docType),
+      date: () => getPrettyDate(date, org.timezone),
+      diff: () => getDiffInDays(date, org.timezone),
+      userName: () => getUserFullNameOrEmail(doc.analysis.assignedBy),
+    }),
     receivers: ({ doc: { analysis, notify } }) => (
       (analysis.executor && notify.includes(analysis.executor))
         ? [analysis.executor]
