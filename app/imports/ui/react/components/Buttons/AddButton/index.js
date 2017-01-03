@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 
 const AddButton = ({ onClick, children }) => (
   <Button
-    type="primary"
+    color="primary"
     onClick={onClick}
   >
     <Icon name="plus" className="margin-right" />

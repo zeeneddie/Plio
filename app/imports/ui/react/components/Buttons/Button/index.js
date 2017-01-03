@@ -14,20 +14,20 @@ const Button = compose(
   }),
   mapProps(({
     children,
-    type = 'primary',
+    color = 'primary',
     onClick,
     className,
     size = 2,
     ...other,
   }) => {
-    const typeCx = type.split(' ').map(t => `btn-${t}`).join(' ');
+    const colorCx = color.split(' ').map(t => `btn-${t}`).join(' ');
     const sizeCx = size && `btn-${size}`;
 
     return {
       ...other,
       onClick,
       children,
-      className: cx('btn', typeCx, sizeCx, className),
+      className: cx('btn', colorCx, sizeCx, className),
     };
   })
 )(componentFromProp('component'));
@@ -37,7 +37,7 @@ Button.propTypes = {
   onClick: PropTypes.func,
   className: PropTypes.string,
   href: PropTypes.string,
-  type: PropTypes.string,
+  color: PropTypes.string,
   size: PropTypes.oneOf(Object.keys(sizeMap)),
 };
 

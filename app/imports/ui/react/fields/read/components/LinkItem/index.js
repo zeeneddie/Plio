@@ -6,7 +6,7 @@ import Icon from '../../../../components/Icon';
 const LinkItem = ({ href, indicator, title, sequentialId }) => (
   <Button
     href={href}
-    type="secondary"
+    color="secondary"
     className="btn-inline pointer"
   >
     {sequentialId && (<strong>{sequentialId} </strong>)}

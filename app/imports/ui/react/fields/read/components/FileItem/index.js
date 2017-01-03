@@ -26,7 +26,7 @@ const FileItem = ({ url = '#', name = null, extension, progress, status }) => {
   return (
     <div className="file-item-read">
       <Button
-        type="secondary"
+        color="secondary"
         className={buttonCName}
         href={url}
       >

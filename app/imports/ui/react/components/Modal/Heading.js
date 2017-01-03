@@ -37,7 +37,7 @@ const ModalHeading = ({
         )}
         {variation === 'save' && (
           <Button
-            type="primary"
+            color="primary"
             className={cx('submit-modal-button', { disabled: isSaving })}
             disabled={isSaving}
           >
@@ -63,7 +63,7 @@ const ModalHeading = ({
     >
       <Button
         component="button"
-        type="secondary"
+        color="secondary"
         className={cx({ disabled: isSaving })}
         disabled={isSaving}
         onClick={onModalClose}

@@ -7,7 +7,7 @@ const QuestionMarkButton = ({ onClick, className }) => (
   <Button
     {...{ className, onClick }}
     component="button"
-    type="link collapse"
+    color="link collapse"
   >
     <Icon name="question-circle" />
   </Button>

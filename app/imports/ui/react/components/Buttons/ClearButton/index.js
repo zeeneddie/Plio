@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 
 const ClearButton = ({ onClick, animating }) => (
   <Button
-    type="link"
+    color="link"
     className="clear-field"
     tabIndex="-1"
     onClick={onClick}

@@ -15,7 +15,7 @@ const Discussion = (props) => (
       <CardHeader className="chat-heading">
         <Wrapper className="discussions-hd-top">
           <CardHeader.Item pull="left" className="card-heading-buttons">
-            <Button type="secondary" onClick={props.onBackArrowClick}>
+            <Button color="secondary" onClick={props.onBackArrowClick}>
               <Icon name="angle-left" margin="right-2x" size="2" />
               <span>Back</span>
             </Button>

@@ -10,7 +10,7 @@ const DiscussButton = ({
   children,
 }) => (
   <Button
-    type="secondary"
+    color="secondary"
     onClick={onClick}
     href={href}
   >
