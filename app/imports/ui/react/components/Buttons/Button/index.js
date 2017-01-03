@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react';
+import { PropTypes } from 'react';
 import cx from 'classnames';
 import { compose, componentFromProp, defaultProps, mapProps } from 'recompose';
+
+import { PullMap } from '/imports/api/constants';
 
 const sizeMap = {
   1: 'sm',
@@ -18,16 +20,18 @@ const Button = compose(
     onClick,
     className,
     size = 2,
+    pull,
     ...other,
   }) => {
     const colorCx = color.split(' ').map(t => `btn-${t}`).join(' ');
     const sizeCx = size && `btn-${size}`;
+    const pullCx = PullMap[pull];
 
     return {
       ...other,
       onClick,
       children,
-      className: cx('btn', colorCx, sizeCx, className),
+      className: cx('btn', colorCx, sizeCx, pullCx, className),
     };
   })
 )(componentFromProp('component'));
@@ -39,6 +43,7 @@ Button.propTypes = {
   href: PropTypes.string,
   color: PropTypes.string,
   size: PropTypes.oneOf(Object.keys(sizeMap)),
+  pull: PropTypes.oneOf(Object.keys(PullMap)),
 };
 
 export default Button;

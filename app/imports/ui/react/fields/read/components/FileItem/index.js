@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { _ } from 'meteor/underscore';
 
 import Button from '../../../../components/Buttons/Button';
-import Icon from '../../../../components/Icon';
+import Icon from '../../../../components/Icons/Icon';
 import { FILE_STATUS_MAP } from '/imports/share/constants';
 
 const isUploaded = ({ progress }) => progress === 1;

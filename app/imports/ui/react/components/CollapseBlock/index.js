@@ -11,25 +11,30 @@ const CollapseBlock = ({
   collapsed,
   children,
   onToggleCollapse,
+  tag = 'a',
   classNames: {
     head = 'list-group-item list-group-subheading list-group-toggle pointer',
     body = 'list-group-collapse collapse',
     wrapper = '',
   } = {},
   ...other,
-}) => (
-  <div className={wrapper}>
-    <a
-      onClick={() => handleToggleCollapse(onToggleCollapse)}
-      className={cx(head, { collapsed })}
-    >
-      {children[0]}
-    </a>
-    <Collapse className={body} {...{ ...other, collapsed }}>
-      {children[1]}
-    </Collapse>
-  </div>
-);
+}) => {
+  const Tag = tag;
+
+  return (
+    <div className={wrapper}>
+      <Tag
+        onClick={() => handleToggleCollapse(onToggleCollapse)}
+        className={cx(head, { collapsed })}
+      >
+        {children[0]}
+      </Tag>
+      <Collapse className={body} {...{ ...other, collapsed }}>
+        {children[1]}
+      </Collapse>
+    </div>
+  );
+};
 
 CollapseBlock.propTypes = {
   onToggleCollapse: PropTypes.func.isRequired,
@@ -39,6 +44,7 @@ CollapseBlock.propTypes = {
     body: PropTypes.string,
     wrapper: PropTypes.string,
   }),
+  tag: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   children: PropTypes.node.isRequired,
   onCollapseShow: PropTypes.func,
   onCollapseShown: PropTypes.func,

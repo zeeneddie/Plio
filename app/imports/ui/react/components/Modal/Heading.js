@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import { PullMap } from '/imports/api/constants';
 import Button from '../Buttons/Button';
-import Icon from '../Icon';
+import IconLoading from '../Icons/IconLoading';
 import HelpPanel from '../HelpPanel';
 
 const ModalHeading = ({
@@ -42,7 +42,7 @@ const ModalHeading = ({
             disabled={isSaving}
           >
             {isSaving && (
-              <Icon name="spinner pulse fw" margin="bottom" />
+              <IconLoading margin="bottom" />
             )}
             <span>{submitCaptionText}</span>
           </Button>
@@ -66,10 +66,10 @@ const ModalHeading = ({
         color="secondary"
         className={cx({ disabled: isSaving })}
         disabled={isSaving}
-        onClick={onModalClose}
+        onMouseDown={onModalClose}
       >
         {isSaving && variation !== 'save' && (
-          <Icon name="spinner pulse fw" margin="bottom" />
+          <IconLoading margin="bottom" />
         )}
         {closeCaptionText}
       </Button>

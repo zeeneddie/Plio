@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Input } from 'reactstrap';
 
 import Button from '../Buttons/Button';
-import Icon from '../Icon';
+import Icon from '../Icons/Icon';
 
 const FileUploader = ({ value, onChange }) => (
   <Button color="secondary file" component="div">
