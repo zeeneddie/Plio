@@ -9,7 +9,7 @@ import csv from 'fast-csv';
 
 import * as Mapping from './mapping';
 import DataAggregator from './DataAggregator';
-import { getLastModifiedFileTime, createMd5Hash } from './helpers';
+import { getCreatedFileTime, createMd5Hash } from './helpers';
 import { isOrgMember } from '../checkers';
 import Method from '../method';
 import { ORG_MUST_BE_MEMBER } from '../organizations/errors';
@@ -41,7 +41,7 @@ function saveData(file, fields, mapping, data) {
 
   writer.on('finish', () => streamFuture.return({
     fileName: file.name,
-    token: createMd5Hash(getLastModifiedFileTime(file.path)),
+    token: createMd5Hash(getCreatedFileTime(file.path)),
   }));
 
   writer.pipe(stream);

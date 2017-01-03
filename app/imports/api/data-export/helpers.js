@@ -5,4 +5,7 @@ export const createMd5Hash = (value) => createHash('md5')
   .update(value.toString())
   .digest('hex');
 
-export const getLastModifiedFileTime = (path) => statSync(path).mtime.getTime();
+export const getCreatedFileTime = (path) => {
+  return statSync(path).birthtime.getTime();
+};
+
