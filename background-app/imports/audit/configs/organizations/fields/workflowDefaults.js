@@ -3,7 +3,7 @@ import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
 
 
-const getWorkflowDefaultsConfig = (field, label) => {
+const getWorkflowDefaultsConfig = (field, relatedDocs) => {
   return [
     {
       field: `workflowDefaults.${field}.workflowType`,
@@ -11,8 +11,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Workflow type for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
+              'organizations.fields.workflowDefaults.workflowType.changed',
           }
         }
       ],
@@ -20,8 +19,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed workflow type for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+              'organizations.fields.workflowDefaults.workflowType.text.changed',
           }
         }
       ],
@@ -36,7 +34,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => newValue,
-          oldValue: () => oldValue
+          oldValue: () => oldValue,
+          relatedDocs,
         };
       },
       receivers: getReceivers
@@ -48,8 +47,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Default step time for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
+              'organizations.fields.workflowDefaults.stepTime.changed',
           }
         }
       ],
@@ -57,8 +55,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+              'organizations.fields.workflowDefaults.stepTime.text.changed',
           }
         }
       ],
@@ -74,7 +71,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${timeVal} ${newValue}`,
-          oldValue: () => `${timeVal} ${oldValue}`
+          oldValue: () => `${timeVal} ${oldValue}`,
+          relatedDocs,
         };
       },
       receivers: getReceivers
@@ -86,8 +84,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Default step time for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
+              'organizations.fields.workflowDefaults.stepTime.changed',
           }
         }
       ],
@@ -95,8 +92,7 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+              'organizations.fields.workflowDefaults.stepTime.text.changed',
           }
         }
       ],
@@ -112,7 +108,8 @@ const getWorkflowDefaultsConfig = (field, label) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${newValue} ${timeUnit}`,
-          oldValue: () => `${oldValue} ${timeUnit}`
+          oldValue: () => `${oldValue} ${timeUnit}`,
+          relatedDocs,
         };
       },
       receivers: getReceivers

@@ -8,12 +8,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} owner set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} owner changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} owner removed'
+        [ChangesKinds.FIELD_ADDED]: 'lessons.fields.owner.added',
+        [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.owner.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.owner.removed',
       },
       logData: getLogData
     }

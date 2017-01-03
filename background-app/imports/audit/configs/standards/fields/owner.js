@@ -8,21 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Owner set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]: 'Owner removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.owner.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.owner.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.owner.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.owner.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.owner.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.owner.text.removed',
       }
     }
   ],

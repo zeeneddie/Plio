@@ -6,12 +6,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Magnitude set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Magnitude changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Magnitude removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.magnitude.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.magnitude.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.magnitude.removed',
       }
     }
   ],

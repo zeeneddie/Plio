@@ -7,9 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: '{{{docName}}} description set',
-        [ChangesKinds.FIELD_CHANGED]: '{{{docName}}} description changed',
-        [ChangesKinds.FIELD_REMOVED]: '{{{docName}}} description removed'
+        [ChangesKinds.FIELD_ADDED]: 'occurrences.fields.description.added',
+        [ChangesKinds.FIELD_CHANGED]: 'occurrences.fields.description.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'occurrences.fields.description.removed',
       },
       logData: getLogData
     }

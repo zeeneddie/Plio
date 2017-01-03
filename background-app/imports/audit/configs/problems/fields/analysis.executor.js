@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis executor set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis executor changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis executor removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.executor.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.executor.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.executor.removed',
       }
     }
   ],

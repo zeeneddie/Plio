@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Identified at set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Identified at removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.identifiedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.identifiedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.identifiedAt.removed',
       }
     }
   ],

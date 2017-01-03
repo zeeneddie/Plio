@@ -9,8 +9,7 @@ export default {
         return deletedAt && deletedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.isDeleted.changed',
       }
     }
   ],

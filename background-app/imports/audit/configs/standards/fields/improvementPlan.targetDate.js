@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan target date for desired outcome set to "{{newValue}}"',
+          'standards.fields.improvementPlan.targetDate.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
+          'standards.fields.improvementPlan.targetDate.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan target date for desired outcome removed'
+          'standards.fields.improvementPlan.targetDate.removed',
       }
     }
   ],
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          'standards.fields.improvementPlan.targetDate.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          'standards.fields.improvementPlan.targetDate.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}'
+          'standards.fields.improvementPlan.targetDate.text.removed',
       }
     }
   ],

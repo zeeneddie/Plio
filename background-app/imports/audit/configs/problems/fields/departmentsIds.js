@@ -8,8 +8,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}'
+        [ChangesKinds.ITEM_ADDED]: 'problems.fields.departmentsIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'problems.fields.departmentsIds.item-removed',
       }
     }
   ],

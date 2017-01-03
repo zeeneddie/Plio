@@ -6,8 +6,7 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_CHANGED]:
-          'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"'
+        [ChangesKinds.FIELD_CHANGED]: 'non-conformities.fields.ref.url.changed',
       }
     }
   ],

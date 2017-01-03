@@ -9,9 +9,12 @@ export default {
         return !diffs['analysis.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Root cause analysis completion comments set',
-        [ChangesKinds.FIELD_CHANGED]: 'Root cause analysis completion comments changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Root cause analysis completion comments removed'
+        [ChangesKinds.FIELD_ADDED]:
+          'problems.fields.analysis.completionComments.added',
+        [ChangesKinds.FIELD_CHANGED]:
+          'problems.fields.analysis.completionComments.changed',
+        [ChangesKinds.FIELD_REMOVED]:
+          'problems.fields.analysis.completionComments.removed',
       }
     }
   ],

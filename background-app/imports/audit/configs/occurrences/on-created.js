@@ -5,7 +5,7 @@ import { getPrettyOrgDate } from '../../utils/helpers.js';
 export default {
   logs: [
     {
-      message: '{{{docName}}} added: date - {{date}}',
+      message: 'occurrences.on-created.on-created',
       logData: getLogData
     }
   ],

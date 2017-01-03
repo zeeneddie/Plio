@@ -11,11 +11,11 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards completed by set to {{newValue}}',
+          'problems.fields.updateOfStandards.completedBy.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards completed by changed from {{oldValue}} to {{newValue}}',
+          'problems.fields.updateOfStandards.completedBy.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards completed by removed'
+          'problems.fields.updateOfStandards.completedBy.removed',
       }
     }
   ],

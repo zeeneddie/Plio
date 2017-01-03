@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} title set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} title removed'
+        [ChangesKinds.FIELD_ADDED]: 'lessons.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.title.removed',
       },
       logData: getLogData
     }

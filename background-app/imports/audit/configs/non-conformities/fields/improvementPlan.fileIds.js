@@ -7,8 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed'
+        [ChangesKinds.ITEM_ADDED]:
+          'non-conformities.fields.improvementPlan.fileIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'non-conformities.fields.improvementPlan.fileIds.item-removed',
       }
     }
   ],

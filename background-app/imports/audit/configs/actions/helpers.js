@@ -1,11 +1,13 @@
-import { Standards } from '/imports/share/collections/standards.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { ProblemTypes } from '/imports/share/constants.js';
-import { getCollectionByDocType } from '/imports/share/helpers.js';
-import { getUserId } from '../../utils/helpers.js';
-import NCAuditConfig from '../non-conformities/nc-audit-config.js';
-import RiskAuditConfig from '../risks/risk-audit-config.js';
+import { _ } from 'meteor/underscore';
+
+import { Standards } from '/imports/share/collections/standards';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { ProblemTypes } from '/imports/share/constants';
+import { getCollectionByDocType } from '/imports/share/helpers';
+import { getUserId } from '../../utils/helpers';
+import NCAuditConfig from '../non-conformities/nc-audit-config';
+import RiskAuditConfig from '../risks/risk-audit-config';
 
 
 export const getReceivers = ({ linkedTo, ownerId }, user) => {
@@ -33,13 +35,13 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
   _.each(
     [
       { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
-      { collection: Risks, type: ProblemTypes.RISK }
+      { collection: Risks, type: ProblemTypes.RISK },
     ],
     ({ collection, type }) => getIds(collection, type)
   );
 
   Standards.find({
-    _id: { $in: Array.from(standardsIds) }
+    _id: { $in: Array.from(standardsIds) },
   }).forEach(({ owner }) => usersIds.add(owner));
 
   const receivers = Array.from(usersIds);

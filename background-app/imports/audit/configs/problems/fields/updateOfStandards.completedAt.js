@@ -11,11 +11,11 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards date set to "{{newValue}}"',
+          'problems.fields.updateOfStandards.completedAt.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards date changed from "{{oldValue}}" to "{{newValue}}"',
+          'problems.fields.updateOfStandards.completedAt.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards date removed'
+          'problems.fields.updateOfStandards.completedAt.removed',
       }
     }
   ],

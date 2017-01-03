@@ -8,24 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Name set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Name changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Name removed'
+        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.added',
+        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set name of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed name of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed name of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.text.removed',
       }
     }
   ],

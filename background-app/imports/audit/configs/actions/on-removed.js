@@ -1,7 +1,7 @@
 export default {
   logs: [
     {
-      message: 'Document removed'
+      message: 'actions.on-removed.on-removed'
     }
   ],
   notifications: []

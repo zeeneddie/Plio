@@ -9,24 +9,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Type set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Type changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Type removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.typeId.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.typeId.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.typeId.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set type of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.typeId.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.typeId.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.typeId.text.removed',
       }
     }
   ],

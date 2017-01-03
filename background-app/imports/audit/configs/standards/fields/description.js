@@ -8,21 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Description set',
-        [ChangesKinds.FIELD_CHANGED]: 'Description changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Description removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.description.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.description.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.description.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set description of {{{docDesc}}} {{{docName}}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed description of {{{docDesc}}} {{{docName}}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed description of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.description.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.description.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.description.text.removed',
       }
     }
   ],

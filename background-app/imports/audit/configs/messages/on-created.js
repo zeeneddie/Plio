@@ -14,12 +14,8 @@ export default {
   logs: [],
   notifications: [
     {
-      text:
-        '{{userName}}' +
-        '{{#if isFile}} uploaded new file for ' +
-        '{{else}} added new message to {{/if}}' +
-        'the discussion of {{{docDesc}}} {{{docName}}}',
-      title: 'New message in discussion',
+      text: 'messages.on-created.text',
+      title: 'messages.on-created.title',
       data({ newDoc: { discussionId, type }, user }) {
         const isFile = type === 'file';
         const standard = getDiscussionStandard(discussionId);

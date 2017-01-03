@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Review date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Review date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Review date removed'
+        [ChangesKinds.FIELD_ADDED]: 'risks.fields.review.reviewedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'risks.fields.review.reviewedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'risks.fields.review.reviewedAt.removed',
       }
     }
   ],

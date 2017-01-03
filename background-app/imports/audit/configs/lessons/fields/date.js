@@ -8,12 +8,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} created date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} created date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} created date removed'
+        [ChangesKinds.FIELD_ADDED]: 'lessons.fields.date.added',
+        [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.date.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.date.removed',
       },
       logData: getLogData
     }

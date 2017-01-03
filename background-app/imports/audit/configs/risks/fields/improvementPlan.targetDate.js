@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan target date for desired outcome set to "{{newValue}}"',
+          'risks.fields.improvementPlan.targetDate.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
+          'risks.fields.improvementPlan.targetDate.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan target date for desired outcome removed'
+          'risks.fields.improvementPlan.targetDate.removed',
       }
     }
   ],

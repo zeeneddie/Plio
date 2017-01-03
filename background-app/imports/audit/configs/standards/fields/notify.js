@@ -8,8 +8,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{item}} was added to notification list',
-        [ChangesKinds.ITEM_REMOVED]: '{{item}} was removed from notification list'
+        [ChangesKinds.ITEM_ADDED]: 'standards.fields.notify.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'standards.fields.notify.item-removed',
       }
     }
   ],
@@ -17,17 +17,17 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added {{item}} to the notification list of {{{docDesc}}} {{{docName}}}',
+          'standards.fields.notify.doc-notification.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed {{item}} from the notification list of {{{docDesc}}} {{{docName}}}'
+          'standards.fields.notify.doc-notification.text.item-removed',
       }
     },
     {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
         return kind === ChangesKinds.ITEM_ADDED;
       },
-      text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
-      title: 'You have been added to the notification list',
+      text: 'standards.fields.notify.user-notification.text.item-added',
+      title: 'standards.fields.notify.user-notification.title.item-added',
       emailTemplateData({ newDoc }) {
         return {
           button: {

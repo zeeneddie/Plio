@@ -68,8 +68,8 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === COMPLETE_ACTION;
       },
-      text: '{{userName}} assigned you to complete {{{docDesc}}} {{{docName}}}',
-      title: 'You have been assigned to complete a {{{docDesc}}}',
+      text: 'work-items.action-completion.text',
+      title: 'work-items.action-completion.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -77,8 +77,8 @@ export const getNotifications = () => {
       shouldSendNotification({ newDoc: { type } }) {
         return type === VERIFY_ACTION;
       },
-      text: '{{userName}} assigned you to verify {{{docDesc}}} {{{docName}}}',
-      title: 'You have been assigned to verify a {{{docDesc}}}',
+      text: 'work-items.action-verification.text',
+      title: 'work-items.action-verification.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -87,8 +87,8 @@ export const getNotifications = () => {
         return (type === COMPLETE_ANALYSIS)
             && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
       },
-      text: '{{userName}} assigned you to do a root cause analysis of {{{docDesc}}} {{{docName}}}',
-      title: 'You have been assigned to do a root cause analysis',
+      text: 'work-items.root-cause-analysis.text',
+      title: 'work-items.root-cause-analysis.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -97,8 +97,8 @@ export const getNotifications = () => {
         return (type === COMPLETE_ANALYSIS)
             && (linkedDoc.type === ProblemTypes.RISK);
       },
-      text: '{{userName}} assigned you to do an initial risk analysis of {{{docName}}}',
-      title: 'You have been assigned to do an initial risk analysis',
+      text: 'work-items.initial-risk-analysis.text',
+      title: 'work-items.initial-risk-analysis.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -107,8 +107,8 @@ export const getNotifications = () => {
         return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
             && (linkedDoc.type === ProblemTypes.NON_CONFORMITY);
       },
-      text: '{{userName}} assigned you to do an update of standards related to {{{docDesc}}} {{{docName}}}',
-      title: 'You have been assigned to do an update of standards',
+      text: 'work-items.update-of-standards.text',
+      title: 'work-items.update-of-standards.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },
@@ -117,8 +117,8 @@ export const getNotifications = () => {
         return (type === COMPLETE_UPDATE_OF_DOCUMENTS)
             && (linkedDoc.type === ProblemTypes.RISK);
       },
-      text: '{{userName}} assigned you to do an update of risk record {{{docName}}}',
-      title: 'You have been assigned to do an update of risk record',
+      text: 'work-items.update-of-risk-record.text',
+      title: 'work-items.update-of-risk-record.title',
       sendBoth: true,
       emailTemplateData: getEmailTemplateData
     },

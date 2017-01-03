@@ -8,7 +8,7 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+          'risks.fields.improvementPlan.reviewDates.date.changed',
       }
     }
   ],

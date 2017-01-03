@@ -9,12 +9,7 @@ export default {
         return diffs['analysis.completedAt'] && diffs['analysis.completedBy'];
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{#if completed}}' +
-            'Root cause analysis completed{{#if comments}}: {{comments}}{{/if}}' +
-          '{{else}}' +
-            'Root cause analysis canceled' +
-          '{{/if}}'
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.status.changed',
       }
     }
   ],

@@ -11,8 +11,7 @@ export default {
         return deletedAt && deletedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.isDeleted.changed',
       }
     }
   ],
@@ -23,11 +22,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}'
+          'standards.fields.isDeleted.text.changed',
       },
       title: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}'
+          'standards.fields.isDeleted.title.changed',
       }
     }
   ],

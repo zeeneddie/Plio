@@ -7,11 +7,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan statement of desired outcome set',
+          'non-conformities.fields.improvementPlan.desiredOutcome.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan statement of desired outcome changed',
+          'non-conformities.fields.improvementPlan.desiredOutcome.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan statement of desired outcome removed'
+          'non-conformities.fields.improvementPlan.desiredOutcome.removed',
       }
     }
   ],

@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis target date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis target date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis target date removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.targetDate.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.targetDate.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.targetDate.removed',
       }
     }
   ],

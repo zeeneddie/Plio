@@ -8,12 +8,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Status set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Status changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Status removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.status.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.status.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.status.removed',
       }
     }
   ],
@@ -24,8 +21,8 @@ export default {
         // 19 - Closed - action(s) verified, standard(s) reviewed
         return (newValue === 18) || (newValue === 19);
       },
-      text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{newValue}}"',
-      title: '{{{docDescCapitalized}}} {{{docName}}} closed',
+      text: 'problems.fields.status.closed-status-notification.text.changed',
+      title: 'problems.fields.status.closed-status-notification.title.changed',
       data({ diffs: { status }, newDoc }) {
         const auditConfig = this;
 

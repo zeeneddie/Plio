@@ -10,12 +10,9 @@ export default {
         return !diffs['analysis.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis completed by set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis completed by removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.completedBy.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.completedBy.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.completedBy.removed',
       }
     }
   ],

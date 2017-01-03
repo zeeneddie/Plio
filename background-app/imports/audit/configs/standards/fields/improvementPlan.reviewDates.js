@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'Improvement plan review date added: "{{date}}"',
+          'standards.fields.improvementPlan.reviewDates.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'Improvement plan review date removed: "{{date}}"'
+          'standards.fields.improvementPlan.reviewDates.item-removed',
       }
     }
   ],
@@ -19,9 +19,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
+          'standards.fields.improvementPlan.reviewDates.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"'
+          'standards.fields.improvementPlan.reviewDates.item-removed',
       }
     }
   ],

@@ -7,8 +7,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'File "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'File removed'
+        [ChangesKinds.ITEM_ADDED]: 'problems.fields.fileIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'problems.fields.fileIds.item-removed',
       }
     }
   ],

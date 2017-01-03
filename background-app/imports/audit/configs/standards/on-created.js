@@ -1,7 +1,7 @@
 export default {
   logs: [
     {
-      message: 'Document created'
+      message: 'standards.on-created.on-created'
     }
   ],
   notifications: []

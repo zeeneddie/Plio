@@ -7,11 +7,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan statement of desired outcome set',
+          'risks.fields.improvementPlan.desiredOutcome.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan statement of desired outcome changed',
+          'risks.fields.improvementPlan.desiredOutcome.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan statement of desired outcome removed'
+          'risks.fields.improvementPlan.desiredOutcome.removed',
       }
     }
   ],

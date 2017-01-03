@@ -7,8 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Treatment plan review date added: "{{date}}"',
-        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan review date removed: "{{date}}"'
+        [ChangesKinds.ITEM_ADDED]:
+          'risks.fields.improvementPlan.reviewDates.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'risks.fields.improvementPlan.reviewDates.item-removed',
       }
     }
   ],

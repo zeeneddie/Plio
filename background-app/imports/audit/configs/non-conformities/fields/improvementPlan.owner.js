@@ -7,12 +7,12 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan owner set to {{newValue}}',
+        [[ChangesKinds.FIELD_ADDED]:
+          'non-conformities.fields.improvementPlan.owner.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
+          'non-conformities.fields.improvementPlan.owner.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan owner removed'
+          'non-conformities.fields.improvementPlan.owner.removed',
       }
     }
   ],

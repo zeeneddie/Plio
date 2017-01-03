@@ -10,12 +10,9 @@ export default {
         return !diffs['analysis.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis date set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis date changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis date removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.completedAt.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.completedAt.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.completedAt.removed',
       }
     }
   ],

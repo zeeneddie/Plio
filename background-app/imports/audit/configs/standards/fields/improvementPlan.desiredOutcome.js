@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan statement of desired outcome set',
+          'standards.fields.improvementPlan.desiredOutcome.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan statement of desired outcome changed',
+          'standards.fields.improvementPlan.desiredOutcome.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan statement of desired outcome removed'
+          'standards.fields.improvementPlan.desiredOutcome.removed',
       }
     }
   ],
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          'standards.fields.improvementPlan.desiredOutcome.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          'standards.fields.improvementPlan.desiredOutcome.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}'
+          'standards.fields.improvementPlan.desiredOutcome.text.removed',
       }
     }
   ],

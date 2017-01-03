@@ -9,24 +9,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Currency set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Currency changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Currency removed'
+        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.currency.added',
+        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.currency.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.currency.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set currency of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed currency of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed currency of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.currency.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.currency.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.currency.text.removed',
       }
     }
   ],

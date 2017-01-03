@@ -6,10 +6,10 @@ import StandardAuditConfig from '../standards/standard-audit-config.js';
 export default {
   logs: [
     {
-      message: 'Document created',
+      message: 'problems.on-created.doc-log',
     },
     {
-      message: '{{{docName}}} was linked to this document',
+      message: 'problems.on-created.linked-standard-log',
       data({ newDoc }) {
         return _(newDoc.standardsIds.length).times(() => {
           return { docName: this.docName(newDoc) };
@@ -27,7 +27,7 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
+      text: 'problems.on-created.linked-standard-notification.text',
       data({ newDoc, user }) {
         const auditConfig = this;
         const docDesc = auditConfig.docDescription(newDoc);

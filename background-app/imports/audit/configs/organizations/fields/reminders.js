@@ -4,7 +4,7 @@ import { getReceivers } from '../helpers.js';
 import { capitalize } from '/imports/share/helpers.js';
 
 
-const getRemindersConfig = (field, label) => {
+const getRemindersConfig = (field, relatedDocs) => {
   const getReminderConfig = (reminderType, reminderLabel) => {
     return [
       {
@@ -12,18 +12,14 @@ const getRemindersConfig = (field, label) => {
         logs: [
           {
             message: {
-              [ChangesKinds.FIELD_CHANGED]:
-                `${capitalize(reminderLabel)} for ${label} ` +
-                `changed from "{{oldValue}}" to "{{newValue}}"`,
+              [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.changed',
             }
           }
         ],
         notifications: [
           {
             text: {
-              [ChangesKinds.FIELD_CHANGED]:
-                `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+              [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.text.changed',
             }
           }
         ],
@@ -39,7 +35,9 @@ const getRemindersConfig = (field, label) => {
             docName: () => auditConfig.docName(newDoc),
             userName: () => getUserFullNameOrEmail(user),
             newValue: () => `${newValue} ${timeUnit}`,
-            oldValue: () => `${oldValue} ${timeUnit}`
+            oldValue: () => `${oldValue} ${timeUnit}`,
+            reminderLabel: capitalize(reminderLabel),
+            relatedDocs,
           };
         },
         receivers: getReceivers
@@ -50,18 +48,14 @@ const getRemindersConfig = (field, label) => {
         logs: [
           {
             message: {
-              [ChangesKinds.FIELD_CHANGED]:
-                `${capitalize(reminderLabel)} for ${label} changed ` +
-                `from "{{oldValue}}" to "{{newValue}}"`,
+              [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.changed',
             }
           }
         ],
         notifications: [
           {
             text: {
-              [ChangesKinds.FIELD_CHANGED]:
-                `{{userName}} changed ${reminderLabel} for ${label} ` +
-                `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+              [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.text.changed',
             }
           }
         ],
@@ -77,7 +71,9 @@ const getRemindersConfig = (field, label) => {
             docName: () => auditConfig.docName(newDoc),
             userName: () => getUserFullNameOrEmail(user),
             newValue: () => `${timeValue} ${newValue}`,
-            oldValue: () => `${timeValue} ${oldValue}`
+            oldValue: () => `${timeValue} ${oldValue}`,
+            reminderLabel: capitalize(reminderLabel),
+            relatedDocs,
           };
         },
         receivers: getReceivers

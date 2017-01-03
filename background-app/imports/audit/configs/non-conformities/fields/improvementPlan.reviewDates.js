@@ -7,8 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Improvement plan review date added: "{{date}}"',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"'
+        [ChangesKinds.ITEM_ADDED]:
+          'non-conformities.fields.improvementPlan.reviewDates.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'non-conformities.fields.improvementPlan.reviewDates.item-removed',
       }
     }
   ],

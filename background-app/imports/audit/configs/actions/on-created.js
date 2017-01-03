@@ -1,21 +1,23 @@
-import { Standards } from '/imports/share/collections/standards.js';
-import { getCollectionByDocType } from '/imports/share/helpers.js';
+import { _ } from 'meteor/underscore';
+
+import { Standards } from '/imports/share/collections/standards';
+import { getCollectionByDocType } from '/imports/share/helpers';
 import {
   getUserFullNameOrEmail,
   getPrettyOrgDate,
   getUserId
-} from '../../utils/helpers.js';
-import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+} from '../../utils/helpers';
+import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
 
 export default {
   logs: [
     {
-      message: 'Document created',
+      message: 'actions.on-created.doc-log',
     },
     {
-      message: '{{{docName}}} was linked to this document',
+      message: 'actions.on-created.linked-doc-log',
       data({ newDoc }) {
         const auditConfig = this;
 
@@ -29,7 +31,7 @@ export default {
 
           return {
             collection: auditConfig.collectionName,
-            documentId
+            documentId,
           };
         });
       }
@@ -37,7 +39,7 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{linkedDocDesc}}} {{{linkedDocName}}}',
+      text: 'actions.on-created.linked-doc-notification.text',
       data({ newDoc, user }) {
         const auditConfig = this;
         const docDesc = auditConfig.docDescription(newDoc);
@@ -81,5 +83,5 @@ export default {
     function({ newDoc: { _id } }) {
       new ActionWorkflow(_id).refreshStatus();
     }
-  ]
+  ],
 };

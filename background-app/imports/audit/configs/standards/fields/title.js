@@ -8,24 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Title set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Title removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.title.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set title of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed title of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed title of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.title.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.title.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.title.text.removed',
       }
     }
   ],

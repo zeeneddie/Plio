@@ -3,30 +3,24 @@ import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 import { getReceivers } from '../helpers.js';
 
 
-const getGuidelinesConfig = (field, guidelineType, label) => {
+const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
   return {
-    field: `${field}.${guidelineType}`,
+    field: `${field}.${magnitude}`,
     logs: [
       {
         message: {
-          [ChangesKinds.FIELD_ADDED]:
-            `Guidelines for ${label} set`,
-          [ChangesKinds.FIELD_CHANGED]:
-            `Guidelines for ${label} changed`,
-          [ChangesKinds.FIELD_REMOVED]:
-            `Guidelines for ${label} removed`
+          [ChangesKinds.FIELD_ADDED]: 'organizations.fields.guidelines.added',
+          [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.guidelines.changed',
+          [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.guidelines.removed',
         }
       }
     ],
     notifications: [
       {
         text: {
-          [ChangesKinds.FIELD_ADDED]:
-            `{{userName}} set guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
-          [ChangesKinds.FIELD_CHANGED]:
-            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
-          [ChangesKinds.FIELD_REMOVED]:
-            `{{userName}} removed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
+          [ChangesKinds.FIELD_ADDED]: 'organizations.fields.guidelines.text.added',
+          [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.guidelines.text.changed',
+          [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.guidelines.text.removed',
         }
       }
     ],
@@ -36,7 +30,8 @@ const getGuidelinesConfig = (field, guidelineType, label) => {
       return {
         docDesc: () => auditConfig.docDescription(newDoc),
         docName: () => auditConfig.docName(newDoc),
-        userName: () => getUserFullNameOrEmail(user)
+        userName: () => getUserFullNameOrEmail(user),
+        relatedDocs,
       };
     },
     receivers: getReceivers

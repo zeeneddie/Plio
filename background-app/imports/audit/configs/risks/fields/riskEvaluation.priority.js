@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk evaluation treatment priority set to "{{newValue}}"',
+          'risks.fields.riskEvaluation.priority.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk evaluation treatment priority changed from "{{oldValue}}" to "{{newValue}}"',
+          'risks.fields.riskEvaluation.priority.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk evaluation treatment priority removed'
+          'risks.fields.riskEvaluation.priority.removed',
       }
     }
   ],

@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards executor set to {{newValue}}',
+          'problems.fields.updateOfStandards.executor.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards executor changed from {{oldValue}} to {{newValue}}',
+          'problems.fields.updateOfStandards.executor.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards executor removed'
+          'problems.fields.updateOfStandards.executor.removed',
       }
     }
   ],

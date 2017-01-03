@@ -7,11 +7,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk evaluation previous loss experience set',
+          'risks.fields.riskEvaluation.prevLossExp.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk evaluation previous loss experience changed',
+          'risks.fields.riskEvaluation.prevLossExp.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk evaluation previous loss experience removed'
+          'risks.fields.riskEvaluation.prevLossExp.removed',
       }
     }
   ],

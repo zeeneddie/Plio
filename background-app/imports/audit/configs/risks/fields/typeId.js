@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Risk type set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Risk type changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Risk type removed'
+        [ChangesKinds.FIELD_ADDED]: 'risks.fields.typeId.added',
+        [ChangesKinds.FIELD_CHANGED]: 'risks.fields.typeId.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'risks.fields.typeId.removed',
       }
     }
   ],

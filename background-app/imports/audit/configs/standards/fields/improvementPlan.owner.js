@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan owner set to {{newValue}}',
+          'standards.fields.improvementPlan.owner.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
+          'standards.fields.improvementPlan.owner.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan owner removed'
+          'standards.fields.improvementPlan.owner.removed',
       }
     }
   ],
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          'standards.fields.improvementPlan.owner.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          'standards.fields.improvementPlan.owner.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s owner of {{{docDesc}}} {{{docName}}}'
+          'standards.fields.improvementPlan.owner.text.removed',
       }
     },
     {

@@ -21,7 +21,7 @@ export default OrgAuditConfig = {
   onCreated: {
     logs: [
       {
-        message: 'Organization created',
+        message: 'organizations.on-created.on-created',
       }
     ],
   },

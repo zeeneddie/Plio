@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk scoring guidelines set',
+          'organizations.fields.rkScoringGuidelines.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk scoring guidelines changed',
+          'organizations.fields.rkScoringGuidelines.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk scoring guidelines removed'
+          'organizations.fields.rkScoringGuidelines.removed',
       }
     }
   ],
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+          'organizations.fields.rkScoringGuidelines.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+          'organizations.fields.rkScoringGuidelines.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}'
+          'organizations.fields.rkScoringGuidelines.text.removed',
       }
     }
   ],

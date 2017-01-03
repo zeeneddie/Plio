@@ -7,10 +7,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]:
-          'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
+        [ChangesKinds.ITEM_ADDED]: 'risks.fields.scores.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'risks.fields.scores.item-removed',
       }
     }
   ],

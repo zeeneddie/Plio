@@ -8,7 +8,7 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+          'non-conformities.fields.improvementPlan.reviewDates.date.changed',
       }
     }
   ],

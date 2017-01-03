@@ -6,10 +6,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Help desk ref added: ID - {{text}}, URL: {{url}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Help desk ref removed: ID - {{text}}, URL: {{url}}',
+        [ChangesKinds.FIELD_ADDED]: 'non-conformities.fields.ref.added',
+        [ChangesKinds.FIELD_REMOVED]: 'non-conformities.fields.ref.removed',
       },
     },
   ],

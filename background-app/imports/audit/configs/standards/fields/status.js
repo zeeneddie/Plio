@@ -9,24 +9,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Status set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Status changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Status removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.status.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.status.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.status.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set status of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed status of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed status of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.status.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.status.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.status.text.removed',
       }
     }
   ],

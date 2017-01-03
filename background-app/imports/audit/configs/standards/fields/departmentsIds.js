@@ -9,10 +9,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]:
-          'Document was linked to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          'Document was unlinked from {{{departmentDesc}}}'
+        [ChangesKinds.ITEM_ADDED]: 'standards.fields.departmentsIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'standards.fields.departmentsIds.item-removed',
       }
     }
   ],
@@ -20,9 +18,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
+          'standards.fields.departmentsIds.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}'
+          'standards.fields.departmentsIds.text.item-removed',
       }
     }
   ],

@@ -6,12 +6,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Title set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Title removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.title.removed',
       }
     }
   ],

@@ -8,24 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Issue number set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Issue number changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Issue number removed'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.issueNumber.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.issueNumber.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.issueNumber.removed',
       }
     }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set issue number of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed issue number of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed issue number of {{{docDesc}}} {{{docName}}}'
+        [ChangesKinds.FIELD_ADDED]: 'standards.fields.issueNumber.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.issueNumber.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.issueNumber.text.removed',
       }
     }
   ],

@@ -5,7 +5,7 @@ import { getPrettyOrgDate } from '../../utils/helpers.js';
 export default {
   logs: [
     {
-      message: '{{{docName}}} removed: date - {{date}}',
+      message: 'occurrences.on-removed.on-removed',
       logData: getLogData
     }
   ],

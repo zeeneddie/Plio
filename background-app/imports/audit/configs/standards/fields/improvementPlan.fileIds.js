@@ -9,8 +9,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed'
+        [ChangesKinds.ITEM_ADDED]:
+          'standards.fields.improvementPlan.fileIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'standards.fields.improvementPlan.fileIds.item-removed',
       }
     }
   ],
@@ -18,9 +20,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
+          'standards.fields.improvementPlan.fileIds.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}'
+          'standards.fields.improvementPlan.fileIds.text.item-removed',
       }
     }
   ],

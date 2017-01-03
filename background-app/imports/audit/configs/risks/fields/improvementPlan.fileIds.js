@@ -7,8 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed'
+        [ChangesKinds.ITEM_ADDED]:
+          'risks.fields.improvementPlan.fileIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'risks.fields.improvementPlan.fileIds.item-removed',
       }
     }
   ],

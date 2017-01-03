@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan owner set to {{newValue}}',
+          'risks.fields.improvementPlan.owner.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan owner changed from {{oldValue}} to {{newValue}}',
+          'risks.fields.improvementPlan.owner.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan owner removed'
+          'risks.fields.improvementPlan.owner.removed',
       }
     }
   ],

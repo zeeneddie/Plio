@@ -6,9 +6,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Description set',
-        [ChangesKinds.FIELD_CHANGED]: 'Description changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Description removed'
+        [ChangesKinds.FIELD_ADDED]: 'problems.fields.description.added',
+        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.description.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.description.removed',
       }
     }
   ],

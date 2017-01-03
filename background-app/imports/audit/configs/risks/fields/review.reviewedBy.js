@@ -7,12 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Review executor set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Review executor changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Review executor removed'
+        [ChangesKinds.FIELD_ADDED]: 'risks.fields.review.reviewedBy.added',
+        [ChangesKinds.FIELD_CHANGED]: 'risks.fields.review.reviewedBy.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'risks.fields.review.reviewedBy.removed',
       }
     }
   ],

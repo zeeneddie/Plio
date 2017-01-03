@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk evaluation treatment decision set to "{{newValue}}"',
+          'risks.fields.riskEvaluation.decision.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
+          'risks.fields.riskEvaluation.decision.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk evaluation treatment decision removed'
+          'risks.fields.riskEvaluation.decision.removed',
       }
     }
   ],

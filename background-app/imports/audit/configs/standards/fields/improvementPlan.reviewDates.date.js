@@ -9,7 +9,7 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+          'standards.fields.improvementPlan.reviewDates.date.changed',
       }
     }
   ],
@@ -17,7 +17,7 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
+          'standards.fields.improvementPlan.reviewDates.date.text.changed',
       }
     }
   ],

@@ -9,14 +9,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{standardName}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{standardName}}}'
+        [ChangesKinds.ITEM_ADDED]:
+          'problems.fields.standardsIds.doc-log.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'problems.fields.standardsIds.doc-log.item-removed',
       }
     },
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{{docName}}} was linked to this document',
-        [ChangesKinds.ITEM_REMOVED]: '{{{docName}}} was unlinked from this document'
+        [ChangesKinds.ITEM_ADDED]:
+          'problems.fields.standardsIds.linked-standard-log.item-added',
+        [ChangesKinds.ITEM_REMOVED]:
+          'problems.fields.standardsIds.linked-standard-log.item-removed',
       },
       data({ newDoc }) {
         const auditConfig = this;
@@ -37,9 +41,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{standardDesc}}} {{{standardName}}}',
+          'problems.fields.standardsIds.linked-standard-notification.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{standardDesc}}} {{{standardName}}}'
+          'problems.fields.standardsIds.linked-standard-notification.text.item-removed',
       }
     }
   ],
