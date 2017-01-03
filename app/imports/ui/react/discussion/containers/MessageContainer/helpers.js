@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Autolinker } from 'meteor/konecty:autolinker';
 import React from 'react';
@@ -7,7 +8,6 @@ import { invokeC } from '/imports/api/helpers';
 import { TruncatedStringLengths } from '/imports/api/constants';
 
 import FileProvider from '../../../containers/providers/FileProvider';
-import FileItem from '../../../fields/read/components/FileItem';
 
 // Helpers
 
@@ -33,13 +33,14 @@ export const getMessageTime = props => getFormattedDate(props.createdAt, 'h:mm A
 
 export const getMessageContents = (props) => {
   switch (props.type) {
-    case 'text':
+    case 'text': {
       const createMarkup = () => ({
         __html: Autolinker.link(props.text || '', {
-          truncate: TruncatedStringLengths.c40
-        })
+          truncate: TruncatedStringLengths.c40,
+        }),
       });
       return <span dangerouslySetInnerHTML={createMarkup()}></span>;
+    }
     case 'file':
       return props.fileId && <FileProvider fileId={props.fileId} />;
     default:

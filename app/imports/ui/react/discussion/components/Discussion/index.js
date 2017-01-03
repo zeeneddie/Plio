@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 import PreloaderPage from '../../../components/PreloaderPage';
 import MessagesListWrapperContainer from '../../containers/MessagesListWrapperContainer';
@@ -36,5 +36,10 @@ const Discussion = (props) => (
     </Wrapper>
   </Wrapper>
 );
+
+Discussion.propTypes = {
+  discussion: PropTypes.any,
+  onBackArrowClick: PropTypes.func.isRequired,
+};
 
 export default Discussion;

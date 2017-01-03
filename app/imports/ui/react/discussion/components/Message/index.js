@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { PropTypes } from 'react';
 
 import MessageDate from '../MessageDate';
 import MessageBox from '../MessageBox';
@@ -11,48 +10,84 @@ import MessageGutter from '../MessageGutter';
 import MessageContent from '../MessageContent';
 import MessageMenu from '../MessageMenu';
 
-const Message = (props) => {
-  return (
-    <div className="chat-message-container">
-      {props.dateToShow && <MessageDate date={props.date} />}
+const Message = ({
+  date,
+  dateToShow,
+  className,
+  isMergedWithPreviousMessage,
+  userAvatar,
+  userFullNameOrEmail,
+  onMessageAvatarClick,
+  userFirstName,
+  onMessageTimeClick,
+  pathToMessage,
+  time,
+  isAuthor,
+  pathToMessageToCopy,
+  onMessageDelete,
+  contents,
+  onMessageContentsClick,
+}) => (
+  <div className="chat-message-container">
+    {dateToShow && <MessageDate {...{ date }} />}
 
-      <MessageBox className={props.className}>
-        {!props.isMergedWithPreviousMessage &&
-          <MessageAvatar
-            avatar={props.userAvatar}
-            alt={props.userFullNameOrEmail}
-            onClick={e => props.onMessageAvatarClick(e)} />}
+    <MessageBox className={className}>
+      {!isMergedWithPreviousMessage &&
+        <MessageAvatar
+          avatar={userAvatar}
+          alt={userFullNameOrEmail}
+          onClick={onMessageAvatarClick}
+        />}
 
-          <MessageCard>
-            {!props.isMergedWithPreviousMessage &&
-              (<div>
-                <MessageAuthor name={props.userFirstName}/>
+      <MessageCard>
+        {!isMergedWithPreviousMessage &&
+          (<div>
+            <MessageAuthor name={userFirstName} />
 
-                <MessageTime
-                  onClick={e => props.onMessageTimeClick(e)}
-                  href={props.pathToMessage}
-                  time={props.time}/>
-              </div>)}
+            <MessageTime
+              {...{ time }}
+              onClick={onMessageTimeClick}
+              href={pathToMessage}
+            />
+          </div>)}
 
-            <MessageMenu
-              isAuthor={props.isAuthor}
-              pathToMessageToCopy={props.pathToMessageToCopy}
-              delete={e => props.onMessageDelete(e)}/>
+        <MessageMenu
+          {...{ isAuthor }}
+          pathToMessageToCopy={pathToMessageToCopy}
+          delete={onMessageDelete}
+        />
 
-            <MessageGutter>
-              <MessageTime
-                onClick={e => props.onMessageTimeClick(e)}
-                href={props.pathToMessage}
-                time={props.time.split(' ')[0]}/>
-            </MessageGutter>
+        <MessageGutter>
+          <MessageTime
+            onClick={onMessageTimeClick}
+            href={pathToMessage}
+            time={time.split(' ')[0]}
+          />
+        </MessageGutter>
 
-            <MessageContent
-              contents={props.contents}
-              onClick={e => props.onMessageContentsClick(e)}/>
-          </MessageCard>
-      </MessageBox>
-    </div>
-  );
+        <MessageContent {...{ contents }} onClick={onMessageContentsClick} />
+      </MessageCard>
+    </MessageBox>
+  </div>
+);
+
+Message.propTypes = {
+  date: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
+  dateToShow: PropTypes.bool,
+  className: PropTypes.string,
+  isMergedWithPreviousMessage: PropTypes.bool,
+  userAvatar: PropTypes.string,
+  userFullNameOrEmail: PropTypes.string,
+  onMessageAvatarClick: PropTypes.func,
+  userFirstName: PropTypes.string,
+  onMessageTimeClick: PropTypes.func,
+  pathToMessage: PropTypes.string,
+  time: PropTypes.string,
+  isAuthor: PropTypes.bool,
+  pathToMessageToCopy: PropTypes.string,
+  onMessageDelete: PropTypes.func,
+  contents: PropTypes.any,
+  onMessageContentsClick: PropTypes.func,
 };
 
 export default Message;

@@ -51,7 +51,6 @@ const DiscussionFileUploader = enhance(({ setAttachments }) => (
 DiscussionFileUploader.propTypes = {
   slingshotDirective: PropTypes.string.isRequired,
   uploaderMetaContext: PropTypes.object.isRequired,
-  setAttachments: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
   organizationId: PropTypes.string.isRequired,
 };
