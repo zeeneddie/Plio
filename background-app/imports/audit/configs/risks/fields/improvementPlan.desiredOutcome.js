@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -12,9 +12,9 @@ export default {
           'risks.fields.improvementPlan.desiredOutcome.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'risks.fields.improvementPlan.desiredOutcome.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
-  data() { }
+  data() { },
 };

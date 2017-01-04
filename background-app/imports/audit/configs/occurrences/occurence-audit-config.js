@@ -1,13 +1,13 @@
-import { CollectionNames } from '/imports/share/constants.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Occurrences } from '/imports/share/collections/occurrences.js';
-import NCAuditConfig from '../non-conformities/nc-audit-config.js';
+import { CollectionNames } from '/imports/share/constants';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Occurrences } from '/imports/share/collections/occurrences';
+import NCAuditConfig from '../non-conformities/nc-audit-config';
 
-import onCreated from './on-created.js';
-import onRemoved from './on-removed.js';
+import onCreated from './on-created';
+import onRemoved from './on-removed';
 
-import date from './fields/date.js';
-import description from './fields/description.js';
+import date from './fields/date';
+import description from './fields/description';
 
 
 export default OccurenceAuditConfig = {
@@ -20,7 +20,7 @@ export default OccurenceAuditConfig = {
 
   updateHandlers: [
     date,
-    description
+    description,
   ],
 
   onRemoved,
@@ -29,7 +29,7 @@ export default OccurenceAuditConfig = {
     return _id;
   },
 
-  docDescription(doc) {
+  docDescription() {
     return 'occurrence';
   },
 
@@ -46,6 +46,6 @@ export default OccurenceAuditConfig = {
     const NC = NonConformities.findOne({ _id: nonConformityId });
 
     return NCAuditConfig.docUrl(NC);
-  }
+  },
 
 };

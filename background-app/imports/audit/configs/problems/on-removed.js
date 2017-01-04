@@ -1,8 +1,8 @@
 export default {
   logs: [
     {
-      message: 'problems.on-removed.on-removed'
-    }
+      message: 'common.on-removed.on-removed',
+    },
   ],
-  notifications: []
+  notifications: [],
 };

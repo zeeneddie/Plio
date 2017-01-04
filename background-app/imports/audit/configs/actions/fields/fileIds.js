@@ -9,16 +9,16 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'actions.fields.fileIds.item-added',
-        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.fileIds.item-removed',
+        [ChangesKinds.ITEM_ADDED]: 'common.fields.fileIds.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'common.fields.fileIds.item-removed',
       },
     },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.ITEM_ADDED]: 'actions.fields.fileIds.text.item-added',
-        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.fileIds.text.item-removed',
+        [ChangesKinds.ITEM_ADDED]: 'common.fields.fileIds.text.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'common.fields.fileIds.text.item-removed',
       },
     },
   ],

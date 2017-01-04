@@ -1,7 +1,7 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { Files } from '/imports/share/collections/files';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,21 +10,21 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'standards.fields.improvementPlan.fileIds.item-added',
+          'common.fields.improvementPlan.fileIds.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'standards.fields.improvementPlan.fileIds.item-removed',
-      }
-    }
+          'common.fields.improvementPlan.fileIds.item-removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          'standards.fields.improvementPlan.fileIds.text.item-added',
+          'common.fields.improvementPlan.fileIds.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'standards.fields.improvementPlan.fileIds.text.item-removed',
-      }
-    }
+          'common.fields.improvementPlan.fileIds.text.item-removed',
+      },
+    },
   ],
   data({ diffs, newDoc, user }) {
     const _id = diffs['improvementPlan.fileIds'].item;
@@ -35,8 +35,8 @@ export default {
       name: () => file().name,
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user)
+      userName: () => getUserFullNameOrEmail(user),
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

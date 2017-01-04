@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -13,8 +13,8 @@ export default {
           'risks.fields.improvementPlan.owner.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'risks.fields.improvementPlan.owner.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +22,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

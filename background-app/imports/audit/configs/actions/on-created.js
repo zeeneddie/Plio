@@ -2,11 +2,7 @@ import { _ } from 'meteor/underscore';
 
 import { Standards } from '/imports/share/collections/standards';
 import { getCollectionByDocType } from '/imports/share/helpers';
-import {
-  getUserFullNameOrEmail,
-  getPrettyOrgDate,
-  getUserId
-} from '../../utils/helpers';
+import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers';
 import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers';
 import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
@@ -14,16 +10,16 @@ import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 export default {
   logs: [
     {
-      message: 'actions.on-created.doc-log',
+      message: 'common.on-created.on-created',
     },
     {
       message: 'actions.on-created.linked-doc-log',
       data({ newDoc }) {
         const auditConfig = this;
 
-        return _(newDoc.linkedTo.length).times(() => {
-          return { docName: () => auditConfig.docName(newDoc) };
-        });
+        return _(newDoc.linkedTo.length).times(() => ({
+          docName: () => auditConfig.docName(newDoc),
+        }));
       },
       logData({ newDoc: { linkedTo } }) {
         return _(linkedTo).map(({ documentId, documentType }) => {
@@ -34,8 +30,8 @@ export default {
             documentId,
           };
         });
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -54,7 +50,7 @@ export default {
             linkedDocName: getLinkedDocName(documentId, documentType),
             docDesc,
             docName,
-            userName
+            userName,
           };
         });
       },
@@ -64,11 +60,11 @@ export default {
 
           const collection = getCollectionByDocType(documentType);
           const { identifiedBy, standardsIds } = collection.findOne({
-            _id: documentId
+            _id: documentId,
           }) || {};
 
           const receivers = new Set();
-          Standards.find({ _id: { $in: standardsIds }  }).forEach(({ owner }) => {
+          Standards.find({ _id: { $in: standardsIds } }).forEach(({ owner }) => {
             (owner !== userId) && receivers.add(owner);
           });
 
@@ -76,12 +72,12 @@ export default {
 
           return Array.from(receivers);
         });
-      }
-    }
+      },
+    },
   ],
   triggers: [
-    function({ newDoc: { _id } }) {
+    function ({ newDoc: { _id } }) {
       new ActionWorkflow(_id).refreshStatus();
-    }
+    },
   ],
 };

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyOrgDate } from '../../../utils/helpers';
 
 
 export default {
@@ -13,8 +13,8 @@ export default {
           'risks.fields.improvementPlan.targetDate.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'risks.fields.improvementPlan.targetDate.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -24,7 +24,7 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
-  }
+  },
 };

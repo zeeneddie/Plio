@@ -69,7 +69,7 @@ export default ActionAuditConfig = {
     return {
       [ActionTypes.CORRECTIVE_ACTION]: 'corrective action',
       [ActionTypes.PREVENTATIVE_ACTION]: 'preventative action',
-      [ActionTypes.RISK_CONTROL]: 'risk control'
+      [ActionTypes.RISK_CONTROL]: 'risk control',
     }[type];
   },
 
@@ -81,6 +81,6 @@ export default ActionAuditConfig = {
     return organizationId;
   },
 
-  docUrl(doc) { },
+  docUrl() { },
 
 };

@@ -1,13 +1,13 @@
-import { getLogData } from './helpers.js';
-import { getPrettyOrgDate } from '../../utils/helpers.js';
+import { getLogData } from './helpers';
+import { getPrettyOrgDate } from '../../utils/helpers';
 
 
 export default {
   logs: [
     {
       message: 'occurrences.on-created.on-created',
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
   data({ newDoc }) {
@@ -16,7 +16,7 @@ export default {
 
     return {
       docName: () => auditConfig.docName(newDoc),
-      date: () => getPrettyOrgDate(newDoc.date, orgId())
+      date: () => getPrettyOrgDate(newDoc.date, orgId()),
     };
-  }
+  },
 };

@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -12,8 +12,8 @@ export default {
         [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.owner.changed',
         [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.owner.removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
   data({ diffs: { owner }, newDoc }) {
@@ -23,7 +23,7 @@ export default {
     return {
       docName: () => auditConfig.docName(newDoc),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

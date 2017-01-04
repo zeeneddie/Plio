@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -12,8 +12,8 @@ export default {
           'risks.fields.riskEvaluation.prevLossExp.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'risks.fields.riskEvaluation.prevLossExp.removed',
-      }
-    }
+      },
+    },
   ],
-  notifications: []
+  notifications: [],
 };

@@ -1,6 +1,6 @@
-import { ProblemsStatuses } from '/imports/share/constants.js';
-import { capitalize } from '/imports/share/helpers.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ProblemsStatuses } from '/imports/share/constants';
+import { capitalize } from '/imports/share/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,8 +11,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'problems.fields.status.added',
         [ChangesKinds.FIELD_CHANGED]: 'problems.fields.status.changed',
         [ChangesKinds.FIELD_REMOVED]: 'problems.fields.status.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -30,28 +30,28 @@ export default {
           docDescCapitalized: () => capitalize(auditConfig.docDescription(newDoc)),
           docDesc: () => auditConfig.docDescription(newDoc),
           docName: () => auditConfig.docName(newDoc),
-          newValue: () => ProblemsStatuses[status.newValue]
+          newValue: () => ProblemsStatuses[status.newValue],
         };
       },
       emailTemplateData({ newDoc }) {
         return {
           button: {
             label: 'View document',
-            url: this.docUrl(newDoc)
-          }
+            url: this.docUrl(newDoc),
+          },
         };
       },
       receivers({ newDoc }) {
         return [newDoc.identifiedBy];
-      }
-    }
+      },
+    },
   ],
   data({ diffs: { status } }) {
     const { newValue, oldValue } = status;
 
     return {
       newValue: () => ProblemsStatuses[newValue],
-      oldValue: () => ProblemsStatuses[oldValue]
+      oldValue: () => ProblemsStatuses[oldValue],
     };
-  }
+  },
 };

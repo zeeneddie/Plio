@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyOrgDate } from '../../../utils/helpers';
 
 
 export default {
@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'non-conformities.fields.improvementPlan.reviewDates.date.changed',
-      }
-    }
+          'common.fields.improvementPlan.reviewDates.date.changed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -20,7 +20,7 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
-  }
+  },
 };

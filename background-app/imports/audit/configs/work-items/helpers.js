@@ -1,18 +1,18 @@
-import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants.js';
-import { Actions } from '/imports/share/collections/actions.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
-import ActionAuditConfig from '../actions/action-audit-config.js';
-import NCAuditConfig from '../non-conformities/nc-audit-config.js';
-import RiskAuditConfig from '../risks/risk-audit-config.js';
+import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants';
+import { Actions } from '/imports/share/collections/actions';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers';
+import ActionAuditConfig from '../actions/action-audit-config';
+import NCAuditConfig from '../non-conformities/nc-audit-config';
+import RiskAuditConfig from '../risks/risk-audit-config';
 
 
 const {
   COMPLETE_ACTION,
   VERIFY_ACTION,
   COMPLETE_ANALYSIS,
-  COMPLETE_UPDATE_OF_DOCUMENTS
+  COMPLETE_UPDATE_OF_DOCUMENTS,
 } = WorkItemsStore.TYPES;
 
 export const getLinkedDoc = (workItem) => {
@@ -23,7 +23,7 @@ export const getLinkedDoc = (workItem) => {
     [ActionTypes.PREVENTATIVE_ACTION]: Actions,
     [ActionTypes.RISK_CONTROL]: Actions,
     [ProblemTypes.NON_CONFORMITY]: NonConformities,
-    [ProblemTypes.RISK]: Risks
+    [ProblemTypes.RISK]: Risks,
   }[type];
 
   return collection.findOne({ _id });
@@ -39,26 +39,26 @@ export const getLinkedDocAuditConfig = (workItem) => {
   }[workItem.linkedDoc.type];
 };
 
-export const getData = function({ newDoc, user }) {
+export const getData = function ({ newDoc, user }) {
   const auditConfig = this;
   return {
     docDesc: () => auditConfig.docDescription(newDoc),
     docName: () => auditConfig.docName(newDoc),
-    userName: () => getUserFullNameOrEmail(user)
+    userName: () => getUserFullNameOrEmail(user),
   };
 };
 
-export const getReceivers = function({ newDoc: { assigneeId }, user }) {
+export const getReceivers = function ({ newDoc: { assigneeId }, user }) {
   const userId = getUserId(user);
   return (userId !== assigneeId) ? [assigneeId] : [];
 };
 
-const getEmailTemplateData = function({ newDoc }) {
+const getEmailTemplateData = function ({ newDoc }) {
   return {
     button: {
       label: 'View work item',
-      url: this.docUrl(newDoc)
-    }
+      url: this.docUrl(newDoc),
+    },
   };
 };
 
@@ -71,7 +71,7 @@ export const getNotifications = () => {
       text: 'work-items.action-completion.text',
       title: 'work-items.action-completion.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
     {
       shouldSendNotification({ newDoc: { type } }) {
@@ -80,7 +80,7 @@ export const getNotifications = () => {
       text: 'work-items.action-verification.text',
       title: 'work-items.action-verification.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
     {
       shouldSendNotification({ newDoc: { type, linkedDoc } }) {
@@ -90,7 +90,7 @@ export const getNotifications = () => {
       text: 'work-items.root-cause-analysis.text',
       title: 'work-items.root-cause-analysis.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
     {
       shouldSendNotification({ newDoc: { type, linkedDoc } }) {
@@ -100,7 +100,7 @@ export const getNotifications = () => {
       text: 'work-items.initial-risk-analysis.text',
       title: 'work-items.initial-risk-analysis.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
     {
       shouldSendNotification({ newDoc: { type, linkedDoc } }) {
@@ -110,7 +110,7 @@ export const getNotifications = () => {
       text: 'work-items.update-of-standards.text',
       title: 'work-items.update-of-standards.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
     {
       shouldSendNotification({ newDoc: { type, linkedDoc } }) {
@@ -120,7 +120,7 @@ export const getNotifications = () => {
       text: 'work-items.update-of-risk-record.text',
       title: 'work-items.update-of-risk-record.title',
       sendBoth: true,
-      emailTemplateData: getEmailTemplateData
+      emailTemplateData: getEmailTemplateData,
     },
   ];
 };

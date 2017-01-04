@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -11,8 +11,8 @@ export default {
         [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.title.changed',
         [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.title.removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
   data({ diffs: { title }, newDoc }) {
@@ -22,7 +22,7 @@ export default {
     return {
       docName: () => auditConfig.docName(newDoc),
       newValue: () => newValue,
-      oldValue: () => oldValue
+      oldValue: () => oldValue,
     };
-  }
+  },
 };

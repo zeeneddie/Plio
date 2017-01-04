@@ -1,5 +1,5 @@
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -10,8 +10,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'risks.fields.typeId.added',
         [ChangesKinds.FIELD_CHANGED]: 'risks.fields.typeId.changed',
         [ChangesKinds.FIELD_REMOVED]: 'risks.fields.typeId.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { typeId } }) {
@@ -24,7 +24,7 @@ export default {
 
     return {
       newValue: () => getRiskTypeTitle(newValue),
-      oldValue: () => getRiskTypeTitle(oldValue)
+      oldValue: () => getRiskTypeTitle(oldValue),
     };
-  }
+  },
 };

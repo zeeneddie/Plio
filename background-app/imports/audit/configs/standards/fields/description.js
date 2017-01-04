@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,22 +8,22 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.description.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.description.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.description.removed',
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.description.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.description.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.description.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.description.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.description.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.description.text.removed',
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.description.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.description.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.description.text.removed',
+      },
+    },
   ],
-  data({ diffs: { description }, newDoc, user }) {
+  data({ newDoc, user }) {
     const auditConfig = this;
 
     return {
@@ -32,5 +32,5 @@ export default {
       userName: () => getUserFullNameOrEmail(user),
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

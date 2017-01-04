@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -6,17 +6,17 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.title.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.title.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.title.removed',
-      }
-    }
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.title.removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { title } }) {
     return {
       newValue: () => title.newValue,
-      oldValue: () => title.oldValue
+      oldValue: () => title.oldValue,
     };
-  }
+  },
 };

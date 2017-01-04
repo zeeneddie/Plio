@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
+import { getPrettyOrgDate } from '../../../utils/helpers';
 
 
 export default {
@@ -12,8 +12,8 @@ export default {
         [ChangesKinds.FIELD_CHANGED]: 'occurrences.fields.date.changed',
         [ChangesKinds.FIELD_REMOVED]: 'occurrences.fields.date.removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
   data({ diffs: { date }, newDoc }) {
@@ -24,7 +24,7 @@ export default {
     return {
       docName: () => auditConfig.docName(newDoc),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
-  }
+  },
 };

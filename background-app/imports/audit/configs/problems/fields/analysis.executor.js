@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -10,8 +10,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.executor.added',
         [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.executor.changed',
         [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.executor.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -19,7 +19,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

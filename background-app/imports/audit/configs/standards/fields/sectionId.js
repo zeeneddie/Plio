@@ -1,7 +1,7 @@
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -12,8 +12,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'standards.fields.sectionId.added',
         [ChangesKinds.FIELD_CHANGED]: 'standards.fields.sectionId.changed',
         [ChangesKinds.FIELD_REMOVED]: 'standards.fields.sectionId.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -21,8 +21,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'standards.fields.sectionId.text.added',
         [ChangesKinds.FIELD_CHANGED]: 'standards.fields.sectionId.text.changed',
         [ChangesKinds.FIELD_REMOVED]: 'standards.fields.sectionId.text.removed',
-      }
-    }
+      },
+    },
   ],
   data({ diffs: { sectionId }, newDoc, user }) {
     const auditConfig = this;
@@ -38,8 +38,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getSectionTitle(newValue),
-      oldValue: () => getSectionTitle(oldValue)
+      oldValue: () => getSectionTitle(oldValue),
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -11,9 +11,9 @@ export default {
         return deletedAt && deletedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.isDeleted.changed',
-      }
-    }
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.isDeleted.changed',
+      },
+    },
   ],
   notifications: [
     {
@@ -22,13 +22,13 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          'standards.fields.isDeleted.text.changed',
+          'common.fields.isDeleted.text.changed',
       },
       title: {
         [ChangesKinds.FIELD_CHANGED]:
-          'standards.fields.isDeleted.title.changed',
-      }
-    }
+          'common.fields.isDeleted.title.changed',
+      },
+    },
   ],
   data({ diffs: { isDeleted }, newDoc, user }) {
     const auditConfig = this;
@@ -37,8 +37,8 @@ export default {
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
-      deleted: () => isDeleted.newValue
+      deleted: () => isDeleted.newValue,
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

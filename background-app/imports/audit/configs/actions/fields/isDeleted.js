@@ -12,7 +12,7 @@ export default {
         return deletedAt && deletedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.isDeleted.changed',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.isDeleted.changed',
       },
     },
   ],
@@ -22,10 +22,10 @@ export default {
         return deletedAt && deletedBy;
       },
       text: {
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.isDeleted.text.changed',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.isDeleted.text.changed',
       },
       title: {
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.isDeleted.title.changed',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.isDeleted.title.changed',
       },
     },
   ],

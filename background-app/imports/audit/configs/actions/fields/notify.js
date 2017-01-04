@@ -7,8 +7,8 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'actions.fields.notify.item-added',
-        [ChangesKinds.ITEM_REMOVED]: 'actions.fields.notify.item-removed',
+        [ChangesKinds.ITEM_ADDED]: 'common.fields.notify.item-added',
+        [ChangesKinds.ITEM_REMOVED]: 'common.fields.notify.item-removed',
       },
     },
   ],
@@ -16,17 +16,17 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          'actions.fields.notify.doc-notification.text.item-added',
+          'common.fields.notify.doc-notification.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'actions.fields.notify.doc-notification.text.item-removed',
+          'common.fields.notify.doc-notification.text.item-removed',
       },
     },
     {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
         return kind === ChangesKinds.ITEM_ADDED;
       },
-      text: 'actions.fields.notify.user-notification.text.item-added',
-      title: 'actions.fields.notify.user-notification.title.item-added',
+      text: 'common.fields.notify.user-notification.text.item-added',
+      title: 'common.fields.notify.user-notification.title.item-added',
       emailTemplateData({ newDoc }) {
         return {
           button: {

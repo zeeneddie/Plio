@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -7,14 +7,14 @@ export default {
   logs: [
     {
       message: {
-        [[ChangesKinds.FIELD_ADDED]:
-          'non-conformities.fields.improvementPlan.owner.added',
+        [ChangesKinds.FIELD_ADDED]:
+          'common.fields.improvementPlan.owner.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'non-conformities.fields.improvementPlan.owner.changed',
+          'common.fields.improvementPlan.owner.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'non-conformities.fields.improvementPlan.owner.removed',
-      }
-    }
+          'common.fields.improvementPlan.owner.removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +22,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

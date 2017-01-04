@@ -1,7 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
-import { capitalize } from '/imports/share/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
+import { capitalize } from '/imports/share/helpers';
 
 
 const getRemindersConfig = (field, relatedDocs) => {
@@ -13,15 +13,15 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             message: {
               [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.changed',
-            }
-          }
+            },
+          },
         ],
         notifications: [
           {
             text: {
               [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.text.changed',
-            }
-          }
+            },
+          },
         ],
         data({ diffs, newDoc, user }) {
           const auditConfig = this;
@@ -40,7 +40,7 @@ const getRemindersConfig = (field, relatedDocs) => {
             relatedDocs,
           };
         },
-        receivers: getReceivers
+        receivers: getReceivers,
       },
 
       {
@@ -49,15 +49,15 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             message: {
               [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.changed',
-            }
-          }
+            },
+          },
         ],
         notifications: [
           {
             text: {
               [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.reminders.text.changed',
-            }
-          }
+            },
+          },
         ],
         data({ diffs, newDoc, user }) {
           const auditConfig = this;
@@ -76,15 +76,15 @@ const getRemindersConfig = (field, relatedDocs) => {
             relatedDocs,
           };
         },
-        receivers: getReceivers
-      }
+        receivers: getReceivers,
+      },
     ];
   };
 
   return [
     ...getReminderConfig('start', 'reminder start time'),
     ...getReminderConfig('interval', 'reminder interval'),
-    ...getReminderConfig('until', 'reminder end time')
+    ...getReminderConfig('until', 'reminder end time'),
   ];
 };
 
@@ -92,5 +92,5 @@ export default [
   ...getRemindersConfig('minorNc', 'minor non-conformities/risks'),
   ...getRemindersConfig('majorNc', 'major non-conformities/risks'),
   ...getRemindersConfig('criticalNc', 'critical non-conformities/risks'),
-  ...getRemindersConfig('improvementPlan', 'improvement plans')
+  ...getRemindersConfig('improvementPlan', 'improvement plans'),
 ];

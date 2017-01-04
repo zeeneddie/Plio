@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -9,25 +9,25 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'standards.fields.improvementPlan.targetDate.added',
+          'common.fields.improvementPlan.targetDate.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'standards.fields.improvementPlan.targetDate.changed',
+          'common.fields.improvementPlan.targetDate.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'standards.fields.improvementPlan.targetDate.removed',
-      }
-    }
+          'common.fields.improvementPlan.targetDate.removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          'standards.fields.improvementPlan.targetDate.text.added',
+          'common.fields.improvementPlan.targetDate.text.added',
         [ChangesKinds.FIELD_CHANGED]:
-          'standards.fields.improvementPlan.targetDate.text.changed',
+          'common.fields.improvementPlan.targetDate.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'standards.fields.improvementPlan.targetDate.text.removed',
-      }
-    }
+          'common.fields.improvementPlan.targetDate.text.removed',
+      },
+    },
   ],
   data({ diffs, newDoc, user }) {
     const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
@@ -39,8 +39,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

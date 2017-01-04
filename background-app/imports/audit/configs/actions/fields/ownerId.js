@@ -7,18 +7,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.ownerId.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.ownerId.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.ownerId.removed',
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.ownerId.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.ownerId.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.ownerId.removed',
       },
     },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.ownerId.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.ownerId.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.ownerId.text.removed',
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.ownerId.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.ownerId.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.ownerId.text.removed',
       },
     },
   ],

@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -11,8 +11,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.added',
         [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.changed',
         [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -20,8 +20,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.text.added',
         [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.text.changed',
         [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.text.removed',
-      }
-    }
+      },
+    },
   ],
   data({ diffs: { name }, oldDoc, user }) {
     const { newValue, oldValue } = name;
@@ -32,8 +32,8 @@ export default {
       docName: () => auditConfig.docName(oldDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
-      oldValue: () => oldValue
+      oldValue: () => oldValue,
     };
   },
-  receivers: getReceivers
+  receivers: getReceivers,
 };

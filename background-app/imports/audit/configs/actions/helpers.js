@@ -11,19 +11,19 @@ import RiskAuditConfig from '../risks/risk-audit-config';
 
 
 export const getReceivers = ({ linkedTo, ownerId }, user) => {
-  const getLinkedDocsIds = (linkedDocs, docType) => {
-    return _.pluck(
+  const getLinkedDocsIds = (linkedDocs, docType) => (
+    _.pluck(
       _.filter(linkedDocs, ({ documentType }) => documentType === docType),
       'documentId'
-    );
-  };
+    )
+  );
 
   const usersIds = new Set([ownerId]);
   const standardsIds = new Set();
 
   const getIds = (collection, problemType) => {
     const query = {
-      _id: { $in: getLinkedDocsIds(linkedTo, problemType) }
+      _id: { $in: getLinkedDocsIds(linkedTo, problemType) },
     };
 
     collection.find(query).forEach((doc) => {
@@ -53,12 +53,10 @@ export const getReceivers = ({ linkedTo, ownerId }, user) => {
   return receivers;
 };
 
-export const getLinkedDocAuditConfig = (documentType) => {
-  return {
-    [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
-    [ProblemTypes.RISK]: RiskAuditConfig
-  }[documentType];
-};
+export const getLinkedDocAuditConfig = (documentType) => ({
+  [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
+  [ProblemTypes.RISK]: RiskAuditConfig,
+}[documentType]);
 
 const getLinkedDoc = (documentId, documentType) => {
   const collection = getCollectionByDocType(documentType);

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -11,12 +11,12 @@ export default {
         [ChangesKinds.FIELD_CHANGED]: 'occurrences.fields.description.changed',
         [ChangesKinds.FIELD_REMOVED]: 'occurrences.fields.description.removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
   data({ newDoc }) {
     const auditConfig = this;
     return { docName: () => auditConfig.docName(newDoc) };
-  }
+  },
 };

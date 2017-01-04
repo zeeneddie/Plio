@@ -1,7 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
 
 export default {
@@ -12,8 +12,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'actions.fields.completionTargetDate.added',
         [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completionTargetDate.changed',
         [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completionTargetDate.removed',
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -24,8 +24,8 @@ export default {
           'actions.fields.completionTargetDate.text.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'actions.fields.completionTargetDate.text.removed',
-      }
-    }
+      },
+    },
   ],
   data({ diffs: { completionTargetDate }, newDoc, user }) {
     const { newValue, oldValue } = completionTargetDate;
@@ -37,15 +37,15 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },
   triggers: [
-    function({ newDoc: { _id } }) {
+    function ({ newDoc: { _id } }) {
       new ActionWorkflow(_id).refreshStatus();
-    }
-  ]
+    },
+  ],
 };

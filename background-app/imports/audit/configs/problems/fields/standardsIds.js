@@ -1,7 +1,7 @@
-import { Standards } from '/imports/share/collections/standards.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers.js';
-import StandardAuditConfig from '../../standards/standard-audit-config.js';
+import { Standards } from '/imports/share/collections/standards';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers';
+import StandardAuditConfig from '../../standards/standard-audit-config';
 
 
 export default {
@@ -13,7 +13,7 @@ export default {
           'problems.fields.standardsIds.doc-log.item-added',
         [ChangesKinds.ITEM_REMOVED]:
           'problems.fields.standardsIds.doc-log.item-removed',
-      }
+      },
     },
     {
       message: {
@@ -28,14 +28,14 @@ export default {
         return { docName: () => auditConfig.docName(newDoc) };
       },
       logData({ diffs: { standardsIds } }) {
-        const { item:standardId } = standardsIds;
+        const { item: standardId } = standardsIds;
 
         return {
           collection: StandardAuditConfig.collectionName,
-          documentId: standardId
+          documentId: standardId,
         };
-      }
-    }
+      },
+    },
   ],
   notifications: [
     {
@@ -44,12 +44,12 @@ export default {
           'problems.fields.standardsIds.linked-standard-notification.text.item-added',
         [ChangesKinds.ITEM_REMOVED]:
           'problems.fields.standardsIds.linked-standard-notification.text.item-removed',
-      }
-    }
+      },
+    },
   ],
   data({ diffs: { standardsIds }, newDoc, user }) {
     const auditConfig = this;
-    const { item:standardId } = standardsIds;
+    const { item: standardId } = standardsIds;
     const standard = Standards.findOne({ _id: standardId });
 
     return {
@@ -57,14 +57,14 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       standardDesc: () => StandardAuditConfig.docDescription(standard),
       standardName: () => StandardAuditConfig.docName(standard),
-      userName: () => getUserFullNameOrEmail(user)
+      userName: () => getUserFullNameOrEmail(user),
     };
   },
-  receivers({ diffs: { standardsIds }, newDoc, user }) {
+  receivers({ diffs: { standardsIds }, user }) {
     const userId = getUserId(user);
-    const { item:standardId } = standardsIds;
+    const { item: standardId } = standardsIds;
     const { owner } = Standards.findOne({ _id: standardId }) || {};
 
     return (owner !== userId) ? [owner] : [];
-  }
+  },
 };

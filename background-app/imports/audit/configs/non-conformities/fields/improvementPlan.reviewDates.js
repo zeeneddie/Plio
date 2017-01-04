@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyOrgDate } from '../../../utils/helpers';
 
 
 export default {
@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'non-conformities.fields.improvementPlan.reviewDates.item-added',
+          'common.fields.improvementPlan.reviewDates.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'non-conformities.fields.improvementPlan.reviewDates.item-removed',
-      }
-    }
+          'common.fields.improvementPlan.reviewDates.item-removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -21,7 +21,7 @@ export default {
     const orgId = () => auditConfig.docOrgId(newDoc);
 
     return {
-      date: () => getPrettyOrgDate(date, orgId())
+      date: () => getPrettyOrgDate(date, orgId()),
     };
-  }
+  },
 };

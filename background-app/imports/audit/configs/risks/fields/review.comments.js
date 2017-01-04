@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -9,8 +9,8 @@ export default {
         [ChangesKinds.FIELD_ADDED]: 'risks.fields.review.comments.added',
         [ChangesKinds.FIELD_CHANGED]: 'risks.fields.review.comments.changed',
         [ChangesKinds.FIELD_REMOVED]: 'risks.fields.review.comments.removed',
-      }
-    }
+      },
+    },
   ],
-  notifications: []
+  notifications: [],
 };

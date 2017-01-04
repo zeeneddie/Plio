@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -7,8 +7,8 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]: 'non-conformities.fields.ref.text.changed',
-      }
-    }
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -16,7 +16,7 @@ export default {
 
     return {
       newValue: () => newValue,
-      oldValue: () => oldValue
+      oldValue: () => oldValue,
     };
-  }
+  },
 };

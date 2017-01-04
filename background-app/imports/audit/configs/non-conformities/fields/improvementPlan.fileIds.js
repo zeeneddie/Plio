@@ -1,5 +1,5 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { Files } from '/imports/share/collections/files';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'non-conformities.fields.improvementPlan.fileIds.item-added',
+          'common.fields.improvementPlan.fileIds.item-added',
         [ChangesKinds.ITEM_REMOVED]:
-          'non-conformities.fields.improvementPlan.fileIds.item-removed',
-      }
-    }
+          'common.fields.improvementPlan.fileIds.item-removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -20,7 +20,7 @@ export default {
     const file = () => Files.findOne({ _id }) || {};
 
     return {
-      name: () => file().name
+      name: () => file().name,
     };
-  }
+  },
 };

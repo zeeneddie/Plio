@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -9,19 +9,19 @@ export default {
         return deletedAt && deletedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.isDeleted.changed',
-      }
-    }
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.isDeleted.changed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { isDeleted } }) {
     return {
-      deleted: () => isDeleted.newValue
+      deleted: () => isDeleted.newValue,
     };
   },
   triggers: [
-    function({ newDoc: { _id } }) {
+    function ({ newDoc: { _id } }) {
       new this.workflowConstructor(_id).refreshStatus();
-    }
-  ]
+    },
+  ],
 };

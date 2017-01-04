@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -15,8 +15,8 @@ export default {
           'problems.fields.analysis.completionComments.changed',
         [ChangesKinds.FIELD_REMOVED]:
           'problems.fields.analysis.completionComments.removed',
-      }
-    }
+      },
+    },
   ],
-  notifications: []
+  notifications: [],
 };

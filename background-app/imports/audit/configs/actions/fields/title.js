@@ -8,18 +8,18 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.title.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.title.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.title.removed',
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.title.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.title.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.title.removed',
       },
     },
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.title.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.title.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.title.text.removed',
+        [ChangesKinds.FIELD_ADDED]: 'common.fields.title.text.added',
+        [ChangesKinds.FIELD_CHANGED]: 'common.fields.title.text.changed',
+        [ChangesKinds.FIELD_REMOVED]: 'common.fields.title.text.removed',
       },
     },
   ],

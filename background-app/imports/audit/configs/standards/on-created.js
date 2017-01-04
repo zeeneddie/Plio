@@ -1,8 +1,8 @@
 export default {
   logs: [
     {
-      message: 'standards.on-created.on-created'
-    }
+      message: 'common.on-created.on-created',
+    },
   ],
-  notifications: []
+  notifications: [],
 };
