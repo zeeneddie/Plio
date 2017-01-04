@@ -1,44 +1,95 @@
 import React, { PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { Dropdown, DropdownMenu, DropdownItem, Input } from 'reactstrap';
-import { compose, withState, withHandlers, lifecycle } from 'recompose';
+import { _ } from 'meteor/underscore';
 
-import { not } from '/imports/api/helpers';
+import { searchByRegex, createSearchRegex, propEq } from '/imports/api/helpers';
+import MentionView from './view';
 
-const enhance = compose(
-  withState('value', 'setValue', ''),
-  withState('isOpen', 'setOpen', false),
-  withHandlers({
-    toggle: ({ setOpen }) => setOpen(not),
-  }),
-  lifecycle({
-    componentWillReceiveProps({ value, setOpen }) {
-      if (this.props.value === value) return;
+export default class Mention extends React.Component {
+  static get defaultProps() {
+    const users = Meteor.users.find().map((user) => ({
+      text: user.fullNameOrEmail(),
+      value: user._id,
+      email: user.emails[0].address,
+    }));
 
-      if (value) setOpen(true);
-      else setOpen(false);
-    },
-  }),
-);
+    return {
+      users,
+      by: '@',
+    };
+  }
 
-const Mention = enhance(({ value, setValue, isOpen, toggle }) => (
-  <Dropdown {...{ isOpen, toggle }}>
-    <Input {...{ value }} onChange={e => setValue(e.target.value)} />
-    <DropdownMenu className="dropdown-menu-full">
-      {Meteor.users.find().map((user) => (
-        <DropdownItem
-          key={user._id}
-          tag="a"
-        >
-          <span>{user.fullName()}</span>
-        </DropdownItem>
-      ))}
-    </DropdownMenu>
-  </Dropdown>
-));
+  static get propTypes() {
+    return {
+      by: PropTypes.string,
+      users: PropTypes.arrayOf(PropTypes.shape({
+        text: PropTypes.string.isRequired,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        email: PropTypes.string.isRequired,
+      })),
+    };
+  }
 
-Mention.propTypes = {
+  constructor(props) {
+    super(props);
 
-};
+    this.state = { isOpen: false, value: '', users: [], match: [] };
 
-export default Mention;
+    this.toggle = this.toggle.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const pattern = new RegExp(`\\B${this.props.by}[a-z0-9_-]+`, 'gi');
+    const match = value.match(pattern) || [];
+    const lastMatch = `${_.last(match)}`;
+    const searchRegex = createSearchRegex(lastMatch.replace(/@/gi, ''));
+    const users = searchByRegex(searchRegex, ['text', 'email'], [...this.props.users]);
+
+    if (match.length) {
+      this.setState({ isOpen: true });
+    } else {
+      this.setState({ isOpen: false });
+    }
+
+    this.setState({ users, match, value: e.target.value });
+  }
+
+  handleUserClick(e, selectedUser) {
+    const user = this.state.users.find(propEq('value', selectedUser.value));
+
+    if (!user) {
+      return this.setState({ isOpen: false });
+    }
+
+    const lastMatch = `${_.last(this.state.match)}`;
+    const userDisplayName = `${this.props.by}${user.value} (${user.text})`;
+    const value = this.state.value.replace(lastMatch, userDisplayName);
+    const match = this.state.match.slice(0, this.state.match.length - 1).concat(selectedUser.email);
+
+    return this.setState({ value, match, isOpen: false }, () => {
+      if (this.input) {
+        this.input.focus();
+        this.input.scrollLeft = this.input.scrollWidth;
+      }
+    });
+  }
+
+  toggle() {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  render() {
+    return (
+      <MentionView
+        {...{ ...this.props, ...this.state }}
+        getInputRef={node => (this.input = node)}
+        toggle={this.toggle}
+        onChange={this.handleInputChange}
+        onUserClick={this.handleUserClick}
+      />
+    );
+  }
+}
