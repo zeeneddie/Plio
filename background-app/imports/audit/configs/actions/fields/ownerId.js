@@ -1,6 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
+
 
 export default {
   field: 'ownerId',
@@ -9,9 +10,9 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Owner set to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]: 'Owner removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Owner removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -21,23 +22,19 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { ownerId }, newDoc, user }) {
+  data({ diffs: { ownerId } }) {
     const { newValue, oldValue } = ownerId;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

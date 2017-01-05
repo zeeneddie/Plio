@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
 
 
 export default {
@@ -12,18 +12,15 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Identified at removed'
-      }
-    }
+          'Identified at removed',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs: { identifiedAt }, newDoc }) {
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
+  data({ diffs: { identifiedAt }, organization: { timezone } }) {
     return {
-      newValue: () => getPrettyOrgDate(identifiedAt.newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(identifiedAt.oldValue, orgId())
+      newValue: () => getPrettyTzDate(identifiedAt.newValue, timezone),
+      oldValue: () => getPrettyTzDate(identifiedAt.oldValue, timezone),
     };
-  }
+  },
 };

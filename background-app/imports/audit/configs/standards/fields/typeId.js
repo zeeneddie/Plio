@@ -1,7 +1,6 @@
-import { StandardTypes } from '/imports/share/collections/standards-types.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { StandardTypes } from '/imports/share/collections/standards-types';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -14,9 +13,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Type changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Type removed'
-      }
-    }
+          'Type removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -26,12 +25,11 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { typeId }, newDoc, user }) {
-    const auditConfig = this;
+  data({ diffs: { typeId } }) {
     const { newValue, oldValue } = typeId;
 
     const getStandardTypeName = (_id) => {
@@ -40,12 +38,11 @@ export default {
     };
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
       newValue: () => getStandardTypeName(newValue),
-      oldValue: () => getStandardTypeName(oldValue)
+      oldValue: () => getStandardTypeName(oldValue),
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

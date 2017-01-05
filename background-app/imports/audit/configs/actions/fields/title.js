@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,9 +9,9 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Title set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]: 'Title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]: 'Title removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Title removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -22,22 +21,18 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed title of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed title of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed title of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { title }, newDoc, oldDoc, user }) {
-    const auditConfig = this;
-
+  data({ diffs: { title }, oldDoc, auditConfig }) {
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(oldDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => title.newValue,
-      oldValue: () => title.oldValue
+      docName: auditConfig.docName(oldDoc),
+      newValue: title.newValue,
+      oldValue: title.oldValue,
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

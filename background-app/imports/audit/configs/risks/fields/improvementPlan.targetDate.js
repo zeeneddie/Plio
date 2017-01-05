@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
 
 
 export default {
@@ -12,19 +12,18 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Treatment plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan target date for desired outcome removed'
-      }
-    }
+          'Treatment plan target date for desired outcome removed',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs, newDoc }) {
+  data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
-  }
+  },
 };

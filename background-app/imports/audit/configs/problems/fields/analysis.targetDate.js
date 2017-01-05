@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
 
 
 export default {
@@ -12,24 +12,21 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Root cause analysis target date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis target date removed'
-      }
-    }
+          'Root cause analysis target date removed',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs, newDoc }) {
+  data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['analysis.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
   },
-  triggers: [
-    function({ newDoc: { _id } }) {
-      new this.workflowConstructor(_id).refreshStatus();
-    }
-  ]
+  trigger({ newDoc: { _id } }) {
+    new this.workflowConstructor(_id).refreshStatus();
+  },
 };

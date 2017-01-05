@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,9 +9,9 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Description set',
         [ChangesKinds.FIELD_CHANGED]: 'Description changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Description removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Description removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -22,18 +21,12 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed description of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed description of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed description of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { description }, newDoc, user }) {
-    const auditConfig = this;
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-    };
+  data() { },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
-  receivers: getReceivers
 };

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
 
 
 export default {
@@ -8,18 +8,17 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'Improvement plan review date added: "{{date}}"',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan review date removed: "{{date}}"',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs, newDoc }) {
+  data({ diffs, organization }) {
     const { item: { date } } = diffs['improvementPlan.reviewDates'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      date: () => getPrettyOrgDate(date, orgId())
+      date: () => getPrettyTzDate(date, timezone),
     };
-  }
+  },
 };

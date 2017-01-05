@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -7,16 +7,13 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: '{{docDesc}} notes set',
-        [ChangesKinds.FIELD_CHANGED]: '{{docDesc}} notes changed',
-        [ChangesKinds.FIELD_REMOVED]: '{{docDesc}} notes removed'
+        [ChangesKinds.FIELD_ADDED]: '{{docName}} notes set',
+        [ChangesKinds.FIELD_CHANGED]: '{{docName}} notes changed',
+        [ChangesKinds.FIELD_REMOVED]: '{{docName}} notes removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ newDoc }) {
-    const auditConfig = this;
-    return { docName: () => auditConfig.docName(newDoc) };
-  }
+  data() { },
 };

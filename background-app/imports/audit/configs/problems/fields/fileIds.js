@@ -1,5 +1,5 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { Files } from '/imports/share/collections/files';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -8,17 +8,19 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'File "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'File removed'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'File removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { fileIds } }) {
-    const { item:_id } = fileIds;
-    const file = () => Files.findOne({ _id }) || {};
+    const { item: _id } = fileIds;
 
-    return {
-      name: () => file().name
+    const getFileName = () => {
+      const { name } = Files.findOne({ _id }) || {};
+      return name;
     };
-  }
+
+    return { name: getFileName };
+  },
 };

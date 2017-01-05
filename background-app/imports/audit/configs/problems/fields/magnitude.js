@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,15 +11,12 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Magnitude changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Magnitude removed'
-      }
-    }
+          'Magnitude removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { magnitude: { newValue, oldValue } } }) {
-    return {
-      newValue: () => newValue,
-      oldValue: () => oldValue
-    };
-  }
+    return { newValue, oldValue };
+  },
 };

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -12,17 +12,17 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Review executor changed from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Review executor removed'
-      }
-    }
+          'Review executor removed',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs, newDoc }) {
+  data({ diffs }) {
     const { newValue, oldValue } = diffs['review.reviewedBy'];
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

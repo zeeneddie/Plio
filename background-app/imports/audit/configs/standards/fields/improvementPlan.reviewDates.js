@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
 import { getReceivers } from '../helpers';
 
 
@@ -11,9 +11,9 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           'Improvement plan review date added: "{{date}}"',
         [ChangesKinds.ITEM_REMOVED]:
-          'Improvement plan review date removed: "{{date}}"'
-      }
-    }
+          'Improvement plan review date removed: "{{date}}"',
+      },
+    },
   ],
   notifications: [
     {
@@ -21,21 +21,19 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           '{{userName}} added improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"'
-      }
-    }
+          '{{userName}} removed improvement plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
+      },
+    },
   ],
-  data({ diffs, newDoc, user }) {
+  data({ diffs, organization }) {
     const { item: { date } } = diffs['improvementPlan.reviewDates'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      date: () => getPrettyOrgDate(date, orgId())
+      date: () => getPrettyTzDate(date, timezone),
     };
   },
-  receivers: getReceivers,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

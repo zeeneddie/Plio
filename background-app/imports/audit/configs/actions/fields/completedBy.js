@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -16,9 +16,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Completed by changed from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Completed by removed'
-      }
-    }
+          'Completed by removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -31,23 +31,19 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completed by of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed completed by of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { completedBy }, newDoc, user }) {
+  data({ diffs: { completedBy } }) {
     const { newValue, oldValue } = completedBy;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

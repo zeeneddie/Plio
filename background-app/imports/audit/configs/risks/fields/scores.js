@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate, getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -10,20 +10,19 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
-      }
-    }
+          'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}',
+      },
+    },
   ],
   notifications: [],
-  data({ diffs: { scores }, newDoc }) {
+  data({ diffs: { scores }, organization }) {
     const { item: { value, scoredAt, scoredBy } } = scores;
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      value: () => value,
-      date: () => getPrettyOrgDate(scoredAt, orgId()),
-      userName: () => getUserFullNameOrEmail(scoredBy)
+      value,
+      date: () => getPrettyTzDate(scoredAt, timezone),
+      userName: () => getUserFullNameOrEmail(scoredBy),
     };
-  }
+  },
 };

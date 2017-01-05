@@ -1,17 +1,19 @@
-import { Standards } from '/imports/share/collections/standards.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { ProblemTypes } from '/imports/share/constants.js';
-import { getCollectionByDocType } from '/imports/share/helpers.js';
-import { getUserId } from '../../utils/helpers.js';
-import NCAuditConfig from '../non-conformities/nc-audit-config.js';
-import RiskAuditConfig from '../risks/risk-audit-config.js';
+import { _ } from 'meteor/underscore';
+
+import { Standards } from '/imports/share/collections/standards';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Risks } from '/imports/share/collections/risks';
+import { ProblemTypes } from '/imports/share/constants';
+import { getCollectionByDocType } from '/imports/share/helpers';
+import { getUserId } from '../../utils/helpers';
+import NCAuditConfig from '../non-conformities/nc-audit-config';
+import RiskAuditConfig from '../risks/risk-audit-config';
 
 
 export const getReceivers = ({ linkedTo, notify }, user) => {
   const getLinkedDocsIds = (linkedDocs, docType) => {
     return _.pluck(
-      _.filter(linkedDocs, ({ documentType }) => documentType === docType),
+      linkedDocs.filter(({ documentType }) => documentType === docType),
       'documentId'
     );
   };
@@ -21,30 +23,30 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
 
   const getIds = (collection, problemType) => {
     const query = {
-      _id: { $in: getLinkedDocsIds(linkedTo, problemType) }
+      _id: { $in: getLinkedDocsIds(linkedTo, problemType) },
     };
 
     collection.find(query).forEach((doc) => {
-      _(doc.standardsIds).each(id => standardsIds.add(id));
+      doc.standardsIds.forEach(id => standardsIds.add(id));
       usersIds.add(doc.identifiedBy);
     });
   };
 
-  _.each(
-    [
-      { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
-      { collection: Risks, type: ProblemTypes.RISK }
-    ],
-    ({ collection, type }) => getIds(collection, type)
-  );
+  const problemCollections = [
+    { collection: NonConformities, type: ProblemTypes.NON_CONFORMITY },
+    { collection: Risks, type: ProblemTypes.RISK },
+  ];
+
+  problemCollections.forEach(({ collection, type }) => getIds(collection, type));
 
   Standards.find({
-    _id: { $in: Array.from(standardsIds) }
+    _id: { $in: Array.from(standardsIds) },
   }).forEach(({ owner }) => usersIds.add(owner));
 
   const receivers = Array.from(usersIds);
+
   const index = receivers.indexOf(getUserId(user));
-  
+
   return index > -1
     ? receivers.slice(0, index).concat(receivers.slice(index + 1))
     : receivers;
@@ -53,7 +55,7 @@ export const getReceivers = ({ linkedTo, notify }, user) => {
 export const getLinkedDocAuditConfig = (documentType) => {
   return {
     [ProblemTypes.NON_CONFORMITY]: NCAuditConfig,
-    [ProblemTypes.RISK]: RiskAuditConfig
+    [ProblemTypes.RISK]: RiskAuditConfig,
   }[documentType];
 };
 

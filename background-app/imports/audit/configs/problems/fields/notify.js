@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers';
 
 
 export default {
@@ -7,10 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{item}} was added to notification list',
-        [ChangesKinds.ITEM_REMOVED]: '{{item}} was removed from notification list'
-      }
-    }
+        [ChangesKinds.ITEM_ADDED]: '{{user}} was added to notification list',
+        [ChangesKinds.ITEM_REMOVED]: '{{user}} was removed from notification list',
+      },
+    },
   ],
   notifications: [
     {
@@ -23,26 +23,21 @@ export default {
         return {
           button: {
             label: 'View document',
-            url: this.docUrl(newDoc)
-          }
+            url: this.docUrl(newDoc),
+          },
         };
       },
       receivers({ diffs: { notify }, user }) {
-        const { item:addedUserId } = notify;
+        const { item: addedUserId } = notify;
         const userId = getUserId(user);
 
-        return (addedUserId !== userId) ? [addedUserId]: [];
-      }
-    }
+        return (addedUserId !== userId) ? [addedUserId] : [];
+      },
+    },
   ],
-  data({ diffs: { notify }, newDoc, user }) {
-    const auditConfig = this;
-
+  data({ diffs: { notify } }) {
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      item: () => getUserFullNameOrEmail(notify.item)
+      user: () => getUserFullNameOrEmail(notify.item),
     };
-  }
+  },
 };

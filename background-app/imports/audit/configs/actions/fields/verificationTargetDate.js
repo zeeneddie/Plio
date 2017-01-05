@@ -1,7 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
 
 export default {
@@ -14,9 +14,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Verification target date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Verification target date removed'
-      }
-    }
+          'Verification target date removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -26,29 +26,23 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed verification target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification target date of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed verification target date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { verificationTargetDate }, newDoc, user }) {
+  data({ diffs: { verificationTargetDate }, organization }) {
     const { newValue, oldValue } = verificationTargetDate;
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },
-  triggers: [
-    function({ newDoc: { _id } }) {
-      new ActionWorkflow(_id).refreshStatus();
-    }
-  ]
+  trigger({ newDoc: { _id } }) {
+    new ActionWorkflow(_id).refreshStatus();
+  },
 };

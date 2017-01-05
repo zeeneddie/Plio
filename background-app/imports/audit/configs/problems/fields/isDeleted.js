@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -10,19 +10,15 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}'
-      }
-    }
+          '{{#if deleted}}Document was deleted{{else}}Document was restored{{/if}}',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { isDeleted } }) {
-    return {
-      deleted: () => isDeleted.newValue
-    };
+    return { deleted: isDeleted.newValue };
   },
-  triggers: [
-    function({ newDoc: { _id } }) {
-      new this.workflowConstructor(_id).refreshStatus();
-    }
-  ]
+  trigger({ newDoc: { _id } }) {
+    new this.workflowConstructor(_id).refreshStatus();
+  },
 };

@@ -8,6 +8,8 @@ import NCAuditConfig from '../configs/non-conformities/nc-audit-config.js';
 import RiskAuditConfig from '../configs/risks/risk-audit-config.js';
 
 
+const DEFAULT_DATE_FORMAT = 'MMMM DD, YYYY';
+
 export const getUserId = user => ((user === SystemName) ? user : user._id);
 
 export const getUserFullNameOrEmail = (userOrId) => {
@@ -23,10 +25,13 @@ export const getUserFullNameOrEmail = (userOrId) => {
   return (user && user.fullNameOrEmail()) || 'Ghost';
 };
 
-export const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY') => {
-  const { timezone } = Organizations.findOne({ _id: organizationId }) || {};
+export const getPrettyTzDate = (date, timezone = 'UTC', format = DEFAULT_DATE_FORMAT) => (
+  moment(date).tz(timezone).format(format)
+);
 
-  return moment(date).tz(timezone || 'UTC').format(format);
+export const getPrettyOrgDate = (date, organizationId, format = DEFAULT_DATE_FORMAT) => {
+  const { timezone } = Organizations.findOne({ _id: organizationId }) || {};
+  return getPrettyTzDate(date, timezone, format);
 };
 
 export const getLinkedDocAuditConfig = (docType) => ({

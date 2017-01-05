@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
+import { getPrettyTzDate } from '../../../utils/helpers';
 
 
 export default {
@@ -13,21 +13,19 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{{docName}}} date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{{docName}}} date removed'
+          '{{{docName}}} date removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ diffs: { date }, newDoc }) {
-    const auditConfig = this;
+  data({ diffs: { date }, organization }) {
     const { newValue, oldValue } = date;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      docName: () => auditConfig.docName(newDoc),
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
-  }
+  },
 };

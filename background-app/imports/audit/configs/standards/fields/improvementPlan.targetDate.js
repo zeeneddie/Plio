@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '../../../utils/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -13,9 +13,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan target date for desired outcome removed'
-      }
-    }
+          'Improvement plan target date for desired outcome removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -25,22 +25,20 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs, newDoc, user }) {
+  data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

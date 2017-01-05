@@ -1,7 +1,6 @@
-import { Departments } from '/imports/share/collections/departments.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { Departments } from '/imports/share/collections/departments';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -12,9 +11,9 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           'Document was linked to {{{departmentDesc}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'Document was unlinked from {{{departmentDesc}}}'
-      }
-    }
+          'Document was unlinked from {{{departmentDesc}}}',
+      },
+    },
   ],
   notifications: [
     {
@@ -22,21 +21,21 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}'
-      }
-    }
+          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}',
+      },
+    },
   ],
-  data({ diffs: { departmentsIds }, newDoc, user }) {
-    const { item:departmentId } = departmentsIds;
-    const department = () => Departments.findOne({ _id: departmentId }) || {};
-    const auditConfig = this;
+  data({ diffs: { departmentsIds } }) {
+    const { item: departmentId } = departmentsIds;
 
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      departmentDesc: () => `${department().name} department`,
-      userName: () => getUserFullNameOrEmail(user)
+    const getDeptName = () => {
+      const { name } = Departments.findOne({ _id: departmentId }) || {};
+      return `${name} department`;
     };
+
+    return { departmentDesc: getDeptName };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

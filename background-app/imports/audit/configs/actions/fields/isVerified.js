@@ -1,7 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow';
 
 
 export default {
@@ -21,9 +20,9 @@ export default {
             '{{/if}}' +
           '{{else}}' +
             'Action verification canceled' +
-          '{{/if}}'
-      }
-    }
+          '{{/if}}',
+      },
+    },
   ],
   notifications: [
     {
@@ -42,31 +41,25 @@ export default {
             '{{/if}}' +
           '{{else}}' +
             '{{userName}} canceled verification of {{{docDesc}}} {{{docName}}}' +
-          '{{/if}}'
-      }
-    }
+          '{{/if}}',
+      },
+    },
   ],
-  data({ diffs, newDoc, user }) {
+  data({ diffs }) {
     const { isVerified, isVerifiedAsEffective, verificationComments } = diffs;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      verified: () => isVerified.newValue,
-      verifiedAsEffective: () => isVerifiedAsEffective && isVerifiedAsEffective.newValue,
-      comments: () => verificationComments && verificationComments.newValue,
-      userName: () => getUserFullNameOrEmail(user)
+      verified: isVerified.newValue,
+      verifiedAsEffective: isVerifiedAsEffective && isVerifiedAsEffective.newValue,
+      comments: verificationComments && verificationComments.newValue,
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },
-  triggers: [
-    function({ diffs: { verifiedAt, verifiedBy }, newDoc: { _id } }) {
-      if (verifiedAt && verifiedBy) {
-        new ActionWorkflow(_id).refreshStatus();
-      }
+  trigger({ diffs, newDoc }) {
+    if (diffs.verifiedAt && diffs.verifiedBy) {
+      new ActionWorkflow(newDoc._id).refreshStatus();
     }
-  ]
+  },
 };

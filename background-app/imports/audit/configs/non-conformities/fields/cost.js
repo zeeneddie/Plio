@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,15 +11,12 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Approx cost per occurrence changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Approx cost per occurrence removed'
-      }
-    }
+          'Approx cost per occurrence removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { cost: { newValue, oldValue } } }) {
-    return {
-      newValue: () => newValue,
-      oldValue: () => oldValue
-    };
-  }
+    return { newValue, oldValue };
+  },
 };

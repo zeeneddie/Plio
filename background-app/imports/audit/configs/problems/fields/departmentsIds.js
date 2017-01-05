@@ -1,6 +1,5 @@
-import { Departments } from '/imports/share/collections/departments.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { Departments } from '/imports/share/collections/departments';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -9,17 +8,19 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { departmentsIds } }) {
-    const { item:departmentId } = departmentsIds;
-    const department = () => Departments.findOne({ _id: departmentId }) || {};
+    const { item: departmentId } = departmentsIds;
 
-    return {
-      departmentDesc: () => `${department().name} department`,
+    const getDeptName = () => {
+      const { name } = Departments.findOne({ _id: departmentId }) || {};
+      return `${name} department`;
     };
-  }
+
+    return { departmentDesc: getDeptName };
+  },
 };

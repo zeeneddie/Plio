@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '../../../utils/helpers';
 
 
 export default {
@@ -15,9 +15,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Root cause analysis completed by removed'
-      }
-    }
+          'Root cause analysis completed by removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
@@ -25,7 +25,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

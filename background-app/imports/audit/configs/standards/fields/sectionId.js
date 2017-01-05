@@ -1,7 +1,6 @@
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -14,9 +13,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Book section changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Book section removed'
-      }
-    }
+          'Book section removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -26,12 +25,11 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed book section of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed book section of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed book section of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { sectionId }, newDoc, user }) {
-    const auditConfig = this;
+  data({ diffs: { sectionId } }) {
     const { newValue, oldValue } = sectionId;
 
     const getSectionTitle = (_id) => {
@@ -40,12 +38,11 @@ export default {
     };
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
       newValue: () => getSectionTitle(newValue),
-      oldValue: () => getSectionTitle(oldValue)
+      oldValue: () => getSectionTitle(oldValue),
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

@@ -1,7 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { Files } from '/imports/share/collections/files.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { Files } from '/imports/share/collections/files';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'File "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'File removed'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'File removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -20,23 +19,23 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           '{{userName}} added file "{{name}}" to {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed file from {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { fileIds }, newDoc, user }) {
-    const { item:_id } = fileIds;
-    const { name } = Files.findOne({ _id }) || {};
-    const auditConfig = this;
+  data({ diffs: { fileIds } }) {
+    const { item: _id } = fileIds;
+
+    const getFileName = () => {
+      const { name } = Files.findOne({ _id }) || {};
+      return name;
+    };
 
     return {
-      name: () => name,
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user)
+      name: getFileName,
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

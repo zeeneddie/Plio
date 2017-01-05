@@ -1,8 +1,8 @@
-import { getUserId } from '../../utils/helpers.js';
+import { getUserId } from '../../utils/helpers';
 
 
-export const getReceivers = function({ newDoc, user }) {
-  const { notify } = newDoc;
+export const getReceivers = function (doc, user) {
+  const { notify } = doc;
   const index = notify.indexOf(getUserId(user));
 
   return index > -1

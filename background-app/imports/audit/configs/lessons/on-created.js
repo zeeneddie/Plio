@@ -1,20 +1,15 @@
-import { getLogData } from './helpers.js';
+import { getLogData } from './helpers';
 
 
 export default {
   logs: [
     {
       message: '{{{docName}}} added: "{{title}}"',
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ newDoc }) {
-    const auditConfig = this;
-
-    return {
-      docName: () => auditConfig.docName(newDoc),
-      title: () => newDoc.title
-    };
-  }
+  data({ newDoc: { title } }) {
+    return { title };
+  },
 };

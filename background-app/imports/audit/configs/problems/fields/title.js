@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,15 +11,13 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Title changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Title removed'
-      }
-    }
+          'Title removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs: { title } }) {
-    return {
-      newValue: () => title.newValue,
-      oldValue: () => title.oldValue
-    };
-  }
+    const { newValue, oldValue } = title;
+    return { newValue, oldValue };
+  },
 };

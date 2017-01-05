@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -8,10 +8,10 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Description set',
         [ChangesKinds.FIELD_CHANGED]: 'Description changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Description removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Description removed',
+      },
+    },
   ],
   notifications: [],
-  data() { }
+  data() { },
 };

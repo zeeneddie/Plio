@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -8,9 +8,10 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Review comments set',
         [ChangesKinds.FIELD_CHANGED]: 'Review comments changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Review comments removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Review comments removed',
+      },
+    },
   ],
-  notifications: []
+  notifications: [],
+  data() { },
 };

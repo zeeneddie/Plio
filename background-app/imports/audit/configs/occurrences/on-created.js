@@ -1,22 +1,18 @@
-import { getLogData } from './helpers.js';
-import { getPrettyOrgDate } from '../../utils/helpers.js';
+import { getLogData } from './helpers';
+import { getPrettyTzDate } from '../../utils/helpers';
 
 
 export default {
   logs: [
     {
       message: '{{{docName}}} added: date - {{date}}',
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ newDoc }) {
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
+  data({ newDoc, organization }) {
     return {
-      docName: () => auditConfig.docName(newDoc),
-      date: () => getPrettyOrgDate(newDoc.date, orgId())
+      date: () => getPrettyTzDate(newDoc.date, organization.timezone),
     };
-  }
+  },
 };

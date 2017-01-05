@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Changelog } from '/imports/share/collections/changelog.js';
+import { Changelog } from '/imports/share/collections/server/changelog.js';
 import { DocChangesKinds } from '/imports/share/constants.js';
 
 

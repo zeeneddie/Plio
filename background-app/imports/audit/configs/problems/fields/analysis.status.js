@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -14,25 +14,23 @@ export default {
             'Root cause analysis completed{{#if comments}}: {{comments}}{{/if}}' +
           '{{else}}' +
             'Root cause analysis canceled' +
-          '{{/if}}'
-      }
-    }
+          '{{/if}}',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
-    const { newValue:status } = diffs['analysis.status'];
-    const { newValue:comments } = diffs['analysis.completionComments'] || {};
+    const { newValue: status } = diffs['analysis.status'];
+    const { newValue: comments } = diffs['analysis.completionComments'] || {};
 
     return {
-      completed: () => status === 1, // Completed
-      comments: () => comments
+      completed: status === 1, // Completed
+      comments,
     };
   },
-  triggers: [
-    function({ diffs, newDoc: { _id } }) {
-      if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
-        new this.workflowConstructor(_id).refreshStatus();
-      }
+  trigger({ diffs, newDoc: { _id } }) {
+    if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
+      new this.workflowConstructor(_id).refreshStatus();
     }
-  ]
+  },
 };

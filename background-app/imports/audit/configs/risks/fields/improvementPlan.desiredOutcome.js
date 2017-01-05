@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,10 +11,10 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Treatment plan statement of desired outcome changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan statement of desired outcome removed'
-      }
-    }
+          'Treatment plan statement of desired outcome removed',
+      },
+    },
   ],
   notifications: [],
-  data() { }
+  data() { },
 };

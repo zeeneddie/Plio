@@ -1,8 +1,8 @@
 export default {
   logs: [
     {
-      message: 'Document removed'
-    }
+      message: 'Document removed',
+    },
   ],
-  notifications: []
+  notifications: [],
 };

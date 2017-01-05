@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -15,26 +15,24 @@ export default {
             'Update of standards completed{{#if comments}}: {{comments}}{{/if}}' +
           '{{else}}' +
             'Update of standards canceled' +
-          '{{/if}}'
-      }
-    }
+          '{{/if}}',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
-    const { newValue:status } = diffs['updateOfStandards.status'];
-    const { newValue:comments } = diffs['updateOfStandards.completionComments'] || {};
+    const { newValue: status } = diffs['updateOfStandards.status'];
+    const { newValue: comments } = diffs['updateOfStandards.completionComments'] || {};
 
     return {
       completed: status === 1, // Completed
-      comments
+      comments,
     };
   },
-  triggers: [
-    function({ diffs, newDoc: { _id } }) {
-      if (diffs['updateOfStandards.completedAt']
-            && diffs['updateOfStandards.completedBy']) {
-        new this.workflowConstructor(_id).refreshStatus();
-      }
+  trigger({ diffs, newDoc: { _id } }) {
+    if (diffs['updateOfStandards.completedAt']
+          && diffs['updateOfStandards.completedBy']) {
+      new this.workflowConstructor(_id).refreshStatus();
     }
-  ]
+  },
 };

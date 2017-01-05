@@ -1,7 +1,6 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { Files } from '/imports/share/collections/files';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -20,21 +19,23 @@ export default {
         [ChangesKinds.ITEM_ADDED]:
           '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs, newDoc, user }) {
+  data({ diffs }) {
     const _id = diffs['improvementPlan.fileIds'].item;
-    const file = () => Files.findOne({ _id }) || {};
-    const auditConfig = this;
+
+    const getFileName = () => {
+      const { name } = Files.findOne({ _id }) || {};
+      return name;
+    };
 
     return {
-      name: () => file().name,
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user)
+      name: getFileName,
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

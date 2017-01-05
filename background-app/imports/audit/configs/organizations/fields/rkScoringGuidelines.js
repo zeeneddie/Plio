@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -13,9 +12,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Risk scoring guidelines changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk scoring guidelines removed'
-      }
-    }
+          'Risk scoring guidelines removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -25,18 +24,12 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ newDoc, user }) {
-    const auditConfig = this;
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user)
-    };
+  data() { },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
-  receivers: getReceivers
 };

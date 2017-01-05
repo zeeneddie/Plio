@@ -1,8 +1,8 @@
-import { Discussions } from '/imports/share/collections/discussions.js';
-import { Messages } from '/imports/share/collections/messages.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
-import StandardAuditConfig from '../standards/standard-audit-config.js';
+import { Discussions } from '/imports/share/collections/discussions';
+import { Messages } from '/imports/share/collections/messages';
+import { Standards } from '/imports/share/collections/standards';
+import { getUserId } from '../../utils/helpers';
+import StandardAuditConfig from '../standards/standard-audit-config';
 
 
 const getDiscussionStandard = (discussionId) => {
@@ -20,25 +20,21 @@ export default {
         '{{else}} added new message to {{/if}}' +
         'the discussion of {{{docDesc}}} {{{docName}}}',
       title: 'New message in discussion',
-      data({ newDoc: { discussionId, type }, user }) {
-        const isFile = type === 'file';
+      data({ newDoc: { discussionId, type } }) {
         const standard = getDiscussionStandard(discussionId);
-        const docDesc = StandardAuditConfig.docDescription(standard);
-        const docName = StandardAuditConfig.docName(standard);
 
         return {
-          docDesc,
-          docName,
-          isFile,
-          userName: getUserFullNameOrEmail(user)
+          docDesc: StandardAuditConfig.docDescription(standard),
+          docName: StandardAuditConfig.docName(standard),
+          isFile: type === 'file',
         };
       },
       emailTemplateData({ newDoc }) {
         return {
           button: {
             label: 'View message',
-            url: this.docUrl(newDoc)
-          }
+            url: this.docUrl(newDoc),
+          },
         };
       },
       receivers({ newDoc: { discussionId }, user }) {
@@ -46,15 +42,15 @@ export default {
         const userId = getUserId(user);
 
         const { owner } = getDiscussionStandard(discussionId) || {};
-        (owner !== userId) && receivers.add(owner);
+        if (owner !== userId) receivers.add(owner);
 
         Messages.find({
           discussionId,
-          createdBy: { $ne: userId }
+          createdBy: { $ne: userId },
         }).forEach(({ createdBy }) => receivers.add(createdBy));
 
         return Array.from(receivers);
-      }
-    }
-  ]
+      },
+    },
+  ],
 };

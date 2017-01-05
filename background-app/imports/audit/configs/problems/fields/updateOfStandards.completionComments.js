@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -11,9 +11,10 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Update of standards completion comments set',
         [ChangesKinds.FIELD_CHANGED]: 'Update of standards completion comments changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Update of standards completion comments removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Update of standards completion comments removed',
+      },
+    },
   ],
-  notifications: []
+  notifications: [],
+  data() { },
 };

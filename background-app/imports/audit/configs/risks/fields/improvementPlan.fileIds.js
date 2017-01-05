@@ -1,5 +1,5 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { Files } from '/imports/share/collections/files';
+import { ChangesKinds } from '../../../utils/changes-kinds';
 
 
 export default {
@@ -8,17 +8,19 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed'
-      }
-    }
+        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed',
+      },
+    },
   ],
   notifications: [],
   data({ diffs }) {
     const _id = diffs['improvementPlan.fileIds'].item;
-    const file = () => Files.findOne({ _id }) || {};
 
-    return {
-      name: () => file().name
+    const getFileName = () => {
+      const { name } = Files.findOne({ _id }) || {};
+      return name;
     };
-  }
+
+    return { name: getFileName };
+  },
 };

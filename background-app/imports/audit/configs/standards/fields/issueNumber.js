@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -13,9 +12,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           'Issue number changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Issue number removed'
-      }
-    }
+          'Issue number removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -25,21 +24,15 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{userName}} changed issue number of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed issue number of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{userName}} removed issue number of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { issueNumber }, newDoc, user }) {
+  data({ diffs: { issueNumber } }) {
     const { newValue, oldValue } = issueNumber;
-    const auditConfig = this;
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => newValue,
-      oldValue: () => oldValue
-    };
+    return { newValue, oldValue };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };
