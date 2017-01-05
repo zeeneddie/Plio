@@ -37,7 +37,7 @@ export default {
   receivers({ newDoc, oldDoc, user }) {
     const { owner: oldOwner } = oldDoc;
     const { owner: newOwner } = newDoc;
-    let receivers = getReceivers({ newDoc, user });
+    let receivers = getReceivers(newDoc, user);
 
     [oldOwner, newOwner].forEach((owner) => {
       if (owner !== getUserId(user)) {

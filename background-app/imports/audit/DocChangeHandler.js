@@ -67,7 +67,7 @@ export default class DocChangeHandler {
       && this._config.docNotifyList(doc);
 
     this._unsubscribeUrl = this._config.docUnsubscribeUrl
-      && this._config.docUnsubscribeFromNotificationsUrl(doc);
+      && this._config.docUnsubscribeUrl(doc);
 
     this._docOrgId = this._config.docOrgId(doc);
     this._organization = Organizations.findOne({ _id: this._docOrgId }) || {};

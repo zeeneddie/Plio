@@ -52,11 +52,11 @@ export const getReceivers = function ({ newDoc, user }) {
   return needToSend ? [assigneeId] : [];
 };
 
-const getEmailTemplateData = function ({ newDoc }) {
+const getEmailTemplateData = function ({ newDoc, auditConfig }) {
   return {
     button: {
       label: 'View work item',
-      url: this.docUrl(newDoc),
+      url: auditConfig.docUrl(newDoc),
     },
   };
 };

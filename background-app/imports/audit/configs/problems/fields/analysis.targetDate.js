@@ -26,7 +26,7 @@ export default {
       oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
   },
-  trigger({ newDoc: { _id } }) {
-    new this.workflowConstructor(_id).refreshStatus();
+  trigger({ newDoc: { _id }, auditConfig }) {
+    new auditConfig.workflowConstructor(_id).refreshStatus();
   },
 };

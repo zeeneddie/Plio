@@ -12,9 +12,9 @@ export default {
     },
     {
       message: '{{{docName}}} was linked to this document',
-      data({ newDoc }) {
+      data({ newDoc, auditConfig }) {
         return _(newDoc.standardsIds.length).times(() => ({
-          docName: this.docName(newDoc),
+          docName: auditConfig.docName(newDoc),
         }));
       },
       logData({ newDoc: { standardsIds } }) {
@@ -46,7 +46,7 @@ export default {
       },
     },
   ],
-  trigger({ newDoc: { _id } }) {
-    new this.workflowConstructor(_id).refreshStatus();
+  trigger({ newDoc: { _id }, auditConfig }) {
+    new auditConfig.workflowConstructor(_id).refreshStatus();
   },
 };

@@ -19,11 +19,11 @@ export default {
       },
       text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',
-      emailTemplateData({ newDoc }) {
+      emailTemplateData({ newDoc, auditConfig }) {
         return {
           button: {
             label: 'View document',
-            url: this.docUrl(newDoc),
+            url: auditConfig.docUrl(newDoc),
           },
         };
       },

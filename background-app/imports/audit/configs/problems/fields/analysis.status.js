@@ -28,9 +28,9 @@ export default {
       comments,
     };
   },
-  trigger({ diffs, newDoc: { _id } }) {
+  trigger({ diffs, newDoc: { _id }, auditConfig }) {
     if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
-      new this.workflowConstructor(_id).refreshStatus();
+      new auditConfig.workflowConstructor(_id).refreshStatus();
     }
   },
 };

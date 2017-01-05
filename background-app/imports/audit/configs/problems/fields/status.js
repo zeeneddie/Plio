@@ -32,11 +32,11 @@ export default {
           newValue: ProblemsStatuses[status.newValue],
         };
       },
-      emailTemplateData({ newDoc }) {
+      emailTemplateData({ newDoc, auditConfig }) {
         return {
           button: {
             label: 'View document',
-            url: this.docUrl(newDoc),
+            url: auditConfig.docUrl(newDoc),
           },
         };
       },

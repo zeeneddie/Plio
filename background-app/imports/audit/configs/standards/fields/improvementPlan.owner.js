@@ -38,11 +38,11 @@ export default {
       text: '{{{userName}}} selected you as improvement plan owner for {{{docDesc}}} {{{docName}}}',
       title: 'You have been selected as improvement plan owner',
       sendBoth: true,
-      emailTemplateData({ newDoc }) {
+      emailTemplateData({ newDoc, auditConfig }) {
         return {
           button: {
             label: 'View standard',
-            url: this.docUrl(newDoc),
+            url: auditConfig.docUrl(newDoc),
           },
         };
       },

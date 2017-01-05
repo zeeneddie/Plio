@@ -29,11 +29,11 @@ export default {
           isFile: type === 'file',
         };
       },
-      emailTemplateData({ newDoc }) {
+      emailTemplateData({ newDoc, auditConfig }) {
         return {
           button: {
             label: 'View message',
-            url: this.docUrl(newDoc),
+            url: auditConfig.docUrl(newDoc),
           },
         };
       },
