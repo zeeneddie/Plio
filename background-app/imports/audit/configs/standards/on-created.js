@@ -1,8 +1,8 @@
 export default {
   logs: [
     {
-      message: 'common.on-created.on-created',
-    },
+      message: 'Document created'
+    }
   ],
-  notifications: [],
+  notifications: []
 };

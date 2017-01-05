@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,25 +9,25 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'organizations.fields.rkScoringGuidelines.added',
+          'Risk scoring guidelines set',
         [ChangesKinds.FIELD_CHANGED]:
-          'organizations.fields.rkScoringGuidelines.changed',
+          'Risk scoring guidelines changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'organizations.fields.rkScoringGuidelines.removed',
-      },
-    },
+          'Risk scoring guidelines removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          'organizations.fields.rkScoringGuidelines.text.added',
+          '{{userName}} set risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'organizations.fields.rkScoringGuidelines.text.changed',
+          '{{userName}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'organizations.fields.rkScoringGuidelines.text.removed',
-      },
-    },
+          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ newDoc, user }) {
     const auditConfig = this;
@@ -35,8 +35,8 @@ export default {
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

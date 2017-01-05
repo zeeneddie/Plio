@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -11,11 +11,14 @@ export default {
         return !isCompleted;
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedBy.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedBy.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedBy.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Completed by set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Completed by changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Completed by removed'
+      }
+    }
   ],
   notifications: [
     {
@@ -23,11 +26,14 @@ export default {
         return !isCompleted;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedBy.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedBy.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedBy.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed completed by of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { completedBy }, newDoc, user }) {
     const { newValue, oldValue } = completedBy;
@@ -38,10 +44,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  },
+  }
 };

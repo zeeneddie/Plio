@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -9,14 +9,11 @@ export default {
         return !diffs['updateOfStandards.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'problems.fields.updateOfStandards.completionComments.added',
-        [ChangesKinds.FIELD_CHANGED]:
-          'problems.fields.updateOfStandards.completionComments.changed',
-        [ChangesKinds.FIELD_REMOVED]:
-          'problems.fields.updateOfStandards.completionComments.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]: 'Update of standards completion comments set',
+        [ChangesKinds.FIELD_CHANGED]: 'Update of standards completion comments changed',
+        [ChangesKinds.FIELD_REMOVED]: 'Update of standards completion comments removed'
+      }
+    }
   ],
-  notifications: [],
+  notifications: []
 };

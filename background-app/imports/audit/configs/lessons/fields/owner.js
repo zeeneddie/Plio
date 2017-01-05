@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getLogData } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getLogData } from '../helpers.js';
 
 
 export default {
@@ -8,12 +8,15 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'lessons.fields.owner.added',
-        [ChangesKinds.FIELD_CHANGED]: 'lessons.fields.owner.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'lessons.fields.owner.removed',
+        [ChangesKinds.FIELD_ADDED]:
+          '{{docDesc}} owner set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{docDesc}} owner changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{docDesc}} owner removed'
       },
-      logData: getLogData,
-    },
+      logData: getLogData
+    }
   ],
   notifications: [],
   data({ diffs: { owner }, newDoc }) {
@@ -23,7 +26,7 @@ export default {
     return {
       docName: () => auditConfig.docName(newDoc),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

@@ -1,7 +1,7 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
-import ActionWorkflow from '/imports/workflow/ActionWorkflow';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
+import ActionWorkflow from '/imports/workflow/ActionWorkflow.js';
 
 
 export default {
@@ -12,9 +12,14 @@ export default {
         return completedAt && completedBy;
       },
       message: {
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.isCompleted.changed',
-      },
-    },
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{#if completed}}' +
+            'Action completed{{#if comments}}: {{comments}}{{/if}}' +
+          '{{else}}' +
+            'Action completion canceled' +
+          '{{/if}}'
+      }
+    }
   ],
   notifications: [
     {
@@ -22,9 +27,15 @@ export default {
         return completedAt && completedBy;
       },
       text: {
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.isCompleted.text.changed',
-      },
-    },
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{#if completed}}' +
+            '{{userName}} completed {{{docDesc}}} {{{docName}}}' +
+            '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+          '{{else}}' +
+            '{{userName}} canceled completion of {{{docDesc}}} {{{docName}}}' +
+          '{{/if}}'
+      }
+    }
   ],
   data({ diffs: { isCompleted, completionComments }, newDoc, user }) {
     const auditConfig = this;
@@ -34,17 +45,17 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       completed: () => isCompleted.newValue,
       comments: () => completionComments && completionComments.newValue,
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
   },
   triggers: [
-    function ({ diffs: { completedAt, completedBy }, newDoc: { _id } }) {
+    function({ diffs: { completedAt, completedBy }, newDoc: { _id } }) {
       if (completedAt && completedBy) {
         new ActionWorkflow(_id).refreshStatus();
       }
-    },
-  ],
+    }
+  ]
 };

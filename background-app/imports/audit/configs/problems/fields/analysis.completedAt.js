@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -10,11 +10,14 @@ export default {
         return !diffs['analysis.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.completedAt.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.completedAt.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.completedAt.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Root cause analysis date set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Root cause analysis date changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Root cause analysis date removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -23,7 +26,7 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
-  },
+  }
 };

@@ -1,37 +1,40 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 export default {
   field: 'notes',
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.notes.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.notes.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.notes.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]: 'Notes set',
+        [ChangesKinds.FIELD_CHANGED]: 'Notes changed',
+        [ChangesKinds.FIELD_REMOVED]: 'Notes removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.notes.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.notes.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.notes.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set notes of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed notes of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed notes of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
-  data({ newDoc, user }) {
+  data({ diffs: { notes }, newDoc, user }) {
     const auditConfig = this;
 
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  },
+  }
 };

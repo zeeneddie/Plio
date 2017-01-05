@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -6,18 +6,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'non-conformities.fields.ref.added',
-        [ChangesKinds.FIELD_REMOVED]: 'non-conformities.fields.ref.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Help desk ref added: ID - {{text}}, URL: {{url}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Help desk ref removed: ID - {{text}}, URL: {{url}}'
+      }
+    }
   ],
   notifications: [],
   data({ diffs: { ref: { newValue, oldValue } } }) {
     const { text, url } = newValue || oldValue;
 
     return {
-      text,
-      url,
+      text: () => text,
+      url: () => url
     };
-  },
+  }
 };

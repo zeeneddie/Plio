@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,28 +9,28 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.owner.added',
+          'Improvement plan owner set to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.owner.changed',
+          'Improvement plan owner changed from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.owner.removed',
-      },
-    },
+          'Improvement plan owner removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.owner.text.added',
+          '{{userName}} set improvement plan\'s owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.owner.text.changed',
+          '{{userName}} changed improvement plan\'s owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.owner.text.removed',
-      },
+          '{{userName}} removed improvement plan\'s owner of {{{docDesc}}} {{{docName}}}'
+      }
     },
     {
       shouldSendNotification({ diffs }) {
-        const { kind: changeKind } = diffs['improvementPlan.owner'] || {};
+        const { kind:changeKind } = diffs['improvementPlan.owner'] || {};
 
         return (changeKind === ChangesKinds.FIELD_ADDED)
             || (changeKind === ChangesKinds.FIELD_CHANGED);
@@ -42,17 +42,17 @@ export default {
         return {
           button: {
             label: 'View standard',
-            url: this.docUrl(newDoc),
-          },
+            url: this.docUrl(newDoc)
+          }
         };
       },
       receivers({ diffs, user }) {
         const userId = getUserId(user);
-        const { newValue: newOwnerId } = diffs['improvementPlan.owner'] || {};
+        const { newValue:newOwnerId } = diffs['improvementPlan.owner'] || {};
 
         return (newOwnerId && (userId !== newOwnerId)) ? [newOwnerId] : [];
-      },
-    },
+      }
+    }
   ],
   data({ diffs, newDoc, user }) {
     const { newValue, oldValue } = diffs['improvementPlan.owner'];
@@ -63,8 +63,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

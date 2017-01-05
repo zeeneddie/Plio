@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -6,17 +6,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'non-conformities.fields.cost.added',
-        [ChangesKinds.FIELD_CHANGED]: 'non-conformities.fields.cost.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'non-conformities.fields.cost.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Approx cost per occurrence set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Approx cost per occurrence changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Approx cost per occurrence removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs: { cost: { newValue, oldValue } } }) {
     return {
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
-  },
+  }
 };

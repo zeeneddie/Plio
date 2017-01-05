@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -8,13 +8,13 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'problems.fields.updateOfStandards.executor.added',
+          'Update of standards executor set to {{newValue}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'problems.fields.updateOfStandards.executor.changed',
+          'Update of standards executor changed from {{oldValue}} to {{newValue}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'problems.fields.updateOfStandards.executor.removed',
-      },
-    },
+          'Update of standards executor removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +22,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

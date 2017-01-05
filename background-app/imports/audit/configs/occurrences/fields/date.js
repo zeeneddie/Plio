@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getLogData } from '../helpers';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getLogData } from '../helpers.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -8,12 +8,15 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'occurrences.fields.date.added',
-        [ChangesKinds.FIELD_CHANGED]: 'occurrences.fields.date.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'occurrences.fields.date.removed',
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{docName}}} date set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{docName}}} date changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{docName}}} date removed'
       },
-      logData: getLogData,
-    },
+      logData: getLogData
+    }
   ],
   notifications: [],
   data({ diffs: { date }, newDoc }) {
@@ -24,7 +27,7 @@ export default {
     return {
       docName: () => auditConfig.docName(newDoc),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
-  },
+  }
 };

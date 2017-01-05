@@ -1,7 +1,7 @@
-import { StandardsBookSections } from '/imports/share/collections/standards-book-sections';
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { StandardsBookSections } from '/imports/share/collections/standards-book-sections.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,20 +9,26 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.sectionId.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.sectionId.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.sectionId.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Book section set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Book section changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Book section removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.sectionId.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.sectionId.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.sectionId.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set book section of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed book section of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed book section of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { sectionId }, newDoc, user }) {
     const auditConfig = this;
@@ -38,8 +44,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getSectionTitle(newValue),
-      oldValue: () => getSectionTitle(oldValue),
+      oldValue: () => getSectionTitle(oldValue)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

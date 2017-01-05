@@ -1,4 +1,4 @@
-import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow';
+import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow.js';
 
 
 export default {
@@ -6,8 +6,8 @@ export default {
   logs: [],
   notifications: [],
   triggers: [
-    function ({ newDoc: { _id } }) {
+    function({ newDoc: { _id } }) {
       new WorkItemWorkflow(_id).refreshStatus();
-    },
-  ],
+    }
+  ]
 };

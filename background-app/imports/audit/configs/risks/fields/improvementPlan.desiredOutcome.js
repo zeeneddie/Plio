@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -7,14 +7,14 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'risks.fields.improvementPlan.desiredOutcome.added',
+          'Treatment plan statement of desired outcome set',
         [ChangesKinds.FIELD_CHANGED]:
-          'risks.fields.improvementPlan.desiredOutcome.changed',
+          'Treatment plan statement of desired outcome changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'risks.fields.improvementPlan.desiredOutcome.removed',
-      },
-    },
+          'Treatment plan statement of desired outcome removed'
+      }
+    }
   ],
   notifications: [],
-  data() { },
+  data() { }
 };

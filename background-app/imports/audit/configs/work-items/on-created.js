@@ -1,5 +1,5 @@
-import { getNotifications, getData, getReceivers } from './helpers';
-import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow';
+import { getNotifications, getData, getReceivers } from './helpers.js';
+import WorkItemWorkflow from '/imports/workflow/WorkItemWorkflow.js';
 
 
 export default {
@@ -8,8 +8,8 @@ export default {
   data: getData,
   receivers: getReceivers,
   triggers: [
-    function ({ newDoc: { _id } }) {
+    function({ newDoc: { _id } }) {
       new WorkItemWorkflow(_id).refreshStatus();
-    },
-  ],
+    }
+  ]
 };

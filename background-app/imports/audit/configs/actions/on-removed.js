@@ -1,8 +1,8 @@
 export default {
   logs: [
     {
-      message: 'common.on-removed.on-removed',
-    },
+      message: 'Document removed'
+    }
   ],
-  notifications: [],
+  notifications: []
 };

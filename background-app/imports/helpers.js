@@ -1,6 +1,5 @@
 import moment from 'moment-timezone';
 import pluralize from 'pluralize';
-import path from 'path';
 
 import { ProblemTypes } from '/imports/share/constants';
 
@@ -30,7 +29,3 @@ export const getDiffInDays = (targetDate, timezone) => {
 
   return `${days} ${pluralize('day', days)}`;
 };
-
-export const getAssetsPath = () => (
-  path.join(path.resolve('.'), 'assets', 'app')
-);

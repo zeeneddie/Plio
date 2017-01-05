@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,25 +9,25 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.desiredOutcome.added',
+          'Improvement plan statement of desired outcome set',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.desiredOutcome.changed',
+          'Improvement plan statement of desired outcome changed',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.desiredOutcome.removed',
-      },
-    },
+          'Improvement plan statement of desired outcome removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.desiredOutcome.text.added',
+          '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.desiredOutcome.text.changed',
+          '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.desiredOutcome.text.removed',
-      },
-    },
+          '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ newDoc, user }) {
     const auditConfig = this;
@@ -35,8 +35,8 @@ export default {
     return {
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

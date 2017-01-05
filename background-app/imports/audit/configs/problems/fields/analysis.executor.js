@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,11 +7,14 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.executor.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.executor.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.executor.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Root cause analysis executor set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Root cause analysis executor changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Root cause analysis executor removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -19,7 +22,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

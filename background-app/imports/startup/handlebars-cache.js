@@ -1,9 +1,9 @@
-import EmailTemplates from '/imports/share/utils/email-templates';
+import HandlebarsCache from '/imports/share/utils/handlebars-cache.js';
 
 
-const getAssetPath = (name) => `email-templates/${name}.handlebars`;
+const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;
 
-EmailTemplates.addTemplates({
-  defaultEmail: getAssetPath('default-email'),
-  recapEmail: getAssetPath('recap-email'),
+HandlebarsCache.addTemplates({
+  defaultEmail: getAssetPath('email', 'default-email'),
+  recapEmail: getAssetPath('email', 'recap-email'),
 });

@@ -1,4 +1,4 @@
-import { Changelog } from '/imports/share/collections/server/changelog.js';
+import { Changelog } from '/imports/share/collections/changelog.js';
 import AuditConfigs from '/imports/audit/audit-configs.js';
 import AuditManager from '/imports/share/utils/audit-manager.js';
 import DocChangeHandler from '/imports/audit/DocChangeHandler.js';

@@ -1,8 +1,8 @@
-import { Discussions } from '/imports/share/collections/discussions';
-import { Messages } from '/imports/share/collections/messages';
-import { Standards } from '/imports/share/collections/standards';
-import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers';
-import StandardAuditConfig from '../standards/standard-audit-config';
+import { Discussions } from '/imports/share/collections/discussions.js';
+import { Messages } from '/imports/share/collections/messages.js';
+import { Standards } from '/imports/share/collections/standards.js';
+import { getUserFullNameOrEmail, getUserId } from '../../utils/helpers.js';
+import StandardAuditConfig from '../standards/standard-audit-config.js';
 
 
 const getDiscussionStandard = (discussionId) => {
@@ -14,8 +14,12 @@ export default {
   logs: [],
   notifications: [
     {
-      text: 'messages.on-created.text',
-      title: 'messages.on-created.title',
+      text:
+        '{{userName}}' +
+        '{{#if isFile}} uploaded new file for ' +
+        '{{else}} added new message to {{/if}}' +
+        'the discussion of {{{docDesc}}} {{{docName}}}',
+      title: 'New message in discussion',
       data({ newDoc: { discussionId, type }, user }) {
         const isFile = type === 'file';
         const standard = getDiscussionStandard(discussionId);
@@ -26,15 +30,15 @@ export default {
           docDesc,
           docName,
           isFile,
-          userName: getUserFullNameOrEmail(user),
+          userName: getUserFullNameOrEmail(user)
         };
       },
       emailTemplateData({ newDoc }) {
         return {
           button: {
             label: 'View message',
-            url: this.docUrl(newDoc),
-          },
+            url: this.docUrl(newDoc)
+          }
         };
       },
       receivers({ newDoc: { discussionId }, user }) {
@@ -46,11 +50,11 @@ export default {
 
         Messages.find({
           discussionId,
-          createdBy: { $ne: userId },
+          createdBy: { $ne: userId }
         }).forEach(({ createdBy }) => receivers.add(createdBy));
 
         return Array.from(receivers);
-      },
-    },
-  ],
+      }
+    }
+  ]
 };

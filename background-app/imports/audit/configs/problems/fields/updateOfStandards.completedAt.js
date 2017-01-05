@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -11,13 +11,13 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'problems.fields.updateOfStandards.completedAt.added',
+          'Update of standards date set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'problems.fields.updateOfStandards.completedAt.changed',
+          'Update of standards date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'problems.fields.updateOfStandards.completedAt.removed',
-      },
-    },
+          'Update of standards date removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -27,7 +27,7 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
-  },
+  }
 };

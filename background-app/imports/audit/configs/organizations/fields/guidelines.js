@@ -1,28 +1,34 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
-const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
+const getGuidelinesConfig = (field, guidelineType, label) => {
   return {
-    field: `${field}.${magnitude}`,
+    field: `${field}.${guidelineType}`,
     logs: [
       {
         message: {
-          [ChangesKinds.FIELD_ADDED]: 'organizations.fields.guidelines.added',
-          [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.guidelines.changed',
-          [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.guidelines.removed',
-        },
-      },
+          [ChangesKinds.FIELD_ADDED]:
+            `Guidelines for ${label} set`,
+          [ChangesKinds.FIELD_CHANGED]:
+            `Guidelines for ${label} changed`,
+          [ChangesKinds.FIELD_REMOVED]:
+            `Guidelines for ${label} removed`
+        }
+      }
     ],
     notifications: [
       {
         text: {
-          [ChangesKinds.FIELD_ADDED]: 'organizations.fields.guidelines.text.added',
-          [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.guidelines.text.changed',
-          [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.guidelines.text.removed',
-        },
-      },
+          [ChangesKinds.FIELD_ADDED]:
+            `{{userName}} set guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
+          [ChangesKinds.FIELD_CHANGED]:
+            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
+          [ChangesKinds.FIELD_REMOVED]:
+            `{{userName}} removed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
+        }
+      }
     ],
     data({ newDoc, user }) {
       const auditConfig = this;
@@ -30,11 +36,10 @@ const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
       return {
         docDesc: () => auditConfig.docDescription(newDoc),
         docName: () => auditConfig.docName(newDoc),
-        userName: () => getUserFullNameOrEmail(user),
-        relatedDocs,
+        userName: () => getUserFullNameOrEmail(user)
       };
     },
-    receivers: getReceivers,
+    receivers: getReceivers
   };
 };
 
@@ -44,5 +49,5 @@ export default [
   getGuidelinesConfig('ncGuidelines', 'critical', 'critical non-conformities'),
   getGuidelinesConfig('rkGuidelines', 'minor', 'minor risks'),
   getGuidelinesConfig('rkGuidelines', 'major', 'major risks'),
-  getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks'),
+  getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks')
 ];

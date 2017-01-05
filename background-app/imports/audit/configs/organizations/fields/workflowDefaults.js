@@ -1,9 +1,9 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
-const getWorkflowDefaultsConfig = (field, relatedDocs) => {
+const getWorkflowDefaultsConfig = (field, label) => {
   return [
     {
       field: `workflowDefaults.${field}.workflowType`,
@@ -11,17 +11,19 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.workflowType.changed',
-          },
-        },
+              `Workflow type for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.workflowType.text.changed',
-          },
-        },
+              `{{userName}} changed workflow type for ${label} ` +
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+          }
+        }
       ],
       data({ diffs, newDoc, user }) {
         const { newValue, oldValue } = diffs[
@@ -34,11 +36,10 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => newValue,
-          oldValue: () => oldValue,
-          relatedDocs,
+          oldValue: () => oldValue
         };
       },
-      receivers: getReceivers,
+      receivers: getReceivers
     },
 
     {
@@ -47,17 +48,19 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.stepTime.changed',
-          },
-        },
+              `Default step time for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.stepTime.text.changed',
-          },
-        },
+              `{{userName}} changed default step time for ${label} ` +
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+          }
+        }
       ],
       data({ diffs, newDoc, user }) {
         const auditConfig = this;
@@ -71,11 +74,10 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${timeVal} ${newValue}`,
-          oldValue: () => `${timeVal} ${oldValue}`,
-          relatedDocs,
+          oldValue: () => `${timeVal} ${oldValue}`
         };
       },
-      receivers: getReceivers,
+      receivers: getReceivers
     },
 
     {
@@ -84,17 +86,19 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.stepTime.changed',
-          },
-        },
+              `Default step time for ${label} changed ` +
+              `from "{{oldValue}}" to "{{newValue}}"`
+          }
+        }
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              'organizations.fields.workflowDefaults.stepTime.text.changed',
-          },
-        },
+              `{{userName}} changed default step time for ${label} ` +
+              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
+          }
+        }
       ],
       data({ diffs, newDoc, user }) {
         const auditConfig = this;
@@ -108,11 +112,10 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
           docName: () => auditConfig.docName(newDoc),
           userName: () => getUserFullNameOrEmail(user),
           newValue: () => `${newValue} ${timeUnit}`,
-          oldValue: () => `${oldValue} ${timeUnit}`,
-          relatedDocs,
+          oldValue: () => `${oldValue} ${timeUnit}`
         };
       },
-      receivers: getReceivers,
+      receivers: getReceivers
     },
   ];
 };
@@ -120,5 +123,5 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
 export default [
   ...getWorkflowDefaultsConfig('minorProblem', 'minor non-conformities/risks'),
   ...getWorkflowDefaultsConfig('majorProblem', 'major non-conformities/risks'),
-  ...getWorkflowDefaultsConfig('criticalProblem', 'critical non-conformities/risks'),
+  ...getWorkflowDefaultsConfig('criticalProblem', 'critical non-conformities/risks')
 ];

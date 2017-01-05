@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -8,13 +8,13 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'problems.fields.updateOfStandards.targetDate.added',
+          'Update of standards target date set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'problems.fields.updateOfStandards.targetDate.changed',
+          'Update of standards target date changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'problems.fields.updateOfStandards.targetDate.removed',
-      },
-    },
+          'Update of standards target date removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -24,12 +24,12 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
   triggers: [
-    function ({ newDoc: { _id } }) {
+    function({ newDoc: { _id } }) {
       new this.workflowConstructor(_id).refreshStatus();
-    },
-  ],
+    }
+  ]
 };

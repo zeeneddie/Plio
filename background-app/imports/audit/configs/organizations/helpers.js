@@ -1,10 +1,8 @@
-import { _ } from 'meteor/underscore';
-
-import { UserMembership } from '/imports/share/constants';
-import { getUserId } from '../../utils/helpers';
+import { UserMembership } from '/imports/share/constants.js';
+import { getUserId } from '../../utils/helpers.js';
 
 
-export const getReceivers = function ({ newDoc: { users }, user }) {
+export const getReceivers = function({ newDoc: { users }, user }) {
   const executorId = getUserId(user);
 
   const orgOwners = _(users).filter((userData) => {
@@ -13,7 +11,7 @@ export const getReceivers = function ({ newDoc: { users }, user }) {
     return _.every([
       executorId !== userId,
       role === UserMembership.ORG_OWNER,
-      isRemoved === false,
+      isRemoved === false
     ]);
   });
 

@@ -1,6 +1,6 @@
-import { ProblemsStatuses } from '/imports/share/constants';
-import { capitalize } from '/imports/share/helpers';
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ProblemsStatuses } from '/imports/share/constants.js';
+import { capitalize } from '/imports/share/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -8,11 +8,14 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.status.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.status.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.status.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Status set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Status changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Status removed'
+      }
+    }
   ],
   notifications: [
     {
@@ -21,8 +24,8 @@ export default {
         // 19 - Closed - action(s) verified, standard(s) reviewed
         return (newValue === 18) || (newValue === 19);
       },
-      text: 'problems.fields.status.closed-status-notification.text.changed',
-      title: 'problems.fields.status.closed-status-notification.title.changed',
+      text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{newValue}}"',
+      title: '{{{docDescCapitalized}}} {{{docName}}} closed',
       data({ diffs: { status }, newDoc }) {
         const auditConfig = this;
 
@@ -30,28 +33,28 @@ export default {
           docDescCapitalized: () => capitalize(auditConfig.docDescription(newDoc)),
           docDesc: () => auditConfig.docDescription(newDoc),
           docName: () => auditConfig.docName(newDoc),
-          newValue: () => ProblemsStatuses[status.newValue],
+          newValue: () => ProblemsStatuses[status.newValue]
         };
       },
       emailTemplateData({ newDoc }) {
         return {
           button: {
             label: 'View document',
-            url: this.docUrl(newDoc),
-          },
+            url: this.docUrl(newDoc)
+          }
         };
       },
       receivers({ newDoc }) {
         return [newDoc.identifiedBy];
-      },
-    },
+      }
+    }
   ],
   data({ diffs: { status } }) {
     const { newValue, oldValue } = status;
 
     return {
       newValue: () => ProblemsStatuses[newValue],
-      oldValue: () => ProblemsStatuses[oldValue],
+      oldValue: () => ProblemsStatuses[oldValue]
     };
-  },
+  }
 };

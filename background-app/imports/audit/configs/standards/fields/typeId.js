@@ -1,7 +1,7 @@
-import { StandardTypes } from '/imports/share/collections/standards-types';
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { StandardTypes } from '/imports/share/collections/standards-types.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,20 +9,26 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.typeId.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.typeId.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.typeId.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Type set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Type changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Type removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'standards.fields.typeId.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'standards.fields.typeId.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'standards.fields.typeId.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set type of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { typeId }, newDoc, user }) {
     const auditConfig = this;
@@ -38,8 +44,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getStandardTypeName(newValue),
-      oldValue: () => getStandardTypeName(oldValue),
+      oldValue: () => getStandardTypeName(oldValue)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

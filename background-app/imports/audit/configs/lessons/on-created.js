@@ -1,12 +1,12 @@
-import { getLogData } from './helpers';
+import { getLogData } from './helpers.js';
 
 
 export default {
   logs: [
     {
-      message: 'lessons.on-created.on-created',
-      logData: getLogData,
-    },
+      message: '{{{docName}}} added: "{{title}}"',
+      logData: getLogData
+    }
   ],
   notifications: [],
   data({ newDoc }) {
@@ -14,7 +14,7 @@ export default {
 
     return {
       docName: () => auditConfig.docName(newDoc),
-      title: () => newDoc.title,
+      title: () => newDoc.title
     };
-  },
+  }
 };

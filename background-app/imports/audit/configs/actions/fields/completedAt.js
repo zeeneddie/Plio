@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail, getPrettyOrgDate } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -11,11 +11,14 @@ export default {
         return !isCompleted;
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Completion date set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Completion date changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Completion date removed'
+      }
+    }
   ],
   notifications: [
     {
@@ -23,11 +26,14 @@ export default {
         return !isCompleted;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completedAt.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completedAt.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completedAt.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set completion date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed completion date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed completion date of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { completedAt }, newDoc, user }) {
     const { newValue, oldValue } = completedAt;
@@ -39,10 +45,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  },
+  }
 };

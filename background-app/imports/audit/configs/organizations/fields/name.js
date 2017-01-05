@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -8,20 +8,26 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.added',
-        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Name set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Name changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Name removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.name.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.name.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.name.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set name of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed name of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed name of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { name }, oldDoc, user }) {
     const { newValue, oldValue } = name;
@@ -32,8 +38,8 @@ export default {
       docName: () => auditConfig.docName(oldDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

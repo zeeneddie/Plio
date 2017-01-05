@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,12 +7,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]:
-          'risks.fields.improvementPlan.reviewDates.item-added',
-        [ChangesKinds.ITEM_REMOVED]:
-          'risks.fields.improvementPlan.reviewDates.item-removed',
-      },
-    },
+        [ChangesKinds.ITEM_ADDED]: 'Treatment plan review date added: "{{date}}"',
+        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan review date removed: "{{date}}"'
+      }
+    }
   ],
   notifications: [],
   data({ diffs, newDoc }) {
@@ -21,7 +19,7 @@ export default {
     const orgId = () => auditConfig.docOrgId(newDoc);
 
     return {
-      date: () => getPrettyOrgDate(date, orgId()),
+      date: () => getPrettyOrgDate(date, orgId())
     };
-  },
+  }
 };

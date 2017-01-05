@@ -1,26 +1,32 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 export default {
   field: 'planInPlace',
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.planInPlace.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.planInPlace.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.planInPlace.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Plan in place set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Plan in place changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Plan in place removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.planInPlace.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.planInPlace.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.planInPlace.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set plan in place of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed plan in place of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed plan in place of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { planInPlace }, newDoc, user }) {
     const { newValue, oldValue } = planInPlace;
@@ -31,10 +37,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  },
+  }
 };

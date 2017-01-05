@@ -1,7 +1,7 @@
-import { Files } from '/imports/share/collections/files';
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { Files } from '/imports/share/collections/files.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,22 +9,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]:
-          'common.fields.improvementPlan.fileIds.item-added',
-        [ChangesKinds.ITEM_REMOVED]:
-          'common.fields.improvementPlan.fileIds.item-removed',
-      },
-    },
+        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
+        [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          'common.fields.improvementPlan.fileIds.text.item-added',
+          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'common.fields.improvementPlan.fileIds.text.item-removed',
-      },
-    },
+          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs, newDoc, user }) {
     const _id = diffs['improvementPlan.fileIds'].item;
@@ -35,8 +33,8 @@ export default {
       name: () => file().name,
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

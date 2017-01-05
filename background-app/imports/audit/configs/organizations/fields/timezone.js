@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -8,20 +8,26 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.timezone.added',
-        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.timezone.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.timezone.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Timezone set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Timezone changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Timezone removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'organizations.fields.timezone.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'organizations.fields.timezone.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'organizations.fields.timezone.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set timezone of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed timezone of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed timezone of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { timezone }, newDoc, user }) {
     const { newValue, oldValue } = timezone;
@@ -32,8 +38,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

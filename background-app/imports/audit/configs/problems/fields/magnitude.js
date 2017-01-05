@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -6,17 +6,20 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.magnitude.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.magnitude.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.magnitude.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Magnitude set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Magnitude changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Magnitude removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs: { magnitude: { newValue, oldValue } } }) {
     return {
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
-  },
+  }
 };

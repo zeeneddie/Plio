@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
 import { getReceiversForIPReviewDate } from '../helpers';
 
 
@@ -9,17 +9,17 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.reviewDates.date.changed',
-      },
-    },
+          'Improvement plan review date changed from "{{oldValue}}" to "{{newValue}}"'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.reviewDates.date.text.changed',
-      },
-    },
+          '{{userName}} changed improvement plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"'
+      }
+    }
   ],
   data({ diffs, newDoc, user }) {
     const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
@@ -31,10 +31,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
   receivers({ newDoc, user }) {
     return getReceiversForIPReviewDate({ newDoc, user });
-  },
+  }
 };

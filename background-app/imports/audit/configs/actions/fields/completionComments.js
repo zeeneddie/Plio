@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -11,11 +11,11 @@ export default {
         return !isCompleted;
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completionComments.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completionComments.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completionComments.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]: 'Completion comments set',
+        [ChangesKinds.FIELD_CHANGED]: 'Completion comments changed',
+        [ChangesKinds.FIELD_REMOVED]: 'Completion comments removed'
+      }
+    }
   ],
   notifications: [
     {
@@ -23,11 +23,14 @@ export default {
         return !isCompleted;
       },
       text: {
-        [ChangesKinds.FIELD_ADDED]: 'actions.fields.completionComments.text.added',
-        [ChangesKinds.FIELD_CHANGED]: 'actions.fields.completionComments.text.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'actions.fields.completionComments.text.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set completion comments of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed completion comments of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed completion comments of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs: { completionComments }, newDoc, user }) {
     const { newValue, oldValue } = completionComments;
@@ -38,10 +41,10 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
   },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  },
+  }
 };

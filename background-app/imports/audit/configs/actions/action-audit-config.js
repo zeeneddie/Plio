@@ -1,30 +1,30 @@
-import { Actions } from '/imports/share/collections/actions';
-import { ActionTypes, CollectionNames } from '/imports/share/constants';
+import { Actions } from '/imports/share/collections/actions.js';
+import { ActionTypes, CollectionNames } from '/imports/share/constants.js';
 
-import onCreated from './on-created';
-import onRemoved from './on-removed';
+import onCreated from './on-created.js';
+import onRemoved from './on-removed.js';
 
-import completedAt from './fields/completedAt';
-import completedBy from './fields/completedBy';
-import completionComments from './fields/completionComments';
-import completionTargetDate from './fields/completionTargetDate';
-import fileIds from './fields/fileIds';
-import isCompleted from './fields/isCompleted';
-import isDeleted from './fields/isDeleted';
-import isVerified from './fields/isVerified';
-import linkedTo from './fields/linkedTo';
-import notes from './fields/notes';
-import notify from './fields/notify';
-import ownerId from './fields/ownerId';
-import planInPlace from './fields/planInPlace';
-import status from './fields/status';
-import title from './fields/title';
-import toBeCompletedBy from './fields/toBeCompletedBy';
-import toBeVerifiedBy from './fields/toBeVerifiedBy';
-import verificationComments from './fields/verificationComments';
-import verificationTargetDate from './fields/verificationTargetDate';
-import verifiedAt from './fields/verifiedAt';
-import verifiedBy from './fields/verifiedBy';
+import completedAt from './fields/completedAt.js';
+import completedBy from './fields/completedBy.js';
+import completionComments from './fields/completionComments.js';
+import completionTargetDate from './fields/completionTargetDate.js';
+import fileIds from './fields/fileIds.js';
+import isCompleted from './fields/isCompleted.js';
+import isDeleted from './fields/isDeleted.js';
+import isVerified from './fields/isVerified.js';
+import linkedTo from './fields/linkedTo.js';
+import notes from './fields/notes.js';
+import notify from './fields/notify.js';
+import ownerId from './fields/ownerId.js';
+import planInPlace from './fields/planInPlace.js';
+import status from './fields/status.js';
+import title from './fields/title.js';
+import toBeCompletedBy from './fields/toBeCompletedBy.js';
+import toBeVerifiedBy from './fields/toBeVerifiedBy.js';
+import verificationComments from './fields/verificationComments.js';
+import verificationTargetDate from './fields/verificationTargetDate.js';
+import verifiedAt from './fields/verifiedAt.js';
+import verifiedBy from './fields/verifiedBy.js';
 
 
 export default ActionAuditConfig = {
@@ -56,7 +56,7 @@ export default ActionAuditConfig = {
     verificationComments,
     verificationTargetDate,
     verifiedAt,
-    verifiedBy,
+    verifiedBy
   ],
 
   onRemoved,
@@ -69,7 +69,7 @@ export default ActionAuditConfig = {
     return {
       [ActionTypes.CORRECTIVE_ACTION]: 'corrective action',
       [ActionTypes.PREVENTATIVE_ACTION]: 'preventative action',
-      [ActionTypes.RISK_CONTROL]: 'risk control',
+      [ActionTypes.RISK_CONTROL]: 'risk control'
     }[type];
   },
 
@@ -81,6 +81,6 @@ export default ActionAuditConfig = {
     return organizationId;
   },
 
-  docUrl() { },
+  docUrl(doc) { }
 
 };

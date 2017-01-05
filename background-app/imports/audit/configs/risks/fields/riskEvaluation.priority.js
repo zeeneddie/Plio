@@ -1,5 +1,5 @@
-import { RiskEvaluationPriorities } from '/imports/share/constants';
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { RiskEvaluationPriorities } from '/imports/share/constants.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -8,13 +8,13 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'risks.fields.riskEvaluation.priority.added',
+          'Risk evaluation treatment priority set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'risks.fields.riskEvaluation.priority.changed',
+          'Risk evaluation treatment priority changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'risks.fields.riskEvaluation.priority.removed',
-      },
-    },
+          'Risk evaluation treatment priority removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +22,7 @@ export default {
 
     return {
       newValue: () => RiskEvaluationPriorities[newValue],
-      oldValue: () => RiskEvaluationPriorities[oldValue],
+      oldValue: () => RiskEvaluationPriorities[oldValue]
     };
-  },
+  }
 };

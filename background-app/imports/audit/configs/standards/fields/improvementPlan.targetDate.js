@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,25 +9,25 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.targetDate.added',
+          'Improvement plan target date for desired outcome set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.targetDate.changed',
+          'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.targetDate.removed',
-      },
-    },
+          'Improvement plan target date for desired outcome removed'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          'common.fields.improvementPlan.targetDate.text.added',
+          '{{userName}} set improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'common.fields.improvementPlan.targetDate.text.changed',
+          '{{userName}} changed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'common.fields.improvementPlan.targetDate.text.removed',
-      },
-    },
+          '{{userName}} removed improvement plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}'
+      }
+    }
   ],
   data({ diffs, newDoc, user }) {
     const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
@@ -39,8 +39,8 @@ export default {
       docName: () => auditConfig.docName(newDoc),
       userName: () => getUserFullNameOrEmail(user),
       newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(oldValue, orgId())
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

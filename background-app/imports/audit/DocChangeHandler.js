@@ -7,7 +7,6 @@ import { ChangesKinds } from './utils/changes-kinds.js';
 import { renderTemplate } from '/imports/share/helpers.js';
 import DocumentDiffer from './utils/document-differ.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';
-import TemplateStore from '/imports/utils/template-store';
 
 
 const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
@@ -166,8 +165,8 @@ export default class DocChangeHandler {
     const { message, logData:getLogData } = logConfig;
     const { kind } = diff || {};
 
-    const msgTemplateKey = _(message).isObject() ? message[kind] : message;
-    if (!msgTemplateKey) {
+    const msgTemplate = _(message).isObject() ? message[kind] : message;
+    if (!msgTemplate) {
       return;
     }
 
@@ -183,17 +182,12 @@ export default class DocChangeHandler {
     _(data).each((templateData, index) => {
       const logDataObj = logData && logData[index];
 
-      this._buildLog(msgTemplateKey, templateData, diff, logDataObj);
+      this._buildLog(msgTemplate, templateData, diff, logDataObj);
     });
   }
 
-  _buildLog(msgTemplateKey, templateData, diff, logData) {
-    const template = TemplateStore.getTemplate(`log-templates.${msgTemplateKey}`);
-    const message = template && template(templateData);
-    console.log(message);
-    if (!message) {
-      return;
-    }
+  _buildLog(msgTemplate, templateData, diff, logData) {
+    const message = renderTemplate(msgTemplate, templateData);
 
     const collection = this._collectionName;
     const documentId = this._docId;
@@ -257,29 +251,24 @@ export default class DocChangeHandler {
       sendBoth=false
     } = notificationConfig;
 
-    const emailTemplate = emailText || text;
-    const pushTemplate = pushText || text;
+    let emailTemplate = emailText || text;
+    let pushTemplate = pushText || text;
 
-    const emailTemplateKey = _(emailTemplate).isObject()
-      ? emailTemplate[kind]
-      : emailTemplate;
-
-    const pushTemplateKey = _(pushTemplate).isObject()
-      ? pushTemplate[kind]
-      : pushTemplate;
+    emailTemplate = _(emailTemplate).isObject() ? emailTemplate[kind] : emailTemplate;
+    pushTemplate = _(pushTemplate).isObject() ? pushTemplate[kind] : pushTemplate;
 
     if (!emailTemplate && !pushTemplate) {
       return;
     }
 
-    const emailSubjectTemplate = emailSubject || title;
-    const pushTitleTemplate = pushTitle || title;
+    let emailSubjectTemplate = emailSubject || title;
+    let pushTitleTemplate = pushTitle || title;
 
-    const emailSubjectTemplateKey = _(emailSubjectTemplate).isObject()
+    emailSubjectTemplate = _(emailSubjectTemplate).isObject()
         ? emailSubjectTemplate[kind]
         : emailSubjectTemplate;
 
-    const pushTitleTemplateKey = _(pushTitleTemplate).isObject()
+    pushTitleTemplate = _(pushTitleTemplate).isObject()
         ? pushTitleTemplate[kind]
         : pushTitleTemplate;
 
@@ -307,8 +296,8 @@ export default class DocChangeHandler {
       const receivers = receiversArr[index];
 
       this._buildNotification({
-        emailTemplateKey, emailSubjectTemplateKey, emailTemplateData,
-        pushTemplateKey, pushTitleTemplateKey, pushData,
+        emailTemplate, emailSubjectTemplate, emailTemplateData,
+        pushTemplate, pushTitleTemplate, pushData,
         emailTemplateName, receivers, templateData,
         sendBoth
       });
@@ -316,8 +305,8 @@ export default class DocChangeHandler {
   }
 
   _buildNotification({
-    emailTemplateKey, emailSubjectTemplateKey, emailTemplateData,
-    pushTemplateKey, pushTitleTemplateKey, pushData,
+    emailTemplate, emailSubjectTemplate, emailTemplateData,
+    pushTemplate, pushTitleTemplate, pushData,
     emailTemplateName, receivers, templateData,
     sendBoth
   }) {
@@ -325,40 +314,22 @@ export default class DocChangeHandler {
       return;
     }
 
-    const emailTextTemplate = TemplateStore.getTemplate(
-      `notification-templates.${emailTemplateKey}`
-    );
-    const emailText = emailTextTemplate && emailTextTemplate(templateData);
-
-    const pushTextTemplate = TemplateStore.getTemplate(
-      `notification-templates.${pushTemplateKey}`
-    );
-    const pushText = pushTextTemplate && pushTextTemplate(templateData);
+    const emailText = renderTemplate(emailTemplate, templateData);
+    const pushText = renderTemplate(pushTemplate, templateData);
 
     let emailSubject;
-    if (emailSubjectTemplateKey) {
-      const emailSubjectTemplate = TemplateStore.getTemplate(
-        `notification-templates.${emailSubjectTemplateKey}`
-      );
-      emailSubject = emailSubjectTemplate && emailSubjectTemplate(templateData);
+    if (emailSubjectTemplate) {
+      emailSubject = renderTemplate(emailSubjectTemplate, templateData);
     } else {
       emailSubject = this._getDefaultNotificationTitle();
     }
 
     let pushTitle;
-    if (pushTitleTemplateKey) {
-      const pushTitleTemplate = TemplateStore.getTemplate(
-        `notification-templates.${pushTitleTemplateKey}`
-      );
-      pushTitle = pushTitleTemplate && pushTitleTemplate(templateData);
+    if (pushTitleTemplate) {
+      pushTitle = renderTemplate(pushTitleTemplate, templateData);
     } else {
       pushTitle = this._getDefaultNotificationTitle();
     }
-
-    console.log(emailText);
-    console.log(pushText);
-    console.log(emailSubject);
-    console.log(pushTitle);
 
     const notification = {
       recipients: receivers,

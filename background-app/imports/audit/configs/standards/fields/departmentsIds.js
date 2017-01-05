@@ -1,7 +1,7 @@
-import { Departments } from '/imports/share/collections/departments';
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
-import { getReceivers } from '../helpers';
+import { Departments } from '/imports/share/collections/departments.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { getReceivers } from '../helpers.js';
 
 
 export default {
@@ -9,23 +9,25 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'common.fields.departmentsIds.item-added',
-        [ChangesKinds.ITEM_REMOVED]: 'common.fields.departmentsIds.item-removed',
-      },
-    },
+        [ChangesKinds.ITEM_ADDED]:
+          'Document was linked to {{{departmentDesc}}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          'Document was unlinked from {{{departmentDesc}}}'
+      }
+    }
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          'common.fields.departmentsIds.text.item-added',
+          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'common.fields.departmentsIds.text.item-removed',
-      },
-    },
+          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}'
+      }
+    }
   ],
   data({ diffs: { departmentsIds }, newDoc, user }) {
-    const { item: departmentId } = departmentsIds;
+    const { item:departmentId } = departmentsIds;
     const department = () => Departments.findOne({ _id: departmentId }) || {};
     const auditConfig = this;
 
@@ -33,8 +35,8 @@ export default {
       docDesc: () => auditConfig.docDescription(newDoc),
       docName: () => auditConfig.docName(newDoc),
       departmentDesc: () => `${department().name} department`,
-      userName: () => getUserFullNameOrEmail(user),
+      userName: () => getUserFullNameOrEmail(user)
     };
   },
-  receivers: getReceivers,
+  receivers: getReceivers
 };

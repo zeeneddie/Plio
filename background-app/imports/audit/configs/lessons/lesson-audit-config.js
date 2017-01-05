@@ -1,15 +1,15 @@
-import { LessonsLearned } from '/imports/share/collections/lessons';
-import { CollectionNames } from '/imports/share/constants';
-import { getLinkedDoc } from '/imports/share/helpers';
-import { getLinkedDocAuditConfig } from '../../utils/helpers';
+import { LessonsLearned } from '/imports/share/collections/lessons.js';
+import { CollectionNames } from '/imports/share/constants.js';
+import { getLinkedDoc } from '/imports/share/helpers.js';
+import { getLinkedDocAuditConfig } from '../../utils/helpers.js';
 
-import onCreated from './on-created';
-import onRemoved from './on-removed';
+import onCreated from './on-created.js';
+import onRemoved from './on-removed.js';
 
-import date from './fields/date';
-import notes from './fields/notes';
-import owner from './fields/owner';
-import title from './fields/title';
+import date from './fields/date.js';
+import notes from './fields/notes.js';
+import owner from './fields/owner.js';
+import title from './fields/title.js';
 
 
 export default LessonAuditConfig = {
@@ -24,7 +24,7 @@ export default LessonAuditConfig = {
     date,
     notes,
     owner,
-    title,
+    title
   ],
 
   onRemoved,
@@ -33,7 +33,7 @@ export default LessonAuditConfig = {
     return _id;
   },
 
-  docDescription() {
+  docDescription(doc) {
     return 'lesson learned';
   },
 
@@ -50,6 +50,6 @@ export default LessonAuditConfig = {
     const linkedDoc = getLinkedDoc(documentId, documentType);
 
     return linkedDocAuditConfig.docUrl(linkedDoc);
-  },
+  }
 
 };

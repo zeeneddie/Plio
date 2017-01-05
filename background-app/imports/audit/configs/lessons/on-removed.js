@@ -1,12 +1,12 @@
-import { getLogData } from './helpers';
+import { getLogData } from './helpers.js';
 
 
 export default {
   logs: [
     {
-      message: 'lessons.on-removed.on-removed',
-      logData: getLogData,
-    },
+      message: '{{{docName}}} removed: "{{title}}"',
+      logData: getLogData
+    }
   ],
   notifications: [],
   data({ oldDoc }) {
@@ -14,7 +14,7 @@ export default {
 
     return {
       docName: () => auditConfig.docName(oldDoc),
-      title: () => oldDoc.title,
+      title: () => oldDoc.title
     };
-  },
+  }
 };

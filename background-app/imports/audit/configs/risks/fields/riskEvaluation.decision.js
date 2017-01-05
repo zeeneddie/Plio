@@ -1,5 +1,5 @@
-import { RiskEvaluationDecisions } from '/imports/share/constants';
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { RiskEvaluationDecisions } from '/imports/share/constants.js';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -8,13 +8,13 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'risks.fields.riskEvaluation.decision.added',
+          'Risk evaluation treatment decision set to "{{newValue}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'risks.fields.riskEvaluation.decision.changed',
+          'Risk evaluation treatment decision changed from "{{oldValue}}" to "{{newValue}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'risks.fields.riskEvaluation.decision.removed',
-      },
-    },
+          'Risk evaluation treatment decision removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +22,7 @@ export default {
 
     return {
       newValue: () => RiskEvaluationDecisions[newValue],
-      oldValue: () => RiskEvaluationDecisions[oldValue],
+      oldValue: () => RiskEvaluationDecisions[oldValue]
     };
-  },
+  }
 };

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate, getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,10 +7,12 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'risks.fields.scores.item-added',
-        [ChangesKinds.ITEM_REMOVED]: 'risks.fields.scores.item-removed',
-      },
-    },
+        [ChangesKinds.ITEM_ADDED]:
+          'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}'
+      }
+    }
   ],
   notifications: [],
   data({ diffs: { scores }, newDoc }) {
@@ -21,7 +23,7 @@ export default {
     return {
       value: () => value,
       date: () => getPrettyOrgDate(scoredAt, orgId()),
-      userName: () => getUserFullNameOrEmail(scoredBy),
+      userName: () => getUserFullNameOrEmail(scoredBy)
     };
-  },
+  }
 };

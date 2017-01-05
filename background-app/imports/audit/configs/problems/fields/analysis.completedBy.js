@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -10,11 +10,14 @@ export default {
         return !diffs['analysis.status'];
       },
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.analysis.completedBy.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.analysis.completedBy.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.analysis.completedBy.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Root cause analysis completed by set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Root cause analysis completed by removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -22,7 +25,7 @@ export default {
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -6,14 +6,11 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'risks.fields.riskEvaluation.comments.added',
-        [ChangesKinds.FIELD_CHANGED]:
-          'risks.fields.riskEvaluation.comments.changed',
-        [ChangesKinds.FIELD_REMOVED]:
-          'risks.fields.riskEvaluation.comments.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]: 'Risk evaluation comments set',
+        [ChangesKinds.FIELD_CHANGED]: 'Risk evaluation comments changed',
+        [ChangesKinds.FIELD_REMOVED]: 'Risk evaluation comments removed'
+      }
+    }
   ],
-  notifications: [],
+  notifications: []
 };

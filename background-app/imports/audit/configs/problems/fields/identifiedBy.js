@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,19 +7,22 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.identifiedBy.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.identifiedBy.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.identifiedBy.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Identified by set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Identified by changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Identified by removed'
+      }
+    }
   ],
   notifications: [],
-  data({ diffs: { identifiedBy } }) {
+  data({ diffs: { identifiedBy }, newDoc }) {
     const { newValue, oldValue } = identifiedBy;
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

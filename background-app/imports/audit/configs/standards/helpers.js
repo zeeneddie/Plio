@@ -1,18 +1,16 @@
-import { _ } from 'meteor/underscore';
-
-import { getUserId } from '../../utils/helpers';
+import { getUserId } from '../../utils/helpers.js';
 
 
-export const getReceivers = function ({ newDoc, user }) {
+export const getReceivers = function({ newDoc, user }) {
   const { owner } = newDoc;
   const userId = getUserId(user);
 
-  return (owner !== userId) ? [owner] : [];
+  return (owner !== userId) ? [owner]: [];
 };
 
-export const getReceiversForIPReviewDate = function ({ newDoc, user }) {
-  const { owner: standardOwnerId } = newDoc;
-  const { owner: IPOwnerId } = newDoc.improvementPlan;
+export const getReceiversForIPReviewDate = function({ newDoc, user }) {
+  const { owner:standardOwnerId } = newDoc;
+  const { owner:IPOwnerId } = newDoc.improvementPlan;
   const userId = getUserId(user);
 
   const receivers = new Set();

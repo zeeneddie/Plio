@@ -1,4 +1,4 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
 
 
 export default {
@@ -6,9 +6,10 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_CHANGED]: 'non-conformities.fields.ref.url.changed',
-      },
-    },
+        [ChangesKinds.FIELD_CHANGED]:
+          'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"'
+      }
+    }
   ],
   notifications: [],
   data({ diffs }) {
@@ -16,7 +17,7 @@ export default {
 
     return {
       newValue: () => newValue,
-      oldValue: () => oldValue,
+      oldValue: () => oldValue
     };
-  },
+  }
 };

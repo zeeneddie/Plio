@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,19 +7,22 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'risks.fields.review.reviewedBy.added',
-        [ChangesKinds.FIELD_CHANGED]: 'risks.fields.review.reviewedBy.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'risks.fields.review.reviewedBy.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Review executor set to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Review executor changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Review executor removed'
+      }
+    }
   ],
   notifications: [],
-  data({ diffs }) {
+  data({ diffs, newDoc }) {
     const { newValue, oldValue } = diffs['review.reviewedBy'];
 
     return {
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue),
+      oldValue: () => getUserFullNameOrEmail(oldValue)
     };
-  },
+  }
 };

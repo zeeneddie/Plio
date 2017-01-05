@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyOrgDate } from '../../../utils/helpers';
+import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getPrettyOrgDate } from '../../../utils/helpers.js';
 
 
 export default {
@@ -7,11 +7,14 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'problems.fields.identifiedAt.added',
-        [ChangesKinds.FIELD_CHANGED]: 'problems.fields.identifiedAt.changed',
-        [ChangesKinds.FIELD_REMOVED]: 'problems.fields.identifiedAt.removed',
-      },
-    },
+        [ChangesKinds.FIELD_ADDED]:
+          'Identified at set to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          'Identified at removed'
+      }
+    }
   ],
   notifications: [],
   data({ diffs: { identifiedAt }, newDoc }) {
@@ -20,7 +23,7 @@ export default {
 
     return {
       newValue: () => getPrettyOrgDate(identifiedAt.newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(identifiedAt.oldValue, orgId()),
+      oldValue: () => getPrettyOrgDate(identifiedAt.oldValue, orgId())
     };
-  },
+  }
 };

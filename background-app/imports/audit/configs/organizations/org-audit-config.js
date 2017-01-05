@@ -1,15 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 
-import { CollectionNames } from '/imports/share/constants';
-import { Organizations } from '/imports/share/collections/organizations';
+import { CollectionNames } from '/imports/share/constants.js';
+import { Organizations } from '/imports/share/collections/organizations.js';
 
-import name from './fields/name';
-import currency from './fields/currency';
-import timezone from './fields/timezone';
-import rkScoringGuidelines from './fields/rkScoringGuidelines';
-import workflowDefaults from './fields/workflowDefaults';
-import reminders from './fields/reminders';
-import guidelines from './fields/guidelines';
+import name from './fields/name.js';
+import currency from './fields/currency.js';
+import timezone from './fields/timezone.js';
+import rkScoringGuidelines from './fields/rkScoringGuidelines.js';
+import workflowDefaults from './fields/workflowDefaults.js';
+import reminders from './fields/reminders.js';
+import guidelines from './fields/guidelines.js';
 
 
 export default OrgAuditConfig = {
@@ -21,8 +21,8 @@ export default OrgAuditConfig = {
   onCreated: {
     logs: [
       {
-        message: 'organizations.on-created.on-created',
-      },
+        message: 'Organization created',
+      }
     ],
   },
 
@@ -33,7 +33,7 @@ export default OrgAuditConfig = {
     rkScoringGuidelines,
     ...workflowDefaults,
     ...reminders,
-    ...guidelines,
+    ...guidelines
   ],
 
   onRemoved: { },
@@ -42,7 +42,7 @@ export default OrgAuditConfig = {
     return _id;
   },
 
-  docDescription() {
+  docDescription(doc) {
     return 'organization';
   },
 
@@ -56,8 +56,8 @@ export default OrgAuditConfig = {
 
   docUrl({ serialNumber }) {
     return Meteor.absoluteUrl(`${serialNumber}`, {
-      rootUrl: Meteor.settings.mainApp.url,
+      rootUrl: Meteor.settings.mainApp.url
     });
-  },
+  }
 
 };

@@ -1,13 +1,13 @@
-import { getLogData } from './helpers';
-import { getPrettyOrgDate } from '../../utils/helpers';
+import { getLogData } from './helpers.js';
+import { getPrettyOrgDate } from '../../utils/helpers.js';
 
 
 export default {
   logs: [
     {
-      message: 'occurrences.on-removed.on-removed',
-      logData: getLogData,
-    },
+      message: '{{{docName}}} removed: date - {{date}}',
+      logData: getLogData
+    }
   ],
   notifications: [],
   data({ oldDoc }) {
@@ -16,7 +16,7 @@ export default {
 
     return {
       docName: () => auditConfig.docName(oldDoc),
-      date: () => getPrettyOrgDate(oldDoc.date, orgId()),
+      date: () => getPrettyOrgDate(oldDoc.date, orgId())
     };
-  },
+  }
 };
