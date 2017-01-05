@@ -11,6 +11,10 @@ import FormButtonList from '../../../forms/components/FormButtonList';
 import SelectRadio from '../../../forms/components/SelectRadio';
 import CardBlockCollapse from '../../../components/CardBlockCollapse';
 import Subcard from '../../../components/Subcard1';
+import TextInput from '../../../forms/components/TextInput';
+import { setName } from '/imports/api/organizations/methods';
+import store from '/imports/client/store';
+import { callMethod } from '/imports/client/store/actions/modalActions';
 
 const enhance = compose(
   withState('state', 'setState', {
@@ -38,19 +42,23 @@ const enhance = compose(
             .concat(state.selectedItems.slice(index + 1)),
         };
       }),
+    onSubmit: ({ organization }) => (e) => {
+      const value = e.target.value;
+
+      store.dispatch(callMethod(setName, { _id: organization._id, name: value }));
+    },
   }),
   flattenProp('state'),
 );
-
-let subcard;
 
 const ModalEdit = enhance(({
   organization = {},
   onSelect,
   selected,
   selectedItems,
-  onDelete,
   items,
+  onDelete,
+  onSubmit,
 }) => (
   <div className="relative">
     <div className="card-block">
@@ -84,9 +92,14 @@ const ModalEdit = enhance(({
         <CardBlock>
           <Card>
             <Subcard leftText="Test #5">
+              <CardBlock>
+                <FormField>
+                  <span>Org name</span>
+                  <TextInput onBlur={onSubmit} value={organization.name} />
+                </FormField>
+              </CardBlock>
               <Subcard.Footer
-                ref={component => (subcard = component)}
-                onClose={() => console.log(subcard)}
+                onClose={(e, { onToggleCollapse }) => onToggleCollapse()}
                 onDelete={() => null}
               />
             </Subcard>

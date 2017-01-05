@@ -1,13 +1,15 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
-import withStateCollapsed from '../../helpers/withStateCollapsed';
+import withContextCollapsed from '../../helpers/withContextCollapsed';
 import CollapseBlock from '../CollapseBlock';
 import Label from '../Labels/Label';
 import ErrorSection from '../ErrorSection';
 import Footer from './Footer';
 
-const Subcard = withStateCollapsed(true)(({
+const enhance = withContextCollapsed(({ collapsed = true }) => collapsed);
+
+const Subcard = enhance(({
   collapsed,
   onToggleCollapse,
   errorText,
@@ -34,7 +36,7 @@ const Subcard = withStateCollapsed(true)(({
       <div>
         <ErrorSection size="3" {...{ errorText }} />
         <div className="subcard-content">
-          {React.cloneElement(children, { collapsed, onToggleCollapse })}
+          {children}
         </div>
       </div>
     </CollapseBlock>
@@ -42,6 +44,7 @@ const Subcard = withStateCollapsed(true)(({
 });
 
 Subcard.propTypes = {
+  collapsed: PropTypes.bool,
   errorText: PropTypes.string,
   isNew: PropTypes.bool,
   leftText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

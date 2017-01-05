@@ -1,45 +1,63 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { CardBlock } from 'reactstrap';
+import { getContext } from 'recompose';
 
 import Button from '../../Buttons/Button';
 import IconLoading from '../../Icons/IconLoading';
 
-const SubcardFooter = ({ isSaving, isNew, onClose, onDelete }) => {
-  let content = null;
+const enhance = getContext({ collapsed: PropTypes.bool, onToggleCollapse: PropTypes.func });
 
-  if (isSaving) {
-    content = (
-      <div>
-        <IconLoading margin="bottom" />
-        <span>Saving...</span>
-      </div>
-    );
-  } else if (isNew) content = (<span>Save</span>);
-  else content = (<span>Close</span>);
+const SubcardFooter = enhance(({ isSaving, isNew, onClose, onSave, onDelete, ...otherProps }) => {
+  let content = null;
+  let rightButtonCb = onSave;
+  const showRightButton = !!(isNew && onSave || !isNew && onClose);
+
+  if (showRightButton) {
+    if (isSaving) {
+      content = (
+        <div>
+          <IconLoading margin="bottom" />
+          <span>Saving...</span>
+        </div>
+      );
+    } else if (isNew) {
+      content = (<span>Save</span>);
+    } else {
+      rightButtonCb = onClose;
+      content = (<span>Close</span>);
+    }
+  }
 
   return (
     <CardBlock className="clearfix">
-      <Button
-        type="secondary"
-        pull="right"
-        className={cx({ disabled: isSaving })}
-        onClick={onClose}
-      >
-        {content}
-      </Button>
-      <Button type="secondary" pull="left" onClick={onDelete}>
-        Delete
-      </Button>
+      {showRightButton && (
+        <Button
+          type="secondary"
+          pull="right"
+          className={cx({ disabled: isSaving })}
+          onClick={e => !isSaving && rightButtonCb(e, { isSaving, isNew, ...otherProps })}
+        >
+          {content}
+        </Button>
+      )}
+      {!!onDelete && (
+        <Button type="secondary" pull="left" onClick={onDelete}>
+          Delete
+        </Button>
+      )}
     </CardBlock>
   );
-};
+});
 
 SubcardFooter.propTypes = {
+  onToggleCollapse: PropTypes.func,
+  collapsed: PropTypes.bool,
   isSaving: PropTypes.bool,
   isNew: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  onSave: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 export default SubcardFooter;
