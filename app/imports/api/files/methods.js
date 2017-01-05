@@ -9,6 +9,8 @@ import {
   ProgressSchema, ErrorSchema
 } from '/imports/share/schemas/schemas.js';
 import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js';
+import { nameIsAllowed } from './validators.js';
+import { FILE_NAME_NOT_VALID } from './errors.js';
 
 const onUpdateCheck = ({ _id, userId }) => {
 	const { organizationId } = checkDocExistance(Files, { _id });
@@ -21,10 +23,15 @@ const onUpdateCheck = ({ _id, userId }) => {
 export const insert = new ValidatedMethod({
   name: 'Files.insert',
 
-  validate: new SimpleSchema([RequiredSchema]).validator(),
+  validate(args) {
+    new SimpleSchema([RequiredSchema]).validator(args);
+
+    if (!nameIsAllowed(args.name)) throw FILE_NAME_NOT_VALID;
+  },
 
   run({ ...args }) {
     const userId = this.userId;
+
     if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create files');
     }
