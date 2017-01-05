@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars';
+import { Meteor } from 'meteor/meteor';
 import moment from 'moment-timezone';
 
 import { Organizations } from '/imports/share/collections/organizations.js';
@@ -8,9 +8,7 @@ import NCAuditConfig from '../configs/non-conformities/nc-audit-config.js';
 import RiskAuditConfig from '../configs/risks/risk-audit-config.js';
 
 
-export const getUserId = (user) => {
-  return (user === SystemName) ? user : user._id;
-};
+export const getUserId = user => ((user === SystemName) ? user : user._id);
 
 export const getUserFullNameOrEmail = (userOrId) => {
   let user = userOrId;
@@ -31,10 +29,8 @@ export const getPrettyOrgDate = (date, organizationId, format = 'MMMM DD, YYYY')
   return moment(date).tz(timezone || 'UTC').format(format);
 };
 
-export const getLinkedDocAuditConfig = (docType) => {
-  return {
-    [DocumentTypes.STANDARD]: StandardAuditConfig,
-    [DocumentTypes.NON_CONFORMITY]: NCAuditConfig,
-    [DocumentTypes.RISK]: RiskAuditConfig
-  }[docType];
-};
+export const getLinkedDocAuditConfig = (docType) => ({
+  [DocumentTypes.STANDARD]: StandardAuditConfig,
+  [DocumentTypes.NON_CONFORMITY]: NCAuditConfig,
+  [DocumentTypes.RISK]: RiskAuditConfig,
+}[docType]);

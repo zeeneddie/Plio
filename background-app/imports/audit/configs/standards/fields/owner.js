@@ -39,12 +39,20 @@ export default {
     };
   },
   receivers({ newDoc, oldDoc, user }) {
-    const { owner:newOwner } = newDoc;
     const { owner:oldOwner } = oldDoc;
-    const userId = getUserId(user);
+    const { owner:newOwner } = newDoc;
+    let receivers = getReceivers({ newDoc, user });
 
-    return _([newOwner, oldOwner]).filter((owner) => {
-      return owner !== userId;
+    [oldOwner, newOwner].forEach((owner) => {
+      if (owner !== getUserId(user)) {
+        const index = receivers.indexOf(owner);
+
+        if (index === -1) {
+          receivers = [...receivers, owner];
+        }
+      }
     });
+
+    return receivers;
   }
 };

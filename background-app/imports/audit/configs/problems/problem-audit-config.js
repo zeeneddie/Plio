@@ -73,6 +73,9 @@ export default ProblemAuditConfig = {
 
   docOrgId({ organizationId }) {
     return organizationId;
-  }
+  },
 
+  notifyList({ notify: notifyList }) {
+    return notifyList;
+  },
 };

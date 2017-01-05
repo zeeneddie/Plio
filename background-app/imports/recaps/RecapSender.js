@@ -1,5 +1,7 @@
 import moment from 'moment-timezone';
 import pluralize from 'pluralize';
+import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
 import { AuditLogs } from '/imports/share/collections/audit-logs.js';
 import { CollectionNames } from '/imports/share/constants.js';
@@ -9,7 +11,6 @@ import { NonConformities } from '/imports/share/collections/non-conformities.js'
 import { Risks } from '/imports/share/collections/risks.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { WorkItems } from '/imports/share/collections/work-items.js';
-import { getCollectionByName } from '/imports/share/helpers.js';
 import NotificationSender from '/imports/share/utils/NotificationSender.js';
 
 
@@ -35,7 +36,7 @@ export default class RecapSender {
 
   _prepare() {
     this._organization = Organizations.findOne({
-      _id: this._organizationId
+      _id: this._organizationId,
     });
 
     const { timezone } = this._organization;
@@ -43,10 +44,13 @@ export default class RecapSender {
     let recapDate;
 
     if (!date) {
-      recapDate = moment().tz(timezone).subtract(1, 'day').toDate();
+      recapDate = moment()
+        .tz(timezone)
+        .subtract(1, 'day')
+        .toDate();
     } else {
       recapDate = moment.tz([
-        date.getFullYear(), date.getMonth(), date.getDate()
+        date.getFullYear(), date.getMonth(), date.getDate(),
       ], timezone).toDate();
     }
 
@@ -63,6 +67,7 @@ export default class RecapSender {
 
     this._docsData = [];
     this._orgData = null;
+    this._unsubscribeUrl = null;
   }
 
   _processLogs() {
@@ -73,7 +78,7 @@ export default class RecapSender {
       CollectionNames.NCS,
       CollectionNames.RISKS,
       CollectionNames.ACTIONS,
-      CollectionNames.ORGANIZATIONS
+      CollectionNames.ORGANIZATIONS,
     ];
 
     const query = {
@@ -81,8 +86,8 @@ export default class RecapSender {
       collection: { $in: docsCollections },
       date: {
         $gt: startDate,
-        $lt: endDate
-      }
+        $lt: endDate,
+      },
     };
 
     const options = { sort: { date: -1 } };
@@ -101,15 +106,16 @@ export default class RecapSender {
     const templateData = {
       organizationName: this._organization.name,
       title: emailSubject,
+      unsubscribeUrl: this._unsubscribeUrl,
       docsData: this._docsData,
-      orgData: this._orgData
+      orgData: this._orgData,
     };
 
     new NotificationSender({
       templateName: RECAP_EMAIL_TEMPLATE,
       recipients,
       emailSubject,
-      templateData
+      templateData,
     }).sendEmail({ isReportEnabled: true });
   }
 
@@ -147,7 +153,7 @@ export default class RecapSender {
       [CollectionNames.STANDARDS]: this._standardsIds,
       [CollectionNames.NCS]: this._ncsIds,
       [CollectionNames.RISKS]: this._risksIds,
-      [CollectionNames.ACTIONS]: this._actionsIds
+      [CollectionNames.ACTIONS]: this._actionsIds,
     }[collection];
 
     set && set.add(documentId);
@@ -173,14 +179,18 @@ export default class RecapSender {
     const { serialNumber } = this._organization;
     const mainAppUrl = Meteor.settings.mainApp.url;
 
+    this._unsubscribeUrl = Meteor.absoluteUrl(`${serialNumber}/unsubscribe`, {
+      rootUrl: mainAppUrl,
+    });
+
     this._makeDocsData({
       collection: Standards,
       idsSet: this._standardsIds,
       docName: 'standard',
       descFn: doc => doc.title,
       urlFn: doc => Meteor.absoluteUrl(`${serialNumber}/standards/${doc._id}`, {
-        rootUrl: mainAppUrl
-      })
+        rootUrl: mainAppUrl,
+      }),
     });
 
     this._makeDocsData({
@@ -189,8 +199,8 @@ export default class RecapSender {
       docName: 'non-conformity',
       descFn: doc => `${doc.sequentialId} "${doc.title}"`,
       urlFn: doc => Meteor.absoluteUrl(`${serialNumber}/non-conformities/${doc._id}`, {
-        rootUrl: mainAppUrl
-      })
+        rootUrl: mainAppUrl,
+      }),
     });
 
     this._makeDocsData({
