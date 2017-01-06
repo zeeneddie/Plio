@@ -1,14 +1,18 @@
 import React, { PropTypes } from 'react';
+import { withState } from 'recompose';
 import Button from 'reactstrap/lib/Button';
 import CardTitle from 'reactstrap/lib/CardTitle';
 import CardBlock from 'reactstrap/lib/CardBlock';
 import Icon from '/imports/ui/react/components/Icon';
+import CardDivider from '/imports/ui/react/components/CardDivider';
+import Subcard from '/imports/ui/react/components/Subcard';
 import Form from '/imports/ui/react/forms/components/Form';
 
 import Filter from '../Filter';
 import SelectOptions from '../SelectOptions';
 
-const DataExportModal = (props) => {
+const enhance = withState('isFilterCollapsed', 'setIsFilterCollapsed', true);
+const DataExportModal = enhance((props) => {
   const exportLabel = props.processing && 'Exporting...' ||
     props.downloadLink && 'Export again' || 'Export';
 
@@ -16,13 +20,22 @@ const DataExportModal = (props) => {
     <Form onSubmit={props.onSubmit}>
       <div className="relative">
         <CardBlock>
-          <CardTitle>Export filter</CardTitle>
-          <Filter {...props} />
-        </CardBlock>
-        <CardBlock>
-          <CardTitle>Select export fields</CardTitle>
           <SelectOptions {...props} />
         </CardBlock>
+        <CardDivider />
+        <Subcard
+          collapsed={props.isFilterCollapsed}
+          setCollapsed={props.setIsFilterCollapsed}
+        >
+          <Subcard.Title>
+            <Subcard.TitleItem pull="left">
+              Advanced filters
+            </Subcard.TitleItem>
+          </Subcard.Title>
+          <Subcard.Content>
+            <Filter {...props} />
+          </Subcard.Content>
+        </Subcard>
 
         <CardBlock className="text-xs-center">
           <Button color="primary" disabled={props.processing}>
@@ -37,7 +50,7 @@ const DataExportModal = (props) => {
       </div>
     </Form>
   );
-};
+});
 
 DataExportModal.propTypes = {
   downloadLink: PropTypes.string,
