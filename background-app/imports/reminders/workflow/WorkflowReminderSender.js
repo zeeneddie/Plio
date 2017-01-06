@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions';
-import { DocumentTypes, ProblemMagnitudes } from '/imports/share/constants';
+import { DocumentTypes, ProblemMagnitudes, TimeUnits } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Organizations } from '/imports/share/collections/organizations';
 import { renderTemplate } from '/imports/share/helpers';
@@ -42,9 +42,7 @@ export default class WorkflowReminderSender {
     this._prepare();
 
     const { reminders } = this._organization;
-    if (!reminders) {
-      throw new Error('Organization reminders is not configured');
-    }
+    this._checkRemindersConfiguration(reminders);
 
     const { minorNc, majorNc, criticalNc, improvementPlan } = reminders;
 
@@ -56,8 +54,36 @@ export default class WorkflowReminderSender {
     this._sendReminders();
   }
 
-  _createProblemReminders(dateConfig, magnitude) {
-    const { start, until } = dateConfig;
+  _checkRemindersConfiguration(remindersConfig) {
+    const timeConfigPattern = {
+      timeValue: Number,
+      timeUnit: Match.OneOf(..._.values(TimeUnits)),
+    };
+
+    const reminderTypesPattern = {
+      start: { ...timeConfigPattern },
+      interval: { ...timeConfigPattern },
+      until: { ...timeConfigPattern },
+    };
+
+    const remindersConfigPattern = {
+      minorNc: Match.Maybe({ ...reminderTypesPattern }),
+      majorNc: Match.Maybe({ ...reminderTypesPattern }),
+      criticalNc: Match.Maybe({ ...reminderTypesPattern }),
+      improvementPlan: Match.Maybe({ ...reminderTypesPattern }),
+    };
+
+    if (!Match.test(remindersConfig, remindersConfigPattern)) {
+      throw new Error('Configuration of organization reminders is not valid');
+    }
+  }
+
+  _createProblemReminders(timeConfig, magnitude) {
+    if (!timeConfig) {
+      return;
+    }
+
+    const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
     const getIds = (collection) => (
@@ -75,6 +101,9 @@ export default class WorkflowReminderSender {
     const createProblemReminders = (collection, ids, docType) => {
       const query = {
         _id: { $in: ids },
+        isDeleted: false,
+        deletedAt: { $exists: false },
+        deletedBy: { $exists: false },
         $or: [{
           'analysis.status': 0, // Not completed
           'analysis.executor': { $exists: true },
@@ -97,23 +126,23 @@ export default class WorkflowReminderSender {
 
       collection.find(query).forEach((doc) => {
         const isAnalysisCompleted = doc.analysis.status === 1;
-        let date;
+        let targetDate;
         let reminderType;
 
         if (isAnalysisCompleted) {
-          date = doc.updateOfStandards.targetDate;
+          targetDate = doc.updateOfStandards.targetDate;
           reminderType = ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS;
         } else {
-          date = doc.analysis.targetDate;
+          targetDate = doc.analysis.targetDate;
           reminderType = ReminderTypes.COMPLETE_ANALYSIS;
         }
 
-        if (!this._shouldSendReminder(date, dateConfig)) {
+        if (!this._shouldSendReminder(targetDate, timeConfig)) {
           return;
         }
 
         this._reminders.push({
-          doc, docType, dateConfig, date, reminderType,
+          doc, docType, targetDate, reminderType,
         });
       });
     };
@@ -123,6 +152,9 @@ export default class WorkflowReminderSender {
 
     const actionQuery = {
       'linkedTo.documentId': { $in: [...NCsIds, ...risksIds] },
+      isDeleted: false,
+      deletedAt: { $exists: false },
+      deletedBy: { $exists: false },
       $or: [{
         isCompleted: false,
         toBeCompletedBy: { $exists: true },
@@ -145,35 +177,42 @@ export default class WorkflowReminderSender {
 
     Actions.find(actionQuery).forEach((doc) => {
       const isCompleted = doc.isCompleted === true;
-      let date;
+      let targetDate;
       let reminderType;
 
       if (isCompleted) {
-        date = doc.verificationTargetDate;
+        targetDate = doc.verificationTargetDate;
         reminderType = ReminderTypes.VERIFY_ACTION;
       } else {
-        date = doc.completionTargetDate;
+        targetDate = doc.completionTargetDate;
         reminderType = ReminderTypes.COMPLETE_ACTION;
       }
 
-      if (!this._shouldSendReminder(date, dateConfig)) {
+      if (!this._shouldSendReminder(targetDate, timeConfig)) {
         return;
       }
 
       this._reminders.push({
-        doc, dateConfig, date, reminderType, docType: doc.type,
+        doc, targetDate, reminderType, docType: doc.type,
       });
     });
   }
 
-  _createImprovementPlanReminders(dateConfig) {
-    const { start, until } = dateConfig;
+  _createImprovementPlanReminders(timeConfig) {
+    if (!timeConfig) {
+      return;
+    }
+
+    const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
     const reminderType = ReminderTypes.REVIEW_IMPROVEMENT_PLAN;
 
     const createReminders = (collection, docType) => {
       const query = {
+        isDeleted: false,
+        deletedAt: { $exists: false },
+        deletedBy: { $exists: false },
         'improvementPlan.owner': { $exists: true },
         'improvementPlan.reviewDates.date': {
           $gte: startDate,
@@ -185,12 +224,12 @@ export default class WorkflowReminderSender {
         const reviewDates = _(doc.improvementPlan.reviewDates).sortBy('date');
 
         const reviewDate = reviewDates.find(({ date }) => (
-          this._shouldSendReminder(date, dateConfig)
+          this._shouldSendReminder(date, timeConfig)
         ));
 
         if (reviewDate) {
           this._reminders.push({
-            doc, docType, dateConfig, reminderType, date: reviewDate.date,
+            doc, docType, reminderType, targetDate: reviewDate.date,
           });
         }
       });
@@ -204,13 +243,13 @@ export default class WorkflowReminderSender {
   _sendReminders() {
     this._reminders.forEach((reminder) => {
       const { date, reminderType } = reminder;
-
       const config = ReminderConfig[reminderType];
 
       const args = {
         org: this._organization,
         ...reminder,
       };
+
       const templateData = config.data(args);
 
       const today = this._date;
@@ -226,7 +265,7 @@ export default class WorkflowReminderSender {
       const title = renderTemplate(config.title[templateKey], templateData);
       const text = renderTemplate(config.text[templateKey], templateData);
 
-      const receivers = config.receivers(args);
+      const receivers = config.receivers(args) || [];
       if (!receivers.length) {
         return;
       }
@@ -240,10 +279,6 @@ export default class WorkflowReminderSender {
       const url = config.url(args);
       if (url) {
         Object.assign(emailTemplateData, {
-          avatar: {
-            alt: 'Plio',
-            url: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
-          },
           button: {
             label: 'Go to this action',
             url,
@@ -272,19 +307,6 @@ export default class WorkflowReminderSender {
   }
 
   _getDateRange(before, after) {
-    const dateConfigPattern = {
-      timeValue: Number,
-      timeUnit: String,
-    };
-
-    [before, after].forEach((config) => {
-      if (!Match.test(config, dateConfigPattern)) {
-        throw new Error(
-          `${JSON.stringify(config)} is not a valid reminder configuration`
-        );
-      }
-    });
-
     const duration = moment.duration(before.timeValue, before.timeUnit);
     duration.add(after.timeValue, after.timeUnit);
 

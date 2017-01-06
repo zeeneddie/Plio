@@ -1,0 +1,41 @@
+import { ActionTypes, ProblemTypes } from '/imports/share/constants';
+
+// actions
+export const getCADesc = () => 'corrective action';
+
+export const getPADesc = () => 'preventative action';
+
+export const getRCDesc = () => 'risk control';
+
+export const getActionDesc = (docType) => {
+  const descFn = {
+    [ActionTypes.CORRECTIVE_ACTION]: getCADesc,
+    [ActionTypes.PREVENTATIVE_ACTION]: getPADesc,
+    [ActionTypes.RISK_CONTROL]: getRCDesc,
+  }[docType];
+
+  return descFn && descFn();
+};
+
+export const getActionName = doc => `${doc.sequentialId} "${doc.title}"`;
+
+// problems
+export const getNCDesc = () => 'non-conformity';
+
+export const getRiskDesc = () => 'risk';
+
+export const getProblemDesc = (problemType) => {
+  const descFn = {
+    [ProblemTypes.NON_CONFORMITY]: getNCDesc,
+    [ProblemTypes.RISK]: getRiskDesc,
+  }[problemType];
+
+  return descFn && descFn();
+};
+
+export const getProblemName = doc => `${doc.sequentialId} "${doc.title}"`;
+
+// standards
+export const getStandardDesc = () => 'standard';
+
+export const getStandardName = doc => `"${doc.title}"`;

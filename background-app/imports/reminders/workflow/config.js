@@ -1,17 +1,24 @@
-import moment from 'moment-timezone';
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
-import { DocumentTypes, WorkItemsStore } from '/imports/share/constants.js';
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import { capitalize, getUserFullNameOrEmail } from '/imports/share/helpers.js';
+import { DocumentTypes, WorkItemsStore } from '/imports/share/constants';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { capitalize, getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getPrettyTzDate, getDiffInDays } from '/imports/helpers/date';
 import {
-  getDiffInDays,
+  getActionDesc,
+  getActionName,
+  getProblemDesc,
+  getProblemName,
+  getStandardDesc,
+  getStandardName,
+} from '/imports/helpers/description';
+import {
   getDocUnsubscribePath,
+  getActionUrl,
   getProblemUrl,
-  getDocUrl,
-  getAbsoluteUrl,
-} from '/imports/helpers';
+  getStandardUrl,
+  getWorkItemUrl,
+} from '/imports/helpers/url';
 
 
 const ReminderTypes = {
@@ -25,56 +32,6 @@ const ReminderTypes = {
 const ReminderDocTypes = {
   ...DocumentTypes,
 };
-
-const getPrettyDate = (date, timezone) => moment(date).tz(timezone).format('MMMM DD, YYYY');
-
-const getProblemName = doc => `${doc.sequentialId} "${doc.title}"`;
-
-const getActionName = doc => `${doc.sequentialId} "${doc.title}"`;
-
-const getStandardName = doc => `"${doc.title}"`;
-
-const getProblemDesc = (docType) => ({
-  [ReminderDocTypes.NON_CONFORMITY]: 'non-conformity',
-  [ReminderDocTypes.RISK]: 'risk',
-}[docType]);
-
-const getActionDesc = (docType) => ({
-  [ReminderDocTypes.CORRECTIVE_ACTION]: 'corrective action',
-  [ReminderDocTypes.PREVENTATIVE_ACTION]: 'preventative action',
-  [ReminderDocTypes.RISK_CONTROL]: 'risk control',
-}[docType]);
-
-const getStandardDesc = () => 'standard';
-
-const getProblemUrlByData = ({ doc, docType, org }) => getProblemUrl(doc, docType, org);
-
-const getActionUrl = ({ doc, reminderType, org }) => {
-  const workItemType = {
-    [ReminderTypes.COMPLETE_ACTION]: WorkItemsStore.TYPES.COMPLETE_ACTION,
-    [ReminderTypes.VERIFY_ACTION]: WorkItemsStore.TYPES.VERIFY_ACTION,
-  }[reminderType];
-
-  const { _id } = WorkItems.findOne({
-    'linkedDoc._id': doc._id,
-    type: workItemType,
-    isCompleted: false,
-  }) || {};
-
-  return getAbsoluteUrl(`${org.serialNumber}/work-inbox?id=${_id}`);
-};
-
-const getActionUrlByPrefix = ({ doc, org }) => getDocUrl({
-  serialNumber: org.serialNumber,
-  documentId: doc._id,
-  prefix: 'actions',
-});
-
-const getStandardUrl = ({ doc, org }) => getDocUrl({
-  serialNumber: org.serialNumber,
-  documentId: doc._id,
-  prefix: 'standards',
-});
 
 const getDocDesc = (docType) => {
   switch (docType) {
@@ -108,17 +65,34 @@ const getDocName = (doc, docType) => {
   }
 };
 
-const getDocUrlByData = ({ docType, ...rest }) => {
+const getActionUrlByData = ({ doc, org }) => getActionUrl(org.serialNumber, doc._id);
+
+const getWorkItemUrlByAction = ({ doc, reminderType, org }) => {
+  const workItemType = {
+    [ReminderTypes.COMPLETE_ACTION]: WorkItemsStore.TYPES.COMPLETE_ACTION,
+    [ReminderTypes.VERIFY_ACTION]: WorkItemsStore.TYPES.VERIFY_ACTION,
+  }[reminderType];
+
+  const { _id } = WorkItems.findOne({
+    'linkedDoc._id': doc._id,
+    type: workItemType,
+    isCompleted: false,
+  }) || {};
+
+  return _id && getWorkItemUrl(org.serialNumber, _id);
+};
+
+const getDocUrlByData = ({ doc, docType, org, reminderType }) => {
   switch (docType) {
     case ReminderDocTypes.NON_CONFORMITY:
     case ReminderDocTypes.RISK:
-      return getProblemUrlByData({ docType, ...rest });
+      return getProblemUrl(doc, docType, org);
     case ReminderDocTypes.CORRECTIVE_ACTION:
     case ReminderDocTypes.PREVENTATIVE_ACTION:
     case ReminderDocTypes.RISK_CONTROL:
-      return getActionUrl({ docType, ...rest });
+      return getWorkItemUrlByAction({ doc, reminderType, org });
     case ReminderDocTypes.STANDARD:
-      return getStandardUrl({ docType, ...rest });
+      return getStandardUrl(org.serialNumber, doc._id);
     default:
       return undefined;
   }
@@ -149,20 +123,20 @@ const ReminderConfig = {
         'to complete a root cause analysis of {{problemDesc}} ' +
         '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, dateConfig, org }) => ({
+    data: ({ doc, docType, targetDate, org }) => ({
       docName: () => getProblemName(doc),
       problemDesc: () => getProblemDesc(docType),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
+      date: () => getPrettyTzDate(targetDate, org.timezone),
+      diff: () => getDiffInDays(targetDate, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.analysis.assignedBy),
     }),
     receivers: ({ doc: { analysis, notify } }) => (
-      (analysis.executor && notify.includes(analysis.executor))
+      (analysis.executor && (notify.indexOf(analysis.executor) > -1))
         ? [analysis.executor]
         : []
     ),
-    url: getProblemUrlByData,
-    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getProblemUrlByData),
+    url: getDocUrlByData,
+    unsubscribeUrl: _.compose(getDocUnsubscribePath, getDocUrlByData),
   },
 
   [ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS]: {
@@ -188,20 +162,20 @@ const ReminderConfig = {
         'to complete an update of standards related to {{problemDesc}} ' +
         '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, org }) => ({
+    data: ({ doc, docType, targetDate, org }) => ({
       docName: () => getProblemName(doc),
       problemDesc: () => getProblemDesc(docType),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
+      date: () => getPrettyTzDate(targetDate, org.timezone),
+      diff: () => getDiffInDays(targetDate, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.updateOfStandards.assignedBy),
     }),
     receivers: ({ doc: { updateOfStandards, notify } }) => (
-      (updateOfStandards.executor && notify.includes(updateOfStandards.executor))
+      (updateOfStandards.executor && (notify.indexOf(updateOfStandards.executor) > -1))
         ? [updateOfStandards.executor]
         : []
     ),
-    url: getProblemUrlByData,
-    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getProblemUrlByData),
+    url: getDocUrlByData,
+    unsubscribeUrl: _.compose(getDocUnsubscribePath, getDocUrlByData),
   },
 
   [ReminderTypes.COMPLETE_ACTION]: {
@@ -224,18 +198,18 @@ const ReminderConfig = {
         'to complete {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, org }) => ({
+    data: ({ doc, docType, targetDate, org }) => ({
       docName: () => getActionName(doc),
       actionDesc: () => getActionDesc(docType),
       actionDescCapitalized: () => capitalize(getActionDesc(docType)),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
+      date: () => getPrettyTzDate(targetDate, org.timezone),
+      diff: () => getDiffInDays(targetDate, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.completionAssignedBy),
     }),
-    url: getActionUrl,
-    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getActionUrlByPrefix),
+    url: getDocUrlByData,
+    unsubscribeUrl: _.compose(getDocUnsubscribePath, getActionUrlByData),
     receivers: ({ doc: { toBeCompletedBy, notify } }) => (
-      (toBeCompletedBy && notify.includes(toBeCompletedBy))
+      (toBeCompletedBy && (notify.indexOf(toBeCompletedBy) > -1))
         ? [toBeCompletedBy]
         : []
     ),
@@ -261,21 +235,21 @@ const ReminderConfig = {
         'to verify {{actionDesc}} {{{docName}}} by {{date}}. ' +
         'This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, org }) => ({
+    data: ({ doc, docType, targetDate, org }) => ({
       docName: () => getActionName(doc),
       actionDesc: () => getActionDesc(docType),
       actionDescCapitalized: () => capitalize(getActionDesc(docType)),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
+      date: () => getPrettyTzDate(targetDate, org.timezone),
+      diff: () => getDiffInDays(targetDate, org.timezone),
       userName: () => getUserFullNameOrEmail(doc.verificationAssignedBy),
     }),
     receivers: ({ doc: { toBeVerifiedBy, notify } }) => (
-      (toBeVerifiedBy && notify.includes(toBeVerifiedBy))
+      (toBeVerifiedBy && (notify.indexOf(toBeVerifiedBy) > -1))
         ? [toBeVerifiedBy]
         : []
     ),
-    url: getActionUrl,
-    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getActionUrlByPrefix),
+    url: getDocUrlByData,
+    unsubscribeUrl: _.compose(getDocUnsubscribePath, getActionUrlByData),
   },
 
   [ReminderTypes.REVIEW_IMPROVEMENT_PLAN]: {
@@ -286,28 +260,28 @@ const ReminderConfig = {
     },
     text: {
       beforeDue:
-        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
-        'This action is {{diff}} before due.',
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} ' +
+        'by {{date}}. This action is {{diff}} before due.',
       dueToday:
-        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
-        'This action is due today.',
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} ' +
+        'by {{date}}. This action is due today.',
       overdue:
-        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} by {{date}}. ' +
-        'This action is {{diff}} overdue.',
+        'You have been asked to review improvement plan of {{docDesc}} {{{docName}}} ' +
+        'by {{date}}. This action is {{diff}} overdue.',
     },
-    data: ({ doc, docType, date, org }) => ({
+    data: ({ doc, docType, targetDate, org }) => ({
       docName: () => getDocName(doc, docType),
       docDesc: () => getDocDesc(docType),
-      date: () => getPrettyDate(date, org.timezone),
-      diff: () => getDiffInDays(date, org.timezone),
+      date: () => getPrettyTzDate(targetDate, org.timezone),
+      diff: () => getDiffInDays(targetDate, org.timezone),
     }),
     receivers: ({ doc: { improvementPlan, notify } }) => (
-      (improvementPlan.owner && notify.includes(improvementPlan.owner))
+      (improvementPlan.owner && (notify.indexOf(improvementPlan.owner) > -1))
         ? [improvementPlan.owner]
         : []
     ),
     url: getDocUrlByData,
-    unsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, getDocUrlByData),
+    unsubscribeUrl: _.compose(getDocUnsubscribePath, getDocUrlByData),
   },
 
 };
