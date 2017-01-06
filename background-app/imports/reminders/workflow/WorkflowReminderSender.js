@@ -2,20 +2,20 @@ import { Match } from 'meteor/check';
 import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 
-import { Actions } from '/imports/share/collections/actions.js';
-import { DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { renderTemplate } from '/imports/share/helpers.js';
-import { Risks } from '/imports/share/collections/risks.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { ReminderConfig, ReminderTypes } from './reminder-config.js';
-import NotificationSender from '/imports/share/utils/NotificationSender.js';
+import { Actions } from '/imports/share/collections/actions';
+import { DocumentTypes, ProblemMagnitudes } from '/imports/share/constants';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { Organizations } from '/imports/share/collections/organizations';
+import { renderTemplate } from '/imports/share/helpers';
+import { Risks } from '/imports/share/collections/risks';
+import { Standards } from '/imports/share/collections/standards';
+import { ReminderConfig, ReminderTypes } from './config';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 const REMINDER_EMAIL_TEMPLATE = 'defaultEmail';
 
-export default class ReminderSender {
+export default class WorkflowReminderSender {
 
   constructor(organizationId) {
     this._organizationId = organizationId;
@@ -29,7 +29,12 @@ export default class ReminderSender {
 
     this._organization = organization;
     this._timezone = organization.timezone || 'UTC';
-    this._date = moment().tz(this._timezone).startOf('day').toDate();
+
+    this._date = moment()
+      .tz(this._timezone)
+      .startOf('day')
+      .toDate();
+
     this._reminders = [];
   }
 
@@ -55,14 +60,14 @@ export default class ReminderSender {
     const { start, until } = dateConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-    const getIds = (collection) => {
-      return collection.find({
+    const getIds = (collection) => (
+      collection.find({
         magnitude,
-        organizationId: this._organizationId
+        organizationId: this._organizationId,
       }, {
-        fields: { _id: 1 }
-      }).map(doc => doc._id);
-    };
+        fields: { _id: 1 },
+      }).map(doc => doc._id)
+    );
 
     const NCsIds = getIds(NonConformities);
     const risksIds = getIds(Risks);
@@ -75,8 +80,8 @@ export default class ReminderSender {
           'analysis.executor': { $exists: true },
           'analysis.targetDate': {
             $gte: startDate,
-            $lte: endDate
-          }
+            $lte: endDate,
+          },
         }, {
           'analysis.status': 1, // Completed
           'analysis.completedAt': { $exists: true },
@@ -85,14 +90,15 @@ export default class ReminderSender {
           'updateOfStandards.executor': { $exists: true },
           'updateOfStandards.targetDate': {
             $gte: startDate,
-            $lte: endDate
-          }
-        }]
+            $lte: endDate,
+          },
+        }],
       };
 
       collection.find(query).forEach((doc) => {
         const isAnalysisCompleted = doc.analysis.status === 1;
-        let date, reminderType;
+        let date;
+        let reminderType;
 
         if (isAnalysisCompleted) {
           date = doc.updateOfStandards.targetDate;
@@ -107,7 +113,7 @@ export default class ReminderSender {
         }
 
         this._reminders.push({
-          doc, docType, dateConfig, date, reminderType
+          doc, docType, dateConfig, date, reminderType,
         });
       });
     };
@@ -122,8 +128,8 @@ export default class ReminderSender {
         toBeCompletedBy: { $exists: true },
         completionTargetDate: {
           $gte: startDate,
-          $lte: endDate
-        }
+          $lte: endDate,
+        },
       }, {
         isCompleted: true,
         completedAt: { $exists: true },
@@ -132,14 +138,15 @@ export default class ReminderSender {
         toBeVerifiedBy: { $exists: true },
         verificationTargetDate: {
           $gte: startDate,
-          $lte: endDate
-        }
-      }]
+          $lte: endDate,
+        },
+      }],
     };
 
     Actions.find(actionQuery).forEach((doc) => {
       const isCompleted = doc.isCompleted === true;
-      let date, reminderType;
+      let date;
+      let reminderType;
 
       if (isCompleted) {
         date = doc.verificationTargetDate;
@@ -154,7 +161,7 @@ export default class ReminderSender {
       }
 
       this._reminders.push({
-        doc, dateConfig, date, reminderType, docType: doc.type
+        doc, dateConfig, date, reminderType, docType: doc.type,
       });
     });
   }
@@ -170,20 +177,22 @@ export default class ReminderSender {
         'improvementPlan.owner': { $exists: true },
         'improvementPlan.reviewDates.date': {
           $gte: startDate,
-          $lte: endDate
-        }
+          $lte: endDate,
+        },
       };
 
       collection.find(query).forEach((doc) => {
         const reviewDates = _(doc.improvementPlan.reviewDates).sortBy('date');
 
-        const reviewDate = _(reviewDates).find(({ date }) => {
-          return this._shouldSendReminder(date, dateConfig);
-        });
+        const reviewDate = reviewDates.find(({ date }) => (
+          this._shouldSendReminder(date, dateConfig)
+        ));
 
-        reviewDate && this._reminders.push({
-          doc, docType, dateConfig, reminderType, date: reviewDate.date
-        });
+        if (reviewDate) {
+          this._reminders.push({
+            doc, docType, dateConfig, reminderType, date: reviewDate.date,
+          });
+        }
       });
     };
 
@@ -193,14 +202,14 @@ export default class ReminderSender {
   }
 
   _sendReminders() {
-    _(this._reminders).each((reminder) => {
+    this._reminders.forEach((reminder) => {
       const { date, reminderType } = reminder;
 
       const config = ReminderConfig[reminderType];
 
       const args = {
         org: this._organization,
-        ...reminder
+        ...reminder,
       };
       const templateData = config.data(args);
 
@@ -229,24 +238,26 @@ export default class ReminderSender {
       };
 
       const url = config.url(args);
-      url && _(emailTemplateData).extend({
-        avatar: {
-          alt: 'Plio',
-          url: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png'
-        },
-        button: {
-          label: 'Go to this action',
-          url
-        }
-      });
+      if (url) {
+        Object.assign(emailTemplateData, {
+          avatar: {
+            alt: 'Plio',
+            url: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
+          },
+          button: {
+            label: 'Go to this action',
+            url,
+          },
+        });
+      }
 
-      const unsubscribeFromNotificationsUrl = config.unsubscribeFromNotificationsUrl &&
-        config.unsubscribeFromNotificationsUrl(args);
+      const unsubscribeUrl = config.unsubscribeUrl &&
+        config.unsubscribeUrl(args);
 
-      if (unsubscribeFromNotificationsUrl) {
+      if (unsubscribeUrl) {
         const docName = templateData.docName();
-        _(emailTemplateData).extend({
-          unsubscribeFromNotificationsUrl,
+        Object.assign(emailTemplateData, {
+          unsubscribeUrl,
           docName,
         });
       }
@@ -263,10 +274,10 @@ export default class ReminderSender {
   _getDateRange(before, after) {
     const dateConfigPattern = {
       timeValue: Number,
-      timeUnit: String
+      timeUnit: String,
     };
 
-    _([before, after]).each((config) => {
+    [before, after].forEach((config) => {
       if (!Match.test(config, dateConfigPattern)) {
         throw new Error(
           `${JSON.stringify(config)} is not a valid reminder configuration`
@@ -316,6 +327,8 @@ export default class ReminderSender {
 
       temp = moment(temp).add(interval.timeValue, interval.timeUnit).toDate();
     }
+
+    return false;
   }
 
 }
