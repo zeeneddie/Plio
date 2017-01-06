@@ -4,7 +4,7 @@ import { DropdownItem } from 'reactstrap';
 
 import FormField from '../../../../../fields/edit/components/FormField';
 import SelectSingle from '../../../../../forms/components/SelectSingle';
-import DropdownItemAdd from '../../../../../components/DropdownItemAdd';
+import HomeScreenTitleAdd from '../HomeScreenTitleAdd';
 
 const enhance = withState('value', 'setValue', '');
 
@@ -13,9 +13,7 @@ const HomeScreenTitle = enhance(({ value, setValue, label, ...other }) => (
     <span>{label}</span>
     <SelectSingle isControlled {...{ value, setValue, ...other }}>
       <DropdownItem divider />
-      <DropdownItemAdd tag="span">
-        {!!value && `Add "${value}" title`}
-      </DropdownItemAdd>
+      <HomeScreenTitleAdd {...{ value, setValue, ...other }} />
     </SelectSingle>
   </FormField>
 ));

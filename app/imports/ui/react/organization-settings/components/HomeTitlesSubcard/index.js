@@ -12,6 +12,8 @@ import {
   NonConformitiesTitles,
   WorkInboxTitles,
 } from '/imports/share/constants';
+import { createWorkspaceTitleValue } from '../../helpers';
+import { equals } from '/imports/api/helpers';
 
 const ITEM_MAP = {
   standards: {
@@ -40,18 +42,26 @@ const HomeTitlesSubcard = ({
 }) => {
   const fields = Object.keys(ITEM_MAP).map((key) => {
     // we need a key for a method and a value to know which title is selected
-    const createValue = val => `${key}(${val})`;
     const currentItem = ITEM_MAP[key];
+    const selectedTitle = titles[key];
+    const newSelectedTitle = !!titles[key] && !currentItem.items.find(equals(selectedTitle))
+     ? [{
+       text: selectedTitle,
+       value: createWorkspaceTitleValue(key, selectedTitle),
+     }]
+     : null;
+
     const items = currentItem.items.map((title) => ({
       text: title,
-      value: createValue(title),
-    }));
+      value: createWorkspaceTitleValue(key, title),
+    })).concat(newSelectedTitle || []);
 
     return (
       <HomeScreenTitle
         {...{ ...currentItem, key, items, onSelect }}
+        id={key}
         noHint
-        selected={createValue(titles[key])}
+        selected={createWorkspaceTitleValue(key, selectedTitle)}
         placeholder="Select a title..."
       />
     );

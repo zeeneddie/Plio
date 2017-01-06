@@ -7,6 +7,12 @@ import SelectSingleView from './view';
 const getValue = ({ items, selected }) => getC('text', items.find(propEq('value', selected))) || '';
 
 export default class SelectSingle extends React.Component {
+  static get childContextTypes() {
+    return {
+      onSelect: PropTypes.func,
+    };
+  }
+
   static get propTypes() {
     return {
       selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -56,13 +62,19 @@ export default class SelectSingle extends React.Component {
     this.onInputChange = _.throttle(this.onInputChange, 300).bind(this);
   }
 
+  getChildContext() {
+    return {
+      onSelect: this.onSelect,
+    };
+  }
+
   componentWillMount() {
     if (this.props.isControlled) {
       this.props.setValue(getValue(this.props));
     }
   }
 
-  onSelect(e, { text, ...other }) {
+  onSelect(e, { text, ...other }, cb) {
     // prevent "close" code to execute on select
     // it will fire otherwise because of onBlur event and will reset the value back
     this.shouldCallOnBlur = false;
@@ -73,7 +85,10 @@ export default class SelectSingle extends React.Component {
       this.setState({ value: text });
     }
 
-    const callback = (err) => err && this.setState({ value: getValue(this.props) });
+    const callback = (err, res) => {
+      if (err) this.setState({ value: getValue(this.props) });
+      if (cb) cb(err, res);
+    };
 
     // we need a timeout there to prevent some flushy things to happen
     // also provide a callback to reset the value if method thrown an error
