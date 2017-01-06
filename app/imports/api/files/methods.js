@@ -10,6 +10,7 @@ import {
 } from '/imports/share/schemas/schemas.js';
 import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js';
 import { nameIsAllowed } from './validators.js';
+import { sanitizeFilename } from '/imports/share/helpers.js';
 import { FILE_NAME_NOT_VALID } from './errors.js';
 
 const onUpdateCheck = ({ _id, userId }) => {
