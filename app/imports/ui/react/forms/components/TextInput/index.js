@@ -1,49 +1,54 @@
-/* eslint-disable no-unused-vars */
-
 import React, { PropTypes } from 'react';
-import cx from 'classnames';
-import { compose, withState, lifecycle } from 'recompose';
+import { compose, withState, lifecycle, branch, renameProp } from 'recompose';
 import property from 'lodash.property';
+import { Input } from 'reactstrap';
+
+import { omitProps } from '/imports/api/helpers';
 
 const enhance = compose(
-  withState('internalValue', 'setInternalValue', property('value')),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if (this.props.value !== nextProps.value) {
-        nextProps.setInternalValue(nextProps.value);
-      }
-    },
-  }),
+  branch(
+    property('isControlled'),
+    renameProp('value', 'internalValue'),
+    compose(
+      withState('internalValue', 'setInternalValue', property('value')),
+      lifecycle({
+        componentWillReceiveProps(nextProps) {
+          if (this.props.value !== nextProps.value) {
+            nextProps.setInternalValue(nextProps.value);
+          }
+        },
+      }),
+    ),
+  ),
+  omitProps(['value', 'isControlled']),
 );
 
 const TextInput = enhance(({
-  value,
   internalValue,
   onChange,
   setInternalValue,
-  className,
   refCb = () => null,
   ...other,
 }) => (
-  <input
-    type="text"
+  <Input
     value={internalValue}
     onChange={(e) => {
-      setInternalValue(e.target.value);
+      if (typeof setInternalValue === 'function') {
+        setInternalValue(e.target.value);
+      }
 
       return typeof onChange === 'function' && onChange(e);
     }}
     ref={refCb}
-    className={cx('form-control', className)}
     {...other}
   />
 ));
 
 TextInput.propTypes = {
+  isControlled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
   refCb: PropTypes.func,
-  className: PropTypes.string,
 };
 
 export default TextInput;

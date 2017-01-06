@@ -1,8 +1,10 @@
 import React, { PropTypes } from 'react';
 import { _ } from 'meteor/underscore';
 
-import { searchByRegex, createSearchRegex } from '/imports/api/helpers';
+import { searchByRegex, createSearchRegex, getC, propEq } from '/imports/api/helpers';
 import SelectSingleView from './view';
+
+const getValue = ({ items, selected }) => getC('text', items.find(propEq('value', selected))) || '';
 
 export default class SelectSingle extends React.Component {
   static get propTypes() {
@@ -16,6 +18,9 @@ export default class SelectSingle extends React.Component {
       onSelect: PropTypes.func.isRequired,
       disabled: PropTypes.bool,
       placeholder: PropTypes.string,
+      isControlled: PropTypes.bool,
+      value: PropTypes.string,
+      setValue: PropTypes.func,
       children: PropTypes.node,
     };
   }
@@ -23,21 +28,65 @@ export default class SelectSingle extends React.Component {
   constructor(props) {
     super(props);
 
+    if (props.isControlled && (
+      ['undefined', 'null'].includes(typeof props.value) || !props.setValue
+    )) {
+      throw new Error('Controlled select input should have "value" and "setValue" props');
+    }
+
     this.state = {
       isOpen: false,
-      value: props.selected,
       items: props.items || [],
     };
+
+    if (!props.isControlled) {
+      this.state = {
+        ...this.state,
+        value: getValue(props),
+      };
+    }
+
+    this.shouldCallOnBlur = true;
 
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
     this.toggle = this.toggle.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onSelect = this.onSelect.bind(this);
     this.onInputChange = _.throttle(this.onInputChange, 300).bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.isControlled) {
+      this.props.setValue(getValue(this.props));
+    }
+  }
+
+  onSelect(e, { text, ...other }) {
+    // prevent "close" code to execute on select
+    // it will fire otherwise because of onBlur event and will reset the value back
+    this.shouldCallOnBlur = false;
+
+    if (this.props.isControlled) {
+      this.props.setValue(text);
+    } else {
+      this.setState({ value: text });
+    }
+
+    const callback = (err) => err && this.setState({ value: getValue(this.props) });
+
+    // we need a timeout there to prevent some flushy things to happen
+    setTimeout(() => this.props.onSelect(e, { text, ...other }, callback), 50);
+  }
+
   onChange(e) {
-    this.onInputChange(e.target.value);
+    const value = e.target.value;
+
+    if (this.props.isControlled) {
+      this.props.setValue(value);
+    }
+
+    this.onInputChange(value);
   }
 
   onInputChange(value) {
@@ -46,22 +95,36 @@ export default class SelectSingle extends React.Component {
       return;
     }
 
-    const items = searchByRegex(createSearchRegex(value), ['text'], [...this.state.items]);
+    const items = searchByRegex(createSearchRegex(value), ['text'], [...this.props.items]);
 
     this.setState({ items });
   }
 
   open() {
-    this.setState({ value: null, isOpen: true });
+    const newState = { isOpen: true };
+
+    if (this.props.isControlled) this.props.setValue('');
+    else Object.assign(newState, { value: '' });
+
+    this.setState(newState);
   }
 
   close() {
-    // timeout because onBlur runs before onClick so onClick will never fire otherwise
-    setTimeout(() => this.setState({
-      isOpen: false,
-      value: this.props.selected,
-      items: this.props.items,
-    }), 150);
+    if (this.shouldCallOnBlur) {
+      const newState = {
+        isOpen: false,
+        items: this.props.items,
+      };
+
+      const value = getValue(this.props);
+
+      if (this.props.isControlled) this.props.setValue(value);
+      else Object.assign(newState, { value });
+      // timeout because onBlur runs before onClick so onClick will never fire otherwise
+      setTimeout(() => this.setState(newState), 150);
+    }
+
+    this.shouldCallOnBlur = true;
   }
 
   toggle() {
@@ -78,6 +141,7 @@ export default class SelectSingle extends React.Component {
         onBlur={this.close}
         toggle={this.toggle}
         onChange={this.onChange}
+        onSelect={this.onSelect}
       >
         {this.props.children}
       </SelectSingleView>
