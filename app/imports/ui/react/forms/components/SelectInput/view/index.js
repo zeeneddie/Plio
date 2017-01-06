@@ -12,7 +12,7 @@ import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
 
-const SelectSingleView = ({
+const SelectInputView = ({
   value,
   selected,
   items,
@@ -68,7 +68,7 @@ const SelectSingleView = ({
   </Dropdown>
 );
 
-SelectSingleView.propTypes = {
+SelectInputView.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -89,4 +89,4 @@ SelectSingleView.propTypes = {
   children: PropTypes.node,
 };
 
-export default SelectSingleView;
+export default SelectInputView;
