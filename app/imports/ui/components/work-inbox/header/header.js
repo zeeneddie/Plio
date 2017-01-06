@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { WorkInboxFilters } from '/imports/api/constants.js';
+import HeaderMenu from '/imports/ui/react/work-inbox/components/HeaderMenu';
 
 Template.WorkInbox_Header.viewmodel({
   mixin: 'workInbox',
@@ -9,6 +10,11 @@ Template.WorkInbox_Header.viewmodel({
       filters: WorkInboxFilters,
       isActiveFilter: this.isActiveWorkInboxFilter.bind(this),
       transformCurrentFilterLabel: (text, filter) => text.replace(filter.prepend, ''),
+      getOptionsMenu() {
+        return {
+          component: HeaderMenu,
+        };
+      },
     };
   },
 });

@@ -20,3 +20,4 @@ import './issue-number';
 import './standard-status';
 import './title';
 import './owner';
+import './status-comment';

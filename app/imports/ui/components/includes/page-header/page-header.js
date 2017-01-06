@@ -54,6 +54,7 @@ Template.PageHeader.viewmodel({
       };
     });
     const activeFilter = filters.find(({ value }) => isActiveFilter(value));
+
     return {
       filters,
       isActiveFilter,
@@ -85,6 +86,7 @@ Template.PageHeader.viewmodel({
 
         return this;
       },
+      getOptionsMenu: this.getOptionsMenu,
     };
   },
 });
