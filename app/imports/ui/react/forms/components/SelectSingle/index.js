@@ -76,6 +76,7 @@ export default class SelectSingle extends React.Component {
     const callback = (err) => err && this.setState({ value: getValue(this.props) });
 
     // we need a timeout there to prevent some flushy things to happen
+    // also provide a callback to reset the value if method thrown an error
     setTimeout(() => this.props.onSelect(e, { text, ...other }, callback), 50);
   }
 
@@ -101,7 +102,7 @@ export default class SelectSingle extends React.Component {
   }
 
   open() {
-    const newState = { isOpen: true };
+    const newState = { isOpen: true, items: this.props.items };
 
     if (this.props.isControlled) this.props.setValue('');
     else Object.assign(newState, { value: '' });
@@ -120,8 +121,8 @@ export default class SelectSingle extends React.Component {
 
       if (this.props.isControlled) this.props.setValue(value);
       else Object.assign(newState, { value });
-      // timeout because onBlur runs before onClick so onClick will never fire otherwise
-      setTimeout(() => this.setState(newState), 150);
+
+      this.setState(newState);
     }
 
     this.shouldCallOnBlur = true;

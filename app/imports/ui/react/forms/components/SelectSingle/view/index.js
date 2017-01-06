@@ -34,7 +34,7 @@ const SelectSingleView = ({
   >
     <InputGroup>
       <TextInput {...{ value, disabled, placeholder, isControlled, onChange, onFocus, onBlur }} />
-      <InputGroupButton onClick={toggle}>
+      <InputGroupButton onClick={e => (isOpen ? onBlur(e) : onFocus(e))}>
         <Button type="secondary icon" className={cx({ disabled })} disabled>
           <Icon name="caret-down" />
         </Button>
