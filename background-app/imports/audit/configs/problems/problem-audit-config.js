@@ -1,3 +1,5 @@
+import { getProblemName } from '/imports/helpers/description';
+
 import onCreated from './on-created';
 import onRemoved from './on-removed';
 
@@ -62,8 +64,8 @@ export default ProblemAuditConfig = {
     return _id;
   },
 
-  docName({ sequentialId, title }) {
-    return `${sequentialId} "${title}"`;
+  docName(doc) {
+    return getProblemName(doc);
   },
 
   docOrgId({ organizationId }) {
@@ -73,5 +75,5 @@ export default ProblemAuditConfig = {
   docNotifyList({ notify = [] }) {
     return notify;
   },
-  
+
 };

@@ -1,4 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -15,6 +16,20 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set evaluation previous loss experience of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed evaluation previous loss experience of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed evaluation previous loss experience of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data() { },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

@@ -1,4 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -15,6 +16,20 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data() { },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

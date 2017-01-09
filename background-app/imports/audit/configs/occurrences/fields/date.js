@@ -1,6 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
 import { getLogData } from '../helpers';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
 
 
 export default {

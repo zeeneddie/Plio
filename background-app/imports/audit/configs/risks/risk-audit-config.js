@@ -20,7 +20,9 @@ import riskEvaluationPrevLossExp from './fields/riskEvaluation.prevLossExp';
 import riskEvaluationPriority from './fields/riskEvaluation.priority';
 import scores from './fields/scores';
 import typeId from './fields/typeId';
+import { getRiskDesc } from '/imports/helpers/description';
 import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+
 
 const generateRiskDocUrl = getDocUrlByOrganizationId('risks');
 
@@ -52,7 +54,7 @@ export default RiskAuditConfig = _.extend({}, ProblemAuditConfig, {
   ],
 
   docDescription() {
-    return 'risk';
+    return getRiskDesc();
   },
 
   docUrl: generateRiskDocUrl,

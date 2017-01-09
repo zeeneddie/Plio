@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions';
 import { ActionTypes, CollectionNames } from '/imports/share/constants';
+import { getActionDesc, getActionName } from '/imports/helpers/description';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
 import onCreated from './on-created';
 import onRemoved from './on-removed';
@@ -27,7 +29,7 @@ import verificationComments from './fields/verificationComments';
 import verificationTargetDate from './fields/verificationTargetDate';
 import verifiedAt from './fields/verifiedAt';
 import verifiedBy from './fields/verifiedBy';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+
 
 export default ActionAuditConfig = {
 
@@ -68,15 +70,11 @@ export default ActionAuditConfig = {
   },
 
   docDescription({ type }) {
-    return {
-      [ActionTypes.CORRECTIVE_ACTION]: 'corrective action',
-      [ActionTypes.PREVENTATIVE_ACTION]: 'preventative action',
-      [ActionTypes.RISK_CONTROL]: 'risk control',
-    }[type];
+    return getActionDesc(type);
   },
 
-  docName({ sequentialId, title }) {
-    return `${sequentialId} "${title}"`;
+  docName(doc) {
+    return getActionName(doc);
   },
 
   docOrgId({ organizationId }) {

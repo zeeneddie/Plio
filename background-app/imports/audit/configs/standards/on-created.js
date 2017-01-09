@@ -1,8 +1,9 @@
+import onCreated from '../common/on-created';
+
+
 export default {
   logs: [
-    {
-      message: 'Document created',
-    },
+    onCreated.logs.default,
   ],
   notifications: [],
 };

@@ -1,5 +1,7 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate, getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -8,13 +10,22 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'Risk score added: value - {{value}}, scored by {{userName}} on {{date}}',
+          'Risk score added: value - {{value}}, scored by {{scoredBy}} on {{date}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'Risk score removed: value - {{value}}, scored by {{userName}} on {{date}}',
+          'Risk score removed: value - {{value}}, scored by {{scoredBy}} on {{date}}',
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.ITEM_ADDED]:
+          '{{userName}} added score to {{{docDesc}}} {{{docName}}}: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{userName}} removed score from {{{docDesc}}} {{{docName}}}: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+      },
+    },
+  ],
   data({ diffs: { scores }, organization }) {
     const { item: { value, scoredAt, scoredBy } } = scores;
     const { timezone } = organization;
@@ -22,7 +33,10 @@ export default {
     return {
       value,
       date: () => getPrettyTzDate(scoredAt, timezone),
-      userName: () => getUserFullNameOrEmail(scoredBy),
+      scoredBy: () => getUserFullNameOrEmail(scoredBy),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

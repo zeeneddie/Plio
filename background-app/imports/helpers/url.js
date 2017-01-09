@@ -18,14 +18,6 @@ export const getDocUrl = ({ serialNumber, documentId, prefix }) => (
   getAbsoluteUrl(getDocPath({ serialNumber, documentId, prefix }))
 );
 
-export const getActionUrl = (serialNumber, documentId) => (
-  getDocUrl({
-    prefix: 'actions',
-    serialNumber,
-    documentId,
-  })
-);
-
 export const getNCUrl = (serialNumber, documentId) => (
   getDocUrl({
     prefix: 'non-conformities',

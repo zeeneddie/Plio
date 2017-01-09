@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -19,7 +20,21 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      shouldSendNotification({ diffs }) {
+        return !diffs['updateOfStandards.status'];
+      },
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set update of standards completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed update of standards completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed update of standards completed by of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs }) {
     const { newValue, oldValue } = diffs['updateOfStandards.completedBy'];
 
@@ -27,5 +42,8 @@ export default {
       newValue: () => getUserFullNameOrEmail(newValue),
       oldValue: () => getUserFullNameOrEmail(oldValue),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

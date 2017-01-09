@@ -1,5 +1,6 @@
 import { RiskTypes } from '/imports/share/collections/risk-types';
 import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -16,7 +17,18 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set type of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs: { typeId } }) {
     const { newValue, oldValue } = typeId;
 
@@ -29,5 +41,8 @@ export default {
       newValue: () => getRiskTypeTitle(newValue),
       oldValue: () => getRiskTypeTitle(oldValue),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

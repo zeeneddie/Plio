@@ -1,5 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
 import { getReceivers } from '../helpers';
 
 

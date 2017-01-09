@@ -1,6 +1,7 @@
+import { _ } from 'meteor/underscore';
 import deepDiff from 'deep-diff';
 
-import { ChangesKinds } from './changes-kinds.js';
+import { ChangesKinds } from './changes-kinds';
 
 
 export default DocumentDiffer = {
@@ -14,7 +15,7 @@ export default DocumentDiffer = {
     } = ChangesKinds;
 
     const getFieldName = (path) => {
-      return _(path).map(field => _(field).isNumber() ? '$': field).join('.');
+      return path.map(field => _.isNumber(field) ? '$': field).join('.');
     };
 
     const getValue = (obj, path) => {
@@ -30,12 +31,12 @@ export default DocumentDiffer = {
 
     const rawDiffs = deepDiff.diff(oldDocument, newDocument);
 
-    const rawArrayDiffs = _(rawDiffs).filter(diff => diff.kind === 'A');
-    const rawFieldDiffs = _(rawDiffs).filter(diff => diff.kind !== 'A');
+    const rawArrayDiffs = rawDiffs.filter(diff => diff.kind === 'A');
+    const rawFieldDiffs = rawDiffs.filter(diff => diff.kind !== 'A');
 
     const processedArrayFields = [];
 
-    _(rawArrayDiffs).each((rawDiff) => {
+    rawArrayDiffs.forEach((rawDiff) => {
       const { kind, path, item: { kind:itemKind } = {} } = rawDiff;
 
       const oldArray = getValue(oldDocument, path);
@@ -52,8 +53,8 @@ export default DocumentDiffer = {
         changeKind = ITEM_REMOVED;
       }
 
-      const item = _(arr1).find(arr1Item => (
-        _(arr2).find(arr2Item => _(arr2Item).isEqual(arr1Item)) === undefined
+      const item = arr1.find(arr1Item => (
+        arr2.find(arr2Item => _.isEqual(arr2Item, arr1Item)) === undefined
       ));
 
       const field = getFieldName(path);
@@ -68,7 +69,7 @@ export default DocumentDiffer = {
       processedArrayFields.push(new RegExp(`^${field}\\.\\$`));
     });
 
-    _(rawFieldDiffs).each((rawDiff) => {
+    rawFieldDiffs.forEach((rawDiff) => {
       const { kind, path, lhs:oldValue, rhs:newValue } = rawDiff;
 
       const field = getFieldName(path);

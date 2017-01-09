@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getReceivers } from '../../problems/helpers';
+import IPReviewDate from '../../common/fields/improvementPlan.reviewDates.date';
 
 
 export default {
@@ -12,14 +13,16 @@ export default {
       },
     },
   ],
-  notifications: [],
-  data({ diffs, organization }) {
-    const { newValue, oldValue } = diffs['improvementPlan.reviewDates.$.date'];
-    const { timezone } = organization;
-
-    return {
-      newValue: () => getPrettyTzDate(newValue, timezone),
-      oldValue: () => getPrettyTzDate(oldValue, timezone),
-    };
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed treatment plan\'s review date for {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+      },
+    },
+  ],
+  data: IPReviewDate.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

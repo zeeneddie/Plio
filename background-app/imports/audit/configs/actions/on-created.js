@@ -5,13 +5,11 @@ import { getCollectionByDocType } from '/imports/share/helpers';
 import { getUserId } from '../../utils/helpers';
 import { getLinkedDocAuditConfig, getLinkedDocDescription, getLinkedDocName } from './helpers';
 import ActionWorkflow from '/imports/workflow/ActionWorkflow';
-
+import onCreated from '../common/on-created';
 
 export default {
   logs: [
-    {
-      message: 'Document created',
-    },
+    onCreated.logs.default,
     {
       message: '{{{docName}}} was linked to this document',
       data({ newDoc, auditConfig }) {

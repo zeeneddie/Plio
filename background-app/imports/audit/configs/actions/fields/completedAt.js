@@ -1,5 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
 import { getReceivers } from '../helpers';
 
 

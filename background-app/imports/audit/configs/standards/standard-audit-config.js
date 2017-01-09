@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 
 import { CollectionNames } from '/imports/share/constants';
 import { Standards } from '/imports/share/collections/standards';
+import { getStandardDesc, getStandardName } from '/imports/helpers/description';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
 import onCreated from './on-created';
 import onRemoved from './on-removed';
@@ -22,7 +24,7 @@ import sectionId from './fields/sectionId';
 import status from './fields/status';
 import title from './fields/title';
 import typeId from './fields/typeId';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+
 
 const generateStandardDocUrl = getDocUrlByOrganizationId('standards');
 
@@ -60,11 +62,11 @@ export default StandardAuditConfig = {
   },
 
   docDescription() {
-    return 'standard';
+    return getStandardDesc();
   },
 
-  docName({ title }) {
-    return `"${title}"`;
+  docName(doc) {
+    return getStandardName(doc);
   },
 
   docOrgId({ organizationId }) {

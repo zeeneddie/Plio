@@ -53,8 +53,6 @@ export const getDocName = (doc, docType) => {
   }
 };
 
-export const getActionUrlByData = ({ doc, org }) => getActionUrl(org.serialNumber, doc._id);
-
 export const getWorkItemUrlByAction = ({ doc, reminderType, org }) => {
   const workItemType = {
     [ReminderTypes.ACTION_COMPLETION]: WorkItemsStore.TYPES.COMPLETE_ACTION,
@@ -95,4 +93,11 @@ export const getDefaultData = ({ doc, docType, targetDate, org }) => ({
 
 export const getUnsubscribeUrl = _.compose(getDocUnsubscribePath, getDocUrlByData);
 
-export const getActionUnsubscribeUrl = _.compose(getDocUnsubscribePath, getActionUrlByData);
+export const getActionUnsubscribeUrl = _.compose(
+  getDocUnsubscribePath,
+  ({ doc, org }) => getDocUrl({
+    prefix: 'actions',
+    serialNumber: org.serialNumber,
+    documentId: doc._id,
+  })
+);

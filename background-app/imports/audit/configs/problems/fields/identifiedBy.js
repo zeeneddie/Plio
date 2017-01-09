@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail } from '../../../utils/helpers';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -16,7 +17,18 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set identified by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed identified by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed identified by of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs: { identifiedBy } }) {
     const { newValue, oldValue } = identifiedBy;
 
@@ -24,5 +36,8 @@ export default {
       newValue: () => getUserFullNameOrEmail(newValue),
       oldValue: () => getUserFullNameOrEmail(oldValue),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

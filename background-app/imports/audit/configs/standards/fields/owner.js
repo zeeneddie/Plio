@@ -1,30 +1,16 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getUserFullNameOrEmail, getUserId } from '../../../utils/helpers';
+import { getUserId } from '../../../utils/helpers';
 import { getReceivers } from '../helpers';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import ownerId from '../../common/fields/ownerId';
 
 
 export default {
   field: 'owner',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]: 'Owner set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]: 'Owner removed',
-      },
-    },
+    ownerId.logs.default,
   ],
   notifications: [
-    {
-      text: {
-        [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
-        [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}',
-      },
-    },
+    ownerId.notifications.default,
   ],
   data({ diffs: { owner } }) {
     const { newValue, oldValue } = owner;

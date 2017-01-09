@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -19,7 +20,21 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      shouldSendNotification({ diffs }) {
+        return !diffs['updateOfStandards.status'];
+      },
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set update of standards date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed update of standards date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed update of standards date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['updateOfStandards.completedAt'];
     const { timezone } = organization;
@@ -28,5 +43,8 @@ export default {
       newValue: () => getPrettyTzDate(newValue, timezone),
       oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

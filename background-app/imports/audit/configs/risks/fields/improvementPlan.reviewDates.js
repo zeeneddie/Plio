@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getReceivers } from '../../problems/helpers';
+import IPReviewDates from '../../common/fields/improvementPlan.reviewDates';
 
 
 export default {
@@ -12,13 +13,18 @@ export default {
       },
     },
   ],
-  notifications: [],
-  data({ diffs, organization }) {
-    const { item: { date } } = diffs['improvementPlan.reviewDates'];
-    const { timezone } = organization;
-
-    return {
-      date: () => getPrettyTzDate(date, timezone),
-    };
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.ITEM_ADDED]:
+          '{{userName}} added treatment plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{userName}} removed treatment plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{date}}"',
+      },
+    },
+  ],
+  data: IPReviewDates.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

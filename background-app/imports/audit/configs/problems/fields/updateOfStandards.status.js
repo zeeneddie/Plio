@@ -1,4 +1,5 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -19,7 +20,22 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      shouldSendNotification({ diffs }) {
+        return diffs['updateOfStandards.completedAt']
+            && diffs['updateOfStandards.completedBy'];
+      },
+      text: {
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{#if completed}}' +
+            '{{userName}} completed update of standards of {{{docDesc}}} {{{docName}}}' +
+          '{{else}}' +
+            '{{userName}} canceled update of standards of {{{docDesc}}} {{{docName}}}' +
+          '{{/if}}',
+      },
+    },
+  ],
   data({ diffs }) {
     const { newValue: status } = diffs['updateOfStandards.status'];
     const { newValue: comments } = diffs['updateOfStandards.completionComments'] || {};
@@ -28,6 +44,9 @@ export default {
       completed: status === 1, // Completed
       comments,
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
   trigger({ diffs, newDoc: { _id }, auditConfig }) {
     if (diffs['updateOfStandards.completedAt']

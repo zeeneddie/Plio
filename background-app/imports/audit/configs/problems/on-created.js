@@ -3,13 +3,11 @@ import { _ } from 'meteor/underscore';
 import { Standards } from '/imports/share/collections/standards';
 import { getUserId } from '../../utils/helpers';
 import StandardAuditConfig from '../standards/standard-audit-config';
-
+import onCreated from '../common/on-created';
 
 export default {
   logs: [
-    {
-      message: 'Document created',
-    },
+    onCreated.logs.default,
     {
       message: '{{{docName}}} was linked to this document',
       data({ newDoc, auditConfig }) {

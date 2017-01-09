@@ -1,20 +1,17 @@
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
+import IPDesiredOutcome from '../../common/fields/improvementPlan.desiredOutcome';
 
 
 export default {
   field: 'improvementPlan.desiredOutcome',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan statement of desired outcome set',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan statement of desired outcome changed',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan statement of desired outcome removed',
-      },
-    },
+    IPDesiredOutcome.logs.default,
   ],
-  notifications: [],
+  notifications: [
+    IPDesiredOutcome.notifications.default,
+  ],
   data() { },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

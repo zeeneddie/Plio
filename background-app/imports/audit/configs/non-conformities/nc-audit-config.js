@@ -2,6 +2,8 @@ import { _ } from 'meteor/underscore';
 
 import { CollectionNames } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+import { getNCDesc } from '/imports/helpers/description';
 import ProblemAuditConfig from '../problems/problem-audit-config';
 import NCWorkflow from '/imports/workflow/NCWorkflow';
 
@@ -15,7 +17,7 @@ import improvementPlanTargetDate from './fields/improvementPlan.targetDate';
 import ref from './fields/ref';
 import refText from './fields/ref.text';
 import refUrl from './fields/ref.url';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+
 
 const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
 
@@ -42,7 +44,7 @@ export default NCAuditConfig = Object.assign({}, ProblemAuditConfig, {
   ],
 
   docDescription() {
-    return 'non-conformity';
+    return getNCDesc();
   },
 
   docUrl: generateNCDocUrl,

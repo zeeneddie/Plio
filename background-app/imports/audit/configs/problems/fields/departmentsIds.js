@@ -1,26 +1,17 @@
-import { Departments } from '/imports/share/collections/departments';
-import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
+import departmentsIds from '../../common/fields/departmentsIds';
 
 
 export default {
   field: 'departmentsIds',
   logs: [
-    {
-      message: {
-        [ChangesKinds.ITEM_ADDED]: 'Document was linked to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]: 'Document was unlinked from {{{departmentDesc}}}',
-      },
-    },
+    departmentsIds.logs.default,
   ],
-  notifications: [],
-  data({ diffs: { departmentsIds } }) {
-    const { item: departmentId } = departmentsIds;
-
-    const getDeptName = () => {
-      const { name } = Departments.findOne({ _id: departmentId }) || {};
-      return `${name} department`;
-    };
-
-    return { departmentDesc: getDeptName };
+  notifications: [
+    departmentsIds.notifications.default,
+  ],
+  data: departmentsIds.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

@@ -1,5 +1,6 @@
 import { ChangesKinds } from '../../../utils/changes-kinds';
-import { getPrettyTzDate } from '../../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -16,7 +17,18 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set review date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed review date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed review date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['review.reviewedAt'];
     const { timezone } = organization;
@@ -25,5 +37,8 @@ export default {
       newValue: getPrettyTzDate(newValue, timezone),
       oldValue: getPrettyTzDate(oldValue, timezone),
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };

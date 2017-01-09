@@ -1,5 +1,6 @@
 import { RiskEvaluationPriorities } from '/imports/share/constants';
 import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -16,7 +17,18 @@ export default {
       },
     },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{userName}} set evaluation treatment priority of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{userName}} changed evaluation treatment priority of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{userName}} removed evaluation treatment priority of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs }) {
     const { newValue, oldValue } = diffs['riskEvaluation.priority'];
 
@@ -24,5 +36,8 @@ export default {
       newValue: RiskEvaluationPriorities[newValue],
       oldValue: RiskEvaluationPriorities[oldValue],
     };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
 };
