@@ -9,7 +9,8 @@ import { Organizations } from '/imports/share/collections/organizations';
 import { renderTemplate } from '/imports/share/helpers';
 import { Risks } from '/imports/share/collections/risks';
 import { Standards } from '/imports/share/collections/standards';
-import { ReminderConfig, ReminderTypes } from './config';
+import { ReminderTypes, TimeRelations } from './config/constants';
+import ReminderConfig from './config';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
@@ -131,10 +132,18 @@ export default class WorkflowReminderSender {
 
         if (isAnalysisCompleted) {
           targetDate = doc.updateOfStandards.targetDate;
-          reminderType = ReminderTypes.COMPLETE_UPDATE_OF_DOCUMENTS;
+
+          reminderType = {
+            [DocumentTypes.NON_CONFORMITY]: ReminderTypes.UPDATE_OF_STANDARDS,
+            [DocumentTypes.RISK]: ReminderTypes.UPDATE_OF_RISK_RECORD,
+          }[docType];
         } else {
           targetDate = doc.analysis.targetDate;
-          reminderType = ReminderTypes.COMPLETE_ANALYSIS;
+
+          reminderType = {
+            [DocumentTypes.NON_CONFORMITY]: ReminderTypes.ROOT_CAUSE_ANALYSIS,
+            [DocumentTypes.RISK]: ReminderTypes.INITIAL_RISK_ANALYSIS,
+          }[docType];
         }
 
         if (!this._shouldSendReminder(targetDate, timeConfig)) {
@@ -182,10 +191,10 @@ export default class WorkflowReminderSender {
 
       if (isCompleted) {
         targetDate = doc.verificationTargetDate;
-        reminderType = ReminderTypes.VERIFY_ACTION;
+        reminderType = ReminderTypes.ACTION_VERIFICATION;
       } else {
         targetDate = doc.completionTargetDate;
-        reminderType = ReminderTypes.COMPLETE_ACTION;
+        reminderType = ReminderTypes.ACTION_COMPLETION;
       }
 
       if (!this._shouldSendReminder(targetDate, timeConfig)) {
@@ -206,7 +215,7 @@ export default class WorkflowReminderSender {
     const { start, until } = timeConfig;
     const { startDate, endDate } = this._getDateRange(start, until);
 
-    const reminderType = ReminderTypes.REVIEW_IMPROVEMENT_PLAN;
+    const reminderType = ReminderTypes.IMPROVEMENT_PLAN_REVIEW;
 
     const createReminders = (collection, docType) => {
       const query = {
@@ -240,68 +249,79 @@ export default class WorkflowReminderSender {
     createReminders(Risks, DocumentTypes.RISK);
   }
 
+  _getReminderEmailData(reminder) {
+    const { date, reminderType } = reminder;
+    const config = ReminderConfig[reminderType];
+
+    const args = {
+      org: this._organization,
+      ...reminder,
+    };
+
+    const templateData = config.data(args);
+
+    const today = this._date;
+    let templateKey;
+    if (moment(today).isBefore(date)) {
+      templateKey = TimeRelations.BEFORE_DUE;
+    } else if (moment(today).isSame(date)) {
+      templateKey = TimeRelations.DUE_TODAY;
+    } else if (moment(today).isAfter(date)) {
+      templateKey = TimeRelations.OVERDUE;
+    }
+
+    const title = renderTemplate(config.title[templateKey], templateData);
+    const text = renderTemplate(config.text[templateKey], templateData);
+
+    const receivers = config.receivers(args) || [];
+    if (!receivers.length) {
+      return;
+    }
+
+    const emailTemplateData = {
+      organizationName: this._organization.name,
+      title,
+      text,
+    };
+
+    const url = config.url(args);
+    if (url) {
+      Object.assign(emailTemplateData, {
+        button: {
+          label: 'Go to this action',
+          url,
+        },
+      });
+    }
+
+    const unsubscribeUrl = config.unsubscribeUrl &&
+      config.unsubscribeUrl(args);
+
+    if (unsubscribeUrl) {
+      const docName = templateData.docName();
+      Object.assign(emailTemplateData, {
+        unsubscribeUrl,
+        docName,
+      });
+    }
+
+    return {
+      recipients: receivers,
+      emailSubject: title,
+      templateData: emailTemplateData,
+    };
+  }
+
   _sendReminders() {
     this._reminders.forEach((reminder) => {
-      const { date, reminderType } = reminder;
-      const config = ReminderConfig[reminderType];
-
-      const args = {
-        org: this._organization,
-        ...reminder,
-      };
-
-      const templateData = config.data(args);
-
-      const today = this._date;
-      let templateKey;
-      if (moment(today).isBefore(date)) {
-        templateKey = 'beforeDue';
-      } else if (moment(today).isSame(date)) {
-        templateKey = 'dueToday';
-      } else if (moment(today).isAfter(date)) {
-        templateKey = 'overdue';
-      }
-
-      const title = renderTemplate(config.title[templateKey], templateData);
-      const text = renderTemplate(config.text[templateKey], templateData);
-
-      const receivers = config.receivers(args) || [];
-      if (!receivers.length) {
+      const reminderEmailData = this._getReminderEmailData(reminder);
+      if (!reminderEmailData) {
         return;
-      }
-
-      const emailTemplateData = {
-        organizationName: this._organization.name,
-        title,
-        text,
-      };
-
-      const url = config.url(args);
-      if (url) {
-        Object.assign(emailTemplateData, {
-          button: {
-            label: 'Go to this action',
-            url,
-          },
-        });
-      }
-
-      const unsubscribeUrl = config.unsubscribeUrl &&
-        config.unsubscribeUrl(args);
-
-      if (unsubscribeUrl) {
-        const docName = templateData.docName();
-        Object.assign(emailTemplateData, {
-          unsubscribeUrl,
-          docName,
-        });
       }
 
       new NotificationSender({
         templateName: REMINDER_EMAIL_TEMPLATE,
-        recipients: receivers,
-        emailSubject: title,
-        templateData: emailTemplateData,
+        ...reminderEmailData,
       }).sendEmail();
     });
   }

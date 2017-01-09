@@ -27,7 +27,7 @@ import verificationComments from './fields/verificationComments';
 import verificationTargetDate from './fields/verificationTargetDate';
 import verifiedAt from './fields/verifiedAt';
 import verifiedBy from './fields/verifiedBy';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
 export default ActionAuditConfig = {
 

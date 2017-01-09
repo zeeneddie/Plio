@@ -15,7 +15,7 @@ import improvementPlanTargetDate from './fields/improvementPlan.targetDate';
 import ref from './fields/ref';
 import refText from './fields/ref.text';
 import refUrl from './fields/ref.url';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
 const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
 

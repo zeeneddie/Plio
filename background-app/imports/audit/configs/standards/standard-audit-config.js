@@ -22,7 +22,7 @@ import sectionId from './fields/sectionId';
 import status from './fields/status';
 import title from './fields/title';
 import typeId from './fields/typeId';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
 const generateStandardDocUrl = getDocUrlByOrganizationId('standards');
 

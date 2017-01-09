@@ -10,11 +10,11 @@ export const getAbsoluteUrl = path => (
   })
 );
 
-export const getDocPath = (serialNumber, documentId, prefix) => (
+export const getDocPath = ({ serialNumber, documentId, prefix }) => (
   `${serialNumber}/${prefix}/${documentId}`
 );
 
-export const getDocUrl = (serialNumber, documentId, prefix) => (
+export const getDocUrl = ({ serialNumber, documentId, prefix }) => (
   getAbsoluteUrl(getDocPath({ serialNumber, documentId, prefix }))
 );
 

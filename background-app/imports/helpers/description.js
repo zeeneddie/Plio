@@ -14,7 +14,7 @@ export const getActionDesc = (docType) => {
     [ActionTypes.RISK_CONTROL]: getRCDesc,
   }[docType];
 
-  return descFn && descFn();
+  return descFn ? descFn() : 'action';
 };
 
 export const getActionName = doc => `${doc.sequentialId} "${doc.title}"`;
