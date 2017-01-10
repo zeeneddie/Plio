@@ -17,11 +17,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set evaluation comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set evaluation comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed evaluation comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed evaluation comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed evaluation comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed evaluation comments of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

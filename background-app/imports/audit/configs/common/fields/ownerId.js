@@ -6,8 +6,8 @@ export default {
   logs: {
     default: {
       message: {
-        [ChangesKinds.FIELD_ADDED]: 'Owner set to {{newValue}}',
-        [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{oldValue}} to {{newValue}}',
+        [ChangesKinds.FIELD_ADDED]: 'Owner set to {{{newValue}}}',
+        [ChangesKinds.FIELD_CHANGED]: 'Owner changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]: 'Owner removed',
       },
     },
@@ -16,11 +16,11 @@ export default {
     default: {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set owner of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed owner of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed owner of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed owner of {{{docDesc}}} {{{docName}}}',
       },
     },
   },

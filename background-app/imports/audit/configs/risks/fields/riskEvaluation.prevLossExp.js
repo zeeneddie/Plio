@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set evaluation previous loss experience of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set evaluation previous loss experience of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed evaluation previous loss experience of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed evaluation previous loss experience of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed evaluation previous loss experience of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed evaluation previous loss experience of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

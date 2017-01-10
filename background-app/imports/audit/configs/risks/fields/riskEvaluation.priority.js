@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk evaluation treatment priority set to "{{newValue}}"',
+          'Risk evaluation treatment priority set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk evaluation treatment priority changed from "{{oldValue}}" to "{{newValue}}"',
+          'Risk evaluation treatment priority changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Risk evaluation treatment priority removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set evaluation treatment priority of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set evaluation treatment priority of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed evaluation treatment priority of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed evaluation treatment priority of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed evaluation treatment priority of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed evaluation treatment priority of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

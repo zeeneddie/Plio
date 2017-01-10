@@ -13,7 +13,7 @@ export default {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            'Update of standards completed{{#if comments}}: {{comments}}{{/if}}' +
+            'Update of standards completed{{#if comments}}: {{{comments}}}{{/if}}' +
           '{{else}}' +
             'Update of standards canceled' +
           '{{/if}}',
@@ -29,9 +29,9 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{userName}} completed update of standards of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} completed update of standards of {{{docDesc}}} {{{docName}}}' +
           '{{else}}' +
-            '{{userName}} canceled update of standards of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} canceled update of standards of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
       },
     },

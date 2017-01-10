@@ -18,11 +18,11 @@ export default {
     default: {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed improvement plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
       },
     },
   },

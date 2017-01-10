@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Status set to "{{newValue}}"',
+          'Status set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Status changed from "{{oldValue}}" to "{{newValue}}"',
+          'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Status removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set status of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set status of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed status of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed status of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed status of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed status of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

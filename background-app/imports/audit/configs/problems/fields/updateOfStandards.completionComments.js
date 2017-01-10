@@ -23,11 +23,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set update of standards completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed update of standards completion comments of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

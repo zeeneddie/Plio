@@ -9,11 +9,11 @@ const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
       {
         message: {
           [ChangesKinds.FIELD_ADDED]:
-            'Guidelines for {{relatedDocs}} set',
+            'Guidelines for {{{relatedDocs}}} set',
           [ChangesKinds.FIELD_CHANGED]:
-            'Guidelines for {{relatedDocs}} changed',
+            'Guidelines for {{{relatedDocs}}} changed',
           [ChangesKinds.FIELD_REMOVED]:
-            'Guidelines for {{relatedDocs}} removed',
+            'Guidelines for {{{relatedDocs}}} removed',
         },
       },
     ],
@@ -21,11 +21,11 @@ const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
       {
         text: {
           [ChangesKinds.FIELD_ADDED]:
-            '{{userName}} set guidelines for {{relatedDocs}} in {{{docDesc}}} {{{docName}}}',
+            '{{{userName}}} set guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
           [ChangesKinds.FIELD_CHANGED]:
-            '{{userName}} changed guidelines for {{relatedDocs}} in {{{docDesc}}} {{{docName}}}',
+            '{{{userName}}} changed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
           [ChangesKinds.FIELD_REMOVED]:
-            '{{userName}} removed guidelines for {{relatedDocs}} in {{{docDesc}}} {{{docName}}}',
+            '{{{userName}}} removed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
         },
       },
     ],

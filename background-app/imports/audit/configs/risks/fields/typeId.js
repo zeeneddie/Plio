@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk type set to "{{newValue}}"',
+          'Risk type set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk type changed from "{{oldValue}}" to "{{newValue}}"',
+          'Risk type changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Risk type removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set type of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set type of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed type of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed type of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

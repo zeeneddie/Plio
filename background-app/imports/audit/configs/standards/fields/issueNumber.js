@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Issue number set to "{{newValue}}"',
+          'Issue number set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Issue number changed from "{{oldValue}}" to "{{newValue}}"',
+          'Issue number changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Issue number removed',
       },
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set issue number of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set issue number of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed issue number of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed issue number of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed issue number of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed issue number of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

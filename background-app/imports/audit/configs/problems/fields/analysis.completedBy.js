@@ -12,9 +12,9 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Root cause analysis completed by set to {{newValue}}',
+          'Root cause analysis completed by set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Root cause analysis completed by changed from {{oldValue}} to {{newValue}}',
+          'Root cause analysis completed by changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Root cause analysis completed by removed',
       },
@@ -27,11 +27,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set root cause analysis completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set root cause analysis completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed root cause analysis completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed root cause analysis completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed root cause analysis completed by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed root cause analysis completed by of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

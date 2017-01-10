@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan owner set to {{newValue}}',
+          'Treatment plan owner set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan owner changed from {{oldValue}} to {{newValue}}',
+          'Treatment plan owner changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Treatment plan owner removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set treatment plan\'s owner of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set treatment plan\'s owner of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed treatment plan\'s owner of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed treatment plan\'s owner of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed treatment plan\'s owner of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed treatment plan\'s owner of {{{docDesc}}} {{{docName}}}',
       },
     },
     Object.assign({}, IPOwner.notifications.personal, {

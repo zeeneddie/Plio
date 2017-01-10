@@ -15,11 +15,11 @@ export default {
     default: {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set description of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set description of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed description of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed description of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed description of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed description of {{{docDesc}}} {{{docName}}}',
       },
     },
   },

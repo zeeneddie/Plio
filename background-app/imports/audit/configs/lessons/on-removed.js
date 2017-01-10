@@ -4,7 +4,7 @@ import { getLogData } from './helpers.js';
 export default {
   logs: [
     {
-      message: '{{{docName}}} removed: "{{title}}"',
+      message: '{{{docName}}} removed: "{{{title}}}"',
       logData: getLogData,
     },
   ],

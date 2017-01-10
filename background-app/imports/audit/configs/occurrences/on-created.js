@@ -5,7 +5,7 @@ import { getPrettyTzDate } from '/imports/helpers/date';
 export default {
   logs: [
     {
-      message: '{{{docName}}} added: date - {{date}}',
+      message: '{{{docName}}} added: date - {{{date}}}',
       logData: getLogData,
     },
   ],

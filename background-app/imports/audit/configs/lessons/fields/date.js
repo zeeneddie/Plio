@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docName}} created date set to "{{newValue}}"',
+          '{{{docName}}} created date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docName}} created date changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} created date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docName}} created date removed',
+          '{{{docName}}} created date removed',
       },
       logData: getLogData,
     },

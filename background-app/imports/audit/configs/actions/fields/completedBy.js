@@ -12,9 +12,9 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Completed by set to {{newValue}}',
+          'Completed by set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Completed by changed from {{oldValue}} to {{newValue}}',
+          'Completed by changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'Completed by removed',
       },
@@ -27,11 +27,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completed by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set completed by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completed by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed completed by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completed by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed completed by of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Timezone set to "{{newValue}}"',
+          'Timezone set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Timezone changed from "{{oldValue}}" to "{{newValue}}"',
+          'Timezone changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Timezone removed',
       },
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set timezone of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set timezone of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed timezone of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed timezone of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed timezone of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed timezone of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

@@ -7,9 +7,9 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.FIELD_ADDED]: '{{docName}} notes set',
-        [ChangesKinds.FIELD_CHANGED]: '{{docName}} notes changed',
-        [ChangesKinds.FIELD_REMOVED]: '{{docName}} notes removed',
+        [ChangesKinds.FIELD_ADDED]: '{{{docName}}} notes set',
+        [ChangesKinds.FIELD_CHANGED]: '{{{docName}}} notes changed',
+        [ChangesKinds.FIELD_REMOVED]: '{{{docName}}} notes removed',
       },
       logData: getLogData,
     },

@@ -10,8 +10,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'Workflow type for {{relatedDocs}} changed ' +
-              'from "{{oldValue}}" to "{{newValue}}"',
+              'Workflow type for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
           },
         },
       ],
@@ -19,8 +19,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              '{{userName}} changed workflow type for {{relatedDocs}} ' +
-              'from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}',
+              '{{{userName}}} changed workflow type for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
           },
         },
       ],
@@ -42,8 +42,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'Default step time for {{relatedDocs}} changed ' +
-              'from "{{oldValue}}" to "{{newValue}}"',
+              'Default step time for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
           },
         },
       ],
@@ -51,8 +51,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              '{{userName}} changed default step time for {{relatedDocs}} ' +
-              'from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}',
+              '{{{userName}}} changed default step time for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
           },
         },
       ],
@@ -79,8 +79,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              'Default step time for {{relatedDocs}} changed ' +
-              'from "{{oldValue}}" to "{{newValue}}"',
+              'Default step time for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
           },
         },
       ],
@@ -88,8 +88,8 @@ const getWorkflowDefaultsConfig = (field, relatedDocs) => {
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              '{{userName}} changed default step time for {{relatedDocs}} ' +
-              'from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}',
+              '{{{userName}}} changed default step time for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
           },
         },
       ],

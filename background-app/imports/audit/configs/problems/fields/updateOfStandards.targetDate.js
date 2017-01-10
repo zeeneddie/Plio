@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards target date set to "{{newValue}}"',
+          'Update of standards target date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards target date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Update of standards target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Update of standards target date removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set update of standards target date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set update of standards target date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed update of standards target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed update of standards target date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed update of standards target date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed update of standards target date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

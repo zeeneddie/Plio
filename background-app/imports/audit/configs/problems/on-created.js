@@ -25,7 +25,7 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
+      text: '{{{userName}}} created {{{docDesc}}} {{{docName}}} for {{{standardDesc}}} {{{standardName}}}',
       data({ newDoc }) {
         const standards = Standards.find({ _id: { $in: newDoc.standardsIds } });
 

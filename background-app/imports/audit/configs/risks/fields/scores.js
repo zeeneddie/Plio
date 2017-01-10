@@ -10,9 +10,9 @@ export default {
     {
       message: {
         [ChangesKinds.ITEM_ADDED]:
-          'Risk score added: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+          'Risk score added: value - {{{value}}}, scored by {{{scoredBy}}} on {{{date}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          'Risk score removed: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+          'Risk score removed: value - {{{value}}}, scored by {{{scoredBy}}} on {{{date}}}',
       },
     },
   ],
@@ -20,9 +20,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added score to {{{docDesc}}} {{{docName}}}: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+          '{{{userName}}} added score to {{{docDesc}}} {{{docName}}}: value - {{{value}}}, scored by {{{scoredBy}}} on {{{date}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed score from {{{docDesc}}} {{{docName}}}: value - {{value}}, scored by {{scoredBy}} on {{date}}',
+          '{{{userName}}} removed score from {{{docDesc}}} {{{docName}}}: value - {{{value}}}, scored by {{{scoredBy}}} on {{{date}}}',
       },
     },
   ],

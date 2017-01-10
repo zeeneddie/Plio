@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Identified at set to "{{newValue}}"',
+          'Identified at set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
+          'Identified at changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Identified at removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set identified date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set identified date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed identified date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed identified date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed identified date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed identified date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

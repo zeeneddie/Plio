@@ -23,11 +23,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed verification comments of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

@@ -12,8 +12,8 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             message: {
               [ChangesKinds.FIELD_CHANGED]:
-                '{{reminderLabel}} for {{relatedDocs}} ' +
-                'changed from "{{oldValue}}" to "{{newValue}}"',
+                '{{{reminderLabel}}} for {{{relatedDocs}}} ' +
+                'changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             },
           },
         ],
@@ -21,8 +21,8 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             text: {
               [ChangesKinds.FIELD_CHANGED]:
-                '{{userName}} changed {{reminderLabel}} for {{relatedDocs}} ' +
-                'from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}',
+                '{{{userName}}} changed {{{reminderLabel}}} for {{{relatedDocs}}} ' +
+                'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
             },
           },
         ],
@@ -50,8 +50,8 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             message: {
               [ChangesKinds.FIELD_CHANGED]:
-                '{{reminderLabel}} for {{relatedDocs}} ' +
-                'changed from "{{oldValue}}" to "{{newValue}}"',
+                '{{{reminderLabel}}} for {{{relatedDocs}}} ' +
+                'changed from "{{{oldValue}}}" to "{{{newValue}}}"',
             },
           },
         ],
@@ -59,8 +59,8 @@ const getRemindersConfig = (field, relatedDocs) => {
           {
             text: {
               [ChangesKinds.FIELD_CHANGED]:
-                '{{userName}} changed {{reminderLabel}} for {{relatedDocs}} ' +
-                'from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}',
+                '{{{userName}}} changed {{{reminderLabel}}} for {{{relatedDocs}}} ' +
+                'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
             },
           },
         ],

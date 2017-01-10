@@ -7,8 +7,8 @@ export default {
   logs: {
     default: {
       message: {
-        [ChangesKinds.ITEM_ADDED]: '{{user}} was added to the notification list',
-        [ChangesKinds.ITEM_REMOVED]: '{{user}} was removed from the notification list',
+        [ChangesKinds.ITEM_ADDED]: '{{{user}}} was added to the notification list',
+        [ChangesKinds.ITEM_REMOVED]: '{{{user}}} was removed from the notification list',
       },
     },
   },
@@ -16,16 +16,16 @@ export default {
     default: {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added {{user}} to the notification list of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} added {{{user}}} to the notification list of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed {{user}} from the notification list of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed {{{user}}} from the notification list of {{{docDesc}}} {{{docName}}}',
       },
     },
     personal: {
       shouldSendNotification({ diffs: { notify: { kind } } }) {
         return kind === ChangesKinds.ITEM_ADDED;
       },
-      text: '{{userName}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
+      text: '{{{userName}}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',
       emailTemplateData({ newDoc, auditConfig }) {
         return {

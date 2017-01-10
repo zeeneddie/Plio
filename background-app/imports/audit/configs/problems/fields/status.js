@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Status set to "{{newValue}}"',
+          'Status set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Status changed from "{{oldValue}}" to "{{newValue}}"',
+          'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Status removed',
       },
@@ -24,7 +24,7 @@ export default {
         // 19 - Closed - action(s) verified, standard(s) reviewed
         return (newValue === 18) || (newValue === 19);
       },
-      text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{newValue}}"',
+      text: 'Status of {{{docDesc}}} {{{docName}}} was changed to "{{{newValue}}}"',
       title: '{{{docDescCapitalized}}} {{{docName}}} closed',
       data({ diffs: { status }, newDoc, auditConfig }) {
         return {

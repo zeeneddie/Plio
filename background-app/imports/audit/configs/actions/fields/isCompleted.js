@@ -13,7 +13,7 @@ export default {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            'Action completed{{#if comments}}: {{comments}}{{/if}}' +
+            'Action completed{{#if comments}}: {{{comments}}}{{/if}}' +
           '{{else}}' +
             'Action completion canceled' +
           '{{/if}}',
@@ -28,10 +28,10 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{userName}} completed {{{docDesc}}} {{{docName}}}' +
-            '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+            '{{{userName}}} completed {{{docDesc}}} {{{docName}}}' +
+            '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled completion of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} canceled completion of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
       },
     },

@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Review date set to "{{newValue}}"',
+          'Review date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Review date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Review date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Review date removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set review date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set review date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed review date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed review date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed review date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed review date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

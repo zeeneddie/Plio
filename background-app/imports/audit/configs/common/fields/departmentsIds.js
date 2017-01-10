@@ -17,9 +17,9 @@ export default {
     default: {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
+          '{{{userName}}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}',
+          '{{{userName}}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}',
       },
     },
   },

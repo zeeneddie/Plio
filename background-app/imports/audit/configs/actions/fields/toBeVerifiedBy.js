@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'To be verified by set to {{newValue}}',
+          'To be verified by set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'To be verified by changed from {{oldValue}} to {{newValue}}',
+          'To be verified by changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
           'To be verified by removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set to be verified by of {{{docDesc}}} {{{docName}}} to {{newValue}}',
+          '{{{userName}}} set to be verified by of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed to be verified by of {{{docDesc}}} {{{docName}}} from {{oldValue}} to {{newValue}}',
+          '{{{userName}}} changed to be verified by of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed to be verified by of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed to be verified by of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

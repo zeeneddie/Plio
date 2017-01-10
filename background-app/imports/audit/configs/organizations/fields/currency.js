@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Currency set to "{{newValue}}"',
+          'Currency set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Currency changed from "{{oldValue}}" to "{{newValue}}"',
+          'Currency changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Currency removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set currency of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set currency of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed currency of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed currency of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed currency of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed currency of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Help desk ref added: ID - {{text}}, URL: {{url}}',
+          'Help desk ref added: ID - {{{text}}}, URL: {{{url}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Help desk ref removed: ID - {{text}}, URL: {{url}}',
+          'Help desk ref removed: ID - {{{text}}}, URL: {{{url}}}',
       },
     },
   ],
@@ -18,9 +18,9 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} added help desk ref to {{{docDesc}}} {{{docName}}}: ID - {{text}}, URL: {{url}}',
+          '{{{userName}}} added help desk ref to {{{docDesc}}} {{{docName}}}: ID - {{{text}}}, URL: {{{url}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed help desk ref of {{{docDesc}}} {{{docName}}}: ID - {{text}}, URL: {{url}}',
+          '{{{userName}}} removed help desk ref of {{{docDesc}}} {{{docName}}}: ID - {{{text}}}, URL: {{{url}}}',
       },
     },
   ],

@@ -6,7 +6,7 @@ export default {
   logs: {
     default: {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{name}}" added',
+        [ChangesKinds.ITEM_ADDED]: 'Improvement plan file "{{{name}}}" added',
         [ChangesKinds.ITEM_REMOVED]: 'Improvement plan file removed',
       },
     },
@@ -15,9 +15,9 @@ export default {
     default: {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} added file "{{{name}}}" to improvement plan of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed file from improvement plan of {{{docDesc}}} {{{docName}}}',
       },
     },
   },

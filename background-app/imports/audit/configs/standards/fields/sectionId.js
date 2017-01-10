@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Book section set to "{{newValue}}"',
+          'Book section set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Book section changed from "{{oldValue}}" to "{{newValue}}"',
+          'Book section changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Book section removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set book section of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set book section of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed book section of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed book section of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed book section of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed book section of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

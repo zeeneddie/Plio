@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Magnitude set to "{{newValue}}"',
+          'Magnitude set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Magnitude changed from "{{oldValue}}" to "{{newValue}}"',
+          'Magnitude changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Magnitude removed',
       },
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set magnitude of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set magnitude of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed magnitude of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed magnitude of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed magnitude of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed magnitude of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

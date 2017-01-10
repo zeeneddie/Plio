@@ -8,7 +8,7 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"',
+          'Help desk ref URL changed from "{{{oldValue}}}" to "{{{newValue}}}"',
       },
     },
   ],
@@ -16,7 +16,7 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed help desk ref url of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed help desk ref url of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
       },
     },
   ],

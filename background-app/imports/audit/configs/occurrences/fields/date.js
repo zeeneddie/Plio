@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{{docName}}} date set to "{{newValue}}"',
+          '{{{docName}}} date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{{docName}}} date changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           '{{{docName}}} date removed',
       },

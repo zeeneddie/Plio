@@ -8,11 +8,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docName}} title set to "{{newValue}}"',
+          '{{{docName}}} title set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docName}} title changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} title changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docName}} title removed',
+          '{{{docName}}} title removed',
       },
       logData: getLogData,
     },

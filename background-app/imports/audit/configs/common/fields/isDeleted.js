@@ -20,11 +20,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}',
       },
       title: {
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} {{#if deleted}}deleted{{else}}restored{{/if}} {{{docDesc}}} {{{docName}}}',
       },
     },
   },

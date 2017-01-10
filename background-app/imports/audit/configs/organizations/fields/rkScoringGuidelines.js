@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed risk scoring guidelines in {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

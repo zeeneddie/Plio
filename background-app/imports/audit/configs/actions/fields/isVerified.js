@@ -14,9 +14,9 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +
             '{{#if verifiedAsEffective}}' +
-              'Action verified as effective{{#if comments}}: {{comments}}{{/if}}' +
+              'Action verified as effective{{#if comments}}: {{{comments}}}{{/if}}' +
             '{{else}}' +
-              'Action failed verification{{#if comments}}: {{comments}}{{/if}}' +
+              'Action failed verification{{#if comments}}: {{{comments}}}{{/if}}' +
             '{{/if}}' +
           '{{else}}' +
             'Action verification canceled' +
@@ -33,14 +33,14 @@ export default {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if verified}}' +
             '{{#if verifiedAsEffective}}' +
-              '{{userName}} verified {{{docDesc}}} {{{docName}}} as effective' +
-              '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+              '{{{userName}}} verified {{{docDesc}}} {{{docName}}} as effective' +
+              '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
             '{{else}}' +
-              '{{userName}} failed verification of {{{docDesc}}} {{{docName}}}' +
-              '{{#if comments}} with following comments: {{comments}}{{/if}}' +
+              '{{{userName}}} failed verification of {{{docDesc}}} {{{docName}}}' +
+              '{{#if comments}} with following comments: {{{comments}}}{{/if}}' +
             '{{/if}}' +
           '{{else}}' +
-            '{{userName}} canceled verification of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} canceled verification of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
       },
     },

@@ -9,11 +9,11 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docName}} owner set to {{newValue}}',
+          '{{{docName}}} owner set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docName}} owner changed from {{oldValue}} to {{newValue}}',
+          '{{{docName}}} owner changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docName}} owner removed',
+          '{{{docName}}} owner removed',
       },
       logData: getLogData,
     },

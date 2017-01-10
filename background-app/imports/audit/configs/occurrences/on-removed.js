@@ -5,7 +5,7 @@ import { getPrettyOrgDate } from '../../utils/helpers';
 export default {
   logs: [
     {
-      message: '{{{docName}}} removed: date - {{date}}',
+      message: '{{{docName}}} removed: date - {{{date}}}',
       logData: getLogData,
     },
   ],

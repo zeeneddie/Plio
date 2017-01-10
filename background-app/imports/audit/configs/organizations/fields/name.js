@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Name set to "{{newValue}}"',
+          'Name set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Name changed from "{{oldValue}}" to "{{newValue}}"',
+          'Name changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Name removed',
       },
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set name of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set name of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed name of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed name of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed name of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed name of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

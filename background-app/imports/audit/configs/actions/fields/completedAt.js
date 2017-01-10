@@ -12,9 +12,9 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Completion date set to "{{newValue}}"',
+          'Completion date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Completion date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Completion date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Completion date removed',
       },
@@ -27,11 +27,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set completion date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set completion date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed completion date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed completion date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed completion date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed completion date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

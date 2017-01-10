@@ -8,9 +8,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Plan in place set to "{{newValue}}"',
+          'Plan in place set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Plan in place changed from "{{oldValue}}" to "{{newValue}}"',
+          'Plan in place changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Plan in place removed',
       },
@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set plan in place of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set plan in place of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed plan in place of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed plan in place of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed plan in place of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed plan in place of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

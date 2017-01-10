@@ -20,11 +20,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed treatment plan\'s statement of desired outcome of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

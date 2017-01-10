@@ -12,7 +12,7 @@ export default {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            'Root cause analysis completed{{#if comments}}: {{comments}}{{/if}}' +
+            'Root cause analysis completed{{#if comments}}: {{{comments}}}{{/if}}' +
           '{{else}}' +
             'Root cause analysis canceled' +
           '{{/if}}',
@@ -27,9 +27,9 @@ export default {
       text: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            '{{userName}} completed root cause analysis of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} completed root cause analysis of {{{docDesc}}} {{{docName}}}' +
           '{{else}}' +
-            '{{userName}} canceled root cause analysis of {{{docDesc}}} {{{docName}}}' +
+            '{{{userName}}} canceled root cause analysis of {{{docDesc}}} {{{docName}}}' +
           '{{/if}}',
       },
     },

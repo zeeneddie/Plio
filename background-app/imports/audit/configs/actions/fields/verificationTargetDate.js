@@ -10,9 +10,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Verification target date set to "{{newValue}}"',
+          'Verification target date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Verification target date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Verification target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Verification target date removed',
       },
@@ -22,11 +22,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification target date of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set verification target date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification target date of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed verification target date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification target date of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed verification target date of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

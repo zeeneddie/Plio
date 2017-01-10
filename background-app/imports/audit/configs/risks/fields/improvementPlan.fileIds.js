@@ -8,7 +8,7 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{name}}" added',
+        [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{{name}}}" added',
         [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed',
       },
     },
@@ -17,9 +17,9 @@ export default {
     {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to treatment plan of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} added file "{{{name}}}" to treatment plan of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from treatment plan of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed file from treatment plan of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

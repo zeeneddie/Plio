@@ -6,7 +6,7 @@ export default {
   logs: {
     default: {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'File "{{name}}" added',
+        [ChangesKinds.ITEM_ADDED]: 'File "{{{name}}}" added',
         [ChangesKinds.ITEM_REMOVED]: 'File removed',
       },
     },
@@ -15,9 +15,9 @@ export default {
     default: {
       text: {
         [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} added file "{{name}}" to {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} added file "{{{name}}}" to {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} removed file from {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed file from {{{docDesc}}} {{{docName}}}',
       },
     },
   },

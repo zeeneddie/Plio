@@ -9,9 +9,9 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Type set to "{{newValue}}"',
+          'Type set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Type changed from "{{oldValue}}" to "{{newValue}}"',
+          'Type changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
           'Type removed',
       },
@@ -21,11 +21,11 @@ export default {
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set type of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set type of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed type of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed type of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed type of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed type of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],

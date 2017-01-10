@@ -15,7 +15,7 @@ export default {
   notifications: [
     {
       text:
-        '{{userName}}' +
+        '{{{userName}}}' +
         '{{#if isFile}} uploaded new file for ' +
         '{{else}} added new message to {{/if}}' +
         'the discussion of {{{docDesc}}} {{{docName}}}',

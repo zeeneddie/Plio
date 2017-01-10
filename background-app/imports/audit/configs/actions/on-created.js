@@ -31,7 +31,7 @@ export default {
   ],
   notifications: [
     {
-      text: '{{userName}} created {{{docDesc}}} {{{docName}}} for {{{linkedDocDesc}}} {{{linkedDocName}}}',
+      text: '{{{userName}}} created {{{docDesc}}} {{{docName}}} for {{{linkedDocDesc}}} {{{linkedDocName}}}',
       data({ newDoc }) {
         return _(newDoc.linkedTo).map(({ documentId, documentType }) => ({
           linkedDocDesc: getLinkedDocDescription(documentId, documentType),

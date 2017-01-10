@@ -23,11 +23,11 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} removed root cause analysis completion comments of {{{docDesc}}} {{{docName}}}',
       },
     },
   ],
