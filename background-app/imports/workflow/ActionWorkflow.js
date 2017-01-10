@@ -1,9 +1,9 @@
-import { Actions } from '/imports/share/collections/actions.js';
-import { WorkflowTypes } from '/imports/share/constants.js';
-import { isDueToday, isOverdue } from '/imports/share/helpers.js';
-import Workflow from './Workflow.js';
-import NCWorkflow from './NCWorkflow.js';
-import RiskWorkflow from './RiskWorkflow.js';
+import { Actions } from '/imports/share/collections/actions';
+import { WorkflowTypes } from '/imports/share/constants';
+import { isDueToday, isOverdue } from '/imports/share/helpers';
+import Workflow from './Workflow';
+import NCWorkflow from './NCWorkflow';
+import RiskWorkflow from './RiskWorkflow';
 
 
 export default class ActionWorkflow extends Workflow {
@@ -30,10 +30,10 @@ export default class ActionWorkflow extends Workflow {
     const action = this._doc;
 
     const NCsIds = action.getLinkedNCsIds();
-    _(NCsIds).each(id => new NCWorkflow(id).refreshStatus());
+    NCsIds.forEach(id => new NCWorkflow(id).refreshStatus());
 
     const risksIds = action.getLinkedRisksIds();
-    _(risksIds).each(id => new RiskWorkflow(id).refreshStatus());
+    risksIds.forEach(id => new RiskWorkflow(id).refreshStatus());
   }
 
   _getDeletedStatus() {
@@ -48,7 +48,7 @@ export default class ActionWorkflow extends Workflow {
     if (action.completed()) {
       return {
         [WorkflowTypes.THREE_STEP]: 9, // Completed
-        [WorkflowTypes.SIX_STEP]: 4 // In progress - completed, not yet verified
+        [WorkflowTypes.SIX_STEP]: 4, // In progress - completed, not yet verified
       }[this._workflowType];
     }
 

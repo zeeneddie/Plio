@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { UserSchema } from '/imports/share/schemas/user-schema.js';
+import { UserSchema } from '/imports/share/schemas/user-schema';
 
 
 Meteor.users.attachSchema(UserSchema);
@@ -10,13 +10,10 @@ Meteor.users.helpers({
     return this.emails[0].address;
   },
   fullName() {
-    const { firstName='', lastName='' } = this.profile;
-
-    if (firstName && lastName) {
-      return `${firstName} ${lastName}`;
-    }
+    const { firstName = '', lastName = '' } = this.profile;
+    return [firstName, lastName].join(' ');
   },
   fullNameOrEmail() {
     return this.fullName() || this.email();
-  }
+  },
 });

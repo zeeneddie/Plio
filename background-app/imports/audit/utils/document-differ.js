@@ -11,12 +11,12 @@ export default DocumentDiffer = {
 
     const {
       ITEM_ADDED, ITEM_REMOVED,
-      FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED
+      FIELD_ADDED, FIELD_CHANGED, FIELD_REMOVED,
     } = ChangesKinds;
 
-    const getFieldName = (path) => {
-      return path.map(field => _.isNumber(field) ? '$': field).join('.');
-    };
+    const getFieldName = (path) => (
+      path.map(field => _.isNumber(field) ? '$': field).join('.')
+    );
 
     const getValue = (obj, path) => {
       let val = obj;
@@ -37,12 +37,14 @@ export default DocumentDiffer = {
     const processedArrayFields = [];
 
     rawArrayDiffs.forEach((rawDiff) => {
-      const { kind, path, item: { kind:itemKind } = {} } = rawDiff;
+      const { path, item: { kind: itemKind } = {} } = rawDiff;
 
       const oldArray = getValue(oldDocument, path);
       const newArray = getValue(newDocument, path);
 
-      let arr1, arr2, changeKind;
+      let arr1;
+      let arr2;
+      let changeKind;
       if (itemKind === 'N') {
         arr1 = newArray;
         arr2 = oldArray;
@@ -63,14 +65,14 @@ export default DocumentDiffer = {
         kind: changeKind,
         field,
         item,
-        path
+        path,
       });
 
       processedArrayFields.push(new RegExp(`^${field}\\.\\$`));
     });
 
     rawFieldDiffs.forEach((rawDiff) => {
-      const { kind, path, lhs:oldValue, rhs:newValue } = rawDiff;
+      const { kind, path, lhs: oldValue, rhs: newValue } = rawDiff;
 
       const field = getFieldName(path);
 
@@ -82,7 +84,7 @@ export default DocumentDiffer = {
       const changesKinds = {
         N: FIELD_ADDED,
         E: FIELD_CHANGED,
-        D: FIELD_REMOVED
+        D: FIELD_REMOVED,
       };
 
       diffs.push({
@@ -90,11 +92,11 @@ export default DocumentDiffer = {
         field,
         oldValue,
         newValue,
-        path
+        path,
       });
     });
 
     return diffs;
-  }
+  },
 
-}
+};

@@ -8,6 +8,6 @@ export default AuditConfigs = {
 
   get(collectionName) {
     return this._auditConfigs[collectionName];
-  }
+  },
 
 };
