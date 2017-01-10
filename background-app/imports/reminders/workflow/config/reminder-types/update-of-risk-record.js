@@ -6,25 +6,25 @@ import { getUserFullNameOrEmail } from '/imports/share/helpers';
 export default {
   title: {
     [TimeRelations.BEFORE_DUE]:
-      'Update of risk record related to {{docDesc}} {{{docName}}} is {{diff}} before due',
+      'Update of risk record {{{docName}}} is {{diff}} before due',
     [TimeRelations.DUE_TODAY]:
-      'Update of risk record related to {{docDesc}} {{{docName}}} is due today',
+      'Update of risk record {{{docName}}} is due today',
     [TimeRelations.OVERDUE]:
-      'Update of risk record related to {{docDesc}} {{{docName}}} is {{diff}} overdue',
+      'Update of risk record {{{docName}}} is {{diff}} overdue',
   },
 
   text: {
     [TimeRelations.BEFORE_DUE]:
       'You have been asked {{#if assignedBy}}by {{{assignedBy}}} {{/if}}' +
-      'to complete an update of risk record related to {{docDesc}} ' +
+      'to complete an update of risk record ' +
       '{{{docName}}} by {{date}}. This action is {{diff}} before due.',
     [TimeRelations.DUE_TODAY]:
       'You have been asked {{#if assignedBy}}by {{{assignedBy}}} {{/if}}' +
-      'to complete an update of risk record related to {{docDesc}} ' +
+      'to complete an update of risk record ' +
       '{{{docName}}} by {{date}}. This action is due today.',
     [TimeRelations.OVERDUE]:
       'You have been asked {{#if assignedBy}}by {{{assignedBy}}} {{/if}}' +
-      'to complete an update of risk record related to {{docDesc}} ' +
+      'to complete an update of risk record ' +
       '{{{docName}}} by {{date}}. This action is {{diff}} overdue.',
   },
 

@@ -28,10 +28,15 @@ export default {
       text: '{{{userName}}} added you to the notification list of {{{docDesc}}} {{{docName}}}',
       title: 'You have been added to the notification list',
       emailTemplateData({ newDoc, auditConfig }) {
+        const url = auditConfig.docUrl(newDoc);
+        if (!url) {
+          return {};
+        }
+
         return {
           button: {
             label: 'View document',
-            url: auditConfig.docUrl(newDoc),
+            url,
           },
         };
       },

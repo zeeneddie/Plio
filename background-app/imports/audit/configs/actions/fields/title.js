@@ -1,5 +1,5 @@
 import { getReceivers } from '../helpers';
-import title from '../../common/fields/notify';
+import title from '../../common/fields/title';
 
 
 export default {

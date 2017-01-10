@@ -1,5 +1,5 @@
 import { getReceivers } from '../helpers';
-import ownerId from '../../common/fields/notify';
+import ownerId from '../../common/fields/ownerId';
 
 
 export default {

@@ -1,5 +1,5 @@
 import { getLogData } from './helpers';
-import { getPrettyOrgDate } from '../../utils/helpers';
+import { getPrettyTzDate } from '/imports/helpers/date';
 
 
 export default {
@@ -13,7 +13,7 @@ export default {
   data({ oldDoc, organization, auditConfig }) {
     return {
       docName: () => auditConfig.docName(oldDoc),
-      date: () => getPrettyOrgDate(oldDoc.date, organization.timezone),
+      date: () => getPrettyTzDate(oldDoc.date, organization.timezone),
     };
   },
 };

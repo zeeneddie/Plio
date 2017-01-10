@@ -228,7 +228,7 @@ export const getUserFullNameOrEmail = (userOrId) => {
 
 export const htmlToPlainText = (html) => {
   check(html, String);
-  
+
   return html.replace(/<br>/gi, "\n")
     .replace(/<p.*>/gi, "\n")
     .replace(/<a.*href="(.*?)".*>(.*?)<\/a>/gi, " $2 (Link->$1) ")

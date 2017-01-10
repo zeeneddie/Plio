@@ -13,7 +13,7 @@ import {
 } from '/imports/helpers/description';
 import {
   getDocUnsubscribePath,
-  getActionUrl,
+  getDocUrl,
   getProblemUrl,
   getStandardUrl,
   getWorkItemUrl,

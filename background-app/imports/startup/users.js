@@ -11,7 +11,7 @@ Meteor.users.helpers({
   },
   fullName() {
     const { firstName = '', lastName = '' } = this.profile;
-    return [firstName, lastName].join(' ');
+    return (firstName || lastName) ? [firstName, lastName].join(' ') : '';
   },
   fullNameOrEmail() {
     return this.fullName() || this.email();
