@@ -9,9 +9,6 @@ import {
   ProgressSchema, ErrorSchema
 } from '/imports/share/schemas/schemas.js';
 import { checkOrgMembership, checkDocExistance } from '/imports/api/checkers.js';
-import { nameIsAllowed } from './validators.js';
-import { sanitizeFilename } from '/imports/share/helpers.js';
-import { FILE_NAME_NOT_VALID } from './errors.js';
 
 const onUpdateCheck = ({ _id, userId }) => {
 	const { organizationId } = checkDocExistance(Files, { _id });
@@ -24,13 +21,9 @@ const onUpdateCheck = ({ _id, userId }) => {
 export const insert = new ValidatedMethod({
   name: 'Files.insert',
 
-  validate(args) {
-    new SimpleSchema([RequiredSchema]).validator(args);
+  validate: new SimpleSchema([RequiredSchema]).validator(),
 
-    if (!nameIsAllowed(args.name)) throw FILE_NAME_NOT_VALID;
-  },
-
-  run({ ...args }) {
+  run(args) {
     const userId = this.userId;
 
     if (!userId) {
@@ -38,8 +31,8 @@ export const insert = new ValidatedMethod({
     }
 
     checkOrgMembership(userId, args.organizationId);
-    return FilesService.insert({ ...args });
-  }
+    return FilesService.insert(args);
+  },
 });
 
 export const updateProgress = new ValidatedMethod({

@@ -6,49 +6,51 @@ import { HelpDocs } from '/imports/share/collections/help-docs.js';
 import { Organizations } from '/imports/share/collections/organizations.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
 import { isOrgMember, canChangeHelpDocs } from '/imports/api/checkers.js';
+import { sanitizeFilename } from '/imports/share/helpers';
 
+
+const createPath = (...segments) => segments.join('/');
 
 const configureSlingshot = () => {
   const {
-    bucketName, acl, ussionsFilesDir, userAvatarsDir,
+    bucketName, acl, userAvatarsDir,
     standardFilesDir, improvementPlanFilesDir,
     nonConformityFilesDir, riskFilesDir,
     actionFilesDir, rootCauseAnalysisFilesDir,
     discussionFilesDir, helpDocsFilesDir,
   } = Meteor.settings.AWSS3Bucket;
 
-  const attachmentDisposition = (file, metaContext) => {
-    const fileName = file.name;
+  const attachmentDisposition = (file) => {
+    const fileName = sanitizeFilename(file.name);
     const disposition = 'attachment';
     return `${disposition}; filename="${fileName}"; filename*=utf-8''${fileName}`;
   };
 
   Slingshot.createDirective('discussionFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
       }
-
       return true;
     },
-
     key(file, metaContext) {
       const { organizationId, discussionId } = metaContext;
-      return `uploads/${organizationId}/${discussionFilesDir}/${discussionId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        discussionFilesDir,
+        discussionId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`,
+      );
+    },
   });
 
   Slingshot.createDirective('userAvatars', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -56,20 +58,20 @@ const configureSlingshot = () => {
 
       return true;
     },
-
     key(file, metaContext) {
       const { userId } = metaContext;
-      return `${userAvatarsDir}/${userId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        userAvatarsDir,
+        userId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('standardFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -77,18 +79,21 @@ const configureSlingshot = () => {
 
       return true;
     },
-
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        standardFilesDir,
+        standardId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('htmlAttachmentPreview', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -96,18 +101,21 @@ const configureSlingshot = () => {
 
       return true;
     },
-
     key(file, metaContext) {
       const { organizationId, standardId } = metaContext;
-      return `uploads/${organizationId}/${standardFilesDir}/${standardId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        standardFilesDir,
+        standardId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('improvementPlanFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
 
     authorize() {
@@ -119,18 +127,20 @@ const configureSlingshot = () => {
     },
 
     key(file, metaContext) {
-      const { organizationId, improvementPlanId } = metaContext;
-      return `uploads/${organizationId}/${improvementPlanFilesDir}/${Random.id()}-${file.name}`;
-    }
+      const { organizationId } = metaContext;
+      return createPath(
+        'uploads',
+        organizationId,
+        improvementPlanFilesDir,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('nonConformityFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -138,20 +148,22 @@ const configureSlingshot = () => {
 
       return true;
     },
-
     key(file, metaContext) {
       const { organizationId, nonConformityId } = metaContext;
-      return `uploads/${organizationId}/${nonConformityFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        nonConformityFilesDir,
+        nonConformityId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('riskFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
-
     authorize() {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -159,18 +171,21 @@ const configureSlingshot = () => {
 
       return true;
     },
-
     key(file, metaContext) {
       const { organizationId, riskId } = metaContext;
-      return `uploads/${organizationId}/${riskFilesDir}/${riskId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        riskFilesDir,
+        riskId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('actionFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
 
     authorize() {
@@ -183,17 +198,20 @@ const configureSlingshot = () => {
 
     key(file, metaContext) {
       const { organizationId, actionId } = metaContext;
-      return `uploads/${organizationId}/${actionFilesDir}/${actionId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        actionFilesDir,
+        actionId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('rootCauseAnalysisFiles', Slingshot.S3Storage, {
+    acl,
     bucket: bucketName,
-
-    acl: acl,
-
     contentDisposition: attachmentDisposition,
-
     authorize(file, metaContext) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -217,17 +235,20 @@ const configureSlingshot = () => {
       const { nonConformityId } = metaContext;
       const { organizationId } = NonConformities.findOne({ _id: nonConformityId });
 
-      return `uploads/${organizationId}/${rootCauseAnalysisFilesDir}/${nonConformityId}/${Random.id()}-${file.name}`;
-    }
+      return createPath(
+        'uploads',
+        organizationId,
+        rootCauseAnalysisFilesDir,
+        nonConformityId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
+    },
   });
 
   Slingshot.createDirective('helpDocFiles', Slingshot.S3Storage, {
-    bucket: bucketName,
-
     acl,
-
+    bucket: bucketName,
     contentDisposition: attachmentDisposition,
-
     authorize(file, { helpDocId }) {
       if (!this.userId) {
         throw new Meteor.Error(403, 'Unauthorized user cannot upload files');
@@ -249,11 +270,17 @@ const configureSlingshot = () => {
 
     key(file, { helpDocId }) {
       const { _id: organizationId } = Organizations.findOne({ isAdminOrg: true });
-      return `uploads/${organizationId}/${helpDocsFilesDir}/${helpDocId}/${Random.id()}-${file.name}`;
+      return createPath(
+        'uploads',
+        organizationId,
+        helpDocsFilesDir,
+        helpDocId,
+        `${Random.id()}-${sanitizeFilename(file.name)}`
+      );
     },
   });
 };
 
 // if (Meteor.isProduction) {
-  configureSlingshot();
+configureSlingshot();
 // }

@@ -239,5 +239,5 @@ export const htmlToPlainText = (html) => {
 export const sanitizeFilename = (str) => {
   check(str, String);
 
-  return str.replace(/[^a-z0-9]/gi, '_').replace(/_{2,}/g, '_');
-}
+  return str.replace(/[^a-z0-9.]/gi, '_').replace(/_{2,}/g, '_');
+};
