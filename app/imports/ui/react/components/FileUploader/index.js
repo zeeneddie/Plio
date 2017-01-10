@@ -4,7 +4,7 @@ import Icon from '../Icon';
 
 const FileUploader = ({ value, onChange }) => (
   <div className="btn btn-secondary btn-file">
-    <Icon name="paperclip" size="3" />
+    <Icon name="paperclip" />
     <input
       type="file"
       multiple="multiple"
