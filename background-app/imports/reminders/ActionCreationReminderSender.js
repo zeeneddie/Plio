@@ -7,7 +7,13 @@ import { Risks } from '/imports/share/collections/risks';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
-import { getProblemName, getProblemDescription, getProblemUrl, getDiffInDays } from '/imports/helpers';
+import {
+  getProblemName,
+  getProblemDescription,
+  getProblemUrl,
+  getDiffInDays,
+  getDocUnsubscribePath,
+} from '/imports/helpers';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
@@ -97,7 +103,18 @@ export default class ActionCreationReminderSender {
     ));
   }
 
+  _getReceivers({ identifiedBy, notify = [] }) {
+    return (identifiedBy && notify.includes(identifiedBy))
+      ? [identifiedBy]
+      : [];
+  }
+
   _sendReminder(problem, problemType) {
+    const receivers = this._getReceivers(problem);
+    if (!receivers.length) {
+      return;
+    }
+
     const problemDesc = getProblemDescription(problemType);
     const problemName = getProblemName(problem);
     const prettyDate = getFormattedDate(problem.createdAt, 'MMMM DD, YYYY');
@@ -108,14 +125,12 @@ export default class ActionCreationReminderSender {
       `Action(s) now need to be created for this ${problemDesc} (${diff} overdue).`;
 
     const buttonLabel = `Go to this ${problemDesc}`;
-    const buttonUrl = Meteor.absoluteUrl(
-      getProblemUrl(problem, problemType, this._organization),
-      {
-        rootUrl: Meteor.settings.mainApp.url,
-      }
-    );
+    const buttonUrl = getProblemUrl(problem, problemType, this._organization);
+
+    const unsubscribeFromNotificationsUrl = getDocUnsubscribePath(buttonUrl);
 
     const templateData = {
+      unsubscribeFromNotificationsUrl,
       organizationName: this._organization.name,
       title: emailSubject,
       text: emailText,
@@ -123,11 +138,12 @@ export default class ActionCreationReminderSender {
         label: buttonLabel,
         url: buttonUrl,
       },
+      docName: problemName,
     };
 
     new NotificationSender({
       templateName: REMINDER_EMAIL_TEMPLATE,
-      recipients: [problem.identifiedBy],
+      recipients: receivers,
       emailSubject,
       templateData,
     }).sendEmail();

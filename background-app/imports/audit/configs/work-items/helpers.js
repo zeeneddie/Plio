@@ -1,3 +1,5 @@
+import { _ } from 'meteor/underscore';
+
 import { ActionTypes, ProblemTypes, WorkItemsStore } from '/imports/share/constants.js';
 import { Actions } from '/imports/share/collections/actions.js';
 import { NonConformities } from '/imports/share/collections/non-conformities.js';
@@ -48,9 +50,15 @@ export const getData = function({ newDoc, user }) {
   };
 };
 
-export const getReceivers = function({ newDoc: { assigneeId }, user }) {
-  const userId = getUserId(user);
-  return (userId !== assigneeId) ? [assigneeId] : [];
+export const getReceivers = function({ newDoc, user }) {
+  const { assigneeId } = newDoc || {};
+
+  const needToSend = _.every([
+    assigneeId,
+    assigneeId !== getUserId(user),
+  ]);
+
+  return needToSend ? [assigneeId] : [];
 };
 
 const getEmailTemplateData = function({ newDoc }) {

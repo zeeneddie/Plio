@@ -1,5 +1,6 @@
 import { Match } from 'meteor/check';
 import moment from 'moment-timezone';
+import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions.js';
 import { DocumentTypes, ProblemMagnitudes } from '/imports/share/constants.js';
@@ -111,7 +112,7 @@ export default class ReminderSender {
       });
     };
 
-    createProblemReminders(NonConformities, NCsIds, DocumentTypes.NC);
+    createProblemReminders(NonConformities, NCsIds, DocumentTypes.NON_CONFORMITY);
     createProblemReminders(Risks, risksIds, DocumentTypes.RISK);
 
     const actionQuery = {
@@ -217,6 +218,9 @@ export default class ReminderSender {
       const text = renderTemplate(config.text[templateKey], templateData);
 
       const receivers = config.receivers(args);
+      if (!receivers.length) {
+        return;
+      }
 
       const emailTemplateData = {
         organizationName: this._organization.name,
@@ -236,11 +240,22 @@ export default class ReminderSender {
         }
       });
 
+      const unsubscribeFromNotificationsUrl = config.unsubscribeFromNotificationsUrl &&
+        config.unsubscribeFromNotificationsUrl(args);
+
+      if (unsubscribeFromNotificationsUrl) {
+        const docName = templateData.docName();
+        _(emailTemplateData).extend({
+          unsubscribeFromNotificationsUrl,
+          docName,
+        });
+      }
+
       new NotificationSender({
         templateName: REMINDER_EMAIL_TEMPLATE,
         recipients: receivers,
         emailSubject: title,
-        templateData: emailTemplateData
+        templateData: emailTemplateData,
       }).sendEmail();
     });
   }
