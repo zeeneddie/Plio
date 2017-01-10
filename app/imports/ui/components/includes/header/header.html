@@ -14,5 +14,8 @@
       </div>
     {{/Navbar_Title}}
     {{> Navbar_Arrow onClick=(callback 'onNavigate')}}
+    {{#if getOptionsMenu}}
+      <div>{{> React (getOptionsMenu) }}</div>
+    {{/if}}
   {{/Navbar}}
 </template>

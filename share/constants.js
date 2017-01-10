@@ -74,6 +74,7 @@ export const CollectionNames = {
   STANDARD_BOOK_SECTIONS: 'StandardsBookSections',
   STANDARDS: 'Standards',
   WORK_ITEMS: 'WorkItems',
+  USERS: 'users',
 };
 
 export const DefaultRiskTypes = [

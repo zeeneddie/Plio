@@ -3,6 +3,7 @@ import { Tracker } from 'meteor/tracker';
 
 import { RiskFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
+import HeaderMenu from '/imports/ui/react/risks/components/HeaderMenu';
 
 Template.Risks_Header.viewmodel({
   mixin: ['risk', 'organization', 'router'],
@@ -12,6 +13,11 @@ Template.Risks_Header.viewmodel({
       filters: RiskFilters,
       isActiveFilter: this.isActiveRiskFilter.bind(this),
       onSelectFilter: this.onSelectFilter.bind(this),
+      getOptionsMenu() {
+        return {
+          component: HeaderMenu,
+        };
+      },
     };
   },
   risk() {
