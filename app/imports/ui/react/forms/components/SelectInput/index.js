@@ -92,7 +92,11 @@ export default class SelectInput extends React.Component {
 
     // we need a timeout there to prevent some flushy things to happen
     // also provide a callback to reset the value if method thrown an error
-    setTimeout(() => this.props.onSelect(e, { text, ...other }, callback), 50);
+    setTimeout(() => {
+      this.props.onSelect(e, { text, ...other }, callback);
+
+      this.shouldCallOnBlur = true;
+    }, 50);
   }
 
   onChange(e) {
