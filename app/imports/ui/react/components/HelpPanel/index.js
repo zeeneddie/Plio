@@ -3,18 +3,19 @@ import React, { PropTypes } from 'react';
 import Head from './Head';
 import Body from './Body';
 
-const HelpPanel = ({ collapsed, onToggleCollapse, refCb, children }) => (
+const HelpPanel = ({ collapsed, onToggleCollapse, refCb, showIconAlways, children }) => (
   <div>
-    <Head {...{ collapsed, onToggleCollapse }} />
-    <Body {...{ refCb, onToggleCollapse }}>{children}</Body>
+    <Head {...{ onToggleCollapse, collapsed: showIconAlways ? true : collapsed }} />
+    <Body {...{ refCb, collapsed, onToggleCollapse }}>{children}</Body>
   </div>
 );
 
 HelpPanel.propTypes = {
   collapsed: PropTypes.bool.isRequired,
   onToggleCollapse: PropTypes.func.isRequired,
+  showIconAlways: PropTypes.bool,
   refCb: PropTypes.func,
-  children: PropTypes.func.isRequired,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.string, PropTypes.node]).isRequired,
 };
 
 HelpPanel.Head = Head;

@@ -36,4 +36,4 @@ sweetAlert.success = (title, body) => swal({
   showConfirmButton: false,
 });
 
-export default sweetAlert;
+export default Object.assign(sweetAlert, swal);

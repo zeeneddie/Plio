@@ -1,13 +1,18 @@
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { Dropdown, InputGroup, InputGroupButton, DropdownMenu, DropdownItem } from 'reactstrap';
+import {
+  Dropdown,
+  InputGroup,
+  InputGroupButton,
+  DropdownMenu,
+  DropdownItem,
+} from 'reactstrap';
 
-import { getC, propEq } from '/imports/api/helpers';
 import TextInput from '../../TextInput';
 import Button from '../../../../components/Buttons/Button';
 import Icon from '../../../../components/Icons/Icon';
 
-const SelectSingleView = ({
+const SelectInputView = ({
   value,
   selected,
   items,
@@ -19,6 +24,8 @@ const SelectSingleView = ({
   onFocus,
   onBlur,
   toggle,
+  noHint,
+  isControlled,
   children,
 }) => (
   <Dropdown
@@ -26,11 +33,8 @@ const SelectSingleView = ({
     {...{ toggle, isOpen }}
   >
     <InputGroup>
-      <TextInput
-        value={getC('text', items.find(propEq('value', value))) || ''}
-        {...{ disabled, placeholder, onChange, onFocus, onBlur }}
-      />
-      <InputGroupButton onClick={toggle}>
+      <TextInput {...{ value, disabled, placeholder, isControlled, onChange, onFocus, onBlur }} />
+      <InputGroupButton onClick={e => (isOpen ? onBlur(e) : onFocus(e))}>
         <Button color="secondary icon" className={cx({ disabled })} {...{ disabled }}>
           <Icon name="caret-down" />
         </Button>
@@ -42,7 +46,7 @@ const SelectSingleView = ({
           <DropdownItem
             key={i}
             tag="a"
-            onClick={e => onSelect(e, item)}
+            onMouseDown={e => onSelect(e, item)}
             className={cx('pointer', {
               indent: item.indent,
               active: selected === item.value,
@@ -51,7 +55,7 @@ const SelectSingleView = ({
             <span>{item.text}</span>
           </DropdownItem>
         ))
-      ) : (
+      ) : !noHint && (
         <DropdownItem tag="div">
           {(() => {
             const Tag = !!children ? 'span' : 'strong';
@@ -64,7 +68,7 @@ const SelectSingleView = ({
   </Dropdown>
 );
 
-SelectSingleView.propTypes = {
+SelectInputView.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   selected: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   items: PropTypes.arrayOf(PropTypes.shape({
@@ -80,7 +84,9 @@ SelectSingleView.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onFocus: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  noHint: PropTypes.bool,
+  isControlled: PropTypes.bool,
   children: PropTypes.node,
 };
 
-export default SelectSingleView;
+export default SelectInputView;

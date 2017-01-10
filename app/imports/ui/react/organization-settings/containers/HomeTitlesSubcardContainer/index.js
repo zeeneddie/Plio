@@ -1,7 +1,6 @@
 import { changeTitle } from '/imports/api/organizations/methods';
-import { _ } from 'meteor/underscore';
 import { connect } from 'react-redux';
-import { compose, withHandlers, withProps, withState } from 'recompose';
+import { compose, withHandlers, withProps } from 'recompose';
 import { composeWithTracker } from 'react-komposer';
 
 import store from '/imports/client/store';
@@ -12,18 +11,16 @@ import { pickDeep } from '/imports/api/helpers';
 
 const enhance = compose(
   withProps({ store }),
-  withState('collapsed', 'setCollapsed', true),
-  withState('isHelpCollapsed', 'setIsHelpCollapsed', true),
+  connect(),
   composeWithTracker(initMainData),
   connect(pickDeep(['organizations.organization'])),
   withHandlers({
-    onFieldChangeHandler: ({ organization }) => (fieldName, fieldValue) => {
+    onSelectTitle: ({ organization }) => (e, { text, value }, callback) =>
       changeTitle.call({
-        fieldName,
-        fieldValue,
+        fieldName: `${value}`.replace(/\(.*\)/, ''),
+        fieldValue: text,
         organizationId: organization._id,
-      });
-    },
+      }, callback),
   }),
 );
 

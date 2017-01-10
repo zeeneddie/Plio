@@ -1,76 +1,89 @@
 import React, { PropTypes } from 'react';
-import { OrganizationSettingsHelp } from '/imports/api/help-messages';
-import Subcard from '../../../components/Subcard';
-import Form from '/imports/ui/react/forms/components/Form';
-import TitleSelect from '../TitleSelect';
+import { CardBlock } from 'reactstrap';
 
+import { OrganizationSettingsHelp } from '/imports/api/help-messages';
+import withStateCollapsed from '/imports/ui/react/helpers/withStateCollapsed';
+import CardBlockCollapse from '/imports/ui/react/components/CardBlockCollapse';
+import HelpPanel from '/imports/ui/react/components/HelpPanel';
+import HomeScreenTitle from '../../fields/edit/components/HomeScreenTitle';
 import {
   StandardTitles,
   RiskTitles,
   NonConformitiesTitles,
   WorkInboxTitles,
 } from '/imports/share/constants';
+import { createWorkspaceTitleValue } from '../../helpers';
+import { equals } from '/imports/api/helpers';
 
+const ITEM_MAP = {
+  standards: {
+    label: 'Standards',
+    items: StandardTitles,
+  },
+  risks: {
+    label: 'Risk register',
+    items: RiskTitles,
+  },
+  nonConformities: {
+    label: 'Non-conformities',
+    items: NonConformitiesTitles,
+  },
+  workInbox: {
+    label: 'Work inbox',
+    items: WorkInboxTitles,
+  },
+};
+const HelpPanelEnhanced = withStateCollapsed(true)(HelpPanel);
 
 const HomeTitlesSubcard = ({
   loading,
-  onFieldChangeHandler,
+  onSelectTitle: onSelect,
   organization: { homeScreenTitles: titles },
-  isHelpCollapsed,
-  setIsHelpCollapsed,
-  ...other,
-}) => (
-  <Subcard loading={loading} {...other}>
-    <Subcard.Title>
-      <Subcard.TitleItem pull="left">
-        Workspace titles
-      </Subcard.TitleItem>
-    </Subcard.Title>
+}) => {
+  const fields = Object.keys(ITEM_MAP).map((key) => {
+    // we need a key for a method and a value to know which title is selected
+    const currentItem = ITEM_MAP[key];
+    const selectedTitle = titles[key];
+    const newSelectedTitle = !!titles[key] && !currentItem.items.find(equals(selectedTitle))
+     ? [{
+       text: selectedTitle,
+       value: createWorkspaceTitleValue(key, selectedTitle),
+     }]
+     : null;
 
-    <Subcard.Content>
-      <Form autosave onFormChange={onFieldChangeHandler}>
-        <TitleSelect
-          name="standards"
-          label="Standards"
-          items={StandardTitles}
-          selected={titles.standards}
-        />
+    const items = currentItem.items.map((title) => ({
+      text: title,
+      value: createWorkspaceTitleValue(key, title),
+    })).concat(newSelectedTitle || []);
 
-        <TitleSelect
-          name="risks"
-          label="Risk register"
-          items={RiskTitles}
-          selected={titles.risks}
-        />
+    return (
+      <HomeScreenTitle
+        {...{ ...currentItem, key, items, onSelect }}
+        id={key}
+        noHint
+        selected={createWorkspaceTitleValue(key, selectedTitle)}
+        placeholder="Select a title..."
+      />
+    );
+  });
 
-        <TitleSelect
-          name="nonConformities"
-          label="Non-conformities"
-          items={NonConformitiesTitles}
-          selected={titles.nonConformities}
-        />
+  return (
+    <CardBlockCollapse leftText="Workspace titles" {...{ loading }}>
+      <CardBlock>
+        {fields}
+      </CardBlock>
 
-        <TitleSelect
-          name="workInbox"
-          label="Work inbox"
-          items={WorkInboxTitles}
-          selected={titles.workInbox}
-        />
-      </Form>
-    </Subcard.Content>
-
-    <Subcard.Help collapsed={isHelpCollapsed} setCollapsed={setIsHelpCollapsed} >
-      {OrganizationSettingsHelp.homeScreenTitles}
-    </Subcard.Help>
-  </Subcard>
-);
+      <HelpPanelEnhanced showIconAlways>
+        {OrganizationSettingsHelp.homeScreenTitles}
+      </HelpPanelEnhanced>
+    </CardBlockCollapse>
+  );
+};
 
 HomeTitlesSubcard.propTypes = {
   loading: PropTypes.bool,
-  onFieldChangeHandler: PropTypes.func,
   organization: PropTypes.object,
-  isHelpCollapsed: PropTypes.bool,
-  setIsHelpCollapsed: PropTypes.func,
+  onSelectTitle: PropTypes.func,
 };
 
 export default HomeTitlesSubcard;
