@@ -22,7 +22,7 @@ const enhance = withState('isOpen', 'setIsOpen', false);
 const HeaderMenu = (props) => (
   <HeaderOptionsMenu {...props}>
     <DataExportModal title="Non-conformities export" {...dataExportProps}>
-      <DropdownItem>Export Data</DropdownItem>
+      <DropdownItem tag="a">Export Data</DropdownItem>
     </DataExportModal>
   </HeaderOptionsMenu>
 );
