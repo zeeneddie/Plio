@@ -37,7 +37,7 @@ const DataExportModal = enhance((props) => {
         <CardBlock className="text-xs-center">
           <Button color="primary" disabled={props.processing}>
             {props.processing ? ([
-              <Icon name="spinner spin" margin="right" />,
+              <Icon key="download-snippet" name="spinner spin" margin="right" />,
               'Exporting...',
             ]) : (
               'Download CSV file'
