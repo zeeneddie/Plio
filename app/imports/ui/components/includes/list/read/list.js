@@ -24,7 +24,7 @@ Template.List_Read.viewmodel({
   onRendered() {
     this.expandCollapsed(this._id());
   },
-  
+
   // can be overwritten by passing this function from parent component as prop
   _transform() {
     return {
@@ -82,7 +82,7 @@ Template.List_Read.viewmodel({
       if (vms && vms.length) {
         this.animating(true);
 
-        this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted());
+        this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted(value, ids));
       }
     }, 0);
   },
@@ -114,8 +114,9 @@ Template.List_Read.viewmodel({
       this.onSearchCompleted();
     });
   },
-  onSearchCompleted() {
+  onSearchCompleted(searchText, searchResult) {
     this.animating(false);
     Tracker.afterFlush(() => this.focused(true));
+    this.onAfterSearch(searchText, searchResult);
   },
 });

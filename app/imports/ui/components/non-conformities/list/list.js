@@ -113,6 +113,13 @@ Template.NC_List.viewmodel({
   onSearchInputValue() {
     return value => extractIds(this._findNCForFilter().array);
   },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToNC(searchResult[0]);
+      }
+    };
+  },
   _getTotalUnreadMessages(ncs) {
     const NCIds = extractIds(ncs);
     const totalUnreadMessages = NCIds.reduce((prev, cur) => {
