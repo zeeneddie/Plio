@@ -253,4 +253,9 @@ export const FILE_TYPE_MAP = {
   VIDEO: 'video',
 };
 
+export const ORDER = {
+  ASC: 'ACS',
+  DESC: 'DECS',
+};
+
 export const COLLECTION_NAME_MAP = mirrorKeys(CollectionNames);

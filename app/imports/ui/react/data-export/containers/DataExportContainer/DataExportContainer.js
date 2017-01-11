@@ -14,14 +14,12 @@ import initMainData from '../../loaders/initMainData';
 
 const enhance = compose(
   withProps(() => ({ store })),
-  withState('downloadLink', 'setDownloadLink', ''),
   withState('processing', 'setProcessing', false),
   composeWithTracker(initMainData),
   connect(pickDeep(['organizations.organization'])),
   withHandlers({
     onSubmit: ({
       organization,
-      setDownloadLink,
       setProcessing,
       docType,
     }) => data => {
@@ -43,9 +41,7 @@ const enhance = compose(
       })(store.dispatch)
         .then(({ fileName, token }) => {
           setProcessing(false);
-          const downloadLink = Meteor.absoluteUrl(`export/${fileName}?token=${token}`);
-
-          setDownloadLink(downloadLink);
+          window.location = Meteor.absoluteUrl(`export/${fileName}?token=${token}`);
         })
         .catch(() => setProcessing(false));
     },

@@ -7,8 +7,9 @@ import { Tracker } from 'meteor/tracker';
 import { _ } from 'meteor/underscore';
 import curry from 'lodash.curry';
 
-import { WorkInboxFilters } from '/imports/api/constants';
+import { WorkInboxFilters, ORDER } from '/imports/api/constants';
 import { findById, extractIds, propEqId } from '/imports/api/helpers';
+
 
 Template.WorkInbox_List.viewmodel({
   share: 'search',
@@ -188,14 +189,17 @@ Template.WorkInbox_List.viewmodel({
   items(userId) {
     const byProp = curry((prop, predicate, array) => array.filter(item => predicate(item[prop])));
     const byStatus = byProp('status');
-    const sortItems = array => (
-      array.sort(({ targetDate: d1 }, { targetDate: d2 }) => d2 - d1)
+    const sortItems = (array, order = ORDER.ASC) => (
+      array.sort(({ targetDate: d1 }, { targetDate: d2 }) => (
+        order === ORDER.ASC ? d2 - d1 : d1 - d2
+      ))
     );
+
     const isInProgress = status => this.STATUSES.IN_PROGRESS().includes(status);
     const isCompleted = status => this.STATUSES.COMPLETED() === status;
     const getItems = (userQuery) => {
       const workItemsQuery = { assigneeId: userQuery, isDeleted: false };
-      const workItems = sortItems(this.getPendingItems(workItemsQuery));
+      const workItems = this.getPendingItems(workItemsQuery);
 
       const deletedQuery = {
         ...this.getActionsSearchQuery(),
@@ -209,8 +213,8 @@ Template.WorkInbox_List.viewmodel({
         isDeleted: true,
       }));
 
-      const current = byStatus(isInProgress, workItems);
-      const completed = byStatus(isCompleted, workItems);
+      const current = byStatus(isInProgress, sortItems(workItems, ORDER.DESC));
+      const completed = byStatus(isCompleted, sortItems(workItems));
 
       return {
         current,

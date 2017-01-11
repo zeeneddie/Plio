@@ -13,9 +13,6 @@ import SelectOptions from '../SelectOptions';
 
 const enhance = withState('isFilterCollapsed', 'setIsFilterCollapsed', true);
 const DataExportModal = enhance((props) => {
-  const exportLabel = props.processing && 'Exporting...' ||
-    props.downloadLink && 'Export again' || 'Export';
-
   return (
     <Form onSubmit={props.onSubmit}>
       <div className="relative">
@@ -39,13 +36,13 @@ const DataExportModal = enhance((props) => {
 
         <CardBlock className="text-xs-center">
           <Button color="primary" disabled={props.processing}>
-            {props.processing ? <Icon name="spinner spin" margin="right" /> : null}
-            {exportLabel}
+            {props.processing ? ([
+              <Icon key="download-snippet" name="spinner spin" margin="right" />,
+              'Exporting...',
+            ]) : (
+              'Download CSV file'
+            )}
           </Button>
-          {props.downloadLink && !props.processing ?
-            <Button download tag="a" href={props.downloadLink} color="link">Download</Button>
-            : null
-          }
         </CardBlock>
       </div>
     </Form>
@@ -53,7 +50,6 @@ const DataExportModal = enhance((props) => {
 });
 
 DataExportModal.propTypes = {
-  downloadLink: PropTypes.string,
   processing: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
