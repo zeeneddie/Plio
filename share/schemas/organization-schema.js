@@ -4,9 +4,13 @@ import { _ } from 'meteor/underscore';
 import {
   OrgCurrencies, WorkflowTypes, UserMembership,
   StandardTitles, RiskTitles, NonConformitiesTitles,
-  WorkInboxTitles, CustomerTypes
+  WorkInboxTitles, CustomerTypes, PossibleReviewFrequencies,
+  TimeUnits,
 } from '../constants.js';
-import { BaseEntitySchema, TimePeriodSchema, TimezoneSchema } from './schemas.js';
+import {
+  BaseEntitySchema, ReminderTimePeriodSchema,
+  TimezoneSchema, TimePeriodSchema,
+} from './schemas.js';
 
 export const HomeTitlesSchema = new SimpleSchema({
   standards: {
@@ -79,7 +83,7 @@ const problemWorkflowSchema = new SimpleSchema({
     allowedValues: _.values(WorkflowTypes),
   },
   stepTime: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
 });
 
@@ -97,13 +101,13 @@ const workflowDefaultsSchema = new SimpleSchema({
 
 const reminderSchema = new SimpleSchema({
   start: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
   interval: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
   until: {
-    type: TimePeriodSchema,
+    type: ReminderTimePeriodSchema,
   },
 });
 
@@ -160,6 +164,42 @@ const rkGuidelinesSchema = new SimpleSchema({
   },
 });
 
+const reviewConfigSchema = new SimpleSchema({
+  frequency: {
+    type: TimePeriodSchema,
+    custom() {
+      const isValid = PossibleReviewFrequencies.find(freqDef => (
+        _.isEqual(freqDef, this.value)
+      ));
+
+      return isValid ? true : 'notAllowed';
+    },
+  },
+  annualDate: {
+    type: Date,
+    autoValue() {
+      if (this.isInsert && !this.isSet) {
+        const createdAt = this.field('createdAt');
+        if (createdAt.isSet) {
+          return createdAt.value;
+        }
+      }
+    },
+  },
+  reminders: {
+    type: reminderSchema,
+  },
+});
+
+const docsReviewSchema = new SimpleSchema({
+  risks: {
+    type: reviewConfigSchema,
+  },
+  standards: {
+    type: reviewConfigSchema,
+  },
+});
+
 const OrganizationEditableFields = {
   name: {
     type: String,
@@ -185,6 +225,10 @@ const OrganizationEditableFields = {
   rkScoringGuidelines: {
     type: String,
     label: 'Risk scoring guidelines text',
+    optional: true,
+  },
+  review: {
+    type: docsReviewSchema,
     optional: true,
   },
   ...OrganizationCurrencySchema,

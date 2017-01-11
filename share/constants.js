@@ -51,7 +51,7 @@ export const AvatarPlaceholders = [
 
 export const PlioS3Logos = {
   square: 'https://s3-eu-west-1.amazonaws.com/plio/images/p-logo-square.png',
-}
+};
 
 export const CollectionNames = {
   ACTIONS: 'Actions',
@@ -257,29 +257,29 @@ export const ReviewStatuses = {
 export const RCAMaxCauses = 5;
 
 export const RiskEvaluationDecisions = {
-  'tolerate': 'Tolerate',
-  'treat': 'Treat',
-  'transfer': 'Transfer',
-  'terminate': 'Terminate',
+  tolerate: 'Tolerate',
+  treat: 'Treat',
+  transfer: 'Transfer',
+  terminate: 'Terminate',
 };
 
 export const RiskEvaluationPriorities = {
-  'low': 'Low',
-  'medium': 'Medium',
-  'high': 'High'
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
 };
 
 export const riskScoreTypes = {
   inherent: {
     id: 'inherent',
     label: 'Inherent risk',
-    adj: 'Inherent'
+    adj: 'Inherent',
   },
   residual: {
     id: 'residual',
     label: 'Residual risk',
-    adj: 'Residual'
-  }
+    adj: 'Residual',
+  },
 };
 
 export const SourceTypes = {
@@ -289,26 +289,31 @@ export const SourceTypes = {
 };
 
 export const StandardStatuses = {
-  'issued': 'Issued',
-  'draft': 'Draft'
+  issued: 'Issued',
+  draft: 'Draft',
 };
 
 export const StringLimits = {
   abbreviation: {
     min: 1,
-    max: 4
+    max: 4,
   },
   title: {
     min: 1,
-    max: 80
-  }
+    max: 80,
+  },
 };
 
 export const SystemName = 'Plio';
 
-export const TimeUnits = {
+export const ReminderTimeUnits = {
   DAYS: 'days',
-  WEEKS: 'weeks'
+  WEEKS: 'weeks',
+};
+
+export const TimeUnits = {
+  ...ReminderTimeUnits,
+  MONTHS: 'months',
 };
 
 export const UserMembership = {
@@ -339,23 +344,23 @@ export const WorkItemsStore = {
     COMPLETE_ACTION: 'complete action',
     VERIFY_ACTION: 'verify action',
     COMPLETE_ANALYSIS: 'complete analysis',
-    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents'
+    COMPLETE_UPDATE_OF_DOCUMENTS: 'complete update of documents',
   },
   LINKED_TYPES: {
     ...ActionTypes,
-    ...ProblemTypes
+    ...ProblemTypes,
   },
   STATUSES: {
     0: 'in progress',
     1: 'due today',
     2: 'overdue',
-    3: 'completed'
-  }
+    3: 'completed',
+  },
 };
 
 export const WorkflowTypes = {
   THREE_STEP: '3-step',
-  SIX_STEP: '6-step'
+  SIX_STEP: '6-step',
 };
 
 export const OrgOwnerRoles = [
@@ -364,18 +369,18 @@ export const OrgOwnerRoles = [
   UserRoles.INVITE_USERS,
   UserRoles.DELETE_USERS,
   UserRoles.EDIT_USER_ROLES,
-  UserRoles.CHANGE_ORG_SETTINGS
+  UserRoles.CHANGE_ORG_SETTINGS,
 ];
 
 export const OrgMemberRoles = [
   UserRoles.CREATE_UPDATE_DELETE_STANDARDS,
-  UserRoles.VIEW_TEAM_ACTIONS
+  UserRoles.VIEW_TEAM_ACTIONS,
 ];
 
 export const OrgCurrencies = {
   EUR: 'EUR',
   GBP: 'GBP',
-  USD: 'USD'
+  USD: 'USD',
 };
 
 const getDefaultGuideline = (type, problemType) => (
@@ -389,93 +394,135 @@ export const OrganizationDefaults = {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     majorProblem: {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     criticalProblem: {
       workflowType: WorkflowTypes.THREE_STEP,
       stepTime: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
-      }
-    }
+        timeUnit: TimeUnits.DAYS,
+      },
+    },
   },
   reminders: {
     minorNc: {
       start: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
-      interval : {
+      interval: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     majorNc: {
       start: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 4,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     criticalNc: {
       start: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 3,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 6,
-        timeUnit: TimeUnits.DAYS
-      }
+        timeUnit: TimeUnits.DAYS,
+      },
     },
     improvementPlan: {
       start: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       interval: {
         timeValue: 1,
-        timeUnit: TimeUnits.DAYS
+        timeUnit: TimeUnits.DAYS,
       },
       until: {
         timeValue: 2,
-        timeUnit: TimeUnits.DAYS
-      }
-    }
+        timeUnit: TimeUnits.DAYS,
+      },
+    },
   },
   ncGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.NON_CONFORMITY),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.NON_CONFORMITY),
-    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY)
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.NON_CONFORMITY),
   },
   rkGuidelines: {
     minor: getDefaultGuideline(ProblemMagnitudes.MINOR, ProblemTypes.RISK),
     major: getDefaultGuideline(ProblemMagnitudes.MAJOR, ProblemTypes.RISK),
-    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK)
+    critical: getDefaultGuideline(ProblemMagnitudes.CRITICAL, ProblemTypes.RISK),
   },
-  rkScoringGuidelines: defaultRiskScoringGuideline
+  rkScoringGuidelines: defaultRiskScoringGuideline,
+  review: {
+    risks: {
+      frequency: {
+        timeValue: 12,
+        timeUnit: TimeUnits.MONTHS,
+      },
+      reminders: {
+        start: {
+          timeValue: 2,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        interval: {
+          timeValue: 1,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        until: {
+          timeValue: 4,
+          timeUnit: TimeUnits.WEEKS,
+        },
+      },
+    },
+    standards: {
+      frequency: {
+        timeValue: 12,
+        timeUnit: TimeUnits.MONTHS,
+      },
+      reminders: {
+        start: {
+          timeValue: 2,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        interval: {
+          timeValue: 1,
+          timeUnit: TimeUnits.WEEKS,
+        },
+        until: {
+          timeValue: 4,
+          timeUnit: TimeUnits.WEEKS,
+        },
+      },
+    },
+  },
 };
 
 export const StandardTitles = [
@@ -528,3 +575,18 @@ export const CustomerTypesNames = {
   [CustomerTypes.FREE_TRIAL]: 'Free trial',
   [CustomerTypes.TEST_ACCOUNT]: 'Test account',
 };
+
+export const PossibleReviewFrequencies = [
+  {
+    timeValue: 6,
+    timeUnit: TimeUnits.MONTHS,
+  },
+  {
+    timeValue: 12,
+    timeUnit: TimeUnits.MONTHS,
+  },
+  {
+    timeValue: 24,
+    timeUnit: TimeUnits.MONTHS,
+  },
+];

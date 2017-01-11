@@ -14,7 +14,7 @@ import {
   WorkflowTypes, ProblemMagnitudes, InvitationStatuses,
 } from '/imports/share/constants';
 import {
-  IdSchema, TimePeriodSchema,
+  IdSchema, ReminderTimePeriodSchema,
   OrganizationIdSchema, NewUserDataSchema,
   UserIdSchema, TimezoneSchema,
 } from '/imports/share/schemas/schemas';
@@ -162,7 +162,7 @@ export const setWorkflowDefaults = new Method({
         optional: true
       },
       stepTime: {
-        type: TimePeriodSchema,
+        type: ReminderTimePeriodSchema,
         optional: true
       }
     }
@@ -182,7 +182,7 @@ export const setReminder = new Method({
 
   validate: new SimpleSchema([
     IdSchema,
-    TimePeriodSchema,
+    ReminderTimePeriodSchema,
     {
       type: {
         type: String,

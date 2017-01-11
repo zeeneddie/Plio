@@ -67,6 +67,10 @@ Template.OrgSettings.viewmodel({
     const { rkScoringGuidelines } = this.organization() || {};
     return rkScoringGuidelines;
   },
+  review() {
+    const { review } = this.organization() || {};
+    return review;
+  },
   setNCGuidelineMethod() {
     return setNCGuideline;
   },

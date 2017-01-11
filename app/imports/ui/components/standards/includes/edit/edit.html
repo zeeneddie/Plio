@@ -66,6 +66,11 @@
           documentId=standard._id
           documentType="standard"
           linkedTo=standard.title}}
+
+      {{> Subcards_Review_Edit
+          _id=standard._id
+          review=standard.review
+          onUpdate=(callback 'update')}}
       <div class="card-block text-xs-center">
         <button type="button" class="btn btn-secondary" {{b "click: remove"}}>Delete</button>
       </div>

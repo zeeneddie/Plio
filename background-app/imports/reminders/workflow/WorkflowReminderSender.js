@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { _ } from 'meteor/underscore';
 
 import { Actions } from '/imports/share/collections/actions';
-import { DocumentTypes, ProblemMagnitudes, TimeUnits } from '/imports/share/constants';
+import { DocumentTypes, ProblemMagnitudes, ReminderTimeUnits } from '/imports/share/constants';
 import { NonConformities } from '/imports/share/collections/non-conformities';
 import { Organizations } from '/imports/share/collections/organizations';
 import { renderTemplate } from '/imports/share/helpers';
@@ -58,7 +58,7 @@ export default class WorkflowReminderSender {
   _checkRemindersConfiguration(remindersConfig) {
     const timeConfigPattern = {
       timeValue: Number,
-      timeUnit: Match.OneOf(..._.values(TimeUnits)),
+      timeUnit: Match.OneOf(..._.values(ReminderTimeUnits)),
     };
 
     const reminderTypesPattern = {
