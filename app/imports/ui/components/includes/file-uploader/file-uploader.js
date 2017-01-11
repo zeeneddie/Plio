@@ -14,7 +14,6 @@ Template.FileUploader.viewmodel({
   upload() {
     const defaultFileData = { organizationId: this.organizationId() };
     const fileData = Object.assign({}, defaultFileData, this.fileData ? this.fileData() : {});
-
     const uploadService = new UploadService({
       slingshotDirective: this.slingshotDirective(),
       slingshotContext: this.metaContext(),
