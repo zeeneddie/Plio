@@ -1,12 +1,20 @@
 import { _ } from 'meteor/underscore';
-import { ActionStatuses, CollectionNames } from '/imports/share/constants';
+import { ActionStatuses, ActionIndexes, CollectionNames } from '/imports/share/constants';
 import { Actions } from '/imports/share/collections/actions';
 import { formatUser, stripHtml, formatDate, formatMap } from '../formatters';
-
 
 export const mapping = {
   collection: Actions,
   filterField: 'status',
+  defaultFilterIndexes: _.difference(
+    _.values(ActionIndexes),
+    [
+      ActionIndexes.DELETED,
+      ActionIndexes.COMPLETED,
+      ActionIndexes.COMPLETED_EFFECTIVE,
+      ActionIndexes.COMPLETED_FAILED,
+    ],
+  ),
   fields: {
     _id: {
       label: 'Action ID',
