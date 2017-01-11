@@ -43,7 +43,7 @@ const LHS = ({
               onBlur={onBlur}
               onFocus={onFocus}
               disabled={animating}
-              refCb={input => (searchInput = input)}
+              getRef={input => (searchInput = input)}
               className="form-control"
               placeholder="Search..."
             />

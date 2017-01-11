@@ -24,7 +24,7 @@ const FormInput = enhance(({
         {children}
         <TextInput
           className={cx('form-control', className)}
-          refCb={input => (textInput = input)}
+          getRef={input => (textInput = input)}
           {...{ ...other, onBlur, value }}
         />
       </div>

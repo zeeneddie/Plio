@@ -27,7 +27,7 @@ const TextInput = enhance(({
   internalValue,
   onChange,
   setInternalValue,
-  refCb = () => null,
+  getRef,
   ...other,
 }) => (
   <Input
@@ -39,7 +39,7 @@ const TextInput = enhance(({
 
       return typeof onChange === 'function' && onChange(e);
     }}
-    ref={refCb}
+    ref={getRef}
     {...other}
   />
 ));
@@ -48,7 +48,7 @@ TextInput.propTypes = {
   isControlled: PropTypes.bool,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  refCb: PropTypes.func,
+  getRef: PropTypes.func,
 };
 
 export default TextInput;

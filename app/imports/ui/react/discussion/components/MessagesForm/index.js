@@ -1,9 +1,24 @@
 import React, { PropTypes } from 'react';
-import { FormGroup, InputGroup, Input, InputGroupButton } from 'reactstrap';
+import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
+import { compose, withState, withProps } from 'recompose';
+import { Meteor } from 'meteor/meteor';
 
+import { omitProps } from '/imports/api/helpers';
 import Button from '../../../components/Buttons/Button';
 import Icon from '../../../components/Icons/Icon';
 import Mention from '../../../components/Mention';
+
+const EnhancedMention = compose(
+  withState('value', 'setValue', ''),
+  omitProps(['setCollapsed']),
+  withProps(() => ({
+    users: Meteor.users.find().map((user) => ({
+      text: user.fullNameOrEmail(),
+      value: user._id,
+      email: user.emails[0].address,
+    })),
+  }))
+)(Mention);
 
 const MessagesForm = ({ onSubmit, disabled, children }) => (
   <div className="chat-form" {...{ onSubmit }}>
@@ -12,12 +27,12 @@ const MessagesForm = ({ onSubmit, disabled, children }) => (
         <FormGroup>
           <InputGroup>
             {children}
-            <Mention text="Hello World" />
-            {/* <Input
-              name="message"
-              placeholder="Add a comment"
-              autoComplete="off"
-            /> */}
+
+            <EnhancedMention dropup>
+              <Mention.Input placeholder="Add a comment" name="message" autoComplete="off" />
+              <Mention.Menu />
+            </EnhancedMention>
+
             <InputGroupButton>
               <Button type="submit" color="secondary" component="button">
                 <Icon name="angle-right" />
