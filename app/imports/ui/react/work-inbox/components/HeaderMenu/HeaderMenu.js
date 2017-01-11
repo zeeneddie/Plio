@@ -12,6 +12,7 @@ import { CollectionNames, ActionStatuses } from '/imports/share/constants';
 const dataExportProps = {
   docType: CollectionNames.ACTIONS,
   statuses: ActionStatuses,
+  checkedFilters: mapping.defaultFilterIndexes,
   fields: Object.keys(mapping.fields).map(key => ({
     name: key,
     ...mapping.fields[key],
