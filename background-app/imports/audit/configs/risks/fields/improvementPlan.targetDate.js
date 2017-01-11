@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
+import IPTargetDate from '../../common/fields/improvementPlan.targetDate';
 
 
 export default {
@@ -8,23 +9,28 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan target date for desired outcome set to "{{newValue}}"',
+          'Treatment plan target date for desired outcome set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
+          'Treatment plan target date for desired outcome changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan target date for desired outcome removed'
-      }
-    }
+          'Treatment plan target date for desired outcome removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs, newDoc }) {
-    const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
-    return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
-    };
-  }
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set treatment plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed treatment plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed treatment plan\'s target date for desired outcome of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
+  data: IPTargetDate.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

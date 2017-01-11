@@ -1,25 +1,17 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getReceivers } from '../helpers';
+import title from '../../common/fields/title';
 
 
 export default {
   field: 'title',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Title set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Title changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Title removed'
-      }
-    }
+    title.logs.default,
   ],
-  notifications: [],
-  data({ diffs: { title } }) {
-    return {
-      newValue: () => title.newValue,
-      oldValue: () => title.oldValue
-    };
-  }
+  notifications: [
+    title.notifications.default,
+  ],
+  data: title.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

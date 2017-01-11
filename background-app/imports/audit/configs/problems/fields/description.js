@@ -1,17 +1,17 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { getReceivers } from '../helpers';
+import description from '../../common/fields/description';
 
 
 export default {
   field: 'description',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]: 'Description set',
-        [ChangesKinds.FIELD_CHANGED]: 'Description changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Description removed'
-      }
-    }
+    description.logs.default,
   ],
-  notifications: [],
-  data() { }
+  notifications: [
+    description.notifications.default,
+  ],
+  data: description.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

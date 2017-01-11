@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,28 +9,39 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards target date set to "{{newValue}}"',
+          'Update of standards target date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards target date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Update of standards target date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards target date removed'
-      }
-    }
+          'Update of standards target date removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs, newDoc }) {
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set update of standards target date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed update of standards target date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed update of standards target date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
+  data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['updateOfStandards.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
   },
-  triggers: [
-    function({ newDoc: { _id } }) {
-      new this.workflowConstructor(_id).refreshStatus();
-    }
-  ]
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
+  trigger({ newDoc: { _id }, auditConfig }) {
+    new auditConfig.workflowConstructor(_id).refreshStatus();
+  },
 };

@@ -7,13 +7,9 @@ import { Risks } from '/imports/share/collections/risks';
 import { Organizations } from '/imports/share/collections/organizations';
 import { ProblemTypes, WorkflowTypes } from '/imports/share/constants';
 import { capitalize, getFormattedDate } from '/imports/share/helpers';
-import {
-  getProblemName,
-  getProblemDescription,
-  getProblemUrl,
-  getDiffInDays,
-  getDocUnsubscribePath,
-} from '/imports/helpers';
+import { getDiffInDays, getPrettyTzDate } from '/imports/helpers/date';
+import { getProblemName, getProblemDesc } from '/imports/helpers/description';
+import { getProblemUrl, getDocUnsubscribePath } from '/imports/helpers/url';
 import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
@@ -109,15 +105,15 @@ export default class ActionCreationReminderSender {
       : [];
   }
 
-  _sendReminder(problem, problemType) {
+  _getReminderEmailData(problem, problemType) {
     const receivers = this._getReceivers(problem);
     if (!receivers.length) {
       return;
     }
 
-    const problemDesc = getProblemDescription(problemType);
+    const problemDesc = getProblemDesc(problemType);
     const problemName = getProblemName(problem);
-    const prettyDate = getFormattedDate(problem.createdAt, 'MMMM DD, YYYY');
+    const prettyDate = getPrettyTzDate(problem.createdAt, this._organization.timezone);
     const diff = getDiffInDays(problem.createdAt, this._organization.timezone);
 
     const emailSubject = `${capitalize(problemDesc)} ${problemName} - action(s) needed`;
@@ -127,10 +123,10 @@ export default class ActionCreationReminderSender {
     const buttonLabel = `Go to this ${problemDesc}`;
     const buttonUrl = getProblemUrl(problem, problemType, this._organization);
 
-    const unsubscribeFromNotificationsUrl = getDocUnsubscribePath(buttonUrl);
+    const unsubscribeUrl = getDocUnsubscribePath(buttonUrl);
 
     const templateData = {
-      unsubscribeFromNotificationsUrl,
+      unsubscribeUrl,
       organizationName: this._organization.name,
       title: emailSubject,
       text: emailText,
@@ -141,11 +137,22 @@ export default class ActionCreationReminderSender {
       docName: problemName,
     };
 
-    new NotificationSender({
-      templateName: REMINDER_EMAIL_TEMPLATE,
+    return {
       recipients: receivers,
       emailSubject,
       templateData,
+    };
+  }
+
+  _sendReminder(problem, problemType) {
+    const reminderEmailData = this._getReminderEmailData(problem, problemType);
+    if (!reminderEmailData) {
+      return;
+    }
+
+    new NotificationSender({
+      templateName: REMINDER_EMAIL_TEMPLATE,
+      ...reminderEmailData,
     }).sendEmail();
   }
 

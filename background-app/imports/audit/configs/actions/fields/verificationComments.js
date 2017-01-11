@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -13,9 +12,9 @@ export default {
       message: {
         [ChangesKinds.FIELD_ADDED]: 'Verification comments set',
         [ChangesKinds.FIELD_CHANGED]: 'Verification comments changed',
-        [ChangesKinds.FIELD_REMOVED]: 'Verification comments removed'
-      }
-    }
+        [ChangesKinds.FIELD_REMOVED]: 'Verification comments removed',
+      },
+    },
   ],
   notifications: [
     {
@@ -24,24 +23,16 @@ export default {
       },
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set verification comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} set verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed verification comments of {{{docDesc}}} {{{docName}}}',
+          '{{{userName}}} changed verification comments of {{{docDesc}}} {{{docName}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed verification comments of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{{userName}}} removed verification comments of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { verificationComments }, newDoc, user }) {
-    const auditConfig = this;
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-    };
-  },
+  data() { },
   receivers({ newDoc, user }) {
     return getReceivers(newDoc, user);
-  }
+  },
 };

@@ -1,25 +1,27 @@
 import { _ } from 'meteor/underscore';
 
-import { CollectionNames } from '/imports/share/constants.js';
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import ProblemAuditConfig from '../problems/problem-audit-config.js';
-import NCWorkflow from '/imports/workflow/NCWorkflow.js';
+import { CollectionNames } from '/imports/share/constants';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
+import { getNCDesc } from '/imports/helpers/description';
+import ProblemAuditConfig from '../problems/problem-audit-config';
+import NCWorkflow from '/imports/workflow/NCWorkflow';
 
 import cost from './fields/cost.js';
-import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';
-import improvementPlanFileIds from './fields/improvementPlan.fileIds.js';
-import improvementPlanOwner from './fields/improvementPlan.owner.js';
-import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date.js';
-import improvementPlanReviewDates from './fields/improvementPlan.reviewDates.js';
-import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
-import ref from './fields/ref.js';
-import refText from './fields/ref.text.js';
-import refUrl from './fields/ref.url.js';
-import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers';
+import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome';
+import improvementPlanFileIds from './fields/improvementPlan.fileIds';
+import improvementPlanOwner from './fields/improvementPlan.owner';
+import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date';
+import improvementPlanReviewDates from './fields/improvementPlan.reviewDates';
+import improvementPlanTargetDate from './fields/improvementPlan.targetDate';
+import ref from './fields/ref';
+import refText from './fields/ref.text';
+import refUrl from './fields/ref.url';
+
 
 const generateNCDocUrl = getDocUrlByOrganizationId('non-conformities');
 
-export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
+export default NCAuditConfig = Object.assign({}, ProblemAuditConfig, {
 
   collection: NonConformities,
 
@@ -42,14 +44,11 @@ export default NCAuditConfig = _.extend({}, ProblemAuditConfig, {
   ],
 
   docDescription() {
-    return 'non-conformity';
+    return getNCDesc();
   },
 
   docUrl: generateNCDocUrl,
 
-  docUnsubscribeFromNotificationsUrl: _.compose(getDocUnsubscribePath, generateNCDocUrl),
+  docUnsubscribeUrl: _.compose(getDocUnsubscribePath, generateNCDocUrl),
 
-  docNotifyList({ notify = [] }) {
-    return notify;
-  },
 });

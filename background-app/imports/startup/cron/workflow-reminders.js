@@ -1,6 +1,6 @@
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations';
 import { getTimezones } from './helpers';
-import ReminderSender from '/imports/reminders/ReminderSender.js';
+import WorkflowReminderSender from '/imports/reminders/workflow/WorkflowReminderSender';
 
 
 // send reminders at 05:00
@@ -17,11 +17,11 @@ SyncedCron.add({
     const timezones = getTimezones(REMINDERS_SENDING_TIME);
 
     Organizations.find({
-      timezone: { $in: timezones }
+      timezone: { $in: timezones },
     }, {
-      fields: { _id: 1 }
+      fields: { _id: 1 },
     }).forEach((org) => {
-      new ReminderSender(org._id).send();
+      new WorkflowReminderSender(org._id).send();
     });
-  }
+  },
 });

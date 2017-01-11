@@ -1,5 +1,6 @@
-import { Files } from '/imports/share/collections/files.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
+import IPFileIds from '../../common/fields/improvementPlan.fileIds';
 
 
 export default {
@@ -7,18 +8,23 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{name}}" added',
-        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed'
-      }
-    }
+        [ChangesKinds.ITEM_ADDED]: 'Treatment plan file "{{{name}}}" added',
+        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan file removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs }) {
-    const _id = diffs['improvementPlan.fileIds'].item;
-    const file = () => Files.findOne({ _id }) || {};
-
-    return {
-      name: () => file().name
-    };
-  }
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.ITEM_ADDED]:
+          '{{{userName}}} added file "{{{name}}}" to treatment plan of {{{docDesc}}} {{{docName}}}',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{{userName}}} removed file from treatment plan of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
+  data: IPFileIds.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

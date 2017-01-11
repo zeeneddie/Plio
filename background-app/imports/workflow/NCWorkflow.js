@@ -1,5 +1,5 @@
-import { NonConformities } from '/imports/share/collections/non-conformities.js';
-import ProblemWorkflow from './ProblemWorkflow.js';
+import { NonConformities } from '/imports/share/collections/non-conformities';
+import ProblemWorkflow from './ProblemWorkflow';
 
 
 export default class NCWorkflow extends ProblemWorkflow {
