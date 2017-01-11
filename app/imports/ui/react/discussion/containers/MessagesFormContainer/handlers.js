@@ -5,6 +5,8 @@ import { reset, submit as submitMessage } from '/imports/client/store/actions/di
 const MESSAGES_LENGTH_LIMIT_BEFORE_RESET = 100;
 
 export const submit = ({
+  value,
+  setValue,
   discussionId,
   organizationId,
   disabled,
@@ -12,17 +14,11 @@ export const submit = ({
 }) => (e) => {
   e.preventDefault();
 
-  if (disabled) return;
+  if (disabled || !value) return;
 
-  const messageInput = e.target.elements.message;
+  setValue('');
 
-  if (!messageInput.value) return;
-
-  const value = messageInput.value;
-
-  messageInput.value = '';
-
-  const callback = (dispatch, getState) => (err, _id) => {
+  const callback = (__, getState) => (err) => {
     if (err) return;
 
     const { messages } = getState().discussion;

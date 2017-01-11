@@ -3,24 +3,11 @@ import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
 import { compose, withState, withProps } from 'recompose';
 import { Meteor } from 'meteor/meteor';
 
-import { omitProps } from '/imports/api/helpers';
 import Button from '../../../components/Buttons/Button';
 import Icon from '../../../components/Icons/Icon';
 import Mention from '../../../components/Mention';
 
-const EnhancedMention = compose(
-  withState('value', 'setValue', ''),
-  omitProps(['setCollapsed']),
-  withProps(() => ({
-    users: Meteor.users.find().map((user) => ({
-      text: user.fullNameOrEmail(),
-      value: user._id,
-      email: user.emails[0].address,
-    })),
-  }))
-)(Mention);
-
-const MessagesForm = ({ onSubmit, disabled, children }) => (
+const MessagesForm = ({ value, setValue, users, onSubmit, disabled, children }) => (
   <div className="chat-form" {...{ onSubmit }}>
     <form className="f1">
       <fieldset {...{ disabled }}>
@@ -28,10 +15,10 @@ const MessagesForm = ({ onSubmit, disabled, children }) => (
           <InputGroup>
             {children}
 
-            <EnhancedMention dropup>
+            <Mention dropup {...{ value, setValue, users }}>
               <Mention.Input placeholder="Add a comment" name="message" autoComplete="off" />
               <Mention.Menu />
-            </EnhancedMention>
+            </Mention>
 
             <InputGroupButton>
               <Button type="submit" color="secondary" component="button">
@@ -46,6 +33,9 @@ const MessagesForm = ({ onSubmit, disabled, children }) => (
 );
 
 MessagesForm.propTypes = {
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired,
   onSubmit: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   children: PropTypes.node,
