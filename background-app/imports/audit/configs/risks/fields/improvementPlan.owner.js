@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
+import IPOwner from '../../common/fields/improvementPlan.owner';
 
 
 export default {
@@ -8,21 +9,32 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Treatment plan owner set to {{newValue}}',
+          'Treatment plan owner set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          'Treatment plan owner changed from {{oldValue}} to {{newValue}}',
+          'Treatment plan owner changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          'Treatment plan owner removed'
-      }
-    }
+          'Treatment plan owner removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs }) {
-    const { newValue, oldValue } = diffs['improvementPlan.owner'];
-
-    return {
-      newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
-    };
-  }
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set treatment plan\'s owner of {{{docDesc}}} {{{docName}}} to {{{newValue}}}',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed treatment plan\'s owner of {{{docDesc}}} {{{docName}}} from {{{oldValue}}} to {{{newValue}}}',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed treatment plan\'s owner of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+    Object.assign({}, IPOwner.notifications.personal, {
+      text: '{{{userName}}} selected you as treatment plan owner for {{{docDesc}}} {{{docName}}}',
+      title: 'You have been selected as treatment plan owner',
+    }),
+  ],
+  data: IPOwner.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

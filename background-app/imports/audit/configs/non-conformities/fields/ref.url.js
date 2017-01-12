@@ -1,4 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -7,17 +8,23 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
-          'Help desk ref URL changed from "{{oldValue}}" to "{{newValue}}"'
-      }
-    }
+          'Help desk ref URL changed from "{{{oldValue}}}" to "{{{newValue}}}"',
+      },
+    },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed help desk ref url of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+      },
+    },
+  ],
   data({ diffs }) {
     const { newValue, oldValue } = diffs['ref.url'];
-
-    return {
-      newValue: () => newValue,
-      oldValue: () => oldValue
-    };
-  }
+    return { newValue, oldValue };
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

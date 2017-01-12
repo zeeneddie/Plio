@@ -1,6 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -9,37 +8,36 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Name set to "{{newValue}}"',
+          'Name set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Name changed from "{{oldValue}}" to "{{newValue}}"',
+          'Name changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Name removed'
-      }
-    }
+          'Name removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set name of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set name of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed name of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed name of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed name of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{{userName}}} removed name of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { name }, oldDoc, user }) {
+  data({ diffs: { name }, oldDoc, auditConfig }) {
     const { newValue, oldValue } = name;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(oldDoc),
-      docName: () => auditConfig.docName(oldDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => newValue,
-      oldValue: () => oldValue
+      docName: auditConfig.docName(oldDoc),
+      newValue,
+      oldValue,
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

@@ -5,7 +5,7 @@ import withStateCollapsed from '../../helpers/withStateCollapsed';
 import CollapseBlock from '../CollapseBlock';
 import IconLoading from '../Icons/IconLoading';
 
-const SubcardWrapper = withStateCollapsed(true)(({
+const CardBlockCollapse = withStateCollapsed(true)(({
   collapsed,
   onToggleCollapse,
   leftText,
@@ -36,11 +36,11 @@ const SubcardWrapper = withStateCollapsed(true)(({
   );
 });
 
-SubcardWrapper.propTypes = {
+CardBlockCollapse.propTypes = {
   leftText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   rightText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   loading: PropTypes.bool,
   children: PropTypes.node,
 };
 
-export default SubcardWrapper;
+export default CardBlockCollapse;

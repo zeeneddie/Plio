@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 import StandardsService from './standards-service.js';
@@ -20,7 +19,6 @@ import {
 } from '../checkers.js';
 import { chain, chainCheckers, inject } from '/imports/api/helpers.js';
 import Method, { CheckedMethod } from '../method.js';
-import { UNIQUE_FIELD_MONGO_ERROR_CODE } from '/imports/api/constants.js';
 
 const injectSTD = inject(Standards);
 
@@ -106,5 +104,21 @@ export const addedToNotifyList = new Method({
     }
 
     return undefined;
+  },
+});
+
+export const removedFromNotifyList = new Method({
+  name: 'Standards.removedFromNotifyList',
+
+  validate: new SimpleSchema([
+    StandardIdSchema,
+  ]).validator(),
+
+  check: checker => injectSTD(checker)(S_EnsureCanChangeChecker),
+
+  run({ standardId }) {
+    if (this.isSimulation) return undefined;
+
+    return new StandardsNotificationsSender(standardId).removedFromNotifyList(this.userId);
   },
 });

@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
+import IPReviewDates from '../../common/fields/improvementPlan.reviewDates';
 
 
 export default {
@@ -7,19 +8,23 @@ export default {
   logs: [
     {
       message: {
-        [ChangesKinds.ITEM_ADDED]: 'Treatment plan review date added: "{{date}}"',
-        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan review date removed: "{{date}}"'
-      }
-    }
+        [ChangesKinds.ITEM_ADDED]: 'Treatment plan review date added: "{{{date}}}"',
+        [ChangesKinds.ITEM_REMOVED]: 'Treatment plan review date removed: "{{{date}}}"',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs, newDoc }) {
-    const { item: { date } } = diffs['improvementPlan.reviewDates'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
-    return {
-      date: () => getPrettyOrgDate(date, orgId())
-    };
-  }
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.ITEM_ADDED]:
+          '{{{userName}}} added treatment plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{{date}}}"',
+        [ChangesKinds.ITEM_REMOVED]:
+          '{{{userName}}} removed treatment plan\'s review date for {{{docDesc}}} {{{docName}}}: "{{{date}}}"',
+      },
+    },
+  ],
+  data: IPReviewDates.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

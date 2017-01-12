@@ -1,29 +1,32 @@
-import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
-import { CollectionNames } from '/imports/share/constants.js';
-import { Standards } from '/imports/share/collections/standards.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { CollectionNames } from '/imports/share/constants';
+import { Standards } from '/imports/share/collections/standards';
+import { getStandardDesc, getStandardName } from '/imports/helpers/description';
+import { getDocUrlByOrganizationId, getDocUnsubscribePath } from '/imports/helpers/url';
 
-import onCreated from './on-created.js';
-import onRemoved from './on-removed.js';
+import onCreated from './on-created';
+import onRemoved from './on-removed';
 
-import departmentsIds from './fields/departmentsIds.js';
-import description from './fields/description.js';
-import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome.js';
-import improvementPlanFileIds from './fields/improvementPlan.fileIds.js';
-import improvementPlanOwner from './fields/improvementPlan.owner.js';
-import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date.js';
-import improvementPlanReviewDates from './fields/improvementPlan.reviewDates.js';
-import improvementPlanTargetDate from './fields/improvementPlan.targetDate.js';
-import isDeleted from './fields/isDeleted.js';
-import issueNumber from './fields/issueNumber.js';
-import notify from './fields/notify.js';
-import owner from './fields/owner.js';
-import sectionId from './fields/sectionId.js';
-import status from './fields/status.js';
-import title from './fields/title.js';
-import typeId from './fields/typeId.js';
+import departmentsIds from './fields/departmentsIds';
+import description from './fields/description';
+import improvementPlanDesiredOutcome from './fields/improvementPlan.desiredOutcome';
+import improvementPlanFileIds from './fields/improvementPlan.fileIds';
+import improvementPlanOwner from './fields/improvementPlan.owner';
+import improvementPlanReviewDatesDate from './fields/improvementPlan.reviewDates.date';
+import improvementPlanReviewDates from './fields/improvementPlan.reviewDates';
+import improvementPlanTargetDate from './fields/improvementPlan.targetDate';
+import isDeleted from './fields/isDeleted';
+import issueNumber from './fields/issueNumber';
+import notify from './fields/notify';
+import owner from './fields/owner';
+import sectionId from './fields/sectionId';
+import status from './fields/status';
+import title from './fields/title';
+import typeId from './fields/typeId';
 
+
+const generateStandardDocUrl = getDocUrlByOrganizationId('standards');
 
 export default StandardAuditConfig = {
 
@@ -49,7 +52,7 @@ export default StandardAuditConfig = {
     sectionId,
     status,
     title,
-    typeId
+    typeId,
   ],
 
   onRemoved,
@@ -58,23 +61,24 @@ export default StandardAuditConfig = {
     return _id;
   },
 
-  docDescription(doc) {
-    return 'standard';
+  docDescription() {
+    return getStandardDesc();
   },
 
-  docName({ title }) {
-    return `"${title}"`;
+  docName(doc) {
+    return getStandardName(doc);
   },
 
   docOrgId({ organizationId }) {
     return organizationId;
   },
 
-  docUrl({ _id, organizationId }) {
-    const { serialNumber } = Organizations.findOne({ _id: organizationId });
-    return Meteor.absoluteUrl(`${serialNumber}/standards/${_id}`, {
-      rootUrl: Meteor.settings.mainApp.url
-    });
-  }
+  docUrl: generateStandardDocUrl,
+
+  docNotifyList({ notify: notifyList = [] }) {
+    return notifyList;
+  },
+
+  docUnsubscribeUrl: _.compose(getDocUnsubscribePath, generateStandardDocUrl),
 
 };

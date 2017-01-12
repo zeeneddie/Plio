@@ -1,45 +1,40 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
-const getGuidelinesConfig = (field, guidelineType, label) => {
+const getGuidelinesConfig = (field, magnitude, relatedDocs) => {
   return {
-    field: `${field}.${guidelineType}`,
+    field: `${field}.${magnitude}`,
     logs: [
       {
         message: {
           [ChangesKinds.FIELD_ADDED]:
-            `Guidelines for ${label} set`,
+            'Guidelines for {{{relatedDocs}}} set',
           [ChangesKinds.FIELD_CHANGED]:
-            `Guidelines for ${label} changed`,
+            'Guidelines for {{{relatedDocs}}} changed',
           [ChangesKinds.FIELD_REMOVED]:
-            `Guidelines for ${label} removed`
-        }
-      }
+            'Guidelines for {{{relatedDocs}}} removed',
+        },
+      },
     ],
     notifications: [
       {
         text: {
           [ChangesKinds.FIELD_ADDED]:
-            `{{userName}} set guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
+            '{{{userName}}} set guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
           [ChangesKinds.FIELD_CHANGED]:
-            `{{userName}} changed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`,
+            '{{{userName}}} changed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
           [ChangesKinds.FIELD_REMOVED]:
-            `{{userName}} removed guidelines for ${label} in {{{docDesc}}} {{{docName}}}`
-        }
-      }
+            '{{{userName}}} removed guidelines for {{{relatedDocs}}} in {{{docDesc}}} {{{docName}}}',
+        },
+      },
     ],
-    data({ newDoc, user }) {
-      const auditConfig = this;
-
-      return {
-        docDesc: () => auditConfig.docDescription(newDoc),
-        docName: () => auditConfig.docName(newDoc),
-        userName: () => getUserFullNameOrEmail(user)
-      };
+    data() {
+      return { relatedDocs };
     },
-    receivers: getReceivers
+    receivers({ newDoc, user }) {
+      return getReceivers(newDoc, user);
+    },
   };
 };
 
@@ -49,5 +44,5 @@ export default [
   getGuidelinesConfig('ncGuidelines', 'critical', 'critical non-conformities'),
   getGuidelinesConfig('rkGuidelines', 'minor', 'minor risks'),
   getGuidelinesConfig('rkGuidelines', 'major', 'major risks'),
-  getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks')
+  getGuidelinesConfig('rkGuidelines', 'critical', 'critical risks'),
 ];

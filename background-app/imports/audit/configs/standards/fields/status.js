@@ -1,7 +1,6 @@
-import { StandardStatuses } from '/imports/share/constants.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { StandardStatuses } from '/imports/share/constants';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -10,37 +9,35 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Status set to "{{newValue}}"',
+          'Status set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Status changed from "{{oldValue}}" to "{{newValue}}"',
+          'Status changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Status removed'
-      }
-    }
+          'Status removed',
+      },
+    },
   ],
   notifications: [
     {
       text: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{userName}} set status of {{{docDesc}}} {{{docName}}} to "{{newValue}}"',
+          '{{{userName}}} set status of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{userName}} changed status of {{{docDesc}}} {{{docName}}} from "{{oldValue}}" to "{{newValue}}"',
+          '{{{userName}}} changed status of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{userName}} removed status of {{{docDesc}}} {{{docName}}}'
-      }
-    }
+          '{{{userName}}} removed status of {{{docDesc}}} {{{docName}}}',
+      },
+    },
   ],
-  data({ diffs: { status }, newDoc, user }) {
+  data({ diffs: { status } }) {
     const { newValue, oldValue } = status;
-    const auditConfig = this;
 
     return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      userName: () => getUserFullNameOrEmail(user),
-      newValue: () => StandardStatuses[newValue],
-      oldValue: () => StandardStatuses[oldValue]
+      newValue: StandardStatuses[newValue],
+      oldValue: StandardStatuses[oldValue],
     };
   },
-  receivers: getReceivers
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

@@ -8,6 +8,7 @@ import invoke from 'lodash.invoke';
 
 import { NonConformityFilters } from '/imports/api/constants.js';
 import { isMobileRes } from '/imports/api/checkers.js';
+import HeaderMenu from '/imports/ui/react/non-comformities/components/HeaderMenu';
 
 Template.NC_Header.viewmodel({
   mixin: ['nonconformity', 'organization', 'router'],
@@ -17,6 +18,11 @@ Template.NC_Header.viewmodel({
       filters: NonConformityFilters,
       onSelectFilter: this.onSelectFilter.bind(this),
       isActiveFilter: this.isActiveNCFilter.bind(this),
+      getOptionsMenu() {
+        return {
+          component: HeaderMenu,
+        };
+      },
     };
   },
   NC() {

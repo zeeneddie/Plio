@@ -30,5 +30,15 @@ export default {
 
   remove({ _id }) {
     return this.collection.remove({ _id });
-  }
+  },
+
+  unsubscribe({ documentId, documentType, userId }, { collection }) {
+    const query = { _id: documentId };
+    const modifier = {
+      $pull: {
+        notify: userId,
+      },
+    };
+    return collection.update(query, modifier);
+  },
 };

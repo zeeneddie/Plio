@@ -16,17 +16,18 @@ import {
   ORG_USER_NOT_ACCEPTED_INVITATION,
   ORG_TRANSFER_CANCELED_COMPLETED,
   ORG_USER_ALREADY_DELETED,
-  ORG_CAN_NOT_BE_DELETED
+  ORG_CAN_NOT_BE_DELETED,
 } from '../errors.js';
 import {
   canChangeOrgSettings,
   canInviteUsers,
-  checkDocExistance,
   canDeleteUsers,
   isOrgOwner,
-  isOrgMember
+  isOrgMember,
+  checkOrgMembershipBySelector,
 } from '../checkers.js';
 import { checkAndThrow } from '../helpers.js';
+import { DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED } from './errors';
 
 
 export const ORG_EnsureCanChange = (userId, organizationId) => {
@@ -143,4 +144,23 @@ export const ORG_EnsureCanBeDeleted = (organizationId) => {
   }) || {};
 
   checkAndThrow(isAdminOrg === true, ORG_CAN_NOT_BE_DELETED);
+};
+
+export const ensureCanUnsubscribeFromDailyRecap = ({ orgSerialNumber: serialNumber, userId }) => {
+  checkOrgMembershipBySelector(userId, { serialNumber });
+
+  const query = {
+    serialNumber,
+    users: {
+      $elemMatch: {
+        userId,
+        sendDailyRecap: { $eq: true },
+      },
+    },
+  };
+  const doc = Organizations.findOne(query);
+
+  checkAndThrow(!doc, DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED);
+
+  return doc;
 };

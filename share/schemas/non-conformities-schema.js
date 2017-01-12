@@ -115,8 +115,8 @@ const NonConformitiesUpdateSchema = new SimpleSchema([
     improvementPlan: {
       type: ImprovementPlanSchema,
       optional: true
-    }
-  }
+    },
+  },
 ]);
 
 export { NonConformitiesSchema, NonConformitiesUpdateSchema, RequiredSchema, OptionalSchema };

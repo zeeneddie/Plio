@@ -1,5 +1,6 @@
-import { RiskTypes } from '/imports/share/collections/risk-types.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { RiskTypes } from '/imports/share/collections/risk-types';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../../problems/helpers';
 
 
 export default {
@@ -8,15 +9,26 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Risk type set to "{{newValue}}"',
+          'Risk type set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Risk type changed from "{{oldValue}}" to "{{newValue}}"',
+          'Risk type changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Risk type removed'
-      }
-    }
+          'Risk type removed',
+      },
+    },
   ],
-  notifications: [],
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set type of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed type of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed type of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
   data({ diffs: { typeId } }) {
     const { newValue, oldValue } = typeId;
 
@@ -27,7 +39,10 @@ export default {
 
     return {
       newValue: () => getRiskTypeTitle(newValue),
-      oldValue: () => getRiskTypeTitle(oldValue)
+      oldValue: () => getRiskTypeTitle(oldValue),
     };
-  }
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

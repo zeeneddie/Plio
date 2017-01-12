@@ -1,42 +1,17 @@
-import { Departments } from '/imports/share/collections/departments.js';
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { getReceivers } from '../helpers';
+import departmentsIds from '../../common/fields/departmentsIds';
 
 
 export default {
   field: 'departmentsIds',
   logs: [
-    {
-      message: {
-        [ChangesKinds.ITEM_ADDED]:
-          'Document was linked to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          'Document was unlinked from {{{departmentDesc}}}'
-      }
-    }
+    departmentsIds.logs.default,
   ],
   notifications: [
-    {
-      text: {
-        [ChangesKinds.ITEM_ADDED]:
-          '{{userName}} linked {{{docDesc}}} {{{docName}}} to {{{departmentDesc}}}',
-        [ChangesKinds.ITEM_REMOVED]:
-          '{{userName}} unlinked {{{docDesc}}} {{{docName}}} from {{{departmentDesc}}}'
-      }
-    }
+    departmentsIds.notifications.default,
   ],
-  data({ diffs: { departmentsIds }, newDoc, user }) {
-    const { item:departmentId } = departmentsIds;
-    const department = () => Departments.findOne({ _id: departmentId }) || {};
-    const auditConfig = this;
-
-    return {
-      docDesc: () => auditConfig.docDescription(newDoc),
-      docName: () => auditConfig.docName(newDoc),
-      departmentDesc: () => `${department().name} department`,
-      userName: () => getUserFullNameOrEmail(user)
-    };
+  data: departmentsIds.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
   },
-  receivers: getReceivers
 };

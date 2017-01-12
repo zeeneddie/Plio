@@ -1,12 +1,13 @@
 import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
-import { AuditLogs } from '/imports/share/collections/audit-logs.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
-import { DocChangesKinds, SystemName } from '/imports/share/constants.js';
-import { ChangesKinds } from './utils/changes-kinds.js';
-import { renderTemplate } from '/imports/share/helpers.js';
-import DocumentDiffer from './utils/document-differ.js';
-import NotificationSender from '/imports/share/utils/NotificationSender.js';
+import { AuditLogs } from '/imports/share/collections/audit-logs';
+import { Organizations } from '/imports/share/collections/organizations';
+import { DocChangesKinds, SystemName } from '/imports/share/constants';
+import { ChangesKinds } from './utils/changes-kinds';
+import { getUserFullNameOrEmail, renderTemplate } from '/imports/share/helpers';
+import DocumentDiffer from './utils/document-differ';
+import NotificationSender from '/imports/share/utils/NotificationSender';
 
 
 const DEFAULT_EMAIL_TEMPLATE = 'defaultEmail';
@@ -33,40 +34,48 @@ export default class DocChangeHandler {
       this._date = new Date();
       this._userId = userId;
     }
+  }
 
+  handleChange() {
+    this._prepare();
+
+    this._getHandlers();
+    this._processHandlers();
+
+    this._saveLogs();
+    this._sendNotifications();
+  }
+
+  _prepare() {
     if (this._userId === SystemName) {
       this._user = this._userId;
     } else {
       this._user = Meteor.users.findOne({ _id: this._userId });
     }
 
-    const doc = newDocument || oldDocument;
+    const doc = this._newDoc || this._oldDoc;
 
-    this._docId = auditConfig.docId(doc);
-    this._docDesc = auditConfig.docDescription(doc);
-    this._docName = auditConfig.docName(doc);
-    this._docUrl = auditConfig.docUrl(doc);
+    this._docId = this._config.docId(doc);
+    this._docDesc = this._config.docDescription(doc);
+    this._docName = this._config.docName(doc);
+    this._docUrl = this._config.docUrl(doc);
 
-    this._docOrgId = auditConfig.docOrgId(doc);
+    this._userName = getUserFullNameOrEmail(this._user);
 
-    const { name:orgName } = Organizations.findOne({ _id: this._docOrgId }) || {};
-    this._docOrgName = orgName;
+    this._docNotifyList = this._config.docNotifyList
+      && this._config.docNotifyList(doc);
 
-    this._collectionName = auditConfig.collectionName;
+    this._unsubscribeUrl = this._config.docUnsubscribeUrl
+      && this._config.docUnsubscribeUrl(doc);
+
+    this._docOrgId = this._config.docOrgId(doc);
+    this._organization = Organizations.findOne({ _id: this._docOrgId }) || {};
+
+    this._collectionName = this._config.collectionName;
 
     this._handlersToProcess = [];
     this._logs = [];
     this._notifications = [];
-  }
-
-  handleChange() {
-    this._getHandlers();
-    this._processHandlers();
-
-    this._saveLogs();
-    this._sendNotifications();
-
-    this._reset();
   }
 
   _getHandlers() {
@@ -80,6 +89,8 @@ export default class DocChangeHandler {
       case DocChangesKinds.DOC_REMOVED:
         this._getHandlersForRemoveAction();
         break;
+      default:
+        break;
     }
   }
 
@@ -89,16 +100,18 @@ export default class DocChangeHandler {
       args: {
         newDoc: this._newDoc,
         user: this._user,
-        date: this._date
-      }
+        date: this._date,
+        organization: this._organization,
+        auditConfig: this._config,
+      },
     });
   }
 
   _getHandlersForUpdateAction() {
-    const diffs = DocumentDiffer.getDiff(this._newDoc, this._oldDoc);
+    const diffs = DocumentDiffer.getDiff(this._newDoc, this._oldDoc) || [];
 
     const diffsMap = {};
-    _(diffs).each(({ field, ...rest }) => {
+    diffs.forEach(({ field, ...rest }) => {
       diffsMap[field] = { field, ...rest };
     });
 
@@ -107,10 +120,12 @@ export default class DocChangeHandler {
       newDoc: this._newDoc,
       oldDoc: this._oldDoc,
       user: this._user,
-      date: this._date
+      date: this._date,
+      organization: this._organization,
+      auditConfig: this._config,
     };
 
-    _(diffs).each((diff) => {
+    diffs.forEach((diff) => {
       const handler = this._config.updateHandlers.find(
         hdl => hdl.field === diff.field
       );
@@ -129,13 +144,15 @@ export default class DocChangeHandler {
       args: {
         oldDoc: this._oldDoc,
         user: this._user,
-        date: this._date
-      }
+        date: this._date,
+        organization: this._organization,
+        auditConfig: this._config,
+      },
     });
   }
 
   _processHandlers() {
-    _(this._handlersToProcess).each(({ handler, args }) => {
+    this._handlersToProcess.forEach(({ handler, args }) => {
       this._processHandler(handler, args);
     });
   }
@@ -143,13 +160,21 @@ export default class DocChangeHandler {
   _processHandler(handler, args) {
     this._createLogs(handler, args);
     this._createNotifications(handler, args);
-    this._processTriggers(handler, args);
+    this._callTrigger(handler, args);
+  }
+
+  _getDefaultData() {
+    return {
+      docDesc: this._docDesc,
+      docName: this._docName,
+      userName: this._userName,
+    };
   }
 
   _createLogs(handler, args) {
-    _(handler.logs).each((logConfig) => {
+    handler.logs.forEach((logConfig) => {
       const { shouldCreateLog } = logConfig;
-      if (shouldCreateLog && !shouldCreateLog.call(this._config, args)) {
+      if (shouldCreateLog && !shouldCreateLog(args)) {
         return;
       }
 
@@ -162,32 +187,35 @@ export default class DocChangeHandler {
 
   _buildLogs(handler, args, logConfig, diff) {
     const getData = logConfig.data || handler.data;
-    const { message, logData:getLogData } = logConfig;
+    const { message, logData: getLogData } = logConfig;
     const { kind } = diff || {};
 
-    const msgTemplate = _(message).isObject() ? message[kind] : message;
+    const msgTemplate = _.isObject(message) ? message[kind] : message;
     if (!msgTemplate) {
       return;
     }
 
     let logData;
     if (getLogData) {
-      logData = getLogData.call(this._config, args);
-      logData = _(logData).isArray() ? logData : [logData];
+      logData = getLogData(args);
+      logData = _.isArray(logData) ? logData : [logData];
     }
 
-    let data = getData && getData.call(this._config, args);
-    data = _(data).isArray() ? data : [data];
+    let data = getData && getData(args);
+    data = _.isArray(data) ? data : [data];
 
-    _(data).each((templateData, index) => {
+    const defaultData = this._getDefaultData();
+
+    data.forEach((dataObj, index) => {
       const logDataObj = logData && logData[index];
+      const msgTemplateData = Object.assign({}, defaultData, dataObj);
 
-      this._buildLog(msgTemplate, templateData, diff, logDataObj);
+      this._buildLog(msgTemplate, msgTemplateData, diff, logDataObj);
     });
   }
 
-  _buildLog(msgTemplate, templateData, diff, logData) {
-    const message = renderTemplate(msgTemplate, templateData);
+  _buildLog(msgTemplate, msgTemplateData, diff, logData) {
+    const message = renderTemplate(msgTemplate, msgTemplateData);
 
     const collection = this._collectionName;
     const documentId = this._docId;
@@ -198,27 +226,29 @@ export default class DocChangeHandler {
       executor: this._userId,
       collection,
       documentId,
-      message
+      message,
     };
 
     const { kind, field, newValue, oldValue } = diff || {};
-
-    field && _(log).extend({ field });
+    if (field) {
+      Object.assign(log, { field });
+    }
 
     const fieldChanges = [
       ChangesKinds.FIELD_ADDED,
       ChangesKinds.FIELD_CHANGED,
-      ChangesKinds.FIELD_REMOVED
+      ChangesKinds.FIELD_REMOVED,
     ];
-    if (_(fieldChanges).contains(kind)) {
-      _(log).extend({ newValue, oldValue });
+
+    if (fieldChanges.indexOf(kind) > -1) {
+      Object.assign(log, { newValue, oldValue });
     }
 
     if (logData) {
-      _(log).extend(logData);
+      Object.assign(log, logData);
 
       if (log.documentId !== documentId) {
-        _(['field', 'newValue', 'oldValue']).each(key => delete log[key]);
+        ['field', 'newValue', 'oldValue'].forEach(key => delete log[key]);
       }
     }
 
@@ -228,7 +258,7 @@ export default class DocChangeHandler {
   _createNotifications(handler, args) {
     _(handler.notifications).each((notificationConfig) => {
       const { shouldSendNotification } = notificationConfig;
-      if (shouldSendNotification && !shouldSendNotification.call(this._config, args)) {
+      if (shouldSendNotification && !shouldSendNotification(args)) {
         return;
       }
 
@@ -246,16 +276,16 @@ export default class DocChangeHandler {
 
     const {
       text, title, emailTemplateName,
-      emailText, emailSubject, emailTemplateData:getEmailTplData,
-      pushText, pushTitle, pushData:getPushData,
-      sendBoth=false
+      emailText, emailSubject, emailTemplateData: getEmailTplData,
+      pushText, pushTitle, pushData: getPushData,
+      sendBoth = false,
     } = notificationConfig;
 
     let emailTemplate = emailText || text;
     let pushTemplate = pushText || text;
 
-    emailTemplate = _(emailTemplate).isObject() ? emailTemplate[kind] : emailTemplate;
-    pushTemplate = _(pushTemplate).isObject() ? pushTemplate[kind] : pushTemplate;
+    emailTemplate = _.isObject(emailTemplate) ? emailTemplate[kind] : emailTemplate;
+    pushTemplate = _.isObject(pushTemplate) ? pushTemplate[kind] : pushTemplate;
 
     if (!emailTemplate && !pushTemplate) {
       return;
@@ -264,42 +294,45 @@ export default class DocChangeHandler {
     let emailSubjectTemplate = emailSubject || title;
     let pushTitleTemplate = pushTitle || title;
 
-    emailSubjectTemplate = _(emailSubjectTemplate).isObject()
+    emailSubjectTemplate = _.isObject(emailSubjectTemplate)
         ? emailSubjectTemplate[kind]
         : emailSubjectTemplate;
 
-    pushTitleTemplate = _(pushTitleTemplate).isObject()
+    pushTitleTemplate = _.isObject(pushTitleTemplate)
         ? pushTitleTemplate[kind]
         : pushTitleTemplate;
 
-    let data = getData && getData.call(this._config, args);
-    data = _(data).isArray() ? data : [data];
+    let data = getData && getData(args);
+    data = _.isArray(data) ? data : [data];
 
-    let receiversArr = getReceivers.call(this._config, args) || [];
-    receiversArr = _(receiversArr[0]).isArray() ? receiversArr : [receiversArr];
+    let receiversArr = getReceivers(args) || [];
+    receiversArr = _.isArray(receiversArr[0]) ? receiversArr : [receiversArr];
 
     let emailTplDataArr;
     if (getEmailTplData) {
-      emailTplDataArr = getEmailTplData.call(this._config, args);
-      emailTplDataArr = _(emailTplDataArr).isArray() ? emailTplDataArr : [emailTplDataArr];
+      emailTplDataArr = getEmailTplData(args);
+      emailTplDataArr = _.isArray(emailTplDataArr) ? emailTplDataArr : [emailTplDataArr];
     }
 
     let pushDataArr;
     if (getPushData) {
-      pushDataArr = getPushData.call(this._config, args);
-      pushDataArr = _(pushDataArr).isArray() ? pushDataArr : [pushDataArr];
+      pushDataArr = getPushData(args);
+      pushDataArr = _.isArray(pushDataArr) ? pushDataArr : [pushDataArr];
     }
 
-    _(data).each((templateData, index) => {
+    const defaultData = this._getDefaultData();
+
+    data.forEach((dataObj, index) => {
       const emailTemplateData = emailTplDataArr && emailTplDataArr[index];
       const pushData = pushDataArr && pushDataArr[index];
       const receivers = receiversArr[index];
+      const templateData = Object.assign({}, defaultData, dataObj);
 
       this._buildNotification({
         emailTemplate, emailSubjectTemplate, emailTemplateData,
         pushTemplate, pushTitleTemplate, pushData,
         emailTemplateName, receivers, templateData,
-        sendBoth
+        sendBoth,
       });
     });
   }
@@ -308,7 +341,7 @@ export default class DocChangeHandler {
     emailTemplate, emailSubjectTemplate, emailTemplateData,
     pushTemplate, pushTitleTemplate, pushData,
     emailTemplateName, receivers, templateData,
-    sendBoth
+    sendBoth,
   }) {
     if (!receivers || !receivers.length) {
       return;
@@ -335,27 +368,31 @@ export default class DocChangeHandler {
       recipients: receivers,
       templateName: emailTemplateName || DEFAULT_EMAIL_TEMPLATE,
       emailSubject,
-      templateData: _({
-        organizationName: this._docOrgName,
+
+      templateData: Object.assign({
+        organizationName: this._organization.name,
+        docName: this._docName,
         title: emailSubject,
-        text: emailText
-      }).extend(emailTemplateData),
-      notificationData: _({
+        text: emailText,
+      }, emailTemplateData),
+
+      notificationData: Object.assign({
         title: pushTitle,
         body: pushText,
-        url: this._docUrl
-      }).extend(pushData),
-      sendBoth
+        url: this._docUrl,
+      }, pushData),
+
+      sendBoth,
     };
 
-    if (_(this._user).isObject()) {
-      _(notification.templateData).extend({
-        avatar: { url: this._user.profile.avatar }
+    if (_.isObject(this._user)) {
+      Object.assign(notification.templateData, {
+        avatar: { url: this._user.profile.avatar },
       });
     }
 
-    if (this._docUrl) {
-      _(notification.templateData).extend({
+    if (this._docUrl && !notification.templateData.button) {
+      Object.assign(notification.templateData, {
         button: {
           url: this._docUrl,
           label: 'Go to this document',
@@ -363,35 +400,37 @@ export default class DocChangeHandler {
       });
     }
 
+    if (this._unsubscribeUrl) {
+      Object.assign(notification.templateData, {
+        unsubscribeUrl: this._unsubscribeUrl,
+      });
+    }
+
     this._notifications.push(notification);
   }
 
   _getDefaultNotificationTitle() {
-    const user = this._user;
     const action = {
       [DocChangesKinds.DOC_CREATED]: 'created',
       [DocChangesKinds.DOC_UPDATED]: 'updated',
-      [DocChangesKinds.DOC_REMOVED]: 'removed'
+      [DocChangesKinds.DOC_REMOVED]: 'removed',
     }[this._docChangeKind];
-    const userName = _(user).isObject() ? user.fullNameOrEmail() : user;
-    const docDesc = this._docDesc;
-    const docName = this._docName;
 
-    return `${userName} ${action} ${docDesc} ${docName}`;
+    return `${this._userName} ${action} ${this._docDesc} ${this._docName}`;
   }
 
   _saveLogs() {
-    _(this._logs).each(log => AuditLogs.insert(log));
+    this._logs.forEach(log => AuditLogs.insert(log));
   }
 
   _sendNotifications() {
     const notificationsMap = {};
 
-    _(this._notifications).each((notification) => {
-      _(notification.recipients).each((receiverId) => {
+    this._notifications.forEach((notification) => {
+      notification.recipients.forEach((receiverId) => {
         const userNotifications = notificationsMap[receiverId];
 
-        if (_(userNotifications).isArray()) {
+        if (_.isArray(userNotifications)) {
           userNotifications.push(notification);
         } else {
           notificationsMap[receiverId] = [notification];
@@ -400,7 +439,7 @@ export default class DocChangeHandler {
     });
 
     const receiversCursor = Meteor.users.find({
-      _id: { $in: _(notificationsMap).keys() }
+      _id: { $in: Object.keys(notificationsMap) },
     });
 
     receiversCursor.forEach((user) => {
@@ -411,33 +450,37 @@ export default class DocChangeHandler {
   _sendNotificationsToUser(notifications, user) {
     const isUserOnline = user.status === 'online';
 
-    _(notifications).each(({ recipients, sendBoth, ...args }) => {
-      const sender = new NotificationSender({
-        recipients: user._id,
-        ...args
-      });
+    notifications.forEach(({
+      sendBoth,
+      templateData: {
+        unsubscribeUrl,
+        ...templateData
+      },
+      ...args
+    }) => {
+      const options = { recipients: user._id, templateData, ...args };
+
+      if (unsubscribeUrl
+          && _.isArray(this._docNotifyList)
+          && this._docNotifyList.indexOf(user._id) > -1) {
+        Object.assign(options.templateData, { unsubscribeUrl });
+      }
+
+      const sender = new NotificationSender(options);
 
       if (sendBoth) {
-        sender.sendAll();
-      } else {
-        isUserOnline ? sender.sendOnSite() : sender.sendEmail();
+        return sender.sendAll();
       }
+
+      return isUserOnline ? sender.sendOnSite() : sender.sendEmail();
     });
   }
 
-  _processTriggers(handler, args) {
-    const triggers = handler.triggers;
-    if (!_(triggers).isArray()) {
-      return;
+  _callTrigger(handler, args) {
+    const trigger = handler.trigger;
+    if (_.isFunction(trigger)) {
+      trigger(args);
     }
-
-    _(triggers).each(triggerFn => triggerFn.call(this._config, args));
-  }
-
-  _reset() {
-    this._handlersToProcess = [];
-    this._logs = [];
-    this._notifications = [];
   }
 
 }

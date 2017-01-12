@@ -1,4 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -11,28 +12,43 @@ export default {
       message: {
         [ChangesKinds.FIELD_CHANGED]:
           '{{#if completed}}' +
-            'Root cause analysis completed{{#if comments}}: {{comments}}{{/if}}' +
+            'Root cause analysis completed{{#if comments}}: {{{comments}}}{{/if}}' +
           '{{else}}' +
             'Root cause analysis canceled' +
-          '{{/if}}'
-      }
-    }
+          '{{/if}}',
+      },
+    },
   ],
-  notifications: [],
+  notifications: [
+    {
+      shouldSendNotification({ diffs }) {
+        return diffs['analysis.completedAt'] && diffs['analysis.completedBy'];
+      },
+      text: {
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{#if completed}}' +
+            '{{{userName}}} completed root cause analysis of {{{docDesc}}} {{{docName}}}' +
+          '{{else}}' +
+            '{{{userName}}} canceled root cause analysis of {{{docDesc}}} {{{docName}}}' +
+          '{{/if}}',
+      },
+    },
+  ],
   data({ diffs }) {
-    const { newValue:status } = diffs['analysis.status'];
-    const { newValue:comments } = diffs['analysis.completionComments'] || {};
+    const { newValue: status } = diffs['analysis.status'];
+    const { newValue: comments } = diffs['analysis.completionComments'] || {};
 
     return {
-      completed: () => status === 1, // Completed
-      comments: () => comments
+      completed: status === 1, // Completed
+      comments,
     };
   },
-  triggers: [
-    function({ diffs, newDoc: { _id } }) {
-      if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
-        new this.workflowConstructor(_id).refreshStatus();
-      }
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
+  trigger({ diffs, newDoc: { _id }, auditConfig }) {
+    if (diffs['analysis.completedAt'] && diffs['analysis.completedBy']) {
+      new auditConfig.workflowConstructor(_id).refreshStatus();
     }
-  ]
+  },
 };

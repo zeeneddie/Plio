@@ -1,6 +1,6 @@
-import { WorkItems } from '/imports/share/collections/work-items.js';
-import { isDueToday, isOverdue } from '/imports/share/helpers.js';
-import Workflow from './Workflow.js';
+import { WorkItems } from '/imports/share/collections/work-items';
+import { isDueToday, isOverdue } from '/imports/share/helpers';
+import Workflow from './Workflow';
 
 
 export default class WorkItemWorkflow extends Workflow {

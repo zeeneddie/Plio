@@ -44,7 +44,9 @@
                 {{/each}}
 
                 {{#with orgData}}
-                  <p style="margin-top: 40px;">{{title}}</p>
+                  <p style="margin-top: 40px;">
+                    Organization settings were updated:
+                  </p>
 
                   <table width="100%" border="0" cellpadding="0" cellspacing="0" style: "border: 1px solid #ddd; border-bottom: none;">
                     <thead>
@@ -69,10 +71,14 @@
         </td>
       </tr>
       <tr>
-        <td class="column" align="left" style="background:#ffffff;text-align:left;vertical-align:top;border-collapse:collapse;color:#888888;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;border-top:1px solid #dddddd">
+        <td class="column" align="left" style="background:#ffffff;text-align:left;vertical-align:top;border-collapse:collapse;color:#888888;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
           <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
-            Do not reply to this email - this is an automated notification message.
+            Do not reply to this email - this is an automated notification message. To stop receiving this type of notification <a href="{{unsubscribeUrl}}">click here</a>.
           </p>
+        </td>
+      </tr>
+      <tr>
+        <td class="column" align="left" style="background:#ffffff;text-align:left;vertical-align:top;border-collapse:collapse;color:#888888;border-spacing:0;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;border-top:1px solid #dddddd">
           <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
             At Plio, we believe that managing your compliance activities and your quality procedures is vital to the future of your business. You need a better software tool than a spreadsheet to keep on top of everything.
           </p>
@@ -85,6 +91,7 @@
           <p style="color:#888888;font-family:'Helvetica Neue',helvetica,arial,sans-serif;font-size:12px;line-height:16px;">
             At Plio, we believe that running a proper management system shouldn’t just be for those that can afford it, it should be available to everyone. It should also be easy enough to use to be understandable by everyone.
           </p>
+
         </td>
       </tr>
     </tbody>

@@ -1,5 +1,5 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -8,24 +8,18 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} title set to "{{newValue}}"',
+          '{{{docName}}} title set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} title changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} title changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} title removed'
+          '{{{docName}}} title removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ diffs: { title }, newDoc }) {
-    const auditConfig = this;
+  data({ diffs: { title } }) {
     const { newValue, oldValue } = title;
-
-    return {
-      docName: () => auditConfig.docName(newDoc),
-      newValue: () => newValue,
-      oldValue: () => oldValue
-    };
-  }
+    return { newValue, oldValue };
+  },
 };

@@ -1,3 +1,5 @@
+import { Meteor } from 'meteor/meteor';
+
 export const ORG_CANNOT_CHANGE_SETTINGS = new Meteor.Error(403, 'User is not authorized for editing organization settings');
 
 export const ORG_CANNOT_INVITE_USERS = new Meteor.Error(403, 'User is not authorized for inviting user\'s from this organization');
@@ -27,3 +29,5 @@ export const ORG_TRANSFER_CANCELED_COMPLETED = new Meteor.Error(400, 'Current or
 export const ORG_ALREADY_EXISTS = name => new Meteor.Error(400, `Organization "${name}" already exists`);
 
 export const ORG_CAN_NOT_BE_DELETED = new Meteor.Error(400, 'Organization can not be deleted');
+
+export const DOC_NOT_FOUND_OR_ALREADY_UNSUBSCRIBED = new Meteor.Error(400, 'The document you are looking for is not found or you\'ve already unsubscribed from the daily recap');

@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -8,22 +9,33 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Identified at set to "{{newValue}}"',
+          'Identified at set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Identified at changed from "{{oldValue}}" to "{{newValue}}"',
+          'Identified at changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Identified at removed'
-      }
-    }
+          'Identified at removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs: { identifiedAt }, newDoc }) {
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
+  notifications: [
+    {
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set identified date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed identified date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed identified date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
+  data({ diffs: { identifiedAt }, organization: { timezone } }) {
     return {
-      newValue: () => getPrettyOrgDate(identifiedAt.newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(identifiedAt.oldValue, orgId())
+      newValue: () => getPrettyTzDate(identifiedAt.newValue, timezone),
+      oldValue: () => getPrettyTzDate(identifiedAt.oldValue, timezone),
     };
-  }
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getUserFullNameOrEmail } from '/imports/share/helpers';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -9,24 +9,22 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} owner set to {{newValue}}',
+          '{{{docName}}} owner set to {{{newValue}}}',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} owner changed from {{oldValue}} to {{newValue}}',
+          '{{{docName}}} owner changed from {{{oldValue}}} to {{{newValue}}}',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} owner removed'
+          '{{{docName}}} owner removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ diffs: { owner }, newDoc }) {
-    const auditConfig = this;
+  data({ diffs: { owner } }) {
     const { newValue, oldValue } = owner;
 
     return {
-      docName: () => auditConfig.docName(newDoc),
       newValue: () => getUserFullNameOrEmail(newValue),
-      oldValue: () => getUserFullNameOrEmail(oldValue)
+      oldValue: () => getUserFullNameOrEmail(oldValue),
     };
-  }
+  },
 };

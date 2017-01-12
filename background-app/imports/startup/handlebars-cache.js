@@ -1,4 +1,4 @@
-import HandlebarsCache from '/imports/share/utils/handlebars-cache.js';
+import HandlebarsCache from '/imports/share/utils/handlebars-cache';
 
 
 const getAssetPath = (type, name) => `notification-templates/${type}/${name}.handlebars`;

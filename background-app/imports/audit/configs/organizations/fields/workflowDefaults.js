@@ -1,9 +1,8 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getUserFullNameOrEmail } from '../../../utils/helpers.js';
-import { getReceivers } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getReceivers } from '../helpers';
 
 
-const getWorkflowDefaultsConfig = (field, label) => {
+const getWorkflowDefaultsConfig = (field, relatedDocs) => {
   return [
     {
       field: `workflowDefaults.${field}.workflowType`,
@@ -11,35 +10,30 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Workflow type for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
-          }
-        }
+              'Workflow type for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
+          },
+        },
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed workflow type for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
-          }
-        }
+              '{{{userName}}} changed workflow type for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
+          },
+        },
       ],
-      data({ diffs, newDoc, user }) {
+      data({ diffs }) {
         const { newValue, oldValue } = diffs[
           `workflowDefaults.${field}.workflowType`
         ];
-        const auditConfig = this;
 
-        return {
-          docDesc: () => auditConfig.docDescription(newDoc),
-          docName: () => auditConfig.docName(newDoc),
-          userName: () => getUserFullNameOrEmail(user),
-          newValue: () => newValue,
-          oldValue: () => oldValue
-        };
+        return { newValue, oldValue, relatedDocs };
       },
-      receivers: getReceivers
+      rreceivers({ newDoc, user }) {
+        return getReceivers(newDoc, user);
+      },
     },
 
     {
@@ -48,36 +42,35 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Default step time for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
-          }
-        }
+              'Default step time for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
+          },
+        },
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
-          }
-        }
+              '{{{userName}}} changed default step time for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
+          },
+        },
       ],
-      data({ diffs, newDoc, user }) {
-        const auditConfig = this;
+      data({ diffs, newDoc }) {
         const { newValue, oldValue } = diffs[
           `workflowDefaults.${field}.stepTime.timeUnit`
         ];
         const timeVal = newDoc.workflowDefaults[field].stepTime.timeValue;
 
         return {
-          docDesc: () => auditConfig.docDescription(newDoc),
-          docName: () => auditConfig.docName(newDoc),
-          userName: () => getUserFullNameOrEmail(user),
-          newValue: () => `${timeVal} ${newValue}`,
-          oldValue: () => `${timeVal} ${oldValue}`
+          newValue: `${timeVal} ${newValue}`,
+          oldValue: `${timeVal} ${oldValue}`,
+          relatedDocs,
         };
       },
-      receivers: getReceivers
+      receivers({ newDoc, user }) {
+        return getReceivers(newDoc, user);
+      },
     },
 
     {
@@ -86,36 +79,35 @@ const getWorkflowDefaultsConfig = (field, label) => {
         {
           message: {
             [ChangesKinds.FIELD_CHANGED]:
-              `Default step time for ${label} changed ` +
-              `from "{{oldValue}}" to "{{newValue}}"`
-          }
-        }
+              'Default step time for {{{relatedDocs}}} changed ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}"',
+          },
+        },
       ],
       notifications: [
         {
           text: {
             [ChangesKinds.FIELD_CHANGED]:
-              `{{userName}} changed default step time for ${label} ` +
-              `from "{{oldValue}}" to "{{newValue}}" in {{{docDesc}}} {{{docName}}}`
-          }
-        }
+              '{{{userName}}} changed default step time for {{{relatedDocs}}} ' +
+              'from "{{{oldValue}}}" to "{{{newValue}}}" in {{{docDesc}}} {{{docName}}}',
+          },
+        },
       ],
-      data({ diffs, newDoc, user }) {
-        const auditConfig = this;
+      data({ diffs, newDoc }) {
         const { newValue, oldValue } = diffs[
           `workflowDefaults.${field}.stepTime.timeValue`
         ];
         const timeUnit = newDoc.workflowDefaults[field].stepTime.timeUnit;
 
         return {
-          docDesc: () => auditConfig.docDescription(newDoc),
-          docName: () => auditConfig.docName(newDoc),
-          userName: () => getUserFullNameOrEmail(user),
-          newValue: () => `${newValue} ${timeUnit}`,
-          oldValue: () => `${oldValue} ${timeUnit}`
+          newValue: `${newValue} ${timeUnit}`,
+          oldValue: `${oldValue} ${timeUnit}`,
+          relatedDocs,
         };
       },
-      receivers: getReceivers
+      receivers({ newDoc, user }) {
+        return getReceivers(newDoc, user);
+      },
     },
   ];
 };
@@ -123,5 +115,5 @@ const getWorkflowDefaultsConfig = (field, label) => {
 export default [
   ...getWorkflowDefaultsConfig('minorProblem', 'minor non-conformities/risks'),
   ...getWorkflowDefaultsConfig('majorProblem', 'major non-conformities/risks'),
-  ...getWorkflowDefaultsConfig('criticalProblem', 'critical non-conformities/risks')
+  ...getWorkflowDefaultsConfig('criticalProblem', 'critical non-conformities/risks'),
 ];

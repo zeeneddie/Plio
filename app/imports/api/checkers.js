@@ -158,6 +158,7 @@ export const isOrgMemberBySelector = (userId, selector) => {
 };
 
 export const isOrgMember = (userId, organizationId) => {
+  debugger
   if (!userIdOrgIdTester(userId, organizationId)) return false;
 
   return isOrgMemberBySelector(userId, { _id: organizationId })
@@ -204,6 +205,9 @@ export const isViewed = (doc, userId) => {
 export const checkOrgMembership = curry((userId, organizationId) => {
   return checkAndThrow(!isOrgMember(userId, organizationId), NOT_AN_ORG_MEMBER);
 });
+
+export const checkOrgMembershipBySelector = curry((userId, selector) =>
+  checkAndThrow(!isOrgMemberBySelector(userId, selector), NOT_AN_ORG_MEMBER));
 
 export const checkOrgMembershipByDoc = (collection, query, userId) => {
   const doc = Object.assign({}, collection.findOne(query));
