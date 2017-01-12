@@ -6,6 +6,5 @@ Discussions.after.remove((userId, discussion) => {
   const discussionId = discussion._id;
   if (discussionId) {
     Messages.remove({ discussionId });
-    console.log('Message removeddd!!!');
   }
 });
