@@ -63,6 +63,15 @@ export default {
       FlowRouter.go('risks', params, queryParams);
     });
   },
+  goToUser(userId) {
+    const params = {
+      orgSerialNumber: this.organizationSerialNumber(),
+      userId,
+    };
+    FlowRouter.withReplaceState(() => {
+      FlowRouter.go('userDirectoryUserPage', params);
+    });
+  },
   handleRouteRedirect(vmName) {
     return Meteor.defer(() => invoke(ViewModel.findOne(vmName), 'handleRoute'));
   },
