@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import { FormGroup, InputGroup, InputGroupButton } from 'reactstrap';
-import { compose, withState, withProps } from 'recompose';
-import { Meteor } from 'meteor/meteor';
 
 import Button from '../../../components/Buttons/Button';
 import Icon from '../../../components/Icons/Icon';

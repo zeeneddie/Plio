@@ -8,8 +8,8 @@ import { submit } from './handlers';
 export default compose(
   connect(),
   withState('value', 'setValue', ''),
-  withProps((props) => ({
-    disabled: !props.doc || props.doc.isDeleted,
+  withProps(({ doc }) => ({
+    disabled: !doc || doc.isDeleted,
     users: Meteor.users.find().map((user) => ({
       text: user.fullNameOrEmail(),
       value: user._id,
