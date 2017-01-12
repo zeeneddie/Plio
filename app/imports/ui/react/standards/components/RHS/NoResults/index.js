@@ -6,7 +6,7 @@ const StandardsRHSNoResults = () => (
   <RHS>
     <RHS.Card className="standard-details">
       <div className="card-block card-heading">
-        <h5>Your search did not match any documents</h5>
+        <h5>Your search did not match any standards</h5>
       </div>
     </RHS.Card>
   </RHS>

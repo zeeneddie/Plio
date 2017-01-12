@@ -118,6 +118,7 @@ export default compose(
     componentWillMount() {
       redirectAndOpen(this.props);
     },
+    // redirect to first found standard or
     // if selected standard is deleted redirect to default
     // and open a default section with that standard
     componentWillReceiveProps(nextProps) {

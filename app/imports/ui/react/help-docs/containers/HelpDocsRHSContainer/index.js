@@ -8,6 +8,7 @@ import { onModalOpen } from './handlers';
 import { getUser } from '/imports/share/helpers';
 import HelpDocsRHS from '../../components/HelpDocsRHS';
 import HelpDocsRHSNotFound from '../../components/HelpDocsRHSNotFound';
+import HelpDocsRHSNoResults from '../../components/HelpDocsRHSNoResults';
 import onToggleScreenMode from '../../../handlers/onToggleScreenMode';
 
 export default compose(
@@ -24,6 +25,14 @@ export default compose(
     ({ helpDocs }) => !!helpDocs.length,
     _.identity,
     renderComponent(HelpDocsRHSNotFound),
+  ),
+
+  connect(pickDeep(['global.searchText', 'helpDocs.helpDocsFiltered'])),
+
+  branch(
+    props => props.searchText && !props.helpDocsFiltered.length,
+    renderComponent(HelpDocsRHSNoResults),
+    _.identity,
   ),
 
   connect(pickDeep([

@@ -44,6 +44,7 @@ export default compose(
       redirectHandle(this.props);
     },
     componentWillReceiveProps(nextProps) {
+      // redirect to first found standard
       if (nextProps.searchText && nextProps.standardsFiltered.length) {
         redirectHandle(nextProps);
       }

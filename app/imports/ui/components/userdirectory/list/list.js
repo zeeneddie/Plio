@@ -4,12 +4,13 @@ import { Organizations } from '/imports/share/collections/organizations';
 import { extractIds } from '/imports/api/helpers';
 
 Template.UserDirectory_List.viewmodel({
-  mixin: ['organization', 'modal'],
+  mixin: ['organization', 'modal', 'router'],
   listArgs() {
     return {
       modalButtonText: 'Invite',
       onModalOpen: this.onInviteClick.bind(this),
-      onSearchInputValue: this.onSearchInputValue.bind(this)
+      onSearchInputValue: this.onSearchInputValue.bind(this),
+      onAfterSearch: this.onAfterSearch(),
     };
   },
   onInviteClick(event) {
@@ -29,5 +30,12 @@ Template.UserDirectory_List.viewmodel({
   },
   onSearchInputValue(value) {
     return extractIds(this.organizationUsers());
-  }
+  },
+  onAfterSearch() {
+    return (searchText, searchResult) => {
+      if (searchText && searchResult.length) {
+        this.goToUser(searchResult[0]);
+      }
+    };
+  },
 });

@@ -72,6 +72,7 @@ Template.List_Read.viewmodel({
     Tracker.flush();
 
     const ids = this.onSearchInputValue(value) || []; // needs to be passed as prop
+    this.searchResult(ids);
 
     this.searchResultsNumber(ids.length);
 
@@ -83,6 +84,8 @@ Template.List_Read.viewmodel({
         this.animating(true);
 
         this.expandAllFound(this._transform().onValue(vms), () => this.onSearchCompleted(value, ids));
+      } else {
+        this.onAfterSearch && this.onAfterSearch(value, ids);
       }
     }, 0);
   },
@@ -117,6 +120,6 @@ Template.List_Read.viewmodel({
   onSearchCompleted(searchText, searchResult) {
     this.animating(false);
     Tracker.afterFlush(() => this.focused(true));
-    this.onAfterSearch(searchText, searchResult);
+    this.onAfterSearch && this.onAfterSearch(searchText, searchResult);
   },
 });
