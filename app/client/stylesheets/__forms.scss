@@ -307,6 +307,10 @@ input:focus ~ .clear-field {
       margin-bottom: 0 !important;
     }
   }
+
+  & > .dropdown > .form-control:first-child {
+    border-radius: 0;
+  }
 }
 
 
