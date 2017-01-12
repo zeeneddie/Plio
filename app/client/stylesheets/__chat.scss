@@ -27,7 +27,7 @@
     &.scroll {
       transform: translateZ(0);
     }
-    
+
     &.loading {
       .chat-item-date {
         display: none;
@@ -172,6 +172,10 @@
 
       .dropdown-menu {
         margin: 0;
+
+        &:empty {
+          display: none;
+        }
       }
     }
     &-reply {
