@@ -9,21 +9,16 @@ import {
   renderComponent,
 } from 'recompose';
 import { connect } from 'react-redux';
-import { batchActions } from 'redux-batched-actions';
-import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
 import { DocumentLayoutSubs } from '/imports/startup/client/subsmanagers';
 import StandardsLayout from '../../components/Layout';
-import {
-  setFilter,
-  setSearchText,
-} from '/imports/client/store/actions/globalActions';
-import { setShowCard } from '/imports/client/store/actions/mobileActions';
+
 import { pickDeep } from '/imports/api/helpers';
-import { StandardFilters, MOBILE_BREAKPOINT } from '/imports/api/constants';
-import { goTo } from '../../../../utils/router/actions';
+import { StandardFilters } from '/imports/api/constants';
+import onHandleFilterChange from '../../../handlers/onHandleFilterChange';
+import onHandleReturn from '../../../handlers/onHandleReturn';
 import loadInitialData from '../../../loaders/loadInitialData';
 import loadIsDiscussionOpened from '../../../loaders/loadIsDiscussionOpened';
 import loadLayoutData from '../../../loaders/loadLayoutData';
@@ -134,31 +129,7 @@ export default compose(
   )),
   connect(pickDeep(['window.width', 'mobile.showCard'])),
   withHandlers({
-    onHandleFilterChange: props => index => {
-      const filter = parseInt(Object.keys(props.filters)[index], 10);
-      const actions = [
-        setSearchText(''),
-        setFilter(filter),
-      ];
-
-      FlowRouter.setQueryParams({ filter });
-
-      props.dispatch(batchActions(actions));
-    },
-    onHandleReturn: (props) => () => {
-      const { orgSerialNumber, urlItemId } = props;
-
-      if (props.width <= MOBILE_BREAKPOINT) {
-        props.dispatch(setShowCard(false));
-
-        if (props.isDiscussionOpened) {
-          return goTo('standard')({ orgSerialNumber, urlItemId });
-        } else if (!props.isDiscussionOpened && props.showCard) {
-          return true;
-        }
-      }
-
-      return goTo('dashboardPage')();
-    },
+    onHandleFilterChange,
+    onHandleReturn,
   }),
 )(StandardsLayout);
