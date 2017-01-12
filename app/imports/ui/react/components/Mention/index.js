@@ -8,6 +8,8 @@ import Input from './Input';
 import Menu from './Menu';
 import { MENTION_REGEX } from './constants';
 
+// TODO: add avatar, filter out current user
+
 const propTypes = {
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,

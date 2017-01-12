@@ -158,7 +158,6 @@ export const isOrgMemberBySelector = (userId, selector) => {
 };
 
 export const isOrgMember = (userId, organizationId) => {
-  debugger
   if (!userIdOrgIdTester(userId, organizationId)) return false;
 
   return isOrgMemberBySelector(userId, { _id: organizationId })

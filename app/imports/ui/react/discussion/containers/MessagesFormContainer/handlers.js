@@ -2,7 +2,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { reset, submit as submitMessage } from '/imports/client/store/actions/discussionActions';
 
-const MESSAGES_LENGTH_LIMIT_BEFORE_RESET = 100;
+const MESSAGES_COUNT_LIMIT_BEFORE_RESET = 100;
 
 export const submit = ({
   value,
@@ -23,7 +23,7 @@ export const submit = ({
 
     const { messages } = getState().discussion;
 
-    if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_LENGTH_LIMIT_BEFORE_RESET) {
+    if (FlowRouter.getQueryParam('at') || messages.length > MESSAGES_COUNT_LIMIT_BEFORE_RESET) {
       FlowRouter.setQueryParams({ at: null });
       dispatch(reset(true));
     }

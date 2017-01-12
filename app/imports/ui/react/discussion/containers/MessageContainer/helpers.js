@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 
 import { getFormattedDate } from '/imports/share/helpers';
 import { invokeC } from '/imports/api/helpers';
@@ -9,33 +8,17 @@ import { TruncatedStringLengths } from '/imports/api/constants';
 import FileProvider from '../../../containers/providers/FileProvider';
 import { openUserDetails } from './handlers';
 import ReactAutolinker from '../../../components/ReactAutolinker';
-import { MENTION_EMAIL_REGEX } from '../../../components/Mention/constants';
+import { getMentionData, getMentionDataWithUsers } from '/imports/share/mentions';
 
 // Helpers
 
 export const invokeUser = path => obj => invokeC(path, obj.user);
 
 const renderMentions = (text, defaultRenderer) => {
-  const splitted = text.split(MENTION_EMAIL_REGEX);
-  const content = splitted.filter(Boolean).map((str, i) => {
-    if (MENTION_EMAIL_REGEX.test(str)) {
-      const mentionExecRegexSource = MENTION_EMAIL_REGEX.source
-        .substring(1, MENTION_EMAIL_REGEX.source.length - 1)
-        .split(' ')
-        .map(r => `(${r})`)
-        .join(' ');
-      const mentionExecRegex = new RegExp(mentionExecRegexSource, 'gi');
-      const match = mentionExecRegex.exec(str);
-      const firstName = match[1];
-      const email = match[2].substring(1, match[2].length - 1);
-      const user = Meteor.users.findOne({ 'emails.address': email });
-      const onClick = openUserDetails({ user });
-
-      return <a {...{ onClick }} key={email}>{firstName}</a>;
-    }
-
-    return defaultRenderer(str, i, text);
-  });
+  const data = getMentionDataWithUsers(getMentionData(text));
+  const content = data.map(({ firstName, email, user, mentionString }, i) => (user ? (
+    <a key={email} onClick={openUserDetails({ user })}>{firstName}</a>
+  ) : defaultRenderer(mentionString, i, text)));
 
   return content;
 };
