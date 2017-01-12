@@ -1,7 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-import { WorkflowTypes } from '/imports/share/constants.js';
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { WorkflowTypes } from '/imports/share/constants';
+import { Organizations } from '/imports/share/collections/organizations';
 
 
 export default class Workflow {
@@ -37,13 +37,13 @@ export default class Workflow {
   }
 
   _updateStatus(status) {
-    const { status:savedStatus } = this._doc;
+    const { status: savedStatus } = this._doc;
 
     if (savedStatus !== status) {
       this.constructor._collection.update({
-        _id: this._id
+        _id: this._id,
       }, {
-        $set: { status }
+        $set: { status },
       });
     }
 
@@ -76,7 +76,7 @@ export default class Workflow {
   }
 
   _getOrgTimezone() {
-    const { organizationId:_id } = this._doc;
+    const { organizationId: _id } = this._doc;
     const { timezone } = Organizations.findOne({ _id }) || {};
     return timezone || 'UTC';
   }

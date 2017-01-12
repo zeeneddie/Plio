@@ -1,13 +1,9 @@
 import './includes';
 import './modals';
-import './useraccounts';
 import './dashboard';
 import './standards';
-import './userdirectory';
 import './login-header.html';
-import './includes';
 import './useraccounts';
-import './standards';
 import './userdirectory';
 import './risks';
 import './non-conformities';
@@ -17,3 +13,4 @@ import './discussion';
 import './notifications';
 import './problems';
 import './help-docs';
+import './data-export';

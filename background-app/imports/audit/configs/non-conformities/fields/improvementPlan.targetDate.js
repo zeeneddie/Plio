@@ -1,30 +1,17 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { getReceivers } from '../../problems/helpers';
+import IPTargetDate from '../../common/fields/improvementPlan.targetDate';
 
 
 export default {
   field: 'improvementPlan.targetDate',
   logs: [
-    {
-      message: {
-        [ChangesKinds.FIELD_ADDED]:
-          'Improvement plan target date for desired outcome set to "{{newValue}}"',
-        [ChangesKinds.FIELD_CHANGED]:
-          'Improvement plan target date for desired outcome changed from "{{oldValue}}" to "{{newValue}}"',
-        [ChangesKinds.FIELD_REMOVED]:
-          'Improvement plan target date for desired outcome removed'
-      }
-    }
+    IPTargetDate.logs.default,
   ],
-  notifications: [],
-  data({ diffs, newDoc }) {
-    const { newValue, oldValue } = diffs['improvementPlan.targetDate'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
-
-    return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
-    };
-  }
+  notifications: [
+    IPTargetDate.notifications.default,
+  ],
+  data: IPTargetDate.data,
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

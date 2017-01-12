@@ -1,5 +1,7 @@
+import { Meteor } from 'meteor/meteor';
 import { compose } from 'recompose';
 import { batchActions } from 'redux-batched-actions';
+import { _ } from 'meteor/underscore';
 import { $ } from 'meteor/jquery';
 import swal from '/imports/ui/utils/swal';
 
@@ -53,10 +55,14 @@ const handleMethodResult = (resolve, reject) => (err, res) => (dispatch) => {
 };
 
 export const callMethod = (method, args) => (dispatch) => new Promise((resolve, reject) => {
+  const methodArgs = [args, compose(dispatch, handleMethodResult(resolve, reject))];
+
   dispatch(batchActions([
     setErrorText(''),
     setSaving(true),
   ]));
 
-  return method.call(args, compose(dispatch, handleMethodResult(resolve, reject)));
+  return _.isString(method)
+    ? Meteor.call(method, ...methodArgs)
+    : method.call(...methodArgs);
 });

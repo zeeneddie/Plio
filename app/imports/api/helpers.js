@@ -502,3 +502,46 @@ export const compileTemplateObject = (params, paramMap) => {
     return { ...prev, [key]: value };
   }, {});
 };
+
+export const createSearchRegex = (val, isPrecise) => {
+  let r;
+  let value = `${val}`;
+
+  try {
+    if (isPrecise) {
+      value = value.replace(/"/g, '');
+      r = new RegExp(`.*(${value}).*`, 'i');
+    } else {
+      r = value.split(' ')
+          .filter(word => !!word)
+          .map(word => `(?=.*\\b.*${word}.*\\b)`)
+          .join('');
+
+      r = new RegExp(`^${r}.*$`, 'i');
+    }
+  } catch (err) { /* ignore errors */ }
+
+  return r;
+};
+
+/*
+  Example:
+  searchByRegex(
+    ['name', 'sequentialId'],
+    createSearchRegex('Hello World'),
+    [{ name: '123' }, { name: 'Hello World' }]
+  );
+  => [{ name: 'Hello World' }];
+*/
+export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
+  array.filter((item) => {
+    if (typeof transformOrArrayOfProps === 'function') {
+      const result = transformOrArrayOfProps(item);
+      return result.filter(a => typeof a === 'string' && a.search(regex) >= 0).length;
+    }
+
+    if (!_.isArray(transformOrArrayOfProps)) return false;
+
+    return transformOrArrayOfProps.filter(prop =>
+      typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
+  }));

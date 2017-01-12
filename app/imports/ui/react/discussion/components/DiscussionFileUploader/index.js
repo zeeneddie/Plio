@@ -23,7 +23,7 @@ const enhance = compose(
       slingshotDirective: props.slingshotDirective,
       slingshotContext: props.uploaderMetaContext,
       maxFileSize: Meteor.settings.public.discussionFilesMaxSize,
-      fileData: { organizationId: 'KwKXz5RefrE5hjWJ2' },
+      fileData: { organizationId: props.organizationId },
       hooks: {
         beforeInsert: () => {
           // this.playNewMessageSound();

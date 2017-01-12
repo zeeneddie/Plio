@@ -63,6 +63,7 @@ Meteor.publish('currentUserOrganizations', function() {
         'users.isRemoved': 1,
         'users.removedAt': 1,
         'users.removedBy': 1,
+        'users.sendDailyRecap': 1,
       },
     });
   } else {
@@ -79,8 +80,29 @@ Meteor.publish('currentUserOrganizationById', function(_id) {
 });
 
 Meteor.publish('currentUserOrganizationBySerialNumber', function(serialNumber) {
+  const fields = {
+    _id: 1,
+    name: 1,
+    serialNumber: 1,
+    users: 1,
+    timezone: 1,
+    currency: 1,
+    workflowDefaults: 1,
+    reminders: 1,
+    ncGuidelines: 1,
+    rkGuidelines: 1,
+    rkScoringGuidelines: 1,
+    homeScreenTitles: 1,
+    isAdminOrg: 1,
+    createdAt: 1,
+    createdBy: 1,
+    updatedAt: 1,
+    updatedBy: 1,
+    lastAccessedDate: 1,
+  };
+
   if (this.userId) {
-    return getUserOrganizations(this.userId, { serialNumber });
+    return getUserOrganizations(this.userId, { serialNumber }, { fields });
   } else {
     return this.ready();
   }
@@ -143,6 +165,7 @@ Meteor.publishComposite('organizationsInfo', {
           name: 1,
           users: 1,
           createdAt: 1,
+          lastAccessedDay: 1,
         },
       });
     }

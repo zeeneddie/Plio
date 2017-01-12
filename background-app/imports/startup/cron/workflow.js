@@ -1,6 +1,6 @@
-import { Organizations } from '/imports/share/collections/organizations.js';
+import { Organizations } from '/imports/share/collections/organizations';
 import { getTimezones } from './helpers';
-import WorkflowUpdater from '/imports/workflow/WorkflowUpdater.js';
+import WorkflowUpdater from '/imports/workflow/WorkflowUpdater';
 
 
 SyncedCron.add({
@@ -14,11 +14,11 @@ SyncedCron.add({
     const timezones = getTimezones('00:00');
 
     Organizations.find({
-      timezone: { $in: timezones }
+      timezone: { $in: timezones },
     }, {
-      fields: { _id: 1 }
+      fields: { _id: 1 },
     }).forEach((org) => {
       new WorkflowUpdater(org._id).update();
     });
-  }
+  },
 });

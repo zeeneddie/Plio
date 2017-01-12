@@ -1,5 +1,5 @@
 <template name="Risks_Card_Read">
-  <div class="content-cards-inner flex scroll" {{b "class: { content: !risk }"}}>
+  <div class="content-cards-inner flex scroll">
     {{#if showCard}}
       {{#with risk}}
         {{#Card_Read
@@ -128,10 +128,14 @@
       {{/with}}
     {{else}}
       {{#CardHeading}}
-        {{#if isActiveRiskFilter 4}}
-          <h5>There are no deleted risks yet.</h5>
+        {{#if noSearchResults}}
+          <h5>Your search did not match any risks</h5>
         {{else}}
-          <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
+          {{#if isActiveRiskFilter 4}}
+            <h5>There are no deleted risks yet.</h5>
+          {{else}}
+            <h5>There are no risks yet! Click on the 'Add' button to create your first risk.</h5>
+          {{/if}}
         {{/if}}
       {{/CardHeading}}
     {{/if}}

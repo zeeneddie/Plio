@@ -23,15 +23,16 @@ export const insert = new ValidatedMethod({
 
   validate: new SimpleSchema([RequiredSchema]).validator(),
 
-  run({ ...args }) {
+  run(args) {
     const userId = this.userId;
+
     if (!userId) {
       throw new Meteor.Error(403, 'Unauthorized user cannot create files');
     }
 
     checkOrgMembership(userId, args.organizationId);
-    return FilesService.insert({ ...args });
-  }
+    return FilesService.insert(args);
+  },
 });
 
 export const updateProgress = new ValidatedMethod({

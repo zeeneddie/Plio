@@ -1,4 +1,4 @@
-import { getNotifications, getData, getReceivers } from '../helpers.js';
+import { getNotifications, getData, getReceivers } from '../helpers';
 
 
 export default {
@@ -6,5 +6,5 @@ export default {
   logs: [],
   notifications: getNotifications(),
   data: getData,
-  receivers: getReceivers
+  receivers: getReceivers,
 };

@@ -12,7 +12,7 @@ import Button from '../../../components/Buttons/Button';
 import ModalEdit from '../ModalEdit';
 
 const CustomersRHS = ({ isReady, organization }) => (
-  <RHS className={cx({ content: !organization })}>
+  <RHS>
     <RHS.Card className="standard-details">
       <RHS.Header
         title="Organization"
@@ -30,6 +30,7 @@ const CustomersRHS = ({ isReady, organization }) => (
 
       <RHS.ContentList isReady={isReady}>
         <Body {...organization} />
+        <div className="card-footer"></div>
       </RHS.ContentList>
     </RHS.Card>
   </RHS>

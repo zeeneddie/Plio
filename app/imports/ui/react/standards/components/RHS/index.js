@@ -6,6 +6,7 @@ import { getId } from '/imports/api/helpers';
 import RHS from '../../../components/RHS';
 import HeaderButtons from './HeaderButtons';
 import Body from './Body';
+import NoResults from './NoResults';
 import NotFound from './NotFound';
 import NotExist from './NotExist';
 import RHSHeaderButtonsContainer from '../../containers/RHSHeaderButtonsContainer';
@@ -21,12 +22,11 @@ const StandardsRHS = ({
   <RHS
     className={cx('expandable', {
       expanded: isFullScreenMode,
-      content: !standard,
     })}
   >
     <RHS.Card className="standard-details">
       <RHS.Header
-        title="Compliance Standard"
+        title="Standard"
         isReady={isReady}
       >
         <RHSHeaderButtonsContainer {...{ standard, hasDocxAttachment }} />
@@ -54,5 +54,6 @@ StandardsRHS.HeaderButtons = HeaderButtons;
 StandardsRHS.Body = Body;
 StandardsRHS.NotFound = NotFound;
 StandardsRHS.NotExist = NotExist;
+StandardsRHS.NoResults = NoResults;
 
 export default StandardsRHS;

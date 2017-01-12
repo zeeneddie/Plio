@@ -1,8 +1,9 @@
+import onRemoved from '../common/on-removed';
+
+
 export default {
   logs: [
-    {
-      message: 'Document removed'
-    }
+    onRemoved.logs.default,
   ],
-  notifications: []
+  notifications: [],
 };

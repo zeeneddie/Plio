@@ -1,6 +1,6 @@
 import { Organizations } from '/imports/share/collections/organizations';
 import { getTimezones } from './helpers';
-import ActionCreationReminderSender from '/imports/reminders/ActionCreationReminderSender';
+import ActionCreationReminderSender from '/imports/reminders/action-creation/ActionCreationReminderSender';
 
 
 // send reminders at 05:00

@@ -1,5 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getReceivers } from '../helpers';
 
 
 export default {
@@ -11,23 +12,39 @@ export default {
       },
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          'Update of standards date set to "{{newValue}}"',
+          'Update of standards date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          'Update of standards date changed from "{{oldValue}}" to "{{newValue}}"',
+          'Update of standards date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          'Update of standards date removed'
-      }
-    }
+          'Update of standards date removed',
+      },
+    },
   ],
-  notifications: [],
-  data({ diffs, newDoc }) {
+  notifications: [
+    {
+      shouldSendNotification({ diffs }) {
+        return !diffs['updateOfStandards.status'];
+      },
+      text: {
+        [ChangesKinds.FIELD_ADDED]:
+          '{{{userName}}} set update of standards date of {{{docDesc}}} {{{docName}}} to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_CHANGED]:
+          '{{{userName}}} changed update of standards date of {{{docDesc}}} {{{docName}}} from "{{{oldValue}}}" to "{{{newValue}}}"',
+        [ChangesKinds.FIELD_REMOVED]:
+          '{{{userName}}} removed update of standards date of {{{docDesc}}} {{{docName}}}',
+      },
+    },
+  ],
+  data({ diffs, organization }) {
     const { newValue, oldValue } = diffs['updateOfStandards.completedAt'];
-    const auditConfig = this;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
-  }
+  },
+  receivers({ newDoc, user }) {
+    return getReceivers(newDoc, user);
+  },
 };

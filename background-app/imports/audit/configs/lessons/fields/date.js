@@ -1,6 +1,6 @@
-import { ChangesKinds } from '../../../utils/changes-kinds.js';
-import { getPrettyOrgDate } from '../../../utils/helpers.js';
-import { getLogData } from '../helpers.js';
+import { ChangesKinds } from '../../../utils/changes-kinds';
+import { getPrettyTzDate } from '/imports/helpers/date';
+import { getLogData } from '../helpers';
 
 
 export default {
@@ -9,25 +9,23 @@ export default {
     {
       message: {
         [ChangesKinds.FIELD_ADDED]:
-          '{{docDesc}} created date set to "{{newValue}}"',
+          '{{{docName}}} created date set to "{{{newValue}}}"',
         [ChangesKinds.FIELD_CHANGED]:
-          '{{docDesc}} created date changed from "{{oldValue}}" to "{{newValue}}"',
+          '{{{docName}}} created date changed from "{{{oldValue}}}" to "{{{newValue}}}"',
         [ChangesKinds.FIELD_REMOVED]:
-          '{{docDesc}} created date removed'
+          '{{{docName}}} created date removed',
       },
-      logData: getLogData
-    }
+      logData: getLogData,
+    },
   ],
   notifications: [],
-  data({ diffs: { date }, newDoc }) {
-    const auditConfig = this;
+  data({ diffs: { date }, organization }) {
     const { newValue, oldValue } = date;
-    const orgId = () => auditConfig.docOrgId(newDoc);
+    const { timezone } = organization;
 
     return {
-      docName: () => auditConfig.docName(newDoc),
-      newValue: () => getPrettyOrgDate(newValue, orgId()),
-      oldValue: () => getPrettyOrgDate(oldValue, orgId())
+      newValue: () => getPrettyTzDate(newValue, timezone),
+      oldValue: () => getPrettyTzDate(oldValue, timezone),
     };
-  }
+  },
 };

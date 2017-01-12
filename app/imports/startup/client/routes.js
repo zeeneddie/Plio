@@ -5,15 +5,20 @@ import { mounter } from 'react-mounter/dist/client';
 import { Meteor } from 'meteor/meteor';
 import { AccountsTemplates } from 'meteor/useraccounts:core';
 import ReactDOM from 'react-dom';
+import React from 'react';
 import { $ } from 'meteor/jquery';
-
 import '/imports/ui/components';
 import '/imports/ui/layouts';
 import '/imports/ui/pages';
 
+import { DocumentTypes, ActionTypes } from '/imports/share/constants';
 import StandardsProvider from '/imports/ui/react/standards/components/Provider';
 import CustomersProvider from '/imports/ui/react/customers/components/Provider';
 import HelpDocsProvider from '/imports/ui/react/help-docs/components/HelpDocsProvider';
+import TransitionalLayout from '/imports/ui/react/layouts/TransitionalLayout';
+import UnsubscribeFromNotifications
+  from '/imports/ui/react/pages/components/Unsubscribe/Notifications';
+import UnsubscribeFromDailyRecap from '/imports/ui/react/pages/components/Unsubscribe/DailyRecap';
 
 BlazeLayout.setRoot('#app');
 
@@ -69,6 +74,20 @@ function mount(layoutClass, regions, options = {}) {
 const mount2 = withOptions({
   rootId: 'app',
 }, mount);
+
+const ROUTE_MAP = {
+  STANDARDS: 'standards',
+  NON_CONFORMITIES: 'non-conformities',
+  RISKS: 'risks',
+  ACTIONS: 'actions',
+};
+
+const DOCUMENT_TYPE_BY_ROUTE_MAP = {
+  [ROUTE_MAP.STANDARDS]: DocumentTypes.STANDARD,
+  [ROUTE_MAP.NON_CONFORMITIES]: DocumentTypes.NON_CONFORMITY,
+  [ROUTE_MAP.RISKS]: DocumentTypes.RISK,
+  [ROUTE_MAP.ACTIONS]: DocumentTypes.CORRECTIVE_ACTION,
+};
 
 AccountsTemplates.configureRoute('signIn', {
   layoutType: 'blaze',
@@ -364,6 +383,32 @@ FlowRouter.route('/:orgSerialNumber/work-inbox/:workItemId', {
   action() {
     BlazeLayout.render('WorkInbox_Layout', {
       content: 'WorkInbox_Page',
+    });
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/:route/:documentId/unsubscribe', {
+  name: 'unsubscribeFromNotifications',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ documentId, route, orgSerialNumber }) {
+    const documentType = DOCUMENT_TYPE_BY_ROUTE_MAP[route];
+
+    mount2(TransitionalLayout, {
+      content: (
+        <UnsubscribeFromNotifications {...{ documentId, documentType, orgSerialNumber }} />
+      ),
+    });
+  },
+});
+
+FlowRouter.route('/:orgSerialNumber/unsubscribe', {
+  name: 'unsubscribeFromDailyRecap',
+  triggersEnter: [checkLoggedIn, checkEmailVerified],
+  action({ orgSerialNumber }) {
+    mount2(TransitionalLayout, {
+      content: (
+        <UnsubscribeFromDailyRecap {...{ orgSerialNumber }} />
+      ),
     });
   },
 });

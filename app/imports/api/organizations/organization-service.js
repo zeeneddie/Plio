@@ -314,4 +314,34 @@ export default OrganizationService = {
 
     return this.collection.update(query, modifier);
   },
+
+  unsubscribeFromDailyRecap({ orgSerialNumber, userId }) {
+    const query = {
+      serialNumber: orgSerialNumber,
+      users: {
+        $elemMatch: {
+          userId,
+          sendDailyRecap: true,
+        },
+      },
+    };
+    const modifier = {
+      $set: {
+        'users.$.sendDailyRecap': false,
+      },
+    };
+
+    return this.collection.update(query, modifier);
+  },
+
+  updateLastAccessedDate({ organizationId }) {
+    console.log('updateLastAccessedDate service run', organizationId);
+    return this.collection.update({
+      _id: organizationId
+    }, {
+      $set: {
+        lastAccessedDate: new Date
+      }
+    });
+  },
 };
