@@ -146,10 +146,14 @@
       {{/with}}
     {{else}}
       {{#CardHeading}}
-        {{#if isActiveNCFilter 4}}
-          <h5>There are no deleted non-conformities yet.</h5>
+        {{#if noSearchResults}}
+          <h5>Your search did not match any non-conformities</h5>
         {{else}}
-          <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
+          {{#if isActiveNCFilter 4}}
+            <h5>There are no deleted non-conformities yet.</h5>
+          {{else}}
+            <h5>There are no non-conformities yet! Click on the 'Add' button to create your first non-conformity.</h5>
+          {{/if}}
         {{/if}}
       {{/CardHeading}}
     {{/if}}

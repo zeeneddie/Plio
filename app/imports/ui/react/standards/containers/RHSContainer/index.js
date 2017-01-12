@@ -37,6 +37,12 @@ export default compose(
     identity,
     renderComponent(StandardsRHS.NotFound),
   ),
+  connect(pickDeep(['global.searchText', 'standards.standardsFiltered'])),
+  branch(
+    props => props.searchText && !props.standardsFiltered.length,
+    renderComponent(StandardsRHS.NoResults),
+    identity,
+  ),
   connect(mapStateToProps),
   mapProps(({
     isCardReady,
