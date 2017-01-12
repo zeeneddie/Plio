@@ -24,7 +24,10 @@ WebApp.connectHandlers.use('/export', (req, res) => {
       return res.end('The file is corrupted. Please, try export data again.');
     }
 
-    res.writeHead(200, { 'Content-type': 'text/csv' });
+    res.writeHead(200, {
+      'Content-type': 'text/csv',
+      'Content-Disposition': 'attachment',
+    });
     return res.end(result);
   });
 });
