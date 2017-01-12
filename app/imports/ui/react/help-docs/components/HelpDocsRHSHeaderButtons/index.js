@@ -11,7 +11,7 @@ const HelpDocsRHSHeaderButtons = (props) => (
     ) : ''}
 
     {props.userHasChangeAccess ? (
-      <Button type="primary" onClick={props.onModalOpen}>
+      <Button color="primary" onClick={props.onModalOpen}>
         Edit
       </Button>
     ) : ''}

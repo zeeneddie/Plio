@@ -20,7 +20,7 @@ const HeaderButtons = (props) => {
   );
 
   const restoreButton = props.hasAccess && props.isDeleted && (
-    <Button type="secondary" onClick={props.onRestore}>
+    <Button color="secondary" onClick={props.onRestore}>
       Restore
     </Button>
   );
@@ -29,14 +29,14 @@ const HeaderButtons = (props) => {
     props.hasAccess &&
     props.isDeleted &&
     props.hasFullAccess && (
-      <Button type="primary" onClick={props.onDelete}>
+      <Button color="primary" onClick={props.onDelete}>
         Delete
       </Button>
     )
   );
 
   const editButton = !props.isDeleted && (
-    <Button type="primary" onClick={props.onModalOpen} >
+    <Button color="primary" onClick={props.onModalOpen} >
       Edit
     </Button>
   );

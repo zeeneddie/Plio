@@ -6,7 +6,7 @@ import FormGroup from 'reactstrap/lib/FormGroup';
 import Label from 'reactstrap/lib/Label';
 import Input from 'reactstrap/lib/Input';
 import Button from 'reactstrap/lib/Button';
-import Icon from '/imports/ui/react/components/Icon';
+import Icon from '/imports/ui/react/components/Icons/Icon';
 
 const enhance = compose(
   getContext({

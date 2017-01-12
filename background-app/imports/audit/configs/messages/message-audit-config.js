@@ -4,6 +4,7 @@ import { CollectionNames } from '/imports/share/constants';
 import { Discussions } from '/imports/share/collections/discussions';
 import { Messages } from '/imports/share/collections/messages';
 import { Organizations } from '/imports/share/collections/organizations';
+import { getLinkedDocAuditConfig } from '../../utils/helpers';
 
 import onCreated from './on-created';
 
@@ -38,20 +39,14 @@ export default MessageAuditConfig = {
   },
 
   docUrl({ _id, discussionId }) {
-    const { organizationId, linkedTo } = Discussions.findOne({
+    const { organizationId, linkedTo, documentType } = Discussions.findOne({
       _id: discussionId,
     }) || {};
+    const config = getLinkedDocAuditConfig(documentType);
+    const docUrl = config.docUrl && config.docUrl({ organizationId, _id: linkedTo });
+    const url = `${docUrl}/discussion?at=${_id}`;
 
-    const { serialNumber } = Organizations.findOne({
-      _id: organizationId,
-    }) || {};
-
-    return Meteor.absoluteUrl(
-      `${serialNumber}/standards/${linkedTo}/discussion?at=${_id}`,
-      {
-        rootUrl: Meteor.settings.mainApp.url,
-      }
-    );
+    return url;
   },
 
 };

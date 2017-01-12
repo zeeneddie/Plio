@@ -8,7 +8,7 @@ import { getId } from '/imports/api/helpers';
 export default subscribe => function loadLayoutData({
     dispatch,
     orgSerialNumber,
-    ...props,
+    ...props
   }, onData) {
   const subscription = subscribe({ orgSerialNumber, ...props });
 

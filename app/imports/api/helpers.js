@@ -6,7 +6,7 @@ import { check, Match } from 'meteor/check';
 import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { ViewModel } from 'meteor/manuel:viewmodel';
-import { shallowEqual } from 'recompose';
+import { shallowEqual, mapProps } from 'recompose';
 import { $ } from 'meteor/jquery';
 
 import {
@@ -544,3 +544,5 @@ export const searchByRegex = curry((regex, transformOrArrayOfProps, array) =>
     return transformOrArrayOfProps.filter(prop =>
       typeof item[prop] === 'string' && item[prop].search(regex) >= 0).length;
   }));
+
+export const omitProps = compose(mapProps, omitC);

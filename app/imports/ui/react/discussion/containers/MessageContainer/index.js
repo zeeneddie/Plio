@@ -1,4 +1,3 @@
-import React from 'react';
 import { compose, lifecycle, withProps, withHandlers } from 'recompose';
 import invoke from 'lodash.invoke';
 
@@ -13,21 +12,21 @@ import {
   getMessageTime,
   getMessageContents,
   getPathToMessageToCopy,
-  getClassName
+  getClassName,
 } from './helpers';
 
 import {
   openUserDetails,
   select,
   deselect,
-  remove
+  remove,
 } from './handlers';
 
 export default compose(
   lifecycle({
     shouldComponentUpdate(nextProps) {
-      return this.props._id === nextProps.at                                       ||
-             (this.props.at === this.props._id && !nextProps.at)                   ||
+      return this.props._id === nextProps.at ||
+             (this.props.at === this.props._id && !nextProps.at) ||
              (this.props.at === this.props._id && nextProps.at !== this.props._id) ||
              !this.props.isMergedWithPreviousMessage && nextProps.isMergedWithPreviousMessage;
     },
@@ -35,13 +34,13 @@ export default compose(
       if (this.props.isSelected) {
         invoke(this.props, 'scrollToSelectedMessage', this);
       }
-    }
+    },
   }),
   withHandlers({
     onMessageAvatarClick: openUserDetails,
     onMessageContentsClick: deselect,
     onMessageTimeClick: select,
-    onMessageDelete: remove
+    onMessageDelete: remove,
   }),
   withProps(transsoc({
     isAuthor,
@@ -52,6 +51,6 @@ export default compose(
     time: getMessageTime,
     contents: getMessageContents,
     pathToMessageToCopy: getPathToMessageToCopy,
-    className: getClassName
+    className: getClassName,
   }))
 )(Message);
